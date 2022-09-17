@@ -73,7 +73,7 @@ export class SidebarAction {
     public GetGroupsWithStocksHierarchyMin$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(InventoryActionsConst.GetGroupsWithStocksHierarchyMin),
-            switchMap((action: CustomActions) => this._inventoryService.GetGroupsWithStocksHierarchyMin(action.payload)),
+            switchMap((action: CustomActions) => this._inventoryService.GetGroupsWithStocksHierarchyMin(action.payload?.q, action.payload?.page, action.payload?.count)),
             map(response => {
                 return this.GetGroupsWithStocksHierarchyMinResponse(response);
             })));
@@ -91,7 +91,7 @@ export class SidebarAction {
     public SearchGroupsWithStocks$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(InventoryActionsConst.SearchGroupsWithStocks),
-            switchMap((action: CustomActions) => this._inventoryService.SearchStockGroupsWithStocks(action.payload)),
+            switchMap((action: CustomActions) => this._inventoryService.SearchStockGroupsWithStocks(action.payload?.q, action.payload?.page, action.payload?.count)),
             map(response => {
                 return this.SearchGroupsWithStocksResponse(response);
             })));
@@ -162,10 +162,10 @@ export class SidebarAction {
         };
     }
 
-    public GetGroupsWithStocksHierarchyMin(q?: string): CustomActions {
+    public GetGroupsWithStocksHierarchyMin(q?: string, page?: number, count?: number): CustomActions {
         return {
             type: InventoryActionsConst.GetGroupsWithStocksHierarchyMin,
-            payload: q
+            payload: { q: q, page: page, count: count }
         };
     }
 
@@ -183,10 +183,10 @@ export class SidebarAction {
         };
     }
 
-    public SearchGroupsWithStocks(q?: string): CustomActions {
+    public SearchGroupsWithStocks(q?: string, page?: number, count?: number): CustomActions {
         return {
             type: InventoryActionsConst.SearchGroupsWithStocks,
-            payload: q
+            payload: { q: q, page: page, count: count }
         };
     }
 

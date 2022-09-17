@@ -10,7 +10,6 @@
     >
         <tax-sidebar
             (navigateEvent)="handleNavigation($event)"
-            [activeCompanyGstNumber]="activeCompanyGstNumber"
             [selectedGstModule]="selectedGstr"
             (clickOutside)="isMobileScreen ? (asideGstSidebarMenuState = 'out') : ''"
             [exclude]="'#primary-new-header'"
@@ -79,7 +78,7 @@
                             aria-controls="dropdown-nested"
                         >
                             <ng-container>
-                                {{ selectedMonth }}
+                                {{ visibleSelectMonth }}
                             </ng-container>
                             <span class="caret"></span>
                         </button>
@@ -93,6 +92,7 @@
                                         [showWeeks]="false"
                                         [minMode]="'month'"
                                         (selectionDone)="periodChanged($event); monthWise.hide()"
+                                        [(ngModel)]="selectedMonth"
                                     ></datepicker>
                                 </a>
                             </li>

@@ -1,10 +1,10 @@
 import { Component, EventEmitter, Output, Input, ChangeDetectionStrategy, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
-import { Router } from '@angular/router';
+import { NavigationStart, Router } from '@angular/router';
 import { GstReport } from '../../gst/constants/gst.constant';
 import { AppState } from '../../store';
 import { select, Store } from '@ngrx/store';
-import { take, takeUntil } from 'rxjs/operators';
+import { filter, take, takeUntil } from 'rxjs/operators';
 import { Observable, of, ReplaySubject } from 'rxjs';
 import { VAT_SUPPORTED_COUNTRIES } from '../../app.constant';
 import { GstReconcileService } from '../../services/GstReconcile.service';
@@ -32,7 +32,7 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
     /** this is store navigate event */
     @Output() public navigateEvent: EventEmitter<string> = new EventEmitter();
     /** this is store actvie company gst number */
-    @Input() public activeCompanyGstNumber: string;
+    public activeCompanyGstNumber: string;
     /** Stores the selected GST module */
     @Input() public selectedGstModule: string = 'dashboard';
     /** True if tax sidebar is included on gst module */
@@ -78,6 +78,10 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch;
         this.getCurrentPeriod$ = this.store.pipe(select(store => store.gstR.currentPeriod), take(1));
+
+        this.store.pipe(select(state => state.gstR?.activeCompanyGst), takeUntil(this.destroyed$)).subscribe(response => {
+            this.activeCompanyGstNumber = response;
+        });
 
         this.loadTaxDetails();
 
@@ -127,6 +131,9 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+        if (!this.router.url.includes('pages/gstfiling') && !this.router.url.includes('pages/invoice/ewaybill') && !this.router.url.includes('pages/reports/reverse-charge') && !this.router.url.includes('pages/settings/taxes')) {
+            this.store.dispatch(this.gstAction.SetActiveCompanyGstin(''));
+        }
         this.store.dispatch(this.gstAction.resetGstr1OverViewResponse());
         this.store.dispatch(this.gstAction.resetGstr2OverViewResponse());
     }

@@ -117,7 +117,6 @@ import { Location, TitleCasePipe } from '@angular/common';
 import { VoucherForm } from '../models/api-models/Voucher';
 import { AdjustmentUtilityService } from '../shared/advance-receipt-adjustment/services/adjustment-utility.service';
 import { GstReconcileActions } from '../actions/gst-reconcile/GstReconcile.actions';
-import { CountryISO, PhoneNumberFormat, SearchCountryField } from 'ngx-intl-tel-input';
 import { SettingsDiscountService } from '../services/settings.discount.service';
 
 /** Type of search: customer and item (product/service) search */
@@ -633,24 +632,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     private referenceVouchersCurrentPage: number = 1;
     /** Reference voucher search field */
     private searchReferenceVoucher: any = "";
-    /** This will hold SearchCountryField */
-    public searchCountryField = SearchCountryField;
-    /** This will hold CountryISO */
-    public countryISO = CountryISO;
-    /** This will hold PhoneNumberFormat */
-    public phoneNumberFormat = PhoneNumberFormat;
-    /** This will hold newCountryCode */
-    public newCountryCode: any = '';
-    /** This will hold oldCountryCode */
-    public oldCountryCode: any = '';
-    /** This will hold updatedNumber */
-    public updatedNumber: any = '';
-    /** This will hold currentCompanyCountryCode */
-    public currentCompanyCountryCode: any = '';
-    /** This will hold updatedNumber */
-    public selectedCustomerNumber: any = '';
-    /** True if we need to destroy mobile number field */
-    public showMobileNumberField: boolean = true;
     /** List of discounts */
     public discountsList: any[] = [];
 
@@ -834,8 +815,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
-                const countryCode = activeCompany.countryV2.alpha2CountryCode;
-                this.currentCompanyCountryCode = countryCode.toLowerCase();
                 this.selectedCompany = activeCompany;
                 this.companyAddressList = activeCompany.addresses;
                 this.initializeCurrentVoucherForm();
@@ -1525,9 +1504,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     }
                     this.isUpdateDataInProcess = false;
                     if (this.isPurchaseInvoice || this.currentVoucherFormDetails?.attachmentAllowed) {
-                        this.selectedFileName = results[0].attachedFileName;
-                        if (this.invFormData && this.invFormData.entries && this.invFormData.entries[0]) {
-                            this.invFormData.entries[0].attachedFile = (results[0]?.attachedFiles) ? results[0]?.attachedFiles[0] : '';
+                        if (!this.copyPurchaseBill) {
+                            this.selectedFileName = results[0].attachedFileName;
+                            if (this.invFormData && this.invFormData.entries && this.invFormData.entries[0]) {
+                                this.invFormData.entries[0].attachedFile = (results[0]?.attachedFiles) ? results[0]?.attachedFiles[0] : '';
+                            }
                         }
                         this.saveCurrentPurchaseRecordDetails();
                     }
@@ -1546,21 +1527,16 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     if (this.customerNameDropDown) {
                         this.customerNameDropDown.clear();
                     }
+
                     if (tempSelectedAcc) {
                         this.customerAcList$ = observableOf([{ label: tempSelectedAcc.name, value: tempSelectedAcc.uniqueName, additional: tempSelectedAcc }]);
                         this.invFormData.voucherDetails.customerName = tempSelectedAcc.name;
-                        this.selectedCustomerNumber = tempSelectedAcc.mobileNo ? "+" + tempSelectedAcc.mobileNo : '';
                         this.invFormData.voucherDetails.customerUniquename = tempSelectedAcc.uniqueName;
                         this.isCustomerSelected = true;
                         this.isMulticurrencyAccount = tempSelectedAcc.currencySymbol !== this.baseCurrencySymbol;
                         this.customerCountryName = tempSelectedAcc.country.countryName;
                         this.customerCountryCode = tempSelectedAcc?.country?.countryCode || 'IN';
                         this.checkIfNeedToExcludeTax(tempSelectedAcc);
-
-                        this.showMobileNumberField = false;
-                        setTimeout(() => {
-                            this.showMobileNumberField = true;
-                        }, 50);
 
                         this.getUpdatedStateCodes(tempSelectedAcc.country.countryCode).then(() => {
                             this.invFormData.accountDetails = new AccountDetailsClass(tempSelectedAcc);
@@ -1604,7 +1580,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         if (tempSelectedAcc.addresses && tempSelectedAcc.addresses.length) {
                             tempSelectedAcc.addresses = [find(tempSelectedAcc.addresses, (tax) => tax.isDefault)];
                         }
-                        this.selectedCustomerNumber = tempSelectedAcc.mobileNo ? "+" + tempSelectedAcc.mobileNo : '';
                         this.invFormData.voucherDetails.customerUniquename = null;
                         this.invFormData.voucherDetails.customerName = tempSelectedAcc.name;
                         this.invFormData.accountDetails = new AccountDetailsClass(tempSelectedAcc);
@@ -2136,10 +2111,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     public assignAccountDetailsValuesInForm(data: AccountResponseV2) {
-        if (data?.mobileNo) {
-            let newSelectedMobileNumber = "+" + data?.mobileNo;
-            this.selectedCustomerNumber = newSelectedMobileNumber;
-        }
         this.isCashBankAccount = false;
 
         data?.parentGroups?.forEach(parentGroup => {
@@ -2291,10 +2262,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     public resetInvoiceForm(f: NgForm) {
-        this.showMobileNumberField = false;
-        setTimeout(() => {
-            this.showMobileNumberField = true;
-        }, 50);
         if (f) {
             f.form.reset();
         }
@@ -2369,6 +2336,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.userDeposit = null;
         this.fillDeliverToAddress();
         this.createEmbeddedViewAtIndex(0);
+        this.onSearchQueryChanged('', 1, 'customer');
     }
 
     public triggerSubmitInvoiceForm(form: NgForm, isUpdate) {
@@ -2603,7 +2571,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         let requestObject: any;
         let voucherDate: any;
         const deposit = this.getDeposit();
-        data.accountDetails.mobileNumber = this.selectedCustomerNumber?.e164Number;
         if (!this.isPurchaseInvoice) {
             voucherDate = data.voucherDetails.voucherDate;
             requestObject = {
@@ -4214,6 +4181,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
                 salesEntryClassArray.push(salesEntryClass);
             });
+
             requestObject = {
                 account: data.accountDetails,
                 updateAccountDetails: this.updateAccount,
@@ -4253,7 +4221,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     this.startLoader(false);
                     return;
                 }
-                data.accountDetails.mobileNumber = this.selectedCustomerNumber?.e164Number;
+
                 const deposit = this.getDeposit();
                 requestObject = {
                     account: data.accountDetails,
@@ -5277,8 +5245,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         voucherClassConversion.accountDetails.billingDetails.gstNumber = result.account.billingDetails.gstNumber ?? result?.account?.billingDetails?.taxNumber;
         voucherClassConversion.accountDetails.billingDetails.state.code = this.getNewStateCode(result.account.billingDetails.stateCode ?? result?.account?.billingDetails?.state?.code);
         voucherClassConversion.accountDetails.billingDetails.state.name = result.account.billingDetails.stateName ?? result?.account?.billingDetails?.state?.name;
-        voucherClassConversion.accountDetails.mobileNumber = result?.account?.mobileNumber;
-        this.selectedCustomerNumber = result?.account?.mobileNumber ? "+" + result?.account?.mobileNumber : '';
+        voucherClassConversion.accountDetails.mobileNumber = result.account.mobileNumber;
 
         voucherClassConversion.accountDetails.shippingDetails = new GstDetailsClass();
         if (result?.account?.shippingDetails) {
@@ -6012,7 +5979,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.customerAcList$ = observableOf(orderBy(this.defaultCustomerSuggestions, 'label'));
             this.salesAccounts$ = observableOf(orderBy(this.defaultItemSuggestions, 'label'));
             // reset form and other
-
             this.resetInvoiceForm(form);
 
             this.newVoucherUniqueName = response?.body?.uniqueName;
@@ -7981,24 +7947,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     /**
-    * This will check no and replace old country code with new country code
-    *
-    * @param {*} event
-    * @memberof ProformaInvoiceComponent
-    */
-    public checkNumber(event: any): void {
-        if (event) {
-            this.oldCountryCode = this.selectedCustomerNumber?.dialCode;
-            let oldNumber = this.selectedCustomerNumber?.e164Number;
-            this.newCountryCode = "+" + event?.dialCode;
-            const value = oldNumber;
-            let newNumber = value ? value?.replace(this.oldCountryCode, this.newCountryCode) : this.newCountryCode;
-            this.selectedCustomerNumber = newNumber;
-            this._cdr.detectChanges();
-        }
-    }
-
-    /**
      * Gets profile information
      *
      * @private
@@ -8027,15 +7975,5 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.discountsList = response?.body;
             }
         });
-    }
-
-    /**
-     * Will put focus in search field in calling code dropdown
-     *
-     * @param {*} element
-     * @memberof ProformaInvoiceComponent
-     */
-    public focusInCallingCodeSearch(element: any): void {
-        this.generalService.focusInCountrySearch(element);
     }
 }

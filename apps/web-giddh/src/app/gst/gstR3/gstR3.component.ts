@@ -1,4 +1,5 @@
-import { Component, OnInit, OnDestroy} from '@angular/core';
+import * as dayjs from 'dayjs';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Observable, ReplaySubject, of } from 'rxjs';
 import {
     GstOverViewRequest,
@@ -11,7 +12,6 @@ import { AppState } from '../../store';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ToasterService } from '../../services/toaster.service';
 import { GstReconcileActions } from '../../actions/gst-reconcile/GstReconcile.actions';
-import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { InvoicePurchaseActions } from '../../actions/purchase-invoice/purchase-invoice.action';
 import { GstReport } from '../constants/gst.constant';
@@ -60,6 +60,8 @@ export class FileGstR3Component implements OnInit, OnDestroy {
     public isMonthSelected: boolean = true;
     /** True, if GST filing needs to be shown */
     public showGstFiling: boolean = SHOW_GST_FILING;
+    /** This will use for string date show */
+    public visibleSelectMonth: string = '';
 
     constructor(
         private store: Store<AppState>,
@@ -80,18 +82,18 @@ export class FileGstR3Component implements OnInit, OnDestroy {
         });
         this.gstFileSuccess$.subscribe(a => this.fileReturnSucces = a);
     }
-    
+
     public ngOnInit(): void {
         document.querySelector('body').classList.add('gst-sidebar-open');
         this.breakpointObserver
-        .observe(['(max-width: 767px)'])
-        .pipe(takeUntil(this.destroyed$))
-        .subscribe((state: BreakpointState) => {
-            this.isMobileScreen = state.matches;
-            if (!this.isMobileScreen) {
-                this.asideGstSidebarMenuState = 'in';
-            }
-        });
+            .observe(['(max-width: 767px)'])
+            .pipe(takeUntil(this.destroyed$))
+            .subscribe((state: BreakpointState) => {
+                this.isMobileScreen = state.matches;
+                if (!this.isMobileScreen) {
+                    this.asideGstSidebarMenuState = 'in';
+                }
+            });
         this.activatedRoute.queryParams.pipe(take(1)).subscribe(params => {
             this.currentPeriod = {
                 from: params['from'],
@@ -104,6 +106,7 @@ export class FileGstR3Component implements OnInit, OnDestroy {
             this.isCompany = params['isCompany'] === 'true';
             this.selectedMonth = dayjs(this.currentPeriod.from, GIDDH_DATE_FORMAT).toISOString();
             this.selectedMonth = dayjs(this.selectedMonth).format('MMMM YYYY');
+            this.visibleSelectMonth = this.selectedMonth;
             this.store.dispatch(this.gstAction.SetSelectedPeriod(this.currentPeriod));
             this.selectedGstr = params['return_type'];
         });
@@ -226,11 +229,12 @@ export class FileGstR3Component implements OnInit, OnDestroy {
 
     public periodChanged(ev) {
         if (ev) {
-            this.selectedMonth = dayjs(ev).format('MMMM YYYY');
             this.currentPeriod = {
                 from: dayjs(ev).startOf('month').format(GIDDH_DATE_FORMAT),
                 to: dayjs(ev).endOf('month').format(GIDDH_DATE_FORMAT)
             };
+            this.selectedMonth = dayjs(ev).format('MMMM YYYY');
+            this.visibleSelectMonth = this.selectedMonth;
             this.dateSelected = true;
             this.store.dispatch(this.gstAction.SetSelectedPeriod(this.currentPeriod));
             let request: GstOverViewRequest = new GstOverViewRequest();
@@ -271,7 +275,7 @@ export class FileGstR3Component implements OnInit, OnDestroy {
             this.userEmail = '';
         }
     }
-    
+
     /**
     * Unsubscribes from subscription
     *
@@ -291,7 +295,7 @@ export class FileGstR3Component implements OnInit, OnDestroy {
      * @memberof FileGstR3Component
      */
     public handleNavigation(type: string): void {
-        switch(type) {
+        switch (type) {
             case GstReport.Gstr1: case GstReport.Gstr2:
                 this.navigateToOverview(type);
                 break;
@@ -308,7 +312,7 @@ export class FileGstR3Component implements OnInit, OnDestroy {
      * @param {*} type Type of report (gstr1, gstr2, gstr3b)
      * @memberof FileGstR3Component
      */
-     public navigateToOverview(type): void {
+    public navigateToOverview(type): void {
         this.router.navigate(['pages', 'gstfiling', 'filing-return'], { queryParams: { return_type: type, from: this.currentPeriod.from, to: this.currentPeriod.to, tab: 0, selectedGst: this.activeCompanyGstNumber } });
     }
 

@@ -815,7 +815,7 @@ export class GeneralService {
     public finalNavigate(route: any, parameter?: any, isSocialLogin?: boolean): void {
         let isQueryParams: boolean;
         if (screen.width <= 767) {
-            this.router.navigate(["/pages/mobile-home"]);
+            this.router.navigate(["/pages/mobile/home"]);
         } else {
             if (route.includes('?')) {
                 parameter = parameter || {};
@@ -1171,17 +1171,5 @@ export class GeneralService {
             }
         }
         return found;
-    }
-
-    /**
-     * Will put focus in search field in calling code dropdown
-     *
-     * @param {*} [element]
-     * @memberof GeneralService
-     */
-    public focusInCountrySearch(element?: any): void {
-        setTimeout(() => {
-            element?.target?.closest(".iti--allow-dropdown")?.querySelector(':scope > .iti__flag-container > .country-dropdown > .search-container > #country-search-box')?.focus();
-        }, 300);
     }
 }

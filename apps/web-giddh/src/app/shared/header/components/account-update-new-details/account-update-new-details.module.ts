@@ -13,7 +13,6 @@ import { ModalModule } from "ngx-bootstrap/modal";
 import { PopoverModule } from "ngx-bootstrap/popover";
 import { TabsModule } from "ngx-bootstrap/tabs";
 import { AccountUpdateNewDetailsComponent } from "./account-update-new-details.component";
-import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
 
 @NgModule({
     declarations: [
@@ -36,8 +35,7 @@ import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
             style: 'slide-left',
             spinnerSize: 30
         }),
-        PopoverModule.forRoot(),
-        NgxIntlTelInputModule
+        PopoverModule.forRoot()
     ],
     exports: [
         AccountUpdateNewDetailsComponent,

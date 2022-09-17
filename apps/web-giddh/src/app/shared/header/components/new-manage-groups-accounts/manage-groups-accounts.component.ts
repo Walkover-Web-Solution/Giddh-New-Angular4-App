@@ -32,7 +32,6 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
     public breadcrumbUniquePath: string[] = [];
     public myModelRect: any;
     public searchLoad: Observable<boolean>;
-    public psConfig: PerfectScrollbarConfigInterface;
     public groupAndAccountSearchString$: Observable<string>;
     private groupSearchTerms = new Subject<string>();
     public searchString: any = '';
@@ -63,7 +62,6 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
     ) {
         this.searchLoad = this.store.pipe(select(state => state.groupwithaccounts.isGroupWithAccountsLoading), takeUntil(this.destroyed$));
         this.groupAndAccountSearchString$ = this.store.pipe(select(s => s.groupwithaccounts.groupAndAccountSearchString), takeUntil(this.destroyed$));
-        this.psConfig = { maxScrollbarLength: 80 };
     }
 
     @HostListener('window:resize', ['$event'])
@@ -174,7 +172,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
         document.querySelector('body')?.classList?.remove('master-page');
     }
 
-    public ScrollToRight() {
+    public scrollToRight(): void {
         if (this.directiveScroll) {
             this.directiveScroll.directiveRef.scrollToRight();
         }

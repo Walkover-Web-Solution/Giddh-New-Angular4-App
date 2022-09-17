@@ -4,7 +4,6 @@
 @import "@angular/material/prebuilt-themes/indigo-pink.css";
 @import "./json-tree.scss";
 @import "./json-diff.scss";
-@import "./ngx-intl-input.scss";
 $custom-typography: mat-typography-config(
     $font-family: "opensans-regular",
 );
@@ -10429,7 +10428,10 @@ input[type="checkbox"].cdk-visually-hidden::after {
         overflow: hidden;
     }
 }
-
+hamburger-menu {
+    position: relative;
+    z-index: 99999;
+}
 .activity-log-page {
     .hamburger-menu {
         position: relative;
@@ -10803,19 +10805,6 @@ input[type="checkbox"].cdk-visually-hidden::after {
                     background: var(--color-secondary-input-bar-background);
                 }
             }
-        }
-    }
-}
-.ngx-wrapper {
-    margin-top: 10px !important;
-    margin-bottom: 10px !important;
-    ngx-intl-tel-input input {
-        width: 402px;
-        padding-left: 55px !important;
-    }
-    .iti {
-        .search-container input {
-            padding-left: 10px !important;
         }
     }
 }

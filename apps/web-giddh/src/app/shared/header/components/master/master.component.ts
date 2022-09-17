@@ -46,6 +46,8 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
     public breadcrumbUniqueNamePath: string[] = [];
     /** Emits breadcrumb path */
     @Output() public breadcrumbPathChanged = new EventEmitter();
+    /** Emits event to scroll to right */
+    @Output() public scrollToRight: EventEmitter<boolean> = new EventEmitter(true);
     /** Active group observable */
     private activeGroup$: Observable<any>;
     /** Shows/hides create new button */
@@ -58,6 +60,8 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
     public activeGroupUniqueName$: Observable<string>;
     /** Active account observable */
     public activeAccount$: Observable<AccountResponseV2>;
+    /** True if we need to use breadcrumb of account */
+    private useAccountBreadcrumb: boolean = false;
 
     constructor(
         private groupService: GroupService,
@@ -80,6 +84,23 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
         this.activeGroup$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroup), takeUntil(this.destroyed$));
         this.activeGroupUniqueName$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroupUniqueName), takeUntil(this.destroyed$));
         this.activeAccount$ = this.store.pipe(select(state => state.groupwithaccounts.activeAccount), takeUntil(this.destroyed$));
+
+        this.activeAccount$.subscribe(response => {
+            if (this.useAccountBreadcrumb && response) {
+                this.breadcrumbPath = [];
+                this.breadcrumbUniqueNamePath = [];
+
+                const currentAccount = {
+                    name: response.name,
+                    uniqueName: response.uniqueName,
+                    parentGroups: [
+                        ...response.parentGroups
+                    ]
+                };
+                this.getBreadCrumbPathFromGroup(currentAccount, null, this.breadcrumbPath, this.breadcrumbUniqueNamePath);
+                this.breadcrumbPathChanged.emit({ breadcrumbPath: this.breadcrumbPath, breadcrumbUniqueNamePath: this.breadcrumbUniqueNamePath });
+            }
+        });
 
         this.store.pipe(select(state => state.groupwithaccounts.isCreateGroupSuccess), takeUntil(this.destroyed$)).subscribe(response => {
             if (response && this.currentGroupColumnIndex > -1) {
@@ -104,8 +125,7 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
 
         this.store.pipe(select(state => state.groupwithaccounts.isDeleteGroupSuccess), takeUntil(this.destroyed$)).subscribe(response => {
             if (response && this.currentGroupColumnIndex > -1) {
-                this.getMasters(this.masterColumnsData[this.currentGroupColumnIndex]?.groupUniqueName, this.currentGroupColumnIndex, true);
-                this.onGroupClick({ uniqueName: this.masterColumnsData[this.currentGroupColumnIndex]?.groupUniqueName }, this.currentGroupColumnIndex - 1, false);
+                this.onGroupClick({ uniqueName: this.masterColumnsData[this.currentGroupColumnIndex]?.groupUniqueName }, this.currentGroupColumnIndex - 1);
             }
         });
 
@@ -312,6 +332,7 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
                     this.masterColumnsData[currentIndex].page = response?.body?.page;
                     this.masterColumnsData[currentIndex].results = this.masterColumnsData[currentIndex].results.concat(response?.body?.results);
                 }
+                this.scrollToRight.emit(true);
             }
             this.loadMoreInProgress = false;
             this.changeDetectorRef.detectChanges();
@@ -330,13 +351,14 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
         this.currentGroupColumnIndex = currentIndex;
         this.currentGroupUniqueName = item.uniqueName;
         this.showCreateNewButton = true;
+        this.useAccountBreadcrumb = false;
         this.breadcrumbPath = [];
         this.breadcrumbUniqueNamePath = [];
         if (loadMaster) {
             this.getMasters(item?.uniqueName, currentIndex);
         }
         this.store.dispatch(this.groupWithAccountsAction.hideAddNewForm());
-        this.store.dispatch(this.groupWithAccountsAction.getGroupDetails(item.uniqueName));
+        this.store.dispatch(this.groupWithAccountsAction.getGroupDetails(item?.uniqueName));
         this.store.dispatch(this.accountsAction.resetActiveAccount());
     }
 
@@ -351,23 +373,10 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
         this.currentGroupColumnIndex = currentIndex;
         this.currentGroupUniqueName = this.masterColumnsData[currentIndex].groupUniqueName;
         this.showCreateNewButton = true;
+        this.useAccountBreadcrumb = true;
 
-        let activeGroup;
-        this.activeGroup$.pipe(take(1)).subscribe(group => activeGroup = group);
-
-        this.breadcrumbPath = [];
-        this.breadcrumbUniqueNamePath = [];
-
-        const currentAccount = {
-            name: item.name,
-            uniqueName: item.uniqueName,
-            parentGroups: activeGroup ? [
-                ...activeGroup.parentGroups,
-                { name: activeGroup.name, uniqueName: activeGroup.uniqueName }
-            ] : []
-        };
-        this.getBreadCrumbPathFromGroup(currentAccount, null, this.breadcrumbPath, this.breadcrumbUniqueNamePath);
-        this.breadcrumbPathChanged.emit({ breadcrumbPath: this.breadcrumbPath, breadcrumbUniqueNamePath: this.breadcrumbUniqueNamePath });
+        let newIndex = Number(currentIndex) + 1;
+        this.masterColumnsData = this.masterColumnsData.slice(0, newIndex);
 
         this.store.dispatch(this.groupWithAccountsAction.hideAddNewForm());
         this.store.dispatch(this.groupWithAccountsAction.showEditAccountForm());
@@ -383,7 +392,7 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof MasterComponent
      */
     public trackByFn(index: number, item: IGroupsWithAccounts) {
-        return item.uniqueName;
+        return item?.uniqueName;
     }
 
     /**
@@ -456,12 +465,12 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
         }
         if (activeEntity?.parentGroups) {
             for (let group of activeEntity.parentGroups) {
-                parentUniquenamePath.push(group.uniqueName);
-                parentPath.push(group.name);
+                parentUniquenamePath.push(group?.uniqueName);
+                parentPath.push(group?.name);
             }
         }
-        parentUniquenamePath.push(activeEntity.uniqueName);
-        parentPath.push(activeEntity.name);
+        parentUniquenamePath.push(activeEntity?.uniqueName);
+        parentPath.push(activeEntity?.name);
         result = activeEntity;
         return result;
     }

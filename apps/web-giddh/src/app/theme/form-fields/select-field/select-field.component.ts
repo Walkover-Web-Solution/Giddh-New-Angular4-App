@@ -27,6 +27,8 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public readonly: boolean;
     /** Default value to prefill */
     @Input() public defaultValue: any = "";
+    /** True if field is required */
+    @Input() public required: boolean = false;
     /** Callback for option selected */
     @Output() public selectedOption: EventEmitter<any> = new EventEmitter<any>();
     /** Search field form control */
@@ -117,14 +119,15 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
-     * Resets the selected value if option not selected after new search
+     * Callback event on blur
      *
      * @memberof SelectFieldComponent
      */
-    public resetValueIfOptionNotSelected(): void {
+    public onBlur(): void {
         setTimeout(() => {
-            if (typeof this.searchFormControl?.value !== "object" && this.searchFormControl?.value !== this.selectedValue) {
-                this.searchFormControl.setValue({ label: this.selectedValue });
+            if (!this.searchFormControl?.value) {
+                this.selectedValue = "";
+                this.selectedOption.emit({ label: '', value: '' });
             }
         }, 200);
     }

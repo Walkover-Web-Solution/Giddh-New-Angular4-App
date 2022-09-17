@@ -12,8 +12,8 @@ import { OrganizationType } from '../../models/user-login-state';
 
 @Component({
     selector: 'mobile-home-sidebar',
-    templateUrl: './mobile-home-sidebar.component.html',
-    styleUrls: ['./mobile-home-sidebar.component.scss']
+    templateUrl: './sidebar.component.html',
+    styleUrls: ['./sidebar.component.scss']
 })
 
 export class MobileHomeSidebarComponent implements OnInit, OnDestroy {

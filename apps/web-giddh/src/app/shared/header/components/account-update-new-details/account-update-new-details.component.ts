@@ -19,8 +19,8 @@ import { GroupResponse } from 'apps/web-giddh/src/app/models/api-models/Group';
 import { IDiscountList } from 'apps/web-giddh/src/app/models/api-models/SettingsDiscount';
 import { AccountService } from 'apps/web-giddh/src/app/services/account.service';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { combineLatest, Observable, of as observableOf, ReplaySubject, timer } from 'rxjs';
-import { debounceTime, take, takeUntil } from 'rxjs/operators';
+import { combineLatest, Observable, of as observableOf, ReplaySubject } from 'rxjs';
+import { take, takeUntil } from 'rxjs/operators';
 import { AccountsAction } from '../../../../actions/accounts.actions';
 import { CommonActions } from '../../../../actions/common.actions';
 import { CompanyActions } from '../../../../actions/company.actions';
@@ -43,6 +43,7 @@ import { AppState } from '../../../../store';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
 import { ShSelectComponent } from '../../../../theme/ng-virtual-select/sh-select.component';
 import { digitsOnly } from '../../../helpers';
+import { parsePhoneNumberFromString, CountryCode } from 'libphonenumber-js/min';
 import { ApplyDiscountRequestV2 } from 'apps/web-giddh/src/app/models/api-models/ApplyDiscount';
 import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
 import { API_COUNT_LIMIT, BootstrapToggleSwitch, EMAIL_VALIDATION_REGEX, TCS_TDS_TAXES_TYPES } from 'apps/web-giddh/src/app/app.constant';
@@ -55,7 +56,6 @@ import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { SettingsDiscountService } from 'apps/web-giddh/src/app/services/settings.discount.service';
 import { CustomFieldsService } from 'apps/web-giddh/src/app/services/custom-fields.service';
 import { FieldTypes } from 'apps/web-giddh/src/app/custom-fields/custom-fields.constant';
-import { CountryISO, PhoneNumberFormat, SearchCountryField } from 'ngx-intl-tel-input';
 
 @Component({
     selector: 'account-update-new-details',
@@ -123,6 +123,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public callingCodesSource$: Observable<IOption[]> = observableOf([]);
     public accounts: IOption[];
     public stateGstCode: any[] = [];
+    public isMobileNumberValid: boolean = true;
     public formFields: any[] = [];
     public isGstValid$: Observable<boolean> = observableOf(true);
     public selectedTab: string = 'address';
@@ -214,21 +215,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public availableFieldTypes: any = FieldTypes;
     /** This will hold toggle buttons value and size */
     public bootstrapToggleSwitch = BootstrapToggleSwitch;
-    /** This will hold SearchCountryField */
-    public searchCountryField = SearchCountryField;
-    /** This will hold CountryISO */
-    public countryISO = CountryISO;
-    /** This will hold PhoneNumberFormat */
-    public phoneNumberFormat = PhoneNumberFormat;
-    /** This will hold newCountryCode */
-    public newCountryCode: any = '';
-    /** This will hold oldCountryCode */
-    public oldCountryCode: any = '';
-    /** This will hold updatedNumber */
-    public updatedNumber: any = '';
-    /** This will hold currentCompanyCountryCode */
-    public currentCompanyCountryCode: any = '';
-
 
     constructor(
         private _fb: FormBuilder,
@@ -258,9 +244,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
                 if (activeCompany.countryV2) {
                     this.selectedCompanyCountryName = activeCompany.countryV2.alpha2CountryCode + ' - ' + activeCompany.country;
-                    const countryCode = this.activeCompany.countryV2.alpha2CountryCode;
-                    this.companyCountry = countryCode;
-                    this.currentCompanyCountryCode = countryCode.toLowerCase();
+                    this.companyCountry = activeCompany.countryV2.alpha2CountryCode;
                 }
                 this.companyCurrency = clone(activeCompany.baseCurrency);
             }
@@ -336,11 +320,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     }
 
     public ngAfterViewInit() {
-        this.addAccountForm?.get('mobileNo')?.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                this.oldCountryCode = response?.dialCode;
-            }
-        });
         if (this.flatGroupsOptions === undefined) {
             this.getAccount();
         }
@@ -653,6 +632,30 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         this.addBlankGstForm();
     }
 
+    public isValidMobileNumber(ele: HTMLInputElement) {
+        if (ele.value) {
+            this.checkMobileNo(ele);
+        }
+    }
+
+    public checkMobileNo(ele) {
+        try {
+            let parsedNumber = parsePhoneNumberFromString('+' + this.addAccountForm.get('mobileCode').value + ele.value, this.addAccountForm.get('country').get('countryCode').value as CountryCode);
+            if (parsedNumber.isValid()) {
+                ele.classList.remove('error-box');
+                this.isMobileNumberValid = true;
+            } else {
+                this.isMobileNumberValid = false;
+                this._toaster.errorToast(this.localeData?.invalid_contact_number);
+                ele.classList.add('error-box');
+            }
+        } catch (error) {
+            this.isMobileNumberValid = false;
+            this._toaster.errorToast(this.localeData?.invalid_contact_number);
+            ele.classList.add('error-box');
+        }
+    }
+
     public submit() {
         if (!this.addAccountForm.get('openingBalance').value) {
             this.addAccountForm.get('openingBalance').setValue('0');
@@ -679,6 +682,14 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             this.activeAccountName = this.accountDetails.uniqueName;
         } else {
             this.activeAccount$.pipe(take(1)).subscribe(activeAccountState => this.activeAccountName = activeAccountState?.uniqueName);
+        }
+        if (!accountRequest.mobileNo) {
+            accountRequest.mobileCode = '';
+        } else {
+            if (!this.isMobileNumberValid) {
+                this._toaster.errorToast(this.localeData?.invalid_contact_number);
+                return false;
+            }
         }
         if (this.isHsnSacEnabledAcc) {
             delete accountRequest['addresses'];
@@ -713,9 +724,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         if (!this.showBankDetail) {
             delete accountRequest['accountBankDetails'];
         }
-
-        let mobileNo = this.addAccountForm?.get('mobileNo')?.value?.e164Number;
-        accountRequest['mobileNo'] = mobileNo;
 
         if (!accountRequest.currency) {
             this.selectedCurrency = this.companyCurrency;
@@ -759,6 +767,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             this.addAccountForm.get('accountBankDetails').reset();
             this.store.dispatch(this._generalActions.resetStatesList());
             this.store.dispatch(this.commonActions.resetOnboardingForm());
+            let phoneCode = event.additional;
+            this.addAccountForm.get('mobileCode').setValue(phoneCode);
             let currencyCode = this.countryCurrency[event.value];
             this.addAccountForm.get('currency').setValue(currencyCode);
             this.getStates(event.value);
@@ -925,6 +935,9 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                         } else {
                             this.addAccountForm.get('currency').patchValue(this.selectedCountryCurrency);
                             this.selectedCurrency = this.selectedCountryCurrency;
+                        }
+                        if (!this.addAccountForm.get('mobileCode').value) {
+                            this.addAccountForm.get('mobileCode')?.patchValue(this.selectedAccountCallingCode);
                         }
                     }
                 }
@@ -1233,7 +1246,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     * @memberof AccountUpdateNewDetailsComponent
     */
     public getCompanyCustomField(): void {
-        if (this.isCustomFieldLoading) {
+        if(this.isCustomFieldLoading) {
             return;
         }
         this.isCustomFieldLoading = true;
@@ -1675,14 +1688,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     }] : this.flatGroupsOptions;
                     this.activeGroupUniqueName = acc.parentGroups?.length > 0 ? acc.parentGroups[acc.parentGroups?.length - 1]?.uniqueName : '';
                     this.store.dispatch(this.groupWithAccountsAction.SetActiveGroup(this.activeGroupUniqueName));
-                    timer(1)
-                        .pipe(debounceTime(50))
-                        .subscribe(_ => {
-                            if (results[0]?.mobileNo) {
-                                let updatedNumber = "+" + results[0]?.mobileNo;
-                                this.addAccountForm?.get('mobileNo')?.patchValue(updatedNumber);
-                            }
-                        });
+
                     this.store.pipe(select(appStore => appStore.groupwithaccounts.activeGroupUniqueName), take(1)).subscribe(response => {
                         if (response !== this.activeGroupUniqueName) {
                             this.store.dispatch(this.groupWithAccountsAction.getGroupDetails(this.activeGroupUniqueName));
@@ -1778,6 +1784,20 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     this.addAccountForm.get('hsnOrSac')?.patchValue('sac');
                 }
                 this.openingBalanceTypeChnaged(accountDetails.openingBalanceType);
+                if (accountDetails.mobileNo) {
+                    if (accountDetails.mobileNo.indexOf('-') > -1) {
+                        let mobileArray = accountDetails.mobileNo.split('-');
+                        this.addAccountForm.get('mobileCode')?.patchValue(mobileArray[0]);
+                        this.addAccountForm.get('mobileNo')?.patchValue(mobileArray[1]);
+                    } else {
+                        this.addAccountForm.get('mobileNo')?.patchValue(accountDetails.mobileNo);
+                        this.addAccountForm.get('mobileCode')?.patchValue(accountDetails.mobileCode);
+                    }
+                } else {
+                    this.addAccountForm.get('mobileNo')?.patchValue('');
+                    this.addAccountForm.get('mobileCode')?.patchValue(this.selectedAccountCallingCode);  // if mobile no null then country calling cade will assign
+                }
+
                 this.toggleStateRequired();
                 setTimeout(() => {
                     this.generalService.invokeEvent.next(["accountEditing", acc]);
@@ -1796,31 +1816,5 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         this.closeAccountModal.emit(true);
         this.store.dispatch(this.groupWithAccountsAction.HideAddAndManageFromOutside());
         document.querySelector('body')?.classList?.remove('master-page');
-    }
-
-    /**	
-    * This will check no and replace old country code with new country code	
-    *	
-    * @param {*} event	
-    * @memberof AccountUpdateNewDetailsComponent	
-    */
-    public checkNumber(event: any): void {
-        if (event) {
-            this.newCountryCode = "+" + event?.dialCode;
-            const value = this.addAccountForm?.get('mobileNo')?.value?.e164Number;
-            let newNumber = value ? value?.replace(this.oldCountryCode, this.newCountryCode) : this.newCountryCode;
-            this.updatedNumber = newNumber;
-            this.addAccountForm.get('mobileNo').setValue(newNumber);
-        }
-    }
-
-    /**
-     * Will put focus in search field in calling code dropdown
-     *
-     * @param {*} element
-     * @memberof AccountUpdateNewDetailsComponent
-     */
-    public focusInCallingCodeSearch(element: any): void {
-        this.generalService.focusInCountrySearch(element);
     }
 }

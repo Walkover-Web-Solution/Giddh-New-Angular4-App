@@ -27,6 +27,7 @@
                             [placeholder]="localeData?.search_accounts"
                             financial-accordion="search"
                             [style.width.px]="260"
+                            autocomplete="off"
                         />
                         <a
                             href="javascript:void(0);"
@@ -94,6 +95,7 @@
                                 [commonLocaleData]="commonLocaleData"
                                 (resetSearchString)="resetGroupSearchString(false)"
                                 (breadcrumbPathChanged)="breadcrumbPathChanged($event)"
+                                (scrollToRight)="scrollToRight()"
                             >
                             </master>
                         </div>
