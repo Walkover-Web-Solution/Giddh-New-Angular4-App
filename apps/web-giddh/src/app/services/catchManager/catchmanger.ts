@@ -105,7 +105,7 @@ export class GiddhErrorHandler {
         const requestObject = {
             apiErrorMessage: `Code: ${errorCode}, Message: ${errorMessage}`,
             apiUrl: response.url,
-            uiPageUrl: this.router.url ? this.router.url.replace(/\/ledger\/.*/, '/ledger/account_unique_name') : '',
+            uiPageUrl: this.router.url ? this.router.url?.replace(/\/ledger\/.*/, '/ledger/account_unique_name') : '',
         };
         const url = `${this.config ? this.config.apiUrl : ''}${ERROR_LOG_API}`;
         this.http.post(url, requestObject).pipe(take(1)).subscribe(() => { }, () => { });

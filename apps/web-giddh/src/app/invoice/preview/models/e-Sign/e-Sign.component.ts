@@ -33,12 +33,12 @@ export class EsignModalComponent implements OnInit, OnDestroy {
     public ngOnInit() {
         this.store.pipe(select(p => p.invoice.invoiceData), takeUntil(this.destroyed$)).subscribe((o: PreviewInvoiceResponseClass) => {
             if (o && o.dataPreview) {
-                this.eSignModel.ReferenceNumber = o.uniqueName;
+                this.eSignModel.ReferenceNumber = o?.uniqueName;
                 this.eSignModel.Name = o.company.name;
                 this.eSignModel.File = o.dataPreview;
-                this.eSignModel.SUrl = this.eSignModel.SUrl + o.uniqueName;
-                this.eSignModel.CUrl = this.eSignModel.CUrl + o.uniqueName;
-                this.eSignModel.FUrl = this.eSignModel.FUrl + o.uniqueName;
+                this.eSignModel.SUrl = this.eSignModel.SUrl + o?.uniqueName;
+                this.eSignModel.CUrl = this.eSignModel.CUrl + o?.uniqueName;
+                this.eSignModel.FUrl = this.eSignModel.FUrl + o?.uniqueName;
             }
         });
     }

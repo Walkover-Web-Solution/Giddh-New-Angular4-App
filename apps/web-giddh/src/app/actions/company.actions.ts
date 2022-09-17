@@ -97,7 +97,7 @@ export class CompanyActions {
 
                 if (response.request.isBranch) {
                     let branchUniqueName: any[] = [];
-                    branchUniqueName.push(response.request.uniqueName);
+                    branchUniqueName.push(response.request?.uniqueName);
                     let dataToSend = { childCompanyUniqueNames: branchUniqueName };
                     this.store.dispatch({
                         type: 'CREATE_BRANCHES',
@@ -123,7 +123,7 @@ export class CompanyActions {
                 }
 
                 let stateDetailsObj = new StateDetailsRequest();
-                stateDetailsObj.companyUniqueName = response.request.uniqueName;
+                stateDetailsObj.companyUniqueName = response.request?.uniqueName;
                 if (!response.request.isBranch) {
                     /**
                      * if user is signed up on their own take him to sales module
@@ -161,7 +161,7 @@ export class CompanyActions {
                 if (response.request.isBranch) {
                     this.store.dispatch(this.userStoreCreateBranch(null));
                     let branchUniqueName: any[] = [];
-                    branchUniqueName.push(response.request.uniqueName);
+                    branchUniqueName.push(response.request?.uniqueName);
                     let dataToSend = { childCompanyUniqueNames: branchUniqueName };
                     this.store.dispatch({
                         type: 'CREATE_BRANCHES',
@@ -187,7 +187,7 @@ export class CompanyActions {
                 }
 
                 let stateDetailsObj = new StateDetailsRequest();
-                stateDetailsObj.companyUniqueName = response.request.uniqueName;
+                stateDetailsObj.companyUniqueName = response.request?.uniqueName;
                 if (!response.request.isBranch) {
                     /**
                      * if user is signed up on their own take him to sales module
@@ -235,7 +235,7 @@ export class CompanyActions {
                     this.store.pipe(select(s => s.session.totalNumberOfcompanies), take(1)).subscribe(res => totalCompany = res);
 
                     if (activeCompanyName) {
-                        let companyIndex = response.body.findIndex(cmp => cmp.uniqueName === activeCompanyName);
+                        let companyIndex = response.body.findIndex(cmp => cmp?.uniqueName === activeCompanyName);
                         if (companyIndex > -1) {
                             // if active company find no action needed
                             if (response.body.length === totalCompany) { // if company created success then only change to new created company otherwise refresh Api call will return null action
@@ -247,14 +247,14 @@ export class CompanyActions {
                             // if no active company active next company from companies list
                             return {
                                 type: 'CHANGE_COMPANY',
-                                payload: response.body[0].uniqueName
+                                payload: response.body[0]?.uniqueName
                             };
                         }
                     } else {
                         // if no active company active next company from companies list
                         return {
                             type: 'CHANGE_COMPANY',
-                            payload: response.body[0].uniqueName
+                            payload: response.body[0]?.uniqueName
                         };
                     }
                 } else {

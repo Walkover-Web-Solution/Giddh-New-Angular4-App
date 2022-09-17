@@ -172,7 +172,7 @@ export class InventoryAction {
                     this._toasty.successToast('Stock Created Successfully');
                     this.store.dispatch(this._salesActions.createStockAcSuccess({
                         name: data.body.name,
-                        uniqueName: data.body.uniqueName,
+                        uniqueName: data.body?.uniqueName,
                         linkedAc: data.body.salesAccountDetails ? data.body.salesAccountDetails.accountUniqueName :
                             data.body.purchaseAccountDetails ? data.body.purchaseAccountDetails.accountUniqueName : ''
                     }));

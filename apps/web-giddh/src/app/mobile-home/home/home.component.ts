@@ -213,7 +213,7 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
         if (this.listOfSelectedGroups && this.listOfSelectedGroups.length > 0) {
             let lastGroup = this.generalService.getLastElement(this.listOfSelectedGroups);
-            this.commandKRequestParams.group = lastGroup.uniqueName;
+            this.commandKRequestParams.group = lastGroup?.uniqueName;
         } else {
             this.commandKRequestParams.group = "";
         }
@@ -257,7 +257,7 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
      */
     public removeItemFromSelectedGroups(item?: any): void {
         if (item) {
-            this.listOfSelectedGroups = remove(this.listOfSelectedGroups, o => item.uniqueName !== o.uniqueName);
+            this.listOfSelectedGroups = remove(this.listOfSelectedGroups, o => item.uniqueName !== o?.uniqueName);
         } else {
             this.listOfSelectedGroups.pop();
         }
@@ -284,7 +284,7 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof MobileHomeComponent
      */
     public trackByFn(index, item: any): any {
-        return item.uniqueName; // unique id corresponding to the item
+        return item?.uniqueName; // unique id corresponding to the item
     }
 
     /**

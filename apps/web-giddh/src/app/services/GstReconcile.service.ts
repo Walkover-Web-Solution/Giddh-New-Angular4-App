@@ -23,8 +23,8 @@ export class GstReconcileService {
         this.companyUniqueName = this.generalService.companyUniqueName;
 
         return this.http.get(this.config.apiUrl + GST_RECONCILE_API.GENERATE_OTP
-            .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            .replace(':userName', encodeURIComponent(userName))
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':userName', encodeURIComponent(userName))
         )
             .pipe(
                 map((res) => {
@@ -39,7 +39,7 @@ export class GstReconcileService {
         this.companyUniqueName = this.generalService.companyUniqueName;
 
         return this.http.post(this.config.apiUrl + GST_RECONCILE_API.VERIFY_OTP
-            .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)),
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)),
             model)
             .pipe(
                 map((res) => {
@@ -54,13 +54,13 @@ export class GstReconcileService {
         this.companyUniqueName = this.generalService.companyUniqueName;
 
         let url = this.config.apiUrl + GST_RECONCILE_API.GET_INVOICES
-            .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            .replace(':from', encodeURIComponent(model.from))
-            .replace(':to', encodeURIComponent(model.to))
-            .replace(':action', encodeURIComponent(model.action))
-            .replace(':page', encodeURIComponent(model.page.toString()))
-            .replace(':count', encodeURIComponent(model.count.toString()))
-            .replace(':refresh', model.refresh.toString());
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':from', encodeURIComponent(model.from))
+            ?.replace(':to', encodeURIComponent(model.to))
+            ?.replace(':action', encodeURIComponent(model.action))
+            ?.replace(':page', encodeURIComponent(model.page.toString()))
+            ?.replace(':count', encodeURIComponent(model.count.toString()))
+            ?.replace(':refresh', model.refresh.toString());
 
         if (model.monthYear) {
             url = `${url}&monthYear=${model.monthYear}`;
@@ -86,11 +86,11 @@ export class GstReconcileService {
     public GetGstrOverview(type: string, requestParam: GstOverViewRequest): Observable<BaseResponse<GstOverViewResult, GstOverViewRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.get(this.config.apiUrl + GSTR_API.GET_OVERVIEW
-            .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            .replace(':from', requestParam.from)
-            .replace(':to', requestParam.to)
-            .replace(':gstin', requestParam.gstin)
-            .replace(':gstType', type)
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':from', requestParam.from)
+            ?.replace(':to', requestParam.to)
+            ?.replace(':gstin', requestParam.gstin)
+            ?.replace(':gstType', type)
         )
             .pipe(
                 map((res) => {
@@ -104,11 +104,11 @@ export class GstReconcileService {
     public GetGstr3BOverview(type: string, requestParam: GstOverViewRequest): Observable<BaseResponse<Gstr3bOverviewResult, GstOverViewRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.get(this.config.apiUrl + GSTR_API.GET_OVERVIEW
-            .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            .replace(':from', requestParam.from)
-            .replace(':to', requestParam.to)
-            .replace(':gstin', requestParam.gstin)
-            .replace(':gstType-summary', type)
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':from', requestParam.from)
+            ?.replace(':to', requestParam.to)
+            ?.replace(':gstin', requestParam.gstin)
+            ?.replace(':gstType-summary', type)
         )
             .pipe(
                 map((res) => {
@@ -122,16 +122,16 @@ export class GstReconcileService {
     public GetSummaryTransaction(type: string, requestParam: any): Observable<BaseResponse<GstTransactionResult, GStTransactionRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.get(this.config.apiUrl + GSTR_API.GET_TRANSACTIONS
-            .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            .replace(':page', requestParam.page)
-            .replace(':count', requestParam.count)
-            .replace(':from', requestParam.from)
-            .replace(':to', requestParam.to)
-            .replace(':gstin', requestParam.gstin)
-            .replace(':entityType', requestParam.entityType)
-            .replace(':gstType', type)
-            .replace(':type', requestParam.type)
-            .replace(':status', requestParam.status)
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':page', requestParam.page)
+            ?.replace(':count', requestParam.count)
+            ?.replace(':from', requestParam.from)
+            ?.replace(':to', requestParam.to)
+            ?.replace(':gstin', requestParam.gstin)
+            ?.replace(':entityType', requestParam.entityType)
+            ?.replace(':gstType', type)
+            ?.replace(':type', requestParam.type)
+            ?.replace(':status', requestParam.status)
         )
             .pipe(
                 map((res) => {
@@ -145,11 +145,11 @@ export class GstReconcileService {
     public GetGstr1SummaryDetails(model: Gstr1SummaryRequest): Observable<BaseResponse<Gstr1SummaryResponse, Gstr1SummaryRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.get(this.config.apiUrl + GSTR_API.GSTR1_SUMMARY_DETAILS
-            .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            .replace(':from', model.from)
-            .replace(':to', model.to)
-            .replace(':gstin', model.gstin)
-            .replace(':monthYear', model.monthYear)
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':from', model.from)
+            ?.replace(':to', model.to)
+            ?.replace(':gstin', model.gstin)
+            ?.replace(':monthYear', model.monthYear)
         )
             .pipe(
                 map((res) => {
@@ -164,12 +164,12 @@ export class GstReconcileService {
         this.companyUniqueName = this.generalService.companyUniqueName;
 
         let apiUrl = GSTR_API.DOWNLOAD_SHEET
-            .replace(':companyUniqueName', this.companyUniqueName)
-            .replace(':from', reqObj.from)
-            .replace(':to', reqObj.to)
-            .replace(':sheetType', reqObj.sheetType)
-            .replace(':gstType', reqObj.type)
-            .replace(':gstin', reqObj.gstin);
+            ?.replace(':companyUniqueName', this.companyUniqueName)
+            ?.replace(':from', reqObj.from)
+            ?.replace(':to', reqObj.to)
+            ?.replace(':sheetType', reqObj.sheetType)
+            ?.replace(':gstType', reqObj.type)
+            ?.replace(':gstin', reqObj.gstin);
 
         return this.http.get(this.config.apiUrl + apiUrl).pipe(map((res) => {
             let data: BaseResponse<any, GstrSheetDownloadRequest> = res;
@@ -181,10 +181,10 @@ export class GstReconcileService {
     public SaveGSPSession(model: GstSaveGspSessionRequest): Observable<BaseResponse<any, GstSaveGspSessionRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.post(this.config.apiUrl + GSTR_API.SAVE_GSP_SESSION
-            .replace(':companyUniqueName', this.companyUniqueName)
-            .replace(':company_gstin', model.gstin)
-            .replace(':USERNAME', model.userName)
-            .replace(':GSP', model.gsp), {})
+            ?.replace(':companyUniqueName', this.companyUniqueName)
+            ?.replace(':company_gstin', model.gstin)
+            ?.replace(':USERNAME', model.userName)
+            ?.replace(':GSP', model.gsp), {})
             .pipe(map((res) => {
                 let data: BaseResponse<any, GstSaveGspSessionRequest> = res;
                 data.queryString = model;
@@ -195,11 +195,11 @@ export class GstReconcileService {
     public SaveGSPSessionWithOTP(model: GstSaveGspSessionRequest): Observable<BaseResponse<string, GstSaveGspSessionRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.post(this.config.apiUrl + GSTR_API.SAVE_GSP_SESSION_WITH_OTP
-            .replace(':companyUniqueName', this.companyUniqueName)
-            .replace(':OTP', model.otp)
-            .replace(':company_gstin', model.gstin)
-            .replace(':USERNAME', model.userName)
-            .replace(':GSP', model.gsp), {})
+            ?.replace(':companyUniqueName', this.companyUniqueName)
+            ?.replace(':OTP', model.otp)
+            ?.replace(':company_gstin', model.gstin)
+            ?.replace(':USERNAME', model.userName)
+            ?.replace(':GSP', model.gsp), {})
             .pipe(map((res) => {
                 let data: BaseResponse<string, GstSaveGspSessionRequest> = res;
                 data.queryString = model;
@@ -210,11 +210,11 @@ export class GstReconcileService {
     public FileGstr1(model: FileGstr1Request): Observable<BaseResponse<string, FileGstr1Request>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.post(this.config.apiUrl + GSTR_API.FILE_GSTR1
-            .replace(':companyUniqueName', this.companyUniqueName)
-            .replace(':company_gstin', model.gstin)
-            .replace(':gsp', model.gsp)
-            .replace(':from', model.from)
-            .replace(':to', model.to), {})
+            ?.replace(':companyUniqueName', this.companyUniqueName)
+            ?.replace(':company_gstin', model.gstin)
+            ?.replace(':gsp', model.gsp)
+            ?.replace(':from', model.from)
+            ?.replace(':to', model.to), {})
             .pipe(map((res) => {
                 let data: BaseResponse<string, FileGstr1Request> = res;
                 data.queryString = model;
@@ -225,8 +225,8 @@ export class GstReconcileService {
     public GetGSPSession(gstin: string): Observable<BaseResponse<GetGspSessionResponse, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.get(this.config.apiUrl + GST_RETURN_API.GET_GSP_SESSION
-            .replace(':companyUniqueName', this.companyUniqueName)
-            .replace(':company_gstin', gstin))
+            ?.replace(':companyUniqueName', this.companyUniqueName)
+            ?.replace(':company_gstin', gstin))
             .pipe(map((res) => {
                 let data: BaseResponse<GetGspSessionResponse, string> = res;
                 data.queryString = { gstin };
@@ -243,7 +243,7 @@ export class GstReconcileService {
     public getTaxDetails(): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.get(this.config.apiUrl + GST_RETURN_API.GET_TAX_DETAILS
-            .replace(':companyUniqueName', this.companyUniqueName))
+            ?.replace(':companyUniqueName', this.companyUniqueName))
             .pipe(catchError((error) => this.errorHandler.HandleCatch<any, any>(error)));
     }
 
@@ -256,11 +256,11 @@ export class GstReconcileService {
     public downloadGSTRJSON(reqObj: GstrJsonDownloadRequest): Observable<BaseResponse<any, GstrJsonDownloadRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let apiUrl = GSTR_API.DOWNLOAD_JSON
-            .replace(':companyUniqueName', this.companyUniqueName)
-            .replace(':from', reqObj.from)
-            .replace(':to', reqObj.to)
-            .replace(':type', reqObj.type)
-            .replace(':gstIn', reqObj.gstin);
+            ?.replace(':companyUniqueName', this.companyUniqueName)
+            ?.replace(':from', reqObj.from)
+            ?.replace(':to', reqObj.to)
+            ?.replace(':type', reqObj.type)
+            ?.replace(':gstIn', reqObj.gstin);
         return this.http.get(this.config.apiUrl + apiUrl).pipe(map((res) => {
             let data: BaseResponse<any, GstrJsonDownloadRequest> = res;
             data.queryString = reqObj;

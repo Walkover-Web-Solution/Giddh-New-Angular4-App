@@ -229,7 +229,7 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
                 } else {
                     uniqueNameToSearch = activeCompany.activeFinancialYear?.uniqueName;
                 }
-                selectedFinancialYear = this.financialOptions.find(p => p.value === uniqueNameToSearch);
+                selectedFinancialYear = this.financialOptions.find(p => p?.value === uniqueNameToSearch);
                 activeFinancialYear = this.selectedCompany.financialYears.find(p => p.uniqueName === uniqueNameToSearch);
                 this.activeFinacialYr = activeFinancialYear;
                 this.currentActiveFinacialYear = _.cloneDeep(selectedFinancialYear);
@@ -274,7 +274,7 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
                     this._toaster.errorToast(res.message);
                 } else {
                     this.purchaseRegisterTotal = new PurchaseReportsModel();
-                    this.purchaseRegisterTotal.particular = this.activeFinacialYr.uniqueName;
+                    this.purchaseRegisterTotal.particular = this.activeFinacialYr?.uniqueName;
                     this.reportRespone = this.filterReportResp(res.body);
                 }
             });
@@ -355,7 +355,7 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
      */
     private savePreferences(): void {
         this.store.dispatch(this.companyActions.setUserChosenFinancialYear({
-            financialYear: this.currentActiveFinacialYear.value, branchUniqueName: this.currentBranch?.uniqueName, timeFilter: this.selectedType
+            financialYear: this.currentActiveFinacialYear?.value, branchUniqueName: this.currentBranch?.uniqueName, timeFilter: this.selectedType
         }));
     }
 

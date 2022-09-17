@@ -195,7 +195,7 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
     }
 
     public setUnitName(name) {
-        let unit = this.stockUnitsList.filter((obj) => obj.value === name || obj.label === name);
+        let unit = this.stockUnitsList?.filter((obj) => obj.value === name || obj.label === name);
         if (unit !== undefined && unit.length > 0) {
             this.customUnitObj.code = unit[0].value;
             this.customUnitObj.name = unit[0].value;

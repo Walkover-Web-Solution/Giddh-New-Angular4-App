@@ -115,7 +115,7 @@ export class ApprovePettyCashEntryConfirmDialogComponent implements OnInit {
     public buildCreatorString(): void {
         if (this.selectedEntryForApprove && this.selectedEntryForApprove.createdBy) {
             this.byCreator = this.localeData?.by_creator;
-            this.byCreator = this.byCreator.replace("[CREATOR_NAME]", this.selectedEntryForApprove.createdBy.name);
+            this.byCreator = this.byCreator?.replace("[CREATOR_NAME]", this.selectedEntryForApprove.createdBy.name);
         } else {
             this.byCreator = "";
         }
@@ -168,8 +168,8 @@ export class ApprovePettyCashEntryConfirmDialogComponent implements OnInit {
         this.onDebtorAccountSearchQueryChanged('', 1, (response) => {
             this.defaultDebtorAccountSuggestions = response.map(result => {
                 return {
-                    value: result.uniqueName,
-                    label: result.name
+                    value: result?.uniqueName,
+                    label: result?.name
                 }
             }) || [];
             this.defaultDebtorAccountPaginationData.page = this.debtorAccountsSearchResultsPaginationData.page;
@@ -188,8 +188,8 @@ export class ApprovePettyCashEntryConfirmDialogComponent implements OnInit {
         this.onCreditorAccountSearchQueryChanged('', 1, (response) => {
             this.defaultCreditorAccountSuggestions = response.map(result => {
                 return {
-                    value: result.uniqueName,
-                    label: result.name
+                    value: result?.uniqueName,
+                    label: result?.name
                 }
             }) || [];
             this.defaultCreditorAccountPaginationData.page = this.creditorAccountsSearchResultsPaginationData.page;
@@ -208,7 +208,7 @@ export class ApprovePettyCashEntryConfirmDialogComponent implements OnInit {
      */
     private isCashBankAccount(particular: any): boolean {
         if (particular) {
-            return particular.parentGroups.some(parent => parent.uniqueName === 'bankaccounts' || parent.uniqueName === 'cash');
+            return particular.parentGroups.some(parent => parent?.uniqueName === 'bankaccounts' || parent?.uniqueName === 'cash');
         }
         return false;
     }
@@ -223,7 +223,7 @@ export class ApprovePettyCashEntryConfirmDialogComponent implements OnInit {
         this.onCashBankAccountSearchQueryChanged('', 1, (response) => {
             this.defaultCreditorAccountSuggestions = response.map(result => {
                 return {
-                    value: result.uniqueName,
+                    value: result?.uniqueName,
                     label: result.name
                 }
             }) || [];
@@ -301,7 +301,7 @@ export class ApprovePettyCashEntryConfirmDialogComponent implements OnInit {
                     if (!this.debtorAccountsSearchResultsPaginationData.query) {
                         const results = response.map(result => {
                             return {
-                                value: result.uniqueName,
+                                value: result?.uniqueName,
                                 label: result.name
                             }
                         }) || [];
@@ -327,7 +327,7 @@ export class ApprovePettyCashEntryConfirmDialogComponent implements OnInit {
                     if (!this.cashBankAccountsSearchResultsPaginationData.query) {
                         const results = response.map(result => {
                             return {
-                                value: result.uniqueName,
+                                value: result?.uniqueName,
                                 label: result.name
                             }
                         }) || [];
@@ -353,7 +353,7 @@ export class ApprovePettyCashEntryConfirmDialogComponent implements OnInit {
                     if (!this.creditorAccountsSearchResultsPaginationData.query) {
                         const results = response.map(result => {
                             return {
-                                value: result.uniqueName,
+                                value: result?.uniqueName,
                                 label: result.name
                             }
                         }) || [];
@@ -411,7 +411,7 @@ export class ApprovePettyCashEntryConfirmDialogComponent implements OnInit {
                 if (data && data.body && data.body.results) {
                     const searchResults = data.body.results.map(result => {
                         return {
-                            value: result.uniqueName,
+                            value: result?.uniqueName,
                             label: result.name
                         }
                     }) || [];
@@ -467,7 +467,7 @@ export class ApprovePettyCashEntryConfirmDialogComponent implements OnInit {
                 if (data && data.body && data.body.results) {
                     const searchResults = data.body.results.map(result => {
                         return {
-                            value: result.uniqueName,
+                            value: result?.uniqueName,
                             label: result.name
                         }
                     }) || [];
@@ -523,7 +523,7 @@ export class ApprovePettyCashEntryConfirmDialogComponent implements OnInit {
                 if (data && data.body && data.body.results) {
                     const searchResults = data.body.results.map(result => {
                         return {
-                            value: result.uniqueName,
+                            value: result?.uniqueName,
                             label: result.name
                         }
                     }) || [];

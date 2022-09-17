@@ -194,14 +194,14 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
         } else {
             this.SubscriptionRequestObj.licenceKey = "";
         }
-        if (this.allSubscriptions[plan.uniqueName].planDetails.amount <= 0) {
-            this.SubscriptionRequestObj.planUniqueName = plan.uniqueName;
-            this.SubscriptionRequestObj.userUniqueName = this.logedInUser.uniqueName;
+        if (this.allSubscriptions[plan?.uniqueName].planDetails.amount <= 0) {
+            this.SubscriptionRequestObj.planUniqueName = plan?.uniqueName;
+            this.SubscriptionRequestObj.userUniqueName = this.logedInUser?.uniqueName;
             this.patchProfile({ subscriptionRequest: this.SubscriptionRequestObj, callNewPlanApi: true });
         } else {
             this.router.navigate(['pages', 'billing-detail', 'buy-plan']);
         }
-        this.store.dispatch(this.companyActions.selectedPlan(this.allSubscriptions[plan.uniqueName]));
+        this.store.dispatch(this.companyActions.selectedPlan(this.allSubscriptions[plan?.uniqueName]));
     }
 
     public patchProfile(obj) {
@@ -218,7 +218,7 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
 
     public createCompanyViaActivationKey() {
         let activationKey = this.licenceKey.value;
-        this.SubscriptionRequestObj.userUniqueName = this.logedInUser.uniqueName;
+        this.SubscriptionRequestObj.userUniqueName = this.logedInUser?.uniqueName;
         if (activationKey) {
             this.SubscriptionRequestObj.licenceKey = activationKey;
             this.patchProfile({ subscriptionRequest: this.SubscriptionRequestObj, callNewPlanApi: true });
@@ -289,7 +289,7 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
             this.router.navigate(['pages', 'billing-detail', 'buy-plan']);
             this.store.dispatch(this.companyActions.selectedPlan(this.subscriptionPlan));
         } else {
-            this.SubscriptionRequestObj.userUniqueName = this.logedInUser.uniqueName;
+            this.SubscriptionRequestObj.userUniqueName = this.logedInUser?.uniqueName;
             if (this.seletedUserPlans?.subscriptionId) {
                 this.SubscriptionRequestObj.subscriptionId = this.seletedUserPlans?.subscriptionId;
                 this.patchProfile({ subscriptionRequest: this.SubscriptionRequestObj, callNewPlanApi: true });
@@ -313,8 +313,8 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
             let subscriptions = res.body;
 
             subscriptions?.forEach(subscription => {
-                this.allSubscriptions[subscription.planDetails.uniqueName] = [];
-                this.allSubscriptions[subscription.planDetails.uniqueName] = subscription;
+                this.allSubscriptions[subscription.planDetails?.uniqueName] = [];
+                this.allSubscriptions[subscription.planDetails?.uniqueName] = subscription;
             });
             this.inputData = [];
             let allPlans = uniqBy(subscriptions?.filter(subscription => subscription?.planDetails.name !== "Trial Plan" && subscription?.status !== "trial" && subscription?.planDetails?.isCommonPlan).map(subscription => { return subscription?.planDetails }), "name");

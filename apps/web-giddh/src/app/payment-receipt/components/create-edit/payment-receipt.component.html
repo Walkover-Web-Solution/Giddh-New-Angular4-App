@@ -13,7 +13,7 @@
                     <div class="clearfix">
                         <div
                             class="clearfix pd-t15"
-                            [ngClass]="{ 'wrapper-receipt-fields': !voucherFormData.account.uniqueName }"
+                            [ngClass]="{ 'wrapper-receipt-fields': !voucherFormData.account?.uniqueName }"
                         >
                             <div class="inner-container">
                                 <div
@@ -39,7 +39,7 @@
                                                         [ngClass]="{
                                                             'error-box':
                                                                 !isValidForm &&
-                                                                !voucherFormData.account.uniqueName?.trim()
+                                                                !voucherFormData.account?.uniqueName?.trim()
                                                         }"
                                                         class="float-left sales-select width-627"
                                                         name="customer-uniquename"
@@ -108,7 +108,7 @@
                                                 </div>
                                                 <div
                                                     class="d-flex aqua-color"
-                                                    *ngIf="voucherFormData?.account.uniqueName"
+                                                    *ngIf="voucherFormData?.account?.uniqueName"
                                                 >
                                                     <span class="cp aqua-color">
                                                         <a href="javascript:void(0)" (click)="getCustomerDetails()">{{
@@ -119,7 +119,7 @@
                                                     </span>
                                                 </div>
                                             </div>
-                                            <ng-container *ngIf="!voucherFormData.account.uniqueName">
+                                            <ng-container *ngIf="!voucherFormData.account?.uniqueName">
                                                 <img
                                                     src="{{ imgPath }}new/search_customer.svg"
                                                     *ngIf="voucherFormData.type === receiptVoucherType"
@@ -141,7 +141,7 @@
                                         <ng-container>
                                             <section
                                                 [ngClass]="{
-                                                    'billing-address-wrap': !voucherFormData.account.uniqueName
+                                                    'billing-address-wrap': !voucherFormData.account?.uniqueName
                                                 }"
                                             >
                                                 <div class="wrap-billing-address clearfix w-100">
@@ -831,7 +831,7 @@
                                                                 'error-box border-radius-5':
                                                                     !isValidForm &&
                                                                     !voucherFormData.entries[0].transactions[0].account
-                                                                        .uniqueName
+                                                                        ?.uniqueName
                                                             }"
                                                         >
                                                             <input

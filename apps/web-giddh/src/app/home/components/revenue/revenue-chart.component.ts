@@ -93,7 +93,7 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
                         this.graphParams.uniqueName = this.activeGraphType['uniqueName'];
                         this.graphParams.type = this.activeGraphType['type'];
                     }
-                    this.revenueGraphTypes.push({ uniqueName: res[key].uniqueName, type: res[key].type });
+                    this.revenueGraphTypes.push({ uniqueName: res[key]?.uniqueName, type: res[key].type });
                 });
 
                 this.getRevenueGraphData();
@@ -125,7 +125,7 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
                             this.currentData.push({
                                 x: x,
                                 y: res.balances[key].current.closingBalance.amount,
-                                tooltip: res.balances[key].current.dateLabel + "<br />" + this.graphParams.uniqueName + ": " + this.activeCompany.baseCurrencySymbol + " " + this.currencyPipe.transform(res.balances[key].current.closingBalance.amount)
+                                tooltip: res.balances[key].current.dateLabel + "<br />" + this.graphParams?.uniqueName + ": " + this.activeCompany.baseCurrencySymbol + " " + this.currencyPipe.transform(res.balances[key].current.closingBalance.amount)
                             });
                         }
 
@@ -133,7 +133,7 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
                             this.previousData.push({
                                 x: x,
                                 y: res.balances[key].previous.closingBalance.amount,
-                                tooltip: res.balances[key].previous.dateLabel + "<br />" + this.graphParams.uniqueName + ": " + this.activeCompany.baseCurrencySymbol + " " + this.currencyPipe.transform(res.balances[key].previous.closingBalance.amount)
+                                tooltip: res.balances[key].previous.dateLabel + "<br />" + this.graphParams?.uniqueName + ": " + this.activeCompany.baseCurrencySymbol + " " + this.currencyPipe.transform(res.balances[key].previous.closingBalance.amount)
                             });
                         }
 

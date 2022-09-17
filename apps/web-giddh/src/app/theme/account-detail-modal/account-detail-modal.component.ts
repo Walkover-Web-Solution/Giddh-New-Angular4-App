@@ -175,12 +175,12 @@ export class AccountDetailModalComponent implements OnChanges, OnDestroy {
             data: {
                 subject: this.messageBody.subject,
                 message: this.messageBody.msg,
-                accounts: [this.accInfo.uniqueName],
+                accounts: [this.accInfo?.uniqueName],
             },
             params: {
                 from: this.from,
                 to: this.to,
-                groupUniqueName: this.accInfo.parentGroups[this.accInfo.parentGroups.length - 1].uniqueName || this.accInfo.parentGroups[this.accInfo.parentGroups.length - 1]
+                groupUniqueName: this.accInfo?.parentGroups[this.accInfo?.parentGroups?.length - 1]?.uniqueName || this.accInfo?.parentGroups[this.accInfo?.parentGroups?.length - 1]
             }
         };
 

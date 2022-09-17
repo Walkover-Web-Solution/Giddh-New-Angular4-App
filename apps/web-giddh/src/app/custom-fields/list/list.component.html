@@ -25,7 +25,7 @@
                         (selectionChange)="customFieldsRequest.moduleUniqueName = $event.value; getCustomFields()"
                         [(value)]="customFieldsRequest.moduleUniqueName"
                     >
-                        <mat-option *ngFor="let module of fieldModules" [value]="module.uniqueName"
+                        <mat-option *ngFor="let module of fieldModules" [value]="module?.uniqueName"
                             >{{ module.name }}
                         </mat-option>
                     </mat-select>
