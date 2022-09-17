@@ -4,8 +4,7 @@ export enum SettingsIntegrationTab {
     Email = 0,
     Collection,
     ECommerce,
-    Payment,
-    Tally
+    Payment
 }
 
 /** Country interface for Organization profile */
