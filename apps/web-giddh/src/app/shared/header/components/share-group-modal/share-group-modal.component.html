@@ -73,7 +73,7 @@
                                         (change)="updatePermission(val, $event)"
                                     >
                                         <option
-                                            [selected]="val.roleUniqueName === permission?.uniqueName"
+                                            [selected]="val?.roleUniqueName === permission?.uniqueName"
                                             [value]="permission?.uniqueName"
                                             *ngFor="let permission of allPermissions$ | async"
                                         >

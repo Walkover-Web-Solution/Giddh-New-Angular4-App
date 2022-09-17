@@ -893,7 +893,7 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
         if (this.selectedField === 'account') {
             this.setAccount(ev.additional);
             setTimeout(() => {
-                let accIndx = this.accountsTransaction.findIndex((acc) => acc.selectedAccount?.uniqueName === ev.value);
+                let accIndx = this.accountsTransaction.findIndex((acc) => acc.selectedAccount?.UniqueName === ev.value);
                 let indexInTaxesToRemember = this.taxesToRemember.findIndex((t) => t.taxUniqueName === ev.value);
                 if (indexInTaxesToRemember > -1 && accIndx > -1) {
                     let rate = this.taxesToRemember[indexInTaxesToRemember].taxValue;
