@@ -471,6 +471,47 @@
                     </div>
                 </div>
             </tab>
+            <tab (selectTab)="loadTallyData($event); tabChanged('tally')">
+                <ng-template tabHeading> <span class="icon-card"></span>{{ localeData?.tally?.tally }}</ng-template>
+                <div class="box clearfix mb-2">
+                    <div class="form-group magic-link-container col-md-9 col-lg-7 d-flex align-items-center">
+                        <label>{{ localeData?.tally?.api_url }}</label>
+                        <mat-form-field appearance="fill">
+                            <input
+                                #magicLinkInput
+                                matInput
+                                class="form-control dashed mat-field-border"
+                                [readonly]="true"
+                                type="text"
+                                [(ngModel)]="magicLink"
+                            />
+                        </mat-form-field>
+                        <span class="input-group-btn">
+                            <button
+                                mat-button
+                                [disabled]="!magicLink ? 'disabled' : null"
+                                class="btn share-ledger-button btn-success d-flex align-items-center disabled-btn-color"
+                                (click)="toggleIsCopied()"
+                                [ngxClipboard]="magicLinkInput"
+                            >
+                                {{ commonLocaleData?.app_copy }}
+                            </button>
+                        </span>
+                        <span class="success" *ngIf="isCopied">{{ localeData?.tally?.copied }}</span>
+                    </div>
+                    <div class="form-group clearfix mb-0 doc-link">
+                        <a target="_blank" class="btn btn-link" [routerLink]="['/pages/user-details/auth-key']">{{
+                            localeData?.email?.auth_key_label
+                        }}</a>
+                        <a
+                            target="_blank"
+                            class="btn btn-link"
+                            href="https://giddh.com/help/sync-with-tally-1591360375828781"
+                            >{{ localeData?.tally?.help_documentation }}</a
+                        >
+                    </div>
+                </div>
+            </tab>
         </tabset>
     </div>
     <div bsModal #createNewAccountModal="bs-modal" [config]="{ backdrop: 'static' }" class="modal" role="dialog">
