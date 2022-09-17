@@ -619,17 +619,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     }
 
     /**
-    * Loads Tally tab data
-    *
-    * @param {any} event Tab select event
-    * @memberof SettingIntegrationComponent
-    */
-    public loadTallyData(event?: any): void {
-        if (event && event instanceof TabDirective || !event) {
-        }
-    }
-
-    /**
      * Loads Collection tab data
      *
      * @param {any} event Tab select event
@@ -692,9 +681,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 break;
             case SettingsIntegrationTab.Payment:
                 this.loadPaymentData();
-                break;
-            case SettingsIntegrationTab.Tally:
-                this.loadTallyData();
                 break;
             default:
                 break;
