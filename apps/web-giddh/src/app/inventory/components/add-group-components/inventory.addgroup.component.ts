@@ -76,7 +76,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
     public ngOnInit() {
         this.store.pipe(take(1)).subscribe(state => {
             if (state.inventory.groupsWithStocks === null) {
-                this.store.dispatch(this.sideBarAction.GetGroupsWithStocksHierarchyMin('', 1, 200));
+                this.store.dispatch(this.sideBarAction.GetGroupsWithStocksHierarchyMin('', 1, 30));
             }
         });
         // get all groups
