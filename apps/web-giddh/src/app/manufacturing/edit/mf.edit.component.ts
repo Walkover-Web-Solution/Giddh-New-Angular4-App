@@ -317,16 +317,24 @@ export class MfEditComponent implements OnInit, OnDestroy {
         }
     }
 
-    public addExpense(data) {
+    public addExpense(data: any, event?: any, type?: string): void {
+        if (type === "transaction") {
+            this.otherExpenses.transactionAccountDefaultName = event?.label;
+        } else if (type === "base") {
+            this.otherExpenses.baseAccountDefaultName = event?.label;
+        }
+
         if (data && data.transactionAccountUniqueName && data.baseAccountUniqueName && data.transactionAmount) {
             let objToPush = {
                 baseAccount: {
-                    uniqueName: data.transactionAccountUniqueName
+                    uniqueName: data.transactionAccountUniqueName,
+                    defaultName: data.transactionAccountDefaultName
                 },
                 transactions: [
                     {
                         account: {
-                            uniqueName: data.baseAccountUniqueName
+                            uniqueName: data.baseAccountUniqueName,
+                            defaultName: data.baseAccountDefaultName
                         },
                         amount: data.transactionAmount
                     }
