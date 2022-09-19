@@ -73,6 +73,7 @@
                                 required
                                 [isRequired]="true"
                                 [defaultValue]="manufacturingDetails?.warehouse?.name"
+                                name="warehouseUniqueName"
                             ></sh-select>
                         </div>
                     </div>
@@ -154,6 +155,7 @@
                                             (blur)="getStockUnit(linkedStocks.stockUniqueName, linkedStocks.quantity)"
                                             [(ngModel)]="linkedStocks.quantity"
                                             #linkedStockQuantity="ngModel"
+                                            name="linkedStocks.quantity"
                                         />
                                     </td>
                                     <td>
@@ -162,6 +164,7 @@
                                             class="form-control text-right"
                                             [(ngModel)]="linkedStocks.manufacturingUnit"
                                             [disabled]="true"
+                                            name="linkedStocks.manufacturingUnit"
                                         />
                                     </td>
 
@@ -173,6 +176,7 @@
                                             class="form-control text-right"
                                             [(ngModel)]="linkedStocks.rate"
                                             #linkedStockRate="ngModel"
+                                            name="linkedStocks.rate"
                                         />
                                     </td>
                                     <td>
@@ -269,8 +273,8 @@
                                                 [options]="liabilityGroupAccounts$ | async"
                                                 [ItemHeight]="56"
                                                 [isFilterEnabled]="true"
-                                                name="baseAccount{{ i }}"
                                                 [(ngModel)]="expense.baseAccount.uniqueName"
+                                                name="baseAccount_{{ i }}"
                                                 class="pull-left select-caret w-100"
                                                 [enableDynamicSearch]="true"
                                                 [isPaginationEnabled]="true"
@@ -278,6 +282,7 @@
                                                 (dynamicSearchedQuery)="
                                                     onLiabilitiesAssetAccountSearchQueryChanged($event)
                                                 "
+                                                (selected)="expense.baseAccount.defaultName = $event?.label"
                                                 [defaultValue]="expense.baseAccount.defaultName"
                                                 [fixedValue]="expense.baseAccount.defaultName"
                                                 [disabled]="
@@ -297,13 +302,14 @@
                                                 [options]="expenseGroupAccounts$ | async"
                                                 [ItemHeight]="56"
                                                 [isFilterEnabled]="true"
-                                                name="expense{{ i }}"
                                                 [(ngModel)]="expense.transactions[0].account.uniqueName"
+                                                name="expenseAccount_{{ i }}"
                                                 class="pull-left select-caret w-100"
                                                 [enableDynamicSearch]="true"
                                                 [isPaginationEnabled]="true"
                                                 (scrollEnd)="handleExpenseAccountScrollEnd()"
                                                 (dynamicSearchedQuery)="onExpenseAccountSearchQueryChanged($event)"
+                                                (selected)="expense.transactions[0].account.defaultName = $event?.label"
                                                 [defaultValue]="expense.transactions[0].account.defaultName"
                                                 [fixedValue]="expense.transactions[0].account.defaultName"
                                                 [disabled]="
@@ -342,10 +348,10 @@
                                         <sh-select
                                             [forceClearReactive]="needForceClearLiability$ | async"
                                             [ItemHeight]="56"
-                                            (selected)="addExpense(otherExpenses)"
+                                            (selected)="addExpense(otherExpenses, $event, 'transaction')"
                                             [options]="liabilityGroupAccounts$ | async"
                                             [(ngModel)]="otherExpenses.transactionAccountUniqueName"
-                                            name="baseAccountUniqueName"
+                                            name="transactionAccountUniqueName"
                                             [placeholder]="'Liability/Asset A/c'"
                                             [enableDynamicSearch]="true"
                                             [isPaginationEnabled]="true"
@@ -365,7 +371,7 @@
                                         <div class="position-relative">
                                             <sh-select
                                                 [forceClearReactive]="needForceClearGroup$ | async"
-                                                (selected)="addExpense(otherExpenses)"
+                                                (selected)="addExpense(otherExpenses, $event, 'base')"
                                                 [options]="expenseGroupAccounts$ | async"
                                                 [(ngModel)]="otherExpenses.baseAccountUniqueName"
                                                 name="baseAccountUniqueName"
