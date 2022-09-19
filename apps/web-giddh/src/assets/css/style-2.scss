@@ -10811,3 +10811,10 @@ hamburger-menu {
 body.hide-scroll-body.master-page {
     overflow-y: hidden !important;
 }
+.ledger-attachments-popup {
+    .cdk-overlay-container {
+        .mat-dialog-container {
+            background-color: var(--color-popup-background);
+        }
+    }
+}
