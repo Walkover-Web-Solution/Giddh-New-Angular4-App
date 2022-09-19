@@ -423,7 +423,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, OnInit, O
                 if ([Separators.IND_COMMA_SEPARATED.toString(), Separators.INT_COMMA_SEPARATED.toString(),
                 Separators.INT_SPACE_SEPARATED.toString(), Separators.INT_APOSTROPHE_SEPARATED.toString()]
                     .includes(this.maskExpression)) {
-                    specialChars = specialChars.filter((f: string) => f !== '.');
+                    specialChars = specialChars?.filter((f: string) => f !== '.');
                 }
                 this.specialCharacters = specialChars;
                 while (
@@ -462,7 +462,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, OnInit, O
         }
         if (typeof inputValue === 'number') {
             inputValue = String(inputValue);
-            inputValue = this._maskValue.startsWith('dot_separator') ? inputValue.replace('.', ',') : inputValue;
+            inputValue = this._maskValue.startsWith('dot_separator') ? inputValue?.replace('.', ',') : inputValue;
             this._maskService.isNumberValue = true;
         }
         (inputValue && this._maskService.maskExpression) ||

@@ -116,7 +116,7 @@ export class TrialBalanceGridComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public trackByFn(index, item: ChildGroup) {
-        return item.uniqueName;
+        return item?.uniqueName;
     }
 
     public toggleSearch() {

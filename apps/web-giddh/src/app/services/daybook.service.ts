@@ -21,11 +21,11 @@ export class DaybookService {
     public GetDaybook(request: DayBookRequestModel, queryRequest: DaybookQueryRequest): Observable<BaseResponse<DayBookResponseModel, DayBookRequestModel>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + DAYBOOK_SEARCH_API.SEARCH
-            .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            .replace(':page', queryRequest.page.toString())
-            .replace(':count', queryRequest.count.toString())
-            .replace(':from', encodeURIComponent(queryRequest.from))
-            .replace(':to', encodeURIComponent(queryRequest.to));
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':page', queryRequest.page.toString())
+            ?.replace(':count', queryRequest.count.toString())
+            ?.replace(':from', encodeURIComponent(queryRequest.from))
+            ?.replace(':to', encodeURIComponent(queryRequest.to));
         url = url.concat(`&branchUniqueName=${queryRequest.branchUniqueName !== this.companyUniqueName ? encodeURIComponent(queryRequest.branchUniqueName) : ''}`);
         return this.http.post(url, request).pipe(
             map((res) => {
@@ -40,14 +40,14 @@ export class DaybookService {
     public ExportDaybook(request: DayBookRequestModel, queryRequest: DaybookQueryRequest): Observable<BaseResponse<DayBookResponseModel, DayBookRequestModel>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + DAYBOOK_SEARCH_API.EXPORT
-            .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            .replace(':page', queryRequest.page.toString())
-            .replace(':count', queryRequest.count.toString())
-            .replace(':from', encodeURIComponent(queryRequest.from))
-            .replace(':to', encodeURIComponent(queryRequest.to))
-            .replace(':format', queryRequest.format.toString())
-            .replace(':type', queryRequest.type.toString())
-            .replace(':sort', queryRequest.sort.toString());
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':page', queryRequest.page.toString())
+            ?.replace(':count', queryRequest.count.toString())
+            ?.replace(':from', encodeURIComponent(queryRequest.from))
+            ?.replace(':to', encodeURIComponent(queryRequest.to))
+            ?.replace(':format', queryRequest.format.toString())
+            ?.replace(':type', queryRequest.type.toString())
+            ?.replace(':sort', queryRequest.sort.toString());
         if (queryRequest.branchUniqueName) {
             queryRequest.branchUniqueName = queryRequest.branchUniqueName !== this.companyUniqueName ? queryRequest.branchUniqueName : '';
             url = url.concat(`&branchUniqueName=${queryRequest.branchUniqueName}`);
@@ -65,14 +65,14 @@ export class DaybookService {
     public ExportDaybookPost(request: DayBookRequestModel, queryRequest: DaybookQueryRequest): Observable<BaseResponse<DayBookResponseModel, DayBookRequestModel>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + DAYBOOK_SEARCH_API.EXPORT
-            .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            .replace(':page', queryRequest.page.toString())
-            .replace(':count', queryRequest.count.toString())
-            .replace(':from', encodeURIComponent(queryRequest.from))
-            .replace(':to', encodeURIComponent(queryRequest.to))
-            .replace(':format', queryRequest.format.toString())
-            .replace(':type', queryRequest.type.toString())
-            .replace(':sort', queryRequest.sort.toString());
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':page', queryRequest.page.toString())
+            ?.replace(':count', queryRequest.count.toString())
+            ?.replace(':from', encodeURIComponent(queryRequest.from))
+            ?.replace(':to', encodeURIComponent(queryRequest.to))
+            ?.replace(':format', queryRequest.format.toString())
+            ?.replace(':type', queryRequest.type.toString())
+            ?.replace(':sort', queryRequest.sort.toString());
         if (queryRequest.branchUniqueName) {
             queryRequest.branchUniqueName = queryRequest.branchUniqueName !== this.companyUniqueName ? queryRequest.branchUniqueName : '';
             url = url.concat(`&branchUniqueName=${queryRequest.branchUniqueName}`);

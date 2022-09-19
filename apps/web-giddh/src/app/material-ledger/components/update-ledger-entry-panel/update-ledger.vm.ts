@@ -121,7 +121,7 @@ export class UpdateLedgerVm {
             this.selectedLedger.transactions = this.selectedLedger.transactions.filter(f => !f.isDiscount);
             let incomeExpenseEntryIndex = this.selectedLedger.transactions.findIndex((trx: ILedgerTransactionItem) => {
                 if (trx?.particular?.uniqueName && !trx?.isTax) {
-                    let category = this.getAccountCategory(trx.particular, trx.particular.uniqueName);
+                    let category = this.getAccountCategory(trx.particular, trx.particular?.uniqueName);
                     return this.isValidCategory(category);
                 }
             });
@@ -136,7 +136,7 @@ export class UpdateLedgerVm {
                 totalAmount = 0;
             }
 
-            this.discountArray.filter(f => f.isActive && f.amount > 0).forEach((dx, index) => {
+            this.discountArray?.filter(f => f.isActive && f.amount > 0).forEach((dx, index) => {
                 let trx: ILedgerTransactionItem = this.blankTransactionItem(discountEntryType);
 
                 trx.particular.uniqueName = dx.discountUniqueName ? dx.discountUniqueName : 'discount';
@@ -159,20 +159,20 @@ export class UpdateLedgerVm {
     public getAccountCategory(account: any, accountName: string): string {
         let parent = account && account.parentGroups && account.parentGroups.length > 0 ? account.parentGroups[0] : '';
         if (parent) {
-            if (find(['shareholdersfunds', 'noncurrentliabilities', 'currentliabilities'], p => p === (parent.uniqueName || parent))) {
+            if (find(['shareholdersfunds', 'noncurrentliabilities', 'currentliabilities'], p => p === (parent?.uniqueName || parent))) {
                 return 'liabilities';
-            } else if (find(['fixedassets'], p => p === (parent.uniqueName || parent))) {
+            } else if (find(['fixedassets'], p => p === (parent?.uniqueName || parent))) {
                 return 'fixedassets';
-            } else if (find(['noncurrentassets', 'currentassets'], p => p === (parent.uniqueName || parent))) {
+            } else if (find(['noncurrentassets', 'currentassets'], p => p === (parent?.uniqueName || parent))) {
                 return 'assets';
-            } else if (find(['revenuefromoperations', 'otherincome'], p => p === (parent.uniqueName || parent))) {
+            } else if (find(['revenuefromoperations', 'otherincome'], p => p === (parent?.uniqueName || parent))) {
                 return 'income';
-            } else if (find(['operatingcost', 'indirectexpenses'], p => p === (parent.uniqueName || parent))) {
+            } else if (find(['operatingcost', 'indirectexpenses'], p => p === (parent?.uniqueName || parent))) {
                 if (accountName === 'roundoff') {
                     return 'roundoff';
                 }
                 let subParent = account.parentGroups[1];
-                if (subParent && subParent.uniqueName === 'discount') {
+                if (subParent && subParent?.uniqueName === 'discount') {
                     return 'discount';
                 }
                 return 'expenses';
@@ -190,7 +190,7 @@ export class UpdateLedgerVm {
 
     public isThereStockEntry(uniqueName: string): boolean {
         // check if entry with same stock added multiple times
-        let isAvailable = this.selectedLedger.transactions.filter(f => f.particular?.uniqueName === uniqueName);
+        let isAvailable = this.selectedLedger.transactions?.filter(f => f.particular?.uniqueName === uniqueName);
         let count: number = isAvailable && isAvailable.length;
 
         if (count > 1) {
@@ -209,7 +209,7 @@ export class UpdateLedgerVm {
     public isThereIncomeOrExpenseEntry(): number {
         let isAvailable = filter(this.selectedLedger.transactions, (trx: ILedgerTransactionItem) => {
             if (trx?.particular?.uniqueName && !trx?.isTax) {
-                let category = this.getAccountCategory(trx.particular, trx.particular.uniqueName);
+                let category = this.getAccountCategory(trx.particular, trx.particular?.uniqueName);
                 return this.isValidCategory(category) || trx.inventory;
             }
         });
@@ -324,7 +324,7 @@ export class UpdateLedgerVm {
                 let tdsTaxPercentage = null;
                 let tcsTaxPercentage = null;
 
-                let transactions = this.selectedLedger.transactions.filter(transaction => !transaction.isTax);
+                let transactions = this.selectedLedger.transactions?.filter(transaction => !transaction.isTax);
                 let totalAmount = (transactions?.length > 0) ? Number(transactions[0].amount) : Number(this.selectedLedger.actualAmount);
 
                 if (this.selectedLedger.otherTaxType === "tcs") {
@@ -486,7 +486,7 @@ export class UpdateLedgerVm {
             this.convertedRate = this.calculateConversionRate(this.stockTrxEntry.inventory.rate, this.ratePrecision);
 
             // update every transaction conversion rates for multi-currency
-            this.selectedLedger.transactions.filter(f => f.particular?.uniqueName !== this.stockTrxEntry.particular?.uniqueName).map(trx => {
+            this.selectedLedger.transactions?.filter(f => f.particular?.uniqueName !== this.stockTrxEntry.particular?.uniqueName).map(trx => {
                 trx.convertedAmount = this.calculateConversionRate(trx.amount);
                 return trx;
             });
@@ -526,14 +526,14 @@ export class UpdateLedgerVm {
         let percentageDiscount = 0;
 
         if (this.discountComponent) {
-            percentageDiscount = this.discountComponent.discountAccountsDetails.filter(f => f.isActive)
-                .filter(s => s.discountType === 'PERCENTAGE')
+            percentageDiscount = this.discountComponent.discountAccountsDetails?.filter(f => f.isActive)
+                ?.filter(s => s.discountType === 'PERCENTAGE')
                 .reduce((pv, cv) => {
                     return Number(cv.discountValue) ? Number(pv) + Number(cv.discountValue) : Number(pv);
                 }, 0) || 0;
 
-            fixDiscount = this.discountComponent.discountAccountsDetails.filter(f => f.isActive)
-                .filter(s => s.discountType === 'FIX_AMOUNT')
+            fixDiscount = this.discountComponent.discountAccountsDetails?.filter(f => f.isActive)
+                ?.filter(s => s.discountType === 'FIX_AMOUNT')
                 .reduce((pv, cv) => {
                     return Number(cv.discountValue) ? Number(pv) + Number(cv.discountValue) : Number(pv);
                 }, 0) || 0;
@@ -672,7 +672,7 @@ export class UpdateLedgerVm {
             requestObj.taxes.push(requestObj.otherTaxModal.appliedOtherTax?.uniqueName);
         }
 
-        requestObj.discounts = discounts.filter(p => p.amount && p.isActive).map(m => {
+        requestObj.discounts = discounts?.filter(p => p.amount && p.isActive).map(m => {
             m.amount = m.discountValue;
             return m;
         });
@@ -688,17 +688,17 @@ export class UpdateLedgerVm {
             let data = _.cloneDeep(underStandingTextData?.find(p => p.accountType === selectedLedgerAccountType));
             if (data) {
                 if (data.balanceText && data.balanceText.cr) {
-                    data.balanceText.cr = data.balanceText.cr.replace('<accountName>', accountName);
+                    data.balanceText.cr = data.balanceText.cr?.replace('<accountName>', accountName);
                 }
                 if (data.balanceText && data.balanceText.dr) {
-                    data.balanceText.dr = data.balanceText.dr.replace('<accountName>', accountName);
+                    data.balanceText.dr = data.balanceText.dr?.replace('<accountName>', accountName);
                 }
 
                 if (data.text && data.text.dr) {
-                    data.text.dr = data.text.dr.replace('<accountName>', accountName);
+                    data.text.dr = data.text.dr?.replace('<accountName>', accountName);
                 }
                 if (data.text && data.text.cr) {
-                    data.text.cr = data.text.cr.replace('<accountName>', accountName);
+                    data.text.cr = data.text.cr?.replace('<accountName>', accountName);
                 }
                 this.ledgerUnderStandingObj = _.cloneDeep(data);
             }

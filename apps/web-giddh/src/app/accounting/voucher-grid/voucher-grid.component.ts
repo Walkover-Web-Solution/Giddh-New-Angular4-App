@@ -402,7 +402,7 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
      */
     public setAccount(acc) {
         let openChequePopup = false;
-        if (acc && acc.parentGroups.find((pg) => pg.uniqueName === 'bankaccounts') && (!this.requestObj.chequeNumber && !this.requestObj.chequeClearanceDate)) {
+        if (acc && acc.parentGroups.find((pg) => pg?.uniqueName === 'bankaccounts') && (!this.requestObj.chequeNumber && !this.requestObj.chequeClearanceDate)) {
             openChequePopup = true;
             this.openChequeDetailForm();
         }
@@ -411,12 +411,12 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
         if (acc) {
             let accModel = {
                 name: acc.name,
-                UniqueName: acc.uniqueName,
-                groupUniqueName: acc.parentGroups[acc.parentGroups.length - 1].uniqueName,
+                UniqueName: acc?.uniqueName,
+                groupUniqueName: acc.parentGroups[acc.parentGroups.length - 1]?.uniqueName,
                 account: acc.name,
                 parentGroups: acc.parentGroups
             };
-            transaction.particular = accModel.UniqueName;
+            transaction.particular = accModel?.UniqueName;
             transaction.selectedAccount = accModel;
             transaction.stocks = acc.stocks;
 
@@ -426,10 +426,10 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
 
             if (acc) {
                 this.groupUniqueName = accModel?.groupUniqueName;
-                this.selectAccUnqName = acc.uniqueName;
+                this.selectAccUnqName = acc?.uniqueName;
 
                 let len = this.requestObj.transactions[idx].inventory ? this.requestObj.transactions[idx].inventory.length : 0;
-                if (!len || this.requestObj.transactions[idx].inventory && this.requestObj.transactions[idx].inventory[len - 1].stock.uniqueName) {
+                if (!len || this.requestObj.transactions[idx].inventory && this.requestObj.transactions[idx].inventory[len - 1].stock?.uniqueName) {
                     this.requestObj.transactions[idx].inventory.push(this.initInventory());
                 }
             }
@@ -518,7 +518,7 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
         if (this.requestObj.transactions.length > 2) {
             this.showConfirmationBox = true;
             if (this.requestObj.description.length > 1) {
-                this.requestObj.description = this.requestObj.description.replace(/(?:\r\n|\r|\n)/g, '');
+                this.requestObj.description = this.requestObj.description?.replace(/(?:\r\n|\r|\n)/g, '');
                 setTimeout(() => {
                     submitBtnEle.focus();
                 }, 100);
@@ -564,8 +564,8 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
                 forEach(data.transactions, (element: any) => {
                     element.type = (element.type === 'by') ? 'credit' : 'debit';
                 });
-                let accUniqueName: string = maxBy(data.transactions, (o: any) => o.amount).selectedAccount.UniqueName;
-                let indexOfMaxAmountEntry = findIndex(data.transactions, (o: any) => o.selectedAccount.UniqueName === accUniqueName);
+                let accUniqueName: string = maxBy(data.transactions, (o: any) => o.amount).selectedAccount?.UniqueName;
+                let indexOfMaxAmountEntry = findIndex(data.transactions, (o: any) => o.selectedAccount?.UniqueName === accUniqueName);
                 data.transactions.splice(indexOfMaxAmountEntry, 1);
                 data = this._tallyModuleService.prepareRequestForAPI(data);
                 this.store.dispatch(this._ledgerActions.CreateBlankLedger(data, accUniqueName));
@@ -581,8 +581,8 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
     }
 
     public validateForContraEntry(data) {
-        const debitEntryWithCashOrBank = data.transactions.find((trxn) => (trxn.type === 'by' && trxn.selectedAccount && trxn.selectedAccount.parentGroups.find((pg) => (pg.uniqueName === 'bankaccounts' || pg.uniqueName === 'cash'))));
-        const creditEntryWithCashOrBank = data.transactions.find((trxn) => (trxn.type === 'to' && trxn.selectedAccount && trxn.selectedAccount.parentGroups.find((pg) => (pg.uniqueName === 'bankaccounts' || pg.uniqueName === 'cash'))));
+        const debitEntryWithCashOrBank = data.transactions.find((trxn) => (trxn.type === 'by' && trxn.selectedAccount && trxn.selectedAccount.parentGroups.find((pg) => (pg?.uniqueName === 'bankaccounts' || pg?.uniqueName === 'cash'))));
+        const creditEntryWithCashOrBank = data.transactions.find((trxn) => (trxn.type === 'to' && trxn.selectedAccount && trxn.selectedAccount.parentGroups.find((pg) => (pg?.uniqueName === 'bankaccounts' || pg?.uniqueName === 'cash'))));
 
         if (debitEntryWithCashOrBank && creditEntryWithCashOrBank) {
             return true;
@@ -592,8 +592,8 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
     }
 
     public validateForSalesAndPurchaseEntry(data) {
-        const debitEntryWithCashOrBank = data.transactions.find((trxn) => (trxn.type === 'by' && trxn.selectedAccount && trxn.selectedAccount.parentGroups.find((pg) => (pg.uniqueName === 'revenuefromoperations' || pg.uniqueName === 'currentassets' || pg.uniqueName === 'currentliabilities' || pg.uniqueName === 'purchases' || pg.uniqueName === 'directexpenses'))));
-        const creditEntryWithCashOrBank = data.transactions.find((trxn) => (trxn.type === 'to' && trxn.selectedAccount && trxn.selectedAccount.parentGroups.find((pg) => (pg.uniqueName === 'revenuefromoperations' || pg.uniqueName === 'currentassets' || pg.uniqueName === 'currentliabilities' || pg.uniqueName === 'purchases' || pg.uniqueName === 'directexpenses'))));
+        const debitEntryWithCashOrBank = data.transactions.find((trxn) => (trxn.type === 'by' && trxn.selectedAccount && trxn.selectedAccount.parentGroups.find((pg) => (pg?.uniqueName === 'revenuefromoperations' || pg?.uniqueName === 'currentassets' || pg?.uniqueName === 'currentliabilities' || pg?.uniqueName === 'purchases' || pg?.uniqueName === 'directexpenses'))));
+        const creditEntryWithCashOrBank = data.transactions.find((trxn) => (trxn.type === 'to' && trxn.selectedAccount && trxn.selectedAccount.parentGroups.find((pg) => (pg?.uniqueName === 'revenuefromoperations' || pg?.uniqueName === 'currentassets' || pg?.uniqueName === 'currentliabilities' || pg?.uniqueName === 'purchases' || pg?.uniqueName === 'directexpenses'))));
 
         if (debitEntryWithCashOrBank && creditEntryWithCashOrBank) {
             return true;
@@ -605,9 +605,9 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
     public validatePaymentAndReceipt(data) {
         if (data.voucherType === 'Payment' || data.voucherType === 'Receipt') {
             const byOrTo = data.voucherType === 'Payment' ? 'to' : 'by';
-            const toAccounts = data.transactions.filter((acc) => acc.type === byOrTo);
-            const AccountOfCashOrBank = toAccounts.filter((acc) => {
-                const indexOfCashOrBank = acc.selectedAccount.parentGroups.findIndex((pg) => pg.uniqueName === 'cash' || pg.uniqueName === 'bankaccounts');
+            const toAccounts = data.transactions?.filter((acc) => acc.type === byOrTo);
+            const AccountOfCashOrBank = toAccounts?.filter((acc) => {
+                const indexOfCashOrBank = acc.selectedAccount.parentGroups.findIndex((pg) => pg?.uniqueName === 'cash' || pg?.uniqueName === 'bankaccounts');
                 return indexOfCashOrBank !== -1 ? true : false;
             });
             return (AccountOfCashOrBank && AccountOfCashOrBank.length) ? true : false;
@@ -760,8 +760,8 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
             }
 
             // this.requestObj.transactions[idx].particular = item.accountStockDetails.accountUniqueName;
-            this.requestObj.transactions[idx].inventory[i].stock = { name: item.name, uniqueName: item.uniqueName };
-            // this.requestObj.transactions[idx].selectedAccount.uniqueName = item.accountStockDetails.accountUniqueName;
+            this.requestObj.transactions[idx].inventory[i].stock = { name: item.name, uniqueName: item?.uniqueName };
+            // this.requestObj.transactions[idx].selectedAccount?.uniqueName = item.accountStockDetails.accountUniqueName;
             this.changePrice(i, this.requestObj.transactions[idx].inventory[i].unit.rate);
         }
 
@@ -919,8 +919,8 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
         let stockAccountArr: IOption[] = [];
         forEach(ItemArr, (obj: any) => {
             stockAccountArr.push({
-                label: `${obj.name} (${obj.uniqueName})`,
-                value: obj.uniqueName,
+                label: `${obj.name} (${obj?.uniqueName})`,
+                value: obj?.uniqueName,
                 additional: obj
             });
         });
@@ -1117,13 +1117,13 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
             let accList: IOption[] = [];
             this.allAccounts.forEach((acc: IFlattenAccountsResultItem) => {
                 if (this.requestObj.voucherType === "Contra") {
-                    const isContraAccount = acc.parentGroups.find((pg) => (pg.uniqueName === 'bankaccounts' || pg.uniqueName === 'cash' || pg.uniqueName === 'currentliabilities'));
-                    const isDisallowedAccount = acc.parentGroups.find((pg) => (pg.uniqueName === 'sundrycreditors' || pg.uniqueName === 'dutiestaxes'));
+                    const isContraAccount = acc.parentGroups.find((pg) => (pg?.uniqueName === 'bankaccounts' || pg?.uniqueName === 'cash' || pg?.uniqueName === 'currentliabilities'));
+                    const isDisallowedAccount = acc.parentGroups.find((pg) => (pg?.uniqueName === 'sundrycreditors' || pg?.uniqueName === 'dutiestaxes'));
                     if (isContraAccount && !isDisallowedAccount) {
-                        accList.push({ label: `${acc.name} (${acc.uniqueName})`, value: acc.uniqueName, additional: acc });
+                        accList.push({ label: `${acc.name} (${acc?.uniqueName})`, value: acc?.uniqueName, additional: acc });
                     }
                 } else {
-                    accList.push({ label: `${acc.name} (${acc.uniqueName})`, value: acc.uniqueName, additional: acc });
+                    accList.push({ label: `${acc.name} (${acc?.uniqueName})`, value: acc?.uniqueName, additional: acc });
                 }
             });
             this.flattenAccounts = accList;

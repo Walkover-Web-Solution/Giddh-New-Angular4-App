@@ -567,13 +567,6 @@ span.icon-export-icon {
 }
 
 /* responsive */
-@media (max-width: 1024px) {
-    .perform-payment {
-        max-width: 100% !important;
-        min-width: 100% !important;
-    }
-}
-
 @media (max-width: 1124px) {
     .add-invoice {
         flex-direction: column-reverse;

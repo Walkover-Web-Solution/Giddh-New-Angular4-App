@@ -22,8 +22,8 @@ export class ImportExcelService {
     public uploadFile(entity: string, model: any) {
         const companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + IMPORT_EXCEL_API.UPLOAD_FILE
-            .replace(':companyUniqueName', companyUniqueName)
-            .replace(':entity', entity)
+            ?.replace(':companyUniqueName', companyUniqueName)
+            ?.replace(':entity', entity)
             ;
         if (model.branchUniqueName) {
             url = url.concat(`&branchUniqueName=${encodeURIComponent(model.branchUniqueName)}`);
@@ -39,9 +39,9 @@ export class ImportExcelService {
     public processImport(entity: string, model: ImportExcelRequestData) {
         const companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + IMPORT_EXCEL_API.PROCESS_IMPORT
-            .replace(':companyUniqueName', companyUniqueName)
-            .replace(':entity', entity)
-            .replace(':isHeaderProvided', model.isHeaderProvided.toString());
+            ?.replace(':companyUniqueName', companyUniqueName)
+            ?.replace(':entity', entity)
+            ?.replace(':isHeaderProvided', model.isHeaderProvided.toString());
         if (model.branchUniqueName) {
             url = url.concat(`&branchUniqueName=${model.branchUniqueName}`);
         }
@@ -54,9 +54,9 @@ export class ImportExcelService {
     public importStatus(paginatedRequest: CommonPaginatedRequest): Observable<BaseResponse<ImportExcelStatusPaginatedResponse, string>> {
         const companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + IMPORT_EXCEL_API.IMPORT_STATUS
-            .replace(':companyUniqueName', companyUniqueName)
-            .replace(':page', paginatedRequest.page.toString())
-            .replace(':count', paginatedRequest.count.toString())
+            ?.replace(':companyUniqueName', companyUniqueName)
+            ?.replace(':page', paginatedRequest.page.toString())
+            ?.replace(':count', paginatedRequest.count.toString())
 
         return this.http.get(url).pipe(map((res) => {
             let data: BaseResponse<ImportExcelStatusPaginatedResponse, string> = res;

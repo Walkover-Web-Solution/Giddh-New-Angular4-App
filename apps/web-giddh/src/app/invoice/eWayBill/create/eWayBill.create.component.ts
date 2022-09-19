@@ -290,7 +290,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         let removeInvoice = this.localeData?.remove_invoice;
         removeInvoice = removeInvoice?.replace("[VOUCHER_NUMBER]", this.selectedInvoices[0].voucherNumber);
         this.deleteTemplateConfirmationMessage = removeInvoice;
-        this.invoiceRemoveConfirmationModel.show();
+        this.invoiceRemoveConfirmationModel?.show();
     }
 
     /**
@@ -303,7 +303,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
                 this.router.navigate(['/pages/invoice/preview/sales']);
             }
         }
-        this.invoiceRemoveConfirmationModel.hide();
+        this.invoiceRemoveConfirmationModel?.hide();
     }
 
     detectChanges() {
@@ -336,9 +336,9 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         this.TransporterDocType = this.ModifiedTransporterDocType;
         if (event) {
             if (event.label === this.localeData?.subsupply_types_list?.supply || event.label === this.localeData?.subsupply_types_list?.export) {
-                this.TransporterDocType = this.TransporterDocType.filter((item) => item.value !== 'CHL');
+                this.TransporterDocType = this.TransporterDocType?.filter((item) => item.value !== 'CHL');
             } else if (event.label === this.localeData?.subsupply_types_list?.job_work) {
-                this.TransporterDocType = this.TransporterDocType.filter((item) => item.value !== 'INV' && item.value !== 'BIL');
+                this.TransporterDocType = this.TransporterDocType?.filter((item) => item.value !== 'INV' && item.value !== 'BIL');
             } else {
                 this.TransporterDocType = this.ModifiedTransporterDocType;
             }

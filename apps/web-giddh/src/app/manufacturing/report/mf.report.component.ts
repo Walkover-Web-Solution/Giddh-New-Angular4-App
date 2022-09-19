@@ -152,8 +152,8 @@ export class MfReportComponent implements OnInit, OnDestroy {
                     this.stockListDropDown = [];
                     forEach(o.results, (unit: any) => {
                         this.stockListDropDown.push({
-                            label: ` ${unit.name} (${unit.uniqueName})`,
-                            value: unit.uniqueName,
+                            label: ` ${unit.name} (${unit?.uniqueName})`,
+                            value: unit?.uniqueName,
                             additional: unit.stockGroup
                         });
                     });
@@ -207,19 +207,19 @@ export class MfReportComponent implements OnInit, OnDestroy {
                 });
                 this.isCompany = this.currentOrganizationType !== OrganizationType.Branch && this.currentCompanyBranches?.length > 2;
                 let currentBranchUniqueName;
-                if (!this.currentBranch.uniqueName) {
+                if (!this.currentBranch?.uniqueName) {
                     // Assign the current branch only when it is not selected. This check is necessary as
                     // opening the branch switcher would reset the current selected branch as this subscription is run everytime
                     // branches are loaded
                     if (this.currentOrganizationType === OrganizationType.Branch) {
                         currentBranchUniqueName = this.generalService.currentBranchUniqueName;
-                        this.currentBranch = cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName)) || this.currentBranch;
+                        this.currentBranch = cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName)) || this.currentBranch;
                     } else {
-                        currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : '';
+                        currentBranchUniqueName = this.activeCompany ? this.activeCompany?.uniqueName : '';
                         this.currentBranch = {
                             name: this.activeCompany ? this.activeCompany.name : '',
                             alias: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
-                            uniqueName: this.activeCompany ? this.activeCompany.uniqueName : '',
+                            uniqueName: this.activeCompany ? this.activeCompany?.uniqueName : '',
                         };
                     }
                 }
@@ -265,8 +265,8 @@ export class MfReportComponent implements OnInit, OnDestroy {
     }
 
     public editMFItem(item) {
-        if (item.uniqueName) {
-            this.store.dispatch(this.manufacturingActions.SetMFItemUniqueNameInStore(item.uniqueName));
+        if (item?.uniqueName) {
+            this.store.dispatch(this.manufacturingActions.SetMFItemUniqueNameInStore(item?.uniqueName));
             this.router.navigate(['/pages/manufacturing/edit']);
         }
     }
@@ -386,7 +386,7 @@ export class MfReportComponent implements OnInit, OnDestroy {
             this.warehouses = [];
             if (warehouses && warehouses.results) {
                 warehouses.results.forEach(warehouse => {
-                    this.warehouses.push({ label: warehouse.name, value: warehouse.uniqueName, additional: warehouse });
+                    this.warehouses.push({ label: warehouse.name, value: warehouse?.uniqueName, additional: warehouse });
                 });
             }
         });

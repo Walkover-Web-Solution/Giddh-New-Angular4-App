@@ -16,13 +16,13 @@ export class ReverseChargeService {
 
     public getReverseChargeReport(companyUniqueName: any, requestGet: ReverseChargeReportGetRequest, requestPost: ReverseChargeReportPostRequest): Observable<BaseResponse<any, any>> {
         let url = this.config.apiUrl + REVERSECHARGE_API.VIEW_REPORT;
-        url = url.replace(':companyUniqueName', encodeURIComponent(companyUniqueName));
-        url = url.replace(':from', requestGet.from);
-        url = url.replace(':to', requestGet.to);
-        url = url.replace(':sort', requestGet.sort);
-        url = url.replace(':sortBy', requestGet.sortBy);
-        url = url.replace(':page', requestGet.page);
-        url = url.replace(':count', requestGet.count);
+        url = url?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName));
+        url = url?.replace(':from', requestGet.from);
+        url = url?.replace(':to', requestGet.to);
+        url = url?.replace(':sort', requestGet.sort);
+        url = url?.replace(':sortBy', requestGet.sortBy);
+        url = url?.replace(':page', requestGet.page);
+        url = url?.replace(':count', requestGet.count);
         if (requestGet.branchUniqueName) {
             url = url.concat(`&branchUniqueName=${requestGet.branchUniqueName !== companyUniqueName ? requestGet.branchUniqueName : ''}`);
         }

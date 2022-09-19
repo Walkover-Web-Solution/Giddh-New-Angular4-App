@@ -22,8 +22,8 @@ export class ImportProcessComponent {
         this.rawImportData = value;
 
         let clonedValues: ImportExcelResponseData = cloneDeep(value);
-        clonedValues.data.items = clonedValues.data.items.filter(item => {
-            item.row = item.row.filter(ro => clonedValues.mappings.some(s => s.columnNumber === parseInt(ro.columnNumber)));
+        clonedValues.data.items = clonedValues.data.items?.filter(item => {
+            item.row = item.row?.filter(ro => clonedValues.mappings.some(s => s.columnNumber === parseInt(ro.columnNumber)));
             return item;
         });
         this._importData = clonedValues;

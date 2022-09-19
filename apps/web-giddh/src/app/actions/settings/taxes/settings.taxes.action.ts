@@ -40,7 +40,7 @@ export class SettingsTaxesActions {
         .pipe(
             ofType(SETTINGS_TAXES_ACTIONS.UPDATE_TAX),
             switchMap((action: CustomActions) => {
-                return this.settingsTaxesService.UpdateTax(action.payload, action.payload.uniqueName).pipe(
+                return this.settingsTaxesService.UpdateTax(action.payload, action.payload?.uniqueName).pipe(
                     map(response => this.UpdateTaxResponse(response)));
             })));
 

@@ -135,10 +135,10 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
 					stock.stock = response?.body;
 					stock?.stock?.variants.forEach(variant => {
 						this.warehouses.forEach(warehouse => {
-							const warehouseFound = variant?.warehouseBalance?.filter(balance => balance.warehouse.uniqueName === warehouse.uniqueName);
+							const warehouseFound = variant?.warehouseBalance?.filter(balance => balance.warehouse?.uniqueName === warehouse?.uniqueName);
 							if (!warehouseFound?.length) {
 								variant.warehouseBalance.push({
-									openingAmount: 0, openingQuantity: 0, stockUnit: stock.stock.stockUnit, warehouse: { name: warehouse.name, uniqueName: warehouse.uniqueName }
+									openingAmount: 0, openingQuantity: 0, stockUnit: stock.stock.stockUnit, warehouse: { name: warehouse.name, uniqueName: warehouse?.uniqueName }
 								});
 							}
 						});
@@ -172,7 +172,7 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
 					this.stocksList?.forEach(stock => {
 						stock.warehouses = [];
 						this.warehouses?.forEach(warehouse => {
-							stock.warehouses.push({ name: warehouse.name, uniqueName: warehouse.uniqueName });
+							stock.warehouses.push({ name: warehouse.name, uniqueName: warehouse?.uniqueName });
 						});
 					});
 
@@ -214,7 +214,7 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
 							const stockFound = this.stocksList?.filter(stock => stock.stockUniqueName === warehouseStock?.stockUniqueName);
 							if (stockFound?.length > 0) {
 								if (stockFound[0]?.warehouses?.length > 0) {
-									const warehouseFound = stockFound[0]?.warehouses?.filter(warehouse => warehouse.uniqueName === uniqueName);
+									const warehouseFound = stockFound[0]?.warehouses?.filter(warehouse => warehouse?.uniqueName === uniqueName);
 									if (warehouseFound?.length > 0) {
 										warehouseFound[0].openingBalance = warehouseStock.openingBalance;
 									}
@@ -314,12 +314,12 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
 		groups.map(group => {
 			if (group) {
 				let newOption: IOption = { label: '', value: '', additional: {} };
-				newOption.label = group.name;
-				newOption.value = group.uniqueName;
+				newOption.label = group?.name;
+				newOption.value = group?.uniqueName;
 				newOption.additional = group;
 				parents.push(newOption);
-				if (group.childStockGroups?.length > 0) {
-					this.arrangeStockGroups(group.childStockGroups, parents);
+				if (group?.childStockGroups?.length > 0) {
+					this.arrangeStockGroups(group?.childStockGroups, parents);
 				}
 			}
 		});

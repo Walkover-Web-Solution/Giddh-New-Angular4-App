@@ -74,7 +74,7 @@ export class UnitMappingComponent implements OnInit {
      */
     private filter(value: string): string[] {
         const filterValue = value.toLowerCase();
-        return this.options.filter(option => option.toLowerCase().includes(filterValue));
+        return this.options?.filter(option => option.toLowerCase().includes(filterValue));
     }
 
     /**

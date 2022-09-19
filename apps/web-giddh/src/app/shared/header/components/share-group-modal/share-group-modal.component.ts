@@ -57,7 +57,7 @@ export class ShareGroupModalComponent implements OnInit, OnDestroy {
         let userRole = {
             emailId: this.email,
             entity: 'group',
-            entityUniqueName: activeGrp.uniqueName,
+            entityUniqueName: activeGrp?.uniqueName,
         };
         let selectedPermission = clone(this.selectedPermission);
         this.store.dispatch(this.accountActions.shareEntity(userRole, selectedPermission.toLowerCase()));

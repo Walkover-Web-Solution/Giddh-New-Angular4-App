@@ -10428,7 +10428,10 @@ input[type="checkbox"].cdk-visually-hidden::after {
         overflow: hidden;
     }
 }
-
+hamburger-menu {
+    position: relative;
+    z-index: 99999;
+}
 .activity-log-page {
     .hamburger-menu {
         position: relative;
@@ -10807,4 +10810,11 @@ input[type="checkbox"].cdk-visually-hidden::after {
 }
 body.hide-scroll-body.master-page {
     overflow-y: hidden !important;
+}
+.ledger-attachments-popup {
+    .cdk-overlay-container {
+        .mat-dialog-container {
+            background-color: var(--color-popup-background);
+        }
+    }
 }

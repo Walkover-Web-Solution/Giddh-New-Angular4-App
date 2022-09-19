@@ -207,7 +207,7 @@
                         <ng-template #popTemplate>
                             <div
                                 *ngIf="taxPopOverTemplate"
-                                [innerHtml]="taxPopOverTemplate.replace('@inTax.name', inTax.name)"
+                                [innerHtml]="taxPopOverTemplate?.replace('@inTax.name', inTax.name)"
                             ></div>
                         </ng-template>
                         <span

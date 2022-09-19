@@ -534,7 +534,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             if (u) {
                 let userEmail = u.email;
                 this.userEmail = clone(userEmail);
-                let userEmailDomain = userEmail.replace(/.*@/, '');
+                let userEmailDomain = userEmail?.replace(/.*@/, '');
                 this.userIsCompanyUser = userEmailDomain && this.companyDomains.indexOf(userEmailDomain) !== -1;
                 let name = u.name;
                 if (u.name.match(/\s/g)) {
@@ -572,10 +572,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 });
 
                 let route = NAVIGATION_ITEM_LIST.find((page) => {
-                    if (!page.additional) {
+                    if (!page?.additional) {
                         return;
                     }
-                    return (page.uniqueName.substring(7, page.uniqueName?.length).indexOf(lastState.replace(tempParams, '')) > -1
+                    return (page?.uniqueName.substring(7, page?.uniqueName?.length).indexOf(lastState?.replace(tempParams, '')) > -1
                         && page.additional.tabIndex === Number(queryParams.tabindex));
                 });
 
@@ -645,7 +645,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         });
 
         if (this.activeCompanyForDb?.uniqueName) {
-            this._dbService.getAllItems(this.activeCompanyForDb.uniqueName, 'accounts').subscribe(accountList => {
+            this._dbService.getAllItems(this.activeCompanyForDb?.uniqueName, 'accounts').subscribe(accountList => {
                 if (accountList?.length) {
                     if (window.innerWidth > 1440 && window.innerHeight > 717) {
                         this.accountItemsFromIndexDB = accountList.slice(0, 7);
@@ -962,7 +962,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         if (!this.activeCompanyForDb) {
             return;
         }
-        if (!this.activeCompanyForDb.uniqueName) {
+        if (!this.activeCompanyForDb?.uniqueName) {
             return;
         }
         if (dbResult) {
@@ -1823,7 +1823,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     private saveLastState(): void {
         let companyUniqueName = null;
         let lastState = this.router.url;
-        lastState = lastState.replace("/pages", "pages");
+        lastState = lastState?.replace("/pages", "pages");
         this.store.pipe(select(state => state.session.companyUniqueName), take(1)).subscribe(response => companyUniqueName = response);
         let stateDetailsRequest = new StateDetailsRequest();
         stateDetailsRequest.companyUniqueName = companyUniqueName;

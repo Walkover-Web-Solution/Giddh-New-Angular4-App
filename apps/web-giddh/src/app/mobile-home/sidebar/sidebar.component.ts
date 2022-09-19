@@ -66,12 +66,12 @@ export class MobileHomeSidebarComponent implements OnInit, OnDestroy {
         });
         this.store.pipe(select(appStore => appStore.session.currentOrganizationDetails), takeUntil(this.destroyed$)).subscribe((organization: Organization) => {
             if (organization && organization.details && organization.details.branchDetails) {
-                this.generalService.currentBranchUniqueName = organization.details.branchDetails.uniqueName;
+                this.generalService.currentBranchUniqueName = organization.details.branchDetails?.uniqueName;
                 this.generalService.currentOrganizationType = organization.type;
                 if (this.generalService.currentBranchUniqueName) {
                     this.currentCompanyBranches$.pipe(take(1)).subscribe(response => {
                         if (response) {
-                            this.currentBranch = response.find(branch => (branch.uniqueName === this.generalService.currentBranchUniqueName));
+                            this.currentBranch = response.find(branch => (branch?.uniqueName === this.generalService.currentBranchUniqueName));
                         }
                     });
                 }
@@ -83,7 +83,7 @@ export class MobileHomeSidebarComponent implements OnInit, OnDestroy {
             if (response && response.length) {
                 if (this.generalService.currentBranchUniqueName) {
                     this.currentBranch = response.find(branch =>
-                        (this.generalService.currentBranchUniqueName === branch.uniqueName)) || {};
+                        (this.generalService.currentBranchUniqueName === branch?.uniqueName)) || {};
                 } else {
                     this.currentBranch = '';
                 }
