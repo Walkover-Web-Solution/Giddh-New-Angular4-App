@@ -68,6 +68,7 @@ import { TaxSidebarModule } from '../shared/tax-sidebar/tax-sidebar.module';
 import { NoDataModule } from '../shared/no-data/no-data.module';
 import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
 import { NgxBootstrapSwitchModule } from 'ngx-bootstrap-switch';
+import { ValidateSubscriptionDirectiveModule } from '../shared/validate-subscription/validate-subscription.module';
 
 const DEFAULT_FONT_PICKER_CONFIG: FontPickerConfigInterface = {
     // Change this to your Google API key
@@ -165,7 +166,8 @@ const INVOICE_ROUTES: Routes = [
         TaxSidebarModule,
         NoDataModule,
         NgxMaskModule.forRoot(),
-        NgxBootstrapSwitchModule.forRoot()
+        NgxBootstrapSwitchModule.forRoot(),
+        ValidateSubscriptionDirectiveModule
     ],
     exports: [
         RouterModule,
