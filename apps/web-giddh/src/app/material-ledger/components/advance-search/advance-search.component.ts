@@ -431,6 +431,12 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
                 this.advanceSearchForm.get('amountLessThan')?.patchValue(false);
                 this.advanceSearchForm.get('amountEqualTo')?.patchValue(true);
                 break;
+            case 'amount-null':
+                this.advanceSearchForm.get('includeAmount')?.patchValue(false);
+                this.advanceSearchForm.get('amountGreaterThan')?.patchValue(false);
+                this.advanceSearchForm.get('amountLessThan')?.patchValue(false);
+                this.advanceSearchForm.get('amountEqualTo')?.patchValue(false);
+                break;    
             case 'inventoryQty-greaterThan':
                 this.advanceSearchForm.get('inventory.includeQuantity')?.patchValue(true);
                 this.advanceSearchForm.get('inventory.quantityGreaterThan')?.patchValue(true);
@@ -462,6 +468,12 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
                 this.advanceSearchForm.get('inventory.quantityEqualTo')?.patchValue(true);
                 break;
             case 'inventoryQty-exclude':
+                this.advanceSearchForm.get('inventory.includeQuantity')?.patchValue(false);
+                this.advanceSearchForm.get('inventory.quantityGreaterThan')?.patchValue(false);
+                this.advanceSearchForm.get('inventory.quantityLessThan')?.patchValue(false);
+                this.advanceSearchForm.get('inventory.quantityEqualTo')?.patchValue(false);
+                break;
+            case 'inventoryQty-null':
                 this.advanceSearchForm.get('inventory.includeQuantity')?.patchValue(false);
                 this.advanceSearchForm.get('inventory.quantityGreaterThan')?.patchValue(false);
                 this.advanceSearchForm.get('inventory.quantityLessThan')?.patchValue(false);
@@ -503,6 +515,12 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
                 this.advanceSearchForm.get('inventory.includeItemLessThan')?.patchValue(false);
                 this.advanceSearchForm.get('inventory.includeItemEqualTo')?.patchValue(false);
                 break;
+            case 'inventoryVal-null':
+                this.advanceSearchForm.get('inventory.includeItemValue')?.patchValue(false);
+                this.advanceSearchForm.get('inventory.includeItemGreaterThan')?.patchValue(false);
+                this.advanceSearchForm.get('inventory.includeItemLessThan')?.patchValue(false);
+                this.advanceSearchForm.get('inventory.includeItemEqualTo')?.patchValue(false);
+                break;    
         }
     }
 
