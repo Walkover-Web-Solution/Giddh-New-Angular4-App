@@ -141,9 +141,9 @@ export class InventorySidebarComponent implements OnInit, OnDestroy, AfterViewIn
         }
         this.currentPage = page;
         if (!this.isSearching) {
-            this.store.dispatch(this.sidebarAction.GetGroupsWithStocksHierarchyMin('', page, 200));
+            this.store.dispatch(this.sidebarAction.GetGroupsWithStocksHierarchyMin('', page, 30));
         } else {
-            this.store.dispatch(this.sidebarAction.SearchGroupsWithStocks(q, page, 200));
+            this.store.dispatch(this.sidebarAction.SearchGroupsWithStocks(q, page, 30));
         }
     }
 
