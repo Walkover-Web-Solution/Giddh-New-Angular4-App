@@ -116,17 +116,17 @@ export class UploadFileComponent implements OnInit, OnDestroy {
             if (response && response.length) {
                 this.currentCompanyBranches = response.map(branch => ({
                     label: branch.alias,
-                    value: branch.uniqueName,
+                    value: branch?.uniqueName,
                     name: branch.name,
                     parentBranch: branch.parentBranch
                 }));
                 const hoBranch = response.find(branch => !branch.parentBranch);
-                const currentBranchUniqueName = this.currentOrganizationType === OrganizationType.Branch ? this.generalService.currentBranchUniqueName : hoBranch ? hoBranch.uniqueName : '';
+                const currentBranchUniqueName = this.currentOrganizationType === OrganizationType.Branch ? this.generalService.currentBranchUniqueName : hoBranch ? hoBranch?.uniqueName : '';
                 if (!this.currentBranch?.uniqueName) {
                     // Assign the current branch only when it is not selected. This check is necessary as
                     // opening the branch switcher would reset the current selected branch as this subscription is run everytime
                     // branches are loaded
-                    this.currentBranch = _.cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName));
+                    this.currentBranch = _.cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName));
                     if (this.currentBranch) {
                         this.currentBranch.name = (this.currentBranch ? this.currentBranch.name : '') + (this.currentBranch?.alias ? ` (${this.currentBranch.alias})` : '');
                     }
@@ -187,7 +187,7 @@ export class UploadFileComponent implements OnInit, OnDestroy {
     public handleFileUpload(file: File): void {
         this.onFileUpload.emit({
             file,
-            branchUniqueName: this.entity === 'entries' && this.currentBranch ? this.currentBranch.uniqueName : ''
+            branchUniqueName: this.entity === 'entries' && this.currentBranch ? this.currentBranch?.uniqueName : ''
         });
     }
 }

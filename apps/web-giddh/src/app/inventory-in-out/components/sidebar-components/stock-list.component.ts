@@ -10,7 +10,7 @@ import { IStocksItem } from '../../../models/interfaces/stocksItem.interface';
   `],
     template: `
     <ul class="list-unstyled  stock-grp-list clearfix" *ngIf="stockList">
-      <li routerLinkActive="active" *ngFor="let s of stockList"><a [routerLink]="['/pages','inventory-in-out','stock',s.uniqueName]"> {{s.name}}</a></li>
+      <li routerLinkActive="active" *ngFor="let s of stockList"><a [routerLink]="['/pages','inventory-in-out','stock',s?.uniqueName]"> {{s.name}}</a></li>
     </ul>
   `
 })

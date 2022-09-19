@@ -149,14 +149,14 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
         }
         this._selectedCompany = value;
         this.financialOptions = value.financialYears.map(q => {
-            return { label: q.uniqueName, value: q.uniqueName };
+            return { label: q?.uniqueName, value: q?.uniqueName };
         });
 
         if (this.filterForm.get('selectedDateOption').value === '0' && value.activeFinancialYear) {
             this.filterForm?.patchValue({
                 to: value.activeFinancialYear.financialYearEnds,
                 from: value.activeFinancialYear.financialYearStarts,
-                selectedFinancialYearOption: value.activeFinancialYear.uniqueName
+                selectedFinancialYearOption: value.activeFinancialYear?.uniqueName
             });
         }
     }
@@ -231,30 +231,30 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
                 this.currentCompanyBranches = [];
                 this.currentCompanyBranches = response.map(branch => ({
                     label: branch.alias,
-                    value: branch.uniqueName,
+                    value: branch?.uniqueName,
                     name: branch.name,
                     parentBranch: branch.parentBranch
                 }));
                 this.currentCompanyBranches.unshift({
                     label: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
                     name: this.activeCompany ? this.activeCompany.name : '',
-                    value: this.activeCompany ? this.activeCompany.uniqueName : '',
+                    value: this.activeCompany ? this.activeCompany?.uniqueName : '',
                     isCompany: true
                 });
                 let currentBranchUniqueName;
-                if (!this.currentBranch.uniqueName) {
+                if (!this.currentBranch?.uniqueName) {
                     // Assign the current branch only when it is not selected. This check is necessary as
                     // opening the branch switcher would reset the current selected branch as this subscription is run everytime
                     // branches are loaded
                     if (this.currentOrganizationType === OrganizationType.Branch) {
                         currentBranchUniqueName = this.generalService.currentBranchUniqueName;
-                        this.currentBranch = cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName)) || this.currentBranch;
+                        this.currentBranch = cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName)) || this.currentBranch;
                     } else {
-                        currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : '';
+                        currentBranchUniqueName = this.activeCompany ? this.activeCompany?.uniqueName : '';
                         this.currentBranch = {
                             name: this.activeCompany ? this.activeCompany.name : '',
                             alias: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
-                            uniqueName: this.activeCompany ? this.activeCompany.uniqueName : '',
+                            uniqueName: this.activeCompany ? this.activeCompany?.uniqueName : '',
                         };
                     }
                 }
@@ -299,8 +299,8 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
 
     public selectFinancialYearOption(v: IOption) {
         if (v.value) {
-            let financialYear = this._selectedCompany.financialYears.find(p => p.uniqueName === v.value);
-            let index = this._selectedCompany.financialYears.findIndex(p => p.uniqueName === v.value);
+            let financialYear = this._selectedCompany.financialYears.find(p => p?.uniqueName === v.value);
+            let index = this._selectedCompany.financialYears.findIndex(p => p?.uniqueName === v.value);
             if (financialYear) {
                 this.filterForm?.patchValue({
                     to: financialYear.financialYearEnds,
@@ -336,7 +336,7 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
 
     public setFYFirstTime(selectedFY: string) {
         if (selectedFY) {
-            let inx = this._selectedCompany.financialYears.findIndex(p => p.uniqueName === selectedFY);
+            let inx = this._selectedCompany.financialYears.findIndex(p => p?.uniqueName === selectedFY);
             if (inx !== -1) {
                 this.filterForm?.patchValue({
                     fy: inx === 0 ? 0 : inx * -1

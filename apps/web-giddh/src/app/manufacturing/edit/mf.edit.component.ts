@@ -147,7 +147,7 @@ export class MfEditComponent implements OnInit, OnDestroy {
         this.store.pipe(select(manufacturingStore => manufacturingStore.manufacturing), takeUntil(this.destroyed$)).subscribe((res: any) => {
             if (res.stockToUpdate) {
                 this.isUpdateCase = true;
-                let manufacturingObj = cloneDeep(res.reportData.results.find((stock) => stock.uniqueName === res.stockToUpdate));
+                let manufacturingObj = cloneDeep(res.reportData.results.find((stock) => stock?.uniqueName === res.stockToUpdate));
                 if (manufacturingObj) {
                     this.selectedProductName = `${manufacturingObj.stockName} (${manufacturingObj.stockUniqueName})`;
                     manufacturingObj.quantity = manufacturingObj.manufacturingQuantity;
@@ -157,7 +157,7 @@ export class MfEditComponent implements OnInit, OnDestroy {
                         item.quantity = (item.manufacturingQuantity / manufacturingObj.manufacturingMultipleOf);
                     });
                     manufacturingObj.otherExpenses.forEach(expense => {
-                        expense.baseAccount.defaultName = `${expense.baseAccount.name} (${expense.baseAccount.uniqueName})`;
+                        expense.baseAccount.defaultName = `${expense.baseAccount.name} (${expense.baseAccount?.uniqueName})`;
                         expense.transactions[0].account.defaultName = `${expense.transactions[0]?.account?.name} (${expense.transactions[0]?.account?.uniqueName})`;
                     });
                     if (!this.initialQuantityObj.length) {
@@ -199,11 +199,11 @@ export class MfEditComponent implements OnInit, OnDestroy {
                         let units = data.results;
 
                         return units.map(unit => {
-                            let alreadyPushedElementindx = manufacturingDetailsObj?.linkedStocks?.findIndex((obj) => obj.stockUniqueName === unit.uniqueName);
+                            let alreadyPushedElementindx = manufacturingDetailsObj?.linkedStocks?.findIndex((obj) => obj.stockUniqueName === unit?.uniqueName);
                             if (alreadyPushedElementindx > -1) {
-                                return { label: ` ${unit.name} (${unit.uniqueName})`, value: unit.uniqueName, isAlreadyPushed: true };
+                                return { label: ` ${unit?.name} (${unit?.uniqueName})`, value: unit?.uniqueName, isAlreadyPushed: true };
                             } else {
-                                return { label: ` ${unit.name} (${unit.uniqueName})`, value: unit.uniqueName, isAlreadyPushed: false };
+                                return { label: ` ${unit?.name} (${unit?.uniqueName})`, value: unit?.uniqueName, isAlreadyPushed: false };
                             }
                         });
                     }
@@ -219,11 +219,11 @@ export class MfEditComponent implements OnInit, OnDestroy {
                     if (data.results) {
                         let units = data.results;
                         return units.map(unit => {
-                            let alreadyPushedElementindx = manufacturingDetailsObj?.linkedStocks?.findIndex((obj) => obj.stockUniqueName === unit.uniqueName);
+                            let alreadyPushedElementindx = manufacturingDetailsObj?.linkedStocks?.findIndex((obj) => obj.stockUniqueName === unit?.uniqueName);
                             if (alreadyPushedElementindx > -1) {
-                                return { label: ` ${unit.name} (${unit.uniqueName})`, value: unit.uniqueName, isAlreadyPushed: true };
+                                return { label: ` ${unit?.name} (${unit?.uniqueName})`, value: unit?.uniqueName, isAlreadyPushed: true };
                             } else {
-                                return { label: ` ${unit.name} (${unit.uniqueName})`, value: unit.uniqueName, isAlreadyPushed: false };
+                                return { label: ` ${unit?.name} (${unit?.uniqueName})`, value: unit?.uniqueName, isAlreadyPushed: false };
                             }
                         });
                     }
@@ -425,8 +425,8 @@ export class MfEditComponent implements OnInit, OnDestroy {
         if (userResponse) {
             let manufacturingObj = cloneDeep(this.manufacturingDetails);
             this.store.dispatch(this.manufacturingActions.DeleteMfItem({
-                stockUniqueName: manufacturingObj.stockUniqueName,
-                manufacturingUniqueName: manufacturingObj.uniqueName
+                stockUniqueName: manufacturingObj?.stockUniqueName,
+                manufacturingUniqueName: manufacturingObj?.uniqueName
             }));
         }
         this.manufacturingConfirmationModal.hide();
@@ -562,8 +562,8 @@ export class MfEditComponent implements OnInit, OnDestroy {
         this.onLiabilitiesAssetAccountSearchQueryChanged('', 1, (response) => {
             this.defaultLiabilitiesAssetAccountSuggestions = response.map(result => {
                 return {
-                    value: result.uniqueName,
-                    label: `${result.name} (${result.uniqueName})`
+                    value: result?.uniqueName,
+                    label: `${result.name} (${result?.uniqueName})`
                 }
             }) || [];
             this.defaultLiabilitiesAssetAccountPaginationData.page = this.liabilitiesAssetAccountsSearchResultsPaginationData.page;
@@ -594,8 +594,8 @@ export class MfEditComponent implements OnInit, OnDestroy {
                 if (data && data.body && data.body.results) {
                     const searchResults = data.body.results.map(result => {
                         return {
-                            value: result.uniqueName,
-                            label: `${result.name} (${result.uniqueName})`
+                            value: result?.uniqueName,
+                            label: `${result.name} (${result?.uniqueName})`
                         }
                     }) || [];
                     if (page === 1) {
@@ -643,8 +643,8 @@ export class MfEditComponent implements OnInit, OnDestroy {
                     if (!this.expenseAccountsSearchResultsPaginationData.query) {
                         const results = response.map(result => {
                             return {
-                                value: result.uniqueName,
-                                label: `${result.name} (${result.uniqueName})`
+                                value: result?.uniqueName,
+                                label: `${result.name} (${result?.uniqueName})`
                             }
                         }) || [];
                         this.defaultExpenseAccountSuggestions = this.defaultExpenseAccountSuggestions.concat(...results);
@@ -678,8 +678,8 @@ export class MfEditComponent implements OnInit, OnDestroy {
                 if (data && data.body && data.body.results) {
                     const searchResults = data.body.results.map(result => {
                         return {
-                            value: result.uniqueName,
-                            label: `${result.name} (${result.uniqueName})`
+                            value: result?.uniqueName,
+                            label: `${result.name} (${result?.uniqueName})`
                         }
                     }) || [];
                     if (page === 1) {
@@ -727,8 +727,8 @@ export class MfEditComponent implements OnInit, OnDestroy {
                     if (!this.defaultLiabilitiesAssetAccountPaginationData.query) {
                         const results = response.map(result => {
                             return {
-                                value: result.uniqueName,
-                                label: `${result.name} (${result.uniqueName})`
+                                value: result?.uniqueName,
+                                label: `${result.name} (${result?.uniqueName})`
                             }
                         }) || [];
                         this.defaultLiabilitiesAssetAccountSuggestions = this.defaultLiabilitiesAssetAccountSuggestions.concat(...results);
@@ -760,9 +760,9 @@ export class MfEditComponent implements OnInit, OnDestroy {
             this.warehouses = [];
             if (warehouses && warehouses.results) {
                 let warehouseResults = cloneDeep(warehouses.results);
-                warehouseResults = warehouseResults?.filter(warehouse => this.manufacturingDetails?.warehouseUniqueName === warehouse.uniqueName || !warehouse.isArchived);
+                warehouseResults = warehouseResults?.filter(warehouse => this.manufacturingDetails?.warehouseUniqueName === warehouse?.uniqueName || !warehouse.isArchived);
                 warehouseResults.forEach(warehouse => {
-                    this.warehouses.push({ label: warehouse.name, value: warehouse.uniqueName, additional: warehouse });
+                    this.warehouses.push({ label: warehouse.name, value: warehouse?.uniqueName, additional: warehouse });
                 });
             }
         });

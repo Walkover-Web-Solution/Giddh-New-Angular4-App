@@ -182,7 +182,7 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
                         if (activeGroupData) {
                             break;
                         } else {
-                            if (group.uniqueName === el.uniqueName) {
+                            if (group?.uniqueName === el.uniqueName) {
                                 el.stocks = group.stocks;
                                 if (state.activeStockUniqueName) {
                                     for (let st of el.stocks) {
@@ -200,7 +200,7 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
                     }
                     return Object.assign({}, state, {
                         activeGroup: group,
-                        activeGroupUniqueName: group.uniqueName,
+                        activeGroupUniqueName: group?.uniqueName,
                         groupsWithStocks: groupArray
                     });
                 }
@@ -257,7 +257,7 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
                     });
                 } else {
                     for (let el of groupArray) {
-                        if (el.uniqueName === groupStockResponse.request.parentStockGroupUniqueName) {
+                        if (el?.uniqueName === groupStockResponse.request.parentStockGroupUniqueName) {
                             el.childStockGroups.push({
                                 name: groupStockResponse.body.name,
                                 uniqueName: groupStockResponse.body.uniqueName,
@@ -310,10 +310,9 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
             if (resp.status === 'success') {
                 groupArray = _.cloneDeep(state.groupsWithStocks);
                 let activeGroup = _.cloneDeep(state.activeGroup);
-                let stateActiveGrp: StockGroupResponse = null;
                 if (resp.request.isSelfParent || !resp.request.isSubGroup) {
                     groupArray.map(gr => {
-                        if (gr.uniqueName === activeGroup.uniqueName) {
+                        if (gr?.uniqueName === activeGroup?.uniqueName) {
                             gr.name = resp.body.name;
                             gr.uniqueName = resp.body.uniqueName;
                             gr.isActive = false;
@@ -322,14 +321,14 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
                     });
                 } else {
                     for (let el of groupArray) {
-                        if (el.uniqueName === resp.body.parentStockGroup.uniqueName) {
-                            let myGrp = removeGroupItemAndReturnIt(el.childStockGroups, resp.body.parentStockGroup.uniqueName, resp.queryString.stockGroupUniquename, null);
+                        if (el?.uniqueName === resp.body.parentStockGroup?.uniqueName) {
+                            let myGrp = removeGroupItemAndReturnIt(el.childStockGroups, resp.body.parentStockGroup?.uniqueName, resp.queryString.stockGroupUniquename, null);
                             if (myGrp) {
                                 myGrp.name = resp.body.name;
                                 myGrp.uniqueName = resp.body.uniqueName;
                                 myGrp.isActive = false;
                                 myGrp.isOpen = false;
-                                addItemAtIndex(groupArray, resp.body.parentStockGroup.uniqueName, myGrp);
+                                addItemAtIndex(groupArray, resp.body.parentStockGroup?.uniqueName, myGrp);
                                 break;
                             }
                         } else {
@@ -340,7 +339,7 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
                                     myGrp.uniqueName = resp.body.uniqueName;
                                     myGrp.isActive = false;
                                     myGrp.isOpen = false;
-                                    addItemAtIndex(groupArray, resp.body.parentStockGroup.uniqueName, myGrp);
+                                    addItemAtIndex(groupArray, resp.body.parentStockGroup?.uniqueName, myGrp);
                                     break;
                                 }
                             }
@@ -363,8 +362,8 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
             if (removeGrpResp.status === 'success') {
                 groupArray = _.cloneDeep(state.groupsWithStocks);
                 for (let el of groupArray) {
-                    if (el.uniqueName === removeGrpResp.request) {
-                        groupArray = groupArray.filter(grp => grp.uniqueName !== removeGrpResp.request);
+                    if (el?.uniqueName === removeGrpResp.request) {
+                        groupArray = groupArray?.filter(grp => grp.uniqueName !== removeGrpResp.request);
                     } else {
                         let myParent = findMyParent(el.childStockGroups, removeGrpResp.request, null);
                         if (myParent) {
@@ -427,7 +426,7 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
                 groupArray = _.cloneDeep(state.groupsWithStocks);
                 if (groupArray && groupArray.length) {
                     for (let el of groupArray) {
-                        if (el.uniqueName === createStockResp.queryString.stockGroupUniqueName) {
+                        if (el?.uniqueName === createStockResp.queryString.stockGroupUniqueName) {
                             el.stocks.push(createStockResp.body);
                             el.isOpen = true;
                             el.isActive = true;
@@ -554,7 +553,7 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
         case InventoryActionsConst.MoveStockResponse:
             let moveStockResp: BaseResponse<string, string> = action.payload;
             groupArray = _.cloneDeep(state.groupsWithStocks);
-            removeStockItemAndReturnIt(groupArray, moveStockResp.queryString.activeGroup.uniqueName, moveStockResp.queryString.stockUniqueName, null);
+            removeStockItemAndReturnIt(groupArray, moveStockResp.queryString.activeGroup?.uniqueName, moveStockResp.queryString.stockUniqueName, null);
             return Object.assign({}, state, {
                 groupsWithStocks: groupArray,
                 activeStock: null,
@@ -599,12 +598,12 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
         case CUSTOM_STOCK_UNIT_ACTIONS.DELETE_STOCK_UNIT_RESPONSE:
             if ((action.payload as BaseResponse<string, string>).status === 'success') {
                 return Object.assign({}, state, {
-                    stockUnits: state.stockUnits.filter(p => p.code !== (action.payload as BaseResponse<string, string>).request),
-                    deleteCustomStockInProcessCode: state.deleteCustomStockInProcessCode.filter(p => p !== (action.payload as BaseResponse<string, string>).request)
+                    stockUnits: state.stockUnits?.filter(p => p.code !== (action.payload as BaseResponse<string, string>).request),
+                    deleteCustomStockInProcessCode: state.deleteCustomStockInProcessCode?.filter(p => p !== (action.payload as BaseResponse<string, string>).request)
                 });
             }
             return Object.assign({}, state, {
-                deleteCustomStockInProcessCode: state.deleteCustomStockInProcessCode.filter(p => p !== (action.payload as BaseResponse<string, string>).request)
+                deleteCustomStockInProcessCode: state.deleteCustomStockInProcessCode?.filter(p => p !== (action.payload as BaseResponse<string, string>).request)
             });
         case CUSTOM_STOCK_UNIT_ACTIONS.GET_STOCK_UNIT_NAME:
             return Object.assign({}, state, { isStockUnitCodeAvailable: null });
@@ -657,7 +656,7 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
 
 const setRecursivlyActive = (groups: IGroupsWithStocksHierarchyMinItem[], uniqueName: string, result: IGroupsWithStocksHierarchyMinItem) => {
     for (let el of groups) {
-        if (el.uniqueName === uniqueName) {
+        if (el?.uniqueName === uniqueName) {
             el.isActive = true;
             el.isOpen = !el.isOpen;
             if (!result) {
@@ -682,7 +681,7 @@ const setRecursivlyActive = (groups: IGroupsWithStocksHierarchyMinItem[], unique
 
 const setRecursivlyStock = (groups: IGroupsWithStocksHierarchyMinItem[], group: StockGroupResponse, result: IGroupsWithStocksHierarchyMinItem, stockUniqueName?: string) => {
     for (let el of groups) {
-        if (el.uniqueName === group.uniqueName) {
+        if (el?.uniqueName === group.uniqueName) {
             el.stocks = group.stocks;
             if (stockUniqueName) {
                 for (let st of el.stocks) {
@@ -715,7 +714,7 @@ const setRecursivlyStock = (groups: IGroupsWithStocksHierarchyMinItem[], group: 
 
 const addNewGroup = (groups: IGroupsWithStocksHierarchyMinItem[], group: BaseResponse<StockGroupResponse, StockGroupRequest>, result: IGroupsWithStocksHierarchyMinItem) => {
     for (let el of groups) {
-        if (el.uniqueName === group.request.parentStockGroupUniqueName) {
+        if (el?.uniqueName === group.request.parentStockGroupUniqueName) {
             el.isActive = false;
             el.isOpen = false;
             el.childStockGroups.push({
@@ -744,7 +743,7 @@ const addNewGroup = (groups: IGroupsWithStocksHierarchyMinItem[], group: BaseRes
 
 const removeGroupItem = (groups: IGroupsWithStocksHierarchyMinItem[], parentUniqueName: string, uniqueName: string) => {
     for (let index = 0; index < groups.length; index++) {
-        if (groups[index].uniqueName === parentUniqueName) {
+        if (groups[index]?.uniqueName === parentUniqueName) {
             groups.splice(index, 1);
             return;
         }
@@ -758,7 +757,7 @@ const removeGroupItem = (groups: IGroupsWithStocksHierarchyMinItem[], parentUniq
 
 const addItemAtIndex = (groups: IGroupsWithStocksHierarchyMinItem[], parentUniqueName: string, group: IGroupsWithStocksHierarchyMinItem) => {
     for (let el of groups) {
-        if (el.uniqueName === parentUniqueName) {
+        if (el?.uniqueName === parentUniqueName) {
             el.isActive = false;
             el.isOpen = false;
             el.childStockGroups.push({
@@ -780,7 +779,7 @@ const addItemAtIndex = (groups: IGroupsWithStocksHierarchyMinItem[], parentUniqu
 
 const findMyParent = (groups: IGroupsWithStocksHierarchyMinItem[], uniqueName: string, result: IGroupsWithStocksHierarchyMinItem) => {
     for (let el of groups) {
-        if (el.uniqueName === uniqueName) {
+        if (el?.uniqueName === uniqueName) {
             if (!result) {
                 result = el;
                 return result;
@@ -799,7 +798,7 @@ const findMyParent = (groups: IGroupsWithStocksHierarchyMinItem[], uniqueName: s
 
 const removeGroupItemAndReturnIt = (groups: IGroupsWithStocksHierarchyMinItem[], parentUniqueName: string, uniqueName: string, result: IGroupsWithStocksHierarchyMinItem): IGroupsWithStocksHierarchyMinItem => {
     for (let index = 0; index < groups.length; index++) {
-        if (groups[index].uniqueName === uniqueName) {
+        if (groups[index]?.uniqueName === uniqueName) {
             result = groups[index];
             groups.splice(index, 1);
             return result;
@@ -817,7 +816,7 @@ const removeGroupItemAndReturnIt = (groups: IGroupsWithStocksHierarchyMinItem[],
 
 const addNewStockToGroup = (groups: IGroupsWithStocksHierarchyMinItem[], stock: BaseResponse<StockDetailResponse, CreateStockRequest>, result: IGroupsWithStocksHierarchyMinItem) => {
     for (let el of groups) {
-        if (el.uniqueName === stock.queryString.stockGroupUniqueName) {
+        if (el?.uniqueName === stock.queryString.stockGroupUniqueName) {
             el.isActive = true;
             el.isOpen = true;
             el.stocks.push(stock.body);
@@ -839,7 +838,7 @@ const addNewStockToGroup = (groups: IGroupsWithStocksHierarchyMinItem[], stock: 
 
 const removeStockItemAndReturnIt = (groups: IGroupsWithStocksHierarchyMinItem[], grpUniqueName: string, stockUniqueName: string, result: INameUniqueName): INameUniqueName => {
     for (let grp of groups) {
-        if (grp.uniqueName === grpUniqueName) {
+        if (grp?.uniqueName === grpUniqueName) {
             let st = grp.stocks.findIndex(p => p.uniqueName === stockUniqueName);
             result = grp.stocks[st];
             grp.stocks.splice(st, 1);
@@ -859,7 +858,7 @@ const removeStockItemAndReturnIt = (groups: IGroupsWithStocksHierarchyMinItem[],
 /** update stock group array object on update stock unit in a group **/
 const updateStockIteminGroupArray = (groups: IGroupsWithStocksHierarchyMinItem[], grpUniqueName: string, response: BaseResponse<StockDetailResponse, CreateStockRequest>): void => {
     for (let grp of groups) {
-        if (grp.uniqueName === grpUniqueName) {
+        if (grp?.uniqueName === grpUniqueName) {
             let index = grp.stocks.findIndex(stock => stock.uniqueName === response.queryString.stockUniqueName);
             if (index > -1) {
                 grp.stocks[index] = {
@@ -877,7 +876,7 @@ const updateStockIteminGroupArray = (groups: IGroupsWithStocksHierarchyMinItem[]
 };
 const addStockItemAtIndex = (groups: IGroupsWithStocksHierarchyMinItem[], parentUniqueName: string, stock: INameUniqueName) => {
     for (let el of groups) {
-        if (el.uniqueName === parentUniqueName) {
+        if (el?.uniqueName === parentUniqueName) {
             el.isActive = true;
             el.isOpen = true;
             el.stocks.push({

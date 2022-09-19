@@ -85,7 +85,7 @@ export class GroupWithAccountsAction {
                 let grouName = null;
                 this.store.pipe(take(1)).subscribe((s) => {
                     if (s.groupwithaccounts.activeGroup) {
-                        grouName = s.groupwithaccounts.activeGroup.uniqueName;
+                        grouName = s.groupwithaccounts.activeGroup?.uniqueName;
                     }
                 });
                 return this.getTaxHierarchy(grouName);
@@ -567,7 +567,7 @@ export class GroupWithAccountsAction {
     public findMyParent(groups: IGroupsWithAccounts[], uniqueName: string, parent: IGroupsWithAccounts): IGroupsWithAccounts {
         if (groups && groups.length > 0) {
             for (let grp of groups) {
-                if (grp.uniqueName === uniqueName) {
+                if (grp?.uniqueName === uniqueName) {
                     return Object.assign({}, parent);
                 }
                 if (grp.groups) {

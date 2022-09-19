@@ -22,7 +22,7 @@ export class SettingsDiscountService {
      */
     public GetDiscounts(): Observable<BaseResponse<IDiscountList[], string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.get(this.config.apiUrl + SETTINGS_DISCOUNT_API.COMMON.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
+        return this.http.get(this.config.apiUrl + SETTINGS_DISCOUNT_API.COMMON?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
             let data: BaseResponse<IDiscountList[], string> = res;
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<IDiscountList[], string>(e, '')));
@@ -34,7 +34,7 @@ export class SettingsDiscountService {
     public CreateDiscount(model: CreateDiscountRequest): Observable<BaseResponse<IDiscountList, CreateDiscountRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.post(this.config.apiUrl + SETTINGS_DISCOUNT_API.COMMON
-            .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)),
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)),
             model).pipe(map((res) => {
                 let data: BaseResponse<IDiscountList, CreateDiscountRequest> = res;
                 data.request = model;
@@ -48,8 +48,8 @@ export class SettingsDiscountService {
     public UpdateDiscount(model: CreateDiscountRequest, uniqueName: string): Observable<BaseResponse<IDiscountList, CreateDiscountRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.put(this.config.apiUrl + SETTINGS_DISCOUNT_API.PUT
-            .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            .replace(':discountUniqueName', encodeURIComponent(uniqueName)), model).pipe(map((res) => {
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':discountUniqueName', encodeURIComponent(uniqueName)), model).pipe(map((res) => {
                 let data: BaseResponse<IDiscountList, CreateDiscountRequest> = res;
                 data.request = model;
                 data.queryString = uniqueName;
@@ -62,7 +62,7 @@ export class SettingsDiscountService {
      */
     public DeleteDiscount(uniqueName: string): Observable<BaseResponse<string, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.delete(this.config.apiUrl + SETTINGS_DISCOUNT_API.COMMON.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)) + '/' + uniqueName).pipe(map((res) => {
+        return this.http.delete(this.config.apiUrl + SETTINGS_DISCOUNT_API.COMMON?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)) + '/' + uniqueName).pipe(map((res) => {
             let data: BaseResponse<any, any> = res;
             data.request = uniqueName;
             return data;

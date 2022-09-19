@@ -87,7 +87,7 @@ export class AccountsAction {
                 this._toasty.successToast(action.payload.body, action.payload.status);
                 this.store.pipe(take(1)).subscribe((s) => {
                     if (s.groupwithaccounts && s.groupwithaccounts.activeGroup) {
-                        return this.getAccountDetails(s.groupwithaccounts.activeAccount.uniqueName);
+                        return this.getAccountDetails(s.groupwithaccounts.activeAccount?.uniqueName);
                     }
                 });
                 return { type: 'EmptyAction' };
@@ -149,7 +149,7 @@ export class AccountsAction {
             map(response => {
                 if (response && response.body && response.queryString) {
                     const updateIndexDb: IUpdateDbRequest = {
-                        newUniqueName: response.body.uniqueName,
+                        newUniqueName: response.body?.uniqueName,
                         oldUniqueName: response.queryString.accountUniqueName,
                         latestName: response.request.name,
                         uniqueName: this._generalServices.companyUniqueName,
@@ -193,7 +193,7 @@ export class AccountsAction {
                     this.store.dispatch(this.commonActions.accountUpdated(true));
                     this.store.dispatch(this.groupWithAccountsAction.hideEditAccountForm());
                     const updateIndexDb: IUpdateDbRequest = {
-                        newUniqueName: response.body.uniqueName,
+                        newUniqueName: response.body?.uniqueName,
                         oldUniqueName: response.queryString.accountUniqueName,
                         latestName: response.request.name,
                         uniqueName: this._generalServices.companyUniqueName,
@@ -220,7 +220,7 @@ export class AccountsAction {
                     this._generalServices.eventHandler.next({ name: eventsConst.accountUpdated, payload: resData });
                     this._toasty.successToast(this.localeService.translate("app_messages.account_updated"));
                     if (!action.payload?.queryString?.isMasterOpen) {
-                        this.store.dispatch(this.getAccountDetails(resData.body.uniqueName));
+                        this.store.dispatch(this.getAccountDetails(resData.body?.uniqueName));
                     }
                 }
                 return { type: 'EmptyAction' };
@@ -371,7 +371,7 @@ export class AccountsAction {
                 }
                 let accountUniqueName = null;
                 this.store.pipe(take(1)).subscribe(s => {
-                    accountUniqueName = s.groupwithaccounts.activeAccount.uniqueName;
+                    accountUniqueName = s.groupwithaccounts.activeAccount?.uniqueName;
                 });
                 return this.sharedAccountWith(accountUniqueName);
             })));
@@ -453,7 +453,7 @@ export class AccountsAction {
                         data.request.forEach(uniqueAccountName => {
                             const request: IUpdateDbRequest = {
                                 uniqueName: this._generalServices.companyUniqueName,
-                                deleteUniqueName: uniqueAccountName.uniqueName,
+                                deleteUniqueName: uniqueAccountName?.uniqueName,
                                 type: "accounts",
                                 name: this._generalServices.companyUniqueName,
                                 isActive: false

@@ -140,7 +140,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
                     isCompany: true
                 });
                 let currentBranchUniqueName;
-                if (!this.currentBranch.uniqueName) {
+                if (!this.currentBranch?.uniqueName) {
                     // Assign the current branch only when it is not selected. This check is necessary as
                     // opening the branch switcher would reset the current selected branch as this subscription is run everytime
                     // branches are loaded
@@ -185,7 +185,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
             vatReportRequest.from = this.fromDate;
             vatReportRequest.to = this.toDate;
             vatReportRequest.taxNumber = this.taxNumber;
-            vatReportRequest.branchUniqueName = this.currentBranch.uniqueName;
+            vatReportRequest.branchUniqueName = this.currentBranch?.uniqueName;
             this.vatReport = [];
 
             this.vatService.getVatReport(vatReportRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
@@ -206,7 +206,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
         vatReportRequest.from = this.fromDate;
         vatReportRequest.to = this.toDate;
         vatReportRequest.taxNumber = this.taxNumber;
-        vatReportRequest.branchUniqueName = this.currentBranch.uniqueName;
+        vatReportRequest.branchUniqueName = this.currentBranch?.uniqueName;
         this.vatService.downloadVatReport(vatReportRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if (res.status === "success") {
                 let blob = this.generalService.base64ToBlob(res.body, 'application/xls', 512);

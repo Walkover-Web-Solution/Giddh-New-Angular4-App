@@ -22,8 +22,8 @@ export class LedgerUtilityService {
         }
 
         if (data?.particularAccount?.parentGroups?.length > 0) {
-            if (data?.particularAccount?.parentGroups[0].uniqueName) {
-                data.particularAccount.parentGroups = data?.particularAccount?.parentGroups?.map(group => group.uniqueName);
+            if (data?.particularAccount?.parentGroups[0]?.uniqueName) {
+                data.particularAccount.parentGroups = data?.particularAccount?.parentGroups?.map(group => group?.uniqueName);
             }
         }
 

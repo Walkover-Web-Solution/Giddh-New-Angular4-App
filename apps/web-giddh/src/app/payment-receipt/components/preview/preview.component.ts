@@ -191,7 +191,7 @@ export class PreviewComponent implements OnInit, OnDestroy, OnChanges, AfterView
      * @memberof PreviewComponent
      */
     public filterVoucher(term: any): void {
-        this.filteredData = this.allVouchers.filter(item => {
+        this.filteredData = this.allVouchers?.filter(item => {
             return item.voucherNumber.toLowerCase().includes(term.toLowerCase()) ||
                 item.account.name.toLowerCase().includes(term.toLowerCase()) ||
                 item.voucherDate.includes(term) ||
@@ -207,7 +207,7 @@ export class PreviewComponent implements OnInit, OnDestroy, OnChanges, AfterView
     public getPdf(): void {
         let model = {
             voucherType: this.voucherType,
-            uniqueName: this.params.uniqueName
+            uniqueName: this.params?.uniqueName
         };
 
         if (this.selectedItem) {
@@ -284,7 +284,7 @@ export class PreviewComponent implements OnInit, OnDestroy, OnChanges, AfterView
     private getVoucherDetails(): void {
         this.store.dispatch(this.invoiceReceiptAction.getVoucherDetailsV4(this.params.accountUniqueName, {
             voucherType: this.voucherType,
-            uniqueName: this.params.uniqueName
+            uniqueName: this.params?.uniqueName
         }));
     }
 

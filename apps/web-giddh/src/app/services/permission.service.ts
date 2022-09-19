@@ -24,7 +24,7 @@ export class PermissionService {
     public GetAllRoles(): Observable<BaseResponse<IRoleCommonResponseAndRequest[], string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
 
-        return this.http.get(this.config.apiUrl + PERMISSION_API.GET_ROLE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
+        return this.http.get(this.config.apiUrl + PERMISSION_API.GET_ROLE?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
             let data: BaseResponse<IRoleCommonResponseAndRequest[], string> = res;
             data.queryString = {};
             return data;
@@ -36,7 +36,7 @@ export class PermissionService {
      */
     public CreateNewRole(model: CreateNewRoleRequest): Observable<BaseResponse<CreateNewRoleResponse, CreateNewRoleRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.post(this.config.apiUrl + PERMISSION_API.CREATE_ROLE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(map((res) => {
+        return this.http.post(this.config.apiUrl + PERMISSION_API.CREATE_ROLE?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(map((res) => {
             let data: BaseResponse<CreateNewRoleResponse, CreateNewRoleRequest> = res;
             data.request = model;
             return data;
@@ -48,7 +48,7 @@ export class PermissionService {
      */
     public UpdateRole(model: IRoleCommonResponseAndRequest): Observable<BaseResponse<IRoleCommonResponseAndRequest, IRoleCommonResponseAndRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.put(this.config.apiUrl + PERMISSION_API.UPDATE_ROLE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':roleUniqueName', model.uniqueName), model).pipe(map((res) => {
+        return this.http.put(this.config.apiUrl + PERMISSION_API.UPDATE_ROLE?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':roleUniqueName', model.uniqueName), model).pipe(map((res) => {
             let data: BaseResponse<IRoleCommonResponseAndRequest, IRoleCommonResponseAndRequest> = res;
             data.request = model;
             return data;
@@ -60,7 +60,7 @@ export class PermissionService {
      */
     public DeleteRole(roleUniqueName: string): Observable<BaseResponse<string, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.delete(this.config.apiUrl + PERMISSION_API.DELETE_ROLE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':roleUniqueName', roleUniqueName)).pipe(map((res) => {
+        return this.http.delete(this.config.apiUrl + PERMISSION_API.DELETE_ROLE?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':roleUniqueName', roleUniqueName)).pipe(map((res) => {
             let data: BaseResponse<string, string> = res;
             data.request = '';
             data.queryString = { roleUniqueName };

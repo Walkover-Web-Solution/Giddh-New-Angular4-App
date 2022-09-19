@@ -17,7 +17,7 @@ export class CommonService {
 
     public GetCountry(request: CountryRequest): Observable<BaseResponse<any, any>> {
         let url = this.config.apiUrl + COMMON_API.COUNTRY;
-        url = url.replace(':formName', request.formName);
+        url = url?.replace(':formName', request.formName);
         return this.http.get(url).pipe(
             map((res) => {
                 let data: BaseResponse<CountryResponse, any> = res;
@@ -36,8 +36,8 @@ export class CommonService {
 
     public getOnboardingForm(request: OnboardingFormRequest): Observable<BaseResponse<any, any>> {
         let url = this.config.apiUrl + COMMON_API.FORM;
-        url = url.replace(':formName', request.formName);
-        url = url.replace(':country', request.country);
+        url = url?.replace(':formName', request.formName);
+        url = url?.replace(':country', request.country);
         return this.http.get(url).pipe(
             map((res) => {
                 let data: BaseResponse<OnboardingFormResponse, any> = res;
@@ -65,9 +65,9 @@ export class CommonService {
      */
     public downloadFile(model: any, downloadOption: string, fileType: string = "base64"): Observable<any> {
         let url = this.config.apiUrl + COMMON_API.DOWNLOAD_FILE
-            .replace(':fileType', fileType)
-            .replace(':downloadOption', downloadOption)
-            .replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName));
+            ?.replace(':fileType', fileType)
+            ?.replace(':downloadOption', downloadOption)
+            ?.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName));
 
         let responseType = (fileType === "base64") ? {} : { responseType: 'blob' };
 

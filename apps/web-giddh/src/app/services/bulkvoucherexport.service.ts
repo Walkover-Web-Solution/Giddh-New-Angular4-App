@@ -28,12 +28,12 @@ export class BulkVoucherExportService {
     public bulkExport(getRequest: any, postRequest: any): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + BULK_VOUCHER_EXPORT_API.BULK_EXPORT;
-        url = url.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
-        url = url.replace(':from', getRequest.from);
-        url = url.replace(':to', getRequest.to);
-        url = url.replace(':type', getRequest.type);
-        url = url.replace(':mail', getRequest.mail);
-        url = url.replace(':q', getRequest.q);
+        url = url?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
+        url = url?.replace(':from', getRequest.from);
+        url = url?.replace(':to', getRequest.to);
+        url = url?.replace(':type', getRequest.type);
+        url = url?.replace(':mail', getRequest.mail);
+        url = url?.replace(':q', getRequest.q);
         if (this.generalService.voucherApiVersion === 2) {
             url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
         }

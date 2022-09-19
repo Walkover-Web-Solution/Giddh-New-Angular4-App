@@ -100,7 +100,7 @@ export class MapExcelDataComponent implements OnInit {
         // filter dataModel options as per selection and for handling duplicate column case
         this.dataModel = this.dataModel.map(m => {
             if (data.field.columnNumber !== m.field.columnNumber) {
-                m.options = m.options.filter(f => f.value !== val.value);
+                m.options = m.options?.filter(f => f.value !== val.value);
             }
             return m;
         });
@@ -170,7 +170,7 @@ export class MapExcelDataComponent implements OnInit {
         });
 
         // change mapping column header as per de-selection
-        this._importData.mappings = this._importData.mappings.filter(f => f.columnNumber !== parseInt(data.field.columnNumber));
+        this._importData.mappings = this._importData.mappings?.filter(f => f.columnNumber !== parseInt(data.field.columnNumber));
 
         this.updateMandatoryHeadersCounters();
         this.updateMandatoryGroupHeadersCounters();
@@ -178,12 +178,12 @@ export class MapExcelDataComponent implements OnInit {
 
     public updateMandatoryHeadersCounters() {
         // count selected mandatory headers
-        this.mandatoryHeadersCount = this.mandatoryHeadersModel.filter(f => f.selected).length;
+        this.mandatoryHeadersCount = this.mandatoryHeadersModel?.filter(f => f.selected).length;
     }
 
     public updateMandatoryGroupHeadersCounters() {
         // count selected mandatory headers
-        this.mandatoryGroupHeadersCount = this.mandatoryGroupModel.filter(f => {
+        this.mandatoryGroupHeadersCount = this.mandatoryGroupModel?.filter(f => {
             return f.some(s => s.selected);
         }).length;
     }
@@ -196,7 +196,7 @@ export class MapExcelDataComponent implements OnInit {
 
             selectedIndex = value.mappings.findIndex(f => f.columnNumber === parseInt(field.columnNumber));
             if (selectedIndex > -1) {
-                options = value.giddhHeaders.filter(f => allMappedColumnHeader.filter(mf => mf !== value.mappings[selectedIndex].mappedColumn).indexOf(f) === -1).map(p => {
+                options = value.giddhHeaders?.filter(f => allMappedColumnHeader?.filter(mf => mf !== value.mappings[selectedIndex].mappedColumn).indexOf(f) === -1).map(p => {
                     return { label: p, value: p };
                 });
             }

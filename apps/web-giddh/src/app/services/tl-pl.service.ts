@@ -33,7 +33,7 @@ export class TlPlService {
             params.branchUniqueName = '';
         }
         return this.http.get(this.config.apiUrl + TB_PL_BS_API.GET_TRIAL_BALANCE
-            .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), params).pipe(
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), params).pipe(
                 map((res) => {
                     let data: BaseResponse<AccountDetails, TrialBalanceRequest> = res;
                     data.request = request;
@@ -57,7 +57,7 @@ export class TlPlService {
             params.branchUniqueName = '';
         }
         return this.http.get(this.config.apiUrl + TB_PL_BS_API.GET_V2_TRIAL_BALANCE
-            .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), params).pipe(
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), params).pipe(
                 map((res) => {
                     let data: BaseResponse<AccountDetails, TrialBalanceRequest> = res;
                     data.request = request;
@@ -75,11 +75,11 @@ export class TlPlService {
             delete request.branchUniqueName;
         }
         let filteredRequest = (Object.keys(request)
-            .filter(p => request[p] != null)
+            ?.filter(p => request[p] != null)
             .reduce((r, i) => ({ ...r, [i]: request[i] }), {}));
 
         return this.http.get(this.config.apiUrl + TB_PL_BS_API.GET_PROFIT_LOSS
-            .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), filteredRequest).pipe(
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), filteredRequest).pipe(
                 map((res) => {
                     let data: BaseResponse<AccountDetails, ProfitLossRequest> = res;
                     data.request = request;
@@ -94,11 +94,11 @@ export class TlPlService {
     public GetCogs(request: GetCogsRequest): Observable<BaseResponse<GetCogsResponse, GetCogsRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let filteredRequest = (Object.keys(request)
-            .filter(p => request[p] != null)
+            ?.filter(p => request[p] != null)
             .reduce((r, i) => ({ ...r, [i]: request[i] }), {}));
 
         return this.http.get(this.config.apiUrl + TB_PL_BS_API.GET_COGS
-            .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), filteredRequest).pipe(
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), filteredRequest).pipe(
                 map((res) => {
                     let data: BaseResponse<GetCogsResponse, GetCogsRequest> = res;
                     data.request = request;
@@ -116,11 +116,11 @@ export class TlPlService {
             delete request.branchUniqueName;
         }
         let filteredRequest = (Object.keys(request)
-            .filter(p => request[p] != null)
+            ?.filter(p => request[p] != null)
             .reduce((r, i) => ({ ...r, [i]: request[i] }), {}));
 
         return this.http.get(this.config.apiUrl + TB_PL_BS_API.GET_BALANCE_SHEET
-            .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), filteredRequest).pipe(
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), filteredRequest).pipe(
                 map((res) => {
                     let data: BaseResponse<AccountDetails, BalanceSheetRequest> = res;
                     data.request = request;
@@ -133,7 +133,7 @@ export class TlPlService {
         this.companyUniqueName = this.generalService.companyUniqueName;
 
         return this.http.get(this.config.apiUrl + TB_PL_BS_API.DOWNLOAD_TRIAL_BALANCE_EXCEL
-            .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), request).pipe(
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), request).pipe(
                 map((res) => {
                     let data = this.generalService.base64ToBlob(res.body, 'application/xml', 512);
                     saveAs(data, request.filename);
@@ -148,11 +148,11 @@ export class TlPlService {
             delete request.branchUniqueName;
         }
         let filteredRequest = (Object.keys(request)
-            .filter(p => request[p] != null)
+            ?.filter(p => request[p] != null)
             .reduce((r, i) => ({ ...r, [i]: request[i] }), {}));
 
         return this.http.get(this.config.apiUrl + TB_PL_BS_API.DOWNLOAD_BALANCE_SHEET_EXCEL
-            .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), filteredRequest).pipe(
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), filteredRequest).pipe(
                 map((res) => {
                     let data = this.generalService.base64ToBlob(res.body, 'application/xml', 512);
                     saveAs(data, request.filename);
@@ -167,11 +167,11 @@ export class TlPlService {
             delete request.branchUniqueName;
         }
         let filteredRequest = (Object.keys(request)
-            .filter(p => request[p] != null)
+            ?.filter(p => request[p] != null)
             .reduce((r, i) => ({ ...r, [i]: request[i] }), {}));
 
         return this.http.get(this.config.apiUrl + TB_PL_BS_API.DOWNLOAD_PROFIT_LOSS_EXCEL
-            .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), filteredRequest).pipe(
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), filteredRequest).pipe(
                 map((res) => {
                     let data = this.generalService.base64ToBlob(res.body, 'application/xml', 512);
                     saveAs(data, request.filename);

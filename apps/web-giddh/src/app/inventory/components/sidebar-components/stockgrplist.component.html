@@ -12,7 +12,7 @@
                         'active':
                             grp.isOpen &&
                             activeGroup &&
-                            activeGroup.uniqueName === grp.uniqueName &&
+                            activeGroup?.uniqueName === grp?.uniqueName &&
                             !(activeStockUniqueName$ | async)
                     }"
                 >
@@ -31,7 +31,7 @@
                             *ngIf="
                                 grp.isOpen &&
                                 activeGroup &&
-                                activeGroup.uniqueName === grp.uniqueName &&
+                                activeGroup?.uniqueName === grp?.uniqueName &&
                                 !(activeStockUniqueName$ | async)
                             "
                         >

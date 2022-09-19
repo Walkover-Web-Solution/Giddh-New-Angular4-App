@@ -107,7 +107,7 @@ export class DiscountComponent implements OnInit, OnDestroy {
         this.createRequest.type = data.discountType;
         this.createRequest.name = data.name;
         this.createRequest.discountValue = data.discountValue;
-        this.createRequest.accountUniqueName = data.linkAccount.uniqueName;
+        this.createRequest.accountUniqueName = data.linkAccount?.uniqueName;
         this.createRequest.discountUniqueName = data.uniqueName;
     }
 

@@ -132,7 +132,7 @@ export class AccountingComponent implements OnInit, OnDestroy {
             if (PAGES_WITH_CHILD.indexOf(selectedPage.page) > -1) {
                 this._tallyModuleService.setVoucher({
                     page: selectedPage.page,
-                    uniqueName: selectedPage.uniqueName,
+                    uniqueName: selectedPage?.uniqueName,
                     gridType: 'voucher'
                 });
             } else {
@@ -143,7 +143,7 @@ export class AccountingComponent implements OnInit, OnDestroy {
             if (PAGES_WITH_CHILD.indexOf(selectedPage.page) > -1) {
                 this._tallyModuleService.setVoucher({
                     page: selectedPage.page,
-                    uniqueName: selectedPage.uniqueName,
+                    uniqueName: selectedPage?.uniqueName,
                     gridType: 'invoice'
                 });
             } else {
