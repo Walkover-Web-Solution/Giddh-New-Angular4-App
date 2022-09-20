@@ -84,6 +84,12 @@ $custom-typography: mat-typography-config(
     float: left !important;
     width: auto !important;
 }
+.activity-table {
+    thead {
+        z-index: 9 !important;
+        position: relative !important;
+    }
+}
 @media screen and (max-width: 1366px) and (orientation: portrait) {
     .subscription-form-select {
         float: left !important;
