@@ -118,7 +118,7 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
                 taxValue: this.tax.taxDetail[0].taxValue,
                 date: dayjs(this.tax.taxDetail[0].date).toDate(),
                 tdsTcsTaxSubTypes: subTyp ? subTyp : null,
-                taxType: subTyp ? this.tax.taxType.replace(subTyp, '') : this.tax.taxType,
+                taxType: subTyp ? this.tax.taxType?.replace(subTyp, '') : this.tax.taxType,
                 taxFileDate: this.tax.taxFileDate.toString()
             };
         }

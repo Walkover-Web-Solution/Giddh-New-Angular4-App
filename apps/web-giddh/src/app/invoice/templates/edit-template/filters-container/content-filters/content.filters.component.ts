@@ -230,9 +230,9 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
                 if (this._invoiceUiDataService.unusedImageSignature) {
                     this.removeFileFromServer();
                 }
-                this.signatureSrc = ApiUrl + 'company/' + this.companyUniqueName + '/image/' + output.file.response.body.uniqueName;
-                this.customTemplate.sections.footer.data.imageSignature.label = output.file.response.body.uniqueName;
-                this._invoiceUiDataService.unusedImageSignature = output.file.response.body.uniqueName;
+                this.signatureSrc = ApiUrl + 'company/' + this.companyUniqueName + '/image/' + output.file.response.body?.uniqueName;
+                this.customTemplate.sections.footer.data.imageSignature.label = output.file.response.body?.uniqueName;
+                this._invoiceUiDataService.unusedImageSignature = output.file.response.body?.uniqueName;
                 this.onChangeFieldVisibility(null, null, null);
                 this._toasty.successToast('file uploaded successfully.');
                 this.startUpload();
@@ -251,7 +251,7 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
         this.companyUniqueName$.pipe(take(1)).subscribe(a => companyUniqueName = a);
         const event: UploadInput = {
             type: 'uploadAll',
-            url: Configuration.ApiUrl + INVOICE_API.UPLOAD_LOGO.replace(':companyUniqueName', encodeURIComponent(companyUniqueName)),
+            url: Configuration.ApiUrl + INVOICE_API.UPLOAD_LOGO?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName)),
             method: 'POST',
             headers: { 'Session-Id': sessionId },
         };

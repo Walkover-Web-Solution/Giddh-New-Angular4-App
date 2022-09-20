@@ -339,7 +339,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     public sort(key: string, ord: "asc" | "desc" = "asc") {
         this.showClearFilter = true;
         if (key.includes("range")) {
-            this.dueAmountReportRequest.rangeCol = parseInt(key.replace("range", ""));
+            this.dueAmountReportRequest.rangeCol = parseInt(key?.replace("range", ""));
             this.dueAmountReportRequest.sortBy = "range";
         } else {
             this.dueAmountReportRequest.rangeCol = null;

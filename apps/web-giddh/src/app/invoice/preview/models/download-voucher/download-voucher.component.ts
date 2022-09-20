@@ -58,7 +58,7 @@ export class DownloadVoucherComponent implements OnInit, OnDestroy {
         if (event.target.checked) {
             this.invoiceType.push(val);
         } else {
-            this.invoiceType = this.invoiceType.filter(f => f !== val);
+            this.invoiceType = this.invoiceType?.filter(f => f !== val);
         }
     }
 
@@ -70,7 +70,7 @@ export class DownloadVoucherComponent implements OnInit, OnDestroy {
             let dataToSend = {
                 copyTypes: this.invoiceType,
                 voucherType: voucherType,
-                uniqueName: this.selectedItem.uniqueName
+                uniqueName: this.selectedItem?.uniqueName
             };
 
             let downloadOption = "";
@@ -90,7 +90,7 @@ export class DownloadVoucherComponent implements OnInit, OnDestroy {
 
             this.commonService.downloadFile(dataToSend, downloadOption, fileType).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response?.status !== "error") {
-                    if (dataToSend.copyTypes.length > 1 || this.isAttachment) {
+                    if (dataToSend.copyTypes?.length > 1 || this.isAttachment) {
                         if (fileType === "base64") {
                             saveAs((this.generalService.base64ToBlob(response.body.attachments[0].encodedData, '', 512)), response.body.attachments[0].name);
                         } else {
@@ -113,10 +113,10 @@ export class DownloadVoucherComponent implements OnInit, OnDestroy {
                 voucherType: voucherType
             };
 
-            this.invoiceService.DownloadInvoice(this.selectedItem.account.uniqueName, dataToSend).pipe(takeUntil(this.destroyed$))
+            this.invoiceService.DownloadInvoice(this.selectedItem.account?.uniqueName, dataToSend).pipe(takeUntil(this.destroyed$))
                 .subscribe(res => {
                     if (res?.status !== "error") {
-                        if (dataToSend.typeOfInvoice.length > 1) {
+                        if (dataToSend.typeOfInvoice?.length > 1) {
                             saveAs(res, `${this.selectedItem.voucherNumber}.` + 'zip');
                         } else {
                             saveAs(res, `${this.selectedItem.voucherNumber}.` + 'pdf');

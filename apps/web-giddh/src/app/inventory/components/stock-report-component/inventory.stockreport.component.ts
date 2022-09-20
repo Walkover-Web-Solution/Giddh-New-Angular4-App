@@ -304,7 +304,7 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
             for (let key of grps) {
                 if (key.stocks && key.stocks.length > 0) {
 
-                    let index = key.stocks.findIndex(p => p.uniqueName === stockUniqueName);
+                    let index = key.stocks.findIndex(p => p?.uniqueName === stockUniqueName);
                     if (index === -1) {
                         let result = this.findStockNameFromId(key.childStockGroups, stockUniqueName);
                         if (result !== '') {
@@ -491,7 +491,7 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
             if (entities) {
                 if (entities.length) {
                     const branches = cloneDeep(entities);
-                    if (this.selectedCmp && branches.findIndex(p => p.uniqueName === this.selectedCmp.uniqueName) === -1) {
+                    if (this.selectedCmp && branches.findIndex(p => p?.uniqueName === this.selectedCmp?.uniqueName) === -1) {
                         this.selectedCmp['label'] = this.selectedCmp.name;
                         branches.push(this.selectedCmp);
                     }
@@ -597,7 +597,7 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
                 this.stockReportRequest.voucherTypes.splice(index, 1);
             }
         }
-        if (this.stockReportRequest.voucherTypes.length > 0 && this.stockReportRequest.voucherTypes.length < this.VOUCHER_TYPES.length) {
+        if (this.stockReportRequest.voucherTypes?.length > 0 && this.stockReportRequest.voucherTypes?.length < this.VOUCHER_TYPES.length) {
             idx = this.stockReportRequest.voucherTypes.indexOf('ALL');
             if (idx !== -1) {
                 this.stockReportRequest.voucherTypes.splice(idx, 1);
@@ -607,10 +607,10 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
                 this.stockReportRequest.voucherTypes.splice(idx, 1);
             }
         }
-        if (this.stockReportRequest.voucherTypes.length === this.VOUCHER_TYPES.length) {
+        if (this.stockReportRequest.voucherTypes?.length === this.VOUCHER_TYPES.length) {
             this.stockReportRequest.voucherTypes = ['ALL'];
         }
-        if (this.stockReportRequest.voucherTypes.length === 0) {
+        if (this.stockReportRequest.voucherTypes?.length === 0) {
             this.stockReportRequest.voucherTypes = ['NONE'];
         }
         this.getStockReport(true);

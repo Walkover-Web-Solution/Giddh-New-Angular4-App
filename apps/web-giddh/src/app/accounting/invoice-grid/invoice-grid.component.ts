@@ -234,7 +234,7 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
             if (accounts) {
                 let accList: IOption[] = [];
                 accounts.forEach((acc: IFlattenAccountsResultItem) => {
-                    accList.push({ label: `${acc.name} (${acc.uniqueName})`, value: acc.uniqueName, additional: acc });
+                    accList.push({ label: `${acc.name} (${acc?.uniqueName})`, value: acc?.uniqueName, additional: acc });
                 });
                 this.flattenAccounts = accList;
                 this.inputForList = cloneDeep(this.flattenAccounts);
@@ -362,7 +362,7 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
      * selectEntryType() to validate Type i.e BY/TO
      */
     public selectEntryType(transactionObj, val, idx) {
-        if (val.length === 2 && (val.toLowerCase() !== 'to' && val.toLowerCase() !== 'by')) {
+        if (val?.length === 2 && (val?.toLowerCase() !== 'to' && val?.toLowerCase() !== 'by')) {
             this._toaster.errorToast("Spell error, you can only use 'To/By'");
             transactionObj.type = 'DEBIT';
         } else {
@@ -433,10 +433,10 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
                 let accModel = {
                     name: acc.name,
                     UniqueName: acc.uniqueName,
-                    groupUniqueName: acc.parentGroups[acc.parentGroups.length - 1],
+                    groupUniqueName: acc?.parentGroups[acc.parentGroups?.length - 1],
                     account: acc.name
                 };
-                this.accountsTransaction[idx].particular = accModel.UniqueName;
+                this.accountsTransaction[idx].particular = accModel?.UniqueName;
                 this.accountsTransaction[idx].selectedAccount = accModel;
                 this.accountsTransaction[idx].stocks = acc.stocks;
             }
@@ -472,7 +472,7 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
      * addNewStock
      */
     public addNewStock(amount, transactionObj, idx) {
-        let lastIdx = this.stocksTransaction.length - 1;
+        let lastIdx = this.stocksTransaction?.length - 1;
         if (amount) {
             transactionObj.amount = Number(amount);
         }
@@ -493,8 +493,8 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
         this.showLedgerAccountList = false;
         this.showStockList.emit(false);
         this.showConfirmationBox = true;
-        if (this.data.description.length > 1) {
-            this.data.description = this.data.description.replace(/(?:\r\n|\r|\n)/g, '');
+        if (this.data.description?.length > 1) {
+            this.data.description = this.data.description?.replace(/(?:\r\n|\r|\n)/g, '');
             setTimeout(() => {
                 submitBtnEle.focus();
             }, 100);
@@ -618,8 +618,8 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
         //   this.stocksTransaction[stkIdx].inventory.unit = defaultUnit;
         // }
         // this.stocksTransaction[stkIdx].particular = item.accountStockDetails.accountUniqueName;
-        this.stocksTransaction[stkIdx].inventory.stock = { name: item.name, uniqueName: item.uniqueName };
-        // this.stocksTransaction[stkIdx].selectedAccount.uniqueName = item.accountStockDetails.accountUniqueName;
+        this.stocksTransaction[stkIdx].inventory.stock = { name: item.name, uniqueName: item?.uniqueName };
+        // this.stocksTransaction[stkIdx].selectedAccount?.uniqueName = item.accountStockDetails.accountUniqueName;
         // this.stocksTransaction[stkIdx].selectedAccount.name = item.accountStockDetails.name;
     }
 
@@ -703,7 +703,7 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
      * saveEntry
      */
     public saveEntry() {
-        if (!this.creditorAcc.uniqueName) {
+        if (!this.creditorAcc?.uniqueName) {
             this._toaster.errorToast("Party A/c Name can't be blank.");
             return setTimeout(() => this.partyAccNameInputField?.nativeElement.focus(), 200);
         }
@@ -714,7 +714,7 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
         data = this._tallyModuleService.prepareRequestForAPI(data);
         data.transactions = this.validateTransaction(data.transactions);
 
-        let accUniqueName: string = this.creditorAcc.uniqueName;
+        let accUniqueName: string = this.creditorAcc?.uniqueName;
 
         forEach(data.transactions, (element: any) => {
             element.type = (element.type === 'by') ? 'debit' : 'credit';
@@ -758,7 +758,7 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
         let accountsTransaction = [];
         let filterData = this._tallyModuleService.prepareRequestForAPI(data);
 
-        if (filterData.transactions.length) {
+        if (filterData.transactions?.length) {
             forEach(filterData.transactions, function (o, i) {
                 if (o.inventory && o.inventory.amount) {
                     stocksTransaction.push(o);
@@ -770,10 +770,10 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
             this.accountsTransaction = accountsTransaction;
             this.stocksTransaction = stocksTransaction;
 
-            if (!stocksTransaction.length) {
+            if (!stocksTransaction?.length) {
                 this.addNewRow('stock');
             }
-            if (!accountsTransaction.length) {
+            if (!accountsTransaction?.length) {
                 this.addNewRow('account');
             }
         }
@@ -805,7 +805,7 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
         this.keyUpDownEvent = ev;
         if (ev && ev.which === 8 && isFirstAccountField) {
             if (ev.target && (ev.target.getAttribute('data-changed') === 'false' || ev.target.value === '')) {
-                let indx = this.stocksTransaction.length - 1;
+                let indx = this.stocksTransaction?.length - 1;
                 let stockEle = document.getElementById(`stock_${indx - 1}`);
                 return stockEle.focus();
             }
@@ -868,8 +868,8 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
         let stockAccountArr: IOption[] = [];
         forEach(ItemArr, (obj: any) => {
             stockAccountArr.push({
-                label: `${obj.name} (${obj.uniqueName})`,
-                value: obj.uniqueName,
+                label: `${obj.name} (${obj?.uniqueName})`,
+                value: obj?.uniqueName,
                 additional: obj
             });
         });
@@ -893,7 +893,7 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
         if (this.selectedField === 'account') {
             this.setAccount(ev.additional);
             setTimeout(() => {
-                let accIndx = this.accountsTransaction.findIndex((acc) => acc.selectedAccount.UniqueName === ev.value);
+                let accIndx = this.accountsTransaction.findIndex((acc) => acc.selectedAccount?.UniqueName === ev.value);
                 let indexInTaxesToRemember = this.taxesToRemember.findIndex((t) => t.taxUniqueName === ev.value);
                 if (indexInTaxesToRemember > -1 && accIndx > -1) {
                     let rate = this.taxesToRemember[indexInTaxesToRemember].taxValue;
@@ -909,21 +909,21 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
                     if (stockFullDetails && stockFullDetails.body.taxes && stockFullDetails.body.taxes.length) {
                         this.companyTaxesList$.pipe(take(1)).subscribe((taxes: TaxResponse[]) => {
                             stockFullDetails.body.taxes.forEach((tax: string) => {
-                                // let selectedTaxAcc = this.allFlattenAccounts.find((acc) => acc.uniqueName === tax);
+                                // let selectedTaxAcc = this.allFlattenAccounts.find((acc) => acc?.uniqueName === tax);
                                 // if (selectedTaxAcc) {
                                 // let acc = selectedTaxAcc;
                                 // let accModel = {
                                 //   name: acc.name,
-                                //   UniqueName: acc.uniqueName,
+                                //   UniqueName: acc?.uniqueName,
                                 //   groupUniqueName: acc.parentGroups[acc.parentGroups.length - 1],
                                 //   account: acc.name
                                 // };
-                                // this.accountsTransaction[0].particular = accModel.UniqueName;
+                                // this.accountsTransaction[0].particular = accModel?.UniqueName;
                                 // this.accountsTransaction[0].selectedAccount = accModel;
                                 // this.accountsTransaction[0].stocks = acc.stocks;
                                 // }
 
-                                let selectedTax = taxes.find((t) => t.uniqueName === tax);
+                                let selectedTax = taxes.find((t) => t?.uniqueName === tax);
                                 let taxTotalValue = 0;
                                 if (selectedTax) {
                                     selectedTax.taxDetail.forEach((st) => {
@@ -1125,7 +1125,7 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
                     if (data.status === 'success') {
                         this.allFlattenAccounts = cloneDeep(data.body.results);
                         if (groupUniqueName) {
-                            const filteredAccounts: IFlattenAccountsResultItem[] = data.body.results.filter((acc) => acc.parentGroups.findIndex((g) => g.uniqueName === groupUniqueName) > -1);
+                            const filteredAccounts: IFlattenAccountsResultItem[] = data.body.results?.filter((acc) => acc.parentGroups.findIndex((g) => g?.uniqueName === groupUniqueName) > -1);
                             this._tallyModuleService.setFlattenAccounts(filteredAccounts);
                             this.isAccountListFiltered = true;
                         } else {

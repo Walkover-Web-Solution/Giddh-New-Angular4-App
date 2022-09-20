@@ -332,7 +332,7 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
                 this.isLoading = false;
                 row.hasHistory = true;
                 if (response && response.status === 'success') {
-                    if (response.body?.results.length > 1) {
+                    if (response.body?.results?.length > 1) {
                         response.body?.results?.forEach((result, index) => {
                             if (result) {
                                 result.index = index;
@@ -383,7 +383,7 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         if (event.checked) {
             details.isChecked = true;
             rowHistory.selectedItems.push(details);
-            if (rowHistory.selectedItems.length > 2) {
+            if (rowHistory.selectedItems?.length > 2) {
                 const firstElement = rowHistory.selectedItems[0];
                 rowHistory.selectedItems = rowHistory.selectedItems.slice(1);
                 firstElement.isChecked = false;

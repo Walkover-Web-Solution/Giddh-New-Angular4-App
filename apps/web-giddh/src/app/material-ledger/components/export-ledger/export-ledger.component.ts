@@ -94,7 +94,7 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.store.pipe(select(value => value.ledger.account), takeUntil(this.destroyed$)).subscribe(ledgerAccount => {
             ledgerAccount?.parentGroups?.forEach(group => {
-                if (["sundrycreditors", "sundrydebtors"].includes(group.uniqueName)) {
+                if (["sundrycreditors", "sundrydebtors"].includes(group?.uniqueName)) {
                     this.enableBillToBill = true;
                 }
             });

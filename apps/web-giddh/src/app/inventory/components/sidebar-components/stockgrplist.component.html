@@ -3,7 +3,7 @@
         <ul class="list-unstyled stock-grp-list clearfix" style="min-height: 100px">
             <li
                 class="clearfix main-group p-0"
-                [ngClass]="{ 'isGrp': grp.childStockGroups.length > 0, 'group-open': grp.isOpen }"
+                [ngClass]="{ 'isGrp': grp.childStockGroups?.length > 0, 'group-open': grp.isOpen }"
                 *ngFor="let grp of Groups"
             >
                 <div
@@ -12,7 +12,7 @@
                         'active':
                             grp.isOpen &&
                             activeGroup &&
-                            activeGroup.uniqueName === grp.uniqueName &&
+                            activeGroup?.uniqueName === grp?.uniqueName &&
                             !(activeStockUniqueName$ | async)
                     }"
                 >
@@ -31,7 +31,7 @@
                             *ngIf="
                                 grp.isOpen &&
                                 activeGroup &&
-                                activeGroup.uniqueName === grp.uniqueName &&
+                                activeGroup?.uniqueName === grp?.uniqueName &&
                                 !(activeStockUniqueName$ | async)
                             "
                         >
@@ -43,7 +43,7 @@
                     <stock-list [Groups]="grp"> </stock-list>
                     <stockgrp-list
                         [Groups]="grp.childStockGroups"
-                        *ngIf="grp.childStockGroups.length > 0 && grp.isOpen"
+                        *ngIf="grp.childStockGroups?.length > 0 && grp.isOpen"
                     >
                     </stockgrp-list>
                 </div>

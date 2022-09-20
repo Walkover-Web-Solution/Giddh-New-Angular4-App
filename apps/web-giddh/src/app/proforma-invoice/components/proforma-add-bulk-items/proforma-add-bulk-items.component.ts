@@ -126,7 +126,7 @@ export class ProformaAddBulkItemsComponent implements OnDestroy {
         let arr: SalesAddBulkStockItems[] = [];
 
         data
-            .filter(f => f.additional && f.additional.stock)
+            ?.filter(f => f.additional && f.additional.stock)
             .forEach(option => {
                 let item = new SalesAddBulkStockItems();
                 item.name = option.label;

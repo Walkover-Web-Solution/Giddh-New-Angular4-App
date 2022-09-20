@@ -27,7 +27,7 @@
         </div> -->
         <div class="all-company-list">
             <ul>
-                <li *ngFor="let company of companyList" (click)="changeCompany(company.uniqueName)">
+                <li *ngFor="let company of companyList" (click)="changeCompany(company?.uniqueName)">
                     <a href="javascript:;">{{ company?.name }}</a>
                 </li>
             </ul>

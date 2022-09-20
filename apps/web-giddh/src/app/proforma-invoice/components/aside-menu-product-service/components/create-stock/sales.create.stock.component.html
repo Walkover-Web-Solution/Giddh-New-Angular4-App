@@ -143,28 +143,6 @@
                                             *ngIf="addStockForm.get('showCodeType').value === 'sac'"
                                         />
                                     </div>
-
-                                    <!--                  <div class="form-group col-4">-->
-                                    <!--                    <label>Discount</label>-->
-                                    <!--                    <div class="btn-group btn-block" dropdown>-->
-                                    <!--                      <button dropdownToggle type="button"-->
-                                    <!--                              class="dropdown-toggle form-control text-left"> Selected-->
-                                    <!--                        ({{ addStockForm.get('taxes').value.length }}) <span-->
-                                    <!--                          class="pull-right"><span class="caret"></span></span></button>-->
-                                    <!--                      <ul *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu">-->
-                                    <!--                        <li role="menuitem" *ngFor="let tax of (companyTaxesList$ | async)">-->
-                                    <!--                          <a class="dropdown-item" (click)="$event.stopPropagation()"><input-->
-                                    <!--                            type="checkbox" [checked]="tax.isChecked"-->
-                                    <!--                            (click)="selectTax($event, tax)"/> {{tax.name}}</a>-->
-                                    <!--                        </li>-->
-                                    <!--                        <li *ngIf="(companyTaxesList$ | async).length < 1">-->
-                                    <!--                          <a class="dropdown-item" (click)="$event.stopPropagation()">No Tax-->
-                                    <!--                            Found</a>-->
-                                    <!--                        </li>-->
-                                    <!--                      </ul>-->
-                                    <!--                    </div>-->
-                                    <!--                  </div>-->
-
                                     <div class="form-group col-4 col-sm-4">
                                         <label>Tax</label>
 
@@ -174,7 +152,7 @@
                                                 type="button"
                                                 class="dropdown-toggle form-control text-left"
                                             >
-                                                Selected ({{ taxTempArray.length }})
+                                                Selected ({{ taxTempArray?.length }})
                                                 <span class="pull-right"><span class="caret"></span></span>
                                             </button>
                                             <ul *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu">
@@ -193,7 +171,7 @@
                                                         {{ tax.name }}</a
                                                     >
                                                 </li>
-                                                <li *ngIf="(companyTaxesList$ | async).length < 1">
+                                                <li *ngIf="(companyTaxesList$ | async)?.length < 1">
                                                     <a class="dropdown-item" (click)="$event.stopPropagation()"
                                                         >No Tax Found</a
                                                     >

@@ -133,7 +133,7 @@ export function CompanyReducer(state: CurrentCompanyState = initialState, action
                     isTaxUpdatingInProcess: false,
                     isTaxUpdatedSuccessfully: true,
                     taxes: state.taxes.map(tax => {
-                        if (tax.uniqueName === res.request.uniqueName) {
+                        if (tax.uniqueName === res.request?.uniqueName) {
                             tax = res.request;
                         }
                         return tax;

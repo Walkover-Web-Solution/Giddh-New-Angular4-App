@@ -129,11 +129,11 @@ export class GeneralService {
         let byteArrays = [];
         let offset = 0;
         if (byteCharacters && byteCharacters.length > 0) {
-            while (offset < byteCharacters.length) {
+            while (offset < byteCharacters?.length) {
                 let slice = byteCharacters.slice(offset, offset + sliceSize);
-                let byteNumbers = new Array(slice.length);
+                let byteNumbers = new Array(slice?.length);
                 let i = 0;
-                while (i < slice.length) {
+                while (i < slice?.length) {
                     byteNumbers[i] = slice.charCodeAt(i);
                     i++;
                 }
@@ -191,7 +191,7 @@ export class GeneralService {
     }
 
     getLastElement(array) {
-        return array[array.length - 1];
+        return array[array?.length - 1];
     };
 
     /**
@@ -249,15 +249,15 @@ export class GeneralService {
      */
     public shouldShowRcmSection(currentLedgerAccountDetails: any, selectedAccountDetails: any, activeCompany?: any): boolean {
         if (currentLedgerAccountDetails && selectedAccountDetails) {
-            if (![currentLedgerAccountDetails.uniqueName, selectedAccountDetails.uniqueName].includes('roundoff')) {
+            if (![currentLedgerAccountDetails?.uniqueName, selectedAccountDetails?.uniqueName].includes('roundoff')) {
                 // List of allowed first level parent groups
                 const allowedFirstLevelUniqueNames = (this.voucherApiVersion === 2 && activeCompany?.country === "India") ? ['operatingcost', 'indirectexpenses', 'fixedassets', 'revenuefromoperations', 'otherincome'] : ['operatingcost', 'indirectexpenses', 'fixedassets'];
                 // List of not allowed second level parent groups
                 const disallowedSecondLevelUniqueNames = (this.voucherApiVersion === 2 && activeCompany?.country === "India") ? ['discount', 'exchangeloss', 'roundoff', 'exchangegain', 'dividendincome', 'interestincome', 'dividendexpense', 'interestexpense'] : ['discount', 'exchangeloss'];
-                const currentLedgerFirstParent = (currentLedgerAccountDetails.parentGroups && currentLedgerAccountDetails.parentGroups[0]) ? currentLedgerAccountDetails.parentGroups[0].uniqueName : '';
-                const currentLedgerSecondParent = (currentLedgerAccountDetails.parentGroups && currentLedgerAccountDetails.parentGroups[1]) ? currentLedgerAccountDetails.parentGroups[1].uniqueName : '';
-                const selectedAccountFirstParent = (selectedAccountDetails.parentGroups && selectedAccountDetails.parentGroups[0]) ? selectedAccountDetails.parentGroups[0].uniqueName : '';
-                const selectedAccountSecondParent = (selectedAccountDetails.parentGroups && selectedAccountDetails.parentGroups[1]) ? selectedAccountDetails.parentGroups[1].uniqueName : '';
+                const currentLedgerFirstParent = (currentLedgerAccountDetails.parentGroups && currentLedgerAccountDetails.parentGroups[0]) ? currentLedgerAccountDetails.parentGroups[0]?.uniqueName : '';
+                const currentLedgerSecondParent = (currentLedgerAccountDetails.parentGroups && currentLedgerAccountDetails.parentGroups[1]) ? currentLedgerAccountDetails.parentGroups[1]?.uniqueName : '';
+                const selectedAccountFirstParent = (selectedAccountDetails.parentGroups && selectedAccountDetails.parentGroups[0]) ? selectedAccountDetails.parentGroups[0]?.uniqueName : '';
+                const selectedAccountSecondParent = (selectedAccountDetails.parentGroups && selectedAccountDetails.parentGroups[1]) ? selectedAccountDetails.parentGroups[1]?.uniqueName : '';
                 // Both accounts (current ledger and selected account) in order to satisfy RCM MUST have first
                 // level parent group unique name in allowed unique names and MUST NOT have their second level parent
                 // in disallowed unique names
@@ -276,7 +276,7 @@ export class GeneralService {
      * @memberof CompletedComponent
      */
     public ConvertUTCTimeToLocalTime(UTCDateString) {
-        UTCDateString = UTCDateString.replace("@", "");
+        UTCDateString = UTCDateString?.replace("@", "");
         let convertdLocalTime = new Date(UTCDateString);
         let hourOffset = convertdLocalTime.getTimezoneOffset() / 60;
         convertdLocalTime.setMinutes(convertdLocalTime.getMinutes() - (hourOffset * 60));
@@ -292,7 +292,7 @@ export class GeneralService {
      */
     public allowAlphanumericChar(value: string): string {
         if (value) {
-            return value.replace(/[^a-zA-Z0-9]/g, '');
+            return value?.replace(/[^a-zA-Z0-9]/g, '');
         } else {
             return '';
         }
@@ -444,7 +444,7 @@ export class GeneralService {
      * @memberof GeneralService
      */
     public getRevisionField(type: any): string {
-        return type.replace(/_/g, " ");
+        return type?.replace(/_/g, " ");
     }
 
     /**
@@ -458,20 +458,20 @@ export class GeneralService {
     public getAccountCategory(account: any, accountName: string): string {
         let parent = account.parentGroups ? account.parentGroups[0] : '';
         if (parent) {
-            if (find(['shareholdersfunds', 'noncurrentliabilities', 'currentliabilities'], p => p === parent.uniqueName)) {
+            if (find(['shareholdersfunds', 'noncurrentliabilities', 'currentliabilities'], p => p === parent?.uniqueName)) {
                 return 'liabilities';
-            } else if (find(['fixedassets'], p => p === parent.uniqueName)) {
+            } else if (find(['fixedassets'], p => p === parent?.uniqueName)) {
                 return 'fixedassets';
-            } else if (find(['noncurrentassets', 'currentassets'], p => p === parent.uniqueName)) {
+            } else if (find(['noncurrentassets', 'currentassets'], p => p === parent?.uniqueName)) {
                 return 'assets';
-            } else if (find(['revenuefromoperations', 'otherincome'], p => p === parent.uniqueName)) {
+            } else if (find(['revenuefromoperations', 'otherincome'], p => p === parent?.uniqueName)) {
                 return 'income';
-            } else if (find(['operatingcost', 'indirectexpenses'], p => p === parent.uniqueName)) {
+            } else if (find(['operatingcost', 'indirectexpenses'], p => p === parent?.uniqueName)) {
                 if (accountName === 'roundoff') {
                     return 'roundoff';
                 }
                 let subParent = account.parentGroups[1];
-                if (subParent && subParent.uniqueName === 'discount') {
+                if (subParent && subParent?.uniqueName === 'discount') {
                     return 'discount';
                 }
                 return 'expenses';
@@ -770,7 +770,7 @@ export class GeneralService {
         itemList?.forEach((menuItem, menuIndex) => {
             visibleMenuItems[menuIndex].items = [];
             menuItem.items?.forEach(item => {
-                const isValidItem = apiItems.find(apiItem => apiItem.uniqueName === item.link);
+                const isValidItem = apiItems.find(apiItem => apiItem?.uniqueName === item.link);
                 if (((isValidItem && item.hide !== module) || (item.alwaysPresent && item.hide !== module)) && (!item.additional?.countrySpecific?.length || item.additional?.countrySpecific?.indexOf(countryCode) > -1) && (!item.additional?.voucherVersion || item.additional?.voucherVersion === this.voucherApiVersion)) {
                     // If items returned from API have the current item which can be shown in branch/company mode, add it
                     visibleMenuItems[menuIndex].items.push(item);
@@ -1164,8 +1164,8 @@ export class GeneralService {
      */
     public checkIfCssExists(path: string): boolean {
         let found = false;
-        for (let i = 0; i < document.styleSheets.length; i++) {
-            if (document.styleSheets[i].href == path) {
+        for (let i = 0; i < document.styleSheets?.length; i++) {
+            if (document.styleSheets[i]?.href == path) {
                 found = true;
                 break;
             }

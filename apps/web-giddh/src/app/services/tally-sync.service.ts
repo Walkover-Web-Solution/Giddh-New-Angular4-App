@@ -20,7 +20,7 @@ export class TallySyncService {
     public getCompletedSync(model: CommonPaginatedRequest) {
         const companyUniqueName = this.generalService.companyUniqueName;
         const url = this.config.apiUrl + TALLY_SYNC_API.COMPLETED
-            .replace(':companyUniqueName', companyUniqueName);
+            ?.replace(':companyUniqueName', companyUniqueName);
         return this.http.get(url, model).pipe(map((res) => {
             return res.body;
         }), catchError((e) => this.errorHandler.HandleCatch<TallySyncResponseData, string>(e)));
@@ -29,7 +29,7 @@ export class TallySyncService {
     public getInProgressSync(model: CommonPaginatedRequest) {
         const companyUniqueName = this.generalService.companyUniqueName;
         const url = this.config.apiUrl + TALLY_SYNC_API.INPROGRESS
-            .replace(':companyUniqueName', companyUniqueName);
+            ?.replace(':companyUniqueName', companyUniqueName);
         return this.http.get(url, model).pipe(map((res) => {
             return res.body;
         }), catchError((e) => this.errorHandler.HandleCatch<TallySyncResponseData, string>(e)));
@@ -37,7 +37,7 @@ export class TallySyncService {
 
     public getErrorLog(companyUniqueName: string, model: DownloadTallyErrorLogRequest) {
         const url = this.config.apiUrl + TALLY_SYNC_API.ERROR_LOG
-            .replace(':companyUniqueName', companyUniqueName);
+            ?.replace(':companyUniqueName', companyUniqueName);
         return this.http.get(url, model).pipe(map((res) => {
             return res;
         }), catchError((e) =>

@@ -132,7 +132,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         this.store.pipe(select(appStore => appStore.settings.branches), take(1)).subscribe(response => {
             branches = response || [];
         });
-        reassignNavigationalArray(isMobile, this._generalService.currentOrganizationType === OrganizationType.Company && branches.length > 1, []);
+        reassignNavigationalArray(isMobile, this._generalService.currentOrganizationType === OrganizationType.Company && branches?.length > 1, []);
         this._generalService.setIsMobileView(isMobile);
     }
 

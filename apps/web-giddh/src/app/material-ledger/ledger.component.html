@@ -1745,7 +1745,7 @@
                                                                         </div>
                                                                         <div class="item-stock">
                                                                             {{ commonLocaleData?.app_stock }}:
-                                                                            {{ option.additional?.stock.uniqueName }}
+                                                                            {{ option.additional?.stock?.uniqueName }}
                                                                         </div>
                                                                     </a>
                                                                 </ng-container>
@@ -2162,7 +2162,7 @@
                                                                         </div>
                                                                         <div class="item-stock">
                                                                             {{ commonLocaleData?.app_stock }}:
-                                                                            {{ option.additional?.stock.uniqueName }}
+                                                                            {{ option.additional?.stock?.uniqueName }}
                                                                         </div>
                                                                     </a>
                                                                 </ng-container>
@@ -2563,8 +2563,15 @@
                                                     [currencyCode]="ledgerTxnBalance?.currencyCode"
                                                 >
                                                 </amount-field>
-                                                &nbsp;
-                                                <span class="text-capitalize">{{ commonLocaleData?.app_cr }}</span>
+                                                <ng-container
+                                                    *ngIf="
+                                                        ledgerTxnBalance?.creditTotal - ledgerTxnBalance?.debitTotal !==
+                                                        0
+                                                    "
+                                                >
+                                                    &nbsp;
+                                                    <span class="text-capitalize">{{ commonLocaleData?.app_cr }}</span>
+                                                </ng-container>
                                             </h3>
                                             <h3
                                                 class="digit-blue sub-total font-12 d-flex"
@@ -2579,8 +2586,16 @@
                                                     [currencyCode]="ledgerTxnBalance?.convertedCurrencyCode"
                                                 >
                                                 </amount-field>
-                                                &nbsp;
-                                                <span class="text-capitalize">{{ commonLocaleData?.app_cr }}</span>
+                                                <ng-container
+                                                    *ngIf="
+                                                        ledgerTxnBalance?.convertedCreditTotal -
+                                                            ledgerTxnBalance?.convertedDebitTotal !==
+                                                        0
+                                                    "
+                                                >
+                                                    &nbsp;
+                                                    <span class="text-capitalize">{{ commonLocaleData?.app_cr }}</span>
+                                                </ng-container>
                                             </h3>
                                         </div>
                                     </div>
@@ -2598,8 +2613,15 @@
                                                     [currencyCode]="ledgerTxnBalance?.currencyCode"
                                                 >
                                                 </amount-field>
-                                                &nbsp;
-                                                <span class="text-capitalize">{{ commonLocaleData?.app_dr }}</span>
+                                                <ng-container
+                                                    *ngIf="
+                                                        ledgerTxnBalance?.debitTotal - ledgerTxnBalance?.creditTotal !==
+                                                        0
+                                                    "
+                                                >
+                                                    &nbsp;
+                                                    <span class="text-capitalize">{{ commonLocaleData?.app_dr }}</span>
+                                                </ng-container>
                                             </h3>
                                             <h3
                                                 class="digit-blue sub-total font-12 d-flex"
@@ -2614,8 +2636,16 @@
                                                     [currencyCode]="ledgerTxnBalance?.convertedCurrencyCode"
                                                 >
                                                 </amount-field>
-                                                &nbsp;
-                                                <span class="text-capitalize">{{ commonLocaleData?.app_dr }}</span>
+                                                <ng-container
+                                                    *ngIf="
+                                                        ledgerTxnBalance?.convertedDebitTotal -
+                                                            ledgerTxnBalance?.convertedCreditTotal !==
+                                                        0
+                                                    "
+                                                >
+                                                    &nbsp;
+                                                    <span class="text-capitalize">{{ commonLocaleData?.app_dr }}</span>
+                                                </ng-container>
                                             </h3>
                                         </div>
                                     </div>

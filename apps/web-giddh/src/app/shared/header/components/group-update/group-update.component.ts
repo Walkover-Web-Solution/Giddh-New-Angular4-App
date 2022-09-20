@@ -421,7 +421,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     public updateGroup() {
         let activeGroupUniqueName: string;
         let uniqueName = this.groupDetailForm.get('uniqueName');
-        uniqueName?.patchValue(uniqueName.value.replace(/ /g, '').toLowerCase());
+        uniqueName?.patchValue(uniqueName.value?.replace(/ /g, '').toLowerCase());
 
         this.activeGroupUniqueName$.pipe(take(1)).subscribe(a => activeGroupUniqueName = a);
         this.store.dispatch(this.groupWithAccountsAction.updateGroup(this.groupDetailForm.value, activeGroupUniqueName));
@@ -464,13 +464,13 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
             if (t) {
                 t.inheritedTaxes.forEach(tt => {
                     tt.applicableTaxes.forEach(ttt => {
-                        data.taxes.push(ttt.uniqueName);
+                        data.taxes.push(ttt?.uniqueName);
                     });
                 });
             }
         });
         data.taxes.push.apply(data.taxes, this.taxGroupForm.value.taxes);
-        data.uniqueName = activeGroup.uniqueName;
+        data.uniqueName = activeGroup?.uniqueName;
         this.store.dispatch(this.groupWithAccountsAction.applyGroupTax(data));
         this.showEditTaxSection = false;
     }
@@ -508,9 +508,9 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
             isTaxableGroup = (activeGroup.uniqueName === 'sundrydebtors' || activeGroup.uniqueName === 'sundrycreditors') || activeGroup.parentGroups.some(groupName => groupName.uniqueName === 'sundrydebtors' || groupName.uniqueName === 'sundrycreditors');
         }
         if (returnIndividualStatus) {
-            if (activeGroup.uniqueName === 'sundrydebtors' || activeGroup.parentGroups.some(groupName => groupName.uniqueName === 'sundrydebtors')) {
+            if (activeGroup?.uniqueName === 'sundrydebtors' || activeGroup?.parentGroups?.some(groupName => groupName?.uniqueName === 'sundrydebtors')) {
                 return {isDebtor: true};
-            } else if (activeGroup.uniqueName === 'sundrycreditors' || activeGroup.parentGroups.some(groupName => groupName.uniqueName === 'sundrycreditors')) {
+            } else if (activeGroup?.uniqueName === 'sundrycreditors' || activeGroup?.parentGroups?.some(groupName => groupName?.uniqueName === 'sundrycreditors')) {
                 return {isCreditor: true};
             }
         }
