@@ -36,7 +36,7 @@ import { GeneralService } from 'apps/web-giddh/src/app/services/general.service'
 import { clone, cloneDeep, uniqBy } from 'apps/web-giddh/src/app/lodash-optimized';
 import { CustomFieldsService } from 'apps/web-giddh/src/app/services/custom-fields.service';
 import { FieldTypes } from 'apps/web-giddh/src/app/custom-fields/custom-fields.constant';
-
+import { HttpClient } from '@angular/common/http';
 @Component({
     selector: 'account-add-new-details',
     templateUrl: './account-add-new-details.component.html',
@@ -171,6 +171,9 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public bootstrapToggleSwitch = BootstrapToggleSwitch;
     /** This will hold isMobileNumberValid */
     public isMobileNumberValid: boolean = false;
+    /** This will hold mobile number field input  */
+    public intl: any;
+    public styleInterval:any;
 
     constructor(
         private _fb: FormBuilder,
@@ -183,7 +186,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         private groupService: GroupService,
         private groupWithAccountsAction: GroupWithAccountsAction,
         private invoiceService: InvoiceService,
-        private customFieldsService: CustomFieldsService) {
+        private customFieldsService: CustomFieldsService,
+        private http: HttpClient) {
         this.activeGroup$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroup), takeUntil(this.destroyed$));
     }
 
@@ -298,6 +302,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
 
     public ngAfterViewInit() {
+        this.onlyPhoneNumber();
         this.addAccountForm.get('country').get('countryCode').setValidators(Validators.required);
         let activegroupName = this.addAccountForm.get('activeGroupUniqueName').value;
         if (activegroupName === 'sundrydebtors' || activegroupName === 'sundrycreditors') {
@@ -1253,5 +1258,64 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         this.closeAccountModal.emit(true);
         this.store.dispatch(this.groupWithAccountsAction.HideAddAndManageFromOutside());
         document.querySelector('body')?.classList?.remove('master-page');
+    }
+
+    public onlyPhoneNumber() {
+        const input = document.getElementById('init-contact');
+        this.intl = new window['intlTelInput'](input, {
+            nationalMode: true,
+            utilsScript: 'https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.17/js/utils.js',
+            autoHideDialCode: false,
+            separateDialCode: false,
+            initialCountry: 'auto',
+            geoIpLookup: (success, failure) => {
+                let countryCode = 'in';
+                const fetchIPApi = this.http.get<any>('https://api.db-ip.com/v2/free/self');
+
+                fetchIPApi.subscribe(
+                    (res) => {
+                        if (res?.response?.ipAddress) {
+                            const fetchCountryByIpApi = this.http.get<any>('http://ip-api.com/json/${res.response.ipAddress');
+                            fetchCountryByIpApi.subscribe(
+                                (fetchCountryByIpApiRes) => {
+                                    if (fetchCountryByIpApiRes?.response?.countryCode) {
+                                        return success(fetchCountryByIpApiRes.response.countryCode);
+                                    } else {
+                                        return success(countryCode);
+                                    }
+                                },
+                                (fetchCountryByIpApiErr) => {
+                                    const fetchCountryByIpInfoApi = this.http.get<any>('https://ipinfo.io/${res.response.ipAddress}/json');
+
+                                    fetchCountryByIpInfoApi.subscribe(
+                                        (fetchCountryByIpInfoApiRes) => {
+                                            if (fetchCountryByIpInfoApiRes?.response?.country) {
+                                                return success(fetchCountryByIpInfoApiRes.response.country);
+                                            } else {
+                                                return success(countryCode);
+                                            }
+                                        },
+                                        (fetchCountryByIpInfoApiErr) => {
+                                            return success(countryCode);
+                                        }
+                                    );
+                                }
+                            );
+                        } else {
+                            return success(countryCode);
+                        }
+                    },
+                    (err) => {
+                        return success(countryCode);
+                    }
+                );
+            },
+        });
+        input.addEventListener('focus', () => {
+            setTimeout(() => {
+            }, 100);
+        });
+        input.addEventListener('countrychange', () => {
+        });
     }
 }

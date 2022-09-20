@@ -447,30 +447,13 @@
                             <div class="form-group">
                                 <label>{{ commonLocaleData?.app_mobile_number }}</label>
                                 <div class="d-flex">
-                                    <sh-select
-                                        [placeholder]="commonLocaleData?.app_country_code"
-                                        [options]="countryPhoneCode"
-                                        formControlName="mobileCode"
-                                        class="mobile-number-sh-select"
-                                    ></sh-select>
                                     <input
-                                        type="text"
-                                        pattern="[0-9]*"
-                                        class="form-control pull-right"
+                                        type="tel"
+                                        #initContact
+                                        (keypress)="onlyPhoneNumber()"
+                                        id="init-contact"
                                         [placeholder]="localeData?.mobile_no_placeholder"
-                                        id="contactNo"
-                                        autocomplete="off"
-                                        (blur)="isValidMobileNumber(mobileNoEl)"
-                                        #mobileNoEl
                                     />
-                                    <small
-                                        class="clearfix error-msg"
-                                        *ngIf="
-                                            addAccountForm.get('mobileNo').value &&
-                                            !addAccountForm.get('mobileCode').value
-                                        "
-                                        >{{ localeData?.phone_code_error }}</small
-                                    >
                                 </div>
                             </div>
                         </div>

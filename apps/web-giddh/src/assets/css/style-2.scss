@@ -4,6 +4,7 @@
 @import "@angular/material/prebuilt-themes/indigo-pink.css";
 @import "./json-tree.scss";
 @import "./json-diff.scss";
+@import "./intl.scss";
 $custom-typography: mat-typography-config(
     $font-family: "opensans-regular",
 );
@@ -6504,7 +6505,7 @@ highcharts-chart {
 #asidePaneFormTabs.custom-tabs .nav.nav-tabs {
     padding: 0 0px 0 0 !important;
     background-color: transparent;
-    z-index: 9;
+    z-index: 2;
     position: relative !important;
     top: -4px !important;
     margin-bottom: 10px;
