@@ -244,8 +244,10 @@ export class ApprovePettyCashEntryConfirmDialogComponent implements OnInit {
             this.showEntryAgainstRequired = false;
             this.pettyCashEntry.particular.uniqueName = option.value;
             this.pettyCashEntry.particular.name = option.label;
-            this.selectedEntryForApprove.baseAccount.uniqueName = option.value;
-            this.selectedEntryForApprove.baseAccount.name = option.label;
+            if (this.selectedEntryForApprove) {
+                this.selectedEntryForApprove.baseAccount.uniqueName = option.value;
+                this.selectedEntryForApprove.baseAccount.name = option.label;
+            }
         }
     }
 
@@ -258,8 +260,10 @@ export class ApprovePettyCashEntryConfirmDialogComponent implements OnInit {
         this.showEntryAgainstRequired = false;
         this.pettyCashEntry.particular.uniqueName = "";
         this.pettyCashEntry.particular.name = "";
-        this.selectedEntryForApprove.baseAccount.uniqueName = "";
-        this.selectedEntryForApprove.baseAccount.name = "";
+        if (this.selectedEntryForApprove) {
+            this.selectedEntryForApprove.baseAccount.uniqueName = "";
+            this.selectedEntryForApprove.baseAccount.name = "";
+        }
         this.entryAgainstObject.model = "";
         this.forceClear$ = observableOf({ status: true });
     }

@@ -302,36 +302,44 @@ export class AgingReportComponent implements OnInit, OnDestroy {
         this.commonRequest = request;
         this.agingAdvanceSearchModal.totalDueAmount = request.amount;
         if (request.category === "totalDue") {
-            switch (request.amountType) {
-                case "GreaterThan":
-                    this.agingAdvanceSearchModal.totalDueAmountGreaterThan = true;
-                    this.agingAdvanceSearchModal.totalDueAmountLessThan = false;
-                    this.agingAdvanceSearchModal.totalDueAmountEqualTo = false;
-                    this.agingAdvanceSearchModal.totalDueAmountNotEqualTo = false;
-                    break;
-                case "LessThan":
-                    this.agingAdvanceSearchModal.totalDueAmountGreaterThan = false;
-                    this.agingAdvanceSearchModal.totalDueAmountLessThan = true;
-                    this.agingAdvanceSearchModal.totalDueAmountEqualTo = false;
-                    this.agingAdvanceSearchModal.totalDueAmountNotEqualTo = false;
-                    break;
-                case "Exclude":
-                    this.agingAdvanceSearchModal.totalDueAmountGreaterThan = false;
-                    this.agingAdvanceSearchModal.totalDueAmountLessThan = false;
-                    this.agingAdvanceSearchModal.totalDueAmountEqualTo = false;
-                    this.agingAdvanceSearchModal.totalDueAmountNotEqualTo = true;
-                    break;
-                case "Equals":
-                    this.agingAdvanceSearchModal.totalDueAmountGreaterThan = false;
-                    this.agingAdvanceSearchModal.totalDueAmountLessThan = false;
-                    this.agingAdvanceSearchModal.totalDueAmountEqualTo = true;
-                    this.agingAdvanceSearchModal.totalDueAmountNotEqualTo = false;
-                    break;
-            }
+            this.agingAdvanceSearchModal.includeTotalDueAmount = true;
         } else {
-            // Code here for Future Due category
             this.agingAdvanceSearchModal.includeTotalDueAmount = false;
         }
+        switch (request.amountType) {
+            case "GreaterThan":
+                this.agingAdvanceSearchModal.totalDueAmountGreaterThan = true;
+                this.agingAdvanceSearchModal.totalDueAmountLessThan = false;
+                this.agingAdvanceSearchModal.totalDueAmountEqualTo = false;
+                this.agingAdvanceSearchModal.totalDueAmountNotEqualTo = false;
+                break;
+            case "LessThan":
+                this.agingAdvanceSearchModal.totalDueAmountGreaterThan = false;
+                this.agingAdvanceSearchModal.totalDueAmountLessThan = true;
+                this.agingAdvanceSearchModal.totalDueAmountEqualTo = false;
+                this.agingAdvanceSearchModal.totalDueAmountNotEqualTo = false;
+                break;
+            case "Exclude":
+                this.agingAdvanceSearchModal.totalDueAmountGreaterThan = false;
+                this.agingAdvanceSearchModal.totalDueAmountLessThan = false;
+                this.agingAdvanceSearchModal.totalDueAmountEqualTo = false;
+                this.agingAdvanceSearchModal.totalDueAmountNotEqualTo = true;
+                break;
+            case "Equals":
+                this.agingAdvanceSearchModal.totalDueAmountGreaterThan = false;
+                this.agingAdvanceSearchModal.totalDueAmountLessThan = false;
+                this.agingAdvanceSearchModal.totalDueAmountEqualTo = true;
+                this.agingAdvanceSearchModal.totalDueAmountNotEqualTo = false;
+                break;
+
+            default:
+                this.agingAdvanceSearchModal.totalDueAmountGreaterThan = false;
+                this.agingAdvanceSearchModal.totalDueAmountLessThan = false;
+                this.agingAdvanceSearchModal.totalDueAmountEqualTo = false;
+                this.agingAdvanceSearchModal.totalDueAmountNotEqualTo = false;
+                break;
+        }
+        
         this.isAdvanceSearchApplied = true;
         this.getDueReport();
     }
