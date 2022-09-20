@@ -585,13 +585,9 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
     public selectVoucher(event: IOption, entry: Adjustment, index: number): void {
         if (event && entry && !this.isFormReset) {
             entry = cloneDeep(event.additional);
-            this.adjustVoucherForm.adjustments.splice(index, 1, entry);
-            const adjustments = this.adjustVoucherForm?.adjustments?.filter(adjustment => adjustment?.uniqueName);
-            this.adjustVoucherForm.adjustments = adjustments;
-            if (entry) {
+            if (entry?.uniqueName) {
+                this.adjustVoucherForm.adjustments.splice(index, 1, entry);
                 this.calculateTax(entry, index);
-            } else {
-                this.adjustVoucherForm.adjustments.push(new Adjustment());
             }
         }
     }
@@ -678,7 +674,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
         if (this.isMultiCurrencyAccount) {
             entryData.adjustmentAmount.amountForCompany = this.getConvertedCompanyAmount(entryData?.adjustmentAmount?.amountForAccount, entryData?.exchangeRate);
         } else {
-            entryData.adjustmentAmount.amountForCompany = entryData?.adjustmentAmount?.amountForAccount;
+            entryData.adjustmentAmount.amountForCompany = entryData.adjustmentAmount?.amountForAccount;
         }
         let entry: Adjustment = cloneDeep(entryData);
         // Object of selected voucher
