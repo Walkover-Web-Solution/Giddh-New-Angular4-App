@@ -475,7 +475,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         this.ranges = this.parseRangesToVm(this.ranges);
 
         // if there's no ranges given, display calender in place of ranges list
-        this.showCalInRanges = (!this.ranges.length) || this.alwaysShowCalendars;
+        this.showCalInRanges = (!this.ranges?.length) || this.alwaysShowCalendars;
 
         // if no time picker is defined then,
         // set start date as start of start date
@@ -870,7 +870,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         if (!this.singleDatePicker && this.autoUpdateInput) {
             if (this.startDate && this.endDate) {
                 // if we use ranges and should show range label on inpu
-                if (this.ranges.length && this.showRangeLabelOnInput === true && this.chosenRange &&
+                if (this.ranges?.length && this.showRangeLabelOnInput === true && this.chosenRange &&
                     this.locale.customRangeLabel !== this.chosenRange) {
                     this.chosenLabel = this.chosenRange;
                 } else {
@@ -893,7 +893,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
      * this should calculate the label
      */
     public calculateChosenLabel(): void {
-        if (this.ranges.length > 0) {
+        if (this.ranges?.length > 0) {
             const flattenRanges = [];
             this.flattenRanges(this.ranges, flattenRanges);
 
@@ -901,7 +901,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
                 if (this.timePicker) {
                     const format = this.timePickerSeconds ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD HH:mm';
 
-                    if (range && range.ranges && !range.ranges.length) {
+                    if (range && range.ranges && !range.ranges?.length) {
                         // ignore times when comparing dates if time picker seconds is not enabled
                         if (this.startDate.format(format) === range.value[0].format(format)
                             && this.endDate.format(format) === range.value[1].format(format)) {
@@ -909,7 +909,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
                         }
                     }
                 } else {
-                    if (range && range.ranges && !range.ranges.length) {
+                    if (range && range.ranges && !range.ranges?.length) {
                         // ignore times when comparing dates if time picker is not enabled
                         if (this.startDate.format('YYYY-MM-DD') === range.value[0].format('YYYY-MM-DD')
                             && this.endDate.format('YYYY-MM-DD') === range.value[1].format('YYYY-MM-DD')) {
@@ -1228,7 +1228,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         this.invalidStartDate = "";
         this.invalidEndDate = "";
 
-        if (this.ranges.length) {
+        if (this.ranges?.length) {
             this.chosenRange = this.locale.customRangeLabel;
         }
 
@@ -1341,7 +1341,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
 
         this.chosenRange = range.name;
         const dates = this.findRange(this.ranges, range.name);
-        if (!dates.value || dates.value.length === 0) {
+        if (!dates.value || dates.value?.length === 0) {
             return false;
         }
 
@@ -1352,7 +1352,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         } else {
             this.calculateChosenLabel();
         }
-        this.showCalInRanges = (!this.ranges.length) || this.alwaysShowCalendars;
+        this.showCalInRanges = (!this.ranges?.length) || this.alwaysShowCalendars;
 
         if (!this.timePicker) {
             this.startDate.startOf('day');
@@ -1608,7 +1608,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
                 }
                 // store classes var
                 let cname = '', disabled = false;
-                for (let i = 0; i < classes.length; i++) {
+                for (let i = 0; i < classes?.length; i++) {
                     cname += classes[i] + ' ';
                     if (classes[i] === 'disabled') {
                         disabled = true;
@@ -1684,7 +1684,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
                     range = subRange;
                     return subRange;
                 } else {
-                    if (subRange.ranges && subRange.ranges.length) {
+                    if (subRange.ranges && subRange.ranges?.length) {
                         range = this.findRange(subRange.ranges, label);
                     }
                 }
@@ -1822,7 +1822,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         this.startDate = dayjs(new Date(financialYear.value.financialYearStarts.split("-").reverse().join("-")));
         this.endDate = dayjs(new Date(financialYear.value.financialYearEnds.split("-").reverse().join("-")));
         this.chosenLabel = this.startDate.format(GIDDH_DATE_FORMAT) + " - " + this.endDate.format(GIDDH_DATE_FORMAT);
-        this.showCalInRanges = (!this.ranges.length) || this.alwaysShowCalendars;
+        this.showCalInRanges = (!this.ranges?.length) || this.alwaysShowCalendars;
 
         if (!this.timePicker) {
             this.startDate.startOf('day');
@@ -1850,9 +1850,9 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
      * @memberof NgxDaterangepickerComponent
      */
     public removeDuplicateDatepickers(): void {
-        if (document.getElementsByTagName("ngx-daterangepicker-material").length > 1) {
-            for (let loop = 0; loop < document.getElementsByTagName("ngx-daterangepicker-material").length; loop++) {
-                document.getElementsByTagName("ngx-daterangepicker-material")[loop].remove();
+        if (document.getElementsByTagName("ngx-daterangepicker-material")?.length > 1) {
+            for (let loop = 0; loop < document.getElementsByTagName("ngx-daterangepicker-material")?.length; loop++) {
+                document.getElementsByTagName("ngx-daterangepicker-material")[loop]?.remove();
             }
         }
     }

@@ -126,7 +126,7 @@
                                             type="button"
                                             class="dropdown-toggle form-control text-left"
                                         >
-                                            Selected ({{ taxTempArray.length }})
+                                            Selected ({{ taxTempArray?.length }})
                                             <span class="pull-right"><span class="caret"></span></span>
                                         </button>
                                         <ul *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu">
@@ -145,7 +145,7 @@
                                                     {{ tax.name }}
                                                 </a>
                                             </li>
-                                            <li *ngIf="(companyTaxesList$ | async).length < 1">
+                                            <li *ngIf="(companyTaxesList$ | async)?.length < 1">
                                                 <a class="dropdown-item" (click)="$event.stopPropagation()"
                                                     >No Tax Found</a
                                                 >

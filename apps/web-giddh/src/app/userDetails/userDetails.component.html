@@ -218,7 +218,7 @@
                                         <th class="text-center">{{ commonLocaleData?.app_action }}</th>
                                     </tr>
                                 </thead>
-                                <tbody *ngIf="userSessionList.length">
+                                <tbody *ngIf="userSessionList?.length">
                                     <tr
                                         *ngFor="
                                             let session of userSessionList;
@@ -265,7 +265,7 @@
                                 </tbody>
                             </table>
                         </div>
-                        <div class="no-data" *ngIf="!userSessionList.length">
+                        <div class="no-data" *ngIf="!userSessionList?.length">
                             <no-data
                                 [primaryMessage]="commonLocaleData?.app_no_entries_found"
                                 [secondaryMessage]="commonLocaleData?.app_search_suggestion"

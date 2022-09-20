@@ -47,7 +47,7 @@
             [style.max-height.px]="102"
             [style.min-height.px]="70"
         >
-            <li *ngIf="taxRenderData.length === 0">
+            <li *ngIf="taxRenderData?.length === 0">
                 <p class="lead pd">{{ commonLocaleData?.app_no_tax_found }}</p>
             </li>
 
@@ -55,7 +55,7 @@
                 <label
                     class="checkbox overflow-hidden width-100 bd-rb pd-b05 custom-item d-flex align-items-center"
                     placement="bottom"
-                    *ngIf="taxRenderData.length - 1 !== idx"
+                    *ngIf="taxRenderData?.length - 1 !== idx"
                     (click)="$event.stopPropagation()"
                     [ngClass]="{ 'disabled-label': tax.isDisabled }"
                     #taxLabelOne
@@ -77,7 +77,7 @@
                 <label
                     class="checkbox overflow-hidden width-100 bd-rb pd-b05 custom-item"
                     placement="top"
-                    *ngIf="taxRenderData.length - 1 === idx"
+                    *ngIf="taxRenderData?.length - 1 === idx"
                     (click)="$event.stopPropagation()"
                     [ngClass]="{ 'disabled-label': tax.isDisabled }"
                     #taxLabelTwo

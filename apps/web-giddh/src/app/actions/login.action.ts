@@ -413,16 +413,16 @@ export class LoginActions {
                         });
                     } else {
                         if (this.activatedRoute.children && this.activatedRoute.children.length > 0) {
-                            if (this.activatedRoute.firstChild.children && this.activatedRoute.firstChild.children.length > 0) {
+                            if (this.activatedRoute.firstChild.children && this.activatedRoute.firstChild.children?.length > 0) {
                                 let path = [];
                                 let parament = {};
                                 this.activatedRoute.firstChild.firstChild.url.pipe(take(1)).subscribe(p => {
-                                    if (p.length > 0) {
+                                    if (p?.length > 0) {
                                         path = [p[0].path];
                                         parament = { queryParams: p[0].parameters };
                                     }
                                 });
-                                if (path.length > 0 && parament) {
+                                if (path?.length > 0 && parament) {
                                     this._router.navigateByUrl('/dummy', { skipLocationChange: true }).then(() => {
                                         if (ROUTES.findIndex(p => p.path.split('/')[0] === path[0].split('/')[0]) > -1) {
                                             this.finalNavigate(path[0], parament);
@@ -941,7 +941,7 @@ export class LoginActions {
         respState.body = new StateDetailsResponse();
         companies.body = sortBy(companies.body, ['name']);
         // now take first company from the companies
-        let cArr = companies.body.sort((a, b) => a.name.length - b.name.length);
+        let cArr = companies.body.sort((a, b) => a?.name?.length - b?.name?.length);
         let company = cArr[0];
         if (company) {
             respState.body.companyUniqueName = company?.uniqueName;
@@ -955,7 +955,7 @@ export class LoginActions {
         try {
             if (company && company.userEntityRoles && company.userEntityRoles.length) {
                 // find sorted userEntityRoles
-                let entitiesArr = company.userEntityRoles.sort((a, b) => a.entity.name.length - b.entity.name.length);
+                let entitiesArr = company.userEntityRoles.sort((a, b) => a?.entity?.name?.length - b?.entity?.name?.length);
                 let entityObj = entitiesArr[0].entity;
                 if (entityObj.entity === 'ACCOUNT') {
                     respState.body.lastState = `ledger/${entityObj?.uniqueName}`;

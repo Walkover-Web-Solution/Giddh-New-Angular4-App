@@ -115,7 +115,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         this.transporterList$ = this.store.pipe(select(p => p.ewaybillstate.TransporterList), takeUntil(this.destroyed$));
         this.isLoggedInUserEwayBill$ = this.store.pipe(select(p => p.ewaybillstate.isUserLoggedInEwaybillSuccess), takeUntil(this.destroyed$));
         this.isUserAddedSuccessfully$ = this.store.pipe(select(p => p.ewaybillstate.isEwaybillUserCreationSuccess), takeUntil(this.destroyed$));
-        this.invoiceBillingGstinNo = this.selectedInvoices.length ? this.selectedInvoices[0].billingGstNumber : '';
+        this.invoiceBillingGstinNo = this.selectedInvoices?.length ? this.selectedInvoices[0]?.billingGstNumber : '';
         this.generateEwayBillform.toGstIn = this.invoiceBillingGstinNo;
     }
 
@@ -153,14 +153,14 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
                 this.transporterDropdown$ = of(transporterArr);
             }
         });
-        this.invoiceNumber = this.selectedInvoices.length ? this.selectedInvoices[0].voucherNumber : '';
-        this.invoiceBillingGstinNo = this.selectedInvoices.length ? this.selectedInvoices[0].billingGstNumber : null;
+        this.invoiceNumber = this.selectedInvoices?.length ? this.selectedInvoices[0]?.voucherNumber : '';
+        this.invoiceBillingGstinNo = this.selectedInvoices?.length ? this.selectedInvoices[0]?.billingGstNumber : null;
         if (this.invoiceBillingGstinNo) {
             this.generateEwayBillform.toGstIn = this.invoiceBillingGstinNo;
         } else {
             this.generateEwayBillform.toGstIn = 'URP';
         }
-        if (this.selectedInvoices.length === 0) {
+        if (this.selectedInvoices?.length === 0) {
             this.router.navigate(['/pages/invoice/preview/sales']);
         }
         this.isEwaybillGeneratedSuccessfully$.subscribe(s => {
@@ -288,7 +288,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         this.confirmationFlag = 'closeConfirmation';
 
         let removeInvoice = this.localeData?.remove_invoice;
-        removeInvoice = removeInvoice?.replace("[VOUCHER_NUMBER]", this.selectedInvoices[0].voucherNumber);
+        removeInvoice = removeInvoice?.replace("[VOUCHER_NUMBER]", this.selectedInvoices[0]?.voucherNumber);
         this.deleteTemplateConfirmationMessage = removeInvoice;
         this.invoiceRemoveConfirmationModel?.show();
     }
@@ -298,8 +298,8 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
      */
     public onCloseConfirmationModal(userResponse: any) {
         if (userResponse.response && userResponse.close === 'closeConfirmation') {
-            this.selectedInvoices.splice(0, 1);
-            if (this.selectedInvoices.length === 0) {
+            this.selectedInvoices?.splice(0, 1);
+            if (this.selectedInvoices?.length === 0) {
                 this.router.navigate(['/pages/invoice/preview/sales']);
             }
         }

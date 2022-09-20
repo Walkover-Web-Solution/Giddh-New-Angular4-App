@@ -302,8 +302,8 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
      * selectEntryType() to validate Type i.e BY/TO
      */
     public selectEntryType(transactionObj, val, idx) {
-        val = val.trim();
-        if (val.length === 2 && (val.toLowerCase() !== 'to' && val.toLowerCase() !== 'by')) {
+        val = val?.trim();
+        if (val?.length === 2 && (val?.toLowerCase() !== 'to' && val?.toLowerCase() !== 'by')) {
             this._toaster.errorToast("Spell error, you can only use 'To/By'");
             transactionObj.type = 'to';
         } else {
@@ -411,8 +411,8 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
         if (acc) {
             let accModel = {
                 name: acc.name,
-                UniqueName: acc?.uniqueName,
-                groupUniqueName: acc.parentGroups[acc.parentGroups.length - 1]?.uniqueName,
+                UniqueName: acc.uniqueName,
+                groupUniqueName: acc.parentGroups[acc.parentGroups?.length - 1]?.uniqueName,
                 account: acc.name,
                 parentGroups: acc.parentGroups
             };
@@ -475,7 +475,6 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
     public addNewEntry(amount, transactionObj, idx) {
         let indx = idx;
         let reqField: any = document.getElementById(`first_element_${idx - 1}`);
-        let lastIndx = this.requestObj.transactions.length - 1;
         if (amount === 0 || amount === '0') {
             if (idx === 0) {
                 this.isFirstRowDeleted = true;
@@ -488,7 +487,7 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
             } else {
                 reqField.focus();
             }
-            if (!this.requestObj.transactions.length) {
+            if (!this.requestObj.transactions?.length) {
                 this.newEntryObj('by');
             }
         } else {
@@ -497,7 +496,7 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
     }
 
     public calModAmt(amount, transactionObj, indx) {
-        let lastIndx = this.requestObj.transactions.length - 1;
+        let lastIndx = this.requestObj.transactions?.length - 1;
         transactionObj.amount = Number(amount);
         transactionObj.total = transactionObj.amount;
         if (indx === lastIndx && this.requestObj.transactions[indx].selectedAccount.name) {
@@ -515,9 +514,9 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
     public openConfirmBox(submitBtnEle: HTMLButtonElement) {
         this.showLedgerAccountList = false;
         this.showStockList = false;
-        if (this.requestObj.transactions.length > 2) {
+        if (this.requestObj.transactions?.length > 2) {
             this.showConfirmationBox = true;
-            if (this.requestObj.description.length > 1) {
+            if (this.requestObj.description?.length > 1) {
                 this.requestObj.description = this.requestObj.description?.replace(/(?:\r\n|\r|\n)/g, '');
                 setTimeout(() => {
                     submitBtnEle.focus();
@@ -808,7 +807,7 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
 
     public validateAndAddNewStock(idx) {
         let i = this.selectedIdx;
-        if (this.requestObj.transactions[i].inventory.length - 1 === idx && this.requestObj.transactions[i].inventory[idx].amount) {
+        if (this.requestObj.transactions[i]?.inventory?.length - 1 === idx && this.requestObj.transactions[i]?.inventory[idx]?.amount) {
             this.requestObj.transactions[i].inventory.push(this.initInventory());
         }
     }
@@ -850,7 +849,7 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
      * validateAccount
      */
     public validateAccount(transactionObj, ev, idx) {
-        let lastIndx = this.requestObj.transactions.length - 1;
+        let lastIndx = this.requestObj.transactions?.length - 1;
         if (idx === lastIndx) {
             return;
         }

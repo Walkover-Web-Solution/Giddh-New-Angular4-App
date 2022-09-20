@@ -265,7 +265,7 @@ export class CompletedComponent implements OnInit, OnDestroy {
 
     public getHours(dateArray: any) {
         let hour;
-        if (dateArray.length > 2) {
+        if (dateArray?.length > 2) {
             hour = dateArray[3] + 1;
         }
         return hour;

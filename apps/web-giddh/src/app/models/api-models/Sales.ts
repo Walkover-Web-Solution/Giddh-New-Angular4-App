@@ -172,7 +172,7 @@ export class AccountDetailsClass {
             if (attrs.country) {
                 this.country = new CountryClass(attrs.country);
             }
-            if (attrs.addresses.length > 0) {
+            if (attrs.addresses?.length > 0) {
                 let str = isNull(attrs.addresses[0].address) ? '' : attrs.addresses[0].address;
                 // set billing
                 this.billingDetails.address = [];
@@ -269,7 +269,7 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
 
     public getTotalTaxOfEntry(taxArr: TaxControlData[]): number {
         let count: number = 0;
-        if (taxArr.length > 0) {
+        if (taxArr?.length > 0) {
             forEach(taxArr, (item: TaxControlData) => {
                 count += item.amount;
             });

@@ -46,7 +46,7 @@
                     <div class="d-flex d-md-none ml-auto flex-column">
                         <div class="d-flex">
                             <!-- region more items-->
-                            <div class="btn-wrapper-more" *ngIf="selectedItems.length === 1">
+                            <div class="btn-wrapper-more" *ngIf="selectedItems?.length === 1">
                                 <div *ngIf="!isCompany" class="btn-group d-inline-block" dropdown #dp="bs-dropdown">
                                     <button
                                         dropdownToggle
@@ -81,7 +81,10 @@
                             </div>
                         </div>
                         <!-- select app proforma -->
-                        <div class="select-all-proformas-on-mobile-view mr-t1 ml-auto" *ngIf="selectedItems.length > 0">
+                        <div
+                            class="select-all-proformas-on-mobile-view mr-t1 ml-auto"
+                            *ngIf="selectedItems?.length > 0"
+                        >
                             <div class="checkbox-img mr-1">
                                 <img
                                     src="assets/images/unchecked.png"
@@ -107,7 +110,7 @@
 
                 <div class="d-md-flex d-sm-none">
                     <!-- region more items -->
-                    <div class="btn-wrapper-more" *ngIf="selectedItems.length === 1">
+                    <div class="btn-wrapper-more" *ngIf="selectedItems?.length === 1">
                         <div *ngIf="!isCompany" class="btn-group d-inline-block" dropdown #dp="bs-dropdown">
                             <button
                                 dropdownToggle
@@ -184,7 +187,7 @@
                             {{ localeData?.new_estimate }}
                         </button>
                     </div>
-                    <div class="btn-wrapper-more" *ngIf="selectedItems.length === 1">
+                    <div class="btn-wrapper-more" *ngIf="selectedItems?.length === 1">
                         <div *ngIf="!isCompany" class="btn-group d-inline-block mr-b1" dropdown #dp="bs-dropdown">
                             <button
                                 dropdownToggle
@@ -259,7 +262,7 @@
                         "
                     >
                         <tr>
-                            <th *ngIf="selectedItems.length > 0" width="4%" class="min-width-check">
+                            <th *ngIf="selectedItems?.length > 0" width="4%" class="min-width-check">
                                 <div class="check-image d-flex justify-content-center">
                                     <img
                                         src="assets/images/unchecked.png"
@@ -274,7 +277,7 @@
                                 </div>
                             </th>
 
-                            <th *ngIf="selectedItems.length === 0" width="4%" class="min-width-check">
+                            <th *ngIf="selectedItems?.length === 0" width="4%" class="min-width-check">
                                 <div class="check-image d-flex justify-content-center">#</div>
                             </th>
 
@@ -374,7 +377,7 @@
                     </thead>
 
                     <tbody
-                        *ngIf="voucherData && voucherData.results.length > 0 && !(isGetAllInProcess$ | async)"
+                        *ngIf="voucherData && voucherData.results?.length > 0 && !(isGetAllInProcess$ | async)"
                         (clickOutside)="hoveredItemUniqueName = ''; clickedItemUniqueName = ''"
                         (mouseleave)="hoveredItemUniqueName = ''; clickedItemUniqueName = ''"
                     >
@@ -389,7 +392,7 @@
                                 *ngIf="
                                     hoveredItemUniqueName === item?.uniqueName ||
                                     item.isSelected ||
-                                    selectedItems.length > 0
+                                    selectedItems?.length > 0
                                 "
                             >
                                 <div class="check-image" class="d-flex checkbox-td">
@@ -411,7 +414,7 @@
                                 *ngIf="
                                     !item.isSelected &&
                                     hoveredItemUniqueName !== item?.uniqueName &&
-                                    selectedItems.length === 0
+                                    selectedItems?.length === 0
                                 "
                                 data-title="#"
                             >

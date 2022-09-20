@@ -154,7 +154,7 @@ export class InwardNoteComponent implements OnInit, OnChanges, OnDestroy {
         }
 
         const items = this.transactions;
-        const value = items.length > 0 ? items.at(0).value : {
+        const value = items?.length > 0 ? items?.at(0)?.value : {
             type: '',
             quantity: '',
             inventoryUser: '',

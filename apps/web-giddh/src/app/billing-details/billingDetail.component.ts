@@ -225,8 +225,8 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
         let isValid: boolean = false;
 
         if (ele.value) {
-            if (this.formFields['taxName']['regex'] !== "" && this.formFields['taxName']['regex'].length > 0) {
-                for (let key = 0; key < this.formFields['taxName']['regex'].length; key++) {
+            if (this.formFields['taxName']['regex'] !== "" && this.formFields['taxName']['regex']?.length > 0) {
+                for (let key = 0; key < this.formFields['taxName']['regex']?.length; key++) {
                     let regex = new RegExp(this.formFields['taxName']['regex'][key]);
                     if (regex.test(ele.value)) {
                         isValid = true;

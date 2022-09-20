@@ -458,7 +458,7 @@
                             </th>
                         </tr>
                     </thead>
-                    <tbody *ngIf="(purchaseRegisteDetailedResponse$ | async).items.length">
+                    <tbody *ngIf="(purchaseRegisteDetailedResponse$ | async)?.items?.length">
                         <tr *ngFor="let item of (purchaseRegisteDetailedResponse$ | async).items">
                             <td [attr.data-title]="commonLocaleData?.app_date">{{ item.date }}</td>
 
@@ -635,7 +635,7 @@
         <div
             class="no-data"
             *ngIf="
-                (purchaseRegisteDetailedResponse$ | async).items.length === 0 &&
+                (purchaseRegisteDetailedResponse$ | async)?.items?.length === 0 &&
                 !(isGetPurchaseDetailsInProcess$ | async)
             "
         >

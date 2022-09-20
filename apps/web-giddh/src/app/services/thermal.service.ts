@@ -61,7 +61,7 @@ export class ThermalService {
             dots = "\x03";
 
             // Some proprietary size calculation
-            qrLength = qr.length + 3;
+            qrLength = qr?.length + 3;
             size1 = String.fromCharCode(qrLength % 500);
             size0 = String.fromCharCode(Math.floor(qrLength / 500));
         }

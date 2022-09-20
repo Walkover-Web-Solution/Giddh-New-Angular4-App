@@ -94,7 +94,7 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
         if (this.transaction && this.transaction.selectedAccount) {
             if (this.transaction.voucherAdjustments) {
                 this.receiptEntries = this.transaction.voucherAdjustments;
-                this.totalEntries = this.receiptEntries.length;
+                this.totalEntries = this.receiptEntries?.length;
                 this.validateEntries(false);
             } else {
                 this.addNewEntry();

@@ -461,7 +461,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             }
         } else {
             let arr = control.value;
-            if (!control.value[arr?.length - 1].sellerId) {
+            if (!control.value[arr?.length - 1]?.sellerId) {
                 return;
             }
             control.push(this.initAmazonReseller());
@@ -671,9 +671,9 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             case SettingsIntegrationTab.Collection:
                 this.loadCollectionData();
                 break;
-            case SettingsIntegrationTab.ECommerce:
-                this.loadEcommerceData();
-                break;
+            // case SettingsIntegrationTab.ECommerce:
+            //     this.loadEcommerceData();
+            //     break;
             case SettingsIntegrationTab.Payment:
                 this.loadPaymentData();
                 break;

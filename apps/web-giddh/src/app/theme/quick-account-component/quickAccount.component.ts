@@ -106,13 +106,13 @@ export class QuickAccountComponent implements OnInit, AfterViewInit, OnDestroy {
         let unqName = control.value;
         unqName = unqName?.replace(/ |,|\//g, '');
         unqName = unqName.toLowerCase();
-        if (unqName.length >= 1) {
+        if (unqName?.length >= 1) {
             let unq = '';
             let text = '';
             const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
             let i = 0;
             while (i < 3) {
-                text += chars.charAt(Math.floor(Math.random() * chars.length));
+                text += chars.charAt(Math.floor(Math.random() * chars?.length));
                 i++;
             }
             unq = unqName + text;
@@ -146,7 +146,7 @@ export class QuickAccountComponent implements OnInit, AfterViewInit, OnDestroy {
 
     public checkSelectedGroup(options: IOption) {
         this.groupsArrayStream$.subscribe(data => {
-            if (data.length) {
+            if (data?.length) {
                 let accountCategory = this.flattenGroup(data, options.value, null);
                 this.showGstBox = accountCategory === 'assets' || accountCategory === 'liabilities';
             }
