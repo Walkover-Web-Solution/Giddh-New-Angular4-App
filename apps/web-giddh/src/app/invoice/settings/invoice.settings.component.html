@@ -5,7 +5,7 @@
     (commonLocaleData)="commonLocaleData = $event"
     (translationComplete)="translationComplete($event)"
 >
-    <div validateSectionPermission [hasPermission]="hasInvoiceSettingPermissions">
+    <div validateSectionPermission [hasPermission]="hasInvoiceSettingPermissions" validateSubscription>
         <section id="invoice-setting">
             <tabset class="tab-integration">
                 <!-- region general tab-->
