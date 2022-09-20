@@ -164,7 +164,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
                 this.proformaWebhook.push(cloneDeep(this.webhookMock));
 
 
-                if (webhookArray.length > 0) {
+                if (webhookArray?.length > 0) {
                     this.webhooks = webhookArray;
                 } else {
                     // adding blank webhook row on load
@@ -257,7 +257,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
 
         let razorpayObj: RazorPayDetailsResponse = cloneDeep(this.settingResponse?.razorPayform) || new RazorPayDetailsResponse();
 
-        if (this.webhooks && this.webhooks.length > 0 && !this.webhooks[this.webhooks.length - 1].url && !this.webhooks[this.webhooks.length - 1].triggerAt) {
+        if (this.webhooks && this.webhooks.length > 0 && !this.webhooks[this.webhooks.length - 1]?.url && !this.webhooks[this.webhooks.length - 1]?.triggerAt) {
             this.webhooks.splice(this.webhooks.length - 1);
         }
         // perform operation to update 'invoice' webhooks
@@ -450,7 +450,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
                     this.invoiceSetting = invoiceSetting;
                 });
             }
-            if (String(defaultDueDate).length > 3) {
+            if (String(defaultDueDate)?.length > 3) {
                 if (defaultDueDate.indexOf('-') !== -1) {
                     invoiceSetting.duePeriod = Number(String(defaultDueDate).substring(0, 4));
                 } else {

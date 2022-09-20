@@ -60,13 +60,13 @@
                 <span>
                     <span
                         [ngStyle]="{
-                            'color': mandatoryHeadersCount === mandatoryHeadersModel.length ? '#00b503' : '#adadad'
+                            'color': mandatoryHeadersCount === mandatoryHeadersModel?.length ? '#00b503' : '#adadad'
                         }"
                     >
                         {{ mandatoryHeadersCount }}</span
-                    >/{{ mandatoryHeadersModel.length }} {{ localeData?.done }}</span
+                    >/{{ mandatoryHeadersModel?.length }} {{ localeData?.done }}</span
                 >
-                &nbsp;<span *ngIf="mandatoryHeadersCount === mandatoryHeadersModel.length" class="success-label">{{
+                &nbsp;<span *ngIf="mandatoryHeadersCount === mandatoryHeadersModel?.length" class="success-label">{{
                     localeData?.successful
                 }}</span>
             </p>
@@ -82,7 +82,7 @@
         </div>
     </div>
     <!-- group mapping -->
-    <div *ngIf="mandatoryGroupModel.length" class="group-model">
+    <div *ngIf="mandatoryGroupModel?.length" class="group-model">
         <div>
             <p>
                 {{ localeData?.minimum_fields_message }} <span class="text-or">{{ entity | titlecase }}</span>
@@ -90,12 +90,12 @@
                 <span>
                     <span
                         [ngStyle]="{
-                            'color': mandatoryGroupHeadersCount === mandatoryGroupModel.length ? '#00b503' : '#adadad'
+                            'color': mandatoryGroupHeadersCount === mandatoryGroupModel?.length ? '#00b503' : '#adadad'
                         }"
                         >{{ mandatoryGroupHeadersCount }}</span
-                    >/{{ mandatoryGroupModel.length }} {{ localeData?.done }}</span
+                    >/{{ mandatoryGroupModel?.length }} {{ localeData?.done }}</span
                 >
-                &nbsp;<span *ngIf="mandatoryGroupHeadersCount === mandatoryGroupModel.length" class="success-label">{{
+                &nbsp;<span *ngIf="mandatoryGroupHeadersCount === mandatoryGroupModel?.length" class="success-label">{{
                     localeData?.successful
                 }}</span>
             </p>

@@ -89,7 +89,7 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
             let res: BaseResponse<GetAllLedgersOfInvoicesResponse, CommonPaginatedRequest> = action.payload;
             if (res.status === 'success') {
                 let body = _.cloneDeep(res.body);
-                if (body.results.length > 0) {
+                if (body.results?.length > 0) {
                     body.results.map((item: ILedgersInvoiceResult) => {
                         item.isSelected = (item.isSelected) ? true : false;
                         item.hasGenerationErr = false;
@@ -173,9 +173,9 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
             if (res.status === 'success' && action.payload.queryString && action.payload.queryString.requestedFrom === 'ledger') {
                 return state;
             }
-            if (res.status === 'success' && reqObj.length > 0) {
+            if (res.status === 'success' && reqObj?.length > 0) {
                 // check for failed entries
-                if (_.isArray(res.body) && res.body.length > 0) {
+                if (_.isArray(res.body) && res.body?.length > 0) {
                     let failedEntriesArr: string[] = [];
                     let needToRemoveEleArr: string[] = [];
                     _.forEach(res.body, (item: IBulkInvoiceGenerationFalingError) => {
@@ -213,7 +213,7 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
                             });
                         });
                     });
-                    if (newState.ledgers.results.length === 0) {
+                    if (newState.ledgers.results?.length === 0) {
                         newState.isBulkInvoiceGeneratedWithoutErrors = true;
                     }
                 }
@@ -416,9 +416,9 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
             if (res.status === 'success' && action.payload.queryString && action.payload.queryString.requestedFrom === 'ledger') {
                 return state;
             }
-            if (res.status === 'success' && reqObj.length > 0) {
+            if (res.status === 'success' && reqObj?.length > 0) {
                 // check for failed entries
-                if (_.isArray(res.body) && res.body.length > 0) {
+                if (_.isArray(res.body) && res.body?.length > 0) {
                     let failedEntriesArr: string[] = [];
                     let needToRemoveEleArr: string[] = [];
                     _.forEach(res.body, (item: IBulkInvoiceGenerationFalingError) => {
@@ -456,7 +456,7 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
                             });
                         });
                     });
-                    if (newState.ledgers.results.length === 0) {
+                    if (newState.ledgers.results?.length === 0) {
                         newState.isBulkInvoiceGeneratedWithoutErrors = true;
                     }
                 }

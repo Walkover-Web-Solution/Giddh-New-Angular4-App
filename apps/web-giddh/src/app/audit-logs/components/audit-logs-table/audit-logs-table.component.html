@@ -124,7 +124,7 @@
                         log?.details &&
                         log?.operationType === 'MERGE' &&
                         log?.details?.source != undefined &&
-                        log?.details?.source.length
+                        log?.details?.source?.length
                     "
                 >
                     <label>{{ localeData?.source }}:</label>
@@ -437,7 +437,7 @@
                             log?.old?.details &&
                             log?.old?.operationType === 'MERGE' &&
                             log?.old?.details?.source != undefined &&
-                            log?.old?.details?.source.length
+                            log?.old?.details?.source?.length
                         "
                     >
                         <label>{{ localeData?.source }}:</label>
@@ -744,7 +744,7 @@
 
         <div
             class="mr-t05"
-            *ngIf="log?.log != null && log?.log?.transactions != undefined && log?.log?.transactions.length > 0"
+            *ngIf="log?.log != null && log?.log?.transactions != undefined && log?.log?.transactions?.length > 0"
         >
             <table class="table table-bordered">
                 <thead>
@@ -877,7 +877,7 @@
             </table>
         </div>
     </section>
-    <section class="no-logs" *ngIf="(auditLogs$ | async).length < 1">
+    <section class="no-logs" *ngIf="(auditLogs$ | async)?.length < 1">
         <div class="no-data">
             <h1>{{ localeData?.no_results_found }}</h1>
             <p>{{ localeData?.no_results_note }}</p>

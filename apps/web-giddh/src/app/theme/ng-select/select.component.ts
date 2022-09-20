@@ -365,7 +365,7 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
     }
 
     private updateFilterEnabled() {
-        this.filterEnabled = this.optionList.options.length >= this.noFilter;
+        this.filterEnabled = this.optionList.options?.length >= this.noFilter;
     }
 
     private valueChanged() {
@@ -410,11 +410,11 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
 
     private clearSelection() {
         let selection: Option[] = this.optionList.selection;
-        if (selection.length > 0) {
+        if (selection?.length > 0) {
             this.optionList.clearSelection();
             this.valueChanged();
 
-            if (selection.length === 1) {
+            if (selection?.length === 1) {
                 this.deselected.emit(selection[0].wrappedOption);
             } else {
                 this.deselected.emit(selection.map(option => option.wrappedOption));
@@ -424,8 +424,8 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
 
     private clearSelectionManually() {
         let selection: Option[] = this.optionList.selection;
-        if (selection.length > 0) {
-            if (selection.length === 1) {
+        if (selection?.length > 0) {
+            if (selection?.length === 1) {
                 this.deselected.emit(selection[0].wrappedOption);
             } else {
                 this.deselected.emit(selection.map(option => option.wrappedOption));
@@ -450,8 +450,8 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
     private deselectLast() {
         let sel: Option[] = this.optionList.selection;
 
-        if (sel.length > 0) {
-            let option: Option = sel[sel.length - 1];
+        if (sel?.length > 0) {
+            let option: Option = sel[sel?.length - 1];
             this.deselectOption(option);
             if (!this.isTypeAheadMode) {
                 this.setMultipleFilterInput(option.label + ' ');
@@ -512,7 +512,7 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
         if (this.multiple && this.filterEnabled) {
             this.filterInput.nativeElement.value = '';
         } else if (this.isTypeAheadMode && this.filterEnabled) {
-            this.filterInput.nativeElement.value = this.optionList.selection.length > 0 ? this.optionList.selection[0].label : '';
+            this.filterInput.nativeElement.value = this.optionList.selection?.length > 0 ? this.optionList.selection[0].label : '';
         }
     }
 
@@ -578,7 +578,7 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
                 (this.filterInput?.nativeElement.value === '' && !this.isTypeAheadMode)) {
                 this.deselectLast();
             } else if (this.optionList.hasSelected && this.filterEnabled &&
-                (this.filterInput?.nativeElement.value === '' || (this.filterInput?.nativeElement.value.length === 1 && this.isTypeAheadMode))) {
+                (this.filterInput?.nativeElement.value === '' || (this.filterInput?.nativeElement.value?.length === 1 && this.isTypeAheadMode))) {
                 this.clearSelectionManually();
             }
         }
@@ -588,7 +588,7 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
         // let key = event.which;
         // if (key === this.KEYS.BACKSPACE) {
         //   if (this.optionList.hasSelected && this.filterEnabled &&
-        //     (this.filterInput.nativeElement.value === '' || (this.filterInput.nativeElement.value.length === 1 && this.isTypeAheadMode))) {
+        //     (this.filterInput.nativeElement.value === '' || (this.filterInput.nativeElement.value?.length === 1 && this.isTypeAheadMode))) {
         //     this.deselectLast();
         //   }
         // }
@@ -618,8 +618,8 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
     private updateFilterWidth() {
         if (typeof this.filterInput !== 'undefined') {
             let value: string = this.filterInput?.nativeElement.value;
-            this.filterInputWidth = value.length === 0 ?
-                1 + this.placeholderView.length * 10 : 1 + value.length * 10;
+            this.filterInputWidth = value?.length === 0 ?
+                1 + this.placeholderView?.length * 10 : 1 + value?.length * 10;
         }
     }
 }

@@ -78,7 +78,7 @@ export function agingReportReducer(state = initialState, action: CustomActions):
                 let data: DueAmountReportResponse = _.cloneDeep(action.payload) as DueAmountReportResponse;
                 let noData = false;
                 let getAgingReportRequestInFlight = false;
-                if (data.results.length < 1) {
+                if (data.results?.length < 1) {
                     noData = true;
                 }
                 return { ...state, getAgingReportRequestInFlight, data, noData };

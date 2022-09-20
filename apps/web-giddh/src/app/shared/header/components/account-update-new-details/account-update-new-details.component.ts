@@ -1627,7 +1627,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             }, 50);
 
             const accountAddress = this.addAccountForm.get('addresses') as FormArray;
-            if (accountAddress.controls.length === 0 || !accountAddress.length) {
+            if (accountAddress.controls?.length === 0 || !accountAddress?.length) {
                 this.addBlankGstForm();
             }
         } else {

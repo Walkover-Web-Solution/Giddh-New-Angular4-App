@@ -122,11 +122,11 @@ export class PermissionModelComponent implements OnInit, OnDestroy {
 
     public selectPage(event) {
         if (event.target.checked) {
-            if (this.makeCount() === this.newRoleObj.pageList.length) {
+            if (this.makeCount() === this.newRoleObj.pageList?.length) {
                 this.newRoleObj.isSelectedAllPages = true;
             }
         } else {
-            if (this.makeCount() === this.newRoleObj.pageList.length) {
+            if (this.makeCount() === this.newRoleObj.pageList?.length) {
                 this.newRoleObj.isSelectedAllPages = false;
             }
         }

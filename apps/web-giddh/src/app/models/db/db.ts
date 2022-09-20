@@ -136,7 +136,7 @@ class AppDatabase extends Dexie {
                               then add it to menu at specific position and then mark that item as removed in default menu
                              */
                             let sorted: IUlist[] = orderBy(this.clonedMenus.filter(f => !f.isRemoved), ['pIndex'], ['desc']);
-                            if (sorted.length === 0) {
+                            if (sorted?.length === 0) {
                                 sorted = DEFAULT_MENUS;
                                 this.clonedMenus = DEFAULT_MENUS;
                             }
@@ -167,7 +167,7 @@ class AppDatabase extends Dexie {
                         if (isSmallScreen && duplicateIndex > limit) {
                             duplicateIndex = this.smallScreenHandler(duplicateIndex, isCompany);
                         }
-                        if (this.clonedMenus.length === 0) {
+                        if (this.clonedMenus?.length === 0) {
                             this.clonedMenus = DEFAULT_MENUS;
                         }
                         arr[originalDuplicateIndex] = arr[duplicateIndex];

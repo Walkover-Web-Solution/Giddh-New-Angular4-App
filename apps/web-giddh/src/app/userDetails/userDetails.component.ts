@@ -233,7 +233,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
     public addNumber(no: string) {
         this.oneTimePassword = '';
         const mobileRegex = /^[0-9]{1,10}$/;
-        if (mobileRegex.test(no) && (no.length === 10)) {
+        if (mobileRegex.test(no) && (no?.length === 10)) {
             const request: SignupWithMobile = new SignupWithMobile();
             request.countryCode = Number(this.countryCode) || 91;
             request.mobileNumber = this.phoneNumber;

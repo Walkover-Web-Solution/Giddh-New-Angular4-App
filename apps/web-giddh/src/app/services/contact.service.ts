@@ -56,7 +56,7 @@ export class ContactService {
             branchUniqueName = branchUniqueName !== this.companyUniqueName ? branchUniqueName : '';
             url = url.concat('&branchUniqueName=', branchUniqueName);
         }
-        if (postData && Object.keys(postData).length > 0) {
+        if (postData && Object.keys(postData)?.length > 0) {
             return this.http.post(url, postData).pipe(map((res) => {
                 let data: BaseResponse<any, string> = res;
                 data.request = '';
@@ -107,7 +107,7 @@ export class ContactService {
             ?.replace(':fromDate', fromDate)
             ?.replace(':toDate', toDate);
 
-        if (postData && Object.keys(postData).length > 0) {
+        if (postData && Object.keys(postData)?.length > 0) {
             return this.http.post(url, postData).pipe(map((res) => {
                 let data: BaseResponse<any, string> = res;
                 data.request = '';

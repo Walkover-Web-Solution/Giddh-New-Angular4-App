@@ -597,7 +597,7 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
                 this.stockReportRequest.voucherTypes.splice(index, 1);
             }
         }
-        if (this.stockReportRequest.voucherTypes.length > 0 && this.stockReportRequest.voucherTypes.length < this.VOUCHER_TYPES.length) {
+        if (this.stockReportRequest.voucherTypes?.length > 0 && this.stockReportRequest.voucherTypes?.length < this.VOUCHER_TYPES.length) {
             idx = this.stockReportRequest.voucherTypes.indexOf('ALL');
             if (idx !== -1) {
                 this.stockReportRequest.voucherTypes.splice(idx, 1);
@@ -607,10 +607,10 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
                 this.stockReportRequest.voucherTypes.splice(idx, 1);
             }
         }
-        if (this.stockReportRequest.voucherTypes.length === this.VOUCHER_TYPES.length) {
+        if (this.stockReportRequest.voucherTypes?.length === this.VOUCHER_TYPES.length) {
             this.stockReportRequest.voucherTypes = ['ALL'];
         }
-        if (this.stockReportRequest.voucherTypes.length === 0) {
+        if (this.stockReportRequest.voucherTypes?.length === 0) {
             this.stockReportRequest.voucherTypes = ['NONE'];
         }
         this.getStockReport(true);

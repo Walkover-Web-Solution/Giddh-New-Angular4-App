@@ -303,7 +303,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.branches = response || [];
-                this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && this.branches.length > 1;
+                this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && this.branches?.length > 1;
             }
         });
         this.advanceSearchFilter.page = 1;
@@ -736,7 +736,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             });
         } else {
             //  It will execute when Bulk delete operation
-            if (this.selectedInvoicesList.length > 1) {
+            if (this.selectedInvoicesList?.length > 1) {
                 let bulkDeleteModel;
                 let selectedVouchers = [];
 
@@ -1160,7 +1160,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             this.selectedInvoicesList.push(item);     // Array of checked seleted Items of the list
         }
 
-        if (this.selectedInvoicesList.length === 1) {
+        if (this.selectedInvoicesList?.length === 1) {
             this.exportInvoiceType = this.selectedInvoicesList[0].account?.uniqueName;
             this.isExported = true;
         }
@@ -1237,7 +1237,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         });
 
         // set date picker date as application date
-        if (universalDate.length > 1) {
+        if (universalDate?.length > 1) {
             this.selectedDateRange = { startDate: dayjs(universalDate[0]), endDate: dayjs(universalDate[1]) };
             this.selectedDateRangeUi = dayjs(universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
 
@@ -1323,8 +1323,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         this.exportcsvRequest.from = this.invoiceSearchRequest.from;
         this.exportcsvRequest.to = this.invoiceSearchRequest.to;
         let dataTosend = { accountUniqueName: '' };
-        if (this.selectedInvoicesList.length > 0) {
-
+        if (this.selectedInvoicesList?.length > 0) {
             dataTosend.accountUniqueName = this.allItemsSelected ? '' : this.selectedInvoicesList[0].account?.uniqueName;
         } else {
             dataTosend.accountUniqueName = '';
@@ -1876,7 +1875,10 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                         }
 
                         let voucherData = cloneDeep(res[0]);
-                        if (voucherData.items.length) {
+                        if (voucherData.items?.length) {
+                            // this.totalSale = voucherData.items.reduce((c, p) => {
+                            //   return Number(c.grandTotal) + Number(p.grandTotal);
+                            // }, 0);
                             this.showExportButton = voucherData.items.every(s => s.account?.uniqueName === voucherData.items[0].account?.uniqueName);
                         } else {
                             if (voucherData.page > 1) {

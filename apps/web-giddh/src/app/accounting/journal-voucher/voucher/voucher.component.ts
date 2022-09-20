@@ -487,8 +487,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * selectEntryType() to validate Type i.e BY/TO
      */
     public selectEntryType(transactionObj, val, idx) {
-        val = val.trim();
-        if (val.length === 2 && (val.toLowerCase() !== 'to' && val.toLowerCase() !== 'by')) {
+        val = val?.trim();
+        if (val?.length === 2 && (val?.toLowerCase() !== 'to' && val?.toLowerCase() !== 'by')) {
             this._toaster.errorToast(this.localeData?.entry_type_error);
             transactionObj.type = 'to';
         } else {
@@ -602,8 +602,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                     }, () => { });
                     let accModel = {
                         name: acc.name,
-                        UniqueName: acc?.uniqueName,
-                        groupUniqueName: acc.parentGroups[acc.parentGroups.length - 1]?.uniqueName,
+                        UniqueName: acc.uniqueName,
+                        groupUniqueName: acc.parentGroups[acc.parentGroups?.length - 1]?.uniqueName,
                         account: acc.name,
                         parentGroups: acc.parentGroups
                     };
@@ -729,7 +729,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     }
 
     public calModAmt(amount, transactionObj, indx) {
-        let lastIndx = this.requestObj.transactions.length - 1;
+        let lastIndx = this.requestObj.transactions?.length - 1;
         transactionObj.amount = Number(amount);
         transactionObj.total = transactionObj.amount;
 
@@ -742,7 +742,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 if (this.requestObj.voucherType !== VOUCHERS.RECEIPT) {
                     this.newEntryObj('to');
                 } else {
-                    if (this.requestObj.transactions.length === 1) {
+                    if (this.requestObj.transactions?.length === 1) {
                         this.newEntryObj('by');
                     }
                 }
@@ -760,7 +760,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this.showStockList = false;
         if (this.totalDebitAmount === this.totalCreditAmount) {
             this.showConfirmationBox = true;
-            if (this.requestObj.description.length > 1) {
+            if (this.requestObj.description?.length > 1) {
                 this.requestObj.description = this.requestObj.description?.replace(/(?:\r\n|\r|\n)/g, '');
                 setTimeout(() => {
                     submitBtnEle.focus();
@@ -818,7 +818,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                     if (voucherAdjustments && voucherAdjustments.length > 0) {
                         let dataVoucherAdjustments = [];
                         let byEntry = data.transactions[1];
-                        let totalTransactions = data.transactions.length;
+                        let totalTransactions = data.transactions?.length;
                         let adjustmentsCount = 0;
 
                         voucherAdjustments.forEach(adjustment => {
@@ -1152,7 +1152,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
     public validateAndAddNewStock(idx) {
         let i = this.selectedIdx;
-        if (this.requestObj.transactions[i].inventory.length - 1 === idx) {
+        if (this.requestObj.transactions[i]?.inventory?.length - 1 === idx) {
             this.requestObj.transactions[i].inventory.push(this.initInventory());
         }
     }
@@ -1184,7 +1184,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      */
     public validateAccount(transactionObj, ev, idx) {
         if (!ev.shiftKey) {
-            let lastIndx = this.requestObj.transactions.length - 1;
+            let lastIndx = this.requestObj.transactions?.length - 1;
             if (idx === lastIndx) {
                 return;
             }

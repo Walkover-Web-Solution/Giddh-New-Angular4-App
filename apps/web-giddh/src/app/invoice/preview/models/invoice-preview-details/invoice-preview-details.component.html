@@ -529,7 +529,7 @@
                                 </div>
                                 <div
                                     class="less-more-details"
-                                    *ngIf="filteredVoucherVersions.length && !moreLogsDisplayed"
+                                    *ngIf="filteredVoucherVersions?.length && !moreLogsDisplayed"
                                 >
                                     <a href="javascript:;" (click)="filterVoucherVersions(true)">{{
                                         localeData?.more_details

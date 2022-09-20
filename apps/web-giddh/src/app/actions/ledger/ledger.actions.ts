@@ -328,7 +328,7 @@ export class LedgerActions {
                 } else {
                     if (typeof data.body === 'string') {
                         this.toaster.showSnackBar("success", data.body);
-                    } else if (_.isArray(data.body) && data.body.length > 0) {
+                    } else if (_.isArray(data.body) && data.body?.length > 0) {
                         // Block will execute if multiple invoice generate
                         if (data && data.queryString && data.queryString.reqObj && !data.queryString.reqObj.combined) {
                             _.forEach(data.body, (item: IBulkInvoiceGenerationFalingError) => {
