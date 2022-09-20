@@ -104,7 +104,7 @@ export class DecimalDigitsDirective implements OnDestroy {
                 // Probably an old IE browser
             }
 
-            let dotLength: number = e.target.value.replace(/[^.]/g, '').length;
+            let dotLength: number = e.target.value?.replace(/[^.]/g, '').length;
 
             // If user has not entered a dot(.) e.target.value.split(".")[1] will be undefined
             let decimalLength = e.target.value.split('.')[1] ? e.target.value.split('.')[1].length : 0;
@@ -126,9 +126,9 @@ export class DecimalDigitsDirective implements OnDestroy {
             let cl = event.clipboardData.getData('text/plain');
             cl = cl.trim();
             if (cl.includes('\'') || cl.includes(',') || cl.includes(' ')) {
-                cl = cl.replace(/'/g, '');
-                cl = cl.replace(/,/g, '');
-                cl = cl.replace(/ /g, '');
+                cl = cl?.replace(/'/g, '');
+                cl = cl?.replace(/,/g, '');
+                cl = cl?.replace(/ /g, '');
 
             } else {
                 if (!new RegExp('^(\\d+)((\\.)\\d{1,' + this.giddhDecimalPlaces + '})?$', 'g').test(cl)) {

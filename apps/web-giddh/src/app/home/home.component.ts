@@ -47,7 +47,7 @@ export class HomeComponent implements OnInit, OnDestroy {
             if (result) {
                 this.accountService.getFlattenAccounts('', '').pipe(takeUntil(this.destroyed$)).subscribe(data => {
                     if (data.status === 'success' && data.body.results.length > 0) {
-                        this.router.navigate([`ledger/${data.body.results[0].uniqueName}`]);
+                        this.router.navigate([`ledger/${data.body.results[0]?.uniqueName}`]);
                     }
                 });
             }

@@ -192,11 +192,11 @@ export class InventoryCreateUpdateGroupComponent implements OnInit, OnDestroy {
         rawList.map(group => {
             if (group) {
                 let newOption: IOption = { label: '', value: '' };
-                newOption.label = group.name;
-                newOption.value = group.uniqueName;
+                newOption.label = group?.name;
+                newOption.value = group?.uniqueName;
                 parents.push(newOption);
-                if (group.childStockGroups && group.childStockGroups.length > 0) {
-                    this.arrangeGroups(group.childStockGroups, parents);
+                if (group?.childStockGroups && group?.childStockGroups.length > 0) {
+                    this.arrangeGroups(group?.childStockGroups, parents);
                 }
             }
         });
@@ -255,7 +255,7 @@ export class InventoryCreateUpdateGroupComponent implements OnInit, OnDestroy {
             this.companyUniqueName$.pipe(take(1)).subscribe(a => companyUniqueName = a);
             const event: UploadInput = {
                 type: 'uploadAll',
-                url: Configuration.ApiUrl + LEDGER_API.UPLOAD_FILE.replace(':companyUniqueName', companyUniqueName),
+                url: Configuration.ApiUrl + LEDGER_API.UPLOAD_FILE?.replace(':companyUniqueName', companyUniqueName),
                 method: 'POST',
                 fieldName: 'file',
                 data: { company: companyUniqueName },

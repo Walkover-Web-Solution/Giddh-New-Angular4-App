@@ -28,11 +28,11 @@ export class DownloadsService {
      */
     public getDownloads(downloadsRequest: DownloadsRequest): Observable<BaseResponse<DownloadsResponse, DownloadsRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.get(this.config.apiUrl + DOWNLOADS_API.DOWNLOADS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            .replace(':from', encodeURIComponent(downloadsRequest.from))
-            .replace(':to', encodeURIComponent(downloadsRequest.to))
-            .replace(':count', encodeURIComponent(downloadsRequest.count))
-            .replace(':page', encodeURIComponent(downloadsRequest.page))).pipe(
+        return this.http.get(this.config.apiUrl + DOWNLOADS_API.DOWNLOADS?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':from', encodeURIComponent(downloadsRequest.from))
+            ?.replace(':to', encodeURIComponent(downloadsRequest.to))
+            ?.replace(':count', encodeURIComponent(downloadsRequest.count))
+            ?.replace(':page', encodeURIComponent(downloadsRequest.page))).pipe(
                 map((res) => {
                     let data: BaseResponse<DownloadsResponse, DownloadsRequest> = res;
                     data.request = downloadsRequest;

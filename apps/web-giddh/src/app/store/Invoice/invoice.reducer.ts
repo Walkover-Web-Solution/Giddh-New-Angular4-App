@@ -250,7 +250,7 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
             let newState = _.cloneDeep(state);
             let res: BaseResponse<string, string> = action.payload;
             if (res.status === 'success') {
-                let uniqueName = res.queryString.uniquename;
+                let uniqueName = res.queryString?.uniquename;
                 let indx = newState.settings.webhooks.findIndex((obj) => obj.uniqueName === uniqueName);
                 if (indx > -1) {
                     newState.settings.webhooks.splice(indx, 1);
@@ -376,7 +376,7 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
         case INVOICE.RECURRING.UPDATE_RECURRING_INVOICE_RESPONSE: {
             if (action.payload) {
                 const recurringVoucherDetails = state.recurringInvoiceData.recurringInvoices.recurringVoucherDetails
-                    .filter(p => p.uniqueName !== action.payload.uniqueName)
+                    ?.filter(p => p.uniqueName !== action.payload.uniqueName)
                     .concat(action.payload);
                 return {
                     ...state, recurringInvoiceData: {

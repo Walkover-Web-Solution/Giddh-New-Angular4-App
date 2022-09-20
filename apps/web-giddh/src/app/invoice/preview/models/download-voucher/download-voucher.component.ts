@@ -58,7 +58,7 @@ export class DownloadVoucherComponent implements OnInit, OnDestroy {
         if (event.target.checked) {
             this.invoiceType.push(val);
         } else {
-            this.invoiceType = this.invoiceType.filter(f => f !== val);
+            this.invoiceType = this.invoiceType?.filter(f => f !== val);
         }
     }
 
@@ -70,7 +70,7 @@ export class DownloadVoucherComponent implements OnInit, OnDestroy {
             let dataToSend = {
                 copyTypes: this.invoiceType,
                 voucherType: voucherType,
-                uniqueName: this.selectedItem.uniqueName
+                uniqueName: this.selectedItem?.uniqueName
             };
 
             let downloadOption = "";
@@ -113,7 +113,7 @@ export class DownloadVoucherComponent implements OnInit, OnDestroy {
                 voucherType: voucherType
             };
 
-            this.invoiceService.DownloadInvoice(this.selectedItem.account.uniqueName, dataToSend).pipe(takeUntil(this.destroyed$))
+            this.invoiceService.DownloadInvoice(this.selectedItem.account?.uniqueName, dataToSend).pipe(takeUntil(this.destroyed$))
                 .subscribe(res => {
                     if (res?.status !== "error") {
                         if (dataToSend.typeOfInvoice.length > 1) {

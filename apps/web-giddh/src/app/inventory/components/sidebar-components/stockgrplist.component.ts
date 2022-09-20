@@ -74,19 +74,19 @@ export class StockgrpListComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public OpenGroup(grp: IGroupsWithStocksHierarchyMinItem, e: Event) {
-        this.invViewService.setActiveView('group', grp.name, null, grp.uniqueName, grp.isOpen);
-        this.invViewService.setActiveGroupUniqueName(grp.uniqueName);
+        this.invViewService.setActiveView('group', grp.name, null, grp?.uniqueName, grp.isOpen);
+        this.invViewService.setActiveGroupUniqueName(grp?.uniqueName);
         e.stopPropagation();
 
         if (grp.isOpen) {
-            this.store.dispatch(this.sideBarAction.OpenGroup(grp.uniqueName));
+            this.store.dispatch(this.sideBarAction.OpenGroup(grp?.uniqueName));
         } else {
-            this.store.dispatch(this.sideBarAction.GetInventoryGroup(grp.uniqueName));
+            this.store.dispatch(this.sideBarAction.GetInventoryGroup(grp?.uniqueName));
         }
     }
 
     public goToManageGroup(grp) {
-        if (grp.uniqueName) {
+        if (grp?.uniqueName) {
             this.store.dispatch(this.inventoryAction.OpenInventoryAsidePane(true));
             this.setInventoryAsideState(true, true, true);
         }

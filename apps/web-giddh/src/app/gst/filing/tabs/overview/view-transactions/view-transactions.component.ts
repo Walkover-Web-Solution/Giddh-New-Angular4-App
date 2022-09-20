@@ -178,7 +178,7 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
                 downloadVoucherRequestObject = {
                     voucherNumber: [invoice.voucherNumber],
                     voucherType: invoice.voucherType,
-                    accountUniqueName: invoice.account.uniqueName
+                    accountUniqueName: invoice.account?.uniqueName
                 };
             
                 this.store.dispatch(this.invoiceReceiptActions.VoucherPreview(downloadVoucherRequestObject, downloadVoucherRequestObject.accountUniqueName));
@@ -263,7 +263,7 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
      */
     public downloadFile(): void {
         let blob = this.generalService.base64ToBlob(this.base64Data, 'application/pdf', 512);
-        return saveAs(blob, `${this.commonLocaleData?.app_invoice}-${this.selectedInvoice.account.uniqueName}.pdf`);
+        return saveAs(blob, `${this.commonLocaleData?.app_invoice}-${this.selectedInvoice.account?.uniqueName}.pdf`);
     }
 
     /**
@@ -277,14 +277,14 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
             this.downloadFile();
         } else if (userResponse.action === 'send_mail' && userResponse.emails && userResponse.emails.length) {
             if (this.voucherApiVersion === 2) {
-                this.store.dispatch(this.invoiceActions.SendInvoiceOnMail(this.selectedInvoice.account.uniqueName, {
+                this.store.dispatch(this.invoiceActions.SendInvoiceOnMail(this.selectedInvoice.account?.uniqueName, {
                     email: { to: userResponse.emails },
-                    uniqueName: this.selectedInvoice.uniqueName,
+                    uniqueName: this.selectedInvoice?.uniqueName,
                     copyTypes: userResponse.typeOfInvoice,
                     voucherType: this.selectedInvoice.voucherType
                 }));
             } else {
-                this.store.dispatch(this.invoiceActions.SendInvoiceOnMail(this.selectedInvoice.account.uniqueName, {
+                this.store.dispatch(this.invoiceActions.SendInvoiceOnMail(this.selectedInvoice.account?.uniqueName, {
                     emailId: userResponse.emails,
                     voucherNumber: [this.selectedInvoice.voucherNumber],
                     typeOfInvoice: userResponse.typeOfInvoice,
@@ -292,7 +292,7 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
                 }));
             }
         } else if (userResponse.action === 'send_sms' && userResponse.numbers && userResponse.numbers.length) {
-            this.store.dispatch(this.invoiceActions.SendInvoiceOnSms(this.selectedInvoice.account.uniqueName, { numbers: userResponse.numbers }, this.selectedInvoice.voucherNumber));
+            this.store.dispatch(this.invoiceActions.SendInvoiceOnSms(this.selectedInvoice.account?.uniqueName, { numbers: userResponse.numbers }, this.selectedInvoice.voucherNumber));
         }
     }
 
@@ -328,7 +328,7 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
                 typeOfInvoice: invoiceCopy,
                 voucherType: this.selectedInvoice.voucherType
             };
-            this.invoiceService.DownloadInvoice(this.selectedInvoice.account.uniqueName, dataToSend).pipe(takeUntil(this.destroyed$))
+            this.invoiceService.DownloadInvoice(this.selectedInvoice.account?.uniqueName, dataToSend).pipe(takeUntil(this.destroyed$))
                 .subscribe(res => {
                     if (res) {
                         if (dataToSend.typeOfInvoice.length > 1) {

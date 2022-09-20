@@ -82,18 +82,18 @@ export class TransferNoteComponent implements OnChanges {
 
     public ngOnChanges(changes: SimpleChanges): void {
         if (changes.stockList && this.stockList) {
-            this.stockListOptions = this.stockList.map(p => ({ label: p.name, value: p.uniqueName }));
+            this.stockListOptions = this.stockList.map(p => ({ label: p.name, value: p?.uniqueName }));
         }
         if (changes.stockUnits && this.stockUnits) {
             this.stockUnitsOptions = this.stockUnits.map(p => ({ label: `${p.name} (${p.code})`, value: p.code }));
         }
         if (changes.userList && this.userList) {
-            this.userListOptions = this.userList.map(p => ({ label: p.name, value: p.uniqueName }));
+            this.userListOptions = this.userList.map(p => ({ label: p.name, value: p?.uniqueName }));
         }
     }
 
     public stockChanged(option: IOption) {
-        const stockItem = this.stockList.find(p => p.uniqueName === option.value);
+        const stockItem = this.stockList.find(p => p?.uniqueName === option.value);
         const stockUnit = stockItem ? stockItem.stockUnit.code : null;
         this.form?.patchValue({ ...this.form.value, stockUnit });
     }

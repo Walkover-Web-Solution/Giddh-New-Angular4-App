@@ -32,7 +32,7 @@ export class SalesService {
      * {{url}}/company/{{companyUniqueName}}/accounts/{{accountUniqueName}}/vouchers/generate
      */
     public generateGenericItem(model: any, isVoucherV4 = false): Observable<BaseResponse<any, any>> {
-        let accountUniqueName = model.account.uniqueName;
+        let accountUniqueName = model.account?.uniqueName;
         this.companyUniqueName = this.generalService.companyUniqueName;
         let url;
         if (isVoucherV4) {
@@ -44,8 +44,8 @@ export class SalesService {
             url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
         }
         return this.http.post(url
-            .replace(':companyUniqueName', this.companyUniqueName)
-            .replace(':accountUniqueName', encodeURIComponent(accountUniqueName))
+            ?.replace(':companyUniqueName', this.companyUniqueName)
+            ?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName))
             , model)
             .pipe(
                 map((res) => {
@@ -60,8 +60,8 @@ export class SalesService {
         let accountUniqueName = model.voucher?.accountDetails?.uniqueName;
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.put(this.config.apiUrl + SALES_API_V2.UPDATE_VOUCHER
-            .replace(':companyUniqueName', this.companyUniqueName)
-            .replace(':accountUniqueName', encodeURIComponent(accountUniqueName)), model)
+            ?.replace(':companyUniqueName', this.companyUniqueName)
+            ?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName)), model)
             .pipe(
                 map((res) => {
                     let data: BaseResponse<any, any> = res;
@@ -72,11 +72,11 @@ export class SalesService {
     }
 
     public updateVoucherV4(model: any): Observable<BaseResponse<any, GenericRequestForGenerateSCD>> {
-        let accountUniqueName = model.account.uniqueName;
+        let accountUniqueName = model.account?.uniqueName;
         this.companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + SALES_API_V4.UPDATE_VOUCHER
-            .replace(':companyUniqueName', this.companyUniqueName)
-            .replace(':accountUniqueName', encodeURIComponent(accountUniqueName));
+            ?.replace(':companyUniqueName', this.companyUniqueName)
+            ?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName));
         if (this.generalService.voucherApiVersion === 2) {
             url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
         }
@@ -108,8 +108,8 @@ export class SalesService {
     public getAllAdvanceReceiptVoucher(model: AdvanceReceiptRequest): Observable<BaseResponse<any, AdvanceReceiptRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let contextPath = this.config.apiUrl + ADVANCE_RECEIPTS_API.GET_ALL_ADVANCE_RECEIPTS
-            .replace(':companyUniqueName', this.companyUniqueName)
-            .replace(':accountUniqueName', encodeURIComponent(model.accountUniqueName)).replace(':invoiceDate', model.invoiceDate);
+            ?.replace(':companyUniqueName', this.companyUniqueName)
+            ?.replace(':accountUniqueName', encodeURIComponent(model.accountUniqueName))?.replace(':invoiceDate', model.invoiceDate);
         if (this.generalService.voucherApiVersion === 2) {
             contextPath = this.generalService.addVoucherVersion(contextPath, this.generalService.voucherApiVersion);
         }
@@ -136,9 +136,9 @@ export class SalesService {
         let url;
 
         if (this.generalService.voucherApiVersion === 2) {
-            url = this.config.apiUrl + ADVANCE_RECEIPTS_API.VOUCHER_ADJUSTMENT_WITH_ADVANCE_RECEIPT.replace(':companyUniqueName', this.companyUniqueName).replace(':voucherUniqueName', invoiceUniqueName);
+            url = this.config.apiUrl + ADVANCE_RECEIPTS_API.VOUCHER_ADJUSTMENT_WITH_ADVANCE_RECEIPT?.replace(':companyUniqueName', this.companyUniqueName)?.replace(':voucherUniqueName', invoiceUniqueName);
         } else {
-            url = this.config.apiUrl + ADVANCE_RECEIPTS_API.INVOICE_ADJUSTMENT_WITH_ADVANCE_RECEIPT.replace(':companyUniqueName', this.companyUniqueName).replace(':invoiceUniqueName', invoiceUniqueName);
+            url = this.config.apiUrl + ADVANCE_RECEIPTS_API.INVOICE_ADJUSTMENT_WITH_ADVANCE_RECEIPT?.replace(':companyUniqueName', this.companyUniqueName)?.replace(':invoiceUniqueName', invoiceUniqueName);
         }
 
         if (this.generalService.voucherApiVersion === 2) {
@@ -161,10 +161,10 @@ export class SalesService {
     *
     */
     public generatePendingVoucherGenericItem(model: any): Observable<BaseResponse<any, any>> {
-        let accountUniqueName = model.account.uniqueName;
+        let accountUniqueName = model.account?.uniqueName;
         let url = `${this.config.apiUrl}${SALES_API_V4.GENERATE_GENERIC_ITEMS}-pending-vouchers`;
-        url = url.replace(':companyUniqueName', this.companyUniqueName)
-            .replace(':accountUniqueName', encodeURIComponent(accountUniqueName));
+        url = url?.replace(':companyUniqueName', this.companyUniqueName)
+            ?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName));
         this.companyUniqueName = this.generalService.companyUniqueName;
         if (this.generalService.voucherApiVersion === 2) {
             url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
@@ -192,12 +192,12 @@ export class SalesService {
     public getInvoiceList(model: any, date: string, count: number = PAGINATION_LIMIT): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let contextPath = SALES_API_V2.GET_VOUCHER_INVOICE_LIST
-            .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            .replace(':voucherDate', encodeURIComponent(date))
-            .replace(':adjustmentRequest', String(true))
-            .replace(':count', String(count))
-            .replace(':number', encodeURIComponent((model.number || "")))
-            .replace(':page', (model.page || 1));
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':voucherDate', encodeURIComponent(date))
+            ?.replace(':adjustmentRequest', String(true))
+            ?.replace(':count', String(count))
+            ?.replace(':number', encodeURIComponent((model.number || "")))
+            ?.replace(':page', (model.page || 1));
         if (this.generalService.voucherApiVersion === 2) {
             contextPath = this.generalService.addVoucherVersion(contextPath, this.generalService.voucherApiVersion);
         }
@@ -215,7 +215,7 @@ export class SalesService {
      */
     public getAccountsWithCurrency(requestObject: any, currency?: string): Observable<any> {
         const companyUniqueName = this.generalService.companyUniqueName;
-        let contextPath = `${this.config.apiUrl}${SALES_API_V2.GET_ACCOUNTS_OF_GROUP_WITH_CURRENCY.replace(':companyUniqueName', companyUniqueName)}`;
+        let contextPath = `${this.config.apiUrl}${SALES_API_V2.GET_ACCOUNTS_OF_GROUP_WITH_CURRENCY?.replace(':companyUniqueName', companyUniqueName)}`;
         if (typeof requestObject === 'string') {
             contextPath = contextPath.concat(`?group=${requestObject}&count=0`);
         } else {
@@ -240,7 +240,7 @@ export class SalesService {
      * @memberof SalesService
      */
     public updateAttachmentInVoucher(model: any): Observable<BaseResponse<any, any>> {
-        let url: string = `${this.config.apiUrl}${SALES_API_V4.UPDATE_ATTACHMENT.replace(':companyUniqueName', this.generalService.companyUniqueName)}`;
+        let url: string = `${this.config.apiUrl}${SALES_API_V4.UPDATE_ATTACHMENT?.replace(':companyUniqueName', this.generalService.companyUniqueName)}`;
         if (this.generalService.voucherApiVersion === 2) {
             url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
         }

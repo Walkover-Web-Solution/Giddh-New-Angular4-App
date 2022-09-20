@@ -222,7 +222,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
                     this.activeCompanyForDb.uniqueName = selectedCmp.uniqueName;
                 }
                 if (this.generalService.companyUniqueName) {
-                    this.dbService.getAllItems(this.activeCompanyForDb.uniqueName, 'accounts').subscribe(accountList => {
+                    this.dbService.getAllItems(this.activeCompanyForDb?.uniqueName, 'accounts').subscribe(accountList => {
                         if (accountList?.length) {
                             if (window.innerWidth > 1440 && window.innerHeight > 717) {
                                 this.accountItemsFromIndexDB = accountList.slice(0, 7);
@@ -408,7 +408,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
         if (!this.activeCompanyForDb) {
             return;
         }
-        if (!this.activeCompanyForDb.uniqueName) {
+        if (!this.activeCompanyForDb?.uniqueName) {
             return;
         }
         if (dbResult) {
@@ -473,7 +473,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
             if (item && item.type === 'MENU') {
                 if (item.additional && item.additional.tab) {
                     if (item.uniqueName.includes('?')) {
-                        item.uniqueName = item.uniqueName.split('?')[0];
+                        item.uniqueName = item.uniqueName?.split('?')[0];
                     }
                     this.router.navigate([item.uniqueName], {
                         queryParams: {

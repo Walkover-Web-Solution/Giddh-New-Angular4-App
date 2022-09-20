@@ -75,7 +75,7 @@ export class MaskApplierService {
         }
         const inputArray: string[] = inputValue.toString().split('');
         if (maskExpression === 'IP') {
-            this.ipError = !!(inputArray.filter((i: string) => i === '.').length < 3 && inputArray.length < 7);
+            this.ipError = !!(inputArray?.filter((i: string) => i === '.').length < 3 && inputArray?.length < 7);
             maskExpression = '099.099.099.099';
         }
         if (maskExpression.startsWith('percent')) {
@@ -120,7 +120,7 @@ export class MaskApplierService {
                 ) {
                     inputValue = inputValue.substring(0, inputValue.length - 1);
                 }
-                inputValue = inputValue.replace('.', ' ');
+                inputValue = inputValue?.replace('.', ' ');
             }
             if (maskExpression.startsWith(Separators.DOT_SEPARATOR)) {
                 if (
@@ -128,7 +128,7 @@ export class MaskApplierService {
                     inputValue.indexOf('.') === inputValue.lastIndexOf('.') &&
                     (inputValue.indexOf('.') > 3 || inputValue.length < 6)
                 ) {
-                    inputValue = inputValue.replace('.', ',');
+                    inputValue = inputValue?.replace('.', ',');
                 }
                 inputValue =
                     inputValue.length > 1 && inputValue[0] === '0' && inputValue[1] !== ','
@@ -147,33 +147,33 @@ export class MaskApplierService {
                     inputValue = inputValue.substring(0, inputValue.length - 1);
                 }
                 inputValue = this.checkInputPrecision(inputValue, precision, ',');
-                strForSep = inputValue.replace(/\s/g, '');
+                strForSep = inputValue?.replace(/\s/g, '');
                 result = this.separator(strForSep, ' ', ',', precision);
             } else if (maskExpression.startsWith(Separators.DOT_SEPARATOR)) {
                 if (inputValue.match(/[@#!$%^&*()_+|~=`{}\[\]:\s";<>?\/]/)) {
                     inputValue = inputValue.substring(0, inputValue.length - 1);
                 }
                 inputValue = this.checkInputPrecision(inputValue, precision, ',');
-                strForSep = inputValue.replace(/\./g, '');
+                strForSep = inputValue?.replace(/\./g, '');
                 result = this.separator(strForSep, '.', ',', precision);
             } else if (maskExpression.startsWith(Separators.COMMA_SEPARATOR)) {
-                strForSep = inputValue.replace(/,/g, '');
+                strForSep = inputValue?.replace(/,/g, '');
                 result = this.separator(strForSep, ',', '.', precision);
             } else if (maskExpression.startsWith(Separators.IND_COMMA_SEPARATED)) {
                 inputValue = this.checkInputPrecisionForCustomInput(inputValue, this.giddhDecimalPlaces, '.');
-                strForSep = inputValue.replace(/,/g, '');
+                strForSep = inputValue?.replace(/,/g, '');
                 result = this.currencySeparator(strForSep, ',', '.', precision, true);
             } else if (maskExpression.startsWith(Separators.INT_SPACE_SEPARATED)) {
                 inputValue = this.checkInputPrecisionForCustomInput(inputValue, this.giddhDecimalPlaces, '.');
-                strForSep = inputValue.replace(/[ ,']/g, '');
+                strForSep = inputValue?.replace(/[ ,']/g, '');
                 result = this.currencySeparator(strForSep, ' ', '.', precision);
             } else if (maskExpression.startsWith(Separators.INT_COMMA_SEPARATED)) {
                 inputValue = this.checkInputPrecisionForCustomInput(inputValue, this.giddhDecimalPlaces, '.');
-                strForSep = inputValue.replace(/,/g, '');
+                strForSep = inputValue?.replace(/,/g, '');
                 result = this.currencySeparator(strForSep, ',', '.', precision);
             } else if (maskExpression.startsWith(Separators.INT_APOSTROPHE_SEPARATED)) {
                 inputValue = this.checkInputPrecisionForCustomInput(inputValue, this.giddhDecimalPlaces, '.');
-                strForSep = inputValue.replace(/[ ,']/g, '');
+                strForSep = inputValue?.replace(/[ ,']/g, '');
                 result = this.currencySeparator(strForSep, '\'', '.', precision);
             }
 
@@ -435,7 +435,7 @@ export class MaskApplierService {
         let res: string = x[0];
         const rgx: RegExp = /(\d+)(\d{3})/;
         while (rgx.test(res)) {
-            res = res.replace(rgx, '$1' + char + '$2');
+            res = res?.replace(rgx, '$1' + char + '$2');
         }
         if (precision === undefined) {
             return res + decimals;
@@ -464,8 +464,8 @@ export class MaskApplierService {
         if (otherNumbers !== '') {
             lastThree = char + lastThree;
         }
-        const res: string = (indFormat ? otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, char) :
-            otherNumbers.replace(/\B(?=(\d{3})+(?!\d))/g, char)) + lastThree;
+        const res: string = (indFormat ? otherNumbers?.replace(/\B(?=(\d{2})+(?!\d))/g, char) :
+            otherNumbers?.replace(/\B(?=(\d{3})+(?!\d))/g, char)) + lastThree;
         if (precision === undefined) {
             return res + decimals;
         } else if (precision === 0) {

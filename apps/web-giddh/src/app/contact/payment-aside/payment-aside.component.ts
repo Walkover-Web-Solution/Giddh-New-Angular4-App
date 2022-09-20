@@ -216,7 +216,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
             }
 
         });
-        this.selectedAccForBulkPayment = this.selectedAccForBulkPayment.filter((data, index) => {
+        this.selectedAccForBulkPayment = this.selectedAccForBulkPayment?.filter((data, index) => {
             return this.selectedAccForBulkPayment.indexOf(data) === index;
         });
         this.selectedAccForBulkPayment.forEach(item => {
@@ -258,7 +258,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
                 if (changes.selectedAccountsForBulkPayment && changes.selectedAccountsForBulkPayment.currentValue) {
                     this.totalSelectedLength = changes.selectedAccountsForBulkPayment.currentValue.length;
                     this.selectedAccForBulkPayment = _.cloneDeep(this.selectedAccountsForBulkPayment);
-                    this.selectedAccForBulkPayment = this.selectedAccForBulkPayment.filter(item => {
+                    this.selectedAccForBulkPayment = this.selectedAccForBulkPayment?.filter(item => {
                         return item.accountBankDetails && item.accountBankDetails.bankAccountNo !== '' && item.accountBankDetails.bankName !== '' && item.accountBankDetails.ifsc !== '';
                     });
                 }
@@ -495,7 +495,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         this.totalSelectedAccountAmount = 0;
         if (selectedAccount && selectedAccount.length) {
             this.totalSelectedAccountAmount = selectedAccount.reduce((prev, cur) => {
-                const closingBalanceAmount = Number(String(cur.closingBalanceAmount).replace(/,/g, ''));
+                const closingBalanceAmount = Number(String(cur.closingBalanceAmount)?.replace(/,/g, ''));
                 return prev + closingBalanceAmount;
             }, 0);
         }
@@ -548,7 +548,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
                 remarks: '',
                 vendorUniqueName: ''
             };
-            const closingBalanceAmount = Number(String(item?.closingBalanceAmount).replace(/,/g, ''));
+            const closingBalanceAmount = Number(String(item?.closingBalanceAmount)?.replace(/,/g, ''));
             transaction.amount = String(closingBalanceAmount);
             transaction.remarks = item?.remarks;
             transaction.vendorUniqueName = item?.uniqueName;

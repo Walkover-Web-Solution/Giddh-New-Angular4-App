@@ -547,7 +547,7 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
      */
     public confirmDelete(item: any): void {
         this.deleteModule = 'purchaseorder';
-        this.selectedItem = item.uniqueName;
+        this.selectedItem = item?.uniqueName;
         this.poConfirmationModel.show();
     }
 

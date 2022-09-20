@@ -90,10 +90,10 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
         this.currentCompanyBranches$.subscribe(response => {
             if (response && response.length) {
                 this.currentCompanyBranches = response.map(branch => ({
-                    label: branch.alias,
-                    value: branch.uniqueName,
-                    name: branch.name,
-                    parentBranch: branch.parentBranch
+                    label: branch?.alias,
+                    value: branch?.uniqueName,
+                    name: branch?.name,
+                    parentBranch: branch?.parentBranch
                 }));
                 this.currentCompanyBranches.unshift({
                     label: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
@@ -121,7 +121,7 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
                         this.currentBranch.alias = selectedBranch.alias;
                     } else {
                         // Company was selected from the branch dropdown
-                        this.currentBranch.name = this.activeCompany.name;
+                        this.currentBranch.name = this.activeCompany?.name;
                     }
                 }
             } else {
@@ -219,8 +219,10 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
         })), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
                 this.selectedCompany = activeCompany;
-                this.financialOptions = activeCompany.financialYears.map(q => {
-                    return { label: q.uniqueName, value: q.uniqueName };
+                this.financialOptions = activeCompany.financialYears.map(response => {
+                    if(response){
+                        return { label: response.uniqueName, value: response.uniqueName };
+                    }
                 });
                 let selectedFinancialYear, activeFinancialYear, uniqueNameToSearch;
                 if (financialYearChosenInReportUniqueName) {
@@ -229,10 +231,12 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
                 } else {
                     uniqueNameToSearch = activeCompany.activeFinancialYear?.uniqueName;
                 }
-                selectedFinancialYear = this.financialOptions.find(p => p.value === uniqueNameToSearch);
+                selectedFinancialYear = this.financialOptions.find(p => p?.value === uniqueNameToSearch);
                 activeFinancialYear = this.selectedCompany.financialYears.find(p => p.uniqueName === uniqueNameToSearch);
                 this.activeFinacialYr = activeFinancialYear;
+                if(selectedFinancialYear){
                 this.currentActiveFinacialYear = _.cloneDeep(selectedFinancialYear);
+                }
                 this.currentBranch.uniqueName = currentBranchUniqueName ? currentBranchUniqueName : this.currentBranch?.uniqueName;
                 this.selectedType = currentTimeFilter ? currentTimeFilter.toLowerCase() : this.selectedType;
                 this.populateRecords(this.selectedType);
@@ -274,7 +278,7 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
                     this._toaster.errorToast(res.message);
                 } else {
                     this.purchaseRegisterTotal = new PurchaseReportsModel();
-                    this.purchaseRegisterTotal.particular = this.activeFinacialYr.uniqueName;
+                    this.purchaseRegisterTotal.particular = this.activeFinacialYr?.uniqueName;
                     this.reportRespone = this.filterReportResp(res.body);
                 }
             });
@@ -355,7 +359,7 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
      */
     private savePreferences(): void {
         this.store.dispatch(this.companyActions.setUserChosenFinancialYear({
-            financialYear: this.currentActiveFinacialYear.value, branchUniqueName: this.currentBranch?.uniqueName, timeFilter: this.selectedType
+            financialYear: this.currentActiveFinacialYear?.value, branchUniqueName: this.currentBranch?.uniqueName, timeFilter: this.selectedType
         }));
     }
 

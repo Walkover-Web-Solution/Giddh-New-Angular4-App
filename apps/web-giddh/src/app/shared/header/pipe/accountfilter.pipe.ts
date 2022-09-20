@@ -33,40 +33,40 @@ export class AccountFilterPipe implements PipeTransform {
         return each(input, (grp: any) => {
             let grpName;
             let grpUnq;
-            grpName = grp.name.toLowerCase();
-            grpUnq = grp.uniqueName.toLowerCase();
+            grpName = grp?.name?.toLowerCase();
+            grpUnq = grp?.uniqueName?.toLowerCase();
             if (!this.checkIndex(grpName, this.srch) && !this.checkIndex(grpUnq, this.srch)) {
                 grp.isVisible = false;
                 if (grp.groups.length > 0) {
                     return each(grp.groups, (sub: any) => {
                         let subName;
                         let subUnq;
-                        subName = sub.name.toLowerCase();
-                        subUnq = sub.uniqueName.toLowerCase();
+                        subName = sub?.name?.toLowerCase();
+                        subUnq = sub?.uniqueName?.toLowerCase();
                         if (!this.checkIndex(subName, this.srch) && !this.checkIndex(subUnq, this.srch)) {
                             sub.isVisible = false;
                             if (sub.groups.length) {
                                 return each(sub.groups, (child: any) => {
                                     let childName;
                                     let childUnq;
-                                    childName = child.name.toLowerCase();
-                                    childUnq = child.uniqueName.toLowerCase();
+                                    childName = child?.name?.toLowerCase();
+                                    childUnq = child?.uniqueName?.toLowerCase();
                                     if (!this.checkIndex(childName, this.srch) && !this.checkIndex(childUnq, this.srch)) {
                                         child.isVisible = false;
                                         if (child.groups.length > 0) {
                                             return each(child.groups, (subChild: any) => {
                                                 let subChildName;
                                                 let subChildUnq;
-                                                subChildName = subChild.name.toLowerCase();
-                                                subChildUnq = subChild.uniqueName.toLowerCase();
+                                                subChildName = subChild?.name?.toLowerCase();
+                                                subChildUnq = subChild?.uniqueName?.toLowerCase();
                                                 if (!this.checkIndex(subChildName, this.srch) && !this.checkIndex(subChildUnq, this.srch)) {
                                                     subChild.isVisible = false;
                                                     if (subChild.groups.length > 0) {
                                                         return each(child.groups, (subChild2: any) => {
                                                             let subChild2Name;
                                                             let subChild2Unq;
-                                                            subChild2Name = subChild2.name.toLowerCase();
-                                                            subChild2Unq = subChild2.uniqueName.toLowerCase();
+                                                            subChild2Name = subChild2?.name?.toLowerCase();
+                                                            subChild2Unq = subChild2?.uniqueName?.toLowerCase();
                                                             if (!this.checkIndex(subChild2Name, this.srch) && !this.checkIndex(subChild2Unq, this.srch)) {
                                                                 subChild2.isVisible = false;
                                                                 if (subChild2.groups.length > 0) {

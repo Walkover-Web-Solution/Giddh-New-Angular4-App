@@ -185,7 +185,7 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
             if (grpData.status === 'success') {
                 return Object.assign({}, state, {
                     activeGroup: grpData.body,
-                    activeGroupUniqueName: grpData.body.uniqueName,
+                    activeGroupUniqueName: grpData.body?.uniqueName,
                     activeGroupInProgress: false,
                     activeGroupTaxHierarchy: null,
                     activeGroupSharedWith: null,
@@ -235,7 +235,7 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
         case GroupWithAccountsAction.UNSHARE_GROUP_RESPONSE:
             let unSharedData: BaseResponse<string, string> = action.payload;
             if (unSharedData.status === 'success') {
-                let myGroupSharedWith = _.cloneDeep(state.activeGroupSharedWith).filter(ac => unSharedData.request !== ac.userEmail);
+                let myGroupSharedWith = _.cloneDeep(state.activeGroupSharedWith)?.filter(ac => unSharedData.request !== ac.userEmail);
                 return Object.assign({}, state, {
                     activeGroupSharedWith: myGroupSharedWith
                 });
@@ -244,7 +244,7 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
         case AccountsAction.UNSHARE_ACCOUNT_RESPONSE:
             let unSharedAccData: BaseResponse<string, string> = action.payload;
             if (unSharedAccData.status === 'success') {
-                let myAccountSharedWith = _.cloneDeep(state.activeAccountSharedWith).filter(ac => unSharedAccData.request !== ac.userEmail);
+                let myAccountSharedWith = _.cloneDeep(state.activeAccountSharedWith)?.filter(ac => unSharedAccData.request !== ac.userEmail);
                 return Object.assign({}, state, {
                     activeAccountSharedWith: myAccountSharedWith
                 });
@@ -597,7 +597,7 @@ const toggleActiveGroupFunc = (groups: IGroupsWithAccounts[], uniqueName: string
     let myChildElementIsOpen = false;
     if (groups) {
         for (let grp of groups) {
-            if (grp.uniqueName === uniqueName) {
+            if (grp?.uniqueName === uniqueName) {
                 grp.isActive = true;
                 grp.isOpen = !grp.isOpen;
                 myChildElementIsOpen = !grp.isOpen;
@@ -621,7 +621,7 @@ const updateActiveGroupFunc = (groups: IGroupsWithAccounts[], uniqueName: string
     }
     if (groups) {
         for (let grp of groups) {
-            if (grp.uniqueName === uniqueName) {
+            if (grp?.uniqueName === uniqueName) {
                 grp.name = updatedGroup.name;
                 grp.uniqueName = updatedGroup.uniqueName;
                 grp.isActive = true;
@@ -642,7 +642,7 @@ const updateActiveGroupFunc = (groups: IGroupsWithAccounts[], uniqueName: string
 const AddAndActiveGroupFunc = (groups: IGroupsWithAccounts[], gData: BaseResponse<GroupResponse, GroupCreateRequest>, myChildElementIsOpen: boolean): boolean => {
     if (groups) {
         for (let grp of groups) {
-            if (grp.uniqueName === gData.request.parentGroupUniqueName) {
+            if (grp?.uniqueName === gData.request.parentGroupUniqueName) {
                 let newData = new GroupsWithAccountsResponse();
                 newData.accounts = [];
                 newData.category = grp.category;
@@ -668,7 +668,7 @@ const AddAndActiveGroupFunc = (groups: IGroupsWithAccounts[], gData: BaseRespons
 };
 const setActiveGroupFunc = (groups: IGroupsWithAccounts[], uniqueName: string, result: IGroupsWithAccounts) => {
     for (let el of groups) {
-        if (el.uniqueName === uniqueName) {
+        if (el?.uniqueName === uniqueName) {
             el.isActive = true;
             el.isOpen = true;
             result = el;
@@ -688,7 +688,7 @@ const setActiveGroupFunc = (groups: IGroupsWithAccounts[], uniqueName: string, r
 };
 const removeGroupFunc = (groups: IGroupsWithAccounts[], uniqueName: string, result: IGroupsWithAccounts) => {
     for (let i = 0; i < groups.length; i++) {
-        if (groups[i].uniqueName === uniqueName) {
+        if (groups[i]?.uniqueName === uniqueName) {
             result = groups[i];
             groups.splice(i, 1);
             return result;
@@ -704,7 +704,7 @@ const removeGroupFunc = (groups: IGroupsWithAccounts[], uniqueName: string, resu
 const removeAccountFunc = (groups: IGroupsWithAccounts[], uniqueName: string, accountUniqueName: string, result: IAccountsInfo): IAccountsInfo => {
     if (groups) {
         for (let grp of groups) {
-            if (grp.uniqueName === uniqueName) {
+            if (grp?.uniqueName === uniqueName) {
                 let index = grp.accounts.findIndex(a => a.uniqueName === accountUniqueName);
                 grp.isOpen = false;
                 grp.isActive = false;
@@ -726,7 +726,7 @@ const addNewGroupFunc = (groups: IGroupsWithAccounts[], gData: IGroupsWithAccoun
         return result;
     }
     for (let grp of groups) {
-        if (grp.uniqueName === parentUniqueName) {
+        if (grp?.uniqueName === parentUniqueName) {
             grp.groups.push(gData);
             result = true;
             return result;
@@ -746,7 +746,7 @@ const addNewAccountFunc = (groups: IGroupsWithAccounts[], aData: IAccountsInfo, 
     }
     if (groups) {
         for (let grp of groups) {
-            if (grp.uniqueName === grpUniqueName) {
+            if (grp?.uniqueName === grpUniqueName) {
                 grp.isOpen = true;
                 grp.accounts.push(aData);
                 result = true;
@@ -769,7 +769,7 @@ const addCreatedAccountFunc = (groups: IGroupsWithAccounts[], aData: AccountResp
     }
     if (groups) {
         for (let grp of groups) {
-            if (grp.uniqueName === grpUniqueName) {
+            if (grp?.uniqueName === grpUniqueName) {
                 grp.isOpen = true;
                 grp.accounts.push(
                     {
@@ -801,7 +801,7 @@ const UpdateAccountFunc = (groups: IGroupsWithAccounts[],
     }
     if (groups) {
         for (let grp of groups) {
-            if (grp.uniqueName === grpUniqueName) {
+            if (grp?.uniqueName === grpUniqueName) {
                 grp.isOpen = true;
                 let index = grp.accounts.findIndex(p => p.uniqueName === accountUniqueName);
                 if (index > -1) {
@@ -845,7 +845,7 @@ const findAndRemoveAccountFunc = (groups: IGroupsWithAccounts[], uniqueName: str
 
 const genAddAndManageUi = (groups: IGroupsWithAccounts[], uniqueName: string, result: boolean) => {
     for (let grp of groups) {
-        if (grp.uniqueName === uniqueName) {
+        if (grp?.uniqueName === uniqueName) {
             grp.isActive = true;
             grp.isOpen = true;
             result = true;

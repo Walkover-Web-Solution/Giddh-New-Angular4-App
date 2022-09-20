@@ -531,7 +531,7 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
                 if (data && data.body && data.body.results) {
                     const searchResults = data.body.results.map(result => {
                         return {
-                            value: result.uniqueName,
+                            value: result?.uniqueName,
                             label: result.name
                         }
                     }) || [];
@@ -588,8 +588,8 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
                 if (data && data.body && data.body.results) {
                     const searchResults = data.body.results.map(result => {
                         return {
-                            value: result.uniqueName,
-                            label: `${result.name} (${result.uniqueName})`
+                            value: result?.uniqueName,
+                            label: `${result.name} (${result?.uniqueName})`
                         }
                     }) || [];
                     if (page === 1) {
@@ -634,7 +634,7 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
                     if (!this.accountsSearchResultsPaginationData.query) {
                         const results = response.map(result => {
                             return {
-                                value: result.uniqueName,
+                                value: result?.uniqueName,
                                 label: result.name
                             }
                         }) || [];
@@ -661,8 +661,8 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
                     if (!this.stocksSearchResultsPaginationData.query) {
                         const results = response.map(result => {
                             return {
-                                value: result.uniqueName,
-                                label: `${result.name} (${result.uniqueName})`
+                                value: result?.uniqueName,
+                                label: `${result.name} (${result?.uniqueName})`
                             }
                         }) || [];
                         this.defaultStockSuggestions = this.defaultStockSuggestions.concat(...results);
@@ -683,7 +683,7 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
         this.onAccountSearchQueryChanged('', 1, (response) => {
             this.defaultAccountSuggestions = response.map(result => {
                 return {
-                    value: result.uniqueName,
+                    value: result?.uniqueName,
                     label: result.name
                 }
             }) || [];
@@ -703,8 +703,8 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
         this.onStockSearchQueryChanged('', 1, (response) => {
             this.defaultStockSuggestions = response.map(result => {
                 return {
-                    value: result.uniqueName,
-                    label: `${result.name} (${result.uniqueName})`
+                    value: result?.uniqueName,
+                    label: `${result.name} (${result?.uniqueName})`
                 }
             }) || [];
             this.defaultStockPaginationData.page = this.stocksSearchResultsPaginationData.page;

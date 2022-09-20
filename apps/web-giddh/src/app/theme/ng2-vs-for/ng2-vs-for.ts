@@ -170,7 +170,9 @@ export class VsForDirective implements OnChanges, AfterViewInit, OnDestroy {
 
     set slicedCollection(value: any[]) {
         this._slicedCollection = value;
-        this.view.context.vsCollection = this._slicedCollection;
+        if (this.view) {
+            this.view.context.vsCollection = this._slicedCollection;
+        }
     }
 
     public ngOnChanges() {
@@ -420,7 +422,9 @@ export class VsForDirective implements OnChanges, AfterViewInit, OnDestroy {
 
         if (digestRequired) {
             this.slicedCollection = this.originalCollection.slice(this.startIndex, this.endIndex);
-            this.view.context.vsStartIndex = this.startIndex;
+            if (this.view) {
+                this.view.context.vsStartIndex = this.startIndex;
+            }
 
             this._prevStartIndex = this.startIndex;
             this._prevEndIndex = this.endIndex;

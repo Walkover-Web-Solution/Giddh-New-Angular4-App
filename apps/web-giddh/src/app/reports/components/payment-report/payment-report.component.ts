@@ -217,7 +217,7 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
                     value: this.activeCompany ? this.activeCompany.uniqueName : '',
                     isCompany: true
                 });
-                if (!this.currentBranch.uniqueName) {
+                if (!this.currentBranch?.uniqueName) {
                     // Assign the current branch only when it is not selected. This check is necessary as
                     // opening the branch switcher would reset the current selected branch as this subscription is run everytime
                     // branches are loaded
@@ -456,7 +456,7 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
                 balanceDue: (this.advanceSearchModel.unusedAmountFilter) ? this.advanceSearchModel.unusedAmountFilter.amount : "",
             sort: this.searchQueryParams.sort,
             sortBy: this.searchQueryParams.sortBy,
-            branchUniqueName: this.currentBranch.uniqueName
+            branchUniqueName: this.currentBranch?.uniqueName
         };
 
         requestObject.balanceMoreThan = false;
@@ -529,7 +529,7 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
                 companyUniqueName: this.activeCompanyUniqueName,
                 from: this.fromDate,
                 to: this.toDate,
-                branchUniqueName: this.currentBranch.uniqueName
+                branchUniqueName: this.currentBranch?.uniqueName
             };
             return this.receiptService.fetchSummary(requestObject);
         }
@@ -686,7 +686,7 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
      */
     public togglePayment(payment: any): void {
         if (payment.isSelected) {
-            this.selectedPayments = this.selectedPayments.filter(selectedPayment => selectedPayment !== payment?.uniqueName);
+            this.selectedPayments = this.selectedPayments?.filter(selectedPayment => selectedPayment !== payment?.uniqueName);
             this.allPaymentsSelected = false;
         } else {
             this.selectedPayments.push(payment?.uniqueName);

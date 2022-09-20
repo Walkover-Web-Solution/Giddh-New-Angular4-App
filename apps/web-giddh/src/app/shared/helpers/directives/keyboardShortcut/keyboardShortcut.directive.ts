@@ -77,7 +77,7 @@ export class KeyboardShortcutDirective {
         } else if (typeof this.keyboardShortcut === 'string') {
             key = this.keyboardShortcut;
         } else {
-            let keys = Object.keys(this.keyboardShortcut).filter(p => this.keyboardShortcut[p]);
+            let keys = Object.keys(this.keyboardShortcut)?.filter(p => this.keyboardShortcut[p]);
             this.matchArray(event, keys);
             return;
         }

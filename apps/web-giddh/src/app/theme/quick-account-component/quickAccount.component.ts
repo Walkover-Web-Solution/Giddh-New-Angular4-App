@@ -104,7 +104,7 @@ export class QuickAccountComponent implements OnInit, AfterViewInit, OnDestroy {
         let control = this.newAccountForm.get('name');
         let uniqueControl = this.newAccountForm.get('uniqueName');
         let unqName = control.value;
-        unqName = unqName.replace(/ |,|\//g, '');
+        unqName = unqName?.replace(/ |,|\//g, '');
         unqName = unqName.toLowerCase();
         if (unqName.length >= 1) {
             let unq = '';
@@ -171,7 +171,7 @@ export class QuickAccountComponent implements OnInit, AfterViewInit, OnDestroy {
     public removeFixedGroupsFromArr(data: IFlattenGroupsAccountsDetail[]) {
         const fixedArr = ['currentassets', 'fixedassets', 'noncurrentassets', 'indirectexpenses', 'operatingcost',
             'otherincome', 'revenuefromoperations', 'shareholdersfunds', 'currentliabilities', 'noncurrentliabilities'];
-        return data.filter(da => {
+        return data?.filter(da => {
             return !(fixedArr.indexOf(da?.groupUniqueName) > -1);
         });
     }

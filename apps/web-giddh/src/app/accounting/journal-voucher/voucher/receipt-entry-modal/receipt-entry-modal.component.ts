@@ -100,7 +100,7 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
                 this.addNewEntry();
             }
 
-            this.pendingInvoicesListParams.accountUniqueNames.push(this.transaction.selectedAccount.UniqueName);
+            this.pendingInvoicesListParams.accountUniqueNames.push(this.transaction.selectedAccount?.UniqueName);
             this.getInvoiceListForReceiptVoucher();
         }
 
@@ -181,7 +181,7 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
             }
         }
 
-        if (entry.type === AdjustmentTypesEnum.againstReference && !entry.invoice.uniqueName) {
+        if (entry.type === AdjustmentTypesEnum.againstReference && !entry.invoice?.uniqueName) {
             this.toaster.clearAllToaster();
             this.toaster.errorToast(this.invoiceErrorMessage);
             this.isValidForm = false;
@@ -204,7 +204,7 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
 
         if (receiptTotal < this.transaction.amount) {
             if (entry.type === AdjustmentTypesEnum.againstReference) {
-                let invoiceBalanceDue = parseFloat(this.pendingInvoiceList[entry.invoice.uniqueName].balanceDue.amountForAccount);
+                let invoiceBalanceDue = parseFloat(this.pendingInvoiceList[entry.invoice?.uniqueName].balanceDue.amountForAccount);
                 if (invoiceBalanceDue >= entry.amount) {
                     this.addNewEntry();
                     this.validateEntries(false);
@@ -252,10 +252,10 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
                 if (res.taxes) {
                     let taxList: IOption[] = [];
                     Object.keys(res.taxes).forEach(key => {
-                        taxList.push({ label: res.taxes[key].name, value: res.taxes[key].uniqueName });
+                        taxList.push({ label: res.taxes[key].name, value: res.taxes[key]?.uniqueName });
 
-                        this.taxList[res.taxes[key].uniqueName] = [];
-                        this.taxList[res.taxes[key].uniqueName] = res.taxes[key];
+                        this.taxList[res.taxes[key]?.uniqueName] = [];
+                        this.taxList[res.taxes[key]?.uniqueName] = res.taxes[key];
                     });
                     this.taxListSource$ = observableOf(taxList);
                 }
@@ -286,10 +286,10 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
                 let pendingInvoiceList: IOption[] = [];
 
                 Object.keys(response.body.results).forEach(key => {
-                    this.pendingInvoiceList[response.body.results[key].uniqueName] = [];
-                    this.pendingInvoiceList[response.body.results[key].uniqueName] = response.body.results[key];
+                    this.pendingInvoiceList[response.body.results[key]?.uniqueName] = [];
+                    this.pendingInvoiceList[response.body.results[key]?.uniqueName] = response.body.results[key];
 
-                    pendingInvoiceList.push({ label: response.body.results[key].voucherNumber + ", " + response.body.results[key].voucherDate + ", " + response.body.results[key].balanceDue.amountForAccount + " " + this.commonLocaleData?.app_cr, value: response.body.results[key].uniqueName });
+                    pendingInvoiceList.push({ label: response.body.results[key].voucherNumber + ", " + response.body.results[key].voucherDate + ", " + response.body.results[key].balanceDue.amountForAccount + " " + this.commonLocaleData?.app_cr, value: response.body.results[key]?.uniqueName });
                 });
                 this.pendingInvoiceListSource$ = observableOf(pendingInvoiceList);
             }
@@ -410,10 +410,10 @@ export class ReceiptEntryModalComponent implements OnInit, OnDestroy {
                     }
                 }
 
-                if (isValid && receipt.type === AdjustmentTypesEnum.againstReference && !receipt.invoice.uniqueName) {
+                if (isValid && receipt.type === AdjustmentTypesEnum.againstReference && !receipt.invoice?.uniqueName) {
                     isValid = false;
                     invoiceRequired = true;
-                } else if (isValid && receipt.type === AdjustmentTypesEnum.againstReference && receipt.invoice.uniqueName && parseFloat(receipt.invoice.amount) < parseFloat(receipt.amount)) {
+                } else if (isValid && receipt.type === AdjustmentTypesEnum.againstReference && receipt.invoice?.uniqueName && parseFloat(receipt.invoice.amount) < parseFloat(receipt.amount)) {
                     isValid = false;
                     invoiceAmountError = true;
                 }

@@ -145,7 +145,7 @@ export class RejectedListComponent implements OnInit, OnChanges {
      */
     public revertActionClicked(item: ExpenseResults): void {
         this.actionPettycashRequest.actionType = 'revert';
-        this.actionPettycashRequest.uniqueName = item.uniqueName;
+        this.actionPettycashRequest.uniqueName = item?.uniqueName;
         this.expenseService.actionPettycashReports(this.actionPettycashRequest, {}).pipe(takeUntil(this.destroyed$)).subscribe(res => {
             if (res.status === 'success') {
                 this.toaster.showSnackBar("success", res.body);
@@ -177,7 +177,7 @@ export class RejectedListComponent implements OnInit, OnChanges {
      */
     public deleteActionClicked(item: ExpenseResults, ref: TemplateRef<any>): void {
         this.actionPettycashRequest.actionType = 'delete';
-        this.actionPettycashRequest.uniqueName = item.uniqueName;
+        this.actionPettycashRequest.uniqueName = item?.uniqueName;
         this.deleteEntryModalRef = this.dialog.open(ref, { disableClose: true });
     }
 

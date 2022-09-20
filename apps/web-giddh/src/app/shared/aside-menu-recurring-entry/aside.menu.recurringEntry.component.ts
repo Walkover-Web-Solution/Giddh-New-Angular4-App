@@ -103,7 +103,7 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges, OnDe
     public deleteInvoice() {
         this.isDeleteLoading = true;
 
-        this.recurringVoucherService.deleteRecurringVouchers(this.invoice.uniqueName).subscribe(response => {
+        this.recurringVoucherService.deleteRecurringVouchers(this.invoice?.uniqueName).subscribe(response => {
             if (response) {
                 this.isDeleteLoading = null;
                 this.closeAsidePane(null);

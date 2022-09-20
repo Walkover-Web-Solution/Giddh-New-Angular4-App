@@ -180,7 +180,7 @@ export class SettingsProfileActions {
     public SetMultipleCurrency(response: CompanyResponse, isMultipleCurrency: boolean): CustomActions {
         return {
             type: CompanyActions.SET_MULTIPLE_CURRENCY_FIELD,
-            payload: { companyUniqueName: response.uniqueName, isMultipleCurrency }
+            payload: { companyUniqueName: response?.uniqueName, isMultipleCurrency }
         };
     }
 

@@ -64,10 +64,10 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
         this.subscriptionRequestObj = {
             planUniqueName: '',
             subscriptionId: this.availablePlans[this.selectedPlan].subscriptionId,
-            userUniqueName: this.moveSelectedCompany.createdBy.uniqueName,
+            userUniqueName: this.moveSelectedCompany?.createdBy?.uniqueName,
             licenceKey: ''
         };
-        this.patchProfile({ subscriptionRequest: this.subscriptionRequestObj, callNewPlanApi: true, moveCompany: this.moveSelectedCompany.uniqueName });
+        this.patchProfile({ subscriptionRequest: this.subscriptionRequestObj, callNewPlanApi: true, moveCompany: this.moveSelectedCompany?.uniqueName });
     }
 
     /**
@@ -96,18 +96,18 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
      * @memberof MoveCompanyComponent
      */
     public getCompanyDetails(): void {
-        this.settingsProfileService.getCompanyDetails(this.moveSelectedCompany.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
+        this.settingsProfileService.getCompanyDetails(this.moveSelectedCompany?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
             if (response && response.status === "success" && response.body) {
                 this.moveSelectedCompany = response.body;
 
                 if (this.subscriptions && this.subscriptions.length > 0) {
                     this.subscriptions.forEach(plan => {
-                        if (plan.subscriptionId && plan.planDetails?.companiesLimit > plan.totalCompanies && this.moveSelectedCompany?.subscription?.subscriptionId !== plan.subscriptionId && this.availablePlans[plan.planDetails.uniqueName] === undefined && plan.planDetails.countries.includes(this.moveSelectedCompany.country)) {
-                            this.availablePlansOption.push({ label: plan.planDetails.name, value: plan.planDetails.uniqueName });
-                            if (this.availablePlans[plan.planDetails.uniqueName] === undefined) {
-                                this.availablePlans[plan.planDetails.uniqueName] = [];
+                        if (plan.subscriptionId && plan.planDetails?.companiesLimit > plan.totalCompanies && this.moveSelectedCompany?.subscription?.subscriptionId !== plan.subscriptionId && this.availablePlans[plan.planDetails?.uniqueName] === undefined && plan.planDetails.countries.includes(this.moveSelectedCompany.country)) {
+                            this.availablePlansOption.push({ label: plan.planDetails?.name, value: plan.planDetails?.uniqueName });
+                            if (this.availablePlans[plan.planDetails?.uniqueName] === undefined) {
+                                this.availablePlans[plan.planDetails?.uniqueName] = [];
                             }
-                            this.availablePlans[plan.planDetails.uniqueName] = plan;
+                            this.availablePlans[plan.planDetails?.uniqueName] = plan;
                         }
                     });
                 }

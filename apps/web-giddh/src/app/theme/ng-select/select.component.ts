@@ -501,7 +501,7 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
             this.updateFilterWidth();
         }
         setTimeout(() => {
-            let hasShown: boolean = this.optionList.filter(term);
+            let hasShown: boolean = this.optionList?.filter(term);
             if (!hasShown) {
                 this.noOptionsFound.emit(term);
             }

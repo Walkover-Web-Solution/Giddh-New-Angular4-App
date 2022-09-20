@@ -73,17 +73,17 @@ export class OptionList {
     /** Selection. **/
 
     get selection(): Option[] {
-        return this.options.filter(option => option.selected);
+        return this.options?.filter(option => option.selected);
     }
 
     /** Filter. **/
 
     get filtered(): Option[] {
-        return this.options.filter(option => option.shown);
+        return this.options?.filter(option => option.shown);
     }
 
     get filteredEnabled(): Option[] {
-        return this.options.filter(option => option.shown && !option.disabled);
+        return this.options?.filter(option => option.shown && !option.disabled);
     }
 
     // v0 and v1 are assumed not to be undefined or null.
@@ -102,7 +102,7 @@ export class OptionList {
     }
 
     public getOptionsByValue(value: string): Option[] {
-        return this.options.filter((option) => {
+        return this.options?.filter((option) => {
             return option.value === value;
         });
     }

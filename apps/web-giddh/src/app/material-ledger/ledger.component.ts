@@ -372,17 +372,17 @@ export class LedgerComponent implements OnInit, OnDestroy {
         let requestObject;
         if (e.additional.stock) {
             requestObject = {
-                stockUniqueName: e.additional.stock.uniqueName,
+                stockUniqueName: e.additional.stock?.uniqueName,
                 oppositeAccountUniqueName: e.additional?.uniqueName
             };
         }
-        const currentLedgerCategory = this.lc.activeAccount ? this.generalService.getAccountCategory(this.lc.activeAccount, this.lc.activeAccount.uniqueName) : '';
+        const currentLedgerCategory = this.lc.activeAccount ? this.generalService.getAccountCategory(this.lc.activeAccount, this.lc.activeAccount?.uniqueName) : '';
         /** If current ledger is of income or expense category then send current ledger unique name else send particular account unique name
             to fetch the correct stock details as the first preference is always the current ledger account and then particular account
             This logic is only required in ledger.
         */
         const accountUniqueName = e.additional.stock && (currentLedgerCategory === 'income' || currentLedgerCategory === 'expenses') ?
-            this.lc.activeAccount ? this.lc.activeAccount.uniqueName : '' :
+            this.lc.activeAccount ? this.lc.activeAccount?.uniqueName : '' :
             e.additional?.uniqueName;
         this.searchService.loadDetails(accountUniqueName, requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
             if (data && data.body) {
@@ -724,8 +724,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 }
 
                 let checkedEntriesName: any[] = uniq([
-                    ...lt.debitTransactions.filter(f => f.isChecked).map(dt => ({ uniqueName: dt.entryUniqueName, type: 'debit' })),
-                    ...lt.creditTransactions.filter(f => f.isChecked).map(ct => ({ uniqueName: ct.entryUniqueName, type: 'credit' })),
+                    ...lt.debitTransactions?.filter(f => f.isChecked).map(dt => ({ uniqueName: dt.entryUniqueName, type: 'debit' })),
+                    ...lt.creditTransactions?.filter(f => f.isChecked).map(ct => ({ uniqueName: ct.entryUniqueName, type: 'credit' })),
                 ]);
 
                 if (checkedEntriesName && checkedEntriesName.length) {
@@ -1007,7 +1007,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     items?.forEach(invoice => {
                         invoice.voucherNumber = this.generalService.getVoucherNumberLabel(invoice?.voucherType, invoice?.voucherNumber, this.commonLocaleData);
 
-                        this.invoiceList.push({ label: invoice?.voucherNumber ? invoice.voucherNumber : '-', value: invoice?.uniqueName, additional: invoice })
+                        this.invoiceList.push({ label: invoice?.voucherNumber ? invoice?.voucherNumber : '-', value: invoice?.uniqueName, additional: invoice })
                     });
                 }
             });
@@ -1066,7 +1066,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         if (unAccountedTrx) {
             this.selectBlankTxn(unAccountedTrx);
 
-            this.dropDowns.filter(dd => dd.idEl === unAccountedTrx.id).forEach(dd => {
+            this.dropDowns?.filter(dd => dd.idEl === unAccountedTrx.id).forEach(dd => {
                 setTimeout(() => {
                     dd.show(null);
                 }, 0);
@@ -1081,7 +1081,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.lc.blankLedger?.transactions.push(newTrx);
             this.selectBlankTxn(newTrx);
             setTimeout(() => {
-                this.dropDowns.filter(dd => dd.idEl === newTrx.id).forEach(dd => {
+                this.dropDowns?.filter(dd => dd.idEl === newTrx.id).forEach(dd => {
                     dd.show(null);
                 });
             }, 0);
@@ -1108,14 +1108,14 @@ export class LedgerComponent implements OnInit, OnDestroy {
         if (this.voucherApiVersion === 2) {
             downloadRequest.uniqueName = transaction.voucherUniqueName;
         } else {
-            downloadRequest.invoiceNumber = [transaction.voucherNumber];
+            downloadRequest.invoiceNumber = [transaction?.voucherNumber];
         }
-        downloadRequest.voucherType = transaction.voucherGeneratedType;
+        downloadRequest.voucherType = transaction?.voucherGeneratedType;
 
         this.ledgerService.DownloadInvoice(downloadRequest, this.lc.accountUnq).pipe(takeUntil(this.destroyed$)).subscribe(d => {
             if (d.status === 'success') {
                 let blob = this.generalService.base64ToBlob(d.body, 'application/pdf', 512);
-                download(`${activeAccount.name} - ${transaction.voucherNumber}.pdf`, blob, 'application/pdf');
+                download(`${activeAccount.name} - ${transaction?.voucherNumber}.pdf`, blob, 'application/pdf');
             } else {
                 this.toaster.showSnackBar("error", d.message);
             }
@@ -1459,7 +1459,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         if (!this.preventDefaultScrollApiCall &&
             (query || (this.defaultSuggestions && this.defaultSuggestions.length === 0) || successCallback)) {
             // Call the API when either query is provided, default suggestions are not present or success callback is provided
-            const currentLedgerCategory = this.lc.activeAccount ? this.generalService.getAccountCategory(this.lc.activeAccount, this.lc.activeAccount.uniqueName) : '';
+            const currentLedgerCategory = this.lc.activeAccount ? this.generalService.getAccountCategory(this.lc.activeAccount, this.lc.activeAccount?.uniqueName) : '';
             // If current ledger is of income or expense category then send current ledger as stockAccountUniqueName. Only required for ledger.
             const accountUniqueName = (currentLedgerCategory === 'income' || currentLedgerCategory === 'expenses') ?
                 this.lc.activeAccount ? this.lc.activeAccount?.uniqueName : '' :
@@ -1598,8 +1598,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
         this.entryUniqueNamesForBulkAction.push(
             ...[
-                ...debitTrx.filter(f => f.isChecked).map(dt => dt.entryUniqueName),
-                ...creditTrx.filter(f => f.isChecked).map(ct => ct.entryUniqueName),
+                ...debitTrx?.filter(f => f.isChecked).map(dt => dt.entryUniqueName),
+                ...creditTrx?.filter(f => f.isChecked).map(ct => ct.entryUniqueName),
             ]);
 
         if (!this.entryUniqueNamesForBulkAction || !this.entryUniqueNamesForBulkAction.length) {
@@ -1684,7 +1684,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.checkedTrxWhileHovering.splice(itemIndx, 1);
             const currentLength = this.isMobileScreen ?
                 this.checkedTrxWhileHovering.length
-                : this.checkedTrxWhileHovering.filter(transaction => transaction.type === type).length;
+                : this.checkedTrxWhileHovering?.filter(transaction => transaction.type === type).length;
             if (this.checkedTrxWhileHovering && (currentLength === 0 || currentLength < totalLength)) {
                 if (type === 'credit') {
                     this.creditSelectAll = false;
@@ -1750,7 +1750,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             let companyUniqueName = null;
             this.sessionKey$.pipe(take(1)).subscribe(a => sessionKey = a);
             this.companyName$.pipe(take(1)).subscribe(a => companyUniqueName = a);
-            let url = Configuration.ApiUrl + LEDGER_API.UPLOAD_FILE.replace(':companyUniqueName', companyUniqueName);
+            let url = Configuration.ApiUrl + LEDGER_API.UPLOAD_FILE?.replace(':companyUniqueName', companyUniqueName);
             if (this.generalService.voucherApiVersion === 2) {
                 url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
             }
@@ -1950,11 +1950,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
             formattedCurrentLedgerAccountParentGroups = transaction.selectedAccount.parentGroups.map(parent => ({ uniqueName: parent }));
         }
         const currentLedgerAccountDetails = {
-            uniqueName: this.lc.activeAccount ? this.lc.activeAccount.uniqueName : '',
+            uniqueName: this.lc.activeAccount ? this.lc.activeAccount?.uniqueName : '',
             parentGroups: this.lc.activeAccount && this.lc.activeAccount.parentGroups ? this.lc.activeAccount.parentGroups : []
         };
         const selectedAccountDetails = {
-            uniqueName: transaction.selectedAccount ? transaction.selectedAccount.uniqueName : '',
+            uniqueName: transaction.selectedAccount ? transaction.selectedAccount?.uniqueName : '',
             parentGroups: formattedCurrentLedgerAccountParentGroups.length ? formattedCurrentLedgerAccountParentGroups : transaction.selectedAccount ? transaction.selectedAccount.parentGroups : []
         };
         const shouldShowRcmEntry = this.generalService.shouldShowRcmSection(currentLedgerAccountDetails, selectedAccountDetails, this.activeCompany);

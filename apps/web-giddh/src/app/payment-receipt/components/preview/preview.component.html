@@ -34,8 +34,8 @@
                             <perfect-scrollbar *ngIf="filteredData && filteredData.length > 0">
                                 <li
                                     class="single-voucher-details cp"
-                                    [ngClass]="{ 'activeItem': row.uniqueName === params?.uniqueName }"
                                     *ngFor="let row of filteredData; let i = index"
+                                    [ngClass]="{ 'activeItem': row?.uniqueName === params?.uniqueName }"
                                     [routerLink]="
                                         '/pages/voucher/' +
                                         voucherType +
