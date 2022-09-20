@@ -170,7 +170,7 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
         this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.branches = response || [];
-                this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && this.branches.length > 1;
+                this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && this.branches?.length > 1;
             }
         });
 
@@ -257,7 +257,7 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
         let purchaseNumbers = this.getSelectedItems();
         this.initBulkUpdateFields();
 
-        if (purchaseNumbers.length > 0) {
+        if (purchaseNumbers?.length > 0) {
             this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: 0 }));
             this.modalRef = this.modalService.show(
                 template,
@@ -618,7 +618,7 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
 
         this.bulkUpdateGetParams.action = action;
 
-        if (purchaseNumbers.length > 0) {
+        if (purchaseNumbers?.length > 0) {
             this.bulkUpdatePostParams.purchaseNumbers = purchaseNumbers;
 
             this.purchaseOrderService.bulkUpdate(this.bulkUpdateGetParams, this.bulkUpdatePostParams).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
@@ -659,7 +659,7 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
      */
     public confirmBulkDelete(): void {
         let purchaseNumbers = this.getSelectedItems();
-        if (purchaseNumbers.length > 0) {
+        if (purchaseNumbers?.length > 0) {
             this.deleteModule = 'purchaseorderlist';
             this.poConfirmationModel.show();
         } else {

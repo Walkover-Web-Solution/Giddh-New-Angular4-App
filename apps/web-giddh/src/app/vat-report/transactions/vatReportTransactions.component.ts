@@ -284,7 +284,7 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
             let accountUniqueName: string = this.selectedInvoice?.account?.uniqueName;
             this.receiptService.DownloadVoucher(dataToSend, accountUniqueName, false).pipe(takeUntil(this.destroyed$)).subscribe(res => {
                 if (res) {
-                    if (dataToSend.typeOfInvoice.length > 1) {
+                    if (dataToSend.typeOfInvoice?.length > 1) {
                         return saveAs(res, `${dataToSend.voucherNumber[0]}.` + 'zip');
                     }
                     return saveAs(res, `${this.selectedInvoice?.voucherNumber}.` + 'pdf');
@@ -302,7 +302,7 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
             this.invoiceService.DownloadInvoice(this.selectedInvoice?.accountUniqueName, dataToSend)
                 .subscribe(res => {
                     if (res) {
-                        if (dataToSend.typeOfInvoice.length > 1) {
+                        if (dataToSend.typeOfInvoice?.length > 1) {
                             return saveAs(res, `${dataToSend.voucherNumber[0]}.` + 'zip');
                         }
                         return saveAs(res, `${dataToSend.voucherNumber[0]}.` + 'pdf');

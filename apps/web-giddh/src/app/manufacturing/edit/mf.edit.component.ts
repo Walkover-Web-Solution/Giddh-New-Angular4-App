@@ -160,7 +160,7 @@ export class MfEditComponent implements OnInit, OnDestroy {
                         expense.baseAccount.defaultName = `${expense.baseAccount.name} (${expense.baseAccount?.uniqueName})`;
                         expense.transactions[0].account.defaultName = `${expense.transactions[0]?.account?.name} (${expense.transactions[0]?.account?.uniqueName})`;
                     });
-                    if (!this.initialQuantityObj.length) {
+                    if (!this.initialQuantityObj?.length) {
                         this.initialQuantityObj = manufacturingObj.linkedStocks;
                     }
                     manufacturingObj.warehouseUniqueName = manufacturingObj?.warehouse?.uniqueName;
@@ -445,7 +445,7 @@ export class MfEditComponent implements OnInit, OnDestroy {
         let value = val;
         let manufacturingObj = cloneDeep(this.manufacturingDetails);
 
-        if (!this.initialQuantityObj.length) {
+        if (!this.initialQuantityObj?.length) {
             this.initialQuantityObj = [];
             manufacturingObj.linkedStocks.forEach((o) => {
                 this.initialQuantityObj.push(o);

@@ -386,8 +386,8 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
      */
     public prepareApproveRequestObject(pettyCashEntryObj: PettyCashResonse): void {
         if (pettyCashEntryObj && this.actionPettyCashRequestBody) {
-            this.actionPettyCashRequestBody.ledgerRequest.attachedFile = (this.DownloadAttachedImgResponse.length > 0) ? this.DownloadAttachedImgResponse[0]?.uniqueName : '';
-            this.actionPettyCashRequestBody.ledgerRequest.attachedFileName = (this.DownloadAttachedImgResponse.length > 0) ? this.DownloadAttachedImgResponse[0].name : '';
+            this.actionPettyCashRequestBody.ledgerRequest.attachedFile = (this.DownloadAttachedImgResponse?.length > 0) ? this.DownloadAttachedImgResponse[0]?.uniqueName : '';
+            this.actionPettyCashRequestBody.ledgerRequest.attachedFileName = (this.DownloadAttachedImgResponse?.length > 0) ? this.DownloadAttachedImgResponse[0]?.name : '';
         }
     }
 

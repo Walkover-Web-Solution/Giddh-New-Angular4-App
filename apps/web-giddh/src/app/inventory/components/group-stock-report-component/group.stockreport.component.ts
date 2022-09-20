@@ -285,8 +285,8 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
 
     public ngOnInit() {
         // get view from sidebar while clicking on group/stock
-        let len = document.location.pathname.split('/').length;
-        this.groupUniqueNameFromURL = document.location.pathname.split('/')[len - 2];
+        let len = document.location.pathname?.split('/')?.length;
+        this.groupUniqueNameFromURL = document.location.pathname?.split('/')[len - 2];
         if (this.groupUniqueNameFromURL && len === 6) {
             this.groupUniqueName = this.groupUniqueNameFromURL;
             this.initReport();
@@ -460,7 +460,7 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
                         element['label'] = element.name;
                     });
                     this.entities$ = observableOf(orderBy(newEntities, 'name'));
-                } else if (newEntities.length === 0) {
+                } else if (newEntities?.length === 0) {
                     this.entities$ = observableOf(null);
                 }
             }

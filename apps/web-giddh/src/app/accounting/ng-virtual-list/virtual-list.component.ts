@@ -158,8 +158,8 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
                 includesArr.push(item);
             }
         });
-        startsWithArr = startsWithArr.sort((a, b) => a.label.length - b.label.length);
-        includesArr = includesArr.sort((a, b) => a.label.length - b.label.length);
+        startsWithArr = startsWithArr.sort((a, b) => a.label?.length - b.label?.length);
+        includesArr = includesArr.sort((a, b) => a.label?.length - b.label?.length);
 
         return concat(startsWithArr, includesArr);
     }
@@ -195,10 +195,10 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
             if (this.customSorting) {
                 this.filteredData = filteredData.sort(this.customSorting);
             } else {
-                this.filteredData = filteredData.sort((a, b) => a.label.length - b.label.length);
+                this.filteredData = filteredData.sort((a, b) => a.label?.length - b.label?.length);
             }
         }
-        if (this.filteredData.length === 0) {
+        if (this.filteredData?.length === 0) {
             // this.noOptionsFound.emit(true);
             this.updateRows([{
                 label: this.commonLocaleData?.app_create_new,
@@ -249,7 +249,7 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
     }
 
     public selectSingle(item) {
-        this._selectedValues.splice(0, this.rows.length);
+        this._selectedValues.splice(0, this.rows?.length);
         this._selectedValues.push(item);
         this.hide();
     }
@@ -280,7 +280,7 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
         // this.focusFilter();
         this.onShow.emit();
         if (this.menuEle && this.menuEle.virtualScrollElm && this.menuEle.virtualScrollElm) {
-            let item = this.rows.find(p => p?.value === (this._selectedValues.length > 0 ? this._selectedValues[0] : (this.rows.length > 0 ? this.rows[0].value : null)));
+            let item = this.rows.find(p => p?.value === (this._selectedValues?.length > 0 ? this._selectedValues[0] : (this.rows?.length > 0 ? this.rows[0].value : null)));
             if (item !== null) {
                 this.menuEle.virtualScrollElm.scrollInto(item);
             }
@@ -460,7 +460,7 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
             this.selected.emit(this._selectedValues);
         } else {
             let newValue: IOption;
-            if (this.selectedValues.length > 0) {
+            if (this.selectedValues?.length > 0) {
                 newValue = this.selectedValues[0];
             }
             if (!newValue) {

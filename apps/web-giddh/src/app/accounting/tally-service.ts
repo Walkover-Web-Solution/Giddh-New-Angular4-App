@@ -365,7 +365,7 @@ export class TallyModuleService {
                 transactions.push(txn);
             }
         });
-        if (transactions.length) {
+        if (transactions?.length) {
             requestObj.transactions = transactions;
         }
         return requestObj;

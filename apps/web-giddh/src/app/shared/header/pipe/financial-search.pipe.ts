@@ -18,15 +18,15 @@ export class FinancialSearchPipe implements PipeTransform {
 
     public transform(input: any, search: string): any {
         if (!isUndefined(search)) {
-            this.srch = search.toLowerCase();
+            this.srch = search?.toLowerCase();
         }
-        if (!isUndefined(this.srch) && this.srch.length > 2) {
+        if (!isUndefined(this.srch) && this.srch?.length > 2) {
             this.zone.run(() => {
                 this.performSearch(input);
             });
         } else {
             if (!isUndefined(this.srch)) {
-                if (this.srch.length < 3) {
+                if (this.srch?.length < 3) {
                     this.zone.run(() => {
                         this.resetSearch(input);
                     });

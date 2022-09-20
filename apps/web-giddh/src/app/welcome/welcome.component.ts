@@ -846,7 +846,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
                     if (!itemName) {
                         this.welcomeForm.form.controls['name'].setErrors({ 'required': true });
                     }
-                    if (itemName.length > 100) {
+                    if (itemName?.length > 100) {
                         this.welcomeForm.form.controls['name'].setErrors({ 'maxlength': true });
                     }
                 }
@@ -998,7 +998,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof WelcomeComponent
      */
     private isAddressValid(address: string = ''): boolean {
-        return address.trim()?.length > 0;
+        return address?.trim()?.length > 0;
     }
 
     /**

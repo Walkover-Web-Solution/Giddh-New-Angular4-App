@@ -23,7 +23,7 @@ export class OptionList {
             return o;
         });
 
-        this._hasShown = this._options.length > 0;
+        this._hasShown = this._options?.length > 0;
         this.highlight();
     }
 
@@ -89,7 +89,7 @@ export class OptionList {
     // v0 and v1 are assumed not to be undefined or null.
     public static equalValues(v0: string[], v1: string[]): boolean {
 
-        if (v0.length !== v1.length) {
+        if (v0?.length !== v1?.length) {
             return false;
         }
 
@@ -132,7 +132,7 @@ export class OptionList {
 
         if (term.trim() === '') {
             this.resetFilter();
-            anyShown = this.options.length > 0;
+            anyShown = this.options?.length > 0;
         } else {
             this.options.forEach((option) => {
                 let l: string = Diacritics.strip(option.label).toUpperCase();
@@ -171,7 +171,7 @@ export class OptionList {
         let shownEnabledOptions = this.filteredEnabled;
         let index = this.getHighlightedIndexFromList(shownEnabledOptions);
 
-        if (index > -1 && index < shownEnabledOptions.length - 1) {
+        if (index > -1 && index < shownEnabledOptions?.length - 1) {
             this.highlightOption(shownEnabledOptions[index + 1]);
         }
     }
@@ -215,7 +215,7 @@ export class OptionList {
     }
 
     private getHighlightedIndexFromList(options: Option[]) {
-        for (let i = 0; i < options.length; i++) {
+        for (let i = 0; i < options?.length; i++) {
             if (options[i].highlighted) {
                 return i;
             }

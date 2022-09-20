@@ -38,7 +38,7 @@ export class GroupService {
             });
             listItem = Object.assign({}, listItem, { parentGroups: [] });
             listItem.parentGroups = newParents;
-            if (listItem.groups.length > 0) {
+            if (listItem.groups?.length > 0) {
                 result = this.flattenGroup(listItem.groups, newParents);
                 result.push(_.omit(listItem, 'groups'));
             } else {

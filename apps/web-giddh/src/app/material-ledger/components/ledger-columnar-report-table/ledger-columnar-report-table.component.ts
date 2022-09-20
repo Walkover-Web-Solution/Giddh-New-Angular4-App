@@ -122,7 +122,7 @@ export class LedgerColumnarReportTableComponent implements OnInit, OnDestroy, On
                 if (response.body && response.body.results) {
                     this.reportResponse = response.body;
                     this.reportResponseResult = response.body.results;
-                    if (response.body.results.length) {
+                    if (response.body.results?.length) {
                         this.prepareColumnForTable();
                     }
                     this.colspanValue = this.getTotalNoOfColumn();

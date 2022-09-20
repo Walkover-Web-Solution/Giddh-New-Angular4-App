@@ -1627,7 +1627,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         }
         if (accountDetails.applicableDiscounts && accountDetails.applicableDiscounts.length) {
             this.accountOtherApplicableDiscount = accountDetails.applicableDiscounts;
-        } else if (accountDetails.inheritedDiscounts && accountDetails.inheritedDiscounts.length && (!this.accountOtherApplicableDiscount || !this.accountOtherApplicableDiscount.length)) {
+        } else if (accountDetails.inheritedDiscounts && accountDetails.inheritedDiscounts.length && (!this.accountOtherApplicableDiscount || !this.accountOtherApplicableDiscount?.length)) {
             this.accountOtherApplicableDiscount.push(...accountDetails.inheritedDiscounts[0].applicableDiscounts);
         }
         if (accountDetails.otherApplicableTaxes && accountDetails.otherApplicableTaxes.length) {

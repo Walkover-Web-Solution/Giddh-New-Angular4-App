@@ -362,7 +362,7 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
      * selectEntryType() to validate Type i.e BY/TO
      */
     public selectEntryType(transactionObj, val, idx) {
-        if (val.length === 2 && (val.toLowerCase() !== 'to' && val.toLowerCase() !== 'by')) {
+        if (val?.length === 2 && (val?.toLowerCase() !== 'to' && val?.toLowerCase() !== 'by')) {
             this._toaster.errorToast("Spell error, you can only use 'To/By'");
             transactionObj.type = 'DEBIT';
         } else {
@@ -432,8 +432,8 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
             if (this.selectedAccIdx > -1) {
                 let accModel = {
                     name: acc.name,
-                    UniqueName: acc?.uniqueName,
-                    groupUniqueName: acc.parentGroups[acc.parentGroups.length - 1],
+                    UniqueName: acc.uniqueName,
+                    groupUniqueName: acc?.parentGroups[acc.parentGroups?.length - 1],
                     account: acc.name
                 };
                 this.accountsTransaction[idx].particular = accModel?.UniqueName;
@@ -472,7 +472,7 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
      * addNewStock
      */
     public addNewStock(amount, transactionObj, idx) {
-        let lastIdx = this.stocksTransaction.length - 1;
+        let lastIdx = this.stocksTransaction?.length - 1;
         if (amount) {
             transactionObj.amount = Number(amount);
         }
@@ -493,7 +493,7 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
         this.showLedgerAccountList = false;
         this.showStockList.emit(false);
         this.showConfirmationBox = true;
-        if (this.data.description.length > 1) {
+        if (this.data.description?.length > 1) {
             this.data.description = this.data.description?.replace(/(?:\r\n|\r|\n)/g, '');
             setTimeout(() => {
                 submitBtnEle.focus();
@@ -758,7 +758,7 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
         let accountsTransaction = [];
         let filterData = this._tallyModuleService.prepareRequestForAPI(data);
 
-        if (filterData.transactions.length) {
+        if (filterData.transactions?.length) {
             forEach(filterData.transactions, function (o, i) {
                 if (o.inventory && o.inventory.amount) {
                     stocksTransaction.push(o);
@@ -770,10 +770,10 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
             this.accountsTransaction = accountsTransaction;
             this.stocksTransaction = stocksTransaction;
 
-            if (!stocksTransaction.length) {
+            if (!stocksTransaction?.length) {
                 this.addNewRow('stock');
             }
-            if (!accountsTransaction.length) {
+            if (!accountsTransaction?.length) {
                 this.addNewRow('account');
             }
         }
@@ -805,7 +805,7 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
         this.keyUpDownEvent = ev;
         if (ev && ev.which === 8 && isFirstAccountField) {
             if (ev.target && (ev.target.getAttribute('data-changed') === 'false' || ev.target.value === '')) {
-                let indx = this.stocksTransaction.length - 1;
+                let indx = this.stocksTransaction?.length - 1;
                 let stockEle = document.getElementById(`stock_${indx - 1}`);
                 return stockEle.focus();
             }

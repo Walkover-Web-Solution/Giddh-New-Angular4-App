@@ -104,10 +104,10 @@ export class DecimalDigitsDirective implements OnDestroy {
                 // Probably an old IE browser
             }
 
-            let dotLength: number = e.target.value?.replace(/[^.]/g, '').length;
+            let dotLength: number = e.target.value?.replace(/[^.]/g, '')?.length;
 
             // If user has not entered a dot(.) e.target.value.split(".")[1] will be undefined
-            let decimalLength = e.target.value.split('.')[1] ? e.target.value.split('.')[1].length : 0;
+            let decimalLength = e.target.value.split('.')[1] ? e.target.value.split('.')[1]?.length : 0;
 
             // (this.giddhDecimalPlaces - 1) because we don't get decimalLength including currently pressed character
             // currentCursorPos > e.target.value.indexOf(".") because we must allow user's to enter value before dot(.)
