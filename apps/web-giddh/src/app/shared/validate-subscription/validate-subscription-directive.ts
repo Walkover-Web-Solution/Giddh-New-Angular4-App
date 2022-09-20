@@ -28,19 +28,21 @@ export class ValidateSubscriptionDirective implements OnInit, OnDestroy {
     public ngOnInit(): void {
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response?.subscription?.status === "expired") {
-                const inputElements = this.elementRef.nativeElement?.querySelectorAll("input,button");
-                if (inputElements?.length > 0) {
-                    inputElements?.forEach(element => {
-                        element?.setAttribute("disabled", "disabled");
-                    });
-                }
+                setTimeout(() => {
+                    const inputElements = this.elementRef.nativeElement?.querySelectorAll("input,button");
+                    if (inputElements?.length > 0) {
+                        inputElements?.forEach(element => {
+                            element?.setAttribute("disabled", "disabled");
+                        });
+                    }
 
-                const linkSwitchElements = this.elementRef.nativeElement?.querySelectorAll("a:not(.nav-link),.bootstrap-switch-wrapper");
-                if (linkSwitchElements?.length > 0) {
-                    linkSwitchElements?.forEach(element => {
-                        element?.classList?.add("click-disabled");
-                    });
-                }
+                    const linkSwitchElements = this.elementRef.nativeElement?.querySelectorAll("a:not(.nav-link),.bootstrap-switch-wrapper");
+                    if (linkSwitchElements?.length > 0) {
+                        linkSwitchElements?.forEach(element => {
+                            element?.classList?.add("click-disabled");
+                        });
+                    }
+                }, 50);
             }
         });
     }
