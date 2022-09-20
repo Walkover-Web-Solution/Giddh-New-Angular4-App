@@ -585,8 +585,10 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
     public selectVoucher(event: IOption, entry: Adjustment, index: number): void {
         if (event && entry && !this.isFormReset) {
             entry = cloneDeep(event.additional);
-            this.adjustVoucherForm.adjustments.splice(index, 1, entry);
-            this.calculateTax(entry, index);
+            if (entry?.uniqueName) {
+                this.adjustVoucherForm.adjustments.splice(index, 1, entry);
+                this.calculateTax(entry, index);
+            }
         }
     }
 

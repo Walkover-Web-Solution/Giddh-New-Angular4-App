@@ -160,6 +160,18 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
                 }
 
                 this.exportRequest.monthYear = monthYear;
+            } else if (this.fromMonth) {
+                let monthYear = [];
+                let startDate = dayjs(new Date(this.fromMonth));
+                monthYear.push(dayjs(startDate.toDate()).format("MM-YYYY"));
+                this.exportRequest.monthYear = monthYear;
+            } else if (this.toMonth) {
+                let monthYear = [];
+                let startDate = dayjs(new Date(this.toMonth));
+                monthYear.push(dayjs(startDate.toDate()).format("MM-YYYY"));
+                this.exportRequest.monthYear = monthYear;
+            } else {
+                this.exportRequest.monthYear = [];
             }
             if (isShowReport) {
                 this.columnarReportResponse = null;
@@ -270,6 +282,21 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
                 startDate = startDate.add(1, 'month');
                 this.toMonthNames.push({ label: dayjs(startDate.toDate()).format("MMM-YYYY"), value: startDate.toDate(), disabled: (new Date(event.value) > startDate.toDate()) });
             }
+        } else {
+            this.fromMonth = "";
+
+            let fromMonth = dayjs(new Date(this.financialYearSelected.financialYearStarts.split("-").reverse().join("-")));
+            let toMonth = dayjs(new Date(this.financialYearSelected.financialYearEnds.split("-").reverse().join("-")));
+            let startDate = fromMonth;
+            let monthsCount = toMonth.diff(fromMonth, 'months');
+            this.toMonthNames = [];
+
+            this.toMonthNames.push({ label: dayjs(startDate.toDate()).format("MMM-YYYY"), value: startDate.toDate() });
+
+            for (let dateLoop = 1; dateLoop <= monthsCount; dateLoop++) {
+                startDate = startDate.add(1, 'month');
+                this.toMonthNames.push({ label: dayjs(startDate.toDate()).format("MMM-YYYY"), value: startDate.toDate() });
+            }
         }
     }
 
@@ -292,6 +319,21 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
             for (let dateLoop = 1; dateLoop <= monthsCount; dateLoop++) {
                 startDate = startDate.add(1, 'month');
                 this.fromMonthNames.push({ label: dayjs(startDate.toDate()).format("MMM-YYYY"), value: startDate.toDate(), disabled: (new Date(event.value) < startDate.toDate()) });
+            }
+        } else {
+            this.toMonth = "";
+
+            let fromMonth = dayjs(new Date(this.financialYearSelected.financialYearStarts.split("-").reverse().join("-")));
+            let toMonth = dayjs(new Date(this.financialYearSelected.financialYearEnds.split("-").reverse().join("-")));
+            let startDate = fromMonth;
+            let monthsCount = toMonth.diff(fromMonth, 'months');
+            this.fromMonthNames = [];
+
+            this.fromMonthNames.push({ label: dayjs(startDate.toDate()).format("MMM-YYYY"), value: startDate.toDate() });
+
+            for (let dateLoop = 1; dateLoop <= monthsCount; dateLoop++) {
+                startDate = startDate.add(1, 'month');
+                this.fromMonthNames.push({ label: dayjs(startDate.toDate()).format("MMM-YYYY"), value: startDate.toDate() });
             }
         }
     }
