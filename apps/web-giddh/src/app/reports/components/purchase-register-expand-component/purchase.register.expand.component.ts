@@ -182,7 +182,7 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
 
     public getDateToDMY(selecteddate) {
         let date = selecteddate.split('-');
-        if (date.length === 3) {
+        if (date?.length === 3) {
             this.translationComplete(true);
             let month = this.monthNames[parseInt(date[1]) - 1]?.substr(0, 3);
             let year = date[2]?.substr(2, 4);

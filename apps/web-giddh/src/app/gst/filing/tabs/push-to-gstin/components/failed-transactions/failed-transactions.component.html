@@ -46,9 +46,9 @@
             </table>
         </div>
 
-        <div class="text-center mb-4" [hidden]="!failedTransactions.length">
+        <div class="text-center mb-4" [hidden]="!failedTransactions?.length">
             <pagination
-                [totalItems]="failedTransactions.length"
+                [totalItems]="failedTransactions?.length"
                 [itemsPerPage]="itemsPerPage"
                 (pageChanged)="pageChanged($event)"
                 [firstText]="commonLocaleData?.app_first"
@@ -58,7 +58,7 @@
             ></pagination>
         </div>
 
-        <div *ngIf="!failedTransactions.length">
+        <div *ngIf="!failedTransactions?.length">
             <div class="filings-empty-state">
                 <img src="{{ imgPath }}nofound.svg" [style.max-width.px]="110" />
                 <div class="empty-msg">

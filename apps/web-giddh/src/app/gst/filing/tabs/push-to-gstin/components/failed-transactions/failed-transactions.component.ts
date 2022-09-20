@@ -47,8 +47,8 @@ export class FailedTransactionsComponent implements OnInit, OnChanges, OnDestroy
 
     public pageChanged(event: PageChangedEvent) {
         let startIndex = (event.page - 1) * this.itemsPerPage;
-        let endIndex = Math.min(startIndex + this.itemsPerPage - 1, this.failedTransactions.length - 1);
-        this.filteredTransactions = this.failedTransactions.slice(startIndex, endIndex + 1);
+        let endIndex = Math.min(startIndex + this.itemsPerPage - 1, this.failedTransactions?.length - 1);
+        this.filteredTransactions = this.failedTransactions?.slice(startIndex, endIndex + 1);
     }
 
     public ngOnDestroy() {

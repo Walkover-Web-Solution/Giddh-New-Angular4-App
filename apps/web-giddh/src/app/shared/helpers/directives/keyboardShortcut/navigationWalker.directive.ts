@@ -237,7 +237,7 @@ export class NavigationWalkerDirective implements OnInit, OnDestroy {
         while (this.horizontalIndex > 0) {
             this.removeHorizontal();
         }
-        while (this.result.length > 1) {
+        while (this.result?.length > 1) {
             this.result.pop();
         }
         (this.horizontalTreeWalker[this.horizontalIndex]).currentNode = this._el?.nativeElement;

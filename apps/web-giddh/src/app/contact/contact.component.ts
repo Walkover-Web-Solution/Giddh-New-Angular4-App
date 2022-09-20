@@ -1687,8 +1687,8 @@ export class ContactComponent implements OnInit, OnDestroy {
         }
         if (this.selectedAccountsList?.length < this.selectedCheckedContacts?.length) {
             let message = this.localeData?.bank_transactions_message;
-            message = message?.replace("[SUCCESS]", this.selectedCheckedContacts.length - this.selectedAccountsList.length);
-            message = message?.replace("[TOTAL]", this.selectedCheckedContacts.length);
+            message = message?.replace("[SUCCESS]", this.selectedCheckedContacts?.length - this.selectedAccountsList?.length);
+            message = message?.replace("[TOTAL]", this.selectedCheckedContacts?.length);
 
             this.toaster.showSnackBar("info", message);
             return;

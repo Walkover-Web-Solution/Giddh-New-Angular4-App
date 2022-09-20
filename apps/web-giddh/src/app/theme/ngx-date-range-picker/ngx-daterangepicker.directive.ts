@@ -239,12 +239,12 @@ export class NgxDaterangepickerDirective implements OnInit, OnChanges, DoCheck {
         if (e.target.tagName.toLowerCase() !== 'input') {
             return;
         }
-        if (!e.target.value.length) {
+        if (!e.target.value?.length) {
             return;
         }
         const dateString = e.target.value.split(this.picker.locale.separator);
         let start = null, end = null;
-        if (dateString.length === 2) {
+        if (dateString?.length === 2) {
             start = dayjs(dateString[0], this.picker.locale.format);
             end = dayjs(dateString[1], this.picker.locale.format);
         }

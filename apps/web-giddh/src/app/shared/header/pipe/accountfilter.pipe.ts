@@ -17,12 +17,12 @@ export class AccountFilterPipe implements PipeTransform {
     public transform(input: any, search: string): any {
         input = cloneDeep(input);
         if (!isUndefined(search)) {
-            this.srch = search.toLowerCase();
+            this.srch = search?.toLowerCase();
         }
 
         if (!isUndefined(this.srch)) {
             this.performSearch(input);
-            if (this.srch.length < 2) {
+            if (this.srch?.length < 2) {
                 this.resetSearch(input);
             }
         }
@@ -37,7 +37,7 @@ export class AccountFilterPipe implements PipeTransform {
             grpUnq = grp?.uniqueName?.toLowerCase();
             if (!this.checkIndex(grpName, this.srch) && !this.checkIndex(grpUnq, this.srch)) {
                 grp.isVisible = false;
-                if (grp.groups.length > 0) {
+                if (grp.groups?.length > 0) {
                     return each(grp.groups, (sub: any) => {
                         let subName;
                         let subUnq;
@@ -45,7 +45,7 @@ export class AccountFilterPipe implements PipeTransform {
                         subUnq = sub?.uniqueName?.toLowerCase();
                         if (!this.checkIndex(subName, this.srch) && !this.checkIndex(subUnq, this.srch)) {
                             sub.isVisible = false;
-                            if (sub.groups.length) {
+                            if (sub.groups?.length) {
                                 return each(sub.groups, (child: any) => {
                                     let childName;
                                     let childUnq;
@@ -53,7 +53,7 @@ export class AccountFilterPipe implements PipeTransform {
                                     childUnq = child?.uniqueName?.toLowerCase();
                                     if (!this.checkIndex(childName, this.srch) && !this.checkIndex(childUnq, this.srch)) {
                                         child.isVisible = false;
-                                        if (child.groups.length > 0) {
+                                        if (child.groups?.length > 0) {
                                             return each(child.groups, (subChild: any) => {
                                                 let subChildName;
                                                 let subChildUnq;
@@ -61,7 +61,7 @@ export class AccountFilterPipe implements PipeTransform {
                                                 subChildUnq = subChild?.uniqueName?.toLowerCase();
                                                 if (!this.checkIndex(subChildName, this.srch) && !this.checkIndex(subChildUnq, this.srch)) {
                                                     subChild.isVisible = false;
-                                                    if (subChild.groups.length > 0) {
+                                                    if (subChild.groups?.length > 0) {
                                                         return each(child.groups, (subChild2: any) => {
                                                             let subChild2Name;
                                                             let subChild2Unq;
@@ -69,7 +69,7 @@ export class AccountFilterPipe implements PipeTransform {
                                                             subChild2Unq = subChild2?.uniqueName?.toLowerCase();
                                                             if (!this.checkIndex(subChild2Name, this.srch) && !this.checkIndex(subChild2Unq, this.srch)) {
                                                                 subChild2.isVisible = false;
-                                                                if (subChild2.groups.length > 0) {
+                                                                if (subChild2.groups?.length > 0) {
                                                                     return this.performSearch(subChild.groups);
                                                                 }
                                                             } else {
@@ -111,10 +111,10 @@ export class AccountFilterPipe implements PipeTransform {
     public resetSearch(input) {
         return each(input, (grp: any) => {
             grp.isVisible = true;
-            if (grp.groups.length > 0) {
+            if (grp.groups?.length > 0) {
                 return each(grp.groups, (sub: any) => {
                     sub.isVisible = true;
-                    if (sub.groups.length > 0) {
+                    if (sub.groups?.length > 0) {
                         return this.resetSearch(sub.groups);
                     }
                 });

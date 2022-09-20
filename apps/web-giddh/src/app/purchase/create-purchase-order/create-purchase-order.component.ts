@@ -422,7 +422,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.isMobileScreen = result.matches;
             if (!this.isMobileScreen && !this.container?.length && this.purchaseOrder?.account?.uniqueName) {
-                this.buildBulkData(this.purchaseOrder.entries.length, 0);
+                this.buildBulkData(this.purchaseOrder.entries?.length, 0);
             }
         });
 
@@ -1420,9 +1420,9 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
      */
     private isStockItemPresent(): boolean {
         const entries = this.purchaseOrder.entries;
-        for (let entry = 0; entry < entries.length; entry++) {
+        for (let entry = 0; entry < entries?.length; entry++) {
             const transactions = entries[entry].transactions;
-            for (let transaction = 0; transaction < transactions.length; transaction++) {
+            for (let transaction = 0; transaction < transactions?.length; transaction++) {
                 const item = transactions[transaction];
                 if (item.isStockTxn) {
                     return true;
@@ -1892,7 +1892,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             }
             this.purchaseOrder.entries.push(entry);
             setTimeout(() => {
-                this.activeIndex = this.purchaseOrder.entries.length ? this.purchaseOrder.entries.length - 1 : 0;
+                this.activeIndex = this.purchaseOrder.entries?.length ? this.purchaseOrder.entries?.length - 1 : 0;
             }, 200);
         } else {
             // if transaction is valid then add new row else show toasty
@@ -1903,10 +1903,10 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             let entry: SalesEntryClass = new SalesEntryClass();
             this.purchaseOrder.entries.push(entry);
             setTimeout(() => {
-                this.activeIndex = this.purchaseOrder.entries.length ? this.purchaseOrder.entries.length - 1 : 0;
+                this.activeIndex = this.purchaseOrder.entries?.length ? this.purchaseOrder.entries?.length - 1 : 0;
             }, 200);
         }
-        this.createEmbeddedViewAtIndex(this.purchaseOrder.entries.length - 1);
+        this.createEmbeddedViewAtIndex(this.purchaseOrder.entries?.length - 1);
         this.openProductDropdown();
     }
 
@@ -1921,7 +1921,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             this.activeIndex = null;
         }
         if (this.container) {
-            for (let index = entryIdx + 1; index < this.purchaseOrder.entries.length; index++) {
+            for (let index = entryIdx + 1; index < this.purchaseOrder.entries?.length; index++) {
                 const viewRef: any = this.container.get(index);
                 if(viewRef) {
                     viewRef.context.entryIdx -= 1;
@@ -1931,7 +1931,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         }
         this.purchaseOrder.entries.splice(entryIdx, 1);
         this.calculateAffectedThingsFromOtherTaxChanges();
-        if (this.purchaseOrder.entries.length === 0) {
+        if (this.purchaseOrder.entries?.length === 0) {
             this.addBlankRow(null);
         }
         this.handleWarehouseVisibility();
@@ -2321,7 +2321,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
      * @memberof CreatePurchaseOrderComponent
      */
     public addBulkStockItems(items: SalesAddBulkStockItems[]): void {
-        const startIndex = this.purchaseOrder.entries.length;
+        const startIndex = this.purchaseOrder.entries?.length;
         let isBlankItemPresent;
         this.ngZone.runOutsideAngular(() => {
             for (const item of items) {
@@ -2337,7 +2337,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                     isBlankItemPresent = true;
                 } else {
                     this.purchaseOrder.entries.push(new SalesEntryClass());
-                    lastIndex = this.purchaseOrder.entries.length - 1;
+                    lastIndex = this.purchaseOrder.entries?.length - 1;
                     isBlankItemInBetween = false;
                 }
 
@@ -2355,7 +2355,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                 this.onSelectSalesAccount(item, this.purchaseOrder.entries[lastIndex].transactions[0], this.purchaseOrder.entries[lastIndex], true, lastIndex);
             }
         });
-        this.buildBulkData(this.purchaseOrder.entries.length, isBlankItemPresent ? 0 : startIndex, isBlankItemPresent);
+        this.buildBulkData(this.purchaseOrder.entries?.length, isBlankItemPresent ? 0 : startIndex, isBlankItemPresent);
     }
 
     /**
@@ -2548,7 +2548,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                             clearInterval(this.interval);
                             this.purchaseOrder.entries = this.modifyEntries(this.purchaseOrderDetails.entries);
                             this.showLoaderUntilDataPrefilled = false;
-                            this.buildBulkData(this.purchaseOrder.entries.length, 0);
+                            this.buildBulkData(this.purchaseOrder.entries?.length, 0);
                             this.handleWarehouseVisibility();
                         }
                     }, 500);
@@ -2837,8 +2837,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             const transaction = (this.purchaseOrder && this.purchaseOrder.entries && this.purchaseOrder.entries[index].transactions) ?
                 this.purchaseOrder.entries[index].transactions[0] : '';
             if (transaction) {
-                transaction['requiredTax'] = (entry.taxes && entry.taxes.length === 0);
-                validEntries = !(entry.taxes.length === 0); // Entry is invalid if tax length is zero
+                transaction['requiredTax'] = (entry.taxes && entry.taxes?.length === 0);
+                validEntries = !(entry.taxes?.length === 0); // Entry is invalid if tax length is zero
             }
         });
         return validEntries;
@@ -2923,7 +2923,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
      * @memberof CreatePurchaseOrderComponent
      */
     public checkIfPipeSymbolRequired(loop: number): boolean {
-        return loop < (this.purchaseOrders.length - 1);
+        return loop < (this.purchaseOrders?.length - 1);
     }
 
     /**
@@ -3484,10 +3484,10 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
      */
     private loadTaxesAndDiscounts(startIndex: number): void {
         this.showBulkLoader = true;
-        for (let index = startIndex; index < this.purchaseOrder.entries.length; index++) {
+        for (let index = startIndex; index < this.purchaseOrder.entries?.length; index++) {
             setTimeout(() => {
                 this.activeIndex = index;
-                if (index === (this.purchaseOrder.entries.length - 1)) {
+                if (index === (this.purchaseOrder.entries?.length - 1)) {
                     this.showBulkLoader = false;
                 }
             }, 30 * index);

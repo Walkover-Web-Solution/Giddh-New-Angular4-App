@@ -109,7 +109,7 @@ export class OutwardNoteComponent implements OnChanges {
         }
 
         const items = this.form.get('transactions') as FormArray;
-        const value = items.length > 0 ? items.at(0).value : {
+        const value = items?.length > 0 ? items?.at(0)?.value : {
             type: '',
             quantity: '',
             inventoryUser: '',

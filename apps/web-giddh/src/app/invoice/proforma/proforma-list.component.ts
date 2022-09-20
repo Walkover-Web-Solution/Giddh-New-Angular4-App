@@ -224,7 +224,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
         this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.branches = response || [];
-                this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && this.branches.length > 1;
+                this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && this.branches?.length > 1;
             }
         });
 
@@ -423,7 +423,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
                 this.getAll();
             }
 
-            if (res && this.selectedItems.length) {
+            if (res && this.selectedItems?.length) {
                 this.selectedItems = [];
                 this.getAll();
             }
@@ -631,7 +631,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
         this.advanceSearchFilter.count = 20;
 
         // set date picker date as application date
-        if (universalDate.length > 1) {
+        if (universalDate?.length > 1) {
             this.advanceSearchFilter.from = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);
             this.advanceSearchFilter.to = dayjs(universalDate[1]).format(GIDDH_DATE_FORMAT);
             this.datePickerOptions = {

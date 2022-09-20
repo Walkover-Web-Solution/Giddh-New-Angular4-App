@@ -57,12 +57,12 @@ export class GiddhCurrencyPipe implements OnDestroy, PipeTransform {
         let lastThree;
         let afterdecDigit = null;
 
-        if (result[0].length <= 3) {
+        if (result[0]?.length <= 3) {
             if (!result[0].toString().includes('-')) {
                 let op = result[0].toString();
-                if (result.length > 1) {
+                if (result?.length > 1) {
                     if (digitAfterDecimal !== 0) {
-                        result[1] = (result[1].length < 4) ? result[1] + '0000' : result[1];
+                        result[1] = (result[1]?.length < 4) ? result[1] + '0000' : result[1];
                         op += '.' + result[1].substring(0, digitAfterDecimal);
                     }
                 } else {
@@ -77,9 +77,9 @@ export class GiddhCurrencyPipe implements OnDestroy, PipeTransform {
                 return shouldRemoveTrailingZeros ? op?.replace(REMOVE_TRAILING_ZERO_REGEX, '$1$2$3') : op;;
             } else {
                 let op = '-' + result[0].substring(1);
-                if (result.length > 1) {
+                if (result?.length > 1) {
                     if (digitAfterDecimal !== 0) {
-                        result[1] = (result[1].length < 4) ? result[1] + '0000' : result[1];
+                        result[1] = (result[1]?.length < 4) ? result[1] + '0000' : result[1];
                         op += '.' + result[1].substring(0, digitAfterDecimal);
                     }
                 } else {
@@ -94,10 +94,10 @@ export class GiddhCurrencyPipe implements OnDestroy, PipeTransform {
                 return shouldRemoveTrailingZeros ? op?.replace(REMOVE_TRAILING_ZERO_REGEX, '$1$2$3') : op;;
             }
         } else {
-            lastThree = result[0].substring(result[0].length - 3);
-            if (result.length > 1) {
+            lastThree = result[0].substring(result[0]?.length - 3);
+            if (result?.length > 1) {
                 if (digitAfterDecimal !== 0) {
-                    result[1] = (result[1].length < 4) ? result[1] + '0000' : result[1];
+                    result[1] = (result[1]?.length < 4) ? result[1] + '0000' : result[1];
                     afterdecDigit = result[1].substring(0, digitAfterDecimal);
                 }
             } else {
@@ -109,7 +109,7 @@ export class GiddhCurrencyPipe implements OnDestroy, PipeTransform {
                 }
             }
         }
-        let otherNumbers = result[0].substring(0, result[0].length - 3);
+        let otherNumbers = result[0].substring(0, result[0]?.length - 3);
 
         switch (currencyType) {
             case 'IND_COMMA_SEPARATED':

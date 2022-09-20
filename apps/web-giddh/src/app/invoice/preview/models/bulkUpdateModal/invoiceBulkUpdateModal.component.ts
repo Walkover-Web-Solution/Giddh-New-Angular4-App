@@ -397,7 +397,7 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges, OnDes
             }
 
             let invoiceUniqueName = [];
-            if (this.selectedInvoicesLists.length) {
+            if (this.selectedInvoicesLists?.length) {
                 this.selectedInvoicesLists.forEach(invoice => {
                     if (invoice.voucherNumber) {
                         invoiceUniqueName.push(invoice.voucherNumber)

@@ -62,13 +62,13 @@ export class MapExcelDataComponent implements OnInit {
     }
 
     public mapExcelData() {
-        if (this.mandatoryHeadersCount !== this.mandatoryHeadersModel.length) {
+        if (this.mandatoryHeadersCount !== this.mandatoryHeadersModel?.length) {
             this.toaster.errorToast(this.localeData?.mandatory_columns_error);
             return;
         } else {
             // check if group have mandatory fields selected
-            if (this.mandatoryGroupModel.length) {
-                if (this.mandatoryGroupHeadersCount !== this.mandatoryGroupModel.length) {
+            if (this.mandatoryGroupModel?.length) {
+                if (this.mandatoryGroupHeadersCount !== this.mandatoryGroupModel?.length) {
                     this.toaster.errorToast(this.localeData?.mandatory_columns_error);
                     return;
                 }
@@ -178,14 +178,14 @@ export class MapExcelDataComponent implements OnInit {
 
     public updateMandatoryHeadersCounters() {
         // count selected mandatory headers
-        this.mandatoryHeadersCount = this.mandatoryHeadersModel?.filter(f => f.selected).length;
+        this.mandatoryHeadersCount = this.mandatoryHeadersModel?.filter(f => f.selected)?.length;
     }
 
     public updateMandatoryGroupHeadersCounters() {
         // count selected mandatory headers
         this.mandatoryGroupHeadersCount = this.mandatoryGroupModel?.filter(f => {
             return f.some(s => s.selected);
-        }).length;
+        })?.length;
     }
 
     private prepareDataModel(value: ImportExcelResponseData) {

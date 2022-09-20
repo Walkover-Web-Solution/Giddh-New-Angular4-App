@@ -129,11 +129,11 @@ export class GeneralService {
         let byteArrays = [];
         let offset = 0;
         if (byteCharacters && byteCharacters.length > 0) {
-            while (offset < byteCharacters.length) {
+            while (offset < byteCharacters?.length) {
                 let slice = byteCharacters.slice(offset, offset + sliceSize);
-                let byteNumbers = new Array(slice.length);
+                let byteNumbers = new Array(slice?.length);
                 let i = 0;
-                while (i < slice.length) {
+                while (i < slice?.length) {
                     byteNumbers[i] = slice.charCodeAt(i);
                     i++;
                 }
@@ -191,7 +191,7 @@ export class GeneralService {
     }
 
     getLastElement(array) {
-        return array[array.length - 1];
+        return array[array?.length - 1];
     };
 
     /**
@@ -1164,8 +1164,8 @@ export class GeneralService {
      */
     public checkIfCssExists(path: string): boolean {
         let found = false;
-        for (let i = 0; i < document.styleSheets.length; i++) {
-            if (document.styleSheets[i].href == path) {
+        for (let i = 0; i < document.styleSheets?.length; i++) {
+            if (document.styleSheets[i]?.href == path) {
                 found = true;
                 break;
             }
