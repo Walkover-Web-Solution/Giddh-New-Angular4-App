@@ -212,6 +212,8 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         if (event && event.value) {
             this.activityObj.userUniqueNames = [];
             this.activityObj.userUniqueNames.push(event.value);
+        } else {
+            this.activityObj.userUniqueNames = [];
         }
     }
 
