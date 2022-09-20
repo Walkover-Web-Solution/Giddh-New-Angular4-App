@@ -55,7 +55,7 @@
         <div
             class="aside-pane-form"
             *ngIf="
-                !isLoading && (!purchaseVersions || !purchaseVersions.results || purchaseVersions.results.length === 0)
+                !isLoading && (!purchaseVersions || !purchaseVersions.results || purchaseVersions.results?.length === 0)
             "
         >
             {{ commonLocaleData?.app_no_result_found }}

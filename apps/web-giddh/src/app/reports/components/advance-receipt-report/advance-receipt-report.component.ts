@@ -106,7 +106,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
         adjustmentVoucherDetails: {
             vouchers: [],
             selectedValue: this.searchQueryParams.receiptTypes[0],
-            isDisabled: !!this.searchQueryParams.receiptTypes.length
+            isDisabled: !!this.searchQueryParams.receiptTypes?.length
         },
         totalAmountFilter: {
             filterValues: [],
@@ -418,7 +418,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
             adjustmentVoucherDetails: {
                 vouchers: [...this.receiptTypes],
                 selectedValue: this.searchQueryParams.receiptTypes[0],
-                isDisabled: !!this.searchQueryParams.receiptTypes.length
+                isDisabled: !!this.searchQueryParams.receiptTypes?.length
             },
             totalAmountFilter: {
                 filterValues: [...this.advanceReceiptAdvanceSearchAmountFilters],
@@ -581,7 +581,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
         const optionalParams = cloneDeep(additionalRequestParameters);
         if (optionalParams) {
             for (let key in optionalParams) {
-                if ((optionalParams[key] === undefined || optionalParams[key] === null) || (optionalParams[key] && isArray(optionalParams[key]) && !optionalParams[key].length)) {
+                if ((optionalParams[key] === undefined || optionalParams[key] === null) || (optionalParams[key] && isArray(optionalParams[key]) && !optionalParams[key]?.length)) {
                     // Delete empty keys or keys with empty arrays as values
                     delete optionalParams[key]; // Delete falsy values
                 }

@@ -225,7 +225,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy, AfterViewIni
                 this._generalService.createNewCompany = this.company;
                 this.store.dispatch(this.companyActions.userStoreCreateCompany(this.company));
                 if (this.isProdMode && companies) {
-                    if (companies.length === 0) {
+                    if (companies?.length === 0) {
                         this.fireSocketCompanyCreateRequest();
                     } else {
                         this.closeCompanyModal.emit();

@@ -83,7 +83,7 @@
                                 <span>
                                     <button
                                         *ngIf="!isCompany"
-                                        [hidden]="selectedLedgerItems.length === 0"
+                                        [hidden]="selectedLedgerItems?.length === 0"
                                         class="btn btn-primary"
                                         (click)="generateBulkInvoice(false)"
                                     >
@@ -91,7 +91,7 @@
                                     </button>
                                     <button
                                         *ngIf="!isCompany"
-                                        [hidden]="selectedLedgerItems.length === 0"
+                                        [hidden]="selectedLedgerItems?.length === 0"
                                         class="btn btn-primary"
                                         (click)="generateBulkInvoice(true)"
                                     >
@@ -102,7 +102,7 @@
                                         *ngIf="!isCompany && !isMobileView"
                                         placement="top"
                                         [tooltip]="localeData?.works_for_single_entry"
-                                        [hidden]="selectedLedgerItems.length === 0 || !togglePrevGenBtn"
+                                        [hidden]="selectedLedgerItems?.length === 0 || !togglePrevGenBtn"
                                         class="btn btn-primary"
                                         (click)="previewInvoice()"
                                     >
@@ -114,7 +114,7 @@
                         <div class="align-items-center d-flex justify-content-center filter-width">
                             <div
                                 class="clear-filter"
-                                [ngClass]="{ 'width-auto': selectedLedgerItems.length === 0 }"
+                                [ngClass]="{ 'width-auto': selectedLedgerItems?.length === 0 }"
                                 *ngIf="customDateSelected && !isMobileView"
                                 (click)="resetDateSearch()"
                             >
@@ -130,7 +130,7 @@
                     <table class="table basic giddh-table pending-table on-mobile-view">
                         <thead class="thead-background1">
                             <tr>
-                                <th width="4%" *ngIf="selectedInvoices.length > 0">
+                                <th width="4%" *ngIf="selectedInvoices?.length > 0">
                                     <div class="check-image d-flex justify-content-center">
                                         <img
                                             src="assets/images/unchecked.png"
@@ -145,7 +145,7 @@
                                     </div>
                                 </th>
 
-                                <th *ngIf="selectedInvoices.length === 0" width="4%">
+                                <th *ngIf="selectedInvoices?.length === 0" width="4%">
                                     <div class="check-image d-flex justify-content-center">#</div>
                                 </th>
 
@@ -231,7 +231,7 @@
                                     *ngIf="
                                         hoveredItemForAction === item?.uniqueName ||
                                         item.isSelected ||
-                                        selectedInvoices.length > 0
+                                        selectedInvoices?.length > 0
                                     "
                                 >
                                     <div class="check-image d-flex justify-content-center" data-title="#">
@@ -255,7 +255,7 @@
                                     *ngIf="
                                         !item.isSelected &&
                                         hoveredItemForAction !== item?.uniqueName &&
-                                        selectedInvoices.length === 0
+                                        selectedInvoices?.length === 0
                                     "
                                     data-title="#"
                                 >

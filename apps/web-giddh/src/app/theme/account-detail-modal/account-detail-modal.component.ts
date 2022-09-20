@@ -161,10 +161,10 @@ export class AccountDetailModalComponent implements OnChanges, OnDestroy {
         let start = el.selectionStart;
         let end = el.selectionEnd;
         let text = el.value;
-        let before = text.substring(0, start);
-        let after = text.substring(end, text.length);
+        let before = text?.substring(0, start);
+        let after = text?.substring(end, text?.length);
         el.value = (before + newText + after);
-        el.selectionStart = el.selectionEnd = start + newText.length;
+        el.selectionStart = el.selectionEnd = start + newText?.length;
         el.focus();
         this.messageBody.msg = el.value;
     }

@@ -245,7 +245,7 @@
                                 </tr>
                             </thead>
 
-                            <tbody *ngIf="inventoryReport && inventoryReport.transactions.length > 0">
+                            <tbody *ngIf="inventoryReport && inventoryReport.transactions?.length > 0">
                                 <tr *ngFor="let txn of inventoryReport.transactions; let idx = index">
                                     <td class="bd-rr">{{ txn.date }}</td>
                                     <td class="bd-rr" *ngIf="type === 'person'">{{ txn.stock.name }}</td>
@@ -280,7 +280,7 @@
                             </tbody>
                             <tbody
                                 *ngIf="
-                                    (inventoryReport && inventoryReport.transactions.length <= 0) || !inventoryReport
+                                    (inventoryReport && inventoryReport.transactions?.length <= 0) || !inventoryReport
                                 "
                             >
                                 <tr>

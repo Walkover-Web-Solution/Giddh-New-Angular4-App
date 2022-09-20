@@ -345,7 +345,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
                     }
 
                     if (this.allAdvanceReceiptResponse?.length) {
-                        if (this.allAdvanceReceiptResponse && this.allAdvanceReceiptResponse.length) {
+                        if (this.allAdvanceReceiptResponse && this.allAdvanceReceiptResponse?.length) {
                             this.allAdvanceReceiptResponse.forEach(item => {
                                 if (item) {
                                     if (!item?.adjustmentAmount) {

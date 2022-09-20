@@ -254,7 +254,7 @@
                 </div>
             </tab>
 
-            <tab (selectTab)="loadEcommerceData($event); tabChanged('ecommerce')">
+            <tab (selectTab)="tabChanged('ecommerce')">
                 <ng-template tabHeading>
                     <span class="icon-ecomm"></span> {{ localeData?.ecommerce?.tab_heading }}
                 </ng-template>

@@ -1652,15 +1652,15 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     public entrySelected(ev: any, uniqueName: string, type: string) {
-        const totalLength = (type === 'debit') ? this.ledgerTransactions.debitTransactions.length :
-            (type === 'credit') ? this.ledgerTransactions.creditTransactions.length :
-                (this.ledgerTransactions.debitTransactions.length + this.ledgerTransactions.creditTransactions.length);
+        const totalLength = (type === 'debit') ? this.ledgerTransactions.debitTransactions?.length :
+            (type === 'credit') ? this.ledgerTransactions.creditTransactions?.length :
+                (this.ledgerTransactions.debitTransactions?.length + this.ledgerTransactions.creditTransactions?.length);
         if (ev.checked) {
             this.checkedTrxWhileHovering.push({ type, uniqueName });
             this.store.dispatch(this.ledgerActions.SelectGivenEntries([uniqueName]));
             const currentLength = this.isMobileScreen ?
-                this.checkedTrxWhileHovering.length
-                : this.checkedTrxWhileHovering.filter(transaction => transaction.type === type).length;
+                this.checkedTrxWhileHovering?.length
+                : this.checkedTrxWhileHovering.filter(transaction => transaction.type === type)?.length;
             if (currentLength === totalLength) {
                 if (type === 'credit') {
                     this.creditSelectAll = true;
@@ -1682,8 +1682,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
             let itemIndx = this.checkedTrxWhileHovering.findIndex((item) => item?.uniqueName === uniqueName);
             this.checkedTrxWhileHovering.splice(itemIndx, 1);
             const currentLength = this.isMobileScreen ?
-                this.checkedTrxWhileHovering.length
-                : this.checkedTrxWhileHovering?.filter(transaction => transaction.type === type).length;
+                this.checkedTrxWhileHovering?.length
+                : this.checkedTrxWhileHovering?.filter(transaction => transaction.type === type)?.length;
             if (this.checkedTrxWhileHovering && (currentLength === 0 || currentLength < totalLength)) {
                 if (type === 'credit') {
                     this.creditSelectAll = false;
@@ -1956,7 +1956,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         };
         const selectedAccountDetails = {
             uniqueName: transaction.selectedAccount ? transaction.selectedAccount?.uniqueName : '',
-            parentGroups: formattedCurrentLedgerAccountParentGroups.length ? formattedCurrentLedgerAccountParentGroups : transaction.selectedAccount ? transaction.selectedAccount.parentGroups : []
+            parentGroups: formattedCurrentLedgerAccountParentGroups?.length ? formattedCurrentLedgerAccountParentGroups : transaction.selectedAccount ? transaction.selectedAccount.parentGroups : []
         };
         const shouldShowRcmEntry = this.generalService.shouldShowRcmSection(currentLedgerAccountDetails, selectedAccountDetails, this.activeCompany);
         if (this.lc && this.lc.currentBlankTxn) {
@@ -1975,7 +1975,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     private handleTaxableAmountVisibility(transaction: TransactionVM): void {
         this.shouldShowRcmTaxableAmount = false;
         this.shouldShowItcSection = false;
-        if (!this.lc || !this.lc.activeAccount || !this.lc.activeAccount.parentGroups || this.lc.activeAccount.parentGroups.length < 2) {
+        if (!this.lc || !this.lc.activeAccount || !this.lc.activeAccount.parentGroups || this.lc.activeAccount.parentGroups?.length < 2) {
             return;
         }
         if (!transaction.selectedAccount || !transaction.selectedAccount.parentGroups || transaction.selectedAccount.parentGroups.length < 2) {

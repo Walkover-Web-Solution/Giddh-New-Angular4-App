@@ -866,7 +866,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 }
             }
         }
-        if (this.isRcmEntry && (!requestObj.taxes || requestObj.taxes.length === 0)) {
+        if (this.isRcmEntry && (!requestObj.taxes || requestObj.taxes?.length === 0)) {
             if (this.taxControll?.taxInputElement?.nativeElement) {
                 // Taxes are mandatory for RCM and Advance Receipt entries
                 this.taxControll.taxInputElement.nativeElement?.classList?.add('error-box');
@@ -1854,7 +1854,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     tdsAmount: null,
                     description: null
                 };
-                if (!adjustments || !adjustments.length) {
+                if (!adjustments || !adjustments?.length) {
                     // No adjustments done clear the adjustment checkbox
                     this.isAdjustReceiptSelected = false;
                     this.isAdjustVoucherSelected = false;

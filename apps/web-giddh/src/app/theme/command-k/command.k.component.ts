@@ -259,7 +259,7 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.commandKRequestParams.totalPages = res.body.totalPages;
                 this._cdref.detectChanges();
             } else {
-                if (this.searchedItems.length === 0) {
+                if (this.searchedItems?.length === 0) {
                     this.noResultsFound = true;
                     this.allowLoadMore = false;
                 }

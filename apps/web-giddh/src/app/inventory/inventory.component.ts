@@ -133,12 +133,12 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
             if (branches) {
                 if (branches.length) {
                     each(branches, (branch) => {
-                        if (branch.addresses && branch.addresses.length) {
+                        if (branch.addresses && branch.addresses?.length) {
                             branch.addresses = [find(branch.addresses, (gst) => gst && gst.isDefault)];
                         }
                     });
                     this.branches$ = observableOf(orderBy(branches, 'name'));
-                } else if (branches.length === 0) {
+                } else if (branches?.length === 0) {
                     this.branches$ = observableOf(null);
                 }
             } else {
@@ -367,7 +367,7 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
 
     private isAllCompaniesSelected() {
         this.companies$.pipe(take(1)).subscribe((companies) => {
-            if (companies.length === this.selectedCompaniesUniquename.length) {
+            if (companies?.length === this.selectedCompaniesUniquename?.length) {
                 this.isAllSelected$ = observableOf(true);
             } else {
                 this.isAllSelected$ = observableOf(false);

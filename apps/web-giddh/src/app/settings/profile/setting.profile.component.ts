@@ -1063,7 +1063,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 profileObj.addresses = profileObj.addresses.slice(0, 3);
             }
 
-            if (profileObj.addresses && !profileObj.addresses.length) {
+            if (profileObj.addresses && !profileObj.addresses?.length) {
                 let newGstObj = {
                     taxNumber: '',
                     stateCode: '',
