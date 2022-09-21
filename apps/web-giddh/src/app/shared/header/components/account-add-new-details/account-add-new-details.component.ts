@@ -329,7 +329,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         if (this.activeCompany && this.activeCompany.countryV2) {
             const countryCode = this.activeCompany.countryV2.alpha2CountryCode;
             const countryName = this.activeCompany.countryV2.countryName;
-            const callingCode = this.activeCompany.countryV2.callingCode;
             this.addAccountForm.get('country').get('countryCode').setValue(countryCode);
             this.selectedCountry = `${countryCode} - ${countryName}`;
             this.selectedCountryCode = countryCode;
@@ -1257,52 +1256,55 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public onlyPhoneNumber() {
         const input = document.getElementById('init-contact');
         this.intl = new window['intlTelInput'](input, {
-            nationalMode: true,
+            nationalMode: false,
             utilsScript: 'https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.17/js/utils.js',
             autoHideDialCode: false,
             separateDialCode: false,
-            initialCountry: 'auto',
+            initialCountry: this.activeCompany.countryV2.alpha2CountryCode.toLowerCase(),
             geoIpLookup: (success, failure) => {
-                let countryCode = 'in';
-                const fetchIPApi = this.http.get<any>('https://api.db-ip.com/v2/free/self');
-
-                fetchIPApi.subscribe(
-                    (res) => {
-                        if (res?.response?.ipAddress) {
-                            const fetchCountryByIpApi = this.http.get<any>('http://ip-api.com/json/${res.response.ipAddress');
-                            fetchCountryByIpApi.subscribe(
-                                (fetchCountryByIpApiRes) => {
-                                    if (fetchCountryByIpApiRes?.response?.countryCode) {
-                                        return success(fetchCountryByIpApiRes.response.countryCode);
-                                    } else {
-                                        return success(countryCode);
-                                    }
-                                },
-                                (fetchCountryByIpApiErr) => {
-                                    const fetchCountryByIpInfoApi = this.http.get<any>('https://ipinfo.io/${res.response.ipAddress}/json');
-
-                                    fetchCountryByIpInfoApi.subscribe(
-                                        (fetchCountryByIpInfoApiRes) => {
-                                            if (fetchCountryByIpInfoApiRes?.response?.country) {
-                                                return success(fetchCountryByIpInfoApiRes.response.country);
-                                            } else {
-                                                return success(countryCode);
-                                            }
-                                        },
-                                        (fetchCountryByIpInfoApiErr) => {
+                let countryCode = this.activeCompany.countryV2.alpha2CountryCode.toLowerCase();
+                if (!countryCode) {
+                    const fetchIPApi = this.http.get<any>('https://api.db-ip.com/v2/free/self');
+                    fetchIPApi.subscribe(
+                        (res) => {
+                            if (res?.response?.ipAddress) {
+                                const fetchCountryByIpApi = this.http.get<any>('http://ip-api.com/json/${res.response.ipAddress');
+                                fetchCountryByIpApi.subscribe(
+                                    (fetchCountryByIpApiRes) => {
+                                        if (fetchCountryByIpApiRes?.response?.countryCode) {
+                                            return success(fetchCountryByIpApiRes.response.countryCode);
+                                        } else {
                                             return success(countryCode);
                                         }
-                                    );
-                                }
-                            );
-                        } else {
+                                    },
+                                    (fetchCountryByIpApiErr) => {
+                                        const fetchCountryByIpInfoApi = this.http.get<any>('https://ipinfo.io/${res.response.ipAddress}/json');
+
+                                        fetchCountryByIpInfoApi.subscribe(
+                                            (fetchCountryByIpInfoApiRes) => {
+                                                if (fetchCountryByIpInfoApiRes?.response?.country) {
+                                                    return success(fetchCountryByIpInfoApiRes.response.country);
+                                                } else {
+                                                    return success(countryCode);
+                                                }
+                                            },
+                                            (fetchCountryByIpInfoApiErr) => {
+                                                return success(countryCode);
+                                            }
+                                        );
+                                    }
+                                );
+                            } else {
+                                return success(countryCode);
+                            }
+                        },
+                        (err) => {
                             return success(countryCode);
                         }
-                    },
-                    (err) => {
-                        return success(countryCode);
-                    }
-                );
+                    );
+                } else {
+                    return success(countryCode);
+                }
             },
         });
         input.addEventListener('focus', () => {

@@ -454,6 +454,7 @@
                                         id="init-contact"
                                         formControlName="mobileNo"
                                         [placeholder]="localeData?.mobile_no_placeholder"
+                                        [ngClass]="!intl?.isValidNumber() ? 'intl-error' : ''"
                                     />
                                 </div>
                                 <span class="error-msg" *ngIf="!intl?.isValidNumber()">Invalid contact number</span>
