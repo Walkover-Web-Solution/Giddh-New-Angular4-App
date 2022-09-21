@@ -53,6 +53,7 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy {
      */
     public ngOnInit(): void {
         this.searchFormControl.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(search => {
+            this.onBlur();
             this.filterOptions(search);
         });
     }
