@@ -1744,13 +1744,13 @@
                 >
                     <div class="modal-dialog modal-md">
                         <div class="modal-content">
-                            <delete-role-confirmation-model
+                            <delete-voucher-confirmation-modal
                                 [module]="selectedVoucher !== 'purchase' ? selectedVoucher : 'purchaselist'"
                                 [selectedInvoiceForDelete]="selectedInvoice"
                                 (confirmDeleteEvent)="deleteConfirmedInvoice()"
                                 (closeModelEvent)="closeConfirmationPopup()"
                             >
-                            </delete-role-confirmation-model>
+                            </delete-voucher-confirmation-modal>
                         </div>
                     </div>
                 </div>

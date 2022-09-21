@@ -159,7 +159,7 @@
                             "namedChunks": false,
                             "aot": true,
                             "extractLicenses": true,
-                            "vendorChunk": false,
+                            "vendorChunk": true,
                             "buildOptimizer": true,
                             "budgets": [
                                 {
@@ -419,7 +419,7 @@
                             "namedChunks": false,
                             "aot": false,
                             "extractLicenses": false,
-                            "vendorChunk": false,
+                            "vendorChunk": true,
                             "buildOptimizer": true,
                             "budgets": [
                                 {

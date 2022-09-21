@@ -39,10 +39,6 @@ import { NgxMaskModule } from './helpers/directives/ngx-mask';
 import { TextCaseChangeModule } from './helpers/directives/textCaseChange/textCaseChange.module';
 import { OnBoardingComponent } from './on-boarding/on-boarding.component';
 import { NgxDaterangepickerMd } from '../theme/ngx-date-range-picker';
-import { ProformaAddBulkItemsComponent } from '../proforma-invoice/components/proforma-add-bulk-items/proforma-add-bulk-items.component';
-import { RevisionHistoryComponent } from './revision-history/revision-history.component';
-import { PurchaseOrderPreviewModalComponent } from './purchase-order-preview/purchase-order-preview.component';
-import { PurchaseSendEmailModalComponent } from './purchase-send-email/purchase-send-email.component';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
 import { AmountFieldComponentModule } from './amount-field/amount-field.module';
@@ -54,7 +50,6 @@ import { ValidateSectionPermissionDirectiveModule } from './validate-section-per
 import { HamburgerMenuModule } from './header/components/hamburger-menu/hamburger-menu.module';
 import { GiddhPageLoaderModule } from './giddh-page-loader/giddh-page-loader.module';
 import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicker.module';
-import { DeleteTemplateConfirmationModalModule } from '../invoice/templates/edit-template/modals/confirmation-modal/confirmation.modal.module';
 import { NgxBootstrapSwitchModule } from 'ngx-bootstrap-switch';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MasterComponent } from './header/components/master/master.component';
@@ -89,10 +84,6 @@ export function provideConfig() {
         ShareAccountModalComponent,
         ExportGroupLedgerComponent,
         AsideMenuOtherTaxes,
-        ProformaAddBulkItemsComponent,
-        RevisionHistoryComponent,
-        PurchaseOrderPreviewModalComponent,
-        PurchaseSendEmailModalComponent,
         MasterComponent
     ],
     imports: [
@@ -141,7 +132,6 @@ export function provideConfig() {
         ValidateSectionPermissionDirectiveModule,
         GiddhPageLoaderModule,
         GiddhDatepickerModule,
-        DeleteTemplateConfirmationModalModule,
         NgxBootstrapSwitchModule.forRoot(),
         MatSlideToggleModule,
         CheckPermissionModule,
@@ -175,10 +165,6 @@ export function provideConfig() {
         TooltipModule,
         BsDatepickerModule,
         NgxDaterangepickerMd,
-        ProformaAddBulkItemsComponent,
-        RevisionHistoryComponent,
-        PurchaseOrderPreviewModalComponent,
-        PurchaseSendEmailModalComponent,
         CurrencyModule,
         TranslateDirectiveModule,
         AmountFieldComponentModule,
@@ -190,7 +176,6 @@ export function provideConfig() {
         ValidateSectionPermissionDirectiveModule,
         GiddhPageLoaderModule,
         GiddhDatepickerModule,
-        DeleteTemplateConfirmationModalModule,
         GenericAsideMenuAccountModule,
         MasterComponent
     ],
