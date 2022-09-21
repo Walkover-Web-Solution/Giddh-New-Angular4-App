@@ -1,224 +1,224 @@
-#phone,
-#init-contact {
-    height: 38.73px;
-    border: 1px solid #d5d9dc;
-    border-radius: 8px;
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 16px;
-    color: #3f4346;
-    // padding-left: 12px !important;
-    // z-index: 9;
-}
-
-#phone:focus,
-#init-contact:focus {
-    border-color: transparent;
-    outline: 2px solid #1e75ba !important;
-}
-.iti__selected-flag {
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 16px;
-}
-
-.iti {
-    display: block !important;
-}
-
-.iti .dropdown-menu.country-dropdown {
-    border-top-left-radius: 0px;
-    border-top-right-radius: 0px;
-    border-color: #c7cace;
-    margin-top: 0px;
-    padding-top: 0px;
-    padding-bottom: 0px;
-
-    overflow: hidden;
-}
-
-.iti .iti__country-list {
-    box-shadow: none;
-    font-size: 14px;
-    margin-left: 0;
-    width: 290px;
-    max-height: 250px;
-}
-.iti__flag-container.open + input {
-    border-bottom-left-radius: 0px;
-    border-bottom-right-radius: 0px;
-}
-
-.iti .search-container input {
-    font-size: 14px;
-    border-color: #c7cace;
-    border-radius: 0;
-    padding: 5px 10px;
-}
-
-.iti .search-container input:focus {
-    outline: none;
-}
-.iti__country {
-    white-space: nowrap;
-    overflow: hidden !important;
-    text-overflow: ellipsis;
-    padding: 10px 10px;
-    color: #3f4346 !important;
-    font-weight: 500;
-    .iti__flag-box {
-        margin-right: 12px;
-    }
-    &:hover,
-    &.iti__highlight {
-        background-color: #d5e0f8 !important;
-    }
-}
-.iti .iti__country-list {
-    border-radius: 0px;
-}
-.iti {
-    display: flex !important;
-}
-// .iti__flag-container {
-//     position: relative;
-//     top: -1px;
-//     left: 1px !important;
-// }
-.iti__selected-flag {
-    // &:hover,
-    // &:focus {
-    //     outline: 1px solid #3498db;
-    // }
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 16px;
-    // border: 1px solid #d5d9dc;
-    // border-radius: 8px;
-    // background-color: transparent !important;
-    height: 36px;
-}
-
-@media screen and (max-width: 479px) {
-    .iti .iti__country-list {
-        width: 88.3vw;
-    }
-}
-
-ngx-intl-tel-input input {
-    height: 44px;
-    margin-bottom: 20px;
-    padding: 10px;
-    border-style: solid;
-    border-width: 1px;
-    border-color: #c7cace;
-    border-radius: 4px;
-    font-size: 18px;
-}
-
-ngx-intl-tel-input.ng-invalid.ng-touched input {
-    border: 1px solid #c0392b;
-}
-
-ngx-intl-tel-input input:hover {
-    // box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.24);
-}
-
-ngx-intl-tel-input input:focus {
-    outline: none !important;
-    // border-color: #3498db !important;
-    box-shadow: 0 0 0 0 #000;
-}
-
-ngx-intl-tel-input input::-webkit-input-placeholder {
-    color: #bac2c7;
-}
-
-ngx-intl-tel-input input:-ms-input-placeholder {
-    color: #bac2c7;
-}
-
-ngx-intl-tel-input input::-ms-input-placeholder {
-    color: #bac2c7;
-}
-
-ngx-intl-tel-input input::placeholder {
-    color: #bac2c7;
-}
-
-ngx-intl-tel-input input[disabled] {
-    background-color: #e5eaf1;
-}
-
 // #phone,
-.selected-dial-code {
-    font-weight: 400;
-    font-size: 14px;
-}
-// #phone {
-//     border-color: #d5d9dc !important;
-//     border-radius: 8px !important;
+// #init-contact {
+//     height: 38.73px;
+//     border: 1px solid #d5d9dc;
+//     border-radius: 8px;
+//     font-weight: 400;
+//     font-size: 14px;
+//     line-height: 16px;
+//     color: #3f4346;
+//     // padding-left: 12px !important;
+//     // z-index: 9;
 // }
-.selected-dial-code {
-    color: #8f9396;
-}
-.dropdown-menu {
-    &.country-dropdown {
-        width: 291px !important;
-        border-radius: 8px 8px 0px 0px !important;
-        border-color: #d5d9dc !important;
-        ul {
-            width: 100%;
-        }
-    }
-}
 
-.iti__flag {
-    background-image: url("https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.17/img/flags.png");
-}
+// #phone:focus,
+// #init-contact:focus {
+//     border-color: transparent;
+//     outline: 2px solid #1e75ba !important;
+// }
+// .iti__selected-flag {
+//     font-weight: 400;
+//     font-size: 14px;
+//     line-height: 16px;
+// }
 
-@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-    .iti__flag {
-        background-image: url("https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.17/img/flags@2x.png");
-    }
-}
-.iti__dial-code {
-    color: #3f4346;
-}
-.invalid-input {
-    outline: 2px solid #cc5229;
-}
-* {
-    scrollbar-width: thin;
-}
+// .iti {
+//     display: block !important;
+// }
 
-/* Works on Chrome/Edge/Safari */
-*::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-}
+// .iti .dropdown-menu.country-dropdown {
+//     border-top-left-radius: 0px;
+//     border-top-right-radius: 0px;
+//     border-color: #c7cace;
+//     margin-top: 0px;
+//     padding-top: 0px;
+//     padding-bottom: 0px;
 
-/* Track */
-::-webkit-scrollbar-track {
-    border-radius: 4px;
-    background: rgb(217 217 217 / 60%);
-}
+//     overflow: hidden;
+// }
 
-/* Handle */
-::-webkit-scrollbar-thumb {
-    background: rgb(182 182 182 / 80%);
-    border-radius: 4px;
-}
+// .iti .iti__country-list {
+//     box-shadow: none;
+//     font-size: 14px;
+//     margin-left: 0;
+//     width: 290px;
+//     max-height: 250px;
+// }
+// .iti__flag-container.open + input {
+//     border-bottom-left-radius: 0px;
+//     border-bottom-right-radius: 0px;
+// }
 
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-    background: rgb(182 182 182 / 90%);
-}
+// .iti .search-container input {
+//     font-size: 14px;
+//     border-color: #c7cace;
+//     border-radius: 0;
+//     padding: 5px 10px;
+// }
 
-// Country Dropdown search design changes
-.search-container {
-    margin: 6px;
-    input {
-        height: 36px;
-    }
-}
+// .iti .search-container input:focus {
+//     outline: none;
+// }
+// .iti__country {
+//     white-space: nowrap;
+//     overflow: hidden !important;
+//     text-overflow: ellipsis;
+//     padding: 10px 10px;
+//     color: #3f4346 !important;
+//     font-weight: 500;
+//     .iti__flag-box {
+//         margin-right: 12px;
+//     }
+//     &:hover,
+//     &.iti__highlight {
+//         background-color: #d5e0f8 !important;
+//     }
+// }
+// .iti .iti__country-list {
+//     border-radius: 0px;
+// }
+// .iti {
+//     display: flex !important;
+// }
+// // .iti__flag-container {
+// //     position: relative;
+// //     top: -1px;
+// //     left: 1px !important;
+// // }
+// .iti__selected-flag {
+//     // &:hover,
+//     // &:focus {
+//     //     outline: 1px solid #3498db;
+//     // }
+//     font-weight: 400;
+//     font-size: 14px;
+//     line-height: 16px;
+//     // border: 1px solid #d5d9dc;
+//     // border-radius: 8px;
+//     // background-color: transparent !important;
+//     height: 36px;
+// }
+
+// @media screen and (max-width: 479px) {
+//     .iti .iti__country-list {
+//         width: 88.3vw;
+//     }
+// }
+
+// ngx-intl-tel-input input {
+//     height: 44px;
+//     margin-bottom: 20px;
+//     padding: 10px;
+//     border-style: solid;
+//     border-width: 1px;
+//     border-color: #c7cace;
+//     border-radius: 4px;
+//     font-size: 18px;
+// }
+
+// ngx-intl-tel-input.ng-invalid.ng-touched input {
+//     border: 1px solid #c0392b;
+// }
+
+// ngx-intl-tel-input input:hover {
+//     // box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.24);
+// }
+
+// ngx-intl-tel-input input:focus {
+//     outline: none !important;
+//     // border-color: #3498db !important;
+//     box-shadow: 0 0 0 0 #000;
+// }
+
+// ngx-intl-tel-input input::-webkit-input-placeholder {
+//     color: #bac2c7;
+// }
+
+// ngx-intl-tel-input input:-ms-input-placeholder {
+//     color: #bac2c7;
+// }
+
+// ngx-intl-tel-input input::-ms-input-placeholder {
+//     color: #bac2c7;
+// }
+
+// ngx-intl-tel-input input::placeholder {
+//     color: #bac2c7;
+// }
+
+// ngx-intl-tel-input input[disabled] {
+//     background-color: #e5eaf1;
+// }
+
+// // #phone,
+// .selected-dial-code {
+//     font-weight: 400;
+//     font-size: 14px;
+// }
+// // #phone {
+// //     border-color: #d5d9dc !important;
+// //     border-radius: 8px !important;
+// // }
+// .selected-dial-code {
+//     color: #8f9396;
+// }
+// .dropdown-menu {
+//     &.country-dropdown {
+//         width: 291px !important;
+//         border-radius: 8px 8px 0px 0px !important;
+//         border-color: #d5d9dc !important;
+//         ul {
+//             width: 100%;
+//         }
+//     }
+// }
+
+// .iti__flag {
+//     background-image: url("https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.17/img/flags.png");
+// }
+
+// @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+//     .iti__flag {
+//         background-image: url("https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.17/img/flags@2x.png");
+//     }
+// }
+// .iti__dial-code {
+//     color: #3f4346;
+// }
+// .invalid-input {
+//     outline: 2px solid #cc5229;
+// }
+// * {
+//     scrollbar-width: thin;
+// }
+
+// /* Works on Chrome/Edge/Safari */
+// *::-webkit-scrollbar {
+//     width: 6px;
+//     height: 6px;
+// }
+
+// /* Track */
+// ::-webkit-scrollbar-track {
+//     border-radius: 4px;
+//     background: rgb(217 217 217 / 60%);
+// }
+
+// /* Handle */
+// ::-webkit-scrollbar-thumb {
+//     background: rgb(182 182 182 / 80%);
+//     border-radius: 4px;
+// }
+
+// /* Handle on hover */
+// ::-webkit-scrollbar-thumb:hover {
+//     background: rgb(182 182 182 / 90%);
+// }
+
+// // Country Dropdown search design changes
+// .search-container {
+//     margin: 6px;
+//     input {
+//         height: 36px;
+//     }
+// }

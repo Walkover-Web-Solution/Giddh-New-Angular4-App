@@ -446,13 +446,15 @@
                                 <label>{{ commonLocaleData?.app_mobile_number }}</label>
                                 <div class="d-flex">
                                     <input
+                                        name="accountDetails.mobileNumber"
                                         type="tel"
                                         #initContact
-                                        (keypress)="onlyPhoneNumber()"
                                         id="init-contact"
+                                        formControlName="mobileNo"
                                         [placeholder]="localeData?.mobile_no_placeholder"
                                     />
                                 </div>
+                                <span class="error-msg" *ngIf="!intl?.isValidNumber()">Invalid contact number</span>
                             </div>
                         </div>
                     </div>
