@@ -835,7 +835,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         let unit = this.currentTxn.selectedAccount.stock.unitRates.find(p => p.stockUnitCode === stockUnitCode);
         this.currentTxn.inventory.unit = { code: unit.stockUnitCode, rate: unit.rate, stockUnitCode: unit.stockUnitCode };
         if (this.currentTxn.inventory.unit) {
-            this.changePrice(this.currentTxn.inventory.unit.rate.toString());
+            this.changePrice(this.currentTxn.inventory.unit.rate?.toString());
         }
     }
 
