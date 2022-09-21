@@ -173,7 +173,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public isMobileNumberValid: boolean = false;
     /** This will hold mobile number field input  */
     public intl: any;
-    public styleInterval:any;
+    public styleInterval: any;
 
     constructor(
         private _fb: FormBuilder,
@@ -334,13 +334,11 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             this.addAccountForm.get('country').get('countryCode').setValue(countryCode);
             this.selectedCountry = `${countryCode} - ${countryName}`;
             this.selectedCountryCode = countryCode;
-            this.addAccountForm.get('mobileCode').setValue(callingCode);
             this.addAccountForm.get('currency').setValue(company.baseCurrency);
             this.getOnboardingForm(countryCode);
             this.companyCountry = countryCode;
         } else {
             this.addAccountForm.get('country').get('countryCode').setValue('IN');
-            this.addAccountForm.get('mobileCode').setValue('91');
             this.selectedCountry = 'IN - India';
             this.selectedCountryCode = 'IN';
             this.addAccountForm.get('currency').setValue('IN');
@@ -360,7 +358,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             foreignOpeningBalance: [''],
             openingBalance: [''],
             mobileNo: [''],
-            mobileCode: [''],
             email: ['', Validators.pattern(EMAIL_VALIDATION_REGEX)],
             companyName: [''],
             attentionTo: [''],
@@ -576,15 +573,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         }
         delete accountRequest['addAccountForm'];
 
-        if (!accountRequest.mobileNo) {
-            accountRequest.mobileCode = '';
-        } else {
-            if (!this.isMobileNumberValid) {
-                this._toaster.errorToast(this.localeData?.invalid_contact_number);
-                return false;
-            }
-        }
-
         if (this.isHsnSacEnabledAcc) {
             delete accountRequest['addresses'];
         } else {
@@ -606,6 +594,9 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         if (this.activeGroupUniqueName === 'discount') {
             delete accountRequest['addresses'];
         }
+
+        let mobileNo = this.intl.getNumber();
+        accountRequest['mobileNo'] = mobileNo;
 
         accountRequest['hsnNumber'] = (accountRequest["hsnOrSac"] === "hsn") ? accountRequest['hsnNumber'] : "";
         accountRequest['sacNumber'] = (accountRequest["hsnOrSac"] === "sac") ? accountRequest['sacNumber'] : "";
@@ -1259,7 +1250,11 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         this.store.dispatch(this.groupWithAccountsAction.HideAddAndManageFromOutside());
         document.querySelector('body')?.classList?.remove('master-page');
     }
-
+    /**
+      *This will use for  fetch mobile number
+     *
+     * @memberof AccountAddNewDetailsComponent
+     */
     public onlyPhoneNumber() {
         const input = document.getElementById('init-contact');
         this.intl = new window['intlTelInput'](input, {
