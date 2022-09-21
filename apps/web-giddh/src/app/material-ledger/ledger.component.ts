@@ -757,7 +757,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                         totalPages: lt.totalPages,
                         showPagination: true
                     };
-                    
+
                     if (!this.cdRf['destroyed']) {
                         this.cdRf.detectChanges();
                     }
