@@ -61,6 +61,7 @@
             [placeholder]="placeholder"
             [(ngModel)]="filter"
             (ngModelChange)="handleInputChange($event)"
+            (change)="!filter ? clear() : ''"
         />
 
         <div (click)="showSearchSuggestion ? show($event) : ''" *ngIf="(!isOpen || !isFilterEnabled) && !multiple">
@@ -86,6 +87,7 @@
                     [placeholder]="placeholder"
                     [disabled]="disabled"
                     [value]="filter"
+                    (change)="!filter ? clear() : ''"
                 />
             </ng-container>
         </div>

@@ -730,6 +730,7 @@
                                                                         "
                                                                         [enableDynamicSearch]="true"
                                                                         (selected)="selectAccount($event, txn)"
+                                                                        (onClear)="selectAccount($event, txn, true)"
                                                                         [placeholder]="
                                                                             commonLocaleData?.app_select_accounts
                                                                         "
@@ -998,6 +999,7 @@
                                                                             currentCompanyBranches?.length > 2
                                                                         "
                                                                         (selected)="selectAccount($event, txn)"
+                                                                        (onClear)="selectAccount($event, txn, true)"
                                                                         [isPaginationEnabled]="true"
                                                                         (scrollEnd)="handleScrollEnd()"
                                                                         (dynamicSearchedQuery)="

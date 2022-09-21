@@ -37,6 +37,7 @@
                 [placeholder]="selectedValues?.length > 0 ? filter : placeholder"
                 [(ngModel)]="filter"
                 (ngModelChange)="updateFilter($event)"
+                (change)="!filter ? clear() : ''"
             />
         </div>
         <!--endregion-->
@@ -63,6 +64,7 @@
             [placeholder]="placeholder"
             [(ngModel)]="filter"
             (ngModelChange)="handleInputChange($event)"
+            (change)="!filter ? clear() : ''"
         />
 
         <div *ngIf="(!isOpen || !isFilterEnabled) && !multiple">
@@ -99,6 +101,7 @@
                     (input)="openListIfNotOpened($event)"
                     [placeholder]="placeholder"
                     [value]="filter"
+                    (change)="!filter ? clear() : ''"
                 />
             </ng-container>
         </div>
