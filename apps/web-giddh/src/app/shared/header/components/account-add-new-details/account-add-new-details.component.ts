@@ -173,7 +173,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public isMobileNumberValid: boolean = false;
     /** This will hold mobile number field input  */
     public intl: any;
-    public styleInterval: any;
 
     constructor(
         private _fb: FormBuilder,

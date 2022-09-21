@@ -19,8 +19,8 @@ import { GroupResponse } from 'apps/web-giddh/src/app/models/api-models/Group';
 import { IDiscountList } from 'apps/web-giddh/src/app/models/api-models/SettingsDiscount';
 import { AccountService } from 'apps/web-giddh/src/app/services/account.service';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { combineLatest, Observable, of as observableOf, ReplaySubject } from 'rxjs';
-import { take, takeUntil } from 'rxjs/operators';
+import { combineLatest, Observable, of as observableOf, ReplaySubject, timer } from 'rxjs';
+import { take, takeUntil , debounceTime} from 'rxjs/operators';
 import { AccountsAction } from '../../../../actions/accounts.actions';
 import { CommonActions } from '../../../../actions/common.actions';
 import { CompanyActions } from '../../../../actions/company.actions';
@@ -56,6 +56,7 @@ import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { SettingsDiscountService } from 'apps/web-giddh/src/app/services/settings.discount.service';
 import { CustomFieldsService } from 'apps/web-giddh/src/app/services/custom-fields.service';
 import { FieldTypes } from 'apps/web-giddh/src/app/custom-fields/custom-fields.constant';
+import { HttpClient } from '@angular/common/http';
 @Component({
     selector: 'account-update-new-details',
     templateUrl: './account-update-new-details.component.html',
@@ -215,6 +216,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public bootstrapToggleSwitch = BootstrapToggleSwitch;
     /** This will hold isMobileNumberValid */
     public isMobileNumberValid: boolean = true;
+    /** This will hold mobile number field input  */
+    public intl: any;
 
     constructor(
         private _fb: FormBuilder,
@@ -232,7 +235,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         private invoiceService: InvoiceService,
         private changeDetectorRef: ChangeDetectorRef,
         private settingsDiscountService: SettingsDiscountService,
-        private customFieldsService: CustomFieldsService
+        private customFieldsService: CustomFieldsService,
+        private http: HttpClient
     ) {
 
     }
@@ -320,6 +324,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     }
 
     public ngAfterViewInit() {
+        this.onlyPhoneNumber();
         if (this.flatGroupsOptions === undefined) {
             this.getAccount();
         }
@@ -682,14 +687,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         } else {
             this.activeAccount$.pipe(take(1)).subscribe(activeAccountState => this.activeAccountName = activeAccountState?.uniqueName);
         }
-        if (!accountRequest.mobileNo) {
-            accountRequest.mobileCode = '';
-        } else {
-            if (!this.isMobileNumberValid) {
-                this._toaster.errorToast(this.localeData?.invalid_contact_number);
-                return false;
-            }
-        }
         if (this.isHsnSacEnabledAcc) {
             delete accountRequest['addresses'];
         } else {
@@ -728,6 +725,10 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             this.addAccountForm.get('currency')?.patchValue(this.selectedCurrency, { onlySelf: true });
             accountRequest.currency = this.selectedCurrency;
         }
+
+        let mobileNo = this.intl.getNumber();
+        accountRequest['mobileNo'] = mobileNo;
+
         accountRequest['hsnNumber'] = (accountRequest["hsnOrSac"] === "hsn") ? accountRequest['hsnNumber'] : "";
         accountRequest['sacNumber'] = (accountRequest["hsnOrSac"] === "sac") ? accountRequest['sacNumber'] : "";
 
@@ -1686,6 +1687,15 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     }] : this.flatGroupsOptions;
                     this.activeGroupUniqueName = acc.parentGroups?.length > 0 ? acc.parentGroups[acc.parentGroups?.length - 1]?.uniqueName : '';
                     this.store.dispatch(this.groupWithAccountsAction.SetActiveGroup(this.activeGroupUniqueName));
+                   timer(1)
+                        .pipe(debounceTime(50))
+                        .subscribe(_ => {
+                            if (results[0]?.mobileNo) {
+                                let updatedNumber ='+'+results[0]?.mobileNo;
+                                this.addAccountForm?.get('mobileNo')?.patchValue(updatedNumber);
+                            }
+                        });
+
                     this.store.pipe(select(appStore => appStore.groupwithaccounts.activeGroupUniqueName), take(1)).subscribe(response => {
                         if (response !== this.activeGroupUniqueName) {
                             this.store.dispatch(this.groupWithAccountsAction.getGroupDetails(this.activeGroupUniqueName));
@@ -1812,5 +1822,69 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         this.closeAccountModal.emit(true);
         this.store.dispatch(this.groupWithAccountsAction.HideAddAndManageFromOutside());
         document.querySelector('body')?.classList?.remove('master-page');
+    }
+
+    /**
+    *This will use for  fetch mobile number
+   *
+   * @memberof AccountAddNewDetailsComponent
+   */
+    public onlyPhoneNumber() {
+        const input = document.getElementById('init-contact');
+        this.intl = new window['intlTelInput'](input, {
+            nationalMode: true,
+            utilsScript: 'https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.17/js/utils.js',
+            autoHideDialCode: false,
+            separateDialCode: false,
+            initialCountry: 'auto',
+            geoIpLookup: (success, failure) => {
+                let countryCode = 'in';
+                const fetchIPApi = this.http.get<any>('https://api.db-ip.com/v2/free/self');
+
+                fetchIPApi.subscribe(
+                    (res) => {
+                        if (res?.response?.ipAddress) {
+                            const fetchCountryByIpApi = this.http.get<any>('http://ip-api.com/json/${res.response.ipAddress');
+                            fetchCountryByIpApi.subscribe(
+                                (fetchCountryByIpApiRes) => {
+                                    if (fetchCountryByIpApiRes?.response?.countryCode) {
+                                        return success(fetchCountryByIpApiRes.response.countryCode);
+                                    } else {
+                                        return success(countryCode);
+                                    }
+                                },
+                                (fetchCountryByIpApiErr) => {
+                                    const fetchCountryByIpInfoApi = this.http.get<any>('https://ipinfo.io/${res.response.ipAddress}/json');
+
+                                    fetchCountryByIpInfoApi.subscribe(
+                                        (fetchCountryByIpInfoApiRes) => {
+                                            if (fetchCountryByIpInfoApiRes?.response?.country) {
+                                                return success(fetchCountryByIpInfoApiRes.response.country);
+                                            } else {
+                                                return success(countryCode);
+                                            }
+                                        },
+                                        (fetchCountryByIpInfoApiErr) => {
+                                            return success(countryCode);
+                                        }
+                                    );
+                                }
+                            );
+                        } else {
+                            return success(countryCode);
+                        }
+                    },
+                    (err) => {
+                        return success(countryCode);
+                    }
+                );
+            },
+        });
+        input.addEventListener('focus', () => {
+            setTimeout(() => {
+            }, 100);
+        });
+        input.addEventListener('countrychange', () => {
+        });
     }
 }

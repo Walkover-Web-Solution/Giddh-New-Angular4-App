@@ -452,33 +452,17 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label>{{ commonLocaleData?.app_mobile_number }}</label>
-                                <div class="d-flex mobileNumberWidth">
-                                    <sh-select
-                                        [placeholder]="commonLocaleData?.app_country_code"
-                                        [options]="countryPhoneCode"
-                                        formControlName="mobileCode"
-                                        class="contact-number-select"
-                                    ></sh-select>
+                                <div class="d-flex">
                                     <input
-                                        type="text"
-                                        pattern="[0-9]*"
-                                        class="form-control pull-right"
-                                        [placeholder]="localeData?.mobile_no_placeholder"
+                                        name="accountDetails.mobileNumber"
+                                        type="tel"
+                                        #initContact
+                                        id="init-contact"
                                         formControlName="mobileNo"
-                                        id="contactNo"
-                                        autocomplete="off"
-                                        (blur)="isValidMobileNumber(mobileNoEl)"
-                                        #mobileNoEl
+                                        [placeholder]="localeData?.mobile_no_placeholder"
                                     />
-                                    <small
-                                        class="clearfix error-msg"
-                                        *ngIf="
-                                            addAccountForm.get('mobileNo').value &&
-                                            !addAccountForm.get('mobileCode').value
-                                        "
-                                        >{{ localeData?.phone_code_error }}</small
-                                    >
                                 </div>
+                                <span class="error-msg" *ngIf="!intl?.isValidNumber()">Invalid contact number</span>
                             </div>
                         </div>
                     </div>
