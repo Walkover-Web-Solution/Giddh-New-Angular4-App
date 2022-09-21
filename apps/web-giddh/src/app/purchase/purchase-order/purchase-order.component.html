@@ -591,13 +591,13 @@
     >
         <div class="modal-dialog modal-md">
             <div class="modal-content">
-                <delete-role-confirmation-model
+                <delete-voucher-confirmation-modal
                     *ngIf="poConfirmationModel.isShown"
                     [module]="deleteModule"
                     (confirmDeleteEvent)="processDelete()"
                     (closeModelEvent)="closeConfirmationPopup()"
                 >
-                </delete-role-confirmation-model>
+                </delete-voucher-confirmation-modal>
             </div>
         </div>
     </div>
