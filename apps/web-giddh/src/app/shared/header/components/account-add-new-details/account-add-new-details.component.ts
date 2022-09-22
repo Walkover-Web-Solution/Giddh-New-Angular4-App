@@ -173,6 +173,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public isMobileNumberValid: boolean = false;
     /** This will hold mobile number field input  */
     public intl: any;
+    /** True if we need to destroy mobile number field */
+    public showMobileNumberError: boolean = false;
 
     constructor(
         private _fb: FormBuilder,
@@ -301,7 +303,9 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
 
     public ngAfterViewInit() {
-        this.onlyPhoneNumber();
+        setTimeout(() => {
+            this.onlyPhoneNumber();
+        }, 1000);
         this.addAccountForm.get('country').get('countryCode').setValidators(Validators.required);
         let activegroupName = this.addAccountForm.get('activeGroupUniqueName').value;
         if (activegroupName === 'sundrydebtors' || activegroupName === 'sundrycreditors') {
@@ -1252,7 +1256,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
      * @memberof AccountAddNewDetailsComponent
      */
     public onlyPhoneNumber() {
-        const input = document.getElementById('init-contact');
+        const input = document.getElementById('init-contact-add');
         this.intl = new window['intlTelInput'](input, {
             nationalMode: false,
             utilsScript: 'https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.17/js/utils.js',
@@ -1305,9 +1309,12 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 }
             },
         });
-        input.addEventListener('focus', () => {
-            setTimeout(() => {
-            }, 100);
+        input.addEventListener('blur', () => {
+            if (!this.intl?.isValidNumber()) {
+                this.showMobileNumberError = true;
+            } else {
+                this.showMobileNumberError = false;
+            }
         });
         input.addEventListener('countrychange', () => {
         });

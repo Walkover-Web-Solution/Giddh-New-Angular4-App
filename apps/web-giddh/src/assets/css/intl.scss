@@ -1,6 +1,7 @@
 .iti {
     position: relative;
     display: inline-block;
+    width: 100%;
 }
 .iti * {
     box-sizing: border-box;
@@ -119,6 +120,7 @@
     padding-right: 6px;
     padding-left: 52px;
     margin-left: 0;
+    width: 100%;
 }
 .iti--allow-dropdown .iti__flag-container,
 .iti--separate-dial-code .iti__flag-container {
