@@ -850,9 +850,9 @@
                                                                         toggleTransactionType($event)
                                                                     "
                                                                     [showTaxationDiscountBox]="
-                                                                        lc.currentBlankTxn.showTaxationDiscountBox
+                                                                        lc.currentBlankTxn?.showTaxationDiscountBox
                                                                     "
-                                                                    [showOtherTax]="lc.currentBlankTxn.showOtherTax"
+                                                                    [showOtherTax]="lc.currentBlankTxn?.showOtherTax"
                                                                     (saveBlankLedger)="saveBankTransaction()"
                                                                     (clickedOutsideEvent)="
                                                                         hideBankLedgerPopup($event);
@@ -1134,9 +1134,9 @@
                                                                         toggleTransactionType($event)
                                                                     "
                                                                     [showTaxationDiscountBox]="
-                                                                        lc.currentBlankTxn.showTaxationDiscountBox
+                                                                        lc.currentBlankTxn?.showTaxationDiscountBox
                                                                     "
-                                                                    [showOtherTax]="lc.currentBlankTxn.showOtherTax"
+                                                                    [showOtherTax]="lc.currentBlankTxn?.showOtherTax"
                                                                     (saveBlankLedger)="saveBankTransaction()"
                                                                     (clickedOutsideEvent)="
                                                                         hideBankLedgerPopup($event);
@@ -1824,8 +1824,8 @@
                                                 [inputMaskFormat]="inputMaskFormat"
                                                 (moreDetailOpen)="handleOpenMoreDetail($event)"
                                                 (changeTransactionType)="toggleTransactionType($event)"
-                                                [showTaxationDiscountBox]="lc.currentBlankTxn.showTaxationDiscountBox"
-                                                [showOtherTax]="lc.currentBlankTxn.showOtherTax"
+                                                [showTaxationDiscountBox]="lc.currentBlankTxn?.showTaxationDiscountBox"
+                                                [showOtherTax]="lc.currentBlankTxn?.showOtherTax"
                                                 (resetBlankLedger)="resetBlankTransaction()"
                                                 (saveBlankLedger)="saveBlankTransaction()"
                                                 (clickedOutsideEvent)="hideNewLedgerEntryPopup()"
@@ -2242,8 +2242,8 @@
                                                 "
                                                 (moreDetailOpen)="handleOpenMoreDetail($event)"
                                                 (changeTransactionType)="toggleTransactionType($event)"
-                                                [showTaxationDiscountBox]="lc.currentBlankTxn.showTaxationDiscountBox"
-                                                [showOtherTax]="lc.currentBlankTxn.showOtherTax"
+                                                [showTaxationDiscountBox]="lc.currentBlankTxn?.showTaxationDiscountBox"
+                                                [showOtherTax]="lc.currentBlankTxn?.showOtherTax"
                                                 (resetBlankLedger)="resetBlankTransaction()"
                                                 (saveBlankLedger)="saveBlankTransaction()"
                                                 (clickedOutsideEvent)="hideNewLedgerEntryPopup()"

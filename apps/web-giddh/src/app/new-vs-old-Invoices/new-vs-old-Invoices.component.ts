@@ -85,12 +85,12 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
                 let universalEndDate = dayjs(response[1]).format("YYYY");
 
                 if (dayjs(response[1]).toDate() >= dayjs().toDate()) {
-                    this.selectedYear = (new Date()).getFullYear().toString();
-                    this.selectedmonth = ("0" + (new Date().getMonth() + 1)).slice(-2).toString();
+                    this.selectedYear = (new Date()).getFullYear()?.toString();
+                    this.selectedmonth = ("0" + (new Date().getMonth() + 1)).slice(-2)?.toString();
                     this.getSalesBifurcation();
                 } else {
                     this.selectedYear = universalEndDate;
-                    this.selectedmonth = ("0" + (dayjs(response[1]).format("M"))).slice(-2).toString();
+                    this.selectedmonth = ("0" + (dayjs(response[1]).format("M"))).slice(-2)?.toString();
                     this.getSalesBifurcation();
                 }
             }

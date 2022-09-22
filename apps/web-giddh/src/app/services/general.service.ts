@@ -146,7 +146,7 @@ export class GeneralService {
     }
 
     convertExponentialToNumber(n) {
-        var [lead, decimal, pow] = n.toString().split(/e|\./);
+        var [lead, decimal, pow] = n?.toString()?.split(/e|\./);
         if (decimal) {
             return +pow <= 0
                 ? "0." + "0".repeat(Math.abs(pow) - 1) + lead + decimal
@@ -952,7 +952,7 @@ export class GeneralService {
      * @memberof GeneralService
      */
     public removeSpecialCharactersFromAmount(amount: any): string {
-        amount = amount.toString();
+        amount = amount?.toString();
         return amount?.replace(/,/g, "")?.replace(/ /g, "")?.replace(/'/g, "").trim();
     }
 
