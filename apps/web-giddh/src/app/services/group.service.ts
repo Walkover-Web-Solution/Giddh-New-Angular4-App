@@ -143,8 +143,8 @@ export class GroupService {
         if (this.companyUniqueName) {
             let url = this.config.apiUrl + GROUP_API.FLATTEN_GROUP_WITH_ACCOUNTS?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
                 ?.replace(':q', encodeURIComponent(q || ''))
-                ?.replace(':page', encodeURIComponent(page.toString()))
-                ?.replace(':count', encodeURIComponent(count.toString()))
+                ?.replace(':page', encodeURIComponent(page?.toString()))
+                ?.replace(':count', encodeURIComponent(count?.toString()))
                 ?.replace(':showEmptyGroups', encodeURIComponent(showEmptyGroups));
             if (branchUniqueName) {
                 url = url.concat(`&branchUniqueName=${branchUniqueName !== this.companyUniqueName ? branchUniqueName : ''}`);
@@ -228,7 +228,7 @@ export class GroupService {
 
     public getMasters(groupUniqueName: string, page: Number): Observable<BaseResponse<GroupResponse, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.get(this.config.apiUrl + GROUP_API.GET_MASTERS?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':groupUniqueName', encodeURIComponent(groupUniqueName))?.replace(':page', encodeURIComponent(page.toString()))?.replace(':count', '1000')).pipe(map((res) => {
+        return this.http.get(this.config.apiUrl + GROUP_API.GET_MASTERS?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':groupUniqueName', encodeURIComponent(groupUniqueName))?.replace(':page', encodeURIComponent(page?.toString()))?.replace(':count', '1000')).pipe(map((res) => {
             let data: BaseResponse<GroupResponse, string> = res;
             data.request = groupUniqueName;
             data.queryString = { groupUniqueName };

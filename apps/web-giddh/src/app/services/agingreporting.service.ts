@@ -44,11 +44,11 @@ export class AgingreportingService {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + DUEAMOUNTREPORT_API_V2.GET?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             ?.replace(':q', encodeURIComponent(queryRequest.q || ''))
-            ?.replace(':page', encodeURIComponent(queryRequest.page.toString()))
-            ?.replace(':count', encodeURIComponent(queryRequest.count.toString()))
-            ?.replace(':sort', encodeURIComponent(queryRequest.sort.toString()))
-            ?.replace(':sortBy', encodeURIComponent(queryRequest.sortBy.toString()))
-            ?.replace(':rangeCol', encodeURIComponent(queryRequest.rangeCol ? queryRequest.rangeCol.toString() : ''));
+            ?.replace(':page', encodeURIComponent(queryRequest.page?.toString()))
+            ?.replace(':count', encodeURIComponent(queryRequest.count?.toString()))
+            ?.replace(':sort', encodeURIComponent(queryRequest.sort?.toString()))
+            ?.replace(':sortBy', encodeURIComponent(queryRequest.sortBy?.toString()))
+            ?.replace(':rangeCol', encodeURIComponent(queryRequest.rangeCol ? queryRequest.rangeCol?.toString() : ''));
         if (branchUniqueName) {
             branchUniqueName = branchUniqueName !== this.companyUniqueName ? branchUniqueName : '';
             url = url.concat(`&branchUniqueName=${branchUniqueName}`);
