@@ -24,7 +24,6 @@ import { AuthServiceConfig, GoogleLoginProvider, SocialLoginModule } from '../th
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
-import { AsideMenuOtherTaxes } from './aside-menu-other-taxes/aside-menu-other-taxes';
 import { AccountOperationsComponent, ManageGroupsAccountsComponent } from './header/components';
 import { GroupAddComponent } from './header/components/group-add/group-add.component';
 import { ExportGroupLedgerComponent } from './header/components/group-export-ledger-modal/export-group-ledger.component';
@@ -83,7 +82,6 @@ export function provideConfig() {
         ShareGroupModalComponent,
         ShareAccountModalComponent,
         ExportGroupLedgerComponent,
-        AsideMenuOtherTaxes,
         MasterComponent
     ],
     imports: [
@@ -157,7 +155,6 @@ export function provideConfig() {
         ConfirmModalModule,
         TextCaseChangeModule,
         KeyboardShortutModule,
-        AsideMenuOtherTaxes,
         MfReportComponent,
         TabsModule,
         BsDropdownModule,
