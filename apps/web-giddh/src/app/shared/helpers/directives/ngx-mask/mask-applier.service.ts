@@ -73,7 +73,7 @@ export class MaskApplierService {
         if (inputValue.slice(0, this.prefix?.length) === this.prefix) {
             inputValue = inputValue.slice(this.prefix?.length, inputValue?.length);
         }
-        const inputArray: string[] = inputValue.toString().split('');
+        const inputArray: string[] = inputValue?.toString()?.split('');
         if (maskExpression === 'IP') {
             this.ipError = !!(inputArray?.filter((i: string) => i === '.')?.length < 3 && inputArray?.length < 7);
             maskExpression = '099.099.099.099';

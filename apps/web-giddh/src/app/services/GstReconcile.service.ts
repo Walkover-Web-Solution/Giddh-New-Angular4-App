@@ -58,9 +58,9 @@ export class GstReconcileService {
             ?.replace(':from', encodeURIComponent(model.from))
             ?.replace(':to', encodeURIComponent(model.to))
             ?.replace(':action', encodeURIComponent(model.action))
-            ?.replace(':page', encodeURIComponent(model.page.toString()))
-            ?.replace(':count', encodeURIComponent(model.count.toString()))
-            ?.replace(':refresh', model.refresh.toString());
+            ?.replace(':page', encodeURIComponent(model.page?.toString()))
+            ?.replace(':count', encodeURIComponent(model.count?.toString()))
+            ?.replace(':refresh', model.refresh?.toString());
 
         if (model.monthYear) {
             url = `${url}&monthYear=${model.monthYear}`;

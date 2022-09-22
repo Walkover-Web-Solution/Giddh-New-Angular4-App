@@ -554,7 +554,7 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
             return item.voucherNumber.toLowerCase().includes(term.toLowerCase()) ||
                 item.vendor.name.toLowerCase().includes(term.toLowerCase()) ||
                 item.voucherDate.includes(term) ||
-                item.grandTotal.amountForAccount.toString().includes(term);
+                item.grandTotal.amountForAccount?.toString()?.includes(term);
         });
     }
 
