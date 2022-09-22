@@ -43,8 +43,8 @@ export async function getCmdkLocal(filename: string, request: any): Promise<any>
 
     const limit = 20;
     const start = (request.params.page - 1) + limit;
-    const response = await findAsync(db, { query: { "results.type": "MENU", "results.name": request.params.q }, start: start, limit: limit });
-    const size = await countAsync(db, { query: { "results.type": "MENU", "results.name": request.params.q } });
+    const response = (request.params.q) ? await findAsync(db, { query: { "results.type": "MENU", "results.name": request.params.q }, start: start, limit: limit }) : await findAsync(db, { start: start, limit: limit });
+    const size = (request.params.q) ? await countAsync(db, { query: { "results.type": "MENU", "results.name": request.params.q } }) : await countAsync(db, {});
 
     if (response?.length > 0) {
         return { status: "success", body: response[0], size: size };
