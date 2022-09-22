@@ -71,7 +71,7 @@ export class SettingTaxesComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         for (let i = 1; i <= 31; i++) {
-            let day = i.toString();
+            let day = i?.toString();
             this.days.push({ label: day, value: day });
         }
 

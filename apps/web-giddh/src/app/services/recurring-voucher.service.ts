@@ -23,10 +23,10 @@ export class RecurringVoucherService {
         if (filter) {
             return this.http.post(this.config.apiUrl + RECURRING_VOUCHER_API.GET
                 ?.replace('{{companyname}}', companyUniqueName)
-                ?.replace(':sort', filter.sort.toString())
-                ?.replace(':sortBy', filter.sortBy.toString())
-                ?.replace(':page', page.toString())
-                ?.replace(':count', count.toString()
+                ?.replace(':sort', filter.sort?.toString())
+                ?.replace(':sortBy', filter.sortBy?.toString())
+                ?.replace(':page', page?.toString())
+                ?.replace(':count', count?.toString()
                 ), filter).pipe(map((res) => {
                     let data: BaseResponse<RecurringInvoice[], string> = res;
                     data.queryString = {};
@@ -37,8 +37,8 @@ export class RecurringVoucherService {
             ?.replace('{{companyname}}', companyUniqueName)
             ?.replace(':sort', "")
             ?.replace(':sortBy', "")
-            ?.replace(':page', page.toString())
-            ?.replace(':count', count.toString())).pipe(map((res) => {
+            ?.replace(':page', page?.toString())
+            ?.replace(':count', count?.toString())).pipe(map((res) => {
                 let data: BaseResponse<RecurringInvoice[], string> = res;
                 data.queryString = {};
                 return data;

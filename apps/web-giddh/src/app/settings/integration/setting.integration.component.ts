@@ -584,12 +584,12 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public prepareDataForUI(data: ShareRequestForm[]): any {
         return data.map((item) => {
             if (item.allowedCidrs && item.allowedCidrs.length > 0) {
-                item.cidrsStr = item.allowedCidrs.toString();
+                item.cidrsStr = item.allowedCidrs?.toString();
             } else {
                 item.cidrsStr = null;
             }
             if (item.allowedIps && item.allowedIps.length > 0) {
-                item.ipsStr = item.allowedIps.toString();
+                item.ipsStr = item.allowedIps?.toString();
             } else {
                 item.ipsStr = null;
             }

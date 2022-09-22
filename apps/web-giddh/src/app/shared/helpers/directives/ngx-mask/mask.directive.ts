@@ -194,7 +194,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, OnInit, O
 
         if (rawInputValue && this.rawInputValue !== undefined && this.rawInputValue !== null) {
             // replace input value with raw value for getting update values
-            this._inputValue = this.rawInputValue.toString();
+            this._inputValue = this.rawInputValue?.toString();
         }
 
         if (patterns) {
@@ -255,7 +255,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, OnInit, O
         if (this._maskService.clearIfNotMatch) {
             return null;
         }
-        if (value && value.toString()?.length >= 1) {
+        if (value && value?.toString()?.length >= 1) {
             let counterOfOpt: number = 0;
             for (const key in this._maskService.maskAvailablePatterns) {
                 if (
@@ -273,7 +273,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, OnInit, O
                     }
                     if (
                         this._maskValue.indexOf(key) !== -1 &&
-                        value.toString()?.length >= this._maskValue.indexOf(key)
+                        value?.toString()?.length >= this._maskValue.indexOf(key)
                     ) {
                         return null;
                     }
@@ -289,8 +289,8 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, OnInit, O
             ) {
                 return null;
             } else if (
-                (this._maskValue.indexOf('*') > 1 && value.toString()?.length < this._maskValue.indexOf('*')) ||
-                (this._maskValue.indexOf('?') > 1 && value.toString()?.length < this._maskValue.indexOf('?'))
+                (this._maskValue.indexOf('*') > 1 && value?.toString()?.length < this._maskValue.indexOf('*')) ||
+                (this._maskValue.indexOf('?') > 1 && value?.toString()?.length < this._maskValue.indexOf('?'))
             ) {
                 return { 'Mask error': true };
             }
@@ -298,7 +298,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, OnInit, O
                 const length: number = this._maskService.dropSpecialCharacters
                     ? this._maskValue?.length - this._maskService.checkSpecialCharAmount(this._maskValue) - counterOfOpt
                     : this._maskValue?.length - counterOfOpt;
-                if (value.toString()?.length < length) {
+                if (value?.toString()?.length < length) {
                     return { 'Mask error': true };
                 }
             }
@@ -427,7 +427,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, OnInit, O
                 }
                 this.specialCharacters = specialChars;
                 while (
-                    this.specialCharacters.includes(this._inputValue[(el.selectionStart as number) - 1].toString())
+                    this.specialCharacters.includes(this._inputValue[(el.selectionStart as number) - 1]?.toString())
                 ) {
                     el.setSelectionRange((el.selectionStart as number) - 1, (el.selectionStart as number) - 1);
                 }

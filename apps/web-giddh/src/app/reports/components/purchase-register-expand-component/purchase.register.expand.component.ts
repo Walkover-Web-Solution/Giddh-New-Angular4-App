@@ -230,7 +230,7 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
         let startDateSplit = startDate.split('-');
         let dt = new Date(startDateSplit[2], startDateSplit[1], startDateSplit[0]);
         // GET THE MONTH AND YEAR OF THE SELECTED DATE.
-        let month = (dt.getMonth() + 1).toString(),
+        let month = (dt.getMonth() + 1)?.toString(),
             year = dt.getFullYear();
 
         // GET THE FIRST AND LAST DATE OF THE MONTH.

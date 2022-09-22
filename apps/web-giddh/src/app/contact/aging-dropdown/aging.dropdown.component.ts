@@ -72,7 +72,7 @@ export class AgingDropdownComponent implements OnDestroy {
     public closeAging(e) {
         this.close.emit();
         if (this.isValid && this.updateRange) {
-            this.store.dispatch(this.agingReportActions.CreateDueRange({ range: [this.options.fourth.toString(), this.options.fifth.toString(), this.options.sixth.toString()] }));
+            this.store.dispatch(this.agingReportActions.CreateDueRange({ range: [this.options.fourth?.toString(), this.options.fifth?.toString(), this.options.sixth?.toString()] }));
         }
         this.closeAgingDropDown();
     }
