@@ -41,7 +41,7 @@ export class ImportExcelService {
         let url = this.config.apiUrl + IMPORT_EXCEL_API.PROCESS_IMPORT
             ?.replace(':companyUniqueName', companyUniqueName)
             ?.replace(':entity', entity)
-            ?.replace(':isHeaderProvided', model.isHeaderProvided.toString());
+            ?.replace(':isHeaderProvided', model.isHeaderProvided?.toString());
         if (model.branchUniqueName) {
             url = url.concat(`&branchUniqueName=${model.branchUniqueName}`);
         }
@@ -55,8 +55,8 @@ export class ImportExcelService {
         const companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + IMPORT_EXCEL_API.IMPORT_STATUS
             ?.replace(':companyUniqueName', companyUniqueName)
-            ?.replace(':page', paginatedRequest.page.toString())
-            ?.replace(':count', paginatedRequest.count.toString())
+            ?.replace(':page', paginatedRequest.page?.toString())
+            ?.replace(':count', paginatedRequest.count?.toString())
 
         return this.http.get(url).pipe(map((res) => {
             let data: BaseResponse<ImportExcelStatusPaginatedResponse, string> = res;

@@ -588,7 +588,10 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
             if (entry?.uniqueName) {
                 this.adjustVoucherForm.adjustments.splice(index, 1, entry);
                 this.calculateTax(entry, index);
+            } else {
+                this.adjustVoucherForm.adjustments[index] = new Adjustment();
             }
+            this.checkValidations();
         }
     }
 
@@ -790,14 +793,15 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
      * @memberof AdvanceReceiptAdjustmentComponent
      */
     public checkValidations(): void {
+        this.isInvalidForm = false;
         if (this.adjustVoucherForm && this.adjustVoucherForm.adjustments && this.adjustVoucherForm.adjustments.length > 0) {
             this.adjustVoucherForm.adjustments.forEach((item, key) => {
-                if ((!item?.voucherNumber && item?.adjustmentAmount?.amountForAccount) || (item?.voucherNumber && !item?.adjustmentAmount?.amountForAccount) || (!item?.voucherNumber && !item?.adjustmentAmount?.amountForAccount && key > 0)) {
+                if ((!item?.voucherNumber && item?.adjustmentAmount?.amountForAccount) || (item?.voucherNumber && !item?.adjustmentAmount?.amountForAccount) || (!item?.voucherNumber && !item?.adjustmentAmount?.amountForAccount && this.adjustVoucherForm.adjustments.length > 0)) {
                     this.isInvalidForm = true;
-                } else {
-                    this.isInvalidForm = false;
                 }
             });
+        } else {
+            this.isInvalidForm = true;
         }
     }
 

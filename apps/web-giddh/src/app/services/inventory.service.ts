@@ -96,7 +96,7 @@ export class InventoryService {
      */
     public SearchStockGroupsWithStocks(q: string = '', page: number = 1, count?: number): Observable<BaseResponse<GroupsWithStocksFlatten, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.get(this.config.apiUrl + INVENTORY_API.GROUPS_WITH_STOCKS_FLATTEN?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':q', encodeURIComponent(q || ''))?.replace(':page', page.toString())?.replace(':count', count.toString())).pipe(map((res) => {
+        return this.http.get(this.config.apiUrl + INVENTORY_API.GROUPS_WITH_STOCKS_FLATTEN?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':q', encodeURIComponent(q || ''))?.replace(':page', page?.toString())?.replace(':count', count?.toString())).pipe(map((res) => {
             let data: BaseResponse<GroupsWithStocksFlatten, string> = res;
             data.request = '';
             data.queryString = { q, page, count };
@@ -175,7 +175,7 @@ export class InventoryService {
      */
     public GetGroupsWithStocksHierarchyMin(q: string = '', page: number = 1, count?: number): Observable<BaseResponse<GroupsWithStocksHierarchyMin, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.get(this.config.apiUrl + INVENTORY_API.GROUPS_WITH_STOCKS_HIERARCHY?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':q', encodeURIComponent(q || ''))?.replace(':page', encodeURIComponent(page.toString()))?.replace(':count', encodeURIComponent(count.toString()))).pipe(map((res) => {
+        return this.http.get(this.config.apiUrl + INVENTORY_API.GROUPS_WITH_STOCKS_HIERARCHY?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':q', encodeURIComponent(q || ''))?.replace(':page', encodeURIComponent(page?.toString()))?.replace(':count', encodeURIComponent(count?.toString()))).pipe(map((res) => {
             let data: BaseResponse<GroupsWithStocksHierarchyMin, string> = res;
             data.request = '';
             data.queryString = { q, page, count };
@@ -322,8 +322,8 @@ export class InventoryService {
             ?.replace(':stockUniqueName', encodeURIComponent(stockReportRequest.stockUniqueName))
             ?.replace(':from', encodeURIComponent(stockReportRequest.from))
             ?.replace(':to', encodeURIComponent(stockReportRequest.to))
-            ?.replace(':count', encodeURIComponent(stockReportRequest.count.toString()))
-            ?.replace(':page', encodeURIComponent(stockReportRequest.page.toString()))).pipe(
+            ?.replace(':count', encodeURIComponent(stockReportRequest.count?.toString()))
+            ?.replace(':page', encodeURIComponent(stockReportRequest.page?.toString()))).pipe(
                 map((res) => {
                     let data: BaseResponse<StockReportResponse, StockReportRequest> = res;
                     data.request = stockReportRequest;
@@ -352,13 +352,13 @@ export class InventoryService {
         return this.http.post(this.config.apiUrl + INVENTORY_API.STOCK_REPORT_V2?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             ?.replace(':stockGroupUniqueName', encodeURIComponent(stockReportRequest.stockGroupUniqueName))
             ?.replace(':stockUniqueName', encodeURIComponent(stockReportRequest.stockUniqueName))
-            ?.replace(':transactionType', encodeURIComponent(stockReportRequest.transactionType ? stockReportRequest.transactionType.toString() : 'all'))
+            ?.replace(':transactionType', encodeURIComponent(stockReportRequest.transactionType ? stockReportRequest.transactionType?.toString() : 'all'))
             ?.replace(':from', encodeURIComponent(stockReportRequest.from))
             ?.replace(':to', encodeURIComponent(stockReportRequest.to))
-            ?.replace(':count', encodeURIComponent(stockReportRequest.count.toString()))
-            ?.replace(':page', encodeURIComponent(stockReportRequest.page.toString()))
-            ?.replace(':sort', encodeURIComponent(stockReportRequest.sort ? stockReportRequest.sort.toString() : ''))
-            ?.replace(':sortBy', encodeURIComponent(stockReportRequest.sortBy ? stockReportRequest.sortBy.toString() : ''))
+            ?.replace(':count', encodeURIComponent(stockReportRequest.count?.toString()))
+            ?.replace(':page', encodeURIComponent(stockReportRequest.page?.toString()))
+            ?.replace(':sort', encodeURIComponent(stockReportRequest.sort ? stockReportRequest.sort?.toString() : ''))
+            ?.replace(':sortBy', encodeURIComponent(stockReportRequest.sortBy ? stockReportRequest.sortBy?.toString() : ''))
             , stockReportRequest).pipe(
                 map((res) => {
                     let data: BaseResponse<StockReportResponse, StockReportRequest> = res;
@@ -403,7 +403,7 @@ export class InventoryService {
             url = url?.replace(':condition', '');
         }
         if (stockReportRequest.number) {
-            url = url?.replace(':number', encodeURIComponent(stockReportRequest.number.toString()));
+            url = url?.replace(':number', encodeURIComponent(stockReportRequest.number?.toString()));
         } else {
             url = url?.replace(':number', '');
         }
@@ -413,8 +413,8 @@ export class InventoryService {
             ?.replace(':stockGroupUniqueName', encodeURIComponent(stockReportRequest.stockGroupUniqueName))
             ?.replace(':from', encodeURIComponent(stockReportRequest.from))
             ?.replace(':to', encodeURIComponent(stockReportRequest.to))
-            ?.replace(':count', encodeURIComponent(stockReportRequest.count ? stockReportRequest.count.toString() : ''))
-            ?.replace(':page', encodeURIComponent(stockReportRequest.page ? stockReportRequest.page.toString() : ''))
+            ?.replace(':count', encodeURIComponent(stockReportRequest.count ? stockReportRequest.count?.toString() : ''))
+            ?.replace(':page', encodeURIComponent(stockReportRequest.page ? stockReportRequest.page?.toString() : ''))
             ?.replace(':stock', encodeURIComponent(stockReportRequest.stockUniqueName))).pipe(
                 map((res) => {
                     let data: BaseResponse<GroupStockReportResponse, GroupStockReportRequest> = res;
@@ -455,7 +455,7 @@ export class InventoryService {
             url = url?.replace(':condition', '');
         }
         if (stockReportRequest.number) {
-            url = url?.replace(':number', encodeURIComponent(stockReportRequest.number.toString()));
+            url = url?.replace(':number', encodeURIComponent(stockReportRequest.number?.toString()));
         } else {
             url = url?.replace(':number', '');
         }
@@ -465,10 +465,10 @@ export class InventoryService {
             ?.replace(':stockGroupUniqueName', encodeURIComponent(stockReportRequest.stockGroupUniqueName))
             ?.replace(':from', encodeURIComponent(stockReportRequest.from))
             ?.replace(':to', encodeURIComponent(stockReportRequest.to))
-            ?.replace(':count', encodeURIComponent(stockReportRequest.count ? stockReportRequest.count.toString() : ''))
-            ?.replace(':page', encodeURIComponent(stockReportRequest.page ? stockReportRequest.page.toString() : ''))
-            ?.replace(':sort', encodeURIComponent(stockReportRequest.sort ? stockReportRequest.sort.toString() : ''))
-            ?.replace(':sortBy', encodeURIComponent(stockReportRequest.sortBy ? stockReportRequest.sortBy.toString() : '')),
+            ?.replace(':count', encodeURIComponent(stockReportRequest.count ? stockReportRequest.count?.toString() : ''))
+            ?.replace(':page', encodeURIComponent(stockReportRequest.page ? stockReportRequest.page?.toString() : ''))
+            ?.replace(':sort', encodeURIComponent(stockReportRequest.sort ? stockReportRequest.sort?.toString() : ''))
+            ?.replace(':sortBy', encodeURIComponent(stockReportRequest.sortBy ? stockReportRequest.sortBy?.toString() : '')),
             stockReportRequest
         ).pipe(
             map((res) => {
@@ -523,9 +523,9 @@ export class InventoryService {
             .get(this.config.apiUrl + INVENTORY_API.USER.GET_ALL
                 ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
                 ?.replace(':q', q)
-                ?.replace(':refresh', refresh.toString())
-                ?.replace(':page', page.toString())
-                ?.replace(':count', count.toString())
+                ?.replace(':refresh', refresh?.toString())
+                ?.replace(':page', page?.toString())
+                ?.replace(':count', count?.toString())
             ).pipe(map((res) => {
                 let data: BaseResponse<IPaginatedResponse<InventoryUser>, string> = res;
                 data.request = '';
@@ -575,10 +575,10 @@ export class InventoryService {
             ?.replace(':stockUniqueName', encodeURIComponent(stockUniqueName))
             ?.replace(':from', encodeURIComponent(from))
             ?.replace(':to', encodeURIComponent(to))
-            ?.replace(':page', encodeURIComponent(page.toString()))
-            ?.replace(':count', encodeURIComponent(count.toString()))
-            ?.replace(':sort', encodeURIComponent(sortBy ? sort.toString() : ''))
-            ?.replace(':sortBy', encodeURIComponent(sortBy ? sortBy.toString() : ''));
+            ?.replace(':page', encodeURIComponent(page?.toString()))
+            ?.replace(':count', encodeURIComponent(count?.toString()))
+            ?.replace(':sort', encodeURIComponent(sortBy ? sort?.toString() : ''))
+            ?.replace(':sortBy', encodeURIComponent(sortBy ? sortBy?.toString() : ''));
         let response;
         response = this.http.post(url, reportFilters);
         return response.pipe(map((res: any) => {
@@ -660,14 +660,14 @@ export class InventoryService {
             url = this.config.apiUrl + INVENTORY_API.DOWNLOAD_INVENTORY_ALL_GROUP_REPORT
                 ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
                 ?.replace(':format', encodeURIComponent(request.format))
-                ?.replace(':from', encodeURIComponent(request.from ? request.from.toString() : ''))
-                ?.replace(':to', encodeURIComponent(request.to ? request.to.toString() : ''))
-                ?.replace(':sortBy', encodeURIComponent(request.sortBy ? request.sortBy.toString() : ''))
-                ?.replace(':sort', encodeURIComponent(request.sort ? request.sort.toString() : ''))
-                ?.replace(':entity', encodeURIComponent(request.entity ? request.entity.toString() : ''))
-                ?.replace(':value', encodeURIComponent(request.value ? request.value.toString() : ''))
-                ?.replace(':number', encodeURIComponent(request.number ? request.number.toString() : ''))
-                ?.replace(':condition', encodeURIComponent(request.condition ? request.condition.toString() : ''))
+                ?.replace(':from', encodeURIComponent(request.from ? request.from?.toString() : ''))
+                ?.replace(':to', encodeURIComponent(request.to ? request.to?.toString() : ''))
+                ?.replace(':sortBy', encodeURIComponent(request.sortBy ? request.sortBy?.toString() : ''))
+                ?.replace(':sort', encodeURIComponent(request.sort ? request.sort?.toString() : ''))
+                ?.replace(':entity', encodeURIComponent(request.entity ? request.entity?.toString() : ''))
+                ?.replace(':value', encodeURIComponent(request.value ? request.value?.toString() : ''))
+                ?.replace(':number', encodeURIComponent(request.number ? request.number?.toString() : ''))
+                ?.replace(':condition', encodeURIComponent(request.condition ? request.condition?.toString() : ''))
         }
         else if (request.reportType === 'group') {
             requestObject = {
@@ -682,22 +682,22 @@ export class InventoryService {
                 ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
                 ?.replace(':stockGroupUniquename', encodeURIComponent(request.stockGroupUniqueName))
                 ?.replace(':format', encodeURIComponent(request.format))
-                ?.replace(':from', encodeURIComponent(request.from ? request.from.toString() : ''))
-                ?.replace(':to', encodeURIComponent(request.to ? request.to.toString() : ''))
-                ?.replace(':sortBy', encodeURIComponent(request.sortBy ? request.sortBy.toString() : ''))
-                ?.replace(':sort', encodeURIComponent(request.sort ? request.sort.toString() : ''));
+                ?.replace(':from', encodeURIComponent(request.from ? request.from?.toString() : ''))
+                ?.replace(':to', encodeURIComponent(request.to ? request.to?.toString() : ''))
+                ?.replace(':sortBy', encodeURIComponent(request.sortBy ? request.sortBy?.toString() : ''))
+                ?.replace(':sort', encodeURIComponent(request.sort ? request.sort?.toString() : ''));
         } else if (request.reportType === 'allstock') {
             url = this.config.apiUrl + INVENTORY_API.DOWNLOAD_INVENTORY_HIERARCHICAL_STOCKS_REPORT
                 ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
                 ?.replace(':stockGroupUniquename', encodeURIComponent(request.stockGroupUniqueName))
                 ?.replace(':stockUniqueName', encodeURIComponent(request.stockUniqueName))
                 ?.replace(':format', encodeURIComponent(request.format))
-                ?.replace(':from', encodeURIComponent(request.from ? request.from.toString() : ''))
-                ?.replace(':to', encodeURIComponent(request.to ? request.to.toString() : ''))
-                ?.replace(':sortBy', encodeURIComponent(request.sortBy ? request.sortBy.toString() : ''))
-                ?.replace(':sort', encodeURIComponent(request.sort ? request.sort.toString() : ''))
-                ?.replace(':page', encodeURIComponent(request.page ? request.page.toString() : ''))
-                ?.replace(':count', encodeURIComponent(request.count ? request.count.toString() : ''));
+                ?.replace(':from', encodeURIComponent(request.from ? request.from?.toString() : ''))
+                ?.replace(':to', encodeURIComponent(request.to ? request.to?.toString() : ''))
+                ?.replace(':sortBy', encodeURIComponent(request.sortBy ? request.sortBy?.toString() : ''))
+                ?.replace(':sort', encodeURIComponent(request.sort ? request.sort?.toString() : ''))
+                ?.replace(':page', encodeURIComponent(request.page ? request.page?.toString() : ''))
+                ?.replace(':count', encodeURIComponent(request.count ? request.count?.toString() : ''));
         } else if (request.reportType === 'stock') {
             requestObject = {
                 warehouseUniqueName: request.warehouseUniqueName,
@@ -708,20 +708,20 @@ export class InventoryService {
                 ?.replace(':stockGroupUniqueName', encodeURIComponent(request.stockGroupUniqueName))
                 ?.replace(':stockUniqueName', encodeURIComponent(request.stockUniqueName))
                 ?.replace(':format', encodeURIComponent(request.format))
-                ?.replace(':from', encodeURIComponent(request.from ? request.from.toString() : ''))
-                ?.replace(':to', encodeURIComponent(request.to ? request.to.toString() : ''))
-                ?.replace(':sortBy', encodeURIComponent(request.sortBy ? request.sortBy.toString() : ''))
-                ?.replace(':sort', encodeURIComponent(request.sort ? request.sort.toString() : ''))
-                ?.replace(':page', encodeURIComponent(request.page ? request.page.toString() : ''))
-                ?.replace(':count', encodeURIComponent(request.count ? request.count.toString() : ''));
+                ?.replace(':from', encodeURIComponent(request.from ? request.from?.toString() : ''))
+                ?.replace(':to', encodeURIComponent(request.to ? request.to?.toString() : ''))
+                ?.replace(':sortBy', encodeURIComponent(request.sortBy ? request.sortBy?.toString() : ''))
+                ?.replace(':sort', encodeURIComponent(request.sort ? request.sort?.toString() : ''))
+                ?.replace(':page', encodeURIComponent(request.page ? request.page?.toString() : ''))
+                ?.replace(':count', encodeURIComponent(request.count ? request.count?.toString() : ''));
         } else if (request.reportType === 'account') {
             url = this.config.apiUrl + INVENTORY_API.DOWNLOAD_INVENTORY_STOCKS_ARRANGED_BY_ACCOUNT_REPORT
                 ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
                 ?.replace(':format', encodeURIComponent(request.format))
-                ?.replace(':sort', encodeURIComponent(request.sort ? request.sort.toString() : ''))
-                ?.replace(':to', encodeURIComponent(request.to ? request.to.toString() : ''))
-                ?.replace(':from', encodeURIComponent(request.from ? request.from.toString() : ''))
-                ?.replace(':sortBy', encodeURIComponent(request.sortBy ? request.sortBy.toString() : ''));
+                ?.replace(':sort', encodeURIComponent(request.sort ? request.sort?.toString() : ''))
+                ?.replace(':to', encodeURIComponent(request.to ? request.to?.toString() : ''))
+                ?.replace(':from', encodeURIComponent(request.from ? request.from?.toString() : ''))
+                ?.replace(':sortBy', encodeURIComponent(request.sortBy ? request.sortBy?.toString() : ''));
         }
 
         if (request.reportType === 'group' || request.reportType === 'stock') {
@@ -755,8 +755,8 @@ export class InventoryService {
                 ?.replace(':format', encodeURIComponent(format))
                 ?.replace(':from', encodeURIComponent(from))
                 ?.replace(':to', encodeURIComponent(to))
-                ?.replace(':sort', encodeURIComponent(reportFilters.sort ? reportFilters.sort.toString() : ''))
-                ?.replace(':sortBy', encodeURIComponent(reportFilters.sortBy ? reportFilters.sortBy.toString() : ''))
+                ?.replace(':sort', encodeURIComponent(reportFilters.sort ? reportFilters.sort?.toString() : ''))
+                ?.replace(':sortBy', encodeURIComponent(reportFilters.sortBy ? reportFilters.sortBy?.toString() : ''))
             return this.http.post(url, reportFilters)
                 .pipe(map((res) => {
                     let data: BaseResponse<any, any> = res;
@@ -772,8 +772,8 @@ export class InventoryService {
                 ?.replace(':format', encodeURIComponent(format))
                 ?.replace(':from', encodeURIComponent(from))
                 ?.replace(':to', encodeURIComponent(to))
-                ?.replace(':sort', encodeURIComponent(reportFilters.sort ? reportFilters.sort.toString() : ''))
-                ?.replace(':sortBy', encodeURIComponent(reportFilters.sortBy ? reportFilters.sortBy.toString() : ''))
+                ?.replace(':sort', encodeURIComponent(reportFilters.sort ? reportFilters.sort?.toString() : ''))
+                ?.replace(':sortBy', encodeURIComponent(reportFilters.sortBy ? reportFilters.sortBy?.toString() : ''))
             return this.http.get(url)
                 .pipe(map((res) => {
                     let data: BaseResponse<any, any> = res;

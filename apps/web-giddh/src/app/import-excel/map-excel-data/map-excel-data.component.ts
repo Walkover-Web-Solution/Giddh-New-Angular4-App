@@ -81,7 +81,7 @@ export class MapExcelDataComponent implements OnInit {
                 items: this._importData?.data?.items
                     .map(p => {
                         p.row = p.row.map((pr, index) => {
-                            pr.columnNumber = index.toString();
+                            pr.columnNumber = index?.toString();
                             return pr;
                         });
                         return p;

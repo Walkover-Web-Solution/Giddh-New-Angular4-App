@@ -129,7 +129,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy, AfterViewIni
         this.logedInuser = this._generalService.user;
         if (this._generalService.createNewCompany) {
             this.company = this._generalService.createNewCompany;
-            if (this.company.contactNo.toString().includes('-')) {
+            if (this.company.contactNo?.toString().includes('-')) {
                 let contact = this.company.contactNo.split('-');
                 this.company.contactNo = contact[1];
             }
@@ -243,7 +243,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy, AfterViewIni
         this.socketCompanyRequest.CompanyName = this.company.name;
         this.socketCompanyRequest.Timestamp = Date.now();
         this.socketCompanyRequest.LoggedInEmailID = this._generalService.user.email;
-        this.socketCompanyRequest.MobileNo = this.company.contactNo.toString();
+        this.socketCompanyRequest.MobileNo = this.company.contactNo?.toString();
         this.socketCompanyRequest.Name = this._generalService.user.name;
         this.socketCompanyRequest.utm_source = this._generalService.getUtmParameter('utm_source');
         this.socketCompanyRequest.utm_medium = this._generalService.getUtmParameter('utm_medium');
@@ -373,7 +373,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy, AfterViewIni
         comnanyName = this.removeSpecialCharacters(comnanyName);
         city = this.removeSpecialCharacters(city);
         d = new Date();
-        dateString = d.getTime().toString();
+        dateString = d.getTime()?.toString();
         randomGenerate = this.getSixCharRandom();
         strings = [comnanyName, city, dateString, randomGenerate];
         return strings.join('');
