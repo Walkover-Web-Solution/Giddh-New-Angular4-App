@@ -33,6 +33,7 @@ import { HasFocusDirectiveModule } from '../shared/helpers/directives/has-focus/
 import { ReplacePipeModule } from '../shared/helpers/pipes/replace/replace.module';
 import { NgxBootstrapSwitchModule } from 'ngx-bootstrap-switch';
 import { VoucherAddBulkItemsModule } from '../shared/voucher-add-bulk-items/voucher-add-bulk-items.module';
+import { AsideMenuOtherTaxesModule } from '../shared/aside-menu-other-taxes/aside-menu-other-taxes.module';
 
 @NgModule({
     imports: [
@@ -66,7 +67,8 @@ import { VoucherAddBulkItemsModule } from '../shared/voucher-add-bulk-items/vouc
         HasFocusDirectiveModule,
         ReplacePipeModule,
         NgxBootstrapSwitchModule.forRoot(),
-        VoucherAddBulkItemsModule
+        VoucherAddBulkItemsModule,
+        AsideMenuOtherTaxesModule
     ],
     exports: [ProformaInvoiceComponent, SalesAddStockComponent, AsideMenuProductServiceComponent],
     declarations: [
