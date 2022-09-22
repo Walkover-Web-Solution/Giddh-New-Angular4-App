@@ -3321,11 +3321,11 @@
         [config]="{ animated: true, keyboard: false, backdrop: false, ignoreBackdropClick: true }"
     >
         <ng-container *ngIf="bulkItemsModal?.isShown">
-            <proforma-add-bulk-items-component
+            <voucher-add-bulk-items-component
                 [invoiceType]="invoiceType"
                 (saveItemsEvent)="addBulkStockItems($event)"
                 (closeEvent)="bulkItemsModal.hide()"
-            ></proforma-add-bulk-items-component>
+            ></voucher-add-bulk-items-component>
         </ng-container>
     </div>
     <!-- endregion -->
