@@ -36,7 +36,8 @@ export class SettingsFinancialYearService {
     public GetAllFinancialYears(): Observable<BaseResponse<IFinancialYearResponse, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         if (this.companyUniqueName) {
-            return this.http.get(this.config.apiUrl + SETTINGS_FINANCIAL_YEAR_API.GET_ALL_FINANCIAL_YEARS?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
+            let apiHost = this.generalService.getApiDomain();
+            return this.http.get(apiHost + SETTINGS_FINANCIAL_YEAR_API.GET_ALL_FINANCIAL_YEARS?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
                 let data: BaseResponse<IFinancialYearResponse, string> = res;
                 data.queryString = {};
                 return data;
@@ -128,7 +129,8 @@ export class SettingsFinancialYearService {
     public getFinancialYearLimits(): Observable<BaseResponse<any, any>> {
         let companyUniqueName = this.generalService.companyUniqueName;
         let options = { loader: "hide" };
-        return this.http.get(this.config.apiUrl + SETTINGS_FINANCIAL_YEAR_API.GET_FINANCIAL_YEAR_LIMITS?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName)), false, options).pipe(map((res) => {
+        let apiHost = this.generalService.getApiDomain();
+        return this.http.get(apiHost + SETTINGS_FINANCIAL_YEAR_API.GET_FINANCIAL_YEAR_LIMITS?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName)), false, options).pipe(map((res) => {
             let data: BaseResponse<any, any> = res;
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));

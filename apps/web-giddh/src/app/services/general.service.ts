@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable, Optional } from '@angular/core';
 import { eventsConst } from 'apps/web-giddh/src/app/shared/header/components/eventsConst';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { ConfirmationModalButton, ConfirmationModalConfiguration } from '../common/confirmation-modal/confirmation-modal.interface';
@@ -10,6 +10,7 @@ import { OrganizationType } from '../models/user-login-state';
 import { AllItems } from '../shared/helpers/allItems';
 import { Router } from '@angular/router';
 import { AdjustedVoucherType, JOURNAL_VOUCHER_ALLOWED_DOMAINS } from '../app.constant';
+import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { SalesOtherTaxesCalculationMethodEnum, VoucherTypeEnum } from '../models/api-models/Sales';
 
 @Injectable()
@@ -81,8 +82,9 @@ export class GeneralService {
     private _sessionId: string;
 
     constructor(
-        private router: Router
-    ) { }
+        private router: Router,
+        @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs
+    ) {}
 
     public SetIAmLoaded(iAmLoaded: boolean) {
         this.IAmLoaded.next(iAmLoaded);
@@ -1183,5 +1185,24 @@ export class GeneralService {
         setTimeout(() => {
             element?.target?.closest(".iti--allow-dropdown")?.querySelector(':scope > .iti__flag-container > .country-dropdown > .search-container > #country-search-box')?.focus();
         }, 300);
+    }
+
+    /* This will return the api host domain based on electron app/web
+     *
+     * @returns {string}
+     * @memberof GeneralService
+     */
+    public getApiDomain(): string {
+        return (isElectron) ? OFFLINE_API_URL : this.config.apiUrl;
+    }
+
+    /**
+     * THis will return boolean based on user is offline/online
+     *
+     * @returns {boolean}
+     * @memberof GeneralService
+     */
+    public isOnline(): boolean {
+        return navigator.onLine;
     }
 }

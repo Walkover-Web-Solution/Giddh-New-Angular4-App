@@ -81,6 +81,7 @@ jobs:
           LINKEDIN_CLIENT_ID_PROD: ${{ secrets.LINKEDIN_CLIENT_ID_PROD }}
           LINKEDIN_SECRET_KEY_PROD: ${{ secrets.LINKEDIN_SECRET_KEY_PROD }}
           RAZORPAY_KEY_PROD: ${{ secrets.RAZORPAY_KEY_PROD }}
+          OFFLINE_API_URL: ${{ secrets.OFFLINE_API_URL }}
     #   Commented for PROD builds as signing can't be done through pipeline for Windows
     #   - name: Creating Electron bundle for Windows (PROD)
     #     if: ${{ matrix.os == 'windows-latest' && github.event.inputs.environment == 'prod' }}
@@ -114,6 +115,7 @@ jobs:
           LINKEDIN_CLIENT_ID_PROD: ${{ secrets.LINKEDIN_CLIENT_ID_PROD }}
           LINKEDIN_SECRET_KEY_PROD: ${{ secrets.LINKEDIN_SECRET_KEY_PROD }}
           RAZORPAY_KEY_PROD: ${{ secrets.RAZORPAY_KEY_PROD }}
+          OFFLINE_API_URL: ${{ secrets.OFFLINE_API_URL }}
       - name: Creating Electron bundle for Mac (PROD)
         if: ${{ matrix.os == 'macos-latest' && github.event.inputs.environment == 'prod' }}
         run: npm run release:mac:ci
@@ -134,6 +136,7 @@ jobs:
           LINKEDIN_CLIENT_ID_PROD: ${{ secrets.LINKEDIN_CLIENT_ID_PROD }}
           LINKEDIN_SECRET_KEY_PROD: ${{ secrets.LINKEDIN_SECRET_KEY_PROD }}
           RAZORPAY_KEY_PROD: ${{ secrets.RAZORPAY_KEY_PROD }}
+          OFFLINE_API_URL: ${{ secrets.OFFLINE_API_URL }}
 #   notify-success:
 #     if: ${{ success() }}
 #     needs: release

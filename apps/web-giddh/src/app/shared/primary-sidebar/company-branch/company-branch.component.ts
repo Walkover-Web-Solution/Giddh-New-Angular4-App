@@ -180,14 +180,15 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
     /**
      * Change company callback method
      *
-     * @param {any} any Selected company
+      * @param {string} selectedCompany Selected company
      * @param {boolean} [fetchLastState] True, if last state of the company needs to be fetched
      * @memberof CompanyBranchComponent
      */
-    public changeCompany(company: any, selectBranchUniqueName: string, fetchLastState?: boolean) {
+    public changeCompany(selectedCompany: any, selectBranchUniqueName: string, fetchLastState?: boolean) {
+        this.generalService.companyUniqueName = selectedCompany?.uniqueName;
         this.store.dispatch(this.companyActions.resetActiveCompanyData());
-        this.generalService.companyUniqueName = company?.uniqueName;
-        this.generalService.voucherApiVersion = company?.voucherVersion;
+        this.generalService.companyUniqueName = selectedCompany?.uniqueName;
+        this.generalService.voucherApiVersion = selectedCompany?.voucherVersion;
         const details = {
             branchDetails: {
                 uniqueName: selectBranchUniqueName
@@ -200,7 +201,17 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
             this.setOrganizationDetails(OrganizationType.Company, details);
         }
 
-        this.store.dispatch(this.loginAction.ChangeCompany(company?.uniqueName, fetchLastState));
+        if(isElectron && !this.generalService.isOnline()) {
+            let stateDetailsObj = { state: 'home', companyUniqueName: selectedCompany?.uniqueName };
+            this.store.dispatch(this.companyActions.setStateDetailsRequest(stateDetailsObj));
+
+            this.store.dispatch(this.companyActions.setActiveCompanyData({
+                name: selectedCompany?.name,
+                uniqueName: selectedCompany?.uniqueName
+            }));
+        }
+
+        this.store.dispatch(this.loginAction.ChangeCompany(selectedCompany?.uniqueName, fetchLastState));
     }
 
     /**

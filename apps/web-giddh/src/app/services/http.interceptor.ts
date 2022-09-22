@@ -28,11 +28,19 @@ export class GiddhHttpInterceptor implements HttpInterceptor {
     }
 
     public intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+        if(isElectron) {
+            let env = PRODUCTION_ENV ? "prod" : STAGING_ENV ? "stage" : "test";
+
+            request = request.clone({
+                params: request.params.append('env', env)
+            });
+        }
+
         if (this.generalService.currentOrganizationType === OrganizationType.Branch && request && request.urlWithParams) {
             request = this.addBranchUniqueName(request);
         }
         request = this.addLanguage(request);
-        if (this.isOnline) {
+        if (this.isOnline || (isElectron && (request.url.includes('localhost') || request.url.includes('.json')))) {
             /** Holds api call retry limit */
             let retryLimit: number = 1;
             /** Holds api call retry attempts */

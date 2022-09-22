@@ -158,7 +158,10 @@ xplat/**/*.ngsummary.json
 /apps/electron-giddh/src/node_modules
 
 package-lock.json
-/apps/electron-giddh/src/
+/apps/electron-giddh/src/**/*.js
+/apps/electron-giddh/src/**/*.js.*
+/apps/electron-giddh/src/*.js
+/apps/electron-giddh/src/*.js.*
 
 #
 .env

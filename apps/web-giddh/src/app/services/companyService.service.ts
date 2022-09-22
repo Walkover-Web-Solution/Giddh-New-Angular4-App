@@ -66,7 +66,9 @@ export class CompanyService {
     public CompanyList(): Observable<BaseResponse<CompanyResponse[], string>> {
         let uniqueName = (this.generalService?.user) ? this.generalService?.user?.uniqueName : "";
 
-        return this.http.get(this.config.apiUrl + COMPANY_API.COMPANY_LIST?.replace(':uniqueName', uniqueName)).pipe(
+        let apiHost = this.generalService.getApiDomain();
+
+        return this.http.get(apiHost + COMPANY_API.COMPANY_LIST?.replace(':uniqueName', uniqueName)).pipe(
             map((res) => {
                 let data: BaseResponse<CompanyResponse[], string> = res;
                 return data;
@@ -91,7 +93,8 @@ export class CompanyService {
      * CurrencyList
      */
     public CurrencyList(): Observable<BaseResponse<ICurrencyResponse[], string>> {
-        return this.http.get(this.config.apiUrl + 'currency').pipe(
+        let apiHost = this.generalService.getApiDomain();
+        return this.http.get(apiHost + 'currency').pipe(
             map((res) => {
                 let data: BaseResponse<ICurrencyResponse[], string> = res;
                 return data;
@@ -147,7 +150,8 @@ export class CompanyService {
     public getApplicationDate(): Observable<BaseResponse<string, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         if (this.companyUniqueName) {
-            return this.http.get(this.config.apiUrl + COMPANY_API.UNIVERSAL_DATE?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
+            let apiHost = this.generalService.getApiDomain();
+            return this.http.get(apiHost + COMPANY_API.UNIVERSAL_DATE?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
                 let data: BaseResponse<string, any> = res;
                 return data;
             }), catchError((e) => this.errorHandler.HandleCatch<string, any>(e)));
@@ -449,7 +453,8 @@ export class CompanyService {
      * @memberof CompanyService
      */
     public getMenuItems(): Observable<any> {
-        let url = `${this.config.apiUrl}${COMPANY_API.GET_SIDE_BAR_ITEM}`;
+        let apiHost = this.generalService.getApiDomain();
+        let url = `${apiHost}${COMPANY_API.GET_SIDE_BAR_ITEM}`;
         url = url?.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName));
         return this.http.get(url).pipe(
             catchError((e) => this.errorHandler.HandleCatch<string, any>(e, ReportsRequestModel)));

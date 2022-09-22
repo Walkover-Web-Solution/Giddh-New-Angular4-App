@@ -131,8 +131,9 @@ export class AuthenticationService {
 
     public FetchUserDetails(): Observable<BaseResponse<UserDetails, string>> {
         let sessionId = (this.generalService.user) ? this.generalService.user.uniqueName : "";
-
-        return this.http.get(this.config.apiUrl + LOGIN_API.FETCH_DETAILS
+        let apiHost = this.generalService.getApiDomain();
+        
+        return this.http.get(apiHost + LOGIN_API.FETCH_DETAILS
             ?.replace(':sessionId', sessionId)).pipe(map((res) => {
                 let data: BaseResponse<UserDetails, string> = res;
                 data.request = '';

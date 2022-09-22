@@ -77,6 +77,7 @@ declare var enableVoucherAdjustmentMultiCurrency: boolean;
 declare var GOOGLE_CLIENT_ID: string;
 declare var GOOGLE_CLIENT_SECRET: string;
 declare var RAZORPAY_KEY: string;
+declare var OFFLINE_API_URL: string;
 // declare var $: JQueryStatic;
 // declare var jQuery: JQueryStatic;
 

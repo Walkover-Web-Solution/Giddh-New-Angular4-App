@@ -7,15 +7,17 @@ import { CommandKRequest } from '../models/api-models/Common';
 import { HttpWrapperService } from "./httpWrapper.service";
 import { Observable } from "rxjs";
 import { GiddhErrorHandler } from './catchManager/catchmanger';
+import { GeneralService } from './general.service';
 
 @Injectable()
 export class CommandKService {
-    constructor(private errorHandler: GiddhErrorHandler, private http: HttpWrapperService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
+    constructor(private errorHandler: GiddhErrorHandler, private http: HttpWrapperService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs, private generalService: GeneralService) {
 
     }
 
     public searchCommandK(request: CommandKRequest, companyUniqueName: string): Observable<BaseResponse<any, any>> {
-        let url = this.config.apiUrl + COMMON_API.COMMAND_K;
+        let apiHost = this.generalService.getApiDomain();
+        let url = apiHost + COMMON_API.COMMAND_K;
         url = url?.replace(':companyUniqueName', companyUniqueName);
         url = url?.replace(':page', request.page);
         url = url?.replace(':q', encodeURIComponent(request.q));
