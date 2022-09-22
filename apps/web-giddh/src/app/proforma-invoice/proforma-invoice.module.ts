@@ -34,6 +34,7 @@ import { ReplacePipeModule } from '../shared/helpers/pipes/replace/replace.modul
 import { NgxBootstrapSwitchModule } from 'ngx-bootstrap-switch';
 import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
 import { VoucherAddBulkItemsModule } from '../shared/voucher-add-bulk-items/voucher-add-bulk-items.module';
+import { AsideMenuOtherTaxesModule } from '../shared/aside-menu-other-taxes/aside-menu-other-taxes.module';
 
 @NgModule({
     imports: [
@@ -68,7 +69,8 @@ import { VoucherAddBulkItemsModule } from '../shared/voucher-add-bulk-items/vouc
         ReplacePipeModule,
         NgxIntlTelInputModule,
         NgxBootstrapSwitchModule.forRoot(),
-        VoucherAddBulkItemsModule
+        VoucherAddBulkItemsModule,
+        AsideMenuOtherTaxesModule
     ],
     exports: [ProformaInvoiceComponent, SalesAddStockComponent, AsideMenuProductServiceComponent],
     declarations: [
