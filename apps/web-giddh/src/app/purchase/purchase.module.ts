@@ -40,6 +40,8 @@ import { AmountFieldComponentModule } from '../shared/amount-field/amount-field.
 import { DatepickerWrapperModule } from '../shared/datepicker-wrapper/datepicker.wrapper.module';
 import { PurchaseOrderPreviewModule } from '../shared/purchase-order-preview/purchase-order-preview.module';
 import { InvoiceModule } from '../invoice/invoice.module';
+import { GenericAsideMenuAccountModule } from '../shared/generic-aside-menu-account/generic.aside.menu.account.module';
+import { AsideMenuOtherTaxesModule } from '../shared/aside-menu-other-taxes/aside-menu-other-taxes.module';
 
 
 @NgModule({
@@ -89,7 +91,9 @@ import { InvoiceModule } from '../invoice/invoice.module';
         GiddhPageLoaderModule,
         AmountFieldComponentModule,
         DatepickerWrapperModule,
-        PurchaseOrderPreviewModule
+        PurchaseOrderPreviewModule,
+        GenericAsideMenuAccountModule,
+        AsideMenuOtherTaxesModule
     ]
 })
 export class PurchaseModule {
