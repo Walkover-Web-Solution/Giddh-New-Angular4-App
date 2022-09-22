@@ -262,54 +262,6 @@
             ]
         },
         {
-            "label": "आयात",
-            "icon": "icon-import",
-            "items": [
-                {
-                    "label": "खाता आयात",
-                    "link": "/pages/import/account",
-                    "icon": "icon-proft-loss-new",
-                    "description": "एक्सेल और सीएसवी आयात करें और मौजूदा अपडेट करें"
-                },
-                {
-                    "label": "कंपनी आयात",
-                    "link": "/pages/company-import-export",
-                    "icon": "icon-company-impex",
-                    "description": "कंपनी आयात और निर्यात"
-                },
-                {
-                    "label": "प्रविष्टियां",
-                    "link": "/pages/import/entries",
-                    "icon": "icon-invoice-new",
-                    "description": "बहुमुद्रा, आवर्ती चालान, नकद चालान"
-                },
-                {
-                    "label": "समूह",
-                    "link": "/pages/import/group",
-                    "icon": "icon-group-new",
-                    "description": "एक्सेल और सीएसवी आयात करें और मौजूदा अपडेट करें"
-                },
-                {
-                    "label": "इन्वेंटरी",
-                    "link": "/pages/import/stock",
-                    "icon": "icon-inventory",
-                    "description": "स्टॉक, समूह और इकाई आयात/बनाएं"
-                },
-                {
-                    "label": "संतुलन परीक्षण",
-                    "link": "/pages/import/trial-balance",
-                    "icon": "icon-trial-balance-new",
-                    "description": "सभी क्रेडिट और डेबिट शेष आयात करें"
-                },
-                {
-                    "label": "टैली आयात",
-                    "link": "/pages/tallysync",
-                    "icon": "icon-tally-import1",
-                    "description": "अपने सिंक किए गए टैली डेटा को ऑनलाइन जांचें"
-                }
-            ]
-        },
-        {
             "label": "इन्वेंटरी",
             "icon": "icon-inventory",
             "items": [

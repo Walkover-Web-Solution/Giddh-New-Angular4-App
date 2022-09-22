@@ -195,8 +195,15 @@
                             "namedChunks": false,
                             "aot": true,
                             "extractLicenses": true,
-                            "vendorChunk": true,
-                            "buildOptimizer": true
+                            "vendorChunk": false,
+                            "buildOptimizer": true,
+                            "budgets": [
+                                {
+                                    "type": "initial",
+                                    "maximumWarning": "2mb",
+                                    "maximumError": "10mb"
+                                }
+                            ]
                         },
                         "prod": {
                             "outputPath": "dist/apps/web-giddh",
@@ -258,7 +265,7 @@
                             "namedChunks": false,
                             "aot": true,
                             "extractLicenses": true,
-                            "vendorChunk": true,
+                            "vendorChunk": false,
                             "buildOptimizer": true,
                             "budgets": [
                                 {
@@ -407,19 +414,19 @@
                                 "input": "apps/web-giddh/src/index.local.html",
                                 "output": "/index.html"
                             },
-                            "optimization": false,
+                            "optimization": true,
                             "outputHashing": "all",
                             "sourceMap": true,
                             "namedChunks": true,
                             "aot": false,
                             "extractLicenses": false,
                             "vendorChunk": false,
-                            "buildOptimizer": false,
+                            "buildOptimizer": true,
                             "budgets": [
                                 {
                                     "type": "initial",
-                                    "maximumWarning": "2mb",
-                                    "maximumError": "10mb"
+                                    "maximumWarning": "25mb",
+                                    "maximumError": "25mb"
                                 }
                             ]
                         },
@@ -446,9 +453,16 @@
                             "sourceMap": false,
                             "namedChunks": false,
                             "aot": true,
-                            "extractLicenses": true,
+                            "extractLicenses": false,
                             "vendorChunk": true,
-                            "buildOptimizer": true
+                            "buildOptimizer": true,
+                            "budgets": [
+                                {
+                                    "type": "initial",
+                                    "maximumWarning": "25mb",
+                                    "maximumError": "25mb"
+                                }
+                            ]
                         },
                         "prod": {
                             "outputPath": "dist/apps/web-giddh",
@@ -505,16 +519,16 @@
                             "optimization": true,
                             "outputHashing": "all",
                             "sourceMap": false,
-                            "namedChunks": false,
+                            "namedChunks": true,
                             "aot": true,
-                            "extractLicenses": true,
+                            "extractLicenses": false,
                             "vendorChunk": true,
                             "buildOptimizer": true,
                             "budgets": [
                                 {
                                     "type": "initial",
-                                    "maximumWarning": "2mb",
-                                    "maximumError": "10mb"
+                                    "maximumWarning": "25mb",
+                                    "maximumError": "25mb"
                                 }
                             ]
                         }

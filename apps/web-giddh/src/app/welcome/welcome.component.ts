@@ -643,12 +643,12 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
                     Object.keys(res.applicableTaxes).forEach(key => {
                         if (res.applicableTaxes[key]) {
                             this.taxesList.push({
-                                label: res.applicableTaxes[key].name,
-                                value: res.applicableTaxes[key].uniqueName,
+                                label: res.applicableTaxes[key]?.name,
+                                value: res.applicableTaxes[key]?.uniqueName,
                                 isSelected: false
                             });
-                            this.currentTaxList[res.applicableTaxes[key].uniqueName] = [];
-                            this.currentTaxList[res.applicableTaxes[key].uniqueName] = res.applicableTaxes[key];
+                            this.currentTaxList[res.applicableTaxes[key]?.uniqueName] = [];
+                            this.currentTaxList[res.applicableTaxes[key]?.uniqueName] = res.applicableTaxes[key];
                         }
                     });
                 }
@@ -846,7 +846,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
                     if (!itemName) {
                         this.welcomeForm.form.controls['name'].setErrors({ 'required': true });
                     }
-                    if (itemName.length > 100) {
+                    if (itemName?.length > 100) {
                         this.welcomeForm.form.controls['name'].setErrors({ 'maxlength': true });
                     }
                 }
@@ -998,7 +998,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof WelcomeComponent
      */
     private isAddressValid(address: string = ''): boolean {
-        return address.trim()?.length > 0;
+        return address?.trim()?.length > 0;
     }
 
     /**

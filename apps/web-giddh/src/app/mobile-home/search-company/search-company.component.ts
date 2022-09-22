@@ -9,8 +9,8 @@ import { LoginActions } from '../../actions/login.action';
 
 @Component({
     selector: 'mobile-seach-company',
-    templateUrl: './mobile-search-company.component.html',
-    styleUrls: ['./mobile-search-company.component.scss'],
+    templateUrl: './search-company.component.html',
+    styleUrls: ['./search-company.component.scss'],
 })
 
 export class MobileSearchCompanyComponent implements OnInit, OnDestroy {
@@ -69,7 +69,7 @@ export class MobileSearchCompanyComponent implements OnInit, OnDestroy {
      * @memberof MobileSearchCompanyComponent
      */
     public filterCompanyList(ev: string): void {
-        let companies: CompanyResponse[] = cloneDeep(this.allCompanies).filter(company => ((company && company.name && company.name.toLowerCase().includes(ev.toLowerCase())) || (company.alias && company.alias.toLowerCase().includes(ev.toLowerCase()))));
+        let companies: CompanyResponse[] = cloneDeep(this.allCompanies)?.filter(company => ((company && company.name && company.name.toLowerCase().includes(ev.toLowerCase())) || (company.alias && company.alias.toLowerCase().includes(ev.toLowerCase()))));
         this.companyList = cloneDeep(companies);
     }
 

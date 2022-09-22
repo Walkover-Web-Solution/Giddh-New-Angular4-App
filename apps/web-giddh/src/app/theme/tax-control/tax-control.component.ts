@@ -113,6 +113,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
     public ngOnChanges(changes: SimpleChanges) {
         // change
         if ('date' in changes && changes.date.currentValue !== changes.date.previousValue) {
+            this.date = (typeof changes['date'].currentValue === "object") ? dayjs(changes['date'].currentValue).format(GIDDH_DATE_FORMAT) : changes['date'].currentValue;
             if (dayjs(changes['date'].currentValue, GIDDH_DATE_FORMAT).isValid()) {
                 this.taxSum = 0;
                 this.prepareTaxObject();
@@ -145,11 +146,11 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
      */
     public prepareTaxObject() {
         if (this.customTaxTypesForTaxFilter && this.customTaxTypesForTaxFilter.length) {
-            this.taxes = this.taxes.filter(f => this.customTaxTypesForTaxFilter.includes(f.taxType));
+            this.taxes = this.taxes?.filter(f => this.customTaxTypesForTaxFilter.includes(f.taxType));
         }
 
         if (this.exceptTaxTypes && this.exceptTaxTypes.length) {
-            this.taxes = this.taxes.filter(f => !this.exceptTaxTypes.includes(f.taxType));
+            this.taxes = this.taxes?.filter(f => !this.exceptTaxTypes.includes(f.taxType));
         }
 
         this.taxes.map(tax => {
@@ -176,12 +177,12 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
                     let taxObject = orderBy(tax.taxDetail, (p: ITaxDetail) => {
                         return dayjs(p.date, GIDDH_DATE_FORMAT);
                     }, 'desc');
-                    let exactDate = taxObject.filter(p => dayjs(p.date, GIDDH_DATE_FORMAT).isSame(dayjs(this.date, GIDDH_DATE_FORMAT)));
-                    if (exactDate.length > 0) {
+                    let exactDate = taxObject?.filter(p => dayjs(p.date, GIDDH_DATE_FORMAT).isSame(dayjs(this.date, GIDDH_DATE_FORMAT)));
+                    if (exactDate?.length > 0) {
                         taxObj.amount = exactDate[0].taxValue;
                     } else {
-                        let filteredTaxObject = taxObject.filter(p => dayjs(p.date, GIDDH_DATE_FORMAT) < dayjs(this.date, GIDDH_DATE_FORMAT));
-                        if (filteredTaxObject.length > 0) {
+                        let filteredTaxObject = taxObject?.filter(p => dayjs(p.date, GIDDH_DATE_FORMAT) < dayjs(this.date, GIDDH_DATE_FORMAT));
+                        if (filteredTaxObject?.length > 0) {
                             taxObj.amount = filteredTaxObject[0].taxValue;
                         } else {
                             taxObj.amount = 0;
@@ -233,7 +234,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
         this.calculateInclusiveOrExclusiveTaxes();
         this.selectedTaxes = this.generateSelectedTaxes();
         if (this.allowedSelection > 0) {
-            if (this.selectedTaxes.length >= this.allowedSelection) {
+            if (this.selectedTaxes?.length >= this.allowedSelection) {
                 this.taxRenderData.map(m => {
                     m.isDisabled = !m.isChecked;
                     return m;
@@ -246,11 +247,11 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
             }
         }
 
-        if (this.allowedSelectionOfAType && this.allowedSelectionOfAType.type.length) {
+        if (this.allowedSelectionOfAType && this.allowedSelectionOfAType.type?.length) {
             this.allowedSelectionOfAType.type.forEach(taxType => {
-                const selectedTaxes = this.taxRenderData.filter(appliedTaxes => (appliedTaxes.isChecked && taxType === appliedTaxes.type));
+                const selectedTaxes = this.taxRenderData?.filter(appliedTaxes => (appliedTaxes.isChecked && taxType === appliedTaxes.type));
 
-                if (selectedTaxes.length >= this.allowedSelectionOfAType.count) {
+                if (selectedTaxes?.length >= this.allowedSelectionOfAType.count) {
                     this.taxRenderData.map((taxesApplied => {
                         if (taxType === taxesApplied.type && !taxesApplied.isChecked) {
                             taxesApplied.isDisabled = true;
@@ -270,7 +271,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
                 // In case of advance receipt only a single tax is allowed in addition to CESS
                 // Check if atleast a single non-cess tax is selected, if yes, then disable all other taxes
                 // except CESS taxes
-                const atleastSingleTaxSelected: boolean = this.taxRenderData.filter((tax) => tax.isChecked && tax.type !== 'gstcess').length !== 0;
+                const atleastSingleTaxSelected: boolean = this.taxRenderData?.filter((tax) => tax.isChecked && tax.type !== 'gstcess')?.length !== 0;
                 if (atleastSingleTaxSelected) {
                     this.taxRenderData.map((taxesApplied => {
                         if ('gstcess' !== taxesApplied.type && !taxesApplied.isChecked) {
@@ -353,7 +354,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
      * @returns {string[]}
      */
     private generateSelectedTaxes(): string[] {
-        return this.taxRenderData.filter(p => p.isChecked).map(p => p.uniqueName);
+        return this.taxRenderData?.filter(p => p.isChecked).map(p => p.uniqueName);
     }
 
     /**

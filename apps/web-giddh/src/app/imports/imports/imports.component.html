@@ -1,0 +1,213 @@
+<ng-container
+    appTranslate
+    [file]="'imports'"
+    (commonLocaleData)="commonLocaleData = $event"
+    (localeData)="localeData = $event"
+    (translationComplete)="translationComplete($event)"
+>
+    <hamburger-menu class="hamburger-menu"></hamburger-menu>
+
+    <div class="import-table-container">
+        <div
+            class="activity-filter-wrap"
+            *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'"
+        >
+            <div class="clearfix pd-t15 pd-b15">
+                <div class="col-xs-12 col-sm-12">
+                    <div class="d-inline-block pull-left mr-2 middle eway-bill-date">
+                        <div class="input-group flex-nowrap mr-b15">
+                            <div class="form-group linked-entities mr-r15 mb-0">
+                                <sh-select
+                                    [options]="currentCompanyBranches"
+                                    [(ngModel)]="currentBranch.uniqueName"
+                                    [showClear]="false"
+                                    [ItemHeight]="33"
+                                    width="100%"
+                                    (selected)="handleBranchChange($event)"
+                                    [isFilterEnabled]="true"
+                                    [placeholder]="commonLocaleData?.app_select_entity"
+                                    [fixedValue]="currentBranch?.alias"
+                                    class="entity-dropdown"
+                                >
+                                    <ng-template #optionTemplate let-option="option">
+                                        <ng-container>
+                                            <a href="javascript:void(0)" class="list-item d-flex">
+                                                <span class="entity-icon">
+                                                    <i
+                                                        class="icon-branch-icon pull-right"
+                                                        *ngIf="!option.isCompany"
+                                                        tooltip="{{ commonLocaleData?.app_branch }}"
+                                                    ></i>
+                                                    <i
+                                                        class="icon-company-profile pull-right"
+                                                        *ngIf="option.isCompany"
+                                                        tooltip="{{ commonLocaleData?.app_company }}"
+                                                    ></i>
+                                                </span>
+                                                <span class="entity-details">
+                                                    <div class="item giddh-limit single-line-clamp">
+                                                        {{ option.label || "-" }}
+                                                    </div>
+                                                    <div class="item-unique giddh-limit single-line-clamp">
+                                                        {{ option.name || "-" }}
+                                                    </div>
+                                                </span>
+                                            </a>
+                                        </ng-container>
+                                    </ng-template>
+                                </sh-select>
+                            </div>
+                            <!-- <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
+                                <i><img src="assets/images/custom-calender.svg" /></i>
+                                <input
+                                    type="text"
+                                    name="selectedDateRange"
+                                    [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                                    class="giddh-datepicker date-range-picker"
+                                />
+                            </div>
+                            <div class="clear-filter form-group mb-0" *ngIf="showClearFilter">
+                                <button
+                                    mat-raised-button
+                                    class="btn btn-filter min-width-100 mr-l1"
+                                    (click)="resetFilter()"
+                                >
+                                    <span class="icon-cross"></span> {{ commonLocaleData?.app_clear_filter }}
+                                </button>
+                            </div> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="isLoading">
+            <giddh-page-loader></giddh-page-loader>
+        </div>
+        <div class="table-content" *ngIf="!isLoading && dataSource?.length">
+            <table mat-table [dataSource]="dataSource" class="import-table">
+                <!-- Requested importDate Column -->
+                <ng-container matColumnDef="importDate">
+                    <th mat-header-cell *matHeaderCellDef>{{ localeData?.import_date }}</th>
+                    <td mat-cell *matCellDef="let element">{{ element.date }}</td>
+                </ng-container>
+                <!-- Requested by Column -->
+                <ng-container matColumnDef="by">
+                    <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_by }}</th>
+                    <td mat-cell *matCellDef="let element">{{ element.user.name }}</td>
+                </ng-container>
+                <!-- Requested module Column -->
+                <ng-container matColumnDef="module">
+                    <th mat-header-cell *matHeaderCellDef>{{ localeData?.module }}</th>
+                    <td mat-cell *matCellDef="let element">{{ element.type }}</td>
+                </ng-container>
+                <!-- Requested importFile Column -->
+                <ng-container matColumnDef="importFile">
+                    <th mat-header-cell *matHeaderCellDef>{{ localeData?.import_file }}</th>
+                    <td mat-cell *matCellDef="let element">
+                        <a target="_blank" [href]="element.efsPath" mat-button class="import-button-status btn-success">
+                            {{ commonLocaleData?.app_download }}
+                        </a>
+                    </td>
+                </ng-container>
+                <!-- Count Column -->
+                <ng-container matColumnDef="count">
+                    <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_count }}</th>
+                    <td mat-cell *matCellDef="let element">
+                        <span>{{ localeData?.success }} : {{ element.count.success }}</span
+                        ><br /><span>{{ localeData?.failed }} : {{ element.count.failed }}</span
+                        ><br /><span>{{ localeData?.total }} : {{ element.count.total }}</span>
+                    </td>
+                </ng-container>
+                <!-- Error Sheet Column -->
+                <ng-container matColumnDef="errorSheet">
+                    <th mat-header-cell *matHeaderCellDef>{{ localeData?.error_sheet }}</th>
+                    <td mat-cell *matCellDef="let element">
+                        <div class="import-text" *ngIf="element.status !== 'COMPLETED'">
+                            {{ element.status }}
+                        </div>
+                        <a
+                            *ngIf="element.status === 'COMPLETED'"
+                            target="_blank"
+                            (click)="downloadErrorSheet(element)"
+                            mat-button
+                            class="import-button-status btn-success"
+                        >
+                            {{ commonLocaleData?.app_download }}
+                        </a>
+                    </td>
+                </ng-container>
+                <!-- Succes Sheet  Column -->
+                <ng-container matColumnDef="succesSheet">
+                    <th mat-header-cell *matHeaderCellDef>{{ localeData?.succes_sheet }}</th>
+                    <td mat-cell *matCellDef="let element">
+                        <div class="import-text" *ngIf="element.status !== 'COMPLETED'">
+                            {{ element.status }}
+                        </div>
+                        <a
+                            *ngIf="element.status === 'COMPLETED'"
+                            target="_blank"
+                            (click)="downloadSuccessSheet(element)"
+                            mat-button
+                            class="import-button-status btn-success"
+                        >
+                            {{ commonLocaleData?.app_download }}
+                        </a>
+                    </td>
+                </ng-container>
+                <!-- Expiry Date Column -->
+                <ng-container matColumnDef="expiry">
+                    <th mat-header-cell *matHeaderCellDef>{{ localeData?.expiry }}</th>
+                    <td mat-cell *matCellDef="let element">{{ element.expireAt }}</td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+            </table>
+        </div>
+    </div>
+</ng-container>
+<section class="no-logs" *ngIf="!dataSource?.length && !isLoading">
+    <div class="no-data">
+        <h1>{{ commonLocaleData?.app_no_record_found }}</h1>
+    </div>
+</section>
+<div class="pagination-wrapper" *ngIf="importRequest?.totalItems > importRequest.count && !isLoading">
+    <pagination
+        [totalItems]="importRequest?.totalItems"
+        [(ngModel)]="importRequest.page"
+        [maxSize]="5"
+        class="pagination-sm"
+        [boundaryLinks]="true"
+        [itemsPerPage]="importRequest.count"
+        [rotate]="false"
+        (pageChanged)="pageChanged($event)"
+        [firstText]="commonLocaleData?.app_first"
+        [previousText]="commonLocaleData?.app_previous"
+        [nextText]="commonLocaleData?.app_next"
+        [lastText]="commonLocaleData?.app_last"
+    ></pagination>
+</div>
+<!-- <ng-template #datepickerTemplate>
+    <div class="datepicker-modal">
+        <div class="modal-body">
+            <app-datepicker-wrapper
+                [inputStartDate]="selectedDateRange?.startDate"
+                [inputEndDate]="selectedDateRange?.endDate"
+                [alwaysShowCalendars]="true"
+                [ranges]="datePickerOptions"
+                [selectedRangeLabel]="selectedRangeLabel"
+                [showCustomRangeLabel]="true"
+                [showClearButton]="false"
+                [showCancel]="true"
+                [linkedCalendars]="true"
+                [showDropdowns]="true"
+                [locale]="{ applyLabel: commonLocaleData?.app_done }"
+                (rangeClicked)="dateSelectedCallback($event)"
+                (datesUpdated)="dateSelectedCallback($event)"
+                [keepCalendarOpeningWithRange]="false"
+                [showRangeLabelOnInput]="false"
+                [dateFieldPosition]="dateFieldPosition"
+            ></app-datepicker-wrapper>
+        </div>
+    </div>
+</ng-template> -->

@@ -90,20 +90,20 @@ export class AllGiddhItemComponent implements OnInit, OnDestroy {
                 return;
             }
             if (event.shiftKey) {
-                if (items.length) {
-                    if (items[this.menuIndex].items[this.itemIndex - 1]) {
+                if (items?.length) {
+                    if (items[this.menuIndex]?.items[this.itemIndex - 1]) {
                         this.itemIndex -= 1;
                     } else {
                         this.menuIndex = items[this.menuIndex - 1] ? this.menuIndex - 1 : 0;
-                        this.itemIndex = items[this.menuIndex].items.length - 1;
+                        this.itemIndex = items[this.menuIndex].items?.length - 1;
                     }
                 } else {
                     this.menuIndex = 0;
                     this.itemIndex = 0;
                 }
             } else {
-                if (items.length) {
-                    if (items[this.menuIndex].items[this.itemIndex + 1]) {
+                if (items?.length) {
+                    if (items[this.menuIndex]?.items[this.itemIndex + 1]) {
                         this.itemIndex += 1;
                     } else {
                         this.menuIndex = items[this.menuIndex + 1] ? this.menuIndex + 1 : 0;

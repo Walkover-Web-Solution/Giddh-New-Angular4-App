@@ -1,19 +1,20 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnDestroy, Output, ViewChild } from '@angular/core';
-import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { fromEvent, ReplaySubject, Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map, takeUntil } from 'rxjs/operators';
-import { SalesAddBulkStockItems, VoucherTypeEnum } from '../../../models/api-models/Sales';
-import { ToasterService } from '../../../services/toaster.service';
-import { SearchService } from '../../../services/search.service';
+import { SalesAddBulkStockItems, VoucherTypeEnum } from '../../models/api-models/Sales';
+import { SearchService } from '../../services/search.service';
+import { ToasterService } from '../../services/toaster.service';
+import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
+
 
 @Component({
-    selector: 'proforma-add-bulk-items-component',
-    templateUrl: './proforma-add-bulk-items.component.html',
-    styleUrls: [`./proforma-add-bulk-items.component.scss`],
+    selector: 'voucher-add-bulk-items-component',
+    templateUrl: './voucher-add-bulk-items.component.html',
+    styleUrls: [`./voucher-add-bulk-items.component.scss`],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class ProformaAddBulkItemsComponent implements OnDestroy {
+export class VoucherAddBulkItemsComponent implements OnDestroy {
     @Input() public invoiceType: string;
 
     @ViewChild('searchElement', { static: false }) public searchElement: ElementRef;
@@ -49,7 +50,7 @@ export class ProformaAddBulkItemsComponent implements OnDestroy {
      *
      * @param {string} query Search query
      * @param {number} [page=1] Page to request
-     * @memberof ProformaAddBulkItemsComponent
+     * @memberof VoucherAddBulkItemsComponent
      */
     public onSearchQueryChanged(query: string, page: number = 1): void {
         this.searchResultsPaginationData.query = query;
@@ -69,7 +70,7 @@ export class ProformaAddBulkItemsComponent implements OnDestroy {
      *
      * @param {*} requestObject Request payload for search API
      * @returns {Observable<any>} Observable to carry out further operations
-     * @memberof ProformaAddBulkItemsComponent
+     * @memberof VoucherAddBulkItemsComponent
      */
     public searchAccount(requestObject: any): Observable<any> {
         return this.searchService.searchAccount(requestObject);
@@ -80,7 +81,7 @@ export class ProformaAddBulkItemsComponent implements OnDestroy {
      *
      * @param {*} results Search results
      * @param {number} [currentPage=1] Current page requested
-     * @memberof ProformaAddBulkItemsComponent
+     * @memberof VoucherAddBulkItemsComponent
      */
     public prepareSearchLists(results: any, currentPage: number = 1): void {
         const searchResults = results.map(result => {
@@ -108,7 +109,7 @@ export class ProformaAddBulkItemsComponent implements OnDestroy {
      * @param {string} query Search Query
      * @param {number} [page=1]
      * @returns {*}
-     * @memberof ProformaAddBulkItemsComponent
+     * @memberof VoucherAddBulkItemsComponent
      */
     public getSearchRequestObject(query: string, page: number = 1): any {
         let group = (this.invoiceType === VoucherTypeEnum.debitNote || this.invoiceType === VoucherTypeEnum.purchase) ?
@@ -126,7 +127,7 @@ export class ProformaAddBulkItemsComponent implements OnDestroy {
         let arr: SalesAddBulkStockItems[] = [];
 
         data
-            .filter(f => f.additional && f.additional.stock)
+            ?.filter(f => f.additional && f.additional.stock)
             .forEach(option => {
                 let item = new SalesAddBulkStockItems();
                 item.name = option.label;
@@ -202,7 +203,7 @@ export class ProformaAddBulkItemsComponent implements OnDestroy {
     /**
      * Scroll to bottom handler
      *
-     * @memberof ProformaAddBulkItemsComponent
+     * @memberof VoucherAddBulkItemsComponent
      */
     onScrollEnd(): void {
         if (this.searchResultsPaginationData.page < this.searchResultsPaginationData.totalPages) {
@@ -219,7 +220,7 @@ export class ProformaAddBulkItemsComponent implements OnDestroy {
      * Callback for translation response complete
      *
      * @param {*} event
-     * @memberof ProformaAddBulkItemsComponent
+     * @memberof VoucherAddBulkItemsComponent
      */
     public translationComplete(event: any): void {
         if (event) {

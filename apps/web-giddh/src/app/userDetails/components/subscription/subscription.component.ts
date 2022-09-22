@@ -198,23 +198,13 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
                     this.menuTwoWidth = 14;
                 }
         });
-
-        /* RAZORPAY */
-        if (window['Razorpay'] === undefined) {
-            let scriptTag = document.createElement('script');
-            scriptTag.src = 'https://checkout.razorpay.com/v1/checkout.js';
-            scriptTag.type = 'text/javascript';
-            scriptTag.defer = true;
-            document.body.appendChild(scriptTag);
-        }
-        /* RAZORPAY */
     }
 
     public ngOnChanges(): void {
         this.translationComplete();
     }
     /**
-     * This function will use for get subscribed companies 
+     * This function will use for get subscribed companies
      *
      * @memberof SubscriptionComponent
      */
@@ -289,14 +279,14 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
         this.subscriptions$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             let subscriptions = [];
             this.subscriptions = [];
-            
+
             if (response?.length) {
                 response.forEach(subscription => {
                     let subscriptionDetails = cloneDeep(subscription);
 
                     subscriptionDetails.remainingDays = Number(dayjs(subscriptionDetails.expiry, GIDDH_DATE_FORMAT).diff(dayjs(), 'day'));
-                    subscriptionDetails.startedAt = dayjs(subscriptionDetails.startedAt, GIDDH_DATE_FORMAT).format("D MMM, y");
-                    subscriptionDetails.expiry = dayjs(subscriptionDetails.expiry, GIDDH_DATE_FORMAT).format("D MMM, y");
+                    subscriptionDetails.startedAt = dayjs(subscriptionDetails.startedAt, GIDDH_DATE_FORMAT).format("D MMM, YYYY");
+                    subscriptionDetails.expiry = dayjs(subscriptionDetails.expiry, GIDDH_DATE_FORMAT).format("D MMM, YYYY");
 
                     let flag = true;
                     if (
@@ -412,7 +402,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     /**
-     * This function will use for patch profile 
+     * This function will use for patch profile
      *
      * @param {*} obj
      * @memberof SubscriptionComponent

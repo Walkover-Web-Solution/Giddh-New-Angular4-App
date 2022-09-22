@@ -234,7 +234,7 @@ export class AddressSettingsComponent implements OnInit, OnDestroy {
      * @memberof AddressSettingsComponent
      */
     public updateAddress(form: any): void {
-        form.formValue['uniqueName'] = this.addressToUpdate.uniqueName;
+        form.formValue['uniqueName'] = this.addressToUpdate?.uniqueName;
         this.updatedAddress.emit(form);
     }
 

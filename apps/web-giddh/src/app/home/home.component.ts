@@ -27,6 +27,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     public hideallcharts: boolean = false;
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** Holds company unique name */
+    public companyUniqueName: string = "";
 
     constructor(
         private store: Store<AppState>,
@@ -39,11 +41,13 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        
         this.needsToRedirectToLedger$.pipe(take(1)).subscribe(result => {
             if (result) {
                 this.accountService.getFlattenAccounts('', '').pipe(takeUntil(this.destroyed$)).subscribe(data => {
-                    if (data.status === 'success' && data.body.results.length > 0) {
-                        this.router.navigate([`ledger/${data.body.results[0].uniqueName}`]);
+                    if (data.status === 'success' && data.body?.results?.length > 0) {
+                        this.router.navigate([`ledger/${data.body?.results[0]?.uniqueName}`]);
                     }
                 });
             }

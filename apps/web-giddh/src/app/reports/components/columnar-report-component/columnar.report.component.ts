@@ -135,7 +135,7 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
      * @memberof ColumnarReportComponent
      */
     public selectGroup(event: any): void {
-        this.groupUniqueName = event.value;
+        this.groupUniqueName = event?.value;
     }
 
     /**
@@ -152,14 +152,26 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
                 let startDate = dayjs(new Date(this.fromMonth));
                 let monthsCount = dayjs(new Date(this.toMonth)).diff(startDate, 'months');
 
-                monthYear.push(dayjs(startDate.toDate(), GIDDH_DATE_FORMAT).format("MM-YYYY"));
+                monthYear.push(dayjs(startDate.toDate()).format("MM-YYYY"));
 
                 for (let dateLoop = 1; dateLoop <= monthsCount; dateLoop++) {
                     startDate = startDate.add(1, 'month');
-                    monthYear.push(dayjs(startDate.toDate(), GIDDH_DATE_FORMAT).format("MM-YYYY"));
+                    monthYear.push(dayjs(startDate.toDate()).format("MM-YYYY"));
                 }
 
                 this.exportRequest.monthYear = monthYear;
+            } else if (this.fromMonth) {
+                let monthYear = [];
+                let startDate = dayjs(new Date(this.fromMonth));
+                monthYear.push(dayjs(startDate.toDate()).format("MM-YYYY"));
+                this.exportRequest.monthYear = monthYear;
+            } else if (this.toMonth) {
+                let monthYear = [];
+                let startDate = dayjs(new Date(this.toMonth));
+                monthYear.push(dayjs(startDate.toDate()).format("MM-YYYY"));
+                this.exportRequest.monthYear = monthYear;
+            } else {
+                this.exportRequest.monthYear = [];
             }
             if (isShowReport) {
                 this.columnarReportResponse = null;
@@ -225,13 +237,13 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
             this.fromMonthNames = [];
             this.toMonthNames = [];
 
-            this.fromMonthNames.push({ label: dayjs(startDate.toDate(), GIDDH_DATE_FORMAT).format("MMM-YYYY"), value: startDate.toDate() });
-            this.toMonthNames.push({ label: dayjs(startDate.toDate(), GIDDH_DATE_FORMAT).format("MMM-YYYY"), value: startDate.toDate() });
+            this.fromMonthNames.push({ label: dayjs(startDate.toDate()).format("MMM-YYYY"), value: startDate.toDate() });
+            this.toMonthNames.push({ label: dayjs(startDate.toDate()).format("MMM-YYYY"), value: startDate.toDate() });
 
             for (let dateLoop = 1; dateLoop <= monthsCount; dateLoop++) {
                 startDate = startDate.add(1, 'month');
-                this.fromMonthNames.push({ label: dayjs(startDate.toDate(), GIDDH_DATE_FORMAT).format("MMM-YYYY"), value: startDate.toDate() });
-                this.toMonthNames.push({ label: dayjs(startDate.toDate(), GIDDH_DATE_FORMAT).format("MMM-YYYY"), value: startDate.toDate() });
+                this.fromMonthNames.push({ label: dayjs(startDate.toDate()).format("MMM-YYYY"), value: startDate.toDate() });
+                this.toMonthNames.push({ label: dayjs(startDate.toDate()).format("MMM-YYYY"), value: startDate.toDate() });
             }
         }
     }
@@ -257,18 +269,33 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
      * @memberof ColumnarReportComponent
      */
     public selectFromMonth(event): void {
-        if (event.value) {
+        if (event?.value) {
             let fromMonth = dayjs(new Date(this.financialYearSelected.financialYearStarts.split("-").reverse().join("-")));
             let toMonth = dayjs(new Date(this.financialYearSelected.financialYearEnds.split("-").reverse().join("-")));
             let startDate = fromMonth;
             let monthsCount = toMonth.diff(fromMonth, 'months');
             this.toMonthNames = [];
 
-            this.toMonthNames.push({ label: dayjs(startDate.toDate(), GIDDH_DATE_FORMAT).format("MMM-YYYY"), value: startDate.toDate(), disabled: (new Date(event.value) > startDate.toDate()) });
+            this.toMonthNames.push({ label: dayjs(startDate.toDate()).format("MMM-YYYY"), value: startDate.toDate(), disabled: (new Date(event.value) > startDate.toDate()) });
 
             for (let dateLoop = 1; dateLoop <= monthsCount; dateLoop++) {
                 startDate = startDate.add(1, 'month');
-                this.toMonthNames.push({ label: dayjs(startDate.toDate(), GIDDH_DATE_FORMAT).format("MMM-YYYY"), value: startDate.toDate(), disabled: (new Date(event.value) > startDate.toDate()) });
+                this.toMonthNames.push({ label: dayjs(startDate.toDate()).format("MMM-YYYY"), value: startDate.toDate(), disabled: (new Date(event.value) > startDate.toDate()) });
+            }
+        } else {
+            this.fromMonth = "";
+
+            let fromMonth = dayjs(new Date(this.financialYearSelected.financialYearStarts.split("-").reverse().join("-")));
+            let toMonth = dayjs(new Date(this.financialYearSelected.financialYearEnds.split("-").reverse().join("-")));
+            let startDate = fromMonth;
+            let monthsCount = toMonth.diff(fromMonth, 'months');
+            this.toMonthNames = [];
+
+            this.toMonthNames.push({ label: dayjs(startDate.toDate()).format("MMM-YYYY"), value: startDate.toDate() });
+
+            for (let dateLoop = 1; dateLoop <= monthsCount; dateLoop++) {
+                startDate = startDate.add(1, 'month');
+                this.toMonthNames.push({ label: dayjs(startDate.toDate()).format("MMM-YYYY"), value: startDate.toDate() });
             }
         }
     }
@@ -280,18 +307,33 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
      * @memberof ColumnarReportComponent
      */
     public selectToMonth(event): void {
-        if (event.value) {
+        if (event?.value) {
             let fromMonth = dayjs(new Date(this.financialYearSelected.financialYearStarts.split("-").reverse().join("-")));
             let toMonth = dayjs(new Date(this.financialYearSelected.financialYearEnds.split("-").reverse().join("-")));
             let startDate = fromMonth;
             let monthsCount = toMonth.diff(fromMonth, 'months');
             this.fromMonthNames = [];
 
-            this.fromMonthNames.push({ label: dayjs(startDate.toDate(), GIDDH_DATE_FORMAT).format("MMM-YYYY"), value: startDate.toDate(), disabled: (new Date(event.value) < startDate.toDate()) });
+            this.fromMonthNames.push({ label: dayjs(startDate.toDate()).format("MMM-YYYY"), value: startDate.toDate(), disabled: (new Date(event.value) < startDate.toDate()) });
 
             for (let dateLoop = 1; dateLoop <= monthsCount; dateLoop++) {
                 startDate = startDate.add(1, 'month');
-                this.fromMonthNames.push({ label: dayjs(startDate.toDate(), GIDDH_DATE_FORMAT).format("MMM-YYYY"), value: startDate.toDate(), disabled: (new Date(event.value) < startDate.toDate()) });
+                this.fromMonthNames.push({ label: dayjs(startDate.toDate()).format("MMM-YYYY"), value: startDate.toDate(), disabled: (new Date(event.value) < startDate.toDate()) });
+            }
+        } else {
+            this.toMonth = "";
+
+            let fromMonth = dayjs(new Date(this.financialYearSelected.financialYearStarts.split("-").reverse().join("-")));
+            let toMonth = dayjs(new Date(this.financialYearSelected.financialYearEnds.split("-").reverse().join("-")));
+            let startDate = fromMonth;
+            let monthsCount = toMonth.diff(fromMonth, 'months');
+            this.fromMonthNames = [];
+
+            this.fromMonthNames.push({ label: dayjs(startDate.toDate()).format("MMM-YYYY"), value: startDate.toDate() });
+
+            for (let dateLoop = 1; dateLoop <= monthsCount; dateLoop++) {
+                startDate = startDate.add(1, 'month');
+                this.fromMonthNames.push({ label: dayjs(startDate.toDate()).format("MMM-YYYY"), value: startDate.toDate() });
             }
         }
     }
@@ -304,11 +346,11 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
     public selectActiveFinancialYear(): void {
         if (this.selectYear && this.selectYear.length > 0 && this.activeFinancialYear) {
             this.selectYear.forEach(key => {
-                if (key.value.uniqueName === this.activeFinancialYear) {
+                if (key?.value?.uniqueName === this.activeFinancialYear) {
                     this.selectFinancialYear(key);
 
-                    let financialYearStarts = dayjs(key.value.financialYearStarts, GIDDH_DATE_FORMAT).format("MMM-YYYY");
-                    let financialYearEnds = dayjs(key.value.financialYearEnds, GIDDH_DATE_FORMAT).format("MMM-YYYY");
+                    let financialYearStarts = dayjs(key?.value.financialYearStarts, GIDDH_DATE_FORMAT).format("MMM-YYYY");
+                    let financialYearEnds = dayjs(key?.value.financialYearEnds, GIDDH_DATE_FORMAT).format("MMM-YYYY");
                     this.activeFinancialYearLabel = financialYearStarts + " - " + financialYearEnds;
                 }
             });

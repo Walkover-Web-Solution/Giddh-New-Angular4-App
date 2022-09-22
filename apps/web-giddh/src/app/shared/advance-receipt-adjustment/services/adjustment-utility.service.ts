@@ -237,4 +237,52 @@ export class AdjustmentUtilityService {
 
         return request;
     }
+
+    /**
+     * Returns the customer name/uniquename
+     *
+     * @param {*} data
+     * @returns {*}
+     * @memberof AdjustmentUtilityService
+     */
+    public getAdjustedCustomer(data: any): any {
+        const debtorCreditorParentGroups = ['sundrydebtors', 'sundrycreditors'];
+
+        if (data?.particularAccount?.parentGroups?.length > 0) {
+            if (data?.particularAccount?.parentGroups[0].uniqueName) {
+                data.particularAccount.parentGroups = data?.particularAccount?.parentGroups?.map(group => group.uniqueName);
+            }
+        }
+
+        let isDebtorCreditorLedger = false;
+
+        data?.ledgerAccount?.parentGroups?.forEach(group => {
+            if (debtorCreditorParentGroups.includes(group?.uniqueName)) {
+                isDebtorCreditorLedger = true;
+            }
+        });
+
+        let isDebtorCreditorAccount = false;
+
+        data?.particularAccount?.parentGroups?.forEach(groupUniqueName => {
+            if (debtorCreditorParentGroups.includes(groupUniqueName)) {
+                isDebtorCreditorAccount = true;
+            }
+        });
+
+        let request = {
+            customerName: '',
+            customerUniquename: ''
+        };
+
+        if (isDebtorCreditorLedger) {
+            request.customerName = data?.ledgerAccount?.name;
+            request.customerUniquename = data?.ledgerAccount?.uniqueName;
+        } else if (isDebtorCreditorAccount) {
+            request.customerName = data?.particularAccount?.name;
+            request.customerUniquename = data?.particularAccount?.uniqueName;
+        }
+
+        return request;
+    }
 }

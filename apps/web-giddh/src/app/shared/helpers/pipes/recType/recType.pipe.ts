@@ -8,11 +8,15 @@ import { ClosingBalance } from '../../../../models/api-models/Search';
 
 export class RecTypePipe implements PipeTransform {
     public transform(value: ClosingBalance) {
-        switch (value?.type) {
-            case 'DEBIT':
-                return ' Dr.';
-            case 'CREDIT':
-                return ' Cr.';
+        if (!value || !value?.amount) {
+            return '';
+        } else {
+            switch (value.type) {
+                case 'DEBIT':
+                    return ' Dr.';
+                case 'CREDIT':
+                    return ' Cr.';
+            }
         }
     }
 }

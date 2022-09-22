@@ -24,13 +24,13 @@ export class PurchaseOrderService {
      */
     public getAll(getRequestObject: any, postRequestObject: any): Observable<BaseResponse<any, any>> {
         let url: string = this.config.apiUrl + PURCHASE_ORDER_API.GET_ALL;
-        url = url.replace(':companyUniqueName', getRequestObject.companyUniqueName);
-        url = url.replace(':from', getRequestObject.from);
-        url = url.replace(':to', getRequestObject.to);
-        url = url.replace(':page', getRequestObject.page);
-        url = url.replace(':count', getRequestObject.count);
-        url = url.replace(':sort', getRequestObject.sort);
-        url = url.replace(':sortBy', getRequestObject.sortBy);
+        url = url?.replace(':companyUniqueName', getRequestObject.companyUniqueName);
+        url = url?.replace(':from', getRequestObject.from);
+        url = url?.replace(':to', getRequestObject.to);
+        url = url?.replace(':page', getRequestObject.page);
+        url = url?.replace(':count', getRequestObject.count);
+        url = url?.replace(':sort', getRequestObject.sort);
+        url = url?.replace(':sortBy', getRequestObject.sortBy);
 
         return this.http.post(url, postRequestObject).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e, getRequestObject)));
     }
@@ -45,8 +45,8 @@ export class PurchaseOrderService {
      */
     public create(getRequestObject: any, postRequestObject: any): Observable<BaseResponse<any, any>> {
         let url: string = this.config.apiUrl + PURCHASE_ORDER_API.CREATE;
-        url = url.replace(':companyUniqueName', getRequestObject.companyUniqueName);
-        url = url.replace(':accountUniqueName', encodeURIComponent(getRequestObject.accountUniqueName));
+        url = url?.replace(':companyUniqueName', getRequestObject.companyUniqueName);
+        url = url?.replace(':accountUniqueName', encodeURIComponent(getRequestObject.accountUniqueName));
 
         return this.http.post(url, postRequestObject).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e, getRequestObject)));
     }
@@ -61,8 +61,8 @@ export class PurchaseOrderService {
      */
     public bulkUpdate(getRequestObject: any, postRequestObject: any): Observable<BaseResponse<any, any>> {
         let url: string = this.config.apiUrl + PURCHASE_ORDER_API.BULK_UPDATE;
-        url = url.replace(':companyUniqueName', getRequestObject.companyUniqueName);
-        url = url.replace(':action', getRequestObject.action);
+        url = url?.replace(':companyUniqueName', getRequestObject.companyUniqueName);
+        url = url?.replace(':action', getRequestObject.action);
 
         return this.http.patch(url, postRequestObject).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e, getRequestObject)));
     }
@@ -77,8 +77,8 @@ export class PurchaseOrderService {
      */
     public statusUpdate(getRequestObject: any, postRequestObject: any): Observable<BaseResponse<any, any>> {
         let url: string = this.config.apiUrl + PURCHASE_ORDER_API.STATUS_UPDATE;
-        url = url.replace(':companyUniqueName', getRequestObject.companyUniqueName);
-        url = url.replace(':accountUniqueName', encodeURIComponent(getRequestObject.accountUniqueName));
+        url = url?.replace(':companyUniqueName', getRequestObject.companyUniqueName);
+        url = url?.replace(':accountUniqueName', encodeURIComponent(getRequestObject.accountUniqueName));
 
         return this.http.patch(url, postRequestObject).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e, getRequestObject)));
     }
@@ -92,8 +92,8 @@ export class PurchaseOrderService {
      */
     public delete(getRequestObject: any): Observable<BaseResponse<any, any>> {
         let url: string = this.config.apiUrl + PURCHASE_ORDER_API.DELETE;
-        url = url.replace(':companyUniqueName', getRequestObject.companyUniqueName);
-        url = url.replace(':poUniqueName', getRequestObject.poUniqueName);
+        url = url?.replace(':companyUniqueName', getRequestObject.companyUniqueName);
+        url = url?.replace(':poUniqueName', getRequestObject.poUniqueName);
 
         return this.http.delete(url).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e, getRequestObject)));
     }
@@ -108,9 +108,9 @@ export class PurchaseOrderService {
      */
     public sendEmail(getRequestObject: any, postRequestObject: any): Observable<BaseResponse<any, any>> {
         let url: string = this.config.apiUrl + PURCHASE_ORDER_API.EMAIL;
-        url = url.replace(':companyUniqueName', getRequestObject.companyUniqueName);
-        url = url.replace(':accountUniqueName', encodeURIComponent(getRequestObject.accountUniqueName));
-        url = url.replace(':poUniqueName', getRequestObject.uniqueName);
+        url = url?.replace(':companyUniqueName', getRequestObject.companyUniqueName);
+        url = url?.replace(':accountUniqueName', encodeURIComponent(getRequestObject.accountUniqueName));
+        url = url?.replace(':poUniqueName', getRequestObject.uniqueName);
 
         return this.http.post(url, postRequestObject).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e, getRequestObject)));
     }
@@ -124,8 +124,8 @@ export class PurchaseOrderService {
      */
     public get(getRequestObject: any): Observable<BaseResponse<any, any>> {
         let url: string = this.config.apiUrl + PURCHASE_ORDER_API.GET;
-        url = url.replace(':companyUniqueName', getRequestObject.companyUniqueName);
-        url = url.replace(':poUniqueName', getRequestObject.poUniqueName);
+        url = url?.replace(':companyUniqueName', getRequestObject.companyUniqueName);
+        url = url?.replace(':poUniqueName', getRequestObject.poUniqueName);
 
         return this.http.get(url).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e, getRequestObject)));
     }
@@ -140,8 +140,8 @@ export class PurchaseOrderService {
      */
     public update(getRequestObject: any, postRequestObject: any): Observable<BaseResponse<any, any>> {
         let url: string = this.config.apiUrl + PURCHASE_ORDER_API.UPDATE;
-        url = url.replace(':companyUniqueName', getRequestObject.companyUniqueName);
-        url = url.replace(':accountUniqueName', encodeURIComponent(getRequestObject.accountUniqueName));
+        url = url?.replace(':companyUniqueName', getRequestObject.companyUniqueName);
+        url = url?.replace(':accountUniqueName', encodeURIComponent(getRequestObject.accountUniqueName));
 
         return this.http.put(url, postRequestObject).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e, getRequestObject)));
     }
@@ -155,8 +155,8 @@ export class PurchaseOrderService {
      */
     public getPreview(getRequestObject: any): Observable<BaseResponse<any, any>> {
         let url: string = this.config.apiUrl + PURCHASE_ORDER_API.GET_PREVIEW;
-        url = url.replace(':companyUniqueName', getRequestObject.companyUniqueName);
-        url = url.replace(':poUniqueName', getRequestObject.poUniqueName);
+        url = url?.replace(':companyUniqueName', getRequestObject.companyUniqueName);
+        url = url?.replace(':poUniqueName', getRequestObject.poUniqueName);
 
         return this.http.get(url).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e, getRequestObject)));
     }
@@ -171,7 +171,7 @@ export class PurchaseOrderService {
      */
     public updateSettingsEmail(getRequestObject: any, postRequestObject: any): Observable<BaseResponse<any, any>> {
         let url: string = this.config.apiUrl + PURCHASE_ORDER_API.UPDATE_SETTINGS_EMAIL;
-        url = url.replace(':companyUniqueName', getRequestObject.companyUniqueName);
+        url = url?.replace(':companyUniqueName', getRequestObject.companyUniqueName);
 
         return this.http.put(url, postRequestObject).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e, getRequestObject)));
     }
@@ -186,10 +186,10 @@ export class PurchaseOrderService {
      */
     public getAllVersions(getRequestObject: any, postRequestObject: any): Observable<BaseResponse<any, any>> {
         let url: string = this.config.apiUrl + PURCHASE_ORDER_API.GET_ALL_VERSIONS;
-        url = url.replace(':companyUniqueName', getRequestObject.companyUniqueName);
-        url = url.replace(':accountUniqueName', encodeURIComponent(getRequestObject.accountUniqueName));
-        url = url.replace(':page', getRequestObject.page);
-        url = url.replace(':count', getRequestObject.count);
+        url = url?.replace(':companyUniqueName', getRequestObject.companyUniqueName);
+        url = url?.replace(':accountUniqueName', encodeURIComponent(getRequestObject.accountUniqueName));
+        url = url?.replace(':page', getRequestObject.page);
+        url = url?.replace(':count', getRequestObject.count);
 
         return this.http.post(url, postRequestObject).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e, getRequestObject)));
     }
@@ -203,9 +203,9 @@ export class PurchaseOrderService {
      */
     public getPdf(getRequestObject: any): Observable<BaseResponse<any, any>> {
         let url: string = this.config.apiUrl + PURCHASE_ORDER_API.GET_PDF;
-        url = url.replace(':companyUniqueName', getRequestObject.companyUniqueName);
-        url = url.replace(':accountUniqueName', encodeURIComponent(getRequestObject.accountUniqueName));
-        url = url.replace(':poUniqueName', getRequestObject.poUniqueName);
+        url = url?.replace(':companyUniqueName', getRequestObject.companyUniqueName);
+        url = url?.replace(':accountUniqueName', encodeURIComponent(getRequestObject.accountUniqueName));
+        url = url?.replace(':poUniqueName', getRequestObject.poUniqueName);
 
         return this.http.get(url).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e, getRequestObject)));
     }
@@ -220,14 +220,14 @@ export class PurchaseOrderService {
      */
     public getAllPendingPo(getRequestObject: any, postRequestObject: any): Observable<BaseResponse<any, any>> {
         let url: string = this.config.apiUrl + PURCHASE_ORDER_API.GET_ALL_PENDING;
-        url = url.replace(':companyUniqueName', getRequestObject.companyUniqueName);
-        url = url.replace(':accountUniqueName', encodeURIComponent(getRequestObject.accountUniqueName));
-        url = url.replace(':from', getRequestObject.from);
-        url = url.replace(':to', getRequestObject.to);
-        url = url.replace(':page', getRequestObject.page);
-        url = url.replace(':count', getRequestObject.count);
-        url = url.replace(':sort', getRequestObject.sort);
-        url = url.replace(':sortBy', getRequestObject.sortBy);
+        url = url?.replace(':companyUniqueName', getRequestObject.companyUniqueName);
+        url = url?.replace(':accountUniqueName', encodeURIComponent(getRequestObject.accountUniqueName));
+        url = url?.replace(':from', getRequestObject.from);
+        url = url?.replace(':to', getRequestObject.to);
+        url = url?.replace(':page', getRequestObject.page);
+        url = url?.replace(':count', getRequestObject.count);
+        url = url?.replace(':sort', getRequestObject.sort);
+        url = url?.replace(':sortBy', getRequestObject.sortBy);
 
         return this.http.post(url, postRequestObject).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e, getRequestObject)));
     }
@@ -239,7 +239,7 @@ export class PurchaseOrderService {
      * @memberof PurchaseOrderService
      */
     public verifyEmail(params: any): Observable<BaseResponse<any, string>> {
-        let url = this.config.apiUrl + PURCHASE_ORDER_API.VERIFY_EMAIL.replace(':companyUniqueName', params.companyUniqueName).replace(':branchUniqueName', params.branchUniqueName).replace(':emailAddress', params.emailAddress).replace(':scope', params.scope);
+        let url = this.config.apiUrl + PURCHASE_ORDER_API.VERIFY_EMAIL?.replace(':companyUniqueName', params.companyUniqueName)?.replace(':branchUniqueName', params.branchUniqueName)?.replace(':emailAddress', params.emailAddress)?.replace(':scope', params.scope);
         return this.http.get(url).pipe(
             map((res) => {
                 let data: BaseResponse<any, string> = res;

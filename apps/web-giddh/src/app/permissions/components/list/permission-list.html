@@ -5,7 +5,7 @@
     (commonLocaleData)="commonLocaleData = $event"
 >
     <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
-    <div class="container-fluid clearfix" *ngIf="allRoles.length > 0">
+    <div class="container-fluid clearfix" *ngIf="allRoles?.length > 0">
         <a
             href="javascript:void(0)"
             *ngIf="showBackButton"

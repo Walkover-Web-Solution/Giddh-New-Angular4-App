@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { fromEvent as observableFromEvent, Observable, ReplaySubject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map, takeUntil } from 'rxjs/operators';
@@ -30,18 +30,20 @@ export class InventorySidebarComponent implements OnInit, OnDestroy, AfterViewIn
     @ViewChild('search', { static: true }) public search: ElementRef;
     @ViewChild('sidebar', { static: true }) public sidebar: ElementRef;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Holds Current page count for stocks api */
+    public currentPage: number = 1;
 
     /**
      * TypeScript public modifiers
      */
-    constructor(private store: Store<AppState>, private sidebarAction: SidebarAction,
+    constructor(
+        private store: Store<AppState>,
+        private sidebarAction: SidebarAction,
         private inventoryService: InventoryService,
         private invViewService: InvViewService,
-        private _toasty: ToasterService,
-        private generalService: GeneralService) {
-        this.store.pipe(select(inventoryStore => inventoryStore.inventory.groupsWithStocks), takeUntil(this.destroyed$)).subscribe((data: any) => {
-            this.stockGroupData = data;
-        });
+        private toasty: ToasterService,
+        private generalService: GeneralService,
+        private changeDetectionRef: ChangeDetectorRef) {
         this.sidebarRect = window.screen.height;
     }
 
@@ -51,12 +53,19 @@ export class InventorySidebarComponent implements OnInit, OnDestroy, AfterViewIn
     }
 
     public ngOnInit() {
+        this.store.pipe(select(inventoryStore => inventoryStore.inventory.groupsWithStocks), takeUntil(this.destroyed$)).subscribe((data: any) => {
+            if (data) {
+                this.stockGroupData = data;
+                this.changeDetectionRef.detectChanges();
+            }
+        });
+
         this.invViewService.getActiveDate().pipe(takeUntil(this.destroyed$)).subscribe(v => {
             this.fromDate = v.from;
             this.toDate = v.to;
         });
 
-        this.store.dispatch(this.sidebarAction.GetGroupsWithStocksHierarchyMin());
+        this.getStocks('', 1);
     }
 
     public ngAfterViewInit() {
@@ -73,8 +82,10 @@ export class InventorySidebarComponent implements OnInit, OnDestroy, AfterViewIn
             .subscribe((val: string) => {
                 if (val) {
                     this.isSearching = true;
+                } else {
+                    this.isSearching = false;
                 }
-                this.store.dispatch(this.sidebarAction.SearchGroupsWithStocks(val));
+                this.getStocks(val, 1);
             });
     }
 
@@ -99,9 +110,9 @@ export class InventorySidebarComponent implements OnInit, OnDestroy, AfterViewIn
         this.inventoryService.downloadAllInventoryReports(obj).pipe(takeUntil(this.destroyed$))
             .subscribe(res => {
                 if (res.status === 'success') {
-                    this._toasty.infoToast(res.body);
+                    this.toasty.infoToast(res.body);
                 } else {
-                    this._toasty.errorToast(res.message);
+                    this.toasty.errorToast(res.message);
                 }
             });
     }
@@ -114,5 +125,44 @@ export class InventorySidebarComponent implements OnInit, OnDestroy, AfterViewIn
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+    }
+
+    /**
+     * Get List of stocks
+     *
+     * @private
+     * @param {string} [q]
+     * @param {number} [page=1]
+     * @memberof InventorySidebarComponent
+     */
+    private getStocks(q?: string, page: number = 1): void {
+        if (page === 1) {
+            this.stockGroupData = [];
+        }
+        this.currentPage = page;
+        if (!this.isSearching) {
+            this.store.dispatch(this.sidebarAction.GetGroupsWithStocksHierarchyMin('', page, 30));
+        } else {
+            this.store.dispatch(this.sidebarAction.SearchGroupsWithStocks(q, page, 30));
+        }
+    }
+
+    /**
+     * Load More stocks
+     *
+     * @memberof InventorySidebarComponent
+     */
+    public loadMore(): void {
+        let getStocksInProgress;
+        this.store.pipe(select(state => state.inventory.getStocksInProgress)).subscribe(response => getStocksInProgress = response);
+        if (!getStocksInProgress) {
+            let stocksTotalPages;
+            this.store.pipe(select(state => state.inventory.stocksTotalPages)).subscribe(response => stocksTotalPages = response);
+
+            if (this.currentPage < stocksTotalPages) {
+                this.currentPage = this.currentPage + 1;
+                this.getStocks(this.search?.nativeElement?.value, this.currentPage);
+            }
+        }
     }
 }

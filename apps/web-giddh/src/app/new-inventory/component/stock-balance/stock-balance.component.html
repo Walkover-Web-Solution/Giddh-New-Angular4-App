@@ -20,10 +20,10 @@
                     >
                         <mat-option
                             (click)="
-                                selectWarehouse(warehouse.uniqueName); updateSelectedWarehouse(warehouse.uniqueName)
+                                selectWarehouse(warehouse?.uniqueName); updateSelectedWarehouse(warehouse?.uniqueName)
                             "
                             *ngFor="let warehouse of warehouses"
-                            [value]="warehouse.uniqueName"
+                            [value]="warehouse?.uniqueName"
                         >
                             {{ warehouse.name ?? "-" }}
                         </mat-option>
@@ -271,7 +271,7 @@
                     </div>
                 </div>
             </div>
-            <div class="no-data-found" *ngIf="stocksList.length <= 0">
+            <div class="no-data-found" *ngIf="stocksList?.length <= 0">
                 <img src="{{ imgPath }}search-data-not-found.svg" /><br />
                 No Data Found
             </div>

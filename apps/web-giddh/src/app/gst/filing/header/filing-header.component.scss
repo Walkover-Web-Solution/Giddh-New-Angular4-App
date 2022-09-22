@@ -1,7 +1,12 @@
 .icon-download {
     font-weight: 600;
 }
-
+.error-button {
+    margin-right: 20px !important;
+}
+.datepicker-header {
+    display: contents;
+}
 .dropdown-menu > li > a:hover {
     color: var(--color-blue);
     background: var(--color-dark-fog);
@@ -30,6 +35,14 @@
 .head-font-weight {
     font-weight: 500 !important;
 }
+.month-picker {
+    li {
+        a:hover {
+            background-color: transparent !important;
+            border: none !important;
+        }
+    }
+}
 @media (max-width: 991px) {
     .list-filter {
         height: auto;
@@ -48,6 +61,9 @@
             }
         }
     }
+}
+.return-sel {
+    font-size: 15px !important;
 }
 @media screen and (max-width: 575px) {
     .btn-wrapper-filling-header {

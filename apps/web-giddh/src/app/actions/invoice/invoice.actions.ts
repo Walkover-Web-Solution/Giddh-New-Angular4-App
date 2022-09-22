@@ -126,7 +126,7 @@ export class InvoiceActions {
                 } else {
                     if (typeof data.body === 'string') {
                         this._toasty.successToast(data.body);
-                    } else if (_.isArray(data.body) && data.body.length > 0) {
+                    } else if (_.isArray(data.body) && data.body?.length > 0) {
                         _.forEach(data.body, (item: IBulkInvoiceGenerationFalingError) => {
                             this._toasty.warningToast(item.reason);
                         });
@@ -371,10 +371,10 @@ export class InvoiceActions {
                 } else {
                     let type = 'pdf';
                     let req = data.queryString.dataToSend;
-                    if (req.typeOfInvoice.length > 1) {
+                    if (req?.typeOfInvoice?.length > 1) {
                         type = 'zip';
                     }
-                    let fileName = req.voucherNumber[0];
+                    let fileName = req?.voucherNumber[0];
                     this.downloadFile(data.body, type, fileName);
                 }
                 return { type: 'EmptyAction' };

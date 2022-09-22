@@ -64,6 +64,7 @@ import { ThermalService } from "./thermal.service";
 import { PrinterFormatService } from "./printer.format.service";
 import { ActivityLogsService } from "./activity-logs.service";
 import { DownloadsService } from "./downloads.service";
+import { ImportsService } from "./imports.service";
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -139,7 +140,8 @@ export class ServiceModule {
                 CustomFieldsService,
                 ThermalService,
                 PrinterFormatService,
-                DownloadsService
+                DownloadsService,
+                ImportsService
             ]
         };
     }

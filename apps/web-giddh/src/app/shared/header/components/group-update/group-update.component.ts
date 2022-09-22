@@ -21,7 +21,6 @@ import { TaxControlComponent } from '../../../../theme/tax-control/tax-control.c
 import { ApplyDiscountRequestV2 } from 'apps/web-giddh/src/app/models/api-models/ApplyDiscount';
 import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
 import { API_COUNT_LIMIT, TCS_TDS_TAXES_TYPES } from 'apps/web-giddh/src/app/app.constant';
-import { SettingsDiscountService } from 'apps/web-giddh/src/app/services/settings.discount.service';
 
 @Component({
     selector: 'group-update',
@@ -39,6 +38,8 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     @Input() public blankLedger: BlankLedgerVM;
     @Input() public currentTxn: TransactionVM = null;
     @Input() public needToReCalculate: BehaviorSubject<boolean>;
+    /** Stores list of discount */
+    @Input() public discountList: any[] = [];
     public isAmountFirst: boolean = false;
     public isTotalFirts: boolean = false;
     @ViewChild('discount', { static: true }) public discountControl: LedgerDiscountComponent;
@@ -68,8 +69,6 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     public isDebtorCreditorGroups: boolean = false;
     /** To check discount box show/hide */
     public showDiscount: boolean = false;
-    /** Stores list of discount */
-    public discountList: any[] = [];
     /** Selected discount list */
     public selectedDiscounts: any[] = [];
     /** To check applied taxes modified  */
@@ -94,8 +93,6 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     };
     /** Stores the value of groups */
     public searchedGroups: IOption[];
-    /** True if we need to show discount field */
-    public showDiscountField: boolean = false;
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     constructor(
@@ -104,8 +101,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
         private groupWithAccountsAction: GroupWithAccountsAction,
         private companyActions: CompanyActions,
         private accountsAction: AccountsAction,
-        private groupService: GroupService,
-        private settingsDiscountService: SettingsDiscountService
+        private groupService: GroupService
     ) {
         this.activeGroup$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroup), takeUntil(this.destroyed$));
         this.activeGroupUniqueName$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroupUniqueName), takeUntil(this.destroyed$));
@@ -174,7 +170,6 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
         setTimeout(() => {
             this.autoFocus?.nativeElement.focus();
         }, 50);
-        this.getDiscountList();
         combineLatest([
             this.store.pipe(select((state: AppState) => state.groupwithaccounts.activeGroupTaxHierarchy)),
             this.store.pipe(select((state: AppState) => state.groupwithaccounts.activeGroup)),
@@ -426,7 +421,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     public updateGroup() {
         let activeGroupUniqueName: string;
         let uniqueName = this.groupDetailForm.get('uniqueName');
-        uniqueName?.patchValue(uniqueName.value.replace(/ /g, '').toLowerCase());
+        uniqueName?.patchValue(uniqueName.value?.replace(/ /g, '').toLowerCase());
 
         this.activeGroupUniqueName$.pipe(take(1)).subscribe(a => activeGroupUniqueName = a);
         this.store.dispatch(this.groupWithAccountsAction.updateGroup(this.groupDetailForm.value, activeGroupUniqueName));
@@ -513,9 +508,9 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
             isTaxableGroup = (activeGroup.uniqueName === 'sundrydebtors' || activeGroup.uniqueName === 'sundrycreditors') || activeGroup.parentGroups.some(groupName => groupName.uniqueName === 'sundrydebtors' || groupName.uniqueName === 'sundrycreditors');
         }
         if (returnIndividualStatus) {
-            if (activeGroup.uniqueName === 'sundrydebtors' || activeGroup.parentGroups.some(groupName => groupName.uniqueName === 'sundrydebtors')) {
+            if (activeGroup?.uniqueName === 'sundrydebtors' || activeGroup?.parentGroups?.some(groupName => groupName?.uniqueName === 'sundrydebtors')) {
                 return {isDebtor: true};
-            } else if (activeGroup.uniqueName === 'sundrycreditors' || activeGroup.parentGroups.some(groupName => groupName.uniqueName === 'sundrycreditors')) {
+            } else if (activeGroup?.uniqueName === 'sundrycreditors' || activeGroup?.parentGroups?.some(groupName => groupName?.uniqueName === 'sundrycreditors')) {
                 return {isCreditor: true};
             }
         }
@@ -539,28 +534,6 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
             assignDiscountObject.isAccount = false;
             this.store.dispatch(this.accountsAction.applyAccountDiscountV2([assignDiscountObject]));
         }
-    }
-
-    /**
-     * To get discount list
-     *
-     * @memberof GroupUpdateComponent
-     */
-    public getDiscountList(): void {
-        this.showDiscountField = false;
-        this.settingsDiscountService.GetDiscounts().pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response?.status === "success" && response?.body?.length > 0) {
-                this.discountList = [];
-                Object.keys(response?.body).forEach(key => {
-                    this.discountList.push({
-                        label: response?.body[key]?.name,
-                        value: response?.body[key]?.uniqueName,
-                        isSelected: false
-                    });
-                });
-                this.showDiscountField = true;
-            }
-        });
     }
 
     /**

@@ -97,7 +97,7 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
                     value: this.activeCompany ? this.activeCompany.uniqueName : '',
                     isCompany: true
                 });
-                if (!this.currentBranch || !this.currentBranch.uniqueName) {
+                if (!this.currentBranch || !this.currentBranch?.uniqueName) {
                     let currentBranchUniqueName;
                     if (this.currentOrganizationType === OrganizationType.Branch) {
                         currentBranchUniqueName = this.generalService.currentBranchUniqueName;
@@ -117,7 +117,7 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
                         this.currentBranch.alias = selectedBranch.alias;
                     } else {
                         // Company was selected from the branch dropdown
-                        this.currentBranch.name = this.activeCompany.name;
+                        this.currentBranch.name = this.activeCompany?.name;
                     }
                 }
             } else {
@@ -215,8 +215,10 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
         })), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
                 this.selectedCompany = activeCompany;
-                this.financialOptions = activeCompany.financialYears.map(q => {
-                    return { label: q.uniqueName, value: q.uniqueName };
+                this.financialOptions = activeCompany.financialYears.map(response => {
+                    if (response) {
+                        return { label: response.uniqueName, value: response.uniqueName };
+                    }
                 });
                 let selectedFinancialYear, activeFinancialYear, uniqueNameToSearch;
                 if (financialYearChosenInReportUniqueName) {
@@ -227,7 +229,9 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
                 }
                 selectedFinancialYear = this.financialOptions.find(p => p?.value === uniqueNameToSearch);
                 activeFinancialYear = this.selectedCompany.financialYears.find(p => p.uniqueName === uniqueNameToSearch);
-                this.currentActiveFinacialYear = _.cloneDeep(selectedFinancialYear);
+                if (selectedFinancialYear) {
+                    this.currentActiveFinacialYear = _.cloneDeep(selectedFinancialYear);
+                }
                 this.currentBranch.uniqueName = currentBranchUniqueName ? currentBranchUniqueName : (this.currentBranch ? this.currentBranch.uniqueName : "");
                 this.selectedType = currentTimeFilter ? currentTimeFilter.toLowerCase() : this.selectedType;
                 this.activeFinacialYr = activeFinancialYear;
@@ -269,7 +273,7 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
                     this._toaster.errorToast(res.message);
                 } else {
                     this.salesRegisterTotal = new ReportsModel();
-                    this.salesRegisterTotal.particular = this.activeFinacialYr.uniqueName;
+                    this.salesRegisterTotal.particular = this.activeFinacialYr?.uniqueName;
                     this.reportRespone = this.filterReportResp(res.body);
                 }
             });
@@ -293,7 +297,7 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
                     this._toaster.errorToast(res.message);
                 } else {
                     this.salesRegisterTotal = new ReportsModel();
-                    this.salesRegisterTotal.particular = this.activeFinacialYr.uniqueName;
+                    this.salesRegisterTotal.particular = this.activeFinacialYr?.uniqueName;
                     this.reportRespone = this.filterReportResp(res.body);
                 }
             });

@@ -441,9 +441,6 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof PrimarySidebarComponent
      */
     public showManageGroupsModal(search: any = ""): void {
-        if (search) {
-            this.store.dispatch(this.groupWithAction.getGroupWithAccounts());
-        }
         this.store.dispatch(this.groupWithAction.OpenAddAndManageFromOutside(search));
     }
 
@@ -476,7 +473,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
             if (item && item.type === 'MENU') {
                 if (item.additional && item.additional.tab) {
                     if (item.uniqueName.includes('?')) {
-                        item.uniqueName = item.uniqueName.split('?')[0];
+                        item.uniqueName = item.uniqueName?.split('?')[0];
                     }
                     this.router.navigate([item.uniqueName], {
                         queryParams: {

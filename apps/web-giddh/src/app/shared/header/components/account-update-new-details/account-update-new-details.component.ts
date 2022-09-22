@@ -616,7 +616,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                             }
 
                             let invalidTaxName = this.commonLocaleData?.app_invalid_tax_name;
-                            invalidTaxName = invalidTaxName.replace("[TAX_NAME]", this.formFields['taxName'].label);
+                            invalidTaxName = invalidTaxName?.replace("[TAX_NAME]", this.formFields['taxName'].label);
                             this._toaster.errorToast(invalidTaxName);
                         }
                     }
@@ -774,7 +774,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         if (event) {
             this.activeGroupUniqueName = event.value;
             let parent = event.additional;
-            if (parent[1]) {
+            if (parent && parent[1]) {
                 this.isParentDebtorCreditor(parent[1].uniqueName);
             }
             this.isGroupSelected.emit(event);
@@ -1077,8 +1077,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
     public showMoveMergedAccountModal() {
         this.moveMergedAccountModalBody = this.localeData?.move_merged_account_content;
-        this.moveMergedAccountModalBody = this.moveMergedAccountModalBody.replace("[SOURCE_ACCOUNT]", this.setAccountForMove);
-        this.moveMergedAccountModalBody = this.moveMergedAccountModalBody.replace("[DESTINATION_ACCOUNT]", this.selectedAccountForMove);
+        this.moveMergedAccountModalBody = this.moveMergedAccountModalBody?.replace("[SOURCE_ACCOUNT]", this.setAccountForMove);
+        this.moveMergedAccountModalBody = this.moveMergedAccountModalBody?.replace("[DESTINATION_ACCOUNT]", this.selectedAccountForMove);
         this.moveMergedAccountModal.show();
     }
 
@@ -1152,7 +1152,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         if (element.value && type) {
             let trim: string = '';
             // changes account number validation for country india as well ref card : GIDK-1119
-            trim = element.value.replace(/[^a-zA-Z0-9]/g, '');
+            trim = element.value?.replace(/[^a-zA-Z0-9]/g, '');
             let accountBankDetail = this.addAccountForm.get('accountBankDetails') as FormArray;
             for (let control of accountBankDetail.controls) {
                 if (type === 'bankAccountNo') {
@@ -1355,9 +1355,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     } else {
                         this.GSTIN_OR_TRN = '';
                     }
-
                     this.taxNamePlaceholder = this.commonLocaleData?.app_enter_tax_name;
-                    this.taxNamePlaceholder = this.taxNamePlaceholder.replace("[TAX_NAME]", this.formFields['taxName']?.label || '');
+                    this.taxNamePlaceholder = this.taxNamePlaceholder?.replace("[TAX_NAME]", this.formFields['taxName']?.label || '');
                 }
             });
         }
@@ -1628,7 +1627,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             }, 50);
 
             const accountAddress = this.addAccountForm.get('addresses') as FormArray;
-            if (accountAddress.controls.length === 0 || !accountAddress.length) {
+            if (accountAddress.controls?.length === 0 || !accountAddress?.length) {
                 this.addBlankGstForm();
             }
         } else {
@@ -1788,6 +1787,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public closeMaster(): void {
         this.closeAccountModal.emit(true);
         this.store.dispatch(this.groupWithAccountsAction.HideAddAndManageFromOutside());
+        document.querySelector('body')?.classList?.remove('master-page');
     }
 
     /**	
@@ -1804,5 +1804,15 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             this.updatedNumber = newNumber;
             this.addAccountForm.get('mobileNo').setValue(newNumber);
         }
+    }
+
+    /**
+     * Will put focus in search field in calling code dropdown
+     *
+     * @param {*} element
+     * @memberof AccountUpdateNewDetailsComponent
+     */
+    public focusInCallingCodeSearch(element: any): void {
+        this.generalService.focusInCountrySearch(element);
     }
 }

@@ -151,7 +151,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy, AfterViewIni
                 this.store.pipe(select(ss => ss.session.lastState), take(1)).subscribe(se => {
                     prevTab = se;
                 });
-                this._generalService.companyUniqueName = this.company.uniqueName;
+                this._generalService.companyUniqueName = this.company?.uniqueName;
                 setTimeout(() => {
                     if (prevTab !== 'user-details') {
                         this.store.dispatch(this._loginAction.ChangeCompany(this.company?.uniqueName));
@@ -163,7 +163,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy, AfterViewIni
         });
         this.store.pipe(select(p => p.session.companyUniqueName), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(a => {
             if (a && a !== '' && this.company?.uniqueName) {
-                if (a.includes(this.company.uniqueName.substring(0, 8))) {
+                if (a.includes(this.company?.uniqueName?.substring(0, 8))) {
                     this.company.name = '';
                     this.company.country = '';
                     this.company.baseCurrency = '';
@@ -225,7 +225,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy, AfterViewIni
                 this._generalService.createNewCompany = this.company;
                 this.store.dispatch(this.companyActions.userStoreCreateCompany(this.company));
                 if (this.isProdMode && companies) {
-                    if (companies.length === 0) {
+                    if (companies?.length === 0) {
                         this.fireSocketCompanyCreateRequest();
                     } else {
                         this.closeCompanyModal.emit();
@@ -264,13 +264,12 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy, AfterViewIni
         if (companies) {
             if (companies.length > 0) {
                 let previousState;
-                this.store.dispatch(this._generalActions.getGroupWithAccounts());
                 this.store.pipe(select(ss => ss.session.lastState), take(1)).subscribe(se => {
                     previousState = se;
                 });
                 if (previousState) {
                     if (!this.createBranch) {
-                        previousState = previousState.replace('pages/', '');
+                        previousState = previousState?.replace('pages/', '');
                         this._route.navigate([`pages/${previousState}`]);
                     }
                 }
@@ -382,12 +381,12 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy, AfterViewIni
 
     private removeSpecialCharacters(str) {
         let finalString;
-        finalString = str.replace(/[^a-zA-Z0-9]/g, '');
+        finalString = str?.replace(/[^a-zA-Z0-9]/g, '');
         return finalString.substr(0, 6).toLowerCase();
     }
 
     private getSixCharRandom() {
-        return Math.random().toString(36).replace(/[^a-zA-Z0-9]+/g, '').substr(0, 6);
+        return Math.random().toString(36)?.replace(/[^a-zA-Z0-9]+/g, '')?.substr(0, 6);
     }
 
     public getCountry() {

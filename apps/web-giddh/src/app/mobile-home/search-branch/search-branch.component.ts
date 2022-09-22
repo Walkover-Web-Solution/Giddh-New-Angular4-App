@@ -14,8 +14,8 @@ import { AppState } from '../../store';
 
 @Component({
     selector: 'mobile-search-branch',
-    templateUrl: './mobile-search-branch.component.html',
-    styleUrls: ['./mobile-search-branch.component.scss'],
+    templateUrl: './search-branch.component.html',
+    styleUrls: ['./search-branch.component.scss'],
 })
 export class MobileSearchBranchComponent implements OnInit, OnDestroy {
 
@@ -64,7 +64,7 @@ export class MobileSearchBranchComponent implements OnInit, OnDestroy {
                 this.currentCompanyBranches = response;
                 if (this.generalService.currentBranchUniqueName) {
                     this.currentBranch = response.find(branch =>
-                        (this.generalService.currentBranchUniqueName === branch.uniqueName)) || {};
+                        (this.generalService.currentBranchUniqueName === branch?.uniqueName)) || {};
                 } else {
                     this.currentBranch = '';
                 }
@@ -72,13 +72,13 @@ export class MobileSearchBranchComponent implements OnInit, OnDestroy {
         });
         this.store.pipe(select(appStore => appStore.session.currentOrganizationDetails), takeUntil(this.destroyed$)).subscribe((organization: Organization) => {
             if (organization && organization.details && organization.details.branchDetails) {
-                this.generalService.currentBranchUniqueName = organization.details.branchDetails.uniqueName;
+                this.generalService.currentBranchUniqueName = organization.details.branchDetails?.uniqueName;
                 this.generalService.currentOrganizationType = organization.type;
                 this.currentOrganizationType = organization.type;
                 if (this.generalService.currentBranchUniqueName) {
                     this.currentCompanyBranches$.pipe(take(1)).subscribe(response => {
                         if (response) {
-                            this.currentBranch = response.find(branch => (branch.uniqueName === this.generalService.currentBranchUniqueName));
+                            this.currentBranch = response.find(branch => (branch?.uniqueName === this.generalService.currentBranchUniqueName));
                         }
                     });
                 }
@@ -120,7 +120,7 @@ export class MobileSearchBranchComponent implements OnInit, OnDestroy {
         this.companyService.getStateDetails(this.generalService.companyUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.body) {
                 if (screen.width <= 767) {
-                    window.location.href = '/pages/mobile-home';
+                    window.location.href = '/pages/mobile/home';
                 } else if (isElectron) {
                     this.router.navigate([response.body.lastState]);
                     setTimeout(() => {
@@ -145,7 +145,7 @@ export class MobileSearchBranchComponent implements OnInit, OnDestroy {
             branches = response || [];
         });
         if (branchName) {
-            this.currentCompanyBranches = branches.filter(branch => {
+            this.currentCompanyBranches = branches?.filter(branch => {
                 if (branch) {
                     if (!branch.alias) {
                         return branch.name.toLowerCase().includes(branchName.toLowerCase());
@@ -170,7 +170,7 @@ export class MobileSearchBranchComponent implements OnInit, OnDestroy {
     private setOrganizationDetails(type: OrganizationType, branchDetails: OrganizationDetails): void {
         const organization: Organization = {
             type, // Mode to which user is switched to
-            uniqueName: this.activeCompany ? this.activeCompany.uniqueName : '',
+            uniqueName: this.activeCompany ? this.activeCompany?.uniqueName : '',
             details: branchDetails
         };
         this.store.dispatch(this.companyActions.setCompanyBranch(organization));

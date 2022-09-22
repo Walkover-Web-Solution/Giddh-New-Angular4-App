@@ -171,8 +171,13 @@ export class OtherSettingsComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof OtherSettingsComponent
      */
     public selectLocale(event?: any): void {
-        this.store.dispatch(this.commonActions.setActiveLocale({ label: event?.label, value: event?.value }));
-        this.showLanguageChangeMessage = true;
+        if (event?.value) {
+            this.store.dispatch(this.commonActions.setActiveLocale({ label: event?.label, value: event?.value }));
+            this.showLanguageChangeMessage = true;
+        } else {
+            event = this.translationLocales[0];
+            this.store.dispatch(this.commonActions.setActiveLocale({ label: event?.label, value: event?.value }));
+        }
     }
 
     /**

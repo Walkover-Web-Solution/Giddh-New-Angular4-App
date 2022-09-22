@@ -132,7 +132,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         this.store.pipe(select(appStore => appStore.settings.branches), take(1)).subscribe(response => {
             branches = response || [];
         });
-        reassignNavigationalArray(isMobile, this._generalService.currentOrganizationType === OrganizationType.Company && branches.length > 1, []);
+        reassignNavigationalArray(isMobile, this._generalService.currentOrganizationType === OrganizationType.Company && branches?.length > 1, []);
         this._generalService.setIsMobileView(isMobile);
     }
 
@@ -190,7 +190,6 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         this._generalService.IAmLoaded.next(true);
         this._cdr.detectChanges();
         this.router.events.pipe(takeUntil(this.destroyed$)).subscribe((evt) => {
-            this.hideMainGiddhLoader();
             if ((evt instanceof NavigationStart) && this.newVersionAvailableForWebApp && !isElectron) {
                 // need to save last state
                 const redirectState = this.getLastStateFromUrl(evt.url);
@@ -238,11 +237,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
      * @memberof AppComponent
      */
     private hideMainGiddhLoader(): void {
-        if (this.router.url.includes('login') || this.router.url.includes('token-verify') || this.router.url.includes('signup')) {
-            document.getElementById("main-giddh-loader")?.classList.add("d-none");
-        } else {
-            document.getElementById("main-giddh-loader")?.classList.remove("d-none");
-        }
+        document.getElementById("main-giddh-loader")?.classList.add("d-none");
     }
 
     private getLastStateFromUrl(url: string): string {

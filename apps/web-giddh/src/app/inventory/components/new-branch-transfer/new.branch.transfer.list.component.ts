@@ -183,34 +183,34 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
             if (response && response.length) {
                 this.currentCompanyBranches = response.map(branch => ({
                     label: branch.alias,
-                    value: branch.uniqueName,
+                    value: branch?.uniqueName,
                     name: branch.name,
                     parentBranch: branch.parentBranch
                 }));
                 this.currentCompanyBranches.unshift({
                     label: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
                     name: this.activeCompany ? this.activeCompany.name : '',
-                    value: this.activeCompany ? this.activeCompany.uniqueName : '',
+                    value: this.activeCompany ? this.activeCompany?.uniqueName : '',
                     isCompany: true
                 });
                 let currentBranchUniqueName;
-                if (!this.currentBranch.uniqueName) {
+                if (!this.currentBranch?.uniqueName) {
                     // Assign the current branch only when it is not selected. This check is necessary as
                     // opening the branch switcher would reset the current selected branch as this subscription is run everytime
                     // branches are loaded
                     if (this.currentOrganizationType === OrganizationType.Branch) {
                         currentBranchUniqueName = this._generalService.currentBranchUniqueName;
-                        this.currentBranch = _.cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName));
+                        this.currentBranch = _.cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName));
                     } else {
-                        currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : '';
+                        currentBranchUniqueName = this.activeCompany ? this.activeCompany?.uniqueName : '';
                         this.currentBranch = {
                             name: this.activeCompany ? this.activeCompany.name : '',
                             alias: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
-                            uniqueName: this.activeCompany ? this.activeCompany.uniqueName : '',
+                            uniqueName: this.activeCompany ? this.activeCompany?.uniqueName : '',
                         };
                     }
                 }
-                this.branchTransferGetRequestParams.branchUniqueName = this.currentBranch.uniqueName;
+                this.branchTransferGetRequestParams.branchUniqueName = this.currentBranch?.uniqueName;
             } else {
                 if (this._generalService.companyUniqueName) {
                     // Avoid API call if new user is onboarded
@@ -343,9 +343,9 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
     }
 
     public showDeleteBranchTransferModal(item): void {
-        this.selectedBranchTransfer = item.uniqueName;
+        this.selectedBranchTransfer = item?.uniqueName;
         this.selectedBranchTransferType = (item.voucherType === "receiptnote") ? "Receipt Note" : "Delivery Challan";
-        this.deleteBranchTransferModal.show();
+        this.deleteBranchTransferModal?.show();
     }
 
     public hideBranchTransferModal(): void {
@@ -369,7 +369,7 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
 
     public showEditBranchTransferPopup(item): void {
         this.branchTransferMode = item.voucherType;
-        this.editBranchTransferUniqueName = item.uniqueName;
+        this.editBranchTransferUniqueName = item?.uniqueName;
         this.openModal();
     }
 
@@ -429,9 +429,9 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
 
     public downloadBranchTransfer(item): void {
         let downloadBranchTransferRequest = new NewBranchTransferDownloadRequest();
-        downloadBranchTransferRequest.uniqueName = item.uniqueName;
+        downloadBranchTransferRequest.uniqueName = item?.uniqueName;
 
-        this.inventoryService.downloadBranchTransfer(this.activeCompany.uniqueName, downloadBranchTransferRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+        this.inventoryService.downloadBranchTransfer(this.activeCompany?.uniqueName, downloadBranchTransferRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if (res.status === "success") {
                 let blob = this._generalService.base64ToBlob(res.body, 'application/pdf', 512);
                 return saveAs(blob, item.voucherNo + `.pdf`);

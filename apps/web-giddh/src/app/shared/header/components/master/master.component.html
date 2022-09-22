@@ -2,7 +2,7 @@
     <div
         class="grp-wrapper"
         fxFlex
-        [ngStyle]="{ 'width': mc.columns?.length * 255 + 'px' }"
+        [ngStyle]="{ 'width': masterColumnsData?.length * 255 + 'px' }"
         [navigationWalker]="{ vertical: 'nav-vr-item', horizontal: 'nav-hr-item' }"
         #navigation="navigationWalker"
         #root
@@ -10,84 +10,92 @@
         (onRight)="onRightKey($event, navigation)"
         (onLeft)="onLeftKey($event, navigation)"
     >
-        <!-- level 1 -->
         <div
             class="col-wrapper left-account-operation"
-            *ngFor="let col of mc.columns; let i = index"
             [style.height.px]="height"
             nav-hr-item
             (ngInit)="onColAdd($event, navigation)"
+            *ngFor="let items of masterColumnsData; let i = index"
         >
             <ul class="new-btn-ul" *ngIf="i !== 0">
                 <li class="new-btn">
                     <a
                         href="javascript:void(0)"
-                        nav-vr-item
                         class="btn-link"
-                        *ngIf="!isSearchingGroups || (isSearchingGroups && col.IsCreateNewBtnShowable)"
-                        (click)="ShowAddNewForm(col)"
+                        nav-vr-item
+                        *ngIf="showCreateNewButton"
+                        (click)="showAddNewForm(items, i)"
                         >{{ localeData?.create_new }}</a
                     >
                 </li>
             </ul>
-            <ng-container *ngIf="col.Items">
+            <ng-container *ngIf="items?.results?.length">
                 <ul class="grp-list users-last-list">
                     <cdk-virtual-scroll-viewport
                         class="virtual-group-list overflow-x-hidden"
                         [itemSize]="37"
                         [minBufferPx]="400"
                         [maxBufferPx]="800"
+                        [id]="i"
                     >
                         <li
-                            *cdkVirtualFor="let item of col.Items; let j = index"
+                            *cdkVirtualFor="let item of items?.results; let j = index; trackBy: trackByFn"
                             class="list-item sidebarTooltip text-overflow-ellipsis"
                         >
-                            <ng-container *ngIf="item.isGroup">
+                            <ng-container *ngIf="item.type === 'GROUP'">
                                 <a
                                     href="javascript:void(0);"
                                     id="subGrp_{{ item.name }}"
                                     nav-vr-item
                                     class="list-item"
                                     (click)="onGroupClick(item, i)"
+                                    tooltip="{{ item.synonyms || item.name }}"
+                                    placement="bottom"
                                     [ngClass]="{
                                         'isActive':
                                             ((activeGroupUniqueName$ | async) === item?.uniqueName ||
                                                 (searchString &&
-                                                    (i === mc.columns?.length - 1 ||
-                                                        (i === mc.columns?.length - 2 &&
-                                                            mc.columns[mc.columns?.length - 1] &&
-                                                            (!mc.columns[mc.columns?.length - 1].Items ||
-                                                                mc.columns[mc.columns?.length - 1].Items?.length ===
-                                                                    0))) &&
+                                                    (i === masterColumnsData?.length - 1 ||
+                                                        (i === masterColumnsData?.length - 2 &&
+                                                            masterColumnsData[masterColumnsData?.length - 1] &&
+                                                            (!masterColumnsData[masterColumnsData?.length - 1]
+                                                                .results ||
+                                                                masterColumnsData[masterColumnsData?.length - 1].results
+                                                                    ?.length === 0))) &&
                                                     j === 0)) &&
-                                            !(activeAccount | async),
+                                            !(activeAccount$ | async) &&
+                                            !(
+                                                (activeAccount$ | async)?.uniqueName === item?.uniqueName ||
+                                                (searchString &&
+                                                    i === masterColumnsData?.length - 1 &&
+                                                    j === 0 &&
+                                                    !(activeAccount$ | async)?.uniqueName)
+                                            ),
                                         'isParent': item?.isOpen
                                     }"
-                                    tooltip="{{ item.synonyms || item.name }}"
-                                    placement="bottom"
                                 >
                                     {{ item?.name }}
                                 </a>
                             </ng-container>
-                            <ng-container *ngIf="!item.isGroup">
+                            <ng-container *ngIf="item.type === 'ACCOUNT'">
                                 <a
                                     href="javascript:void(0);"
-                                    nav-vr-item
                                     class="list-item isAcc"
-                                    [ngClass]="{
-                                        'isActive':
-                                            (activeAccount | async)?.uniqueName === item?.uniqueName ||
-                                            (searchString &&
-                                                i === mc.columns?.length - 1 &&
-                                                j === 0 &&
-                                                !(activeAccount | async)?.uniqueName)
-                                    }"
+                                    nav-vr-item
                                     id="acc_{{ item.name }}"
                                     tooltip="{{ item.name }}"
                                     placement="bottom"
                                     (click)="onAccountClick(item, i)"
+                                    [ngClass]="{
+                                        'isActive':
+                                            (activeAccount$ | async)?.uniqueName === item?.uniqueName ||
+                                            (searchString &&
+                                                i === masterColumnsData?.length - 1 &&
+                                                j === 0 &&
+                                                !(activeAccount$ | async)?.uniqueName)
+                                    }"
                                 >
-                                    {{ item?.name }}
+                                    {{ item?.name }} {{ commonLocaleData?.app_ac }}
                                 </a>
                             </ng-container>
                         </li>

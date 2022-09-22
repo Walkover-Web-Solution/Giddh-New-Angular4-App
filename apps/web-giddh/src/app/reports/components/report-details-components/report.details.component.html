@@ -42,19 +42,19 @@
                                 <span class="entity-icon">
                                     <i
                                         class="icon-branch-icon pull-right"
-                                        *ngIf="!option.isCompany"
+                                        *ngIf="!option?.isCompany"
                                         [tooltip]="commonLocaleData?.app_branch"
                                     ></i>
                                     <i
                                         class="icon-company-profile pull-right"
-                                        *ngIf="option.isCompany"
+                                        *ngIf="option?.isCompany"
                                         [tooltip]="commonLocaleData?.app_company"
                                     ></i>
                                 </span>
                                 <span class="entity-details">
-                                    <div class="item giddh-limit single-line-clamp">{{ option.label || "-" }}</div>
+                                    <div class="item giddh-limit single-line-clamp">{{ option?.label || "-" }}</div>
                                     <div class="item-unique giddh-limit single-line-clamp">
-                                        {{ option.name || "-" }}
+                                        {{ option?.name || "-" }}
                                     </div>
                                 </span>
                             </a>

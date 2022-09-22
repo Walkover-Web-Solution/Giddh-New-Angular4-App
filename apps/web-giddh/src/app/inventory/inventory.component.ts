@@ -133,12 +133,12 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
             if (branches) {
                 if (branches.length) {
                     each(branches, (branch) => {
-                        if (branch.addresses && branch.addresses.length) {
+                        if (branch.addresses && branch.addresses?.length) {
                             branch.addresses = [find(branch.addresses, (gst) => gst && gst.isDefault)];
                         }
                     });
                     this.branches$ = observableOf(orderBy(branches, 'name'));
-                } else if (branches.length === 0) {
+                } else if (branches?.length === 0) {
                     this.branches$ = observableOf(null);
                 }
             } else {
@@ -148,9 +148,9 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
                 let companiesWithSuperAdminRole = [];
                 each(companies, (cmp) => {
                     each(cmp.userEntityRoles, (company) => {
-                        if (company.entity.entity === 'COMPANY' && company.role.uniqueName === 'super_admin') {
+                        if (company.entity.entity === 'COMPANY' && company.role?.uniqueName === 'super_admin') {
                             if (branches && branches.length) {
-                                let existIndx = branches.findIndex((b) => b.uniqueName === cmp.uniqueName);
+                                let existIndx = branches.findIndex((b) => b?.uniqueName === cmp?.uniqueName);
                                 if (existIndx === -1) {
                                     companiesWithSuperAdminRole.push(cmp);
                                 }
@@ -288,7 +288,7 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
         if (ev.target.checked) {
             this.companies$.pipe(take(1)).subscribe((companies) => {
                 each(companies, (company) => {
-                    this.selectedCompaniesUniquename.push(company.uniqueName);
+                    this.selectedCompaniesUniquename.push(company?.uniqueName);
                     this.selectedCompaniesName.push(company);
                 });
             });
@@ -298,14 +298,14 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
 
     public checkUncheckMe(cmp, ev) {
         if (ev.target.checked) {
-            if (this.selectedCompaniesUniquename.indexOf(cmp.uniqueName) === -1) {
-                this.selectedCompaniesUniquename.push(cmp.uniqueName);
+            if (this.selectedCompaniesUniquename.indexOf(cmp?.uniqueName) === -1) {
+                this.selectedCompaniesUniquename.push(cmp?.uniqueName);
             }
             if (cmp.name) {
                 this.selectedCompaniesName.push(cmp);
             }
         } else {
-            let indx = this.selectedCompaniesUniquename.indexOf(cmp.uniqueName);
+            let indx = this.selectedCompaniesUniquename.indexOf(cmp?.uniqueName);
             this.selectedCompaniesUniquename.splice(indx, 1);
             let idx = this.selectedCompaniesName.indexOf(cmp);
             this.selectedCompaniesName.splice(idx, 1);
@@ -367,7 +367,7 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
 
     private isAllCompaniesSelected() {
         this.companies$.pipe(take(1)).subscribe((companies) => {
-            if (companies.length === this.selectedCompaniesUniquename.length) {
+            if (companies?.length === this.selectedCompaniesUniquename?.length) {
                 this.isAllSelected$ = observableOf(true);
             } else {
                 this.isAllSelected$ = observableOf(false);
@@ -438,7 +438,7 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof InventoryComponent
      */
     private loadBranchWarehouse(selectedBranchUniqueName: string): void {
-        let branchDetails: any = this.branchesWithWarehouse?.filter((branch) => branch.uniqueName === selectedBranchUniqueName);
+        let branchDetails: any = this.branchesWithWarehouse?.filter((branch) => branch?.uniqueName === selectedBranchUniqueName);
         if (branchDetails && branchDetails.length > 0) {
             branchDetails = branchDetails.pop();
             const warehouseData = this.settingsUtilityService.getFormattedWarehouseData(branchDetails.warehouses);
@@ -450,13 +450,13 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
                     // Select 'All Entity' as default if warehouse count is more than 1
                     warehouse = 'all-entities';
                 } else {
-                    warehouse = warehouseData.formattedWarehouses[0].uniqueName;
+                    warehouse = warehouseData.formattedWarehouses[0]?.uniqueName;
                 }
-                const currentWarehouse = warehouseData.formattedWarehouses.find((data) => data.uniqueName === warehouse || data.value === warehouse);
+                const currentWarehouse = warehouseData.formattedWarehouses.find((data) => data?.uniqueName === warehouse || data.value === warehouse);
                 if (currentWarehouse && this.warehouseFilter) {
                     this.warehouseFilter.filter = currentWarehouse.label;
                 }
-                this.currentBranchAndWarehouseFilterValues = { warehouse, branch: branchDetails.uniqueName, isCompany: branchDetails.isCompany };
+                this.currentBranchAndWarehouseFilterValues = { warehouse, branch: branchDetails?.uniqueName, isCompany: branchDetails.isCompany };
             }
             this.warehouses = warehouseData.formattedWarehouses;
         }
@@ -471,7 +471,7 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
     private loadBranchWithWarehouse(): void {
         if (this.branchesWithWarehouse && this.branchesWithWarehouse.length) {
             let currentEntityUniqueName = this.generalService.currentOrganizationType === OrganizationType.Branch ? this.generalService.currentBranchUniqueName : this.generalService.companyUniqueName;
-            this.branches = this.branchesWithWarehouse.map((branch: any) => ({ label: `${branch.alias || branch.name}`, value: branch.uniqueName }));
+            this.branches = this.branchesWithWarehouse.map((branch: any) => ({ label: `${branch.alias || branch.name}`, value: branch?.uniqueName }));
             this.loadBranchWarehouse(currentEntityUniqueName);
         }
     }
@@ -520,16 +520,16 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
                 }
             });
 
-            this.GroupStockReportRequest.stockGroupUniqueName = firstElement.uniqueName;
+            this.GroupStockReportRequest.stockGroupUniqueName = firstElement?.uniqueName;
             this.activeView = 'group';
-            this.firstDefaultActiveGroup = firstElement.uniqueName;
+            this.firstDefaultActiveGroup = firstElement?.uniqueName;
             this.firstDefaultActiveGroupName = firstElement.name;
             if (this.activeTabIndex === 0) {
                 // Selected tab is Inventory
                 this.loadBranchAndWarehouseDetails();
-                this.store.dispatch(this.sideBarAction.GetInventoryGroup(firstElement.uniqueName)); // open first default group
+                this.store.dispatch(this.sideBarAction.GetInventoryGroup(firstElement?.uniqueName)); // open first default group
             } else {
-                this.store.dispatch(this.sideBarAction.GetInventoryGroup(firstElement.uniqueName)); // open first default group
+                this.store.dispatch(this.sideBarAction.GetInventoryGroup(firstElement?.uniqueName)); // open first default group
                 this.store.dispatch(this.stockReportActions.GetGroupStocksReport(cloneDeep(this.GroupStockReportRequest))); // open first default group
             }
         }

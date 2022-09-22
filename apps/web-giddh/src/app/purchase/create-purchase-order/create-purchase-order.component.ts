@@ -422,7 +422,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.isMobileScreen = result.matches;
             if (!this.isMobileScreen && !this.container?.length && this.purchaseOrder?.account?.uniqueName) {
-                this.buildBulkData(this.purchaseOrder.entries.length, 0);
+                this.buildBulkData(this.purchaseOrder.entries?.length, 0);
             }
         });
 
@@ -605,7 +605,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         this.store.pipe(select((state: AppState) => state.session.applicationDate)).pipe(takeUntil(this.destroyed$)).subscribe((dateObj: Date[]) => {
             if (dateObj) {
                 try {
-                    this.universalDate = dayjs(dateObj[1]);
+                    const universalDate: any = dayjs(dateObj[1]);
+                    this.universalDate = universalDate.$d;
                     this.assignDates();
                 } catch (e) {
                     this.universalDate = new Date();
@@ -665,8 +666,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             this.isMulticurrencyAccount = accountDetails.currency !== this.companyCurrency;
             if (this.isMulticurrencyAccount) {
                 this.customerCurrencyCode = accountDetails.currency;
-                this.getCurrencyRate(this.companyCurrency, accountDetails.currency,
-                    dayjs(this.purchaseOrder.voucherDetails.voucherDate).format(GIDDH_DATE_FORMAT));
+                let voucherDate = (typeof this.purchaseOrder.voucherDetails.voucherDate === "object") ? dayjs(this.purchaseOrder.voucherDetails.voucherDate).format(GIDDH_DATE_FORMAT) : this.purchaseOrder.voucherDetails.voucherDate;
+                this.getCurrencyRate(this.companyCurrency, accountDetails.currency, voucherDate);
             } else {
                 this.customerCurrencyCode = this.companyCurrency;
                 this.previousExchangeRate = this.exchangeRate;
@@ -1225,12 +1226,12 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                 this.startLoader(false);
                 if (fieldName) {
                     let invalidTax = this.localeData?.invalid_tax_field;
-                    invalidTax = invalidTax.replace("[TAX_NAME]", this.formFields['taxName']?.label);
-                    invalidTax = invalidTax.replace("[FIELD_NAME]", fieldName);
+                    invalidTax = invalidTax?.replace("[TAX_NAME]", this.formFields['taxName']?.label);
+                    invalidTax = invalidTax?.replace("[FIELD_NAME]", fieldName);
                     this.toaster.errorToast(invalidTax);
                 } else {
                     let invalidTax = this.localeData?.invalid_tax_field;
-                    invalidTax = invalidTax.replace("[TAX_NAME]", this.formFields['taxName']?.label);
+                    invalidTax = invalidTax?.replace("[TAX_NAME]", this.formFields['taxName']?.label);
                     this.toaster.errorToast(invalidTax);
                 }
             }
@@ -1297,16 +1298,16 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                 };
             }
             if (isBulkItem) {
-                txn = this.calculateItemValues(selectedAcc, txn, entry);
+                txn = this.calculateItemValues(selectedAcc, txn, entry, false, true);
             } else {
                 this.searchService.loadDetails(selectedAcc.additional.uniqueName, requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
                     if (data && data.body) {
                         // Take taxes of parent group and stock's own taxes
-                        const taxes = data.body.taxes || [];
-                        if (data.body.stock) {
-                            taxes.push(...data.body.stock.taxes);
-                        }
-
+                        const taxes = this.generalService.fetchTaxesOnPriority(
+                            data.body.stock?.taxes ?? [],
+                            data.body.stock?.groupTaxes ?? [],
+                            data.body.taxes ?? [],
+                            data.body.groupTaxes ?? []);
                         // directly assign additional property
                         selectedAcc.additional = {
                             ...selectedAcc.additional,
@@ -1419,9 +1420,9 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
      */
     private isStockItemPresent(): boolean {
         const entries = this.purchaseOrder.entries;
-        for (let entry = 0; entry < entries.length; entry++) {
+        for (let entry = 0; entry < entries?.length; entry++) {
             const transactions = entries[entry].transactions;
-            for (let transaction = 0; transaction < transactions.length; transaction++) {
+            for (let transaction = 0; transaction < transactions?.length; transaction++) {
                 const item = transactions[transaction];
                 if (item.isStockTxn) {
                     return true;
@@ -1528,14 +1529,14 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
      * @memberof CreatePurchaseOrderComponent
      */
     public calculateTotalDiscountOfEntry(entry: SalesEntryClass, trx: SalesTransactionItemClass, calculateEntryTotal: boolean = true): void {
-        let percentageListTotal = entry.discounts.filter(f => f.isActive)
-            .filter(s => s.discountType === 'PERCENTAGE')
+        let percentageListTotal = entry.discounts?.filter(f => f.isActive)
+            ?.filter(s => s.discountType === 'PERCENTAGE')
             .reduce((pv, cv) => {
                 return Number(cv.discountValue) ? Number(pv) + Number(cv.discountValue) : Number(pv);
             }, 0) || 0;
 
-        let fixedListTotal = entry.discounts.filter(f => f.isActive)
-            .filter(s => s.discountType === 'FIX_AMOUNT')
+        let fixedListTotal = entry.discounts?.filter(f => f.isActive)
+            ?.filter(s => s.discountType === 'FIX_AMOUNT')
             .reduce((pv, cv) => {
                 return Number(cv.discountValue) ? Number(pv) + Number(cv.discountValue) : Number(pv);
             }, 0) || 0;
@@ -1566,7 +1567,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     public calculateEntryTaxSum(entry: SalesEntryClass, trx: SalesTransactionItemClass, calculateEntryTotal: boolean = true): void {
         let taxPercentage: number = 0;
         let cessPercentage: number = 0;
-        entry.taxes.filter(f => f.isChecked).forEach(tax => {
+        entry.taxes?.filter(f => f.isChecked).forEach(tax => {
             if (tax.type === 'gstcess') {
                 cessPercentage += tax.amount;
             } else {
@@ -1614,14 +1615,14 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
      */
     public calculateTransactionValueInclusively(entry: SalesEntryClass, transaction: SalesTransactionItemClass): void {
         // Calculate discount
-        let percentageDiscountTotal = entry.discounts.filter(discount => discount.isActive)
-            .filter(activeDiscount => activeDiscount.discountType === 'PERCENTAGE')
+        let percentageDiscountTotal = entry.discounts?.filter(discount => discount.isActive)
+            ?.filter(activeDiscount => activeDiscount.discountType === 'PERCENTAGE')
             .reduce((pv, cv) => {
                 return Number(cv.discountValue) ? Number(pv) + Number(cv.discountValue) : Number(pv);
             }, 0) || 0;
 
-        let fixedDiscountTotal = entry.discounts.filter(discount => discount.isActive)
-            .filter(activeDiscount => activeDiscount.discountType === 'FIX_AMOUNT')
+        let fixedDiscountTotal = entry.discounts?.filter(discount => discount.isActive)
+            ?.filter(activeDiscount => activeDiscount.discountType === 'FIX_AMOUNT')
             .reduce((pv, cv) => {
                 return Number(cv.discountValue) ? Number(pv) + Number(cv.discountValue) : Number(pv);
             }, 0) || 0;
@@ -1630,7 +1631,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         let taxPercentage: number = 0;
         let cessPercentage: number = 0;
         let taxTotal: number = 0;
-        entry.taxes.filter(tax => tax.isChecked).forEach(selectedTax => {
+        entry.taxes?.filter(tax => tax.isChecked).forEach(selectedTax => {
             if (selectedTax.type === 'gstcess') {
                 cessPercentage += selectedTax.amount;
             } else {
@@ -1891,7 +1892,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             }
             this.purchaseOrder.entries.push(entry);
             setTimeout(() => {
-                this.activeIndex = this.purchaseOrder.entries.length ? this.purchaseOrder.entries.length - 1 : 0;
+                this.activeIndex = this.purchaseOrder.entries?.length ? this.purchaseOrder.entries?.length - 1 : 0;
             }, 200);
         } else {
             // if transaction is valid then add new row else show toasty
@@ -1902,10 +1903,10 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             let entry: SalesEntryClass = new SalesEntryClass();
             this.purchaseOrder.entries.push(entry);
             setTimeout(() => {
-                this.activeIndex = this.purchaseOrder.entries.length ? this.purchaseOrder.entries.length - 1 : 0;
+                this.activeIndex = this.purchaseOrder.entries?.length ? this.purchaseOrder.entries?.length - 1 : 0;
             }, 200);
         }
-        this.createEmbeddedViewAtIndex(this.purchaseOrder.entries.length - 1);
+        this.createEmbeddedViewAtIndex(this.purchaseOrder.entries?.length - 1);
         this.openProductDropdown();
     }
 
@@ -1920,7 +1921,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             this.activeIndex = null;
         }
         if (this.container) {
-            for (let index = entryIdx + 1; index < this.purchaseOrder.entries.length; index++) {
+            for (let index = entryIdx + 1; index < this.purchaseOrder.entries?.length; index++) {
                 const viewRef: any = this.container.get(index);
                 if(viewRef) {
                     viewRef.context.entryIdx -= 1;
@@ -1930,7 +1931,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         }
         this.purchaseOrder.entries.splice(entryIdx, 1);
         this.calculateAffectedThingsFromOtherTaxChanges();
-        if (this.purchaseOrder.entries.length === 0) {
+        if (this.purchaseOrder.entries?.length === 0) {
             this.addBlankRow(null);
         }
         this.handleWarehouseVisibility();
@@ -2056,7 +2057,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             return;
         }
 
-        data.entries = data.entries.filter((entry, indx) => {
+        data.entries = data.entries?.filter((entry, indx) => {
             if (!entry.transactions[0].accountUniqueName && indx !== 0) {
                 this.purchaseOrder.entries.splice(indx, 1);
             }
@@ -2065,10 +2066,10 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
 
         data.entries = data.entries.map(entry => {
             // filter active discounts
-            entry.discounts = entry.discounts.filter(dis => dis.isActive);
+            entry.discounts = entry.discounts?.filter(dis => dis.isActive);
 
             // filter active taxes
-            entry.taxes = entry.taxes.filter(tax => tax.isChecked);
+            entry.taxes = entry.taxes?.filter(tax => tax.isChecked);
             return entry;
         });
 
@@ -2090,14 +2091,14 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         // replace /n to br for (shipping and billing)
 
         if (data.accountDetails.shippingDetails.address && data.accountDetails.shippingDetails.address.length && data.accountDetails.shippingDetails.address[0].length > 0) {
-            data.accountDetails.shippingDetails.address[0] = data.accountDetails.shippingDetails.address[0].trim();
-            data.accountDetails.shippingDetails.address[0] = data.accountDetails.shippingDetails.address[0].replace(/\n/g, '<br />');
-            data.accountDetails.shippingDetails.address = data.accountDetails.shippingDetails.address[0].split('<br />');
+            data.accountDetails.shippingDetails.address[0] = data.accountDetails.shippingDetails.address[0]?.trim();
+            data.accountDetails.shippingDetails.address[0] = data.accountDetails.shippingDetails.address[0]?.replace(/\n/g, '<br />');
+            data.accountDetails.shippingDetails.address = data.accountDetails.shippingDetails.address[0]?.split('<br />');
         }
         if (data.accountDetails.billingDetails.address && data.accountDetails.billingDetails.address.length && data.accountDetails.billingDetails.address[0].length > 0) {
-            data.accountDetails.billingDetails.address[0] = data.accountDetails.billingDetails.address[0].trim();
-            data.accountDetails.billingDetails.address[0] = data.accountDetails.billingDetails.address[0].replace(/\n/g, '<br />');
-            data.accountDetails.billingDetails.address = data.accountDetails.billingDetails.address[0].split('<br />');
+            data.accountDetails.billingDetails.address[0] = data.accountDetails.billingDetails.address[0]?.trim();
+            data.accountDetails.billingDetails.address[0] = data.accountDetails.billingDetails.address[0]?.replace(/\n/g, '<br />');
+            data.accountDetails.billingDetails.address = data.accountDetails.billingDetails.address[0]?.split('<br />');
         }
 
         // convert date object
@@ -2320,7 +2321,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
      * @memberof CreatePurchaseOrderComponent
      */
     public addBulkStockItems(items: SalesAddBulkStockItems[]): void {
-        const startIndex = this.purchaseOrder.entries.length;
+        const startIndex = this.purchaseOrder.entries?.length;
         let isBlankItemPresent;
         this.ngZone.runOutsideAngular(() => {
             for (const item of items) {
@@ -2336,7 +2337,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                     isBlankItemPresent = true;
                 } else {
                     this.purchaseOrder.entries.push(new SalesEntryClass());
-                    lastIndex = this.purchaseOrder.entries.length - 1;
+                    lastIndex = this.purchaseOrder.entries?.length - 1;
                     isBlankItemInBetween = false;
                 }
 
@@ -2346,13 +2347,15 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                 if (isBlankItemInBetween) {
                     // Update the context of blank items found in between of list of entries
                     const viewRef: any = this.container.get(lastIndex);
-                    viewRef.context.$implicit = this.purchaseOrder.entries[lastIndex];
-                    viewRef.context.transaction = this.purchaseOrder.entries[lastIndex].transactions[0];
+                    if (viewRef) {
+                        viewRef.context.$implicit = this.purchaseOrder.entries[lastIndex];
+                        viewRef.context.transaction = this.purchaseOrder.entries[lastIndex].transactions[0];
+                    }
                 }
                 this.onSelectSalesAccount(item, this.purchaseOrder.entries[lastIndex].transactions[0], this.purchaseOrder.entries[lastIndex], true, lastIndex);
             }
         });
-        this.buildBulkData(this.purchaseOrder.entries.length, isBlankItemPresent ? 0 : startIndex, isBlankItemPresent);
+        this.buildBulkData(this.purchaseOrder.entries?.length, isBlankItemPresent ? 0 : startIndex, isBlankItemPresent);
     }
 
     /**
@@ -2545,7 +2548,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                             clearInterval(this.interval);
                             this.purchaseOrder.entries = this.modifyEntries(this.purchaseOrderDetails.entries);
                             this.showLoaderUntilDataPrefilled = false;
-                            this.buildBulkData(this.purchaseOrder.entries.length, 0);
+                            this.buildBulkData(this.purchaseOrder.entries?.length, 0);
                             this.handleWarehouseVisibility();
                         }
                     }, 500);
@@ -2834,8 +2837,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             const transaction = (this.purchaseOrder && this.purchaseOrder.entries && this.purchaseOrder.entries[index].transactions) ?
                 this.purchaseOrder.entries[index].transactions[0] : '';
             if (transaction) {
-                transaction['requiredTax'] = (entry.taxes && entry.taxes.length === 0);
-                validEntries = !(entry.taxes.length === 0); // Entry is invalid if tax length is zero
+                transaction['requiredTax'] = (entry.taxes && entry.taxes?.length === 0);
+                validEntries = !(entry.taxes?.length === 0); // Entry is invalid if tax length is zero
             }
         });
         return validEntries;
@@ -2863,7 +2866,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
      * @memberof CreatePurchaseOrderComponent
      */
     public updateExchangeRate(val: any): void {
-        val = (val) ? val.replace(this.baseCurrencySymbol, '') : '';
+        val = (val) ? val?.replace(this.baseCurrencySymbol, '') : '';
         let total = (val) ? (parseFloat(this.generalService.removeSpecialCharactersFromAmount(val)) || 0) : 0;
         if (this.isMulticurrencyAccount) {
             this.exchangeRate = total / this.purchaseOrder.voucherDetails.grandTotal || 0;
@@ -2920,7 +2923,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
      * @memberof CreatePurchaseOrderComponent
      */
     public checkIfPipeSymbolRequired(loop: number): boolean {
-        return loop < (this.purchaseOrders.length - 1);
+        return loop < (this.purchaseOrders?.length - 1);
     }
 
     /**
@@ -2974,7 +2977,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     public onUpdateOrderDate(): void {
         this.isOrderDateChanged = true;
         if (this.isMulticurrencyAccount && this.purchaseOrder.voucherDetails.voucherDate) {
-            this.getCurrencyRate(this.companyCurrency, this.customerCurrencyCode, dayjs(this.purchaseOrder.voucherDetails.voucherDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT));
+            let voucherDate = (typeof this.purchaseOrder.voucherDetails.voucherDate === "object") ? dayjs(this.purchaseOrder.voucherDetails.voucherDate).format(GIDDH_DATE_FORMAT) : this.purchaseOrder.voucherDetails.voucherDate;
+            this.getCurrencyRate(this.companyCurrency, this.customerCurrencyCode, voucherDate);
         }
         if (this.invoiceSettings && this.invoiceSettings.purchaseBillSettings) {
             setTimeout(() => {
@@ -3268,7 +3272,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
      * @returns {SalesTransactionItemClass} Returns the complete transaction instance
      * @memberof CreatePurchaseOrderComponent
      */
-    private calculateItemValues(selectedAcc: any, transaction: SalesTransactionItemClass, entry: SalesEntryClass, calculateTransaction: boolean = true): SalesTransactionItemClass {
+    private calculateItemValues(selectedAcc: any, transaction: SalesTransactionItemClass, entry: SalesEntryClass, calculateTransaction: boolean = true, isBulkItem?: boolean): SalesTransactionItemClass {
         let additional = _.cloneDeep(selectedAcc.additional);
         transaction.quantity = additional.quantity ? additional.quantity : (additional.stock) ? 1 : null;
         transaction.applicableTaxes = [];
@@ -3315,7 +3319,11 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             });
         } else {
             // assign taxes for non stock accounts
-            transaction.applicableTaxes = additional.applicableTaxes;
+            if (isBulkItem) {
+                transaction.applicableTaxes = additional.stock?.groupTaxes ? additional.stock?.groupTaxes : additional.applicableTaxes;
+            } else {
+                transaction.applicableTaxes = additional.applicableTaxes;
+            }
         }
 
         transaction.accountName = additional.name;
@@ -3476,10 +3484,10 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
      */
     private loadTaxesAndDiscounts(startIndex: number): void {
         this.showBulkLoader = true;
-        for (let index = startIndex; index < this.purchaseOrder.entries.length; index++) {
+        for (let index = startIndex; index < this.purchaseOrder.entries?.length; index++) {
             setTimeout(() => {
                 this.activeIndex = index;
-                if (index === (this.purchaseOrder.entries.length - 1)) {
+                if (index === (this.purchaseOrder.entries?.length - 1)) {
                     this.showBulkLoader = false;
                 }
             }, 30 * index);

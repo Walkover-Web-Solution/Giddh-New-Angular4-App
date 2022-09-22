@@ -78,7 +78,7 @@
                             </div>
                         </div>
 
-                        <ng-container *ngIf="showOtherDetails">
+                        <div [ngClass]="{ 'd-none': !showOtherDetails }">
                             <div class="row">
                                 <div class="form-group col-sm-4 col-12">
                                     <label>Unique Name</label>
@@ -87,7 +87,6 @@
                                         name="uniqueName"
                                         UniqueNameDirective
                                         textCaseChangeDirective
-                                        [control]="addStockForm.get('uniqueName')"
                                         class="form-control"
                                         formControlName="uniqueName"
                                     />
@@ -325,7 +324,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </ng-container>
+                        </div>
                     </div>
 
                     <div class="row">
@@ -670,7 +669,7 @@
                                     type="button"
                                     *ngIf="isUpdatingStockForm"
                                     [ladda]="isStockUpdateInProcess$ | async"
-                                    class="btn btn-primary"
+                                    class="btn btn-success"
                                     (click)="update()"
                                     [disabled]="addStockForm.invalid || disableStockButton"
                                 >

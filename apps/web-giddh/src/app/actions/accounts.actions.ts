@@ -42,6 +42,7 @@ export class AccountsAction {
     public static SHARED_ACCOUNT_WITH_RESPONSE = 'AccountSharedWithResponse';
     public static MOVE_ACCOUNT = 'AccountMove';
     public static MOVE_ACCOUNT_RESPONSE = 'AccountMoveResponse';
+    public static MOVE_ACCOUNT_RESET = 'AccountMoveReset';
     public static UPDATE_ACCOUNT = 'UpdateAccount';
     public static UPDATE_ACCOUNT_RESPONSE = 'UpdateAccountResponse';
     public static UPDATE_ACCOUNTV2 = 'UpdateAccountV2';
@@ -86,7 +87,7 @@ export class AccountsAction {
                 this._toasty.successToast(action.payload.body, action.payload.status);
                 this.store.pipe(take(1)).subscribe((s) => {
                     if (s.groupwithaccounts && s.groupwithaccounts.activeGroup) {
-                        return this.getAccountDetails(s.groupwithaccounts.activeAccount.uniqueName);
+                        return this.getAccountDetails(s.groupwithaccounts.activeAccount?.uniqueName);
                     }
                 });
                 return { type: 'EmptyAction' };
@@ -148,7 +149,7 @@ export class AccountsAction {
             map(response => {
                 if (response && response.body && response.queryString) {
                     const updateIndexDb: IUpdateDbRequest = {
-                        newUniqueName: response.body.uniqueName,
+                        newUniqueName: response.body?.uniqueName,
                         oldUniqueName: response.queryString.accountUniqueName,
                         latestName: response.request.name,
                         uniqueName: this._generalServices.companyUniqueName,
@@ -192,7 +193,7 @@ export class AccountsAction {
                     this.store.dispatch(this.commonActions.accountUpdated(true));
                     this.store.dispatch(this.groupWithAccountsAction.hideEditAccountForm());
                     const updateIndexDb: IUpdateDbRequest = {
-                        newUniqueName: response.body.uniqueName,
+                        newUniqueName: response.body?.uniqueName,
                         oldUniqueName: response.queryString.accountUniqueName,
                         latestName: response.request.name,
                         uniqueName: this._generalServices.companyUniqueName,
@@ -218,7 +219,9 @@ export class AccountsAction {
                     this._generalServices.invokeEvent.next(["accountUpdated", resData]);
                     this._generalServices.eventHandler.next({ name: eventsConst.accountUpdated, payload: resData });
                     this._toasty.successToast(this.localeService.translate("app_messages.account_updated"));
-                    this.store.dispatch(this.getAccountDetails(resData.body.uniqueName));
+                    if (!action.payload?.queryString?.isMasterOpen) {
+                        this.store.dispatch(this.getAccountDetails(resData.body?.uniqueName));
+                    }
                 }
                 return { type: 'EmptyAction' };
             })));
@@ -368,7 +371,7 @@ export class AccountsAction {
                 }
                 let accountUniqueName = null;
                 this.store.pipe(take(1)).subscribe(s => {
-                    accountUniqueName = s.groupwithaccounts.activeAccount.uniqueName;
+                    accountUniqueName = s.groupwithaccounts.activeAccount?.uniqueName;
                 });
                 return this.sharedAccountWith(accountUniqueName);
             })));
@@ -417,7 +420,6 @@ export class AccountsAction {
                     let data: BaseResponse<string, AccountMoveRequest> = action.payload;
                     this._generalServices.eventHandler.next({ name: eventsConst.accountMoved, payload: data });
                     this._toasty.successToast(this.localeService.translate("app_messages.account_moved"), '');
-                    this.groupWithAccountsAction.getGroupDetails(data.request.uniqueName);
                 }
                 return {
                     type: 'EmptyAction'
@@ -451,7 +453,7 @@ export class AccountsAction {
                         data.request.forEach(uniqueAccountName => {
                             const request: IUpdateDbRequest = {
                                 uniqueName: this._generalServices.companyUniqueName,
-                                deleteUniqueName: uniqueAccountName.uniqueName,
+                                deleteUniqueName: uniqueAccountName?.uniqueName,
                                 type: "accounts",
                                 name: this._generalServices.companyUniqueName,
                                 isActive: false
@@ -593,7 +595,7 @@ export class AccountsAction {
         };
     }
 
-    public updateAccountV2(value: { groupUniqueName: string, accountUniqueName: string }, account: AccountRequestV2): CustomActions {
+    public updateAccountV2(value: { groupUniqueName: string, accountUniqueName: string, isMasterOpen?: boolean }, account: AccountRequestV2): CustomActions {
         return {
             type: AccountsAction.UPDATE_ACCOUNTV2,
             payload: { account, value }
@@ -710,6 +712,12 @@ export class AccountsAction {
         return {
             type: AccountsAction.MOVE_ACCOUNT_RESPONSE,
             payload: value
+        };
+    }
+
+    public moveAccountReset(): CustomActions {
+        return {
+            type: AccountsAction.MOVE_ACCOUNT_RESET
         };
     }
 

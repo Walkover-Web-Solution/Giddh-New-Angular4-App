@@ -129,7 +129,7 @@
                                                 >
                                                     <mat-option
                                                         *ngFor="let tax of taxes"
-                                                        [value]="tax.uniqueName"
+                                                        [value]="tax?.uniqueName"
                                                         [disabled]="tax.isDisabled"
                                                         [selected]="tax.isChecked"
                                                         (onSelectionChange)="!tax.isDisabled ? selectTax(tax) : ''"

@@ -32,7 +32,7 @@
                                     >
                                         <li role="menuitem" *ngFor="let gtype of revenueGraphTypes">
                                             <a class="dropdown-item" (click)="changeGraphType(gtype)">{{
-                                                gtype.displayName
+                                                gtype?.uniqueName
                                             }}</a>
                                         </li>
                                     </ul>

@@ -70,6 +70,26 @@
     }
 }
 
+.mat-form-field {
+    width: 65% !important;
+}
+
+.mat-form-field-wrapper {
+    padding-bottom: 0 !important;
+}
+
+.magic-link-container {
+    margin-bottom: 0 !important;
+}
+
+.doc-link {
+    a {
+        text-decoration: underline;
+    }
+    :focus {
+        box-shadow: none;
+    }
+}
 /*responsive*/
 @media (max-width: 1359px) {
     .xs-pd-l15 {

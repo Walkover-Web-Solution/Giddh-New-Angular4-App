@@ -225,7 +225,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         this.activeGroup$.subscribe(response => {
             if (response) {
                 if (this.activeGroupUniqueName && response.uniqueName !== this.activeGroupUniqueName) {
-                    this.store.dispatch(this.groupWithAccountsAction.getGroupDetails(this.activeGroupUniqueName));
+                    this.store.dispatch(this.groupWithAccountsAction.getAccountGroupDetails(this.activeGroupUniqueName));
                 } else if (response.parentGroups && response.parentGroups.length) {
                     let parent = response.parentGroups;
                     const HSN_SAC_PARENT_GROUPS = ['revenuefromoperations', 'otherincome', 'operatingcost', 'indirectexpenses'];
@@ -233,8 +233,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                         this.isHsnSacEnabledAcc = (parent[1].parentGroups) ? HSN_SAC_PARENT_GROUPS.includes(parent[1].parentGroups[0]?.uniqueName) : false;
                         this.isParentDebtorCreditor(parent[1].uniqueName);
                     } else if (parent?.length === 1) {
-                        this.isHsnSacEnabledAcc = (response.parentGroups) ? HSN_SAC_PARENT_GROUPS.includes(response.parentGroups[0]?.uniqueName) : false;
-                        this.isParentDebtorCreditor(response.uniqueName);
+                        this.isHsnSacEnabledAcc = (response.parentGroups) ? HSN_SAC_PARENT_GROUPS.includes(response?.parentGroups[0]?.uniqueName) : false;
+                        this.isParentDebtorCreditor(response?.uniqueName);
                     }
                     this.showHideAddressTab();
                 }
@@ -864,7 +864,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         let trim: string = '';
         if (element.value && type) {
             // changes account number validation for country india as well ref card : GIDK-1119
-            trim = element.value.replace(/[^a-zA-Z0-9]/g, '');
+            trim = element.value?.replace(/[^a-zA-Z0-9]/g, '');
             let accountBankDetail = this.addAccountForm.get('accountBankDetails') as FormArray;
             for (let control of accountBankDetail.controls) {
                 if (type === 'bankAccountNo') {
@@ -1048,10 +1048,10 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                         }
                     }) || [];
                     if (page === 1) {
-                        if (activeGroup && searchResults.findIndex(group => group.value === activeGroup.uniqueName) === -1) {
+                        if (activeGroup && searchResults.findIndex(group => group.value === activeGroup?.uniqueName) === -1) {
                             // Active group is not found in first page add it
                             searchResults.push({
-                                value: activeGroup.uniqueName,
+                                value: activeGroup?.uniqueName,
                                 label: `${activeGroup.name}`,
                                 additional: activeGroup.parentGroups
                             });
@@ -1204,7 +1204,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             }, 50);
 
             const accountAddress = this.addAccountForm.get('addresses') as FormArray;
-            if (accountAddress.controls.length === 0 || !accountAddress.length) {
+            if (accountAddress.controls?.length === 0 || !accountAddress?.length) {
                 this.addBlankGstForm();
             }
         } else {
@@ -1233,6 +1233,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public closeMaster(): void {
         this.closeAccountModal.emit(true);
         this.store.dispatch(this.groupWithAccountsAction.HideAddAndManageFromOutside());
+        document.querySelector('body')?.classList?.remove('master-page');
     }
 
     /**	
@@ -1249,5 +1250,15 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             this.updatedNumber = newNumber;
             this.addAccountForm.get('mobileNo').setValue(newNumber);
         }
+    }
+
+    /**
+     * Will put focus in search field in calling code dropdown
+     *
+     * @param {*} element
+     * @memberof AccountAddNewDetailsComponent
+     */
+    public focusInCallingCodeSearch(element: any): void {
+        this.generalService.focusInCountrySearch(element);
     }
 }

@@ -147,7 +147,7 @@ export class OnReturnDirective {
                 //   return target.focus();
                 // }
                 // && !this.isOtherKeyPressed && this.selectedField !== target
-                if (target && e.target.value.length === e.target.selectionEnd) {
+                if (target && e.target.value?.length === e.target.selectionEnd) {
                     if (selectedEle.getAttribute('data-changed') === 'false' || selectedEle.value.trim() === '') {
                         e.preventDefault();
                         if (target.disabled) {

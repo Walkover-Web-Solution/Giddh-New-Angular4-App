@@ -1,4 +1,9 @@
 .custom-field-page {
+    .table-content {
+        max-height: calc(100vh - 200px);
+        overflow-y: auto;
+        height: calc(100vh - 200px);
+    }
     h4 {
         font-size: 16px;
         font-family: "opensans-semibold";

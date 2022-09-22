@@ -22,9 +22,9 @@ export class CashFlowStatementService {
      */
     public downloadReport(request: any): Observable<BaseResponse<any, any>> {
         let url = this.config.apiUrl + Report;
-        url = url.replace(':companyUniqueName', request.companyUniqueName);
-        url = url.replace(':from', request.from);
-        url = url.replace(':to', request.to);
+        url = url?.replace(':companyUniqueName', request.companyUniqueName);
+        url = url?.replace(':from', request.from);
+        url = url?.replace(':to', request.to);
         return this.http.get(url).pipe(
             map((res) => {
                 let data: BaseResponse<any, any> = res;

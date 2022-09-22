@@ -431,6 +431,12 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
                 this.advanceSearchForm.get('amountLessThan')?.patchValue(false);
                 this.advanceSearchForm.get('amountEqualTo')?.patchValue(true);
                 break;
+            case 'amount-null':
+                this.advanceSearchForm.get('includeAmount')?.patchValue(false);
+                this.advanceSearchForm.get('amountGreaterThan')?.patchValue(false);
+                this.advanceSearchForm.get('amountLessThan')?.patchValue(false);
+                this.advanceSearchForm.get('amountEqualTo')?.patchValue(false);
+                break;    
             case 'inventoryQty-greaterThan':
                 this.advanceSearchForm.get('inventory.includeQuantity')?.patchValue(true);
                 this.advanceSearchForm.get('inventory.quantityGreaterThan')?.patchValue(true);
@@ -462,6 +468,12 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
                 this.advanceSearchForm.get('inventory.quantityEqualTo')?.patchValue(true);
                 break;
             case 'inventoryQty-exclude':
+                this.advanceSearchForm.get('inventory.includeQuantity')?.patchValue(false);
+                this.advanceSearchForm.get('inventory.quantityGreaterThan')?.patchValue(false);
+                this.advanceSearchForm.get('inventory.quantityLessThan')?.patchValue(false);
+                this.advanceSearchForm.get('inventory.quantityEqualTo')?.patchValue(false);
+                break;
+            case 'inventoryQty-null':
                 this.advanceSearchForm.get('inventory.includeQuantity')?.patchValue(false);
                 this.advanceSearchForm.get('inventory.quantityGreaterThan')?.patchValue(false);
                 this.advanceSearchForm.get('inventory.quantityLessThan')?.patchValue(false);
@@ -503,6 +515,12 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
                 this.advanceSearchForm.get('inventory.includeItemLessThan')?.patchValue(false);
                 this.advanceSearchForm.get('inventory.includeItemEqualTo')?.patchValue(false);
                 break;
+            case 'inventoryVal-null':
+                this.advanceSearchForm.get('inventory.includeItemValue')?.patchValue(false);
+                this.advanceSearchForm.get('inventory.includeItemGreaterThan')?.patchValue(false);
+                this.advanceSearchForm.get('inventory.includeItemLessThan')?.patchValue(false);
+                this.advanceSearchForm.get('inventory.includeItemEqualTo')?.patchValue(false);
+                break;    
         }
     }
 
@@ -611,8 +629,8 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
                 if (data && data.body && data.body.results) {
                     const searchResults = data.body.results.map(result => {
                         return {
-                            value: result.uniqueName,
-                            label: `${result.name} (${result.uniqueName})`
+                            value: result?.uniqueName,
+                            label: `${result.name} (${result?.uniqueName})`
                         }
                     }) || [];
                     if (page === 1) {
@@ -660,8 +678,8 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
                     if (!this.accountsSearchResultsPaginationData.query) {
                         const results = response.map(result => {
                             return {
-                                value: result.uniqueName,
-                                label: `${result.name} - (${result.uniqueName})`
+                                value: result?.uniqueName,
+                                label: `${result.name} - (${result?.uniqueName})`
                             }
                         }) || [];
                         this.defaultAccountSuggestions = this.defaultAccountSuggestions.concat(...results);
@@ -698,8 +716,8 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
                 if (data && data.body && data.body.results) {
                     const searchResults = data.body.results.map(result => {
                         return {
-                            value: result.uniqueName,
-                            label: `${result.name} (${result.uniqueName})`
+                            value: result?.uniqueName,
+                            label: `${result.name} (${result?.uniqueName})`
                         }
                     }) || [];
                     if (page === 1) {
@@ -755,8 +773,8 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
                 if (data && data.body && data.body.results) {
                     const searchResults = data.body.results.map(result => {
                         return {
-                            value: result.uniqueName,
-                            label: `${result.name} (${result.uniqueName})`
+                            value: result?.uniqueName,
+                            label: `${result.name} (${result?.uniqueName})`
                         }
                     }) || [];
                     if (page === 1) {
@@ -804,8 +822,8 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
                     if (!this.stocksSearchResultsPaginationData.query) {
                         const results = response.map(result => {
                             return {
-                                value: result.uniqueName,
-                                label: `${result.name} (${result.uniqueName})`
+                                value: result?.uniqueName,
+                                label: `${result.name} (${result?.uniqueName})`
                             }
                         }) || [];
                         this.defaultStockSuggestions = this.defaultStockSuggestions.concat(...results);
@@ -831,8 +849,8 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
                     if (!this.groupsSearchResultsPaginationData.query) {
                         const results = response.map(result => {
                             return {
-                                value: result.uniqueName,
-                                label: `${result.name} (${result.uniqueName})`
+                                value: result?.uniqueName,
+                                label: `${result.name} (${result?.uniqueName})`
                             }
                         }) || [];
                         this.defaultGroupSuggestions = this.defaultGroupSuggestions.concat(...results);
@@ -853,8 +871,8 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
         this.onStockSearchQueryChanged('', 1, (response) => {
             this.defaultStockSuggestions = response.map(result => {
                 return {
-                    value: result.uniqueName,
-                    label: `${result.name} (${result.uniqueName})`
+                    value: result?.uniqueName,
+                    label: `${result.name} (${result?.uniqueName})`
                 }
             }) || [];
             this.defaultStockPaginationData.page = this.stocksSearchResultsPaginationData.page;
@@ -875,8 +893,8 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
         this.onGroupSearchQueryChanged('', 1, (response) => {
             this.defaultGroupSuggestions = response.map(result => {
                 return {
-                    value: result.uniqueName,
-                    label: `${result.name} (${result.uniqueName})`
+                    value: result?.uniqueName,
+                    label: `${result.name} (${result?.uniqueName})`
                 }
             }) || [];
             this.defaultGroupPaginationData.page = this.groupsSearchResultsPaginationData.page;
@@ -897,8 +915,8 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
         this.onAccountSearchQueryChanged('', 1, (response) => {
             this.defaultAccountSuggestions = response.map(result => {
                 return {
-                    value: result.uniqueName,
-                    label: `${result.name} (${result.uniqueName})`
+                    value: result?.uniqueName,
+                    label: `${result.name} (${result?.uniqueName})`
                 }
             }) || [];
             this.defaultAccountPaginationData.page = this.accountsSearchResultsPaginationData.page;

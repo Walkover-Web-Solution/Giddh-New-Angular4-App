@@ -1,24 +1,24 @@
 import { HostListener, Inject, Component, OnInit, ChangeDetectorRef, OnDestroy, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { Subject, ReplaySubject, Observable } from 'rxjs';
 import { Store, select } from '@ngrx/store';
-import { AppState } from '../store';
-import { GeneralService } from '../services/general.service';
-import { CommandKService } from '../services/commandk.service';
-import { takeUntil, debounceTime } from 'rxjs/operators';
-import { remove } from '../lodash-optimized';
 import { Router } from '@angular/router';
 import { BACKSPACE } from '@angular/cdk/keycodes';
-import { LoginActions } from '../actions/login.action';
-import { AuthService } from '../theme/ng-social-login-module/index';
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { CommandKRequest } from '../models/api-models/Common';
 import { BsDropdownConfig, BsDropdownDirective } from 'ngx-bootstrap/dropdown';
 import { DOCUMENT } from '@angular/common';
+import { CommandKRequest } from '../../models/api-models/Common';
+import { AppState } from '../../store';
+import { GeneralService } from '../../services/general.service';
+import { LoginActions } from '../../actions/login.action';
+import { CommandKService } from '../../services/commandk.service';
+import { AuthService } from '../../theme/ng-social-login-module';
+import { debounceTime, takeUntil } from 'rxjs/operators';
+import { remove } from '../../lodash-optimized';
 
 @Component({
     selector: 'mobile-home',
-    templateUrl: './mobile-home.component.html',
-    styleUrls: ['./mobile-home.component.scss'],
+    templateUrl: './home.component.html',
+    styleUrls: ['./home.component.scss'],
     providers: [
         {
             provide: BsDropdownConfig, useValue: { insideClick: true },
@@ -81,7 +81,7 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
     constructor(@Inject(DOCUMENT) document, private store: Store<AppState>, private generalService: GeneralService, private commandKService: CommandKService, private cdref: ChangeDetectorRef, private router: Router, private loginAction: LoginActions, private socialAuthService: AuthService, private breakPointObservar: BreakpointObserver) {
         document.querySelector('body').classList.add('mobile-home');
-        this.isLoggedInWithSocialAccount$ = this.store.pipe(select(state => state.login.isLoggedInWithSocialAccount, takeUntil(this.destroyed$)));
+        this.isLoggedInWithSocialAccount$ = this.store.pipe(select(state => state.login.isLoggedInWithSocialAccount), takeUntil(this.destroyed$));
     }
 
     /**
@@ -115,7 +115,7 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.activeCompanyUniqueName = activeCompany.uniqueName;
                 let selectedCompanyArray = activeCompany.name.split(" ");
                 let companyInitials = [];
-                for (let loop = 0; loop < selectedCompanyArray.length; loop++) {
+                for (let loop = 0; loop < selectedCompanyArray?.length; loop++) {
                     if (loop <= 1) {
                         companyInitials.push(selectedCompanyArray[loop][0]);
                     } else {
@@ -213,7 +213,7 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
         if (this.listOfSelectedGroups && this.listOfSelectedGroups.length > 0) {
             let lastGroup = this.generalService.getLastElement(this.listOfSelectedGroups);
-            this.commandKRequestParams.group = lastGroup.uniqueName;
+            this.commandKRequestParams.group = lastGroup?.uniqueName;
         } else {
             this.commandKRequestParams.group = "";
         }
@@ -257,7 +257,7 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
      */
     public removeItemFromSelectedGroups(item?: any): void {
         if (item) {
-            this.listOfSelectedGroups = remove(this.listOfSelectedGroups, o => item.uniqueName !== o.uniqueName);
+            this.listOfSelectedGroups = remove(this.listOfSelectedGroups, o => item.uniqueName !== o?.uniqueName);
         } else {
             this.listOfSelectedGroups.pop();
         }
@@ -284,7 +284,7 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof MobileHomeComponent
      */
     public trackByFn(index, item: any): any {
-        return item.uniqueName; // unique id corresponding to the item
+        return item?.uniqueName; // unique id corresponding to the item
     }
 
     /**
@@ -341,7 +341,7 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
             }
         } else if (item.type === 'GROUP') {
             this.commandKRequestParams.q = "";
-            if (!this.listOfSelectedGroups || this.listOfSelectedGroups.length === 0) {
+            if (!this.listOfSelectedGroups || this.listOfSelectedGroups?.length === 0) {
                 this.listOfSelectedGroups = [];
             }
             this.listOfSelectedGroups.push(item);

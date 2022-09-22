@@ -52,7 +52,7 @@
             <div class="col-sm-12">
                 <button
                     class="btn btn-success"
-                    [disabled]="!copyTypes || copyTypes.length === 0 || isLoading"
+                    [disabled]="!copyTypes || copyTypes?.length === 0 || isLoading"
                     (click)="exportVouchers(false)"
                 >
                     {{ commonLocaleData?.app_download }}
@@ -78,7 +78,7 @@
                 <button
                     class="btn btn-success"
                     [disabled]="
-                        !recipients || recipients.length === 0 || !copyTypes || copyTypes.length === 0 || isLoading
+                        !recipients || recipients?.length === 0 || !copyTypes || copyTypes?.length === 0 || isLoading
                     "
                     (click)="exportVouchers(true)"
                 >

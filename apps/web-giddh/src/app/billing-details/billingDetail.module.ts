@@ -15,6 +15,7 @@ import { AmountFieldComponentModule } from '../shared/amount-field/amount-field.
 import { SnackBarModule } from '../theme/snackbar/snackbar.module';
 import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
 import { HamburgerMenuModule } from '../shared/header/components/hamburger-menu/hamburger-menu.module';
+import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 
 
 @NgModule({
@@ -34,7 +35,8 @@ import { HamburgerMenuModule } from '../shared/header/components/hamburger-menu/
         MatButtonModule,
         AmountFieldComponentModule,
         TranslateDirectiveModule,
-        HamburgerMenuModule
+        HamburgerMenuModule,
+        FormFieldsModule
     ],
     declarations: [BillingDetailComponent]
 })

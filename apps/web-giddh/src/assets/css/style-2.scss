@@ -85,6 +85,12 @@ $custom-typography: mat-typography-config(
     float: left !important;
     width: auto !important;
 }
+.activity-table {
+    thead {
+        z-index: 9 !important;
+        position: relative !important;
+    }
+}
 @media screen and (max-width: 1366px) and (orientation: portrait) {
     .subscription-form-select {
         float: left !important;
@@ -5691,7 +5697,7 @@ footer#footer.absolute-footer {
 }
 
 .master-page {
-    groups-account-sidebar {
+    master {
         .grp-list {
             .cdk-virtual-scroll-viewport {
                 .cdk-virtual-scroll-content-wrapper {
@@ -5706,17 +5712,6 @@ footer#footer.absolute-footer {
     }
     hamburger-menu {
         z-index: 0;
-    }
-}
-
-.update-ledger-entry-panel-popup {
-    #HW_frame_cont,
-    #HW_styles_cont {
-        + {
-            .cdk-overlay-container {
-                z-index: 99999 !important;
-            }
-        }
     }
 }
 
@@ -7940,6 +7935,9 @@ giddh-datepicker {
 }
 
 .stock-create-edit {
+    .cdk-overlay-container {
+        z-index: 8;
+    }
     #main {
         #content-wrapper {
             background-color: var(--color-common-septenary-background-for-all-components);
@@ -11148,4 +11146,29 @@ hamburger-menu {
             padding-left: 10px !important;
         }
     }
+}
+body.hide-scroll-body.master-page {
+    overflow-y: hidden !important;
+}
+.ledger-attachments-popup {
+    .cdk-overlay-container {
+        .mat-dialog-container {
+            background-color: var(--color-popup-background);
+        }
+    }
+}
+.click-disabled {
+    pointer-events: none;
+    cursor: not-allowed;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    color: var(--color-secondary-input-bar-border);
+}
+.mat-datepicker-input:disabled {
+    color: var(--color-primary-input-bar-text) !important;
+    background-color: var(--color-primary-input-bar-background) !important;
 }

@@ -358,7 +358,7 @@ export function AuthenticationReducer(state: AuthenticationState = initialState,
             if (resp.status === 'success') {
                 return {
                     ...state,
-                    user: Object.assign({}, state.user, {
+                    user: Object.assign({}, state?.user, {
                         contactNumber: resp.request.mobileNumber,
                         countryCode: resp.request.countryCode
                     }),
@@ -384,7 +384,7 @@ export function AuthenticationReducer(state: AuthenticationState = initialState,
                         isLoginWithPasswordIsShowVerifyOtp: true,
                         user: res.body
                     });
-                } else if (!res.body.user.isVerified) {
+                } else if (!res.body?.user?.isVerified) {
                     return Object.assign({}, state, {
                         isLoginWithPasswordInProcess: false,
                         isLoginWithPasswordSuccessNotVerified: true,
@@ -670,7 +670,7 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
 
             let companiesList = _.cloneDeep(newState.companies);
 
-            let selectedCompanyIndex = companiesList?.findIndex((company) => company.uniqueName === companyInfo.companyUniqueName);
+            let selectedCompanyIndex = companiesList?.findIndex((company) => company?.uniqueName === companyInfo?.companyUniqueName);
 
             if (selectedCompanyIndex > -1) {
                 companiesList[selectedCompanyIndex].isMultipleCurrency = companyInfo.isMultipleCurrency;
@@ -684,7 +684,7 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
                 return {
                     ...state,
                     user: {
-                        ...state.user,
+                        ...state?.user,
                         user: userResp.body
                     }
                 };
@@ -705,7 +705,7 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
             let response: BaseResponse<CompanyResponse, string> = action.payload;
             if (response.status === 'success') {
                 let d = _.cloneDeep(state);
-                let currentCompanyIndx = _.findIndex(d.companies, (company) => company.uniqueName === response.body.uniqueName);
+                let currentCompanyIndx = _.findIndex(d.companies, (company) => company?.uniqueName === response.body?.uniqueName);
                 if (currentCompanyIndx !== -1) {
                     d.companies[currentCompanyIndx].country = response.body.country;
                     return Object.assign({}, state, d);
@@ -719,7 +719,7 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
                 let d = _.cloneDeep(state);
                 localStorage.setItem('currencyDesimalType', response.body.balanceDecimalPlaces);
                 localStorage.setItem('currencyNumberType', response.body.balanceDisplayFormat);
-                let currentCompanyIndx = _.findIndex(d.companies, (company) => company.uniqueName === response.body.uniqueName);
+                let currentCompanyIndx = _.findIndex(d.companies, (company) => company?.uniqueName === response.body?.uniqueName);
                 if (currentCompanyIndx !== -1) {
                     d.companies[currentCompanyIndx].country = response.body.country;
                     return Object.assign({}, state, d);

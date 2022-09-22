@@ -870,7 +870,7 @@ ul.sub-list {
 
 /*new header css starts*/
 .fixed-padding {
-    padding-top: 12px;
+    padding-top: 55px;
 }
 #primary-new-header.primary-main-header {
     padding-left: 15px;
@@ -1039,13 +1039,6 @@ aside-setting {
         }
     }
 }
-@media (max-width: 1024px) {
-    .fixed-padding {
-        #primary-new-header {
-            z-index: 99999 !important;
-        }
-    }
-}
 @media (max-width: 767px) {
     .setting-sidebar-wrapper {
         z-index: 9999;
@@ -1057,7 +1050,7 @@ aside-setting {
         top: 0;
     }
     .fixed-padding {
-        padding-top: 44px;
+        padding-top: 87px;
         #primary-new-header.primary-main-header {
             background-color: var(--color-giddh-blue);
             position: fixed;
