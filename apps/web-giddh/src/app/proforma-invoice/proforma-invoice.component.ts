@@ -2086,7 +2086,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @memberof ProformaInvoiceComponent
      */
     public getStateCode(type: string, statesEle: SalesShSelectComponent) {
-        let gstVal = cloneDeep(this.invFormData.accountDetails[type].gstNumber).toString();
+        let gstVal = cloneDeep(this.invFormData.accountDetails[type].gstNumber)?.toString();
         if (gstVal && gstVal.length >= 2) {
             const selectedState = this.statesSource.find(item => item.stateGstCode === gstVal.substring(0, 2));
             if (selectedState) {
@@ -2867,7 +2867,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             }
 
             if (trx.amount) {
-                let transactionAmount = trx.amount.toString();
+                let transactionAmount = trx.amount?.toString();
 
                 if (this.invFormData.accountDetails.currencySymbol && transactionAmount) {
                     transactionAmount = transactionAmount?.replace(this.invFormData.accountDetails.currencySymbol, "");
@@ -6898,7 +6898,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @memberof ProformaInvoiceComponent
      */
     public getStateCodeCompany(type: string): void {
-        let gstVal = cloneDeep(this.purchaseBillCompany[type].gstNumber).toString();
+        let gstVal = cloneDeep(this.purchaseBillCompany[type].gstNumber)?.toString();
         if (gstVal && gstVal.length >= 2) {
             const selectedState = this.companyStatesSource.find(item => item.stateGstCode === gstVal.substring(0, 2));
             if (selectedState) {

@@ -994,7 +994,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
             return item.voucherNumber?.toLowerCase()?.includes(term?.toLowerCase()) ||
                 item.account.name.toLowerCase().includes(term.toLowerCase()) ||
                 item.voucherDate.includes(term) ||
-                item.grandTotal.toString().includes(term);
+                item.grandTotal?.toString().includes(term);
         });
         this.detectChanges();
     }

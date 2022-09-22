@@ -361,7 +361,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
             this.createNewCompanyPreparedObj.address = this.companyProfileObj.address ? this.companyProfileObj.address : '';
             this.createNewCompanyPreparedObj.taxes = (this.selectedTaxes?.length > 0) ? this.selectedTaxes : [];
             if (this.createNewCompanyPreparedObj.phoneCode && this.createNewCompanyPreparedObj.contactNo) {
-                if (!this.createNewCompanyPreparedObj.contactNo.toString().includes('-')) {
+                if (!this.createNewCompanyPreparedObj.contactNo?.toString()?.includes('-')) {
                     this.createNewCompanyPreparedObj.contactNo = this.createNewCompanyPreparedObj.phoneCode + '-' + this.createNewCompanyPreparedObj.contactNo;
                 }
             }
@@ -909,7 +909,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof WelcomeComponent
      */
     private getFormattedContactNumber(contactNumber: string): string {
-        if (contactNumber.toString().includes('-')) {
+        if (contactNumber?.toString()?.includes('-')) {
             return contactNumber.split('-')[1];
         }
         return contactNumber;
@@ -925,8 +925,8 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof WelcomeComponent
      */
     private getCallingCode(contactNumber: string): string {
-        if (contactNumber.toString().includes('-')) {
-            return contactNumber.split('-')[0];
+        if (contactNumber?.toString()?.includes('-')) {
+            return contactNumber?.split('-')[0];
         }
         return '';
     }

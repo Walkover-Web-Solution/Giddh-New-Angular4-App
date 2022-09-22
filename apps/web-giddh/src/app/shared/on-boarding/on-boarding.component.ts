@@ -114,7 +114,7 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
         this.logedInuser = this._generalService.user;
         if (this._generalService.createNewCompany) {
             this.company = this._generalService.createNewCompany;
-            if (this.company.contactNo.toString().includes('-')) {
+            if (this.company.contactNo?.toString()?.includes('-')) {
                 let contact = this.company.contactNo.split('-');
                 this.company.contactNo = contact[1];
             }
@@ -267,7 +267,7 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
         comnanyName = this.removeSpecialCharacters(comnanyName);
         city = this.removeSpecialCharacters(city);
         d = new Date();
-        dateString = d.getTime().toString();
+        dateString = d.getTime()?.toString();
         randomGenerate = this.getSixCharRandom();
         strings = [comnanyName, city, dateString, randomGenerate];
         return strings.join('');

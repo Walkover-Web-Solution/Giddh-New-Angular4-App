@@ -44,8 +44,8 @@ export class ContactService {
 
         url = url?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             ?.replace(':groupUniqueName', encodeURIComponent(groupUniqueName))
-            ?.replace(':count', count.toString())
-            ?.replace(':page', pageNumber.toString())
+            ?.replace(':count', count?.toString())
+            ?.replace(':page', pageNumber?.toString())
             ?.replace(':refresh', refresh)
             ?.replace(':query', query)
             ?.replace(':sortBy', sortBy)
@@ -98,8 +98,8 @@ export class ContactService {
 
         url = url?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             ?.replace(':groupUniqueName', encodeURIComponent(groupUniqueName))
-            ?.replace(':count', count.toString())
-            ?.replace(':page', pageNumber.toString())
+            ?.replace(':count', count?.toString())
+            ?.replace(':page', pageNumber?.toString())
             ?.replace(':refresh', refresh)
             ?.replace(':query', query)
             ?.replace(':sortBy', sortBy)

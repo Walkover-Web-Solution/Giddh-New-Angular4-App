@@ -22,8 +22,8 @@ export class DaybookService {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + DAYBOOK_SEARCH_API.SEARCH
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            ?.replace(':page', queryRequest.page.toString())
-            ?.replace(':count', queryRequest.count.toString())
+            ?.replace(':page', queryRequest.page?.toString())
+            ?.replace(':count', queryRequest.count?.toString())
             ?.replace(':from', encodeURIComponent(queryRequest.from))
             ?.replace(':to', encodeURIComponent(queryRequest.to));
         url = url.concat(`&branchUniqueName=${queryRequest.branchUniqueName !== this.companyUniqueName ? encodeURIComponent(queryRequest.branchUniqueName) : ''}`);
@@ -41,13 +41,13 @@ export class DaybookService {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + DAYBOOK_SEARCH_API.EXPORT
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            ?.replace(':page', queryRequest.page.toString())
-            ?.replace(':count', queryRequest.count.toString())
+            ?.replace(':page', queryRequest.page?.toString())
+            ?.replace(':count', queryRequest.count?.toString())
             ?.replace(':from', encodeURIComponent(queryRequest.from))
             ?.replace(':to', encodeURIComponent(queryRequest.to))
-            ?.replace(':format', queryRequest.format.toString())
-            ?.replace(':type', queryRequest.type.toString())
-            ?.replace(':sort', queryRequest.sort.toString());
+            ?.replace(':format', queryRequest.format?.toString())
+            ?.replace(':type', queryRequest.type?.toString())
+            ?.replace(':sort', queryRequest.sort?.toString());
         if (queryRequest.branchUniqueName) {
             queryRequest.branchUniqueName = queryRequest.branchUniqueName !== this.companyUniqueName ? queryRequest.branchUniqueName : '';
             url = url.concat(`&branchUniqueName=${queryRequest.branchUniqueName}`);
@@ -66,13 +66,13 @@ export class DaybookService {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + DAYBOOK_SEARCH_API.EXPORT
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            ?.replace(':page', queryRequest.page.toString())
-            ?.replace(':count', queryRequest.count.toString())
+            ?.replace(':page', queryRequest.page?.toString())
+            ?.replace(':count', queryRequest.count?.toString())
             ?.replace(':from', encodeURIComponent(queryRequest.from))
             ?.replace(':to', encodeURIComponent(queryRequest.to))
-            ?.replace(':format', queryRequest.format.toString())
-            ?.replace(':type', queryRequest.type.toString())
-            ?.replace(':sort', queryRequest.sort.toString());
+            ?.replace(':format', queryRequest.format?.toString())
+            ?.replace(':type', queryRequest.type?.toString())
+            ?.replace(':sort', queryRequest.sort?.toString());
         if (queryRequest.branchUniqueName) {
             queryRequest.branchUniqueName = queryRequest.branchUniqueName !== this.companyUniqueName ? queryRequest.branchUniqueName : '';
             url = url.concat(`&branchUniqueName=${queryRequest.branchUniqueName}`);
