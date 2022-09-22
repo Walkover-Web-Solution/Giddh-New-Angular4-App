@@ -456,13 +456,16 @@
                                     <input
                                         name="accountDetails.mobileNumber"
                                         type="tel"
-                                        #initContact
-                                        id="init-contact"
+                                        #initContactUpdate
+                                        id="init-contact-update"
                                         formControlName="mobileNo"
                                         [placeholder]="localeData?.mobile_no_placeholder"
+                                        [ngClass]="showMobileNumberError ? 'intl-error' : ''"
                                     />
                                 </div>
-                                <span class="error-msg" *ngIf="!intl?.isValidNumber()">Invalid contact number</span>
+                                <span class="error-msg" *ngIf="showMobileNumberError">{{
+                                    localeData?.invalid_contact_number
+                                }}</span>
                             </div>
                         </div>
                     </div>

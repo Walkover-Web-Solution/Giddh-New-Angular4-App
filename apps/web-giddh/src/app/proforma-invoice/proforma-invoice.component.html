@@ -1015,14 +1015,17 @@
                                     <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12">
                                         <div class="col-sm-12 col-xl-6 col-lg-10 col-md-10 pl-0">
                                             <input
-                                                digitsOnlyDirective
-                                                [placeholder]="localeData?.mobile_number_placeholder"
-                                                type="tel"
                                                 name="accountDetails.mobileNumber"
-                                                class="form-control attention-to"
-                                                [(ngModel)]="invFormData.accountDetails.mobileNumber"
+                                                type="tel"
+                                                #initContactProforma
+                                                id="init-contact-proforma"
+                                                [placeholder]="localeData?.mobile_number_placeholder"
+                                                [ngClass]="showMobileNumberError ? 'intl-error' : ''"
                                             />
                                         </div>
+                                        <span class="error-msg" *ngIf="showMobileNumberError">
+                                            {{ localeData?.invalid_contact_number }}</span
+                                        >
                                     </div>
                                 </div>
                                 <!-- endregion-->

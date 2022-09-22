@@ -107,5 +107,6 @@
     "exchange_label": "विनिमय",
     "confirm_delete_file": "क्या आप वाकई संलग्न फ़ाइल को हटाना चाहते हैं?",
     "enter_amount": "कृपया जमा राशि दर्ज करें",
-    "voucher_number_required": "वाउचर नंबर अनिवार्य है।"
+    "voucher_number_required": "वाउचर नंबर अनिवार्य है।",
+    "invalid_contact_number": "अमान्य संपर्क नंबर"
 }

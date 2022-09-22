@@ -20,7 +20,7 @@ import { IDiscountList } from 'apps/web-giddh/src/app/models/api-models/Settings
 import { AccountService } from 'apps/web-giddh/src/app/services/account.service';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { combineLatest, Observable, of as observableOf, ReplaySubject, timer } from 'rxjs';
-import { take, takeUntil , debounceTime} from 'rxjs/operators';
+import { take, takeUntil, debounceTime } from 'rxjs/operators';
 import { AccountsAction } from '../../../../actions/accounts.actions';
 import { CommonActions } from '../../../../actions/common.actions';
 import { CompanyActions } from '../../../../actions/company.actions';
@@ -218,6 +218,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public isMobileNumberValid: boolean = true;
     /** This will hold mobile number field input  */
     public intl: any;
+    /** True if we need to destroy mobile number field */
+    public showMobileNumberError: boolean = false;
 
     constructor(
         private _fb: FormBuilder,
@@ -1687,11 +1689,11 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     }] : this.flatGroupsOptions;
                     this.activeGroupUniqueName = acc.parentGroups?.length > 0 ? acc.parentGroups[acc.parentGroups?.length - 1]?.uniqueName : '';
                     this.store.dispatch(this.groupWithAccountsAction.SetActiveGroup(this.activeGroupUniqueName));
-                   timer(1)
+                    timer(1)
                         .pipe(debounceTime(50))
                         .subscribe(_ => {
                             if (results[0]?.mobileNo) {
-                                let updatedNumber ='+'+results[0]?.mobileNo;
+                                let updatedNumber = '+' + results[0]?.mobileNo;
                                 this.intl.setNumber(updatedNumber);
                             }
                         });
@@ -1829,7 +1831,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
    * @memberof AccountUpdateNewDetailsComponent
    */
     public onlyPhoneNumber() {
-        const input = document.getElementById('init-contact');
+        const input = document.getElementById('init-contact-update');
         this.intl = new window['intlTelInput'](input, {
             nationalMode: false,
             utilsScript: 'https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.17/js/utils.js',
@@ -1881,9 +1883,12 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 }
             },
         });
-        input.addEventListener('focus', () => {
-            setTimeout(() => {
-            }, 100);
+        input.addEventListener('blur', () => {
+            if (!this.intl?.isValidNumber()) {
+                this.showMobileNumberError = true;
+            } else {
+                this.showMobileNumberError = false;
+            }
         });
         input.addEventListener('countrychange', () => {
         });
