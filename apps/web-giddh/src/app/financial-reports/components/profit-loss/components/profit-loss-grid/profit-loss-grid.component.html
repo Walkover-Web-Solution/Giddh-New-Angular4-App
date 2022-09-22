@@ -57,7 +57,7 @@
                                                 "
                                             >
                                                 {{
-                                                    dayjs(plData?.dates?.to, giddhDateFormat).toString()
+                                                    dayjs(plData?.dates?.to, giddhDateFormat)?.toString()
                                                         | date: "dd MMMM yyyy"
                                                 }}</span
                                             >

@@ -59,7 +59,7 @@ export class FinancialYearComponent implements OnInit, OnDestroy {
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
                 this.currentCompanyName = activeCompany.name;
-                this.financialOptions = activeCompany.financialYears.map(element => {
+                this.financialOptions = activeCompany.financialYears?.map(element => {
                     return { label: element.uniqueName, value: element.uniqueName };
                 });
             }
@@ -76,7 +76,7 @@ export class FinancialYearComponent implements OnInit, OnDestroy {
         let endYear = dayjs().year();
         let startYear = dayjs().subtract(7, 'year').year();
         let yearArray = range(startYear, endYear);
-        this.yearOptions = yearArray.map(year => {
+        this.yearOptions = yearArray?.map(year => {
             return { label: String(year), value: year };
         });
     }

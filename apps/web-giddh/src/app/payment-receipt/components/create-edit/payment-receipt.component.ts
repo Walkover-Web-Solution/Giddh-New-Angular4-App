@@ -1614,7 +1614,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
      * @memberof PaymentReceiptComponent
      */
     public getStateCode(type: string, statesElement: SalesShSelectComponent): void {
-        let gstVal = cloneDeep(this.voucherFormData.account[type].taxNumber).toString();
+        let gstVal = cloneDeep(this.voucherFormData.account[type].taxNumber)?.toString();
         if (gstVal && gstVal.length >= 2) {
             const selectedState = this.statesSource.find(item => item.additional?.stateGstCode === gstVal.substring(0, 2));
             if (selectedState) {

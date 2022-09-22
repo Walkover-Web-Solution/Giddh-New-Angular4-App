@@ -195,7 +195,7 @@ export class PreviewComponent implements OnInit, OnDestroy, OnChanges, AfterView
             return item.voucherNumber.toLowerCase().includes(term.toLowerCase()) ||
                 item.account.name.toLowerCase().includes(term.toLowerCase()) ||
                 item.voucherDate.includes(term) ||
-                item.grandTotal.amountForAccount.toString().includes(term);
+                item.grandTotal.amountForAccount?.toString()?.includes(term);
         });
     }
 

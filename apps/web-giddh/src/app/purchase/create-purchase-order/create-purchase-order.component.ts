@@ -1168,9 +1168,9 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     public getStateCode(type: string, addressType: string): void {
         let gstVal;
         if (addressType === "vendor") {
-            gstVal = _.cloneDeep(this.purchaseOrder.account[type].gstNumber).toString();
+            gstVal = _.cloneDeep(this.purchaseOrder.account[type].gstNumber)?.toString();
         } else {
-            gstVal = _.cloneDeep(this.purchaseOrder.company[type].gstNumber).toString();
+            gstVal = _.cloneDeep(this.purchaseOrder.company[type].gstNumber)?.toString();
         }
 
         if (gstVal && gstVal.length >= 2) {

@@ -72,14 +72,14 @@ export class LedgerService {
 
         let url = this.config.apiUrl + LEDGER_API.NEW_GET_LEDGER?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             ?.replace(':q', encodeURIComponent(request.q || ''))
-            ?.replace(':page', request.page.toString())
-            ?.replace(':count', encodeURIComponent(request.count.toString()))
+            ?.replace(':page', request.page?.toString())
+            ?.replace(':count', encodeURIComponent(request.count?.toString()))
             ?.replace(':accountUniqueName', encodeURIComponent(request.accountUniqueName))
             ?.replace(':from', request.from)
             ?.replace(':sort', encodeURIComponent(request.sort))
             ?.replace(':to', encodeURIComponent(request.to))
-            ?.replace(':reversePage', request.reversePage.toString())
-            ?.replace(':accountCurrency', request.accountCurrency.toString());
+            ?.replace(':reversePage', request.reversePage?.toString())
+            ?.replace(':accountCurrency', request.accountCurrency?.toString());
         if (request.branchUniqueName) {
             request.branchUniqueName = request.branchUniqueName !== this.companyUniqueName ? request.branchUniqueName : '';
             url = url.concat(`&branchUniqueName=${request.branchUniqueName}`);
@@ -481,7 +481,7 @@ export class LedgerService {
         let url = this.config.apiUrl + LEDGER_API.GET_BALANCE?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             ?.replace(':accountUniqueName', encodeURIComponent(model.accountUniqueName))
             ?.replace(':from', model.from)?.replace(':to', model.to)
-            ?.replace(':accountCurrency', model.accountCurrency.toString());
+            ?.replace(':accountCurrency', model.accountCurrency?.toString());
         if (model.branchUniqueName) {
             model.branchUniqueName = model.branchUniqueName !== this.companyUniqueName ? model.branchUniqueName : '';
             url = url.concat(`&branchUniqueName=${model.branchUniqueName}`);
