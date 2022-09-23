@@ -60,7 +60,7 @@ export class ShareLedgerComponent implements OnInit, OnDestroy {
         magicLinkRequest.to = dayjs(data.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) ? dayjs(data.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) : dayjs().format(GIDDH_DATE_FORMAT);
         magicLinkRequest.branchUniqueName = this.inputData?.advanceSearchRequest.branchUniqueName || '';
         this.ledgerService.GenerateMagicLink(magicLinkRequest, this.inputData?.accountUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(resp => {
-            if (resp.status === 'success') {
+            if (resp?.status === 'success') {
                 this.magicLink = resp.body.magicLink;
             } else {
                 this.magicLink = '';
