@@ -1,15 +1,15 @@
 import { Component, EventEmitter, Output, Input, OnDestroy, OnInit } from '@angular/core';
 import { trigger, state, style, transition, animate } from '@angular/animations';
-import { AddAccountRequest } from '../../../models/api-models/Account';
-import { AccountService } from '../../../services/account.service';
-import { ToasterService } from '../../../services/toaster.service';
 import { takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
+import { AddAccountRequest } from '../../models/api-models/Account';
+import { AccountService } from '../../services/account.service';
+import { ToasterService } from '../../services/toaster.service';
 
 @Component({
     selector: 'aside-menu-product-service',
-    styleUrls: ['./component.scss'],
-    templateUrl: './component.html',
+    styleUrls: ['./aside-menu-product-service.component.scss'],
+    templateUrl: './aside-menu-product-service.component.html',
     animations: [
         trigger('slideInOut', [
             state('in', style({

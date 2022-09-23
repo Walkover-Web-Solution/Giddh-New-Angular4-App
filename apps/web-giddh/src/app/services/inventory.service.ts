@@ -175,7 +175,7 @@ export class InventoryService {
      */
     public GetGroupsWithStocksHierarchyMin(q: string = '', page: number = 1, count?: number): Observable<BaseResponse<GroupsWithStocksHierarchyMin, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.get(this.config.apiUrl + INVENTORY_API.GROUPS_WITH_STOCKS_HIERARCHY?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':q', encodeURIComponent(q || ''))?.replace(':page', encodeURIComponent(page?.toString()))?.replace(':count', encodeURIComponent(count?.toString()))).pipe(map((res) => {
+        return this.http.get(this.config.apiUrl + INVENTORY_API.GROUPS_WITH_STOCKS_HIERARCHY?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':q', encodeURIComponent(q || ''))?.replace(':page', encodeURIComponent(page?.toString()))?.replace(':count', encodeURIComponent((count) ? count?.toString() : ''))).pipe(map((res) => {
             let data: BaseResponse<GroupsWithStocksHierarchyMin, string> = res;
             data.request = '';
             data.queryString = { q, page, count };

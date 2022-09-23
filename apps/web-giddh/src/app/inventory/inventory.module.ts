@@ -45,6 +45,7 @@ import { JobworkSidebarComponent } from './jobwork/sidebar-components/jobwork.si
 import { ManufacturingComponent } from './manufacturing/manufacturing.component';
 import { NgxBootstrapSwitchModule } from 'ngx-bootstrap-switch';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
+import { AsideMenuProductServiceModule } from '../shared/aside-menu-product-service/aside-menu-product-service.module';
 
 @NgModule({
     declarations: [
@@ -124,7 +125,8 @@ import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
         InventoryAddStockModule,
         ConfirmModalModule,
         NgxBootstrapSwitchModule.forRoot(),
-        PerfectScrollbarModule
+        PerfectScrollbarModule,
+        AsideMenuProductServiceModule
     ],
     entryComponents: [PaginationComponent]
 })
