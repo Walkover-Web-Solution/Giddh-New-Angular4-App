@@ -798,7 +798,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.loaderService.show();
         } else if (output.type === 'done') {
             this.loaderService.hide();
-            if (output.file.response.status === 'success') {
+            if (output.file.response?.status === 'success') {
                 this.isFileUploading = false;
                 this.blankLedger.attachedFile = output.file.response.body?.uniqueName;
                 this.blankLedger.attachedFileName = output.file.response.body?.name;
@@ -869,7 +869,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         o.to = (this.trxRequest.to) ? dayjs(this.trxRequest.to).format(GIDDH_DATE_FORMAT) : "";
         this.ledgerService.GetReconcile(o.accountUniqueName, o.from, o.to, o.chequeNumber).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             let data: BaseResponse<ReconcileResponse[], string> = res;
-            if (data.status === 'success') {
+            if (data?.status === 'success') {
                 if (data.body && data.body.length) {
                     forEach(data.body, (entry: ReconcileResponse) => {
                         forEach(entry.transactions, (txn: ILedgerTransactionItem) => {
@@ -931,7 +931,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 transactionId: this.blankLedger.transactionId
             };
             this.ledgerService.MapBankTransactions(model, unqObj).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
-                if (res.status === 'success') {
+                if (res?.status === 'success') {
                     if (typeof (res.body) === 'string') {
                         this.toaster.showSnackBar("success", res.body);
                     } else {
