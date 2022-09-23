@@ -549,7 +549,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             this.loaderService.show();
         } else if (output.type === 'done') {
             this.loaderService.hide();
-            if (output.file.response.status === 'success') {
+            if (output.file.response?.status === 'success') {
                 this.isFileUploading = false;
                 this.vm.selectedLedger.attachedFile = output.file.response.body?.uniqueName;
                 this.vm.selectedLedger.attachedFileName = output.file.response.body?.name;
@@ -970,7 +970,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public downloadAttachedFile(fileName: string, e: Event) {
         e.stopPropagation();
         this.ledgerService.DownloadAttachement(fileName).pipe(takeUntil(this.destroyed$)).subscribe(d => {
-            if (d.status === 'success') {
+            if (d?.status === 'success') {
                 let blob = this.generalService.base64ToBlob(d.body.uploadedFile, `image/${d.body.fileType}`, 512);
                 return saveAs(blob, d.body.name);
             } else {
@@ -990,7 +990,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         downloadRequest.voucherType = (transaction?.voucherGeneratedType) ? transaction?.voucherGeneratedType : transaction?.voucher?.name;
 
         this.ledgerService.DownloadInvoice(downloadRequest, this.activeAccount?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(d => {
-            if (d.status === 'success') {
+            if (d?.status === 'success') {
                 let blob = this.generalService.base64ToBlob(d.body, 'application/pdf', 512);
                 return saveAs(blob, `${this.activeAccount.name} - ${transaction?.voucherNumber}.pdf`);
             } else {
@@ -2121,7 +2121,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      */
     private initEntry(resp: any[], updateBaseAccountParticular?: boolean): void {
         // insure we have account details, if we are normal ledger mode and not petty cash mode ( special case for others entry in petty cash )
-        if (this.isPettyCash && this.accountUniqueName && resp[1].status !== 'success') {
+        if (this.isPettyCash && this.accountUniqueName && resp[1]?.status !== 'success') {
             return;
         }
 
