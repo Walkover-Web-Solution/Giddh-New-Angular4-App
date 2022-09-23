@@ -880,7 +880,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             let getRequest = { accountUniqueName: this.trxRequest.accountUniqueName, from: this.trxRequest.from, count: this.bankTransactionsResponse.countPerPage, page: this.bankTransactionsResponse.page }
             this.ledgerService.GetBankTransactionsForLedger(getRequest).pipe(takeUntil(this.destroyed$)).subscribe(res => {
                 this.isBankTransactionLoading = false;
-                if (res.status === 'success') {
+                if (res?.status === 'success') {
                     if (res.body) {
                         this.bankTransactionsResponse.totalItems = res.body.totalItems;
                         this.bankTransactionsResponse.totalPages = res.body.totalPages;
@@ -1112,7 +1112,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         downloadRequest.voucherType = transaction?.voucherGeneratedType;
 
         this.ledgerService.DownloadInvoice(downloadRequest, this.lc.accountUnq).pipe(takeUntil(this.destroyed$)).subscribe(d => {
-            if (d.status === 'success') {
+            if (d?.status === 'success') {
                 let blob = this.generalService.base64ToBlob(d.body, 'application/pdf', 512);
                 download(`${activeAccount.name} - ${transaction?.voucherNumber}.pdf`, blob, 'application/pdf');
             } else {
@@ -1769,7 +1769,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.loaderService.show();
         } else if (output.type === 'done') {
             this.loaderService.hide();
-            if (output.file.response.status === 'success') {
+            if (output.file.response?.status === 'success') {
                 this.entryUniqueNamesForBulkAction = [];
                 this.getTransactionData();
                 this.isFileUploading = false;
@@ -1835,7 +1835,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
      */
     public deleteBankTxn(transactionId) {
         this.ledgerService.DeleteBankTransaction(transactionId).pipe(takeUntil(this.destroyed$)).subscribe((res: BaseResponse<any, string>) => {
-            if (res.status === 'success') {
+            if (res?.status === 'success') {
                 this.toaster.showSnackBar("success", this.localeData?.bank_transaction_deleted);
             }
         });
