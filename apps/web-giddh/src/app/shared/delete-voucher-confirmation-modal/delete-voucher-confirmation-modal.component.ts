@@ -1,13 +1,11 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { ILedgersInvoiceResult } from '../../../../models/api-models/Invoice';
-import { confirmationMessages } from "../../../../shared/helpers/confirmationMessages";
+import { ILedgersInvoiceResult } from '../../models/api-models/Invoice';
 
 @Component({
-    selector: 'delete-role-confirmation-model',
-    templateUrl: './confirmation.model.component.html'
+    selector: 'delete-voucher-confirmation-modal',
+    templateUrl: './delete-voucher-confirmation-modal.component.html'
 })
-
-export class DeleteInvoiceConfirmationModelComponent {
+export class DeleteVoucherConfirmationModalComponent {
     /* Taking module name as input to show confirmation message based on module */
     @Input() public module: string = '';
     @Input() public selectedInvoiceForDelete: ILedgersInvoiceResult;
@@ -30,7 +28,7 @@ export class DeleteInvoiceConfirmationModelComponent {
      * Callback for translation response complete
      *
      * @param {*} event
-     * @memberof DeleteInvoiceConfirmationModelComponent
+     * @memberof DeleteVoucherConfirmationModalComponent
      */
     public translationComplete(event: any): void {
         if (event) {
