@@ -42,6 +42,7 @@ import { PurchaseOrderPreviewModule } from '../shared/purchase-order-preview/pur
 import { InvoiceModule } from '../invoice/invoice.module';
 import { GenericAsideMenuAccountModule } from '../shared/generic-aside-menu-account/generic.aside.menu.account.module';
 import { AsideMenuOtherTaxesModule } from '../shared/aside-menu-other-taxes/aside-menu-other-taxes.module';
+import { AsideMenuProductServiceModule } from '../shared/aside-menu-product-service/aside-menu-product-service.module';
 
 
 @NgModule({
@@ -93,7 +94,8 @@ import { AsideMenuOtherTaxesModule } from '../shared/aside-menu-other-taxes/asid
         DatepickerWrapperModule,
         PurchaseOrderPreviewModule,
         GenericAsideMenuAccountModule,
-        AsideMenuOtherTaxesModule
+        AsideMenuOtherTaxesModule,
+        AsideMenuProductServiceModule
     ]
 })
 export class PurchaseModule {
