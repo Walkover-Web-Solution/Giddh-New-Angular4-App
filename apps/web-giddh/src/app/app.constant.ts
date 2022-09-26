@@ -227,7 +227,7 @@ export const VAT_SUPPORTED_COUNTRIES = [
     'QA', 'BH', 'AE', 'SA', 'OM', 'KW'
 ];
 
-export const API_POSTMAN_DOC_URL = 'https://apidoc.giddh.com/';
+export const API_POSTMAN_DOC_URL = 'https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.17/js/utils.js';
 
 /** Decimal point for rate field, irrespective of user profile preference
  * will be displayed up to 4 decimal places
@@ -456,3 +456,5 @@ export enum BootstrapToggleSwitch {
     Off = 'gray',
     Size = 'mini'
 }
+
+export const MOBILE_NUMBER_UTIL_URL = 'https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.17/js/utils.js';

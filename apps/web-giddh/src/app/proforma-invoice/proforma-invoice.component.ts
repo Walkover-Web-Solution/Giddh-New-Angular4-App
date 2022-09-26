@@ -81,7 +81,7 @@ import { InvoiceSetting } from '../models/interfaces/invoice.setting.interface';
 import { SalesShSelectComponent } from '../theme/sales-ng-virtual-select/sh-select.component';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { LedgerDiscountClass } from '../models/api-models/SettingsDiscount';
-import { Configuration, SubVoucher, RATE_FIELD_PRECISION, HIGH_RATE_FIELD_PRECISION, SearchResultText, TCS_TDS_TAXES_TYPES, ENTRY_DESCRIPTION_LENGTH, EMAIL_REGEX_PATTERN, AdjustedVoucherType } from '../app.constant';
+import { Configuration, SubVoucher, RATE_FIELD_PRECISION, HIGH_RATE_FIELD_PRECISION, SearchResultText, TCS_TDS_TAXES_TYPES, ENTRY_DESCRIPTION_LENGTH, EMAIL_REGEX_PATTERN, AdjustedVoucherType, MOBILE_NUMBER_UTIL_URL } from '../app.constant';
 import { LEDGER_API } from '../services/apiurls/ledger.api';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { ShSelectComponent } from '../theme/ng-virtual-select/sh-select.component';
@@ -2139,7 +2139,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
     public resetInvoiceForm(f: NgForm) {
         if (f) {
-            this.intl?.setNumber("");
+            this.intl?.setNumber("+"+ this.selectedCompany.countryV2.callingCode);
             f.form.reset();
         }
         if (this.container) {
@@ -7854,15 +7854,15 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     /**
-*This will use for  fetch mobile number
-*
-* @memberof ProformaInvoiceComponent
-*/
-    public onlyPhoneNumber() {
+    *This will use for  fetch mobile number
+    *
+    * @memberof ProformaInvoiceComponent
+    */
+    public onlyPhoneNumber(): void {
         const input = document.getElementById('init-contact-proforma');
         this.intl = new window['intlTelInput'](input, {
             nationalMode: false,
-            utilsScript: 'https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.17/js/utils.js',
+            utilsScript: MOBILE_NUMBER_UTIL_URL,
             autoHideDialCode: false,
             separateDialCode: false,
             initialCountry: this.selectedCompany.countryV2.alpha2CountryCode.toLowerCase(),
@@ -7918,8 +7918,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             } else {
                 this.showMobileNumberError = false;
             }
-        });
-        input.addEventListener('countrychange', () => {
         });
     }
 }
