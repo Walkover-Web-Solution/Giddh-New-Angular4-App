@@ -81,7 +81,7 @@ import { InvoiceSetting } from '../models/interfaces/invoice.setting.interface';
 import { SalesShSelectComponent } from '../theme/sales-ng-virtual-select/sh-select.component';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { LedgerDiscountClass } from '../models/api-models/SettingsDiscount';
-import { Configuration, SubVoucher, RATE_FIELD_PRECISION, HIGH_RATE_FIELD_PRECISION, SearchResultText, TCS_TDS_TAXES_TYPES, ENTRY_DESCRIPTION_LENGTH, EMAIL_REGEX_PATTERN, AdjustedVoucherType } from '../app.constant';
+import { Configuration, SubVoucher, RATE_FIELD_PRECISION, HIGH_RATE_FIELD_PRECISION, SearchResultText, TCS_TDS_TAXES_TYPES, ENTRY_DESCRIPTION_LENGTH, EMAIL_REGEX_PATTERN, AdjustedVoucherType, MOBILE_NUMBER_UTIL_URL } from '../app.constant';
 import { LEDGER_API } from '../services/apiurls/ledger.api';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { ShSelectComponent } from '../theme/ng-virtual-select/sh-select.component';
@@ -117,9 +117,8 @@ import { Location, TitleCasePipe } from '@angular/common';
 import { VoucherForm } from '../models/api-models/Voucher';
 import { AdjustmentUtilityService } from '../shared/advance-receipt-adjustment/services/adjustment-utility.service';
 import { GstReconcileActions } from '../actions/gst-reconcile/GstReconcile.actions';
-import { CountryISO, PhoneNumberFormat, SearchCountryField } from 'ngx-intl-tel-input';
 import { SettingsDiscountService } from '../services/settings.discount.service';
-
+import { HttpClient } from '@angular/common/http';
 /** Type of search: customer and item (product/service) search */
 const SEARCH_TYPE = {
     CUSTOMER: 'customer',
@@ -632,26 +631,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     private referenceVouchersCurrentPage: number = 1;
     /** Reference voucher search field */
     private searchReferenceVoucher: any = "";
-    /** This will hold SearchCountryField */
-    public searchCountryField = SearchCountryField;
-    /** This will hold CountryISO */
-    public countryISO = CountryISO;
-    /** This will hold PhoneNumberFormat */
-    public phoneNumberFormat = PhoneNumberFormat;
-    /** This will hold newCountryCode */
-    public newCountryCode: any = '';
-    /** This will hold oldCountryCode */
-    public oldCountryCode: any = '';
-    /** This will hold updatedNumber */
-    public updatedNumber: any = '';
-    /** This will hold currentCompanyCountryCode */
-    public currentCompanyCountryCode: any = '';
+    /** List of discounts */
+    public discountsList: any[] = [];
+    /** This will hold mobile number field input  */
+    public intl: any;
     /** This will hold updatedNumber */
     public selectedCustomerNumber: any = '';
     /** True if we need to destroy mobile number field */
-    public showMobileNumberField: boolean = true;
-    /** List of discounts */
-    public discountsList: any[] = [];
+    public showMobileNumberError: boolean = false;
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -713,7 +700,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         private location: Location,
         private adjustmentUtilityService: AdjustmentUtilityService,
         private gstAction: GstReconcileActions,
-        private settingsDiscountService: SettingsDiscountService
+        private settingsDiscountService: SettingsDiscountService,
+        private http: HttpClient
     ) {
         this.advanceReceiptAdjustmentData = new VoucherAdjustments();
         this.advanceReceiptAdjustmentData.adjustments = [];
@@ -752,6 +740,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     public ngAfterViewInit() {
+        setTimeout(() => {
+            this.onlyPhoneNumber();
+        }, 1000);
         if (!this.isUpdateMode) {
             this.toggleBodyClass();
         }
@@ -833,8 +824,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
-                const countryCode = activeCompany.countryV2.alpha2CountryCode;
-                this.currentCompanyCountryCode = countryCode.toLowerCase();
                 this.selectedCompany = activeCompany;
                 this.companyAddressList = activeCompany.addresses;
                 this.initializeCurrentVoucherForm();
@@ -1405,18 +1394,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     if (tempSelectedAcc) {
                         this.customerAcList$ = observableOf([{ label: tempSelectedAcc.name, value: tempSelectedAcc.uniqueName, additional: tempSelectedAcc }]);
                         this.invFormData.voucherDetails.customerName = tempSelectedAcc.name;
-                        this.selectedCustomerNumber = tempSelectedAcc.mobileNo ? "+" + tempSelectedAcc.mobileNo : '';
+                        let selectedCustomerNumber = tempSelectedAcc.mobileNo ? "+" + tempSelectedAcc.mobileNo : '';
+                        this.intl?.setNumber(selectedCustomerNumber);
                         this.invFormData.voucherDetails.customerUniquename = tempSelectedAcc.uniqueName;
                         this.isCustomerSelected = true;
                         this.isMulticurrencyAccount = tempSelectedAcc.currencySymbol !== this.baseCurrencySymbol;
                         this.customerCountryName = tempSelectedAcc.country.countryName;
                         this.customerCountryCode = tempSelectedAcc?.country?.countryCode || 'IN';
                         this.checkIfNeedToExcludeTax(tempSelectedAcc);
-
-                        this.showMobileNumberField = false;
-                        setTimeout(() => {
-                            this.showMobileNumberField = true;
-                        }, 50);
 
                         this.getUpdatedStateCodes(tempSelectedAcc.country.countryCode).then(() => {
                             this.invFormData.accountDetails = new AccountDetailsClass(tempSelectedAcc);
@@ -1460,7 +1445,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         if (tempSelectedAcc.addresses && tempSelectedAcc.addresses.length) {
                             tempSelectedAcc.addresses = [find(tempSelectedAcc.addresses, (tax) => tax.isDefault)];
                         }
-                        this.selectedCustomerNumber = tempSelectedAcc.mobileNo ? "+" + tempSelectedAcc.mobileNo : '';
+                        let selectedCustomerNumber = tempSelectedAcc.mobileNo ? "+" + tempSelectedAcc.mobileNo : '';
+                        this.intl?.setNumber(selectedCustomerNumber);
                         this.invFormData.voucherDetails.customerUniquename = null;
                         this.invFormData.voucherDetails.customerName = tempSelectedAcc.name;
                         this.invFormData.accountDetails = new AccountDetailsClass(tempSelectedAcc);
@@ -1994,7 +1980,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public assignAccountDetailsValuesInForm(data: AccountResponseV2) {
         if (data?.mobileNo) {
             let newSelectedMobileNumber = "+" + data?.mobileNo;
-            this.selectedCustomerNumber = newSelectedMobileNumber;
+            this.intl?.setNumber(newSelectedMobileNumber);
         }
         this.isCashBankAccount = false;
 
@@ -2147,11 +2133,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     public resetInvoiceForm(f: NgForm) {
-        this.showMobileNumberField = false;
-        setTimeout(() => {
-            this.showMobileNumberField = true;
-        }, 50);
         if (f) {
+            this.intl?.setNumber("+"+ this.selectedCompany.countryV2.callingCode);
             f.form.reset();
         }
         if (this.container) {
@@ -2460,7 +2443,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         let requestObject: any;
         let voucherDate: any;
         const deposit = this.getDeposit();
-        data.accountDetails.mobileNumber = this.selectedCustomerNumber?.e164Number;
+        data.accountDetails.mobileNumber = this.intl?.getNumber();
         if (!this.isPurchaseInvoice) {
             voucherDate = data.voucherDetails.voucherDate;
             requestObject = {
@@ -4115,7 +4098,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     this.startLoader(false);
                     return;
                 }
-                data.accountDetails.mobileNumber = this.selectedCustomerNumber?.e164Number;
+                data.accountDetails.mobileNumber = this.intl?.getNumber();
                 const deposit = this.getDeposit();
                 requestObject = {
                     account: data.accountDetails,
@@ -5139,8 +5122,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         voucherClassConversion.accountDetails.billingDetails.gstNumber = result.account.billingDetails.gstNumber ?? result?.account?.billingDetails?.taxNumber;
         voucherClassConversion.accountDetails.billingDetails.state.code = this.getNewStateCode(result.account.billingDetails.stateCode ?? result?.account?.billingDetails?.state?.code);
         voucherClassConversion.accountDetails.billingDetails.state.name = result.account.billingDetails.stateName ?? result?.account?.billingDetails?.state?.name;
-        voucherClassConversion.accountDetails.mobileNumber = result?.account?.mobileNumber;
-        this.selectedCustomerNumber = result?.account?.mobileNumber ? "+" + result?.account?.mobileNumber : '';
+        let selectedCustomerNumber = result?.account?.mobileNumber ? "+" + result?.account?.mobileNumber : '';
+        this.intl?.setNumber(selectedCustomerNumber);
+        voucherClassConversion.accountDetails.mobileNumber = result.account.mobileNumber;
 
         voucherClassConversion.accountDetails.shippingDetails = new GstDetailsClass();
         if (result?.account?.shippingDetails) {
@@ -7844,23 +7828,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     /**
-    * This will check no and replace old country code with new country code
-    *
-    * @param {*} event
-    * @memberof ProformaInvoiceComponent
-    */
-    public checkNumber(event: any): void {
-        if (event) {
-            this.oldCountryCode = this.selectedCustomerNumber?.dialCode;
-            let oldNumber = this.selectedCustomerNumber?.e164Number;
-            this.newCountryCode = "+" + event?.dialCode;
-            const value = oldNumber;
-            let newNumber = value ? value?.replace(this.oldCountryCode, this.newCountryCode) : this.newCountryCode;
-            this.selectedCustomerNumber = newNumber;
-            this._cdr.detectChanges();
-        }
-    }
-    /**
      * Gets profile information
      *
      * @private
@@ -7892,12 +7859,70 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     /**
-     * Will put focus in search field in calling code dropdown
-     *
-     * @param {*} element
-     * @memberof ProformaInvoiceComponent
-     */
-    public focusInCallingCodeSearch(element: any): void {
-        this.generalService.focusInCountrySearch(element);
+    *This will use for  fetch mobile number
+    *
+    * @memberof ProformaInvoiceComponent
+    */
+    public onlyPhoneNumber(): void {
+        const input = document.getElementById('init-contact-proforma');
+        this.intl = new window['intlTelInput'](input, {
+            nationalMode: false,
+            utilsScript: MOBILE_NUMBER_UTIL_URL,
+            autoHideDialCode: false,
+            separateDialCode: false,
+            initialCountry: this.selectedCompany.countryV2.alpha2CountryCode.toLowerCase(),
+            geoIpLookup: (success, failure) => {
+                let countryCode = this.selectedCompany.countryV2.alpha2CountryCode.toLowerCase();
+                if (!countryCode) {
+                    const fetchIPApi = this.http.get<any>('https://api.db-ip.com/v2/free/self');
+                    fetchIPApi.subscribe(
+                        (res) => {
+                            if (res?.response?.ipAddress) {
+                                const fetchCountryByIpApi = this.http.get<any>('http://ip-api.com/json/${res.response.ipAddress');
+                                fetchCountryByIpApi.subscribe(
+                                    (fetchCountryByIpApiRes) => {
+                                        if (fetchCountryByIpApiRes?.response?.countryCode) {
+                                            return success(fetchCountryByIpApiRes.response.countryCode);
+                                        } else {
+                                            return success(countryCode);
+                                        }
+                                    },
+                                    (fetchCountryByIpApiErr) => {
+                                        const fetchCountryByIpInfoApi = this.http.get<any>('https://ipinfo.io/${res.response.ipAddress}/json');
+
+                                        fetchCountryByIpInfoApi.subscribe(
+                                            (fetchCountryByIpInfoApiRes) => {
+                                                if (fetchCountryByIpInfoApiRes?.response?.country) {
+                                                    return success(fetchCountryByIpInfoApiRes.response.country);
+                                                } else {
+                                                    return success(countryCode);
+                                                }
+                                            },
+                                            (fetchCountryByIpInfoApiErr) => {
+                                                return success(countryCode);
+                                            }
+                                        );
+                                    }
+                                );
+                            } else {
+                                return success(countryCode);
+                            }
+                        },
+                        (err) => {
+                            return success(countryCode);
+                        }
+                    );
+                } else {
+                    return success(countryCode);
+                }
+            },
+        });
+        input.addEventListener('blur', () => {
+            if (!this.intl?.isValidNumber()) {
+                this.showMobileNumberError = true;
+            } else {
+                this.showMobileNumberError = false;
+            }
+        });
     }
 }

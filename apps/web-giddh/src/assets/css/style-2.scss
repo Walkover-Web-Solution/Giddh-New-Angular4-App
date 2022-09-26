@@ -4,7 +4,7 @@
 @import "@angular/material/prebuilt-themes/indigo-pink.css";
 @import "./json-tree.scss";
 @import "./json-diff.scss";
-@import "./ngx-intl-input.scss";
+@import "./intl.scss";
 $custom-typography: mat-typography-config(
     $font-family: "opensans-regular",
 );
@@ -6511,7 +6511,7 @@ highcharts-chart {
 #asidePaneFormTabs.custom-tabs .nav.nav-tabs {
     padding: 0 0px 0 0 !important;
     background-color: transparent;
-    z-index: 9;
+    z-index: 2;
     position: relative !important;
     top: -4px !important;
     margin-bottom: 10px;
@@ -11131,19 +11131,6 @@ hamburger-menu {
                     background: var(--color-secondary-input-bar-background);
                 }
             }
-        }
-    }
-}
-.ngx-wrapper {
-    margin-top: 10px !important;
-    margin-bottom: 10px !important;
-    ngx-intl-tel-input input {
-        width: 402px;
-        padding-left: 55px !important;
-    }
-    .iti {
-        .search-container input {
-            padding-left: 10px !important;
         }
     }
 }

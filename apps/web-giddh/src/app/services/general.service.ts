@@ -1172,16 +1172,4 @@ export class GeneralService {
         }
         return found;
     }
-
-    /**
-     * Will put focus in search field in calling code dropdown
-     *
-     * @param {*} [element]
-     * @memberof GeneralService
-     */
-    public focusInCountrySearch(element?: any): void {
-        setTimeout(() => {
-            element?.target?.closest(".iti--allow-dropdown")?.querySelector(':scope > .iti__flag-container > .country-dropdown > .search-container > #country-search-box')?.focus();
-        }, 300);
-    }
 }

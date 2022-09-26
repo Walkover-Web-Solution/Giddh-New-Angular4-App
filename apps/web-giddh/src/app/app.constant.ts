@@ -455,3 +455,5 @@ export enum BootstrapToggleSwitch {
     Off = 'gray',
     Size = 'mini'
 }
+
+export const MOBILE_NUMBER_UTIL_URL = 'https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.17/js/utils.js';

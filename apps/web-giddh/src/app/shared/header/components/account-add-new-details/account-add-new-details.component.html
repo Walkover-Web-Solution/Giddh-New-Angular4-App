@@ -447,48 +447,33 @@
                             <div class="form-group">
                                 <label>{{ commonLocaleData?.app_mobile_number }}</label>
                                 <div class="d-flex">
-                                    <ngx-intl-tel-input
-                                        [cssClass]="'pull-right'"
-                                        [enableAutoCountrySelect]="true"
-                                        [enablePlaceholder]="true"
-                                        [searchCountryFlag]="true"
-                                        [searchCountryField]="[searchCountryField.Iso2, searchCountryField.Name]"
-                                        [selectFirstCountry]="false"
-                                        [maxLength]="30"
-                                        [phoneValidation]="true"
-                                        [numberFormat]="phoneNumberFormat.National"
-                                        name="mobileNo"
-                                        (countryChange)="checkNumber($event)"
-                                        #mobileNo
-                                        [selectedCountryISO]="currentCompanyCountryCode"
+                                    <input
+                                        name="accountDetails.mobileNumber"
+                                        type="tel"
+                                        #initContactAdd
+                                        id="init-contact-add"
                                         formControlName="mobileNo"
-                                        (click)="focusInCallingCodeSearch($event)"
-                                    >
-                                    </ngx-intl-tel-input>
+                                        [placeholder]="localeData?.mobile_no_placeholder"
+                                        [ngClass]="showMobileNumberError ? 'intl-error' : ''"
+                                    />
                                 </div>
-                                <span
-                                    class="error-msg"
-                                    *ngIf="
-                                        addAccountForm.controls['mobileNo'].touched &&
-                                        addAccountForm.controls['mobileNo'].invalid
-                                    "
-                                    >{{ localeData?.invalid_mobile_number }}</span
-                                >
+                                <span class="error-msg" *ngIf="showMobileNumberError">{{
+                                    localeData?.invalid_contact_number
+                                }}</span>
                             </div>
                         </div>
                     </div>
-
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label>{{ commonLocaleData?.app_email_id }}</label>
-                                <input type="email" class="form-control" formControlName="email" name="emailId" />
-                                <span
-                                    class="error-msg"
-                                    *ngIf="addAccountForm.get('email').dirty && addAccountForm.get('email').errors"
-                                    >{{ localeData?.email_id_error }}</span
-                                >
-                            </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>{{ commonLocaleData?.app_email_id }}</label>
+                            <input type="email" class="form-control" formControlName="email" name="emailId" />
+                            <span
+                                class="error-msg"
+                                *ngIf="addAccountForm.get('email').dirty && addAccountForm.get('email').errors"
+                                >{{ localeData?.email_id_error }}</span
+                            >
                         </div>
                     </div>
                 </div>
