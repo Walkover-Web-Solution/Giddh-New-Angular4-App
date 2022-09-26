@@ -2134,7 +2134,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
     public resetInvoiceForm(f: NgForm) {
         if (f) {
-            this.intl?.setNumber("+"+ this.selectedCompany.countryV2.callingCode);
+            this.intl?.setNumber("+"+ this.selectedCompany?.countryV2?.callingCode);
             f.form.reset();
         }
         if (this.container) {
@@ -7870,9 +7870,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             utilsScript: MOBILE_NUMBER_UTIL_URL,
             autoHideDialCode: false,
             separateDialCode: false,
-            initialCountry: this.selectedCompany.countryV2.alpha2CountryCode.toLowerCase(),
+            initialCountry: this.selectedCompany?.countryV2?.alpha2CountryCode.toLowerCase(),
             geoIpLookup: (success, failure) => {
-                let countryCode = this.selectedCompany.countryV2.alpha2CountryCode.toLowerCase();
+                let countryCode = this.selectedCompany?.countryV2?.alpha2CountryCode.toLowerCase();
                 if (!countryCode) {
                     const fetchIPApi = this.http.get<any>('https://api.db-ip.com/v2/free/self');
                     fetchIPApi.subscribe(
