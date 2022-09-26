@@ -1032,7 +1032,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      *
      * @memberof SettingIntegrationComponent
      */
-    public toggleIsCopied() : void {
+    public urlCopied(): void {
         this.isCopied = true;
         setTimeout(() => {
             this.isCopied = false;
