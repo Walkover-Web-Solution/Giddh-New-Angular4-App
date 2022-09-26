@@ -20,8 +20,6 @@ import { SelectModule } from '../theme/ng-select/ng-select';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { SalesShSelectModule } from '../theme/sales-ng-virtual-select/sh-select.module';
 import { TaxControlModule } from '../theme/tax-control/tax-control.module';
-import { AsideMenuProductServiceComponent } from './components/aside-menu-product-service/component';
-import { SalesAddStockComponent } from './components/aside-menu-product-service/components/create-stock/sales.create.stock.component';
 import { ProformaGstTreatmentComponent } from './components/proforma-gst-treatment/proforma-gst-treatment.component';
 import { ProformaLastInvoicesComponent } from './components/proforma-last-invoices/proforma-last-invoices.component';
 import { ProformaPrintInPlaceComponent } from './components/proforma-print-inplace/proforma-print-in-place.component';
@@ -32,6 +30,10 @@ import { AdvanceReceiptAdjustmentModule } from '../shared/advance-receipt-adjust
 import { HasFocusDirectiveModule } from '../shared/helpers/directives/has-focus/has-focus.module';
 import { ReplacePipeModule } from '../shared/helpers/pipes/replace/replace.module';
 import { NgxBootstrapSwitchModule } from 'ngx-bootstrap-switch';
+import { VoucherAddBulkItemsModule } from '../shared/voucher-add-bulk-items/voucher-add-bulk-items.module';
+import { AsideMenuOtherTaxesModule } from '../shared/aside-menu-other-taxes/aside-menu-other-taxes.module';
+import { AsideMenuProductServiceModule } from '../shared/aside-menu-product-service/aside-menu-product-service.module';
+
 @NgModule({
     imports: [
         ProformaInvoiceRoutingModule,
@@ -63,16 +65,17 @@ import { NgxBootstrapSwitchModule } from 'ngx-bootstrap-switch';
         AdvanceReceiptAdjustmentModule,
         HasFocusDirectiveModule,
         ReplacePipeModule,
-        NgxBootstrapSwitchModule.forRoot()
+        NgxBootstrapSwitchModule.forRoot(),
+        VoucherAddBulkItemsModule,
+        AsideMenuOtherTaxesModule,
+        AsideMenuProductServiceModule
     ],
-    exports: [ProformaInvoiceComponent, SalesAddStockComponent, AsideMenuProductServiceComponent],
+    exports: [ProformaInvoiceComponent],
     declarations: [
         ProformaInvoiceRendererComponent,
         ProformaInvoiceComponent,
         ProformaLastInvoicesComponent,
         ProformaGstTreatmentComponent,
-        SalesAddStockComponent,
-        AsideMenuProductServiceComponent,
         ProformaPrintInPlaceComponent
     ],
     providers: [TitleCasePipe],

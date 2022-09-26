@@ -85,6 +85,12 @@ $custom-typography: mat-typography-config(
     float: left !important;
     width: auto !important;
 }
+.activity-table {
+    thead {
+        z-index: 9 !important;
+        position: relative !important;
+    }
+}
 @media screen and (max-width: 1366px) and (orientation: portrait) {
     .subscription-form-select {
         float: left !important;
@@ -11137,4 +11143,19 @@ body.hide-scroll-body.master-page {
             background-color: var(--color-popup-background);
         }
     }
+}
+.click-disabled {
+    pointer-events: none;
+    cursor: not-allowed;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    color: var(--color-secondary-input-bar-border);
+}
+.mat-datepicker-input:disabled {
+    color: var(--color-primary-input-bar-text) !important;
+    background-color: var(--color-primary-input-bar-background) !important;
 }

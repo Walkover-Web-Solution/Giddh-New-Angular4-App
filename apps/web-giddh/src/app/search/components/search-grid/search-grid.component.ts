@@ -95,7 +95,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
      */
     public set sortReverse(value: boolean) {
         this._sortReverse = value;
-        this.searchResponseFiltered$ = this.searchResponseFiltered$.pipe(map(p => cloneDeep(p).sort((a, b) => (value ? -1 : 1) * a[this._sortType].toString().localeCompare(b[this._sortType]))));
+        this.searchResponseFiltered$ = this.searchResponseFiltered$.pipe(map(p => cloneDeep(p).sort((a, b) => (value ? -1 : 1) * a[this._sortType]?.toString().localeCompare(b[this._sortType]))));
     }
 
     /** pagination related  */

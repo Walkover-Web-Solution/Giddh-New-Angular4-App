@@ -129,7 +129,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy, AfterViewIni
         this.logedInuser = this._generalService.user;
         if (this._generalService.createNewCompany) {
             this.company = this._generalService.createNewCompany;
-            if (this.company.contactNo.toString().includes('-')) {
+            if (this.company.contactNo?.toString().includes('-')) {
                 let contact = this.company.contactNo.split('-');
                 this.company.contactNo = contact[1];
             }
@@ -151,7 +151,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy, AfterViewIni
                 this.store.pipe(select(ss => ss.session.lastState), take(1)).subscribe(se => {
                     prevTab = se;
                 });
-                this._generalService.companyUniqueName = this.company.uniqueName;
+                this._generalService.companyUniqueName = this.company?.uniqueName;
                 setTimeout(() => {
                     if (prevTab !== 'user-details') {
                         this.store.dispatch(this._loginAction.ChangeCompany(this.company?.uniqueName));
@@ -163,7 +163,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy, AfterViewIni
         });
         this.store.pipe(select(p => p.session.companyUniqueName), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(a => {
             if (a && a !== '' && this.company?.uniqueName) {
-                if (a.includes(this.company.uniqueName.substring(0, 8))) {
+                if (a.includes(this.company?.uniqueName?.substring(0, 8))) {
                     this.company.name = '';
                     this.company.country = '';
                     this.company.baseCurrency = '';
@@ -225,7 +225,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy, AfterViewIni
                 this._generalService.createNewCompany = this.company;
                 this.store.dispatch(this.companyActions.userStoreCreateCompany(this.company));
                 if (this.isProdMode && companies) {
-                    if (companies.length === 0) {
+                    if (companies?.length === 0) {
                         this.fireSocketCompanyCreateRequest();
                     } else {
                         this.closeCompanyModal.emit();
@@ -243,7 +243,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy, AfterViewIni
         this.socketCompanyRequest.CompanyName = this.company.name;
         this.socketCompanyRequest.Timestamp = Date.now();
         this.socketCompanyRequest.LoggedInEmailID = this._generalService.user.email;
-        this.socketCompanyRequest.MobileNo = this.company.contactNo.toString();
+        this.socketCompanyRequest.MobileNo = this.company.contactNo?.toString();
         this.socketCompanyRequest.Name = this._generalService.user.name;
         this.socketCompanyRequest.utm_source = this._generalService.getUtmParameter('utm_source');
         this.socketCompanyRequest.utm_medium = this._generalService.getUtmParameter('utm_medium');
@@ -269,7 +269,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy, AfterViewIni
                 });
                 if (previousState) {
                     if (!this.createBranch) {
-                        previousState = previousState.replace('pages/', '');
+                        previousState = previousState?.replace('pages/', '');
                         this._route.navigate([`pages/${previousState}`]);
                     }
                 }
@@ -373,7 +373,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy, AfterViewIni
         comnanyName = this.removeSpecialCharacters(comnanyName);
         city = this.removeSpecialCharacters(city);
         d = new Date();
-        dateString = d.getTime().toString();
+        dateString = d.getTime()?.toString();
         randomGenerate = this.getSixCharRandom();
         strings = [comnanyName, city, dateString, randomGenerate];
         return strings.join('');
@@ -381,12 +381,12 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy, AfterViewIni
 
     private removeSpecialCharacters(str) {
         let finalString;
-        finalString = str.replace(/[^a-zA-Z0-9]/g, '');
+        finalString = str?.replace(/[^a-zA-Z0-9]/g, '');
         return finalString.substr(0, 6).toLowerCase();
     }
 
     private getSixCharRandom() {
-        return Math.random().toString(36).replace(/[^a-zA-Z0-9]+/g, '').substr(0, 6);
+        return Math.random().toString(36)?.replace(/[^a-zA-Z0-9]+/g, '')?.substr(0, 6);
     }
 
     public getCountry() {

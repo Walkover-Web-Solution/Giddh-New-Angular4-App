@@ -58,10 +58,10 @@ export class GridRowComponent implements OnChanges, OnDestroy {
     }
 
     public entryClicked(acc) {
-        let url = location.href + '?returnUrl=ledger/' + acc.uniqueName + '/' + this.from + '/' + this.to;
+        let url = location.href + '?returnUrl=ledger/' + acc?.uniqueName + '/' + this.from + '/' + this.to;
         if (isElectron) {
             let ipcRenderer = (window as any).require('electron').ipcRenderer;
-            url = location.origin + location.pathname + '#./pages/ledger/' + acc.uniqueName + '/' + this.from + '/' + this.to;
+            url = location.origin + location.pathname + '#./pages/ledger/' + acc?.uniqueName + '/' + this.from + '/' + this.to;
             ipcRenderer.send('open-url', url);
         } else {
             (window as any).open(url);
@@ -69,14 +69,14 @@ export class GridRowComponent implements OnChanges, OnDestroy {
     }
 
     public accountInfo(acc, e: Event) {
-        this.searchService.loadDetails(acc.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.searchService.loadDetails(acc?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.body) {
                 this.accountDetails = response.body;
                 const parentGroups = response.body.parentGroups?.join(', ');
                 const creditorsString = 'currentliabilities, sundrycreditors';
                 const debtorsString = 'currentassets, sundrydebtors';
                 if (parentGroups.indexOf(creditorsString) > -1 || parentGroups.indexOf(debtorsString) > -1) {
-                    this.modalUniqueName = response.body.uniqueName;
+                    this.modalUniqueName = response.body?.uniqueName;
                 } else {
                     this.modalUniqueName = '';
                     this.entryClicked(acc);
@@ -91,7 +91,7 @@ export class GridRowComponent implements OnChanges, OnDestroy {
     }
 
     public trackByFn(index, item: Account) {
-        return item.uniqueName;
+        return item?.uniqueName;
     }
 
     /**

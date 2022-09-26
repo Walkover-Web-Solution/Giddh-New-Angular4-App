@@ -28,7 +28,7 @@ describe('An OptionList\'s constructor', () => {
     it('creates empty list if undefined is provided as parameter', () => {
         let optionList: OptionList = new OptionList(undefined);
 
-        expect(optionList.options.length).toBe(0);
+        expect(optionList.options?.length).toBe(0);
         expect(optionList.hasShown).toBe(false);
         expect(optionList.highlightedOption).toBe(null);
     });
@@ -36,7 +36,7 @@ describe('An OptionList\'s constructor', () => {
     it('creates empty list if null is provided as parameter', () => {
         let optionList: OptionList = new OptionList(null);
 
-        expect(optionList.options.length).toBe(0);
+        expect(optionList.options?.length).toBe(0);
         expect(optionList.hasShown).toBe(false);
         expect(optionList.highlightedOption).toBe(null);
     });
@@ -61,20 +61,20 @@ describe('An OptionList\'s getOptionsByValue function', () => {
         let result: Option[] = optionList.getOptionsByValue('test');
 
         expect(result.constructor).toBe(Array);
-        expect(result.length).toBe(0);
+        expect(result?.length).toBe(0);
     });
 
     it('returns empty list if value is not in list of options', () => {
         let result: Option[] = optionList.getOptionsByValue('test');
 
         expect(result.constructor).toBe(Array);
-        expect(result.length).toBe(0);
+        expect(result?.length).toBe(0);
     });
 
     it('returns the option with requested value', () => {
         let result: Option[] = optionList.getOptionsByValue('2');
 
-        expect(result.length).toBe(1);
+        expect(result?.length).toBe(1);
         expect(result[0].label).toBe('Option 2');
         expect(result[0].value).toBe('2');
     });
@@ -83,7 +83,7 @@ describe('An OptionList\'s getOptionsByValue function', () => {
         optionList.options[4].wrappedOption.value = '3';
         let result: Option[] = optionList.getOptionsByValue('3');
 
-        expect(result.length).toBe(2);
+        expect(result?.length).toBe(2);
         expect(result[0].value).toBe('3');
         expect(result[1].value).toBe('3');
     });
@@ -108,21 +108,21 @@ describe('An OptionList\'s get value function', () => {
         let value: string[] = optionList.value;
 
         expect(value.constructor).toBe(Array);
-        expect(value.length).toBe(0);
+        expect(value?.length).toBe(0);
     });
 
     it('returns empty list if no options are selected', () => {
         let value: string[] = optionList.value;
 
         expect(value.constructor).toBe(Array);
-        expect(value.length).toBe(0);
+        expect(value?.length).toBe(0);
     });
 
     it('returns value of selected option', () => {
         optionList.options[1].selected = true;
         let value: string[] = optionList.value;
 
-        expect(value.length).toBe(1);
+        expect(value?.length).toBe(1);
         expect(value[0]).toBe('1');
     });
 
@@ -131,7 +131,7 @@ describe('An OptionList\'s get value function', () => {
         optionList.options[4].selected = true;
         let value: string[] = optionList.value;
 
-        expect(value.length).toBe(2);
+        expect(value?.length).toBe(2);
         expect(value[0]).toBe('2');
         expect(value[1]).toBe('4');
     });
@@ -155,52 +155,52 @@ describe('An OptionList\'s set value function', () => {
         optionList = new OptionList([]);
 
         optionList.value = [];
-        expect(optionList.value.length).toBe(0);
+        expect(optionList.value?.length).toBe(0);
 
         optionList.value = ['2'];
-        expect(optionList.value.length).toBe(0);
+        expect(optionList.value?.length).toBe(0);
 
         optionList.value = ['0', '4'];
-        expect(optionList.value.length).toBe(0);
+        expect(optionList.value?.length).toBe(0);
     });
 
     it('has unchanged value when setting non-existing option value', () => {
         optionList.value = ['a'];
-        expect(optionList.value.length).toBe(0);
+        expect(optionList.value?.length).toBe(0);
 
         optionList.value = ['2'];
-        expect(optionList.value.length).toBe(1);
+        expect(optionList.value?.length).toBe(1);
         expect(optionList.value[0]).toBe('2');
 
         optionList.value = ['b', 'c'];
-        expect(optionList.value.length).toBe(0);
+        expect(optionList.value?.length).toBe(0);
 
         optionList.value = ['d', '3'];
-        expect(optionList.value.length).toBe(1);
+        expect(optionList.value?.length).toBe(1);
         expect(optionList.value[0]).toBe('3');
     });
 
     it('has unchanged value when setting value that is already set', () => {
         optionList.value = ['0', '4'];
-        expect(optionList.value.length).toBe(2);
+        expect(optionList.value?.length).toBe(2);
         expect(optionList.value[0]).toBe('0');
         expect(optionList.value[1]).toBe('4');
 
         optionList.value = ['0', '4'];
-        expect(optionList.value.length).toBe(2);
+        expect(optionList.value?.length).toBe(2);
         expect(optionList.value[0]).toBe('0');
         expect(optionList.value[1]).toBe('4');
     });
 
     it('selects single set value', () => {
         optionList.value = ['4'];
-        expect(optionList.value.length).toBe(1);
+        expect(optionList.value?.length).toBe(1);
         expect(optionList.value[0]).toBe('4');
     });
 
     it('selects multiple set values', () => {
         optionList.value = ['0', '2', '4'];
-        expect(optionList.value.length).toBe(3);
+        expect(optionList.value?.length).toBe(3);
         expect(optionList.value[0]).toBe('0');
         expect(optionList.value[1]).toBe('2');
         expect(optionList.value[2]).toBe('4');
@@ -208,7 +208,7 @@ describe('An OptionList\'s set value function', () => {
 
     it('selects values in the order of the option list', () => {
         optionList.value = ['2', '4', '0'];
-        expect(optionList.value.length).toBe(3);
+        expect(optionList.value?.length).toBe(3);
         expect(optionList.value[0]).toBe('0');
         expect(optionList.value[1]).toBe('2');
         expect(optionList.value[2]).toBe('4');

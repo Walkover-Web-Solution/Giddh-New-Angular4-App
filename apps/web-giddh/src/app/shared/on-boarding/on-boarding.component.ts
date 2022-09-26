@@ -114,7 +114,7 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
         this.logedInuser = this._generalService.user;
         if (this._generalService.createNewCompany) {
             this.company = this._generalService.createNewCompany;
-            if (this.company.contactNo.toString().includes('-')) {
+            if (this.company.contactNo?.toString()?.includes('-')) {
                 let contact = this.company.contactNo.split('-');
                 this.company.contactNo = contact[1];
             }
@@ -133,7 +133,7 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
                 this.store.pipe(select(ss => ss.session.lastState), take(1)).subscribe(se => {
                     prevTab = se;
                 });
-                this._generalService.companyUniqueName = this.company.uniqueName;
+                this._generalService.companyUniqueName = this.company?.uniqueName;
                 setTimeout(() => {
                     if (prevTab !== 'user-details') {
                         this.store.dispatch(this._loginAction.ChangeCompany(this.company?.uniqueName));
@@ -145,7 +145,7 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
         });
         this.store.pipe(select(p => p.session.companyUniqueName), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(a => {
             if (a && a !== '' && this.company?.uniqueName) {
-                if (a.includes(this.company.uniqueName.substring(0, 8))) {
+                if (a.includes(this.company?.uniqueName?.substring(0, 8))) {
                     this.company.name = '';
                     this.company.country = '';
                     this.company.baseCurrency = '';
@@ -267,7 +267,7 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
         comnanyName = this.removeSpecialCharacters(comnanyName);
         city = this.removeSpecialCharacters(city);
         d = new Date();
-        dateString = d.getTime().toString();
+        dateString = d.getTime()?.toString();
         randomGenerate = this.getSixCharRandom();
         strings = [comnanyName, city, dateString, randomGenerate];
         return strings.join('');
@@ -275,12 +275,12 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
 
     private removeSpecialCharacters(str) {
         let finalString;
-        finalString = str.replace(/[^a-zA-Z0-9]/g, '');
+        finalString = str?.replace(/[^a-zA-Z0-9]/g, '');
         return finalString.substr(0, 6).toLowerCase();
     }
 
     private getSixCharRandom() {
-        return Math.random().toString(36).replace(/[^a-zA-Z0-9]+/g, '').substr(0, 6);
+        return Math.random()?.toString(36)?.replace(/[^a-zA-Z0-9]+/g, '').substr(0, 6);
     }
 
     public getCountry() {

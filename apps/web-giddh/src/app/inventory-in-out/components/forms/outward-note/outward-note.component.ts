@@ -76,7 +76,7 @@ export class OutwardNoteComponent implements OnChanges {
         this.mode = mode;
         this.form.reset();
         this.inventoryEntryDate?.patchValue(dayjs().format(GIDDH_DATE_FORMAT));
-        this.transactions.controls = this.transactions.controls.filter(trx => false);
+        this.transactions.controls = this.transactions.controls?.filter(trx => false);
 
         if (this.mode === 'receiver') {
             this.stock.setValidators(Validators.required);
@@ -92,13 +92,13 @@ export class OutwardNoteComponent implements OnChanges {
 
     public ngOnChanges(changes: SimpleChanges): void {
         if (changes.stockList && this.stockList) {
-            this.stockListOptions = this.stockList.map(p => ({ label: p.name, value: p.uniqueName }));
+            this.stockListOptions = this.stockList.map(p => ({ label: p.name, value: p?.uniqueName }));
         }
         if (changes.stockUnits && this.stockUnits) {
             this.stockUnitsOptions = this.stockUnits.map(p => ({ label: `${p.name} (${p.code})`, value: p.code }));
         }
         if (changes.userList && this.userList) {
-            this.userListOptions = this.userList.map(p => ({ label: p.name, value: p.uniqueName }));
+            this.userListOptions = this.userList.map(p => ({ label: p.name, value: p?.uniqueName }));
         }
     }
 
@@ -109,7 +109,7 @@ export class OutwardNoteComponent implements OnChanges {
         }
 
         const items = this.form.get('transactions') as FormArray;
-        const value = items.length > 0 ? items.at(0).value : {
+        const value = items?.length > 0 ? items?.at(0)?.value : {
             type: '',
             quantity: '',
             inventoryUser: '',
@@ -134,8 +134,8 @@ export class OutwardNoteComponent implements OnChanges {
 
     public userChanged(option: IOption, index: number) {
         const items = this.form.get('transactions') as FormArray;
-        const user = this.userList.find(p => p.uniqueName === option.value);
-        const inventoryUser = user ? { uniqueName: user.uniqueName } : null;
+        const user = this.userList.find(p => p?.uniqueName === option.value);
+        const inventoryUser = user ? { uniqueName: user?.uniqueName } : null;
         if (index >= 0) {
             const control = items.at(index);
             control?.patchValue({
@@ -149,8 +149,8 @@ export class OutwardNoteComponent implements OnChanges {
 
     public stockChanged(option: IOption, index: number) {
         const items = this.transactions;
-        const stockItem = this.stockList.find(p => p.uniqueName === option.value);
-        const stock = stockItem ? { uniqueName: stockItem.uniqueName } : null;
+        const stockItem = this.stockList.find(p => p?.uniqueName === option.value);
+        const stock = stockItem ? { uniqueName: stockItem?.uniqueName } : null;
         const stockUnit = stockItem ? stockItem.stockUnit.code : null;
         if (index >= 0) {
             const control = items.at(index);

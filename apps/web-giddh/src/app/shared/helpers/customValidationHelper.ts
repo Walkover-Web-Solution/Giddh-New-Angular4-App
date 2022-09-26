@@ -66,7 +66,7 @@ export const stockManufacturingDetailsValidator = (control: AbstractControl) => 
     const manufacturingUnitCode = control.get('manufacturingUnitCode');
 
     if (manufacturingQuantity && manufacturingUnitCode) {
-        if (!linkedStocks.controls.length) {
+        if (!linkedStocks?.controls?.length) {
             return { notAllowed: true };
         } else {
             return null;

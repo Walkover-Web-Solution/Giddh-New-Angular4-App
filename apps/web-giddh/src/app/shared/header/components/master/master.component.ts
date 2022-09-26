@@ -151,12 +151,14 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
         this.store.pipe(select(state => state.groupwithaccounts.isDeleteAccSuccess), takeUntil(this.destroyed$)).subscribe(response => {
             if (response && this.currentGroupColumnIndex > -1) {
                 this.getMasters(this.masterColumnsData[this.currentGroupColumnIndex]?.groupUniqueName, this.currentGroupColumnIndex, true);
+                this.currentGroupColumnIndex = this.currentGroupColumnIndex - 1;
             }
         });
 
         this.store.pipe(select(state => state.groupwithaccounts.moveAccountSuccess), takeUntil(this.destroyed$)).subscribe(response => {
             if (response && this.currentGroupColumnIndex > -1) {
                 this.getMasters(this.masterColumnsData[this.currentGroupColumnIndex]?.groupUniqueName, this.currentGroupColumnIndex - 1);
+                this.currentGroupColumnIndex = this.currentGroupColumnIndex - 1;
                 this.store.dispatch(this.accountsAction.moveAccountReset());
             }
         });

@@ -162,7 +162,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
                 let companiesWithSuperAdminRole = [];
                 each(companies, (cmp) => {
                     each(cmp.userEntityRoles, (company) => {
-                        if (company.entity.entity === 'COMPANY' && company.role.uniqueName === 'super_admin') {
+                        if (company.entity.entity === 'COMPANY' && company.role?.uniqueName === 'super_admin') {
                             if (branches?.length) {
                                 let existIndx = branches.findIndex((b) => b.uniqueName === cmp.uniqueName);
                                 if (existIndx === -1) {
@@ -209,7 +209,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         let branches = [...this.unFilteredBranchList];
         if (query) {
             const lowercaseQuery = query.toLowerCase();
-            branches = this.unFilteredBranchList.filter(branch => (branch.name && branch.name.toLowerCase().includes(lowercaseQuery)) || (branch.alias && branch.alias.toLowerCase().includes(lowercaseQuery)));
+            branches = this.unFilteredBranchList?.filter(branch => (branch.name && branch.name.toLowerCase().includes(lowercaseQuery)) || (branch.alias && branch.alias.toLowerCase().includes(lowercaseQuery)));
         }
         this.branches$ = observableOf(branches);
     }
@@ -301,16 +301,16 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
 
     public checkUncheckMe(cmp, ev) {
         if (ev.target.checked) {
-            if (this.selectedCompaniesUniquename.indexOf(cmp.uniqueName) === -1) {
+            if (this.selectedCompaniesUniquename?.indexOf(cmp.uniqueName) === -1) {
                 this.selectedCompaniesUniquename.push(cmp.uniqueName);
             }
             if (cmp.name) {
                 this.selectedCompaniesName.push(cmp);
             }
         } else {
-            let indx = this.selectedCompaniesUniquename.indexOf(cmp.uniqueName);
+            let indx = this.selectedCompaniesUniquename?.indexOf(cmp.uniqueName);
             this.selectedCompaniesUniquename.splice(indx, 1);
-            let idx = this.selectedCompaniesName.indexOf(cmp);
+            let idx = this.selectedCompaniesName?.indexOf(cmp);
             this.selectedCompaniesName.splice(idx, 1);
         }
         this.isAllCompaniesSelected();
@@ -447,7 +447,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     public updateBranchInfo(branchDetails: any): void {
         branchDetails.formValue.linkedEntity = branchDetails.formValue.linkedEntity || [];
         this.isBranchChangeInProgress = true;
-        const linkAddresses = branchDetails.addressDetails.linkedEntities.filter(entity => (branchDetails.formValue.linkedEntity.includes(entity.uniqueName))).map(filteredEntity => ({
+        const linkAddresses = branchDetails.addressDetails.linkedEntities?.filter(entity => (branchDetails.formValue.linkedEntity.includes(entity.uniqueName))).map(filteredEntity => ({
             uniqueName: filteredEntity.uniqueName,
             isDefault: filteredEntity.isDefault,
         }));

@@ -272,8 +272,8 @@
                                                 class="download-invoice-ledger"
                                                 *ngIf="
                                                     voucherApiVersion !== 2 &&
-                                                    vm.selectedLedger.voucherNumber &&
-                                                    vm.selectedLedger.voucherNumber.length > 0 &&
+                                                    vm.selectedLedger?.voucherNumber &&
+                                                    vm.selectedLedger?.voucherNumber?.length > 0 &&
                                                     (txn?.particular?.name || txn?.particular?.uniqueName)
                                                 "
                                                 [matTooltipPosition]="'left'"
@@ -281,11 +281,11 @@
                                                 [matTooltip]="
                                                     commonLocaleData?.app_download +
                                                     ' ' +
-                                                    (vm.selectedLedger.voucherGeneratedType === 'sales'
+                                                    (vm.selectedLedger?.voucherGeneratedType === 'sales'
                                                         ? commonLocaleData?.app_invoice
                                                         : commonLocaleData?.app_voucher) +
                                                     ' : ' +
-                                                    (vm.selectedLedger.voucherNumber ||
+                                                    (vm.selectedLedger?.voucherNumber ||
                                                         commonLocaleData?.app_not_available)
                                                 "
                                                 (click)="downloadFiles('VOUCHER', $event)"

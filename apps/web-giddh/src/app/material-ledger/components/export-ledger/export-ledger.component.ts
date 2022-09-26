@@ -94,7 +94,7 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.store.pipe(select(value => value.ledger.account), takeUntil(this.destroyed$)).subscribe(ledgerAccount => {
             ledgerAccount?.parentGroups?.forEach(group => {
-                if (["sundrycreditors", "sundrydebtors"].includes(group.uniqueName)) {
+                if (["sundrycreditors", "sundrydebtors"].includes(group?.uniqueName)) {
                     this.enableBillToBill = true;
                 }
             });
@@ -184,7 +184,7 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
             this.ledgerService.ExportLedger(exportRequest, this.inputData?.accountUniqueName, body.dataToSend, exportByInvoiceNumber).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 this.isLoading = false;
                 this.changeDetectorRef.detectChanges();
-                if (response.status === 'success') {
+                if (response?.status === 'success') {
                     if (response.body) {
                         if (this.emailTypeSelected === 'admin-detailed') {
                             if (response.body.encodedData) {
@@ -195,7 +195,7 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
                                 this.router.navigate(["/pages/downloads"]);
                             }
                         } else {
-                            if (response.status === "success") {
+                            if (response?.status === "success") {
                                 if (response?.body?.status === "success") {
                                     if (response.queryString.fileType === 'xlsx') {
                                         let blob = this.generalService.base64ToBlob(response.body.response, 'application/vnd.ms-excel', 512);

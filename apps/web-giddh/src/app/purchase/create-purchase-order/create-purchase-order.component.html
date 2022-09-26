@@ -64,7 +64,7 @@
                                                     [notFoundLinkText]="localeData?.add_vendor"
                                                     (keyup)="resetVendor($event)"
                                                     (onClear)="resetVendor(null)"
-                                                    [isOpen]="!isUpdateMode && !purchaseOrder.account.uniqueName"
+                                                    [isOpen]="!isUpdateMode && !purchaseOrder.account?.uniqueName"
                                                 >
                                                     <ng-template #optionTemplate let-option="option">
                                                         <a
@@ -988,7 +988,7 @@
                 </div>
             </div>
         </div>
-        <ng-container *ngIf="!purchaseOrder.account.uniqueName">
+        <ng-container *ngIf="!purchaseOrder.account?.uniqueName">
             <img src="assets/images/new/search-vendor.svg" class="img-responsive search-arrow-image" />
         </ng-container>
         <section
@@ -2499,7 +2499,7 @@
                                                                 </div>
                                                                 <div class="item-stock">
                                                                     {{ commonLocaleData?.app_stock }}:
-                                                                    {{ option.additional?.stock.uniqueName }}
+                                                                    {{ option.additional?.stock?.uniqueName }}
                                                                 </div>
                                                             </a>
                                                         </ng-container>
@@ -3322,11 +3322,11 @@
         [config]="{ animated: true, keyboard: false, backdrop: false, ignoreBackdropClick: true }"
     >
         <ng-container *ngIf="bulkItemsModal?.isShown">
-            <proforma-add-bulk-items-component
+            <voucher-add-bulk-items-component
                 [invoiceType]="invoiceType"
                 (saveItemsEvent)="addBulkStockItems($event)"
                 (closeEvent)="bulkItemsModal.hide()"
-            ></proforma-add-bulk-items-component>
+            ></voucher-add-bulk-items-component>
         </ng-container>
     </div>
     <!-- endregion -->

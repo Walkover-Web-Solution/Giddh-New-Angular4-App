@@ -166,7 +166,7 @@
                                             >{{ localeData?.bulk_update }}</a
                                         >
                                     </li>
-                                    <li role="menuitem" *ngIf="selectedItems.length === 1">
+                                    <li role="menuitem" *ngIf="selectedItems?.length === 1">
                                         <a
                                             class="dropdown-item cp"
                                             href="javascript:void(0)"
@@ -196,7 +196,7 @@
                                         role="menuitem"
                                         *ngIf="
                                             selectedVoucher !== 'purchase' ||
-                                            (selectedItems.length === 1 && selectedVoucher === 'purchase')
+                                            (selectedItems?.length === 1 && selectedVoucher === 'purchase')
                                         "
                                     >
                                         <a
@@ -225,10 +225,10 @@
                                 class="desktop-view-btn"
                                 *ngIf="
                                     (voucherApiVersion !== 2 &&
-                                        selectedItems.length === 1 &&
+                                        selectedItems?.length === 1 &&
                                         selectedVoucher === 'purchase') ||
-                                    (selectedItems.length > 0 && selectedVoucher !== 'purchase') ||
-                                    (voucherApiVersion === 2 && selectedItems.length > 0)
+                                    (selectedItems?.length > 0 && selectedVoucher !== 'purchase') ||
+                                    (voucherApiVersion === 2 && selectedItems?.length > 0)
                                 "
                             >
                                 <div *ngIf="!isCompany" class="btn-group" dropdown #dp="bs-dropdown">
@@ -258,7 +258,7 @@
                                                 >{{ localeData?.bulk_update }}</a
                                             >
                                         </li>
-                                        <li role="menuitem" *ngIf="selectedItems.length === 1">
+                                        <li role="menuitem" *ngIf="selectedItems?.length === 1">
                                             <a
                                                 class="dropdown-item cp"
                                                 href="javascript:void(0)"
@@ -441,7 +441,7 @@
                                     >
                                         {{ localeData?.cancel_e_invoice }}
                                     </button>
-                                    <div *ngIf="selectedItems.length === 1">
+                                    <div *ngIf="selectedItems?.length === 1">
                                         <div
                                             *ngIf="!isCompany"
                                             class="btn-group"
@@ -519,7 +519,7 @@
                                 >
                                     {{ localeData?.cancel_e_invoice }}
                                 </button>
-                                <div *ngIf="selectedItems.length === 1">
+                                <div *ngIf="selectedItems?.length === 1">
                                     <div
                                         *ngIf="!isCompany"
                                         class="btn-group"
@@ -677,7 +677,7 @@
                             "
                         >
                             <tr>
-                                <th width="4%" *ngIf="selectedItems.length > 0" class="min-wid-check">
+                                <th width="4%" *ngIf="selectedItems?.length > 0" class="min-wid-check">
                                     <div class="check-image d-flex justify-content-start">
                                         <img
                                             src="assets/images/unchecked.png"
@@ -691,7 +691,7 @@
                                         />
                                     </div>
                                 </th>
-                                <th *ngIf="selectedItems.length === 0" width="4%" class="min-wid-check">
+                                <th *ngIf="selectedItems?.length === 0" width="4%" class="min-wid-check">
                                     <div class="check-image d-flex justify-content-start">#</div>
                                 </th>
                                 <th
@@ -843,7 +843,7 @@
                             "
                         >
                             <tr>
-                                <th width="4%" *ngIf="selectedItems.length > 0" class="min-wid-check">
+                                <th width="4%" *ngIf="selectedItems?.length > 0" class="min-wid-check">
                                     <div class="check-image d-flex justify-content-start">
                                         <img
                                             src="assets/images/unchecked.png"
@@ -858,7 +858,7 @@
                                     </div>
                                 </th>
 
-                                <th *ngIf="selectedItems.length === 0" width="4%" class="min-wid-check">
+                                <th *ngIf="selectedItems?.length === 0" width="4%" class="min-wid-check">
                                     <div class="check-image d-flex justify-content-start">#</div>
                                 </th>
 
@@ -968,7 +968,7 @@
                             (mouseleave)="hoveredItemForAction = ''; clickedHoveredItemForAction = ''"
                             *ngIf="
                                 voucherData &&
-                                voucherData.items.length > 0 &&
+                                voucherData.items?.length > 0 &&
                                 !(isGetAllRequestInProcess$ | async) &&
                                 (selectedVoucher === 'sales' || selectedVoucher === 'purchase')
                             "
@@ -983,7 +983,7 @@
                                     *ngIf="
                                         hoveredItemForAction === item?.uniqueName ||
                                         item?.isSelected ||
-                                        selectedItems.length > 0
+                                        selectedItems?.length > 0
                                     "
                                 >
                                     <div class="check-image d-flex justify-content-start">
@@ -1005,7 +1005,7 @@
                                     *ngIf="
                                         !item.isSelected &&
                                         hoveredItemForAction !== item?.uniqueName &&
-                                        selectedItems.length === 0
+                                        selectedItems?.length === 0
                                     "
                                 >
                                     <div class="d-flex justify-content-start">{{ i + 1 }}</div>
@@ -1256,7 +1256,7 @@
                         <tbody
                             *ngIf="
                                 voucherData &&
-                                voucherData.items.length > 0 &&
+                                voucherData.items?.length > 0 &&
                                 !(isGetAllRequestInProcess$ | async) &&
                                 selectedVoucher !== 'sales' &&
                                 selectedVoucher !== 'purchase'
@@ -1273,7 +1273,7 @@
                                     *ngIf="
                                         hoveredItemForAction === item?.uniqueName ||
                                         item.isSelected ||
-                                        selectedItems.length > 0
+                                        selectedItems?.length > 0
                                     "
                                 >
                                     <div class="check-image d-flex justify-content-start">
@@ -1296,7 +1296,7 @@
                                     *ngIf="
                                         !item.isSelected &&
                                         hoveredItemForAction !== item?.uniqueName &&
-                                        selectedItems.length === 0
+                                        selectedItems?.length === 0
                                     "
                                 >
                                     <div class="d-flex justify-content-start">{{ i + 1 }}</div>
@@ -1490,7 +1490,7 @@
                 <ng-container
                     *ngIf="
                         voucherData &&
-                        voucherData.items.length > 0 &&
+                        voucherData.items?.length > 0 &&
                         !(isGetAllRequestInProcess$ | async) &&
                         (selectedVoucher === 'sales' || selectedVoucher === 'purchase') &&
                         isMobileView
@@ -1734,13 +1734,13 @@
                 >
                     <div class="modal-dialog modal-md">
                         <div class="modal-content">
-                            <delete-role-confirmation-model
+                            <delete-voucher-confirmation-modal
                                 [module]="selectedVoucher !== 'purchase' ? selectedVoucher : 'purchaselist'"
                                 [selectedInvoiceForDelete]="selectedInvoice"
                                 (confirmDeleteEvent)="deleteConfirmedInvoice()"
                                 (closeModelEvent)="closeConfirmationPopup()"
                             >
-                            </delete-role-confirmation-model>
+                            </delete-voucher-confirmation-modal>
                         </div>
                     </div>
                 </div>

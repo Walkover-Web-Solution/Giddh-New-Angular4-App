@@ -226,8 +226,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                         this.isHsnSacEnabledAcc = (parent[1].parentGroups) ? HSN_SAC_PARENT_GROUPS.includes(parent[1].parentGroups[0]?.uniqueName) : false;
                         this.isParentDebtorCreditor(parent[1].uniqueName);
                     } else if (parent?.length === 1) {
-                        this.isHsnSacEnabledAcc = (response.parentGroups) ? HSN_SAC_PARENT_GROUPS.includes(response.parentGroups[0]?.uniqueName) : false;
-                        this.isParentDebtorCreditor(response.uniqueName);
+                        this.isHsnSacEnabledAcc = (response.parentGroups) ? HSN_SAC_PARENT_GROUPS.includes(response?.parentGroups[0]?.uniqueName) : false;
+                        this.isParentDebtorCreditor(response?.uniqueName);
                     }
                     this.showHideAddressTab();
                 }
@@ -881,7 +881,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         let trim: string = '';
         if (element.value && type) {
             // changes account number validation for country india as well ref card : GIDK-1119
-            trim = element.value.replace(/[^a-zA-Z0-9]/g, '');
+            trim = element.value?.replace(/[^a-zA-Z0-9]/g, '');
             let accountBankDetail = this.addAccountForm.get('accountBankDetails') as FormArray;
             for (let control of accountBankDetail.controls) {
                 if (type === 'bankAccountNo') {
@@ -1065,10 +1065,10 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                         }
                     }) || [];
                     if (page === 1) {
-                        if (activeGroup && searchResults.findIndex(group => group.value === activeGroup.uniqueName) === -1) {
+                        if (activeGroup && searchResults.findIndex(group => group.value === activeGroup?.uniqueName) === -1) {
                             // Active group is not found in first page add it
                             searchResults.push({
-                                value: activeGroup.uniqueName,
+                                value: activeGroup?.uniqueName,
                                 label: `${activeGroup.name}`,
                                 additional: activeGroup.parentGroups
                             });
@@ -1221,7 +1221,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             }, 50);
 
             const accountAddress = this.addAccountForm.get('addresses') as FormArray;
-            if (accountAddress.controls.length === 0 || !accountAddress.length) {
+            if (accountAddress.controls?.length === 0 || !accountAddress?.length) {
                 this.addBlankGstForm();
             }
         } else {

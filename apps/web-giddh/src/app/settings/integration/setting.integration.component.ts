@@ -156,6 +156,10 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public imgPath: string = '';
     /** This will hold toggle buttons value and size */
     public bootstrapToggleSwitch = BootstrapToggleSwitch;
+    /** This will hold isCopied */
+    public isCopied: boolean = false;
+    /** This will hold apiUrl */
+    public apiUrl: string = '';
 
     constructor(
         private router: Router,
@@ -186,6 +190,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     }
 
     public ngOnInit() {
+        let companyUniqueName = this.generalService.companyUniqueName;
+        this.apiUrl = `${ApiUrl}company/${companyUniqueName}/imports/tally-import`;
         this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         //logic to switch to payment tab if coming from vedor tabs add payment
         if (this.selectedTabParent !== undefined && this.selectedTabParent !== null) {
@@ -470,7 +476,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             }
         } else {
             let arr = control.value;
-            if (!control.value[arr?.length - 1].sellerId) {
+            if (!control.value[arr?.length - 1]?.sellerId) {
                 return;
             }
             control.push(this.initAmazonReseller());
@@ -578,12 +584,12 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public prepareDataForUI(data: ShareRequestForm[]): any {
         return data.map((item) => {
             if (item.allowedCidrs && item.allowedCidrs.length > 0) {
-                item.cidrsStr = item.allowedCidrs.toString();
+                item.cidrsStr = item.allowedCidrs?.toString();
             } else {
                 item.cidrsStr = null;
             }
             if (item.allowedIps && item.allowedIps.length > 0) {
-                item.ipsStr = item.allowedIps.toString();
+                item.ipsStr = item.allowedIps?.toString();
             } else {
                 item.ipsStr = null;
             }
@@ -680,9 +686,9 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             case SettingsIntegrationTab.Collection:
                 this.loadCollectionData();
                 break;
-            case SettingsIntegrationTab.ECommerce:
-                this.loadEcommerceData();
-                break;
+            // case SettingsIntegrationTab.ECommerce:
+            //     this.loadEcommerceData();
+            //     break;
             case SettingsIntegrationTab.Payment:
                 this.loadPaymentData();
                 break;
@@ -1029,5 +1035,17 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 this.toasty.errorToast(response?.body?.message);
             }
         });
+    }
+
+    /**
+     * This will use for copy api url link and display copied
+     *
+     * @memberof SettingIntegrationComponent
+     */
+    public toggleIsCopied() : void {
+        this.isCopied = true;
+        setTimeout(() => {
+            this.isCopied = false;
+        }, 3000);
     }
 }

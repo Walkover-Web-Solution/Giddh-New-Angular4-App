@@ -22,7 +22,7 @@ export class SettingsIntegrationService {
     */
     public GetSMSKey(): Observable<BaseResponse<SmsKeyClass, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.get(this.config.apiUrl + SETTINGS_INTEGRATION_API.SMS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
+        return this.http.get(this.config.apiUrl + SETTINGS_INTEGRATION_API.SMS?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
             let data: BaseResponse<SmsKeyClass, string> = res;
             data.queryString = {};
             return data;
@@ -34,7 +34,7 @@ export class SettingsIntegrationService {
      */
     public SaveSMSKey(model: SmsKeyClass): Observable<BaseResponse<string, SmsKeyClass>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.post(this.config.apiUrl + SETTINGS_INTEGRATION_API.SMS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(map((res) => {
+        return this.http.post(this.config.apiUrl + SETTINGS_INTEGRATION_API.SMS?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(map((res) => {
             let data: BaseResponse<string, SmsKeyClass> = res;
             data.request = model;
             return data;
@@ -46,7 +46,7 @@ export class SettingsIntegrationService {
     */
     public GetEmailKey(): Observable<BaseResponse<EmailKeyClass, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.get(this.config.apiUrl + SETTINGS_INTEGRATION_API.EMAIL.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
+        return this.http.get(this.config.apiUrl + SETTINGS_INTEGRATION_API.EMAIL?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
             let data: BaseResponse<EmailKeyClass, string> = res;
             data.queryString = {};
             return data;
@@ -58,7 +58,7 @@ export class SettingsIntegrationService {
      */
     public SaveEmailKey(model: EmailKeyClass): Observable<BaseResponse<string, EmailKeyClass>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.post(this.config.apiUrl + SETTINGS_INTEGRATION_API.EMAIL.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(map((res) => {
+        return this.http.post(this.config.apiUrl + SETTINGS_INTEGRATION_API.EMAIL?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(map((res) => {
             let data: BaseResponse<string, EmailKeyClass> = res;
             data.request = model;
             return data;
@@ -69,7 +69,7 @@ export class SettingsIntegrationService {
      */
     public SavePaymentKey(model: PaymentClass): Observable<BaseResponse<string, PaymentClass>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.post(this.config.apiUrl + SETTINGS_INTEGRATION_API.PAYMENT.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(map((res) => {
+        return this.http.post(this.config.apiUrl + SETTINGS_INTEGRATION_API.PAYMENT?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(map((res) => {
             let data: BaseResponse<string, PaymentClass> = res;
             data.request = model;
             return data;
@@ -80,7 +80,7 @@ export class SettingsIntegrationService {
      */
     public updatePaymentKey(model): Observable<BaseResponse<string, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.put(this.config.apiUrl + SETTINGS_INTEGRATION_API.UPDATE_PAYMENT.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(map((res) => {
+        return this.http.put(this.config.apiUrl + SETTINGS_INTEGRATION_API.UPDATE_PAYMENT?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(map((res) => {
             let data: BaseResponse<string, any> = res;
             data.request = model;
             return data;
@@ -91,7 +91,7 @@ export class SettingsIntegrationService {
     */
     public GetRazorPayDetails(): Observable<BaseResponse<RazorPayDetailsResponse, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.get(this.config.apiUrl + SETTINGS_INTEGRATION_API.RAZORPAY.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
+        return this.http.get(this.config.apiUrl + SETTINGS_INTEGRATION_API.RAZORPAY?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
             let data: BaseResponse<RazorPayDetailsResponse, string> = res;
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<RazorPayDetailsResponse, string>(e)));
@@ -102,7 +102,7 @@ export class SettingsIntegrationService {
     */
     public SaveRazorPayDetails(model: RazorPayClass): Observable<BaseResponse<RazorPayDetailsResponse, RazorPayClass>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.post(this.config.apiUrl + SETTINGS_INTEGRATION_API.RAZORPAY.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(map((res) => {
+        return this.http.post(this.config.apiUrl + SETTINGS_INTEGRATION_API.RAZORPAY?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(map((res) => {
             let data: BaseResponse<RazorPayDetailsResponse, RazorPayClass> = res;
             data.request = model;
             return data;
@@ -114,7 +114,7 @@ export class SettingsIntegrationService {
     */
     public UpdateRazorPayDetails(model: RazorPayClass): Observable<BaseResponse<RazorPayDetailsResponse, RazorPayClass>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.put(this.config.apiUrl + SETTINGS_INTEGRATION_API.RAZORPAY.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(map((res) => {
+        return this.http.put(this.config.apiUrl + SETTINGS_INTEGRATION_API.RAZORPAY?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(map((res) => {
             let data: BaseResponse<RazorPayDetailsResponse, RazorPayClass> = res;
             data.request = model;
             return data;
@@ -126,7 +126,7 @@ export class SettingsIntegrationService {
     */
     public DeleteRazorPayDetails(): Observable<BaseResponse<string, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.delete(this.config.apiUrl + SETTINGS_INTEGRATION_API.RAZORPAY.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
+        return this.http.delete(this.config.apiUrl + SETTINGS_INTEGRATION_API.RAZORPAY?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
             let data: BaseResponse<string, string> = res;
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e)));
@@ -135,7 +135,7 @@ export class SettingsIntegrationService {
     public SaveCashFreeDetail(model: CashfreeClass): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         delete model['fakeAccObj'];
-        return this.http.post(this.config.apiUrl + SETTINGS_INTEGRATION_API.CASHFREE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(map((res) => {
+        return this.http.post(this.config.apiUrl + SETTINGS_INTEGRATION_API.CASHFREE?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(map((res) => {
             let data: BaseResponse<any, any> = res;
             data.request = model;
             return data;
@@ -144,7 +144,7 @@ export class SettingsIntegrationService {
 
     public GetCashFreeDetail(): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.get(this.config.apiUrl + SETTINGS_INTEGRATION_API.CASHFREE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
+        return this.http.get(this.config.apiUrl + SETTINGS_INTEGRATION_API.CASHFREE?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
             let data: BaseResponse<any, any> = res;
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<string, SmsKeyClass>(e)));
@@ -153,7 +153,7 @@ export class SettingsIntegrationService {
     public UpdateCashFreeDetail(model: CashfreeClass): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         delete model['fakeAccObj'];
-        return this.http.put(this.config.apiUrl + SETTINGS_INTEGRATION_API.CASHFREE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(map((res) => {
+        return this.http.put(this.config.apiUrl + SETTINGS_INTEGRATION_API.CASHFREE?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(map((res) => {
             let data: BaseResponse<any, any> = res;
             data.request = model;
             return data;
@@ -162,7 +162,7 @@ export class SettingsIntegrationService {
 
     public DeleteCashFreeDetail(): Observable<BaseResponse<string, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.delete(this.config.apiUrl + SETTINGS_INTEGRATION_API.CASHFREE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
+        return this.http.delete(this.config.apiUrl + SETTINGS_INTEGRATION_API.CASHFREE?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
             let data: BaseResponse<string, string> = res;
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e)));
@@ -170,7 +170,7 @@ export class SettingsIntegrationService {
 
     public GetAutoCollectUser(): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.get(this.config.apiUrl + SETTINGS_INTEGRATION_API.AUTOCOLLECT_USER.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
+        return this.http.get(this.config.apiUrl + SETTINGS_INTEGRATION_API.AUTOCOLLECT_USER?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
             let data: BaseResponse<any, any> = res;
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<string, SmsKeyClass>(e)));
@@ -179,7 +179,7 @@ export class SettingsIntegrationService {
     public AddAutoCollectUser(model: CashfreeClass): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         delete model['fakeAccObj'];
-        return this.http.post(this.config.apiUrl + SETTINGS_INTEGRATION_API.AUTOCOLLECT_USER.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(map((res) => {
+        return this.http.post(this.config.apiUrl + SETTINGS_INTEGRATION_API.AUTOCOLLECT_USER?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(map((res) => {
             let data: BaseResponse<any, any> = res;
             data.request = model;
             return data;
@@ -189,7 +189,7 @@ export class SettingsIntegrationService {
     public UpdateAutoCollectUser(model: CashfreeClass): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         delete model['fakeAccObj'];
-        return this.http.put(this.config.apiUrl + SETTINGS_INTEGRATION_API.AUTOCOLLECT_USER.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(map((res) => {
+        return this.http.put(this.config.apiUrl + SETTINGS_INTEGRATION_API.AUTOCOLLECT_USER?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(map((res) => {
             let data: BaseResponse<any, any> = res;
             data.request = model;
             return data;
@@ -198,7 +198,7 @@ export class SettingsIntegrationService {
 
     public DeleteAutoCollectUser(): Observable<BaseResponse<string, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.delete(this.config.apiUrl + SETTINGS_INTEGRATION_API.AUTOCOLLECT_USER.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
+        return this.http.delete(this.config.apiUrl + SETTINGS_INTEGRATION_API.AUTOCOLLECT_USER?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
             let data: BaseResponse<string, string> = res;
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e)));
@@ -206,7 +206,7 @@ export class SettingsIntegrationService {
 
     public GetPaymentGateway(): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.get(this.config.apiUrl + SETTINGS_INTEGRATION_API.PAYMENT_GATEWAY.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
+        return this.http.get(this.config.apiUrl + SETTINGS_INTEGRATION_API.PAYMENT_GATEWAY?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
             let data: BaseResponse<any, any> = res;
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<string, SmsKeyClass>(e)));
@@ -214,7 +214,7 @@ export class SettingsIntegrationService {
 
     public AddPaymentGateway(model: CashfreeClass): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.post(this.config.apiUrl + SETTINGS_INTEGRATION_API.PAYMENT_GATEWAY.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(map((res) => {
+        return this.http.post(this.config.apiUrl + SETTINGS_INTEGRATION_API.PAYMENT_GATEWAY?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(map((res) => {
             let data: BaseResponse<any, any> = res;
             data.request = model;
             return data;
@@ -223,7 +223,7 @@ export class SettingsIntegrationService {
 
     public UpdatePaymentGateway(model: CashfreeClass): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.put(this.config.apiUrl + SETTINGS_INTEGRATION_API.PAYMENT_GATEWAY.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(map((res) => {
+        return this.http.put(this.config.apiUrl + SETTINGS_INTEGRATION_API.PAYMENT_GATEWAY?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(map((res) => {
             let data: BaseResponse<any, any> = res;
             data.request = model;
             return data;
@@ -232,7 +232,7 @@ export class SettingsIntegrationService {
 
     public DeletePaymentGateway(): Observable<BaseResponse<string, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.delete(this.config.apiUrl + SETTINGS_INTEGRATION_API.PAYMENT_GATEWAY.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
+        return this.http.delete(this.config.apiUrl + SETTINGS_INTEGRATION_API.PAYMENT_GATEWAY?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
             let data: BaseResponse<string, string> = res;
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e)));
@@ -240,7 +240,7 @@ export class SettingsIntegrationService {
 
     public GetAmazonSeller(): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.get(this.config.apiUrl + SETTINGS_INTEGRATION_API.AMAZON_SELLER.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(
+        return this.http.get(this.config.apiUrl + SETTINGS_INTEGRATION_API.AMAZON_SELLER?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(
             map((res) => {
                 let data: BaseResponse<any, any> = res;
                 return data;
@@ -249,7 +249,7 @@ export class SettingsIntegrationService {
 
     public AddAmazonSeller(model: AmazonSellerClass[]): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.post(this.config.apiUrl + SETTINGS_INTEGRATION_API.AMAZON_SELLER.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(map((res) => {
+        return this.http.post(this.config.apiUrl + SETTINGS_INTEGRATION_API.AMAZON_SELLER?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(map((res) => {
             let data: BaseResponse<any, any[]> = res;
             data.request = model;
             return data;
@@ -259,7 +259,7 @@ export class SettingsIntegrationService {
     public UpdateAmazonSeller(model: AmazonSellerClass): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let sellerId = model.sellerId;
-        return this.http.put(this.config.apiUrl + SETTINGS_INTEGRATION_API.AMAZON_SELLER_OPERATION.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':sellerId', sellerId), model).pipe(map((res) => {
+        return this.http.put(this.config.apiUrl + SETTINGS_INTEGRATION_API.AMAZON_SELLER_OPERATION?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':sellerId', sellerId), model).pipe(map((res) => {
             let data: BaseResponse<any, any> = res;
             data.request = model;
             return data;
@@ -268,7 +268,7 @@ export class SettingsIntegrationService {
 
     public DeleteAmazonSeller(sellerId): Observable<BaseResponse<string, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.delete(this.config.apiUrl + SETTINGS_INTEGRATION_API.AMAZON_SELLER_OPERATION.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':sellerId', sellerId)).pipe(map((res) => {
+        return this.http.delete(this.config.apiUrl + SETTINGS_INTEGRATION_API.AMAZON_SELLER_OPERATION?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':sellerId', sellerId)).pipe(map((res) => {
             let data: BaseResponse<any, any> = res;
             data.request = { sellerId };
             return data;
@@ -277,7 +277,7 @@ export class SettingsIntegrationService {
 
     public GetGmailIntegrationStatus(): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.get(this.config.apiUrl + SETTINGS_INTEGRATION_API.GET_GMAIL_INTEGRATION_STATUS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
+        return this.http.get(this.config.apiUrl + SETTINGS_INTEGRATION_API.GET_GMAIL_INTEGRATION_STATUS?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
             let data: BaseResponse<any, any> = res;
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<string, SmsKeyClass>(e)));
@@ -288,7 +288,7 @@ export class SettingsIntegrationService {
     */
     public RemoveGmailIntegration(): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.delete(this.config.apiUrl + SETTINGS_INTEGRATION_API.REMOVE_GMAIL_INTEGRATION.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
+        return this.http.delete(this.config.apiUrl + SETTINGS_INTEGRATION_API.REMOVE_GMAIL_INTEGRATION?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
             let data: BaseResponse<any, any> = res;
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
@@ -296,7 +296,7 @@ export class SettingsIntegrationService {
 
     public RemoveICICI(urn) {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.delete(this.config.apiUrl + SETTINGS_INTEGRATION_API.REMOVE_ICICI_REQUEST.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':urn', urn)).pipe(map((res) => {
+        return this.http.delete(this.config.apiUrl + SETTINGS_INTEGRATION_API.REMOVE_ICICI_REQUEST?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':urn', urn)).pipe(map((res) => {
 
             let data: BaseResponse<any, any> = res;
             return data;
@@ -312,7 +312,7 @@ export class SettingsIntegrationService {
      * @memberof SettingsIntegrationService
      */
     public getValidationFormForBank(companyUniqueName: string, bankName: string): Observable<BaseResponse<any, any>> {
-        return this.http.get(this.config.apiUrl + SETTINGS_INTEGRATION_API.BANK_INTERATION_VALIDATION_FORM.replace(':companyUniqueName', encodeURIComponent(companyUniqueName)).replace(':bankName', bankName)).pipe(map((res) => {
+        return this.http.get(this.config.apiUrl + SETTINGS_INTEGRATION_API.BANK_INTERATION_VALIDATION_FORM?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName))?.replace(':bankName', bankName)).pipe(map((res) => {
             let data: BaseResponse<any, any> = res;
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<string, SmsKeyClass>(e)));
@@ -327,7 +327,7 @@ export class SettingsIntegrationService {
      */
     public bankAccountRegistration(model: any): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.post(this.config.apiUrl + SETTINGS_INTEGRATION_API.BANK_ACCOUNT_REGISTRATION.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(
+        return this.http.post(this.config.apiUrl + SETTINGS_INTEGRATION_API.BANK_ACCOUNT_REGISTRATION?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(
             map((res) => {
                 let data: BaseResponse<any, any> = res;
                 data.request = model;
@@ -345,7 +345,7 @@ export class SettingsIntegrationService {
     public getAllBankAccounts(): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
 
-        return this.http.get(this.config.apiUrl + SETTINGS_INTEGRATION_API.BANK_ACCOUNT_REGISTRATION.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
+        return this.http.get(this.config.apiUrl + SETTINGS_INTEGRATION_API.BANK_ACCOUNT_REGISTRATION?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
             let data: BaseResponse<any, string> = res;
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
@@ -360,7 +360,7 @@ export class SettingsIntegrationService {
      */
     public deleteBankAccountLogin(model: any): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.deleteWithBody(this.config.apiUrl + SETTINGS_INTEGRATION_API.BANK_ACCOUNT_REGISTRATION.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(
+        return this.http.deleteWithBody(this.config.apiUrl + SETTINGS_INTEGRATION_API.BANK_ACCOUNT_REGISTRATION?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(
             map((res) => {
                 let data: BaseResponse<any, any> = res;
                 data.request = model;
@@ -378,7 +378,7 @@ export class SettingsIntegrationService {
      */
     public bankAccountMultiRegistration(model: any): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.post(this.config.apiUrl + SETTINGS_INTEGRATION_API.BANK_ACCOUNT_MULTI_REGISTRATION.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(
+        return this.http.post(this.config.apiUrl + SETTINGS_INTEGRATION_API.BANK_ACCOUNT_MULTI_REGISTRATION?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(
             map((res) => {
                 let data: BaseResponse<any, any> = res;
                 data.request = model;
@@ -397,7 +397,7 @@ export class SettingsIntegrationService {
      */
     public updatePayorAccount(model: any, request: any): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.put(this.config.apiUrl + SETTINGS_INTEGRATION_API.UPDATE_PAYOR_ACCOUNT.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':bankAccountUniqueName', encodeURIComponent(request.bankAccountUniqueName)).replace(':urn', encodeURIComponent(request.urn)), model).pipe(map((res) => {
+        return this.http.put(this.config.apiUrl + SETTINGS_INTEGRATION_API.UPDATE_PAYOR_ACCOUNT?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':bankAccountUniqueName', encodeURIComponent(request.bankAccountUniqueName))?.replace(':urn', encodeURIComponent(request.urn)), model).pipe(map((res) => {
             let data: BaseResponse<any, any> = res;
             data.request = model;
             return data;
@@ -414,7 +414,7 @@ export class SettingsIntegrationService {
      */
     public updateAccount(model: any, request: any): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.put(this.config.apiUrl + SETTINGS_INTEGRATION_API.UPDATE_ACCOUNT.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':bankAccountUniqueName', encodeURIComponent(request.bankAccountUniqueName)), model).pipe(map((res) => {
+        return this.http.put(this.config.apiUrl + SETTINGS_INTEGRATION_API.UPDATE_ACCOUNT?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':bankAccountUniqueName', encodeURIComponent(request.bankAccountUniqueName)), model).pipe(map((res) => {
             let data: BaseResponse<any, any> = res;
             data.request = model;
             return data;
@@ -431,7 +431,7 @@ export class SettingsIntegrationService {
     public getPayorRegistrationStatus(request: any): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
 
-        return this.http.get(this.config.apiUrl + SETTINGS_INTEGRATION_API.GET_PAYOR_REGISTRATION_STATUS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':bankAccountUniqueName', encodeURIComponent(request.bankAccountUniqueName)).replace(':urn', encodeURIComponent(request.urn))).pipe(map((res) => {
+        return this.http.get(this.config.apiUrl + SETTINGS_INTEGRATION_API.GET_PAYOR_REGISTRATION_STATUS?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':bankAccountUniqueName', encodeURIComponent(request.bankAccountUniqueName))?.replace(':urn', encodeURIComponent(request.urn))).pipe(map((res) => {
             let data: BaseResponse<any, string> = res;
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
@@ -448,7 +448,7 @@ export class SettingsIntegrationService {
     public getBankAccountPayorsList(bankAccountUniqueName: string, amount: any): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
 
-        return this.http.get(this.config.apiUrl + SETTINGS_INTEGRATION_API.GET_BANK_ACCOUNT_PAYORS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':bankAccountUniqueName', bankAccountUniqueName).replace(':amount', amount)).pipe(map((res) => {
+        return this.http.get(this.config.apiUrl + SETTINGS_INTEGRATION_API.GET_BANK_ACCOUNT_PAYORS?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':bankAccountUniqueName', bankAccountUniqueName)?.replace(':amount', amount)).pipe(map((res) => {
             let data: BaseResponse<any, any> = res;
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<string, SmsKeyClass>(e)));

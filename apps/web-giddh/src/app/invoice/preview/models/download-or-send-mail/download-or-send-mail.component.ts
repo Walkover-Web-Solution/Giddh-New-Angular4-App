@@ -101,7 +101,7 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
 
             let getRequest = {
                 voucherType: this.selectedVoucher.voucherType,
-                uniqueName: this.selectedVoucher.uniqueName
+                uniqueName: this.selectedVoucher?.uniqueName
             };
 
             this.sanitizedPdfFileUrl = null;
@@ -117,14 +117,14 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
 
                     this.selectedInvoiceNo = this.selectedVoucher.voucherNumber;
                     this.selectedVoucherType = this.selectedVoucher.voucherType;
-                    this.selectedVoucherUniqueName = this.selectedVoucher.uniqueName;
+                    this.selectedVoucherUniqueName = this.selectedVoucher?.uniqueName;
 
                     let accountUniqueName = (this.selectedVoucher?.accountUniqueName || this.selectedVoucher.account?.uniqueName);
 
                     this.store.dispatch(this.invoiceReceiptActions.getVoucherDetailsV4(accountUniqueName, {
                         invoiceNumber:this.selectedVoucher.voucherNumber,
                         voucherType: this.selectedVoucher.voucherType,
-                        uniqueName: this.selectedVoucher.uniqueName
+                        uniqueName: this.selectedVoucher?.uniqueName
                     }));
 
                     this.showPdfWrap = true;
@@ -151,12 +151,12 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
                     reader.readAsDataURL(o);
                     this.selectedInvoiceNo = o.request.voucherNumber?.join();
                     this.selectedVoucherType = o.request.voucherType;
-                    this.selectedVoucherUniqueName = o.request.uniqueName;
+                    this.selectedVoucherUniqueName = o.request?.uniqueName;
 
                     this.store.dispatch(this.invoiceReceiptActions.getVoucherDetailsV4(o.request.accountUniqueName, {
                         invoiceNumber: o.request.voucherNumber?.join(),
                         voucherType: o.request.voucherType,
-                        uniqueName: (this.voucherApiVersion === 2) ? o.request.uniqueName : undefined
+                        uniqueName: (this.voucherApiVersion === 2) ? o.request?.uniqueName : undefined
                     }));
 
                     this.showPdfWrap = true;
@@ -178,7 +178,7 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
 
         this.store.pipe(select(p => p.receipt.voucher), takeUntil(this.destroyed$)).subscribe((o: any) => {
             if (o) {
-                this.accountUniqueName = o.account.uniqueName;
+                this.accountUniqueName = o.account?.uniqueName;
                 if(o.templateDetails?.templateUniqueName) {
                     this.store.dispatch(this._invoiceActions.GetTemplateDetailsOfInvoice(o.templateDetails?.templateUniqueName));
                 }
@@ -280,7 +280,7 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
 
             this.commonService.downloadFile(dataToSend, downloadOption, fileType).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response?.status !== "error") {
-                    if (dataToSend.copyTypes.length > 1 || this.isAttachment) {
+                    if (dataToSend.copyTypes?.length > 1 || this.isAttachment) {
                         if (fileType === "base64") {
                             saveAs((this.generalService.base64ToBlob(response.body.attachments[0].encodedData, '', 512)), response.body.attachments[0].name);
                         } else {

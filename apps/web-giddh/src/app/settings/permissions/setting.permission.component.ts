@@ -89,12 +89,12 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
     public prepareDataForUI(data: ShareRequestForm[]) {
         return data.map((o) => {
             if (o.allowedCidrs && o.allowedCidrs.length > 0) {
-                o.cidrsStr = o.allowedCidrs.toString();
+                o.cidrsStr = o.allowedCidrs?.toString();
             } else {
                 o.cidrsStr = null;
             }
             if (o.allowedIps && o.allowedIps.length > 0) {
-                o.ipsStr = o.allowedIps.toString();
+                o.ipsStr = o.allowedIps?.toString();
             } else {
                 o.ipsStr = null;
             }

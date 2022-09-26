@@ -386,7 +386,7 @@
     </head>
 
     <body
-        *ngIf="inputTemplate.sections && inputTemplate.sections.length"
+        *ngIf="inputTemplate.sections && inputTemplate.sections?.length"
         [ngStyle]="{ 'font-family': inputTemplate.font, 'padding-top': inputTemplate.topMargin + 'px', 'padding-bottom': inputTemplate.bottomMargin + 'px', 'padding-right': inputTemplate.rightMargin + 'px', 'padding-left': inputTemplate.leftMargin + 'px' }"
     >
         <!--class="disabled-area"-->
@@ -444,7 +444,7 @@
                                             <tr *ngIf="inputTemplate.sections[0].content[4].display">
                                                 <td>
                                                     <strong
-                                                        >{{(inputTemplate.sections[0].content[4].label.length > 0) ?
+                                                        >{{(inputTemplate.sections[0].content[4].label?.length > 0) ?
                                                         inputTemplate.sections[0].content[4].label : 'Invoice
                                                         Date'}}</strong
                                                     >
@@ -456,7 +456,7 @@
                                             <tr *ngIf="inputTemplate.sections[0].content[5].display">
                                                 <td>
                                                     <strong
-                                                        >{{(inputTemplate.sections[0].content[5].label.length > 0) ?
+                                                        >{{(inputTemplate.sections[0].content[5].label?.length > 0) ?
                                                         inputTemplate.sections[0].content[5].label : 'Invoice
                                                         No.'}}</strong
                                                     >
@@ -466,7 +466,7 @@
                                             <tr *ngIf="inputTemplate.sections[0].content[12].display">
                                                 <td>
                                                     <strong
-                                                        >{{(inputTemplate.sections[0].content[12].label.length > 0) ?
+                                                        >{{(inputTemplate.sections[0].content[12].label?.length > 0) ?
                                                         inputTemplate.sections[0].content[12].label : 'Due
                                                         Date'}}</strong
                                                     >
@@ -489,7 +489,7 @@
                         <h2
                             [ngClass]="{'no-content' : (inputTemplate.sections[0].content[23] && !inputTemplate.sections[0].content[23].display)}"
                             [ngStyle]="{ 'color': inputTemplate.templateColor}"
-                            title="{{( inputTemplate.sections[0].content[23] && inputTemplate.sections[0].content[23].label.length > 0) ? inputTemplate.sections[0].content[23].label : 'INVOICE' }}"
+                            title="{{( inputTemplate.sections[0].content[23] && inputTemplate.sections[0].content[23].label?.length > 0) ? inputTemplate.sections[0].content[23].label : 'INVOICE' }}"
                         >
                             <hr [ngStyle]="{ 'background-color': inputTemplate.templateColor}" />
                         </h2>
@@ -516,7 +516,7 @@
                             <td *ngIf="inputTemplate.sections[0].content[14].display">
                                 <p>
                                     <strong
-                                        >{{(inputTemplate.sections[0].content[14].label.length > 0) ?
+                                        >{{(inputTemplate.sections[0].content[14].label?.length > 0) ?
                                         inputTemplate.sections[0].content[14].label : 'Billing Address'}}</strong
                                     >
                                 </p>
@@ -530,7 +530,7 @@
                             <td *ngIf="inputTemplate.sections[0].content[16].display">
                                 <p>
                                     <strong
-                                        >{{(inputTemplate.sections[0].content[16].label.length > 0) ?
+                                        >{{(inputTemplate.sections[0].content[16].label?.length > 0) ?
                                         inputTemplate.sections[0].content[16].label : 'Shipping Address'}}</strong
                                     >
                                 </p>
@@ -546,7 +546,7 @@
                                 &nbsp;
                             </td>
                             <!--<td>-->
-                            <!--&lt;!&ndash;<p><strong [ngClass]="{false: 'hidden-label', true: ' ' }[fieldDisplayState.enableDueDate]">{{(this.inputTemplate.dueDate.length > 0) ? this.inputTemplate.dueDate : 'Due Date'}}</strong></p>&ndash;&gt;-->
+                            <!--&lt;!&ndash;<p><strong [ngClass]="{false: 'hidden-label', true: ' ' }[fieldDisplayState.enableDueDate]">{{(this.inputTemplate.dueDate?.length > 0) ? this.inputTemplate.dueDate : 'Due Date'}}</strong></p>&ndash;&gt;-->
                             <!--&lt;!&ndash;<p>30/06/2017</p>&ndash;&gt;-->
                             <!--</td>-->
                             <td
@@ -554,7 +554,7 @@
                             >
                                 <p>
                                     <strong
-                                        >{{(inputTemplate.sections[0].content[15].label.length > 0) ?
+                                        >{{(inputTemplate.sections[0].content[15].label?.length > 0) ?
                                         inputTemplate.sections[0].content[15].label : 'GSTIN'}}</strong
                                     >
                                 </p>
@@ -570,7 +570,7 @@
                             >
                                 <p>
                                     <strong
-                                        >{{(inputTemplate.sections[0].content[18].label.length > 0) ?
+                                        >{{(inputTemplate.sections[0].content[18].label?.length > 0) ?
                                         inputTemplate.sections[0].content[18].label : 'GSTIN'}}</strong
                                     >
                                 </p>
@@ -584,7 +584,7 @@
                         <tr>
                             <td *ngIf="inputTemplate.sections[0].content[6].display">
                                 <strong
-                                    >{{(inputTemplate.sections[0].content[6].label.length > 0) ?
+                                    >{{(inputTemplate.sections[0].content[6].label?.length > 0) ?
                                     inputTemplate.sections[0].content[6].label : 'Ship Date'}}</strong
                                 >
                                 <p>30/06/2017</p>
@@ -592,7 +592,7 @@
 
                             <td *ngIf="inputTemplate.sections[0].content[7].display">
                                 <strong
-                                    >{{(inputTemplate.sections[0].content[7].label.length > 0) ?
+                                    >{{(inputTemplate.sections[0].content[7].label?.length > 0) ?
                                     inputTemplate.sections[0].content[7].label : 'Ship Via'}}</strong
                                 >
                                 <p>30/06/2017</p>
@@ -600,14 +600,14 @@
 
                             <td *ngIf="inputTemplate.sections[0].content[8].display">
                                 <strong
-                                    >{{(inputTemplate.sections[0].content[8].label.length > 0) ?
+                                    >{{(inputTemplate.sections[0].content[8].label?.length > 0) ?
                                     inputTemplate.sections[0].content[8].label : 'Tracking No'}}</strong
                                 >
                                 <p>00115467</p>
                             </td>
                             <td *ngIf="inputTemplate.sections[0].content[19].display">
                                 <strong
-                                    >{{(inputTemplate.sections[0].content[19].label.length > 0) ?
+                                    >{{(inputTemplate.sections[0].content[19].label?.length > 0) ?
                                     inputTemplate.sections[0].content[19].label : 'Custom Field1'}}</strong
                                 >
                                 <p>Hello this is custom field</p>
@@ -615,7 +615,7 @@
 
                             <td *ngIf="inputTemplate.sections[0].content[20].display">
                                 <strong
-                                    >{{(inputTemplate.sections[0].content[20].label.length > 0) ?
+                                    >{{(inputTemplate.sections[0].content[20].label?.length > 0) ?
                                     inputTemplate.sections[0].content[20].label : 'Custom Field2'}}</strong
                                 >
                                 <p>2324342424432</p>
@@ -623,7 +623,7 @@
 
                             <td *ngIf="inputTemplate.sections[0].content[21].display">
                                 <strong
-                                    >{{(inputTemplate.sections[0].content[21].label.length > 0) ?
+                                    >{{(inputTemplate.sections[0].content[21].label?.length > 0) ?
                                     inputTemplate.sections[0].content[21].label : 'Custom Field3'}}</strong
                                 >
                                 <p>Field 3</p>
@@ -649,7 +649,7 @@
                                     class="text-right"
                                     [ngStyle]="{ 'background-color': inputTemplate.tableColor}"
                                 >
-                                    {{(inputTemplate.sections[1].content[0].label.length > 0) ?
+                                    {{(inputTemplate.sections[1].content[0].label?.length > 0) ?
                                     inputTemplate.sections[1].content[0].label : 'S No'}}
                                 </th>
                                 <th
@@ -657,7 +657,7 @@
                                     class="text-left"
                                     [ngStyle]="{ 'background-color': inputTemplate.tableColor}"
                                 >
-                                    {{(inputTemplate.sections[1].content[1].label.length > 0) ?
+                                    {{(inputTemplate.sections[1].content[1].label?.length > 0) ?
                                     inputTemplate.sections[1].content[1].label : 'Date'}}
                                 </th>
                                 <th
@@ -666,7 +666,7 @@
                                     class="text-left"
                                     [ngStyle]="{ 'background-color': inputTemplate.tableColor}"
                                 >
-                                    {{(inputTemplate.sections[1].content[2].label.length > 0) ?
+                                    {{(inputTemplate.sections[1].content[2].label?.length > 0) ?
                                     inputTemplate.sections[1].content[2].label : 'Item'}}
                                 </th>
                                 <th
@@ -674,7 +674,7 @@
                                     class="text-right"
                                     [ngStyle]="{ 'background-color': inputTemplate.tableColor}"
                                 >
-                                    {{(inputTemplate.sections[1].content[3].label.length > 0) ?
+                                    {{(inputTemplate.sections[1].content[3].label?.length > 0) ?
                                     inputTemplate.sections[1].content[3].label : 'HSN/SAC'}}
                                 </th>
                                 <th
@@ -682,7 +682,7 @@
                                     class="text-right"
                                     [ngStyle]="{ 'background-color': inputTemplate.tableColor}"
                                 >
-                                    {{(inputTemplate.sections[1].content[10].label.length > 0) ?
+                                    {{(inputTemplate.sections[1].content[10].label?.length > 0) ?
                                     inputTemplate.sections[1].content[10].label : 'Qty.'}}
                                 </th>
                                 <th
@@ -690,7 +690,7 @@
                                     class="text-right"
                                     [ngStyle]="{ 'background-color': inputTemplate.tableColor}"
                                 >
-                                    {{(inputTemplate.sections[1].content[5].label.length > 0) ?
+                                    {{(inputTemplate.sections[1].content[5].label?.length > 0) ?
                                     inputTemplate.sections[1].content[5].label : 'Rate'}} (<i
                                         class="icon-rupees font-11"
                                     ></i
@@ -701,7 +701,7 @@
                                     class="text-right"
                                     [ngStyle]="{ 'background-color': inputTemplate.tableColor}"
                                 >
-                                    {{(inputTemplate.sections[1].content[6].label.length > 0) ?
+                                    {{(inputTemplate.sections[1].content[6].label?.length > 0) ?
                                     inputTemplate.sections[1].content[6].label : 'Disc.'}} (<i
                                         class="icon-rupees font-11"
                                     ></i
@@ -712,7 +712,7 @@
                                     class="text-right"
                                     [ngStyle]="{ 'background-color': inputTemplate.tableColor}"
                                 >
-                                    {{(inputTemplate.sections[1].content[7].label.length > 0) ?
+                                    {{(inputTemplate.sections[1].content[7].label?.length > 0) ?
                                     inputTemplate.sections[1].content[7].label : 'Taxable Value'}}
                                 </th>
                                 <th
@@ -720,7 +720,7 @@
                                     class="text-right"
                                     [ngStyle]="{ 'background-color': inputTemplate.tableColor}"
                                 >
-                                    {{(inputTemplate.sections[1].content[8].label.length > 0) ?
+                                    {{(inputTemplate.sections[1].content[8].label?.length > 0) ?
                                     inputTemplate.sections[1].content[8].label : 'Tax'}}(<i
                                         class="icon-rupees font-11"
                                     ></i
@@ -732,7 +732,7 @@
                                     class="text-right"
                                     [ngStyle]="{ 'background-color': inputTemplate.tableColor}"
                                 >
-                                    {{(inputTemplate.sections[1].content[9].label.length > 0) ?
+                                    {{(inputTemplate.sections[1].content[9].label?.length > 0) ?
                                     inputTemplate.sections[1].content[9].label : 'Total'}} (<i
                                         class="icon-rupees font-11"
                                     ></i

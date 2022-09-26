@@ -126,7 +126,7 @@
                         </div>
                         <div class="group-name">
                             <h4>{{ item?.name }}</h4>
-                            <span class="account-unique-name">({{ item.uniqueName }})</span>
+                            <span class="account-unique-name">({{ item?.uniqueName }})</span>
                             <p *ngIf="item.parentGroups">
                                 <span *ngFor="let subitem of item.parentGroups; let idx = index">
                                     <ng-container *ngIf="idx > 0">

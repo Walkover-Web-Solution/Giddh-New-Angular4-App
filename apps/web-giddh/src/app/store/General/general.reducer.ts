@@ -186,7 +186,7 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
                 addCreatedAccountFunc(groupArray, accountData.body, accountData.queryString?.groupUniqueName, false);
 
                 let flattenItem = cloneDeep(accountData.body);
-                flattenItem.uNameStr = flattenItem.parentGroups.map(mp => mp.uniqueName).join(', ');
+                flattenItem.uNameStr = flattenItem.parentGroups.map(mp => mp.uniqueName)?.join(', ');
 
                 if (state.flattenAccounts) {
                     return {
@@ -241,7 +241,7 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
                 let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
                 if (groupArray) {
                     let deletedItem = removeAccountFunc(groupArray, action?.payload?.queryString?.activeGroupUniqueName, mAcc.queryString.accountUniqueName, null);
-                    addNewAccountFunc(groupArray, deletedItem, mAcc.request.uniqueName, false);
+                    addNewAccountFunc(groupArray, deletedItem, mAcc.request?.uniqueName, false);
                     return {
                         ...state,
                         groupswithaccounts: groupArray
@@ -283,7 +283,7 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
 
         case GENERAL_ACTIONS.SET_APP_HEADER_TITLE: {
             return {
-                ...state, headerTitle: { uniqueName: action.payload.uniqueName, additional: action.payload.additional }
+                ...state, headerTitle: { uniqueName: action.payload?.uniqueName, additional: action.payload.additional }
             }
         }
 
@@ -298,13 +298,13 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
             }
         }
         case GENERAL_ACTIONS.UPDATE_CURRENT_LIABILITIES: {
-            if(state?.flattenAccounts){
-               let flattenAccountsArray = [...state.flattenAccounts];
-               flattenAccountsArray = flattenAccountsArray.filter(account => account.uniqueName !== action.payload);
-               return {
-                ...state,
-                flattenAccounts: flattenAccountsArray
-               }
+            if (state?.flattenAccounts) {
+                let flattenAccountsArray = [...state.flattenAccounts];
+                flattenAccountsArray = flattenAccountsArray?.filter(account => account.uniqueName !== action.payload);
+                return {
+                    ...state,
+                    flattenAccounts: flattenAccountsArray
+                }
             }
             return {
               ...state,
@@ -377,7 +377,7 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
 
 const AddAndActiveGroupFunc = (groups: IGroupsWithAccounts[], gData: BaseResponse<GroupResponse, GroupCreateRequest>, myChildElementIsOpen: boolean): boolean => {
     for (let grp of groups) {
-        if (grp.uniqueName === gData.request.parentGroupUniqueName) {
+        if (grp.uniqueName === gData.request?.parentGroupUniqueName) {
             let newData = new GroupsWithAccountsResponse();
             newData.accounts = [];
             newData.category = grp.category;
@@ -427,7 +427,7 @@ const updateActiveGroupFunc = (groups: IGroupsWithAccounts[], uniqueName: string
 const removeGroupFunc = (groups: IGroupsWithAccounts[], uniqueName: string, result: IGroupsWithAccounts) => {
     if (groups) {
         for (let i = 0; i < groups.length; i++) {
-            if (groups[i].uniqueName === uniqueName) {
+            if (groups[i]?.uniqueName === uniqueName) {
                 result = groups[i];
                 groups.splice(i, 1);
                 return result;

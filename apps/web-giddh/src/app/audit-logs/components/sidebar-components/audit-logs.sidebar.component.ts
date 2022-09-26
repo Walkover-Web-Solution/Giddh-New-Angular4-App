@@ -132,11 +132,11 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
             newParents = union([], parents);
             newParents.push({
                 name: listItem.name,
-                uniqueName: listItem.uniqueName
+                uniqueName: listItem?.uniqueName
             });
             listItem = Object.assign({}, listItem, { parentGroups: [] });
             listItem.parentGroups = newParents;
-            if (listItem.groups.length > 0) {
+            if (listItem.groups?.length > 0) {
                 result = this.flattenGroup(listItem.groups, newParents);
                 result.push(omit(listItem, 'groups'));
             } else {
@@ -322,7 +322,7 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
                 if (data && data.body && data.body.results) {
                     const searchResults = data.body.results.map(result => {
                         return {
-                            value: result.uniqueName,
+                            value: result?.uniqueName,
                             label: result.name
                         }
                     }) || [];
@@ -371,7 +371,7 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
                     if (!this.accountsSearchResultsPaginationData.query) {
                         const results = response.map(result => {
                             return {
-                                value: result.uniqueName,
+                                value: result?.uniqueName,
                                 label: result.name
                             }
                         }) || [];
@@ -406,7 +406,7 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
                 if (data && data.body && data.body.results) {
                     const searchResults = data.body.results.map(result => {
                         return {
-                            value: result.uniqueName,
+                            value: result?.uniqueName,
                             label: result.name
                         }
                     }) || [];
@@ -455,7 +455,7 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
                     if (!this.groupsSearchResultsPaginationData.query) {
                         const results = response.map(result => {
                             return {
-                                value: result.uniqueName,
+                                value: result?.uniqueName,
                                 label: result.name
                             }
                         }) || [];
@@ -477,7 +477,7 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
         this.onGroupSearchQueryChanged('', 1, (response) => {
             this.defaultGroupSuggestions = response.map(result => {
                 return {
-                    value: result.uniqueName,
+                    value: result?.uniqueName,
                     label: result.name
                 }
             }) || [];
@@ -497,7 +497,7 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
         this.onAccountSearchQueryChanged('', 1, (response) => {
             this.defaultAccountSuggestions = response.map(result => {
                 return {
-                    value: result.uniqueName,
+                    value: result?.uniqueName,
                     label: result.name
                 }
             }) || [];

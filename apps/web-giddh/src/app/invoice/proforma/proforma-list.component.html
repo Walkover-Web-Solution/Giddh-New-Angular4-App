@@ -46,7 +46,7 @@
                     <div class="d-flex d-md-none ml-auto flex-column">
                         <div class="d-flex">
                             <!-- region more items-->
-                            <div class="btn-wrapper-more" *ngIf="selectedItems.length === 1">
+                            <div class="btn-wrapper-more" *ngIf="selectedItems?.length === 1">
                                 <div *ngIf="!isCompany" class="btn-group d-inline-block" dropdown #dp="bs-dropdown">
                                     <button
                                         dropdownToggle
@@ -81,7 +81,10 @@
                             </div>
                         </div>
                         <!-- select app proforma -->
-                        <div class="select-all-proformas-on-mobile-view mr-t1 ml-auto" *ngIf="selectedItems.length > 0">
+                        <div
+                            class="select-all-proformas-on-mobile-view mr-t1 ml-auto"
+                            *ngIf="selectedItems?.length > 0"
+                        >
                             <div class="checkbox-img mr-1">
                                 <img
                                     src="assets/images/unchecked.png"
@@ -107,7 +110,7 @@
 
                 <div class="d-md-flex d-sm-none">
                     <!-- region more items -->
-                    <div class="btn-wrapper-more" *ngIf="selectedItems.length === 1">
+                    <div class="btn-wrapper-more" *ngIf="selectedItems?.length === 1">
                         <div *ngIf="!isCompany" class="btn-group d-inline-block" dropdown #dp="bs-dropdown">
                             <button
                                 dropdownToggle
@@ -185,8 +188,7 @@
                             {{ localeData?.new_estimate }}
                         </button>
                     </div>
-
-                    <div class="btn-wrapper-more" *ngIf="selectedItems.length === 1">
+                    <div class="btn-wrapper-more" *ngIf="selectedItems?.length === 1">
                         <div *ngIf="!isCompany" class="btn-group d-inline-block mr-b1" dropdown #dp="bs-dropdown">
                             <button
                                 dropdownToggle
@@ -263,7 +265,7 @@
                             "
                         >
                             <tr>
-                                <th *ngIf="selectedItems.length > 0" width="4%" class="min-width-check">
+                                <th *ngIf="selectedItems?.length > 0" width="4%" class="min-width-check">
                                     <div class="check-image d-flex justify-content-center">
                                         <img
                                             src="assets/images/unchecked.png"
@@ -278,7 +280,7 @@
                                     </div>
                                 </th>
 
-                                <th *ngIf="selectedItems.length === 0" width="4%" class="min-width-check">
+                                <th *ngIf="selectedItems?.length === 0" width="4%" class="min-width-check">
                                     <div class="check-image d-flex justify-content-center">#</div>
                                 </th>
 
@@ -388,16 +390,16 @@
                         >
                             <tr
                                 *ngFor="let item of voucherData.results; let i = index"
-                                (mouseover)="hoveredItemUniqueName = item.uniqueName"
+                                (mouseover)="hoveredItemUniqueName = item?.uniqueName"
                             >
                                 <td
                                     class="check-image"
                                     width="4%"
                                     data-title="#"
                                     *ngIf="
-                                        hoveredItemUniqueName === item.uniqueName ||
+                                        hoveredItemUniqueName === item?.uniqueName ||
                                         item.isSelected ||
-                                        selectedItems.length > 0
+                                        selectedItems?.length > 0
                                     "
                                 >
                                     <div class="check-image" class="d-flex checkbox-td">
@@ -418,8 +420,8 @@
                                     width="4%"
                                     *ngIf="
                                         !item.isSelected &&
-                                        hoveredItemUniqueName !== item.uniqueName &&
-                                        selectedItems.length === 0
+                                        hoveredItemUniqueName !== item?.uniqueName &&
+                                        selectedItems?.length === 0
                                     "
                                     data-title="#"
                                 >
@@ -439,7 +441,7 @@
                                             href="javascript:void(0);"
                                             class="btn-link-2"
                                             (click)="onSelectInvoice(item)"
-                                            >{{ item.uniqueName }}</a
+                                            >{{ item?.uniqueName }}</a
                                         >
                                     </div>
                                     <span *ngIf="item.expiredDays !== null">
@@ -451,19 +453,19 @@
 
                                 <td
                                     width="19%"
-                                    (dblclick)="selectedCustomerUniqueName = item.uniqueName"
+                                    (dblclick)="selectedCustomerUniqueName = item?.uniqueName"
                                     class="cp no-dbl-click-select"
                                     (clickOutside)="selectedCustomerUniqueName = ''"
                                     [attr.data-title]="commonLocaleData?.app_customer"
                                 >
                                     {{ item.customerName }}
                                     <div
-                                        *ngIf="selectedCustomerUniqueName === item.uniqueName"
+                                        *ngIf="selectedCustomerUniqueName === item?.uniqueName"
                                         account-detail-modal-component
                                         [accountUniqueName]="item.customerUniqueName"
                                         [from]="this.advanceSearchFilter.from"
                                         [to]="this.advanceSearchFilter.to"
-                                        [isModalOpen]="selectedCustomerUniqueName === item.uniqueName"
+                                        [isModalOpen]="selectedCustomerUniqueName === item?.uniqueName"
                                     ></div>
                                 </td>
 
@@ -508,7 +510,7 @@
                                 <td
                                     width="10%"
                                     [attr.data-title]="commonLocaleData?.app_action"
-                                    (click)="clickedItemUniqueName = item.uniqueName"
+                                    (click)="clickedItemUniqueName = item?.uniqueName"
                                     class="cp"
                                     *ngIf="item.action !== 'invoiced'"
                                 >
@@ -750,12 +752,12 @@
             >
                 <div class="modal-dialog modal-md">
                     <div class="modal-content">
-                        <delete-role-confirmation-model
+                        <delete-voucher-confirmation-modal
                             [module]="voucherType + 'list'"
                             (confirmDeleteEvent)="deleteVoucher()"
                             (closeModelEvent)="toggleConfirmationModel()"
                         >
-                        </delete-role-confirmation-model>
+                        </delete-voucher-confirmation-modal>
                     </div>
                 </div>
             </div>

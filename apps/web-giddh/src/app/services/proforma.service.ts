@@ -25,8 +25,8 @@ export class ProformaService {
         });
 
         return this.http.post(url
-            .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            .replace(':vouchers', voucherType), request)
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':vouchers', voucherType), request)
             .pipe(
                 map((res) => {
                     let data: BaseResponse<ProformaResponse, ProformaFilter> = res;
@@ -40,9 +40,9 @@ export class ProformaService {
     public get(request: ProformaGetRequest, voucherType: string): Observable<BaseResponse<VoucherClass, ProformaGetRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.post(this.config.apiUrl + PROFORMA_API.base
-            .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            .replace(':vouchers', voucherType)
-            .replace(':accountUniqueName', encodeURIComponent(request.accountUniqueName)),
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':vouchers', voucherType)
+            ?.replace(':accountUniqueName', encodeURIComponent(request.accountUniqueName)),
             request
         ).pipe(
             map((res) => {
@@ -57,14 +57,14 @@ export class ProformaService {
     public generate(request: VoucherClass): Observable<BaseResponse<VoucherClass, VoucherClass>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.post(this.config.apiUrl + PROFORMA_API.generate
-            .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            .replace(':vouchers', request.voucherDetails.voucherType)
-            .replace(':accountUniqueName', encodeURIComponent(request.accountDetails.uniqueName)),
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':vouchers', request.voucherDetails.voucherType)
+            ?.replace(':accountUniqueName', encodeURIComponent(request.accountDetails?.uniqueName)),
             request
         ).pipe(
             map((res) => {
                 let data: BaseResponse<VoucherClass, VoucherClass> = res;
-                data.queryString = request.accountDetails.uniqueName;
+                data.queryString = request.accountDetails?.uniqueName;
                 data.request = request;
                 return data;
             }),
@@ -74,14 +74,14 @@ export class ProformaService {
     public update(request: VoucherClass): Observable<BaseResponse<VoucherClass, VoucherClass>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.put(this.config.apiUrl + PROFORMA_API.base
-            .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            .replace(':vouchers', request.voucherDetails.voucherType)
-            .replace(':accountUniqueName', encodeURIComponent(request.accountDetails.uniqueName)),
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':vouchers', request.voucherDetails.voucherType)
+            ?.replace(':accountUniqueName', encodeURIComponent(request.accountDetails?.uniqueName)),
             request
         ).pipe(
             map((res) => {
                 let data: BaseResponse<VoucherClass, VoucherClass> = res;
-                data.queryString = request.accountDetails.uniqueName;
+                data.queryString = request.accountDetails?.uniqueName;
                 data.request = request;
                 return data;
             }),
@@ -91,9 +91,9 @@ export class ProformaService {
     public delete(request: ProformaGetRequest, voucherType: string): Observable<BaseResponse<string, ProformaGetRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.deleteWithBody(this.config.apiUrl + PROFORMA_API.base
-            .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            .replace(':vouchers', voucherType)
-            .replace(':accountUniqueName', encodeURIComponent(request.accountUniqueName)),
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':vouchers', voucherType)
+            ?.replace(':accountUniqueName', encodeURIComponent(request.accountUniqueName)),
             request
         ).pipe(
             map((res) => {
@@ -108,10 +108,10 @@ export class ProformaService {
     public download(request: ProformaDownloadRequest, voucherType: string): Observable<BaseResponse<string, ProformaDownloadRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.post(this.config.apiUrl + PROFORMA_API.download
-            .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            .replace(':vouchers', voucherType)
-            .replace(':fileType', request.fileType)
-            .replace(':accountUniqueName', encodeURIComponent(request.accountUniqueName)),
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':vouchers', voucherType)
+            ?.replace(':fileType', request.fileType)
+            ?.replace(':accountUniqueName', encodeURIComponent(request.accountUniqueName)),
             request
         ).pipe(
             map((res) => {
@@ -126,8 +126,8 @@ export class ProformaService {
     public generateInvoice(request: ProformaGetRequest, voucherType: string): Observable<BaseResponse<string, ProformaGetRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.post(this.config.apiUrl + (voucherType === 'proformas' ? PROFORMA_API.generateInvoice : ESTIMATES_API.generateInvoice)
-            .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            .replace(':accountUniqueName', encodeURIComponent(request.accountUniqueName)),
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':accountUniqueName', encodeURIComponent(request.accountUniqueName)),
             request
         ).pipe(
             map((res) => {
@@ -142,9 +142,9 @@ export class ProformaService {
     public generateProforma(request: ProformaGetRequest, voucherType: string): Observable<BaseResponse<string, ProformaGetRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.post(this.config.apiUrl + ESTIMATES_API.generateProforma
-            .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            .replace(':vouchers', voucherType)
-            .replace(':accountUniqueName', encodeURIComponent(request.accountUniqueName)),
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':vouchers', voucherType)
+            ?.replace(':accountUniqueName', encodeURIComponent(request.accountUniqueName)),
             request
         ).pipe(
             map((res) => {
@@ -158,9 +158,9 @@ export class ProformaService {
 
     public updateAction(request: ProformaUpdateActionRequest, voucherType: string): Observable<BaseResponse<string, ProformaUpdateActionRequest>> {
         return this.http.put(this.config.apiUrl + PROFORMA_API.updateAction
-            .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            .replace(':vouchers', voucherType)
-            .replace(':accountUniqueName', encodeURIComponent(request.accountUniqueName)),
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':vouchers', voucherType)
+            ?.replace(':accountUniqueName', encodeURIComponent(request.accountUniqueName)),
             request
         ).pipe(
             map((res) => {
@@ -179,9 +179,9 @@ export class ProformaService {
         });
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.post(url
-            .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            .replace(':vouchers', voucherType)
-            .replace(':accountUniqueName', encodeURIComponent(request.accountUniqueName)),
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':vouchers', voucherType)
+            ?.replace(':accountUniqueName', encodeURIComponent(request.accountUniqueName)),
             request
         ).pipe(
             map((res) => {
@@ -196,9 +196,9 @@ export class ProformaService {
     public sendEmail(request: ProformaGetRequest, voucherType: string): Observable<BaseResponse<string, ProformaGetRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.post(this.config.apiUrl + PROFORMA_API.mailProforma
-            .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            .replace(':vouchers', voucherType)
-            .replace(':accountUniqueName', encodeURIComponent(request.accountUniqueName)),
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':vouchers', voucherType)
+            ?.replace(':accountUniqueName', encodeURIComponent(request.accountUniqueName)),
             request
         ).pipe(
             map((res) => {

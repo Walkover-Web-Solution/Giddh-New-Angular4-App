@@ -507,7 +507,7 @@
                                     <div class="single-payment-detail clearfix">
                                         <div class="payment-icon"><img src="assets/images/send-icon.svg" /></div>
                                         <p class="payment-content">{{ localeData?.email_invoice }}</p>
-                                        <a href="javascript:;" (click)="showEmailSendModal.show()">
+                                        <a href="javascript:;" (click)="showEmailSendModal?.show()">
                                             {{
                                                 selectedItem?.voucherType === "credit note" ||
                                                 selectedItem?.voucherType === "debit note"
@@ -529,7 +529,7 @@
                                 </div>
                                 <div
                                     class="less-more-details"
-                                    *ngIf="filteredVoucherVersions.length && !moreLogsDisplayed"
+                                    *ngIf="filteredVoucherVersions?.length && !moreLogsDisplayed"
                                 >
                                     <a href="javascript:;" (click)="filterVoucherVersions(true)">{{
                                         localeData?.more_details
@@ -809,9 +809,9 @@
         <div class="modal-content">
             <app-send-email-invoice-component
                 [voucherType]="voucherType"
-                (successEvent)="sendEmail.emit($event); showEmailSendModal.hide()"
+                (successEvent)="sendEmail.emit($event); showEmailSendModal?.hide()"
                 [selectedItem]="selectedItem"
-                (cancelEvent)="showEmailSendModal.hide()"
+                (cancelEvent)="showEmailSendModal?.hide()"
             >
             </app-send-email-invoice-component>
         </div>
@@ -834,7 +834,7 @@
                 [selectedItem]="selectedItem"
                 [localeData]="localeData"
                 [commonLocaleData]="commonLocaleData"
-                (cancelEvent)="downloadVoucherModal.hide()"
+                (cancelEvent)="downloadVoucherModal?.hide()"
             >
             </download-voucher>
         </div>

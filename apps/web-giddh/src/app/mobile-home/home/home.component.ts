@@ -115,7 +115,7 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.activeCompanyUniqueName = activeCompany.uniqueName;
                 let selectedCompanyArray = activeCompany.name.split(" ");
                 let companyInitials = [];
-                for (let loop = 0; loop < selectedCompanyArray.length; loop++) {
+                for (let loop = 0; loop < selectedCompanyArray?.length; loop++) {
                     if (loop <= 1) {
                         companyInitials.push(selectedCompanyArray[loop][0]);
                     } else {
@@ -213,7 +213,7 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
         if (this.listOfSelectedGroups && this.listOfSelectedGroups.length > 0) {
             let lastGroup = this.generalService.getLastElement(this.listOfSelectedGroups);
-            this.commandKRequestParams.group = lastGroup.uniqueName;
+            this.commandKRequestParams.group = lastGroup?.uniqueName;
         } else {
             this.commandKRequestParams.group = "";
         }
@@ -257,7 +257,7 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
      */
     public removeItemFromSelectedGroups(item?: any): void {
         if (item) {
-            this.listOfSelectedGroups = remove(this.listOfSelectedGroups, o => item.uniqueName !== o.uniqueName);
+            this.listOfSelectedGroups = remove(this.listOfSelectedGroups, o => item.uniqueName !== o?.uniqueName);
         } else {
             this.listOfSelectedGroups.pop();
         }
@@ -284,7 +284,7 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof MobileHomeComponent
      */
     public trackByFn(index, item: any): any {
-        return item.uniqueName; // unique id corresponding to the item
+        return item?.uniqueName; // unique id corresponding to the item
     }
 
     /**
@@ -341,7 +341,7 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
             }
         } else if (item.type === 'GROUP') {
             this.commandKRequestParams.q = "";
-            if (!this.listOfSelectedGroups || this.listOfSelectedGroups.length === 0) {
+            if (!this.listOfSelectedGroups || this.listOfSelectedGroups?.length === 0) {
                 this.listOfSelectedGroups = [];
             }
             this.listOfSelectedGroups.push(item);

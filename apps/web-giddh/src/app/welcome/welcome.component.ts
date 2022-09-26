@@ -361,7 +361,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
             this.createNewCompanyPreparedObj.address = this.companyProfileObj.address ? this.companyProfileObj.address : '';
             this.createNewCompanyPreparedObj.taxes = (this.selectedTaxes?.length > 0) ? this.selectedTaxes : [];
             if (this.createNewCompanyPreparedObj.phoneCode && this.createNewCompanyPreparedObj.contactNo) {
-                if (!this.createNewCompanyPreparedObj.contactNo.toString().includes('-')) {
+                if (!this.createNewCompanyPreparedObj.contactNo?.toString()?.includes('-')) {
                     this.createNewCompanyPreparedObj.contactNo = this.createNewCompanyPreparedObj.phoneCode + '-' + this.createNewCompanyPreparedObj.contactNo;
                 }
             }
@@ -643,12 +643,12 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
                     Object.keys(res.applicableTaxes).forEach(key => {
                         if (res.applicableTaxes[key]) {
                             this.taxesList.push({
-                                label: res.applicableTaxes[key].name,
-                                value: res.applicableTaxes[key].uniqueName,
+                                label: res.applicableTaxes[key]?.name,
+                                value: res.applicableTaxes[key]?.uniqueName,
                                 isSelected: false
                             });
-                            this.currentTaxList[res.applicableTaxes[key].uniqueName] = [];
-                            this.currentTaxList[res.applicableTaxes[key].uniqueName] = res.applicableTaxes[key];
+                            this.currentTaxList[res.applicableTaxes[key]?.uniqueName] = [];
+                            this.currentTaxList[res.applicableTaxes[key]?.uniqueName] = res.applicableTaxes[key];
                         }
                     });
                 }
@@ -846,7 +846,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
                     if (!itemName) {
                         this.welcomeForm.form.controls['name'].setErrors({ 'required': true });
                     }
-                    if (itemName.length > 100) {
+                    if (itemName?.length > 100) {
                         this.welcomeForm.form.controls['name'].setErrors({ 'maxlength': true });
                     }
                 }
@@ -909,7 +909,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof WelcomeComponent
      */
     private getFormattedContactNumber(contactNumber: string): string {
-        if (contactNumber.toString().includes('-')) {
+        if (contactNumber?.toString()?.includes('-')) {
             return contactNumber.split('-')[1];
         }
         return contactNumber;
@@ -925,8 +925,8 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof WelcomeComponent
      */
     private getCallingCode(contactNumber: string): string {
-        if (contactNumber.toString().includes('-')) {
-            return contactNumber.split('-')[0];
+        if (contactNumber?.toString()?.includes('-')) {
+            return contactNumber?.split('-')[0];
         }
         return '';
     }
@@ -998,7 +998,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof WelcomeComponent
      */
     private isAddressValid(address: string = ''): boolean {
-        return address.trim()?.length > 0;
+        return address?.trim()?.length > 0;
     }
 
     /**

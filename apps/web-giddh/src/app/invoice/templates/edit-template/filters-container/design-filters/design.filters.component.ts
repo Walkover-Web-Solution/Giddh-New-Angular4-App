@@ -205,10 +205,10 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
     public onDesignChange(fieldName, value) {
         let template;
         if (fieldName === 'uniqueName') { // change whole template
-            const selectedTemplate = cloneDeep(this.sampleTemplates.find((t: CustomTemplateResponse) => (t.uniqueName === value)));
+            const selectedTemplate = cloneDeep(this.sampleTemplates.find((t: CustomTemplateResponse) => (t?.uniqueName === value)));
             template = selectedTemplate ? selectedTemplate : cloneDeep(this.customTemplate);
             if (this.mode === 'update' && selectedTemplate) {
-                template.uniqueName = cloneDeep(this.customTemplate.uniqueName);
+                template.uniqueName = cloneDeep(this.customTemplate?.uniqueName);
                 template.name = cloneDeep(this.customTemplate.name);
             }
         } else { // change specific field
@@ -338,9 +338,9 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
     }
 
     public newLineToBR(template) {
-        template.sections['footer'].data['message1'].label = template.sections['footer'].data['message1'].label.replace(/(?:\r\n|\r|\n)/g, '<br />');
-        template.sections['footer'].data['companyAddress'].label = template.sections['footer'].data['companyAddress'].label.replace(/(?:\r\n|\r|\n)/g, '<br />');
-        template.sections['footer'].data['slogan'].label = template.sections['footer'].data['slogan'].label.replace(/(?:\r\n|\r|\n)/g, '<br />');
+        template.sections['footer'].data['message1'].label = template.sections['footer'].data['message1'].label?.replace(/(?:\r\n|\r|\n)/g, '<br />');
+        template.sections['footer'].data['companyAddress'].label = template.sections['footer'].data['companyAddress'].label?.replace(/(?:\r\n|\r|\n)/g, '<br />');
+        template.sections['footer'].data['slogan'].label = template.sections['footer'].data['slogan'].label?.replace(/(?:\r\n|\r|\n)/g, '<br />');
 
         // template.sections[2].content[9].label = template.sections[2].content[9].label.replace(/(?:\r\n|\r|\n)/g, '<br />');
         return template;
@@ -353,7 +353,7 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
         this.companyUniqueName$.pipe(take(1)).subscribe(a => companyUniqueName = a);
         const event: UploadInput = {
             type: 'uploadAll',
-            url: Configuration.ApiUrl + INVOICE_API.UPLOAD_LOGO.replace(':companyUniqueName', encodeURIComponent(companyUniqueName)),
+            url: Configuration.ApiUrl + INVOICE_API.UPLOAD_LOGO?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName)),
             method: 'POST',
             headers: { 'Session-Id': sessionId },
         };

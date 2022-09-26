@@ -1,28 +1,28 @@
 import { Observable, of, ReplaySubject, Subject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
-import { AppState } from '../../../../../store';
 import { Store, select } from '@ngrx/store';
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
-import { SidebarAction } from '../../../../../actions/inventory/sidebar.actions';
+import { ActivatedRoute } from '@angular/router';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { decimalDigits, digitsOnly, stockManufacturingDetailsValidator } from '../../../../../shared/helpers';
-import { CreateStockRequest, StockDetailResponse, StockGroupResponse } from '../../../../../models/api-models/Inventory';
-import { InventoryAction } from '../../../../../actions/inventory/inventory.actions';
-import * as  _ from '../../../../../lodash-optimized';
-import { CustomStockUnitAction } from '../../../../../actions/inventory/customStockUnit.actions';
-import { IUnitRateItem } from '../../../../../models/interfaces/stocksItem.interface';
-import { uniqueNameInvalidStringReplace } from '../../../../../shared/helpers/helperFunctions';
-import { IOption } from '../../../../../theme/ng-virtual-select/sh-options.interface';
-import { ToasterService } from '../../../../../services/toaster.service';
-import { InventoryService } from '../../../../../services/inventory.service';
-import { IGroupsWithStocksHierarchyMinItem } from '../../../../../models/interfaces/groupsWithStocks.interface';
-import { IForceClear } from '../../../../../models/api-models/Sales';
-import { TaxResponse } from '../../../../../models/api-models/Company';
-import { CompanyActions } from '../../../../../actions/company.actions';
-import { InvViewService } from '../../../../../inventory/inv.view.service';
 import { INVALID_STOCK_ERROR_MESSAGE } from 'apps/web-giddh/src/app/app.constant';
 import { SalesService } from 'apps/web-giddh/src/app/services/sales.service';
 import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service';
+import { CompanyActions } from 'apps/web-giddh/src/app/actions/company.actions';
+import { CustomStockUnitAction } from 'apps/web-giddh/src/app/actions/inventory/customStockUnit.actions';
+import { InventoryAction } from 'apps/web-giddh/src/app/actions/inventory/inventory.actions';
+import { SidebarAction } from 'apps/web-giddh/src/app/actions/inventory/sidebar.actions';
+import { InvViewService } from 'apps/web-giddh/src/app/inventory/inv.view.service';
+import { TaxResponse } from 'apps/web-giddh/src/app/models/api-models/Company';
+import { StockGroupResponse, StockDetailResponse, CreateStockRequest } from 'apps/web-giddh/src/app/models/api-models/Inventory';
+import { IForceClear } from 'apps/web-giddh/src/app/models/api-models/Sales';
+import { IGroupsWithStocksHierarchyMinItem } from 'apps/web-giddh/src/app/models/interfaces/groupsWithStocks.interface';
+import { IUnitRateItem } from 'apps/web-giddh/src/app/models/interfaces/stocksItem.interface';
+import { InventoryService } from 'apps/web-giddh/src/app/services/inventory.service';
+import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
+import { AppState } from 'apps/web-giddh/src/app/store';
+import { IOption } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-options.interface';
+import { decimalDigits, digitsOnly, stockManufacturingDetailsValidator } from '../../../helpers';
+import { uniqueNameInvalidStringReplace } from '../../../helpers/helperFunctions';
 
 @Component({
     selector: 'sales-create-stock',
@@ -343,8 +343,8 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
                             manufacturingUnitCode: a.manufacturingDetails.manufacturingUnitCode
                         }
                     });
-                    a.manufacturingDetails.linkedStocks.map((item, i) => {
-                        this.addItemInLinkedStocks(item, i, a.manufacturingDetails.linkedStocks.length - 1);
+                    a.manufacturingDetails.linkedStocks?.map((item, i) => {
+                        this.addItemInLinkedStocks(item, i, a.manufacturingDetails.linkedStocks?.length - 1);
                     });
                 } else {
                     this.addStockForm?.patchValue({ isFsStock: false });
@@ -358,7 +358,7 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
                 });
 
                 this.taxTempArray = [];
-                if (a.taxes.length) {
+                if (a.taxes?.length) {
                     this.mapSavedTaxes(a.taxes);
                 }
                 this.store.dispatch(this.inventoryAction.hideLoaderForStock());
@@ -478,7 +478,7 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
     public removePurchaseUnitRates(i: number) {
         // remove address from the list
         const control = this.addStockForm.controls['purchaseUnitRates'] as FormArray;
-        if (control.length > 1) {
+        if (control?.length > 1) {
             control.removeAt(i);
         } else {
             control.controls[0].reset();
@@ -511,7 +511,7 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
     public removeSaleUnitRates(i: number) {
         // remove address from the list
         const control = this.addStockForm.controls['saleUnitRates'] as FormArray;
-        if (control.length > 1) {
+        if (control?.length > 1) {
             control.removeAt(i);
         } else {
             control.controls[0].reset();
@@ -529,7 +529,6 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
         if (this.isUpdatingStockForm) {
             return true;
         }
-        let groupName = null;
         let val: string = this.addStockForm.controls['name'].value;
         if (val) {
             val = uniqueNameInvalidStringReplace(val);
@@ -606,7 +605,7 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
         this.editLinkedStockIdx = i;
         const manufacturingDetailsContorl = this.addStockForm.controls['manufacturingDetails'] as FormGroup;
         const control = manufacturingDetailsContorl.controls['linkedStocks'] as FormArray;
-        let last = control.controls.length - 1;
+        let last = control.controls?.length - 1;
         control.disable();
         control.controls[i].enable();
         control.controls[last].enable();
@@ -619,7 +618,7 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
         control.controls[i]?.patchValue(item);
         this.editLinkedStockIdx = null;
         this.editModeForLinkedStokes = false;
-        let last = control.controls.length;
+        let last = control.controls?.length;
         control.disable();
         control.controls[last - 1].enable();
     }
@@ -668,13 +667,13 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
         const manufacturingDetailsContorls = this.addStockForm.controls['manufacturingDetails'] as FormGroup;
         const linkedStocksControls = manufacturingDetailsContorls.controls['linkedStocks'] as FormArray;
 
-        if (purchaseUnitRatesControls.controls.length > 1) {
+        if (purchaseUnitRatesControls.controls?.length > 1) {
             purchaseUnitRatesControls.controls = purchaseUnitRatesControls.controls.splice(1);
         }
-        if (saleUnitRatesControls.length > 1) {
+        if (saleUnitRatesControls?.length > 1) {
             saleUnitRatesControls.controls = saleUnitRatesControls.controls.splice(1);
         }
-        if (linkedStocksControls.length > 1) {
+        if (linkedStocksControls?.length > 1) {
             linkedStocksControls.controls = [];
             linkedStocksControls.push(this.initialIManufacturingDetails());
         }
@@ -719,8 +718,8 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
                         manufacturingUnitCode: activeStock.manufacturingDetails.manufacturingUnitCode
                     }
                 });
-                activeStock.manufacturingDetails.linkedStocks.map((item, i) => {
-                    this.addItemInLinkedStocks(item, i, activeStock.manufacturingDetails.linkedStocks.length - 1);
+                activeStock.manufacturingDetails.linkedStocks?.map((item, i) => {
+                    this.addItemInLinkedStocks(item, i, activeStock.manufacturingDetails.linkedStocks?.length - 1);
                 });
             } else {
                 this.addStockForm?.patchValue({ isFsStock: false });
@@ -733,7 +732,7 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
         let stockObj = new CreateStockRequest();
         let uniqueName = this.addStockForm.get('uniqueName');
         if (uniqueName.value) {
-            uniqueName?.patchValue(uniqueName.value.replace(/ /g, '').toLowerCase());
+            uniqueName?.patchValue(uniqueName.value?.replace(/ /g, '').toLowerCase());
         }
         this.addStockForm.get('uniqueName').enable();
 
@@ -754,7 +753,7 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
 
         if (formObj.enablePurchase) {
             if (this.validateStock(formObj.purchaseUnitRates)) {
-                formObj.purchaseUnitRates = formObj.purchaseUnitRates.filter((pr) => {
+                formObj.purchaseUnitRates = formObj.purchaseUnitRates?.filter((pr) => {
                     // Aditya: In inventory while creating purchase and sales unit and rate are mandatory error issue
                     // return pr.stockUnitCode && pr.rate;
                     return pr.stockUnitCode || pr.rate;
@@ -770,7 +769,7 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
         }
         if (formObj.enableSales) {
             if (this.validateStock(formObj.purchaseUnitRates)) {
-                formObj.saleUnitRates = formObj.saleUnitRates.filter((pr) => {
+                formObj.saleUnitRates = formObj.saleUnitRates?.filter((pr) => {
                     // Aditya: In inventory while creating purchase and sales unit and rate are mandatory error issue
                     // return pr.stockUnitCode && pr.rate;
                     return pr.stockUnitCode || pr.rate;
@@ -951,7 +950,7 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
         let isOk = pattern.test(e.key);
         if (!isOk) {
             let val = this.addStockForm.get('skuCode').value;
-            val = val.substr(0, (val.length - 1));
+            val = val?.substr(0, (val?.length - 1));
             this.addStockForm.get('skuCode')?.patchValue(val);
             return;
         }
@@ -1020,7 +1019,7 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
             } else if (index > -1 && e.target.checked) {
                 tax.isChecked = true;
                 tax.isDisabled = false;
-                this.taxTempArray = this.taxTempArray.filter(ele => {
+                this.taxTempArray = this.taxTempArray?.filter(ele => {
                     return tax.taxType !== ele.taxType;
                 });
                 this.taxTempArray.push(tax);
@@ -1158,7 +1157,7 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
             const formEntries = unitRates.filter((unitRate) => {
                 return (unitRate.stockUnitCode && !unitRate.rate) || (!unitRate.stockUnitCode && unitRate.rate);
             });
-            return formEntries.length === 0;
+            return formEntries?.length === 0;
         }
         return true;
     }

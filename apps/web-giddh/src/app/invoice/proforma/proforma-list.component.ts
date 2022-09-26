@@ -224,7 +224,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
         this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.branches = response || [];
-                this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && this.branches.length > 1;
+                this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && this.branches?.length > 1;
             }
         });
 
@@ -260,7 +260,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
                             item = this.addToolTiptext(item);
                         }
 
-                        item.isSelected = this.generalService.checkIfValueExistsInArray(this.selectedInvoices, item.uniqueName);
+                        item.isSelected = this.generalService.checkIfValueExistsInArray(this.selectedInvoices, item?.uniqueName);
 
                         this.itemsListForDetails.push(this.parseItemForVm(item));
 
@@ -423,7 +423,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
                 this.getAll();
             }
 
-            if (res && this.selectedItems.length) {
+            if (res && this.selectedItems?.length) {
                 this.selectedItems = [];
                 this.getAll();
             }
@@ -519,9 +519,9 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
                 item.isSelected = this.allItemsSelected;
 
                 if (this.allItemsSelected) {
-                    this.selectedInvoices = this.generalService.addValueInArray(this.selectedInvoices, item.uniqueName);
+                    this.selectedInvoices = this.generalService.addValueInArray(this.selectedInvoices, item?.uniqueName);
                 } else {
-                    this.selectedInvoices = this.generalService.removeValueFromArray(this.selectedInvoices, item.uniqueName);
+                    this.selectedInvoices = this.generalService.removeValueFromArray(this.selectedInvoices, item?.uniqueName);
                 }
 
                 this.itemStateChanged(item, true);
@@ -533,9 +533,9 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
     public toggleItem(item: any, action: boolean) {
         item.isSelected = action;
         if (action) {
-            this.selectedInvoices = this.generalService.addValueInArray(this.selectedInvoices, item.uniqueName);
+            this.selectedInvoices = this.generalService.addValueInArray(this.selectedInvoices, item?.uniqueName);
         } else {
-            this.selectedInvoices = this.generalService.removeValueFromArray(this.selectedInvoices, item.uniqueName);
+            this.selectedInvoices = this.generalService.removeValueFromArray(this.selectedInvoices, item?.uniqueName);
             this.allItemsSelected = false;
         }
         this.itemStateChanged(item);
@@ -547,12 +547,12 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     public itemStateChanged(item: ProformaItem, allSelected: boolean = false) {
-        let index = (this.selectedItems) ? this.selectedItems.findIndex(f => f === item.uniqueName) : -1;
+        let index = (this.selectedItems) ? this.selectedItems.findIndex(f => f === item?.uniqueName) : -1;
 
         if (index > -1 && !allSelected) {
-            this.selectedItems = this.selectedItems.filter(f => f !== item.uniqueName);
+            this.selectedItems = this.selectedItems?.filter(f => f !== item?.uniqueName);
         } else {
-            this.selectedItems.push(item.uniqueName);
+            this.selectedItems.push(item?.uniqueName);
         }
     }
 
@@ -631,7 +631,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
         this.advanceSearchFilter.count = 20;
 
         // set date picker date as application date
-        if (universalDate.length > 1) {
+        if (universalDate?.length > 1) {
             this.advanceSearchFilter.from = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);
             this.advanceSearchFilter.to = dayjs(universalDate[1]).format(GIDDH_DATE_FORMAT);
             this.datePickerOptions = {
@@ -664,7 +664,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
 
     public updateVoucherAction(action: string, item?: ProformaItem) {
         let request: ProformaUpdateActionRequest = new ProformaUpdateActionRequest();
-        request.accountUniqueName = this.selectedVoucher ? this.selectedVoucher.account.uniqueName : item.customerUniqueName;
+        request.accountUniqueName = this.selectedVoucher ? this.selectedVoucher.account?.uniqueName : item.customerUniqueName;
 
         if (this.voucherType === VoucherTypeEnum.generateProforma || this.voucherType === VoucherTypeEnum.proforma) {
             request.proformaNumber = this.selectedVoucher ? this.selectedVoucher.voucherNumber : item.proformaNumber;
@@ -754,7 +754,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
     private prepareCommonRequest(): ProformaGetRequest {
         let request: ProformaGetRequest = new ProformaGetRequest();
 
-        request.accountUniqueName = this.selectedVoucher.account.uniqueName;
+        request.accountUniqueName = this.selectedVoucher.account?.uniqueName;
 
         if (this.voucherType === VoucherTypeEnum.generateProforma || this.voucherType === VoucherTypeEnum.proforma) {
             request.proformaNumber = this.selectedVoucher.voucherNumber;

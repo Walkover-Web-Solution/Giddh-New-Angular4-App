@@ -185,7 +185,7 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
 
     public getDateToDMY(selecteddate) {
         let date = selecteddate.split('-');
-        if (date.length === 3) {
+        if (date?.length === 3) {
             this.translationComplete(true);
             let month = this.monthNames[parseInt(date[1]) - 1]?.substr(0, 3);
             let year = date[2]?.substr(2, 4);
@@ -234,7 +234,7 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
         let startDateSplit = startDate.split('-');
         let dt = new Date(startDateSplit[2], startDateSplit[1], startDateSplit[0]);
         // GET THE MONTH AND YEAR OF THE SELECTED DATE.
-        let month = (dt.getMonth() + 1).toString(),
+        let month = (dt.getMonth() + 1)?.toString(),
             year = dt.getFullYear();
 
         if (parseInt(month) < 10) {

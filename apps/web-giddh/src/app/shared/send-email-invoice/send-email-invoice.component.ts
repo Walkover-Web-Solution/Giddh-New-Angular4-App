@@ -49,7 +49,7 @@ export class SendEmailInvoiceComponent implements OnInit {
         if (event.target.checked) {
             this.invoiceType.push(val);
         } else {
-            this.invoiceType = this.invoiceType.filter(f => f !== val);
+            this.invoiceType = this.invoiceType?.filter(f => f !== val);
         }
     }
 
@@ -58,7 +58,7 @@ export class SendEmailInvoiceComponent implements OnInit {
             this.successEvent.emit(this.emailAddresses);
         } else {
             if(this.voucherApiVersion === 2) {
-                this.successEvent.emit({ email: this.emailAddresses, invoiceType: this.invoiceType, uniqueName: this.selectedItem.uniqueName });
+                this.successEvent.emit({ email: this.emailAddresses, invoiceType: this.invoiceType, uniqueName: this.selectedItem?.uniqueName });
             } else {
                 this.successEvent.emit({ email: this.emailAddresses, invoiceType: this.invoiceType, invoiceNumber: this.selectedItem.voucherNumber });
             }

@@ -225,8 +225,8 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
         let isValid: boolean = false;
 
         if (ele.value) {
-            if (this.formFields['taxName']['regex'] !== "" && this.formFields['taxName']['regex'].length > 0) {
-                for (let key = 0; key < this.formFields['taxName']['regex'].length; key++) {
+            if (this.formFields['taxName']['regex'] !== "" && this.formFields['taxName']['regex']?.length > 0) {
+                for (let key = 0; key < this.formFields['taxName']['regex']?.length; key++) {
                     let regex = new RegExp(this.formFields['taxName']['regex'][key]);
                     if (regex.test(ele.value)) {
                         isValid = true;
@@ -303,8 +303,8 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
     public prepareSelectedPlanFromSubscriptions(plan: CreateCompanyUsersPlan): void {
         this.isCreateAndSwitchCompanyInProcess = true;
         this.subscriptionPrice = plan.planDetails.amount;
-        this.SubscriptionRequestObj.userUniqueName = this.logedInuser.uniqueName;
-        this.SubscriptionRequestObj.planUniqueName = plan.planDetails.uniqueName;
+        this.SubscriptionRequestObj.userUniqueName = this.logedInuser?.uniqueName;
+        this.SubscriptionRequestObj.planUniqueName = plan.planDetails?.uniqueName;
         if (!this.UserCurrency) {
             this.store.pipe(select(s => s.session.currentCompanyCurrency), takeUntil(this.destroyed$)).subscribe(res => {
                 if (res) {
@@ -430,13 +430,13 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
             this.createNewCompany.contactNo = this.activeCompany.contactNo;
             this.createNewCompany.phoneCode = this.activeCompany.countryV2 ? this.activeCompany.countryV2.callingCode : '';
             this.createNewCompany.country = this.activeCompany.countryV2 ? this.activeCompany.countryV2.alpha2CountryCode : '';
-            this.createNewCompany.uniqueName = this.activeCompany.uniqueName;
+            this.createNewCompany.uniqueName = this.activeCompany?.uniqueName;
             this.createNewCompany.address = this.activeCompany.address;
             this.createNewCompany.addresses = this.activeCompany.addresses;
             this.createNewCompany.businessType = this.activeCompany.businessType;
             this.createNewCompany.businessNature = this.activeCompany.businessNature;
             this.createNewCompany.subscriptionRequest = new SubscriptionRequest();
-            this.createNewCompany.subscriptionRequest.userUniqueName = this.activeCompany.subscription ? this.activeCompany.subscription.userDetails.uniqueName : '';
+            this.createNewCompany.subscriptionRequest.userUniqueName = this.activeCompany.subscription ? this.activeCompany.subscription.userDetails?.uniqueName : '';
 
             // assign state code to billing details object
             if (this.activeCompany.state) {

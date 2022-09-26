@@ -1318,8 +1318,8 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
 
     private setTableColspan() {
-        let balancesColsArr = ["openingBalance"];
-        let length = Object.keys(this.showFieldFilter).filter(f => this.showFieldFilter[f]).filter(f => balancesColsArr.includes(f))?.length;
+        let balancesColsArr = ['openingBalance'];
+        let length = Object.keys(this.showFieldFilter)?.filter(f => this.showFieldFilter[f])?.filter(f => balancesColsArr.includes(f))?.length;
         this.tableColsPan = length > 0 ? 4 : 3;
     }
 
@@ -1409,11 +1409,11 @@ export class ContactComponent implements OnInit, OnDestroy {
      */
     public prepareSelectedContactsList(element: any, isChecked: boolean): void {
         // selected accounts or creditors list for bulk payment
-        let accountExists = this.selectedAccountsList?.filter(account => account.uniqueName === element?.uniqueName);
+        let accountExists = this.selectedAccountsList?.filter(account => account?.uniqueName === element?.uniqueName);
         if (!accountExists?.length && isChecked) {
             this.selectedAccountsList.push(element);
         } else if (accountExists?.length > 0 && !isChecked) {
-            this.selectedAccountsList = this.selectedAccountsList?.filter(account => account.uniqueName !== element?.uniqueName);
+            this.selectedAccountsList = this.selectedAccountsList?.filter(account => account?.uniqueName !== element?.uniqueName);
         }
         // selected contacts list
         let indexOfEntrySelected = this.selectedCheckedContacts.indexOf(element?.uniqueName);
@@ -1487,16 +1487,16 @@ export class ContactComponent implements OnInit, OnDestroy {
         for (let key of field) {
             if (key?.uniqueName) {
                 let index = Object.keys(this.showFieldFilter).length;
-                if (!this.showFieldFilter[key.uniqueName]) {
-                    this.showFieldFilter[key.uniqueName] = {
+                if (!this.showFieldFilter[key?.uniqueName]) {
+                    this.showFieldFilter[key?.uniqueName] = {
                         visibility: false,
                         displayName: key.key,
                     };
                 }
 
-                let isColumnAvailable = this.availableColumnsCount.filter(column => column.value === key.uniqueName);
+                let isColumnAvailable = this.availableColumnsCount?.filter(column => column.value === key?.uniqueName);
                 if (!isColumnAvailable?.length) {
-                    this.availableColumnsCount.push({ key: index, value: key.uniqueName });
+                    this.availableColumnsCount.push({ key: index, value: key?.uniqueName });
                 }
             }
         }
@@ -1512,16 +1512,16 @@ export class ContactComponent implements OnInit, OnDestroy {
      */
     public setDisplayColumns(): void {
         const defaultColumms: string[] = this.activeTab === "customer" ? this.customerColumns : this.vendorColumns;
-        let computedColumns: string[] = [...defaultColumms, ...Object.keys(this.showFieldFilter).filter(key => this.showFieldFilter[key].visibility)];
+        let computedColumns: string[] = [...defaultColumms, ...Object.keys(this.showFieldFilter)?.filter(key => this.showFieldFilter[key].visibility)];
         if (this.activeTab === "vendor" && computedColumns?.length) {
             computedColumns?.push("action");
         }
         if (computedColumns.findIndex(s => s === "openingBalance") > -1) {
-            computedColumns = computedColumns.filter(s => s !== "openingBalance");
+            computedColumns = computedColumns?.filter(s => s !== "openingBalance");
             computedColumns.splice(1, 0, "openingBalance");
         }
         if (computedColumns.findIndex(s => s === "parentGroup") > -1) {
-            computedColumns = computedColumns.filter(s => s !== "parentGroup");
+            computedColumns = computedColumns?.filter(s => s !== "parentGroup");
             computedColumns.splice(1, 0, "parentGroup");
         }
         this.displayColumns.next(computedColumns);
@@ -1707,8 +1707,8 @@ export class ContactComponent implements OnInit, OnDestroy {
         }
         if (this.selectedAccountsList?.length < this.selectedCheckedContacts?.length) {
             let message = this.localeData?.bank_transactions_message;
-            message = message.replace("[SUCCESS]", this.selectedCheckedContacts.length - this.selectedAccountsList.length);
-            message = message.replace("[TOTAL]", this.selectedCheckedContacts.length);
+            message = message?.replace("[SUCCESS]", this.selectedCheckedContacts?.length - this.selectedAccountsList?.length);
+            message = message?.replace("[TOTAL]", this.selectedCheckedContacts?.length);
 
             this.toaster.showSnackBar("info", message);
             return;
