@@ -65,6 +65,25 @@
                             </ng-template>
                         </sh-select>
                     </div>
+                    <div *ngIf="taxes?.length" class="mr-r1 mr-l1">
+                        <div class="d-flex align-items-center">
+                            <label>{{ commonLocaleData?.app_gstin }}:</label>
+                            <div class="tax-dropdown mr-l05">
+                                <sh-select
+                                    [options]="taxes"
+                                    [(ngModel)]="EwayBillfilterRequest.gstin"
+                                    (selected)="selectTax($event)"
+                                    [defaultValue]="EwayBillfilterRequest.gstin"
+                                    [placeholder]="localeData?.select_gstin"
+                                    [showClear]="false"
+                                    [multiple]="false"
+                                    [ItemHeight]="67"
+                                    [isRequired]="true"
+                                >
+                                </sh-select>
+                            </div>
+                        </div>
+                    </div>
                     <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
                         <i><img src="assets/images/custom-calender.svg" /></i>
                         <input
