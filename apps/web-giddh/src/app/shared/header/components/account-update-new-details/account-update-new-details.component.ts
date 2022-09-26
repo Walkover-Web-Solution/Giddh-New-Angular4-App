@@ -705,7 +705,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             accountRequest.currency = this.selectedCurrency;
         }
 
-        let mobileNo = this.intl.getNumber();
+        let mobileNo = this.intl?.getNumber();
         accountRequest['mobileNo'] = mobileNo;
 
         accountRequest['hsnNumber'] = (accountRequest["hsnOrSac"] === "hsn") ? accountRequest['hsnNumber'] : "";

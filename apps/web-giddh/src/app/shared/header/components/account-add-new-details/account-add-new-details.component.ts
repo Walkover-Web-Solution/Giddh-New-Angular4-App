@@ -572,7 +572,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             delete accountRequest['addresses'];
         }
 
-        let mobileNo = this.intl.getNumber();
+        let mobileNo = this.intl?.getNumber();
         accountRequest['mobileNo'] = mobileNo;
 
         accountRequest['hsnNumber'] = (accountRequest["hsnOrSac"] === "hsn") ? accountRequest['hsnNumber'] : "";
