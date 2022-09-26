@@ -1241,9 +1241,9 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             utilsScript: MOBILE_NUMBER_UTIL_URL,
             autoHideDialCode: false,
             separateDialCode: false,
-            initialCountry: this.activeCompany.countryV2.alpha2CountryCode.toLowerCase(),
+            initialCountry: this.activeCompany?.countryV2?.alpha2CountryCode.toLowerCase(),
             geoIpLookup: (success, failure) => {
-                let countryCode = this.activeCompany.countryV2.alpha2CountryCode.toLowerCase();
+                let countryCode = this.activeCompany?.countryV2?.alpha2CountryCode.toLowerCase();
                 if (!countryCode) {
                     const fetchIPApi = this.http.get<any>('https://api.db-ip.com/v2/free/self');
                     fetchIPApi.subscribe(

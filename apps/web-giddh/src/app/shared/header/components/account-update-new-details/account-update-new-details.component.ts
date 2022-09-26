@@ -1670,7 +1670,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                         .subscribe(_ => {
                             if (results[0]?.mobileNo) {
                                 let updatedNumber = '+' + results[0]?.mobileNo;
-                                this.intl.setNumber(updatedNumber);
+                                this.intl?.setNumber(updatedNumber);
                             }
                         });
                     this.store.pipe(select(appStore => appStore.groupwithaccounts.activeGroupUniqueName), take(1)).subscribe(response => {
