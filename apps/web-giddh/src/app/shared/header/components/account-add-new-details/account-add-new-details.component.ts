@@ -29,7 +29,7 @@ import { GeneralActions } from "../../../../actions/general/general.actions";
 import { parsePhoneNumberFromString, CountryCode } from 'libphonenumber-js/min';
 import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
 import { GroupWithAccountsAction } from 'apps/web-giddh/src/app/actions/groupwithaccounts.actions';
-import { API_COUNT_LIMIT, BootstrapToggleSwitch, EMAIL_VALIDATION_REGEX } from 'apps/web-giddh/src/app/app.constant';
+import { API_COUNT_LIMIT, BootstrapToggleSwitch, EMAIL_VALIDATION_REGEX, MOBILE_NUMBER_UTIL_URL } from 'apps/web-giddh/src/app/app.constant';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
@@ -525,30 +525,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         addresses.reset();
         countries.reset();
         this.addAccountForm.reset();
-    }
-
-    public isValidMobileNumber(ele: HTMLInputElement) {
-        if (ele.value) {
-            this.checkMobileNo(ele);
-        }
-    }
-
-    public checkMobileNo(ele) {
-        try {
-            let parsedNumber = parsePhoneNumberFromString('+' + this.addAccountForm.get('mobileCode').value + ele.value, this.addAccountForm.get('country').get('countryCode').value as CountryCode);
-            if (parsedNumber.isValid()) {
-                ele.classList.remove('error-box');
-                this.isMobileNumberValid = true;
-            } else {
-                this.isMobileNumberValid = false;
-                this._toaster.errorToast(this.localeData?.invalid_contact_number);
-                ele.classList.add('error-box');
-            }
-        } catch (error) {
-            this.isMobileNumberValid = false;
-            this._toaster.errorToast(this.localeData?.invalid_contact_number);
-            ele.classList.add('error-box');
-        }
     }
 
     public submit() {
@@ -1252,16 +1228,17 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         this.store.dispatch(this.groupWithAccountsAction.HideAddAndManageFromOutside());
         document.querySelector('body')?.classList?.remove('master-page');
     }
+
     /**
       *This will use for  fetch mobile number
      *
      * @memberof AccountAddNewDetailsComponent
      */
-    public onlyPhoneNumber() {
+    public onlyPhoneNumber(): void {
         const input = document.getElementById('init-contact-add');
         this.intl = new window['intlTelInput'](input, {
             nationalMode: false,
-            utilsScript: 'https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.17/js/utils.js',
+            utilsScript: MOBILE_NUMBER_UTIL_URL,
             autoHideDialCode: false,
             separateDialCode: false,
             initialCountry: this.activeCompany.countryV2.alpha2CountryCode.toLowerCase(),
@@ -1317,8 +1294,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             } else {
                 this.showMobileNumberError = false;
             }
-        });
-        input.addEventListener('countrychange', () => {
         });
     }
 }
