@@ -41,9 +41,7 @@
                             (click)="viewTransactions(item)"
                             class="row-hover"
                             [ngClass]="{
-                                'cp-none':
-                                    item.gstReturnType === 'hsnsac' ||
-                                    item.gstReturnType === 'CreditNote/DebitNote/RefundVouchers'
+                                'cp-none': item.gstReturnType === 'CreditNote/DebitNote/RefundVouchers'
                             }"
                         >
                             <td [ngSwitch]="true" [attr.data-title]="localeData?.filing?.description">

@@ -170,7 +170,6 @@ export class FilingComponent implements OnInit, OnDestroy {
      */
     public openHsnSacSection(): void {
         this.showHsn = true;
-        this.selectTab('', true, 'pushToGstn');
     }
 
     /**
