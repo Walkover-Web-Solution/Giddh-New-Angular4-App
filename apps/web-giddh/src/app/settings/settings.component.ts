@@ -175,6 +175,8 @@ export class SettingsComponent implements OnInit, OnDestroy {
                 return SETTING_INTEGRATION_TABS.COLLECTION.VALUE;
             case SETTING_INTEGRATION_TABS.EMAIL.LABEL:
                 return SETTING_INTEGRATION_TABS.EMAIL.VALUE;
+            case SETTING_INTEGRATION_TABS.TALLY.LABEL:
+                return SETTING_INTEGRATION_TABS.TALLY.VALUE;
             // case SETTING_INTEGRATION_TABS.SMS.LABEL:
             //     return SETTING_INTEGRATION_TABS.SMS.VALUE;
             default:
