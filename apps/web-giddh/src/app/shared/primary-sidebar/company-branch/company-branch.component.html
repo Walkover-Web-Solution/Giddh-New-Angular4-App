@@ -64,7 +64,7 @@
                             class="btn-group"
                             *ngFor="let company of companyListForFilter; let i = index"
                             [ngClass]="{ 'active': company?.uniqueName === activeCompany?.uniqueName }"
-                            [tooltip]="company?.name"
+                            [tooltip]="company?.name + ' ' + company?.alias"
                             [placement]="i === 0 ? 'bottom' : 'top'"
                         >
                             <span
