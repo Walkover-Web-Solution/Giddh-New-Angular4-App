@@ -2036,6 +2036,12 @@ bs-datepicker-container {
 
 .setting-sidebar-open.voucher-preview-edit {
     bs-datepicker-container {
+        z-index: 9999 !important;
+    }
+}
+
+.setting-sidebar-open.invoice-preview-page {
+    bs-datepicker-container {
         z-index: 99;
     }
 }
