@@ -1403,6 +1403,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         this.invFormData.voucherDetails.customerName = tempSelectedAcc.name;
                         let selectedCustomerNumber = tempSelectedAcc.mobileNo ? "+" + tempSelectedAcc.mobileNo : '';
                         this.intl?.setNumber(selectedCustomerNumber);
+                        this.displayEnterNumber();
                         this.invFormData.voucherDetails.customerUniquename = tempSelectedAcc.uniqueName;
                         this.isCustomerSelected = true;
                         this.isMulticurrencyAccount = tempSelectedAcc.currencySymbol !== this.baseCurrencySymbol;
@@ -1454,6 +1455,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         }
                         let selectedCustomerNumber = tempSelectedAcc.mobileNo ? "+" + tempSelectedAcc.mobileNo : '';
                         this.intl?.setNumber(selectedCustomerNumber);
+                        this.displayEnterNumber();
                         this.invFormData.voucherDetails.customerUniquename = null;
                         this.invFormData.voucherDetails.customerName = tempSelectedAcc.name;
                         this.invFormData.accountDetails = new AccountDetailsClass(tempSelectedAcc);
@@ -1988,6 +1990,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if (data?.mobileNo) {
             let newSelectedMobileNumber = "+" + data?.mobileNo;
             this.intl?.setNumber(newSelectedMobileNumber);
+            this.displayEnterNumber();
         }
         this.isCashBankAccount = false;
 
@@ -2142,6 +2145,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public resetInvoiceForm(f: NgForm) {
         if (f) {
             this.intl?.setNumber("+" + this.selectedCompany?.countryV2?.callingCode);
+            this.displayEnterNumber();
             f.form.reset();
         }
         if (this.container) {
@@ -7910,36 +7914,40 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                             return success(countryCode);
                         }
                     );
-
                 },
             });
-        let reset = function () {
-            input?.classList.remove("error");
-            if (errorMsg && validMsg) {
-                errorMsg.innerHTML = "";
-                errorMsg.classList.add("hide");
-                validMsg.classList.add("hide");
-            }
-        };
-        input.addEventListener('blur', () => {
-            reset();
-            if (input) {
-                if (this.intl.isValidNumber()) {
-                    validMsg.classList.remove("hide");
-                } else {
-                    input?.classList.add("error");
-                    let errorCode = this.intl?.getValidationError();
-                    if (errorMsg) {
-                        errorMsg.innerHTML = errorMap[errorCode];
-                        errorMsg.classList.remove("hide");
+            let reset = function () {
+                input?.classList.remove("error");
+                if (errorMsg && validMsg) {
+                    errorMsg.innerHTML = "";
+                    errorMsg.classList.add("hide");
+                    validMsg.classList.add("hide");
+                }
+            };
+            input.addEventListener('blur', () => {
+                let phoneNumber = this.intl?.getNumber();
+                reset();
+                if (input) {
+                    if (phoneNumber?.length) {
+                        if (this.intl.isValidNumber()) {
+                            validMsg.classList.remove("hide");
+                        } else {
+                            input?.classList.add("error");
+                            let errorCode = this.intl?.getValidationError();
+                            if (errorMsg) {
+                                this._toasty.errorToast(this.localeData?.invalid_contact_number);
+                                errorMsg.innerHTML = errorMap[errorCode];
+                                errorMsg.classList.remove("hide");
+                            }
+                        }
+                    } else {
                     }
                 }
-            }
-        });
-        input.addEventListener('countrychange', () => {
-            this.displayEnterNumber();
-        });
-    }
+            });
+            input.addEventListener('countrychange', () => {
+                this.displayEnterNumber();
+            });
+        }
     }
 
     /**

@@ -1304,12 +1304,10 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 let phoneNumber = this.intl?.getNumber();
                 reset();
                 if (input) {
-
                     if (phoneNumber?.length) {
                         if (this.intl.isValidNumber()) {
-                            console.log("if");
                             validMsg.classList.remove("hide");
-                        }else {
+                        } else {
                             input?.classList.add("error");
                             let errorCode = this.intl?.getValidationError();
                             if (errorMsg) {

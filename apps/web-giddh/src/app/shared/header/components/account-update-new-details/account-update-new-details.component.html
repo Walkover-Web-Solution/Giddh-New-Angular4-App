@@ -459,12 +459,12 @@
                                         #initContactUpdate
                                         id="init-contact-update"
                                         formControlName="mobileNo"
-                                        [placeholder]="localeData?.mobile_no_placeholder"
                                         (keyup)="displayEnterNumber()"
                                     />
                                 </div>
                                 <span class="display-mobile">{{ displayMobileNumber }}</span
                                 ><br />
+                                <span id="init-contact-update-valid-msg" class="hide"></span>
                                 <span id="init-contact-update-error-msg" class="hide"></span>
                             </div>
                         </div>
