@@ -991,6 +991,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             }
 
             if (!this.isPendingVoucherType) {
+                this.preventDefaultScrollApiCall = false;
+                this.defaultCustomerSuggestions = [];
                 this.loadDefaultSearchSuggestions();
             }
             this.getAllLastInvoices();
@@ -6232,8 +6234,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      */
     public onSearchQueryChanged(query: string, page: number = 1, searchType: string, successCallback?: Function): void {
         if (!this.preventDefaultScrollApiCall &&
-            (query || (searchType === SEARCH_TYPE.CUSTOMER && this.defaultCustomerSuggestions && this.defaultCustomerSuggestions.length === 0) ||
-                (searchType === SEARCH_TYPE.ITEM && this.defaultItemSuggestions && this.defaultItemSuggestions.length === 0) || successCallback)) {
+            (query || (searchType === SEARCH_TYPE.CUSTOMER && this.defaultCustomerSuggestions?.length === 0) ||
+                (searchType === SEARCH_TYPE.ITEM && this.defaultItemSuggestions?.length === 0) || successCallback)) {
             if (searchType === SEARCH_TYPE.CUSTOMER) {
                 this.searchCustomerResultsPaginationData.query = query;
             } else if (searchType === SEARCH_TYPE.ITEM) {
