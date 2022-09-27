@@ -57,6 +57,7 @@ import { SettingsDiscountService } from 'apps/web-giddh/src/app/services/setting
 import { CustomFieldsService } from 'apps/web-giddh/src/app/services/custom-fields.service';
 import { FieldTypes } from 'apps/web-giddh/src/app/custom-fields/custom-fields.constant';
 import { HttpClient } from '@angular/common/http';
+declare var window;
 @Component({
     selector: 'account-update-new-details',
     templateUrl: './account-update-new-details.component.html',
@@ -219,7 +220,9 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     /** This will hold mobile number field input  */
     public intl: any;
     /** True if we need to destroy mobile number field */
-    public showMobileNumberError: boolean = false;
+    public displayMobileNumber: boolean = false;
+    /** True if we need to destroy phone number field */
+    public isPhoneNumberValid: boolean = false;
 
     constructor(
         private _fb: FormBuilder,
@@ -326,7 +329,10 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     }
 
     public ngAfterViewInit() {
-        this.onlyPhoneNumber();
+        setTimeout(() => {
+            this.onlyPhoneNumber();
+            this.displayEnterNumber();
+        }, 1000);
         if (this.flatGroupsOptions === undefined) {
             this.getAccount();
         }
@@ -1802,20 +1808,24 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     }
 
     /**
-    *This will use for  fetch mobile number
-   *
-   * @memberof AccountUpdateNewDetailsComponent
-   */
+   *This will use for  fetch mobile number
+  *
+  * @memberof AccountUpdateNewDetailsComponent
+  */
     public onlyPhoneNumber(): void {
-        const input = document.getElementById('init-contact-update');
-        this.intl = new window['intlTelInput'](input, {
-            nationalMode: false,
-            utilsScript: MOBILE_NUMBER_UTIL_URL,
-            autoHideDialCode: false,
-            separateDialCode: false,
-            geoIpLookup: (success, failure) => {
-                let countryCode = this.activeCompany.countryV2.alpha2CountryCode.toLowerCase();
-                if (!countryCode) {
+        let input = document.getElementById('init-contact-update');
+        const errorMsg = document.querySelector("#init-contact-update-error-msg");
+        const validMsg = document.querySelector("#init-contact-update-valid-msg");
+        let errorMap = ["Invalid number", "Invalid country code", "Too short", "Too long", "Invalid number"];
+        if (window['intlTelInput'] && input) {
+            this.intl = window['intlTelInput'](input, {
+                nationalMode: true,
+                utilsScript: MOBILE_NUMBER_UTIL_URL,
+                autoHideDialCode: false,
+                separateDialCode: false,
+                initialCountry: 'auto',
+                geoIpLookup: (success, failure) => {
+                    let countryCode = 'in';
                     const fetchIPApi = this.http.get<any>('https://api.db-ip.com/v2/free/self');
                     fetchIPApi.subscribe(
                         (res) => {
@@ -1854,17 +1864,47 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                             return success(countryCode);
                         }
                     );
-                } else {
-                    return success(countryCode);
+                },
+            });
+            let reset = function () {
+                input?.classList.remove("error");
+                if (errorMsg && validMsg) {
+                    errorMsg.innerHTML = "";
+                    errorMsg.classList.add("hide");
+                    validMsg.classList.add("hide");
                 }
-            },
-        });
-        input.addEventListener('blur', () => {
-            if (!this.intl?.isValidNumber()) {
-                this.showMobileNumberError = true;
-            } else {
-                this.showMobileNumberError = false;
-            }
-        });
+            };
+            input.addEventListener('blur', () => {
+                reset();
+                if (input) {
+                    if (this.intl.isValidNumber()) {
+                        validMsg.classList.remove("hide");
+                    } else {
+                        input?.classList.add("error");
+                        let errorCode = this.intl?.getValidationError();
+                        if (errorMsg) {
+                            errorMsg.innerHTML = errorMap[errorCode];
+                            errorMsg.classList.remove("hide");
+                        }
+                    }
+                }
+            });
+            input.addEventListener('countrychange', () => {
+                this.displayEnterNumber();
+            });
+        }
+    }
+    /**
+ * This will use for display enter number
+ *
+ * @memberof AccountUpdateNewDetailsComponent
+ */
+    public displayEnterNumber(): void {
+        this.displayMobileNumber = this.intl?.getNumber().includes('+')
+            ? this.intl?.getNumber()
+            : `+${this.intl?.getSelectedCountryData()?.dialCode}${this.intl?.getNumber()}`;
+
+        // let phoneNumberWithoutCountryCode = this.intl?.getNumber().split('+' + this.intl?.getSelectedCountryData()?.dialCode)?.[1];
+        //  this.isPhoneNumberValid = phoneNumberWithoutCountryCode?.length ?  this.intl.isValidNumber(): true;
     }
 }

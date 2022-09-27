@@ -37,6 +37,9 @@ import { clone, cloneDeep, uniqBy } from 'apps/web-giddh/src/app/lodash-optimize
 import { CustomFieldsService } from 'apps/web-giddh/src/app/services/custom-fields.service';
 import { FieldTypes } from 'apps/web-giddh/src/app/custom-fields/custom-fields.constant';
 import { HttpClient } from '@angular/common/http';
+
+/** Declare of window */
+declare var window;
 @Component({
     selector: 'account-add-new-details',
     templateUrl: './account-add-new-details.component.html',
@@ -174,7 +177,9 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     /** This will hold mobile number field input  */
     public intl: any;
     /** True if we need to destroy mobile number field */
-    public showMobileNumberError: boolean = false;
+    public displayMobileNumber: boolean = false;
+    /** True if we need to destroy phone number field */
+    public isPhoneNumberValid: boolean = false;
 
     constructor(
         private _fb: FormBuilder,
@@ -305,6 +310,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public ngAfterViewInit() {
         setTimeout(() => {
             this.onlyPhoneNumber();
+            this.displayEnterNumber();
         }, 1000);
         this.addAccountForm.get('country').get('countryCode').setValidators(Validators.required);
         let activegroupName = this.addAccountForm.get('activeGroupUniqueName').value;
@@ -1235,16 +1241,19 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
      * @memberof AccountAddNewDetailsComponent
      */
     public onlyPhoneNumber(): void {
-        const input = document.getElementById('init-contact-add');
-        this.intl = new window['intlTelInput'](input, {
-            nationalMode: false,
-            utilsScript: MOBILE_NUMBER_UTIL_URL,
-            autoHideDialCode: false,
-            separateDialCode: false,
-            initialCountry: this.activeCompany?.countryV2?.alpha2CountryCode.toLowerCase(),
-            geoIpLookup: (success, failure) => {
-                let countryCode = this.activeCompany?.countryV2?.alpha2CountryCode.toLowerCase();
-                if (!countryCode) {
+        let input = document.getElementById('init-contact-add');
+        const errorMsg = document.querySelector("#init-contact-add-error-msg");
+        const validMsg = document.querySelector("#init-contact-add-valid-msg");
+        let errorMap = ["Invalid number", "Invalid country code", "Too short", "Too long", "Invalid number"];
+        if (window['intlTelInput'] && input) {
+            this.intl = window['intlTelInput'](input, {
+                nationalMode: true,
+                utilsScript: MOBILE_NUMBER_UTIL_URL,
+                autoHideDialCode: false,
+                separateDialCode: false,
+                initialCountry: 'auto',
+                geoIpLookup: (success, failure) => {
+                    let countryCode = 'in';
                     const fetchIPApi = this.http.get<any>('https://api.db-ip.com/v2/free/self');
                     fetchIPApi.subscribe(
                         (res) => {
@@ -1283,17 +1292,51 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                             return success(countryCode);
                         }
                     );
-                } else {
-                    return success(countryCode);
+                },
+            });
+            let reset = function () {
+                input?.classList.remove("error");
+                if (errorMsg && validMsg) {
+                    errorMsg.innerHTML = "";
+                    errorMsg.classList.add("hide");
+                    validMsg.classList.add("hide");
                 }
-            },
-        });
-        input.addEventListener('blur', () => {
-            if (!this.intl?.isValidNumber()) {
-                this.showMobileNumberError = true;
-            } else {
-                this.showMobileNumberError = false;
-            }
-        });
+            };
+            input.addEventListener('blur', () => {
+                let phoneNumber = this.intl?.getNumber();
+                reset();
+                if (input) {
+
+                    if (phoneNumber?.length) {
+                        if (this.intl.isValidNumber()) {
+                            console.log("if");
+                            validMsg.classList.remove("hide");
+                        }else {
+                            input?.classList.add("error");
+                            let errorCode = this.intl?.getValidationError();
+                            if (errorMsg) {
+                                this._toaster.errorToast(this.localeData?.invalid_contact_number);
+                                errorMsg.innerHTML = errorMap[errorCode];
+                                errorMsg.classList.remove("hide");
+                            }
+                        }
+                    } else {
+                    }
+                }
+            });
+            input.addEventListener('countrychange', () => {
+                this.displayEnterNumber();
+            });
+        }
+    }
+    /**
+ * This will use for display enter number
+ *
+ * @memberof AccountAddNewDetailsComponent
+ */
+    public displayEnterNumber(): void {
+        this.displayMobileNumber = this.intl?.getNumber().includes('+')
+            ? this.intl?.getNumber()
+            : `+${this.intl?.getSelectedCountryData()?.dialCode}${this.intl?.getNumber()}`;
     }
 }

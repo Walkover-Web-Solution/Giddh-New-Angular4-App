@@ -460,12 +460,12 @@
                                         id="init-contact-update"
                                         formControlName="mobileNo"
                                         [placeholder]="localeData?.mobile_no_placeholder"
-                                        [ngClass]="showMobileNumberError ? 'intl-error' : ''"
+                                        (keyup)="displayEnterNumber()"
                                     />
                                 </div>
-                                <span class="error-msg" *ngIf="showMobileNumberError">{{
-                                    localeData?.invalid_contact_number
-                                }}</span>
+                                <span class="display-mobile">{{ displayMobileNumber }}</span
+                                ><br />
+                                <span id="init-contact-update-error-msg" class="hide"></span>
                             </div>
                         </div>
                     </div>

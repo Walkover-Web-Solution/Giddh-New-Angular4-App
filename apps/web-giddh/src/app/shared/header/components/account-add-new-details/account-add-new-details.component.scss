@@ -144,6 +144,27 @@ a.btn-remove {
         white-space: normal;
     }
 }
+input.error {
+    border: 1px solid var(--color-danger);
+}
+#init-contact-add-valid-msg {
+    color: var(--color-success-enable) !important;
+    font-size: 14px;
+}
+#init-contact-add-error-msg {
+    color: var(--color-danger);
+    font-size: 14px;
+}
+.display-mobile {
+    color: var(--color-gray);
+    font-size: 14px;
+}
+.hide {
+    display: none;
+}
+.mobile-number {
+    float: left;
+}
 
 @media (max-width: 767px) {
     .upper-form .select-group {

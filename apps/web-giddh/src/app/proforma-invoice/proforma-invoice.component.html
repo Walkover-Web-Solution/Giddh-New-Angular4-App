@@ -1008,24 +1008,26 @@
                                 <!-- endregion-->
 
                                 <!-- region mobile no -->
-                                <div class="row mt-1">
+                                <div class="row mt-1 mobile-number-wrapper">
                                     <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3">
                                         <label>{{ commonLocaleData?.app_mobile_number }}</label>
                                     </div>
                                     <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12">
-                                        <div class="col-sm-12 col-xl-6 col-lg-10 col-md-10 pl-0">
+                                        <div class="col-sm-12 col-xl-6 col-lg-10 col-md-10 pl-0 mobile-number">
                                             <input
                                                 name="accountDetails.mobileNumber"
                                                 type="tel"
                                                 #initContactProforma
                                                 id="init-contact-proforma"
                                                 [placeholder]="localeData?.mobile_number_placeholder"
-                                                [ngClass]="showMobileNumberError ? 'intl-error' : ''"
+                                                (keyup)="displayEnterNumber()"
                                             />
+                                            <span class="display-mobile">{{ displayMobileNumber }}</span>
                                         </div>
-                                        <span class="error-msg" *ngIf="showMobileNumberError">
-                                            {{ localeData?.invalid_contact_number }}</span
+                                        <span id="init-contact-proforma-valid-msg" class="hide"
+                                            >✓ {{ localeData?.valid_mobile }}</span
                                         >
+                                        <span id="init-contact-proforma-error-msg" class="hide"></span>
                                     </div>
                                 </div>
                                 <!-- endregion-->

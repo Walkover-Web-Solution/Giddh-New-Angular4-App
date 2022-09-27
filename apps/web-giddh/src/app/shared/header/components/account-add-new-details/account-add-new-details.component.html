@@ -443,7 +443,7 @@
                                 />
                             </div>
                         </div>
-                        <div class="col-sm-6">
+                        <div class="col-sm-6 mobile-number-container">
                             <div class="form-group">
                                 <label>{{ commonLocaleData?.app_mobile_number }}</label>
                                 <div class="d-flex">
@@ -454,12 +454,13 @@
                                         id="init-contact-add"
                                         formControlName="mobileNo"
                                         [placeholder]="localeData?.mobile_no_placeholder"
-                                        [ngClass]="showMobileNumberError ? 'intl-error' : ''"
+                                        (keyup)="displayEnterNumber()"
                                     />
                                 </div>
-                                <span class="error-msg" *ngIf="showMobileNumberError">{{
-                                    localeData?.invalid_contact_number
-                                }}</span>
+                                <span class="display-mobile">{{ displayMobileNumber }}</span
+                                ><br />
+                                <span id="init-contact-add-valid-msg" class="hide"></span>
+                                <span id="init-contact-add-error-msg" class="hide"></span>
                             </div>
                         </div>
                     </div>
