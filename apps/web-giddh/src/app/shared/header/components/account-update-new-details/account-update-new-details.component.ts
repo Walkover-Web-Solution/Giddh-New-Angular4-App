@@ -1775,13 +1775,14 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 }
                 this.openingBalanceTypeChnaged(accountDetails.openingBalanceType);
                 if (accountDetails.mobileNo) {
+
                     if (accountDetails.mobileNo.indexOf('-') > -1) {
                         let mobileArray = accountDetails.mobileNo.split('-');
                         this.addAccountForm.get('mobileCode')?.patchValue(mobileArray[0]);
                         this.addAccountForm.get('mobileNo')?.patchValue(mobileArray[1]);
                     } else {
-                        this.addAccountForm.get('mobileNo')?.patchValue(accountDetails.mobileNo);
-                        this.addAccountForm.get('mobileCode')?.patchValue(accountDetails.mobileCode);
+                        this.addAccountForm.get('mobileNo')?.patchValue('+' + accountDetails.mobileNo);
+                        this.addAccountForm.get('mobileCode')?.patchValue('+' + accountDetails.mobileCode);
                     }
                 } else {
                     this.addAccountForm.get('mobileNo')?.patchValue('');
@@ -1875,17 +1876,22 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 }
             };
             input.addEventListener('blur', () => {
+                let phoneNumber = this.intl?.getNumber();
                 reset();
                 if (input) {
-                    if (this.intl.isValidNumber()) {
-                        validMsg.classList.remove("hide");
-                    } else {
-                        input?.classList.add("error");
-                        let errorCode = this.intl?.getValidationError();
-                        if (errorMsg) {
-                            errorMsg.innerHTML = errorMap[errorCode];
-                            errorMsg.classList.remove("hide");
+                    if (phoneNumber?.length) {
+                        if (this.intl.isValidNumber()) {
+                            validMsg.classList.remove("hide");
+                        } else {
+                            input?.classList.add("error");
+                            let errorCode = this.intl?.getValidationError();
+                            if (errorMsg) {
+                                this._toaster.errorToast(this.localeData?.invalid_contact_number);
+                                errorMsg.innerHTML = errorMap[errorCode];
+                                errorMsg.classList.remove("hide");
+                            }
                         }
+                    } else {
                     }
                 }
             });
@@ -1903,8 +1909,5 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         this.displayMobileNumber = this.intl?.getNumber().includes('+')
             ? this.intl?.getNumber()
             : `+${this.intl?.getSelectedCountryData()?.dialCode}${this.intl?.getNumber()}`;
-
-        // let phoneNumberWithoutCountryCode = this.intl?.getNumber().split('+' + this.intl?.getSelectedCountryData()?.dialCode)?.[1];
-        //  this.isPhoneNumberValid = phoneNumberWithoutCountryCode?.length ?  this.intl.isValidNumber(): true;
     }
 }
