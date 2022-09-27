@@ -62,6 +62,7 @@
     "all_inherited_discounts": "All Inherited Discounts",
     "discounts_inherited_from": "Discount being inherited from",
     "no_inherited_discounts": "No Inherited Discounts",
+    "valid_mobile":"Valid",
     "tabs": {
         "address": "Address",
         "contact": "Contact",

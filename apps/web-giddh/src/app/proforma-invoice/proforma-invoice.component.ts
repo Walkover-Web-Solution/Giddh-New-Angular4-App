@@ -125,7 +125,8 @@ const SEARCH_TYPE = {
     ITEM: 'item',
     BANK: 'bank'
 }
-
+/** Declare of window */
+declare var window;
 @Component({
     selector: 'proforma-invoice-component',
     templateUrl: './proforma-invoice.component.html',
@@ -639,7 +640,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     /** This will hold updatedNumber */
     public selectedCustomerNumber: any = '';
     /** True if we need to destroy mobile number field */
-    public showMobileNumberError: boolean = false;
+    public displayMobileNumber: string = '';
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -743,6 +744,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public ngAfterViewInit() {
         setTimeout(() => {
             this.onlyPhoneNumber();
+            this.displayEnterNumber();
         }, 1000);
         if (!this.isUpdateMode) {
             this.toggleBodyClass();
@@ -2139,7 +2141,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
     public resetInvoiceForm(f: NgForm) {
         if (f) {
-            this.intl?.setNumber("+"+ this.selectedCompany.countryV2.callingCode);
+            this.intl?.setNumber("+" + this.selectedCompany?.countryV2?.callingCode);
             f.form.reset();
         }
         if (this.container) {
@@ -7862,17 +7864,18 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         const input = document.getElementById('init-contact-proforma');
         this.intl = new window['intlTelInput'](input, {
             nationalMode: false,
-            utilsScript: MOBILE_NUMBER_UTIL_URL,
-            autoHideDialCode: false,
-            separateDialCode: false,
-            initialCountry: this.selectedCompany.countryV2.alpha2CountryCode.toLowerCase(),
-            geoIpLookup: (success, failure) => {
-                let countryCode = this.selectedCompany.countryV2.alpha2CountryCode.toLowerCase();
-                if (!countryCode) {
+        if (window['intlTelInput'] && input) {
+            this.intl = window['intlTelInput'](input, {
+                nationalMode: true,
+                utilsScript: MOBILE_NUMBER_UTIL_URL,
+                autoHideDialCode: false,
+                separateDialCode: false,
+                initialCountry: 'auto',
+                geoIpLookup: (success, failure) => {
+                    let countryCode = 'in';
                     const fetchIPApi = this.http.get<any>('https://api.db-ip.com/v2/free/self');
                     fetchIPApi.subscribe(
                         (res) => {
-                            if (res?.response?.ipAddress) {
                                 const fetchCountryByIpApi = this.http.get<any>('http://ip-api.com/json/${res.response.ipAddress');
                                 fetchCountryByIpApi.subscribe(
                                     (fetchCountryByIpApiRes) => {
@@ -7907,17 +7910,47 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                             return success(countryCode);
                         }
                     );
-                } else {
-                    return success(countryCode);
-                }
-            },
-        });
+
+                },
+            });
+        let reset = function () {
+            input?.classList.remove("error");
+            if (errorMsg && validMsg) {
+                errorMsg.innerHTML = "";
+                errorMsg.classList.add("hide");
+                validMsg.classList.add("hide");
+            }
+        };
         input.addEventListener('blur', () => {
-            if (!this.intl?.isValidNumber()) {
-                this.showMobileNumberError = true;
-            } else {
-                this.showMobileNumberError = false;
+            reset();
+            if (input) {
+                if (this.intl.isValidNumber()) {
+                    validMsg.classList.remove("hide");
+                } else {
+                    input?.classList.add("error");
+                    let errorCode = this.intl?.getValidationError();
+                    if (errorMsg) {
+                        errorMsg.innerHTML = errorMap[errorCode];
+                        errorMsg.classList.remove("hide");
+                    }
+                }
             }
         });
+        input.addEventListener('countrychange', () => {
+            this.displayEnterNumber();
+        });
+    }
+    }
+
+    /**
+     * This will use for display enter number
+     *
+     * @memberof ProformaInvoiceComponent
+     */
+    public displayEnterNumber(): void {
+        this.displayMobileNumber = this.intl?.getNumber()?.includes('+')
+            ? this.intl?.getNumber()
+            : `+${this.intl?.getSelectedCountryData()?.dialCode}${this.intl?.getNumber()}`;
     }
 }
+
