@@ -1,11 +1,11 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { GstReconcileActions } from '../../../../actions/gst-reconcile/GstReconcile.actions';
 import { select, Store } from '@ngrx/store';
 import { GstDatePeriod, Gstr1SummaryRequest, Gstr1SummaryResponse } from '../../../../models/api-models/GstReconcile';
 import { ReplaySubject } from 'rxjs';
-import { ActivatedRoute } from '@angular/router';
 import { AppState } from '../../../../store';
 import { takeUntil } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 @Component({
     // tslint:disable-next-line:component-selector
@@ -23,9 +23,6 @@ export class PushToGstInComponent implements OnInit, OnDestroy {
     @Input() public localeData: any = {};
     /** This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
-    /** Emitted when back button is clicked on HSN summary page */
-    @Output() public backClicked: EventEmitter<void> = new EventEmitter();
-    public showTransaction: boolean = false;
     public gstr1SummaryDetails: Gstr1SummaryResponse;
     public gstr1SummaryDetailsInProcess: boolean = false;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -33,11 +30,8 @@ export class PushToGstInComponent implements OnInit, OnDestroy {
     constructor(
         private store: Store<AppState>,
         private gstrAction: GstReconcileActions,
-        private activatedRoute: ActivatedRoute,
-        private changeDetectorRef: ChangeDetectorRef) {
-        this.activatedRoute.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
-            this.showTransaction = !!params['transaction'];
-        });
+        private changeDetectorRef: ChangeDetectorRef, 
+        private route: Router) {
 
         this.store.pipe(select(s => s.gstR.gstr1SummaryResponse), takeUntil(this.destroyed$)).subscribe(result => {
             this.gstr1SummaryDetails = result;
@@ -74,8 +68,7 @@ export class PushToGstInComponent implements OnInit, OnDestroy {
      *
      * @memberof PushToGstInComponent
      */
-    public goBack(): void {
-        this.showHsn = false;
-        this.backClicked.emit();
+    public goBack() {
+        this.route.navigate(['pages', 'gstfiling', 'filing-return'], { queryParams: { return_type: this.selectedGst, from: this.currentPeriod.from, to: this.currentPeriod.to, selectedGst: this.activeCompanyGstNumber } });
     }
 }

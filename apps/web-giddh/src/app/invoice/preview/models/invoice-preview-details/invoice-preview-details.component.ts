@@ -770,9 +770,9 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         } else if (output.type === 'start') {
             this.isFileUploading = true;
         } else if (output.type === 'done') {
-            if (output.file.response.status === 'success') {
+            if (output.file.response?.status === 'success') {
                 this._toasty.successToast(this.localeData?.file_uploaded);
-                const response = output.file.response.body;
+                const response = output.file.response?.body;
                 this.isFileUploading = false;
                 if (this.voucherApiVersion === 2) {
                     const requestObject = {
@@ -796,7 +796,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                 }
             } else {
                 this.isFileUploading = false;
-                this._toasty.errorToast(output.file.response.message);
+                this._toasty.errorToast(output.file.response?.message);
             }
         }
     }

@@ -109,10 +109,10 @@ export class InventorySidebarComponent implements OnInit, OnDestroy, AfterViewIn
         obj.branchUniqueName = this.generalService.currentOrganizationType === OrganizationType.Branch ? this.generalService.currentBranchUniqueName : '';
         this.inventoryService.downloadAllInventoryReports(obj).pipe(takeUntil(this.destroyed$))
             .subscribe(res => {
-                if (res.status === 'success') {
-                    this.toasty.infoToast(res.body);
+                if (res?.status === 'success') {
+                    this.toasty.infoToast(res?.body);
                 } else {
-                    this.toasty.errorToast(res.message);
+                    this.toasty.errorToast(res?.message);
                 }
             });
     }

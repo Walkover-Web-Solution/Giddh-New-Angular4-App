@@ -257,8 +257,8 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
         }
 
         this.inventoryService.getBranchTransferList(this.branchTransferGetRequestParams, this.branchTransferPostRequestParams).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
-            if (response.status === "success") {
-                this.branchTransferResponse = response.body;
+            if (response?.status === "success") {
+                this.branchTransferResponse = response?.body;
             } else {
                 this.initBranchTransferListResponse();
             }
@@ -333,11 +333,11 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
     public deleteNewBranchTransfer(): void {
         this.hideBranchTransferModal();
         this.inventoryService.deleteNewBranchTransfer(this.selectedBranchTransfer).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
-            if (response.status === "success") {
-                this._toasty.successToast(response.body);
+            if (response?.status === "success") {
+                this._toasty.successToast(response?.body);
                 this.getBranchTransferList(false);
             } else {
-                this._toasty.errorToast(response.message);
+                this._toasty.errorToast(response?.message);
             }
         });
     }
@@ -432,12 +432,12 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
         downloadBranchTransferRequest.uniqueName = item?.uniqueName;
 
         this.inventoryService.downloadBranchTransfer(this.activeCompany?.uniqueName, downloadBranchTransferRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
-            if (res.status === "success") {
-                let blob = this._generalService.base64ToBlob(res.body, 'application/pdf', 512);
+            if (res?.status === "success") {
+                let blob = this._generalService.base64ToBlob(res?.body, 'application/pdf', 512);
                 return saveAs(blob, item.voucherNo + `.pdf`);
             } else {
                 this._toasty.clearAllToaster();
-                this._toasty.errorToast(res.message);
+                this._toasty.errorToast(res?.message);
             }
         });
     }

@@ -119,7 +119,7 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
         this.auditLogFormVM.getLogsInprocess$ = this.store.pipe(select(state => state.auditlog.getLogInProcess), takeUntil(this.destroyed$));
         this.auditLogFormVM.user$ = this.store.pipe(select(state => { if (state.session.user) { return state.session.user.user; } }), take(1));
         this.companyService.getComapnyUsers().pipe(takeUntil(this.destroyed$)).subscribe(data => {
-            if (data.status === 'success') {
+            if (data?.status === 'success') {
                 let users: IOption[] = [];
                 data.body.map((item) => {
                     users.push({ label: item.userName, value: item.userUniqueName, additional: item });

@@ -715,7 +715,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     public deleteComment(accountUniqueName) {
         setTimeout(() => {
             this.contactService.deleteComment(accountUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(res => {
-                if (res.status === "success") {
+                if (res?.status === "success") {
                     this.updateCommentIdx = null;
                 }
             });
@@ -778,7 +778,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     public addComment(account) {
         setTimeout(() => {
             this.contactService.addComment(account?.comment, account?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(res => {
-                if (res.status === 'success') {
+                if (res?.status === 'success') {
                     this.updateCommentIdx = null;
                     account.comment = cloneDeep(res.body.description);
                 }
@@ -873,7 +873,7 @@ export class ContactComponent implements OnInit, OnDestroy {
         if (this.messageBody.btn.set === this.commonLocaleData?.app_send_email) {
             return this.companyServices.sendEmail(request).pipe(takeUntil(this.destroyed$))
                 .subscribe((r) => {
-                    r.status === "success" ? this.toaster.showSnackBar("success", r.body) : this.toaster.showSnackBar("error", r.message);
+                    r?.status === "success" ? this.toaster.showSnackBar("success", r?.body) : this.toaster.showSnackBar("error", r?.message);
                     this.checkboxInfo = {
                         selectedPage: 1,
                     };
@@ -885,7 +885,7 @@ export class ContactComponent implements OnInit, OnDestroy {
             delete temp.data["subject"];
             return this.companyServices.sendSms(temp).pipe(takeUntil(this.destroyed$))
                 .subscribe((r) => {
-                    r.status === "success" ? this.toaster.showSnackBar("success", r.body) : this.toaster.showSnackBar("error", r.message);
+                    r?.status === "success" ? this.toaster.showSnackBar("success", r?.body) : this.toaster.showSnackBar("error", r?.message);
                     this.checkboxInfo = {
                         selectedPage: 1,
                     };
@@ -1110,8 +1110,8 @@ export class ContactComponent implements OnInit, OnDestroy {
 
         this.companyServices.downloadCSV(request).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             this.searchLoader$ = observableOf(false);
-            if (res.status === "success") {
-                let blobData = this.generalService.base64ToBlob(res.body, "text/csv", 512);
+            if (res?.status === "success") {
+                let blobData = this.generalService.base64ToBlob(res?.body, "text/csv", 512);
                 return saveAs(blobData, `${this.groupUniqueName}.csv`);
             }
         });
