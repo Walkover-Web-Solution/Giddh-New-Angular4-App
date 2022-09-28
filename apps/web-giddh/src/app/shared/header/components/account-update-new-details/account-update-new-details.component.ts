@@ -221,8 +221,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public intl: any;
     /** True if we need to destroy mobile number field */
     public displayMobileNumber: boolean = false;
-    /** True if we need to destroy phone number field */
-    public isPhoneNumberValid: boolean = false;
 
     constructor(
         private _fb: FormBuilder,
