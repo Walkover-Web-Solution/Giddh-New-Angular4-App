@@ -441,7 +441,7 @@
                                 />
                             </div>
                         </div>
-                        <div class="col-sm-6 mobile-number-container">
+                        <div class="col-sm-6 mobile-number-wrapper">
                             <div class="form-group">
                                 <label>{{ commonLocaleData?.app_mobile_number }}</label>
                                 <div class="d-flex">
@@ -450,10 +450,11 @@
                                         type="tel"
                                         #initContactAdd
                                         id="init-contact-add"
+                                        formControlName="mobileNo"
                                     />
                                 </div>
-                                <span id="init-contact-add-valid-msg" class="hide"></span>
-                                <span id="init-contact-add-error-msg" class="hide"></span>
+                                <span id="init-contact-add-valid-msg" class="d-none"></span>
+                                <span id="init-contact-add-error-msg" class="d-none"></span>
                             </div>
                         </div>
                     </div>

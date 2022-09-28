@@ -3,33 +3,6 @@
 /**
 # margin mixin pass direction and number
 */
-
-.mobile-number-wrapper {
-    input.error {
-        border: 1px solid var(--color-danger);
-    }
-    #init-contact-proforma-valid-msg {
-        color: var(--color-success-enable) !important;
-        line-height: 3;
-        font-size: 14px;
-    }
-    #init-contact-proforma-error-msg {
-        color: var(--color-danger);
-        line-height: 3;
-        font-size: 14px;
-    }
-    .display-mobile {
-        color: var(--color-gray);
-        font-size: 14px;
-    }
-    .hide {
-        display: none;
-    }
-    .mobile-number {
-        float: left;
-    }
-}
-
 @mixin marg($d, $num) {
     @if $d== "B" {
         margin-bottom: $num;

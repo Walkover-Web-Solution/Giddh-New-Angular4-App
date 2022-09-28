@@ -26,10 +26,9 @@ import { IForceClear } from "../../../../models/api-models/Sales";
 import { CountryRequest, OnboardingFormRequest } from "../../../../models/api-models/Common";
 import { CommonActions } from '../../../../actions/common.actions';
 import { GeneralActions } from "../../../../actions/general/general.actions";
-import { parsePhoneNumberFromString, CountryCode } from 'libphonenumber-js/min';
 import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
 import { GroupWithAccountsAction } from 'apps/web-giddh/src/app/actions/groupwithaccounts.actions';
-import { API_COUNT_LIMIT, BootstrapToggleSwitch, EMAIL_VALIDATION_REGEX, MOBILE_NUMBER_UTIL_URL } from 'apps/web-giddh/src/app/app.constant';
+import { API_COUNT_LIMIT, BootstrapToggleSwitch, EMAIL_VALIDATION_REGEX, MOBILE_NUMBER_ADDRESS_JSON_URL, MOBILE_NUMBER_IP_ADDRESS_URL, MOBILE_NUMBER_SELF_URL, MOBILE_NUMBER_UTIL_URL } from 'apps/web-giddh/src/app/app.constant';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
@@ -1237,7 +1236,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         let input = document.getElementById('init-contact-add');
         const errorMsg = document.querySelector("#init-contact-add-error-msg");
         const validMsg = document.querySelector("#init-contact-add-valid-msg");
-        let errorMap = ["Invalid number", "Invalid country code", "Too short", "Too long", "Invalid number"];
+        let errorMap = [this.localeData?.invalid_contact_number, this.commonLocaleData?.app_invalid_country_code, this.commonLocaleData?.app_invalid_contact_too_short, this.commonLocaleData?.app_invalid_contact_too_long, this.localeData?.invalid_contact_number];
         if (window['intlTelInput'] && input) {
             this.intl = window['intlTelInput'](input, {
                 nationalMode: true,
@@ -1247,11 +1246,11 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 initialCountry: 'auto',
                 geoIpLookup: (success, failure) => {
                     let countryCode = 'in';
-                    const fetchIPApi = this.http.get<any>('https://api.db-ip.com/v2/free/self');
+                    const fetchIPApi = this.http.get<any>(MOBILE_NUMBER_SELF_URL);
                     fetchIPApi.subscribe(
                         (res) => {
                             if (res?.response?.ipAddress) {
-                                const fetchCountryByIpApi = this.http.get<any>('http://ip-api.com/json/${res.response.ipAddress');
+                                const fetchCountryByIpApi = this.http.get<any>(MOBILE_NUMBER_IP_ADDRESS_URL);
                                 fetchCountryByIpApi.subscribe(
                                     (fetchCountryByIpApiRes) => {
                                         if (fetchCountryByIpApiRes?.response?.countryCode) {
@@ -1261,7 +1260,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                                         }
                                     },
                                     (fetchCountryByIpApiErr) => {
-                                        const fetchCountryByIpInfoApi = this.http.get<any>('https://ipinfo.io/${res.response.ipAddress}/json');
+                                        const fetchCountryByIpInfoApi = this.http.get<any>(MOBILE_NUMBER_ADDRESS_JSON_URL);
 
                                         fetchCountryByIpInfoApi.subscribe(
                                             (fetchCountryByIpInfoApiRes) => {
@@ -1287,12 +1286,12 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                     );
                 },
             });
-            let reset = function () {
-                input?.classList.remove("error");
+            let reset = () => {
+                input?.classList?.remove("error");
                 if (errorMsg && validMsg) {
                     errorMsg.innerHTML = "";
-                    errorMsg.classList.add("hide");
-                    validMsg.classList.add("hide");
+                    errorMsg.classList.add("d-none");
+                    validMsg.classList.add("d-none");
                 }
             };
             input.addEventListener('blur', () => {
@@ -1300,18 +1299,17 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 reset();
                 if (input) {
                     if (phoneNumber?.length) {
-                        if (this.intl.isValidNumber()) {
-                            validMsg.classList.remove("hide");
+                        if (this.intl?.isValidNumber()) {
+                            validMsg?.classList?.remove("d-none");
                         } else {
-                            input?.classList.add("error");
+                            input?.classList?.add("error");
                             let errorCode = this.intl?.getValidationError();
-                            if (errorMsg) {
+                            if (errorMsg && errorMap[errorCode]) {
                                 this._toaster.errorToast(this.localeData?.invalid_contact_number);
                                 errorMsg.innerHTML = errorMap[errorCode];
-                                errorMsg.classList.remove("hide");
+                                errorMsg.classList.remove("d-none");
                             }
                         }
-                    } else {
                     }
                 }
             });
