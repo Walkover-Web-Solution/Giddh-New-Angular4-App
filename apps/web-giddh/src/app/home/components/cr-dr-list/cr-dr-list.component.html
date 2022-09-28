@@ -86,12 +86,9 @@
                             </tr>
                             <tr *ngIf="drAccounts?.length === 0">
                                 <td colspan="4" class="no-entries">
-                                    <button
-                                        class="btn btn-primary"
-                                        [routerLink]="['/pages/proforma-invoice/invoice/sales']"
-                                    >
+                                    <a class="btn btn-primary" [routerLink]="['/pages/proforma-invoice/invoice/sales']">
                                         {{ localeData?.do_sales }}
-                                    </button>
+                                    </a>
                                 </td>
                             </tr>
                         </tbody>
@@ -155,12 +152,12 @@
                             </tr>
                             <tr *ngIf="crAccounts?.length === 0">
                                 <td colspan="4" class="no-entries">
-                                    <button
+                                    <a
                                         class="btn btn-primary"
                                         [routerLink]="['/pages/proforma-invoice/invoice/purchase']"
                                     >
                                         {{ localeData?.do_purchase }}
-                                    </button>
+                                    </a>
                                 </td>
                             </tr>
                         </tbody>
