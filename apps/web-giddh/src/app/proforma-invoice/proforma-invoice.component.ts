@@ -638,8 +638,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public intl: any;
     /** This will hold updatedNumber */
     public selectedCustomerNumber: any = '';
-    /** True if we need to destroy mobile number field */
-    public displayMobileNumber: string = '';
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -743,7 +741,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public ngAfterViewInit() {
         setTimeout(() => {
             this.onlyPhoneNumber();
-            this.displayEnterNumber();
         }, 1000);
         if (!this.isUpdateMode) {
             this.toggleBodyClass();
@@ -1398,7 +1395,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         this.invFormData.voucherDetails.customerName = tempSelectedAcc.name;
                         let selectedCustomerNumber = tempSelectedAcc.mobileNo ? "+" + tempSelectedAcc.mobileNo : '';
                         this.intl?.setNumber(selectedCustomerNumber);
-                        this.displayEnterNumber();
                         this.invFormData.voucherDetails.customerUniquename = tempSelectedAcc.uniqueName;
                         this.isCustomerSelected = true;
                         this.isMulticurrencyAccount = tempSelectedAcc.currencySymbol !== this.baseCurrencySymbol;
@@ -1450,7 +1446,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         }
                         let selectedCustomerNumber = tempSelectedAcc.mobileNo ? "+" + tempSelectedAcc.mobileNo : '';
                         this.intl?.setNumber(selectedCustomerNumber);
-                        this.displayEnterNumber();
                         this.invFormData.voucherDetails.customerUniquename = null;
                         this.invFormData.voucherDetails.customerName = tempSelectedAcc.name;
                         this.invFormData.accountDetails = new AccountDetailsClass(tempSelectedAcc);
@@ -1985,7 +1980,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if (data?.mobileNo) {
             let newSelectedMobileNumber = "+" + data?.mobileNo;
             this.intl?.setNumber(newSelectedMobileNumber);
-            this.displayEnterNumber();
         }
         this.isCashBankAccount = false;
 
@@ -2140,7 +2134,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public resetInvoiceForm(f: NgForm) {
         if (f) {
             this.intl?.setNumber("+" + this.selectedCompany?.countryV2?.callingCode);
-            this.displayEnterNumber();
             f.form.reset();
         }
         if (this.container) {
@@ -7951,21 +7944,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     }
                 }
             });
-            input.addEventListener('countrychange', () => {
-                this.displayEnterNumber();
-            });
         }
-    }
-
-    /**
-     * This will use for display enter number
-     *
-     * @memberof ProformaInvoiceComponent
-     */
-    public displayEnterNumber(): void {
-        this.displayMobileNumber = this.intl?.getNumber()?.includes('+')
-            ? this.intl?.getNumber()
-            : `+${this.intl?.getSelectedCountryData()?.dialCode}${this.intl?.getNumber()}`;
     }
 }
 

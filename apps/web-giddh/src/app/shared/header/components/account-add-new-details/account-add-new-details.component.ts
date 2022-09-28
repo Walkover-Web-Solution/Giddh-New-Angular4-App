@@ -176,8 +176,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public isMobileNumberValid: boolean = false;
     /** This will hold mobile number field input  */
     public intl: any;
-    /** True if we need to destroy mobile number field */
-    public displayMobileNumber: boolean = false;
 
     constructor(
         private _fb: FormBuilder,
@@ -308,7 +306,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public ngAfterViewInit() {
         setTimeout(() => {
             this.onlyPhoneNumber();
-            this.displayEnterNumber();
         }, 1000);
         this.addAccountForm.get('country').get('countryCode').setValidators(Validators.required);
         let activegroupName = this.addAccountForm.get('activeGroupUniqueName').value;
@@ -1320,19 +1317,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                     }
                 }
             });
-            input.addEventListener('countrychange', () => {
-                this.displayEnterNumber();
-            });
         }
-    }
-    /**
- * This will use for display enter number
- *
- * @memberof AccountAddNewDetailsComponent
- */
-    public displayEnterNumber(): void {
-        this.displayMobileNumber = this.intl?.getNumber().includes('+')
-            ? this.intl?.getNumber()
-            : `+${this.intl?.getSelectedCountryData()?.dialCode}${this.intl?.getNumber()}`;
     }
 }
