@@ -362,10 +362,10 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
                 obj.data.periodOptions = null;
             }
             this._settingsPermissionService.UpdatePermission(form).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
-                if (res.status === 'success') {
+                if (res?.status === 'success') {
                     this._toasty.successToast(this.localeData?.permission_updated_success);
                 } else {
-                    this._toasty.warningToast(res.message, res.code);
+                    this._toasty.warningToast(res?.message, res?.code);
                 }
                 this.onSubmitForm.emit(obj);
             });

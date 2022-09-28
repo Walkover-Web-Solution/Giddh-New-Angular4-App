@@ -172,9 +172,9 @@ export class InventoryCreateUpdateGroupComponent implements OnInit, OnDestroy {
      */
     private getParentGroups(): void {
         this.inventoryService.GetGroupsWithStocksFlatten().pipe(takeUntil(this.destroyed$)).subscribe(data => {
-            if (data.status === 'success') {
+            if (data?.status === 'success') {
                 let groups: IOption[] = [];
-                this.arrangeGroups(data.body.results, groups);
+                this.arrangeGroups(data.body?.results, groups);
                 this.groups$ = observableOf(groups);
             }
         });
@@ -265,14 +265,14 @@ export class InventoryCreateUpdateGroupComponent implements OnInit, OnDestroy {
         } else if (output.type === 'start') {
             this.isFileUploading = true;
         } else if (output.type === 'done') {
-            if (output.file.response.status === 'success') {
+            if (output.file.response?.status === 'success') {
                 this.isFileUploading = false;
                 this.groupForm?.get("image")?.patchValue({ uniqueName: output.file.response.body?.uniqueName, name: output.file.response.body?.name });
                 this.toaster.successToast(this.commonLocaleData?.app_messages?.file_uploaded);
             } else {
                 this.isFileUploading = false;
                 this.groupForm?.get("image")?.patchValue({ uniqueName: "", name: "" });
-                this.toaster.errorToast(output.file.response.message);
+                this.toaster.errorToast(output.file.response?.message);
             }
         }
     }

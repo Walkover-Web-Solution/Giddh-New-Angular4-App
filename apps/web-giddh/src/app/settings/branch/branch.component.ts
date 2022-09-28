@@ -458,12 +458,12 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
             linkAddresses
         };
         this.settingsProfileService.updateBranchInfo(requestObj).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response.status === 'success') {
+            if (response?.status === 'success') {
                 this.closeAddressSidePane = 'out';
                 this.store.dispatch(this.settingsBranchActions.GetALLBranches({ from: '', to: '' }));
                 this.toasterService.successToast(this.localeData?.branch_updated);
             } else {
-                this.toasterService.errorToast(response.message);
+                this.toasterService.errorToast(response?.message);
             }
             this.isBranchChangeInProgress = false;
         }, () => {

@@ -78,11 +78,11 @@ export class AccountDetailModalComponent implements OnChanges, OnDestroy {
      */
     public getAccountDetails(accountUniqueName: string): void {
         this._accountService.GetAccountDetailsV2(accountUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response.status === 'success') {
+            if (response?.status === 'success') {
                 this.accInfo = response.body;
                 this.changeDetectorRef.detectChanges();
             } else {
-                this._toaster.errorToast(response.message);
+                this._toaster.errorToast(response?.message);
             }
         });
     }
@@ -187,14 +187,14 @@ export class AccountDetailModalComponent implements OnChanges, OnDestroy {
         if (this.messageBody.btn.set === this.commonLocaleData?.app_send_email) {
             return this._companyServices.sendEmail(request).pipe(takeUntil(this.destroyed$))
                 .subscribe((r) => {
-                    r.status === 'success' ? this._toaster.successToast(r.body) : this._toaster.errorToast(r.message);
+                    r?.status === 'success' ? this._toaster.successToast(r?.body) : this._toaster.errorToast(r?.message);
                 });
         } else if (this.messageBody.btn.set === this.localeData?.send_sms) {
             let temp = request;
             delete temp.data['subject'];
             return this._companyServices.sendSms(temp).pipe(takeUntil(this.destroyed$))
                 .subscribe((r) => {
-                    r.status === 'success' ? this._toaster.successToast(r.body) : this._toaster.errorToast(r.message);
+                    r?.status === 'success' ? this._toaster.successToast(r?.body) : this._toaster.errorToast(r?.message);
                 });
         }
 

@@ -274,12 +274,12 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
                 branchUniqueName: this.currentBranch?.uniqueName
             }
             this.companyService.getPurchaseRegister(request).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
-                if (res.status === 'error') {
-                    this._toaster.errorToast(res.message);
+                if (res?.status === 'error') {
+                    this._toaster.errorToast(res?.message);
                 } else {
                     this.purchaseRegisterTotal = new PurchaseReportsModel();
                     this.purchaseRegisterTotal.particular = this.activeFinacialYr?.uniqueName;
-                    this.reportRespone = this.filterReportResp(res.body);
+                    this.reportRespone = this.filterReportResp(res?.body);
                 }
             });
             this.savePreferences();
@@ -299,12 +299,12 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
                 branchUniqueName: this.currentBranch?.uniqueName
             }
             this.companyService.getPurchaseRegister(request).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
-                if (res.status === 'error') {
-                    this._toaster.errorToast(res.message);
+                if (res?.status === 'error') {
+                    this._toaster.errorToast(res?.message);
                 } else {
                     this.purchaseRegisterTotal = new PurchaseReportsModel();
                     this.purchaseRegisterTotal.particular = this.activeFinacialYr?.uniqueName;
-                    this.reportRespone = this.filterReportResp(res.body);
+                    this.reportRespone = this.filterReportResp(res?.body);
                 }
             });
 

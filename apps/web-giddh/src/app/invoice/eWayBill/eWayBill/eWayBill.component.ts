@@ -414,12 +414,11 @@ export class EWayBillComponent implements OnInit, OnDestroy {
     public onSelectEwayDownload(eway: Result) {
         this.selectedEway = _.cloneDeep(eway);
         this._invoiceService.DownloadEwayBills(this.selectedEway.ewbNo).pipe(takeUntil(this.destroyed$)).subscribe(d => {
-
-            if (d.status === 'success') {
+            if (d?.status === 'success') {
                 let blob = this.generalService.base64ToBlob(d.body, 'application/pdf', 512);
                 return saveAs(blob, `${this.selectedEway.ewbNo} - ${this.selectedEway.customerName}.pdf`);
             } else {
-                this._toaster.errorToast(d.message);
+                this._toaster.errorToast(d?.message);
             }
         });
     }
@@ -427,11 +426,11 @@ export class EWayBillComponent implements OnInit, OnDestroy {
     public onSelectEwayDetailedDownload(ewayItem: Result) {
         this.selectedEway = _.cloneDeep(ewayItem);
         this._invoiceService.DownloadDetailedEwayBills(this.selectedEway.ewbNo).pipe(takeUntil(this.destroyed$)).subscribe(d => {
-            if (d.status === 'success') {
+            if (d?.status === 'success') {
                 let blob = this.generalService.base64ToBlob(d.body, 'application/pdf', 512);
                 return saveAs(blob, `${this.selectedEway.ewbNo} - ${this.selectedEway.customerName}.pdf`);
             } else {
-                this._toaster.errorToast(d.message);
+                this._toaster.errorToast(d?.message);
             }
         });
     }

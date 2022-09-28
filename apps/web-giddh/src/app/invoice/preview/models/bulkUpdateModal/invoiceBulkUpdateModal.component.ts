@@ -129,7 +129,7 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges, OnDes
             this._loaderService.show();
         } else if (output.type === 'done') {
             this._loaderService.hide();
-            if (output.file.response.status === 'success') {
+            if (output.file.response?.status === 'success') {
                 this.updateInProcess = false;
                 this.updateImageSignatureRequest.imageSignatureUniqueName = '';
                 if (output.file.response.body && output.file.response.body?.uniqueName) {
@@ -409,11 +409,11 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges, OnDes
             if (selectedVouchers?.length && requestModel.voucherType) {
                 this.updateInProcess = true;
                 this._invoiceBulkUpdateService.bulkUpdateInvoice(requestModel, actionType).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                    if (response.status === "success") {
-                        this._toaster.successToast(response.body);
+                    if (response?.status === "success") {
+                        this._toaster.successToast(response?.body);
                         this.onCancel(true);
                     } else {
-                        this._toaster.errorToast(response.message);
+                        this._toaster.errorToast(response?.message);
                     }
                     this.updateInProcess = false;
                 });
