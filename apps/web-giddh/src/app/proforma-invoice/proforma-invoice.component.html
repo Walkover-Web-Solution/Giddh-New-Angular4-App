@@ -5253,7 +5253,7 @@
                                             isFileUploading ||
                                             !hasVoucherEntry ||
                                             invoiceForm?.controls['message2']?.errors?.maxlength ||
-                                            isMobileNumberValid
+                                            isMobileNumberInvalid
                                         "
                                         (click)="doAction(0); triggerSubmitInvoiceForm(invoiceForm, false)"
                                         class="btn btn-default"
@@ -5273,7 +5273,7 @@
                                         [disabled]="
                                             !hasVoucherEntry ||
                                             invoiceForm?.controls['message2']?.errors?.maxlength ||
-                                            isMobileNumberValid
+                                            isMobileNumberInvalid
                                         "
                                         (click)="doAction(0); triggerSubmitInvoiceForm(invoiceForm, true)"
                                         class="btn btn-default"
@@ -5291,7 +5291,7 @@
                                         [isDisabled]="
                                             !hasVoucherEntry ||
                                             invoiceForm?.controls['message2']?.errors?.maxlength ||
-                                            isMobileNumberValid
+                                            isMobileNumberInvalid
                                         "
                                     >
                                         <button
@@ -5299,7 +5299,7 @@
                                             [disabled]="
                                                 !hasVoucherEntry ||
                                                 invoiceForm?.controls['message2']?.errors?.maxlength ||
-                                                isMobileNumberValid
+                                                isMobileNumberInvalid
                                             "
                                             (click)="doAction(0); triggerSubmitInvoiceForm(invoiceForm, false)"
                                             class="btn btn-default generate-invoice"
@@ -5434,7 +5434,7 @@
                                         isFileUploading ||
                                         !hasVoucherEntry ||
                                         invoiceForm?.controls['message2']?.errors?.maxlength ||
-                                        isMobileNumberValid
+                                        isMobileNumberInvalid
                                     "
                                     (click)="submitUpdateForm(invoiceForm)"
                                 >

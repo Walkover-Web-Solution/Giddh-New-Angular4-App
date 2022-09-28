@@ -171,8 +171,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public availableFieldTypes: any = FieldTypes;
     /** This will hold toggle buttons value and size */
     public bootstrapToggleSwitch = BootstrapToggleSwitch;
-    /** This will hold isMobileNumberValid */
-    public isMobileNumberValid: boolean = false;
+    /** This will hold isMobileNumberInvalid */
+    public isMobileNumberInvalid: boolean = false;
     /** This will hold mobile number field input  */
     public intl: any;
 
@@ -1301,10 +1301,10 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                     if (phoneNumber?.length) {
                         if (this.intl?.isValidNumber()) {
                             validMsg?.classList?.remove("d-none");
-                            this.isMobileNumberValid = false;
+                            this.isMobileNumberInvalid = false;
                         } else {
                             input?.classList?.add("error");
-                            this.isMobileNumberValid = true;
+                            this.isMobileNumberInvalid = true;
                             let errorCode = this.intl?.getValidationError();
                             if (errorMsg && errorMap[errorCode]) {
                                 this._toaster.errorToast(this.localeData?.invalid_contact_number);

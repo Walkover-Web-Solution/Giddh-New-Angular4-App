@@ -639,8 +639,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public intl: any;
     /** This will hold updatedNumber */
     public selectedCustomerNumber: any = '';
-    /** This will hold isMobileNumberValid */
-    public isMobileNumberValid: boolean = false;
+    /** This will hold isMobileNumberInvalid */
+    public isMobileNumberInvalid: boolean = false;
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -6229,7 +6229,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @memberof ProformaInvoiceComponent
      */
     public onSearchQueryChanged(query: string, page: number = 1, searchType: string, successCallback?: Function): void {
-        if(query === ''){
+        if(query){
             this.intl?.setNumber("");
         }
         if (!this.preventDefaultScrollApiCall &&
@@ -7932,10 +7932,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     if (phoneNumber?.length) {
                         if (this.intl?.isValidNumber()) {
                             validMsg?.classList?.remove("d-none");
-                            this.isMobileNumberValid = false;
+                            this.isMobileNumberInvalid = false;
                         } else {
                             input?.classList?.add("error");
-                            this.isMobileNumberValid = true;
+                            this.isMobileNumberInvalid = true;
                             let errorCode = this.intl?.getValidationError();
                             if (errorMsg && errorMap[errorCode]) {
                                 this._toasty.errorToast(this.localeData?.invalid_contact_number);

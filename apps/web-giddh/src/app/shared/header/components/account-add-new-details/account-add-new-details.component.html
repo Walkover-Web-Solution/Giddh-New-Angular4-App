@@ -765,7 +765,7 @@
                             type="submit"
                             class="btn btn-success"
                             [ladda]="createAccountInProcess$ | async"
-                            [disabled]="addAccountForm.invalid || !(isGstValid$ | async) || isMobileNumberValid"
+                            [disabled]="addAccountForm.invalid || !(isGstValid$ | async) || isMobileNumberInvalid"
                         >
                             {{ commonLocaleData?.app_save }}
                         </button>
