@@ -1,5 +1,6 @@
 import Datastore from "nedb";
-import { countAsync, findAsync, insertAsync, loadDatabase, removeAsync } from "../../helpers/nedb_async";
+import { findAsync, insertAsync, loadDatabase, removeAsync } from "../../helpers/nedb_async";
+import * as appAath from "path";
 
 /**
  * This will save the cmdk options list
@@ -46,7 +47,7 @@ export async function getCmdkLocal(filename: string, request: any): Promise<any>
     const response = (request.params.q) ? await findAsync(db, { query: { "results.name": request.params.q }, start: start, limit: limit }) : await findAsync(db, { start: start, limit: limit });
 
     if (response) {
-        return { status: "success", body: response[0], q: "Ravinder : " + request.params.q };
+        return { status: "success", body: response[0], q: appAath.join("Ravinder : ", request.params.q) };
     } else {
         return { status: "error", message: "Cmdk list unavailable.", q: request.params.q };
     }
