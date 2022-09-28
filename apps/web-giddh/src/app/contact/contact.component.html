@@ -95,7 +95,7 @@
                                     </div>
                                 </div>
                                 <form
-                                    *ngIf="sundryCreditorsAccounts?.length && sundryDebtorsAccounts?.length"
+                                    *ngIf="sundryCreditorsAccounts?.length || sundryDebtorsAccounts?.length"
                                     #invoiceForm="ngForm"
                                     novalidate
                                     class="form-inline input-grp-date-range-picker position-relative"
@@ -419,7 +419,7 @@
                     </div>
                     <div
                         class="text-center top-aging-table-top separate-top-aging pd-1 mr-t1"
-                        *ngIf="isMobileScreen && sundryDebtorsAccounts?.length && sundryCreditorsAccounts?.length"
+                        *ngIf="isMobileScreen && (sundryDebtorsAccounts?.length || sundryCreditorsAccounts?.length)"
                     >
                         <p (click)="showGiddhDatepicker($event)">
                             <strong>{{ commonLocaleData?.app_due_as_on }} </strong>
@@ -1514,7 +1514,7 @@
             "
         >
             <div class="align-item-center">
-                <img class="customer-height" src="./assets/images/customer-vendor//stock-photo.png" alt="" />
+                <img class="customer-img" src="{{ imgPath }}customer-vendor//stock-photo.png" alt="" />
                 <div class="btn-group pull-right">
                     <button
                         mat-raised-button
