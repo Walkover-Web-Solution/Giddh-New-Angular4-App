@@ -5,259 +5,260 @@ name: Desktop build workflow
 # Controls when the action will run. Workflow runs when manually triggered using the UI
 # or API.
 on:
-  workflow_dispatch:
-    # Inputs the workflow accepts.
-    inputs:
-      note:
-        # Friendly description to be shown in the UI instead contains details about the build
-        description: "Note"
-        # Default value if no value is explicitly provided
-        default: "This build contains work from "
-        # Input has to be provided for the workflow to run
-        required: true
-      environment:
-        description: "App environment (test/prod)"
-        default: "test"
-        required: true
-      version:
-        description: "App version"
-        default: "8.0.8"
-        required: true
+    workflow_dispatch:
+        # Inputs the workflow accepts.
+        inputs:
+            note:
+                # Friendly description to be shown in the UI instead contains details about the build
+                description: "Note"
+                # Default value if no value is explicitly provided
+                default: "This build contains work from "
+                # Input has to be provided for the workflow to run
+                required: true
+            environment:
+                description: "App environment (test/prod)"
+                default: "test"
+                required: true
+            version:
+                description: "App version"
+                default: "8.0.8"
+                required: true
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  release:
-    runs-on: ${{ matrix.os }}
+    release:
+        runs-on: ${{ matrix.os }}
 
-    strategy:
-      matrix:
-        os: [windows-latest, macos-latest]
+        strategy:
+            matrix:
+                os: [windows-latest, macos-latest]
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
-      - name: Check out Git repository
-        uses: actions/checkout@v2
-      - name: Install Node.js & NPM
-        uses: actions/setup-node@v2
-        with:
-          node-version: "14"
-      - uses: bahmutov/npm-install@v1
-        env:
-          CYPRESS_INSTALL_BINARY: 0
-        with:
-          useLockFile: false
-          useRollingCache: true
-          working-directory: .
-      - uses: bahmutov/npm-install@v1
-        with:
-          useLockFile: false
-          useRollingCache: true
-          working-directory: ./apps/electron-giddh/src/
-      - name: Update app version in root package
-        uses: MerthinTechnologies/edit-json-action@v1
-        with:
-          filename: "./package.json"
-          key: "version"
-          value: ${{ github.event.inputs.version }}
-      - name: Update app version in sub-package
-        uses: MerthinTechnologies/edit-json-action@v1
-        with:
-          filename: "./apps/electron-giddh/src/package.json"
-          key: "version"
-          value: ${{ github.event.inputs.version }}
-      - name: Creating Electron bundle for Windows (TEST)
-        if: ${{ matrix.os == 'windows-latest' && github.event.inputs.environment == 'test' }}
-        run: npm run package:windows:test
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          GOOGLE_CLIENT_ID_TEST: ${{ secrets.GOOGLE_CLIENT_ID_TEST }}
-          GOOGLE_CLIENT_SECRET_TEST: ${{ secrets.GOOGLE_CLIENT_SECRET_TEST }}
-          RAZORPAY_KEY_TEST: ${{ secrets.RAZORPAY_KEY_TEST }}
-          GOOGLE_CLIENT_ID_PROD: ${{ secrets.GOOGLE_CLIENT_ID_PROD }}
-          GOOGLE_CLIENT_SECRET_PROD: ${{ secrets.GOOGLE_CLIENT_SECRET_PROD }}
-          TWITTER_CLIENT_ID_PROD: ${{ secrets.TWITTER_CLIENT_ID_PROD }}
-          TWITTER_SECRET_KEY_PROD: ${{ secrets.TWITTER_SECRET_KEY_PROD }}
-          LINKEDIN_CLIENT_ID_PROD: ${{ secrets.LINKEDIN_CLIENT_ID_PROD }}
-          LINKEDIN_SECRET_KEY_PROD: ${{ secrets.LINKEDIN_SECRET_KEY_PROD }}
-          RAZORPAY_KEY_PROD: ${{ secrets.RAZORPAY_KEY_PROD }}
-          OFFLINE_API_URL: ${{ secrets.OFFLINE_API_URL }}
-    #   Commented for PROD builds as signing can't be done through pipeline for Windows
-    #   - name: Creating Electron bundle for Windows (PROD)
-    #     if: ${{ matrix.os == 'windows-latest' && github.event.inputs.environment == 'prod' }}
-    #     run: npm run release:windows:ci
-    #     env:
-    #       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-    #       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      - name: Install wget
-        if: ${{ matrix.os == 'macos-latest' }}
-        run: brew install wget
-      - name: Fetching Provisioning profile
-        if: ${{ matrix.os == 'macos-latest' }}
-        run: cd ./electron-sign && wget -q --no-check-certificate '${{ secrets.PROVISIONING_PROFILE_URL }}' -O embedded.provisionprofile
-      - name: Creating Electron bundle for Mac (TEST)
-        if: ${{ matrix.os == 'macos-latest' && github.event.inputs.environment == 'test' }}
-        run: npm run package:mac:test
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          CSC_LINK: ${{ secrets.CSC_LINK_MAC }}
-          CSC_KEY_PASSWORD: ${{ secrets.CSC_LINK_MAC_PASS }}
-          NOTARIZE_EMAIL: ${{ secrets.NOTARIZE_EMAIL }}
-          NOTARIZE_PASS: ${{ secrets.NOTARIZE_PASS }}
-          GOOGLE_CLIENT_ID_TEST: ${{ secrets.GOOGLE_CLIENT_ID_TEST }}
-          GOOGLE_CLIENT_SECRET_TEST: ${{ secrets.GOOGLE_CLIENT_SECRET_TEST }}
-          RAZORPAY_KEY_TEST: ${{ secrets.RAZORPAY_KEY_TEST }}
-          GOOGLE_CLIENT_ID_PROD: ${{ secrets.GOOGLE_CLIENT_ID_PROD }}
-          GOOGLE_CLIENT_SECRET_PROD: ${{ secrets.GOOGLE_CLIENT_SECRET_PROD }}
-          TWITTER_CLIENT_ID_PROD: ${{ secrets.TWITTER_CLIENT_ID_PROD }}
-          TWITTER_SECRET_KEY_PROD: ${{ secrets.TWITTER_SECRET_KEY_PROD }}
-          LINKEDIN_CLIENT_ID_PROD: ${{ secrets.LINKEDIN_CLIENT_ID_PROD }}
-          LINKEDIN_SECRET_KEY_PROD: ${{ secrets.LINKEDIN_SECRET_KEY_PROD }}
-          RAZORPAY_KEY_PROD: ${{ secrets.RAZORPAY_KEY_PROD }}
-          OFFLINE_API_URL: ${{ secrets.OFFLINE_API_URL }}
-      - name: Creating Electron bundle for Mac (PROD)
-        if: ${{ matrix.os == 'macos-latest' && github.event.inputs.environment == 'prod' }}
-        run: npm run release:mac:ci
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          CSC_LINK: ${{ secrets.CSC_LINK_MAC }}
-          CSC_KEY_PASSWORD: ${{ secrets.CSC_LINK_MAC_PASS }}
-          NOTARIZE_EMAIL: ${{ secrets.NOTARIZE_EMAIL }}
-          NOTARIZE_PASS: ${{ secrets.NOTARIZE_PASS }}
-          GOOGLE_CLIENT_ID_TEST: ${{ secrets.GOOGLE_CLIENT_ID_TEST }}
-          GOOGLE_CLIENT_SECRET_TEST: ${{ secrets.GOOGLE_CLIENT_SECRET_TEST }}
-          RAZORPAY_KEY_TEST: ${{ secrets.RAZORPAY_KEY_TEST }}
-          GOOGLE_CLIENT_ID_PROD: ${{ secrets.GOOGLE_CLIENT_ID_PROD }}
-          GOOGLE_CLIENT_SECRET_PROD: ${{ secrets.GOOGLE_CLIENT_SECRET_PROD }}
-          TWITTER_CLIENT_ID_PROD: ${{ secrets.TWITTER_CLIENT_ID_PROD }}
-          TWITTER_SECRET_KEY_PROD: ${{ secrets.TWITTER_SECRET_KEY_PROD }}
-          LINKEDIN_CLIENT_ID_PROD: ${{ secrets.LINKEDIN_CLIENT_ID_PROD }}
-          LINKEDIN_SECRET_KEY_PROD: ${{ secrets.LINKEDIN_SECRET_KEY_PROD }}
-          RAZORPAY_KEY_PROD: ${{ secrets.RAZORPAY_KEY_PROD }}
-          OFFLINE_API_URL: ${{ secrets.OFFLINE_API_URL }}
-#   notify-success:
-#     if: ${{ success() }}
-#     needs: release
-#     name: Slack Notification Success
-#     runs-on: ubuntu-latest
-#     steps:
-#       - name: Slack Notification Success TEST
-#         if: ${{ github.event.inputs.environment == 'test' }}
-#         uses: rtCamp/action-slack-notify@v2
-#         env:
-#           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-#           SLACK_CHANNEL: ${{ secrets.SLACK_UI_BUILDS_CHANNEL_ID }}
-#           SLACK_COLOR: "#4CAF50" # or a specific color like 'green' or '#ff00ff'
-#           SLACK_MESSAGE: "${{ github.event.inputs.note }}. Build download URL: Windows - https://giddh-app-builds-test.s3.ap-south-1.amazonaws.com/giddh+Setup+${{ github.event.inputs.version }}.exe | Mac - https://s3-ap-south-1.amazonaws.com/giddh-app-builds-test/giddh-${{ github.event.inputs.version }}.dmg"
-#           SLACK_FOOTER: ''
-#           SLACK_TITLE: Giddh Desktop build for testing
-#           SLACK_USERNAME: Giddh Desktop build
-#           SLACK_ICON: https://drive.google.com/file/d/1qrhagyky1_X9OHmNvSQJPb0LSC4Uc0UO/view?usp=sharing
-#       - name: Slack Notification Success PROD
-#         if: ${{ github.event.inputs.environment == 'prod' }}
-#         uses: rtCamp/action-slack-notify@v2
-#         env:
-#           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-#           SLACK_CHANNEL: ${{ secrets.SLACK_ELECTRON_BUILDS_CHANNEL_ID }}
-#           SLACK_COLOR: "#4CAF50" # or a specific color like 'green' or '#ff00ff'
-#           SLACK_MESSAGE: "${{ github.event.inputs.note }}. Build download URL: Mac - https://s3-ap-south-1.amazonaws.com/giddh-app-builds/giddh-${{ github.event.inputs.version }}.dmg"
-#           SLACK_FOOTER: ''
-#           SLACK_TITLE: Giddh Desktop build deployment to PROD
-#           SLACK_USERNAME: Giddh Desktop build
-#           SLACK_ICON: https://drive.google.com/file/d/1qrhagyky1_X9OHmNvSQJPb0LSC4Uc0UO/view?usp=sharing
-#   notify-failure:
-#     if: ${{ failure() }}
-#     needs: release
-#     name: Slack Notification Failure
-#     runs-on: ubuntu-latest
-#     steps:
-#       - name: Slack Notification Failure TEST
-#         if: ${{ github.event.inputs.environment == 'test' }}
-#         uses: rtCamp/action-slack-notify@v2
-#         env:
-#           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-#           SLACK_CHANNEL: ${{ secrets.SLACK_UI_BUILDS_CHANNEL_ID }}
-#           SLACK_COLOR: "#e53935" # or a specific color like 'red' or '#ff00ff'
-#           SLACK_MESSAGE: "Build failed"
-#           SLACK_FOOTER: ''
-#           SLACK_TITLE: Giddh Desktop build for testing
-#           SLACK_USERNAME: Giddh Desktop build
-#           SLACK_ICON: https://drive.google.com/file/d/1qrhagyky1_X9OHmNvSQJPb0LSC4Uc0UO/view?usp=sharing
-#       - name: Slack Notification Failure PROD
-#         if: ${{ github.event.inputs.environment == 'prod' }}
-#         uses: rtCamp/action-slack-notify@v2
-#         env:
-#           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-#           SLACK_CHANNEL: ${{ secrets.SLACK_ELECTRON_BUILDS_CHANNEL_ID }}
-#           SLACK_COLOR: "#e53935" # or a specific color like 'red' or '#ff00ff'
-#           SLACK_MESSAGE: "Build failed"
-#           SLACK_FOOTER: ''
-#           SLACK_TITLE: Giddh Desktop build deployment to PROD
-#           SLACK_USERNAME: Giddh Desktop build
-#           SLACK_ICON: https://drive.google.com/file/d/1qrhagyky1_X9OHmNvSQJPb0LSC4Uc0UO/view?usp=sharing
-  notify-success:
-    if: ${{ success() }}
-    needs: release
-    name: Email Notification Success
-    runs-on: ubuntu-latest
-    steps:
-      - name: Email Notification Success TEST
-        if: ${{ github.event.inputs.environment == 'test' }}
-        uses: dawidd6/action-send-mail@v3
-        with:
-          server_address: smtp.gmail.com
-          server_port: 465
-          username: ${{secrets.GIDDH_BUILDS_USERNAME}}
-          password: ${{secrets.GIDDH_BUILDS_PASSWORD}}
-          subject: ${{ github.actor }} - ${{ github.workflow }} job ${{ job.status }}
-          to: ${{ secrets.GIDDH_BUILDS_RECIPIENTS }}
-          bcc: $ {{ secrets.GIDDH_BUILDS_BCC_RECIPIENTS }}
-          from: Giddh Builds
-          body: Job in workflow ${{ github.workflow }} ${{ env.BUILD_ENV }} of ${{ github.repository }} has ${{ job.status }}. ${{ github.event.inputs.note }}. Build download URL:- Windows - https://giddh-app-builds-test.s3.ap-south-1.amazonaws.com/giddh+Setup+${{ github.event.inputs.version }}.exe | Mac - https://s3-ap-south-1.amazonaws.com/giddh-app-builds-test/giddh-${{ github.event.inputs.version }}.dmg, Commit - https://github.com/Walkover-Web-Solution/Giddh-New-Angular4-App/commit/${{ github.sha }}
-      - name: Email Notification Success PROD
-        if: ${{ github.event.inputs.environment == 'prod' }}
-        uses: dawidd6/action-send-mail@v3
-        with:
-          server_address: smtp.gmail.com
-          server_port: 465
-          username: ${{secrets.GIDDH_BUILDS_USERNAME}}
-          password: ${{secrets.GIDDH_BUILDS_PASSWORD}}
-          subject: ${{ github.actor }} - ${{ github.workflow }} job ${{ job.status }}
-          to: ${{ secrets.GIDDH_BUILDS_RECIPIENTS }}
-          bcc: $ {{ secrets.GIDDH_BUILDS_BCC_RECIPIENTS }}
-          from: Giddh Builds
-          body: Job in workflow ${{ github.workflow }} ${{ env.BUILD_ENV }} of ${{ github.repository }} has ${{ job.status }}. ${{ github.event.inputs.note }}. Build download URL:- Mac - https://s3-ap-south-1.amazonaws.com/giddh-app-builds/giddh-${{ github.event.inputs.version }}.dmg, Commit - https://github.com/Walkover-Web-Solution/Giddh-New-Angular4-App/commit/${{ github.sha }}
-  notify-failure:
-    if: ${{ failure() }}
-    needs: release
-    name: Email Notification Failure
-    runs-on: ubuntu-latest
-    steps:
-      - name: Email Notification Failure TEST
-        if: ${{ github.event.inputs.environment == 'test' }}
-        uses: dawidd6/action-send-mail@v3
-        with:
-          server_address: smtp.gmail.com
-          server_port: 465
-          username: ${{secrets.GIDDH_BUILDS_USERNAME}}
-          password: ${{secrets.GIDDH_BUILDS_PASSWORD}}
-          subject: ${{ github.actor }} - ${{ github.workflow }} job ${{ job.status }}
-          to: ${{ secrets.GIDDH_BUILDS_RECIPIENTS }}
-          bcc: $ {{ secrets.GIDDH_BUILDS_BCC_RECIPIENTS }}
-          from: Giddh Builds
-          body: Job in workflow ${{ github.workflow }} ${{ env.BUILD_ENV }} of ${{ github.repository }} has ${{ job.status }}. Commit - https://github.com/Walkover-Web-Solution/Giddh-New-Angular4-App/commit/${{ github.sha }}
-      - name: Email Notification Failure PROD
-        if: ${{ github.event.inputs.environment == 'prod' }}
-        uses: dawidd6/action-send-mail@v3
-        with:
-          server_address: smtp.gmail.com
-          server_port: 465
-          username: ${{secrets.GIDDH_BUILDS_USERNAME}}
-          password: ${{secrets.GIDDH_BUILDS_PASSWORD}}
-          subject: ${{ github.actor }} - ${{ github.workflow }} job ${{ job.status }}
-          to: ${{ secrets.GIDDH_BUILDS_RECIPIENTS }}
-          bcc: $ {{ secrets.GIDDH_BUILDS_BCC_RECIPIENTS }}
-          from: Giddh Builds
-          body: Job in workflow ${{ github.workflow }} ${{ env.BUILD_ENV }} of ${{ github.repository }} has ${{ job.status }}. Commit - https://github.com/Walkover-Web-Solution/Giddh-New-Angular4-App/commit/${{ github.sha }}
+        # Steps represent a sequence of tasks that will be executed as part of the job
+        steps:
+            - name: Check out Git repository
+              uses: actions/checkout@v2
+            - name: Install Node.js & NPM
+              uses: actions/setup-node@v2
+              with:
+                  node-version: "16"
+            - uses: bahmutov/npm-install@v1
+              env:
+                  CYPRESS_INSTALL_BINARY: 0
+              with:
+                  useLockFile: false
+                  useRollingCache: true
+                  working-directory: .
+                  install-command: npm i --force
+            - uses: bahmutov/npm-install@v1
+              with:
+                  useLockFile: false
+                  useRollingCache: true
+                  working-directory: ./apps/electron-giddh/src/
+            - name: Update app version in root package
+              uses: MerthinTechnologies/edit-json-action@v1
+              with:
+                  filename: "./package.json"
+                  key: "version"
+                  value: ${{ github.event.inputs.version }}
+            - name: Update app version in sub-package
+              uses: MerthinTechnologies/edit-json-action@v1
+              with:
+                  filename: "./apps/electron-giddh/src/package.json"
+                  key: "version"
+                  value: ${{ github.event.inputs.version }}
+            - name: Creating Electron bundle for Windows (TEST)
+              if: ${{ matrix.os == 'windows-latest' && github.event.inputs.environment == 'test' }}
+              run: npm run package:windows:test
+              env:
+                  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+                  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+                  GOOGLE_CLIENT_ID_TEST: ${{ secrets.GOOGLE_CLIENT_ID_TEST }}
+                  GOOGLE_CLIENT_SECRET_TEST: ${{ secrets.GOOGLE_CLIENT_SECRET_TEST }}
+                  RAZORPAY_KEY_TEST: ${{ secrets.RAZORPAY_KEY_TEST }}
+                  GOOGLE_CLIENT_ID_PROD: ${{ secrets.GOOGLE_CLIENT_ID_PROD }}
+                  GOOGLE_CLIENT_SECRET_PROD: ${{ secrets.GOOGLE_CLIENT_SECRET_PROD }}
+                  TWITTER_CLIENT_ID_PROD: ${{ secrets.TWITTER_CLIENT_ID_PROD }}
+                  TWITTER_SECRET_KEY_PROD: ${{ secrets.TWITTER_SECRET_KEY_PROD }}
+                  LINKEDIN_CLIENT_ID_PROD: ${{ secrets.LINKEDIN_CLIENT_ID_PROD }}
+                  LINKEDIN_SECRET_KEY_PROD: ${{ secrets.LINKEDIN_SECRET_KEY_PROD }}
+                  RAZORPAY_KEY_PROD: ${{ secrets.RAZORPAY_KEY_PROD }}
+                  OFFLINE_API_URL: ${{ secrets.OFFLINE_API_URL }}
+            #   Commented for PROD builds as signing can't be done through pipeline for Windows
+            #   - name: Creating Electron bundle for Windows (PROD)
+            #     if: ${{ matrix.os == 'windows-latest' && github.event.inputs.environment == 'prod' }}
+            #     run: npm run release:windows:ci
+            #     env:
+            #       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            #       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            - name: Install wget
+              if: ${{ matrix.os == 'macos-latest' }}
+              run: brew install wget
+            - name: Fetching Provisioning profile
+              if: ${{ matrix.os == 'macos-latest' }}
+              run: cd ./electron-sign && wget -q --no-check-certificate '${{ secrets.PROVISIONING_PROFILE_URL }}' -O embedded.provisionprofile
+            - name: Creating Electron bundle for Mac (TEST)
+              if: ${{ matrix.os == 'macos-latest' && github.event.inputs.environment == 'test' }}
+              run: npm run package:mac:test
+              env:
+                  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+                  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+                  CSC_LINK: ${{ secrets.CSC_LINK_MAC }}
+                  CSC_KEY_PASSWORD: ${{ secrets.CSC_LINK_MAC_PASS }}
+                  NOTARIZE_EMAIL: ${{ secrets.NOTARIZE_EMAIL }}
+                  NOTARIZE_PASS: ${{ secrets.NOTARIZE_PASS }}
+                  GOOGLE_CLIENT_ID_TEST: ${{ secrets.GOOGLE_CLIENT_ID_TEST }}
+                  GOOGLE_CLIENT_SECRET_TEST: ${{ secrets.GOOGLE_CLIENT_SECRET_TEST }}
+                  RAZORPAY_KEY_TEST: ${{ secrets.RAZORPAY_KEY_TEST }}
+                  GOOGLE_CLIENT_ID_PROD: ${{ secrets.GOOGLE_CLIENT_ID_PROD }}
+                  GOOGLE_CLIENT_SECRET_PROD: ${{ secrets.GOOGLE_CLIENT_SECRET_PROD }}
+                  TWITTER_CLIENT_ID_PROD: ${{ secrets.TWITTER_CLIENT_ID_PROD }}
+                  TWITTER_SECRET_KEY_PROD: ${{ secrets.TWITTER_SECRET_KEY_PROD }}
+                  LINKEDIN_CLIENT_ID_PROD: ${{ secrets.LINKEDIN_CLIENT_ID_PROD }}
+                  LINKEDIN_SECRET_KEY_PROD: ${{ secrets.LINKEDIN_SECRET_KEY_PROD }}
+                  RAZORPAY_KEY_PROD: ${{ secrets.RAZORPAY_KEY_PROD }}
+                  OFFLINE_API_URL: ${{ secrets.OFFLINE_API_URL }}
+            - name: Creating Electron bundle for Mac (PROD)
+              if: ${{ matrix.os == 'macos-latest' && github.event.inputs.environment == 'prod' }}
+              run: npm run release:mac:ci
+              env:
+                  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+                  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+                  CSC_LINK: ${{ secrets.CSC_LINK_MAC }}
+                  CSC_KEY_PASSWORD: ${{ secrets.CSC_LINK_MAC_PASS }}
+                  NOTARIZE_EMAIL: ${{ secrets.NOTARIZE_EMAIL }}
+                  NOTARIZE_PASS: ${{ secrets.NOTARIZE_PASS }}
+                  GOOGLE_CLIENT_ID_TEST: ${{ secrets.GOOGLE_CLIENT_ID_TEST }}
+                  GOOGLE_CLIENT_SECRET_TEST: ${{ secrets.GOOGLE_CLIENT_SECRET_TEST }}
+                  RAZORPAY_KEY_TEST: ${{ secrets.RAZORPAY_KEY_TEST }}
+                  GOOGLE_CLIENT_ID_PROD: ${{ secrets.GOOGLE_CLIENT_ID_PROD }}
+                  GOOGLE_CLIENT_SECRET_PROD: ${{ secrets.GOOGLE_CLIENT_SECRET_PROD }}
+                  TWITTER_CLIENT_ID_PROD: ${{ secrets.TWITTER_CLIENT_ID_PROD }}
+                  TWITTER_SECRET_KEY_PROD: ${{ secrets.TWITTER_SECRET_KEY_PROD }}
+                  LINKEDIN_CLIENT_ID_PROD: ${{ secrets.LINKEDIN_CLIENT_ID_PROD }}
+                  LINKEDIN_SECRET_KEY_PROD: ${{ secrets.LINKEDIN_SECRET_KEY_PROD }}
+                  RAZORPAY_KEY_PROD: ${{ secrets.RAZORPAY_KEY_PROD }}
+                  OFFLINE_API_URL: ${{ secrets.OFFLINE_API_URL }}
+    #   notify-success:
+    #     if: ${{ success() }}
+    #     needs: release
+    #     name: Slack Notification Success
+    #     runs-on: ubuntu-latest
+    #     steps:
+    #       - name: Slack Notification Success TEST
+    #         if: ${{ github.event.inputs.environment == 'test' }}
+    #         uses: rtCamp/action-slack-notify@v2
+    #         env:
+    #           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+    #           SLACK_CHANNEL: ${{ secrets.SLACK_UI_BUILDS_CHANNEL_ID }}
+    #           SLACK_COLOR: "#4CAF50" # or a specific color like 'green' or '#ff00ff'
+    #           SLACK_MESSAGE: "${{ github.event.inputs.note }}. Build download URL: Windows - https://giddh-app-builds-test.s3.ap-south-1.amazonaws.com/giddh+Setup+${{ github.event.inputs.version }}.exe | Mac - https://s3-ap-south-1.amazonaws.com/giddh-app-builds-test/giddh-${{ github.event.inputs.version }}.dmg"
+    #           SLACK_FOOTER: ''
+    #           SLACK_TITLE: Giddh Desktop build for testing
+    #           SLACK_USERNAME: Giddh Desktop build
+    #           SLACK_ICON: https://drive.google.com/file/d/1qrhagyky1_X9OHmNvSQJPb0LSC4Uc0UO/view?usp=sharing
+    #       - name: Slack Notification Success PROD
+    #         if: ${{ github.event.inputs.environment == 'prod' }}
+    #         uses: rtCamp/action-slack-notify@v2
+    #         env:
+    #           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+    #           SLACK_CHANNEL: ${{ secrets.SLACK_ELECTRON_BUILDS_CHANNEL_ID }}
+    #           SLACK_COLOR: "#4CAF50" # or a specific color like 'green' or '#ff00ff'
+    #           SLACK_MESSAGE: "${{ github.event.inputs.note }}. Build download URL: Mac - https://s3-ap-south-1.amazonaws.com/giddh-app-builds/giddh-${{ github.event.inputs.version }}.dmg"
+    #           SLACK_FOOTER: ''
+    #           SLACK_TITLE: Giddh Desktop build deployment to PROD
+    #           SLACK_USERNAME: Giddh Desktop build
+    #           SLACK_ICON: https://drive.google.com/file/d/1qrhagyky1_X9OHmNvSQJPb0LSC4Uc0UO/view?usp=sharing
+    #   notify-failure:
+    #     if: ${{ failure() }}
+    #     needs: release
+    #     name: Slack Notification Failure
+    #     runs-on: ubuntu-latest
+    #     steps:
+    #       - name: Slack Notification Failure TEST
+    #         if: ${{ github.event.inputs.environment == 'test' }}
+    #         uses: rtCamp/action-slack-notify@v2
+    #         env:
+    #           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+    #           SLACK_CHANNEL: ${{ secrets.SLACK_UI_BUILDS_CHANNEL_ID }}
+    #           SLACK_COLOR: "#e53935" # or a specific color like 'red' or '#ff00ff'
+    #           SLACK_MESSAGE: "Build failed"
+    #           SLACK_FOOTER: ''
+    #           SLACK_TITLE: Giddh Desktop build for testing
+    #           SLACK_USERNAME: Giddh Desktop build
+    #           SLACK_ICON: https://drive.google.com/file/d/1qrhagyky1_X9OHmNvSQJPb0LSC4Uc0UO/view?usp=sharing
+    #       - name: Slack Notification Failure PROD
+    #         if: ${{ github.event.inputs.environment == 'prod' }}
+    #         uses: rtCamp/action-slack-notify@v2
+    #         env:
+    #           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+    #           SLACK_CHANNEL: ${{ secrets.SLACK_ELECTRON_BUILDS_CHANNEL_ID }}
+    #           SLACK_COLOR: "#e53935" # or a specific color like 'red' or '#ff00ff'
+    #           SLACK_MESSAGE: "Build failed"
+    #           SLACK_FOOTER: ''
+    #           SLACK_TITLE: Giddh Desktop build deployment to PROD
+    #           SLACK_USERNAME: Giddh Desktop build
+    #           SLACK_ICON: https://drive.google.com/file/d/1qrhagyky1_X9OHmNvSQJPb0LSC4Uc0UO/view?usp=sharing
+    notify-success:
+        if: ${{ success() }}
+        needs: release
+        name: Email Notification Success
+        runs-on: ubuntu-latest
+        steps:
+            - name: Email Notification Success TEST
+              if: ${{ github.event.inputs.environment == 'test' }}
+              uses: dawidd6/action-send-mail@v3
+              with:
+                  server_address: smtp.gmail.com
+                  server_port: 465
+                  username: ${{secrets.GIDDH_BUILDS_USERNAME}}
+                  password: ${{secrets.GIDDH_BUILDS_PASSWORD}}
+                  subject: ${{ github.actor }} - ${{ github.workflow }} job ${{ job.status }}
+                  to: ${{ secrets.GIDDH_BUILDS_RECIPIENTS }}
+                  bcc: $ {{ secrets.GIDDH_BUILDS_BCC_RECIPIENTS }}
+                  from: Giddh Builds
+                  body: Job in workflow ${{ github.workflow }} ${{ env.BUILD_ENV }} of ${{ github.repository }} has ${{ job.status }}. ${{ github.event.inputs.note }}. Build download URL:- Windows - https://giddh-app-builds-test.s3.ap-south-1.amazonaws.com/giddh+Setup+${{ github.event.inputs.version }}.exe | Mac - https://s3-ap-south-1.amazonaws.com/giddh-app-builds-test/giddh-${{ github.event.inputs.version }}.dmg, Commit - https://github.com/Walkover-Web-Solution/Giddh-New-Angular4-App/commit/${{ github.sha }}
+            - name: Email Notification Success PROD
+              if: ${{ github.event.inputs.environment == 'prod' }}
+              uses: dawidd6/action-send-mail@v3
+              with:
+                  server_address: smtp.gmail.com
+                  server_port: 465
+                  username: ${{secrets.GIDDH_BUILDS_USERNAME}}
+                  password: ${{secrets.GIDDH_BUILDS_PASSWORD}}
+                  subject: ${{ github.actor }} - ${{ github.workflow }} job ${{ job.status }}
+                  to: ${{ secrets.GIDDH_BUILDS_RECIPIENTS }}
+                  bcc: $ {{ secrets.GIDDH_BUILDS_BCC_RECIPIENTS }}
+                  from: Giddh Builds
+                  body: Job in workflow ${{ github.workflow }} ${{ env.BUILD_ENV }} of ${{ github.repository }} has ${{ job.status }}. ${{ github.event.inputs.note }}. Build download URL:- Mac - https://s3-ap-south-1.amazonaws.com/giddh-app-builds/giddh-${{ github.event.inputs.version }}.dmg, Commit - https://github.com/Walkover-Web-Solution/Giddh-New-Angular4-App/commit/${{ github.sha }}
+    notify-failure:
+        if: ${{ failure() }}
+        needs: release
+        name: Email Notification Failure
+        runs-on: ubuntu-latest
+        steps:
+            - name: Email Notification Failure TEST
+              if: ${{ github.event.inputs.environment == 'test' }}
+              uses: dawidd6/action-send-mail@v3
+              with:
+                  server_address: smtp.gmail.com
+                  server_port: 465
+                  username: ${{secrets.GIDDH_BUILDS_USERNAME}}
+                  password: ${{secrets.GIDDH_BUILDS_PASSWORD}}
+                  subject: ${{ github.actor }} - ${{ github.workflow }} job ${{ job.status }}
+                  to: ${{ secrets.GIDDH_BUILDS_RECIPIENTS }}
+                  bcc: $ {{ secrets.GIDDH_BUILDS_BCC_RECIPIENTS }}
+                  from: Giddh Builds
+                  body: Job in workflow ${{ github.workflow }} ${{ env.BUILD_ENV }} of ${{ github.repository }} has ${{ job.status }}. Commit - https://github.com/Walkover-Web-Solution/Giddh-New-Angular4-App/commit/${{ github.sha }}
+            - name: Email Notification Failure PROD
+              if: ${{ github.event.inputs.environment == 'prod' }}
+              uses: dawidd6/action-send-mail@v3
+              with:
+                  server_address: smtp.gmail.com
+                  server_port: 465
+                  username: ${{secrets.GIDDH_BUILDS_USERNAME}}
+                  password: ${{secrets.GIDDH_BUILDS_PASSWORD}}
+                  subject: ${{ github.actor }} - ${{ github.workflow }} job ${{ job.status }}
+                  to: ${{ secrets.GIDDH_BUILDS_RECIPIENTS }}
+                  bcc: $ {{ secrets.GIDDH_BUILDS_BCC_RECIPIENTS }}
+                  from: Giddh Builds
+                  body: Job in workflow ${{ github.workflow }} ${{ env.BUILD_ENV }} of ${{ github.repository }} has ${{ job.status }}. Commit - https://github.com/Walkover-Web-Solution/Giddh-New-Angular4-App/commit/${{ github.sha }}
