@@ -1825,7 +1825,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     fetchIPApi.subscribe(
                         (res) => {
                             if (res?.response?.ipAddress) {
-                                const fetchCountryByIpApi = this.http.get<any>(MOBILE_NUMBER_IP_ADDRESS_URL);
+                                const fetchCountryByIpApi = this.http.get<any>(MOBILE_NUMBER_IP_ADDRESS_URL + `${res.response.ipAddress}`);
                                 fetchCountryByIpApi.subscribe(
                                     (fetchCountryByIpApiRes) => {
                                         if (fetchCountryByIpApiRes?.response?.countryCode) {
@@ -1835,7 +1835,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                                         }
                                     },
                                     (fetchCountryByIpApiErr) => {
-                                        const fetchCountryByIpInfoApi = this.http.get<any>(MOBILE_NUMBER_ADDRESS_JSON_URL);
+                                        const fetchCountryByIpInfoApi = this.http.get<any>(MOBILE_NUMBER_ADDRESS_JSON_URL + `${res.response.ipAddress}`);
 
                                         fetchCountryByIpInfoApi.subscribe(
                                             (fetchCountryByIpInfoApiRes) => {
