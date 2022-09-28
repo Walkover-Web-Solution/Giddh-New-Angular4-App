@@ -41,7 +41,7 @@ export function createDbFile(filename: string): any {
  */
 export function getPath(filename: string): any {
     const app = electron?.app || electron?.remote?.app;
-    const path = appAath.join(app.getPath('userData'), filename);
+    const path = (app) ? appAath.join(app?.getPath('userData'), filename) : filename;
     createDbFile(path);
     return path;
 }

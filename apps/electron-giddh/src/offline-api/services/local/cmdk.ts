@@ -43,12 +43,12 @@ export async function getCmdkLocal(filename: string, request: any): Promise<any>
 
     /** Finding the cmdk options list */
     const limit = 20;
-    const start = (request.params.page - 1) + limit;
-    const response = (request.params.q) ? await findAsync(db, { query: { "results.name": request.params.q }, start: start, limit: limit }) : await findAsync(db, { start: start, limit: limit });
+    const start = (request.query.page - 1) + limit;
+    const response = (request.query.q) ? await findAsync(db, { query: { "results.name": request.query.q }, start: start, limit: limit }) : await findAsync(db, { start: start, limit: limit });
 
     if (response) {
-        return { status: "success", body: response[0], q: appAath.join("Ravinder : ", request.params.q) };
+        return { status: "success", body: response[0], q: appAath.join("Ravinder : ", request.query.q) };
     } else {
-        return { status: "error", message: "Cmdk list unavailable.", q: request.params.q };
+        return { status: "error", message: "Cmdk list unavailable.", q: request.query.q };
     }
 }
