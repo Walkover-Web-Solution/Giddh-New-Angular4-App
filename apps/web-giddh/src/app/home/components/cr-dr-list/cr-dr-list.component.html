@@ -86,7 +86,11 @@
                             </tr>
                             <tr *ngIf="drAccounts?.length === 0">
                                 <td colspan="4" class="no-entries">
-                                    <a class="btn btn-primary" [routerLink]="['/pages/proforma-invoice/invoice/sales']">
+                                    <a
+                                        class="btn btn-primary"
+                                        href="javascript:;"
+                                        [routerLink]="['/pages/proforma-invoice/invoice/sales']"
+                                    >
                                         {{ localeData?.do_sales }}
                                     </a>
                                 </td>
@@ -153,6 +157,7 @@
                             <tr *ngIf="crAccounts?.length === 0">
                                 <td colspan="4" class="no-entries">
                                     <a
+                                        href="javascript:;"
                                         class="btn btn-primary"
                                         [routerLink]="['/pages/proforma-invoice/invoice/purchase']"
                                     >
