@@ -81,7 +81,7 @@ import { InvoiceSetting } from '../models/interfaces/invoice.setting.interface';
 import { SalesShSelectComponent } from '../theme/sales-ng-virtual-select/sh-select.component';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { LedgerDiscountClass } from '../models/api-models/SettingsDiscount';
-import { Configuration, SubVoucher, RATE_FIELD_PRECISION, HIGH_RATE_FIELD_PRECISION, SearchResultText, TCS_TDS_TAXES_TYPES, ENTRY_DESCRIPTION_LENGTH, EMAIL_REGEX_PATTERN, AdjustedVoucherType, MOBILE_NUMBER_UTIL_URL } from '../app.constant';
+import { Configuration, SubVoucher, RATE_FIELD_PRECISION, HIGH_RATE_FIELD_PRECISION, SearchResultText, TCS_TDS_TAXES_TYPES, ENTRY_DESCRIPTION_LENGTH, EMAIL_REGEX_PATTERN, AdjustedVoucherType, MOBILE_NUMBER_UTIL_URL, MOBILE_NUMBER_SELF_URL, MOBILE_NUMBER_IP_ADDRESS_URL, MOBILE_NUMBER_ADDRESS_JSON_URL } from '../app.constant';
 import { LEDGER_API } from '../services/apiurls/ledger.api';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { ShSelectComponent } from '../theme/ng-virtual-select/sh-select.component';
@@ -7866,7 +7866,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         let input = document.getElementById('init-contact-proforma');
         const errorMsg = document.querySelector("#init-contact-proforma-error-msg");
         const validMsg = document.querySelector("#init-contact-proforma-valid-msg");
-        let errorMap = ["Invalid number", "Invalid country code", "Too short", "Too long", "Invalid number"];
+        let errorMap = [this.localeData?.invalid_contact_number, this.commonLocaleData?.app_invalid_country_code, this.commonLocaleData?.app_invalid_contact_too_short, this.commonLocaleData?.app_invalid_contact_too_long, this.localeData?.invalid_contact_number];
         if (window['intlTelInput'] && input) {
             this.intl = window['intlTelInput'](input, {
                 nationalMode: true,
@@ -7876,11 +7876,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 initialCountry: 'auto',
                 geoIpLookup: (success, failure) => {
                     let countryCode = 'in';
-                    const fetchIPApi = this.http.get<any>('https://api.db-ip.com/v2/free/self');
+                    const fetchIPApi = this.http.get<any>(MOBILE_NUMBER_SELF_URL);
                     fetchIPApi.subscribe(
                         (res) => {
                             if (res?.response?.ipAddress) {
-                                const fetchCountryByIpApi = this.http.get<any>('http://ip-api.com/json/${res.response.ipAddress');
+                                const fetchCountryByIpApi = this.http.get<any>(MOBILE_NUMBER_IP_ADDRESS_URL);
                                 fetchCountryByIpApi.subscribe(
                                     (fetchCountryByIpApiRes) => {
                                         if (fetchCountryByIpApiRes?.response?.countryCode) {
@@ -7890,7 +7890,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                                         }
                                     },
                                     (fetchCountryByIpApiErr) => {
-                                        const fetchCountryByIpInfoApi = this.http.get<any>('https://ipinfo.io/${res.response.ipAddress}/json');
+                                        const fetchCountryByIpInfoApi = this.http.get<any>(MOBILE_NUMBER_ADDRESS_JSON_URL);
 
                                         fetchCountryByIpInfoApi.subscribe(
                                             (fetchCountryByIpInfoApiRes) => {
@@ -7916,12 +7916,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     );
                 },
             });
-            let reset = function () {
-                input?.classList.remove("error");
+            let reset = () => {
+                input?.classList?.remove("error");
                 if (errorMsg && validMsg) {
                     errorMsg.innerHTML = "";
-                    errorMsg.classList.add("hide");
-                    validMsg.classList.add("hide");
+                    errorMsg.classList.add("d-none");
+                    validMsg.classList.add("d-none");
                 }
             };
             input.addEventListener('blur', () => {
@@ -7929,18 +7929,17 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 reset();
                 if (input) {
                     if (phoneNumber?.length) {
-                        if (this.intl.isValidNumber()) {
-                            validMsg.classList.remove("hide");
+                        if (this.intl?.isValidNumber()) {
+                            validMsg?.classList?.remove("d-none");
                         } else {
-                            input?.classList.add("error");
+                            input?.classList?.add("error");
                             let errorCode = this.intl?.getValidationError();
-                            if (errorMsg) {
+                            if (errorMsg && errorMap[errorCode]) {
                                 this._toasty.errorToast(this.localeData?.invalid_contact_number);
                                 errorMsg.innerHTML = errorMap[errorCode];
-                                errorMsg.classList.remove("hide");
+                                errorMsg.classList.remove("d-none");
                             }
                         }
-                    } else {
                     }
                 }
             });
