@@ -925,7 +925,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         };
 
         this.settingsProfileService.createNewAddress(requestObj).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response.status === 'success') {
+            if (response?.status === 'success') {
                 this.closeAddressSidePane = true;
                 if (this.currentOrganizationType === OrganizationType.Company) {
                     this.loadAddresses('GET');
@@ -934,7 +934,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 }
                 this._toasty.successToast('Address created successfully');
             } else {
-                this._toasty.errorToast(response.message);
+                this._toasty.errorToast(response?.message);
             }
             this.isAddressChangeInProgress = false;
             this.changeDetectorRef.detectChanges();
@@ -969,12 +969,12 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             linkEntity
         };
         this.settingsProfileService.updateAddress(requestObj).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response.status === 'success') {
+            if (response?.status === 'success') {
                 this.closeAddressSidePane = true;
                 this.loadAddresses('GET');
                 this._toasty.successToast('Address updated successfully');
             } else {
-                this._toasty.errorToast(response.message);
+                this._toasty.errorToast(response?.message);
             }
             this.isAddressChangeInProgress = false;
         }, () => {

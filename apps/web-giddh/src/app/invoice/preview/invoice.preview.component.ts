@@ -722,12 +722,12 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             };
             this.purchaseRecordService.deletePurchaseRecord(requestObject).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
                 this.selectedItems = [];
-                if (response.status === 'success') {
+                if (response?.status === 'success') {
                     this._toaster.successToast(response.body);
                     this.selectedInvoiceForDetails = null;
                     this.getVoucher(this.isUniversalDateApplicable);
                 } else {
-                    this._toaster.errorToast(response.message);
+                    this._toaster.errorToast(response?.message);
                     this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(this.lastListingFilters, this.selectedVoucher));
                     this._receiptServices.getAllReceiptBalanceDue(this.lastListingFilters, this.selectedVoucher).pipe(takeUntil(this.destroyed$)).subscribe(res => {
                         this.parseBalRes(res);
@@ -1311,9 +1311,9 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         this.selectedInvoice = allInvoices.find((o) => o?.uniqueName === this.selectedItems[0]);
         this.validateInvoiceobj.invoiceNumber = this.selectedInvoice.voucherNumber;
         this._invoiceService.validateInvoiceForEwaybill(this.validateInvoiceobj).pipe(takeUntil(this.destroyed$)).subscribe(res => {
-            if (res.status === 'success') {
-                if (res.body.errorMessage) {
-                    this._toaster.warningToast(res.body.errorMessage);
+            if (res?.status === 'success') {
+                if (res.body?.errorMessage) {
+                    this._toaster.warningToast(res.body?.errorMessage);
                 }
             }
         });
@@ -1979,11 +1979,11 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
         apiCallObservable.pipe(take(1)).subscribe(response => {
             this.getVoucher(this.isUniversalDateApplicable);
-            if (response.status === 'success') {
+            if (response?.status === 'success') {
                 this._toaster.successToast(response.body);
                 this.modalRef?.hide();
                 this.resetCancelEInvoice();
-            } else if (response.status === 'error') {
+            } else if (response?.status === 'error') {
                 this._toaster.errorToast(response.message, response.code);
             }
         });

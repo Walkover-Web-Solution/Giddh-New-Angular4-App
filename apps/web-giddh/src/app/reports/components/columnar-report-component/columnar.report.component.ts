@@ -181,16 +181,16 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
             this.ledgerService.downloadColumnarReport(this.companyUniqueName, this.groupUniqueName, this.exportRequest, isShowReport).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                 this.isLoading = false;
                 this.isShowColumnarReport = false;
-                if (res.status === "success") {
+                if (res?.status === "success") {
                     if (isShowReport) {
-                        this.columnarReportResponse = res.body;
+                        this.columnarReportResponse = res?.body;
                     } else {
                         let blob = this.generalService.base64ToBlob(res.body, 'application/xls', 512);
                         return saveAs(blob, this.localeData?.downloaded_filename);
                     }
                 } else {
                     this.toaster.clearAllToaster();
-                    this.toaster.errorToast(res.message);
+                    this.toaster.errorToast(res?.message);
                 }
             });
         }

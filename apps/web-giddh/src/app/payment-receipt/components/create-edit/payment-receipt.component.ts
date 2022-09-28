@@ -801,14 +801,14 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
         } else if (output.type === 'start') {
             this.isFileUploading = true;
         } else if (output.type === 'done') {
-            if (output.file.response.status === 'success') {
+            if (output.file.response?.status === 'success') {
                 this.isFileUploading = false;
-                this.voucherFormData.attachedFiles = [output.file.response.body?.uniqueName];
+                this.voucherFormData.attachedFiles = [output.file.response?.body?.uniqueName];
                 this.toaster.showSnackBar("success", this.localeData?.file_uploaded);
             } else {
                 this.isFileUploading = false;
                 this.voucherFormData.attachedFiles = [];
-                this.toaster.showSnackBar("error", output.file.response.message);
+                this.toaster.showSnackBar("error", output.file.response?.message);
             }
         }
     }

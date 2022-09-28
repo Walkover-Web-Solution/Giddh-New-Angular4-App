@@ -147,11 +147,11 @@ export class RejectedListComponent implements OnInit, OnChanges {
         this.actionPettycashRequest.actionType = 'revert';
         this.actionPettycashRequest.uniqueName = item?.uniqueName;
         this.expenseService.actionPettycashReports(this.actionPettycashRequest, {}).pipe(takeUntil(this.destroyed$)).subscribe(res => {
-            if (res.status === 'success') {
-                this.toaster.showSnackBar("success", res.body);
+            if (res?.status === 'success') {
+                this.toaster.showSnackBar("success", res?.body);
                 this.getPettyCashRejectedReports(this.pettycashRequest);
                 this.getPettyCashPendingReports(this.pettycashRequest);
-            } else {
+            } else if(res?.message) {
                 this.toaster.showSnackBar("error", res.message);
             }
         });
@@ -243,10 +243,10 @@ export class RejectedListComponent implements OnInit, OnChanges {
      */
     public deleteEntry(): void {
         this.expenseService.actionPettycashReports(this.actionPettycashRequest, {}).pipe(takeUntil(this.destroyed$)).subscribe(res => {
-            if (res.status === 'success') {
-                this.toaster.showSnackBar("success", res.body);
+            if (res?.status === 'success') {
+                this.toaster.showSnackBar("success", res?.body);
                 this.getPettyCashRejectedReports(this.pettycashRequest);
-            } else {
+            } else if(res?.message) {
                 this.toaster.showSnackBar("error", res.message);
             }
         });

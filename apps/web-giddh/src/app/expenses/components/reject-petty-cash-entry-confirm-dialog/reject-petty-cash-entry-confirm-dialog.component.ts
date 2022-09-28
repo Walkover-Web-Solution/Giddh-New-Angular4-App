@@ -68,11 +68,11 @@ export class RejectPettyCashEntryConfirmDialogComponent implements OnInit, OnDes
         this.actionPettyCashRequest.accountUniqueName = this.selectedItem.particularAccount?.uniqueName
 
         this.expenseService.actionPettycashReports(this.actionPettyCashRequest, this.actionPettyCashRequestBody).pipe(takeUntil(this.destroyed$)).subscribe(res => {
-            if (res.status === 'success') {
-                this.toaster.showSnackBar("success", res.body);
+            if (res?.status === 'success') {
+                this.toaster.showSnackBar("success", res?.body);
                 this.rejectEntry.emit(true);
             } else {
-                this.toaster.showSnackBar("error", res.body ?? res.message);
+                this.toaster.showSnackBar("error", res?.body ?? res?.message);
                 this.rejectEntry.emit(false);
             }
         });

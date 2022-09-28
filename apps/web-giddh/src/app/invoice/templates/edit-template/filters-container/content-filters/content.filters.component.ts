@@ -224,7 +224,7 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
         } else if (output.type === 'start') {
             this.isSignatureUploadInProgress = true;
         } else if (output.type === 'done') {
-            if (output.file.response.status === 'success') {
+            if (output.file.response?.status === 'success') {
                 if (this._invoiceUiDataService.unusedImageSignature) {
                     this.removeFileFromServer();
                 }
@@ -235,7 +235,7 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
                 this._toasty.successToast('file uploaded successfully.');
                 this.startUpload();
             } else {
-                this._toasty.errorToast(output.file.response.message, output.file.response.code);
+                this._toasty.errorToast(output.file.response?.message, output.file.response?.code);
             }
             this.isSignatureUploadInProgress = false;
             this.signatureImgAttached = true;

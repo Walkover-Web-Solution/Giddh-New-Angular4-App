@@ -815,7 +815,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
             this.sortStockItems(cloneDeep(this.allStocks));
         } else {
             this.inventoryService.GetStocks().pipe(takeUntil(this.destroyed$)).subscribe(data => {
-                if (data.status === 'success') {
+                if (data?.status === 'success') {
                     this.sortStockItems(data.body.results);
                     this.allStocks = cloneDeep(data.body.results);
                     if (focusTargetElement) {
@@ -1040,7 +1040,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
         this.store.pipe(select(p => p.session.companyUniqueName), take(1)).subscribe(a => {
             if (a && a !== '') {
                 this._accountService.getFlattenAccounts('', '', '').pipe(takeUntil(this.destroyed$)).subscribe(data => {
-                    if (data.status === 'success') {
+                    if (data?.status === 'success') {
                         this.allFlattenAccounts = cloneDeep(data.body.results);
                         if (groupUniqueName) {
                             const filteredAccounts: IFlattenAccountsResultItem[] = data.body.results?.filter((acc) => acc.parentGroups.findIndex((g) => g?.uniqueName === groupUniqueName) > -1);

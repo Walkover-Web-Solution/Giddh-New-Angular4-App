@@ -894,9 +894,8 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
             // this.inputForList = cloneDeep(this.allStocks);
             this.sortStockItems(cloneDeep(this.allStocks));
         } else {
-            const reqArray = parentGrpUnqName ? [parentGrpUnqName] : null;
             this.inventoryService.GetStocks().pipe(takeUntil(this.destroyed$)).subscribe(data => {
-                if (data.status === 'success') {
+                if (data?.status === 'success') {
                     this.allStocks = cloneDeep(data.body.results);
                     this.sortStockItems(this.allStocks);
                     if (needToFocusStockInputField) {
@@ -1085,7 +1084,7 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
         this.store.pipe(select(p => p.session.companyUniqueName), take(1)).subscribe(a => {
             if (a && a !== '') {
                 this._accountService.getFlattenAccounts('', '', '').pipe(takeUntil(this.destroyed$)).subscribe(data => {
-                    if (data.status === 'success') {
+                    if (data?.status === 'success') {
                         this._tallyModuleService.setFlattenAccounts(data.body.results);
                         if (needToFocusAccountInputField) {
                             this.selectedAccountInputField.value = '';

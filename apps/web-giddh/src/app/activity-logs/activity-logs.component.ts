@@ -123,13 +123,12 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         }
         this.getFormFilter();
         this.companyService.getComapnyUsers().pipe(takeUntil(this.destroyed$)).subscribe(data => {
-            if (data.status === 'success') {
+            if (data?.status === 'success') {
                 let users: IOption[] = [];
                 data.body.map((item) => {
                     users.push({ label: item.userName, value: item.userUniqueName, additional: item });
                 });
                 this.users = users;
-            } else {
             }
         });
         /** Universal date observer */

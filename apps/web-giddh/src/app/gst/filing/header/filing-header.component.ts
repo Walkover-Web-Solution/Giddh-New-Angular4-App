@@ -323,7 +323,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
             request.from = this.currentPeriod.from;
             request.to = this.currentPeriod.to;
             this.gstReconcileService.downloadGSTRJSON(request).pipe(takeUntil(this.destroyed$)).subscribe(res => {
-                if (res.status === "success") {
+                if (res?.status === "success") {
                     let blobData = this.generalService.base64ToBlob(res?.body, "json", 512);
                     return saveAs(blobData, `${this.activeCompanyGstNumber}.json`);
                 } else {

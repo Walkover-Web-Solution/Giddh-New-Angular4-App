@@ -583,12 +583,12 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
             product.stockDetails.rate = 0;
 
             this.inventoryService.GetStockDetails(event.additional.stockGroup?.uniqueName, event.value).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
-                if (response.status === 'success') {
-                    product.stockDetails.rate = response.body.purchaseAccountDetails?.unitRates[0]?.rate;
-                    if (!response.body.purchaseAccountDetails) {
-                        product.stockDetails.stockUnit = response.body.stockUnit.code;
+                if (response?.status === 'success') {
+                    product.stockDetails.rate = response?.body?.purchaseAccountDetails?.unitRates[0]?.rate;
+                    if (!response?.body?.purchaseAccountDetails) {
+                        product.stockDetails.stockUnit = response?.body?.stockUnit?.code;
                     } else {
-                        product.stockDetails.stockUnit = response.body.purchaseAccountDetails?.unitRates[0]?.stockUnitCode;
+                        product.stockDetails.stockUnit = response?.body?.purchaseAccountDetails?.unitRates[0]?.stockUnitCode;
                     }
                     this.calculateRowTotal(product);
                 }
@@ -1174,7 +1174,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     public getBranchTransfer(): void {
         this.isUpdateMode = true;
         this.inventoryService.getNewBranchTransfer(this.editBranchTransferUniqueName).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
-            if (response.status === "success") {
+            if (response?.status === "success") {
                 this.branchTransfer.dateOfSupply = response.body.dateOfSupply;
                 this.branchTransfer.challanNo = response.body.challanNo;
                 this.branchTransfer.note = response.body.note;
@@ -1281,7 +1281,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                 }, 1000);
             } else {
                 this.closeBranchTransferPopup();
-                this._toasty.errorToast(response.message);
+                this._toasty.errorToast(response?.message);
             }
         });
     }

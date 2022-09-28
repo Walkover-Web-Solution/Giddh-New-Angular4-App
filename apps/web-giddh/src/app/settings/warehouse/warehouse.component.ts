@@ -381,12 +381,12 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
             linkAddresses
         };
         this.settingsProfileService.updatWarehouseInfo(requestObj).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response.status === 'success') {
+            if (response?.status === 'success') {
                 this.asideEditWarehousePane = 'out';
                 this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: PAGINATION_LIMIT }));
                 this.toasterService.successToast(this.localeData?.warehouse_updated);
             } else {
-                this.toasterService.errorToast(response.message);
+                this.toasterService.errorToast(response?.message);
             }
             this.isWarehouseUpdateInProgress = false;
         }, () => {

@@ -270,12 +270,12 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
             this.reverseChargeReportResults = [];
 
             this.reverseChargeService.getReverseChargeReport(this.activeCompany.uniqueName, this.reverseChargeReportGetRequest, this.reverseChargeReportPostRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
-                if (res.status === 'success') {
+                if (res?.status === 'success') {
                     this.reverseChargeReportResults = res.body;
 
                     if(this.todaySelected) {
-                        this.selectedDateRange = { startDate: dayjs(this.reverseChargeReportResults.from, GIDDH_DATE_FORMAT), endDate: dayjs(this.reverseChargeReportResults.to, GIDDH_DATE_FORMAT) };
-                        this.selectedDateRangeUi = dayjs(this.reverseChargeReportResults.from, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(this.reverseChargeReportResults.to, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
+                        this.selectedDateRange = { startDate: dayjs(this.reverseChargeReportResults?.from, GIDDH_DATE_FORMAT), endDate: dayjs(this.reverseChargeReportResults?.to, GIDDH_DATE_FORMAT) };
+                        this.selectedDateRangeUi = dayjs(this.reverseChargeReportResults?.from, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(this.reverseChargeReportResults?.to, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
                     }
 
                     this.cdRef.detectChanges();
