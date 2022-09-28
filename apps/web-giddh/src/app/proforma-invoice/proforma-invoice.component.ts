@@ -6229,7 +6229,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @memberof ProformaInvoiceComponent
      */
     public onSearchQueryChanged(query: string, page: number = 1, searchType: string, successCallback?: Function): void {
-        if(query){
+        if(query === ''){
             this.intl?.setNumber("");
         }
         if (!this.preventDefaultScrollApiCall &&
