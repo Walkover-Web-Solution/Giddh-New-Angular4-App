@@ -286,7 +286,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             }
         });
 
-        this.addAccountForm.get('activeGroupUniqueName').setValue(this.activeGroupUniqueName);
+        this.addAccountForm.get('activeGroupUniqueName')?.setValue(this.activeGroupUniqueName);
 
         if (this.autoFocus !== undefined) {
             setTimeout(() => {
@@ -333,17 +333,17 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         if (this.activeCompany && this.activeCompany.countryV2) {
             const countryCode = this.activeCompany.countryV2.alpha2CountryCode;
             const countryName = this.activeCompany.countryV2.countryName;
-            this.addAccountForm.get('country').get('countryCode').setValue(countryCode);
+            this.addAccountForm.get('country').get('countryCode')?.setValue(countryCode);
             this.selectedCountry = `${countryCode} - ${countryName}`;
             this.selectedCountryCode = countryCode;
-            this.addAccountForm.get('currency').setValue(company.baseCurrency);
+            this.addAccountForm.get('currency')?.setValue(company.baseCurrency);
             this.getOnboardingForm(countryCode);
             this.companyCountry = countryCode;
         } else {
-            this.addAccountForm.get('country').get('countryCode').setValue('IN');
+            this.addAccountForm.get('country').get('countryCode')?.setValue('IN');
             this.selectedCountry = 'IN - India';
             this.selectedCountryCode = 'IN';
-            this.addAccountForm.get('currency').setValue('IN');
+            this.addAccountForm.get('currency')?.setValue('IN');
             this.companyCountry = 'IN';
             this.getOnboardingForm('IN');
         }
@@ -417,7 +417,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         for (let control of addresses.controls) {
             control.get('stateCode')?.patchValue(null);
             control.get('state').get('code')?.patchValue(null);
-            control.get('gstNumber').setValue("");
+            control.get('gstNumber')?.setValue("");
         }
     }
 
@@ -429,7 +429,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             control.get('beneficiaryName')?.patchValue(null);
             control.get('branchName')?.patchValue(null);
             control.get('swiftCode')?.patchValue(null);
-            control.get('ifsc').setValue("");
+            control.get('ifsc')?.setValue("");
         }
     }
 
@@ -470,7 +470,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             return;
         }
         let gstVal: string = gstForm.get('gstNumber').value?.trim();
-        gstForm.get('gstNumber').setValue(gstVal?.trim());
+        gstForm.get('gstNumber')?.setValue(gstVal?.trim());
         if (gstVal?.length) {
             if (gstVal?.length !== 15) {
                 gstForm.get('partyType').reset('NOT APPLICABLE');
@@ -529,7 +529,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
 
     public submit() {
         if (!this.addAccountForm.get('openingBalance').value) {
-            this.addAccountForm.get('openingBalance').setValue('0');
+            this.addAccountForm.get('openingBalance')?.setValue('0');
         }
         if (!this.addAccountForm.get('foreignOpeningBalance').value) {
             this.addAccountForm.get('foreignOpeningBalance')?.patchValue('0');
@@ -615,9 +615,9 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             this.store.dispatch(this.commonActions.resetOnboardingForm());
             this.getOnboardingForm(event.value);
             let phoneCode = event.additional;
-            this.addAccountForm.get('mobileCode').setValue(phoneCode);
+            this.addAccountForm.get('mobileCode')?.setValue(phoneCode);
             let currencyCode = this.countryCurrency[event.value];
-            this.addAccountForm.get('currency').setValue(currencyCode);
+            this.addAccountForm.get('currency')?.setValue(currencyCode);
             this.getStates(event.value);
             this.toggleStateRequired();
             this.resetGstStateForm();
@@ -991,7 +991,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
      */
     public selectedBooleanCustomField(isChecked: string, index: number): void {
         const customField = this.addAccountForm.get('customFields') as FormArray;
-        customField.controls[index].get('value').setValue(isChecked);
+        customField.controls[index].get('value')?.setValue(isChecked);
     }
 
     /**
@@ -1303,8 +1303,10 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                     if (phoneNumber?.length) {
                         if (this.intl?.isValidNumber()) {
                             validMsg?.classList?.remove("d-none");
+                            this.isMobileNumberValid = false;
                         } else {
                             input?.classList?.add("error");
+                            this.isMobileNumberValid = true;
                             let errorCode = this.intl?.getValidationError();
                             if (errorMsg && errorMap[errorCode]) {
                                 this._toaster.errorToast(this.localeData?.invalid_contact_number);

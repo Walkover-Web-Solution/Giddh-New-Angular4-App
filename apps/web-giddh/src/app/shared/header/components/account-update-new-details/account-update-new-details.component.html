@@ -799,7 +799,7 @@
                         (click)="submit()"
                         class="btn btn-primary update-btn-zindex"
                         [ladda]="updateAccountInProcess$ | async"
-                        [disabled]="addAccountForm.invalid || !(isGstValid$ | async)"
+                        [disabled]="addAccountForm.invalid || !(isGstValid$ | async) || isMobileNumberValid"
                     >
                         {{ commonLocaleData?.app_update }}
                     </button>

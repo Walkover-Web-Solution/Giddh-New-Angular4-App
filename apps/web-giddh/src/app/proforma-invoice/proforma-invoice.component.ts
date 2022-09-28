@@ -638,6 +638,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public intl: any;
     /** This will hold updatedNumber */
     public selectedCustomerNumber: any = '';
+    /** This will hold isMobileNumberValid */
+    public isMobileNumberValid: boolean = false;
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -2135,7 +2137,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
     public resetInvoiceForm(f: NgForm) {
         if (f) {
-            this.intl?.setNumber("+" + this.selectedCompany?.countryV2?.callingCode);
+            this.intl?.setNumber("");
             f.form.reset();
         }
         if (this.container) {
@@ -3532,6 +3534,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.getAllAdvanceReceipts(this.invFormData.voucherDetails.customerUniquename, this.invFormData.voucherDetails.voucherDate)
             }
             this.isCustomerSelected = true;
+            this.invFormData.accountDetails.mobileNumber = this.intl?.getNumber();
             this.invFormData.accountDetails.name = '';
             if (item.additional) {
                 this.customerAccount.email = item.additional.email;
@@ -6226,6 +6229,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @memberof ProformaInvoiceComponent
      */
     public onSearchQueryChanged(query: string, page: number = 1, searchType: string, successCallback?: Function): void {
+        if(query === ''){
+            this.intl?.setNumber("");
+        }
         if (!this.preventDefaultScrollApiCall &&
             (query || (searchType === SEARCH_TYPE.CUSTOMER && this.defaultCustomerSuggestions?.length === 0) ||
                 (searchType === SEARCH_TYPE.ITEM && this.defaultItemSuggestions?.length === 0) || successCallback)) {
@@ -7927,8 +7933,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     if (phoneNumber?.length) {
                         if (this.intl?.isValidNumber()) {
                             validMsg?.classList?.remove("d-none");
+                            this.isMobileNumberValid = false;
                         } else {
                             input?.classList?.add("error");
+                            this.isMobileNumberValid = true;
                             let errorCode = this.intl?.getValidationError();
                             if (errorMsg && errorMap[errorCode]) {
                                 this._toasty.errorToast(this.localeData?.invalid_contact_number);
