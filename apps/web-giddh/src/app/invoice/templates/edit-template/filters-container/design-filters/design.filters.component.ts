@@ -292,7 +292,7 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
             this._invoiceUiDataService.isLogoUpdateInProgress = true;
         } else if (output.type === 'done') {
             this.isFileUploadInProgress = false;
-            if (output.file.response.status === 'success') {
+            if (output.file.response?.status === 'success') {
                 this.showUploadButton = false;
                 this.showDeleteButton = true;
                 this.startUpload();
@@ -302,7 +302,7 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
                 this._invoiceUiDataService.isLogoUpdateInProgress = false;
                 this._toasty.successToast('file uploaded successfully.');
             } else {
-                this._toasty.errorToast(output.file.response.message, output.file.response.code);
+                this._toasty.errorToast(output.file.response?.message, output.file.response?.code);
             }
         }
     }
@@ -325,11 +325,11 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
             data = this.newLineToBR(data);
 
             this._invoiceTemplatesService.updateTemplate(data?.uniqueName, data).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
-                if (res.status === 'success') {
+                if (res?.status === 'success') {
                     this._toasty.successToast('Template Updated Successfully.');
                     this.store.dispatch(this.invoiceActions.getAllCreatedTemplates(this.templateType));
                 } else {
-                    this._toasty.errorToast(res.message, res.code);
+                    this._toasty.errorToast(res?.message, res?.code);
                 }
             });
         } else {

@@ -489,10 +489,10 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
             redirect_uri: this.getRedirectUrl(AppUrl)
         };
         this._authenticationService.saveGmailAuthCode(dataToSave).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
-            if (res.status === 'success') {
+            if (res?.status === 'success') {
                 this._toasty.successToast(this.localeData?.gmail_account_added, this.commonLocaleData?.app_success);
             } else {
-                this._toasty.errorToast(res.message, res.code);
+                this._toasty.errorToast(res?.message, res?.code);
             }
             this.store.dispatch(this.settingsIntegrationActions.GetGmailIntegrationStatus());
             this.router.navigateByUrl('/pages/invoice/preview/settings/email');

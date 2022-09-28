@@ -565,7 +565,7 @@ export class UpdateLedgerVm {
             }
         } else {
             // find account that's from category income || expenses || fixed assets
-            let trx: ILedgerTransactionItem = find(this.selectedLedger.transactions, (t) => {
+            let trx: ILedgerTransactionItem = find(this.selectedLedger?.transactions, (t) => {
                 let category = this.getAccountCategory(t?.particular, t?.particular?.uniqueName);
                 return !t?.isTax && this.isValidCategory(category);
             });
@@ -584,7 +584,7 @@ export class UpdateLedgerVm {
         let particularAccount = this.getParticularAccount();
         let ledgerAccount = this.getLedgerAccount(particularAccount);
 
-        if (this.generalService.isReceiptPaymentEntry(ledgerAccount, particularAccount, this.selectedLedger.voucher.shortCode)) {
+        if (this.generalService.isReceiptPaymentEntry(ledgerAccount, particularAccount, this.selectedLedger?.voucher?.shortCode)) {
             this.totalAmount = this.grandTotal;
             this.generateGrandTotal();
         }

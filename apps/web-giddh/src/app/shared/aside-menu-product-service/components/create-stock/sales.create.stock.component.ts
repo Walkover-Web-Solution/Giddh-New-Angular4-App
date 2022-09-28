@@ -258,9 +258,9 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
 
         // get purchase accounts
         this.salesService.getAccountsWithCurrency('operatingcost, indirectexpenses').pipe(takeUntil(this.destroyed$)).subscribe(data => {
-            if (data.status === 'success') {
+            if (data?.status === 'success') {
                 let purchaseAccounts: IOption[] = [];
-                data.body.results.map(d => {
+                data?.body?.results?.map(d => {
                     purchaseAccounts.push({ label: `${d.name} (${d.uniqueName})`, value: d.uniqueName });
                 });
                 this.purchaseAccountsDropDown$ = of(purchaseAccounts);
@@ -269,9 +269,9 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
 
         // get sales accounts
         this.salesService.getAccountsWithCurrency('revenuefromoperations, otherincome').pipe(takeUntil(this.destroyed$)).subscribe(data => {
-            if (data.status === 'success') {
+            if (data?.status === 'success') {
                 let salesAccounts: IOption[] = [];
-                data.body.results.map(d => {
+                data?.body?.results?.map(d => {
                     salesAccounts.push({ label: `${d.name} (${d.uniqueName})`, value: d.uniqueName });
                 });
                 this.salesAccountsDropDown$ = of(salesAccounts);
@@ -854,8 +854,8 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
         // parentgroup data
         let flattenData: IOption[] = [];
         this._inventoryService.GetGroupsWithStocksFlatten().pipe(takeUntil(this.destroyed$)).subscribe(data => {
-            if (data.status === 'success') {
-                this.flattenDATA(data.body.results, flattenData);
+            if (data?.status === 'success') {
+                this.flattenDATA(data?.body?.results, flattenData);
                 this.groupsData$ = of(flattenData);
                 this.setActiveGroupOnCreateStock();
             }

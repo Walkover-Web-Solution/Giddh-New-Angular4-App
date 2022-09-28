@@ -315,13 +315,13 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
         if (this.subscriptionPrice && this.UserCurrency) {
             this.companyService.getRazorPayOrderId(this.subscriptionPrice, this.UserCurrency).pipe(takeUntil(this.destroyed$)).subscribe((res: any) => {
                 this.isCreateAndSwitchCompanyInProcess = false;
-                if (res.status === 'success') {
-                    this.ChangePaidPlanAMT = res.body.amount;
-                    this.orderId = res.body.id;
+                if (res?.status === 'success') {
+                    this.ChangePaidPlanAMT = res.body?.amount;
+                    this.orderId = res.body?.id;
                     this.store.dispatch(this.companyActions.selectedPlan(plan));
                     this.razorpayAmount = this.getPayAmountForRazorPay(this.ChangePaidPlanAMT);
                     this.ngAfterViewInit();
-                } else {
+                } else if(res?.message) {
                     this.toasty.errorToast(res.message);
                 }
             });

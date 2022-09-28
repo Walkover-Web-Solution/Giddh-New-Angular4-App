@@ -223,9 +223,9 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
     public getParentGroupData() {
         // parentgroup data
         this._inventoryService.GetGroupsWithStocksFlatten().pipe(takeUntil(this.destroyed$)).subscribe(data => {
-            if (data.status === 'success') {
+            if (data?.status === 'success') {
                 let flattenData: IOption[] = [];
-                this.flattenDATA(data.body.results, flattenData);
+                this.flattenDATA(data.body?.results, flattenData);
                 this.groupsData$ = observableOf(flattenData);
             }
         });

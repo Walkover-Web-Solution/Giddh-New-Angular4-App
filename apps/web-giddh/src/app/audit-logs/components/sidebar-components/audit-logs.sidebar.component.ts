@@ -107,7 +107,7 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
         }), takeUntil(this.destroyed$));
 
         this.companyService.getComapnyUsers().pipe(takeUntil(this.destroyed$)).subscribe(data => {
-            if (data.status === 'success') {
+            if (data?.status === 'success') {
                 let users: IOption[] = [];
                 data.body.map((d) => {
                     users.push({ label: d.userName, value: d.userUniqueName, additional: d });
