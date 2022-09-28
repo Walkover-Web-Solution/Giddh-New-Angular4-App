@@ -215,7 +215,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     /** This will hold toggle buttons value and size */
     public bootstrapToggleSwitch = BootstrapToggleSwitch;
     /** This will hold isMobileNumberValid */
-    public isMobileNumberValid: boolean = true;
+    public isMobileNumberValid: boolean = false;
     /** This will hold mobile number field input  */
     public intl: any;
 
@@ -306,7 +306,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             }, 50);
         }
 
-        this.addAccountForm.get('activeGroupUniqueName').setValue(this.activeGroupUniqueName);
+        this.addAccountForm.get('activeGroupUniqueName')?.setValue(this.activeGroupUniqueName);
         this.accountsAction.mergeAccountResponse$.pipe(takeUntil(this.destroyed$)).subscribe(res => {
             this.selectedaccountForMerge = '';
         });
@@ -379,9 +379,9 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                                 let inheritedTaxes = flattenDeep(activeAccountTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((j: any) => j?.uniqueName);
                                 let allTaxes = applicableTaxes?.filter(f => inheritedTaxes.indexOf(f) === -1);
                                 // set value in tax group form
-                                this.taxGroupForm.setValue({ taxes: allTaxes });
+                                this.taxGroupForm?.setValue({ taxes: allTaxes });
                             } else {
-                                this.taxGroupForm.setValue({ taxes: applicableTaxes });
+                                this.taxGroupForm?.setValue({ taxes: applicableTaxes });
                             }
                             const notInheritedTax = differenceBy(taxes.map(p => {
                                 return { label: p.name, value: p?.uniqueName, additional: p };
@@ -391,7 +391,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                             return this.filterTaxesForDebtorCreditor(notInheritedTax);
                         } else {
                             // set value in tax group form
-                            this.taxGroupForm.setValue({ taxes: applicableTaxes });
+                            this.taxGroupForm?.setValue({ taxes: applicableTaxes });
 
                             const formattedTax = taxes.map(p => {
                                 return { label: p.name, value: p?.uniqueName, additional: p };
@@ -524,7 +524,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         for (let control of addresses.controls) {
             control.get('stateCode')?.patchValue(null);
             control.get('state').get('code')?.patchValue(null);
-            control.get('gstNumber').setValue("");
+            control.get('gstNumber')?.setValue("");
         }
     }
 
@@ -580,7 +580,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
     public getStateCode(gstForm: FormGroup, statesEle: ShSelectComponent) {
         let gstVal: string = gstForm.get('gstNumber').value;
-        gstForm.get('gstNumber').setValue(gstVal?.trim());
+        gstForm.get('gstNumber')?.setValue(gstVal?.trim());
         if (gstVal?.length) {
             if (gstVal?.length !== 15) {
                 gstForm.get('partyType').reset('NOT APPLICABLE');
@@ -641,7 +641,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
     public submit() {
         if (!this.addAccountForm.get('openingBalance').value) {
-            this.addAccountForm.get('openingBalance').setValue('0');
+            this.addAccountForm.get('openingBalance')?.setValue('0');
         }
         if (!this.addAccountForm.get('foreignOpeningBalance').value) {
             this.addAccountForm.get('foreignOpeningBalance')?.patchValue('0');
@@ -745,9 +745,9 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             this.store.dispatch(this._generalActions.resetStatesList());
             this.store.dispatch(this.commonActions.resetOnboardingForm());
             let phoneCode = event.additional;
-            this.addAccountForm.get('mobileCode').setValue(phoneCode);
+            this.addAccountForm.get('mobileCode')?.setValue(phoneCode);
             let currencyCode = this.countryCurrency[event.value];
-            this.addAccountForm.get('currency').setValue(currencyCode);
+            this.addAccountForm.get('currency')?.setValue(currencyCode);
             this.getStates(event.value);
             this.getOnboardingForm(event.value);
             this.toggleStateRequired();
@@ -1305,7 +1305,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      */
     public selectedBooleanCustomField(isChecked: string, index: number): void {
         const customField = this.addAccountForm.get('customFields') as FormArray;
-        customField.controls[index].get('value').setValue(isChecked);
+        customField.controls[index].get('value')?.setValue(isChecked);
     }
 
     /**
@@ -1876,8 +1876,10 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     if (phoneNumber?.length) {
                         if (this.intl?.isValidNumber()) {
                             validMsg?.classList?.remove("d-none");
+                            this.isMobileNumberValid = false;
                         } else {
                             input?.classList?.add("error");
+                            this.isMobileNumberValid = true;
                             let errorCode = this.intl?.getValidationError();
                             if (errorMsg && errorMap[errorCode]) {
                                 this._toaster.errorToast(this.localeData?.invalid_contact_number);
