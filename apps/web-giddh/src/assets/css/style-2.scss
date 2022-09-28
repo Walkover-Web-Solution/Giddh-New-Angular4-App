@@ -91,6 +91,42 @@ $custom-typography: mat-typography-config(
         position: relative !important;
     }
 }
+.mobile-number-wrapper {
+    input.error {
+        border: 1px solid var(--color-danger);
+    }
+    #init-contact-proforma-valid-msg {
+        color: var(--color-success-enable) !important;
+        font-size: 14px;
+    }
+    #init-contact-proforma-error-msg {
+        color: var(--color-danger);
+        font-size: 14px;
+    }
+    #init-contact-update-valid-msg {
+        color: var(--color-success-enable) !important;
+        font-size: 14px;
+    }
+    #init-contact-update-error-msg {
+        color: var(--color-danger);
+        font-size: 14px;
+    }
+    #init-contact-add-valid-msg {
+        color: var(--color-success-enable) !important;
+        font-size: 14px;
+    }
+    #init-contact-add-error-msg {
+        color: var(--color-danger);
+        font-size: 14px;
+    }
+    .display-mobile {
+        color: var(--color-gray);
+        font-size: 14px;
+    }
+    .mobile-number {
+        float: left;
+    }
+}
 @media screen and (max-width: 1366px) and (orientation: portrait) {
     .subscription-form-select {
         float: left !important;

@@ -64,9 +64,11 @@ span.dr-label {
     .input-group {
         .input-group-addon {
             border-left: 1px solid var(--color-iron) !important;
+            border-radius: 5px;
         }
         input {
             border-left: 1px solid var(--color-iron) !important;
+            border-radius: 5px;
             border-right: none;
             &:focus {
                 border-left: 1px solid var(--color-blue) !important;
@@ -98,7 +100,7 @@ form.gstin-form {
 }
 .add-address-default h3 {
     font-size: 16px;
-    color: var(--color-common-primary-text);
+    color: var(--color-nero);
 }
 
 .contact-form,
@@ -111,25 +113,30 @@ form.gstin-form {
     display: block;
 }
 
-#asidePaneFormTabs ul.nav.nav-tabs {
-    display: flex;
-    align-items: flex-start;
-    flex-direction: row-reverse;
-    justify-content: flex-end;
+.update-btn-zindex {
+    z-index: 0;
+    color: var(--color-secondary-button-text) !important;
+    border-color: var(--color-secondary-button-background) !important;
+    background-color: var(--color-secondary-button-background) !important;
+    &:hover {
+        border-color: var(--color-secondary-button-background-hover) !important;
+        background-color: var(--color-secondary-button-background-hover) !important;
+    }
 }
 
-.mobile-number-sh-select {
-    width: 90px;
-    margin-right: 10px;
+.wd100 {
+    width: 100% !important;
 }
 
-a.btn-remove {
-    padding: 3px 10px;
-    background-color: var(--color-white);
-    color: var(--color-nero);
-    border: 1px solid var(--color-iron);
+.width-select {
+    width: calc(100% - 112px);
 }
 
+.move-to-group {
+    .list-item {
+        border-bottom: 1px solid var(--color-iron);
+    }
+}
 .name-of-field {
     display: flex;
     align-items: center;
@@ -144,8 +151,12 @@ a.btn-remove {
         white-space: normal;
     }
 }
-@media (max-width: 767px) {
-    .upper-form .select-group {
-        margin-bottom: 15px;
-    }
+
+.contact-number-select {
+    width: 60px;
+    margin-right: 10px;
+}
+.merge-btn,
+.save-btn {
+    min-width: 100px;
 }

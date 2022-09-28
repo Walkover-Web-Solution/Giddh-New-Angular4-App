@@ -108,5 +108,5 @@
     "confirm_delete_file": "Are you sure you want to delete the attached file?",
     "enter_amount": "Please enter deposit amount",
     "voucher_number_required": "Voucher number is mandatory.",
-     "invalid_contact_number": "Invalid Contact number"
+    "invalid_contact_number": "Invalid Contact number"
 }

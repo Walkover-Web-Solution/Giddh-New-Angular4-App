@@ -458,3 +458,6 @@ export enum BootstrapToggleSwitch {
 }
 
 export const MOBILE_NUMBER_UTIL_URL = 'https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.17/js/utils.js';
+export const MOBILE_NUMBER_SELF_URL = 'https://api.db-ip.com/v2/free/self';
+export const MOBILE_NUMBER_IP_ADDRESS_URL = 'http://ip-api.com/json/';
+export const MOBILE_NUMBER_ADDRESS_JSON_URL = 'https://ipinfo.io/';

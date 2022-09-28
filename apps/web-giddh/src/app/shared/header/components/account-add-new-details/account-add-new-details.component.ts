@@ -26,10 +26,9 @@ import { IForceClear } from "../../../../models/api-models/Sales";
 import { CountryRequest, OnboardingFormRequest } from "../../../../models/api-models/Common";
 import { CommonActions } from '../../../../actions/common.actions';
 import { GeneralActions } from "../../../../actions/general/general.actions";
-import { parsePhoneNumberFromString, CountryCode } from 'libphonenumber-js/min';
 import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
 import { GroupWithAccountsAction } from 'apps/web-giddh/src/app/actions/groupwithaccounts.actions';
-import { API_COUNT_LIMIT, BootstrapToggleSwitch, EMAIL_VALIDATION_REGEX, MOBILE_NUMBER_UTIL_URL } from 'apps/web-giddh/src/app/app.constant';
+import { API_COUNT_LIMIT, BootstrapToggleSwitch, EMAIL_VALIDATION_REGEX, MOBILE_NUMBER_ADDRESS_JSON_URL, MOBILE_NUMBER_IP_ADDRESS_URL, MOBILE_NUMBER_SELF_URL, MOBILE_NUMBER_UTIL_URL } from 'apps/web-giddh/src/app/app.constant';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
@@ -37,6 +36,9 @@ import { clone, cloneDeep, uniqBy } from 'apps/web-giddh/src/app/lodash-optimize
 import { CustomFieldsService } from 'apps/web-giddh/src/app/services/custom-fields.service';
 import { FieldTypes } from 'apps/web-giddh/src/app/custom-fields/custom-fields.constant';
 import { HttpClient } from '@angular/common/http';
+
+/** Declare of window */
+declare var window;
 @Component({
     selector: 'account-add-new-details',
     templateUrl: './account-add-new-details.component.html',
@@ -173,8 +175,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public isMobileNumberValid: boolean = false;
     /** This will hold mobile number field input  */
     public intl: any;
-    /** True if we need to destroy mobile number field */
-    public showMobileNumberError: boolean = false;
 
     constructor(
         private _fb: FormBuilder,
@@ -1235,21 +1235,24 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
      * @memberof AccountAddNewDetailsComponent
      */
     public onlyPhoneNumber(): void {
-        const input = document.getElementById('init-contact-add');
-        this.intl = new window['intlTelInput'](input, {
-            nationalMode: false,
-            utilsScript: MOBILE_NUMBER_UTIL_URL,
-            autoHideDialCode: false,
-            separateDialCode: false,
-            initialCountry: this.activeCompany?.countryV2?.alpha2CountryCode.toLowerCase(),
-            geoIpLookup: (success, failure) => {
-                let countryCode = this.activeCompany?.countryV2?.alpha2CountryCode.toLowerCase();
-                if (!countryCode) {
-                    const fetchIPApi = this.http.get<any>('https://api.db-ip.com/v2/free/self');
+        let input = document.getElementById('init-contact-add');
+        const errorMsg = document.querySelector("#init-contact-add-error-msg");
+        const validMsg = document.querySelector("#init-contact-add-valid-msg");
+        let errorMap = [this.localeData?.invalid_contact_number, this.commonLocaleData?.app_invalid_country_code, this.commonLocaleData?.app_invalid_contact_too_short, this.commonLocaleData?.app_invalid_contact_too_long, this.localeData?.invalid_contact_number];
+        if (window['intlTelInput'] && input) {
+            this.intl = window['intlTelInput'](input, {
+                nationalMode: true,
+                utilsScript: MOBILE_NUMBER_UTIL_URL,
+                autoHideDialCode: false,
+                separateDialCode: false,
+                initialCountry: 'auto',
+                geoIpLookup: (success, failure) => {
+                    let countryCode = 'in';
+                    const fetchIPApi = this.http.get<any>(MOBILE_NUMBER_SELF_URL);
                     fetchIPApi.subscribe(
                         (res) => {
                             if (res?.response?.ipAddress) {
-                                const fetchCountryByIpApi = this.http.get<any>('http://ip-api.com/json/${res.response.ipAddress');
+                                const fetchCountryByIpApi = this.http.get<any>(MOBILE_NUMBER_IP_ADDRESS_URL + `${ res.response.ipAddress}`);
                                 fetchCountryByIpApi.subscribe(
                                     (fetchCountryByIpApiRes) => {
                                         if (fetchCountryByIpApiRes?.response?.countryCode) {
@@ -1259,7 +1262,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                                         }
                                     },
                                     (fetchCountryByIpApiErr) => {
-                                        const fetchCountryByIpInfoApi = this.http.get<any>('https://ipinfo.io/${res.response.ipAddress}/json');
+                                        const fetchCountryByIpInfoApi = this.http.get<any>(MOBILE_NUMBER_ADDRESS_JSON_URL + `${res.response.ipAddress}`);
 
                                         fetchCountryByIpInfoApi.subscribe(
                                             (fetchCountryByIpInfoApiRes) => {
@@ -1283,17 +1286,35 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                             return success(countryCode);
                         }
                     );
-                } else {
-                    return success(countryCode);
+                },
+            });
+            let reset = () => {
+                input?.classList?.remove("error");
+                if (errorMsg && validMsg) {
+                    errorMsg.innerHTML = "";
+                    errorMsg.classList.add("d-none");
+                    validMsg.classList.add("d-none");
                 }
-            },
-        });
-        input.addEventListener('blur', () => {
-            if (!this.intl?.isValidNumber()) {
-                this.showMobileNumberError = true;
-            } else {
-                this.showMobileNumberError = false;
-            }
-        });
+            };
+            input.addEventListener('blur', () => {
+                let phoneNumber = this.intl?.getNumber();
+                reset();
+                if (input) {
+                    if (phoneNumber?.length) {
+                        if (this.intl?.isValidNumber()) {
+                            validMsg?.classList?.remove("d-none");
+                        } else {
+                            input?.classList?.add("error");
+                            let errorCode = this.intl?.getValidationError();
+                            if (errorMsg && errorMap[errorCode]) {
+                                this._toaster.errorToast(this.localeData?.invalid_contact_number);
+                                errorMsg.innerHTML = errorMap[errorCode];
+                                errorMsg.classList.remove("d-none");
+                            }
+                        }
+                    }
+                }
+            });
+        }
     }
 }
