@@ -32,7 +32,7 @@
                                     <div class="btn-group pull-right">
                                         <button
                                             mat-raised-button
-                                            *ngIf="activeTab == 'customer'"
+                                            *ngIf="activeTab == 'customer' && sundryDebtorsAccounts?.length"
                                             class="btn-sky-blue mr-0"
                                             (click)="openAddAndManage('customer')"
                                         >
@@ -40,7 +40,7 @@
                                         </button>
                                         <button
                                             mat-raised-button
-                                            *ngIf="activeTab == 'vendor'"
+                                            *ngIf="activeTab == 'vendor' && sundryCreditorsAccounts?.length"
                                             class="btn-sky-blue mr-0"
                                             (click)="openAddAndManage('vendor')"
                                         >
@@ -95,6 +95,7 @@
                                     </div>
                                 </div>
                                 <form
+                                    *ngIf="sundryCreditorsAccounts?.length || sundryDebtorsAccounts?.length"
                                     #invoiceForm="ngForm"
                                     novalidate
                                     class="form-inline input-grp-date-range-picker position-relative"
@@ -238,7 +239,7 @@
                                 <div class="btn-group pull-right on-mobile-view mr-t1">
                                     <button
                                         mat-raised-button
-                                        *ngIf="activeTab == 'customer'"
+                                        *ngIf="activeTab == 'customer' && sundryDebtorsAccounts?.length"
                                         class="btn-sky-blue mr-r05 w-100"
                                         (click)="openAddAndManage('customer')"
                                     >
@@ -246,7 +247,7 @@
                                     </button>
                                     <button
                                         mat-raised-button
-                                        *ngIf="activeTab == 'vendor'"
+                                        *ngIf="activeTab == 'vendor' && sundryCreditorsAccounts?.length"
                                         class="btn-sky-blue w-100"
                                         (click)="openAddAndManage('vendor')"
                                     >
@@ -416,14 +417,15 @@
                             </div>
                         </div>
                     </div>
-
-                    <div class="text-center top-aging-table-top separate-top-aging pd-1 mr-t1" *ngIf="isMobileScreen">
+                    <div
+                        class="text-center top-aging-table-top separate-top-aging pd-1 mr-t1"
+                        *ngIf="isMobileScreen && (sundryDebtorsAccounts?.length || sundryCreditorsAccounts?.length)"
+                    >
                         <p (click)="showGiddhDatepicker($event)">
                             <strong>{{ commonLocaleData?.app_due_as_on }} </strong>
                             <span *ngIf="selectedDateRangeUi"> {{ selectedDateRangeUi }} </span>
                         </p>
                     </div>
-
                     <div class="contact-main customer-page on-mobile-view">
                         <div class="pd-b2 mr-b1">
                             <div>
@@ -1511,7 +1513,27 @@
                 (activeTab === 'vendor' && !sundryCreditorsAccounts?.length)
             "
         >
-            <no-data [secondaryMessageClass]="'p-0'"></no-data>
+            <div class="align-item-center">
+                <img class="customer-img" src="{{ imgPath }}customer-vendor/stock-photo.png" alt="" />
+                <div class="btn-group pull-right">
+                    <button
+                        mat-raised-button
+                        *ngIf="activeTab == 'customer'"
+                        class="btn-sky-blue mr-0"
+                        (click)="openAddAndManage('customer')"
+                    >
+                        {{ localeData?.new_customer }}
+                    </button>
+                    <button
+                        mat-raised-button
+                        *ngIf="activeTab == 'vendor'"
+                        class="btn-sky-blue mr-0"
+                        (click)="openAddAndManage('vendor')"
+                    >
+                        {{ localeData?.new_vendor }}
+                    </button>
+                </div>
+            </div>
         </div>
     </ng-template>
 
