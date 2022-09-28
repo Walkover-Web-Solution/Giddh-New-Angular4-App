@@ -3870,17 +3870,17 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         } else if (output.type === 'start') {
             this.isFileUploading = true;
         } else if (output.type === 'done') {
-            if (output.file.response.status === 'success') {
+            if (output.file.response?.status === 'success') {
                 this.isFileUploading = false;
-                this.invFormData.entries[0].attachedFile = output.file.response.body?.uniqueName;
-                this.invFormData.entries[0].attachedFileName = output.file.response.body?.name;
+                this.invFormData.entries[0].attachedFile = output.file.response?.body?.uniqueName;
+                this.invFormData.entries[0].attachedFileName = output.file.response?.body?.name;
                 this._toasty.successToast(this.localeData?.file_uploaded);
             } else {
                 this.isFileUploading = false;
                 this.invFormData.entries[0].attachedFile = '';
                 this.invFormData.entries[0].attachedFileName = '';
                 this.selectedFileName = '';
-                this._toasty.errorToast(output.file.response.message);
+                this._toasty.errorToast(output.file.response?.message);
             }
         }
     }
@@ -4251,16 +4251,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @param invoiceForm
      */
     private actionsAfterVoucherUpdate(response: BaseResponse<VoucherClass, GenericRequestForGenerateSCD> | BaseResponse<any, PurchaseRecordRequest>, invoiceForm: NgForm) {
-        if (response.status === 'success' && response.body) {
+        if (response?.status === 'success' && response?.body) {
             // To clear receipts voucher store
             if (this.isSalesInvoice || this.isCashInvoice) {
                 this.store.dispatch(this.invoiceReceiptActions.ResetVoucherDetails());
-                // To get re-assign receipts voucher store
-                // this.store.dispatch(this.invoiceReceiptActions.getVoucherDetailsV4(response.body.account?.uniqueName, {
-                //     invoiceNumber: response.body.number,
-                //     voucherType: response.body.type,
-                //     uniqueName: (this.voucherApiVersion === 2) ? response.body.uniqueName : undefined
-                // }));
             }
             // reset form and other
             this.resetInvoiceForm(invoiceForm);
@@ -4289,7 +4283,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         } else {
             this.advanceReceiptAdjustmentData = this.adjustmentUtilityService.getVoucherAdjustmentObject(this.advanceReceiptAdjustmentData, this.selectedVoucherType);
             this.startLoader(false);
-            this._toasty.errorToast(response.message, response.code);
+            this._toasty.errorToast(response?.message, response?.code);
         }
         this.updateAccount = false;
     }
@@ -5856,7 +5850,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @memberof ProformaInvoiceComponent
      */
     private handleGenerateResponse(response: BaseResponse<any, GenericRequestForGenerateSCD | PurchaseRecordRequest>, form: NgForm): void {
-        if (response.status === 'success') {
+        if (response?.status === 'success') {
             this.customerAcList$ = observableOf(orderBy(this.defaultCustomerSuggestions, 'label'));
             this.salesAccounts$ = observableOf(orderBy(this.defaultItemSuggestions, 'label'));
             // reset form and other
@@ -5865,7 +5859,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
             this.newVoucherUniqueName = response?.body?.uniqueName;
 
-            if (response.body.account) {
+            if (response.body?.account) {
                 this.voucherNumber = response.body.number;
                 this.invoiceNo = this.voucherNumber;
                 this.accountUniqueName = response.body.account?.uniqueName;
@@ -5889,7 +5883,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.postResponseAction(this.invoiceNo);
         } else {
             this.startLoader(false);
-            this._toasty.errorToast(response.message, response.code);
+            this._toasty.errorToast(response?.message, response?.code);
             return;
         }
         this.updateAccount = false;

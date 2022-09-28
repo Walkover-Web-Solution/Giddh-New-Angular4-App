@@ -23,7 +23,7 @@ export class GiddhErrorHandler {
     public HandleCatch<TResponce, TRequest>(r: HttpErrorResponse, request?: any, queryString?: any): Observable<BaseResponse<TResponce, TRequest>> {
         let data: BaseResponse<TResponce, TRequest> = new BaseResponse<TResponce, TRequest>();
         // logout if invalid session detacted
-        if (r.status === 0) {
+        if (r?.status === 0) {
             data = {
                 body: null,
                 code: 'Internal Error',
@@ -34,18 +34,18 @@ export class GiddhErrorHandler {
             data.queryString = queryString;
         } else {
             this.logApiError(r);
-            if (r.status === 500 ||
-                r.status === 501 ||
-                r.status === 502 ||
-                r.status === 503 ||
-                r.status === 504 ||
-                r.status === 505 ||
-                r.status === 506 ||
-                r.status === 507 ||
-                r.status === 508 ||
-                r.status === 509 ||
-                r.status === 510 ||
-                r.status === 511
+            if (r?.status === 500 ||
+                r?.status === 501 ||
+                r?.status === 502 ||
+                r?.status === 503 ||
+                r?.status === 504 ||
+                r?.status === 505 ||
+                r?.status === 506 ||
+                r?.status === 507 ||
+                r?.status === 508 ||
+                r?.status === 509 ||
+                r?.status === 510 ||
+                r?.status === 511
             ) {
                 data.status = 'error';
                 data.message = 'Something went wrong';
@@ -81,10 +81,10 @@ export class GiddhErrorHandler {
 
         if(typeof data === "string") {
             data = {
-                statusCode: r.status
+                statusCode: r?.status
             };
         } else {
-            data.statusCode = r.status;
+            data.statusCode = r?.status;
         }
 
         return new Observable<BaseResponse<TResponce, TRequest>>((o) => {
@@ -99,12 +99,12 @@ export class GiddhErrorHandler {
      * @memberof GiddhErrorHandler
      */
     public logApiError(response: HttpErrorResponse): void {
-        const apiError = response.error as any;
-        const errorCode = apiError.code ? apiError.code : response.status;
-        const errorMessage = apiError.message ? apiError.message : 'Bad Gateway';
+        const apiError = response?.error as any;
+        const errorCode = apiError?.code ? apiError?.code : response?.status;
+        const errorMessage = apiError?.message ? apiError?.message : 'Bad Gateway';
         const requestObject = {
             apiErrorMessage: `Code: ${errorCode}, Message: ${errorMessage}`,
-            apiUrl: response.url,
+            apiUrl: response?.url,
             uiPageUrl: this.router.url ? this.router.url?.replace(/\/ledger\/.*/, '/ledger/account_unique_name') : '',
         };
         const url = `${this.config ? this.config.apiUrl : ''}${ERROR_LOG_API}`;
@@ -115,7 +115,7 @@ export class GiddhErrorHandler {
 export function HandleCatch<TResponce, TRequest>(r: any, request?: any, queryString?: any): Observable<BaseResponse<TResponce, TRequest>> {
     let data: BaseResponse<TResponce, TRequest> = new BaseResponse<TResponce, TRequest>();
     // logout if invalid session detacted
-    if (r.status === 0) {
+    if (r?.status === 0) {
         data = {
             body: null,
             code: 'Internal Error',
@@ -125,13 +125,13 @@ export function HandleCatch<TResponce, TRequest>(r: any, request?: any, queryStr
         data.request = request;
         data.queryString = queryString;
     } else {
-        if (r.text() === '') {
+        if (r?.text() === '') {
             data.status = 'error';
             data.message = 'Something went wrong';
             data.body = null;
             data.code = 'Internal Error';
         } else {
-            data = r.json();
+            data = r?.json();
             if (data.code === 'SESSION_EXPIRED_OR_INVALID') {
                 this.store.dispatch({ type: 'LoginOut' });
             }

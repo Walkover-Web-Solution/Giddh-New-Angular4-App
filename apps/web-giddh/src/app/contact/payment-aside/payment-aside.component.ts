@@ -289,13 +289,13 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
             }
         };
         this.companyService.getOTP(request).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
-            if (res.status === 'success') {
+            if (res?.status === 'success') {
                 this.OTPsent = true;
             } else {
-                if (res.status === 'error' && res.code === 'BANK_ERROR') {
-                    this.toaster.showSnackBar("warning", res.message);
+                if (res?.status === 'error' && res?.code === 'BANK_ERROR') {
+                    this.toaster.showSnackBar("warning", res?.message);
                 } else {
-                    this.toaster.showSnackBar("error", res.message);
+                    this.toaster.showSnackBar("error", res?.message);
                 }
             }
         });
@@ -312,14 +312,13 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         this.receivedOtp = null;
         this.companyService.resendOtp(this.companyUniqueName, this.selectedBankUrn, this.paymentRequestId, this.selectedBankUniqueName).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response && response.status === 'success') {
-
                 this.isPayClicked = true;
                 if (response.body && response.body.message) {
                     this.toaster.showSnackBar("success", response.body.message);
                     this.otpReceiverNameMessage = response.body.message;
                     this.paymentRequestId = response.body.requestId;
                 }
-            } else if (response.status === 'error') {
+            } else if (response?.status === 'error') {
                 this.toaster.showSnackBar("error", response.message, response.code);
             }
         });
@@ -341,10 +340,10 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
                 this.closePaymentModel(true);
                 this.openModalWithClass(this.successTemplate);
             } else {
-                if (res.status === 'error' && res.code === 'BANK_ERROR') {
-                    this.toaster.showSnackBar("warning", res.message);
+                if (res?.status === 'error' && res?.code === 'BANK_ERROR') {
+                    this.toaster.showSnackBar("warning", res?.message);
                 } else {
-                    this.toaster.showSnackBar("error", res.message, res.code);
+                    this.toaster.showSnackBar("error", res?.message, res?.code);
                 }
             }
             this.isRequestInProcess = false;
@@ -464,7 +463,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
                     this.otpReceiverNameMessage = response.body.message;
                     this.paymentRequestId = response.body.requestId;
                 }
-            } else if (response.status === 'error') {
+            } else if (response?.status === 'error') {
                 this.isPayClicked = false;
                 this.toaster.showSnackBar("error", response.message, response.code);
                 this.paymentRequestId = '';

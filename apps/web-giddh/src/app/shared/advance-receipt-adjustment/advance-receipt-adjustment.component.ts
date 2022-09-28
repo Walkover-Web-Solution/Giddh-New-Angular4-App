@@ -325,7 +325,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
             }
 
             apiCallObservable.pipe(takeUntil(this.destroyed$)).subscribe(res => {
-                if (res.status === 'success') {
+                if (res?.status === 'success') {
                     this.adjustVoucherOptions = [];
                     if (this.adjustVoucherForm && this.adjustVoucherForm.adjustments) {
                         this.adjustVoucherForm.adjustments.forEach(item => {

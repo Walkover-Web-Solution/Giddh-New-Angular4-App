@@ -825,10 +825,10 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
         obj.branchUniqueName = this.currentBranchAndWarehouse.branch;
         this.inventoryService.downloadAllInventoryReports(obj).pipe(takeUntil(this.destroyed$))
             .subscribe(res => {
-                if (res.status === 'success') {
-                    this._toasty.infoToast(res.body);
+                if (res?.status === 'success') {
+                    this._toasty.infoToast(res?.body);
                 } else {
-                    this._toasty.errorToast(res.message);
+                    this._toasty.errorToast(res?.message);
                 }
             });
     }

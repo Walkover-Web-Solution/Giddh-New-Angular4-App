@@ -166,10 +166,10 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
         });
         this.store.dispatch(this.loginAction.FetchUserDetails());
         this.loginService.GetAuthKey().pipe(takeUntil(this.destroyed$)).subscribe(a => {
-            if (a.status === 'success') {
-                this.userAuthKey = a.body.authKey;
+            if (a?.status === 'success') {
+                this.userAuthKey = a?.body?.authKey;
             } else {
-                this.toasty.errorToast(a.message, a.status);
+                this.toasty.errorToast(a?.message, a?.status);
             }
         });
         this.store.pipe(select(s => s.subscriptions.companies), takeUntil(this.destroyed$))
@@ -253,20 +253,20 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
 
     public changeTwoWayAuth() {
         this.loginService.SetSettings({ authenticateTwoWay: this.twoWayAuth }).pipe(takeUntil(this.destroyed$)).subscribe(res => {
-            if (res.status === 'success') {
+            if (res?.status === 'success') {
                 this.toasty.successToast(res.body);
             } else {
-                this.toasty.errorToast(res.message);
+                this.toasty.errorToast(res?.message);
             }
         });
     }
 
     public regenerateKey() {
         this.loginService.RegenerateAuthKey().pipe(takeUntil(this.destroyed$)).subscribe(a => {
-            if (a.status === 'success') {
+            if (a?.status === 'success') {
                 this.userAuthKey = a.body.authKey;
             } else {
-                this.toasty.errorToast(a.message, a.status);
+                this.toasty.errorToast(a?.message, a?.status);
             }
         });
     }

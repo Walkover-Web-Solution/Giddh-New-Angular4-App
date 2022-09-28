@@ -1693,11 +1693,11 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     this._accountService.GetApplyDiscount(accountDetails?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                         this.selectedDiscounts = [];
                         this.forceClearDiscount$ = observableOf({ status: true });
-                        if (response.status === 'success') {
+                        if (response?.status === 'success') {
                             if (response.body) {
                                 if (response.body[accountDetails?.uniqueName]) {
                                     let list = response.body[accountDetails?.uniqueName];
-                                    Object.keys(list).forEach(key => {
+                                    Object.keys(list)?.forEach(key => {
                                         let UniqueName = list[key]['discount']['uniqueName'];
                                         this.selectedDiscounts.push(UniqueName);
                                     });
