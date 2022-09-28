@@ -5249,7 +5249,8 @@
                                         [disabled]="
                                             isFileUploading ||
                                             !hasVoucherEntry ||
-                                            invoiceForm?.controls['message2']?.errors?.maxlength
+                                            invoiceForm?.controls['message2']?.errors?.maxlength ||
+                                            isMobileNumberInvalid
                                         "
                                         (click)="doAction(0); triggerSubmitInvoiceForm(invoiceForm, false)"
                                         class="btn btn-default"
@@ -5267,7 +5268,9 @@
                                     <button
                                         type="button"
                                         [disabled]="
-                                            !hasVoucherEntry || invoiceForm?.controls['message2']?.errors?.maxlength
+                                            !hasVoucherEntry ||
+                                            invoiceForm?.controls['message2']?.errors?.maxlength ||
+                                            isMobileNumberInvalid
                                         "
                                         (click)="doAction(0); triggerSubmitInvoiceForm(invoiceForm, true)"
                                         class="btn btn-default"
@@ -5283,13 +5286,17 @@
                                         [dropup]="isDropup"
                                         dropdown
                                         [isDisabled]="
-                                            !hasVoucherEntry || invoiceForm?.controls['message2']?.errors?.maxlength
+                                            !hasVoucherEntry ||
+                                            invoiceForm?.controls['message2']?.errors?.maxlength ||
+                                            isMobileNumberInvalid
                                         "
                                     >
                                         <button
                                             type="button"
                                             [disabled]="
-                                                !hasVoucherEntry || invoiceForm?.controls['message2']?.errors?.maxlength
+                                                !hasVoucherEntry ||
+                                                invoiceForm?.controls['message2']?.errors?.maxlength ||
+                                                isMobileNumberInvalid
                                             "
                                             (click)="doAction(0); triggerSubmitInvoiceForm(invoiceForm, false)"
                                             class="btn btn-default generate-invoice"
@@ -5423,7 +5430,8 @@
                                     [disabled]="
                                         isFileUploading ||
                                         !hasVoucherEntry ||
-                                        invoiceForm?.controls['message2']?.errors?.maxlength
+                                        invoiceForm?.controls['message2']?.errors?.maxlength ||
+                                        isMobileNumberInvalid
                                     "
                                     (click)="submitUpdateForm(invoiceForm)"
                                 >
