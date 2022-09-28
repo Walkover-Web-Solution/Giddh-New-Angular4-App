@@ -682,11 +682,11 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
                 this.groupExportLedgerBodyRequest.groupUniqueName = grpUniqueName;
                 this.groupExportLedgerBodyRequest.sort = response.body.sort ? 'ASC' : 'DESC';
                 this.ledgerService.groupLedgerExport(this.groupExportLedgerBodyRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                    if (response.status === 'success') {
+                    if (response?.status === 'success') {
                         this.router.navigate(["/pages/downloads"]);
-                        this.toaster.showSnackBar("success", response.body);
+                        this.toaster.showSnackBar("success", response?.body);
                     } else {
-                        this.toaster.showSnackBar("error", response.message, response.code);
+                        this.toaster.showSnackBar("error", response?.message, response?.code);
                     }
                 });
             }

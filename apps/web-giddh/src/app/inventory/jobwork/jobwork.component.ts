@@ -323,7 +323,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
     public updateDescription(txn: any) {
         this.updateDescriptionIdx = null;
         this.inventoryService.updateDescription(txn.uniqueName, txn.description).pipe(takeUntil(this.destroyed$)).subscribe(res => {
-            if (res.status === 'success') {
+            if (res?.status === 'success') {
                 this.updateDescriptionIdx = null;
             } else {
                 txn.description = null;
@@ -637,10 +637,10 @@ export class JobworkComponent implements OnInit, OnDestroy {
         this.inventoryService.downloadJobwork(this.uniqueName, this.type, format, this.startDate, this.endDate, this.filter)
             .pipe(takeUntil(this.destroyed$))
             .subscribe(d => {
-                if (d.status === 'success') {
-                    this._toasty.infoToast(d.body);
+                if (d?.status === 'success') {
+                    this._toasty.infoToast(d?.body);
                 } else {
-                    this._toasty.errorToast(d.message);
+                    this._toasty.errorToast(d?.message);
                 }
             });
     }

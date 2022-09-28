@@ -58,8 +58,8 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
         pageNumber = pageNumber ? pageNumber : 1;
         refresh = refresh ? refresh : 'false';
         this.contactService.GetContacts(fromDate, toDate, groupUniqueName, pageNumber, refresh, count, query, sortBy, order).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
-            if (res.status === 'success') {
-                this.bankAccounts = res.body.results;
+            if (res?.status === 'success') {
+                this.bankAccounts = res?.body?.results;
             }
             this.isLoading = false;
         });

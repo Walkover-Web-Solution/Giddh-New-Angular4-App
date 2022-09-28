@@ -532,8 +532,8 @@ export class LedgerService {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.get(this.config.apiUrl + LEDGER_API.GET_UNPAID_INVOICE_LIST
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            ?.replace(':accountUniqueName', encodeURIComponent(model.accountUniqueName))
-            ?.replace(':accStatus', encodeURIComponent(model.status))
+            ?.replace(':accountUniqueName', encodeURIComponent(model?.accountUniqueName))
+            ?.replace(':accStatus', encodeURIComponent(model?.status))
         ).pipe(
             map((res) => {
                 let data: BaseResponse<IUnpaidInvoiceListResponse, any> = res;

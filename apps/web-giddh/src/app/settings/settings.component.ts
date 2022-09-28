@@ -238,11 +238,10 @@ export class SettingsComponent implements OnInit, OnDestroy {
                 "refresh_token": p.refresh_token
             };
             this._authenticationService.saveGmailToken(dataToSave).pipe(take(1)).subscribe((res) => {
-
-                if (res.status === 'success') {
+                if (res?.status === 'success') {
                     this._toast.successToast(this.localeData?.gmail_account_added, this.commonLocaleData?.app_success);
                 } else {
-                    this._toast.errorToast(res.message, res.code);
+                    this._toast.errorToast(res?.message, res?.code);
                 }
                 this.store.dispatch(this.settingsIntegrationActions.GetGmailIntegrationStatus());
             });

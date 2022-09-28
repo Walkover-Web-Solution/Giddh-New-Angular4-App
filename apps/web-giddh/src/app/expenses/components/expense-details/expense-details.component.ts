@@ -365,12 +365,12 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
 
         this.expenseService.actionPettycashReports(actionType, { ledgerRequest }).pipe(takeUntil(this.destroyed$)).subscribe(res => {
             this.approveEntryRequestInProcess = false;
-            if (res.status === 'success') {
+            if (res?.status === 'success') {
                 this.hideApproveConfirmPopup(false);
                 this.toaster.showSnackBar("success", res?.body);
                 this.processNextRecord();
             } else {
-                this.toaster.showSnackBar("error", res.message);
+                this.toaster.showSnackBar("error", res?.message);
                 this.approveEntryRequestInProcess = false;
             }
         }, (error => {
@@ -433,17 +433,17 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
         } else if (output.type === 'start') {
             this.imgUploadInprogress = true;
         } else if (output.type === 'done') {
-            if (output.file.response.status === 'success') {
-                this.signatureSrc = ApiUrl + 'company/' + this.companyUniqueName + '/image/' + output.file.response.body?.uniqueName;
+            if (output.file.response?.status === 'success') {
+                this.signatureSrc = ApiUrl + 'company/' + this.companyUniqueName + '/image/' + output.file.response?.body?.uniqueName;
                 let img = {
-                    src: ApiUrl + 'company/' + this.companyUniqueName + '/image/' + output.file.response.body?.uniqueName
+                    src: ApiUrl + 'company/' + this.companyUniqueName + '/image/' + output.file.response?.body?.uniqueName
                 }
-                this.DownloadAttachedImgResponse.push(output.file.response.body);
-                this.imgAttachedFileName = output.file.response.body.name;
+                this.DownloadAttachedImgResponse.push(output.file.response?.body);
+                this.imgAttachedFileName = output.file.response?.body?.name;
                 this.imageURL.push(img);
                 this.toaster.showSnackBar("success", this.localeData?.file_upload_success);
             } else {
-                this.toaster.showSnackBar("error", output.file.response.message, output.file.response.code);
+                this.toaster.showSnackBar("error", output.file.response?.message, output.file.response?.code);
             }
             this.imgUploadInprogress = false;
             this.imgAttached = true;

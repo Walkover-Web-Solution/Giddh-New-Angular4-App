@@ -76,6 +76,9 @@ thead th {
     border-radius: 30px;
     border: 1px solid var(--color-primary-button-border);
 }
+.min-width-130 {
+    min-width: 130px !important;
+}
 @media (max-width: 768px) {
     .debtors-table {
         margin-bottom: 30px;

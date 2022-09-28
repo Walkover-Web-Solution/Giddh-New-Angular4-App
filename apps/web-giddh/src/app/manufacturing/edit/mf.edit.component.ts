@@ -474,9 +474,8 @@ export class MfEditComponent implements OnInit, OnDestroy {
     public getStockUnit(selectedItem, itemQuantity) {
         if (selectedItem && itemQuantity && Number(itemQuantity) > 0) {
             this._inventoryService.GetStockUniqueNameWithDetail(selectedItem).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
-
-                if (res.status === 'success') {
-                    let unitCode = res.body.stockUnit.code;
+                if (res?.status === 'success') {
+                    let unitCode = res.body?.stockUnit?.code;
 
                     let data = {
                         stockUniqueName: selectedItem,
@@ -490,8 +489,8 @@ export class MfEditComponent implements OnInit, OnDestroy {
                     this.linkedStocks.stockUnitCode = unitCode;
 
                     this._inventoryService.GetRateForStoke(selectedItem, data).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
-                        if (response.status === 'success') {
-                            this.linkedStocks.rate = cloneDeep(response.body.rate);
+                        if (response?.status === 'success') {
+                            this.linkedStocks.rate = cloneDeep(response.body?.rate);
                             setTimeout(() => {
                                 this.addConsumption(this.linkedStocks);
                             }, 10);

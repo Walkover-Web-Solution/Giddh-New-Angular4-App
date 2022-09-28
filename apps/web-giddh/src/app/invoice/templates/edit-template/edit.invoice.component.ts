@@ -810,13 +810,13 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
             }
 
             this._invoiceTemplatesService.saveTemplates(data).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
-                if (res.status === 'success') {
+                if (res?.status === 'success') {
                     this._toasty.successToast('Template Saved Successfully.');
                     this.templateModal.hide();
                     this.showtemplateModal = false;
                     this.store.dispatch(this.invoiceActions.getAllCreatedTemplates(this.templateType));
                 } else {
-                    this._toasty.errorToast(res.message, res.code);
+                    this._toasty.errorToast(res?.message, res?.code);
                 }
             });
         } else {
@@ -858,7 +858,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
             }
             data = this.newLineToBR(data);
             this._invoiceTemplatesService.updateTemplate(data?.uniqueName, data).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
-                if (res.status === 'success') {
+                if (res?.status === 'success') {
                     this._toasty.successToast('Template Updated Successfully.');
                     this.confirmationFlag = null;
                     this.selectedTemplateUniqueName = null;
@@ -875,7 +875,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
                     this.showtemplateModal = false;
                     this.store.dispatch(this.invoiceActions.getAllCreatedTemplates(this.templateType));
                 } else {
-                    this._toasty.errorToast(res.message, res.code);
+                    this._toasty.errorToast(res?.message, res?.code);
                 }
             });
         } else {

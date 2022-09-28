@@ -303,9 +303,9 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
      */
     public getPurchaseAccounts(): void {
         this.salesService.getAccountsWithCurrency('operatingcost, indirectexpenses').pipe(takeUntil(this.destroyed$)).subscribe(data => {
-            if (data.status === 'success') {
+            if (data?.status === 'success') {
                 let purchaseAccounts: IOption[] = [];
-                data.body.results.map(account => {
+                data.body?.results.map(account => {
                     purchaseAccounts.push({ label: `${account.name} (${account?.uniqueName})`, value: account?.uniqueName, additional: account });
                 });
 
@@ -325,9 +325,9 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
      */
     public getSalesAccounts(): void {
         this.salesService.getAccountsWithCurrency('revenuefromoperations, otherincome').pipe(takeUntil(this.destroyed$)).subscribe(data => {
-            if (data.status === 'success') {
+            if (data?.status === 'success') {
                 let salesAccounts: IOption[] = [];
-                data.body.results.map(account => {
+                data.body?.results?.map(account => {
                     salesAccounts.push({ label: `${account.name} (${account?.uniqueName})`, value: account?.uniqueName, additional: account });
                 });
 
