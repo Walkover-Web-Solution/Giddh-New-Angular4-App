@@ -3,6 +3,11 @@
     padding: 2px 10px;
 }
 
+.customer-img {
+    height: 360px;
+    width: 489px;
+}
+
 .dis {
     display: flex;
 }
@@ -266,11 +271,19 @@ th.mat-header-cell:first-of-type {
             }
         }
     }
+    .customer-img {
+        height: 360px;
+        width: 489px;
+    }
 }
 
 @media (max-width: 767px) {
     span.input-addon {
         top: 0;
+    }
+    .customer-img {
+        height: auto;
+        width: 100%;
     }
     .main-table {
         margin-top: 0;
