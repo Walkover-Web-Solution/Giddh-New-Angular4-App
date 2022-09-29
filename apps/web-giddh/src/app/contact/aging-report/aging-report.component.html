@@ -5,7 +5,7 @@
     >
         <div class="aging-form-inline">
             <div class="btn-group pull-left on-desktop-view">
-                <button mat-flat-button class="btn-sky-blue" (click)="creteNewCustomerEvent.emit(true)">
+                <button mat-flat-button class="btn-sky-blue" (click)="createNewCustomerEvent.emit(true)">
                     {{ localeData?.new_customer }}
                 </button>
             </div>
@@ -108,7 +108,7 @@
             </div>
         </div>
         <div class="btn-group mr-t15 pull-left mobile-view">
-            <button mat-raised-button class="btn-sky-blue w-100" (click)="creteNewCustomerEvent.emit(true)">
+            <button mat-raised-button class="btn-sky-blue w-100" (click)="createNewCustomerEvent.emit(true)">
                 {{ localeData?.new_customer }}
             </button>
         </div>
@@ -150,12 +150,7 @@
             <div *ngIf="!isMobileScreen" class="table-responsive">
                 <ng-container *ngTemplateOutlet="mainTable"></ng-container>
             </div>
-            <div
-                *ngIf="
-                    (isMobileScreen && (dueAmountReportData$ | async)?.results?.length) ||
-                    (getAgingReportRequestInProcess$ | async)
-                "
-            >
+            <div *ngIf="isMobileScreen && (dueAmountReportData$ | async)?.results?.length">
                 <div class="text-center top-aging-table-top pd-1">
                     <p (click)="openAgingDropDown()">
                         <strong>{{ localeData?.due_in_last_days }} </strong>
@@ -175,7 +170,7 @@
             >
                 <div class="align-item-center">
                     <img class="customer-img" src="{{ imgPath }}customer-vendor/stock-photo.png" alt="" />
-                    <button mat-flat-button class="btn-sky-blue" (click)="creteNewCustomerEvent.emit(true)">
+                    <button mat-flat-button class="btn-sky-blue" (click)="createNewCustomerEvent.emit(true)">
                         {{ localeData?.new_customer }}
                     </button>
                 </div>
@@ -225,7 +220,7 @@
 </ng-template>
 <!-- endregion -->
 <ng-template #mainTable>
-    <div [hidden]="!(dueAmountReportData$ | async)?.results?.length || !dueAmountReportRequest?.q">
+    <div [hidden]="!(dueAmountReportData$ | async)?.results?.length && !dueAmountReportRequest?.q">
         <div class="d-flex justify-content-end">
             <mat-menu #agingDropdown="matMenu" class="aging-dropdown-table">
                 <ng-template matMenuContent>

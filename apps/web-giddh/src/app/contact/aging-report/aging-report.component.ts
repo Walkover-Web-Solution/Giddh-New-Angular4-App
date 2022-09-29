@@ -75,7 +75,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     @ViewChild("filterDropDownList", { static: true }) public filterDropDownList: BsDropdownDirective;
     /** Advance search component instance */
     @ViewChild("agingReportAdvanceSearch", { read: ContactAdvanceSearchComponent, static: true }) public agingReportAdvanceSearch: ContactAdvanceSearchComponent;
-    @Output() public creteNewCustomerEvent: EventEmitter<boolean> = new EventEmitter();
+    @Output() public createNewCustomerEvent: EventEmitter<boolean> = new EventEmitter();
     /** Observable to store the branches of current company */
     public currentCompanyBranches$: Observable<any>;
     /** Stores the branch list of a company */
