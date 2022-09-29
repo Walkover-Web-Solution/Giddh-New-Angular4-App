@@ -47,8 +47,8 @@ export async function getCmdkLocal(filename: string, request: any): Promise<any>
     const response = (request.query.q) ? await findAsync(db, { query: { results: { name: request.query.q } }, start: start, limit: limit }) : await findAsync(db, { start: start, limit: limit });
 
     if (response?.length > 0) {
-        return { status: "success", body: response[0], q: request.query.q };
+        return { status: "success", body: response[0], filename: filename };
     } else {
-        return { status: "error", message: "No results found.", q: request.query.q };
+        return { status: "error", message: "No results found.", filename: filename };
     }
 }
