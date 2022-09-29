@@ -103,6 +103,8 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     @ViewChild(MatMenuTrigger) menu: MatMenuTrigger;
     /** True, if custom date filter is selected or custom searching or sorting is performed */
     public showClearFilter: boolean = false;
+    /** Holds images folder path */
+    public imgPath: string = "";
 
     constructor(
         public dialog: MatDialog,
@@ -153,6 +155,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        this.imgPath = isElectron ? "assets/images/" : AppUrl + APP_FOLDER + "assets/images/";
         this.getDueAmountreportData();
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.getDueReport();
@@ -339,7 +342,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
                 this.agingAdvanceSearchModal.totalDueAmountNotEqualTo = false;
                 break;
         }
-        
+
         this.isAdvanceSearchApplied = true;
         this.getDueReport();
     }
