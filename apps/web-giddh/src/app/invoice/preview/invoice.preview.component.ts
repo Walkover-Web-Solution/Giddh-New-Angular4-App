@@ -448,6 +448,10 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                     this.invoiceSearchRequest.from = dayjs(dateObj[0]).format(GIDDH_DATE_FORMAT);
                     this.invoiceSearchRequest.to = dayjs(dateObj[1]).format(GIDDH_DATE_FORMAT);
                     this.isUniversalDateApplicable = true;
+
+                    if (window.localStorage) {
+                        localStorage.setItem('universalSelectedDate', dateObj);
+                    }
                 }
                 this.getVoucher(true);
             }
@@ -1295,11 +1299,10 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public ngOnDestroy() {
-        this.universalDate$.pipe(take(1)).subscribe(a => {
-            if (a && window.localStorage) {
-                localStorage.setItem('universalSelectedDate', a);
-            }
-        });
+        if (window.localStorage) {
+            localStorage.removeItem('universalSelectedDate');
+            localStorage.removeItem('invoiceSelectedDate');
+        }
         document.querySelector('body').classList.remove('fixed');
         document.querySelector('body').classList.remove('invoice-preview-page');
         this.destroyed$.next(true);
