@@ -6,6 +6,8 @@ import { takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
 import { cloneDeep } from '../../lodash-optimized';
 import { LoginActions } from '../../actions/login.action';
+import { Router } from '@angular/router';
+import { BreakpointObserver } from '@angular/cdk/layout';
 
 @Component({
     selector: 'mobile-seach-company',
@@ -28,7 +30,11 @@ export class MobileSearchCompanyComponent implements OnInit, OnDestroy {
     /* This will hold local JSON data */
     public localeData: any = {};
 
-    constructor(private store: Store<AppState>, private loginAction: LoginActions) {
+    constructor(
+        private store: Store<AppState>, 
+        private loginAction: LoginActions, 
+        private router: Router, 
+        private breakPointObservar: BreakpointObserver) {
 
     }
 
@@ -38,6 +44,14 @@ export class MobileSearchCompanyComponent implements OnInit, OnDestroy {
      * @memberof MobileSearchCompanyComponent
      */
     public ngOnInit(): void {
+        this.breakPointObservar.observe([
+            '(max-width: 767px)'
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            if (!result.matches) {
+                this.router.navigate(["/pages/home"]);
+            }
+        });
+
         document.querySelector('body').classList.add('remove-header-lower-layer');
 
         this.store.pipe(select((state: AppState) => state.session.companies), takeUntil(this.destroyed$)).subscribe(companies => {
