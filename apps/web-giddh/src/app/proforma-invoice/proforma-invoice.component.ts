@@ -640,6 +640,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public selectedCustomerNumber: any = '';
     /** This will hold isMobileNumberInvalid */
     public isMobileNumberInvalid: boolean = false;
+    /** Mobile Number state instance */
+    @ViewChild('initContactProforma', { static: false }) initContactProforma: ElementRef;
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -741,8 +743,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     public ngAfterViewInit() {
-        setTimeout(() => {
-            this.onlyPhoneNumber();
+        let interval = setInterval(() => {
+            if(this.initContactProforma) {
+                    this.onlyPhoneNumber();
+                    clearInterval(interval);
+            }
         }, 1000);
         if (!this.isUpdateMode) {
             this.toggleBodyClass();
@@ -6235,9 +6240,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @memberof ProformaInvoiceComponent
      */
     public onSearchQueryChanged(query: string, page: number = 1, searchType: string, successCallback?: Function): void {
-        // if(!query){
-        //     this.intl?.setNumber("");
-        // }
         if (!this.preventDefaultScrollApiCall &&
             (query || (searchType === SEARCH_TYPE.CUSTOMER && this.defaultCustomerSuggestions?.length === 0) ||
                 (searchType === SEARCH_TYPE.ITEM && this.defaultItemSuggestions?.length === 0) || successCallback)) {
