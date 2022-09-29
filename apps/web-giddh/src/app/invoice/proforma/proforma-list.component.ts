@@ -342,10 +342,8 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
 
         //--------------------- Refresh report data according to universal date--------------------------------
         this.store.pipe(select(createSelector([(state: AppState) => state.session.applicationDate], (a) => {
-
             if (a) {
                 if (localStorage.getItem('universalSelectedDate')) {
-
                     let universalStorageData = localStorage.getItem('universalSelectedDate').split(',');
                     if ((dayjs(universalStorageData[0]).format(GIDDH_DATE_FORMAT) === dayjs(a[0]).format(GIDDH_DATE_FORMAT)) && (dayjs(universalStorageData[1]).format(GIDDH_DATE_FORMAT) === dayjs(a[1]).format(GIDDH_DATE_FORMAT))) {
                         if (window.localStorage && localStorage.getItem(this.localStorageSelectedDate)) {
@@ -408,6 +406,10 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
 
                     this.advanceSearchFilter.from = dayjs(a[0]).format(GIDDH_DATE_FORMAT);
                     this.advanceSearchFilter.to = dayjs(a[1]).format(GIDDH_DATE_FORMAT);
+
+                    if (window.localStorage) {
+                        localStorage.setItem('universalSelectedDate', a);
+                    }
                 }
                 this.getAll();
             }
@@ -726,11 +728,11 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     public ngOnDestroy(): void {
-        this.universalDate$.pipe(take(1)).subscribe(a => {
-            if (a && window.localStorage) {
-                localStorage.setItem('universalSelectedDate', a);
-            }
-        });
+        if (window.localStorage) {
+            localStorage.removeItem('universalSelectedDate');
+            localStorage.removeItem('proformaSelectedDate');
+            localStorage.removeItem('estimateSelectedDate');
+        }
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
