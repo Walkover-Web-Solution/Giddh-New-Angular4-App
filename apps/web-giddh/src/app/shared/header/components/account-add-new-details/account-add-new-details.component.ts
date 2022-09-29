@@ -1250,7 +1250,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                     fetchIPApi.subscribe(
                         (res) => {
                             if (res?.response?.ipAddress) {
-                                const fetchCountryByIpApi = this.http.get<any>(MOBILE_NUMBER_IP_ADDRESS_URL + `${ res.response.ipAddress}`);
+                                const fetchCountryByIpApi = this.http.get<any>(MOBILE_NUMBER_IP_ADDRESS_URL + `${res.response.ipAddress}`);
                                 fetchCountryByIpApi.subscribe(
                                     (fetchCountryByIpApiRes) => {
                                         if (fetchCountryByIpApiRes?.response?.countryCode) {
@@ -1312,6 +1312,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                                 errorMsg.classList.remove("d-none");
                             }
                         }
+                    } else {
+                        this.isMobileNumberInvalid = false;
                     }
                 }
             });

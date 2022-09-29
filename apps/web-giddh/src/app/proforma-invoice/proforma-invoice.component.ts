@@ -3525,6 +3525,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     public onSelectCustomer(item: IOption): void {
+        this.onlyPhoneNumber();
+        this.intl?.setNumber("");
         this.typeaheadNoResultsOfCustomer = false;
         this.referenceVouchersCurrentPage = 1;
         if (item.value) {
@@ -3732,6 +3734,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public resetCustomerName(event) {
         if (event) {
             if (!event.target.value) {
+                this.onlyPhoneNumber();
+                this.intl?.setNumber("");
                 this.invFormData.voucherDetails.customerName = null;
                 this.invFormData.voucherDetails.customerUniquename = null;
                 this.isCustomerSelected = false;
@@ -3744,6 +3748,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 }
             }
         } else {
+            this.onlyPhoneNumber();
+            this.intl?.setNumber("");
             this.invFormData.voucherDetails.customerName = null;
             this.invFormData.voucherDetails.tempCustomerName = null;
             this.isCustomerSelected = false;
@@ -6229,9 +6235,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @memberof ProformaInvoiceComponent
      */
     public onSearchQueryChanged(query: string, page: number = 1, searchType: string, successCallback?: Function): void {
-        if(!query){
-            this.intl?.setNumber("");
-        }
+        // if(!query){
+        //     this.intl?.setNumber("");
+        // }
         if (!this.preventDefaultScrollApiCall &&
             (query || (searchType === SEARCH_TYPE.CUSTOMER && this.defaultCustomerSuggestions?.length === 0) ||
                 (searchType === SEARCH_TYPE.ITEM && this.defaultItemSuggestions?.length === 0) || successCallback)) {
@@ -7943,6 +7949,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                                 errorMsg.classList.remove("d-none");
                             }
                         }
+                    } else {
+                        this.isMobileNumberInvalid = false;
                     }
                 }
             });

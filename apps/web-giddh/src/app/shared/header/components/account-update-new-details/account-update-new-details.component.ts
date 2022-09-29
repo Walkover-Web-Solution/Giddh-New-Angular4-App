@@ -1887,6 +1887,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                                 errorMsg.classList.remove("d-none");
                             }
                         }
+                    } else {
+                        this.isMobileNumberInvalid = false;
                     }
                 }
             });
