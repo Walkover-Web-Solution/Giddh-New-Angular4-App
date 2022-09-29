@@ -8,7 +8,7 @@ export function startServer() {
     app.listen(59448, () => console.log(`Express server listening on port 59448`));
 
     const electronApp = electron?.app || electron?.remote?.app;
-    electronApp.getPath('userData');
+    electronApp.getPath('appData');
     
     defineRoutes(app);
 }
