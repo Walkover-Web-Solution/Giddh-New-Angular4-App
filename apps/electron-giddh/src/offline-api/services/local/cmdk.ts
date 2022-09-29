@@ -44,7 +44,7 @@ export async function getCmdkLocal(filename: string, request: any): Promise<any>
     /** Finding the cmdk options list */
     const limit = 20;
     const start = (request.query.page - 1) + limit;
-    const response = (request.query.q) ? await findAsync(db, { query: { results: { name: request.query.q } }, start: start, limit: limit }) : await findAsync(db, { start: start, limit: limit });
+    const response = (request.query.q) ? await findAsync(db, { query: { results: { name: request.query.q } } }) : await findAsync(db, {  });
 
     if (response?.length > 0) {
         return { status: "success", body: response[0], filename: filename };

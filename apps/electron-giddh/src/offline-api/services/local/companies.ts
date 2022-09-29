@@ -42,8 +42,8 @@ export async function getCompaniesLocal(filename: string, request: any): Promise
     const response = await findAsync(db, {});
 
     if (response?.length > 0) {
-        return { status: "success", body: response };
+        return { status: "success", body: response, filename: filename };
     } else {
-        return { status: "error", message: "Companies list unavailable." };
+        return { status: "error", message: "Companies list unavailable.", filename: filename };
     }
 }
