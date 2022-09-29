@@ -37,8 +37,8 @@ table.basic td {
     padding-left: 0;
     font-weight: 500;
 }
-.creditors-table tr:last-child td {
-    border-bottom: none !important;
+.last-card {
+    min-height: auto !important;
 }
 table.basic th {
     font-size: 14px;
