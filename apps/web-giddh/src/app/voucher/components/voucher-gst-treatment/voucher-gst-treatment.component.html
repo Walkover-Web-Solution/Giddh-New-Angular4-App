@@ -1,0 +1,47 @@
+<div class="gst-treatment-wrapper" (click)="clickInside($event)">
+    <div class="gst-treatment-header d-flex">
+        <span class="flex-fill">{{ localeData?.gst_treatment }}</span>
+
+        <span class="cp" (click)="closeEvent.emit()">
+            <i class="icon-cross"></i>
+        </span>
+    </div>
+
+    <div class="gst-treatment-body">
+        <form name="gstTreatmentForm" novalidate="">
+            <div class="container-fluid mr-t1">
+                <div>
+                    <div class="form-group">
+                        <label>{{ localeData?.party_type }}</label>
+                        <sh-select [options]="[]" [showClear]="false"></sh-select>
+                    </div>
+
+                    <div class="form-group mr-b05">
+                        <label>{{ commonLocaleData?.app_gstin }}*</label>
+                        <input
+                            class="form-control"
+                            [placeholder]="commonLocaleData?.app_unique_name_placeholder"
+                            type="text"
+                        />
+                    </div>
+
+                    <div class="d-flex justify-content-end">
+                        <span class="cp aqua-color font-12">
+                            <a href="javascript:;">{{ commonLocaleData?.app_validate }}</a>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="mt-2">
+                    <button class="btn btn-success">
+                        {{ commonLocaleData?.app_save }}
+                    </button>
+
+                    <button class="btn btn-primary" (click)="closeEvent.emit()">
+                        {{ commonLocaleData?.app_cancel }}
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
