@@ -22,7 +22,12 @@
                 [id]="activeTab !== 'aging-report' ? 'giddh-page-heading' : ''"
             >
                 <div class="container-fluid">
-                    <div *ngIf="sundryDebtorsAccounts?.length || sundryCreditorsAccounts?.length">
+                    <div
+                        *ngIf="
+                            (activeTab === 'customer' && sundryDebtorsAccounts?.length) ||
+                            (activeTab === 'vendor' && sundryCreditorsAccounts?.length)
+                        "
+                    >
                         <div
                             class="top-bar customer-top-bar clearfix"
                             [ngClass]="{ 'vendor-top-bar': activeTab === 'vendor' }"
