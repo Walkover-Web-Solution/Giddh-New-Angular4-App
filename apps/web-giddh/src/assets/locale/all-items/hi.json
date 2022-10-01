@@ -261,7 +261,7 @@
                 },
                 {
                     "label": "आयात",
-                    "link": "/pages/imports",
+                    "link": "/pages/downloads/imports",
                     "icon": "icon-tally-import1",
                     "description": "अपने सिंक किए गए टैली डेटा को ऑनलाइन जांचें"
                 }
@@ -361,7 +361,7 @@
                 },
                 {
                     "label": "डाउनलोड",
-                    "link": "/pages/downloads",
+                    "link": "/pages/downloads/exports",
                     "icon": "icon-download-circle"
                 },
                 {
