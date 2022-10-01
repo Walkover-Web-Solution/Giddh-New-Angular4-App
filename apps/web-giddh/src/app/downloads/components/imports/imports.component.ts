@@ -7,22 +7,22 @@ import * as isSameOrAfter from 'dayjs/plugin/isSameOrAfter' // load on demand
 dayjs.extend(isSameOrAfter) // use plugin
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { select, Store } from '@ngrx/store';
-import { ImportsService } from '../../services/imports.service';
-import { ImportsData, ImportsRequest, ImportsSheetDownloadRequest } from '../../models/api-models/imports';
-import { GeneralService } from '../../services/general.service';
-import { AppState } from '../../store';
-import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
-import { cloneDeep } from '../../lodash-optimized';
-import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from '../../app.constant';
-import { OrganizationType } from '../../models/user-login-state';
-import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
-import { ToasterService } from '../../services/toaster.service';
 import { download } from '@giddh-workspaces/utils';
+import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
+import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from '../../../app.constant';
+import { cloneDeep } from '../../../lodash-optimized';
+import { ImportsData, ImportsRequest, ImportsSheetDownloadRequest } from '../../../models/api-models/imports';
+import { OrganizationType } from '../../../models/user-login-state';
+import { GeneralService } from '../../../services/general.service';
+import { ToasterService } from '../../../services/toaster.service';
+import { GIDDH_NEW_DATE_FORMAT_UI, GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
+import { AppState } from '../../../store';
+import { ImportsService } from '../../../services/imports.service';
 
 /** Hold information of import  */
 const ELEMENT_DATA: ImportsData[] = [];
 @Component({
-    selector: 'app-imports',
+    selector: 'imports',
     templateUrl: './imports.component.html',
     styleUrls: ['./imports.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,

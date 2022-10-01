@@ -1,12 +1,10 @@
 <ng-container
     appTranslate
-    [file]="'imports'"
+    [file]="'downloads/imports'"
     (commonLocaleData)="commonLocaleData = $event"
     (localeData)="localeData = $event"
     (translationComplete)="translationComplete($event)"
 >
-    <hamburger-menu class="hamburger-menu"></hamburger-menu>
-
     <div class="import-table-container">
         <div
             class="activity-filter-wrap"
