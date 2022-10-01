@@ -208,7 +208,7 @@ export class ApprovePettyCashEntryConfirmDialogComponent implements OnInit {
      */
     private isCashBankAccount(particular: any): boolean {
         if (particular) {
-            return particular.parentGroups.some(parent => parent?.uniqueName === 'bankaccounts' || parent?.uniqueName === 'cash');
+            return particular.parentGroups.some(parent => parent?.uniqueName === 'bankaccounts' || parent?.uniqueName === 'cash' || parent?.uniqueName === 'loanandoverdraft');
         }
         return false;
     }
@@ -465,7 +465,7 @@ export class ApprovePettyCashEntryConfirmDialogComponent implements OnInit {
             const requestObject: any = {
                 q: encodeURIComponent(query),
                 page,
-                group: encodeURIComponent('cash, bankaccounts')
+                group: encodeURIComponent('cash, bankaccounts, loanandoverdraft')
             }
             this.searchService.searchAccountV2(requestObject).subscribe(data => {
                 if (data && data.body && data.body.results) {

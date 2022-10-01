@@ -224,7 +224,7 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
     private loadLinkedAccounts(): void {
         const params = {
             group: encodeURIComponent('currentassets, currentliabilities'),
-            exceptGroups: encodeURIComponent('cash, bankaccounts, sundrydebtors, sundrycreditors, reversecharge, taxonadvance'),
+            exceptGroups: encodeURIComponent('cash, bankaccounts, loanandoverdraft, sundrydebtors, sundrycreditors, reversecharge, taxonadvance'),
             count: 0
         };
         let accounts = [];

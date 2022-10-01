@@ -1996,7 +1996,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.isCashBankAccount = false;
 
         data?.parentGroups?.forEach(parentGroup => {
-            if (parentGroup?.uniqueName === "cash" || parentGroup?.uniqueName === "bankaccounts") {
+            if (parentGroup?.uniqueName === "cash" || parentGroup?.uniqueName === "bankaccounts" || parentGroup?.uniqueName === "loanandoverdraft") {
                 this.isCashBankAccount = true;
             }
         });
@@ -6343,7 +6343,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.searchCustomerResultsPaginationData.query = query;
             group = (this.invoiceType === VoucherTypeEnum.debitNote) ? 'sundrycreditors' :
                 (this.invoiceType === VoucherTypeEnum.purchase) ?
-                    'sundrycreditors, bankaccounts, cash' : 'sundrydebtors';
+                    'sundrycreditors, bankaccounts, cash, loanandoverdraft' : 'sundrydebtors';
             this.selectedGrpUniqueNameForAddEditAccountModal = (this.invoiceType === VoucherTypeEnum.debitNote || this.invoiceType === VoucherTypeEnum.purchase) ?
                 'sundrycreditors' : 'sundrydebtors';
         } else if (searchType === SEARCH_TYPE.ITEM) {
@@ -6356,6 +6356,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             }
         } else if (searchType === SEARCH_TYPE.BANK) {
             group = 'bankaccounts, cash';
+
+            if (this.voucherApiVersion === 2) {
+                group += ", loanandoverdraft";
+            }
         }
         const requestObject = {
             q: encodeURIComponent(query),
@@ -6498,9 +6502,13 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.selectedPaymentMode = null;
         this.forceClearDepositAccount$ = observableOf({ status: true });
         this.userDeposit = null;
+        let groups = "cash, bankaccounts";
 
-        this.salesService.getAccountsWithCurrency('cash, bankaccounts', `${customerCurrency}, ${this.companyCurrency}`).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+        if (this.voucherApiVersion === 2) {
+            groups += ", loanandoverdraft";
+        }
 
+        this.salesService.getAccountsWithCurrency(groups, `${customerCurrency}, ${this.companyCurrency}`).pipe(takeUntil(this.destroyed$)).subscribe(data => {
             this.bankAccounts$ = observableOf(this.updateBankAccountObject(data));
         });
     }
@@ -7781,7 +7789,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.hideDepositSection = false;
         if (this.voucherApiVersion === 2 && this.isPurchaseInvoice && accountDetails?.parentGroups?.length > 0) {
             accountDetails?.parentGroups.forEach(group => {
-                if (group.uniqueName === "cash" || group.uniqueName === "bankaccounts") {
+                if (group.uniqueName === "cash" || group.uniqueName === "bankaccounts" || group.uniqueName === "loanandoverdraft") {
                     this.hideDepositSection = true;
                 }
             });

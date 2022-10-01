@@ -508,14 +508,14 @@ export class TallyModuleService {
     public getGroupByVoucher(voucherType: string, selectedTransactionType?: string): any {
         if (voucherType === VOUCHERS.CONTRA) {
             return {
-                group: encodeURIComponent('bankaccounts, cash, currentliabilities'),
+                group: encodeURIComponent('bankaccounts, cash, loanandoverdraft, currentliabilities'),
                 exceptGroups: encodeURIComponent('sundrycreditors, dutiestaxes')
             };
         } else if (voucherType === VOUCHERS.RECEIPT) {
             return {
                 group: selectedTransactionType === 'to' ?
                     encodeURIComponent('currentliabilities, sundrycreditors, sundrydebtors') :
-                    encodeURIComponent('bankaccounts, cash, currentliabilities, sundrycreditors, sundrydebtors'),
+                    encodeURIComponent('bankaccounts, cash, loanandoverdraft, currentliabilities, sundrycreditors, sundrydebtors'),
                 exceptGroups: encodeURIComponent('dutiestaxes')
             };
         } else {
