@@ -316,7 +316,7 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
 
     public loadPaymentModes() {
         const paymentMode: IOption[] = [];
-        this.salesService.getAccountsWithCurrency('cash, bankaccounts').pipe(takeUntil(this.destroyed$)).subscribe(data => {
+        this.salesService.getAccountsWithCurrency('cash, bankaccounts, loanandoverdraft').pipe(takeUntil(this.destroyed$)).subscribe(data => {
             if (data && data.body && data.body.results) {
                 data.body.results.forEach(account => {
                     paymentMode.push({

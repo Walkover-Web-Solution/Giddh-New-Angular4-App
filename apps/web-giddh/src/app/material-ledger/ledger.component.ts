@@ -945,7 +945,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     public clickUnpaidInvoiceList(e?: boolean) {
         if (e) {
-            if (this.accountUniquename === 'cash' || this.accountUniquename === 'bankaccounts' && this.selectedTxnAccUniqueName) {
+            if ((this.accountUniquename === 'cash' || this.accountUniquename === 'bankaccounts' || this.accountUniquename === 'loanandoverdraft') && this.selectedTxnAccUniqueName) {
                 this.getInvoiceLists({ accountUniqueName: this.selectedTxnAccUniqueName, status: 'unpaid' });
             } else {
                 this.getInvoiceLists({ accountUniqueName: this.accountUniquename, status: 'unpaid' });
