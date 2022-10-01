@@ -568,9 +568,16 @@ button.btn.btn-filter span.icon-cross {
 .customer-vendor-name-search-icon {
     top: 2px;
 }
-
+.customer-img {
+    height: 360px;
+    width: 489px;
+}
 /*responsive*/
 @media (max-width: 1024px) {
+    .customer-img {
+        height: 360px;
+        width: 489px;
+    }
     .customer-form-inline {
         position: relative;
         display: flex;
@@ -676,6 +683,10 @@ button.btn.btn-filter span.icon-cross {
 }
 
 @media (max-width: 767px) {
+    .customer-img {
+        height: auto;
+        width: 100%;
+    }
     @include all-table;
     span.input-addon {
         top: 0;
@@ -811,6 +822,10 @@ button.btn.btn-filter span.icon-cross {
 @media (min-width: 769px) and (max-width: 1023px) {
     .separate-top-aging {
         display: none;
+    }
+    .customer-img {
+        height: auto;
+        width: 100%;
     }
 }
 
