@@ -261,7 +261,7 @@
                 },
                    {
                     "label": "आयात करतो",
-                    "link": "/pages/imports",
+                    "link": "/pages/downloads/imports",
                     "icon": "icon-tally-import1",
                     "description": "आपला संकालित केलेला टॅली डेटा ऑनलाइन तपासा"
                 }
@@ -403,7 +403,7 @@
                 },
                 {
                     "label": "डाउनलोड करा",
-                    "link": "/pages/downloads",
+                    "link": "/pages/downloads/exports",
                     "icon": "icon-download-circle"
                 },
                 {
