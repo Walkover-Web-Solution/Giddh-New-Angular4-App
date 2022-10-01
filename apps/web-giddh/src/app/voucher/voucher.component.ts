@@ -129,6 +129,9 @@ const SEARCH_TYPE = {
     BANK: 'bank'
 }
 
+	/** Declare of window */
+    declare var window;
+
 @Component({
     selector: 'voucher-component',
     templateUrl: './voucher.component.html',
@@ -1551,6 +1554,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         ])
             .pipe(takeUntil(this.destroyed$))
             .subscribe(result => {
+
                 let arr: PreviousInvoicesVm[] = [];
                 if (!this.isProformaInvoice && !this.isEstimateInvoice) {
                     if (result[0]) {
@@ -7959,5 +7963,15 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             });
         }
     }
+
+        /**
+     * Callback function for getLastInvoiceDetails function
+     *
+     * @param {PreviousInvoicesVm} item
+     * @memberof VoucherComponent
+     */
+         public copyInvoice(item: PreviousInvoicesVm): void {
+            this.getLastInvoiceDetails({ accountUniqueName: item.account?.uniqueName, invoiceNo: item.versionNumber, uniqueName: item.uniqueName });
+        }
 }
 

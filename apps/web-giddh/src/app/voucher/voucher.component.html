@@ -306,28 +306,41 @@
                                                                     !(isPendingVoucherType && isCashInvoice))) &&
                                                             (invFormData.voucherDetails.customerName ||
                                                                 invFormData.voucherDetails.customerUniquename) &&
-                                                            lastInvoices?.length &&
+                                                            lastInvoices.length &&
                                                             !isUpdateMode
                                                         "
                                                     >
-                                                        <a
-                                                            href="javascript:;"
-                                                            (click)="showLastEstimateModal = !showLastEstimateModal"
-                                                            (clickOutside)="showLastEstimateModal = false"
-                                                        >
+                                                        <a href="javascript:;" [matMenuTriggerFor]="menu">
                                                             <i class="icon-copy-file"></i> {{ copyPreviousInvoiceText }}
                                                         </a>
-                                                        <ng-container
-                                                            *ngTemplateOutlet="
-                                                                lastEstimateModal;
-                                                                context: { $implicit: showLastEstimateModal }
-                                                            "
-                                                        >
-                                                        </ng-container>
+                                                        <div class="previous-estimate-wrapper">
+                                                            <mat-menu #menu="matMenu" class="copy-invoice-menu">
+                                                                <button
+                                                                    mat-menu-item
+                                                                    *ngFor="let item of lastInvoices"
+                                                                    (click)="copyInvoice(item)"
+                                                                    class="line-height-initial"
+                                                                >
+                                                                    <div class="pd">
+                                                                        <div class="d-flex flex-column">
+                                                                            <div class="d-flex justify-content-between">
+                                                                                <span>{{ item?.versionNumber }}</span>
+                                                                                <span>{{
+                                                                                    item?.grandTotal?.amountForAccount
+                                                                                }}</span>
+                                                                            </div>
+                                                                            <span
+                                                                                >{{ item?.date }} (
+                                                                                {{ item?.account?.name }} )</span
+                                                                            >
+                                                                        </div>
+                                                                    </div>
+                                                                </button>
+                                                            </mat-menu>
+                                                        </div>
                                                     </div>
                                                     <!-- endregion -->
                                                 </div>
-
                                                 <!-- region Unregistered Business / customer details -->
                                                 <div
                                                     class="d-flex aqua-color"
@@ -5536,15 +5549,6 @@
             ></voucher-add-bulk-items-component>
         </ng-container>
     </div>
-    <!-- endregion -->
-
-    <!-- region last estimate modal-->
-    <ng-template #lastEstimateModal let-show>
-        <div *ngIf="show" class="last-estimate-modal">
-            <voucher-last-invoices-component [data]="lastInvoices" (invoiceSelected)="getLastInvoiceDetails($event)">
-            </voucher-last-invoices-component>
-        </div>
-    </ng-template>
     <!-- endregion -->
 
     <!-- region gst treatment modal-->
