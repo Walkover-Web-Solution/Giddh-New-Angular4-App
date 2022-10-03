@@ -1,15 +1,14 @@
+import { BreakpointObserver } from '@angular/cdk/layout';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { Observable, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { CompanyActions } from '../../actions/company.actions';
-import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
 import { Organization, OrganizationDetails } from '../../models/api-models/Company';
 import { OrganizationType } from '../../models/user-login-state';
 import { CompanyService } from '../../services/companyService.service';
 import { GeneralService } from '../../services/general.service';
-import { SettingsProfileService } from '../../services/settings.profile.service';
 import { AppState } from '../../store';
 
 @Component({
@@ -18,7 +17,6 @@ import { AppState } from '../../store';
     styleUrls: ['./search-branch.component.scss'],
 })
 export class MobileSearchBranchComponent implements OnInit, OnDestroy {
-
     /** Observable to store the branches of current company */
     public currentCompanyBranches$: Observable<any>;
     /** Stores the branch list of a company */
@@ -31,7 +29,6 @@ export class MobileSearchBranchComponent implements OnInit, OnDestroy {
     public activeCompany: any;
     /** Stores the details of the current branch */
     public currentBranch: any;
-
     /** Subject to unsubscribe from all the subscription */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* This will hold local JSON data */
@@ -45,9 +42,8 @@ export class MobileSearchBranchComponent implements OnInit, OnDestroy {
         private companyActions: CompanyActions,
         private generalService: GeneralService,
         private router: Router,
-        private settingsProfileService: SettingsProfileService,
-        private store: Store<AppState>,
-        private settingsBranchAction: SettingsBranchActions,
+        private store: Store<AppState>, 
+        private breakPointObservar: BreakpointObserver
     ) {
 
     }
@@ -58,6 +54,14 @@ export class MobileSearchBranchComponent implements OnInit, OnDestroy {
      * @memberof MobileSearchBranchComponent
      */
     public ngOnInit(): void {
+        this.breakPointObservar.observe([
+            '(max-width: 767px)'
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            if (!result.matches) {
+                this.router.navigate(["/pages/home"]);
+            }
+        });
+        
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
         this.currentCompanyBranches$.subscribe(response => {
             if (response && response.length) {

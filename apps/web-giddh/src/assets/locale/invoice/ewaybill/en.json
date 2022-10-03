@@ -97,5 +97,6 @@
     "search_particular": "Search Particular",
     "download_eway_bill": "Download E-way Bill",
     "mode_of_transportation": "Mode of Transportation",
-    "pincode_required": "Please update pincode in voucher before creating eway bill."
+    "pincode_required": "Please update pincode in voucher before creating eway bill.",
+    "select_gstin": "Select GSTIN"
 }
