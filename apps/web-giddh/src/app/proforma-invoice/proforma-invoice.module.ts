@@ -33,7 +33,6 @@ import { NgxBootstrapSwitchModule } from 'ngx-bootstrap-switch';
 import { VoucherAddBulkItemsModule } from '../shared/voucher-add-bulk-items/voucher-add-bulk-items.module';
 import { AsideMenuOtherTaxesModule } from '../shared/aside-menu-other-taxes/aside-menu-other-taxes.module';
 import { AsideMenuProductServiceModule } from '../shared/aside-menu-product-service/aside-menu-product-service.module';
-
 @NgModule({
     imports: [
         ProformaInvoiceRoutingModule,
