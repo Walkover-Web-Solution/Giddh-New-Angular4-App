@@ -158,7 +158,7 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
                         this.showDeleteButton = true;
                         this.showUploadButton = false;
                         let preview: any = document.getElementById('logoImage');
-                        preview.setAttribute('src', ApiUrl + 'company/' + this.companyUniqueName + '/image/' + template.logoUniqueName);
+                        preview?.setAttribute('src', ApiUrl + 'company/' + this.companyUniqueName + '/image/' + template.logoUniqueName);
                     }
                 }
             }
@@ -172,7 +172,7 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
                 this.isFileUploaded = false;
                 this.defaultImageSize = 'S';
                 const preview: any = document.getElementById('logoImage');
-                preview.setAttribute('src', '');
+                preview?.setAttribute('src', '');
             }
         });
 

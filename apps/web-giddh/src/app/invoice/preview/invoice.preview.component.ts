@@ -56,6 +56,7 @@ import { CommonActions } from '../../actions/common.actions';
 import { AdjustmentUtilityService } from '../../shared/advance-receipt-adjustment/services/adjustment-utility.service';
 import { GeneralActions } from '../../actions/general/general.actions';
 import { giddhRoundOff } from '../../shared/helpers/helperFunctions';
+import { PurchaseOrderActions } from '../../actions/purchase-order/purchase-order.action';
 
 /** Multi currency modules includes Cash/Sales Invoice and CR/DR note */
 const MULTI_CURRENCY_MODULES = [VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.purchase];
@@ -264,7 +265,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         private modalService: BsModalService,
         private generalService: GeneralService,
         private commonActions: CommonActions,
-        private adjustmentUtilityService: AdjustmentUtilityService
+        private adjustmentUtilityService: AdjustmentUtilityService,
+        private purchaseOrderActions: PurchaseOrderActions
     ) {
         this.advanceReceiptAdjustmentData = null;
         this.invoiceSearchRequest.page = 1;
@@ -448,6 +450,10 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                     this.invoiceSearchRequest.from = dayjs(dateObj[0]).format(GIDDH_DATE_FORMAT);
                     this.invoiceSearchRequest.to = dayjs(dateObj[1]).format(GIDDH_DATE_FORMAT);
                     this.isUniversalDateApplicable = true;
+
+                    if (window.localStorage) {
+                        localStorage.setItem('universalSelectedDate', dateObj);
+                    }
                 }
                 this.getVoucher(true);
             }
@@ -578,6 +584,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             this.hasVoucherListPermissions = response;
         });
         this.voucherApiVersion = this.generalService.voucherApiVersion;
+
+        this.store.dispatch(this.purchaseOrderActions.setPurchaseOrderFilters({}));
     }
 
     public ngOnChanges(changes: SimpleChanges): void {
@@ -1295,11 +1303,10 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public ngOnDestroy() {
-        this.universalDate$.pipe(take(1)).subscribe(a => {
-            if (a && window.localStorage) {
-                localStorage.setItem('universalSelectedDate', a);
-            }
-        });
+        if (window.localStorage) {
+            localStorage.removeItem('universalSelectedDate');
+            localStorage.removeItem('invoiceSelectedDate');
+        }
         document.querySelector('body').classList.remove('fixed');
         document.querySelector('body').classList.remove('invoice-preview-page');
         this.destroyed$.next(true);

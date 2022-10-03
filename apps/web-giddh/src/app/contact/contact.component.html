@@ -23,240 +23,249 @@
             >
                 <div class="container-fluid">
                     <div
-                        class="top-bar customer-top-bar clearfix"
-                        [ngClass]="{ 'vendor-top-bar': activeTab === 'vendor' }"
+                        *ngIf="
+                            (activeTab === 'customer' && sundryDebtorsAccounts?.length) ||
+                            (activeTab === 'vendor' && sundryCreditorsAccounts?.length)
+                        "
                     >
-                        <div class="customer-form-inline">
-                            <div class="wrap-search-entity d-flex">
-                                <div class="dis mr-r15 pull-left on-desktop-view">
-                                    <div class="btn-group pull-right">
+                        <div
+                            class="top-bar customer-top-bar clearfix"
+                            [ngClass]="{ 'vendor-top-bar': activeTab === 'vendor' }"
+                        >
+                            <div class="customer-form-inline">
+                                <div class="wrap-search-entity d-flex">
+                                    <div class="dis mr-r15 pull-left on-desktop-view">
+                                        <div class="btn-group pull-right">
+                                            <button
+                                                mat-raised-button
+                                                *ngIf="activeTab == 'customer'"
+                                                class="btn-sky-blue mr-0"
+                                                (click)="openAddAndManage('customer')"
+                                            >
+                                                {{ localeData?.new_customer }}
+                                            </button>
+                                            <button
+                                                mat-raised-button
+                                                *ngIf="activeTab == 'vendor'"
+                                                class="btn-sky-blue mr-0"
+                                                (click)="openAddAndManage('vendor')"
+                                            >
+                                                {{ localeData?.new_vendor }}
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div
+                                        class="form-group mr-r15 pull-left linked-entities mb-0"
+                                        name="currentBranch"
+                                        *ngIf="
+                                            currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'
+                                        "
+                                    >
+                                        <div>
+                                            <sh-select
+                                                [options]="currentCompanyBranches"
+                                                [(ngModel)]="currentBranch.uniqueName"
+                                                [showClear]="false"
+                                                [ItemHeight]="33"
+                                                width="100%"
+                                                (selected)="handleBranchChange($event)"
+                                                [isFilterEnabled]="true"
+                                                [placeholder]="commonLocaleData?.app_select_entity"
+                                                [fixedValue]="currentBranch?.alias"
+                                            >
+                                                <ng-template #optionTemplate let-option="option">
+                                                    <ng-container>
+                                                        <a href="javascript:void(0)" class="list-item d-flex">
+                                                            <span class="entity-icon">
+                                                                <i
+                                                                    class="icon-branch-icon pull-right"
+                                                                    *ngIf="!option.isCompany"
+                                                                    tooltip="{{ commonLocaleData?.app_branch }}"
+                                                                ></i>
+                                                                <i
+                                                                    class="icon-company-profile pull-right"
+                                                                    *ngIf="option.isCompany"
+                                                                    tooltip="{{ commonLocaleData?.app_company }}"
+                                                                ></i>
+                                                            </span>
+                                                            <span class="entity-details">
+                                                                <div class="item giddh-limit single-line-clamp">
+                                                                    {{ option?.label || "-" }}
+                                                                </div>
+                                                                <div class="item-unique giddh-limit single-line-clamp">
+                                                                    {{ option?.name || "-" }}
+                                                                </div>
+                                                            </span>
+                                                        </a>
+                                                    </ng-container>
+                                                </ng-template>
+                                            </sh-select>
+                                        </div>
+                                    </div>
+                                    <form
+                                        *ngIf="sundryCreditorsAccounts?.length || sundryDebtorsAccounts?.length"
+                                        #invoiceForm="ngForm"
+                                        novalidate
+                                        class="form-inline input-grp-date-range-picker position-relative"
+                                    >
+                                        <div class="form-group mr-r15 d-flex flex-fill">
+                                            <div
+                                                class="form-group custom-datepicker mr-r15"
+                                                (click)="showGiddhDatepicker($event)"
+                                            >
+                                                <i class="icon-calender calendar-addon"></i>
+                                                <input
+                                                    matInput
+                                                    type="text"
+                                                    name="selectedDateRange"
+                                                    [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                                                    class="giddh-datepicker form-control date-range-picker"
+                                                />
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div
+                                    class="
+                                        clear-filter
+                                        align-items-center
+                                        d-flex
+                                        justify-content-xl-center justify-content-lg-start
+                                        w-50
+                                    "
+                                    *ngIf="showClearFilter"
+                                >
+                                    <button class="btn btn-filters mr-0" (click)="resetAdvanceSearch()">
+                                        <span class="icon-cross"></span> {{ commonLocaleData?.app_clear_filter }}
+                                    </button>
+                                </div>
+                                <!-- Invoice filter section ends -->
+                                <div class="button-content">
+                                    <button
+                                        mat-raised-button
+                                        class="btn btn-group btn-filter desktop-button-filter"
+                                        *ngIf="selectedCheckedContacts?.length > 0"
+                                        (click)="clearSelectedContacts()"
+                                    >
+                                        <span class="icon-cross"></span> {{ commonLocaleData?.app_clear_selected }}
+                                    </button>
+                                </div>
+
+                                <div class="pd-t1-md d-flex justify-content-between">
+                                    <!-- On company class will show only if we are on company mode and branches length will be less than equal 2 -->
+                                    <div class="d-flex justify-content-between">
+                                        <div
+                                            class="pull-left header-left d-none"
+                                            [ngClass]="{ 'on-company': currentCompanyBranches?.length >= 2 }"
+                                        >
+                                            <div
+                                                class="form-group max-width-250 search-field mb-0"
+                                                *ngIf="activeTab !== 'aging'"
+                                            >
+                                                <text-field
+                                                    type="text"
+                                                    name="searchStr"
+                                                    [placeholder]="localeData?.name_email_mobile"
+                                                    [cssClass]="'form-control'"
+                                                    [(ngModel)]="searchStr"
+                                                    (ngModelChange)="searchStr$.next($event)"
+                                                ></text-field>
+                                                <span class="input-addon">
+                                                    <i class="icon-search"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="customer-footer-box pull-right">
+                                            <button
+                                                mat-raised-button
+                                                class="btn btn-group btn-filter mobile-button-filter"
+                                                *ngIf="selectedAccountsList?.length > 0"
+                                                (click)="clearSelectedContacts()"
+                                            >
+                                                <span class="icon-cross"></span>
+
+                                                <span>{{ commonLocaleData?.app_clear }}</span>
+                                            </button>
+                                        </div>
+                                        <div class="mr-0" *ngIf="activeTab !== 'aging'">
+                                            <button
+                                                mat-icon-button
+                                                [matMenuTriggerFor]="menu"
+                                                matTooltipPosition="left"
+                                                matTooltip="{{ localeData?.filter_toggle }}"
+                                            >
+                                                <i class="icon-options"></i>
+                                            </button>
+                                            <mat-menu #menu="matMenu">
+                                                <button
+                                                    mat-menu-item
+                                                    (click)="$event.stopPropagation()"
+                                                    (keydown.enter)="
+                                                        $event.stopPropagation();
+                                                        selectAllCheckbox.checked = !selectAllCheckbox.checked;
+                                                        selectAllColumns(selectAllCheckbox.checked)
+                                                    "
+                                                >
+                                                    <mat-checkbox
+                                                        #selectAllCheckbox
+                                                        color="primary"
+                                                        name="selectAll"
+                                                        [(ngModel)]="selectAll"
+                                                        (change)="selectAllColumns($event.checked)"
+                                                        >{{ commonLocaleData?.app_select_all }}
+                                                    </mat-checkbox>
+                                                </button>
+                                                <ng-container *ngFor="let item of availableColumnsCount">
+                                                    <button
+                                                        *ngIf="showFieldFilter[item.value]"
+                                                        mat-menu-item
+                                                        (click)="$event.stopPropagation()"
+                                                        (keydown.enter)="
+                                                            $event.stopPropagation();
+                                                            optionsCheckbox.checked = !optionsCheckbox.checked;
+                                                            columnFilter(
+                                                                !showFieldFilter[item.value].visibility,
+                                                                item.value
+                                                            )
+                                                        "
+                                                    >
+                                                        <mat-checkbox
+                                                            #optionsCheckbox
+                                                            class="text-capitalize"
+                                                            color="primary"
+                                                            name="{{ item?.value }}"
+                                                            (ngModelChange)="columnFilter($event, item.value)"
+                                                            [(ngModel)]="showFieldFilter[item.value].visibility"
+                                                        >
+                                                            {{ showFieldFilter[item.value].displayName }}</mat-checkbox
+                                                        >
+                                                    </button>
+                                                </ng-container>
+                                            </mat-menu>
+                                        </div>
+                                    </div>
+                                    <div class="btn-group pull-right on-mobile-view mr-t1">
                                         <button
                                             mat-raised-button
-                                            *ngIf="activeTab == 'customer'"
-                                            class="btn-sky-blue mr-0"
+                                            *ngIf="activeTab == 'customer' && sundryDebtorsAccounts?.length"
+                                            class="btn-sky-blue mr-r05 w-100"
                                             (click)="openAddAndManage('customer')"
                                         >
                                             {{ localeData?.new_customer }}
                                         </button>
                                         <button
                                             mat-raised-button
-                                            *ngIf="activeTab == 'vendor'"
-                                            class="btn-sky-blue mr-0"
+                                            *ngIf="activeTab == 'vendor' && sundryCreditorsAccounts?.length"
+                                            class="btn-sky-blue w-100"
                                             (click)="openAddAndManage('vendor')"
                                         >
                                             {{ localeData?.new_vendor }}
                                         </button>
                                     </div>
                                 </div>
-                                <div
-                                    class="form-group mr-r15 pull-left linked-entities mb-0"
-                                    name="currentBranch"
-                                    *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'"
-                                >
-                                    <div>
-                                        <sh-select
-                                            [options]="currentCompanyBranches"
-                                            [(ngModel)]="currentBranch.uniqueName"
-                                            [showClear]="false"
-                                            [ItemHeight]="33"
-                                            width="100%"
-                                            (selected)="handleBranchChange($event)"
-                                            [isFilterEnabled]="true"
-                                            [placeholder]="commonLocaleData?.app_select_entity"
-                                            [fixedValue]="currentBranch?.alias"
-                                        >
-                                            <ng-template #optionTemplate let-option="option">
-                                                <ng-container>
-                                                    <a href="javascript:void(0)" class="list-item d-flex">
-                                                        <span class="entity-icon">
-                                                            <i
-                                                                class="icon-branch-icon pull-right"
-                                                                *ngIf="!option.isCompany"
-                                                                tooltip="{{ commonLocaleData?.app_branch }}"
-                                                            ></i>
-                                                            <i
-                                                                class="icon-company-profile pull-right"
-                                                                *ngIf="option.isCompany"
-                                                                tooltip="{{ commonLocaleData?.app_company }}"
-                                                            ></i>
-                                                        </span>
-                                                        <span class="entity-details">
-                                                            <div class="item giddh-limit single-line-clamp">
-                                                                {{ option?.label || "-" }}
-                                                            </div>
-                                                            <div class="item-unique giddh-limit single-line-clamp">
-                                                                {{ option?.name || "-" }}
-                                                            </div>
-                                                        </span>
-                                                    </a>
-                                                </ng-container>
-                                            </ng-template>
-                                        </sh-select>
-                                    </div>
-                                </div>
-                                <form
-                                    #invoiceForm="ngForm"
-                                    novalidate
-                                    class="form-inline input-grp-date-range-picker position-relative"
-                                >
-                                    <div class="form-group mr-r15 d-flex flex-fill">
-                                        <div
-                                            class="form-group custom-datepicker mr-r15"
-                                            (click)="showGiddhDatepicker($event)"
-                                        >
-                                            <i class="icon-calender calendar-addon"></i>
-                                            <input
-                                                matInput
-                                                type="text"
-                                                name="selectedDateRange"
-                                                [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
-                                                class="giddh-datepicker form-control date-range-picker"
-                                            />
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                            <div
-                                class="
-                                    clear-filter
-                                    align-items-center
-                                    d-flex
-                                    justify-content-xl-center justify-content-lg-start
-                                    w-50
-                                "
-                                *ngIf="showClearFilter"
-                            >
-                                <button class="btn btn-filters mr-0" (click)="resetAdvanceSearch()">
-                                    <span class="icon-cross"></span> {{ commonLocaleData?.app_clear_filter }}
-                                </button>
-                            </div>
-                            <!-- Invoice filter section ends -->
-                            <div class="button-content">
-                                <button
-                                    mat-raised-button
-                                    class="btn btn-group btn-filter desktop-button-filter"
-                                    *ngIf="selectedCheckedContacts?.length > 0"
-                                    (click)="clearSelectedContacts()"
-                                >
-                                    <span class="icon-cross"></span> {{ commonLocaleData?.app_clear_selected }}
-                                </button>
-                            </div>
-
-                            <div class="pd-t1-md d-flex justify-content-between">
-                                <!-- On company class will show only if we are on company mode and branches length will be less than equal 2 -->
-                                <div class="d-flex justify-content-between">
-                                    <div
-                                        class="pull-left header-left d-none"
-                                        [ngClass]="{ 'on-company': currentCompanyBranches?.length >= 2 }"
-                                    >
-                                        <div
-                                            class="form-group max-width-250 search-field mb-0"
-                                            *ngIf="activeTab !== 'aging'"
-                                        >
-                                            <text-field
-                                                type="text"
-                                                name="searchStr"
-                                                [placeholder]="localeData?.name_email_mobile"
-                                                [cssClass]="'form-control'"
-                                                [(ngModel)]="searchStr"
-                                                (ngModelChange)="searchStr$.next($event)"
-                                            ></text-field>
-                                            <span class="input-addon">
-                                                <i class="icon-search"></i>
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="customer-footer-box pull-right">
-                                        <button
-                                            mat-raised-button
-                                            class="btn btn-group btn-filter mobile-button-filter"
-                                            *ngIf="selectedAccountsList?.length > 0"
-                                            (click)="clearSelectedContacts()"
-                                        >
-                                            <span class="icon-cross"></span>
-
-                                            <span>{{ commonLocaleData?.app_clear }}</span>
-                                        </button>
-                                    </div>
-                                    <div class="mr-0" *ngIf="activeTab !== 'aging'">
-                                        <button
-                                            mat-icon-button
-                                            [matMenuTriggerFor]="menu"
-                                            matTooltipPosition="left"
-                                            matTooltip="{{ localeData?.filter_toggle }}"
-                                        >
-                                            <i class="icon-options"></i>
-                                        </button>
-                                        <mat-menu #menu="matMenu">
-                                            <button
-                                                mat-menu-item
-                                                (click)="$event.stopPropagation()"
-                                                (keydown.enter)="
-                                                    $event.stopPropagation();
-                                                    selectAllCheckbox.checked = !selectAllCheckbox.checked;
-                                                    selectAllColumns(selectAllCheckbox.checked)
-                                                "
-                                            >
-                                                <mat-checkbox
-                                                    #selectAllCheckbox
-                                                    color="primary"
-                                                    name="selectAll"
-                                                    [(ngModel)]="selectAll"
-                                                    (change)="selectAllColumns($event.checked)"
-                                                    >{{ commonLocaleData?.app_select_all }}
-                                                </mat-checkbox>
-                                            </button>
-                                            <ng-container *ngFor="let item of availableColumnsCount">
-                                                <button
-                                                    *ngIf="showFieldFilter[item.value]"
-                                                    mat-menu-item
-                                                    (click)="$event.stopPropagation()"
-                                                    (keydown.enter)="
-                                                        $event.stopPropagation();
-                                                        optionsCheckbox.checked = !optionsCheckbox.checked;
-                                                        columnFilter(
-                                                            !showFieldFilter[item.value].visibility,
-                                                            item.value
-                                                        )
-                                                    "
-                                                >
-                                                    <mat-checkbox
-                                                        #optionsCheckbox
-                                                        class="text-capitalize"
-                                                        color="primary"
-                                                        name="{{ item?.value }}"
-                                                        (ngModelChange)="columnFilter($event, item.value)"
-                                                        [(ngModel)]="showFieldFilter[item.value].visibility"
-                                                    >
-                                                        {{ showFieldFilter[item.value].displayName }}</mat-checkbox
-                                                    >
-                                                </button>
-                                            </ng-container>
-                                        </mat-menu>
-                                    </div>
-                                </div>
-                                <div class="btn-group pull-right on-mobile-view mr-t1">
-                                    <button
-                                        mat-raised-button
-                                        *ngIf="activeTab == 'customer'"
-                                        class="btn-sky-blue mr-r05 w-100"
-                                        (click)="openAddAndManage('customer')"
-                                    >
-                                        {{ localeData?.new_customer }}
-                                    </button>
-                                    <button
-                                        mat-raised-button
-                                        *ngIf="activeTab == 'vendor'"
-                                        class="btn-sky-blue w-100"
-                                        (click)="openAddAndManage('vendor')"
-                                    >
-                                        {{ localeData?.new_vendor }}
-                                    </button>
-                                </div>
                             </div>
                         </div>
                     </div>
-
                     <div class="top-content">
                         <div
                             class="d-flex w-100 justify-content-between overflow-x-auto"
@@ -416,14 +425,15 @@
                             </div>
                         </div>
                     </div>
-
-                    <div class="text-center top-aging-table-top separate-top-aging pd-1 mr-t1" *ngIf="isMobileScreen">
+                    <div
+                        class="text-center top-aging-table-top separate-top-aging pd-1 mr-t1"
+                        *ngIf="isMobileScreen && (sundryDebtorsAccounts?.length || sundryCreditorsAccounts?.length)"
+                    >
                         <p (click)="showGiddhDatepicker($event)">
                             <strong>{{ commonLocaleData?.app_due_as_on }} </strong>
                             <span *ngIf="selectedDateRangeUi"> {{ selectedDateRangeUi }} </span>
                         </p>
                     </div>
-
                     <div class="contact-main customer-page on-mobile-view">
                         <div class="pd-b2 mr-b1">
                             <div>
@@ -447,7 +457,7 @@
                     *ngIf="activeTab === 'aging-report'"
                     [localeData]="localeData"
                     [commonLocaleData]="commonLocaleData"
-                    (creteNewCustomerEvent)="openAddAndManage('customer')"
+                    (createNewCustomerEvent)="openAddAndManage('customer')"
                 >
                 </aging-report>
             </mat-tab>
@@ -1511,7 +1521,27 @@
                 (activeTab === 'vendor' && !sundryCreditorsAccounts?.length)
             "
         >
-            <no-data [secondaryMessageClass]="'p-0'"></no-data>
+            <div class="align-item-center">
+                <img class="customer-img" src="{{ imgPath }}customer-vendor/stock-photo.png" alt="" />
+                <div class="btn-group pull-right">
+                    <button
+                        mat-raised-button
+                        *ngIf="activeTab == 'customer'"
+                        class="btn-sky-blue mr-0"
+                        (click)="openAddAndManage('customer')"
+                    >
+                        {{ localeData?.new_customer }}
+                    </button>
+                    <button
+                        mat-raised-button
+                        *ngIf="activeTab == 'vendor'"
+                        class="btn-sky-blue mr-0"
+                        (click)="openAddAndManage('vendor')"
+                    >
+                        {{ localeData?.new_vendor }}
+                    </button>
+                </div>
+            </div>
         </div>
     </ng-template>
 
