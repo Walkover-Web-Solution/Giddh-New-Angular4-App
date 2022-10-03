@@ -676,5 +676,9 @@
     "app_purchase_bill": "Purchase Bill",
     "app_on": "On",
     "app_off": "Off",
-    "app_preview_formats": "These file formats are not supported for preview (xls, xlsx, doc, CSV)"
+    "app_preview_formats": "These file formats are not supported for preview (xls, xlsx, doc, CSV)",
+    "app_count": "Count",
+    "app_invalid_country_code": "Invalid country code",
+    "app_invalid_contact_too_short": "Too short",
+    "app_invalid_contact_too_long": "Too long"
 }

@@ -674,5 +674,9 @@
     "app_purchase_bill": "खरेदी बिल",
     "app_on": "On",
     "app_off": "Off",
-    "app_preview_formats": "हे फाइल स्वरूप पूर्वावलोकनासाठी समर्थित नाहीत (xls, xlsx, doc, CSV)"
+    "app_preview_formats": "हे फाइल स्वरूप पूर्वावलोकनासाठी समर्थित नाहीत (xls, xlsx, doc, CSV)",
+    "app_count": "मोजा",
+    "app_invalid_country_code": "अवैध देश कोड",
+    "app_invalid_contact_too_short": "खुप लहान",
+    "app_invalid_contact_too_long": "खूप लांब"
 }

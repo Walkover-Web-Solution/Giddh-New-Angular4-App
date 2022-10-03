@@ -1011,21 +1011,22 @@
                                 <!-- endregion-->
 
                                 <!-- region mobile no -->
-                                <div class="row mt-1">
-                                    <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12">
+                                <div class="row mt-1 mobile-number-wrapper">
+                                    <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3">
                                         <label>{{ commonLocaleData?.app_mobile_number }}</label>
                                     </div>
 
                                     <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12">
-                                        <div class="col-sm-12 col-xl-6 col-lg-10 col-md-10 pl-0">
+                                        <div class="col-sm-12 col-xl-6 col-lg-10 col-md-10 pl-0 mobile-number">
                                             <input
-                                                digitsOnlyDirective
-                                                [placeholder]="localeData?.mobile_number_placeholder"
-                                                type="tel"
                                                 name="accountDetails.mobileNumber"
-                                                class="form-control attention-to"
-                                                [(ngModel)]="invFormData.accountDetails.mobileNumber"
+                                                type="tel"
+                                                #initContactProforma
+                                                id="init-contact-proforma"
+                                                [placeholder]="localeData?.mobile_number_placeholder"
                                             />
+                                            <span id="init-contact-proforma-valid-msg" class="d-none"></span>
+                                            <span id="init-contact-proforma-error-msg" class="d-none"></span>
                                         </div>
                                     </div>
                                 </div>
@@ -5252,7 +5253,8 @@
                                         [disabled]="
                                             isFileUploading ||
                                             !hasVoucherEntry ||
-                                            invoiceForm?.controls['message2']?.errors?.maxlength
+                                            invoiceForm?.controls['message2']?.errors?.maxlength ||
+                                            isMobileNumberInvalid
                                         "
                                         (click)="doAction(0); triggerSubmitInvoiceForm(invoiceForm, false)"
                                         class="btn btn-default"
@@ -5270,7 +5272,9 @@
                                     <button
                                         type="button"
                                         [disabled]="
-                                            !hasVoucherEntry || invoiceForm?.controls['message2']?.errors?.maxlength
+                                            !hasVoucherEntry ||
+                                            invoiceForm?.controls['message2']?.errors?.maxlength ||
+                                            isMobileNumberInvalid
                                         "
                                         (click)="doAction(0); triggerSubmitInvoiceForm(invoiceForm, true)"
                                         class="btn btn-default"
@@ -5286,13 +5290,17 @@
                                         [dropup]="isDropup"
                                         dropdown
                                         [isDisabled]="
-                                            !hasVoucherEntry || invoiceForm?.controls['message2']?.errors?.maxlength
+                                            !hasVoucherEntry ||
+                                            invoiceForm?.controls['message2']?.errors?.maxlength ||
+                                            isMobileNumberInvalid
                                         "
                                     >
                                         <button
                                             type="button"
                                             [disabled]="
-                                                !hasVoucherEntry || invoiceForm?.controls['message2']?.errors?.maxlength
+                                                !hasVoucherEntry ||
+                                                invoiceForm?.controls['message2']?.errors?.maxlength ||
+                                                isMobileNumberInvalid
                                             "
                                             (click)="doAction(0); triggerSubmitInvoiceForm(invoiceForm, false)"
                                             class="btn btn-default generate-invoice"
@@ -5426,7 +5434,8 @@
                                     [disabled]="
                                         isFileUploading ||
                                         !hasVoucherEntry ||
-                                        invoiceForm?.controls['message2']?.errors?.maxlength
+                                        invoiceForm?.controls['message2']?.errors?.maxlength ||
+                                        isMobileNumberInvalid
                                     "
                                     (click)="submitUpdateForm(invoiceForm)"
                                 >

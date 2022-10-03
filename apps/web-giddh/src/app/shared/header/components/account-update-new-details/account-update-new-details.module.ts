@@ -13,7 +13,6 @@ import { ModalModule } from "ngx-bootstrap/modal";
 import { PopoverModule } from "ngx-bootstrap/popover";
 import { TabsModule } from "ngx-bootstrap/tabs";
 import { AccountUpdateNewDetailsComponent } from "./account-update-new-details.component";
-
 @NgModule({
     declarations: [
         AccountUpdateNewDetailsComponent
@@ -35,7 +34,7 @@ import { AccountUpdateNewDetailsComponent } from "./account-update-new-details.c
             style: 'slide-left',
             spinnerSize: 30
         }),
-        PopoverModule.forRoot()
+        PopoverModule.forRoot(),
     ],
     exports: [
         AccountUpdateNewDetailsComponent,

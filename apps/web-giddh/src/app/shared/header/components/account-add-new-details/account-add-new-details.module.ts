@@ -9,7 +9,6 @@ import { TranslateDirectiveModule } from 'apps/web-giddh/src/app/theme/translate
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { AccountAddNewDetailsComponent } from './account-add-new-details.component';
 import { NgxBootstrapSwitchModule } from 'ngx-bootstrap-switch';
-
 @NgModule({
     declarations: [AccountAddNewDetailsComponent],
     exports: [AccountAddNewDetailsComponent],
