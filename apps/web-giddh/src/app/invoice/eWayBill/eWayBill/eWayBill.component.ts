@@ -23,6 +23,7 @@ import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { Router } from '@angular/router';
 import { OrganizationType } from '../../../models/user-login-state';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
+import { GstReconcileService } from '../../../services/GstReconcile.service';
 
 @Component({
     // tslint:disable-next-line:component-selector
@@ -132,6 +133,8 @@ export class EWayBillComponent implements OnInit, OnDestroy {
     public universalDate: any[] = [];
     /** True if initial api got called */
     public initialApiCalled: boolean = false;
+    /** Stores the tax details of a company */
+    public taxes: IOption[] = [];
 
     constructor(
         private store: Store<AppState>,
@@ -145,6 +148,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         private breakpointObserver: BreakpointObserver,
         private router: Router,
         private settingsBranchAction: SettingsBranchActions,
+        private gstReconcileService: GstReconcileService
     ) {
         this.EwayBillfilterRequest.count = 20;
         this.EwayBillfilterRequest.page = 1;
@@ -186,6 +190,12 @@ export class EWayBillComponent implements OnInit, OnDestroy {
                 }
             }
         });
+
+        this.store.pipe(select(state => state.gstR?.activeCompanyGst), takeUntil(this.destroyed$)).subscribe(response => {
+            if(response) {
+                this.EwayBillfilterRequest.gstin = response;
+            }
+        });
     }
 
     public selectedDate(value: any) {
@@ -198,6 +208,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
         document.querySelector('body').classList.add('gst-sidebar-open');
+        this.loadTaxDetails();
         this.cancelEwaySuccess$.subscribe(p => {
             if (p) {
                 this.store.dispatch(this.invoiceActions.getALLEwaybillList());
@@ -549,6 +560,9 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         if (o.branchUniqueName) {
             model.branchUniqueName = o.branchUniqueName;
         }
+        if(o.gstin) {
+            model.gstin = o.gstin;
+        }
 
         return model;
     }
@@ -671,5 +685,46 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         }
 
         this._cd.detectChanges();
+    }
+
+    /**
+     * Loads the tax details of a company
+     *
+     * @private
+     * @memberof EWayBillComponent
+     */
+    private loadTaxDetails(): void {
+        this.gstReconcileService.getTaxDetails().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response && response.body) {
+                this.taxes = response.body.map(tax => ({
+                    label: tax,
+                    value: tax
+                }));
+
+                if (!this.EwayBillfilterRequest.gstin && this.taxes?.length > 0) {
+                    this.EwayBillfilterRequest.gstin = this.taxes[0].value;
+                    if (this.initialApiCalled) {
+                        this.selectTax();
+                    }
+                }
+            }
+        });
+    }
+
+    /**
+     * Select tax handler
+     *
+     * @param {*} [event]
+     * @memberof EWayBillComponent
+     */
+    public selectTax(event?: any): void {
+        if (event && event.value) {
+            this.EwayBillfilterRequest.gstin = event.value;
+        }
+
+        if ((this.currentCompanyBranches?.length > 2 && this.currentOrganizationType === 'COMPANY') || this.EwayBillfilterRequest.gstin) {
+            this.EwayBillfilterRequest.page = 0;
+            this.getAllFilteredInvoice();
+        }
     }
 }
