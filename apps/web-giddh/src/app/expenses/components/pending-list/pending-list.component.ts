@@ -13,6 +13,7 @@ import * as dayjs from 'dayjs';
 import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
 import { Lightbox } from 'ngx-lightbox';
+import { GeneralService } from '../../../services/general.service';
 
 @Component({
     selector: 'app-pending-list',
@@ -83,7 +84,8 @@ export class PendingListComponent implements OnInit, OnChanges {
         private toaster: ToasterService,
         private cdRef: ChangeDetectorRef,
         public dialog: MatDialog,
-        private lightbox: Lightbox
+        private lightbox: Lightbox,
+        private generalService: GeneralService
     ) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
         this.todaySelected$ = this.store.pipe(select(state => state.session.todaySelected), takeUntil(this.destroyed$));
@@ -337,7 +339,7 @@ export class PendingListComponent implements OnInit, OnChanges {
      */
     private isCashBankAccount(particular: any): boolean {
         if (particular) {
-            return particular.parentGroups.some(parent => parent?.uniqueName === 'bankaccounts' || parent?.uniqueName === 'cash' || parent?.uniqueName === 'loanandoverdraft');
+            return particular.parentGroups.some(parent => parent?.uniqueName === 'bankaccounts' || parent?.uniqueName === 'cash' || (this.generalService.voucherApiVersion === 2 && parent?.uniqueName === 'loanandoverdraft'));
         }
         return false;
     }

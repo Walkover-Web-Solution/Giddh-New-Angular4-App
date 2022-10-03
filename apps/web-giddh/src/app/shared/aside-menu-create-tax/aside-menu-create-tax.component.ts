@@ -12,6 +12,7 @@ import { IForceClear } from "../../models/api-models/Sales";
 import { GIDDH_DATE_FORMAT } from '../helpers/defaultDateFormat';
 import { SalesService } from '../../services/sales.service';
 import { cloneDeep } from '../../lodash-optimized';
+import { GeneralService } from '../../services/general.service';
 
 @Component({
     selector: 'aside-menu-create-tax-component',
@@ -48,7 +49,8 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
     constructor(
         private store: Store<AppState>,
         private _settingsTaxesActions: SettingsTaxesActions,
-        private salesService: SalesService
+        private salesService: SalesService,
+        private generalService: GeneralService
     ) {
         this.newTaxObj.date = dayjs().toDate();
     }
@@ -224,7 +226,7 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
     private loadLinkedAccounts(): void {
         const params = {
             group: encodeURIComponent('currentassets, currentliabilities'),
-            exceptGroups: encodeURIComponent('cash, bankaccounts, loanandoverdraft, sundrydebtors, sundrycreditors, reversecharge, taxonadvance'),
+            exceptGroups: (this.generalService.voucherApiVersion === 2) ? encodeURIComponent('cash, bankaccounts, loanandoverdraft, sundrydebtors, sundrycreditors, reversecharge, taxonadvance') : encodeURIComponent('cash, bankaccounts, sundrydebtors, sundrycreditors, reversecharge, taxonadvance'),
             count: 0
         };
         let accounts = [];

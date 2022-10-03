@@ -507,6 +507,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.generalService.addLinkTag("./assets/css/ledgerfont/ledgerfont.css");
         }
         document.querySelector('body').classList.add('ledger-body');
+
+        if (this.generalService.voucherApiVersion === 2) {
+            this.allowParentGroup.push("loanandoverdraft");
+        }
+
         this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: 0 }));
         // get company taxes
         this.store.dispatch(this.companyActions.getTax());
@@ -946,7 +951,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     public clickUnpaidInvoiceList(e?: boolean) {
         if (e) {
-            if ((this.accountUniquename === 'cash' || this.accountUniquename === 'bankaccounts' || this.accountUniquename === 'loanandoverdraft') && this.selectedTxnAccUniqueName) {
+            if ((this.accountUniquename === 'cash' || this.accountUniquename === 'bankaccounts' || (this.generalService.voucherApiVersion === 2 && this.accountUniquename === 'loanandoverdraft')) && this.selectedTxnAccUniqueName) {
                 this.getInvoiceLists({ accountUniqueName: this.selectedTxnAccUniqueName, status: 'unpaid' });
             } else {
                 this.getInvoiceLists({ accountUniqueName: this.accountUniquename, status: 'unpaid' });

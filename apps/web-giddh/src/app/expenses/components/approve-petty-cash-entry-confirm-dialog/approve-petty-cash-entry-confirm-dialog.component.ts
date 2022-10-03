@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Observable, of as observableOf } from 'rxjs';
 import { IForceClear } from '../../../models/api-models/Sales';
+import { GeneralService } from '../../../services/general.service';
 import { SearchService } from '../../../services/search.service';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 
@@ -88,7 +89,8 @@ export class ApprovePettyCashEntryConfirmDialogComponent implements OnInit {
     };
 
     constructor(
-        private searchService: SearchService
+        private searchService: SearchService,
+        private generalService: GeneralService
     ) {
     }
 
@@ -208,7 +210,7 @@ export class ApprovePettyCashEntryConfirmDialogComponent implements OnInit {
      */
     private isCashBankAccount(particular: any): boolean {
         if (particular) {
-            return particular.parentGroups.some(parent => parent?.uniqueName === 'bankaccounts' || parent?.uniqueName === 'cash' || parent?.uniqueName === 'loanandoverdraft');
+            return particular.parentGroups.some(parent => parent?.uniqueName === 'bankaccounts' || parent?.uniqueName === 'cash' || (this.generalService.voucherApiVersion === 2 && parent?.uniqueName === 'loanandoverdraft'));
         }
         return false;
     }
@@ -465,7 +467,7 @@ export class ApprovePettyCashEntryConfirmDialogComponent implements OnInit {
             const requestObject: any = {
                 q: encodeURIComponent(query),
                 page,
-                group: encodeURIComponent('cash, bankaccounts, loanandoverdraft')
+                group: (this.generalService.voucherApiVersion === 2) ? encodeURIComponent('cash, bankaccounts, loanandoverdraft') : encodeURIComponent('cash, bankaccounts')
             }
             this.searchService.searchAccountV2(requestObject).subscribe(data => {
                 if (data && data.body && data.body.results) {

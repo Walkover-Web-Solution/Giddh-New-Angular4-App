@@ -22,6 +22,7 @@ import { SearchService } from '../../../services/search.service';
 import { MatDialog } from '@angular/material/dialog';
 import { CompanyActions } from '../../../actions/company.actions';
 import { Lightbox } from 'ngx-lightbox';
+import { GeneralService } from '../../../services/general.service';
 
 @Component({
     selector: 'app-expense-details',
@@ -160,7 +161,8 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
         private searchService: SearchService,
         private dialog: MatDialog,
         private companyActions: CompanyActions,
-        private lightbox: Lightbox
+        private lightbox: Lightbox,
+        private generalService: GeneralService
     ) {
         this.files = [];
         this.uploadInput = new EventEmitter<UploadInput>();
@@ -553,7 +555,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
      */
     private isCashBankAccount(particular: any): boolean {
         if (particular) {
-            return particular.parentGroups.some(parent => parent?.uniqueName === 'bankaccounts' || parent?.uniqueName === 'cash' || parent?.uniqueName === 'loanandoverdraft');
+            return particular.parentGroups.some(parent => parent?.uniqueName === 'bankaccounts' || parent?.uniqueName === 'cash' || (this.generalService.voucherApiVersion === 2 && parent?.uniqueName === 'loanandoverdraft'));
         }
         return false;
     }
@@ -827,7 +829,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
             const requestObject: any = {
                 q: encodeURIComponent(query),
                 page,
-                group: encodeURIComponent('cash, bankaccounts, loanandoverdraft')
+                group: (this.generalService.voucherApiVersion === 2) ? encodeURIComponent('cash, bankaccounts, loanandoverdraft') : encodeURIComponent('cash, bankaccounts')
             }
             this.searchService.searchAccountV2(requestObject).subscribe(data => {
                 if (data && data.body && data.body.results) {
