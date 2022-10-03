@@ -191,7 +191,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public accountPettyCashStream: any;
     /**To check tourist scheme applicable or not */
     public isTouristSchemeApplicable: boolean = false;
-    public allowParentGroup = ['sales', 'cash', 'sundrydebtors', 'bankaccounts', 'loanandoverdraft'];
+    public allowParentGroup = ['sales', 'cash', 'sundrydebtors', 'bankaccounts'];
     /** To check advance receipts adjusted invoice is there for trasaction */
     public isAdjustedInvoicesWithAdvanceReceipt: boolean = false;
     /** To check advance receipts adjustment is there for trasaction */
@@ -321,6 +321,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         }
         if (this.searchResultsPaginationTotalPages) {
             this.searchResultsPaginationData.totalPages = this.searchResultsPaginationTotalPages;
+        }
+
+        if (this.generalService.voucherApiVersion === 2) {
+            this.allowParentGroup.push("loanandoverdraft");
         }
 
         this.settingsTagService.GetAllTags().pipe(takeUntil(this.destroyed$)).subscribe(response => {

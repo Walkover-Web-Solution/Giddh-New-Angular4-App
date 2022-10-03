@@ -1993,7 +1993,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.isCashBankAccount = false;
 
         data?.parentGroups?.forEach(parentGroup => {
-            if (parentGroup?.uniqueName === "cash" || parentGroup?.uniqueName === "bankaccounts" || parentGroup?.uniqueName === "loanandoverdraft") {
+            if (parentGroup?.uniqueName === "cash" || parentGroup?.uniqueName === "bankaccounts" || (this.voucherApiVersion === 2 && parentGroup?.uniqueName === "loanandoverdraft")) {
                 this.isCashBankAccount = true;
             }
         });
@@ -6343,7 +6343,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.searchCustomerResultsPaginationData.query = query;
             group = (this.invoiceType === VoucherTypeEnum.debitNote) ? 'sundrycreditors' :
                 (this.invoiceType === VoucherTypeEnum.purchase) ?
-                    'sundrycreditors, bankaccounts, cash, loanandoverdraft' : 'sundrydebtors';
+                (this.voucherApiVersion === 2) ? 'sundrycreditors, bankaccounts, cash, loanandoverdraft' : 'sundrycreditors, bankaccounts, cash' : 'sundrydebtors';
             this.selectedGrpUniqueNameForAddEditAccountModal = (this.invoiceType === VoucherTypeEnum.debitNote || this.invoiceType === VoucherTypeEnum.purchase) ?
                 'sundrycreditors' : 'sundrydebtors';
         } else if (searchType === SEARCH_TYPE.ITEM) {
@@ -7790,7 +7790,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.hideDepositSection = false;
         if (this.voucherApiVersion === 2 && this.isPurchaseInvoice && accountDetails?.parentGroups?.length > 0) {
             accountDetails?.parentGroups.forEach(group => {
-                if (group.uniqueName === "cash" || group.uniqueName === "bankaccounts" || group.uniqueName === "loanandoverdraft") {
+                if (group.uniqueName === "cash" || group.uniqueName === "bankaccounts" || (this.voucherApiVersion === 2 && group.uniqueName === "loanandoverdraft")) {
                     this.hideDepositSection = true;
                 }
             });
