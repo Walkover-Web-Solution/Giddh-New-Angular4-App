@@ -1617,43 +1617,42 @@
                                                 </div>
                                                 <div class="form-group">
                                                     <label>{{ invoiceDateLabel }}</label>
+                                                    <div class="form-group col-xs-4 col-sm-4 mb-0">
+                                                        <giddh-datepicker
+                                                            #voucherDate="ngModel"
+                                                            [placeholder]="giddhDateFormat"
+                                                            name="voucherDate"
+                                                            [(ngModel)]="invFormData.voucherDetails.voucherDate"
+                                                            [class.invalid-inp]="
+                                                                voucherDate.errors &&
+                                                                (voucherDate.dirty || voucherDate.touched)
+                                                            "
+                                                            [disabled]="
+                                                                invoiceType !== 'purchase' && isUpdateMode
+                                                                    ? 'disabled'
+                                                                    : null
+                                                            "
+                                                            (focus)="onFocusInvoiceDate()"
+                                                            (blur)="onBlurInvoiceDate(0)"
+                                                            (ngModelChange)="
+                                                                onVoucherDateChanged(
+                                                                    $event,
+                                                                    invFormData.voucherDetails.voucherDate
+                                                                )
+                                                            "
+                                                        >
+                                                        </giddh-datepicker>
 
-                                                    <input
-                                                        type="text"
-                                                        [placeholder]="giddhDateFormat"
-                                                        #voucherDate="ngModel"
-                                                        name="voucherDate"
-                                                        class="form-control dateinvoice"
-                                                        bsDatepicker
-                                                        [bsConfig]="{ dateInputFormat: giddhDateFormat }"
-                                                        [(ngModel)]="invFormData.voucherDetails.voucherDate"
-                                                        [disabled]="
-                                                            invoiceType !== 'purchase' && isUpdateMode
-                                                                ? 'disabled'
-                                                                : null
-                                                        "
-                                                        [class.invalid-inp]="
-                                                            voucherDate.errors &&
-                                                            (voucherDate.dirty || voucherDate.touched)
-                                                        "
-                                                        (focus)="onFocusInvoiceDate()"
-                                                        (blur)="onBlurInvoiceDate(0)"
-                                                        (bsValueChange)="
-                                                            onVoucherDateChanged(
-                                                                $event,
-                                                                invFormData.voucherDetails.voucherDate
-                                                            )
-                                                        "
-                                                    />
-                                                    <p
-                                                        class="text-danger"
-                                                        *ngIf="
-                                                            voucherDate.errors &&
-                                                            (voucherDate.dirty || voucherDate.touched)
-                                                        "
-                                                    >
-                                                        {{ localeData?.invalid_date }}
-                                                    </p>
+                                                        <p
+                                                            class="text-danger"
+                                                            *ngIf="
+                                                                voucherDate.errors &&
+                                                                (voucherDate.dirty || voucherDate.touched)
+                                                            "
+                                                        >
+                                                            {{ localeData?.invalid_date }}
+                                                        </p>
+                                                    </div>
                                                 </div>
 
                                                 <div
@@ -1667,27 +1666,27 @@
                                                     "
                                                 >
                                                     <label>{{ invoiceDueDateLabel }}</label>
-
-                                                    <input
-                                                        type="text"
-                                                        [placeholder]="giddhDateFormat"
-                                                        #dueDate="ngModel"
-                                                        name="dueDate"
-                                                        class="form-control date-invoice"
-                                                        bsDatepicker
-                                                        [bsConfig]="{ dateInputFormat: giddhDateFormat }"
-                                                        [(ngModel)]="invFormData.voucherDetails.dueDate"
-                                                        [class.invalid-inp]="
-                                                            dueDate.errors && (dueDate.dirty || dueDate.touched)
-                                                        "
-                                                        (blur)="onBlurDueDate(0); openProductDropdown()"
-                                                    />
-                                                    <p
-                                                        class="text-danger"
-                                                        *ngIf="dueDate.errors && (dueDate.dirty || dueDate.touched)"
-                                                    >
-                                                        {{ localeData?.invalid_date }}
-                                                    </p>
+                                                    <div class="form-group col-xs-4 col-sm-4 mb-0">
+                                                        <giddh-datepicker
+                                                            type="text"
+                                                            [placeholder]="giddhDateFormat"
+                                                            #dueDate="ngModel"
+                                                            name="dueDate"
+                                                            class="date-invoice"
+                                                            [(ngModel)]="invFormData.voucherDetails.dueDate"
+                                                            [class.invalid-inp]="
+                                                                dueDate.errors && (dueDate.dirty || dueDate.touched)
+                                                            "
+                                                            (blur)="onBlurDueDate(0); openProductDropdown()"
+                                                        >
+                                                        </giddh-datepicker>
+                                                        <p
+                                                            class="text-danger"
+                                                            *ngIf="dueDate.errors && (dueDate.dirty || dueDate.touched)"
+                                                        >
+                                                            {{ localeData?.invalid_date }}
+                                                        </p>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -1718,24 +1717,22 @@
                                     </div>
                                 </div>
 
-                                <div class="row mt-1" *ngIf="isMobileScreen">
+                                <div class="row mt-1 mobile-invoice-date-due-date" *ngIf="isMobileScreen">
                                     <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3">
                                         <label>{{ invoiceDateLabel }}</label>
                                     </div>
                                     <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12">
                                         <div class="col-sm-12 col-xl-6 col-lg-10 col-md-10 pl-0">
-                                            <input
+                                            <giddh-datepicker
                                                 type="text"
                                                 [placeholder]="giddhDateFormat"
                                                 #voucherDate="ngModel"
                                                 name="voucherDate"
-                                                class="form-control date-invoice"
-                                                bsDatepicker
-                                                [bsConfig]="{ dateInputFormat: giddhDateFormat }"
+                                                class="date-invoice"
                                                 [(ngModel)]="invFormData.voucherDetails.voucherDate"
                                                 (focus)="onFocusInvoiceDate()"
                                                 (blur)="onBlurInvoiceDate(0)"
-                                                (bsValueChange)="
+                                                (ngModelChange)="
                                                     onVoucherDateChanged($event, invFormData.voucherDetails.voucherDate)
                                                 "
                                                 [disabled]="
@@ -1744,7 +1741,8 @@
                                                 [class.invalid-inp]="
                                                     voucherDate.errors && (voucherDate.dirty || voucherDate.touched)
                                                 "
-                                            />
+                                            >
+                                            </giddh-datepicker>
                                             <p
                                                 class="text-danger"
                                                 *ngIf="voucherDate.errors && (voucherDate.dirty || voucherDate.touched)"
@@ -1756,7 +1754,7 @@
                                 </div>
 
                                 <div
-                                    class="row mt-1"
+                                    class="row mt-1 mobile-invoice-date-due-date"
                                     *ngIf="
                                         isMobileScreen &&
                                         (currentVoucherFormDetails?.dueDate ||
@@ -1771,19 +1769,18 @@
                                     </div>
                                     <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12">
                                         <div class="col-sm-12 col-xl-6 col-lg-10 col-md-10 pl-0">
-                                            <input
+                                            <giddh-datepicker
                                                 type="text"
                                                 [placeholder]="giddhDateFormat"
                                                 #dueDate="ngModel"
                                                 name="dueDate"
-                                                class="form-control date-invoice"
-                                                bsDatepicker
-                                                [bsConfig]="{ dateInputFormat: giddhDateFormat }"
+                                                class="date-invoice"
                                                 [(ngModel)]="invFormData.voucherDetails.dueDate"
                                                 [class.invalid-inp]="
                                                     dueDate.errors && (dueDate.dirty || dueDate.touched)
                                                 "
-                                            />
+                                            >
+                                            </giddh-datepicker>
                                             <p
                                                 class="text-danger"
                                                 *ngIf="dueDate.errors && (dueDate.dirty || dueDate.touched)"

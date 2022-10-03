@@ -20,7 +20,7 @@
                         <label>{{commonLocaleData?.app_select_tax}}<span class="text-danger">*</span></label>
 
                         <div class="mr-b2">
-                            <sh-select
+                            <!-- <sh-select
                                 name="selectTax"
                                 [placeholder]="commonLocaleData?.app_select_tax"
                                 [options]="taxesOptions"
@@ -29,8 +29,19 @@
                                 (onClear)="onClear()"
                                 [showClear]="true"
                             >
-                            </sh-select>
+                            </sh-select> -->
+                            <select-field
+                                [cssClass]="'form-control mat-field-border'"
+                                [placeholder]="commonLocaleData?.app_select_tax"
+                                [options]="taxesOptions"
+                                (selectedOption)="
+                        applyTax($event);
 
+                        "
+                                [required]="true"
+                                [defaultValue]="selectedTaxUniqueName"
+                            >
+                            </select-field>
                             <label class="label-tax" *ngIf="defaultOtherTaxesModal?.appliedOtherTax?.name">
                                 {{ defaultOtherTaxesModal?.appliedOtherTax?.name | uppercase}}
                             </label>
@@ -44,12 +55,19 @@
                     </div>
 
                     <div class="mb-2">
-                        <sh-select
+                        <select-field
+                            [cssClass]="'form-control mat-field-border'"
+                            [placeholder]="commonLocaleData?.app_select_method"
+                            [options]="calculationMethodOptions"
+                            [defaultValue]="defaultOtherTaxesModal.tcsCalculationMethod"
+                        >
+                        </select-field>
+                        <!-- <sh-select
                             [options]="calculationMethodOptions"
                             name="tcsCalculationMethod"
                             [placeholder]="commonLocaleData?.app_select_method"
                             [(ngModel)]="defaultOtherTaxesModal.tcsCalculationMethod"
-                        ></sh-select>
+                        ></sh-select> -->
                     </div>
                 </div>
             </div>

@@ -155,6 +155,26 @@ $custom-typography: mat-typography-config(
 .text-align-right {
     text-align: right;
 }
+.invoice-date-due-date {
+    .mat-datepicker-toggle .mat-button-wrapper .mat-datepicker-toggle-default-icon {
+        color: var(--color-datepicker-date-icon);
+        position: absolute;
+        bottom: 8px !important;
+        right: 10px !important;
+    }
+    .mat-form-field-wrapper
+        .mat-form-field-infix
+        .mat-input-element.mat-form-field-autofill-control.mat-datepicker-input {
+        position: absolute;
+        padding-top: 12px !important;
+        padding-left: 45px !important;
+    }
+}
+// .aside-menu-othertax-open{
+//     .cdk-overlay-container{
+//         z-index: 99999;
+//     }
+// }
 @media screen and (max-width: 1366px) and (orientation: portrait) {
     .subscription-form-select {
         float: left !important;
@@ -9674,6 +9694,21 @@ body.update-scroll-hidden {
         left: 15px !important;
         right: auto !important;
     }
+    .mobile-invoice-date-due-date {
+        .mat-datepicker-toggle .mat-button-wrapper .mat-datepicker-toggle-default-icon {
+            color: var(--color-datepicker-date-icon);
+            position: absolute;
+            bottom: 8px !important;
+            right: 10px !important;
+        }
+        .mat-form-field-wrapper
+            .mat-form-field-infix
+            .mat-input-element.mat-form-field-autofill-control.mat-datepicker-input {
+            position: absolute;
+            padding-top: 11px !important;
+            padding-left: 45px !important;
+        }
+    }
     .setting-page.tb-pl-bs-tabs ul.nav.nav-tabs {
         overflow-x: auto;
         white-space: nowrap;
@@ -9905,6 +9940,21 @@ body.update-scroll-hidden {
 }
 
 @media (min-width: 768px) {
+    .mobile-invoice-date-due-date {
+        .mat-datepicker-toggle .mat-button-wrapper .mat-datepicker-toggle-default-icon {
+            color: var(--color-datepicker-date-icon);
+            position: absolute;
+            bottom: 8px !important;
+            right: 10px !important;
+        }
+        .mat-form-field-wrapper
+            .mat-form-field-infix
+            .mat-input-element.mat-form-field-autofill-control.mat-datepicker-input {
+            position: absolute;
+            padding-top: 11px !important;
+            padding-left: 45px !important;
+        }
+    }
     .invoice-modal-content .modal-dialog {
         margin: 70px auto;
     }
@@ -9940,6 +9990,21 @@ body.update-scroll-hidden {
 }
 
 @media (min-width: 480px) and (max-width: 667px) {
+    .mobile-invoice-date-due-date {
+        .mat-datepicker-toggle .mat-button-wrapper .mat-datepicker-toggle-default-icon {
+            color: var(--color-datepicker-date-icon);
+            position: absolute;
+            bottom: 8px !important;
+            right: 10px !important;
+        }
+        .mat-form-field-wrapper
+            .mat-form-field-infix
+            .mat-input-element.mat-form-field-autofill-control.mat-datepicker-input {
+            position: absolute;
+            padding-top: 11px !important;
+            padding-left: 45px !important;
+        }
+    }
     .edit-modal {
         margin: 0 auto;
         padding-top: 0;

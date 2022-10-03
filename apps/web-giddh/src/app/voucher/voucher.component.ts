@@ -2001,7 +2001,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.isCashBankAccount = false;
 
         data?.parentGroups?.forEach(parentGroup => {
-            if (parentGroup?.uniqueName === "cash" || parentGroup?.uniqueName === "bankaccounts") {
+            if (parentGroup?.uniqueName === "cash" || parentGroup?.uniqueName === "bankaccounts"  || (this.voucherApiVersion === 2 && parentGroup?.uniqueName === "loanandoverdraft")) {
                 this.isCashBankAccount = true;
             }
         });
@@ -5277,6 +5277,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         }
 
         if (this.voucherDateBeforeUpdate && this.invFormData.voucherDetails.voucherDate && this.voucherDateBeforeUpdate !== this.invFormData.voucherDetails.voucherDate && (!this.isUpdateMode || (this.isUpdateMode && this.invoiceType !== VoucherTypeEnum.purchase))) {
+        console.log("called");
             this.isVoucherDateChanged = true;
             this.dateChangeType = "voucher";
             this.dateChangeConfiguration = this.generalService.getDateChangeConfiguration(this.localeData, this.commonLocaleData, true);
@@ -6348,7 +6349,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             this.searchCustomerResultsPaginationData.query = query;
             group = (this.invoiceType === VoucherTypeEnum.debitNote) ? 'sundrycreditors' :
                 (this.invoiceType === VoucherTypeEnum.purchase) ?
-                    'sundrycreditors, bankaccounts, cash' : 'sundrydebtors';
+                (this.voucherApiVersion === 2) ? 'sundrycreditors, bankaccounts, cash, loanandoverdraft' : 'sundrycreditors, bankaccounts, cash' : 'sundrydebtors';
             this.selectedGrpUniqueNameForAddEditAccountModal = (this.invoiceType === VoucherTypeEnum.debitNote || this.invoiceType === VoucherTypeEnum.purchase) ?
                 'sundrycreditors' : 'sundrydebtors';
         } else if (searchType === SEARCH_TYPE.ITEM) {
@@ -6361,6 +6362,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             }
         } else if (searchType === SEARCH_TYPE.BANK) {
             group = 'bankaccounts, cash';
+            if (this.voucherApiVersion === 2) {
+                group += ", loanandoverdraft";
+            }
         }
         const requestObject = {
             q: encodeURIComponent(query),
@@ -6503,9 +6507,11 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.selectedPaymentMode = null;
         this.forceClearDepositAccount$ = observableOf({ status: true });
         this.userDeposit = null;
-
-        this.salesService.getAccountsWithCurrency('cash, bankaccounts', `${customerCurrency}, ${this.companyCurrency}`).pipe(takeUntil(this.destroyed$)).subscribe(data => {
-
+        let groups = "cash, bankaccounts";
+        if (this.voucherApiVersion === 2) {
+            groups += ", loanandoverdraft";
+        }
+        this.salesService.getAccountsWithCurrency(groups, `${customerCurrency}, ${this.companyCurrency}`).pipe(takeUntil(this.destroyed$)).subscribe(data => {
             this.bankAccounts$ = observableOf(this.updateBankAccountObject(data));
         });
     }
@@ -7786,7 +7792,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.hideDepositSection = false;
         if (this.voucherApiVersion === 2 && this.isPurchaseInvoice && accountDetails?.parentGroups?.length > 0) {
             accountDetails?.parentGroups.forEach(group => {
-                if (group.uniqueName === "cash" || group.uniqueName === "bankaccounts") {
+                if (group.uniqueName === "cash" || group.uniqueName === "bankaccounts" || (this.voucherApiVersion === 2 && group.uniqueName === "loanandoverdraft")) {
                     this.hideDepositSection = true;
                 }
             });
