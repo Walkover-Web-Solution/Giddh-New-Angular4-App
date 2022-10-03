@@ -265,7 +265,7 @@
                 },
                 {
                     "label": "Imports",
-                    "link": "/pages/imports",
+                    "link": "/pages/downloads/imports",
                     "icon": "icon-tally-import1",
                     "description": "Check your synced Tally data online"
                 }
@@ -407,7 +407,7 @@
                 },
                 {
                     "label": "Downloads",
-                    "link": "/pages/downloads",
+                    "link": "/pages/downloads/exports",
                     "icon": "icon-download-circle"
                 },
                 {
