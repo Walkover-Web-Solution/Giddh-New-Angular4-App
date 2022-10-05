@@ -304,7 +304,7 @@ export class SignupComponent implements OnInit, OnDestroy {
      */
     public setCountryCode(event: IOption) {
         if (event.value) {
-            let country = this.countryCodeList.filter((obj) => obj.value === event.value);
+            let country = this.countryCodeList?.filter((obj) => obj.value === event.value);
             this.selectedCountry = country[0].label;
         }
     }

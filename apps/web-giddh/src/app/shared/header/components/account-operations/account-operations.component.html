@@ -49,7 +49,12 @@
             [localeData]="localeData"
             [commonLocaleData]="commonLocaleData"
         ></group-add>
-        <group-update *ngIf="showEditGroup$ | async" [localeData]="localeData" [commonLocaleData]="commonLocaleData">
+        <group-update
+            *ngIf="showEditGroup$ | async"
+            [localeData]="localeData"
+            [commonLocaleData]="commonLocaleData"
+            [discountList]="discounts"
+        >
         </group-update>
     </div>
     <!--add/edit group form-->

@@ -55,7 +55,7 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
 
     ngOnInit() {
         for (let i = 1; i <= 31; i++) {
-            this.days.push({ label: i.toString(), value: i.toString() });
+            this.days.push({ label: i?.toString(), value: i?.toString() });
         }
         this.duration = [
             { label: this.commonLocaleData?.app_duration?.monthly, value: 'MONTHLY' },
@@ -118,8 +118,8 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
                 taxValue: this.tax.taxDetail[0].taxValue,
                 date: dayjs(this.tax.taxDetail[0].date).toDate(),
                 tdsTcsTaxSubTypes: subTyp ? subTyp : null,
-                taxType: subTyp ? this.tax.taxType.replace(subTyp, '') : this.tax.taxType,
-                taxFileDate: this.tax.taxFileDate.toString()
+                taxType: subTyp ? this.tax.taxType?.replace(subTyp, '') : this.tax.taxType,
+                taxFileDate: this.tax.taxFileDate?.toString()
             };
         }
     }

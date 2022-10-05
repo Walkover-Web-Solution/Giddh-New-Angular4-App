@@ -926,7 +926,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     public createNewAddress(addressDetails: any): void {
         this.isAddressChangeInProgress = true;
         const chosenState = addressDetails.addressDetails.stateList.find(selectedState => selectedState.value === addressDetails.formValue.state);
-        let linkEntity = addressDetails.addressDetails.linkedEntities.filter(entity => (addressDetails.formValue.linkedEntity.includes(entity.uniqueName))).map(filteredEntity => ({
+        let linkEntity = addressDetails.addressDetails.linkedEntities?.filter(entity => (addressDetails.formValue.linkedEntity.includes(entity.uniqueName))).map(filteredEntity => ({
             uniqueName: filteredEntity.uniqueName,
             isDefault: filteredEntity.isDefault,
             entity: filteredEntity.entity
@@ -943,7 +943,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         };
 
         this.settingsProfileService.createNewAddress(requestObj).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response.status === 'success') {
+            if (response?.status === 'success') {
                 this.closeAddressSidePane = true;
                 if (this.currentOrganizationType === OrganizationType.Company) {
                     this.loadAddresses('GET');
@@ -952,7 +952,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 }
                 this._toasty.successToast('Address created successfully');
             } else {
-                this._toasty.errorToast(response.message);
+                this._toasty.errorToast(response?.message);
             }
             this.isAddressChangeInProgress = false;
             this.changeDetectorRef.detectChanges();
@@ -971,7 +971,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         this.isAddressChangeInProgress = true;
         addressDetails.formValue.linkedEntity = addressDetails.formValue.linkedEntity || [];
         const chosenState = addressDetails.addressDetails.stateList.find(selectedState => selectedState.value === addressDetails.formValue.state);
-        const linkEntity = addressDetails.addressDetails.linkedEntities.filter(entity => (addressDetails.formValue.linkedEntity.includes(entity.uniqueName))).map(filteredEntity => ({
+        const linkEntity = addressDetails.addressDetails.linkedEntities?.filter(entity => (addressDetails.formValue.linkedEntity.includes(entity.uniqueName))).map(filteredEntity => ({
             uniqueName: filteredEntity.uniqueName,
             isDefault: filteredEntity.isDefault,
             entity: filteredEntity.entity
@@ -987,12 +987,12 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             linkEntity
         };
         this.settingsProfileService.updateAddress(requestObj).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response.status === 'success') {
+            if (response?.status === 'success') {
                 this.closeAddressSidePane = true;
                 this.loadAddresses('GET');
                 this._toasty.successToast('Address updated successfully');
             } else {
-                this._toasty.errorToast(response.message);
+                this._toasty.errorToast(response?.message);
             }
             this.isAddressChangeInProgress = false;
         }, () => {
@@ -1023,7 +1023,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         const requestObject = {
             name: this.currentBranchDetails.name,
             alias: this.currentBranchDetails.alias,
-            linkAddresses: this.currentBranchDetails.addresses.filter(address => address.uniqueName !== addressDetails.uniqueName)
+            linkAddresses: this.currentBranchDetails.addresses?.filter(address => address.uniqueName !== addressDetails.uniqueName)
         }
         this.settingsProfileService.updateBranchInfo(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.store.dispatch(this.settingsProfileActions.getBranchInfo());
@@ -1081,7 +1081,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 profileObj.addresses = profileObj.addresses.slice(0, 3);
             }
 
-            if (profileObj.addresses && !profileObj.addresses.length) {
+            if (profileObj.addresses && !profileObj.addresses?.length) {
                 let newGstObj = {
                     taxNumber: '',
                     stateCode: '',

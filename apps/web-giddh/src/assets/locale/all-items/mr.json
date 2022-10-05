@@ -268,48 +268,6 @@
             ]
         },
         {
-            "label": "आयात करा",
-            "icon": "icon-import",
-            "items": [
-                {
-                    "label": "खाती आयात",
-                    "link": "/pages/import/account",
-                    "icon": "icon-proft-loss-new",
-                    "description": "एक्सेल आणि सीएसव्ही आयात करा आणि विद्यमान अद्यतनित करा"
-                },
-                {
-                    "label": "कंपनी आयात",
-                    "link": "/pages/company-import-export",
-                    "icon": "icon-company-impex",
-                    "description": "कंपनी आयात आणि निर्यात"
-                },
-                {
-                    "label": "नोंदी",
-                    "link": "/pages/import/entries",
-                    "icon": "icon-invoice-new",
-                    "description": "मल्टीक्युरन्सी, आवर्ती चलन, रोख चलन"
-                },
-                {
-                    "label": "गट",
-                    "link": "/pages/import/group",
-                    "icon": "icon-group-new",
-                    "description": "एक्सेल आणि सीएसव्ही आयात करा आणि विद्यमान अद्यतनित करा"
-                },
-                {
-                    "label": "यादी",
-                    "link": "/pages/import/stock",
-                    "icon": "icon-inventory",
-                    "description": "स्टॉक / गट आणि युनिट आयात / तयार करा"
-                },
-                {
-                    "label": "चाचणी शिल्लक",
-                    "link": "/pages/import/trial-balance",
-                    "icon": "icon-trial-balance-new",
-                    "description": "सर्व क्रेडिट आणि डेबिट शिल्लक आयात करा"
-                }
-            ]
-        },
-        {
             "label": "यादी",
             "icon": "icon-inventory",
             "items": [

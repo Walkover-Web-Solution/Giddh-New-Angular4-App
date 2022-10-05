@@ -135,13 +135,6 @@ export class GstComponent implements OnInit, OnDestroy {
 
         this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch;
 
-        this.route.events.pipe(filter(route => route instanceof NavigationStart), takeUntil(this.destroyed$)).subscribe((event: any) => {
-            if (!event.url.includes('pages/gstfiling')) {
-                // Reset the store value
-                this.store.dispatch(this.gstAction.SetActiveCompanyGstin(''));
-            }
-        });
-
         this.getCurrentPeriod$.subscribe(a => {
             if (a && a.from) {
                 let date = {
@@ -362,6 +355,11 @@ export class GstComponent implements OnInit, OnDestroy {
                     label: tax,
                     value: tax
                 }));
+
+                if (!this.activeCompanyGstNumber && this.taxes?.length > 0) {
+                    this.activeCompanyGstNumber = this.taxes[0].value;
+                    this.selectTax();
+                }
             }
             this.isTaxApiInProgress = false;
         });

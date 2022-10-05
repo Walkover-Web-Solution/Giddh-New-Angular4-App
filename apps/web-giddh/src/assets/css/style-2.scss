@@ -4,6 +4,7 @@
 @import "@angular/material/prebuilt-themes/indigo-pink.css";
 @import "./json-tree.scss";
 @import "./json-diff.scss";
+@import "./intl.scss";
 $custom-typography: mat-typography-config(
     $font-family: "opensans-regular",
 );
@@ -83,6 +84,48 @@ $custom-typography: mat-typography-config(
 .branch-profile-wrapper {
     float: left !important;
     width: auto !important;
+}
+.activity-table {
+    thead {
+        z-index: 9 !important;
+        position: relative !important;
+    }
+}
+.mobile-number-wrapper {
+    input.error {
+        border: 1px solid var(--color-danger);
+    }
+    #init-contact-proforma-valid-msg {
+        color: var(--color-success-enable) !important;
+        font-size: 14px;
+    }
+    #init-contact-proforma-error-msg {
+        color: var(--color-danger);
+        font-size: 14px;
+    }
+    #init-contact-update-valid-msg {
+        color: var(--color-success-enable) !important;
+        font-size: 14px;
+    }
+    #init-contact-update-error-msg {
+        color: var(--color-danger);
+        font-size: 14px;
+    }
+    #init-contact-add-valid-msg {
+        color: var(--color-success-enable) !important;
+        font-size: 14px;
+    }
+    #init-contact-add-error-msg {
+        color: var(--color-danger);
+        font-size: 14px;
+    }
+    .display-mobile {
+        color: var(--color-gray);
+        font-size: 14px;
+    }
+    .mobile-number {
+        float: left;
+    }
 }
 @media screen and (max-width: 1366px) and (orientation: portrait) {
     .subscription-form-select {
@@ -5149,14 +5192,7 @@ perfect-scrollbar > .ps > .ps-overlay {
     height: 12px;
     width: 12px;
 }
-.tab1div,
-.subtabs-box {
-    display: none;
-}
 .tab1div:first-child {
-    display: block;
-}
-.subtabs-box:first-child {
     display: block;
 }
 .tax-engine .transactions-list .filter-band {
@@ -5633,7 +5669,7 @@ footer#footer.absolute-footer {
 }
 
 .master-page {
-    groups-account-sidebar {
+    master {
         .grp-list {
             .cdk-virtual-scroll-viewport {
                 .cdk-virtual-scroll-content-wrapper {
@@ -6450,7 +6486,7 @@ highcharts-chart {
 #asidePaneFormTabs.custom-tabs .nav.nav-tabs {
     padding: 0 0px 0 0 !important;
     background-color: transparent;
-    z-index: 9;
+    z-index: 2;
     position: relative !important;
     top: -4px !important;
     margin-bottom: 10px;
@@ -10428,7 +10464,10 @@ input[type="checkbox"].cdk-visually-hidden::after {
         overflow: hidden;
     }
 }
-
+hamburger-menu {
+    position: relative;
+    z-index: 99999;
+}
 .activity-log-page {
     .hamburger-menu {
         position: relative;
@@ -10804,4 +10843,29 @@ input[type="checkbox"].cdk-visually-hidden::after {
             }
         }
     }
+}
+body.hide-scroll-body.master-page {
+    overflow-y: hidden !important;
+}
+.ledger-attachments-popup {
+    .cdk-overlay-container {
+        .mat-dialog-container {
+            background-color: var(--color-popup-background);
+        }
+    }
+}
+.click-disabled {
+    pointer-events: none;
+    cursor: not-allowed;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    color: var(--color-secondary-input-bar-border);
+}
+.mat-datepicker-input:disabled {
+    color: var(--color-primary-input-bar-text) !important;
+    background-color: var(--color-primary-input-bar-background) !important;
 }

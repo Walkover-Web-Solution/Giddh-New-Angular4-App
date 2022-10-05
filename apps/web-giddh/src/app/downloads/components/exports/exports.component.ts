@@ -97,6 +97,7 @@ export class ExportsComponent implements OnInit, OnDestroy {
                 this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                 this.downloadRequest.from = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);
                 this.downloadRequest.to = dayjs(universalDate[1]).format(GIDDH_DATE_FORMAT);
+                this.getDownloads();
             }
         });
     }

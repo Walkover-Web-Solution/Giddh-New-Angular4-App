@@ -22,11 +22,11 @@ export class RecurringVoucherService {
         const companyUniqueName = this.generalService.companyUniqueName;
         if (filter) {
             return this.http.post(this.config.apiUrl + RECURRING_VOUCHER_API.GET
-                .replace('{{companyname}}', companyUniqueName)
-                .replace(':sort', filter.sort.toString())
-                .replace(':sortBy', filter.sortBy.toString())
-                .replace(':page', page.toString())
-                .replace(':count', count.toString()
+                ?.replace('{{companyname}}', companyUniqueName)
+                ?.replace(':sort', filter.sort?.toString())
+                ?.replace(':sortBy', filter.sortBy?.toString())
+                ?.replace(':page', page?.toString())
+                ?.replace(':count', count?.toString()
                 ), filter).pipe(map((res) => {
                     let data: BaseResponse<RecurringInvoice[], string> = res;
                     data.queryString = {};
@@ -34,11 +34,11 @@ export class RecurringVoucherService {
                 }), catchError((e) => this.errorHandler.HandleCatch<RecurringInvoice[], string>(e)));
         }
         return this.http.get(this.config.apiUrl + RECURRING_VOUCHER_API.GET
-            .replace('{{companyname}}', companyUniqueName)
-            .replace(':sort', "")
-            .replace(':sortBy', "")
-            .replace(':page', page.toString())
-            .replace(':count', count.toString())).pipe(map((res) => {
+            ?.replace('{{companyname}}', companyUniqueName)
+            ?.replace(':sort', "")
+            ?.replace(':sortBy', "")
+            ?.replace(':page', page?.toString())
+            ?.replace(':count', count?.toString())).pipe(map((res) => {
                 let data: BaseResponse<RecurringInvoice[], string> = res;
                 data.queryString = {};
                 return data;
@@ -48,7 +48,7 @@ export class RecurringVoucherService {
     public createRecurringVouchers(model: RecurringInvoice) {
         const companyUniqueName = this.generalService.companyUniqueName;
         return this.http.post(this.config.apiUrl + RECURRING_VOUCHER_API.CREATE
-            .replace('{{companyname}}', companyUniqueName), model).pipe(map((res) => {
+            ?.replace('{{companyname}}', companyUniqueName), model).pipe(map((res) => {
                 let data: BaseResponse<RecurringInvoice, string> = res;
                 data.queryString = {};
                 return data;
@@ -63,8 +63,8 @@ export class RecurringVoucherService {
             cronEndDate: model.cronEndDate
         };
         return this.http.patch(this.config.apiUrl + RECURRING_VOUCHER_API.UPDATE
-            .replace('{{companyname}}', companyUniqueName)
-            .replace('{{uniqueName}}', model.uniqueName), req).pipe(
+            ?.replace('{{companyname}}', companyUniqueName)
+            ?.replace('{{uniqueName}}', model.uniqueName), req).pipe(
                 map((res) => {
                     let data: BaseResponse<RecurringInvoice, string> = res;
                     data.queryString = {};
@@ -75,8 +75,8 @@ export class RecurringVoucherService {
     public deleteRecurringVouchers(id: string) {
         const companyUniqueName = this.generalService.companyUniqueName;
         return this.http.delete(this.config.apiUrl + RECURRING_VOUCHER_API.DELETE
-            .replace('{{companyname}}', companyUniqueName)
-            .replace('{{uniqueName}}', id)).pipe(map((res) => {
+            ?.replace('{{companyname}}', companyUniqueName)
+            ?.replace('{{uniqueName}}', id)).pipe(map((res) => {
                 let data: BaseResponse<string, string> = res;
                 data.queryString = {};
                 data.request = id;

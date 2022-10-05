@@ -114,7 +114,7 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         for (let i = 1; i <= 31; i++) {
-            let day = i.toString();
+            let day = i?.toString();
             this.days.push({ label: day, value: day });
         }
 
@@ -206,7 +206,7 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
 
     public deleteTax(taxToDelete) {
         this.newTriggerObj = taxToDelete;
-        this.selectedTax = this.availableTriggers.find((tax) => tax.uniqueName === taxToDelete.uniqueName).name;
+        this.selectedTax = this.availableTriggers.find((tax) => tax.uniqueName === taxToDelete?.uniqueName).name;
         let message = this.localeData?.delete_tax;
         message = message?.replace("[SELECTED_TAX]", this.selectedTax);
         this.confirmationMessage = message;
@@ -232,7 +232,7 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
         this.triggerConfirmationModel.hide();
         if (userResponse) {
             if (this.confirmationFor === 'delete') {
-                this.settingsTriggersService.DeleteTrigger(this.newTriggerObj.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                this.settingsTriggersService.DeleteTrigger(this.newTriggerObj?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     this.showToaster(this.commonLocaleData?.app_messages?.trigger_deleted, response);
                 });
             } else if (this.confirmationFor === 'edit') {
@@ -240,7 +240,7 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
                     tax.date = dayjs(tax.date).format(GIDDH_DATE_FORMAT);
                 });
 
-                this.settingsTriggersService.UpdateTrigger(this.newTriggerObj, this.newTriggerObj.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                this.settingsTriggersService.UpdateTrigger(this.newTriggerObj, this.newTriggerObj?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     this.resetNewFormModel();
                     this.showToaster(this.commonLocaleData?.app_messages?.trigger_updated, response);
                 });

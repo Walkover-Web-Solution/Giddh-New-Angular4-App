@@ -158,7 +158,7 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
                         this.showDeleteButton = true;
                         this.showUploadButton = false;
                         let preview: any = document.getElementById('logoImage');
-                        preview.setAttribute('src', ApiUrl + 'company/' + this.companyUniqueName + '/image/' + template.logoUniqueName);
+                        preview?.setAttribute('src', ApiUrl + 'company/' + this.companyUniqueName + '/image/' + template.logoUniqueName);
                     }
                 }
             }
@@ -172,7 +172,7 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
                 this.isFileUploaded = false;
                 this.defaultImageSize = 'S';
                 const preview: any = document.getElementById('logoImage');
-                preview.setAttribute('src', '');
+                preview?.setAttribute('src', '');
             }
         });
 
@@ -205,10 +205,10 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
     public onDesignChange(fieldName, value) {
         let template;
         if (fieldName === 'uniqueName') { // change whole template
-            const selectedTemplate = cloneDeep(this.sampleTemplates.find((t: CustomTemplateResponse) => (t.uniqueName === value)));
+            const selectedTemplate = cloneDeep(this.sampleTemplates.find((t: CustomTemplateResponse) => (t?.uniqueName === value)));
             template = selectedTemplate ? selectedTemplate : cloneDeep(this.customTemplate);
             if (this.mode === 'update' && selectedTemplate) {
-                template.uniqueName = cloneDeep(this.customTemplate.uniqueName);
+                template.uniqueName = cloneDeep(this.customTemplate?.uniqueName);
                 template.name = cloneDeep(this.customTemplate.name);
             }
         } else { // change specific field
@@ -292,7 +292,7 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
             this._invoiceUiDataService.isLogoUpdateInProgress = true;
         } else if (output.type === 'done') {
             this.isFileUploadInProgress = false;
-            if (output.file.response.status === 'success') {
+            if (output.file.response?.status === 'success') {
                 this.showUploadButton = false;
                 this.showDeleteButton = true;
                 this.startUpload();
@@ -302,7 +302,7 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
                 this._invoiceUiDataService.isLogoUpdateInProgress = false;
                 this._toasty.successToast('file uploaded successfully.');
             } else {
-                this._toasty.errorToast(output.file.response.message, output.file.response.code);
+                this._toasty.errorToast(output.file.response?.message, output.file.response?.code);
             }
         }
     }
@@ -325,11 +325,11 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
             data = this.newLineToBR(data);
 
             this._invoiceTemplatesService.updateTemplate(data?.uniqueName, data).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
-                if (res.status === 'success') {
+                if (res?.status === 'success') {
                     this._toasty.successToast('Template Updated Successfully.');
                     this.store.dispatch(this.invoiceActions.getAllCreatedTemplates(this.templateType));
                 } else {
-                    this._toasty.errorToast(res.message, res.code);
+                    this._toasty.errorToast(res?.message, res?.code);
                 }
             });
         } else {
@@ -338,9 +338,9 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
     }
 
     public newLineToBR(template) {
-        template.sections['footer'].data['message1'].label = template.sections['footer'].data['message1'].label.replace(/(?:\r\n|\r|\n)/g, '<br />');
-        template.sections['footer'].data['companyAddress'].label = template.sections['footer'].data['companyAddress'].label.replace(/(?:\r\n|\r|\n)/g, '<br />');
-        template.sections['footer'].data['slogan'].label = template.sections['footer'].data['slogan'].label.replace(/(?:\r\n|\r|\n)/g, '<br />');
+        template.sections['footer'].data['message1'].label = template.sections['footer'].data['message1'].label?.replace(/(?:\r\n|\r|\n)/g, '<br />');
+        template.sections['footer'].data['companyAddress'].label = template.sections['footer'].data['companyAddress'].label?.replace(/(?:\r\n|\r|\n)/g, '<br />');
+        template.sections['footer'].data['slogan'].label = template.sections['footer'].data['slogan'].label?.replace(/(?:\r\n|\r|\n)/g, '<br />');
 
         // template.sections[2].content[9].label = template.sections[2].content[9].label.replace(/(?:\r\n|\r|\n)/g, '<br />');
         return template;
@@ -353,7 +353,7 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
         this.companyUniqueName$.pipe(take(1)).subscribe(a => companyUniqueName = a);
         const event: UploadInput = {
             type: 'uploadAll',
-            url: Configuration.ApiUrl + INVOICE_API.UPLOAD_LOGO.replace(':companyUniqueName', encodeURIComponent(companyUniqueName)),
+            url: Configuration.ApiUrl + INVOICE_API.UPLOAD_LOGO?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName)),
             method: 'POST',
             headers: { 'Session-Id': sessionId },
         };

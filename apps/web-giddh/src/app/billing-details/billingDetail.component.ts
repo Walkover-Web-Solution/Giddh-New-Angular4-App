@@ -87,7 +87,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
     /** control for the MatSelect filter keyword */
-    public searchBillingStates: FormControl = new FormControl();
+    public searchBillingStates: string = "";
     /** Billing States list */
     public filteredBillingStates: IOption[] = [];
     /** control for the MatSelect filter keyword */
@@ -124,22 +124,15 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     public ngOnInit(): void {
-
-        /** This will be use for reset state value if input is empty */
-        this.store.pipe(select(s => s.general.states), takeUntil(this.destroyed$)).subscribe(res => {
-            if (res) {
-                Object.keys(res.stateList).forEach(key => {
-                    if (res.stateList[key]?.code === this.createNewCompany?.addresses[0]?.stateCode) {
-                        this.checkAndResetValue(this.searchBillingStates, res.stateList[key].name);
-                    }
-                });
-            }
-        });
-
-        /** This will use for filter states  */
-        this.searchBillingStates.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(search => {
-            this.filterStates(search);
-        });
+        /* RAZORPAY */
+        if (window['Razorpay'] === undefined) {
+            let scriptTag = document.createElement('script');
+            scriptTag.src = 'https://checkout.razorpay.com/v1/checkout.js';
+            scriptTag.type = 'text/javascript';
+            scriptTag.defer = true;
+            document.body.appendChild(scriptTag);
+        }
+        /* RAZORPAY */
 
         /** This will use for filter country  */
         this.searchCountry.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(search => {
@@ -149,15 +142,13 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
         this.store.dispatch(this.settingsProfileActions.resetPatchProfile());
 
         /** This will use for get active company data */
-        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-            if (activeCompany) {
-                this.getUpdatedStateCodes(activeCompany.countryV2?.alpha3CountryCode, true);
-                this.showGstAndTaxUsingCountryName(activeCompany.countryV2?.countryName);
-                // this.searchCountry.setValue({ label: activeCompany.countryV2?.countryName });
-                this.activeCompany = activeCompany;
-                this.getStates();
-                // this.getCountry();
+        this.settingsProfileService.GetProfileInfo().pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
+            if (response?.status === "success") {
+                this.getUpdatedStateCodes(response?.body?.countryV2?.alpha3CountryCode, true);
+                this.showGstAndTaxUsingCountryName(response?.body?.countryV2?.countryName);
+                this.activeCompany = response?.body;
                 this.reFillForm();
+                this.getStates();
             }
         });
 
@@ -234,8 +225,8 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
         let isValid: boolean = false;
 
         if (ele.value) {
-            if (this.formFields['taxName']['regex'] !== "" && this.formFields['taxName']['regex'].length > 0) {
-                for (let key = 0; key < this.formFields['taxName']['regex'].length; key++) {
+            if (this.formFields['taxName']['regex'] !== "" && this.formFields['taxName']['regex']?.length > 0) {
+                for (let key = 0; key < this.formFields['taxName']['regex']?.length; key++) {
                     let regex = new RegExp(this.formFields['taxName']['regex'][key]);
                     if (regex.test(ele.value)) {
                         isValid = true;
@@ -312,8 +303,8 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
     public prepareSelectedPlanFromSubscriptions(plan: CreateCompanyUsersPlan): void {
         this.isCreateAndSwitchCompanyInProcess = true;
         this.subscriptionPrice = plan.planDetails.amount;
-        this.SubscriptionRequestObj.userUniqueName = this.logedInuser.uniqueName;
-        this.SubscriptionRequestObj.planUniqueName = plan.planDetails.uniqueName;
+        this.SubscriptionRequestObj.userUniqueName = this.logedInuser?.uniqueName;
+        this.SubscriptionRequestObj.planUniqueName = plan.planDetails?.uniqueName;
         if (!this.UserCurrency) {
             this.store.pipe(select(s => s.session.currentCompanyCurrency), takeUntil(this.destroyed$)).subscribe(res => {
                 if (res) {
@@ -324,13 +315,13 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
         if (this.subscriptionPrice && this.UserCurrency) {
             this.companyService.getRazorPayOrderId(this.subscriptionPrice, this.UserCurrency).pipe(takeUntil(this.destroyed$)).subscribe((res: any) => {
                 this.isCreateAndSwitchCompanyInProcess = false;
-                if (res.status === 'success') {
-                    this.ChangePaidPlanAMT = res.body.amount;
-                    this.orderId = res.body.id;
+                if (res?.status === 'success') {
+                    this.ChangePaidPlanAMT = res.body?.amount;
+                    this.orderId = res.body?.id;
                     this.store.dispatch(this.companyActions.selectedPlan(plan));
                     this.razorpayAmount = this.getPayAmountForRazorPay(this.ChangePaidPlanAMT);
                     this.ngAfterViewInit();
-                } else {
+                } else if(res?.message) {
                     this.toasty.errorToast(res.message);
                 }
             });
@@ -375,7 +366,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof BillingDetailComponent
      */
     public onStateChange(event: any): void {
-        this.billingDetailsObj.stateCode = event?.option?.value?.value;
+        this.billingDetailsObj.stateCode = event?.value;
         this.cdRef.detectChanges();
     }
 
@@ -425,7 +416,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
 
         };
         setTimeout(() => {
-            this.razorpay = new (window as any).Razorpay(this.options);
+            this.razorpay = new window['Razorpay'](this.options);
         }, 1000);
     }
 
@@ -439,13 +430,13 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
             this.createNewCompany.contactNo = this.activeCompany.contactNo;
             this.createNewCompany.phoneCode = this.activeCompany.countryV2 ? this.activeCompany.countryV2.callingCode : '';
             this.createNewCompany.country = this.activeCompany.countryV2 ? this.activeCompany.countryV2.alpha2CountryCode : '';
-            this.createNewCompany.uniqueName = this.activeCompany.uniqueName;
+            this.createNewCompany.uniqueName = this.activeCompany?.uniqueName;
             this.createNewCompany.address = this.activeCompany.address;
             this.createNewCompany.addresses = this.activeCompany.addresses;
             this.createNewCompany.businessType = this.activeCompany.businessType;
             this.createNewCompany.businessNature = this.activeCompany.businessNature;
             this.createNewCompany.subscriptionRequest = new SubscriptionRequest();
-            this.createNewCompany.subscriptionRequest.userUniqueName = this.activeCompany.subscription ? this.activeCompany.subscription.userDetails.uniqueName : '';
+            this.createNewCompany.subscriptionRequest.userUniqueName = this.activeCompany.subscription ? this.activeCompany.subscription.userDetails?.uniqueName : '';
 
             // assign state code to billing details object
             if (this.activeCompany.state) {
@@ -464,7 +455,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
 
         let selectedBusinesstype = this.createNewCompany.businessType;
         if (selectedBusinesstype === 'Registered') {
-            this.billingDetailsObj.gstin = this.createNewCompany.addresses[0].taxNumber;
+            this.billingDetailsObj.gstin = this.createNewCompany.addresses[0]?.taxNumber;
         }
         this.billingDetailsObj.address = this.createNewCompany.address;
     }
@@ -489,13 +480,14 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.countrySource$ = observableOf(this.countrySource);
                 setTimeout(() => {
                     this.showLoader = false;
+                    this.cdRef.detectChanges();
                 }, 3000);
             } else {
                 let countryRequest = new CountryRequest();
                 countryRequest.formName = '';
                 this.store.dispatch(this.commonActions.GetAllCountry(countryRequest));
+                this.cdRef.detectChanges();
             }
-            this.cdRef.detectChanges();
         });
     }
 
@@ -506,7 +498,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof BillingDetailComponent
      */
     public getStates(): void {
-        this.store.pipe(select(s => s.general.states), take(1)).subscribe(res => {
+        this.store.pipe(select(s => s.general.states), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 this.states = [];
                 Object.keys(res.stateList).forEach(key => {
@@ -519,7 +511,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
 
                     if (this.createNewCompany !== undefined && this.createNewCompany.addresses !== undefined && this.createNewCompany.addresses[0] !== undefined) {
                         if (res.stateList[key].code === this.createNewCompany.addresses[0].stateCode) {
-                            this.searchBillingStates.setValue({ label: res.stateList[key].name });
+                            this.searchBillingStates = res.stateList[key].name;
                             this.selectedState = res.stateList[key].name;
                             this.billingDetailsObj.stateCode = res.stateList[key].code;
                         }
@@ -528,6 +520,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.filteredBillingStates = cloneDeep(this.states);
                 this.statesSource$ = observableOf(this.states);
                 this.showLoader = false;
+                this.cdRef.detectChanges();
             } else {
                 // initialize new StatesRequest();
                 let statesRequest = new StatesRequest();
@@ -535,6 +528,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
                 // check if createNewCompany object is initialized if not then user current company country code
                 statesRequest.country = this.createNewCompany ? this.createNewCompany.country : this.activeCompany.countryV2 ? this.activeCompany.countryV2.alpha2CountryCode : '';
                 this.store.dispatch(this.generalActions.getAllState(statesRequest));
+                this.cdRef.detectChanges();
             }
         });
     }
@@ -661,11 +655,6 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
     public resetValueIfOptionNotSelected(field: string): void {
         setTimeout(() => {
             switch (field) {
-                case "billingState":
-                    const stateObj = this.companyStatesSource?.filter(state => state.value === this.billingDetailsObj.stateCode);
-                    this.checkAndResetValue(this.searchBillingStates, stateObj[0]?.label);
-                    break;
-
                 case "billingCountry":
                     this.checkAndResetValue(this.searchCountry, this.activeCompany.country);
                     break;
@@ -713,7 +702,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof BillingDetailComponent
      */
     public onSelectChangeCountry(evt: any) {
-        this.searchBillingStates.setValue('');
+        this.searchBillingStates = '';
         this.getUpdatedStateCodes(evt.source.value.value, true);
         if (evt.source.value.label === 'India' && this.activeCompany?.country === 'India') {
             this.showGstinNo = true;

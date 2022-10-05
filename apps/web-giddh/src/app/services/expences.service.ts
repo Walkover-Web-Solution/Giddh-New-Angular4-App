@@ -24,7 +24,7 @@ export class ExpenseService {
         let url = this.createQueryString(this.config.apiUrl + EXPENSE_API.GET, {
             page: request.page, count: request.count, sort: request.sort, sortBy: request.sortBy
         });
-        return this.http.post(url.replace(':companyUniqueName', this.companyUniqueName), request).pipe(
+        return this.http.post(url?.replace(':companyUniqueName', this.companyUniqueName), request).pipe(
             map((res) => {
                 let data: BaseResponse<PettyCashReportResponse, any> = res;
                 data.request = request;
@@ -40,7 +40,7 @@ export class ExpenseService {
             page: request.page, count: request.count, sort: request.sort, sortBy: request.sortBy
         });
 
-        return this.http.post(url.replace(':companyUniqueName', this.companyUniqueName), request).pipe(
+        return this.http.post(url?.replace(':companyUniqueName', this.companyUniqueName), request).pipe(
             map((res) => {
                 let data: BaseResponse<PettyCashReportResponse, any> = res;
                 data.request = request;
@@ -52,10 +52,10 @@ export class ExpenseService {
     public actionPettycashReports(requestObj: ActionPettycashRequest, model?: any): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + EXPENSE_API.ACTION
-            .replace(':companyUniqueName', this.companyUniqueName)
-            .replace(':uniqueName', requestObj.uniqueName)
-            .replace(':accountUniqueName', encodeURIComponent(requestObj.accountUniqueName))
-            .replace(':actionType', requestObj.actionType);
+            ?.replace(':companyUniqueName', this.companyUniqueName)
+            ?.replace(':uniqueName', requestObj?.uniqueName)
+            ?.replace(':accountUniqueName', encodeURIComponent(requestObj.accountUniqueName))
+            ?.replace(':actionType', requestObj?.actionType);
 
         if (this.generalService.voucherApiVersion === 2) {
             url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
@@ -73,8 +73,8 @@ export class ExpenseService {
     public getPettycashEntry(uniqueName: string): Observable<BaseResponse<PettyCashResonse, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.get(this.config.apiUrl + EXPENSE_API.GETEntry
-            .replace(':companyUniqueName', this.companyUniqueName)
-            .replace(':accountUniqueName', encodeURIComponent(uniqueName))).pipe(
+            ?.replace(':companyUniqueName', this.companyUniqueName)
+            ?.replace(':accountUniqueName', encodeURIComponent(uniqueName))).pipe(
                 map((res) => {
                     let data: BaseResponse<any, any> = res;
                     return data;

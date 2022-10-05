@@ -10,6 +10,7 @@ import { GROUP_API } from './apiurls/group.api';
 import { GroupsWithAccountsResponse } from '../models/api-models/GroupsWithAccounts';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
+import { PAGINATION_LIMIT } from '../app.constant';
 
 declare var _: any;
 
@@ -37,7 +38,7 @@ export class GroupService {
             });
             listItem = Object.assign({}, listItem, { parentGroups: [] });
             listItem.parentGroups = newParents;
-            if (listItem.groups.length > 0) {
+            if (listItem.groups?.length > 0) {
                 result = this.flattenGroup(listItem.groups, newParents);
                 result.push(_.omit(listItem, 'groups'));
             } else {
@@ -50,7 +51,7 @@ export class GroupService {
 
     public CreateGroup(model: GroupCreateRequest): Observable<BaseResponse<GroupResponse, GroupCreateRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.post(this.config.apiUrl + GROUP_API.CREATE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(map((res) => {
+        return this.http.post(this.config.apiUrl + GROUP_API.CREATE?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(map((res) => {
             let data: BaseResponse<GroupResponse, GroupCreateRequest> = res;
             data.request = model;
             return data;
@@ -59,7 +60,7 @@ export class GroupService {
 
     public UpdateGroup(modele: GroupUpateRequest, groupUniqueName: string): Observable<BaseResponse<GroupResponse, GroupUpateRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.put(this.config.apiUrl + GROUP_API.UPDATE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':groupUniqueName', encodeURIComponent(groupUniqueName)), modele).pipe(map((res) => {
+        return this.http.put(this.config.apiUrl + GROUP_API.UPDATE?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':groupUniqueName', encodeURIComponent(groupUniqueName)), modele).pipe(map((res) => {
             let data: BaseResponse<GroupResponse, GroupUpateRequest> = res;
             data.queryString = { groupUniqueName };
             data.request = modele;
@@ -71,7 +72,7 @@ export class GroupService {
     public UnShareGroup(userEmail: string, groupUniqueName: string): Observable<BaseResponse<string, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
 
-        return this.http.put(this.config.apiUrl + GROUP_API.UNSHARE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':groupUniqueName', encodeURIComponent(groupUniqueName)), { user: userEmail }).pipe(map((res) => {
+        return this.http.put(this.config.apiUrl + GROUP_API.UNSHARE?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':groupUniqueName', encodeURIComponent(groupUniqueName)), { user: userEmail }).pipe(map((res) => {
             let data: BaseResponse<string, string> = res;
             data.request = userEmail;
             data.queryString = { groupUniqueName };
@@ -81,7 +82,7 @@ export class GroupService {
 
     public ShareWithGroup(groupUniqueName: string): Observable<BaseResponse<GroupSharedWithResponse[], string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.get(this.config.apiUrl + GROUP_API.SHARED_WITH.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':groupUniqueName', encodeURIComponent(groupUniqueName))).pipe(map((res) => {
+        return this.http.get(this.config.apiUrl + GROUP_API.SHARED_WITH?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':groupUniqueName', encodeURIComponent(groupUniqueName))).pipe(map((res) => {
             let data: BaseResponse<GroupSharedWithResponse[], string> = res;
             data.queryString = { groupUniqueName };
             data.request = groupUniqueName;
@@ -91,7 +92,7 @@ export class GroupService {
 
     public GetGroupsWithAccounts(q: string, branchUniqueName?: string): Observable<BaseResponse<GroupsWithAccountsResponse[], string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        let url = this.config.apiUrl + GROUP_API.GROUPS_WITH_ACCOUNT.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':q', encodeURIComponent(q || ''));
+        let url = this.config.apiUrl + GROUP_API.GROUPS_WITH_ACCOUNT?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':q', encodeURIComponent(q || ''));
         if (branchUniqueName) {
             branchUniqueName = branchUniqueName !== this.companyUniqueName ? branchUniqueName : '';
             url = url.concat(`&branchUniqueName=${branchUniqueName}`);
@@ -109,7 +110,7 @@ export class GroupService {
 
     public MoveGroup(modele: MoveGroupRequest, groupUniqueName: string): Observable<BaseResponse<MoveGroupResponse, MoveGroupRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.put(this.config.apiUrl + GROUP_API.MOVE_GROUP.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':groupUniqueName', encodeURIComponent(groupUniqueName)), modele).pipe(map((res) => {
+        return this.http.put(this.config.apiUrl + GROUP_API.MOVE_GROUP?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':groupUniqueName', encodeURIComponent(groupUniqueName)), modele).pipe(map((res) => {
             let data: BaseResponse<MoveGroupResponse, MoveGroupRequest> = res;
             data.request = modele;
             data.queryString = { groupUniqueName };
@@ -119,7 +120,7 @@ export class GroupService {
 
     public GetGroupDetails(groupUniqueName: string): Observable<BaseResponse<GroupResponse, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.get(this.config.apiUrl + GROUP_API.GET_GROUP_DETAILS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':groupUniqueName', encodeURIComponent(groupUniqueName))).pipe(map((res) => {
+        return this.http.get(this.config.apiUrl + GROUP_API.GET_GROUP_DETAILS?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':groupUniqueName', encodeURIComponent(groupUniqueName))).pipe(map((res) => {
             let data: BaseResponse<GroupResponse, string> = res;
             data.request = groupUniqueName;
             data.queryString = { groupUniqueName };
@@ -127,24 +128,24 @@ export class GroupService {
         }), catchError((e) => this.errorHandler.HandleCatch<GroupResponse, string>(e, groupUniqueName, { groupUniqueName })));
     }
 
-    public DeleteGroup(groupUniqueName: string): Observable<BaseResponse<string, string>> {
+    public DeleteGroup(groupUniqueName: string): Observable<BaseResponse<any, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.delete(this.config.apiUrl + GROUP_API.DELETE_GROUP.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':groupUniqueName', encodeURIComponent(groupUniqueName))).pipe(map((res) => {
-            let data: BaseResponse<string, string> = res;
+        return this.http.delete(this.config.apiUrl + GROUP_API.DELETE_GROUP?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':groupUniqueName', encodeURIComponent(groupUniqueName))).pipe(map((res) => {
+            let data: BaseResponse<any, string> = res;
             data.request = groupUniqueName;
             data.queryString = { groupUniqueName };
             return data;
-        }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, groupUniqueName, { groupUniqueName })));
+        }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e, groupUniqueName, { groupUniqueName })));
     }
 
     public GetFlattenGroupsAccounts(q: string = '', page: number = 1, count: number = 20000, showEmptyGroups: string = 'false', branchUniqueName?: string): Observable<BaseResponse<FlattenGroupsAccountsResponse, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         if (this.companyUniqueName) {
-            let url = this.config.apiUrl + GROUP_API.FLATTEN_GROUP_WITH_ACCOUNTS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-                .replace(':q', encodeURIComponent(q || ''))
-                .replace(':page', encodeURIComponent(page.toString()))
-                .replace(':count', encodeURIComponent(count.toString()))
-                .replace(':showEmptyGroups', encodeURIComponent(showEmptyGroups));
+            let url = this.config.apiUrl + GROUP_API.FLATTEN_GROUP_WITH_ACCOUNTS?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+                ?.replace(':q', encodeURIComponent(q || ''))
+                ?.replace(':page', encodeURIComponent(page?.toString()))
+                ?.replace(':count', encodeURIComponent(count?.toString()))
+                ?.replace(':showEmptyGroups', encodeURIComponent(showEmptyGroups));
             if (branchUniqueName) {
                 url = url.concat(`&branchUniqueName=${branchUniqueName !== this.companyUniqueName ? branchUniqueName : ''}`);
             }
@@ -161,7 +162,7 @@ export class GroupService {
 
     public GetTaxHierarchy(groupUniqueName: string): Observable<BaseResponse<GroupsTaxHierarchyResponse, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.get(this.config.apiUrl + GROUP_API.TAX_HIERARCHY.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':groupUniqueName', encodeURIComponent(groupUniqueName))).pipe(map((res) => {
+        return this.http.get(this.config.apiUrl + GROUP_API.TAX_HIERARCHY?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':groupUniqueName', encodeURIComponent(groupUniqueName))).pipe(map((res) => {
             let data: BaseResponse<GroupsTaxHierarchyResponse, string> = res;
             data.request = groupUniqueName;
             data.queryString = { groupUniqueName };
@@ -178,7 +179,7 @@ export class GroupService {
      */
     public createCompanyCustomField(model: any): Observable<BaseResponse<any, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.post(this.config.apiUrl + GROUP_API.CREATE_COMPANY_CUSTOM_FIELD.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(map(response => {
+        return this.http.post(this.config.apiUrl + GROUP_API.CREATE_COMPANY_CUSTOM_FIELD?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(map(response => {
             let data: BaseResponse<any, string> = response;
             data.request = model;
             return data;
@@ -194,7 +195,7 @@ export class GroupService {
     */
     public getCompanyCustomField(): Observable<BaseResponse<any, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.get(this.config.apiUrl + GROUP_API.CREATE_COMPANY_CUSTOM_FIELD.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map(response => {
+        return this.http.get(this.config.apiUrl + GROUP_API.CREATE_COMPANY_CUSTOM_FIELD?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map(response => {
             let data: BaseResponse<any, string> = response;
             return data;
         }), catchError((exception) => this.errorHandler.HandleCatch<string, any>(exception)));
@@ -209,7 +210,7 @@ export class GroupService {
      */
     public searchGroups(params: any): Observable<any> {
         const companyUniqueName = this.generalService.companyUniqueName;
-        let contextPath = `${this.config.apiUrl}${GROUP_API.SEARCH_GROUPS}`.replace(':companyUniqueName', encodeURIComponent(companyUniqueName));
+        let contextPath = `${this.config.apiUrl}${GROUP_API.SEARCH_GROUPS}`?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName));
         if (params) {
             Object.keys(params).forEach((key, index) => {
                 const delimiter = index === 0 ? '?' : '&'
@@ -223,5 +224,23 @@ export class GroupService {
         }
         return this.http.get(contextPath)
             .pipe(catchError((error) => this.errorHandler.HandleCatch<any, any>(error)));
+    }
+
+    public getMasters(groupUniqueName: string, page: Number): Observable<BaseResponse<GroupResponse, string>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.get(this.config.apiUrl + GROUP_API.GET_MASTERS?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':groupUniqueName', encodeURIComponent(groupUniqueName))?.replace(':page', encodeURIComponent(page?.toString()))?.replace(':count', '1000')).pipe(map((res) => {
+            let data: BaseResponse<GroupResponse, string> = res;
+            data.request = groupUniqueName;
+            data.queryString = { groupUniqueName };
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<GroupResponse, string>(e, groupUniqueName, { groupUniqueName })));
+    }
+
+    public getTopSharedGroups(): Observable<BaseResponse<GroupResponse, string>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.get(this.config.apiUrl + GROUP_API.GET_TOP_SHARED_GROUPS?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
+            let data: BaseResponse<GroupResponse, string> = res;
+            return data;
+        }), catchError((error) => this.errorHandler.HandleCatch<any, any>(error)));
     }
 }

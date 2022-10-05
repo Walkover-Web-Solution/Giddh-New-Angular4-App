@@ -90,10 +90,10 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
         let shareScopes = ['SHRALL', 'SHRLWR', 'SHRSM'];
         roleObj?.scopes.forEach((role) => {
             if (role.name === 'SHARE') {
-                role.permissions = role.permissions.filter((p) => {
+                role.permissions = role.permissions?.filter((p) => {
                     return shareScopes.indexOf(p.code) > -1;
                 });
-                if (role.permissions.length < 3) {
+                if (role.permissions?.length < 3) {
                     shareScopes.forEach((s: string) => {
                         let indexOfAbsentScope = role.permissions.findIndex((p) => p.code === s);
                         if (indexOfAbsentScope === -1) {
@@ -140,13 +140,13 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
         arr = forEach(data?.scopes, (page: Scope) => {
             remove(page.permissions, (o: Permission) => !o.isSelected);
         });
-        return filter(arr, (o: Scope) => o.permissions.length > 0);
+        return filter(arr, (o: Scope) => o.permissions?.length > 0);
     }
 
     public addNewRole(): any {
         let data = cloneDeep(this.roleObj);
         data.scopes = this.getScopeDataReadyForAPI(data);
-        if (data.scopes.length < 1) {
+        if (data.scopes?.length < 1) {
             return this._toaster.errorToast(this.localeData?.add_role_error);
         }
         this.store.dispatch(this.permissionActions.CreateRole(data));
@@ -184,7 +184,7 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
                 obj.permissions = obj.permissions.map((o: Permission) => {
                     return o = new NewPermissionObj(o.code, true);
                 });
-                if (obj.permissions.length < 6 && obj.name !== 'SHARE') {
+                if (obj.permissions?.length < 6 && obj.name !== 'SHARE') {
                     obj.permissions = this.pushNonExistRoles(obj.permissions, this.getAllRolesOfPageReady(cloneDeep(this.rawDataForAllRoles)));
                 }
                 let count = 0;
@@ -193,7 +193,7 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
                         count += 1;
                     }
                 });
-                if (count === obj.permissions.length) {
+                if (count === obj.permissions?.length) {
                     obj.selectAll = true;
                 }
             });

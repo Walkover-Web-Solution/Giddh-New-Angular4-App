@@ -119,7 +119,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="row" *ngIf="addAccountForm.get('country').value.countryCode !== companyCountry">
+                <div class="row" *ngIf="addAccountForm.get('currency').value !== companyCurrency">
                     <div class="form-group col-xs-12 col-sm-4">
                         <label for="">{{ localeData?.foreign_opening_balance }}</label>
                         <div [ngClass]="{ 'input-group': addAccountForm.get('foreignOpeningBalance').value > 0 }">
@@ -449,36 +449,21 @@
                                 />
                             </div>
                         </div>
-                        <div class="col-sm-6">
+                        <div class="col-sm-6 mobile-number-wrapper">
                             <div class="form-group">
                                 <label>{{ commonLocaleData?.app_mobile_number }}</label>
-                                <div class="d-flex mobileNumberWidth">
-                                    <sh-select
-                                        [placeholder]="commonLocaleData?.app_country_code"
-                                        [options]="countryPhoneCode"
-                                        formControlName="mobileCode"
-                                        class="contact-number-select"
-                                    ></sh-select>
+                                <div class="d-flex">
                                     <input
-                                        type="text"
-                                        pattern="[0-9]*"
-                                        class="form-control pull-right"
-                                        [placeholder]="localeData?.mobile_no_placeholder"
+                                        name="accountDetails.mobileNumber"
+                                        type="tel"
+                                        #initContactUpdate
+                                        id="init-contact-update"
                                         formControlName="mobileNo"
-                                        id="contactNo"
-                                        autocomplete="off"
-                                        (blur)="isValidMobileNumber(mobileNoEl)"
-                                        #mobileNoEl
+                                        [placeholder]="localeData?.mobile_no_placeholder"
                                     />
-                                    <small
-                                        class="clearfix error-msg"
-                                        *ngIf="
-                                            addAccountForm.get('mobileNo').value &&
-                                            !addAccountForm.get('mobileCode').value
-                                        "
-                                        >{{ localeData?.phone_code_error }}</small
-                                    >
                                 </div>
+                                <span id="init-contact-update-valid-msg" class="d-none"></span>
+                                <span id="init-contact-update-error-msg" class="d-none"></span>
                             </div>
                         </div>
                     </div>
@@ -815,7 +800,7 @@
                         (click)="submit()"
                         class="btn btn-primary update-btn-zindex"
                         [ladda]="updateAccountInProcess$ | async"
-                        [disabled]="addAccountForm.invalid || !(isGstValid$ | async)"
+                        [disabled]="addAccountForm.invalid || !(isGstValid$ | async) || isMobileNumberInvalid"
                     >
                         {{ commonLocaleData?.app_update }}
                     </button>

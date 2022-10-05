@@ -284,6 +284,9 @@ span.icon-advance-filter {
 .select-all-proformas-on-mobile-view {
     display: none;
 }
+.advance-search-mobile {
+    display: none;
+}
 .btn-wrapper-more {
     height: 30px;
 }
@@ -311,6 +314,9 @@ span.icon-advance-filter {
                 justify-content: flex-start !important;
             }
         }
+    }
+    .advance-search-mobile {
+        display: block;
     }
     .select-all-proformas-on-mobile-view {
         display: flex;

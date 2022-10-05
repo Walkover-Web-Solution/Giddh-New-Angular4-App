@@ -172,9 +172,9 @@ export class InventoryCreateUpdateGroupComponent implements OnInit, OnDestroy {
      */
     private getParentGroups(): void {
         this.inventoryService.GetGroupsWithStocksFlatten().pipe(takeUntil(this.destroyed$)).subscribe(data => {
-            if (data.status === 'success') {
+            if (data?.status === 'success') {
                 let groups: IOption[] = [];
-                this.arrangeGroups(data.body.results, groups);
+                this.arrangeGroups(data.body?.results, groups);
                 this.groups$ = observableOf(groups);
             }
         });
@@ -192,11 +192,11 @@ export class InventoryCreateUpdateGroupComponent implements OnInit, OnDestroy {
         rawList.map(group => {
             if (group) {
                 let newOption: IOption = { label: '', value: '' };
-                newOption.label = group.name;
-                newOption.value = group.uniqueName;
+                newOption.label = group?.name;
+                newOption.value = group?.uniqueName;
                 parents.push(newOption);
-                if (group.childStockGroups && group.childStockGroups.length > 0) {
-                    this.arrangeGroups(group.childStockGroups, parents);
+                if (group?.childStockGroups && group?.childStockGroups.length > 0) {
+                    this.arrangeGroups(group?.childStockGroups, parents);
                 }
             }
         });
@@ -255,7 +255,7 @@ export class InventoryCreateUpdateGroupComponent implements OnInit, OnDestroy {
             this.companyUniqueName$.pipe(take(1)).subscribe(a => companyUniqueName = a);
             const event: UploadInput = {
                 type: 'uploadAll',
-                url: Configuration.ApiUrl + LEDGER_API.UPLOAD_FILE.replace(':companyUniqueName', companyUniqueName),
+                url: Configuration.ApiUrl + LEDGER_API.UPLOAD_FILE?.replace(':companyUniqueName', companyUniqueName),
                 method: 'POST',
                 fieldName: 'file',
                 data: { company: companyUniqueName },
@@ -265,14 +265,14 @@ export class InventoryCreateUpdateGroupComponent implements OnInit, OnDestroy {
         } else if (output.type === 'start') {
             this.isFileUploading = true;
         } else if (output.type === 'done') {
-            if (output.file.response.status === 'success') {
+            if (output.file.response?.status === 'success') {
                 this.isFileUploading = false;
                 this.groupForm?.get("image")?.patchValue({ uniqueName: output.file.response.body?.uniqueName, name: output.file.response.body?.name });
                 this.toaster.successToast(this.commonLocaleData?.app_messages?.file_uploaded);
             } else {
                 this.isFileUploading = false;
                 this.groupForm?.get("image")?.patchValue({ uniqueName: "", name: "" });
-                this.toaster.errorToast(output.file.response.message);
+                this.toaster.errorToast(output.file.response?.message);
             }
         }
     }

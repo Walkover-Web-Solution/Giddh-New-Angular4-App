@@ -95,7 +95,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
      */
     public set sortReverse(value: boolean) {
         this._sortReverse = value;
-        this.searchResponseFiltered$ = this.searchResponseFiltered$.pipe(map(p => cloneDeep(p).sort((a, b) => (value ? -1 : 1) * a[this._sortType].toString().localeCompare(b[this._sortType]))));
+        this.searchResponseFiltered$ = this.searchResponseFiltered$.pipe(map(p => cloneDeep(p).sort((a, b) => (value ? -1 : 1) * a[this._sortType]?.toString().localeCompare(b[this._sortType]))));
     }
 
     /** pagination related  */
@@ -311,8 +311,8 @@ export class SearchGridComponent implements OnInit, OnDestroy {
 
             this.companyServices.downloadCSV(request).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                 this.searchLoader$ = of(false);
-                if (res.status === 'success') {
-                    let blobData = this.generalService.base64ToBlob(res.body, 'text/csv', 512);
+                if (res?.status === 'success') {
+                    let blobData = this.generalService.base64ToBlob(res?.body, 'text/csv', 512);
                     return saveAs(blobData, `${p.groupName}.csv`);
                 }
             });
@@ -421,7 +421,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
             if (this.messageBody.btn.set === this.commonLocaleData?.app_send_email) {
                 return this.companyServices.sendEmail(request).pipe(takeUntil(this.destroyed$))
                     .subscribe((r) => {
-                        r.status === 'success' ? this.toaster.successToast(r.body) : this.toaster.errorToast(r.message);
+                        r?.status === 'success' ? this.toaster.successToast(r?.body) : this.toaster.errorToast(r?.message);
                         this.checkboxInfo = {
                             selectedPage: 1
                         };
@@ -431,7 +431,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
                 delete temp.data['subject'];
                 return this.companyServices.sendSms(temp).pipe(takeUntil(this.destroyed$))
                     .subscribe((r) => {
-                        r.status === 'success' ? this.toaster.successToast(r.body) : this.toaster.errorToast(r.message);
+                        r?.status === 'success' ? this.toaster.successToast(r?.body) : this.toaster.errorToast(r?.message);
                         this.checkboxInfo = {
                             selectedPage: 1
                         };

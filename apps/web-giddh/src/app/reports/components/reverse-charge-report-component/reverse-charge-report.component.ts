@@ -180,7 +180,7 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
                     isCompany: true
                 });
                 let currentBranchUniqueName;
-                if (!this.currentBranch.uniqueName) {
+                if (!this.currentBranch?.uniqueName) {
                     // Assign the current branch only when it is not selected. This check is necessary as
                     // opening the branch switcher would reset the current selected branch as this subscription is run everytime
                     // branches are loaded
@@ -195,7 +195,7 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
                             uniqueName: this.activeCompany ? this.activeCompany.uniqueName : '',
                         };
                     }
-                    this.reverseChargeReportGetRequest.branchUniqueName = this.currentBranch.uniqueName;
+                    this.reverseChargeReportGetRequest.branchUniqueName = this.currentBranch?.uniqueName;
                 }
             } else {
                 if (this.generalService.companyUniqueName) {
@@ -270,12 +270,12 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
             this.reverseChargeReportResults = [];
 
             this.reverseChargeService.getReverseChargeReport(this.activeCompany.uniqueName, this.reverseChargeReportGetRequest, this.reverseChargeReportPostRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
-                if (res.status === 'success') {
+                if (res?.status === 'success') {
                     this.reverseChargeReportResults = res.body;
 
                     if(this.todaySelected) {
-                        this.selectedDateRange = { startDate: dayjs(this.reverseChargeReportResults.from, GIDDH_DATE_FORMAT), endDate: dayjs(this.reverseChargeReportResults.to, GIDDH_DATE_FORMAT) };
-                        this.selectedDateRangeUi = dayjs(this.reverseChargeReportResults.from, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(this.reverseChargeReportResults.to, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
+                        this.selectedDateRange = { startDate: dayjs(this.reverseChargeReportResults?.from, GIDDH_DATE_FORMAT), endDate: dayjs(this.reverseChargeReportResults?.to, GIDDH_DATE_FORMAT) };
+                        this.selectedDateRangeUi = dayjs(this.reverseChargeReportResults?.from, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(this.reverseChargeReportResults?.to, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
                     }
 
                     this.cdRef.detectChanges();
@@ -430,8 +430,8 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
      * @memberof ReverseChargeReport
      */
     public handleBranchChange(selectedEntity: any): void {
-        this.currentBranch.name = selectedEntity.label;
-        this.reverseChargeReportGetRequest.branchUniqueName = selectedEntity.value;
+        this.currentBranch.name = selectedEntity?.label;
+        this.reverseChargeReportGetRequest.branchUniqueName = selectedEntity?.value;
         this.getReverseChargeReport(true);
     }
 

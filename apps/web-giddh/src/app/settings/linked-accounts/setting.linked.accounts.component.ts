@@ -142,9 +142,9 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
      */
     public yodleeBank() {
         this._settingsLinkedAccountsService.GetYodleeToken().pipe(takeUntil(this.destroyed$)).subscribe(data => {
-            if (data.status === 'success') {
-                if (data.body.user) {
-                    let token = cloneDeep(data.body.user.accessTokens[0]);
+            if (data?.status === 'success') {
+                if (data?.body?.user) {
+                    let token = cloneDeep(data.body.user?.accessTokens[0]);
                     this.yodleeForm?.patchValue({
                         rsession: data.body.rsession,
                         app: token.appId,

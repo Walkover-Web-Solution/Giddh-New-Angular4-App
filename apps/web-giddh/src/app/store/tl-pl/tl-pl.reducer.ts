@@ -161,10 +161,10 @@ const removeZeroAmountAccount = (grpList: ChildGroup[]) => {
                 }
             });
         }
-        if (tempAcc.length > 0) {
+        if (tempAcc?.length > 0) {
             grp.accounts = tempAcc;
         }
-        if (grp.childGroups.length > 0) {
+        if (grp.childGroups?.length > 0) {
             return removeZeroAmountAccount(grp.childGroups);
         }
     });
@@ -181,10 +181,10 @@ const addVisibleFlag = (grpList: ChildGroup[]) => {
             account.isVisible = false;
         });
 
-        if (tempAcc.length > 0) {
+        if (tempAcc?.length > 0) {
             grp.accounts = tempAcc;
         }
-        if (grp.childGroups.length > 0) {
+        if (grp.childGroups?.length > 0) {
             return addVisibleFlag(grp.childGroups);
         }
     });
@@ -193,7 +193,7 @@ const addVisibleFlag = (grpList: ChildGroup[]) => {
 
 const removeZeroAmountGroup = (grpList) => {
     return each(grpList, (grp: any) => {
-        if (grp.childGroups.length > 0) {
+        if (grp.childGroups?.length > 0) {
             removeZeroAmountGroup(grp.childGroups);
         }
         return reject(grp.childGroups, (cGrp) => {
@@ -223,7 +223,7 @@ const filterProfitLossData = (data, statement) => {
                 }
                 return filterPlData.incArr[0].childGroups.push(grp);
             case 'expenses':
-                if (grp.uniqueName === 'operatingcost') {
+                if (grp?.uniqueName === 'operatingcost') {
                     filterPlData.expArr.push(operatingGrp);
                     return filterPlData.expArr[0].childGroups.push(grp);
                 } else {

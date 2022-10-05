@@ -121,7 +121,7 @@ export class InwardNoteComponent implements OnInit, OnChanges, OnDestroy {
         this.mode = mode;
         this.form.reset();
         this.inventoryEntryDate?.patchValue(dayjs().format(GIDDH_DATE_FORMAT));
-        this.transactions.controls = this.transactions.controls.filter(trx => false);
+        this.transactions.controls = this.transactions.controls?.filter(trx => false);
 
         if (this.mode === 'sender') {
             this.stock.setValidators(Validators.required);
@@ -137,13 +137,13 @@ export class InwardNoteComponent implements OnInit, OnChanges, OnDestroy {
 
     public ngOnChanges(changes: SimpleChanges): void {
         if (changes.stockList && this.stockList) {
-            this.stockListOptions = this.stockList.map(p => ({ label: p.name, value: p.uniqueName }));
+            this.stockListOptions = this.stockList.map(p => ({ label: p.name, value: p?.uniqueName }));
         }
         if (changes.stockUnits && this.stockUnits) {
             this.stockUnitsOptions = this.stockUnits.map(p => ({ label: `${p.name} (${p.code})`, value: p.code }));
         }
         if (changes.userList && this.userList) {
-            this.userListOptions = this.userList.map(p => ({ label: p.name, value: p.uniqueName }));
+            this.userListOptions = this.userList.map(p => ({ label: p.name, value: p?.uniqueName }));
         }
     }
 
@@ -154,7 +154,7 @@ export class InwardNoteComponent implements OnInit, OnChanges, OnDestroy {
         }
 
         const items = this.transactions;
-        const value = items.length > 0 ? items.at(0).value : {
+        const value = items?.length > 0 ? items?.at(0)?.value : {
             type: '',
             quantity: '',
             inventoryUser: '',
@@ -179,8 +179,8 @@ export class InwardNoteComponent implements OnInit, OnChanges, OnDestroy {
 
     public userChanged(option: IOption, index: number) {
         const items = this.form.get('transactions') as FormArray;
-        const user = this.userList.find(p => p.uniqueName === option.value);
-        const inventoryUser = user ? { uniqueName: user.uniqueName } : null;
+        const user = this.userList.find(p => p?.uniqueName === option.value);
+        const inventoryUser = user ? { uniqueName: user?.uniqueName } : null;
 
         if (index >= 0) {
             const control = items.at(index);
@@ -195,8 +195,8 @@ export class InwardNoteComponent implements OnInit, OnChanges, OnDestroy {
 
     public async stockChanged(option: IOption, index: number) {
         const items = this.transactions;
-        const stockItem = this.stockList.find(p => p.uniqueName === option.value);
-        const stock = stockItem ? { uniqueName: stockItem.uniqueName } : null;
+        const stockItem = this.stockList.find(p => p?.uniqueName === option.value);
+        const stock = stockItem ? { uniqueName: stockItem?.uniqueName } : null;
         const stockUnit = stockItem ? stockItem.stockUnit.code : null;
 
         if (stockItem && this.mode === 'sender') {
@@ -258,7 +258,7 @@ export class InwardNoteComponent implements OnInit, OnChanges, OnDestroy {
             this.disableStockButton = true;
             return;
         } else {
-            const stockItem = this.stockList.find(p => p.uniqueName === uniqueName);
+            const stockItem = this.stockList.find(p => p?.uniqueName === uniqueName);
             const stockUnit = stockItem ? stockItem.stockUnit.code : null;
             control.at(i).get('stockUnitCode')?.patchValue(stockUnit);
             this.disableStockButton = false;
@@ -340,7 +340,7 @@ export class InwardNoteComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public async getStockDetails(stockItem: IStocksItem) {
-        return await this._inventoryService.GetStockDetails(stockItem.stockGroup.uniqueName, stockItem.uniqueName).toPromise();
+        return await this._inventoryService.GetStockDetails(stockItem.stockGroup?.uniqueName, stockItem?.uniqueName).toPromise();
     }
 
     /**

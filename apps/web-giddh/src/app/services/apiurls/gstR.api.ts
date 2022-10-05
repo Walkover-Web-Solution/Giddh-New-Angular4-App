@@ -12,4 +12,5 @@ export const GSTR_API = {
     SAVE_GSP_SESSION: COMMON_V2 + '/gsp-session?gstin=:company_gstin&userName=:USERNAME&gsp=:GSP',
     SAVE_GSP_SESSION_WITH_OTP: COMMON_V2 + '/authenticate-gsp-session?gstin=:company_gstin&userName=:USERNAME&gsp=:GSP&otp=:OTP',
     FILE_GSTR1: COMMON_V2 + '/save-gstr1?gstin=:company_gstin&from=:from&to=:to&gsp=:gsp',
+    DOWNLOAD_JSON: COMMON_V2 +'/gstr1/download?gstin=:gstIn&from=:from&to=:to&type=:type'
 };

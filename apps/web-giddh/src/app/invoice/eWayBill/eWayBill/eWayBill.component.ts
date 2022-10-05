@@ -23,6 +23,7 @@ import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { Router } from '@angular/router';
 import { OrganizationType } from '../../../models/user-login-state';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
+import { GstReconcileService } from '../../../services/GstReconcile.service';
 
 @Component({
     // tslint:disable-next-line:component-selector
@@ -132,6 +133,8 @@ export class EWayBillComponent implements OnInit, OnDestroy {
     public universalDate: any[] = [];
     /** True if initial api got called */
     public initialApiCalled: boolean = false;
+    /** Stores the tax details of a company */
+    public taxes: IOption[] = [];
 
     constructor(
         private store: Store<AppState>,
@@ -145,6 +148,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         private breakpointObserver: BreakpointObserver,
         private router: Router,
         private settingsBranchAction: SettingsBranchActions,
+        private gstReconcileService: GstReconcileService
     ) {
         this.EwayBillfilterRequest.count = 20;
         this.EwayBillfilterRequest.page = 1;
@@ -186,6 +190,12 @@ export class EWayBillComponent implements OnInit, OnDestroy {
                 }
             }
         });
+
+        this.store.pipe(select(state => state.gstR?.activeCompanyGst), takeUntil(this.destroyed$)).subscribe(response => {
+            if(response) {
+                this.EwayBillfilterRequest.gstin = response;
+            }
+        });
     }
 
     public selectedDate(value: any) {
@@ -198,6 +208,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
         document.querySelector('body').classList.add('gst-sidebar-open');
+        this.loadTaxDetails();
         this.cancelEwaySuccess$.subscribe(p => {
             if (p) {
                 this.store.dispatch(this.invoiceActions.getALLEwaybillList());
@@ -294,34 +305,34 @@ export class EWayBillComponent implements OnInit, OnDestroy {
             if (response && response.length) {
                 this.currentCompanyBranches = response.map(branch => ({
                     label: branch.alias,
-                    value: branch.uniqueName,
+                    value: branch?.uniqueName,
                     name: branch.name,
                     parentBranch: branch.parentBranch
                 }));
                 this.currentCompanyBranches.unshift({
                     label: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
                     name: this.activeCompany ? this.activeCompany.name : '',
-                    value: this.activeCompany ? this.activeCompany.uniqueName : '',
+                    value: this.activeCompany ? this.activeCompany?.uniqueName : '',
                     isCompany: true
                 });
                 let currentBranchUniqueName;
-                if (!this.currentBranch || !this.currentBranch.uniqueName) {
+                if (!this.currentBranch || !this.currentBranch?.uniqueName) {
                     // Assign the current branch only when it is not selected. This check is necessary as
                     // opening the branch switcher would reset the current selected branch as this subscription is run everytime
                     // branches are loaded
                     if (this.currentOrganizationType === OrganizationType.Branch) {
                         currentBranchUniqueName = this.generalService.currentBranchUniqueName;
-                        this.currentBranch = _.cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName)) || this.currentBranch;
+                        this.currentBranch = _.cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName)) || this.currentBranch;
                     } else {
-                        currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : '';
+                        currentBranchUniqueName = this.activeCompany ? this.activeCompany?.uniqueName : '';
                         this.currentBranch = {
                             name: this.activeCompany ? this.activeCompany.name : '',
                             alias: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
-                            uniqueName: this.activeCompany ? this.activeCompany.uniqueName : '',
+                            uniqueName: this.activeCompany ? this.activeCompany?.uniqueName : '',
                         };
                     }
                 }
-                this.EwayBillfilterRequest.branchUniqueName = (this.currentBranch) ? this.currentBranch.uniqueName : "";
+                this.EwayBillfilterRequest.branchUniqueName = (this.currentBranch) ? this.currentBranch?.uniqueName : "";
                 if (!this.initialApiCalled) {
                     this.initialApiCalled = true;
                     this.initialRequest();
@@ -414,12 +425,11 @@ export class EWayBillComponent implements OnInit, OnDestroy {
     public onSelectEwayDownload(eway: Result) {
         this.selectedEway = _.cloneDeep(eway);
         this._invoiceService.DownloadEwayBills(this.selectedEway.ewbNo).pipe(takeUntil(this.destroyed$)).subscribe(d => {
-
-            if (d.status === 'success') {
+            if (d?.status === 'success') {
                 let blob = this.generalService.base64ToBlob(d.body, 'application/pdf', 512);
                 return saveAs(blob, `${this.selectedEway.ewbNo} - ${this.selectedEway.customerName}.pdf`);
             } else {
-                this._toaster.errorToast(d.message);
+                this._toaster.errorToast(d?.message);
             }
         });
     }
@@ -427,11 +437,11 @@ export class EWayBillComponent implements OnInit, OnDestroy {
     public onSelectEwayDetailedDownload(ewayItem: Result) {
         this.selectedEway = _.cloneDeep(ewayItem);
         this._invoiceService.DownloadDetailedEwayBills(this.selectedEway.ewbNo).pipe(takeUntil(this.destroyed$)).subscribe(d => {
-            if (d.status === 'success') {
+            if (d?.status === 'success') {
                 let blob = this.generalService.base64ToBlob(d.body, 'application/pdf', 512);
                 return saveAs(blob, `${this.selectedEway.ewbNo} - ${this.selectedEway.customerName}.pdf`);
             } else {
-                this._toaster.errorToast(d.message);
+                this._toaster.errorToast(d?.message);
             }
         });
     }
@@ -549,6 +559,9 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         }
         if (o.branchUniqueName) {
             model.branchUniqueName = o.branchUniqueName;
+        }
+        if(o.gstin) {
+            model.gstin = o.gstin;
         }
 
         return model;
@@ -672,5 +685,46 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         }
 
         this._cd.detectChanges();
+    }
+
+    /**
+     * Loads the tax details of a company
+     *
+     * @private
+     * @memberof EWayBillComponent
+     */
+    private loadTaxDetails(): void {
+        this.gstReconcileService.getTaxDetails().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response && response.body) {
+                this.taxes = response.body.map(tax => ({
+                    label: tax,
+                    value: tax
+                }));
+
+                if (!this.EwayBillfilterRequest.gstin && this.taxes?.length > 0) {
+                    this.EwayBillfilterRequest.gstin = this.taxes[0].value;
+                    if (this.initialApiCalled) {
+                        this.selectTax();
+                    }
+                }
+            }
+        });
+    }
+
+    /**
+     * Select tax handler
+     *
+     * @param {*} [event]
+     * @memberof EWayBillComponent
+     */
+    public selectTax(event?: any): void {
+        if (event && event.value) {
+            this.EwayBillfilterRequest.gstin = event.value;
+        }
+
+        if ((this.currentCompanyBranches?.length > 2 && this.currentOrganizationType === 'COMPANY') || this.EwayBillfilterRequest.gstin) {
+            this.EwayBillfilterRequest.page = 0;
+            this.getAllFilteredInvoice();
+        }
     }
 }

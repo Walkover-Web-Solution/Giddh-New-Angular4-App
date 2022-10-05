@@ -62,13 +62,13 @@ export class MapExcelDataComponent implements OnInit {
     }
 
     public mapExcelData() {
-        if (this.mandatoryHeadersCount !== this.mandatoryHeadersModel.length) {
+        if (this.mandatoryHeadersCount !== this.mandatoryHeadersModel?.length) {
             this.toaster.errorToast(this.localeData?.mandatory_columns_error);
             return;
         } else {
             // check if group have mandatory fields selected
-            if (this.mandatoryGroupModel.length) {
-                if (this.mandatoryGroupHeadersCount !== this.mandatoryGroupModel.length) {
+            if (this.mandatoryGroupModel?.length) {
+                if (this.mandatoryGroupHeadersCount !== this.mandatoryGroupModel?.length) {
                     this.toaster.errorToast(this.localeData?.mandatory_columns_error);
                     return;
                 }
@@ -81,7 +81,7 @@ export class MapExcelDataComponent implements OnInit {
                 items: this._importData?.data?.items
                     .map(p => {
                         p.row = p.row.map((pr, index) => {
-                            pr.columnNumber = index.toString();
+                            pr.columnNumber = index?.toString();
                             return pr;
                         });
                         return p;
@@ -100,7 +100,7 @@ export class MapExcelDataComponent implements OnInit {
         // filter dataModel options as per selection and for handling duplicate column case
         this.dataModel = this.dataModel.map(m => {
             if (data.field.columnNumber !== m.field.columnNumber) {
-                m.options = m.options.filter(f => f.value !== val.value);
+                m.options = m.options?.filter(f => f.value !== val.value);
             }
             return m;
         });
@@ -170,7 +170,7 @@ export class MapExcelDataComponent implements OnInit {
         });
 
         // change mapping column header as per de-selection
-        this._importData.mappings = this._importData.mappings.filter(f => f.columnNumber !== parseInt(data.field.columnNumber));
+        this._importData.mappings = this._importData.mappings?.filter(f => f.columnNumber !== parseInt(data.field.columnNumber));
 
         this.updateMandatoryHeadersCounters();
         this.updateMandatoryGroupHeadersCounters();
@@ -178,14 +178,14 @@ export class MapExcelDataComponent implements OnInit {
 
     public updateMandatoryHeadersCounters() {
         // count selected mandatory headers
-        this.mandatoryHeadersCount = this.mandatoryHeadersModel.filter(f => f.selected).length;
+        this.mandatoryHeadersCount = this.mandatoryHeadersModel?.filter(f => f.selected)?.length;
     }
 
     public updateMandatoryGroupHeadersCounters() {
         // count selected mandatory headers
-        this.mandatoryGroupHeadersCount = this.mandatoryGroupModel.filter(f => {
+        this.mandatoryGroupHeadersCount = this.mandatoryGroupModel?.filter(f => {
             return f.some(s => s.selected);
-        }).length;
+        })?.length;
     }
 
     private prepareDataModel(value: ImportExcelResponseData) {
@@ -196,7 +196,7 @@ export class MapExcelDataComponent implements OnInit {
 
             selectedIndex = value.mappings.findIndex(f => f.columnNumber === parseInt(field.columnNumber));
             if (selectedIndex > -1) {
-                options = value.giddhHeaders.filter(f => allMappedColumnHeader.filter(mf => mf !== value.mappings[selectedIndex].mappedColumn).indexOf(f) === -1).map(p => {
+                options = value.giddhHeaders?.filter(f => allMappedColumnHeader?.filter(mf => mf !== value.mappings[selectedIndex].mappedColumn).indexOf(f) === -1).map(p => {
                     return { label: p, value: p };
                 });
             }

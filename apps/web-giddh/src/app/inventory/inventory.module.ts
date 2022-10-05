@@ -44,6 +44,8 @@ import { InventoryRoutingModule } from './inventory.routing.module';
 import { JobworkSidebarComponent } from './jobwork/sidebar-components/jobwork.sidebar.component';
 import { ManufacturingComponent } from './manufacturing/manufacturing.component';
 import { NgxBootstrapSwitchModule } from 'ngx-bootstrap-switch';
+import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
+import { AsideMenuProductServiceModule } from '../shared/aside-menu-product-service/aside-menu-product-service.module';
 
 @NgModule({
     declarations: [
@@ -122,7 +124,9 @@ import { NgxBootstrapSwitchModule } from 'ngx-bootstrap-switch';
         GiddhRoundOffPipeModule,
         InventoryAddStockModule,
         ConfirmModalModule,
-        NgxBootstrapSwitchModule.forRoot()
+        NgxBootstrapSwitchModule.forRoot(),
+        PerfectScrollbarModule,
+        AsideMenuProductServiceModule
     ],
     entryComponents: [PaginationComponent]
 })

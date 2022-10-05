@@ -457,8 +457,8 @@
                             </th>
                         </tr>
                     </thead>
-                    <tbody *ngIf="(salesRegisteDetailedResponse$ | async).items.length">
-                        <tr *ngFor="let item of (salesRegisteDetailedResponse$ | async).items">
+                    <tbody *ngIf="(salesRegisteDetailedResponse$ | async)?.items?.length">
+                        <tr *ngFor="let item of (salesRegisteDetailedResponse$ | async)?.items">
                             <td [attr.data-title]="commonLocaleData?.app_date">{{ item.date }}</td>
 
                             <td
@@ -471,7 +471,7 @@
                                 <div
                                     *ngIf="modalUniqueName === item.uniqueName"
                                     account-detail-modal-component
-                                    [accountUniqueName]="item.account.uniqueName"
+                                    [accountUniqueName]="item.account?.uniqueName"
                                     [voucherType]="'sales'"
                                     [from]="this.from"
                                     [to]="this.to"
@@ -633,7 +633,9 @@
         </div>
         <div
             class="no-data"
-            *ngIf="(salesRegisteDetailedResponse$ | async).items.length === 0 && !(isGetSalesDetailsInProcess$ | async)"
+            *ngIf="
+                (salesRegisteDetailedResponse$ | async)?.items?.length === 0 && !(isGetSalesDetailsInProcess$ | async)
+            "
         >
             <no-data></no-data>
         </div>

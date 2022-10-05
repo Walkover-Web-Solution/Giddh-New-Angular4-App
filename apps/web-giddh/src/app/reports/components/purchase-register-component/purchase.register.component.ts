@@ -90,10 +90,10 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
         this.currentCompanyBranches$.subscribe(response => {
             if (response && response.length) {
                 this.currentCompanyBranches = response.map(branch => ({
-                    label: branch.alias,
-                    value: branch.uniqueName,
-                    name: branch.name,
-                    parentBranch: branch.parentBranch
+                    label: branch?.alias,
+                    value: branch?.uniqueName,
+                    name: branch?.name,
+                    parentBranch: branch?.parentBranch
                 }));
                 this.currentCompanyBranches.unshift({
                     label: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
@@ -121,7 +121,7 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
                         this.currentBranch.alias = selectedBranch.alias;
                     } else {
                         // Company was selected from the branch dropdown
-                        this.currentBranch.name = this.activeCompany.name;
+                        this.currentBranch.name = this.activeCompany?.name;
                     }
                 }
             } else {
@@ -219,8 +219,10 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
         })), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
                 this.selectedCompany = activeCompany;
-                this.financialOptions = activeCompany.financialYears.map(q => {
-                    return { label: q.uniqueName, value: q.uniqueName };
+                this.financialOptions = activeCompany.financialYears.map(response => {
+                    if(response){
+                        return { label: response.uniqueName, value: response.uniqueName };
+                    }
                 });
                 let selectedFinancialYear, activeFinancialYear, uniqueNameToSearch;
                 if (financialYearChosenInReportUniqueName) {
@@ -229,10 +231,12 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
                 } else {
                     uniqueNameToSearch = activeCompany.activeFinancialYear?.uniqueName;
                 }
-                selectedFinancialYear = this.financialOptions.find(p => p.value === uniqueNameToSearch);
+                selectedFinancialYear = this.financialOptions.find(p => p?.value === uniqueNameToSearch);
                 activeFinancialYear = this.selectedCompany.financialYears.find(p => p.uniqueName === uniqueNameToSearch);
                 this.activeFinacialYr = activeFinancialYear;
+                if(selectedFinancialYear){
                 this.currentActiveFinacialYear = _.cloneDeep(selectedFinancialYear);
+                }
                 this.currentBranch.uniqueName = currentBranchUniqueName ? currentBranchUniqueName : this.currentBranch?.uniqueName;
                 this.selectedType = currentTimeFilter ? currentTimeFilter.toLowerCase() : this.selectedType;
                 this.populateRecords(this.selectedType);
@@ -252,8 +256,8 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
     public populateRecords(interval, month?) {
         this.interval = interval;
         if (this.activeFinacialYr) {
-            let startDate = this.activeFinacialYr.financialYearStarts.toString();
-            let endDate = this.activeFinacialYr.financialYearEnds.toString();
+            let startDate = this.activeFinacialYr.financialYearStarts?.toString();
+            let endDate = this.activeFinacialYr.financialYearEnds?.toString();
             if (month) {
                 this.selectedMonth = month;
                 let startEndDate = this.getDateFromMonth(this.monthNames.indexOf(this.selectedMonth) + 1);
@@ -270,12 +274,12 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
                 branchUniqueName: this.currentBranch?.uniqueName
             }
             this.companyService.getPurchaseRegister(request).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
-                if (res.status === 'error') {
-                    this._toaster.errorToast(res.message);
+                if (res?.status === 'error') {
+                    this._toaster.errorToast(res?.message);
                 } else {
                     this.purchaseRegisterTotal = new PurchaseReportsModel();
-                    this.purchaseRegisterTotal.particular = this.activeFinacialYr.uniqueName;
-                    this.reportRespone = this.filterReportResp(res.body);
+                    this.purchaseRegisterTotal.particular = this.activeFinacialYr?.uniqueName;
+                    this.reportRespone = this.filterReportResp(res?.body);
                 }
             });
             this.savePreferences();
@@ -295,12 +299,12 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
                 branchUniqueName: this.currentBranch?.uniqueName
             }
             this.companyService.getPurchaseRegister(request).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
-                if (res.status === 'error') {
-                    this._toaster.errorToast(res.message);
+                if (res?.status === 'error') {
+                    this._toaster.errorToast(res?.message);
                 } else {
                     this.purchaseRegisterTotal = new PurchaseReportsModel();
                     this.purchaseRegisterTotal.particular = this.activeFinacialYr?.uniqueName;
-                    this.reportRespone = this.filterReportResp(res.body);
+                    this.reportRespone = this.filterReportResp(res?.body);
                 }
             });
 
@@ -323,7 +327,7 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
             let startDateSplit = startDate.split('-');
             let dt = new Date(startDateSplit[2], startDateSplit[1], startDateSplit[0]);
             // GET THE MONTH AND YEAR OF THE SELECTED DATE.
-            let month = (dt.getMonth() + 1).toString(),
+            let month = (dt.getMonth() + 1)?.toString(),
                 year = dt.getFullYear();
 
             // GET THE FIRST AND LAST DATE OF THE MONTH.
@@ -355,7 +359,7 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
      */
     private savePreferences(): void {
         this.store.dispatch(this.companyActions.setUserChosenFinancialYear({
-            financialYear: this.currentActiveFinacialYear.value, branchUniqueName: this.currentBranch?.uniqueName, timeFilter: this.selectedType
+            financialYear: this.currentActiveFinacialYear?.value, branchUniqueName: this.currentBranch?.uniqueName, timeFilter: this.selectedType
         }));
     }
 

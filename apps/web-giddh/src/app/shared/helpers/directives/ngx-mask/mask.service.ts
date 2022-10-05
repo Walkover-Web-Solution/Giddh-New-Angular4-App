@@ -51,12 +51,12 @@ export class MaskService extends MaskApplierService {
         let newInputValue: string = '';
         if (this.hiddenInput !== undefined) {
             let actualResult: string[] = this.actualValue.split('');
-            inputValue !== '' && actualResult.length
+            inputValue !== '' && actualResult?.length
                 ? typeof this.selStart === 'number' && typeof this.selEnd === 'number'
-                    ? inputValue.length > actualResult.length
+                    ? inputValue?.length > actualResult?.length
                         ? actualResult.splice(this.selStart, 0, getSymbol)
-                        : inputValue.length < actualResult.length
-                            ? actualResult.length - inputValue.length === 1
+                        : inputValue?.length < actualResult?.length
+                            ? actualResult?.length - inputValue?.length === 1
                                 ? actualResult.splice(this.selStart - 1, 1)
                                 : actualResult.splice(this.selStart, this.selEnd - this.selStart)
                             // tslint:disable-next-line:no-unused-expression
@@ -64,9 +64,9 @@ export class MaskService extends MaskApplierService {
                     // tslint:disable-next-line:no-unused-expression
                     : null
                 : (actualResult = []);
-            newInputValue = this.actualValue.length ? this.shiftTypedSymbols(actualResult.join('')) : inputValue;
+            newInputValue = this.actualValue?.length ? this.shiftTypedSymbols(actualResult.join('')) : inputValue;
         }
-        newInputValue = Boolean(newInputValue) && newInputValue.length ? newInputValue : inputValue;
+        newInputValue = Boolean(newInputValue) && newInputValue?.length ? newInputValue : inputValue;
         const result: string = super.applyMask(newInputValue, maskExpression, position, cb);
         this.actualValue = this.getActualValue(result);
 
@@ -75,21 +75,21 @@ export class MaskService extends MaskApplierService {
                 this.maskExpression.startsWith(Separators.DOT_SEPARATOR)) &&
             this.dropSpecialCharacters === true
         ) {
-            this.maskSpecialCharacters = this.maskSpecialCharacters.filter((item: string) => item !== ',');
+            this.maskSpecialCharacters = this.maskSpecialCharacters?.filter((item: string) => item !== ',');
         }
         if (this.maskExpression.startsWith(Separators.COMMA_SEPARATOR) && this.dropSpecialCharacters === true) {
-            this.maskSpecialCharacters = this.maskSpecialCharacters.filter((item: string) => item !== '.');
+            this.maskSpecialCharacters = this.maskSpecialCharacters?.filter((item: string) => item !== '.');
         }
 
         this.formControlResult(result);
 
         if (!this.showMaskTyped) {
             if (this.hiddenInput) {
-                return result && result.length ? this.hideInput(result, this.maskExpression) : result;
+                return result && result?.length ? this.hideInput(result, this.maskExpression) : result;
             }
             return result;
         }
-        const resLen: number = result.length;
+        const resLen: number = result?.length;
         const prefNmask: string = this.prefix + this.maskIsShown;
         return result + (this.maskExpression === 'IP' ? prefNmask : prefNmask.slice(resLen));
     }
@@ -146,7 +146,7 @@ export class MaskService extends MaskApplierService {
                         symbolToReplace = currSymbol;
                         return inputValue[index + 1];
                     }
-                    if (symbolToReplace.length) {
+                    if (symbolToReplace?.length) {
                         const replaceSymbol: string = symbolToReplace;
                         symbolToReplace = '';
                         return replaceSymbol;
@@ -159,7 +159,7 @@ export class MaskService extends MaskApplierService {
 
     public showMaskInInput(inputVal?: string): string {
         if (this.showMaskTyped && !!this.shownMaskExpression) {
-            if (this.maskExpression.length !== this.shownMaskExpression.length) {
+            if (this.maskExpression?.length !== this.shownMaskExpression?.length) {
                 throw new Error('Mask expression must match mask placeholder length');
             } else {
                 return this.shownMaskExpression;
@@ -168,7 +168,7 @@ export class MaskService extends MaskApplierService {
             if (inputVal) {
                 return this._checkForIp(inputVal);
             }
-            return this.maskExpression.replace(/\w/g, '_');
+            return this.maskExpression?.replace(/\w/g, '_');
         }
         return '';
     }
@@ -176,7 +176,7 @@ export class MaskService extends MaskApplierService {
     public clearIfNotMatchFn(): void {
         if (
             this.clearIfNotMatch &&
-            this.prefix.length + this.maskExpression.length + this.suffix.length !== this._formElement.value.length
+            this.prefix?.length + this.maskExpression?.length + this.suffix?.length !== this._formElement.value?.length
         ) {
             this.formElementProperty = ['value', ''];
             this.applyMask(this._formElement.value, this.maskExpression);
@@ -188,8 +188,8 @@ export class MaskService extends MaskApplierService {
     }
 
     public checkSpecialCharAmount(mask: string): number {
-        const chars: string[] = mask.split('').filter((item: string) => this._findSpecialChar(item));
-        return chars.length;
+        const chars: string[] = mask.split('')?.filter((item: string) => this._findSpecialChar(item));
+        return chars?.length;
     }
 
     private _checkForIp(inputVal: string): string {
@@ -197,21 +197,21 @@ export class MaskService extends MaskApplierService {
             return '_._._._';
         }
         const arr: string[] = [];
-        for (let i: number = 0; i < inputVal.length; i++) {
+        for (let i: number = 0; i < inputVal?.length; i++) {
             if (inputVal[i].match('\\d')) {
                 arr.push(inputVal[i]);
             }
         }
-        if (arr.length <= 3) {
+        if (arr?.length <= 3) {
             return '_._._';
         }
-        if (arr.length > 3 && arr.length <= 6) {
+        if (arr?.length > 3 && arr?.length <= 6) {
             return '_._';
         }
-        if (arr.length > 6 && arr.length <= 9) {
+        if (arr?.length > 6 && arr?.length <= 9) {
             return '_';
         }
-        if (arr.length > 9 && arr.length <= 12) {
+        if (arr?.length > 9 && arr?.length <= 12) {
             return '';
         }
         return '';
@@ -231,21 +231,21 @@ export class MaskService extends MaskApplierService {
     }
 
     private _removeMask(value: string, specialCharactersForRemove: string[]): string {
-        return value ? value.replace(this._regExpForRemove(specialCharactersForRemove), '') : value;
+        return value ? value?.replace(this._regExpForRemove(specialCharactersForRemove), '') : value;
     }
 
     private _removePrefix(value: string): string {
         if (!this.prefix) {
             return value;
         }
-        return value ? value.replace(this.prefix, '') : value;
+        return value ? value?.replace(this.prefix, '') : value;
     }
 
     private _removeSuffix(value: string): string {
         if (!this.suffix) {
             return value;
         }
-        return value ? value.replace(this.suffix, '') : value;
+        return value ? value?.replace(this.suffix, '') : value;
     }
 
     private _regExpForRemove(specialCharactersForRemove: string[]): RegExp {
@@ -265,7 +265,7 @@ export class MaskService extends MaskApplierService {
                         this._removeMask(
                             this._removeSuffix(this._removePrefix(result)),
                             this.maskSpecialCharacters
-                        ).replace(',', '.')
+                        )?.replace(',', '.')
                     );
         }
         separatorValue = this.testFn(Separators.DOT_SEPARATOR, this.maskExpression);
@@ -279,7 +279,7 @@ export class MaskService extends MaskApplierService {
                         this._removeMask(
                             this._removeSuffix(this._removePrefix(result)),
                             this.maskSpecialCharacters
-                        ).replace(',', '.')
+                        )?.replace(',', '.')
                     );
         }
         separatorValue = this.testFn(Separators.COMMA_SEPARATOR, this.maskExpression);
@@ -298,7 +298,7 @@ export class MaskService extends MaskApplierService {
                 this.maskExpression === Separators.INT_SPACE_SEPARATED || this.maskExpression === Separators.INT_COMMA_SEPARATED) {
                 return result === ''
                     ? result
-                    : Number(this._removeMask(this._removeSuffix(this._removePrefix(result)), this.maskSpecialCharacters.filter(f => f !== '.')));
+                    : Number(this._removeMask(this._removeSuffix(this._removePrefix(result)), this.maskSpecialCharacters?.filter(f => f !== '.')));
             } else {
                 return result === ''
                     ? result
@@ -309,7 +309,7 @@ export class MaskService extends MaskApplierService {
                 ','
             ) !== -1
         ) {
-            return this._removeMask(this._removeSuffix(this._removePrefix(result)), this.maskSpecialCharacters).replace(
+            return this._removeMask(this._removeSuffix(this._removePrefix(result)), this.maskSpecialCharacters)?.replace(
                 ',',
                 '.'
             );
@@ -318,7 +318,7 @@ export class MaskService extends MaskApplierService {
                 this.maskExpression === Separators.INT_SPACE_SEPARATED || this.maskExpression === Separators.INT_COMMA_SEPARATED) {
                 return result === ''
                     ? result
-                    : this._removeMask(this._removeSuffix(this._removePrefix(result)), this.maskSpecialCharacters.filter(f => f !== '.'));
+                    : this._removeMask(this._removeSuffix(this._removePrefix(result)), this.maskSpecialCharacters?.filter(f => f !== '.'));
             }
             return this._removeMask(this._removeSuffix(this._removePrefix(result)), this.maskSpecialCharacters);
         }

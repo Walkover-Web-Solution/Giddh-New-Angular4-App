@@ -128,22 +128,22 @@ export class LedgerVM {
         requestObj = cloneDeep(this.blankLedger);
 
         // filter transactions which have selected account
-        requestObj.transactions = requestObj.transactions.filter((bl: TransactionVM) => bl.particular);
+        requestObj.transactions = requestObj.transactions?.filter((bl: TransactionVM) => bl.particular);
 
         // map over transactions array
         requestObj.transactions.map((bl) => {
             // set transaction.particular to selectedAccount uniqueName
-            bl.particular = bl.selectedAccount ? bl.selectedAccount.uniqueName : bl.particular;
+            bl.particular = bl.selectedAccount ? bl.selectedAccount?.uniqueName : bl.particular;
             bl.isInclusiveTax = false;
             // filter taxes uniqueNames
-            bl.taxes = [...bl.taxesVm.filter(p => p.isChecked).map(p => p?.uniqueName)];
+            bl.taxes = [...bl.taxesVm?.filter(p => p.isChecked).map(p => p?.uniqueName)];
             // filter discount
-            bl.discounts = bl.discounts.filter(p => p.amount && p.isActive);
+            bl.discounts = bl.discounts?.filter(p => p.amount && p.isActive);
             // delete local id
             delete bl['id'];
 
             if (requestObj.isOtherTaxesApplicable && requestObj.otherTaxModal.appliedOtherTax) {
-                bl.taxes.push(requestObj.otherTaxModal.appliedOtherTax.uniqueName);
+                bl.taxes.push(requestObj.otherTaxModal.appliedOtherTax?.uniqueName);
             }
         });
         if (requestObj.voucherType === 'advance-receipt') {
@@ -197,17 +197,17 @@ export class LedgerVM {
 
             if (data) {
                 if (data.balanceText && data.balanceText.cr) {
-                    data.balanceText.cr = data.balanceText.cr.replace('<accountName>', accountName);
+                    data.balanceText.cr = data.balanceText.cr?.replace('<accountName>', accountName);
                 }
                 if (data.balanceText && data.balanceText.dr) {
-                    data.balanceText.dr = data.balanceText.dr.replace('<accountName>', accountName);
+                    data.balanceText.dr = data.balanceText.dr?.replace('<accountName>', accountName);
                 }
 
                 if (data.text && data.text.dr) {
-                    data.text.dr = data.text.dr.replace('<accountName>', accountName);
+                    data.text.dr = data.text.dr?.replace('<accountName>', accountName);
                 }
                 if (data.text && data.text.cr) {
-                    data.text.cr = data.text.cr.replace('<accountName>', accountName);
+                    data.text.cr = data.text.cr?.replace('<accountName>', accountName);
                 }
                 this.ledgerUnderStandingObj = _.cloneDeep(data);
             }
@@ -290,16 +290,16 @@ export class LedgerVM {
         requestObj = cloneDeep(this.currentBankEntry);
 
         // filter transactions which have selected account
-        requestObj.transactions = requestObj.transactions.filter((bl: TransactionVM) => bl.particular);
+        requestObj.transactions = requestObj.transactions?.filter((bl: TransactionVM) => bl.particular);
 
         // map over transactions array
         requestObj.transactions.map((bl: any) => {
             // set transaction.particular to selectedAccount uniqueName
             bl.particular = bl.selectedAccount ? bl.selectedAccount.uniqueName : bl.particular;
             // filter taxes uniqueNames
-            bl.taxes = [...bl.taxesVm.filter(p => p.isChecked).map(p => p?.uniqueName)];
+            bl.taxes = [...bl.taxesVm?.filter(p => p.isChecked).map(p => p?.uniqueName)];
             // filter discount
-            bl.discounts = bl.discounts.filter(p => p.amount && p.isActive);
+            bl.discounts = bl.discounts?.filter(p => p.amount && p.isActive);
             // delete local id
             delete bl['id'];
         });

@@ -150,6 +150,7 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
         });
 
         this.getFiles();
+        document.querySelector('body')?.classList?.add('ledger-attachments-popup');
     }
 
     /**
@@ -160,6 +161,7 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+        document.querySelector('body')?.classList?.remove('ledger-attachments-popup');
     }
 
     /**
@@ -307,16 +309,16 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
         } else if (output.type === 'start') {
             this.isFileUploading = true;
         } else if (output.type === 'done') {
-            if (output.file.response.status === 'success') {
+            if (output.file.response?.status === 'success') {
                 this.isFileUploading = false;
-                this.selectedItem.attachedFiles = [output.file.response.body?.uniqueName];
+                this.selectedItem.attachedFiles = [output.file.response?.body?.uniqueName];
                 this.toaster.showSnackBar("success", this.localeData?.file_uploaded);
 
                 //this.store.dispatch(this.ledgerAction.updateTxnEntry(this.selectedItem, this.selectedItem.particular?.uniqueName, this.selectedItem.entryUniqueName));
             } else {
                 this.isFileUploading = false;
                 this.selectedItem.attachedFiles = [];
-                this.toaster.showSnackBar("error", output.file.response.message);
+                this.toaster.showSnackBar("error", output.file.response?.message);
             }
         }
     }
@@ -400,7 +402,7 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
             if (response) {
                 this.ledgerService.removeAttachment(this.attachments[index]?.uniqueName).subscribe((response) => {
                     if (response?.status === 'success') {
-                        let updatedAttachments = this.attachments.filter(attachment => attachment.uniqueName !== this.attachments[index]?.uniqueName);
+                        let updatedAttachments = this.attachments?.filter(attachment => attachment.uniqueName !== this.attachments[index]?.uniqueName);
                         this.attachments = updatedAttachments;
                         this.refreshAfterClose = true;
 

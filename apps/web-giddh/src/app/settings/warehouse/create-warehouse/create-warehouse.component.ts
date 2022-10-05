@@ -295,7 +295,7 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
     public createNewAddress(addressDetails: any): void {
         this.isAddressChangeInProgress = true;
         const chosenState = addressDetails.addressDetails.stateList.find(selectedState => selectedState.value === addressDetails.formValue.state);
-        const linkEntity = addressDetails.addressDetails.linkedEntities.filter(entity => (addressDetails.formValue.linkedEntity.includes(entity.uniqueName))).map(filteredEntity => ({
+        const linkEntity = addressDetails.addressDetails.linkedEntities?.filter(entity => (addressDetails.formValue.linkedEntity.includes(entity.uniqueName))).map(filteredEntity => ({
             uniqueName: filteredEntity.uniqueName,
             isDefault: filteredEntity.isDefault,
             entity: filteredEntity.entity
@@ -311,7 +311,7 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
         };
 
         this.settingsProfileService.createNewAddress(requestObj).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
-            if (response.status === 'success' && response.body) {
+            if (response?.status === 'success' && response?.body) {
                 this.toggleAddressAsidePane();
                 this.addresses.push({
                     ...response.body,
@@ -320,7 +320,7 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
                 })
                 this.toastService.successToast(this.profileLocaleData?.address_created);
             } else {
-                this.toastService.errorToast(response.message);
+                this.toastService.errorToast(response?.message);
             }
             this.isAddressChangeInProgress = false;
         }, () => {

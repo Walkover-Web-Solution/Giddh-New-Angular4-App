@@ -496,11 +496,6 @@ export class ContactComponent implements OnInit, OnDestroy {
 
     public performActions(type: number, account: any, event?: any) {
         switch (type) {
-            case 0: // go to add and manage
-                this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(account.name));
-                this.store.dispatch(this.groupWithAccountsAction.OpenAddAndManageFromOutside(account.name));
-                break;
-
             case 1: // go to ledger
                 this.goToRoute("ledger", `/${this.fromDate}/${this.toDate}`, account?.uniqueName);
                 break;
@@ -720,7 +715,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     public deleteComment(accountUniqueName) {
         setTimeout(() => {
             this.contactService.deleteComment(accountUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(res => {
-                if (res.status === "success") {
+                if (res?.status === "success") {
                     this.updateCommentIdx = null;
                 }
             });
@@ -783,7 +778,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     public addComment(account) {
         setTimeout(() => {
             this.contactService.addComment(account?.comment, account?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(res => {
-                if (res.status === 'success') {
+                if (res?.status === 'success') {
                     this.updateCommentIdx = null;
                     account.comment = cloneDeep(res.body.description);
                 }
@@ -878,7 +873,7 @@ export class ContactComponent implements OnInit, OnDestroy {
         if (this.messageBody.btn.set === this.commonLocaleData?.app_send_email) {
             return this.companyServices.sendEmail(request).pipe(takeUntil(this.destroyed$))
                 .subscribe((r) => {
-                    r.status === "success" ? this.toaster.showSnackBar("success", r.body) : this.toaster.showSnackBar("error", r.message);
+                    r?.status === "success" ? this.toaster.showSnackBar("success", r?.body) : this.toaster.showSnackBar("error", r?.message);
                     this.checkboxInfo = {
                         selectedPage: 1,
                     };
@@ -890,7 +885,7 @@ export class ContactComponent implements OnInit, OnDestroy {
             delete temp.data["subject"];
             return this.companyServices.sendSms(temp).pipe(takeUntil(this.destroyed$))
                 .subscribe((r) => {
-                    r.status === "success" ? this.toaster.showSnackBar("success", r.body) : this.toaster.showSnackBar("error", r.message);
+                    r?.status === "success" ? this.toaster.showSnackBar("success", r?.body) : this.toaster.showSnackBar("error", r?.message);
                     this.checkboxInfo = {
                         selectedPage: 1,
                     };
@@ -1115,8 +1110,8 @@ export class ContactComponent implements OnInit, OnDestroy {
 
         this.companyServices.downloadCSV(request).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             this.searchLoader$ = observableOf(false);
-            if (res.status === "success") {
-                let blobData = this.generalService.base64ToBlob(res.body, "text/csv", 512);
+            if (res?.status === "success") {
+                let blobData = this.generalService.base64ToBlob(res?.body, "text/csv", 512);
                 return saveAs(blobData, `${this.groupUniqueName}.csv`);
             }
         });
@@ -1304,7 +1299,7 @@ export class ContactComponent implements OnInit, OnDestroy {
 
     private setTableColspan() {
         let balancesColsArr = ['openingBalance'];
-        let length = Object.keys(this.showFieldFilter).filter(f => this.showFieldFilter[f]).filter(f => balancesColsArr.includes(f))?.length;
+        let length = Object.keys(this.showFieldFilter)?.filter(f => this.showFieldFilter[f])?.filter(f => balancesColsArr.includes(f))?.length;
         this.tableColsPan = length > 0 ? 4 : 3;
     }
 
@@ -1394,11 +1389,11 @@ export class ContactComponent implements OnInit, OnDestroy {
      */
     public prepareSelectedContactsList(element: any, isChecked: boolean): void {
         // selected accounts or creditors list for bulk payment
-        let accountExists = this.selectedAccountsList?.filter(account => account.uniqueName === element?.uniqueName);
+        let accountExists = this.selectedAccountsList?.filter(account => account?.uniqueName === element?.uniqueName);
         if (!accountExists?.length && isChecked) {
             this.selectedAccountsList.push(element);
         } else if (accountExists?.length > 0 && !isChecked) {
-            this.selectedAccountsList = this.selectedAccountsList?.filter(account => account.uniqueName !== element?.uniqueName);
+            this.selectedAccountsList = this.selectedAccountsList?.filter(account => account?.uniqueName !== element?.uniqueName);
         }
         // selected contacts list
         let indexOfEntrySelected = this.selectedCheckedContacts.indexOf(element?.uniqueName);
@@ -1472,16 +1467,16 @@ export class ContactComponent implements OnInit, OnDestroy {
         for (let key of field) {
             if (key?.uniqueName) {
                 let index = Object.keys(this.showFieldFilter).length;
-                if (!this.showFieldFilter[key.uniqueName]) {
-                    this.showFieldFilter[key.uniqueName] = {
+                if (!this.showFieldFilter[key?.uniqueName]) {
+                    this.showFieldFilter[key?.uniqueName] = {
                         visibility: false,
                         displayName: key.key,
                     };
                 }
 
-                let isColumnAvailable = this.availableColumnsCount.filter(column => column.value === key.uniqueName);
+                let isColumnAvailable = this.availableColumnsCount?.filter(column => column.value === key?.uniqueName);
                 if (!isColumnAvailable?.length) {
-                    this.availableColumnsCount.push({ key: index, value: key.uniqueName });
+                    this.availableColumnsCount.push({ key: index, value: key?.uniqueName });
                 }
             }
         }
@@ -1497,16 +1492,16 @@ export class ContactComponent implements OnInit, OnDestroy {
      */
     public setDisplayColumns(): void {
         const defaultColumms: string[] = this.activeTab === "customer" ? this.customerColumns : this.vendorColumns;
-        let computedColumns: string[] = [...defaultColumms, ...Object.keys(this.showFieldFilter).filter(key => this.showFieldFilter[key].visibility)];
+        let computedColumns: string[] = [...defaultColumms, ...Object.keys(this.showFieldFilter)?.filter(key => this.showFieldFilter[key].visibility)];
         if (this.activeTab === "vendor" && computedColumns?.length) {
             computedColumns?.push("action");
         }
         if (computedColumns.findIndex(s => s === "openingBalance") > -1) {
-            computedColumns = computedColumns.filter(s => s !== "openingBalance");
+            computedColumns = computedColumns?.filter(s => s !== "openingBalance");
             computedColumns.splice(1, 0, "openingBalance");
         }
         if (computedColumns.findIndex(s => s === "parentGroup") > -1) {
-            computedColumns = computedColumns.filter(s => s !== "parentGroup");
+            computedColumns = computedColumns?.filter(s => s !== "parentGroup");
             computedColumns.splice(1, 0, "parentGroup");
         }
         this.displayColumns.next(computedColumns);
@@ -1692,8 +1687,8 @@ export class ContactComponent implements OnInit, OnDestroy {
         }
         if (this.selectedAccountsList?.length < this.selectedCheckedContacts?.length) {
             let message = this.localeData?.bank_transactions_message;
-            message = message.replace("[SUCCESS]", this.selectedCheckedContacts.length - this.selectedAccountsList.length);
-            message = message.replace("[TOTAL]", this.selectedCheckedContacts.length);
+            message = message?.replace("[SUCCESS]", this.selectedCheckedContacts?.length - this.selectedAccountsList?.length);
+            message = message?.replace("[TOTAL]", this.selectedCheckedContacts?.length);
 
             this.toaster.showSnackBar("info", message);
             return;

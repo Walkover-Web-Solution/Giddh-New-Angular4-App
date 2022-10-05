@@ -111,11 +111,11 @@ export class UpdateLedgerTaxControlComponent implements OnDestroy, OnChanges {
      */
     public prepareTaxObject() {
         if (this.customTaxTypesForTaxFilter && this.customTaxTypesForTaxFilter.length) {
-            this.taxes = this.taxes.filter(f => this.customTaxTypesForTaxFilter.includes(f.taxType));
+            this.taxes = this.taxes?.filter(f => this.customTaxTypesForTaxFilter.includes(f.taxType));
         }
 
         if (this.exceptTaxTypes && this.exceptTaxTypes.length) {
-            this.taxes = this.taxes.filter(f => !this.exceptTaxTypes.includes(f.taxType));
+            this.taxes = this.taxes?.filter(f => !this.exceptTaxTypes.includes(f.taxType));
         }
         this.taxes.map(tax => {
             const index = this.taxRenderData.findIndex(f => f?.uniqueName === tax?.uniqueName);
@@ -135,11 +135,11 @@ export class UpdateLedgerTaxControlComponent implements OnDestroy, OnChanges {
                     let taxObject = orderBy(tax.taxDetail, (p: ITaxDetail) => {
                         return dayjs(p.date, GIDDH_DATE_FORMAT);
                     }, 'desc');
-                    let exactDate = taxObject.filter(p => dayjs(p.date, GIDDH_DATE_FORMAT).isSame(dayjs(this.date, GIDDH_DATE_FORMAT)));
+                    let exactDate = taxObject?.filter(p => dayjs(p.date, GIDDH_DATE_FORMAT).isSame(dayjs(this.date, GIDDH_DATE_FORMAT)));
                     if (exactDate && exactDate.length > 0) {
                         taxObj.amount = exactDate[0].taxValue;
                     } else {
-                        let filteredTaxObject = taxObject.filter(p => dayjs(p.date, GIDDH_DATE_FORMAT) < dayjs(this.date, GIDDH_DATE_FORMAT));
+                        let filteredTaxObject = taxObject?.filter(p => dayjs(p.date, GIDDH_DATE_FORMAT) < dayjs(this.date, GIDDH_DATE_FORMAT));
                         if (filteredTaxObject && filteredTaxObject.length > 0) {
                             taxObj.amount = filteredTaxObject[0].taxValue;
                         } else {
@@ -196,7 +196,7 @@ export class UpdateLedgerTaxControlComponent implements OnDestroy, OnChanges {
         }
         if (this.allowedSelectionOfAType && this.allowedSelectionOfAType.type && this.allowedSelectionOfAType.type.length) {
             this.allowedSelectionOfAType.type.forEach(taxType => {
-                const selectedTaxes = this.taxRenderData.filter(appliedTaxes => (appliedTaxes.isChecked && taxType === appliedTaxes.type));
+                const selectedTaxes = this.taxRenderData?.filter(appliedTaxes => (appliedTaxes.isChecked && taxType === appliedTaxes.type));
 
                 if (selectedTaxes && selectedTaxes.length >= this.allowedSelectionOfAType.count) {
                     this.taxRenderData.map((taxesApplied => {
@@ -218,7 +218,7 @@ export class UpdateLedgerTaxControlComponent implements OnDestroy, OnChanges {
                 // In case of advance receipt only a single tax is allowed in addition to CESS
                 // Check if atleast a single non-cess tax is selected, if yes, then disable all other taxes
                 // except CESS taxes
-                let singleSelectedTax = this.taxRenderData.filter((tax) => tax.isChecked && tax.type !== 'gstcess');
+                let singleSelectedTax = this.taxRenderData?.filter((tax) => tax.isChecked && tax.type !== 'gstcess');
                 const atleastSingleTaxSelected: boolean = singleSelectedTax && singleSelectedTax.length !== 0;
                 if (atleastSingleTaxSelected) {
                     this.taxRenderData.map((taxesApplied => {
@@ -305,7 +305,7 @@ export class UpdateLedgerTaxControlComponent implements OnDestroy, OnChanges {
      * @returns {string[]}
      */
     private generateSelectedTaxes(): UpdateLedgerTaxData[] {
-        return this.taxRenderData.filter(p => p.isChecked).map(p => {
+        return this.taxRenderData?.filter(p => p.isChecked).map(p => {
             let tax = new UpdateLedgerTaxData();
             tax.particular.name = p?.name;
             tax.particular.uniqueName = p?.uniqueName;

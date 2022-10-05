@@ -267,11 +267,11 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     }
 
     public ngOnChanges(changes: SimpleChanges): void {
-        if ('items' in changes && changes.items.currentValue.filter(newItem => (!changes?.items?.previousValue || changes?.items?.previousValue?.every(oldItem => oldItem?.uniqueName !== newItem?.uniqueName)))?.length) {
+        if ('items' in changes && changes.items.currentValue?.filter(newItem => (!changes?.items?.previousValue || changes?.items?.previousValue?.every(oldItem => oldItem?.uniqueName !== newItem?.uniqueName)))?.length) {
             this.filteredData = changes.items.currentValue;
-            if (this.selectedItem && this.selectedItem.uniqueName) {
-                this.selectedItem = this.filteredData.filter(item => {
-                    return item.uniqueName === this.selectedItem.uniqueName;
+            if (this.selectedItem && this.selectedItem?.uniqueName) {
+                this.selectedItem = this.filteredData?.filter(item => {
+                    return item?.uniqueName === this.selectedItem?.uniqueName;
                 })[0];
             }
             if (this.invoiceSearch && this.searchElement && this.searchElement.nativeElement) {
@@ -415,8 +415,8 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
 
         if (this._generalService.voucherApiVersion === 2 && ![VoucherTypeEnum.generateEstimate, VoucherTypeEnum.generateProforma].includes(this.voucherType)) {
             let getRequest = {
-                voucherType: this.selectedItem.voucherType,
-                uniqueName: this.selectedItem.uniqueName
+                voucherType: this.selectedItem?.voucherType,
+                uniqueName: this.selectedItem?.uniqueName
             };
 
             this.sanitizedPdfFileUrl = null;
@@ -437,7 +437,9 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
 
                     if (result.body.attachments?.length > 0) {
                         /** Creating attachment start */
-                        this.selectedItem.hasAttachment = true;
+                        if (this.selectedItem) {
+                            this.selectedItem.hasAttachment = true;
+                        }
                         this.isAttachmentExpanded = false;
                         const fileExtention = result.body.attachments[0].type.toLowerCase();
                         if (FILE_ATTACHMENT_TYPE.IMAGE.includes(fileExtention)) {
@@ -642,8 +644,8 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
             }
         } else if (this.selectedItem?.voucherType === VoucherTypeEnum.creditNote || this.selectedItem?.voucherType === VoucherTypeEnum.debitNote) {
             if (this._generalService.voucherApiVersion === 2) {
-                if (this.selectedItem.hasAttachment) {
-                    this.downloadVoucherModal.show();
+                if (this.selectedItem?.hasAttachment) {
+                    this.downloadVoucherModal?.show();
                 } else {
                     if (this.selectedItem) {
                         return saveAs(this.selectedItem.blob, `${this.selectedItem.voucherNumber}.pdf`);
@@ -653,7 +655,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                 this.downloadCreditDebitNotePdf();
             }
         } else {
-            this.downloadVoucherModal.show();
+            this.downloadVoucherModal?.show();
         }
     }
 
@@ -707,9 +709,9 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                 res = this._generalService.convertV1ResponseInV2(res);
                 this.thermalService.print(this.defaultTemplate, res);
             } else {
-                this.store.dispatch(this._invoiceReceiptActions.getVoucherDetailsV4(this.selectedItem.account?.uniqueName, {
+                this.store.dispatch(this._invoiceReceiptActions.getVoucherDetailsV4(this.selectedItem?.account?.uniqueName, {
                     invoiceNumber: this.selectedItem?.voucherNumber,
-                    voucherType: this.selectedItem.voucherType,
+                    voucherType: this.selectedItem?.voucherType,
                     uniqueName: this.selectedItem?.uniqueName
                 }));
             }
@@ -760,7 +762,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
             this.companyName$.pipe(take(1)).subscribe(a => companyUniqueName = a);
             const event: UploadInput = {
                 type: 'uploadAll',
-                url: Configuration.ApiUrl + LEDGER_API.UPLOAD_FILE.replace(':companyUniqueName', companyUniqueName),
+                url: Configuration.ApiUrl + LEDGER_API.UPLOAD_FILE?.replace(':companyUniqueName', companyUniqueName),
                 method: 'POST',
                 fieldName: 'file',
                 data: { company: companyUniqueName },
@@ -770,9 +772,9 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         } else if (output.type === 'start') {
             this.isFileUploading = true;
         } else if (output.type === 'done') {
-            if (output.file.response.status === 'success') {
+            if (output.file.response?.status === 'success') {
                 this._toasty.successToast(this.localeData?.file_uploaded);
-                const response = output.file.response.body;
+                const response = output.file.response?.body;
                 this.isFileUploading = false;
                 if (this.voucherApiVersion === 2) {
                     const requestObject = {
@@ -796,7 +798,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                 }
             } else {
                 this.isFileUploading = false;
-                this._toasty.errorToast(output.file.response.message);
+                this._toasty.errorToast(output.file.response?.message);
             }
         }
     }
@@ -884,7 +886,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
      * @memberof InvoicePreviewDetailsComponent
      */
     public checkIfPipeSymbolRequired(loop: number): boolean {
-        return loop < (this.purchaseOrderNumbers.length - 1);
+        return loop < (this.purchaseOrderNumbers?.length - 1);
     }
 
     /**
@@ -922,9 +924,9 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
      * @memberof InvoicePreviewDetailsComponent
      */
     public openSendMailModal(template: TemplateRef<any>): void {
-        this.sendEmailRequest.email = this.selectedItem.account.email;
-        this.sendEmailRequest.uniqueName = this.selectedItem.uniqueName;
-        this.sendEmailRequest.accountUniqueName = this.selectedItem.account.uniqueName;
+        this.sendEmailRequest.email = this.selectedItem?.account?.email;
+        this.sendEmailRequest.uniqueName = this.selectedItem?.uniqueName;
+        this.sendEmailRequest.accountUniqueName = this.selectedItem?.account?.uniqueName;
         this.sendEmailRequest.companyUniqueName = this.companyUniqueName;
         this.modalRef = this.modalService.show(template);
     }
@@ -951,8 +953,8 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         if (this.pdfPreviewHasError || !this.pdfPreviewLoaded) {
             return;
         }
-        if (this._generalService.voucherApiVersion === 2 && this.selectedItem.hasAttachment) {
-            this.downloadVoucherModal.show();
+        if (this._generalService.voucherApiVersion === 2 && this.selectedItem?.hasAttachment) {
+            this.downloadVoucherModal?.show();
         } else {
             let voucherNumber = (this.selectedItem?.voucherNumber) ? this.selectedItem?.voucherNumber : this.commonLocaleData?.app_not_available;
             saveAs(this.attachedDocumentBlob, voucherNumber + '.pdf');
@@ -966,14 +968,14 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
      */
     public getLinkedPurchaseOrders(): void {
         this.purchaseOrderNumbers = [];
-        if (this.selectedItem.voucherType === VoucherTypeEnum.purchase) {
+        if (this.selectedItem?.voucherType === VoucherTypeEnum.purchase) {
             const apiCallObservable = this._generalService.voucherApiVersion === 2 ?
-                this._receiptService.getVoucherDetailsV4(this.selectedItem.account?.uniqueName, {
+                this._receiptService.getVoucherDetailsV4(this.selectedItem?.account?.uniqueName, {
                     invoiceNumber: this.selectedItem?.voucherNumber,
-                    voucherType: this.selectedItem.voucherType,
+                    voucherType: this.selectedItem?.voucherType,
                     uniqueName: this.selectedItem?.uniqueName
                 }) :
-                this._receiptService.GetPurchaseRecordDetails(this.selectedItem.account?.uniqueName, this.selectedItem.uniqueName);
+                this._receiptService.GetPurchaseRecordDetails(this.selectedItem?.account?.uniqueName, this.selectedItem?.uniqueName);
             apiCallObservable.pipe(takeUntil(this.destroyed$)).subscribe((res: any) => {
                 if (res && res.body) {
                     this.purchaseOrderNumbers = res.body.purchaseOrderDetails;
@@ -991,11 +993,11 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     public filterVouchers(term): void {
         this.invoiceSearch = term;
         this.invoiceSearchEvent.emit(this.invoiceSearch);
-        this.filteredData = this.items.filter(item => {
+        this.filteredData = this.items?.filter(item => {
             return item.voucherNumber.toLowerCase().includes(term.toLowerCase()) ||
                 item.account.name.toLowerCase().includes(term.toLowerCase()) ||
                 item.voucherDate.includes(term) ||
-                item.grandTotal.toString().includes(term);
+                item.grandTotal?.toString().includes(term);
         });
         this.detectChanges();
     }
@@ -1009,7 +1011,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
      */
     public getVoucherLogText(log: any): string {
         let voucherLog = this.localeData?.voucher_log;
-        voucherLog = voucherLog?.replace("[ACTION]", log.action).replace("[TOTAL]", log.grandTotal).replace("[USER]", log.user?.name);
+        voucherLog = voucherLog?.replace("[ACTION]", log.action)?.replace("[TOTAL]", log.grandTotal)?.replace("[USER]", log.user?.name);
         return voucherLog;
     }
 
@@ -1038,7 +1040,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
             voucherType
         };
         if (voucherType) {
-            this.invoiceService.DownloadInvoice(this.selectedItem.account.uniqueName, dataToSend).pipe(takeUntil(this.destroyed$))
+            this.invoiceService.DownloadInvoice(this.selectedItem?.account?.uniqueName, dataToSend).pipe(takeUntil(this.destroyed$))
                 .subscribe(res => {
                     if (res) {
                         saveAs(res, `${dataToSend.voucherNumber[0]}.` + 'pdf');

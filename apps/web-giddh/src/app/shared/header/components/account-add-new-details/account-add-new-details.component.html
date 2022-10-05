@@ -122,7 +122,7 @@
                     </div>
                     <div
                         class="form-group col-xs-12 col-sm-4"
-                        *ngIf="addAccountForm.get('country').value.countryCode !== companyCountry"
+                        *ngIf="addAccountForm.get('currency').value !== companyCurrency"
                     >
                         <div>
                             <label>{{ localeData?.foreign_opening_balance }}</label>
@@ -441,51 +441,35 @@
                                 />
                             </div>
                         </div>
-                        <div class="col-sm-6">
+                        <div class="col-sm-6 mobile-number-wrapper">
                             <div class="form-group">
                                 <label>{{ commonLocaleData?.app_mobile_number }}</label>
                                 <div class="d-flex">
-                                    <sh-select
-                                        [placeholder]="commonLocaleData?.app_country_code"
-                                        [options]="countryPhoneCode"
-                                        formControlName="mobileCode"
-                                        class="mobile-number-sh-select"
-                                    ></sh-select>
                                     <input
-                                        type="text"
-                                        pattern="[0-9]*"
-                                        class="form-control pull-right"
-                                        [placeholder]="localeData?.mobile_no_placeholder"
+                                        name="accountDetails.mobileNumber"
+                                        type="tel"
+                                        #initContactAdd
+                                        id="init-contact-add"
                                         formControlName="mobileNo"
-                                        id="contactNo"
-                                        autocomplete="off"
-                                        (blur)="isValidMobileNumber(mobileNoEl)"
-                                        #mobileNoEl
+                                        [placeholder]="localeData?.mobile_no_placeholder"
                                     />
-                                    <small
-                                        class="clearfix error-msg"
-                                        *ngIf="
-                                            addAccountForm.get('mobileNo').value &&
-                                            !addAccountForm.get('mobileCode').value
-                                        "
-                                        >{{ localeData?.phone_code_error }}</small
-                                    >
                                 </div>
+                                <span id="init-contact-add-valid-msg" class="d-none"></span>
+                                <span id="init-contact-add-error-msg" class="d-none"></span>
                             </div>
                         </div>
                     </div>
-
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label>{{ commonLocaleData?.app_email_id }}</label>
-                                <input type="email" class="form-control" formControlName="email" name="emailId" />
-                                <span
-                                    class="error-msg"
-                                    *ngIf="addAccountForm.get('email').dirty && addAccountForm.get('email').errors"
-                                    >{{ localeData?.email_id_error }}</span
-                                >
-                            </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>{{ commonLocaleData?.app_email_id }}</label>
+                            <input type="email" class="form-control" formControlName="email" name="emailId" />
+                            <span
+                                class="error-msg"
+                                *ngIf="addAccountForm.get('email').dirty && addAccountForm.get('email').errors"
+                                >{{ localeData?.email_id_error }}</span
+                            >
                         </div>
                     </div>
                 </div>
@@ -782,7 +766,7 @@
                             type="submit"
                             class="btn btn-success"
                             [ladda]="createAccountInProcess$ | async"
-                            [disabled]="addAccountForm.invalid || !(isGstValid$ | async)"
+                            [disabled]="addAccountForm.invalid || !(isGstValid$ | async) || isMobileNumberInvalid"
                         >
                             {{ commonLocaleData?.app_save }}
                         </button>

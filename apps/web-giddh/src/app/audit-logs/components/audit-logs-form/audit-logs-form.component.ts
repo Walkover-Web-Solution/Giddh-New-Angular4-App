@@ -119,7 +119,7 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
         this.auditLogFormVM.getLogsInprocess$ = this.store.pipe(select(state => state.auditlog.getLogInProcess), takeUntil(this.destroyed$));
         this.auditLogFormVM.user$ = this.store.pipe(select(state => { if (state.session.user) { return state.session.user.user; } }), take(1));
         this.companyService.getComapnyUsers().pipe(takeUntil(this.destroyed$)).subscribe(data => {
-            if (data.status === 'success') {
+            if (data?.status === 'success') {
                 let users: IOption[] = [];
                 data.body.map((item) => {
                     users.push({ label: item.userName, value: item.userUniqueName, additional: item });
@@ -154,11 +154,11 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
             newParents = union([], parents);
             newParents.push({
                 name: listItem.name,
-                uniqueName: listItem.uniqueName
+                uniqueName: listItem?.uniqueName
             });
             listItem = Object.assign({}, listItem, { parentGroups: [] });
             listItem.parentGroups = newParents;
-            if (listItem.groups.length > 0) {
+            if (listItem.groups?.length > 0) {
                 result = this.flattenGroup(listItem.groups, newParents);
                 result.push(omit(listItem, 'groups'));
             } else {
@@ -245,7 +245,7 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
      * @memberof AuditLogsFormComponent
      */
     public prepareOperationFormData(selectEntity: any): void {
-        if (selectEntity.filter) {
+        if (selectEntity?.filter) {
             this.getOperationsFilterData(selectEntity.filter);
         } else {
             this.auditLogFormVM.filters = [];
@@ -262,7 +262,7 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
     public getOperationsFilterData(entityType: string): any {
         this.auditLogFormVM.filters = [];
         if (entityType) {
-            let selectedEntityObject = this.auditLogFilterForm.filter(element => {
+            let selectedEntityObject = this.auditLogFilterForm?.filter(element => {
                 if (element.entity.label.toLocaleLowerCase() === entityType.toLocaleLowerCase()) {
                     return element;
                 }
@@ -357,7 +357,7 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
                 if (data && data.body && data.body.results) {
                     const searchResults = data.body.results.map(result => {
                         return {
-                            value: result.uniqueName,
+                            value: result?.uniqueName,
                             label: result.name
                         }
                     }) || [];
@@ -406,7 +406,7 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
                     if (!this.accountsSearchResultsPaginationData.query) {
                         const results = response.map(result => {
                             return {
-                                value: result.uniqueName,
+                                value: result?.uniqueName,
                                 label: result.name
                             }
                         }) || [];
@@ -441,7 +441,7 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
                 if (data && data.body && data.body.results) {
                     const searchResults = data.body.results.map(result => {
                         return {
-                            value: result.uniqueName,
+                            value: result?.uniqueName,
                             label: result.name
                         }
                     }) || [];
@@ -487,7 +487,7 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
                     if (!this.groupsSearchResultsPaginationData.query) {
                         const results = response.map(result => {
                             return {
-                                value: result.uniqueName,
+                                value: result?.uniqueName,
                                 label: result.name
                             }
                         }) || [];
@@ -509,7 +509,7 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
         this.onGroupSearchQueryChanged('', 1, (response) => {
             this.defaultGroupSuggestions = response.map(result => {
                 return {
-                    value: result.uniqueName,
+                    value: result?.uniqueName,
                     label: result.name
                 }
             }) || [];
@@ -529,7 +529,7 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
         this.onAccountSearchQueryChanged('', 1, (response) => {
             this.defaultAccountSuggestions = response.map(result => {
                 return {
-                    value: result.uniqueName,
+                    value: result?.uniqueName,
                     label: result.name
                 }
             }) || [];

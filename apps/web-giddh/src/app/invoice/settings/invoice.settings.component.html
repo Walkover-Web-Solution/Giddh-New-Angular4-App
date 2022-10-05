@@ -5,7 +5,7 @@
     (commonLocaleData)="commonLocaleData = $event"
     (translationComplete)="translationComplete($event)"
 >
-    <div validateSectionPermission [hasPermission]="hasInvoiceSettingPermissions">
+    <div validateSectionPermission [hasPermission]="hasInvoiceSettingPermissions" validateSubscription>
         <section id="invoice-setting">
             <tabset class="tab-integration">
                 <!-- region general tab-->
@@ -121,7 +121,7 @@
                                                         (click)="verfiyEmail(invoiceSetting.email)"
                                                         [disabled]="
                                                             !isEmailChanged &&
-                                                            (!invoiceSetting.email || invoiceSetting.email.length < 4)
+                                                            (!invoiceSetting.email || invoiceSetting.email?.length < 4)
                                                         "
                                                         *ngIf="!invoiceSetting.emailVerified"
                                                     >
@@ -135,13 +135,14 @@
                                                         [ngClass]="{
                                                             'delete-icon-opacity':
                                                                 !invoiceSetting.email ||
-                                                                invoiceSetting.email.length < 4,
+                                                                invoiceSetting.email?.length < 4,
                                                             'cursor-pointer': !(
-                                                                !invoiceSetting.email || invoiceSetting.email.length < 4
+                                                                !invoiceSetting.email ||
+                                                                invoiceSetting.email?.length < 4
                                                             )
                                                         }"
                                                         (click)="
-                                                            !(!invoiceSetting.email || invoiceSetting.email.length < 4)
+                                                            !(!invoiceSetting.email || invoiceSetting.email?.length < 4)
                                                                 ? deleteEmail(invoiceSetting.email)
                                                                 : ''
                                                         "

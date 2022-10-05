@@ -69,7 +69,7 @@ export class SalesActions {
             map(response => {
                 if (response && response.body && response.queryString) {
                     const updateIndexDb: IUpdateDbRequest = {
-                        newUniqueName: response.body.uniqueName,
+                        newUniqueName: response.body?.uniqueName,
                         oldUniqueName: response.queryString.accountUniqueName,
                         latestName: response.request.name,
                         uniqueName: this._generalServices.companyUniqueName,

@@ -18,7 +18,7 @@ export class LocationService {
 
     public GetCity(location: GeoLocationSearch) {
         let url = this.config.apiUrl + this.GoogleApiURL;
-        return this.http.get(url.replace(':q', location.QueryString)).pipe(
+        return this.http.get(url?.replace(':q', location.QueryString)).pipe(
             map((res) => {
                 let r = res as any;
                 let data = r.status === 'success' ? r.body.items : [];

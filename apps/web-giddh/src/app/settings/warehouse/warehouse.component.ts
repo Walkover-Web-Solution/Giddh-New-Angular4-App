@@ -238,7 +238,7 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
             if (formControls) {
                 const requestParamter = this.settingsUtilityService.getCreateWarehouseRequestObject(formControls);
                 if (this.itemOnBoardingDetails && this.itemOnBoardingDetails.isItemUpdateInProgress) {
-                    requestParamter['warehouseUniqueName'] = this.selectedWarehouse.uniqueName;
+                    requestParamter['warehouseUniqueName'] = this.selectedWarehouse?.uniqueName;
                     this.store.dispatch(this.warehouseActions.updateWarehouse(requestParamter));
                 } else {
                     this.store.dispatch(this.warehouseActions.createWarehouse(requestParamter));
@@ -317,7 +317,7 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
     public setAsDefault(warehouse: any, warehouseIndex: number): void {
         if (!warehouse.isDefault) {
             this.store.dispatch(this.warehouseActions.setAsDefaultWarehouse({
-                warehouseUniqueName: warehouse.uniqueName,
+                warehouseUniqueName: warehouse?.uniqueName,
                 warehouseIndex
             }));
         }
@@ -371,22 +371,22 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
     public updateWarehouseInfo(warehouseDetails: any): void {
         warehouseDetails.formValue.linkedEntity = warehouseDetails.formValue.linkedEntity || [];
         this.isWarehouseUpdateInProgress = true;
-        const linkAddresses = warehouseDetails.addressDetails.linkedEntities.filter(entity => (warehouseDetails.formValue.linkedEntity.includes(entity.uniqueName))).map(filteredEntity => ({
-            uniqueName: filteredEntity.uniqueName,
+        const linkAddresses = warehouseDetails.addressDetails.linkedEntities?.filter(entity => (warehouseDetails.formValue.linkedEntity.includes(entity?.uniqueName))).map(filteredEntity => ({
+            uniqueName: filteredEntity?.uniqueName,
             isDefault: filteredEntity.isDefault,
         }));
         const requestObj = {
             name: warehouseDetails.formValue.name,
-            warehouseUniqueName: this.selectedWarehouse.uniqueName,
+            warehouseUniqueName: this.selectedWarehouse?.uniqueName,
             linkAddresses
         };
         this.settingsProfileService.updatWarehouseInfo(requestObj).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response.status === 'success') {
+            if (response?.status === 'success') {
                 this.asideEditWarehousePane = 'out';
                 this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: PAGINATION_LIMIT }));
                 this.toasterService.successToast(this.localeData?.warehouse_updated);
             } else {
-                this.toasterService.errorToast(response.message);
+                this.toasterService.errorToast(response?.message);
             }
             this.isWarehouseUpdateInProgress = false;
         }, () => {

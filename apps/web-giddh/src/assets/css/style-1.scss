@@ -2036,6 +2036,12 @@ bs-datepicker-container {
 
 .setting-sidebar-open.voucher-preview-edit {
     bs-datepicker-container {
+        z-index: 9999 !important;
+    }
+}
+
+.setting-sidebar-open.invoice-preview-page {
+    bs-datepicker-container {
         z-index: 99;
     }
 }
@@ -2234,9 +2240,6 @@ form#groupDetailForm {
     }
 }
 @media only screen and (max-width: 1024px) {
-    .modal-dialog.universal_modal .shortcuts {
-        display: none;
-    }
     .pd-t1-md {
         padding-top: 10px;
     }

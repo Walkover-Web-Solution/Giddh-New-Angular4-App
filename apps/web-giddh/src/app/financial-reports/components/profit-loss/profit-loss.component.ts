@@ -97,14 +97,14 @@ export class ProfitLossComponent implements OnInit, AfterViewInit, OnDestroy {
                     cogsGrp.accounts = [];
                     cogsGrp.childGroups = [];
 
-                    Object.keys(cogs).filter(f => ['openingInventory', 'closingInventory', 'purchasesStockAmount', 'manufacturingExpenses', 'debitNoteStockAmount'].includes(f)).forEach(f => {
+                    Object.keys(cogs)?.filter(f => ['openingInventory', 'closingInventory', 'purchasesStockAmount', 'manufacturingExpenses', 'debitNoteStockAmount'].includes(f)).forEach(f => {
                         let cg = new ChildGroup();
                         cg.isCreated = false;
                         cg.isVisible = false;
                         cg.isIncludedInSearch = true;
                         cg.isOpen = false;
                         cg.uniqueName = f;
-                        cg.groupName = (f) ? f.replace(/([a-z0-9])([A-Z])/g, '$1 $2') : "";
+                        cg.groupName = (f) ? f?.replace(/([a-z0-9])([A-Z])/g, '$1 $2') : "";
                         cg.category = f === 'income';
                         cg.closingBalance = {
                             amount: cogs[f],
@@ -215,7 +215,7 @@ export class ProfitLossComponent implements OnInit, AfterViewInit, OnDestroy {
     public findIndex(activeFY, financialYears) {
         let tempFYIndex = 0;
         each(financialYears, (fy: any, index: number) => {
-            if (fy.uniqueName === activeFY.uniqueName) {
+            if (fy?.uniqueName === activeFY?.uniqueName) {
                 if (index === 0) {
                     tempFYIndex = index;
                 } else {

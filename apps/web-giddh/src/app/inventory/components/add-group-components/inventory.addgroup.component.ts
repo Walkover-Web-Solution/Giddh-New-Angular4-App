@@ -76,7 +76,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
     public ngOnInit() {
         this.store.pipe(take(1)).subscribe(state => {
             if (state.inventory.groupsWithStocks === null) {
-                this.store.dispatch(this.sideBarAction.GetGroupsWithStocksHierarchyMin());
+                this.store.dispatch(this.sideBarAction.GetGroupsWithStocksHierarchyMin('', 1, 30));
             }
         });
         // get all groups
@@ -128,10 +128,10 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
             if (account && !this.addGroup) {
                 let updGroupObj = new StockGroupRequest();
                 updGroupObj.name = account.name;
-                updGroupObj.uniqueName = account.uniqueName;
+                updGroupObj.uniqueName = account?.uniqueName;
                 updGroupObj.hsnNumber = account.hsnNumber;
                 updGroupObj.sacNumber = account.sacNumber;
-                if (updGroupObj.uniqueName === 'maingroup') {
+                if (updGroupObj?.uniqueName === 'maingroup') {
                     this.addGroupForm.controls['uniqueName'].disable();
                     this.defaultGrpActive = true;
                 } else {
@@ -140,8 +140,8 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
                 }
 
                 if (account.parentStockGroup) {
-                    this.selectedGroup = { label: account.parentStockGroup.name, value: account.parentStockGroup.uniqueName };
-                    this.parentStockSearchString = account.parentStockGroup.uniqueName;
+                    this.selectedGroup = { label: account.parentStockGroup.name, value: account.parentStockGroup?.uniqueName };
+                    this.parentStockSearchString = account.parentStockGroup?.uniqueName;
                     updGroupObj.isSubGroup = true;
                 } else {
                     updGroupObj.parentStockGroupUniqueName = '';
@@ -151,7 +151,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
                 }
                 this.addGroupForm?.patchValue(updGroupObj);
                 if (account.parentStockGroup) {
-                    this.addGroupForm?.patchValue({ parentStockGroupUniqueName: account.parentStockGroup.uniqueName });
+                    this.addGroupForm?.patchValue({ parentStockGroupUniqueName: account.parentStockGroup?.uniqueName });
                 }
 
                 if (account.hsnNumber) {
@@ -162,7 +162,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
 
             } else {
                 if (account) {
-                    this.addGroupForm?.patchValue({ isSubGroup: true, parentStockGroupUniqueName: account.uniqueName });
+                    this.addGroupForm?.patchValue({ isSubGroup: true, parentStockGroupUniqueName: account?.uniqueName });
                 } else {
                     this.addGroupForm?.patchValue({ name: '', uniqueName: '', hsnNumber: '', sacNumber: '', isSubGroup: false });
                 }
@@ -210,7 +210,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
 
     public ngAfterViewInit() {
         this.activeGroup$.pipe(take(1)).subscribe(a => {
-            if (this.groupUniqueName && a && a.uniqueName === this.groupUniqueName) {
+            if (this.groupUniqueName && a && a?.uniqueName === this.groupUniqueName) {
                 //
             } else {
                 if (this.groupUniqueName) {
@@ -223,9 +223,9 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
     public getParentGroupData() {
         // parentgroup data
         this._inventoryService.GetGroupsWithStocksFlatten().pipe(takeUntil(this.destroyed$)).subscribe(data => {
-            if (data.status === 'success') {
+            if (data?.status === 'success') {
                 let flattenData: IOption[] = [];
-                this.flattenDATA(data.body.results, flattenData);
+                this.flattenDATA(data.body?.results, flattenData);
                 this.groupsData$ = observableOf(flattenData);
             }
         });
@@ -236,7 +236,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
             if (p) {
                 let newOption: IOption = { label: '', value: '' };
                 newOption.label = p.name;
-                newOption.value = p.uniqueName;
+                newOption.value = p?.uniqueName;
                 parents.push(newOption);
                 if (p.childStockGroups && p.childStockGroups.length > 0) {
                     this.flattenDATA(p.childStockGroups, parents);
@@ -290,7 +290,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
         let stockRequest = new StockGroupRequest();
         let uniqueNameField = this.addGroupForm.get('uniqueName');
         if (uniqueNameField && uniqueNameField.value) {
-            uniqueNameField?.patchValue(uniqueNameField.value.replace(/ /g, '').toLowerCase());
+            uniqueNameField?.patchValue(uniqueNameField.value?.replace(/ /g, '').toLowerCase());
         }
 
         if (this.addGroupForm.get("showCodeType").value === "hsn") {
@@ -325,7 +325,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
 
         this.activeGroup$.pipe(take(1)).subscribe(a => activeGroup = a);
         if (uniqueNameField && uniqueNameField.value) {
-            uniqueNameField?.patchValue(uniqueNameField.value.replace(/ /g, '').toLowerCase());
+            uniqueNameField?.patchValue(uniqueNameField.value?.replace(/ /g, '').toLowerCase());
         }
 
         if (this.addGroupForm.get("showCodeType").value === "hsn") {
@@ -347,7 +347,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
             stockRequest.taxes = [];
         }
 
-        this.store.dispatch(this.inventoryActions.updateGroup(stockRequest, activeGroup.uniqueName));
+        this.store.dispatch(this.inventoryActions.updateGroup(stockRequest, activeGroup?.uniqueName));
         this.store.pipe(select(p => p.inventory.isUpdateGroupInProcess), distinctUntilChanged(), filter(p => !p), takeUntil(this.destroyed$)).subscribe((a) => {
             this.activeGroup$.pipe(take(1)).subscribe(b => activeGroup = b);
         });
@@ -357,7 +357,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
         let activeGroup: StockGroupResponse = null;
         this.activeGroup$.pipe(take(1)).subscribe(a => activeGroup = a);
         if (activeGroup) {
-            this.store.dispatch(this.inventoryActions.removeGroup(activeGroup.uniqueName));
+            this.store.dispatch(this.inventoryActions.removeGroup(activeGroup?.uniqueName));
         }
         this.router.navigateByUrl('/pages/inventory');
     }
@@ -433,7 +433,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
                                 companyTax.isDisabled = true;
                             }
                         }
-                        if (companyTax.uniqueName === tax.uniqueName) {
+                        if (companyTax?.uniqueName === tax?.uniqueName) {
                             tax.isChecked = true;
                             tax.isDisabled = false;
                             this.taxTempArray.push(tax);
@@ -443,12 +443,12 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
             } else if (index > -1 && event.target.checked) {
                 tax.isChecked = true;
                 tax.isDisabled = false;
-                this.taxTempArray = this.taxTempArray.filter(ele => {
+                this.taxTempArray = this.taxTempArray?.filter(ele => {
                     return tax.taxType !== ele.taxType;
                 });
                 this.taxTempArray.push(tax);
             } else {
-                let idx = _.findIndex(this.taxTempArray, (taxTemp) => taxTemp.uniqueName === tax.uniqueName);
+                let idx = _.findIndex(this.taxTempArray, (taxTemp) => taxTemp?.uniqueName === tax?.uniqueName);
                 this.taxTempArray.splice(idx, 1);
                 tax.isChecked = false;
                 this.companyTaxesList$.subscribe((taxes) => {
@@ -469,13 +469,13 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
                 this.taxTempArray.push(tax);
                 tax.isChecked = true;
             } else {
-                let idx = _.findIndex(this.taxTempArray, (taxTemp) => taxTemp.uniqueName === tax.uniqueName);
+                let idx = _.findIndex(this.taxTempArray, (taxTemp) => taxTemp?.uniqueName === tax?.uniqueName);
                 this.taxTempArray.splice(idx, 1);
                 tax.isChecked = false;
             }
         }
 
-        this.addGroupForm.get('taxes')?.patchValue(this.taxTempArray.map(taxTemp => taxTemp.uniqueName));
+        this.addGroupForm.get('taxes')?.patchValue(this.taxTempArray.map(taxTemp => taxTemp?.uniqueName));
     }
 
     /**
@@ -491,7 +491,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
         this.companyTaxesList$.subscribe(companyTax => {
             _.filter(companyTax, (tax) => {
                 _.find(taxes, (unq) => {
-                    if (unq === tax.uniqueName) {
+                    if (unq === tax?.uniqueName) {
                         return taxToMap.push(tax);
                     }
                 });

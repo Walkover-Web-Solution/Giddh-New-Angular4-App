@@ -314,6 +314,12 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
                 this.advanceSearchForm.get('amountLessThan')?.patchValue(false);
                 this.advanceSearchForm.get('amountEqualTo')?.patchValue(true);
                 break;
+            case 'amount-null':
+                this.advanceSearchForm.get('includeAmount')?.patchValue(false);
+                this.advanceSearchForm.get('amountGreaterThan')?.patchValue(false);
+                this.advanceSearchForm.get('amountLessThan')?.patchValue(false);
+                this.advanceSearchForm.get('amountEqualTo')?.patchValue(false);
+                break;    
             case 'inventoryQty-greaterThan':
                 this.advanceSearchForm.get('inventory.includeQuantity')?.patchValue(true);
                 this.advanceSearchForm.get('inventory.quantityGreaterThan')?.patchValue(true);
@@ -350,6 +356,12 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
                 this.advanceSearchForm.get('inventory.quantityLessThan')?.patchValue(false);
                 this.advanceSearchForm.get('inventory.quantityEqualTo')?.patchValue(true);
                 break;
+            case 'inventoryQty-null':
+                this.advanceSearchForm.get('inventory.includeQuantity')?.patchValue(false);
+                this.advanceSearchForm.get('inventory.quantityGreaterThan')?.patchValue(false);
+                this.advanceSearchForm.get('inventory.quantityLessThan')?.patchValue(false);
+                this.advanceSearchForm.get('inventory.quantityEqualTo')?.patchValue(false);
+                break;     
             case 'inventoryVal-greaterThan':
                 this.advanceSearchForm.get('inventory.includeItemValue')?.patchValue(true);
                 this.advanceSearchForm.get('inventory.itemValueGreaterThan')?.patchValue(true);
@@ -386,6 +398,12 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
                 this.advanceSearchForm.get('inventory.itemValueLessThan')?.patchValue(false);
                 this.advanceSearchForm.get('inventory.itemValueEqualTo')?.patchValue(true);
                 break;
+            case 'inventoryVal-null':
+                this.advanceSearchForm.get('inventory.includeItemValue')?.patchValue(false);
+                this.advanceSearchForm.get('inventory.itemValueGreaterThan')?.patchValue(false);
+                this.advanceSearchForm.get('inventory.itemValueLessThan')?.patchValue(false);
+                this.advanceSearchForm.get('inventory.itemValueEqualTo')?.patchValue(false);
+                break;      
         }
     }
 
@@ -531,7 +549,7 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
                 if (data && data.body && data.body.results) {
                     const searchResults = data.body.results.map(result => {
                         return {
-                            value: result.uniqueName,
+                            value: result?.uniqueName,
                             label: result.name
                         }
                     }) || [];
@@ -588,8 +606,8 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
                 if (data && data.body && data.body.results) {
                     const searchResults = data.body.results.map(result => {
                         return {
-                            value: result.uniqueName,
-                            label: `${result.name} (${result.uniqueName})`
+                            value: result?.uniqueName,
+                            label: `${result.name} (${result?.uniqueName})`
                         }
                     }) || [];
                     if (page === 1) {
@@ -634,7 +652,7 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
                     if (!this.accountsSearchResultsPaginationData.query) {
                         const results = response.map(result => {
                             return {
-                                value: result.uniqueName,
+                                value: result?.uniqueName,
                                 label: result.name
                             }
                         }) || [];
@@ -661,8 +679,8 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
                     if (!this.stocksSearchResultsPaginationData.query) {
                         const results = response.map(result => {
                             return {
-                                value: result.uniqueName,
-                                label: `${result.name} (${result.uniqueName})`
+                                value: result?.uniqueName,
+                                label: `${result.name} (${result?.uniqueName})`
                             }
                         }) || [];
                         this.defaultStockSuggestions = this.defaultStockSuggestions.concat(...results);
@@ -683,7 +701,7 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
         this.onAccountSearchQueryChanged('', 1, (response) => {
             this.defaultAccountSuggestions = response.map(result => {
                 return {
-                    value: result.uniqueName,
+                    value: result?.uniqueName,
                     label: result.name
                 }
             }) || [];
@@ -703,8 +721,8 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
         this.onStockSearchQueryChanged('', 1, (response) => {
             this.defaultStockSuggestions = response.map(result => {
                 return {
-                    value: result.uniqueName,
-                    label: `${result.name} (${result.uniqueName})`
+                    value: result?.uniqueName,
+                    label: `${result.name} (${result?.uniqueName})`
                 }
             }) || [];
             this.defaultStockPaginationData.page = this.stocksSearchResultsPaginationData.page;

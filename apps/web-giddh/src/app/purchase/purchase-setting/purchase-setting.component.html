@@ -64,7 +64,8 @@
                                                         [disabled]="
                                                             !isEmailChanged &&
                                                             (!invoiceSettings.purchaseBillSettings.email ||
-                                                                invoiceSettings.purchaseBillSettings.email.length < 4 ||
+                                                                invoiceSettings.purchaseBillSettings.email?.length <
+                                                                    4 ||
                                                                 invoiceSettings.purchaseBillSettings.emailVerified)
                                                         "
                                                         *ngIf="!invoiceSettings.purchaseBillSettings.emailVerified"
@@ -81,16 +82,16 @@
                                                         [ngClass]="{
                                                             'delete-icon-opacity':
                                                                 !invoiceSettings.purchaseBillSettings.email ||
-                                                                invoiceSettings.purchaseBillSettings.email.length < 4,
+                                                                invoiceSettings.purchaseBillSettings.email?.length < 4,
                                                             'cursor-pointer': !(
                                                                 !invoiceSettings.purchaseBillSettings.email ||
-                                                                invoiceSettings.purchaseBillSettings.email.length < 4
+                                                                invoiceSettings.purchaseBillSettings.email?.length < 4
                                                             )
                                                         }"
                                                         (click)="
                                                             !(
                                                                 !invoiceSettings.purchaseBillSettings.email ||
-                                                                invoiceSettings.purchaseBillSettings.email.length < 4
+                                                                invoiceSettings.purchaseBillSettings.email?.length < 4
                                                             )
                                                                 ? deleteEmail(
                                                                       invoiceSettings.purchaseBillSettings.email

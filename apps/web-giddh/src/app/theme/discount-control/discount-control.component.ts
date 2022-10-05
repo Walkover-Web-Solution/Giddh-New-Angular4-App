@@ -129,7 +129,7 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
                     obj.discountValue = acc.discountValue;
                     obj.discountType = acc.discountType;
                     obj.isActive = false;
-                    obj.particular = acc.linkAccount.uniqueName;
+                    obj.particular = acc.linkAccount?.uniqueName;
                     obj.discountUniqueName = acc.uniqueName;
                     obj.name = acc.name;
                     this.discountAccountsDetails.push(obj);
@@ -141,8 +141,8 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     public discountFromInput(type: 'FIX_AMOUNT' | 'PERCENTAGE', event: any) {
-        this.defaultDiscount.amount = parseFloat(String(event.target.value).replace(/[,'\s]/g, ''));
-        this.defaultDiscount.discountValue = parseFloat(String(event.target.value).replace(/[,'\s]/g, ''));
+        this.defaultDiscount.amount = parseFloat(String(event.target.value)?.replace(/[,'\s]/g, ''));
+        this.defaultDiscount.discountValue = parseFloat(String(event.target.value)?.replace(/[,'\s]/g, ''));
         this.defaultDiscount.discountType = type;
 
         this.change();

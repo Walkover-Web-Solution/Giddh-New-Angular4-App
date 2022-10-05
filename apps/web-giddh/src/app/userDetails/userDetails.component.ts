@@ -163,10 +163,10 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
         });
         this.store.dispatch(this.loginAction.FetchUserDetails());
         this.loginService.GetAuthKey().pipe(takeUntil(this.destroyed$)).subscribe(a => {
-            if (a.status === 'success') {
-                this.userAuthKey = a.body.authKey;
+            if (a?.status === 'success') {
+                this.userAuthKey = a?.body?.authKey;
             } else {
-                this.toasty.errorToast(a.message, a.status);
+                this.toasty.errorToast(a?.message, a?.status);
             }
         });
         this.store.pipe(select(s => s.subscriptions.companies), takeUntil(this.destroyed$))
@@ -230,7 +230,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
     public addNumber(no: string) {
         this.oneTimePassword = '';
         const mobileRegex = /^[0-9]{1,10}$/;
-        if (mobileRegex.test(no) && (no.length === 10)) {
+        if (mobileRegex.test(no) && (no?.length === 10)) {
             const request: SignupWithMobile = new SignupWithMobile();
             request.countryCode = Number(this.countryCode) || 91;
             request.mobileNumber = this.phoneNumber;
@@ -250,20 +250,20 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
 
     public changeTwoWayAuth() {
         this.loginService.SetSettings({ authenticateTwoWay: this.twoWayAuth }).pipe(takeUntil(this.destroyed$)).subscribe(res => {
-            if (res.status === 'success') {
+            if (res?.status === 'success') {
                 this.toasty.successToast(res.body);
             } else {
-                this.toasty.errorToast(res.message);
+                this.toasty.errorToast(res?.message);
             }
         });
     }
 
     public regenerateKey() {
         this.loginService.RegenerateAuthKey().pipe(takeUntil(this.destroyed$)).subscribe(a => {
-            if (a.status === 'success') {
+            if (a?.status === 'success') {
                 this.userAuthKey = a.body.authKey;
             } else {
-                this.toasty.errorToast(a.message, a.status);
+                this.toasty.errorToast(a?.message, a?.status);
             }
         });
     }

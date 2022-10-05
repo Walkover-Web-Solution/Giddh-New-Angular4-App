@@ -89,12 +89,12 @@ export class CrDrComponent implements OnInit, OnDestroy {
         refresh = refresh ? refresh : 'false';
 
         this.contactService.GetContactsDashboard(fromDate, toDate, groupUniqueName, pageNumber, refresh, count, query, sortBy, order).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
-            if (res.status === 'success') {
+            if (res?.status === 'success') {
                 if (groupUniqueName === "sundrydebtors") {
-                    this.drAccounts = res.body.results;
+                    this.drAccounts = res.body?.results;
                 }
                 if (groupUniqueName === "sundrycreditors") {
-                    this.crAccounts = res.body.results;
+                    this.crAccounts = res.body?.results;
                 }
 
                 if (!(this.fromDate && this.toDate) && res.body && res.body.results && res.body.results.fromDate && res.body.results.toDate) {

@@ -64,15 +64,15 @@ export class RejectPettyCashEntryConfirmDialogComponent implements OnInit, OnDes
         this.actionPettyCashRequestBody = new ExpenseActionRequest();
         this.actionPettyCashRequestBody.message = this.rejectReason.value;
         this.actionPettyCashRequest.actionType = 'reject';
-        this.actionPettyCashRequest.uniqueName = this.selectedItem.uniqueName;
-        this.actionPettyCashRequest.accountUniqueName = this.selectedItem.particularAccount.uniqueName
+        this.actionPettyCashRequest.uniqueName = this.selectedItem?.uniqueName;
+        this.actionPettyCashRequest.accountUniqueName = this.selectedItem.particularAccount?.uniqueName
 
         this.expenseService.actionPettycashReports(this.actionPettyCashRequest, this.actionPettyCashRequestBody).pipe(takeUntil(this.destroyed$)).subscribe(res => {
-            if (res.status === 'success') {
-                this.toaster.showSnackBar("success", res.body);
+            if (res?.status === 'success') {
+                this.toaster.showSnackBar("success", res?.body);
                 this.rejectEntry.emit(true);
             } else {
-                this.toaster.showSnackBar("error", res.body ?? res.message);
+                this.toaster.showSnackBar("error", res?.body ?? res?.message);
                 this.rejectEntry.emit(false);
             }
         });
@@ -86,7 +86,7 @@ export class RejectPettyCashEntryConfirmDialogComponent implements OnInit, OnDes
     public buildCreatorString(): void {
         if (this.selectedItem && this.selectedItem.createdBy) {
             this.byCreator = this.localeData?.by_creator;
-            this.byCreator = this.byCreator.replace("[CREATOR_NAME]", this.selectedItem.createdBy.name);
+            this.byCreator = this.byCreator?.replace("[CREATOR_NAME]", this.selectedItem.createdBy.name);
         } else {
             this.byCreator = "";
         }

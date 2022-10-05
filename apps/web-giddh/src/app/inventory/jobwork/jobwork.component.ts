@@ -142,7 +142,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
         this.inventoryUsers$ = this._store.pipe(select(s => s.inventoryInOutState.inventoryUsers && s.inventoryInOutState.inventoryUsers), takeUntil(this.destroyed$));
         this.universalDate$ = this._store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
         // on reload page
-        let len = document.location.pathname.split('/').length;
+        let len = document.location.pathname.split('/')?.length;
         if (len === 6) {
             this.uniqueName = document.location.pathname.split('/')[len - 1];
             this.type = document.location.pathname.split('/')[len - 2];
@@ -175,7 +175,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
             this.nameStockOrPerson = v.name;
             if (v.uniqueName) {
                 this.uniqueName = v.uniqueName;
-                let length = document.location.pathname.split('/').length;
+                let length = document.location.pathname.split('/')?.length;
                 if (!v.uniqueName && length === 6) {
                     this.uniqueName = document.location.pathname.split('/')[length - 1];
                 }
@@ -323,7 +323,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
     public updateDescription(txn: any) {
         this.updateDescriptionIdx = null;
         this.inventoryService.updateDescription(txn.uniqueName, txn.description).pipe(takeUntil(this.destroyed$)).subscribe(res => {
-            if (res.status === 'success') {
+            if (res?.status === 'success') {
                 this.updateDescriptionIdx = null;
             } else {
                 txn.description = null;
@@ -567,7 +567,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
                 this.filter.jobWorkTransactionType.splice(index, 1);
             }
         }
-        if (this.filter.jobWorkTransactionType.length > 0 && this.filter.jobWorkTransactionType.length < this.VOUCHER_TYPES.length) {
+        if (this.filter.jobWorkTransactionType?.length > 0 && this.filter.jobWorkTransactionType?.length < this.VOUCHER_TYPES.length) {
             idx = this.filter.jobWorkTransactionType.indexOf('ALL');
             if (idx !== -1) {
                 this.filter.jobWorkTransactionType.splice(idx, 1);
@@ -577,10 +577,10 @@ export class JobworkComponent implements OnInit, OnDestroy {
                 this.filter.jobWorkTransactionType.splice(idx, 1);
             }
         }
-        if (this.filter.jobWorkTransactionType.length === this.VOUCHER_TYPES.length) {
+        if (this.filter.jobWorkTransactionType?.length === this.VOUCHER_TYPES.length) {
             this.filter.jobWorkTransactionType = ['ALL'];
         }
-        if (this.filter.jobWorkTransactionType.length === 0) {
+        if (this.filter.jobWorkTransactionType?.length === 0) {
             this.filter.jobWorkTransactionType = ['NONE'];
         }
         this.isFilterCorrect = true;
@@ -637,10 +637,10 @@ export class JobworkComponent implements OnInit, OnDestroy {
         this.inventoryService.downloadJobwork(this.uniqueName, this.type, format, this.startDate, this.endDate, this.filter)
             .pipe(takeUntil(this.destroyed$))
             .subscribe(d => {
-                if (d.status === 'success') {
-                    this._toasty.infoToast(d.body);
+                if (d?.status === 'success') {
+                    this._toasty.infoToast(d?.body);
                 } else {
-                    this._toasty.errorToast(d.message);
+                    this._toasty.errorToast(d?.message);
                 }
             });
     }

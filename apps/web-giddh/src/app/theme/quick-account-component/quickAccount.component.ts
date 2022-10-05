@@ -56,7 +56,7 @@ export class QuickAccountComponent implements OnInit, AfterViewInit, OnDestroy {
 
     public ngOnInit() {
         this._groupService.GetFlattenGroupsAccounts('', 1, 5000, 'true').pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            if (result.status === 'success') {
+            if (result?.status === 'success') {
                 let groupsListArray: IOption[] = [];
                 result.body.results = this.removeFixedGroupsFromArr(result.body.results);
                 result.body.results.forEach(a => {
@@ -104,15 +104,15 @@ export class QuickAccountComponent implements OnInit, AfterViewInit, OnDestroy {
         let control = this.newAccountForm.get('name');
         let uniqueControl = this.newAccountForm.get('uniqueName');
         let unqName = control.value;
-        unqName = unqName.replace(/ |,|\//g, '');
+        unqName = unqName?.replace(/ |,|\//g, '');
         unqName = unqName.toLowerCase();
-        if (unqName.length >= 1) {
+        if (unqName?.length >= 1) {
             let unq = '';
             let text = '';
             const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
             let i = 0;
             while (i < 3) {
-                text += chars.charAt(Math.floor(Math.random() * chars.length));
+                text += chars.charAt(Math.floor(Math.random() * chars?.length));
                 i++;
             }
             unq = unqName + text;
@@ -146,7 +146,7 @@ export class QuickAccountComponent implements OnInit, AfterViewInit, OnDestroy {
 
     public checkSelectedGroup(options: IOption) {
         this.groupsArrayStream$.subscribe(data => {
-            if (data.length) {
+            if (data?.length) {
                 let accountCategory = this.flattenGroup(data, options.value, null);
                 this.showGstBox = accountCategory === 'assets' || accountCategory === 'liabilities';
             }
@@ -171,7 +171,7 @@ export class QuickAccountComponent implements OnInit, AfterViewInit, OnDestroy {
     public removeFixedGroupsFromArr(data: IFlattenGroupsAccountsDetail[]) {
         const fixedArr = ['currentassets', 'fixedassets', 'noncurrentassets', 'indirectexpenses', 'operatingcost',
             'otherincome', 'revenuefromoperations', 'shareholdersfunds', 'currentliabilities', 'noncurrentliabilities'];
-        return data.filter(da => {
+        return data?.filter(da => {
             return !(fixedArr.indexOf(da?.groupUniqueName) > -1);
         });
     }
