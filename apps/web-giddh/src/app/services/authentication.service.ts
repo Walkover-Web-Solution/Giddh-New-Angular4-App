@@ -312,4 +312,11 @@ export class AuthenticationService {
             return res;
         }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, args)));
     }
+
+    public loginWithOtp(data: any): Observable<BaseResponse<any, any>> {
+        return this.http.post(this.config.apiUrl + LOGIN_API.LOGIN_WITH_OTP, data).pipe(map((res) => {
+            let data: BaseResponse<string, any> = res;
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<string, any>(e)));
+    }
 }

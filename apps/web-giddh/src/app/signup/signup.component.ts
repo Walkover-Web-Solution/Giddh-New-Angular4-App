@@ -4,7 +4,7 @@ import { AppState } from "../store";
 import { Component, Inject, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ModalDirective } from "ngx-bootstrap/modal";
-import { Configuration } from "../app.constant";
+import { Configuration, OTP_PROVIDER_URL, OTP_TOKEN_AUTH, OTP_WIDGET_ID } from "../app.constant";
 import { Store, select } from "@ngrx/store";
 import { Observable, ReplaySubject } from "rxjs";
 import {
@@ -23,6 +23,11 @@ import { IOption } from "../theme/ng-virtual-select/sh-options.interface";
 import { DOCUMENT } from "@angular/common";
 import { userLoginStateEnum } from "../models/user-login-state";
 import { contriesWithCodes } from "../shared/helpers/countryWithCodes";
+import { LoaderService } from "../loader/loader.service";
+import { ToasterService } from "../services/toaster.service";
+import { AuthenticationService } from "../services/authentication.service";
+
+declare var initSendOTP: any;
 
 @Component({
     selector: "signup",
@@ -68,7 +73,10 @@ export class SignupComponent implements OnInit, OnDestroy {
         private store: Store<AppState>,
         private loginAction: LoginActions,
         private authService: AuthService,
-        @Inject(DOCUMENT) private document: Document
+        @Inject(DOCUMENT) private document: Document,
+        private loaderService: LoaderService,
+        private toaster: ToasterService,
+        private authenticationService: AuthenticationService
     ) {
         this.urlPath = isElectron ? "" : AppUrl + APP_FOLDER;
         this.isLoginWithEmailInProcess$ = this.store.pipe(select(state => {
@@ -324,6 +332,49 @@ export class SignupComponent implements OnInit, OnDestroy {
         let ObjToSend = model.value;
         if (ObjToSend) {
             this.store.dispatch(this.loginAction.SignupWithPasswdRequest(ObjToSend));
+        }
+    }
+
+    /**
+     * This will open the signup with otp popup
+     *
+     * @memberof SignupComponent
+     */
+    public signUpWithOtp(): void {
+        this.loaderService.show();
+
+        let configuration = {
+            widgetId: OTP_WIDGET_ID,
+            tokenAuth: OTP_TOKEN_AUTH,
+            success: (data) => {
+                this.authenticationService.loginWithOtp({ email: 'ravinder@walkover.in', accessToken: data?.message }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                    if (response?.status === "success") {
+                        this.loginAction.LoginSuccess(response?.body);
+                    } else {
+                        this.toaster.errorToast(response?.message);
+                    }
+                });
+            },
+            failure: (error: any) => {
+                this.toaster.errorToast(error?.message);
+            }
+        };
+
+        /* OTP LOGIN */
+        if (window['initSendOTP'] === undefined) {
+            let scriptTag = document.createElement('script');
+            scriptTag.src = OTP_PROVIDER_URL;
+            scriptTag.type = 'text/javascript';
+            scriptTag.defer = true;
+            document.body.appendChild(scriptTag);
+
+            setTimeout(() => {
+                initSendOTP(configuration);
+                this.loaderService.hide();
+            }, 2000);
+        } else {
+            initSendOTP(configuration);
+            this.loaderService.hide();
         }
     }
 }
