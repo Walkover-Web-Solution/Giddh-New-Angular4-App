@@ -408,7 +408,7 @@ export class LoginComponent implements OnInit, OnDestroy {
             widgetId: OTP_WIDGET_ID,
             tokenAuth: OTP_TOKEN_AUTH,
             success: (data) => {
-                this.authenticationService.loginWithOtp({ email: 'ravinder@walkover.in', accessToken: data?.message }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                this.authenticationService.loginWithOtp({ accessToken: data?.message }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     if (response?.status === "success") {
                         this.loginAction.LoginSuccess(response?.body);
                     } else {
