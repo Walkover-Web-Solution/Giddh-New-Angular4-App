@@ -258,12 +258,6 @@
                     "link": "/pages/reports/monthly-columnar-report",
                     "icon": "icon-monthly-columnar-report",
                     "description": "प्रत्येक गटाचा मासिक तपशीलवार अहवाल"
-                },
-                   {
-                    "label": "आयात करतो",
-                    "link": "/pages/downloads/imports",
-                    "icon": "icon-tally-import1",
-                    "description": "आपला संकालित केलेला टॅली डेटा ऑनलाइन तपासा"
                 }
             ]
         },
