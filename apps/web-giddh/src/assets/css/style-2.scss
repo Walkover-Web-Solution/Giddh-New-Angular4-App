@@ -175,6 +175,21 @@ $custom-typography: mat-typography-config(
 //         z-index: 99999;
 //     }
 // }
+.account-aside-menu-state {
+    .mat-datepicker-toggle .mat-button-wrapper .mat-datepicker-toggle-default-icon {
+        color: var(--color-datepicker-date-icon);
+        position: absolute;
+        bottom: 8px !important;
+        right: 10px !important;
+    }
+    .mat-form-field-wrapper
+        .mat-form-field-infix
+        .mat-input-element.mat-form-field-autofill-control.mat-datepicker-input {
+        position: absolute;
+        padding-top: 12px !important;
+        padding-left: 45px !important;
+    }
+}
 @media screen and (max-width: 1366px) and (orientation: portrait) {
     .subscription-form-select {
         float: left !important;

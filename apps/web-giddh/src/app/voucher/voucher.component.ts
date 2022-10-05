@@ -121,6 +121,7 @@ import { SettingsDiscountService } from '../services/settings.discount.service';
 import { ConfirmationModalComponent } from '../common/confirmation-modal/confirmation-modal.component';
 import { MatDialog } from '@angular/material/dialog';
 import { HttpClient } from '@angular/common/http';
+import { NewConfirmationModalComponent } from '../theme/new-confirmation-modal/confirmation-modal.component';
 
 /** Type of search: customer and item (product/service) search */
 const SEARCH_TYPE = {
@@ -129,8 +130,8 @@ const SEARCH_TYPE = {
     BANK: 'bank'
 }
 
-	/** Declare of window */
-    declare var window;
+/** Declare of window */
+declare var window;
 
 @Component({
     selector: 'voucher-component',
@@ -160,21 +161,14 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     @Input() public callFromOutside: boolean = true;
 
     @ViewChild(ElementViewContainerRef, { static: true }) public elementViewContainerRef: ElementViewContainerRef;
-    @ViewChild('bulkItemsModal', { static: true }) public bulkItemsModal: ModalDirective;
-    @ViewChild('sendEmailModal', { static: true }) public sendEmailModal: ModalDirective;
-    @ViewChild('printVoucherModal', { static: true }) public printVoucherModal: ModalDirective;
-
     @ViewChild('copyPreviousEstimate', { static: true }) public copyPreviousEstimate: ElementRef;
     @ViewChild('unregisteredBusiness', { static: true }) public unregisteredBusiness: ElementRef;
-
     @ViewChild('invoiceForm', { static: false }) public invoiceForm: NgForm;
     @ViewChildren('discountComponent') public discountComponent: QueryList<DiscountListComponent>;
     @ViewChildren('taxControlComponent') public taxControlComponent: QueryList<TaxControlComponent>;
     @ViewChild('customerNameDropDown', { static: false }) public customerNameDropDown: SalesShSelectComponent;
-
     @ViewChildren('selectAccount') public selectAccount: QueryList<ShSelectComponent>;
     @ViewChildren('description') public description: QueryList<ElementRef>;
-
     @ViewChild('inputCustomerName', { static: true }) public inputCustomerName: ElementRef;
     @ViewChild('customerBillingAddress', { static: true }) public customerBillingAddress: ElementRef;
     @ViewChildren(BsDatepickerDirective) public datePickers: QueryList<BsDatepickerDirective>;
@@ -647,6 +641,14 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public isMobileNumberInvalid: boolean = false;
     /** Mobile Number state instance */
     @ViewChild('initContactProforma', { static: false }) initContactProforma: ElementRef;
+    /** Instance of RCM checkbox */
+    @ViewChild("rcmCheckbox") public rcmCheckbox: ElementRef;
+    /* Selector for send email  modal */
+    @ViewChild('sendEmailModal', { static: true }) public sendEmailModal: any;
+    /* Selector for print  modal */
+    @ViewChild('printVoucherModal', { static: true }) public printVoucherModal: any;
+    /* Selector for bulk items  modal */
+    @ViewChild('bulkItemsModal', { static: true }) public bulkItemsModal: any;
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -654,7 +656,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      *
      * @readonly
      * @type {boolean}
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     public get shouldApplyMaxLengthOnNotes(): boolean {
         return (this.isSalesInvoice || this.isProformaInvoice || this.isEstimateInvoice);
@@ -666,7 +668,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @readonly
      * @private
      * @type {boolean}
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     private get isPurchaseRecordContractBroken(): boolean {
         return (this.purchaseRecordCustomerUniqueName !== this.invFormData.voucherDetails.customerUniquename) ||
@@ -709,7 +711,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         private adjustmentUtilityService: AdjustmentUtilityService,
         private gstAction: GstReconcileActions,
         private settingsDiscountService: SettingsDiscountService,
-        private http: HttpClient
+        private http: HttpClient,
+        public dialog: MatDialog
     ) {
         this.advanceReceiptAdjustmentData = new VoucherAdjustments();
         this.advanceReceiptAdjustmentData.adjustments = [];
@@ -749,9 +752,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
     public ngAfterViewInit() {
         let interval = setInterval(() => {
-            if(this.initContactProforma) {
-                    this.onlyPhoneNumber();
-                    clearInterval(interval);
+            if (this.initContactProforma) {
+                this.onlyPhoneNumber();
+                clearInterval(interval);
             }
         }, 1000);
         if (!this.isUpdateMode) {
@@ -772,11 +775,48 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * Toggle the RCM checkbox based on user confirmation
      *
      * @param {*} event Click event
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
-    public toggleRcmCheckbox(event: any): void {
-        event.preventDefault();
-        this.rcmConfiguration = this.generalService.getRcmConfiguration(event?.target?.checked, this.commonLocaleData);
+    public toggleRcmCheckbox(event: any, element: string): void {
+        let isChecked;
+        if (element === "checkbox") {
+            isChecked = event?.checked;
+            this.rcmCheckbox['checked'] = !isChecked;
+        } else {
+            isChecked = !event?._checked;
+        }
+        this.rcmConfiguration = this.generalService.getRcmConfiguration(isChecked, this.commonLocaleData);
+
+        let dialogRef = this.dialog.open(NewConfirmationModalComponent, {
+            width: '630px',
+            data: {
+                configuration: this.rcmConfiguration
+            }
+        });
+
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            this.handleRcmChange(response);
+        });
+    }
+
+    /**
+     * This will use for open add bulk item modal
+     *
+     * @memberof VoucherComponent
+     */
+    public addBulkItems(): void {
+        this.dialog.open(this.bulkItemsModal, {
+            width: '50%',
+        });
+
+    }
+    /**
+     * This will use for cancel bulk item modal
+     *
+     * @memberof VoucherComponent
+     */
+    public cancelBulkItemsModal(): void {
+        this.dialog.closeAll();
     }
 
     /**
@@ -784,7 +824,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * action with the RCM popup
      *
      * @param {string} action Action performed by user
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     public handleRcmChange(action: string): void {
         if (action === this.commonLocaleData?.app_yes) {
@@ -794,9 +834,18 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             this.calculateGrandTotal();
             this.calculateBalanceDue();
         }
-        if (this.rcmPopup) {
-            this.rcmPopup.hide();
-        }
+        this._cdr.detectChanges();
+    }
+
+    /**
+ * This will reset the state of checkbox and ngModel to make sure we update it based on user confirmation later
+ *
+ * @param {*} event
+ * @memberof VoucherComponent
+ */
+    public changeRcmCheckboxState(event: any): void {
+        this.isRcmEntry = !this.isRcmEntry;
+        this.toggleRcmCheckbox(event, 'checkbox');
     }
 
     public ngOnInit() {
@@ -1633,7 +1682,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * Initializes voucher module
      *
      * @private
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     private initiateVoucherModule(): void {
         this.sundryDebtorsAcList = [];
@@ -1713,7 +1762,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * To fetch regex call for onboarding countries (gulf)
      *
      * @param {string} countryCode
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     public getOnboardingForm(countryCode: string): void {
         if (this.onboardingFormRequest.country !== countryCode) {
@@ -1747,7 +1796,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * Shows or hides the loader
      *
      * @param {boolean} shouldStartLoader True, if loader is to be shown
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     public startLoader(shouldStartLoader: boolean): void {
         this.showLoader = shouldStartLoader;
@@ -1760,7 +1809,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @private
      * @param {string} oldStatusCode Old state code
      * @returns {string} Returns new state code
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     private getNewStateCode(oldStatusCode: string): string {
         const currentState = this.statesSource.find((st: any) => (oldStatusCode === st.value || oldStatusCode === st.stateGstCode));
@@ -1898,7 +1947,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     /**
      * Removes the selected invoice for credit note
      *
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     public removeSelectedInvoice(): void {
         this.invoiceForceClearReactive$ = observableOf({ status: true });
@@ -1971,7 +2020,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * Selected invoice for credit note
      *
      * @param {any} event Selected invoice for credit note
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     public creditNoteInvoiceSelected(event: any): void {
         if (event && event.additional && event.value) {
@@ -2001,7 +2050,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.isCashBankAccount = false;
 
         data?.parentGroups?.forEach(parentGroup => {
-            if (parentGroup?.uniqueName === "cash" || parentGroup?.uniqueName === "bankaccounts"  || (this.voucherApiVersion === 2 && parentGroup?.uniqueName === "loanandoverdraft")) {
+            if (parentGroup?.uniqueName === "cash" || parentGroup?.uniqueName === "bankaccounts" || (this.voucherApiVersion === 2 && parentGroup?.uniqueName === "loanandoverdraft")) {
                 this.isCashBankAccount = true;
             }
         });
@@ -2037,7 +2086,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * Initializes acounnt currency details
      *
      * @param {AccountResponseV2} item Account details
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     public initializeAccountCurrencyDetails(item: AccountResponseV2): void {
         // If currency of item is null or undefined then treat it to be equivalent of company currency
@@ -2085,7 +2134,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      *
      * @param {string} type billingDetails || shipping
      * @param {SalesShSelectComponent} statesEle state input box
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     public getStateCode(type: string, statesEle: SalesShSelectComponent) {
         let gstVal = cloneDeep(this.invFormData.accountDetails[type].gstNumber)?.toString();
@@ -2117,7 +2166,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      *
      * @param {*} value Value to be validated
      * @param {string} fieldName Field name for which the value is validated
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     public checkGstNumValidation(value, fieldName: string = '') {
         this.isValidGstinNumber = false;
@@ -2346,7 +2395,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 if (!entry.transactions[0].accountUniqueName && indx !== 0) {
                     this.invFormData.entries.splice(indx, 1);
                 }
-                if(!transactionError) {
+                if (!transactionError) {
                     // filter active discounts
                     entry.discounts = entry.discounts?.filter(dis => dis.isActive);
 
@@ -2362,7 +2411,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     }
 
                     entry.transactions = entry.transactions.map((txn: SalesTransactionItemClass) => {
-                        if(!transactionError) {
+                        if (!transactionError) {
                             // convert date object
                             // txn.date = this.convertDateForAPI(txn.date);
                             entry.entryDate = dayjs(this.convertDateForAPI(entry.entryDate), GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
@@ -2395,7 +2444,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     });
                 }
 
-                if(entry.transactions[0]?.accountUniqueName || indx === 0) {
+                if (entry.transactions[0]?.accountUniqueName || indx === 0) {
                     entries.push(entry);
                 }
 
@@ -2749,7 +2798,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     /**
      * Closes the other taxes side menu panel on click of overlay
      *
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     public closeAsideMenuStateForOtherTaxes(): void {
         if (this.asideMenuStateForOtherTaxes === 'in') {
@@ -2911,7 +2960,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      *
      * @param {SalesEntryClass} entry Entry value
      * @param {SalesTransactionItemClass} transaction Current transaction
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     public calculateTransactionValueInclusively(entry: SalesEntryClass, transaction: SalesTransactionItemClass): void {
         // Calculate discount
@@ -3065,7 +3114,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      *
      * @param {boolean} returnModValue True, if only absolute value is required
      * @returns {number} Balance due
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     public getConvertedBalanceDue(returnModValue?: boolean): number {
         const convertedBalanceDue = parseFloat(Number(
@@ -3090,7 +3139,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     /**
      * Updates the value of stocks in entries according to the changed ER (Exchange Rate)
      *
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     public updateStockEntries(): void {
         if (this.invFormData.entries && this.invFormData.entries.length) {
@@ -3112,7 +3161,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     /**
      * Updates the value of stocks in entries according to the changed ER (Exchange Rate)
      *
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     public exchangeRateChanged(): void {
         if (this.invFormData.entries && this.invFormData.entries.length) {
@@ -3164,7 +3213,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     /**
      * To check invoice amount less with advance receipts adjusted amount then open Advane receipts adjust modal
      *
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     public isAdjustAdvanceReceiptModalOpen() {
         this.openAdjustPaymentModal();
@@ -3328,7 +3377,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @param {boolean} calculateTransaction True, if calculation needs to be calculated
      * @param {boolean} isBulkItem True, if bulk item entry is entered
      * @returns {SalesTransactionItemClass} Returns the complete transaction instance
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
 
     public calculateItemValues(selectedAcc: any, transaction: SalesTransactionItemClass, entry: SalesEntryClass, calculateTransaction: boolean = true, isBulkItem?: boolean): SalesTransactionItemClass {
@@ -3721,12 +3770,16 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             }
             case ActionTypeAfterVoucherGenerateOrUpdate.generateAndPrint: {
                 this.startLoader(false);
-                this.printVoucherModal.show();
+                this.dialog.open(this.printVoucherModal, {
+                    width: '50%'
+                });
                 break;
             }
             case ActionTypeAfterVoucherGenerateOrUpdate.generateAndSend: {
                 this.startLoader(false);
-                this.sendEmailModal.show();
+                this.dialog.open(this.sendEmailModal, {
+                    width: '630px'
+                });
                 break;
             }
             case ActionTypeAfterVoucherGenerateOrUpdate.updateSuccess: {
@@ -3906,7 +3959,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     /**
      * Triggered when user clicks the 'Cancel' button of update flow
      *
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     public cancelUpdate(): void {
         if (this.callFromOutside) {
@@ -3932,7 +3985,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     /**
      * Adds the bulk stock items
      *
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     public addBulkStockItems(items: SalesAddBulkStockItems[]) {
         const startIndex = this.invFormData.entries?.length;
@@ -4020,7 +4073,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      *
      * @private
      * @param {NgForm} invoiceForm Form instance for values
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     private handleUpdateInvoiceForm(invoiceForm: NgForm): void {
         let requestObject: any = this.prepareDataForApi();
@@ -4620,19 +4673,29 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.cancelEmailModal();
     }
 
+    /**
+     * This will use for cancel email modal
+     *
+     * @memberof VoucherComponent
+     */
     public cancelEmailModal(): void {
         this.accountUniqueName = '';
         this.invoiceNo = '';
         this.newVoucherUniqueName = '';
-        this.sendEmailModal.hide();
+        this.dialog.closeAll();
         this.showInvoicePending();
     }
 
+    /**
+     * This will use for cancel print modal
+     *
+     * @memberof VoucherComponent
+     */
     public cancelPrintModal(): void {
         this.accountUniqueName = '';
         this.invoiceNo = '';
         this.newVoucherUniqueName = '';
-        this.printVoucherModal.hide();
+        this.dialog.closeAll();
         this.showInvoicePending();
     }
 
@@ -5277,7 +5340,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         }
 
         if (this.voucherDateBeforeUpdate && this.invFormData.voucherDetails.voucherDate && this.voucherDateBeforeUpdate !== this.invFormData.voucherDetails.voucherDate && (!this.isUpdateMode || (this.isUpdateMode && this.invoiceType !== VoucherTypeEnum.purchase))) {
-        console.log("called");
             this.isVoucherDateChanged = true;
             this.dateChangeType = "voucher";
             this.dateChangeConfiguration = this.generalService.getDateChangeConfiguration(this.localeData, this.commonLocaleData, true);
@@ -5290,13 +5352,15 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         }
     }
 
+
+
     /**
      * Fetches the currency exchange rate between two countries
      *
      * @param {*} to Converted to currency symbol
      * @param {*} from Converted from currency symbol
      * @param {string} date on which currency rate is required, default is today's date
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     public getCurrencyRate(to, from, date: any): void {
         if (from && to) {
@@ -5329,7 +5393,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      *
      * @param {*} data Data of bank/cash account from API response
      * @returns
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     public updateBankAccountObject(data: any) {
         let bankAccounts: IOption[] = [];
@@ -5379,7 +5443,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @param {*} countryCode Country code for the user
      * @param {boolean} isCompanyStates
      * @returns Promise to carry out further operations
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     private getUpdatedStateCodes(countryCode: any, isCompanyStates?: boolean): Promise<any> {
         this.startLoader(true);
@@ -5485,7 +5549,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * Handles the customer name change for Cash Invoice
      *
      * @param {*} event Input change event
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     public handleCustomerChange(event: any): void {
         if (!event.target.value) {
@@ -5569,7 +5633,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     /**
      * Outside click handler for transaction row
      *
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     handleOutsideClick(): void {
         this.activeIndx = null;
@@ -5579,7 +5643,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     /**
      * Check valid entry if have any then enable save button
      *
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     checkVoucherEntries(): void {
         if (this.invFormData.entries && this.invFormData.entries.length) {
@@ -5601,7 +5665,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      *
      * @param {*} data Data to be checked
      * @returns {boolean} True, if all the entries have atleast single tax
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     validateTaxes(data: any): boolean {
         let validEntries = true;
@@ -5621,7 +5685,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * action with the confirmation popup
      *
      * @param {string} action Action performed by user
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     public handlePurchaseRecordConfirmation(action: string): void {
         if (action === this.commonLocaleData?.app_yes) {
@@ -5643,7 +5707,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      *
      * @param {SalesEntryClass} entry Current entry
      * @param {SalesTransactionItemClass} transaction Current transaction
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     public handleQuantityBlur(entry: SalesEntryClass, transaction: SalesTransactionItemClass): void {
         if (transaction.quantity !== undefined) {
@@ -5665,7 +5729,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * Stores the purchase record data
      *
      * @private
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     private saveCurrentPurchaseRecordDetails(): void {
         try {
@@ -5682,7 +5746,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      *
      * @private
      * @param {WarehouseDetails} [warehouse] Warehouse to show pre-filled in drop down
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     private initializeWarehouse(warehouse?: WarehouseDetails): void {
         this.store.pipe(select(appState => appState.warehouse.warehouses), filter((warehouses) => !!warehouses), take(1)).subscribe((warehouses: any) => {
@@ -5726,7 +5790,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      *
      * @private
      * @returns {boolean} True, if module is one of the multi-currency supported module
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     private isMultiCurrencyModule(): boolean {
         return [VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.cash, VoucherTypeEnum.generateProforma, VoucherTypeEnum.generateEstimate, VoucherTypeEnum.purchase].includes(this.invoiceType);
@@ -5737,7 +5801,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      *
      * @private
      * @returns {boolean} True, if item entries contains stock item
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     private isStockItemPresent(): boolean {
         if (this.isMultiCurrencyModule() && this.invFormData.entries) {
@@ -5760,7 +5824,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * changes from stock to non-stock or vice-versa
      *
      * @private
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     private handleWarehouseVisibility(): void {
         // Non stock item got selected, search if there is any stock item along with non-stock item
@@ -5776,7 +5840,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      *
      * @private
      * @param {PurchaseRecordRequest} requestObject Request object required from the service
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     private generatePurchaseRecord(requestObject: PurchaseRecordRequest): void {
         this.purchaseRecordConfirmationConfiguration = this.voucherUtilityService.getPurchaseRecordConfirmationConfiguration(this.localeData, this.commonLocaleData);
@@ -5820,7 +5884,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      *
      * @private
      * @param {PurchaseRecordRequest} request Request object required by the service
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     private createPurchaseRecord(request: PurchaseRecordRequest): void {
         // Create a new puchase record with voucher API for voucher version 2 else create a new purchase record with its own API
@@ -5839,7 +5903,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      *
      * @private
      * @param {PurchaseRecordRequest} request Request object required by the service
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     private updatePurchaseRecord(request: any): void {
         // Update the puchase record with voucher API for voucher version 2 else merge the purchase record (PATCH method, UPDATE flow)
@@ -5867,7 +5931,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @private
      * @param {BaseResponse<any, GenericRequestForGenerateSCD | PurchaseRecordRequest>} response Response received from the API
      * @param {NgForm} form Invoice form instance
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     private handleGenerateResponse(response: BaseResponse<any, GenericRequestForGenerateSCD | PurchaseRecordRequest>, form: NgForm): void {
         if (response?.status === 'success') {
@@ -5920,7 +5984,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      *
      * @private
      * @returns {Observable<BaseResponse<any, any>>} Returns data of previous record if found else null
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     private validatePurchaseRecord(): Observable<BaseResponse<any, any>> {
         const requestObject = {
@@ -5937,7 +6001,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      *
      * @private
      * @returns {Promise<any>} Promise to carry out further operations
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     private async mergePurchaseRecord(): Promise<any> {
         // Confirmation received, delete old merged entries
@@ -5958,7 +6022,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     /**
      * This function is used to get inventory settings from store
      *
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     public getInventorySettings(): void {
         this.store.pipe(select((s: AppState) => s.invoice.settings), takeUntil(this.destroyed$)).subscribe((settings: InvoiceSetting) => {
@@ -5975,7 +6039,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * Toggle Tourist scheme checkbox then reset passport number
      *
      * @param {*} event Click event
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     public touristSchemeApplicableToggle(): void {
         this.invFormData.passportNumber = '';
@@ -5985,7 +6049,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      *
      *
      * @param {*} event
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     public allowAlphanumericChar(event: any): void {
         if (event && event.value) {
@@ -5998,7 +6062,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     /**
      * To reset advance receipt adjusted data
      *
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     public resetAdvanceReceiptAdjustData(): void {
         this.adjustPaymentData.customerName = '';
@@ -6016,7 +6080,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     /**
      * To close advance reciipt modal
      *
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     public closeAdvanceReceiptModal() {
         this.showAdvanceReceiptAdjust = false;
@@ -6032,7 +6096,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     /**
      * To open advance receipts adjustment pop up
      *
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     public openAdjustPaymentModal() {
         this.showAdvanceReceiptAdjust = true;
@@ -6045,7 +6109,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * Toggle advance receipts option
      *
      * @param {*} event True, if Advance receipt adjust option enabled
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     public clickAdjustAmount(event) {
         if (event) {
@@ -6072,7 +6136,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * To get all advance adjusted data
      *
      * @param {{ adjustVoucherData: VoucherAdjustments, adjustPaymentData: AdjustAdvancePaymentModal }} advanceReceiptsAdjustEvent event that contains advance receipts adjusted data
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     public getAdvanceReceiptAdjustData(advanceReceiptsAdjustEvent: { adjustVoucherData: VoucherAdjustments, adjustPaymentData: AdjustAdvancePaymentModal }) {
         this.advanceReceiptAdjustmentData = advanceReceiptsAdjustEvent.adjustVoucherData;
@@ -6098,7 +6162,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * To calculate advance receipt adjusted amount is case of update invoice
      *
      * @param {*} voucherObject voucher response in case of update
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     public calculateAdjustedVoucherTotal(voucherObjectArray: any[]): void {
         this.totalAdvanceReceiptsAdjustedAmount = 0;
@@ -6130,7 +6194,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * To calculate balance due amount after adjustment of advance receipts
      *
      * @returns {number} Balance due amount
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     public getCalculatedBalanceDueAfterAdvanceReceiptsAdjustment(): number {
         return parseFloat(Number(this.invFormData.voucherDetails.grandTotal + this.invFormData.voucherDetails.tcsTotal - this.adjustPaymentData.totalAdjustedAmount - this.depositAmount - this.invFormData.voucherDetails.tdsTotal).toFixed(2));
@@ -6141,7 +6205,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      *
      * @param {*} customerUniquename Selected customer unique name
      * @param {*} voucherDate  Voucher Date (GIDDH_DATE_FORMAT) of selected invoice
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     public getAllAdvanceReceipts(customerUniqueName: string, voucherDate: any): void {
         let date;
@@ -6190,7 +6254,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * Scroll to bottom handler
      *
      * @param {string} searchType Search type
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     public handleScrollEnd(searchType: string): void {
         const query = searchType === SEARCH_TYPE.CUSTOMER ? this.searchCustomerResultsPaginationData.query :
@@ -6243,7 +6307,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @param {number} [page=1] Page to request
      * @param {string} searchType Type of search to make
      * @param {Function} successCallback Callback to carry out further operation
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     public onSearchQueryChanged(query: string, page: number = 1, searchType: string, successCallback?: Function): void {
         if (!this.preventDefaultScrollApiCall &&
@@ -6311,7 +6375,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @param {*} results Search results
      * @param {number} [currentPage=1] Current page requested
      * @param {string} searchType Search type of the searched item
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     public prepareSearchLists(results: any, currentPage: number = 1, searchType: string): void {
         const searchResults = results.map(result => {
@@ -6340,7 +6404,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @param {number} [page=1] Page for which search is to be made
      * @param {string} searchType Type of search to be performed
      * @returns {*} Search request object
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     public getSearchRequestObject(query: string, page: number = 1, searchType: string): any {
         let withStocks: boolean;
@@ -6349,7 +6413,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             this.searchCustomerResultsPaginationData.query = query;
             group = (this.invoiceType === VoucherTypeEnum.debitNote) ? 'sundrycreditors' :
                 (this.invoiceType === VoucherTypeEnum.purchase) ?
-                (this.voucherApiVersion === 2) ? 'sundrycreditors, bankaccounts, cash, loanandoverdraft' : 'sundrycreditors, bankaccounts, cash' : 'sundrydebtors';
+                    (this.voucherApiVersion === 2) ? 'sundrycreditors, bankaccounts, cash, loanandoverdraft' : 'sundrycreditors, bankaccounts, cash' : 'sundrydebtors';
             this.selectedGrpUniqueNameForAddEditAccountModal = (this.invoiceType === VoucherTypeEnum.debitNote || this.invoiceType === VoucherTypeEnum.purchase) ?
                 'sundrycreditors' : 'sundrydebtors';
         } else if (searchType === SEARCH_TYPE.ITEM) {
@@ -6382,7 +6446,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      *
      * @param {*} requestObject Request object
      * @returns {Observable<any>} Observable to carry out further operation
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     public searchAccount(requestObject: any): Observable<any> {
         return this.searchService.searchAccount(requestObject);
@@ -6393,7 +6457,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      *
      * @param {boolean} shouldShowDefaultList True, if default list should be shown
      * @param {string} searchType Search type made by the user
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     public resetPreviousSearchResults(shouldShowDefaultList: boolean = false, searchType?: string): void {
         if (shouldShowDefaultList && searchType) {
@@ -6451,7 +6515,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * section
      *
      * @private
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     private getDefaultTemplateData(): void {
         const templateType = [VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote].includes(this.invoiceType) ? 'voucher' : 'invoice';
@@ -6463,7 +6527,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      *
      * @private
      * @param {CustomTemplateState} templateData Template data received from API
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     private setTemplatePlaceholder(templateData: CustomTemplateState): void {
         if (templateData && templateData.customCreatedTemplates && templateData.customCreatedTemplates.length > 0) {
@@ -6500,7 +6564,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      *
      * @private
      * @param {string} customerCurrency Currency of the customer selected
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     private loadBankCashAccounts(customerCurrency: string): void {
         this.depositAccountUniqueName = '';
@@ -6520,7 +6584,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * This will hide the edit hsn/sac popup
      *
      * @param {*} transaction
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     public hideHsnSacEditPopup(transaction: any): void {
         if (transaction.showCodeType === "hsn") {
@@ -6536,7 +6600,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * This will check if we need to exclude tax from total
      *
      * @param {*} data
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     public checkIfNeedToExcludeTax(data: any): void {
         this.excludeTax = false;
@@ -6579,7 +6643,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * This will get the list of PO by vendor
      *
      * @param {*} vendorName
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     public getVendorPurchaseOrders(vendorName: any): void {
         let purchaseOrderGetRequest = { companyUniqueName: this.selectedCompany?.uniqueName, accountUniqueName: vendorName, page: 1, count: 100, sort: '', sortBy: '' };
@@ -6626,7 +6690,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * This will get the PO details
      *
      * @param {*} event
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     public getPurchaseOrder(event: any, addRemove: boolean): void {
         if (event && event.length > 0) {
@@ -6675,7 +6739,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * This will add the items if linked PO is selected
      *
      * @param {*} entries
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     public addPoItems(poUniqueName: string, entries: any, totalPending: number): void {
         this.startLoader(true);
@@ -6773,7 +6837,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     /**
      * This will remove the Items if linked PO is removed
      *
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     public removePoItem(): void {
         if (this.selectedPoItems && this.selectedPoItems.length > 0) {
@@ -6850,7 +6914,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     /**
      * This will autofill billing details into shipping for company
      *
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     public autoFillCompanyShippingDetails(): void {
         if (this.autoFillCompanyShipping) {
@@ -6866,7 +6930,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      *
      * @param {*} event
      * @param {boolean} isBilling
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     public fillShippingBillingCompanyDetails(event: any, isBilling: boolean): void {
         let stateName = event.label;
@@ -6898,7 +6962,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * This will assign state based on GST/TRN
      *
      * @param {string} type
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     public getStateCodeCompany(type: string): void {
         let gstVal = cloneDeep(this.purchaseBillCompany[type].gstNumber)?.toString();
@@ -6923,7 +6987,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * This will assign company billing/shipping in deliver to
      *
      * @param {*} company
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     public assignCompanyBillingShipping(company: any): void {
         if (company.billingDetails && company.shippingDetails) {
@@ -6953,7 +7017,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     /**
      * This will autofill the
      *
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     public fillDeliverToAddress(): void {
         let branches = [];
@@ -6992,7 +7056,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * This will autofill warehouse address
      *
      * @param {*} warehouse
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     public autoFillDeliverToWarehouseAddress(warehouse: any): void {
         if (warehouse) {
@@ -7023,7 +7087,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      Resets the shipping address if no default linked address is
      * found in a warehouse
      *
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     public resetShippingAddress(): void {
         this.purchaseBillCompany.shippingDetails.address = [];
@@ -7038,7 +7102,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * Callback for warehouse
      *
      * @param {*} warehouse
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     public onSelectWarehouse(warehouse: any): void {
         if (this.isPurchaseInvoice) {
@@ -7049,7 +7113,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     /**
      * To get tax list and assign values to local variables
      *
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     public getAllDiscounts(): void {
         this.store.pipe(select(p => p.company && p.company.isGetTaxesSuccess), takeUntil(this.destroyed$)).subscribe(isGetTaxes => {
@@ -7083,7 +7147,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * when voucher is changed
      *
      * @private
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     private loadDefaultSearchSuggestions(): void {
         this.onSearchQueryChanged('', 1, SEARCH_TYPE.CUSTOMER, (response) => {
@@ -7132,7 +7196,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      *
      * @private
      * @param {string} searchType Search type made by the user
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     private assignSearchResultToList(searchType: string): void {
         if (searchType === SEARCH_TYPE.CUSTOMER) {
@@ -7161,7 +7225,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @private
      * @param {SalesEntryClass} entry
      * @returns {LedgerDiscountClass[]}
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     private parsePoDiscountFromResponse(entry: SalesEntryClass): LedgerDiscountClass[] {
         let discountArray: LedgerDiscountClass[] = [];
@@ -7188,7 +7252,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * This will handle date change modal confirmation
      *
      * @param {string} action
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     public handleDateChangeConfirmation(action: string): void {
         if (action === this.commonLocaleData?.app_yes) {
@@ -7218,7 +7282,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * Callback for entry date change
      *
      * @param {number} entryIdx
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     public onBlurEntryDate(entryIdx: number, isDatepickerOpen: boolean): void {
         if (typeof (this.invFormData.entries[entryIdx].entryDate) === "object") {
@@ -7239,7 +7303,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     /**
      * This will update due date based on invoice date
      *
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     public updateDueDate(): void {
         let invoiceSettings: InvoiceSetting = null;
@@ -7268,7 +7332,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     /**
      * This will hold voucher date for comparision after change
      *
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     public onFocusInvoiceDate(): void {
         this.voucherDateBeforeUpdate = this.invFormData.voucherDetails.voucherDate;
@@ -7280,7 +7344,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @param {*} data
      * @param {*} address
      * @param {boolean} isCompanyAddress
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     public selectAddress(data: any, address: any, isCompanyAddress: boolean = false): void {
         if (data && address) {
@@ -7306,7 +7370,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * Recalculates the entries total value
      *
      * @private
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     private recalculateEntriesTotal(): void {
         this.updateStockEntries();
@@ -7325,7 +7389,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @param {number} length Total length of the entries formed after bulk items are added
      * @param {number} startIndex Start index of the bulk items (the index from which progressive rendering will start)
      * @param {boolean} [isBlankItemInBetween] True, if any blank item is found in between
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     private buildBulkData(length: number, startIndex: number, isBlankItemInBetween?: boolean): void {
         if (startIndex === 0 && this.container?.length) {
@@ -7364,7 +7428,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      *
      * @private
      * @param {number} startIndex Start index for the calculation
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     private loadTaxesAndDiscounts(startIndex: number): void {
         if (startIndex < this.invFormData.entries?.length) {
@@ -7386,7 +7450,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      *
      * @private
      * @params entryIndex {number} Index of current entry
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     private createEmbeddedViewAtIndex(entryIndex: number): void {
         const context = {
@@ -7404,7 +7468,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * Opens product dropdown
      *
      * @private
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     public openProductDropdown(): void {
         if (this.invFormData?.voucherDetails?.customerUniquename || this.invFormData?.voucherDetails?.customerName) {
@@ -7421,7 +7485,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * Focuses on description field
      *
      * @private
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     private focusOnDescription(): void {
         setTimeout(() => {
@@ -7438,7 +7502,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @private
      * @param {SalesEntryClass} entry Entry instance
      * @param {SalesTransactionItemClass} transaction Transaction instance
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     private calculateConvertedTotal(entry: SalesEntryClass, transaction: SalesTransactionItemClass): void {
         if (this.excludeTax || this.isRcmEntry) {
@@ -7463,7 +7527,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * Callback for translation response complete
      *
      * @param {*} event
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     public translationComplete(event: any): void {
         if (event) {
@@ -7509,7 +7573,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     /**
      * This will get copy previous invoice text
      *
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     public getCopyPreviousInvoiceText(): void {
         this.copyPreviousInvoiceText = (this.isCreditNote || this.isDebitNote) ? this.localeData?.copy_previous_dr_cr : this.localeData?.copy_previous_invoices;
@@ -7521,7 +7585,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     /**
      * This will get generate invoice text
      *
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     public getGenerateInvoiceText(): void {
         this.generateInvoiceText = this.localeData?.generate_invoice;
@@ -7533,7 +7597,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     /**
      * This will get update invoice text
      *
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     public getUpdateInvoiceText(): void {
         this.updateInvoiceText = this.localeData?.update_invoice;
@@ -7545,7 +7609,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     /**
      * This will get text for item table
      *
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     public getItemColumns(): void {
         this.theadArrReadOnly = [
@@ -7592,7 +7656,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * Recalculates the converted total amount for each entry when
      * the grand total amount in company currency is updated
      *
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     public recalculateConvertedTotal(): void {
         if (this.invFormData.entries && this.invFormData.entries.length) {
@@ -7606,7 +7670,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     /**
      * This function will redirect to invoice pending after once after voucher process has been completed
      *
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     public showInvoicePending(): void {
         if (this.isPendingVoucherType) {
@@ -7620,7 +7684,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * This will return selected voucher type
      *
      * @returns {string}
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     public getInvoiceType(): string {
         let invoiceType = "";
@@ -7669,7 +7733,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * Initializes current voucher form
      *
      * @private
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     private initializeCurrentVoucherForm(): void {
         if (this.voucherApiVersion === 2) {
@@ -7685,7 +7749,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * Calculates the converted amount
      *
      * @param {SalesTransactionItemClass} transaction Current edited transaction
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     public calculateConvertedAmount(transaction: SalesTransactionItemClass): void {
         if (this.isMulticurrencyAccount) {
@@ -7701,7 +7765,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * This will set the data in selected item if user is editing voucher from outside module
      *
      * @private
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     private setSelectedItem(): void {
         this.route.queryParams.pipe(take(1)).subscribe((params) => {
@@ -7721,7 +7785,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     /**
      * Deletes the attached file
      *
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     public deleteAttachment(): void {
         this._ledgerService.removeAttachment(this.invFormData.entries[0].attachedFile).subscribe((response) => {
@@ -7742,7 +7806,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     /**
      * This will update the deposit amount updated by user
      *
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     public updateDepositAmount(depositAmount: any): void {
         depositAmount = String(depositAmount)?.replace(/[^0-9]/g, '');
@@ -7754,7 +7818,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      *
      * @private
      * @returns {AmountClassMulticurrency}
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     private getDeposit(): AmountClassMulticurrency {
         let deposit = new AmountClassMulticurrency();
@@ -7786,7 +7850,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      *
      * @private
      * @param {*} accountDetails
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     private hideDepositSectionForCashBankGroups(accountDetails: any): void {
         this.hideDepositSection = false;
@@ -7804,7 +7868,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      *
      * @private
      * @param {*} data
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     private updateAccountDetails(data: any): void {
         this.getUpdatedStateCodes(data.country.countryCode).then(() => {
@@ -7838,7 +7902,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     /**
      * Resets invoice list and current page
      *
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     public resetInvoiceList(): void {
         this.invoiceList = [];
@@ -7850,9 +7914,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * Gets profile information
      *
      * @private
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
-     private getProfile(): void {
+    private getProfile(): void {
         this.store.pipe(select(state => state.settings.profile), takeUntil(this.destroyed$)).subscribe(async (profile) => {
             if (profile) {
                 this.companyCountryName = profile.country;
@@ -7867,7 +7931,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * Get list of discounts
      *
      * @private
-     * @memberof ProformaInvoiceComponent
+     * @memberof VoucherComponent
      */
     private getDiscounts(): void {
         this.settingsDiscountService.GetDiscounts().pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -7880,7 +7944,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     /**
     *This will use for  fetch mobile number
     *
-    * @memberof ProformaInvoiceComponent
+    * @memberof VoucherComponent
     */
     public onlyPhoneNumber(): void {
         let input = document.getElementById('init-contact-proforma');
@@ -7970,14 +8034,14 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         }
     }
 
-        /**
-     * Callback function for getLastInvoiceDetails function
-     *
-     * @param {PreviousInvoicesVm} item
-     * @memberof VoucherComponent
-     */
-         public copyInvoice(item: PreviousInvoicesVm): void {
-            this.getLastInvoiceDetails({ accountUniqueName: item.account?.uniqueName, invoiceNo: item.versionNumber, uniqueName: item.uniqueName });
-        }
+    /**
+ * Callback function for getLastInvoiceDetails function
+ *
+ * @param {PreviousInvoicesVm} item
+ * @memberof VoucherComponent
+ */
+    public copyInvoice(item: PreviousInvoicesVm): void {
+        this.getLastInvoiceDetails({ accountUniqueName: item.account?.uniqueName, invoiceNo: item.versionNumber, uniqueName: item.uniqueName });
+    }
 }
 

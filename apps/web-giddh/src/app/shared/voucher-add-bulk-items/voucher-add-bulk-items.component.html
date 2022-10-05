@@ -10,7 +10,13 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title pull-left">{{ localeData?.add_bulk_items }}</h4>
-                    <button type="button" class="close pull-right" aria-label="Close" (click)="closeEvent.emit()">
+                    <button
+                        mat-button
+                        type="button"
+                        class="close pull-right"
+                        aria-label="Close"
+                        (click)="closeEvent.emit()"
+                    >
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -22,10 +28,11 @@
                             <div class="left-content">
                                 <div class="search-box">
                                     <input
+                                        matInput
                                         type="text"
                                         [placeholder]="localeData?.search_stock"
                                         #searchElement
-                                        class="pr-1 pl-1 form-control"
+                                        class="pr-1 pl-1 form-control mat-field-border"
                                     />
                                 </div>
 
@@ -92,6 +99,7 @@
                                                         </span>
 
                                                         <input
+                                                            matInput
                                                             type="number"
                                                             name="quantity"
                                                             class="form-control input-number text-align-center"
@@ -130,7 +138,6 @@
 
                                 <div class="template-footer">
                                     <hr />
-
                                     <div class="btn-group bulk-item-btn-group">
                                         <button
                                             mat-button

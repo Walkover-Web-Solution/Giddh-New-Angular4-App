@@ -1806,33 +1806,26 @@
                                     </div>
                                     <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12">
                                         <div class="col-sm-6 col-xl-6 col-lg-10 col-md-10 pl-0">
-                                            <input
+                                            <mat-checkbox
+                                                #rcmCheckbox
+                                                color="primary"
                                                 id="reverse-charge"
+                                                [(ngModel)]="isRcmEntry"
+                                                (change)="changeRcmCheckboxState($event)"
+                                                class="mr-r1"
                                                 name="rcmEntry"
-                                                class="checkbox-custom"
-                                                type="checkbox"
-                                                [ngModel]="isRcmEntry"
-                                                (click)="toggleRcmCheckbox($event)"
-                                            />
+                                                [disabled]="isReadOnly"
+                                            >
+                                            </mat-checkbox>
                                             <label
                                                 class="checkbox-custom-label"
-                                                #rcmPopup="bs-popover"
-                                                [popover]="rcmTemplate"
-                                                container="body"
-                                                placement="bottom right"
-                                                containerClass="purchase-invoice-rcm"
                                                 for="reverse-charge"
+                                                (click)="!isReadOnly ? toggleRcmCheckbox(rcmCheckbox, 'label') : ''"
+                                                [innerHTML]="localeData?.transaction_reverse_charge"
                                             >
-                                                {{ localeData?.transaction_reverse_charge }}
                                             </label>
                                         </div>
                                     </div>
-                                    <ng-template #rcmTemplate>
-                                        <confirmation-modal
-                                            [configuration]="rcmConfiguration"
-                                            (buttonClicked)="handleRcmChange($event)"
-                                        ></confirmation-modal>
-                                    </ng-template>
                                 </div>
                                 <!-- for purchase record end -->
                                 <!-- reverse charge transction end  -->
@@ -2953,9 +2946,7 @@
                             <div class="p-1 aqua-color add-line-bulk-item width-100">
                                 <a href="javascript:;" (click)="addBlankRow(null)">{{ localeData?.add_new_line }}</a>
                                 <span class="font-14 add-bulk-button"> | </span>
-                                <a (click)="bulkItemsModal.show()" href="javascript:;">{{
-                                    localeData?.add_bulk_entries
-                                }}</a>
+                                <a (click)="addBulkItems()" href="javascript:;">{{ localeData?.add_bulk_entries }}</a>
                             </div>
                             <!-- endregion -->
                         </table>
@@ -5509,44 +5500,34 @@
     >
     </app-aside-recurring-entry>
     <!-- region send email popup -->
-    <div bsModal #sendEmailModal="bs-modal" tabindex="-1" class="modal fade" role="dialog" [config]="modalConfig">
-        <div class="modal-dialog modal-md">
-            <div class="modal-content">
-                <ng-container *ngIf="actionAfterGenerateORUpdate === 2">
-                    <app-send-email-invoice-component
-                        [voucherType]="invoiceType"
-                        (successEvent)="sendEmail($event)"
-                        [selectedItem]="{
-                            voucherNumber: invoiceNo,
-                            uniqueName: accountUniqueName,
-                            account: customerAccount,
-                            voucherUniqueName: newVoucherUniqueName
-                        }"
-                        (cancelEvent)="cancelEmailModal()"
-                    ></app-send-email-invoice-component>
-                </ng-container>
-            </div>
-        </div>
-    </div>
+    <ng-template #sendEmailModal>
+        <ng-container *ngIf="actionAfterGenerateORUpdate === 2">
+            <app-send-email-invoice-component
+                [voucherType]="invoiceType"
+                (successEvent)="sendEmail($event)"
+                [selectedItem]="{
+                    voucherNumber: invoiceNo,
+                    uniqueName: accountUniqueName,
+                    account: customerAccount,
+                    voucherUniqueName: newVoucherUniqueName
+                }"
+                (cancelEvent)="cancelEmailModal()"
+            ></app-send-email-invoice-component>
+        </ng-container>
+    </ng-template>
     <!-- endregion -->
 
     <!-- region bulk items -->
-    <div
-        bsModal
-        #bulkItemsModal="bs-modal"
-        tabindex="-1"
-        class="modal fade"
-        role="dialog"
-        [config]="{ animated: true, keyboard: false, backdrop: false, ignoreBackdropClick: true }"
-    >
-        <ng-container *ngIf="bulkItemsModal?.isShown">
+
+    <ng-template #bulkItemsModal>
+        <ng-container>
             <voucher-add-bulk-items-component
                 [invoiceType]="invoiceType"
                 (saveItemsEvent)="addBulkStockItems($event)"
-                (closeEvent)="bulkItemsModal.hide()"
+                (closeEvent)="cancelBulkItemsModal()"
             ></voucher-add-bulk-items-component>
         </ng-container>
-    </div>
+    </ng-template>
     <!-- endregion -->
 
     <!-- region gst treatment modal-->
@@ -5583,26 +5564,21 @@
     </ng-template>
 
     <!-- region print voucher popup -->
-    <div bsModal #printVoucherModal="bs-modal" tabindex="-1" class="modal fade" role="dialog" [config]="modalConfig">
-        <div class="modal-dialog modal-xl">
-            <div class="modal-content">
-                <ng-container *ngIf="actionAfterGenerateORUpdate === 3 && invoiceNo && accountUniqueName">
-                    <voucher-print-in-place-component
-                        [voucherType]="invoiceType"
-                        [localeData]="localeData"
-                        [commonLocaleData]="commonLocaleData"
-                        [selectedItem]="{
-                            voucherNumber: invoiceNo,
-                            uniqueName: accountUniqueName,
-                            voucherUniqueName: newVoucherUniqueName
-                        }"
-                        (cancelEvent)="cancelPrintModal()"
-                    ></voucher-print-in-place-component>
-                </ng-container>
-            </div>
-        </div>
-    </div>
-
+    <ng-template #printVoucherModal>
+        <ng-container *ngIf="actionAfterGenerateORUpdate === 3 && invoiceNo && accountUniqueName">
+            <voucher-print-in-place-component
+                [voucherType]="invoiceType"
+                [localeData]="localeData"
+                [commonLocaleData]="commonLocaleData"
+                [selectedItem]="{
+                    voucherNumber: invoiceNo,
+                    uniqueName: accountUniqueName,
+                    voucherUniqueName: newVoucherUniqueName
+                }"
+                (cancelEvent)="cancelPrintModal()"
+            ></voucher-print-in-place-component>
+        </ng-container>
+    </ng-template>
     <!-- common template ref for displaying invoice type with first letter capital -->
     <ng-template #invoiceTypeDisplayRef>
         {{ getInvoiceType() | titlecase }}
