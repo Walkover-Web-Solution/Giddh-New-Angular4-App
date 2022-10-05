@@ -262,12 +262,6 @@
                     "link": "/pages/reports/monthly-columnar-report",
                     "icon": "icon-monthly-columnar-report",
                     "description": "Monthly detailed report of each group"
-                },
-                {
-                    "label": "Imports",
-                    "link": "/pages/downloads/imports",
-                    "icon": "icon-tally-import1",
-                    "description": "Check your synced Tally data online"
                 }
             ]
         },

@@ -258,12 +258,6 @@
                     "link": "/pages/reports/monthly-columnar-report",
                     "icon": "icon-monthly-columnar-report",
                     "description": "प्रत्येक समूह की मासिक विस्तृत रिपोर्ट"
-                },
-                {
-                    "label": "आयात",
-                    "link": "/pages/downloads/imports",
-                    "icon": "icon-tally-import1",
-                    "description": "अपने सिंक किए गए टैली डेटा को ऑनलाइन जांचें"
                 }
             ]
         },
