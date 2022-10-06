@@ -545,6 +545,7 @@
                                                                         >
                                                                             <!-- <label>GSTIN</label> -->
                                                                             <input
+                                                                                matInput
                                                                                 maxLength="15"
                                                                                 autocomplete="None"
                                                                                 type="text"
@@ -567,6 +568,7 @@
                                                                                 "
                                                                             />
                                                                             <input
+                                                                                matInput
                                                                                 maxLength="15"
                                                                                 autocomplete="None"
                                                                                 type="text"
@@ -601,6 +603,7 @@
                                                                         >
                                                                             <div class="form-group mr-b05">
                                                                                 <input
+                                                                                    matInput
                                                                                     type="number"
                                                                                     class="form-control input-custom"
                                                                                     autocomplete="false"
@@ -5583,14 +5586,9 @@
     <ng-template #invoiceTypeDisplayRef>
         {{ getInvoiceType() | titlecase }}
     </ng-template>
-    <div
-        class="modal fade purchase-record-confirmation-modal"
-        tabindex="-1"
-        #purchaseRecordConfirmationPopup="bs-modal"
-        [config]="{ animated: true, ignoreBackdropClick: true }"
-        bsModal
-        role="dialog"
-    >
+
+    <!-- region purchase  order  popup -->
+    <ng-template #purchaseRecordConfirmationPopup>
         <div class="modal-dialog">
             <div class="modal-content">
                 <confirmation-modal
@@ -5599,17 +5597,10 @@
                 ></confirmation-modal>
             </div>
         </div>
-    </div>
-
-    <div
-        class="modal fade purchase-record-confirmation-modal"
-        tabindex="-1"
-        #adjustPaymentModal="bs-modal"
-        [config]="{ animated: true, ignoreBackdropClick: true, backdrop: false }"
-        bsModal
-        role="dialog"
-    >
-        <div *ngIf="adjustPaymentModal?.isShown" class="modal-dialog modal-xl">
+    </ng-template>
+    <!-- region  adjust payment  popup -->
+    <ng-template #adjustPaymentModal>
+        <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <advance-receipt-adjustment-component
                     *ngIf="showAdvanceReceiptAdjust"
@@ -5629,16 +5620,9 @@
                 </advance-receipt-adjustment-component>
             </div>
         </div>
-    </div>
-
-    <div
-        bsModal
-        #dateChangeConfirmationModel="bs-modal"
-        class="modal fade"
-        role="dialog"
-        [config]="{ keyboard: true }"
-        tabindex="-1"
-    >
+    </ng-template>
+    <!-- region  date change confirmation popup -->
+    <ng-template #dateChangeConfirmationModel>
         <div class="modal-dialog modal-md">
             <div class="modal-content">
                 <confirmation-modal
@@ -5647,16 +5631,9 @@
                 ></confirmation-modal>
             </div>
         </div>
-    </div>
-
-    <div
-        bsModal
-        #attachmentDeleteConfirmationModel="bs-modal"
-        class="modal fade"
-        role="dialog"
-        [config]="{ animated: true, keyboard: false, backdrop: false, ignoreBackdropClick: true }"
-        tabindex="-1"
-    >
+    </ng-template>
+    <!-- region  date change confirmation popup -->
+    <ng-template #dateChangeConfirmationModel>
         <div class="modal-dialog modal-md">
             <div class="modal-content" *ngIf="attachmentDeleteConfirmationModel?.isShown">
                 <confirm-modal
@@ -5666,5 +5643,5 @@
                 ></confirm-modal>
             </div>
         </div>
-    </div>
+    </ng-template>
 </ng-container>

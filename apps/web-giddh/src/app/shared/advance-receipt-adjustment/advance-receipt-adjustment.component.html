@@ -8,7 +8,7 @@
     <!-- Adjust Payment modal start -->
     <div class="modal-header">
         <h4 class="modal-title bg pull-left">{{ localeData?.page_heading }}</h4>
-        <button type="button" class="close pull-right" aria-label="Close" (click)="onCancel()">
+        <button mat-button class="close pull-right" aria-label="Close" (click)="onCancel()">
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
@@ -23,8 +23,9 @@
                         <div class="form-group">
                             <label>{{ localeData?.customer_name }} </label>
                             <input
+                                matInput
                                 type="text"
-                                class="form-control"
+                                class="form-control mat-field-border"
                                 name="customerName"
                                 [(ngModel)]="adjustPayment.customerName"
                                 readonly
@@ -378,38 +379,35 @@
                             <div class="col-md-2 col-sm-3 col-xs-5">
                                 <span class="d-inline-block font-14">{{ localeData?.tax_deducted }}</span>
                             </div>
-
-                            <div class="col-md-8 col-sm-8 col-xs-7">
-                                <span class="p-0 mr-2 d-inline-block">
-                                    <input
-                                        class="radio-custom cp ml-0"
-                                        type="radio"
-                                        id="deductedNo"
-                                        name="isTaxDeducted"
-                                        [value]="false"
-                                        [(ngModel)]="isTaxDeducted"
-                                        (ngModelChange)="isTdsSelected($event)"
-                                    />
+                            <mat-radio-group
+                                aria-label="Select an option"
+                                class="d-flex"
+                                name="isTaxDeducted"
+                                [(ngModel)]="isTaxDeducted"
+                            >
+                                <mat-radio-button
+                                    color="primary"
+                                    id="deductedNo"
+                                    [value]="false"
+                                    (change)="isTdsSelected($event)"
+                                    class="font-size-14 mr-3"
+                                >
                                     <label for="deductedNo" class="radio-custom-label">{{
                                         commonLocaleData?.app_no
                                     }}</label>
-                                </span>
-
-                                <span class="p-0 mr-2 d-inline-block">
-                                    <input
-                                        class="radio-custom cp ml-0"
-                                        type="radio"
-                                        name="isTaxDeducted"
-                                        id="deductedYes"
-                                        [value]="true"
-                                        [(ngModel)]="isTaxDeducted"
-                                        (ngModelChange)="isTdsSelected($event)"
-                                    />
+                                </mat-radio-button>
+                                <mat-radio-button
+                                    color="primary"
+                                    id="deductedYes"
+                                    [value]="true"
+                                    class="font-size-14"
+                                    (change)="isTdsSelected($event)"
+                                >
                                     <label for="deductedYes" class="radio-custom-label">{{
                                         commonLocaleData?.app_yes
                                     }}</label>
-                                </span>
-                            </div>
+                                </mat-radio-button>
+                            </mat-radio-group>
                         </div>
 
                         <ng-container *ngIf="isVoucherModule && isTaxDeducted && voucherApiVersion !== 2">
@@ -508,8 +506,8 @@
                         </div>
                         <div class="mt-2">
                             <button
+                                mat-button
                                 *ngIf="!isUpdateMode"
-                                type="button"
                                 class="btn btn-success mr-r1"
                                 [disabled]="isInvalidForm"
                                 (click)="saveAdjustAdvanceReceipt(adjustAdvancePaymentForm)"
@@ -517,15 +515,15 @@
                                 {{ commonLocaleData?.app_save }}
                             </button>
                             <button
+                                mat-button
                                 *ngIf="isUpdateMode"
-                                type="button"
                                 class="btn btn-success mr-r1"
                                 [disabled]="isInvalidForm"
                                 (click)="saveAdjustAdvanceReceipt(adjustAdvancePaymentForm)"
                             >
                                 {{ commonLocaleData?.app_update }}
                             </button>
-                            <button class="btn btn-cancel" (click)="onClear(true)">
+                            <button mat-button class="btn btn-cancel" (click)="onClear(true)">
                                 {{ commonLocaleData?.app_reset }}
                             </button>
                         </div>

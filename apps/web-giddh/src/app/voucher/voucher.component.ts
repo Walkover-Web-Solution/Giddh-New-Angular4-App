@@ -175,8 +175,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
     /** RCM popup instance */
     @ViewChild('rcmPopup', { static: false }) public rcmPopup: PopoverDirective;
-    /** Purchase record modal instance */
-    @ViewChild('purchaseRecordConfirmationPopup', { static: false }) public purchaseRecordConfirmationPopup: ModalDirective;
     /** Billing state instance */
     @ViewChild('billingState', { static: true }) billingState: ElementRef;
     /** Shipping state instance */
@@ -187,11 +185,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     /** Shipping state instance */
     @ViewChild('shippingStateCompany', { static: false }) shippingStateCompany: ElementRef;
 
-    /**Adjust advance receipts */
-    @ViewChild('adjustPaymentModal', { static: true }) public adjustPaymentModal: ModalDirective;
     @ViewChild('advanceReceiptComponent', { static: true }) public advanceReceiptComponent: AdvanceReceiptAdjustmentComponent;
-    /** Date change confirmation modal */
-    @ViewChild('dateChangeConfirmationModel', { static: true }) public dateChangeConfirmationModel: ModalDirective;
     /** Container element for all the entries */
     @ViewChild('itemsContainer', { read: ViewContainerRef, static: false }) container: ViewContainerRef;
     /** Template reference for each entry */
@@ -649,6 +643,12 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     @ViewChild('printVoucherModal', { static: true }) public printVoucherModal: any;
     /* Selector for bulk items  modal */
     @ViewChild('bulkItemsModal', { static: true }) public bulkItemsModal: any;
+    /**Adjust advance receipts */
+    @ViewChild('adjustPaymentModal', { static: true }) public adjustPaymentModal: any;
+    /** Purchase record modal instance */
+    @ViewChild('purchaseRecordConfirmationPopup', { static: true }) public purchaseRecordConfirmationPopup: any;
+    /** Date change confirmation modal */
+    @ViewChild('dateChangeConfirmationModel', { static: true }) public dateChangeConfirmationModel: any;
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -808,7 +808,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.dialog.open(this.bulkItemsModal, {
             width: '50%',
         });
-
     }
     /**
      * This will use for cancel bulk item modal
@@ -5343,7 +5342,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             this.isVoucherDateChanged = true;
             this.dateChangeType = "voucher";
             this.dateChangeConfiguration = this.generalService.getDateChangeConfiguration(this.localeData, this.commonLocaleData, true);
-            this.dateChangeConfirmationModel.show();
+            this.dialog.open(this.dateChangeConfirmationModel, {
+                width: '50%',
+            });
         }
 
         if (this.voucherDateBeforeUpdate) {
@@ -5698,7 +5699,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             this._toasty.errorToast(this.localeData?.purchase_record_error, this.localeData?.purchase_bill);
         }
         if (this.purchaseRecordConfirmationPopup) {
-            this.purchaseRecordConfirmationPopup.hide();
+            this.dialog.closeAll();
         }
     }
 
@@ -5857,7 +5858,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                          for current purchase record and hence old entries' OLD unique names should be deleted */
                         this.matchingPurchaseRecord.entries.forEach((entry => delete entry.uniqueName));
                     }
-                    this.purchaseRecordConfirmationPopup.show();
+                    this.dialog.open(this.purchaseRecordConfirmationPopup, {
+                        width: '50%',
+                    });
                 } else {
                     this.matchingPurchaseRecord = null;
                     if (this.isUpdateMode) {
@@ -6084,7 +6087,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      */
     public closeAdvanceReceiptModal() {
         this.showAdvanceReceiptAdjust = false;
-        this.adjustPaymentModal.hide();
+        this.dialog.closeAll();
         if (this.advanceReceiptAdjustmentData && this.advanceReceiptAdjustmentData.adjustments) {
             this.isAdjustAmount = this.advanceReceiptAdjustmentData.adjustments.length ? true : false;
         } else {
@@ -6102,7 +6105,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.showAdvanceReceiptAdjust = true;
         this.isAdjustAmount = true;
         this.invFormData.voucherDetails.exchangeRate = this.exchangeRate;
-        this.adjustPaymentModal.show();
+        this.dialog.open(this.adjustPaymentModal, {
+            width: '50%',
+        });
     }
 
     /**
@@ -7275,7 +7280,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             }
         }
 
-        this.dateChangeConfirmationModel.hide();
+        this.dialog.closeAll();
     }
 
     /**
@@ -7296,7 +7301,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             this.dateChangeType = "entry";
             this.updatedEntryIndex = entryIdx;
             this.dateChangeConfiguration = this.generalService.getDateChangeConfiguration(this.localeData, this.commonLocaleData, false);
-            this.dateChangeConfirmationModel.show();
+            this.dialog.open(this.dateChangeConfirmationModel, {
+                width: '50%',
+            });
         }
     }
 
