@@ -2,7 +2,7 @@ import { take, takeUntil } from "rxjs/operators";
 import { LoginActions } from "../actions/login.action";
 import { AppState } from "../store";
 import { Component, Inject, OnDestroy, OnInit, ViewChild } from "@angular/core";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
 import { ModalDirective } from "ngx-bootstrap/modal";
 import { Configuration } from "../app.constant";
 import { Store, select } from "@ngrx/store";
@@ -37,9 +37,9 @@ export class SignupComponent implements OnInit, OnDestroy {
     @ViewChild("twoWayAuthModal", { static: true }) public twoWayAuthModal: ModalDirective;
     public urlPath: string = "";
     public isSubmited: boolean = false;
-    public mobileVerifyForm: FormGroup;
-    public emailVerifyForm: FormGroup;
-    public twoWayOthForm: FormGroup;
+    public mobileVerifyForm: UntypedFormGroup;
+    public emailVerifyForm: UntypedFormGroup;
+    public twoWayOthForm: UntypedFormGroup;
     public isVerifyMobileInProcess$: Observable<boolean>;
     public isLoginWithMobileInProcess$: Observable<boolean>;
     public isVerifyEmailInProcess$: Observable<boolean>;
@@ -53,9 +53,9 @@ export class SignupComponent implements OnInit, OnDestroy {
     public selectedCountry: string;
     public selectedBanner: string = null;
     public loginUsing: string = null;
-    public signUpWithPasswdForm: FormGroup;
+    public signUpWithPasswdForm: UntypedFormGroup;
     public isSignupWithPasswordInProcess$: Observable<boolean>;
-    public signupVerifyForm: FormGroup;
+    public signupVerifyForm: UntypedFormGroup;
     public isSignupWithPasswordSuccess$: Observable<boolean>;
     public retryCount: number = 0;
     public signupVerifyEmail$: Observable<string>;
@@ -64,7 +64,7 @@ export class SignupComponent implements OnInit, OnDestroy {
     public isLoginWithGoogleInProcess$: Observable<boolean>;
 
     // tslint:disable-next-line:no-empty
-    constructor(private fb: FormBuilder,
+    constructor(private fb: UntypedFormBuilder,
         private store: Store<AppState>,
         private loginAction: LoginActions,
         private authService: AuthService,
@@ -320,7 +320,7 @@ export class SignupComponent implements OnInit, OnDestroy {
         this.selectedBanner = "slide" + selectedSlide;
     }
 
-    public SignupWithPasswd(model: FormGroup) {
+    public SignupWithPasswd(model: UntypedFormGroup) {
         let ObjToSend = model.value;
         if (ObjToSend) {
             this.store.dispatch(this.loginAction.SignupWithPasswdRequest(ObjToSend));

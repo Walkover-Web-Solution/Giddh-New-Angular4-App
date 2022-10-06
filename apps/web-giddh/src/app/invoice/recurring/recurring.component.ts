@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { IOption } from '../../theme/ng-select/ng-select';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { RecurringInvoice, RecurringInvoices } from '../../models/interfaces/RecurringInvoice';
 import { Observable, ReplaySubject } from 'rxjs';
 import { AppState } from '../../store';
@@ -66,8 +66,8 @@ export class RecurringComponent implements OnInit, OnDestroy {
     public allItemsSelected: boolean = false;
     public recurringVoucherDetails: RecurringInvoice[];
     public selectedItems: string[] = [];
-    public customerNameInput: FormControl = new FormControl();
-    public invoiceNumberInput: FormControl = new FormControl();
+    public customerNameInput: UntypedFormControl = new UntypedFormControl();
+    public invoiceNumberInput: UntypedFormControl = new UntypedFormControl();
     public hoveredItemForAction: string = '';
     public clickedHoveredItemForAction: string = '';
     public showResetFilterButton: boolean = false;

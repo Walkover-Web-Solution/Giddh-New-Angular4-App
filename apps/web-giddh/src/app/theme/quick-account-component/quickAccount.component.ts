@@ -1,7 +1,7 @@
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild, OnDestroy } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
 import { AccountRequestV2 } from 'apps/web-giddh/src/app/models/api-models/Account';
 import { select, Store } from '@ngrx/store';
@@ -31,13 +31,13 @@ export class QuickAccountComponent implements OnInit, AfterViewInit, OnDestroy {
     public isQuickAccountInProcess$: Observable<boolean>;
     public isQuickAccountCreatedSuccessfully$: Observable<boolean>;
     public showGstBox: boolean = false;
-    public newAccountForm: FormGroup;
+    public newAccountForm: UntypedFormGroup;
     public comingFromDiscountList: boolean = false;
     public states: any[] = [];
 
     public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private _fb: FormBuilder, private _groupService: GroupService, private _toaster: ToasterService,
+    constructor(private _fb: UntypedFormBuilder, private _groupService: GroupService, private _toaster: ToasterService,
         private ledgerAction: LedgerActions, private store: Store<AppState>) {
         this.isQuickAccountInProcess$ = this.store.pipe(select(p => p.ledger.isQuickAccountInProcess), takeUntil(this.destroyed$));
         this.isQuickAccountCreatedSuccessfully$ = this.store.pipe(select(p => p.ledger.isQuickAccountCreatedSuccessfully), takeUntil(this.destroyed$));
@@ -122,7 +122,7 @@ export class QuickAccountComponent implements OnInit, AfterViewInit, OnDestroy {
         }
     }
 
-    public getStateCode(gstForm: FormGroup, statesEle: ShSelectComponent) {
+    public getStateCode(gstForm: UntypedFormGroup, statesEle: ShSelectComponent) {
         let gstVal: string = gstForm.get('gstNumber').value;
         if (gstVal?.length >= 2) {
             this.statesSource$.pipe(take(1)).subscribe(state => {

@@ -4,7 +4,7 @@ import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import { RecurringInvoice } from '../../models/interfaces/RecurringInvoice';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import * as dayjs from 'dayjs';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { ReplaySubject } from 'rxjs';
@@ -27,7 +27,7 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges, OnDe
     public timeOptions: IOption[];
     public isLoading: boolean = false;
     public isDeleteLoading: boolean;
-    public form: FormGroup;
+    public form: UntypedFormGroup;
     public config: Partial<BsDatepickerConfig> = { dateInputFormat: GIDDH_DATE_FORMAT };
     @Input() public voucherNumber: string;
     @Input() public voucherType?: string;
@@ -46,7 +46,7 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges, OnDe
     public commonLocaleData: any = {};
 
     constructor(private store: Store<AppState>,
-        private _fb: FormBuilder,
+        private _fb: UntypedFormBuilder,
         private _toaster: ToasterService,
         private _invoiceActions: InvoiceActions, private recurringVoucherService: RecurringVoucherService) {
         this.today.setDate(this.today.getDate() + 1);

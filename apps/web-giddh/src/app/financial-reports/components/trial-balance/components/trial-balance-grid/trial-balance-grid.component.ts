@@ -13,7 +13,7 @@ import {
     SimpleChanges,
     ViewChild,
 } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { each } from 'apps/web-giddh/src/app/lodash-optimized';
 import { Account, ChildGroup } from 'apps/web-giddh/src/app/models/api-models/Search';
 import { AccountDetails } from 'apps/web-giddh/src/app/models/api-models/tb-pl-bs';
@@ -29,7 +29,7 @@ import { debounceTime, takeUntil } from 'rxjs/operators';
 export class TrialBalanceGridComponent implements OnInit, OnChanges, OnDestroy {
 
     public noData: boolean;
-    public accountSearchControl: FormControl = new FormControl();
+    public accountSearchControl: UntypedFormControl = new UntypedFormControl();
     @ViewChild('searchInputEl', { static: true }) public searchInputEl: ElementRef;
     public showClearSearch: boolean = false;
     @Input() public search: string = '';

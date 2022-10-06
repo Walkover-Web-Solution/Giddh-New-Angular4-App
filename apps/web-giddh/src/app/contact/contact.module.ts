@@ -103,9 +103,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         MatDialogModule,
         AccountUpdateNewDetailsModule
     ],
-    entryComponents: [
-        PaginationComponent
-    ],
     providers: [
         {
             provide: PERFECT_SCROLLBAR_CONFIG,

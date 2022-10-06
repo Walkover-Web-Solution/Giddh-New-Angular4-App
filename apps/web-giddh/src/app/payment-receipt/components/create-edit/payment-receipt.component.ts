@@ -1,7 +1,7 @@
 import { animate, state, style, transition, trigger } from "@angular/animations";
 import { TitleCasePipe } from "@angular/common";
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
-import { FormControl, NgForm } from "@angular/forms";
+import { UntypedFormControl, NgForm } from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
 import { ActivatedRoute, Router } from "@angular/router";
 import { select, Store } from "@ngrx/store";
@@ -115,11 +115,11 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
     /** List of bank account for dropdown list */
     public bankAccounts: IOption[] = [];
     /** control for the MatSelect filter keyword */
-    public searchBankAccount: FormControl = new FormControl();
+    public searchBankAccount: UntypedFormControl = new UntypedFormControl();
     /** control for the MatSelect filter keyword */
-    public searchBillingStates: FormControl = new FormControl();
+    public searchBillingStates: UntypedFormControl = new UntypedFormControl();
     /** control for the MatSelect filter keyword */
-    public searchShippingStates: FormControl = new FormControl();
+    public searchShippingStates: UntypedFormControl = new UntypedFormControl();
     /** Input mask format */
     public inputMaskFormat: string = '';
     /* This will hold local JSON data */
@@ -1816,7 +1816,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
      * @param {*} value
      * @memberof PaymentReceiptComponent
      */
-    private checkAndResetValue(formControl: FormControl, value: any): void {
+    private checkAndResetValue(formControl: UntypedFormControl, value: any): void {
         if (typeof formControl?.value !== "object" && formControl?.value !== value) {
             formControl.setValue({ label: value });
         }

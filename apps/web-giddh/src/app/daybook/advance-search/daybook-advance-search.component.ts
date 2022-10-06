@@ -1,6 +1,6 @@
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 import { Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import * as dayjs from 'dayjs';
@@ -36,7 +36,7 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
     @Output() public closeModelEvent: EventEmitter<any> = new EventEmitter();
     @ViewChild('dateRangePickerDir', { read: DaterangePickerComponent, static: true }) public dateRangePickerDir: DaterangePickerComponent;
     public advanceSearchObject: DayBookRequestModel = null;
-    public advanceSearchForm: FormGroup;
+    public advanceSearchForm: UntypedFormGroup;
     public showChequeDatePicker: boolean = false;
     public accounts$: Observable<IOption[]>;
     public groups$: Observable<IOption[]>;
@@ -107,7 +107,7 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
     constructor(
         private inventoryService: InventoryService,
         private store: Store<AppState>,
-        private fb: FormBuilder,
+        private fb: UntypedFormBuilder,
         private generalService: GeneralService,
         private modalService: BsModalService,
         private searchService: SearchService
