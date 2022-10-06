@@ -144,8 +144,8 @@
   },
   "devDependencies": {
     "@angular-builders/custom-webpack": "^12.1.0",
-    "@angular-devkit/build-angular": "12.1.1",
-    "@angular/cli": "12.1.1",
+    "@angular-devkit/build-angular": "13.3.9",
+    "@angular/cli": "13.3.9",
     "@angular/compiler-cli": "14.2.5",
     "@angular/language-service": "14.2.5",
     "@ngrx/store-devtools": "12.2.0",
