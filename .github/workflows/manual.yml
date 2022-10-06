@@ -40,7 +40,7 @@ jobs:
       - name: Install Node.js & NPM
         uses: actions/setup-node@v2
         with:
-          node-version: "14"
+          node-version: "16"
       - uses: bahmutov/npm-install@v1
         env:
           CYPRESS_INSTALL_BINARY: 0
@@ -48,6 +48,7 @@ jobs:
           useLockFile: false
           useRollingCache: true
           working-directory: .
+          install-command: npm i --force
       - uses: bahmutov/npm-install@v1
         with:
           useLockFile: false
