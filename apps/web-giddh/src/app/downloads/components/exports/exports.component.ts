@@ -2,7 +2,6 @@ import { Component, OnInit, OnDestroy, ChangeDetectorRef, ViewChild, ElementRef,
 import { MatDialog } from '@angular/material/dialog';
 import { DownloadsService } from '../../../services/downloads.service';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
-import { DownloadsJsonComponent } from '../downloads-json/downloads-json.component';
 import { takeUntil } from 'rxjs/operators';
 import { Observable, ReplaySubject } from 'rxjs';
 import * as dayjs from 'dayjs';
@@ -15,17 +14,18 @@ import { AppState } from '../../../store';
 import { DownloadData, DownloadsRequest } from '../../../models/api-models/downloads';
 import { cloneDeep } from '../../../lodash-optimized';
 import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from '../../../app.constant';
+import { ExportsJsonComponent } from '../exports-json/exports-json.component';
 
 /** Hold information of Download  */
 const ELEMENT_DATA: DownloadData[] = [];
 @Component({
-    selector: 'downloads',
-    templateUrl: './downloads.component.html',
-    styleUrls: ['./downloads.component.scss'],
+    selector: 'exports',
+    templateUrl: './exports.component.html',
+    styleUrls: ['./exports.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 
-export class DownloadsComponent implements OnInit, OnDestroy {
+export class ExportsComponent implements OnInit, OnDestroy {
     /** This will hold local JSON data */
     public localeData: any = {};
     /** This will hold common JSON data */
@@ -84,7 +84,7 @@ export class DownloadsComponent implements OnInit, OnDestroy {
     /**
      * Initializes the component
      *
-     * @memberof DownloadsComponent
+     * @memberof ExportsComponent
      */
     public ngOnInit(): void {
         this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
@@ -106,10 +106,10 @@ export class DownloadsComponent implements OnInit, OnDestroy {
      *Opens the Sidebar popup
      *
      * @param {*} row
-     * @memberof DownloadsComponent
+     * @memberof ExportsComponent
      */
     public openDialog(row: any): void {
-        const dialogRef = this.dialog.open(DownloadsJsonComponent, {
+        this.dialog.open(ExportsJsonComponent, {
             data: row?.filters,
             panelClass: 'download-json-panel'
         });
@@ -119,7 +119,7 @@ export class DownloadsComponent implements OnInit, OnDestroy {
      *This function will be called when get the Downloads
      *
      * @param {boolean} [resetPage]
-     * @memberof DownloadsComponent
+     * @memberof ExportsComponent
      */
     public getDownloads(resetPage?: boolean): void {
         if (resetPage) {
@@ -156,7 +156,7 @@ export class DownloadsComponent implements OnInit, OnDestroy {
     * This function will change the page of activity logs
     *
     * @param {*} event
-    * @memberof DownloadsComponent
+    * @memberof ExportsComponent
     */
     public pageChanged(event: any): void {
         if (this.downloadRequest.page !== event.page) {
@@ -171,7 +171,7 @@ export class DownloadsComponent implements OnInit, OnDestroy {
      * @param {*} [value]
      * @param {*} [from]
      * @return {*}  {void}
-     * @memberof DownloadsComponent
+     * @memberof ExportsComponent
      */
     public dateSelectedCallback(value?: any, from?: any): void {
         if (value && value.event === "cancel") {
@@ -199,7 +199,7 @@ export class DownloadsComponent implements OnInit, OnDestroy {
     /**
     * This will hide the datepicker
     *
-    * @memberof DownloadsComponent
+    * @memberof ExportsComponent
     */
     public hideGiddhDatepicker(): void {
         this.modalRef.hide();
@@ -209,7 +209,7 @@ export class DownloadsComponent implements OnInit, OnDestroy {
      *To show the datepicker
      *
      * @param {*} element
-     * @memberof DownloadsComponent
+     * @memberof ExportsComponent
      */
     public showGiddhDatepicker(element: any): void {
         if (element) {
@@ -224,7 +224,7 @@ export class DownloadsComponent implements OnInit, OnDestroy {
     /**
      * To reset applied filter
      *
-     * @memberof DownloadsComponent
+     * @memberof ExportsComponent
      */
     public resetFilter(): void {
         this.showClearFilter = false;
@@ -245,7 +245,7 @@ export class DownloadsComponent implements OnInit, OnDestroy {
     /**
      * Releases the memory
      *
-     * @memberof DownloadsComponent
+     * @memberof ExportsComponent
     */
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
@@ -257,7 +257,7 @@ export class DownloadsComponent implements OnInit, OnDestroy {
    * Callback for translation response complete
    *
    * @param {boolean} event
-   * @memberof DownloadsComponent
+   * @memberof ExportsComponent
    */
     public translationComplete(event: boolean): void {
         if (event) {

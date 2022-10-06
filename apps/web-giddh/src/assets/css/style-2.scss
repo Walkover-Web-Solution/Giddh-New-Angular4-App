@@ -62,11 +62,6 @@ $custom-typography: mat-typography-config(
         width: 18.2% !important;
     }
 }
-.billing-details {
-    .mat-form-field-infix {
-        border-top: 0 !important;
-    }
-}
 .all-table {
     .mat-column-contact {
         text-transform: lowercase;
@@ -79,6 +74,11 @@ $custom-typography: mat-typography-config(
     }
     .comment-header {
         min-width: 170px !important;
+    }
+}
+.billing-details {
+    .mat-form-field-infix {
+        border-top: 0 !important;
     }
 }
 .branch-profile-wrapper {
@@ -179,6 +179,20 @@ $custom-typography: mat-typography-config(
         .mat-select {
             margin-top: 0 !important;
             z-index: 9991 !important;
+        }
+    }
+}
+
+.product-option {
+    .product-option-wrapper {
+        .mat-select {
+            border: 1px solid var(--color-iron);
+            border-radius: 5px;
+            height: 35px;
+            display: flex !important;
+            flex-direction: column;
+            justify-content: center;
+            padding: 0px 5px;
         }
     }
 }
@@ -358,7 +372,9 @@ body {
     -webkit-font-smoothing: auto;
     padding: 0 !important;
     margin: 0 !important;
-} /* table css need to removed at last (finish)*/
+}
+
+/* table css need to removed at last (finish)*/
 .modal-header .close {
     cursor: pointer;
 }
@@ -632,7 +648,6 @@ input {
 .invoice-control .invoice-nav.navbar-nav > li > a.active {
     background-color: var(--color-white);
 }
-
 .navbar {
     min-height: auto;
     margin-bottom: 10px;
@@ -767,7 +782,10 @@ ul.sub-list {
 .invoice-preview.table-responsive {
     display: block !important;
     width: 100%;
-} /* file upload css start */
+}
+
+/* file upload css start */
+
 .input-upload .input-group-btn {
     display: inline;
 }
@@ -1485,6 +1503,7 @@ modal-container.modal {
 }
 
 /* my css end */
+
 /*input*/
 .form-control {
     background: var(--color-secondary-input-bar-background) !important;
@@ -2718,10 +2737,10 @@ a.btn.btn-xs.btn-link.pull-right {
     position: relative;
     background: var(--color-primary-header-background) !important;
     color: var(--color-white);
+    border-color: var(--color-primary-popup-list-header-bottom-border);
     height: 65px;
     display: flex;
     align-items: center;
-    border-color: var(--color-primary-popup-list-header-bottom-border);
 }
 
 .modal-body {
@@ -3740,6 +3759,7 @@ label {
     line-height: 50px;
     margin-bottom: 0 !important;
     padding: 0 10px;
+    font-size: 14px;
 }
 .design-tool li [class^="ico-"],
 .design-tool li [class*=" ico-"] {
@@ -4704,7 +4724,10 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
             background-color: var(--color-dropdown-primary-background);
         }
     }
-} /* ==================================================Branch
+}
+
+/* ==================================================
+    Branch
 ================================================== */
 .branch .box h1 {
     font-size: 18px;
@@ -5665,6 +5688,40 @@ footer#footer.absolute-footer {
                 }
             }
         }
+        .scroll-container {
+            .wrap-account-sidebar {
+                .grp-wrapper {
+                    .col-wrapper {
+                        border-color: var(--color-common-secondary-border);
+                        &:nth-child(1) {
+                            background-color: var(--color-common-primary-background-for-all-components);
+                        }
+                    }
+                }
+            }
+        }
+        .manage-group-acc {
+            account-operations {
+                #middleBody {
+                    .top-bar {
+                        border-color: var(--color-common-secondary-border) !important;
+                    }
+                }
+            }
+        }
+    }
+    login {
+        .modal.fade {
+            .modal-body.clearfix {
+                #authModal {
+                    button[type="login"].ladda-button {
+                        .ladda-label {
+                            color: var(--color-secondary-button-text);
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -6388,9 +6445,6 @@ highcharts-chart {
 .panel {
     border-radius: 2px;
 }
-.invoice-modal-content .app-aside-menu-other-taxes:host {
-    top: 60px !important;
-}
 
 .mat-chip-list {
     .mat-chip-list-wrapper {
@@ -6841,7 +6895,10 @@ ngx-daterangepicker-material {
 
 span#HW_badge_cont:nth-child(3) {
     display: none;
-} /*notofication css end*/
+}
+
+/*notofication css end*/
+
 .setting-data,
 .setting-sidebar-open .white-row {
     padding-left: 15px !important;
@@ -7010,10 +7067,14 @@ span#HW_badge_cont:nth-child(3) {
             padding-left: 60px;
         }
     }
-} /*flex css start*/
+}
+
+/*flex css start*/
 .flex-column {
     flex-direction: column;
-} /*flex css start*/
+}
+
+/*flex css start*/
 .select-border-bottom {
     .form-control {
         border: none;
@@ -7486,7 +7547,9 @@ giddh-datepicker {
         width: 26px;
         height: 26px;
     }
-    .mat-form-field-appearance-fill:not(.mat-form-field-disabled).mat-form-field-flex:hover
+
+    .mat-form-field-appearance-fill:not(.mat-form-field-disabled)
+        .mat-form-field-flex:hover
         ~ .mat-form-field-underline
         .mat-form-field-ripple {
         opacity: 0 !important;
@@ -7544,6 +7607,7 @@ giddh-datepicker {
         z-index: 1000 !important;
     }
     overflow-y: auto !important;
+    height: auto;
     .advance-search {
         #export-body {
             sh-select {
@@ -7901,8 +7965,7 @@ giddh-datepicker {
 
 .stock-create-edit {
     .cdk-overlay-container {
-        z-index: 9;
-        position: relative;
+        z-index: 8;
     }
     #main {
         #content-wrapper {
@@ -8356,6 +8419,25 @@ body.update-scroll-hidden {
                     }
                 }
             }
+            .modal-body {
+                sh-select-menu {
+                    .menu {
+                        virtual-scroll {
+                            .total-padding {
+                                height: auto;
+                            }
+                        }
+                        .mat-dialog-container {
+                            .modal-body {
+                                input,
+                                textarea {
+                                    border: 1px solid var(--color-secondary-input-bar-border);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
         .cdk-overlay-connected-position-bounding-box {
             .mat-menu-panel {
@@ -8369,7 +8451,23 @@ body.update-scroll-hidden {
         }
     }
 }
-
+.ledger-attachments-popup {
+    .cdk-overlay-container {
+        .mat-dialog-container {
+            background-color: var(--color-popup-background);
+        }
+        .cdk-overlay-connected-position-bounding-box {
+            .mat-menu-panel {
+                .mat-menu-content {
+                    button:focus {
+                        box-shadow: none !important;
+                        background-color: var(--color-dropdown-list-hover-background);
+                    }
+                }
+            }
+        }
+    }
+}
 .cdk-overlay-pane {
     height: auto !important;
 }
@@ -8413,8 +8511,14 @@ body.update-scroll-hidden {
         flex: 100% !important;
     }
     .main-table {
-        tbody > tr > td:first-child {
-            min-width: 242px !important;
+        tbody {
+            tr {
+                td {
+                    &:first-child {
+                        min-width: 242px !important;
+                    }
+                }
+            }
         }
     }
     .users-last-list {
@@ -10083,7 +10187,10 @@ body.prevent-body-scroll {
     .linked-address sh-select-menu .total-padding {
         height: 257px !important;
     }
-} /*media query for height resolution end*/
+}
+
+/*media query for height resolution end*/
+
 .modal.fade.giddh-calendar.show {
     z-index: 999999;
 }
@@ -10125,7 +10232,9 @@ body.prevent-body-scroll {
 
 .giddh-no-permissions {
     display: none !important;
-} /** Angular material datepicker **/
+}
+
+/** Angular material datepicker **/
 .mat-calendar-header {
     padding: 2px 8px 2px 8px !important;
     background-color: var(--color-table-datepicker-header-background);
@@ -10175,7 +10284,9 @@ body.prevent-body-scroll {
 
 mat-year-view table tr td.mat-calendar-body-label {
     display: none !important;
-} /** Angular material datepicker **/
+}
+
+/** Angular material datepicker **/
 
 input[type="checkbox"].cdk-visually-hidden::before,
 input[type="checkbox"].cdk-visually-hidden::after {
@@ -10413,6 +10524,201 @@ input[type="checkbox"].cdk-visually-hidden::after {
         }
     }
 }
+.stock-group-search input {
+    padding-left: 30px !important;
+    padding-top: 20px !important;
+}
+.stock-balance-wrapper {
+    .search-warehouse-bar {
+        .mat-form-field-infix {
+            height: 58px;
+            width: 200px;
+            margin-top: -16px;
+            padding: 16px 0px;
+
+            .mat-select-placeholder,
+            mat-select-trigger {
+                color: var(--color-secondary-search-bar-placeholder);
+            }
+
+            .mat-select-arrow {
+                position: relative;
+                top: 5px;
+            }
+        }
+    }
+    .mat-form-field-appearance-outline {
+        .mat-form-field-outline {
+            color: var(--color-search-bar-primary-border);
+        }
+    }
+    .stock-balance-main-list-table {
+    }
+
+    .stock-list-body {
+        .stock-list-expanded-content {
+            .mat-form-field-infix {
+                border: 1px solid;
+                border-radius: 5px;
+                width: 112px;
+                height: 34px;
+                color: var(--color-white);
+                background-color: var(--color-white);
+
+                .mat-select-value {
+                    position: relative;
+                    padding-left: 8px;
+                    top: 4px;
+                    height: 20px;
+                }
+                .mat-select-arrow-wrapper {
+                    position: relative;
+                    top: 13px;
+                    right: 3px;
+                }
+                .mat-select-placeholder {
+                    color: var(--color-secondary-search-bar-placeholder);
+                }
+            }
+        }
+    }
+    .searching-stocks {
+        .custom-material-search-bar {
+            .mat-form-field-outline {
+                height: 33px;
+                background-color: var(--color-sidebar-primary-search-bar-background);
+                border-radius: 5px;
+            }
+            input {
+                position: absolute;
+                bottom: 17.5px;
+                padding-left: 15px;
+            }
+        }
+        .stock-searchbar {
+            .mat-form-field-outline {
+                width: 230px;
+                color: var(--color-sidebar-primary-search-bar-background);
+            }
+        }
+        .group-searchbar {
+            .mat-form-field-outline {
+                color: var(--color-sidebar-primary-search-bar-background);
+            }
+        }
+        select-field {
+            input {
+                &.mat-form-field-autofill-control {
+                    width: 167px;
+                    padding-left: 28px !important;
+                    background-color: var(--color-sidebar-primary-search-bar-background) !important;
+                    &::placeholder {
+                        color: var(--color-primary-search-bar-placeholder) !important;
+                    }
+                }
+            }
+        }
+        .stock-table {
+            .unexpanded-list {
+                .input-select-wrapper {
+                    .unit-dropdown {
+                        input {
+                            padding-left: 5px !important;
+                            padding-right: 17px !important;
+                            background-color: var(--color-primary-input-bar-background-focus) !important;
+                            &:active,
+                            &:focus {
+                                background-color: var(--color-common-primary-background-for-all-components) !important;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+#mat-select-0-panel {
+    min-width: calc(100% + 24px) !important;
+    position: absolute;
+    top: 44px;
+    left: 28px;
+
+    button {
+        span.mat-button-wrapper {
+            color: var(--color-blue);
+        }
+    }
+
+    .mat-pseudo-checkbox {
+        color: var(--color-primary-checkbox-and-expansion-panel-arrow);
+    }
+}
+
+.myPanelClass {
+    margin-top: 30px !important;
+    margin-left: 16px !important;
+
+    button {
+        color: var(--color-blue);
+    }
+}
+
+.myPanelClass.position-fix {
+    min-width: calc(100% + 15px) !important;
+    position: absolute;
+    top: 1px;
+    left: -7px;
+}
+
+.create-custom-field-page {
+    .custom-field-wrapper {
+        text-field {
+            .text-field-container {
+                input {
+                    width: 100%;
+                    height: auto;
+                    border: 1px solid var(--color-secondary-input-bar-border);
+                    background-color: var(--color-secondary-input-bar-background);
+
+                    &::placeholder {
+                        color: var(--color-common-primary-input-placeholder);
+                    }
+                }
+            }
+        }
+        .mat-select {
+            .mat-select-placeholder {
+                font-size: 14px;
+                color: var(--color-common-primary-input-placeholder);
+            }
+        }
+        .minMaxField-wrapper {
+            .minMaxField {
+                .text-field-container {
+                    width: 42%;
+                    display: inline-block;
+
+                    &:first-child {
+                        margin-right: 10px;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.select-physical-product {
+    .product-option {
+        .product-option-wrapper {
+            .multi-select-input {
+                input {
+                    background: var(--color-secondary-input-bar-background);
+                }
+            }
+        }
+    }
+}
 .logs-sidebar {
     min-height: 100% !important;
     height: 100% !important;
@@ -10491,6 +10797,19 @@ hamburger-menu {
                                 padding: 15px !important;
                                 transform: translate(-7px, -9px);
                             }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    .activity-container {
+        .table-content {
+            .giddh-table {
+                tr.cursor-pointer {
+                    &:hover {
+                        td {
+                            background-color: var(--color-primary-common-without-opacity-list-hover) !important;
                         }
                     }
                 }

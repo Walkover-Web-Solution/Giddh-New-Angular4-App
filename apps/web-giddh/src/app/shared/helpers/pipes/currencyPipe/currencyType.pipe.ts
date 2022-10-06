@@ -178,6 +178,5 @@ export class GiddhCurrencyPipe implements OnDestroy, PipeTransform {
                 break;
         }
         return shouldRemoveTrailingZeros ? finaloutput?.replace(REMOVE_TRAILING_ZERO_REGEX, '$1$2$3') : finaloutput;
-
     }
 }

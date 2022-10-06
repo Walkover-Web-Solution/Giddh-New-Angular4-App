@@ -202,6 +202,15 @@ export class FileGstR3Component implements OnInit, OnDestroy {
                 }
             }
         });
+        this.store.pipe(select(appState => appState.general.openGstSideMenu), takeUntil(this.destroyed$)).subscribe(shouldOpen => {
+            if (this.isMobileScreen) {
+                if (shouldOpen) {
+                    this.asideGstSidebarMenuState = 'in';
+                } else {
+                    this.asideGstSidebarMenuState = 'out';
+                }
+            }
+        });
         this.getCurrentPeriod$ = this.store.pipe(select(appStore => appStore.gstR.currentPeriod), takeUntil(this.destroyed$));
         this.getCurrentPeriod$.subscribe(currentPeriod => {
             if (currentPeriod && currentPeriod.from) {
@@ -213,15 +222,6 @@ export class FileGstR3Component implements OnInit, OnDestroy {
                     this.isMonthSelected = true;
                 } else {
                     this.isMonthSelected = false;
-                }
-            }
-        });
-        this.store.pipe(select(appState => appState.general.openGstSideMenu), takeUntil(this.destroyed$)).subscribe(shouldOpen => {
-            if (this.isMobileScreen) {
-                if (shouldOpen) {
-                    this.asideGstSidebarMenuState = 'in';
-                } else {
-                    this.asideGstSidebarMenuState = 'out';
                 }
             }
         });

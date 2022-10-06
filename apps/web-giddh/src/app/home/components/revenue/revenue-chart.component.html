@@ -19,7 +19,7 @@
                                         aria-controls="dropdown-basic"
                                     >
                                         <span *ngIf="activeGraphType !== undefined">
-                                            <strong>{{ activeGraphType["uniqueName"] }}</strong>
+                                            <strong>{{ activeGraphType["displayName"] }}</strong>
                                         </span>
                                         <span class="icon-arrow-down mr-l1"></span>
                                     </span>
@@ -80,7 +80,7 @@
                     <div class="total-sale-detail" *ngIf="activeGraphType !== undefined">
                         <div class="single-sale-detail">
                             <p>
-                                {{ commonLocaleData?.app_total }} {{ activeGraphType["uniqueName"] }} ({{
+                                {{ commonLocaleData?.app_total }} {{ activeGraphType["displayName"] }} ({{
                                     commonLocaleData?.app_this_week
                                 }})
                             </p>
@@ -97,7 +97,7 @@
                         </div>
                         <div class="single-sale-detail">
                             <p>
-                                {{ commonLocaleData?.app_total }} {{ activeGraphType["uniqueName"] }} ({{
+                                {{ commonLocaleData?.app_total }} {{ activeGraphType["displayName"] }} ({{
                                     commonLocaleData?.app_last_week
                                 }})
                             </p>
@@ -158,7 +158,7 @@
                                     <input
                                         type="text"
                                         readonly
-                                        placeholder="{{ localeData?.select_dates }}"
+                                        [placeholder]="localeData?.select_dates"
                                         class="form-control"
                                         #dp1="bsDaterangepicker"
                                         [bsValue]="previousDateRangePickerValue"
@@ -176,7 +176,7 @@
                                     <input
                                         type="text"
                                         readonly
-                                        placeholder="{{ localeData?.select_dates }}"
+                                        [placeholder]="localeData?.select_dates"
                                         class="form-control"
                                         #dp2="bsDaterangepicker"
                                         [bsValue]="currentDateRangePickerValue"
@@ -203,12 +203,12 @@
                 <div class="clearfix top-dates">
                     <div class="pull-left about-date">
                         <div class="active-date">
-                            <span></span>{{ this.getPreviousWeekStartEndDate[0] | date }} -
-                            {{ this.getPreviousWeekStartEndDate[1] | date }}
+                            <span></span>{{ getPreviousWeekStartEndDate[0] | date }} -
+                            {{ getPreviousWeekStartEndDate[1] | date }}
                         </div>
                         <div class="in-active-date">
-                            <span></span>{{ this.getCurrentWeekStartEndDate[0] | date }} -
-                            {{ this.getCurrentWeekStartEndDate[1] | date }}
+                            <span></span>{{ getCurrentWeekStartEndDate[0] | date }} -
+                            {{ getCurrentWeekStartEndDate[1] | date }}
                         </div>
                         <div class="pull-right revenue-tabs">
                             <div class="total-sales-tabs">

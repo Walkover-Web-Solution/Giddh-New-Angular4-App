@@ -118,5 +118,11 @@
         "get_instant_overdraft": "इन्स्टंट ओव्हरड्राफ्ट मिळवा",
         "duration_error": "कृपया दिलेल्या रकमेचा कालावधी निवडा",
         "required_field_error": "कृपया सर्व आवश्यक फील्ड भरा"
-	}
+	},
+    "tally":{
+        "help_documentation":"मदत दस्तऐवजीकरण",
+        "copied":"कॉपी केले...",
+        "api_url":"API URL :",
+        "heading":"टेली"
+    }
 }
