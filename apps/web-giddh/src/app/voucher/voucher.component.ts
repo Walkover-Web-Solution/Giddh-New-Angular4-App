@@ -166,7 +166,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     @ViewChild('invoiceForm', { static: false }) public invoiceForm: NgForm;
     @ViewChildren('discountComponent') public discountComponent: QueryList<DiscountListComponent>;
     @ViewChildren('taxControlComponent') public taxControlComponent: QueryList<TaxControlComponent>;
-    @ViewChild('customerNameDropDown', { static: false }) public customerNameDropDown: SalesShSelectComponent;
     @ViewChildren('selectAccount') public selectAccount: QueryList<ShSelectComponent>;
     @ViewChildren('description') public description: QueryList<ElementRef>;
     @ViewChild('inputCustomerName', { static: true }) public inputCustomerName: ElementRef;
@@ -649,6 +648,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     @ViewChild('purchaseRecordConfirmationPopup', { static: true }) public purchaseRecordConfirmationPopup: any;
     /** Date change confirmation modal */
     @ViewChild('dateChangeConfirmationModel', { static: true }) public dateChangeConfirmationModel: any;
+      /** True if we have to open account selection dropdown */
+      public openAccountSelectionDropdown: boolean = false;
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -760,6 +761,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         if (!this.isUpdateMode) {
             this.toggleBodyClass();
         }
+        this.openAccountSelectionDropdown = !this.isUpdateMode;
         this.selectAccount.changes.pipe(distinctUntilChanged((firstItem, nextItem) => {
             return firstItem?.first?.filter === nextItem?.first?.filter;
         }), takeUntil(this.destroyed$)).subscribe((queryChanges: QueryList<ShSelectComponent>) => {
@@ -1450,10 +1452,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     let tempSelectedAcc: AccountResponseV2;
                     this.createdAccountDetails$.pipe(take(1)).subscribe(acc => tempSelectedAcc = acc);
 
-                    if (this.customerNameDropDown) {
-                        this.customerNameDropDown.clear();
-                    }
-
                     if (tempSelectedAcc) {
                         this.customerAcList$ = observableOf([{ label: tempSelectedAcc.name, value: tempSelectedAcc.uniqueName, additional: tempSelectedAcc }]);
                         this.invFormData.voucherDetails.customerName = tempSelectedAcc.name;
@@ -1500,9 +1498,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
                     let tempSelectedAcc: AccountResponseV2;
                     this.updatedAccountDetails$.pipe(take(1)).subscribe(acc => tempSelectedAcc = acc);
-                    if (this.customerNameDropDown) {
-                        this.customerNameDropDown.clear();
-                    }
                     if (tempSelectedAcc) {
                         this.customerAcList$ = observableOf([{ label: tempSelectedAcc.name, value: tempSelectedAcc.uniqueName, additional: tempSelectedAcc }]);
                         if (tempSelectedAcc.addresses && tempSelectedAcc.addresses.length) {
@@ -3582,13 +3577,14 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.typeaheadNoResultsOfCustomer = e;
     }
 
-    public onSelectCustomer(item: IOption): void {
+    public onSelectCustomer(item: any): void {
         this.onlyPhoneNumber();
         this.intl?.setNumber("");
         this.typeaheadNoResultsOfCustomer = false;
         this.referenceVouchersCurrentPage = 1;
         if (item.value) {
             this.invFormData.voucherDetails.customerName = item.label;
+            this.invFormData.voucherDetails.customerUniquename = item.value;
             this.getAccountDetails(item.value);
             if (this.invFormData.voucherDetails.customerUniquename && this.invFormData.voucherDetails.voucherDate) {
                 this.getAllAdvanceReceipts(this.invFormData.voucherDetails.customerUniquename, this.invFormData.voucherDetails.voucherDate)
@@ -3629,6 +3625,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         }
         this.accountAsideMenuState = this.accountAsideMenuState === 'out' ? 'in' : 'out';
         this.toggleBodyClass();
+        if (!this.invFormData.voucherDetails.customerUniquename && this.accountAsideMenuState === 'out') {
+            this.openAccountSelectionDropdown = true;
+        }
     }
 
     public toggleRecurringAsidePane(toggle?: string): void {
@@ -3813,6 +3812,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             this.onlyPhoneNumber();
             this.intl?.setNumber("");
             this.invFormData.voucherDetails.customerName = null;
+            this.invFormData.voucherDetails.customerUniquename = null;
             this.invFormData.voucherDetails.tempCustomerName = null;
             this.isCustomerSelected = false;
             this.invFormData.accountDetails = new AccountDetailsClass();
@@ -4053,10 +4053,11 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     }
 
     public addAccountFromShortcut() {
+        this.openAccountSelectionDropdown = false;
         if (!this.isCustomerSelected) {
             this.selectedCustomerForDetails = null;
-            this.toggleAccountAsidePane();
         }
+        this.toggleAccountAsidePane();
     }
 
     /**
@@ -5492,9 +5493,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         return stateListRet;
     }
 
-    public fillShippingBillingDetails($event: any, isBilling) {
-        let stateName = $event.label;
-        let stateCode = $event.value;
+    public fillShippingBillingDetails(event: any, isBilling?: boolean): void {
+        let stateName = event.label;
+        let stateCode = event.value;
 
         if (isBilling) {
             // update account details address if it's billing details
@@ -5504,6 +5505,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             this.invFormData.accountDetails.billingDetails.state.name = stateName;
             this.invFormData.accountDetails.billingDetails.stateName = stateName;
             this.invFormData.accountDetails.billingDetails.stateCode = stateCode;
+            this.invFormData.accountDetails.billingDetails.state.code = stateCode;
         } else {
             if (this.shippingState && this.shippingState.nativeElement) {
                 this.shippingState.nativeElement.classList.remove('error-box');
@@ -5514,6 +5516,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 this.invFormData.accountDetails.shippingDetails.stateName = stateName;
                 this.invFormData.accountDetails.shippingDetails.stateCode = stateCode;
                 this.invFormData.accountDetails.shippingDetails.state.name = stateName;
+                this.invFormData.accountDetails.shippingDetails.state.code = stateCode;
             }
         }
     }
@@ -5594,16 +5597,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 }
             }, 200);
         } else {
-            if (!this.isPendingVoucherType) {
-                setTimeout(() => {
-                    let firstElementToFocus: any = document.getElementsByClassName('firstElementToFocus');
-                    if (firstElementToFocus[0]) {
-                        firstElementToFocus[0].focus();
-                        if (this.customerNameDropDown && !this.isUpdateMode) {
-                            this.customerNameDropDown.show();
-                        }
-                    }
-                }, 200);
+            if (!this.isPendingVoucherType && !this.isUpdateMode) {
+                this.openAccountSelectionDropdown = true;
             }
         }
     }
@@ -6949,6 +6944,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             this.purchaseBillCompany.billingDetails.state.name = stateName;
             this.purchaseBillCompany.billingDetails.stateName = stateName;
             this.purchaseBillCompany.billingDetails.stateCode = stateCode;
+            this.purchaseBillCompany.billingDetails.state.code = stateCode;
         } else {
             if (this.shippingStateCompany && this.shippingStateCompany.nativeElement) {
                 this.shippingStateCompany.nativeElement.classList.remove('error-box');
@@ -6959,6 +6955,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 this.purchaseBillCompany.shippingDetails.stateName = stateName;
                 this.purchaseBillCompany.shippingDetails.stateCode = stateCode;
                 this.purchaseBillCompany.shippingDetails.state.name = stateName;
+                this.purchaseBillCompany.shippingDetails.state.code = stateCode;
             }
         }
     }
@@ -7110,6 +7107,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @memberof VoucherComponent
      */
     public onSelectWarehouse(warehouse: any): void {
+        this.selectedWarehouse = warehouse?.uniqueName;
         if (this.isPurchaseInvoice) {
             this.autoFillDeliverToWarehouseAddress(warehouse);
         }

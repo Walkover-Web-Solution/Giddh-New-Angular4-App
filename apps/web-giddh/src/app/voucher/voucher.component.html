@@ -11,7 +11,8 @@
         <div class="d-flex border-bottom mobile-view-padding">
             <hamburger-menu
                 [pageHeading]="(isCashInvoice ? localeData?.invoice_types?.cash : getInvoiceType()) | titlecase"
-            ></hamburger-menu>
+            >
+            </hamburger-menu>
             <div class="form-group mr-b05 clearfix pro-invoice-heading">
                 <div class="clearfix">
                     <div class="btn-group proforma-sales-time" dropdown>
@@ -186,50 +187,15 @@
                                                 <div class="d-flex">
                                                     <!-- region if not cashinvoice show customer dropdown -->
                                                     <ng-container *ngIf="!isCashInvoice">
-                                                        <sales-sh-select
-                                                            class="float-left sales-select"
-                                                            name="voucherDetails.customerName"
-                                                            #customerNameDropDown
-                                                            [options]="customerAcList$ | async"
-                                                            [(ngModel)]="invFormData.voucherDetails.customerUniquename"
-                                                            [customFilter]="customMoveGroupFilter"
-                                                            (noOptionsFound)="noResultsForCustomer($event)"
-                                                            [isPaginationEnabled]="true"
-                                                            (scrollEnd)="handleScrollEnd('customer')"
-                                                            (dynamicSearchedQuery)="
-                                                                onSearchQueryChanged($event, 1, 'customer')
-                                                            "
-                                                            [notFoundMsg]="noResultsFoundLabel"
-                                                            [enableDynamicSearch]="true"
-                                                            (onHide)="resetPreviousSearchResults(true, 'customer')"
-                                                            (selected)="onSelectCustomer($event)"
+                                                        <select-field
+                                                            [cssClass]="'form-control mat-field-border'"
+                                                            [name]="'voucherDetails.customerName'"
                                                             [placeholder]="customerPlaceHolder"
-                                                            [notFoundLink]="true"
-                                                            [doNotReset]="true"
-                                                            [forceClearReactive]="forceClear$ | async"
-                                                            [isFilterEnabled]="true"
-                                                            (noResultsClicked)="addNewAccount()"
-                                                            [multiple]="false"
-                                                            [ItemHeight]="67"
-                                                            [notFoundLinkText]="customerNotFoundText"
-                                                            (keyup)="resetCustomerName($event)"
-                                                            (onClear)="resetCustomerName(null)"
-                                                            [isOpen]="
-                                                                allowFocus &&
-                                                                !isUpdateMode &&
-                                                                !invFormData.voucherDetails.customerUniquename
-                                                            "
-                                                            [disabled]="
-                                                                isUpdateMode &&
-                                                                invoiceType !== 'sales' &&
-                                                                invoiceType !== 'cash' &&
-                                                                invoiceType !== 'purchase' &&
-                                                                (voucherApiVersion === 1 ||
-                                                                    (voucherApiVersion === 2 &&
-                                                                        invoiceType !== 'debit note' &&
-                                                                        invoiceType !== 'credit note'))
-                                                            "
-                                                            [fixedValue]="
+                                                            [options]="customerAcList$ | async"
+                                                            [openDropdown]="openAccountSelectionDropdown"
+                                                            (selectedOption)="onSelectCustomer($event)"
+                                                            (createOption)="addNewAccount()"
+                                                            [defaultValue]="
                                                                 isUpdateMode &&
                                                                 invoiceType !== 'sales' &&
                                                                 invoiceType !== 'cash' &&
@@ -241,55 +207,28 @@
                                                                     ? invFormData.voucherDetails.customerName
                                                                     : ''
                                                             "
+                                                            [createNewText]="customerNotFoundText"
+                                                            [enableDynamicSearch]="true"
+                                                            (dynamicSearchedQuery)="
+                                                                onSearchQueryChanged($event, 1, 'customer')
+                                                            "
+                                                            [allowValueReset]="true"
+                                                            (onClear)="resetCustomerName(null)"
                                                         >
-                                                            <ng-template #optionTemplate let-option="option">
-                                                                <a
-                                                                    href="javascript:void(0)"
-                                                                    class="list-item flex-column"
-                                                                >
-                                                                    <div class="item">{{ option?.label }}</div>
-                                                                    <div class="item-unique">{{ option.value }}</div>
-                                                                </a>
-                                                            </ng-template>
-
-                                                            <ng-template #notFoundLinkTemplate>
-                                                                <a
-                                                                    href="javascript:void(0)"
-                                                                    class="
-                                                                        list-item
-                                                                        pd-l05 pd-r05
-                                                                        border-none
-                                                                        d-flex
-                                                                        justify-content-between
-                                                                        w-100
-                                                                    "
-                                                                    [keyboardShortcut]="'alt+c'"
-                                                                >
-                                                                    <div class="item">{{ customerNotFoundText }}</div>
-                                                                    <div class="item">
-                                                                        {{ commonLocaleData?.app_alt_c }}
-                                                                    </div>
-                                                                </a>
-                                                            </ng-template>
-                                                        </sales-sh-select>
+                                                        </select-field>
                                                     </ng-container>
                                                     <!-- endregion -->
                                                     <!-- region if not cashinvoice show customer dropdown -->
                                                     <ng-container *ngIf="isCashInvoice">
-                                                        <input
-                                                            type="text"
-                                                            name="voucherDetails.customerName"
-                                                            [autofocus]="true"
-                                                            #inputCustomerName
-                                                            class="form-control cash-invoice-input"
+                                                        <text-field>
+                                                            [type]="'text'" [name]="'voucherDetails.customerName'"
+                                                            [autoFocus]="true" #inputCustomerName
+                                                            [cssClass]="'form-control cash-invoice-input'"
                                                             [(ngModel)]="invFormData.voucherDetails.customerName"
-                                                            (change)="handleCustomerChange($event)"
-                                                            [readOnly]="
-                                                                isUpdateMode &&
-                                                                invoiceType !== 'sales' &&
-                                                                invoiceType !== 'cash'
-                                                            "
-                                                        />
+                                                            (change)="handleCustomerChange($event)" [readOnly]="
+                                                            isUpdateMode && invoiceType !== 'sales' && invoiceType !==
+                                                            'cash' "
+                                                        </text-field>
                                                     </ng-container>
                                                     <!-- endregion -->
 
@@ -428,67 +367,60 @@
                                                                                 btn-group btn-block
                                                                                 change-address-dropdown
                                                                             "
-                                                                            dropdown
-                                                                            #billingAddressDropDownWeb="bs-dropdown"
                                                                             [attachOutsideOnClick]="true"
-                                                                            (clickOutside)="
-                                                                                billingAddressDropDownWeb.hide()
-                                                                            "
                                                                             *ngIf="accountAddressList?.length > 1"
                                                                         >
                                                                             <a
-                                                                                dropdownToggle
-                                                                                type="button"
-                                                                                class="dropdown-toggle"
+                                                                                [matMenuTriggerFor]="
+                                                                                    changeBillingAddress
+                                                                                "
+                                                                                class="dropdown-toggle cp"
                                                                             >
                                                                                 {{ localeData?.change }}</a
                                                                             >
-                                                                            <ul
-                                                                                *dropdownMenu
-                                                                                class="
-                                                                                    dropdown-menu dropdown-menu-right
-                                                                                "
-                                                                                role="menu"
-                                                                            >
-                                                                                <li
-                                                                                    role="menuitem"
+                                                                            <mat-menu #changeBillingAddress="matMenu">
+                                                                                <a
+                                                                                    mat-menu-item
+                                                                                    disableRipple="true"
+                                                                                    class="
+                                                                                        d-flex
+                                                                                        flex-column
+                                                                                        justify-content-center
+                                                                                        line-height-initial
+                                                                                    "
                                                                                     *ngFor="
                                                                                         let address of accountAddressList
                                                                                     "
+                                                                                    (click)="
+                                                                                        selectAddress(
+                                                                                            invFormData.accountDetails
+                                                                                                .billingDetails,
+                                                                                            address
+                                                                                        )
+                                                                                    "
                                                                                 >
-                                                                                    <a
-                                                                                        class="dropdown-item"
-                                                                                        (click)="
-                                                                                            selectAddress(
-                                                                                                invFormData
-                                                                                                    .accountDetails
-                                                                                                    .billingDetails,
-                                                                                                address
-                                                                                            )
-                                                                                        "
-                                                                                    >
-                                                                                        {{ address.address }}
-                                                                                        {{ address.state?.name }}
-                                                                                        <span class="d-block">
-                                                                                            {{
-                                                                                                address.gstNumber
-                                                                                                    ? (showGSTINNo
-                                                                                                          ? commonLocaleData?.app_gstin +
-                                                                                                            ": "
-                                                                                                          : commonLocaleData?.app_trn +
-                                                                                                            ": ") +
-                                                                                                      address.gstNumber
-                                                                                                    : ""
-                                                                                            }}
-                                                                                        </span>
-                                                                                    </a>
-                                                                                </li>
-                                                                            </ul>
+                                                                                    {{ address.address }}
+                                                                                    {{ address.state?.name }}
+                                                                                    <p class="font-12">
+                                                                                        {{
+                                                                                            address.gstNumber
+                                                                                                ? (showGSTINNo
+                                                                                                      ? commonLocaleData?.app_gstin +
+                                                                                                        ": "
+                                                                                                      : commonLocaleData?.app_trn +
+                                                                                                        ": ") +
+                                                                                                  address.gstNumber
+                                                                                                : ""
+                                                                                        }}
+                                                                                    </p>
+                                                                                </a>
+                                                                            </mat-menu>
                                                                         </div>
                                                                     </span>
                                                                 </div>
                                                                 <div class="billing-address clearfix">
                                                                     <textarea
+                                                                        matInput
                                                                         name="billingDetails.address"
                                                                         class="form-control"
                                                                         (keyup)="autoFillShippingDetails()"
@@ -511,12 +443,12 @@
                                                                         </div>
 
                                                                         <div class="col-sm-12 col-md-6" #billingState>
-                                                                            <sales-sh-select
+                                                                            <select-field
                                                                                 [placeholder]="
                                                                                     commonLocaleData?.app_state
                                                                                 "
-                                                                                class="select-bdr-bottom"
-                                                                                (selected)="
+                                                                                [cssClass]="'select-bdr-bottom'"
+                                                                                (selectedOption)="
                                                                                     fillShippingBillingDetails(
                                                                                         $event,
                                                                                         true
@@ -524,33 +456,30 @@
                                                                                     autoFillShippingDetails()
                                                                                 "
                                                                                 #statesBilling
-                                                                                [showBottomBorderOnly]="true"
-                                                                                [forceClearReactive]="
-                                                                                    billingShippingForceClearReactive$
-                                                                                        | async
-                                                                                "
                                                                                 [options]="statesSource"
-                                                                                name="billingDetails.stateCode"
-                                                                                [(ngModel)]="
-                                                                                    invFormData.accountDetails
-                                                                                        .billingDetails.state.code
+                                                                                [name]="'billingDetails.stateCode'"
+                                                                                [allowValueReset]="true"
+                                                                                (onClear)="
+                                                                                    fillShippingBillingDetails(
+                                                                                        $event,
+                                                                                        true
+                                                                                    );
+                                                                                    autoFillShippingDetails()
                                                                                 "
                                                                             >
-                                                                            </sales-sh-select>
+                                                                            </select-field>
                                                                         </div>
 
                                                                         <div
                                                                             class="col-sm-6 col-md-6"
                                                                             *ngIf="shouldShowTrnGstField"
                                                                         >
-                                                                            <!-- <label>GSTIN</label> -->
-                                                                            <input
-                                                                                matInput
-                                                                                maxLength="15"
+                                                                            <text-field
+                                                                                [maxlength]="15"
                                                                                 autocomplete="None"
-                                                                                type="text"
-                                                                                name="billingDetails.gstNumber"
-                                                                                class="form-control input-custom"
+                                                                                [type]="'text'"
+                                                                                [name]="'billingDetails.gstNumber'"
+                                                                                [cssClass]="'form-control input-custom'"
                                                                                 *ngIf="showGSTINNo"
                                                                                 [(ngModel)]="
                                                                                     invFormData.accountDetails
@@ -566,14 +495,13 @@
                                                                                 [placeholder]="
                                                                                     commonLocaleData?.app_gstin
                                                                                 "
-                                                                            />
-                                                                            <input
-                                                                                matInput
-                                                                                maxLength="15"
+                                                                            ></text-field>
+                                                                            <text-field
+                                                                                [maxlength]="15"
                                                                                 autocomplete="None"
-                                                                                type="text"
-                                                                                name="billingDetails.gstNumber"
-                                                                                class="form-control input-custom"
+                                                                                [type]="'text'"
+                                                                                [name]="'billingDetails.gstNumber'"
+                                                                                [cssClass]="'form-control input-custom'"
                                                                                 *ngIf="showTRNNo"
                                                                                 [(ngModel)]="
                                                                                     invFormData.accountDetails
@@ -589,7 +517,7 @@
                                                                                 [placeholder]="
                                                                                     commonLocaleData?.app_trn
                                                                                 "
-                                                                            />
+                                                                            ></text-field>
                                                                         </div>
                                                                         <!-- static pin code  -->
                                                                         <div
@@ -602,12 +530,13 @@
                                                                             }"
                                                                         >
                                                                             <div class="form-group mr-b05">
-                                                                                <input
-                                                                                    matInput
-                                                                                    type="number"
-                                                                                    class="form-control input-custom"
+                                                                                <text-field
+                                                                                    [type]="'number'"
+                                                                                    [cssClass]="
+                                                                                        'form-control input-custom'
+                                                                                    "
                                                                                     autocomplete="false"
-                                                                                    name="billingPinCode"
+                                                                                    [name]="'billingPinCode'"
                                                                                     (blur)="autoFillShippingDetails()"
                                                                                     [placeholder]="
                                                                                         commonLocaleData?.app_pin_code
@@ -616,9 +545,8 @@
                                                                                         invFormData.accountDetails
                                                                                             .billingDetails.pincode
                                                                                     "
-                                                                                    decimalDigitsDirective
-                                                                                    [preventDecimal]="true"
-                                                                                />
+                                                                                    [allowDecimalDigitsOnly]="true"
+                                                                                ></text-field>
                                                                             </div>
                                                                         </div>
                                                                         <!-- static pin code end-->
@@ -633,14 +561,16 @@
                                                             <div class="form-group p-0 width-100">
                                                                 <div class="d-flex align-items-center pb-1">
                                                                     <span class="pb-0 pd-r15">
-                                                                        <input
-                                                                            type="checkbox"
+                                                                        <mat-checkbox
                                                                             (change)="autoFillShippingDetails()"
                                                                             name="autoFillShipping"
+                                                                            color="primary"
+                                                                            class="auto-fill-shipping-address"
                                                                             [ngModelOptions]="{ standalone: true }"
                                                                             [(ngModel)]="autoFillShipping"
-                                                                        />
-                                                                        {{ localeData?.shipping_billing_same }}
+                                                                        >
+                                                                            {{ localeData?.shipping_billing_same }}
+                                                                        </mat-checkbox>
                                                                     </span>
                                                                     <span>
                                                                         <div
@@ -648,66 +578,60 @@
                                                                                 btn-group btn-block
                                                                                 change-address-dropdown
                                                                             "
-                                                                            dropdown
-                                                                            #shippingAddressDropDownWeb="bs-dropdown"
                                                                             [attachOutsideOnClick]="true"
-                                                                            (clickOutside)="
-                                                                                shippingAddressDropDownWeb.hide()
-                                                                            "
                                                                             *ngIf="
                                                                                 accountAddressList?.length > 1 &&
                                                                                 !autoFillShipping
                                                                             "
                                                                         >
                                                                             <a
-                                                                                dropdownToggle
-                                                                                type="button"
-                                                                                class="dropdown-toggle"
+                                                                                [matMenuTriggerFor]="
+                                                                                    shippingBillingAddressSame
+                                                                                "
+                                                                                class="dropdown-toggle cp"
                                                                             >
                                                                                 {{ localeData?.change }}</a
                                                                             >
-                                                                            <ul
-                                                                                *dropdownMenu
-                                                                                class="
-                                                                                    dropdown-menu dropdown-menu-right
-                                                                                "
-                                                                                role="menu"
+                                                                            <mat-menu
+                                                                                #shippingBillingAddressSame="matMenu"
                                                                             >
-                                                                                <li
-                                                                                    role="menuitem"
+                                                                                <a
+                                                                                    mat-menu-item
+                                                                                    disableRipple="true"
+                                                                                    class="
+                                                                                        d-flex
+                                                                                        flex-column
+                                                                                        justify-content-center
+                                                                                        line-height-initial
+                                                                                    "
                                                                                     *ngFor="
                                                                                         let address of accountAddressList
                                                                                     "
+                                                                                    (click)="
+                                                                                        selectAddress(
+                                                                                            invFormData.accountDetails
+                                                                                                .shippingDetails,
+                                                                                            address
+                                                                                        )
+                                                                                    "
                                                                                 >
-                                                                                    <a
-                                                                                        class="dropdown-item"
-                                                                                        (click)="
-                                                                                            selectAddress(
-                                                                                                invFormData
-                                                                                                    .accountDetails
-                                                                                                    .shippingDetails,
-                                                                                                address
-                                                                                            )
-                                                                                        "
-                                                                                    >
-                                                                                        {{ address.address }}
-                                                                                        {{ address.state?.name }}
+                                                                                    {{ address.address }}
+                                                                                    {{ address.state?.name }}
 
-                                                                                        <span class="d-block"
-                                                                                            >{{
-                                                                                                address.gstNumber
-                                                                                                    ? (showGSTINNo
-                                                                                                          ? commonLocaleData?.app_gstin +
-                                                                                                            ": "
-                                                                                                          : commonLocaleData?.app_trn +
-                                                                                                            ": ") +
-                                                                                                      address.gstNumber
-                                                                                                    : ""
-                                                                                            }}
-                                                                                        </span>
-                                                                                    </a>
-                                                                                </li>
-                                                                            </ul>
+                                                                                    <p class="font-12">
+                                                                                        {{
+                                                                                            address.gstNumber
+                                                                                                ? (showGSTINNo
+                                                                                                      ? commonLocaleData?.app_gstin +
+                                                                                                        ": "
+                                                                                                      : commonLocaleData?.app_trn +
+                                                                                                        ": ") +
+                                                                                                  address.gstNumber
+                                                                                                : ""
+                                                                                        }}
+                                                                                    </p>
+                                                                                </a>
+                                                                            </mat-menu>
                                                                         </div>
                                                                     </span>
                                                                 </div>
@@ -716,6 +640,7 @@
                                                                     [ngClass]="{ 'disabled': autoFillShipping }"
                                                                 >
                                                                     <textarea
+                                                                        matInput
                                                                         [readonly]="autoFillShipping"
                                                                         name="shippingDetails.address"
                                                                         class="form-control"
@@ -741,45 +666,45 @@
                                                                                 class="col-sm-12 col-md-6"
                                                                                 #shippingState
                                                                             >
-                                                                                <sales-sh-select
+                                                                                <select-field
                                                                                     [placeholder]="
                                                                                         commonLocaleData?.app_state
                                                                                     "
-                                                                                    class="select-bdr-bottom"
+                                                                                    [cssClass]="'select-bdr-bottom'"
                                                                                     #statesShipping
-                                                                                    [forceClearReactive]="
-                                                                                        billingShippingForceClearReactive$
-                                                                                            | async
-                                                                                    "
-                                                                                    [showBottomBorderOnly]="true"
-                                                                                    (selected)="
+                                                                                    (selectedOption)="
                                                                                         fillShippingBillingDetails(
                                                                                             $event,
                                                                                             false
                                                                                         )
                                                                                     "
                                                                                     [options]="statesSource"
-                                                                                    name="shippingDetails.stateCode"
-                                                                                    [(ngModel)]="
-                                                                                        invFormData.accountDetails
-                                                                                            .shippingDetails.state.code
+                                                                                    [name]="'shippingDetails.stateCode'"
+                                                                                    [allowValueReset]="true"
+                                                                                    (onClear)="
+                                                                                        fillShippingBillingDetails(
+                                                                                            $event,
+                                                                                            false
+                                                                                        )
                                                                                     "
                                                                                 >
-                                                                                </sales-sh-select>
+                                                                                </select-field>
                                                                             </div>
 
                                                                             <div
                                                                                 class="col-sm-6"
                                                                                 *ngIf="shouldShowTrnGstField"
                                                                             >
-                                                                                <input
+                                                                                <text-field
                                                                                     [readonly]="autoFillShipping"
                                                                                     autocomplete="None"
-                                                                                    maxLength="15"
-                                                                                    type="text"
-                                                                                    name="shippingDetails.gstNumber"
+                                                                                    [maxlength]="15"
+                                                                                    [type]="'text'"
+                                                                                    [name]="'shippingDetails.gstNumber'"
                                                                                     *ngIf="showGSTINNo"
-                                                                                    class="form-control input-custom"
+                                                                                    [cssClass]="
+                                                                                        'form-control input-custom'
+                                                                                    "
                                                                                     [(ngModel)]="
                                                                                         invFormData.accountDetails
                                                                                             .shippingDetails.gstNumber
@@ -793,14 +718,16 @@
                                                                                     [placeholder]="
                                                                                         commonLocaleData?.app_gstin
                                                                                     "
-                                                                                />
-                                                                                <input
+                                                                                ></text-field>
+                                                                                <text-field
                                                                                     [readonly]="autoFillShipping"
-                                                                                    maxLength="15"
+                                                                                    [maxlength]="15"
                                                                                     autocomplete="None"
-                                                                                    type="text"
-                                                                                    name="shippingDetails.gstNumber"
-                                                                                    class="form-control input-custom"
+                                                                                    [type]="'text'"
+                                                                                    [name]="'shippingDetails.gstNumber'"
+                                                                                    [cssClass]="
+                                                                                        'form-control input-custom'
+                                                                                    "
                                                                                     *ngIf="showTRNNo"
                                                                                     [(ngModel)]="
                                                                                         invFormData.accountDetails
@@ -815,7 +742,7 @@
                                                                                     [placeholder]="
                                                                                         commonLocaleData?.app_trn
                                                                                     "
-                                                                                />
+                                                                                ></text-field>
                                                                             </div>
                                                                             <!-- static pin code  -->
                                                                             <div
@@ -828,14 +755,13 @@
                                                                                 }"
                                                                             >
                                                                                 <div class="form-group mr-b05">
-                                                                                    <input
-                                                                                        type="number"
-                                                                                        class="
-                                                                                            form-control
-                                                                                            input-custom
+                                                                                    <text-field
+                                                                                        [type]="'number'"
+                                                                                        [cssClass]="
+                                                                                            'form-control input-custom'
                                                                                         "
                                                                                         autocomplete="false"
-                                                                                        name="shippingPinCode"
+                                                                                        [name]="'shippingPinCode'"
                                                                                         [placeholder]="
                                                                                             commonLocaleData?.app_pin_code
                                                                                         "
@@ -843,9 +769,8 @@
                                                                                             invFormData.accountDetails
                                                                                                 .shippingDetails.pincode
                                                                                         "
-                                                                                        decimalDigitsDirective
-                                                                                        [preventDecimal]="true"
-                                                                                    />
+                                                                                        [allowDecimalDigitsOnly]="true"
+                                                                                    ></text-field>
                                                                                 </div>
                                                                             </div>
                                                                             <!-- static pin code end-->
@@ -863,7 +788,7 @@
                                 </div>
                                 <!-- endregion -->
                             </div>
-
+                            <!-- region balance due -->
                             <!-- region balance due -->
                             <div
                                 class="col-sm-3 col-md-3 balance-due-absolute"
@@ -994,13 +919,13 @@
 
                                     <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12">
                                         <div class="pl-0 col-sm-12 col-xl-6 col-lg-10 col-md-10">
-                                            <input
-                                                type="text"
-                                                name="accountDetails.attention"
+                                            <text-field
+                                                [type]="'text'"
+                                                [name]="'accountDetails.attention'"
                                                 [placeholder]="localeData?.attention_to"
-                                                class="form-control attention-to"
+                                                [cssClass]="'form-control attention-to mat-field-border'"
                                                 [(ngModel)]="invFormData.accountDetails.attentionTo"
-                                            />
+                                            ></text-field>
                                         </div>
                                     </div>
                                 </div>
@@ -1013,13 +938,13 @@
                                     </div>
                                     <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12">
                                         <div class="col-sm-12 col-xl-6 col-lg-10 col-md-10 pl-0">
-                                            <input
-                                                type="email"
+                                            <text-field
+                                                [type]="'email'"
                                                 [placeholder]="localeData?.account_email_placeholder"
-                                                name="accountDetails.email"
-                                                class="form-control attention-to"
+                                                [name]="'accountDetails.email'"
+                                                [cssClass]="'form-control attention-to mat-field-border'"
                                                 [(ngModel)]="invFormData.accountDetails.email"
-                                            />
+                                            ></text-field>
                                         </div>
                                     </div>
                                 </div>
@@ -1057,15 +982,16 @@
                                     </div>
                                     <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12">
                                         <div class="col-sm-12 col-xl-6 col-lg-10 col-md-10 pl-0">
-                                            <sh-select
-                                                class="multi-select"
-                                                name="warehouse"
+                                            <select-field
+                                                [cssClass]="'multi-select mat-field-border'"
+                                                [name]="'warehouse'"
                                                 [placeholder]="localeData?.select_warehouse_placeholder"
-                                                [(ngModel)]="selectedWarehouse"
                                                 [options]="warehouses"
-                                                (selected)="onSelectWarehouse($event)"
+                                                (selectedOption)="onSelectWarehouse($event)"
+                                                [allowValueReset]="true"
+                                                (onClear)="onSelectWarehouse($event)"
                                             >
-                                            </sh-select>
+                                            </select-field>
                                         </div>
                                     </div>
                                 </div>
@@ -1169,20 +1095,27 @@
                                                                         class="col-sm-12 col-md-6"
                                                                         #billingStateCompany
                                                                     >
-                                                                        <sales-sh-select
+                                                                        <select-field
                                                                             [placeholder]="commonLocaleData?.app_state"
-                                                                            class="select-border-bottom"
-                                                                            (selected)="
+                                                                            [cssClass]="'select-border-bottom'"
+                                                                            (selectedOption)="
                                                                                 fillShippingBillingCompanyDetails(
                                                                                     $event,
                                                                                     true
                                                                                 );
                                                                                 autoFillCompanyShippingDetails()
                                                                             "
-                                                                            [showBottomBorderOnly]="true"
+                                                                            [allowValueReset]="true"
+                                                                            (onClear)="
+                                                                                fillShippingBillingCompanyDetails(
+                                                                                    $event,
+                                                                                    true
+                                                                                );
+                                                                                autoFillCompanyShippingDetails()
+                                                                            "
                                                                             [options]="companyStatesSource"
-                                                                            name="companyBillingDetailsStateCode"
-                                                                            [disabled]="
+                                                                            [name]="'companyBillingDetailsStateCode'"
+                                                                            [readonly]="
                                                                                 purchaseBillCompany.billingDetails
                                                                                     .gstNumber &&
                                                                                 purchaseBillCompany.billingDetails
@@ -1190,16 +1123,12 @@
                                                                                     ? true
                                                                                     : null
                                                                             "
-                                                                            [fixedValue]="
+                                                                            [defaultValue]="
                                                                                 purchaseBillCompany.billingDetails.state
                                                                                     .name
                                                                             "
-                                                                            [(ngModel)]="
-                                                                                purchaseBillCompany.billingDetails.state
-                                                                                    .code
-                                                                            "
                                                                         >
-                                                                        </sales-sh-select>
+                                                                        </select-field>
                                                                     </div>
                                                                     <div
                                                                         class="col-sm-6 col-md-6"
@@ -1208,16 +1137,16 @@
                                                                             (showGSTINNo || showTRNNo)
                                                                         "
                                                                     >
-                                                                        <input
-                                                                            maxlength="15"
+                                                                        <text-field
+                                                                            [maxlength]="15"
                                                                             autocomplete="None"
-                                                                            type="text"
-                                                                            name="companyBillingDetailsTax"
+                                                                            [type]="'text'"
+                                                                            [name]="'companyBillingDetailsTax'"
                                                                             [(ngModel)]="
                                                                                 purchaseBillCompany.billingDetails
                                                                                     .gstNumber
                                                                             "
-                                                                            class="form-control input-custom"
+                                                                            [cssClass]="'form-control input-custom'"
                                                                             (blur)="autoFillCompanyShippingDetails()"
                                                                             (change)="
                                                                                 getStateCodeCompany('billingDetails')
@@ -1227,7 +1156,7 @@
                                                                                     ? commonLocaleData?.app_gstin
                                                                                     : commonLocaleData?.app_trn
                                                                             "
-                                                                        />
+                                                                        ></text-field>
                                                                     </div>
                                                                     <!-- static pin code  -->
                                                                     <div
@@ -1240,11 +1169,11 @@
                                                                         }"
                                                                     >
                                                                         <div class="form-group mr-b05">
-                                                                            <input
-                                                                                type="number"
-                                                                                class="form-control input-custom"
+                                                                            <text-field
+                                                                                [type]="'number'"
+                                                                                [cssClass]="'form-control input-custom'"
                                                                                 autocomplete="false"
-                                                                                name="purchaseBillBillingPinCode"
+                                                                                [name]="'purchaseBillBillingPinCode'"
                                                                                 [placeholder]="
                                                                                     commonLocaleData?.app_pin_code
                                                                                 "
@@ -1255,9 +1184,8 @@
                                                                                 (blur)="
                                                                                     autoFillCompanyShippingDetails()
                                                                                 "
-                                                                                decimalDigitsDirective
-                                                                                [preventDecimal]="true"
-                                                                            />
+                                                                                [allowDecimalDigitsOnly]="true"
+                                                                            ></text-field>
                                                                         </div>
                                                                     </div>
                                                                     <!-- static pin code end-->
@@ -1272,14 +1200,14 @@
                                                         <div class="form-group p-0 width-100">
                                                             <div class="d-flex align-items-center pb-1">
                                                                 <span class="pd-r15">
-                                                                    <input
-                                                                        type="checkbox"
+                                                                    <mat-checkbox
                                                                         autocomplete="None"
                                                                         name="autoFillCompanyShipping"
                                                                         [(ngModel)]="autoFillCompanyShipping"
                                                                         (change)="autoFillCompanyShippingDetails()"
-                                                                    />
-                                                                    {{ localeData?.shipping_billing_same }}
+                                                                    >
+                                                                        {{ localeData?.shipping_billing_same }}
+                                                                    </mat-checkbox>
                                                                 </span>
                                                             </div>
                                                             <div
@@ -1312,42 +1240,47 @@
                                                                             class="col-sm-12 col-md-6"
                                                                             #shippingStateCompany
                                                                         >
-                                                                            <sales-sh-select
+                                                                            <select-field
                                                                                 [placeholder]="
                                                                                     commonLocaleData?.app_state
                                                                                 "
-                                                                                [disabled]="autoFillCompanyShipping"
-                                                                                class="select-border-bottom"
+                                                                                [cssClass]="'select-border-bottom'"
                                                                                 [ngClass]="{
                                                                                     'disabled': autoFillCompanyShipping
                                                                                 }"
-                                                                                (selected)="
+                                                                                (selectedOption)="
                                                                                     fillShippingBillingCompanyDetails(
                                                                                         $event,
                                                                                         false
                                                                                     )
                                                                                 "
-                                                                                [showBottomBorderOnly]="true"
+                                                                                [allowValueReset]="true"
+                                                                                (onClear)="
+                                                                                    fillShippingBillingCompanyDetails(
+                                                                                        $event,
+                                                                                        false
+                                                                                    )
+                                                                                "
                                                                                 [options]="companyStatesSource"
-                                                                                name="companyShippingDetailsStateCode"
-                                                                                [disabled]="
-                                                                                    purchaseBillCompany.shippingDetails
+                                                                                [name]="
+                                                                                    'companyShippingDetailsStateCode'
+                                                                                "
+                                                                                [readonly]="
+                                                                                    autoFillCompanyShipping ||
+                                                                                    (purchaseBillCompany.shippingDetails
                                                                                         .gstNumber &&
-                                                                                    purchaseBillCompany.shippingDetails
-                                                                                        .gstNumber.length >= 2
+                                                                                        purchaseBillCompany
+                                                                                            .shippingDetails.gstNumber
+                                                                                            .length >= 2)
                                                                                         ? true
                                                                                         : null
                                                                                 "
-                                                                                [fixedValue]="
+                                                                                [defaultValue]="
                                                                                     purchaseBillCompany.shippingDetails
                                                                                         .state.name
                                                                                 "
-                                                                                [(ngModel)]="
-                                                                                    purchaseBillCompany.shippingDetails
-                                                                                        .state.code
-                                                                                "
                                                                             >
-                                                                            </sales-sh-select>
+                                                                            </select-field>
                                                                         </div>
                                                                         <div
                                                                             class="col-sm-6 col-md-6"
@@ -1356,16 +1289,16 @@
                                                                                 (showGSTINNo || showTRNNo)
                                                                             "
                                                                         >
-                                                                            <input
-                                                                                maxLength="15"
+                                                                            <text-field
+                                                                                [maxlength]="15"
                                                                                 autocomplete="None"
-                                                                                type="text"
-                                                                                name="companyShippingDetailsTax"
+                                                                                [type]="'text'"
+                                                                                [name]="'companyShippingDetailsTax'"
                                                                                 [(ngModel)]="
                                                                                     purchaseBillCompany.shippingDetails
                                                                                         .gstNumber
                                                                                 "
-                                                                                class="form-control input-custom"
+                                                                                [cssClass]="'form-control input-custom'"
                                                                                 (change)="
                                                                                     getStateCodeCompany(
                                                                                         'shippingDetails'
@@ -1376,7 +1309,7 @@
                                                                                         ? commonLocaleData?.app_gstin
                                                                                         : commonLocaleData?.app_trn
                                                                                 "
-                                                                            />
+                                                                            ></text-field>
                                                                         </div>
                                                                         <!-- static pin code  -->
                                                                         <div
@@ -1389,11 +1322,15 @@
                                                                             }"
                                                                         >
                                                                             <div class="form-group mr-b05">
-                                                                                <input
-                                                                                    type="number"
-                                                                                    class="form-control input-custom"
+                                                                                <text-field
+                                                                                    [type]="'number'"
+                                                                                    [cssClass]="
+                                                                                        'form-control input-custom'
+                                                                                    "
                                                                                     autocomplete="false"
-                                                                                    name="purchaseBillShippingPinCode"
+                                                                                    [name]="
+                                                                                        'purchaseBillShippingPinCode'
+                                                                                    "
                                                                                     [placeholder]="
                                                                                         commonLocaleData?.app_pin_code
                                                                                     "
@@ -1401,9 +1338,8 @@
                                                                                         purchaseBillCompany
                                                                                             .shippingDetails.pincode
                                                                                     "
-                                                                                    decimalDigitsDirective
-                                                                                    [preventDecimal]="true"
-                                                                                />
+                                                                                    [allowDecimalDigitsOnly]="true"
+                                                                                ></text-field>
                                                                             </div>
                                                                         </div>
                                                                         <!-- static pin code end-->
@@ -1487,7 +1423,7 @@
                                         <div class="col-sm-12 col-xl-6 col-lg-5 col-md-10 pl-0">
                                             <!-- Enabled for CR/DR update flow -->
                                             <div>
-                                                <input
+                                                <text-field
                                                     *ngIf="!isCreditNote && !isDebitNote"
                                                     type="text"
                                                     name="accountDetails.invoiceNum"
@@ -1499,8 +1435,7 @@
                                                             : null
                                                     "
                                                     [(ngModel)]="invFormData.voucherDetails.voucherNumber"
-                                                />
-
+                                                ></text-field>
                                                 <ng-container *ngIf="isCreditNote || isDebitNote">
                                                     <sh-select
                                                         *ngIf="voucherApiVersion === 2"
@@ -1704,7 +1639,7 @@
                                     <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9">
                                         <div class="col-sm-12 col-xl-6 col-lg-5 col-md-10 pl-0">
                                             <div>
-                                                <input
+                                                <text-field
                                                     type="text"
                                                     name="accountDetails.invoiceNum"
                                                     class="form-control invoice-date attention-to"
@@ -1715,7 +1650,7 @@
                                                             : null
                                                     "
                                                     [(ngModel)]="invFormData.voucherDetails.voucherNumber"
-                                                />
+                                                ></text-field>
                                             </div>
                                         </div>
                                     </div>
@@ -1841,17 +1776,14 @@
                                         </div>
                                         <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12">
                                             <div class="col-sm-12 col-xl-6 col-lg-10 col-md-10 pl-0">
-                                                <input
+                                                <mat-checkbox
                                                     id="tourist-scheme"
-                                                    type="checkbox"
                                                     name="touristSchemeApplicable"
-                                                    class="checkbox-custom"
                                                     [(ngModel)]="invFormData.touristSchemeApplicable"
                                                     (ngModelChange)="touristSchemeApplicableToggle()"
-                                                />
-                                                <label for="tourist-scheme" class="checkbox-custom-label">
+                                                >
                                                     {{ localeData?.transaction_tourist_scheme }}
-                                                </label>
+                                                </mat-checkbox>
                                             </div>
                                         </div>
                                     </div>
@@ -2558,39 +2490,25 @@
                                                                 </span>
                                                             </div>
                                                             <div class="hsn-code-dropdown" *ngIf="hsnDropdownShow">
-                                                                <div class="d-flex wrap-hsn-sac mb-2 mt-3">
-                                                                    <span>
-                                                                        <input
-                                                                            type="radio"
-                                                                            class="radio-custom radio-theme"
-                                                                            name="showCodeType{{ entryIdx }}"
-                                                                            id="hsnCodeType{{ entryIdx }}"
-                                                                            [(ngModel)]="transaction.showCodeType"
-                                                                            value="hsn"
-                                                                        />
-                                                                        <label
-                                                                            for="hsnCodeType{{ entryIdx }}"
-                                                                            class="radio-custom-label"
-                                                                            >{{ commonLocaleData?.app_hsn_code }}</label
-                                                                        >
-                                                                    </span>
-                                                                    <span>
-                                                                        <input
-                                                                            type="radio"
-                                                                            class="radio-custom radio-theme"
-                                                                            name="showCodeType{{ entryIdx }}"
-                                                                            id="sacCodeType{{ entryIdx }}"
-                                                                            [(ngModel)]="transaction.showCodeType"
-                                                                            value="sac"
-                                                                        />
-                                                                        <label
-                                                                            for="sacCodeType{{ entryIdx }}"
-                                                                            class="radio-custom-label"
-                                                                            >{{ commonLocaleData?.app_sac_code }}</label
-                                                                        >
-                                                                    </span>
-                                                                </div>
-                                                                <input
+                                                                <mat-radio-group class="d-flex mb-2">
+                                                                    <mat-radio-button
+                                                                        color="primary"
+                                                                        name="showCodeType{{ entryIdx }}"
+                                                                        id="hsnCodeType{{ entryIdx }}"
+                                                                        [(ngModel)]="transaction.showCodeType"
+                                                                        value="hsn"
+                                                                        >{{ commonLocaleData?.app_hsn_code }}
+                                                                    </mat-radio-button>
+                                                                    <mat-radio-button
+                                                                        color="primary"
+                                                                        name="showCodeType{{ entryIdx }}"
+                                                                        id="sacCodeType{{ entryIdx }}"
+                                                                        [(ngModel)]="transaction.showCodeType"
+                                                                        value="sac"
+                                                                        >{{ commonLocaleData?.app_sac_code }}
+                                                                    </mat-radio-button>
+                                                                </mat-radio-group>
+                                                                <text-field
                                                                     type="text"
                                                                     maxLength="10"
                                                                     decimalDigitsDirective
@@ -2598,8 +2516,8 @@
                                                                     name="transaction.hsnNumber_{{ entryIdx }}"
                                                                     *ngIf="transaction.showCodeType === 'hsn'"
                                                                     [(ngModel)]="transaction.hsnNumber"
-                                                                />
-                                                                <input
+                                                                ></text-field>
+                                                                <text-field
                                                                     type="text"
                                                                     maxLength="10"
                                                                     decimalDigitsDirective
@@ -2607,10 +2525,11 @@
                                                                     name="transaction.hsnNumber_{{ entryIdx }}"
                                                                     *ngIf="transaction.showCodeType === 'sac'"
                                                                     [(ngModel)]="transaction.sacNumber"
-                                                                />
+                                                                ></text-field>
 
                                                                 <div class="btn-group mt-2 pt-1 d-flex">
                                                                     <button
+                                                                        mat-button
                                                                         class="btn btn-sm btn-success-green"
                                                                         type="button"
                                                                         (click)="hsnDropdownShow = !hsnDropdownShow"
@@ -2618,8 +2537,8 @@
                                                                         {{ commonLocaleData?.app_save }}
                                                                     </button>
                                                                     <button
-                                                                        class="btn btn-sm btn-primary mr-0"
-                                                                        type="button"
+                                                                        mat-button
+                                                                        class="btn cancel-button mr-0"
                                                                         (click)="hideHsnSacEditPopup(transaction)"
                                                                     >
                                                                         {{ commonLocaleData?.app_cancel }}
@@ -3017,7 +2936,7 @@
                                                 </div>
 
                                                 <div class="form-group col-xs-4 col-sm-4 mb-0">
-                                                    <input
+                                                    <text-field
                                                         type="text"
                                                         name="trackingNumber"
                                                         [(ngModel)]="invFormData.templateDetails.other.trackingNumber"
@@ -3026,12 +2945,12 @@
                                                             templatePlaceholder?.trackingNumber ||
                                                             localeData?.tracking_number
                                                         "
-                                                    />
+                                                    ></text-field>
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <div class="form-group col-xs-4 col-sm-4 mb-0">
-                                                    <input
+                                                    <text-field
                                                         type="text"
                                                         name="customField1"
                                                         [(ngModel)]="invFormData.templateDetails.other.customField1"
@@ -3039,11 +2958,11 @@
                                                         [placeholder]="
                                                             templatePlaceholder?.customField1Label || localeData?.field1
                                                         "
-                                                    />
+                                                    ></text-field>
                                                 </div>
 
                                                 <div class="form-group col-xs-4 col-sm-4 mb-0">
-                                                    <input
+                                                    <text-field
                                                         type="text"
                                                         name="customField2"
                                                         [(ngModel)]="invFormData.templateDetails.other.customField2"
@@ -3051,11 +2970,11 @@
                                                         [placeholder]="
                                                             templatePlaceholder?.customField2Label || localeData?.field2
                                                         "
-                                                    />
+                                                    ></text-field>
                                                 </div>
 
                                                 <div class="form-group col-xs-4 col-sm-4 mb-0">
-                                                    <input
+                                                    <text-field
                                                         type="text"
                                                         name="customField3"
                                                         [(ngModel)]="invFormData.templateDetails.other.customField3"
@@ -3063,7 +2982,7 @@
                                                         [placeholder]="
                                                             templatePlaceholder?.customField3Label || localeData?.field3
                                                         "
-                                                    />
+                                                    ></text-field>
                                                 </div>
                                             </div>
                                         </div>
@@ -4691,7 +4610,7 @@
 
                         <div class="other-detail-card">
                             <div *ngIf="!currentVoucherFormDetails || currentVoucherFormDetails?.otherDetails">
-                                <div class="collapse-pane clearfix">
+                                <!-- <div class="collapse-pane clearfix">
                                     <div
                                         class="collapse-pane-heading"
                                         (click)="isOthrDtlCollapsed = !isOthrDtlCollapsed"
@@ -4796,17 +4715,107 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </div> -->
+                                <mat-expansion-panel class="other-details-expansion-panel">
+                                    <mat-expansion-panel-header>
+                                        <mat-panel-title>
+                                            {{ commonLocaleData?.app_other_details }}
+                                        </mat-panel-title>
+                                    </mat-expansion-panel-header>
+                                    <div class="row invoice-other-details-row">
+                                        <div class="form-group col-xs-4 col-sm-4 mb-0">
+                                            <giddh-datepicker
+                                                #shippingDate="ngModel"
+                                                [placeholder]="templatePlaceholder?.shippedDateLabel"
+                                                name="shippingDate"
+                                                [(ngModel)]="invFormData.templateDetails.other.shippingDate"
+                                                [class.invalid-inp]="
+                                                    shippingDate.errors && (shippingDate.dirty || shippingDate.touched)
+                                                "
+                                            >
+                                            </giddh-datepicker>
+                                            <p
+                                                class="text-danger"
+                                                *ngIf="
+                                                    shippingDate.errors && (shippingDate.dirty || shippingDate.touched)
+                                                "
+                                            >
+                                                {{ localeData?.invalid_date }}
+                                            </p>
+                                        </div>
+                                        <div class="form-group col-xs-4 col-sm-4 mb-0">
+                                            <text-field
+                                                type="text"
+                                                name="shippedVia"
+                                                [(ngModel)]="invFormData.templateDetails.other.shippedVia"
+                                                class="form-control"
+                                                [placeholder]="
+                                                    templatePlaceholder?.shippedViaLabel || localeData?.ship_via
+                                                "
+                                            ></text-field>
+                                        </div>
+                                        <div class="form-group col-xs-4 col-sm-4 mb-0">
+                                            <text-field
+                                                type="text"
+                                                name="trackingNumber"
+                                                [(ngModel)]="invFormData.templateDetails.other.trackingNumber"
+                                                class="form-control"
+                                                [placeholder]="
+                                                    templatePlaceholder?.trackingNumber || localeData?.tracking_number
+                                                "
+                                            ></text-field>
+                                        </div>
+                                    </div>
+                                    <div class="row invoice-other-details-row">
+                                        <div class="form-group col-xs-4 col-sm-4 mb-0">
+                                            <text-field
+                                                type="text"
+                                                name="customField1"
+                                                [(ngModel)]="invFormData.templateDetails.other.customField1"
+                                                class="form-control"
+                                                [placeholder]="
+                                                    templatePlaceholder?.customField1Label || localeData?.field1
+                                                "
+                                            ></text-field>
+                                        </div>
+                                        <div class="form-group col-xs-4 col-sm-4 mb-0">
+                                            <text-field
+                                                type="text"
+                                                name="customField2"
+                                                [(ngModel)]="invFormData.templateDetails.other.customField2"
+                                                class="form-control"
+                                                [placeholder]="
+                                                    templatePlaceholder?.customField2Label || localeData?.field2
+                                                "
+                                            ></text-field>
+                                        </div>
+                                        <div class="form-group col-xs-4 col-sm-4 mb-0">
+                                            <text-field
+                                                type="text"
+                                                name="customField3"
+                                                [(ngModel)]="invFormData.templateDetails.other.customField3"
+                                                class="form-control"
+                                                [placeholder]="
+                                                    templatePlaceholder?.customField3Label || localeData?.field3
+                                                "
+                                            ></text-field>
+                                        </div>
+                                    </div>
+                                </mat-expansion-panel>
                             </div>
                             <div class="pd-t1 pl-0 max-width-600" *ngIf="!isPurchaseInvoice">
                                 <label class="mr-b1">{{ commonLocaleData?.app_note }}</label>
                                 <textarea
-                                    rows="3"
-                                    class="form-control"
+                                    matInput
+                                    class="form-control textarea-height mat-field-border"
+                                    hasFocus
+                                    #message2="hasFocus"
+                                    [class.error-box]="invoiceForm?.controls['message2']?.errors?.maxlength"
                                     name="message2"
                                     [maxlength]="shouldApplyMaxLengthOnNotes && !showNotesAtLastPage ? 200 : null"
                                     [(ngModel)]="invFormData.templateDetails.other.message2"
-                                ></textarea>
+                                >
+                                </textarea>
                             </div>
                         </div>
 
@@ -5107,7 +5116,7 @@
                                                             isSalesInvoice || currentVoucherFormDetails?.depositAllowed
                                                         "
                                                     >
-                                                        <input
+                                                        <text-field
                                                             type="text"
                                                             (blur)="
                                                                 calculateBalanceDue();
@@ -5127,7 +5136,7 @@
                                                             [suffix]="selectedSuffixForCurrency"
                                                             [mask]="inputMaskFormat"
                                                             [attr.required]="depositAccountUniqueName ? true : false"
-                                                        />
+                                                        ></text-field>
                                                         <label class="pull-right pt-1">{{
                                                             commonLocaleData?.app_amount
                                                         }}</label>

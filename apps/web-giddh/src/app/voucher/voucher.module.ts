@@ -32,6 +32,7 @@ import { SendEmailInvoiceModule } from "../shared/send-email-invoice/send-email-
 import { SharedModule } from "../shared/shared.module";
 import { VoucherAddBulkItemsModule } from "../shared/voucher-add-bulk-items/voucher-add-bulk-items.module";
 import { DiscountControlModule } from "../theme/discount-control/discount-control.module";
+import { FormFieldsModule } from "../theme/form-fields/form-fields.module";
 // import { GiddhDatepickerModule } from "../theme/giddh-datepicker/giddh-datepicker.module";
 import { SelectModule } from "../theme/ng-select/ng-select";
 import { ShSelectModule } from "../theme/ng-virtual-select/sh-select.module";
@@ -88,7 +89,8 @@ import { VoucherRoutingModule } from "./voucher.routing.module";
         MatSelectModule,
         MatFormFieldModule,
         MatInputModule,
-        MatRadioModule
+        MatRadioModule,
+        FormFieldsModule
     ],
     exports: [VoucherComponent],
     declarations: [

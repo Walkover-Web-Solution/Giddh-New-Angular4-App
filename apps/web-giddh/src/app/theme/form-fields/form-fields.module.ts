@@ -11,6 +11,8 @@ import { DecimalDigitsModule } from "../../shared/helpers/directives/decimalDigi
 import { SelectFieldComponent } from "./select-field/select-field.component";
 import { TextFieldComponent } from "./text-field/text-field.component";
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { DigitsOnlyModule } from "../../shared/helpers/directives/digitsOnly/digitsOnly.module";
+import { TranslateDirectiveModule } from "../translate/translate.directive.module";
 
 @NgModule({
     declarations: [
@@ -28,7 +30,9 @@ import { MatTooltipModule } from '@angular/material/tooltip';
         MatAutocompleteModule,
         ReactiveFormsModule,
         DecimalDigitsModule,
-        MatTooltipModule
+        MatTooltipModule,
+        TranslateDirectiveModule,
+        DigitsOnlyModule
     ],
     exports: [
         TextFieldComponent,

@@ -17,7 +17,7 @@
         [attr.min]="min"
         [attr.max]="max"
         [maxLength]="maxlength"
-        *ngIf="!allowDecimalDigitsOnly"
+        *ngIf="!allowDecimalDigitsOnly && !allowDigitsOnly"
         #textField
     />
     <input
@@ -36,7 +36,7 @@
         [required]="required"
         [attr.min]="min"
         [attr.max]="max"
-        *ngIf="allowDecimalDigitsOnly"
+        *ngIf="allowDigitsOnly"
         decimalDigitsDirective
         #textField
     />

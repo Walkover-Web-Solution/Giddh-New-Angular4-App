@@ -138,7 +138,8 @@ $custom-typography: mat-typography-config(
         padding: 5px;
         height: auto;
         max-height: calc(210px);
-        overflow-y: auto;
+        overflow-y: auto !important;
+        min-width: 230px;
     }
 }
 .tax-control-menu {

@@ -873,6 +873,13 @@ span.edit-icon {
     box-shadow: 0 6px 12px var(--color-primary-common-box-shadow);
     right: 0;
     z-index: 4;
+    .btn-group {
+        .cancel-button {
+            color: var(--color-primary-basic-button-text);
+            background-color: var(--color-white);
+            border: 1px solid var(--color-common-secondary-border);
+        }
+    }
 }
 
 .hsn-code-dropdown label {
@@ -1802,6 +1809,7 @@ span.eligible-ITC {
         border-bottom: none;
         margin-bottom: 0;
     }
+
     .show-in-mobile {
         background: var(--color-white);
         border-top: 1px solid var(--color-iron);
