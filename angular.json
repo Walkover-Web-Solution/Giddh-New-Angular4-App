@@ -558,8 +558,10 @@
         }
     },
     "cli": {
-        "defaultCollection": "@nrwl/angular",
-        "analytics": "69d6b0ae-2848-419a-9569-8ea7bbf4545f"
+      "analytics": "69d6b0ae-2848-419a-9569-8ea7bbf4545f",
+        "schematicCollections": [
+          "@nrwl/angular"
+        ]
     },
     "schematics": {
         "@nrwl/angular:application": {
