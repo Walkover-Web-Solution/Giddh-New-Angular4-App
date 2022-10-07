@@ -23,7 +23,9 @@ export class PermissionDataService {
     private createdBy: CompanyData;
 
     constructor(private store: Store<AppState>) {
-        this.store.pipe(select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.session.companyUniqueName], (companies, uniqueName) => {
+        this.store.pipe(select(createSelector([(state: AppState) => state.session.companies], (companies) => {
+            let uniqueName;
+            this.store.pipe(select(state => state.session.companyUniqueName), take(1)).subscribe(companyUniqueName => uniqueName = companyUniqueName);
             let currentCompany = companies.find((company) => company?.uniqueName === uniqueName);
             this.getCompany = currentCompany;
             this.store.pipe(select(state => state.session.companyUser)).subscribe(response => {
