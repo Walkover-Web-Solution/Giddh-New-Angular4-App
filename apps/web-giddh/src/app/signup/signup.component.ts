@@ -4,7 +4,7 @@ import { AppState } from "../store";
 import { Component, Inject, NgZone, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ModalDirective } from "ngx-bootstrap/modal";
-import { Configuration, OTP_PROVIDER_URL, OTP_TOKEN_AUTH, OTP_WIDGET_ID } from "../app.constant";
+import { Configuration, OTP_PROVIDER_URL } from "../app.constant";
 import { Store, select } from "@ngrx/store";
 import { Observable, ReplaySubject } from "rxjs";
 import {
