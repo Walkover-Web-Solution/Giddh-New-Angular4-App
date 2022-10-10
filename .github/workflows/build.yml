@@ -62,6 +62,8 @@ jobs:
           LINKEDIN_CLIENT_ID_PROD: ${{ secrets.LINKEDIN_CLIENT_ID_PROD }}
           LINKEDIN_SECRET_KEY_PROD: ${{ secrets.LINKEDIN_SECRET_KEY_PROD }}
           RAZORPAY_KEY_PROD: ${{ secrets.RAZORPAY_KEY_PROD }}
+          OTP_WIDGET_ID: ${{ secrets.OTP_WIDGET_ID }}
+          OTP_TOKEN_AUTH: ${{ secrets.OTP_TOKEN_AUTH }}
       - name: Copy Test folder
         if: ${{ env.BUILD_ENV == 'Test' }}
         run: |
@@ -81,6 +83,8 @@ jobs:
           LINKEDIN_CLIENT_ID_PROD: ${{ secrets.LINKEDIN_CLIENT_ID_PROD }}
           LINKEDIN_SECRET_KEY_PROD: ${{ secrets.LINKEDIN_SECRET_KEY_PROD }}
           RAZORPAY_KEY_PROD: ${{ secrets.RAZORPAY_KEY_PROD }}
+          OTP_WIDGET_ID: ${{ secrets.OTP_WIDGET_ID }}
+          OTP_TOKEN_AUTH: ${{ secrets.OTP_TOKEN_AUTH }}
       - name: Copy Stage folder
         if: ${{ env.BUILD_ENV == 'Stage' }}
         run: |
@@ -100,6 +104,8 @@ jobs:
           LINKEDIN_CLIENT_ID_PROD: ${{ secrets.LINKEDIN_CLIENT_ID_PROD }}
           LINKEDIN_SECRET_KEY_PROD: ${{ secrets.LINKEDIN_SECRET_KEY_PROD }}
           RAZORPAY_KEY_PROD: ${{ secrets.RAZORPAY_KEY_PROD }}
+          OTP_WIDGET_ID: ${{ secrets.OTP_WIDGET_ID }}
+          OTP_TOKEN_AUTH: ${{ secrets.OTP_TOKEN_AUTH }}
       - name: Copy Beta folder
         if: ${{ env.BUILD_ENV == 'Beta' }}
         run: |
@@ -119,6 +125,8 @@ jobs:
           LINKEDIN_CLIENT_ID_PROD: ${{ secrets.LINKEDIN_CLIENT_ID_PROD }}
           LINKEDIN_SECRET_KEY_PROD: ${{ secrets.LINKEDIN_SECRET_KEY_PROD }}
           RAZORPAY_KEY_PROD: ${{ secrets.RAZORPAY_KEY_PROD }}
+          OTP_WIDGET_ID: ${{ secrets.OTP_WIDGET_ID }}
+          OTP_TOKEN_AUTH: ${{ secrets.OTP_TOKEN_AUTH }}
       - name: Copy Prod folder
         if: ${{ env.BUILD_ENV == 'Prod' }}
         run: |
