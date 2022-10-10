@@ -323,6 +323,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             this.searchResultsPaginationData.totalPages = this.searchResultsPaginationTotalPages;
         }
 
+        if (this.generalService.voucherApiVersion === 2) {
+            this.allowParentGroup.push("loanandoverdraft");
+        }
+
         this.settingsTagService.GetAllTags().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success" && response?.body?.length > 0) {
                 _.map(response?.body, (tag) => {
@@ -1282,6 +1286,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     }
                 }
             }
+            this.vm.selectedLedger.generateInvoice = true;
         } else {
             if (this.vm.selectedLedger) {
                 if (this.voucherApiVersion === 2) {

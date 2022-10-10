@@ -278,7 +278,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
         private commonService: CommonService,
         private adjustmentUtilityService: AdjustmentUtilityService
     ) {
-
         this.lc = new LedgerVM();
         this.advanceSearchRequest = new AdvanceSearchRequest();
         this.trxRequest = new TransactionsRequest();
@@ -507,6 +506,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.generalService.addLinkTag("./assets/css/ledgerfont/ledgerfont.css");
         }
         document.querySelector('body').classList.add('ledger-body');
+
+        if (this.generalService.voucherApiVersion === 2) {
+            this.allowParentGroup.push("loanandoverdraft");
+        }
+
         this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: 0 }));
         // get company taxes
         this.store.dispatch(this.companyActions.getTax());
@@ -946,7 +950,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     public clickUnpaidInvoiceList(e?: boolean) {
         if (e) {
-            if (this.accountUniquename === 'cash' || this.accountUniquename === 'bankaccounts' && this.selectedTxnAccUniqueName) {
+            if ((this.accountUniquename === 'cash' || this.accountUniquename === 'bankaccounts' || (this.generalService.voucherApiVersion === 2 && this.accountUniquename === 'loanandoverdraft')) && this.selectedTxnAccUniqueName) {
                 this.getInvoiceLists({ accountUniqueName: this.selectedTxnAccUniqueName, status: 'unpaid' });
             } else {
                 this.getInvoiceLists({ accountUniqueName: this.accountUniquename, status: 'unpaid' });
@@ -1462,7 +1466,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             const currentLedgerCategory = this.lc.activeAccount ? this.generalService.getAccountCategory(this.lc.activeAccount, this.lc.activeAccount?.uniqueName) : '';
             // If current ledger is of income or expense category then send current ledger as stockAccountUniqueName. Only required for ledger.
             const accountUniqueName = (currentLedgerCategory === 'income' || currentLedgerCategory === 'expenses') ?
-                this.lc.activeAccount ? this.lc.activeAccount?.uniqueName : '' :
+                this.lc.activeAccount ? this.lc.activeAccount.uniqueName : '' :
                 '';
             const requestObject = {
                 q: encodeURIComponent(query),
@@ -2297,7 +2301,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
                     this.getBankTransactions();
 
-                    this.isBankOrCashAccount = accountDetails.parentGroups.some((grp) => grp?.uniqueName === 'bankaccounts');
+                    this.isBankOrCashAccount = accountDetails.parentGroups.some((grp) => grp?.uniqueName === 'bankaccounts' || grp?.uniqueName === 'loanandoverdraft');
                     if (accountDetails.currency && profile.baseCurrency) {
                         this.isLedgerAccountAllowsMultiCurrency = accountDetails.currency && accountDetails.currency !== profile.baseCurrency;
                     } else {

@@ -112,7 +112,7 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
      * @memberof AccountCreateEditComponent
      */
     private loadDefaultBankAccountsSuggestions(): void {
-        this.salesService.getAccountsWithCurrency('bankaccounts').pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.salesService.getAccountsWithCurrency('bankaccounts,loanandoverdraft').pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.body?.results) {
                 const bankAccounts = response.body.results.map(account => ({
                     label: account.name,
@@ -180,9 +180,6 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
                     this.toaster.errorToast(response?.message);
                 }
             });
-        } else {
-            this.toaster.clearAllToaster();
-            this.toaster.errorToast(this.localeData?.payment?.required_field_error);
         }
     }
 

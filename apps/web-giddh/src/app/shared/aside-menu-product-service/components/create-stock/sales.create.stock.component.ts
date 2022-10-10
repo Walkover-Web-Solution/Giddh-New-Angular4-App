@@ -88,8 +88,6 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
     public addNewStock: boolean = false;
     public manageInProcess$: Observable<any>;
     public companyTaxesList$: Observable<TaxResponse[]>;
-    public isManageInventory$: Observable<boolean>;
-    public invoiceSetting$: Observable<any>;
     public customFieldsArray: any[] = [];
     public taxTempArray: any[] = [];
     public editSKUlabel: boolean = false;
@@ -128,7 +126,6 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
         this.manageInProcess$ = this.store.pipe(select(s => s.inventory.inventoryAsideState), takeUntil(this.destroyed$));
         this.store.dispatch(this.companyActions.getTax());
         this.companyTaxesList$ = this.store.pipe(select(p => p.company && p.company.taxes), takeUntil(this.destroyed$));
-        this.invoiceSetting$ = this.store.pipe(select(p => p.invoice.settings), takeUntil(this.destroyed$));
 
         this.store.pipe(select(state => state.inventory.stockUnits), takeUntil(this.destroyed$)).subscribe(p => {
             if (p && p.length) {
@@ -413,12 +410,6 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
         this.manageInProcess$.subscribe(s => {
             if (!s.isOpen) {
                 this.addStockForm.reset();
-            }
-        });
-
-        this.invoiceSetting$.subscribe(a => {
-            if (a && a.companyInventorySettings) {
-                this.isManageInventory$ = of(a.companyInventorySettings.manageInventory);
             }
         });
     }

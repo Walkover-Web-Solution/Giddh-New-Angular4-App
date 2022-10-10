@@ -192,7 +192,7 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
                                 return download(response.body.name, blob, (response.body.type === "xlsx" ? 'application/vnd.ms-excel' : 'text/csv'));
                             } else {
                                 this.toaster.showSnackBar("success", response.body);
-                                this.router.navigate(["/pages/downloads"]);
+                                this.router.navigate(["/pages/downloads/exports"]);
                             }
                         } else {
                             if (response?.status === "success") {
