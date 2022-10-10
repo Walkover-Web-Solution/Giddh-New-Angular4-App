@@ -191,6 +191,15 @@ $custom-typography: mat-typography-config(
         padding-left: 45px !important;
     }
 }
+.select-customers-name {
+    select-field {
+        width: 62.7% !important;
+    }
+    text-field {
+        width: 62.7% !important;
+    }
+}
+
 @media screen and (max-width: 1366px) and (orientation: portrait) {
     .subscription-form-select {
         float: left !important;

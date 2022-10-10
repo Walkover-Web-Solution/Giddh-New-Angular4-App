@@ -648,8 +648,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     @ViewChild('purchaseRecordConfirmationPopup', { static: true }) public purchaseRecordConfirmationPopup: any;
     /** Date change confirmation modal */
     @ViewChild('dateChangeConfirmationModel', { static: true }) public dateChangeConfirmationModel: any;
-      /** True if we have to open account selection dropdown */
-      public openAccountSelectionDropdown: boolean = false;
+    /** True if we have to open account selection dropdown */
+    public openAccountSelectionDropdown: boolean = false;
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we

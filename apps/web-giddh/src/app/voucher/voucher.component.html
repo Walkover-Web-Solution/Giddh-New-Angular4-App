@@ -181,7 +181,7 @@
 
                                         <!-- region customer dropdown -->
                                         <div
-                                            class="col-sm-12 col-xl-7 col-lg-8 col-md-9 col-xs-12 select-customer-name"
+                                            class="col-sm-12 col-xl-7 col-lg-8 col-md-9 col-xs-12 select-customers-name"
                                         >
                                             <div class="clearfix d-flex flex-column">
                                                 <div class="d-flex">
@@ -220,15 +220,22 @@
                                                     <!-- endregion -->
                                                     <!-- region if not cashinvoice show customer dropdown -->
                                                     <ng-container *ngIf="isCashInvoice">
-                                                        <text-field>
-                                                            [type]="'text'" [name]="'voucherDetails.customerName'"
-                                                            [autoFocus]="true" #inputCustomerName
-                                                            [cssClass]="'form-control cash-invoice-input'"
+                                                        <text-field
+                                                            [type]="'text'"
+                                                            [name]="'voucherDetails.customerName'"
+                                                            [autoFocus]="true"
+                                                            #inputCustomerName
+                                                            [cssClass]="
+                                                                'form-control mat-field-border cash-invoice-input'
+                                                            "
                                                             [(ngModel)]="invFormData.voucherDetails.customerName"
-                                                            (change)="handleCustomerChange($event)" [readOnly]="
-                                                            isUpdateMode && invoiceType !== 'sales' && invoiceType !==
-                                                            'cash' "
-                                                        </text-field>
+                                                            (change)="handleCustomerChange($event)"
+                                                            [readOnly]="
+                                                                isUpdateMode &&
+                                                                invoiceType !== 'sales' &&
+                                                                invoiceType !== 'cash'
+                                                            "
+                                                        ></text-field>
                                                     </ng-container>
                                                     <!-- endregion -->
 
@@ -3357,7 +3364,14 @@
                                                             "
                                                         >
                                                             <li role="menuitem" class="mr-t1">
-                                                                <div class="clearfix payment-mode deposit-payment-mode">
+                                                                <div
+                                                                    class="
+                                                                        clearfix
+                                                                        payment-mode
+                                                                        deposit-payment-mode
+                                                                        number1
+                                                                    "
+                                                                >
                                                                     <div class="pull-right balance-due-text">
                                                                         <div
                                                                             class="clearfix mr-b1 text-left"
@@ -3458,43 +3472,21 @@
                                                             "
                                                         >
                                                             <li role="menuitem" class="mr-t1">
-                                                                <div class="clearfix payment-mode">
-                                                                    <sh-select
-                                                                        class="pull-right"
-                                                                        name="depositAccountUniqueName"
+                                                                <div class="clearfix payment-mode number2">
+                                                                    <select-field
+                                                                        [cssClass]="
+                                                                            'form-control mat-field-border pull-right'
+                                                                        "
+                                                                        [name]="'depositAccountUniqueName'"
                                                                         [options]="bankAccounts$ | async"
-                                                                        [(ngModel)]="depositAccountUniqueName"
-                                                                        (selected)="onSelectPaymentMode($event)"
-                                                                        (onClear)="onSelectPaymentMode($event, true)"
+                                                                        (selectedOption)="onSelectPaymentMode($event)"
                                                                         [placeholder]="
                                                                             commonLocaleData?.app_select_account
                                                                         "
-                                                                        [notFoundLink]="false"
-                                                                        [forceClearReactive]="
-                                                                            forceClearDepositAccount$ | async
-                                                                        "
-                                                                        [multiple]="false"
-                                                                        [ItemHeight]="33"
-                                                                        [useInBuiltFilterForIOptionTypeItems]="true"
-                                                                        class="text-left"
+                                                                        (onClear)="onSelectPaymentMode($event, true)"
                                                                     >
-                                                                        <ng-template
-                                                                            #optionTemplate1
-                                                                            let-option="option"
-                                                                        >
-                                                                            <a
-                                                                                href="javascript:void(0)"
-                                                                                class="list-item"
-                                                                            >
-                                                                                <div class="item">
-                                                                                    {{ option.label }}
-                                                                                </div>
-                                                                                <div class="item-unique">
-                                                                                    {{ option.value }}
-                                                                                </div>
-                                                                            </a>
-                                                                        </ng-template>
-                                                                    </sh-select>
+                                                                    </select-field>
+
                                                                     <label class="pull-right">{{
                                                                         commonLocaleData?.app_payment_mode
                                                                     }}</label>
@@ -3515,6 +3507,7 @@
                                                                 "
                                                             >
                                                                 <input
+                                                                    matInput
                                                                     type="text"
                                                                     (blur)="
                                                                         calculateBalanceDue();
@@ -3525,9 +3518,11 @@
                                                                     class="
                                                                         form-control
                                                                         amount-field
+                                                                        due-amount-field
                                                                         text-right
                                                                         pull-right
                                                                         max-width-100
+                                                                        mat-field-border
                                                                     "
                                                                     [(ngModel)]="depositAmount"
                                                                     [prefix]="depositCurrSymbol"
@@ -5073,31 +5068,17 @@
                                                 <p>{{ localeData?.deposit }}</p>
                                                 <ul>
                                                     <li role="menuitem" class="mr-t1">
-                                                        <div class="clearfix payment-mode deposit-payment-mode">
-                                                            <sh-select
-                                                                class="pull-right"
-                                                                name="depositAccountUniqueName"
+                                                        <div class="clearfix payment-mode deposit-payment-mode number3">
+                                                            <select-field
+                                                                [cssClass]="'form-control mat-field-border pull-right'"
+                                                                [name]="'depositAccountUniqueName'"
                                                                 [options]="bankAccounts$ | async"
-                                                                [(ngModel)]="depositAccountUniqueName"
-                                                                (selected)="onSelectPaymentMode($event)"
-                                                                (onClear)="onSelectPaymentMode($event, true)"
+                                                                (selectedOption)="onSelectPaymentMode($event)"
                                                                 [placeholder]="commonLocaleData?.app_select_account"
-                                                                [notFoundLink]="false"
-                                                                [forceClearReactive]="forceClear$ | async"
-                                                                [multiple]="false"
-                                                                [ItemHeight]="33"
-                                                                [useInBuiltFilterForIOptionTypeItems]="true"
-                                                                class="text-left"
+                                                                (onClear)="onSelectPaymentMode($event, true)"
                                                             >
-                                                                <ng-template #optionTemplate1 let-option="option">
-                                                                    <a href="javascript:void(0)" class="list-item">
-                                                                        <div class="item">{{ option?.label }}</div>
-                                                                        <div class="item-unique">
-                                                                            {{ option.value }}
-                                                                        </div>
-                                                                    </a>
-                                                                </ng-template>
-                                                            </sh-select>
+                                                            </select-field>
+
                                                             <label class="pull-right pt-1">{{
                                                                 commonLocaleData?.app_payment_mode
                                                             }}</label>
@@ -5252,7 +5233,7 @@
                             <!-- region generate mode -->
                             <div class="pull-right pr update-mode" *ngIf="!isUpdateMode">
                                 <button
-                                    type="button"
+                                    mat-button
                                     (click)="resetInvoiceForm(invoiceForm)"
                                     class="btn btn-danger d-inline-block v-align-middle"
                                 >
@@ -5262,8 +5243,8 @@
                                 <!-- region purchase invoice -->
                                 <span class="d-inline-block v-align-middle" *ngIf="isPurchaseInvoice">
                                     <button
+                                        mat-button
                                         *ngIf="!isCompany"
-                                        type="button"
                                         [disabled]="
                                             isFileUploading ||
                                             !hasVoucherEntry ||
@@ -5284,7 +5265,7 @@
                                     *ngIf="!isPurchaseInvoice && !isProformaInvoice && !isEstimateInvoice"
                                 >
                                     <button
-                                        type="button"
+                                        mat-button
                                         [disabled]="
                                             !hasVoucherEntry ||
                                             invoiceForm?.controls['message2']?.errors?.maxlength ||
@@ -5301,8 +5282,6 @@
                                     <div
                                         *ngIf="!isCompany"
                                         class="btn-group"
-                                        [dropup]="isDropup"
-                                        dropdown
                                         [isDisabled]="
                                             !hasVoucherEntry ||
                                             invoiceForm?.controls['message2']?.errors?.maxlength ||
@@ -5310,7 +5289,7 @@
                                         "
                                     >
                                         <button
-                                            type="button"
+                                            mat-button
                                             [disabled]="
                                                 !hasVoucherEntry ||
                                                 invoiceForm?.controls['message2']?.errors?.maxlength ||
@@ -5323,48 +5302,47 @@
                                         </button>
                                     </div>
 
-                                    <div *ngIf="!isCompany" class="btn-group" dropdown [dropup]="isDropup">
+                                    <div *ngIf="!isCompany" class="btn-group">
+                                        <mat-menu #dropdownMenu="matMenu" class="bottom-dropdown-menu">
+                                            <ul id="dropdown-dropup" class="create-send-menu h1">
+                                                <li role="menuitem">
+                                                    <a
+                                                        class="dropdown-item cp"
+                                                        (click)="
+                                                            doAction(2); triggerSubmitInvoiceForm(invoiceForm, false)
+                                                        "
+                                                        >{{ localeData?.create_send }}</a
+                                                    >
+                                                </li>
+
+                                                <li role="menuitem">
+                                                    <a
+                                                        class="dropdown-item cp"
+                                                        (click)="
+                                                            doAction(3); triggerSubmitInvoiceForm(invoiceForm, false)
+                                                        "
+                                                        >{{ localeData?.create_print }}</a
+                                                    >
+                                                </li>
+
+                                                <li
+                                                    role="menuitem"
+                                                    (click)="doAction(4); triggerSubmitInvoiceForm(invoiceForm, false)"
+                                                    *ngIf="voucherApiVersion !== 2"
+                                                >
+                                                    <a class="dropdown-item cp">{{ localeData?.generate_recurring }}</a>
+                                                </li>
+                                            </ul>
+                                        </mat-menu>
                                         <button
+                                            [matMenuTriggerFor]="dropdownMenu"
                                             id="button-dropup"
                                             *ngIf="invoiceType === 'sales'"
-                                            dropdownToggle
-                                            type="button"
-                                            class="btn btn-default dropdown-toggle"
-                                            aria-controls="dropdown-dropup"
+                                            mat-button
+                                            class="btn btn-default dropdown-toggle h2"
                                         >
                                             <span class="caret"></span>
                                         </button>
-                                        <ul
-                                            id="dropdown-dropup"
-                                            *dropdownMenu
-                                            class="dropdown-menu dropdown-menu-right"
-                                            role="menu"
-                                            aria-labelledby="button-dropup"
-                                        >
-                                            <li role="menuitem">
-                                                <a
-                                                    class="dropdown-item cp"
-                                                    (click)="doAction(2); triggerSubmitInvoiceForm(invoiceForm, false)"
-                                                    >{{ localeData?.create_send }}</a
-                                                >
-                                            </li>
-
-                                            <li role="menuitem">
-                                                <a
-                                                    class="dropdown-item cp"
-                                                    (click)="doAction(3); triggerSubmitInvoiceForm(invoiceForm, false)"
-                                                    >{{ localeData?.create_print }}</a
-                                                >
-                                            </li>
-
-                                            <li
-                                                role="menuitem"
-                                                (click)="doAction(4); triggerSubmitInvoiceForm(invoiceForm, false)"
-                                                *ngIf="voucherApiVersion !== 2"
-                                            >
-                                                <a class="dropdown-item cp">{{ localeData?.generate_recurring }}</a>
-                                            </li>
-                                        </ul>
                                     </div>
                                 </span>
                                 <!-- endregion -->
@@ -5376,55 +5354,52 @@
                                 >
                                     <div
                                         class="btn-group"
-                                        dropdown
-                                        [dropup]="isDropup"
                                         [isDisabled]="
                                             !hasVoucherEntry || invoiceForm?.controls['message2']?.errors?.maxlength
                                         "
                                     >
                                         <button
                                             *ngIf="!isCompany"
-                                            type="button"
+                                            mat-button
                                             [disabled]="
                                                 !hasVoucherEntry || invoiceForm?.controls['message2']?.errors?.maxlength
                                             "
                                             (click)="doAction(0); triggerSubmitInvoiceForm(invoiceForm, false)"
-                                            class="btn btn-default"
+                                            class="btn btn-default h3"
                                         >
                                             {{ commonLocaleData?.app_create }}
                                         </button>
                                         <button
+                                            [matMenuTriggerFor]="dropdownMenu2"
                                             id="button-dropup"
-                                            type="button"
-                                            dropdownToggle
+                                            mat-button
                                             class="btn btn-default dropdown-toggle dropdown-toggle-split"
-                                            aria-controls="dropdown-dropup"
                                         >
                                             <span class="caret"></span>
                                         </button>
-                                        <ul
-                                            id="dropdown-dropup"
-                                            *dropdownMenu
-                                            class="dropdown-menu dropdown-menu-right"
-                                            role="menu"
-                                            aria-labelledby="button-dropup"
-                                        >
-                                            <li role="menuitem">
-                                                <a
-                                                    class="dropdown-item cp"
-                                                    (click)="doAction(2); triggerSubmitInvoiceForm(invoiceForm, false)"
-                                                    >{{ localeData?.create_send }}</a
-                                                >
-                                            </li>
+                                        <mat-menu #dropdownMenu2="matMenu" class="bottom-dropdown-menu">
+                                            <ul id="dropdown-dropup" class="create-send-menu h1" role="menu">
+                                                <li role="menuitem">
+                                                    <a
+                                                        class="dropdown-item cp"
+                                                        (click)="
+                                                            doAction(2); triggerSubmitInvoiceForm(invoiceForm, false)
+                                                        "
+                                                        >{{ localeData?.create_send }}</a
+                                                    >
+                                                </li>
 
-                                            <li role="menuitem">
-                                                <a
-                                                    class="dropdown-item cp"
-                                                    (click)="doAction(3); triggerSubmitInvoiceForm(invoiceForm, false)"
-                                                    >{{ localeData?.create_print }}</a
-                                                >
-                                            </li>
-                                        </ul>
+                                                <li role="menuitem">
+                                                    <a
+                                                        class="dropdown-item cp"
+                                                        (click)="
+                                                            doAction(3); triggerSubmitInvoiceForm(invoiceForm, false)
+                                                        "
+                                                        >{{ localeData?.create_print }}</a
+                                                    >
+                                                </li>
+                                            </ul>
+                                        </mat-menu>
                                     </div>
                                 </span>
                                 <!-- endregion -->
@@ -5434,7 +5409,7 @@
                             <!-- region update mode -->
                             <div class="pull-right pr" *ngIf="isUpdateMode">
                                 <button
-                                    type="button"
+                                    mat-button
                                     class="btn btn-danger d-inline-block v-align-middle"
                                     (click)="cancelUpdate()"
                                 >
@@ -5443,7 +5418,7 @@
 
                                 <button
                                     *ngIf="!isCompany"
-                                    type="button"
+                                    mat-button
                                     class="btn btn-default"
                                     [disabled]="
                                         isFileUploading ||

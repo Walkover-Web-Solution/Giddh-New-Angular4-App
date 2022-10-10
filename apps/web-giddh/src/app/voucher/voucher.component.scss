@@ -1629,6 +1629,14 @@ span.eligible-ITC {
         padding-bottom: 0;
     }
 }
+.payment-mode {
+    select-field {
+        float: right;
+        width: 50%;
+        margin-left: 20px;
+        text-align: left;
+    }
+}
 .linking-dropdown {
     .linking-item {
         flex-direction: column;
@@ -1665,10 +1673,6 @@ span.eligible-ITC {
     .caret {
         transform: rotate(180deg);
     }
-}
-
-.sales-select {
-    width: 62.7% !important;
 }
 .height-rate {
     height: 1px;
@@ -1888,10 +1892,7 @@ span.eligible-ITC {
     .for-multi-currency.sales-proforma-estimate .search-arrow-image {
         top: 160px;
     }
-    .select-customer-name sales-sh-select {
-        width: 100% !important;
-        margin-right: 15px;
-    }
+
     .wrap-billing-address .bill-add {
         width: 100%;
         max-width: 100%;
@@ -2001,7 +2002,23 @@ span.eligible-ITC {
         vertical-align: middle;
     }
 }
-
+.due-amount-field {
+    width: 50% !important;
+}
+.create-send-menu {
+    min-width: 160px !important;
+    a {
+        color: var(--color-dropdown-list);
+        background-color: var(--color-dropdown-primary-background);
+        font-size: 16px;
+        &:hover {
+            color: var(--color-dropdown-list-hover-text) !important;
+            background: var(--color-dropdown-list-hover-background) !important;
+        }
+    }
+}
+.bottom-dropdown-menu {
+}
 @media (max-width: 320px) {
     .deposit-section {
         transform: translateX(20px);
