@@ -832,7 +832,7 @@ export class GeneralService {
             if (isQueryParams) {
                 this.router.navigate([route], { queryParams: parameter });
             } else {
-                this.router.navigate([route], parameter);
+                this.router.navigate([route], parameter || {});
             }
             if (isElectron && isSocialLogin) {
                 setTimeout(() => {

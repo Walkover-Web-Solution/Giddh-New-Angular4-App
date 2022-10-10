@@ -78,6 +78,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     /** To Observe is google login inprocess */
     public isLoginWithGoogleInProcess$: Observable<boolean>;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Observable to login via otp */
+    private verifiedOtpResponse$: ReplaySubject<any> = new ReplaySubject();
 
     // tslint:disable-next-line:no-empty
     constructor(private _fb: FormBuilder,
@@ -136,6 +138,13 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.userDetails$ = this.store.pipe(select(p => p?.session?.user), takeUntil(this.destroyed$));
         this.isTwoWayAuthInProcess$ = this.store.pipe(select(p => p.login.isTwoWayAuthInProcess), takeUntil(this.destroyed$));
         this.isTwoWayAuthInSuccess$ = this.store.pipe(select(p => p.login.isTwoWayAuthSuccess), takeUntil(this.destroyed$));
+
+        this.verifiedOtpResponse$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if(response) {
+                this.initiateLogin(response);
+                this.verifiedOtpResponse$.next(false);
+            }
+        });
     }
 
     // tslint:disable-next-line:no-empty
@@ -407,14 +416,8 @@ export class LoginComponent implements OnInit, OnDestroy {
         let configuration = {
             widgetId: OTP_WIDGET_ID,
             tokenAuth: OTP_TOKEN_AUTH,
-            success: (data) => {
-                this.authenticationService.loginWithOtp({ accessToken: data?.message }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                    if (response?.status === "success") {
-                        this.loginAction.LoginSuccess(response?.body);
-                    } else {
-                        this.toaster.errorToast(response?.message);
-                    }
-                });
+            success: (data: any) => {
+                this.verifiedOtpResponse$.next(data);
             },
             failure: (error: any) => {
                 this.toaster.errorToast(error?.message);
@@ -427,15 +430,31 @@ export class LoginComponent implements OnInit, OnDestroy {
             scriptTag.src = OTP_PROVIDER_URL;
             scriptTag.type = 'text/javascript';
             scriptTag.defer = true;
-            document.body.appendChild(scriptTag);
-
-            setTimeout(() => {
+            scriptTag.onload = () => {
                 initSendOTP(configuration);
                 this.loaderService.hide();
-            }, 2000);
+            };
+            document.body.appendChild(scriptTag);
         } else {
             initSendOTP(configuration);
             this.loaderService.hide();
         }
+    }
+
+    /**
+     * Initiate the login process using otp
+     *
+     * @private
+     * @param {*} data
+     * @memberof LoginComponent
+     */
+    private initiateLogin(data: any): void {
+        this.authenticationService.loginWithOtp({ accessToken: data?.message }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === "success") {
+                this.store.dispatch(this.loginAction.LoginWithPasswdResponse(response));
+            } else {
+                this.toaster.errorToast(response?.message);
+            }
+        });
     }
 }
