@@ -2302,7 +2302,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
                     this.getBankTransactions();
 
-                    this.isBankOrCashAccount = accountDetails.parentGroups.some((grp) => grp?.uniqueName === 'bankaccounts');
+                    this.isBankOrCashAccount = accountDetails.parentGroups.some((grp) => grp?.uniqueName === 'bankaccounts' || grp?.uniqueName === 'loanandoverdraft');
                     if (accountDetails.currency && profile.baseCurrency) {
                         this.isLedgerAccountAllowsMultiCurrency = accountDetails.currency && accountDetails.currency !== profile.baseCurrency;
                     } else {
