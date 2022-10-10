@@ -484,7 +484,7 @@ export class InvoiceService {
     public getAllEwaybillsfilterList(body: IEwayBillfilter): Observable<BaseResponse<IEwayBillAllList, IEwayBillfilter>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let url = this.createQueryStringForEway(this.config.apiUrl + EWAYBILL_API.GENERATE_EWAYBILL, {
-            page: body.page, count: body.count, fromDate: body.fromDate, toDate: body.toDate, sort: body.sort, sortBy: body.sortBy, searchTerm: body.searchTerm, searchOn: body.searchOn,
+            page: body.page, count: body.count, fromDate: body.fromDate, toDate: body.toDate, sort: body.sort, sortBy: body.sortBy, searchTerm: body.searchTerm, searchOn: body.searchOn, gstin: body.gstin
         });
         if (body.branchUniqueName) {
             body.branchUniqueName = body.branchUniqueName !== this.companyUniqueName ? body.branchUniqueName : '';
@@ -493,7 +493,7 @@ export class InvoiceService {
         return this.http.get(url?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(
             map((res) => {
                 let data: BaseResponse<IEwayBillAllList, IEwayBillfilter> = res;
-                data.queryString = { sort: body.sort, sortBy: body.sortBy, searchTerm: body.searchTerm, searchOn: body.searchOn };
+                data.queryString = { sort: body.sort, sortBy: body.sortBy, searchTerm: body.searchTerm, searchOn: body.searchOn, gstin: body.gstin };
                 return data;
             }),
             catchError((e) => this.errorHandler.HandleCatch<IEwayBillAllList, IEwayBillfilter>(e)));
@@ -507,6 +507,9 @@ export class InvoiceService {
         }
         if ((model.toDate)) {
             url = url + 'toDate=' + model.toDate + '&';
+        }
+        if ((model.gstin)) {
+            url = url + 'gstin=' + model.gstin + '&';
         }
         if ((model.page)) {
             url = url + 'page=' + model.page + '&';
