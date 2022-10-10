@@ -1,9 +1,9 @@
 import { take, takeUntil } from "rxjs/operators";
 import { LoginActions } from "../actions/login.action";
 import { AppState } from "../store";
-import { Component, Inject, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import { Component, Inject, NgZone, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { ModalDirective, ModalOptions } from "ngx-bootstrap/modal";
+import { ModalDirective } from "ngx-bootstrap/modal";
 import { Configuration, OTP_PROVIDER_URL, OTP_TOKEN_AUTH, OTP_WIDGET_ID } from "../app.constant";
 import { Store, select } from "@ngrx/store";
 import { Observable, ReplaySubject } from "rxjs";
@@ -78,8 +78,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     /** To Observe is google login inprocess */
     public isLoginWithGoogleInProcess$: Observable<boolean>;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    /** Observable to login via otp */
-    private verifiedOtpResponse$: ReplaySubject<any> = new ReplaySubject();
 
     // tslint:disable-next-line:no-empty
     constructor(private _fb: FormBuilder,
@@ -89,7 +87,8 @@ export class LoginComponent implements OnInit, OnDestroy {
         @Inject(DOCUMENT) private document: Document,
         private loaderService: LoaderService,
         private toaster: ToasterService,
-        private authenticationService: AuthenticationService
+        private authenticationService: AuthenticationService,
+        private ngZone: NgZone
     ) {
         this.urlPath = isElectron ? "" : AppUrl + APP_FOLDER;
         this.isLoginWithEmailInProcess$ = this.store.pipe(select(state => {
@@ -138,13 +137,6 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.userDetails$ = this.store.pipe(select(p => p?.session?.user), takeUntil(this.destroyed$));
         this.isTwoWayAuthInProcess$ = this.store.pipe(select(p => p.login.isTwoWayAuthInProcess), takeUntil(this.destroyed$));
         this.isTwoWayAuthInSuccess$ = this.store.pipe(select(p => p.login.isTwoWayAuthSuccess), takeUntil(this.destroyed$));
-
-        this.verifiedOtpResponse$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if(response) {
-                this.initiateLogin(response);
-                this.verifiedOtpResponse$.next(false);
-            }
-        });
     }
 
     // tslint:disable-next-line:no-empty
@@ -417,7 +409,9 @@ export class LoginComponent implements OnInit, OnDestroy {
             widgetId: OTP_WIDGET_ID,
             tokenAuth: OTP_TOKEN_AUTH,
             success: (data: any) => {
-                this.verifiedOtpResponse$.next(data);
+                this.ngZone.run(() => {
+                    this.initiateLogin(data);
+                });
             },
             failure: (error: any) => {
                 this.toaster.errorToast(error?.message);
