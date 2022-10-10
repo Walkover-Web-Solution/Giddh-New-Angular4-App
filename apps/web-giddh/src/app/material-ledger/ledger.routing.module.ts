@@ -10,6 +10,9 @@ import { LedgerComponent } from './ledger.component';
             },
             {
                 path: ':accountUniqueName/:from/:to', component: LedgerComponent
+            },
+            {
+                path: '', redirectTo: '/pages/home', pathMatch: 'full'
             }
         ])
     ],
