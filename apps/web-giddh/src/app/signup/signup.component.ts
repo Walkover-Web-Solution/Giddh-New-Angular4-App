@@ -39,7 +39,7 @@ export class SignupComponent implements OnInit, OnDestroy {
     @ViewChild("emailVerifyModal", { static: true }) public emailVerifyModal: ModalDirective;
     public isLoginWithEmailSubmited$: Observable<boolean>;
     @ViewChild("mobileVerifyModal", { static: true }) public mobileVerifyModal: ModalDirective;
-    @ViewChild("twoWayAuthModal", { static: true }) public twoWayAuthModal: ModalDirective;
+    @ViewChild("twoWayAuthModal", { static: false }) public twoWayAuthModal: ModalDirective;
     public urlPath: string = "";
     public isSubmited: boolean = false;
     public mobileVerifyForm: FormGroup;
@@ -67,6 +67,7 @@ export class SignupComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** To Observe is google login inprocess */
     public isLoginWithGoogleInProcess$: Observable<boolean>;
+    public isLoginWithPasswordIsShowVerifyOtp$: Observable<boolean>;
 
     // tslint:disable-next-line:no-empty
     constructor(private fb: FormBuilder,
@@ -120,6 +121,7 @@ export class SignupComponent implements OnInit, OnDestroy {
         this.userDetails$ = this.store.pipe(select(p => p.session.user), takeUntil(this.destroyed$));
         this.isTwoWayAuthInProcess$ = this.store.pipe(select(p => p.login.isTwoWayAuthInProcess), takeUntil(this.destroyed$));
         this.isTwoWayAuthInSuccess$ = this.store.pipe(select(p => p.login.isTwoWayAuthSuccess), takeUntil(this.destroyed$));
+        this.isLoginWithPasswordIsShowVerifyOtp$ = this.store.pipe(select(state => { return state.login.isLoginWithPasswordIsShowVerifyOtp;}), takeUntil(this.destroyed$));
     }
 
     // tslint:disable-next-line:no-empty
@@ -175,6 +177,13 @@ export class SignupComponent implements OnInit, OnDestroy {
                 this.showTwoWayAuthModal();
             }
         });
+
+        this.isLoginWithPasswordIsShowVerifyOtp$.subscribe(res => {
+            if (res) {
+                this.showTwoWayAuthModal();
+            }
+        });
+
         // check if two way auth is successfully done
         this.isTwoWayAuthInSuccess$.subscribe(a => {
             if (a) {
