@@ -188,13 +188,25 @@
                                                     <!-- region if not cashinvoice show customer dropdown -->
                                                     <ng-container *ngIf="!isCashInvoice">
                                                         <select-field
-                                                            [cssClass]="'form-control mat-field-border'"
+                                                            [cssClass]="
+                                                                'form-control mat-field-border customer-dropdown'
+                                                            "
                                                             [name]="'voucherDetails.customerName'"
                                                             [placeholder]="customerPlaceHolder"
                                                             [options]="customerAcList$ | async"
-                                                            [openDropdown]="openAccountSelectionDropdown"
+                                                            [openDropdown]="openProductSelectionDropdown"
                                                             (selectedOption)="onSelectCustomer($event)"
                                                             (createOption)="addNewAccount()"
+                                                            [disabled]="
+                                                                isUpdateMode &&
+                                                                invoiceType !== 'sales' &&
+                                                                invoiceType !== 'cash' &&
+                                                                invoiceType !== 'purchase' &&
+                                                                (voucherApiVersion === 1 ||
+                                                                    (voucherApiVersion === 2 &&
+                                                                        invoiceType !== 'debit note' &&
+                                                                        invoiceType !== 'credit note'))
+                                                            "
                                                             [defaultValue]="
                                                                 isUpdateMode &&
                                                                 invoiceType !== 'sales' &&
@@ -448,7 +460,6 @@
                                                                                 {{ customerCountryName }}
                                                                             </label>
                                                                         </div>
-
                                                                         <div class="col-sm-12 col-md-6" #billingState>
                                                                             <select-field
                                                                                 [placeholder]="
@@ -476,7 +487,6 @@
                                                                             >
                                                                             </select-field>
                                                                         </div>
-
                                                                         <div
                                                                             class="col-sm-6 col-md-6"
                                                                             *ngIf="shouldShowTrnGstField"
@@ -1025,57 +1035,60 @@
                                                                             btn-group btn-block
                                                                             change-address-dropdown
                                                                         "
-                                                                        dropdown
-                                                                        #companyBillingAddressDropDownWeb="bs-dropdown"
                                                                         [attachOutsideOnClick]="true"
-                                                                        (clickOutside)="
-                                                                            companyBillingAddressDropDownWeb.hide()
-                                                                        "
                                                                         *ngIf="companyAddressList?.length > 1"
                                                                     >
                                                                         <a
-                                                                            dropdownToggle
+                                                                            [matMenuTriggerFor]="
+                                                                                companyBillingAddressDropDownWeb
+                                                                            "
                                                                             type="button"
                                                                             class="dropdown-toggle"
                                                                         >
                                                                             {{ localeData?.change }}</a
                                                                         >
-                                                                        <ul
-                                                                            *dropdownMenu
-                                                                            class="dropdown-menu dropdown-menu-right"
-                                                                            role="menu"
+                                                                        <mat-menu
+                                                                            #companyBillingAddressDropDownWeb="matMenu"
                                                                         >
-                                                                            <li
-                                                                                role="menuitem"
-                                                                                *ngFor="
-                                                                                    let address of companyAddressList
+                                                                            <ul
+                                                                                *dropdownMenu
+                                                                                class="
+                                                                                    dropdown-menu dropdown-menu-right
                                                                                 "
+                                                                                role="menu"
                                                                             >
-                                                                                <a
-                                                                                    class="dropdown-item"
-                                                                                    (click)="
-                                                                                        selectAddress(
-                                                                                            purchaseBillCompany.billingDetails,
-                                                                                            address,
-                                                                                            true
-                                                                                        )
+                                                                                <li
+                                                                                    role="menuitem"
+                                                                                    *ngFor="
+                                                                                        let address of companyAddressList
                                                                                     "
                                                                                 >
-                                                                                    {{ address.address }}
-                                                                                    {{ address.stateName }}
-                                                                                    <span class="d-block">{{
-                                                                                        address.taxNumber
-                                                                                            ? (showGSTINNo
-                                                                                                  ? commonLocaleData?.app_gstin +
-                                                                                                    ": "
-                                                                                                  : commonLocaleData?.app_trn +
-                                                                                                    ": ") +
-                                                                                              address.taxNumber
-                                                                                            : ""
-                                                                                    }}</span>
-                                                                                </a>
-                                                                            </li>
-                                                                        </ul>
+                                                                                    <a
+                                                                                        class="dropdown-item"
+                                                                                        (click)="
+                                                                                            selectAddress(
+                                                                                                purchaseBillCompany.billingDetails,
+                                                                                                address,
+                                                                                                true
+                                                                                            )
+                                                                                        "
+                                                                                    >
+                                                                                        {{ address.address }}
+                                                                                        {{ address.stateName }}
+                                                                                        <span class="d-block">{{
+                                                                                            address.taxNumber
+                                                                                                ? (showGSTINNo
+                                                                                                      ? commonLocaleData?.app_gstin +
+                                                                                                        ": "
+                                                                                                      : commonLocaleData?.app_trn +
+                                                                                                        ": ") +
+                                                                                                  address.taxNumber
+                                                                                                : ""
+                                                                                        }}</span>
+                                                                                    </a>
+                                                                                </li>
+                                                                            </ul>
+                                                                        </mat-menu>
                                                                     </div>
                                                                 </span>
                                                             </div>
@@ -1623,7 +1636,7 @@
                                                             [class.invalid-inp]="
                                                                 dueDate.errors && (dueDate.dirty || dueDate.touched)
                                                             "
-                                                            (blur)="onBlurDueDate(0); openProductDropdown()"
+                                                            (blur)="onBlurDueDate(0)"
                                                         >
                                                         </giddh-datepicker>
                                                         <p
@@ -1858,13 +1871,13 @@
                                     <span class="currency-digits" *ngIf="!showCurrencyValue">{{
                                         originalExchangeRate | giddhCurrency
                                     }}</span>
-                                    <input
+                                    <text-field
                                         type="number"
                                         name="exchangeRate"
                                         [(ngModel)]="newExchangeRate"
-                                        *ngIf="showCurrencyValue"
                                         class="form-control edit-currency"
-                                    />
+                                        *ngIf="showCurrencyValue"
+                                    ></text-field>
                                     {{ companyCurrency }}
                                 </span>
 
@@ -1910,13 +1923,13 @@
                                     <span class="currency-digits" *ngIf="!showCurrencyValue">{{
                                         originalReverseExchangeRate | giddhCurrency
                                     }}</span>
-                                    <input
+                                    <text-field
                                         type="number"
                                         name="exchangeRate"
                                         [(ngModel)]="reverseExchangeRate"
-                                        *ngIf="showCurrencyValue"
                                         class="form-control edit-currency"
-                                    />
+                                        *ngIf="showCurrencyValue"
+                                    ></text-field>
                                     {{ companyCurrencyName }}
                                 </span>
 
@@ -2332,12 +2345,15 @@
                                     <td (click)="closeDiscountPopup(); closeTaxControlPopup()">
                                         <div class="product-name">
                                             <div class="ng-select-wrap">
-                                                <sh-select
-                                                    [options]="salesAccounts$ | async"
+                                                <select-field
                                                     #selectAccount
-                                                    [(ngModel)]="transaction.fakeAccForSelect2"
-                                                    name="transaction.fakeAccForSelect2_{{ entryIdx }}"
-                                                    (selected)="
+                                                    [openDropdown]="openProductSelectionDropdown"
+                                                    [cssClass]="'form-control mat-field-border'"
+                                                    [name]="'transaction.fakeAccForSelect2_{{ entryIdx }}'"
+                                                    [placeholder]="localeData?.select_acc"
+                                                    [options]="salesAccounts$ | async"
+                                                    (selectedOption)="
+                                                        transaction.fakeAccForSelect2 = $event.value;
                                                         onSelectSalesAccount(
                                                             $event,
                                                             transaction,
@@ -2347,15 +2363,7 @@
                                                             entryIdx
                                                         )
                                                     "
-                                                    [placeholder]="localeData?.select_acc"
-                                                    [notFoundLink]="true"
-                                                    [isPaginationEnabled]="true"
-                                                    (scrollEnd)="handleScrollEnd('item')"
-                                                    (dynamicSearchedQuery)="onSearchQueryChanged($event, 1, 'item')"
-                                                    (onHide)="noResultsFoundLabel = localeData?.search_acc"
-                                                    [notFoundMsg]="noResultsFoundLabel"
-                                                    [enableDynamicSearch]="true"
-                                                    [fixedValue]="
+                                                    [defaultValue]="
                                                         transaction.stockDetails && transaction.stockDetails.name
                                                             ? transaction.accountName +
                                                               ' (' +
@@ -2363,36 +2371,12 @@
                                                               ')'
                                                             : transaction.accountName
                                                     "
-                                                    [forceClearReactive]="forceClear$ | async"
-                                                    (noResultsClicked)="onNoResultsClicked(entryIdx)"
-                                                    [multiple]="false"
-                                                    [ItemHeight]="67"
+                                                    [enableDynamicSearch]="true"
+                                                    (dynamicSearchedQuery)="onSearchQueryChanged($event, 1, 'item')"
                                                     (onClear)="onClearSalesAccount(transaction)"
-                                                    [useInBuiltFilterForFlattenAc]="true"
+                                                    (onHide)="noResultsFoundLabel = localeData?.search_acc"
                                                 >
-                                                    <ng-template #optionTemplate let-option="option">
-                                                        <ng-container *ngIf="!option.additional?.stock">
-                                                            <a href="javascript:void(0)" class="list-item flex-column">
-                                                                <div class="item">{{ option?.label }}</div>
-                                                                <div class="item-unique">
-                                                                    {{ option.additional?.uniqueName }}
-                                                                </div>
-                                                            </a>
-                                                        </ng-container>
-                                                        <ng-container *ngIf="option.additional?.stock">
-                                                            <a href="javascript:void(0)" class="list-item flex-column">
-                                                                <div class="item">{{ option?.label }}</div>
-                                                                <div class="item-unique">
-                                                                    {{ option.additional?.uniqueName }}
-                                                                </div>
-                                                                <div class="item-stock">
-                                                                    {{ commonLocaleData?.app_stock }}:
-                                                                    {{ option.additional?.stock?.uniqueName }}
-                                                                </div>
-                                                            </a>
-                                                        </ng-container>
-                                                    </ng-template>
-                                                </sh-select>
+                                                </select-field>
                                             </div>
                                         </div>
 
@@ -2931,7 +2915,7 @@
                                                 </div>
 
                                                 <div class="form-group col-xs-4 col-sm-4 mb-0">
-                                                    <input
+                                                    <text-field
                                                         type="text"
                                                         name="shippedVia"
                                                         [(ngModel)]="invFormData.templateDetails.other.shippedVia"
@@ -2939,7 +2923,7 @@
                                                         [placeholder]="
                                                             templatePlaceholder?.shippedViaLabel || localeData?.ship_via
                                                         "
-                                                    />
+                                                    ></text-field>
                                                 </div>
 
                                                 <div class="form-group col-xs-4 col-sm-4 mb-0">

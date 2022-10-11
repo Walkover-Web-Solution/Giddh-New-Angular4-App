@@ -166,7 +166,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     @ViewChild('invoiceForm', { static: false }) public invoiceForm: NgForm;
     @ViewChildren('discountComponent') public discountComponent: QueryList<DiscountListComponent>;
     @ViewChildren('taxControlComponent') public taxControlComponent: QueryList<TaxControlComponent>;
-    @ViewChildren('selectAccount') public selectAccount: QueryList<ShSelectComponent>;
+    @ViewChildren('selectAccount') public selectAccount: QueryList<ElementRef>;
     @ViewChildren('description') public description: QueryList<ElementRef>;
     @ViewChild('inputCustomerName', { static: true }) public inputCustomerName: ElementRef;
     @ViewChild('customerBillingAddress', { static: true }) public customerBillingAddress: ElementRef;
@@ -650,6 +650,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     @ViewChild('dateChangeConfirmationModel', { static: true }) public dateChangeConfirmationModel: any;
     /** True if we have to open account selection dropdown */
     public openAccountSelectionDropdown: boolean = false;
+    /** True if we have to open product selection dropdown */
+    public openProductSelectionDropdown: boolean = false;
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -762,15 +764,15 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             this.toggleBodyClass();
         }
         this.openAccountSelectionDropdown = !this.isUpdateMode;
-        this.selectAccount.changes.pipe(distinctUntilChanged((firstItem, nextItem) => {
-            return firstItem?.first?.filter === nextItem?.first?.filter;
-        }), takeUntil(this.destroyed$)).subscribe((queryChanges: QueryList<ShSelectComponent>) => {
-            if ((this.invFormData?.voucherDetails?.customerUniquename || this.invFormData?.voucherDetails?.customerName) && !queryChanges?.first?.isOpen) {
-                setTimeout(() => {
-                    queryChanges?.first?.show();
-                });
-            }
-        });
+        // this.selectAccount.changes.pipe(distinctUntilChanged((firstItem, nextItem) => {
+        //     return firstItem?.first?.filter === nextItem?.first?.filter;
+        // }), takeUntil(this.destroyed$)).subscribe((queryChanges: QueryList<ShSelectComponent>) => {
+        //     if ((this.invFormData?.voucherDetails?.customerUniquename || this.invFormData?.voucherDetails?.customerName) && !queryChanges?.first?.isOpen) {
+        //         setTimeout(() => {
+        //             queryChanges?.first?.show();
+        //         });
+        //     }
+        // });
     }
 
     /**
@@ -1097,7 +1099,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             if (accountDetails) {
                 this.hideDepositSectionForCashBankGroups(accountDetails);
                 this.assignAccountDetailsValuesInForm(accountDetails);
-                this.openProductDropdown();
+                this.openAccountSelectionDropdown;
             }
         });
 
@@ -1812,7 +1814,16 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
     public makeCustomerList() {
         if (!(this.invoiceType === VoucherTypeEnum.debitNote || this.invoiceType === VoucherTypeEnum.purchase)) {
+            let customerList: IOption[] = [];
             this.customerAcList$ = observableOf(orderBy(this.sundryDebtorsAcList, 'label'));
+            // this.customerAcList$?.subscribe(response => {
+            //     if (response) {
+            //         response.forEach(account => {
+            //             customerList.push({ label: account.label, value: account.value });
+            //         });
+            //     }
+            // });
+
             this.salesAccounts$ = observableOf(orderBy(this.prdSerAcListForDeb, 'label'));
             this.selectedGrpUniqueNameForAddEditAccountModal = 'sundrydebtors';
         } else {
@@ -3238,7 +3249,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     }
 
     public onSelectSalesAccount(selectedAcc: any, txn: SalesTransactionItemClass, entry: SalesEntryClass, isBulkItem: boolean = false, isLinkedPoItem: boolean = false, entryIndex: number): any {
-
         this.invFormData.entries[entryIndex] = entry;
         this.invFormData.entries[entryIndex].transactions[0] = txn;
         if ((selectedAcc.value || isBulkItem) && selectedAcc.additional && selectedAcc.additional?.uniqueName) {
@@ -3677,7 +3687,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.createEmbeddedViewAtIndex(this.invFormData.entries?.length - 1);
         this.activeIndx = (this.invFormData.entries && this.invFormData.entries.length) ? this.invFormData.entries.length - 1 : 0;
         setTimeout(() => {
-            this.openProductDropdown();
+            this.openProductSelectionDropdown = true
         }, 200);
     }
 
@@ -5585,7 +5595,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         if (!this.isSalesInvoice && !this.isPurchaseInvoice && !this.isProformaInvoice && !this.isEstimateInvoice) {
             // FOR CASH INVOICE, DEBIT NOTE AND CREDIT NOTE
             this.setActiveIndx(index);
-            this.openProductDropdown();
+            this.openProductSelectionDropdown = true;
         }
     }
 
@@ -6378,6 +6388,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @memberof VoucherComponent
      */
     public prepareSearchLists(results: any, currentPage: number = 1, searchType: string): void {
+
         const searchResults = results.map(result => {
             return {
                 value: result.stock ? `${result.uniqueName}#${result.stock.uniqueName}` : result.uniqueName,
@@ -7466,23 +7477,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         if (this.template) {
             const view = this.template.createEmbeddedView(context);
             this.container.insert(view);
-        }
-    }
-
-    /**
-     * Opens product dropdown
-     *
-     * @private
-     * @memberof VoucherComponent
-     */
-    public openProductDropdown(): void {
-        if (this.invFormData?.voucherDetails?.customerUniquename || this.invFormData?.voucherDetails?.customerName) {
-            setTimeout(() => {
-                const shSelectField: ShSelectComponent = !this.isMobileScreen ? this.selectAccount?.first : this.selectAccount?.last;
-                if (shSelectField) {
-                    shSelectField.show();
-                }
-            }, 200);
         }
     }
 

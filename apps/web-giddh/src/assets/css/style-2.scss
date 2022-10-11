@@ -191,14 +191,6 @@ $custom-typography: mat-typography-config(
         padding-left: 45px !important;
     }
 }
-.select-customers-name {
-    select-field {
-        width: 62.7% !important;
-    }
-    text-field {
-        width: 62.7% !important;
-    }
-}
 
 @media screen and (max-width: 1366px) and (orientation: portrait) {
     .subscription-form-select {
@@ -1754,6 +1746,7 @@ fieldset[disabled] .btn-primary:hover {
     color: var(--color-nero) !important;
     border-color: var(--color-dark-fog) !important;
     border-radius: 5px !important;
+    min-width: auto;
 } /*btn end*/
 .ledger-main .form-control {
     background: var(--color-table-input-background) !important;
@@ -6500,6 +6493,52 @@ highcharts-chart {
                 justify-content: flex-end;
             }
         }
+    }
+    .select-customers-name {
+        select-field {
+            width: 62.7% !important;
+            min-width: 62.7% !important;
+        }
+        text-field {
+            width: 62.7% !important;
+            min-width: 62.7% !important;
+        }
+    }
+    .bill-add {
+        text-field {
+            input {
+                border: none;
+                border-bottom: 1px solid var(--color-secondary-input-bar-border);
+            }
+        }
+    }
+    .cdk-overlay-container {
+        z-index: 99;
+    }
+    .custom-class-create {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        padding: 5px;
+        &:hover {
+            background: var(--color-dark-fog);
+            text-decoration: underline;
+        }
+    }
+    .option-value {
+        float: left !important;
+        width: 100% !important;
+        line-height: 1.2 !important;
+    }
+    .common-uniquename {
+        color: var(--color-gray) !important;
+        font-size: 12px;
+    }
+    .create-new {
+        font-size: 14px;
+    }
+    .create-new-command {
+        font-size: 14px;
     }
 }
 .aside-menu-othertax-open {
