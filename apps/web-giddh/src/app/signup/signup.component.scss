@@ -540,7 +540,14 @@ small {
 .forgotStep {
     display: none;
 }
-
+.msg91-ico {
+    a {
+        width: 199px;
+        span {
+            padding-left: 0;
+        }
+    }
+}
 @media only screen and (max-width: 1200px) {
     .slide-content {
         padding: 0 55px;

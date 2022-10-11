@@ -1,10 +1,10 @@
 import { take, takeUntil } from "rxjs/operators";
 import { LoginActions } from "../actions/login.action";
 import { AppState } from "../store";
-import { Component, Inject, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import { Component, Inject, NgZone, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { ModalDirective, ModalOptions } from "ngx-bootstrap/modal";
-import { Configuration } from "../app.constant";
+import { ModalDirective } from "ngx-bootstrap/modal";
+import { Configuration, OTP_PROVIDER_URL } from "../app.constant";
 import { Store, select } from "@ngrx/store";
 import { Observable, ReplaySubject } from "rxjs";
 import {
@@ -23,6 +23,11 @@ import { IOption } from "../theme/ng-virtual-select/sh-options.interface";
 import { DOCUMENT } from "@angular/common";
 import { userLoginStateEnum } from "../models/user-login-state";
 import { contriesWithCodes } from "../shared/helpers/countryWithCodes";
+import { LoaderService } from "../loader/loader.service";
+import { ToasterService } from "../services/toaster.service";
+import { AuthenticationService } from "../services/authentication.service";
+
+declare var initSendOTP: any;
 
 @Component({
     selector: "login",
@@ -79,7 +84,11 @@ export class LoginComponent implements OnInit, OnDestroy {
         private store: Store<AppState>,
         private loginAction: LoginActions,
         private authService: AuthService,
-        @Inject(DOCUMENT) private document: Document
+        @Inject(DOCUMENT) private document: Document,
+        private loaderService: LoaderService,
+        private toaster: ToasterService,
+        private authenticationService: AuthenticationService,
+        private ngZone: NgZone
     ) {
         this.urlPath = isElectron ? "" : AppUrl + APP_FOLDER;
         this.isLoginWithEmailInProcess$ = this.store.pipe(select(state => {
@@ -388,4 +397,58 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.userUniqueKey = null;
     }
 
+    /**
+     * This will open the login with otp popup
+     *
+     * @memberof LoginComponent
+     */
+    public signInWithOtp(): void {
+        this.loaderService.show();
+
+        let configuration = {
+            widgetId: OTP_WIDGET_ID,
+            tokenAuth: OTP_TOKEN_AUTH,
+            success: (data: any) => {
+                this.ngZone.run(() => {
+                    this.initiateLogin(data);
+                });
+            },
+            failure: (error: any) => {
+                this.toaster.errorToast(error?.message);
+            }
+        };
+
+        /* OTP LOGIN */
+        if (window['initSendOTP'] === undefined) {
+            let scriptTag = document.createElement('script');
+            scriptTag.src = OTP_PROVIDER_URL;
+            scriptTag.type = 'text/javascript';
+            scriptTag.defer = true;
+            scriptTag.onload = () => {
+                initSendOTP(configuration);
+                this.loaderService.hide();
+            };
+            document.body.appendChild(scriptTag);
+        } else {
+            initSendOTP(configuration);
+            this.loaderService.hide();
+        }
+    }
+
+    /**
+     * Initiate the login process using otp
+     *
+     * @private
+     * @param {*} data
+     * @memberof LoginComponent
+     */
+    private initiateLogin(data: any): void {
+        this.authenticationService.loginWithOtp({ accessToken: data?.message }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === "success") {
+                this.store.dispatch(this.loginAction.LoginWithPasswdResponse(response));
+            } else {
+                this.toaster.errorToast(response?.message);
+            }
+        });
+    }
 }

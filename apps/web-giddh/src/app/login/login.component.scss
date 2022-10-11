@@ -538,6 +538,14 @@ small {
 .input-width-mobile {
     width: calc(100% - 80px);
 }
+.msg91-ico {
+    a {
+        width: 189px;
+        span {
+            padding-left: 0;
+        }
+    }
+}
 
 @media only screen and (max-width: 767px) {
     .giddh-login {

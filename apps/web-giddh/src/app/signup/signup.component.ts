@@ -1,10 +1,10 @@
 import { take, takeUntil } from "rxjs/operators";
 import { LoginActions } from "../actions/login.action";
 import { AppState } from "../store";
-import { Component, Inject, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import { Component, Inject, NgZone, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ModalDirective } from "ngx-bootstrap/modal";
-import { Configuration } from "../app.constant";
+import { Configuration, OTP_PROVIDER_URL } from "../app.constant";
 import { Store, select } from "@ngrx/store";
 import { Observable, ReplaySubject } from "rxjs";
 import {
@@ -23,6 +23,11 @@ import { IOption } from "../theme/ng-virtual-select/sh-options.interface";
 import { DOCUMENT } from "@angular/common";
 import { userLoginStateEnum } from "../models/user-login-state";
 import { contriesWithCodes } from "../shared/helpers/countryWithCodes";
+import { LoaderService } from "../loader/loader.service";
+import { ToasterService } from "../services/toaster.service";
+import { AuthenticationService } from "../services/authentication.service";
+
+declare var initSendOTP: any;
 
 @Component({
     selector: "signup",
@@ -34,7 +39,7 @@ export class SignupComponent implements OnInit, OnDestroy {
     @ViewChild("emailVerifyModal", { static: true }) public emailVerifyModal: ModalDirective;
     public isLoginWithEmailSubmited$: Observable<boolean>;
     @ViewChild("mobileVerifyModal", { static: true }) public mobileVerifyModal: ModalDirective;
-    @ViewChild("twoWayAuthModal", { static: true }) public twoWayAuthModal: ModalDirective;
+    @ViewChild("twoWayAuthModal", { static: false }) public twoWayAuthModal: ModalDirective;
     public urlPath: string = "";
     public isSubmited: boolean = false;
     public mobileVerifyForm: FormGroup;
@@ -62,13 +67,18 @@ export class SignupComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** To Observe is google login inprocess */
     public isLoginWithGoogleInProcess$: Observable<boolean>;
+    public isLoginWithPasswordIsShowVerifyOtp$: Observable<boolean>;
 
     // tslint:disable-next-line:no-empty
     constructor(private fb: FormBuilder,
         private store: Store<AppState>,
         private loginAction: LoginActions,
         private authService: AuthService,
-        @Inject(DOCUMENT) private document: Document
+        @Inject(DOCUMENT) private document: Document,
+        private loaderService: LoaderService,
+        private toaster: ToasterService,
+        private authenticationService: AuthenticationService,
+        private ngZone: NgZone
     ) {
         this.urlPath = isElectron ? "" : AppUrl + APP_FOLDER;
         this.isLoginWithEmailInProcess$ = this.store.pipe(select(state => {
@@ -111,6 +121,7 @@ export class SignupComponent implements OnInit, OnDestroy {
         this.userDetails$ = this.store.pipe(select(p => p.session.user), takeUntil(this.destroyed$));
         this.isTwoWayAuthInProcess$ = this.store.pipe(select(p => p.login.isTwoWayAuthInProcess), takeUntil(this.destroyed$));
         this.isTwoWayAuthInSuccess$ = this.store.pipe(select(p => p.login.isTwoWayAuthSuccess), takeUntil(this.destroyed$));
+        this.isLoginWithPasswordIsShowVerifyOtp$ = this.store.pipe(select(state => { return state.login.isLoginWithPasswordIsShowVerifyOtp;}), takeUntil(this.destroyed$));
     }
 
     // tslint:disable-next-line:no-empty
@@ -166,6 +177,13 @@ export class SignupComponent implements OnInit, OnDestroy {
                 this.showTwoWayAuthModal();
             }
         });
+
+        this.isLoginWithPasswordIsShowVerifyOtp$.subscribe(res => {
+            if (res) {
+                this.showTwoWayAuthModal();
+            }
+        });
+
         // check if two way auth is successfully done
         this.isTwoWayAuthInSuccess$.subscribe(a => {
             if (a) {
@@ -325,5 +343,60 @@ export class SignupComponent implements OnInit, OnDestroy {
         if (ObjToSend) {
             this.store.dispatch(this.loginAction.SignupWithPasswdRequest(ObjToSend));
         }
+    }
+
+    /**
+     * This will open the signup with otp popup
+     *
+     * @memberof SignupComponent
+     */
+    public signUpWithOtp(): void {
+        this.loaderService.show();
+
+        let configuration = {
+            widgetId: OTP_WIDGET_ID,
+            tokenAuth: OTP_TOKEN_AUTH,
+            success: (data: any) => {
+                this.ngZone.run(() => {
+                    this.initiateSignup(data);
+                });
+            },
+            failure: (error: any) => {
+                this.toaster.errorToast(error?.message);
+            }
+        };
+
+        /* OTP SIGNUP */
+        if (window['initSendOTP'] === undefined) {
+            let scriptTag = document.createElement('script');
+            scriptTag.src = OTP_PROVIDER_URL;
+            scriptTag.type = 'text/javascript';
+            scriptTag.defer = true;
+            scriptTag.onload = () => {
+                initSendOTP(configuration);
+                this.loaderService.hide();
+            };
+            document.body.appendChild(scriptTag);
+        } else {
+            initSendOTP(configuration);
+            this.loaderService.hide();
+        }
+    }
+
+    /**
+     * Initiate the signup process using otp
+     *
+     * @private
+     * @param {*} data
+     * @memberof SignupComponent
+     */
+     private initiateSignup(data: any): void {
+        this.authenticationService.loginWithOtp({ accessToken: data?.message }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === "success") {
+                this.store.dispatch(this.loginAction.LoginWithPasswdResponse(response));
+            } else {
+                this.toaster.errorToast(response?.message);
+            }
+        });
     }
 }
