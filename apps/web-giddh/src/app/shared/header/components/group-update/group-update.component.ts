@@ -1,6 +1,6 @@
 import { take, takeUntil } from 'rxjs/operators';
 import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild, Input, ElementRef } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 import { GroupWithAccountsAction } from '../../../../actions/groupwithaccounts.actions';
 import { AppState } from '../../../../store';
@@ -47,9 +47,9 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     @ViewChild('autoFocused', { static: true }) public autoFocus: ElementRef;
 
     public companyTaxDropDown: Array<IOption>;
-    public groupDetailForm: FormGroup;
-    public moveGroupForm: FormGroup;
-    public taxGroupForm: FormGroup;
+    public groupDetailForm: UntypedFormGroup;
+    public moveGroupForm: UntypedFormGroup;
+    public taxGroupForm: UntypedFormGroup;
     public activeGroup$: Observable<GroupResponse>;
     public activeGroupUniqueName$: Observable<string>;
     public isTaxableGroup$: Observable<boolean>;
@@ -96,7 +96,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     constructor(
-        private _fb: FormBuilder,
+        private _fb: UntypedFormBuilder,
         private store: Store<AppState>,
         private groupWithAccountsAction: GroupWithAccountsAction,
         private companyActions: CompanyActions,

@@ -7,7 +7,7 @@ import { combineLatest as observableCombineLatest, Observable, of as observableO
 import { ActionPettycashRequest, ExpenseResults, PettyCashReportResponse } from '../../../models/api-models/Expences';
 import { ExpenseService } from '../../../services/expences.service';
 import { CommonPaginatedRequest } from '../../../models/api-models/Invoice';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 import * as dayjs from 'dayjs';
 import { MatSort } from '@angular/material/sort';
@@ -55,11 +55,11 @@ export class PendingListComponent implements OnInit, OnChanges {
     public isRowExpand: boolean = false;
     public pettycashRequest: CommonPaginatedRequest = new CommonPaginatedRequest();
     public showSubmittedBySearch: boolean = false;
-    public submittedBySearchInput: FormControl = new FormControl();
+    public submittedBySearchInput: UntypedFormControl = new UntypedFormControl();
     public showAccountSearch: boolean = false;
-    public accountSearchInput: FormControl = new FormControl();
+    public accountSearchInput: UntypedFormControl = new UntypedFormControl();
     public showPaymentReceiveSearch: boolean = false;
-    public paymentReceiveSearchInput: FormControl = new FormControl();
+    public paymentReceiveSearchInput: UntypedFormControl = new UntypedFormControl();
     public approveEntryModalRef: any;
     public approveEntryRequestInProcess: boolean = false;
     /** Entry against object */

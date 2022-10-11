@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
@@ -25,7 +25,7 @@ export class InventoryCreateUpdateGroupComponent implements OnInit, OnDestroy {
     /* This will store image path */
     public imgPath: string = '';
     /** Form Group for group form */
-    public groupForm: FormGroup;
+    public groupForm: UntypedFormGroup;
     /** Observable to hold stock groups */
     public groups$: Observable<IOption[]>;
     /* This will clear the select value in sh-select */
@@ -51,7 +51,7 @@ export class InventoryCreateUpdateGroupComponent implements OnInit, OnDestroy {
 
     constructor(
         private store: Store<AppState>,
-        private formBuilder: FormBuilder,
+        private formBuilder: UntypedFormBuilder,
         private inventoryService: InventoryService,
         private toaster: ToasterService,
         private route: ActivatedRoute

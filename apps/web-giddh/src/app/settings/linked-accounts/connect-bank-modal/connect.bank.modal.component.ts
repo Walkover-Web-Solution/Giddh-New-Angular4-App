@@ -3,7 +3,7 @@ import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output } 
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { Observable, of, ReplaySubject, Subject, merge } from 'rxjs';
 import { SettingsLinkedAccountsService } from '../../../services/settings.linked.accounts.service';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ToasterService } from '../../../services/toaster.service';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import { Store, select } from '@ngrx/store';
@@ -60,7 +60,7 @@ export class ConnectBankModalComponent implements OnChanges, OnInit, OnDestroy {
         name: ''
     };
     public step: number = 1;
-    public loginForm: FormGroup;
+    public loginForm: UntypedFormGroup;
     public bankSyncInProgress: boolean;
     public apiInInterval: any;
     public cancelRequest: boolean = false;
@@ -74,7 +74,7 @@ export class ConnectBankModalComponent implements OnChanges, OnInit, OnDestroy {
 
     constructor(public sanitizer: DomSanitizer,
         private _settingsLinkedAccountsService: SettingsLinkedAccountsService,
-        private _fb: FormBuilder,
+        private _fb: UntypedFormBuilder,
         private _toaster: ToasterService,
         private store: Store<AppState>
     ) {
@@ -241,8 +241,8 @@ export class ConnectBankModalComponent implements OnChanges, OnInit, OnDestroy {
 
     // add addInputRow controls
     public addInputRow(i: number, item) {
-        const inputRowControls = this.loginForm.controls['row'] as FormArray;
-        const control = this.loginForm.controls['row'] as FormArray;
+        const inputRowControls = this.loginForm.controls['row'] as UntypedFormArray;
+        const control = this.loginForm.controls['row'] as UntypedFormArray;
 
         // add addInputRow to the list
         if (item) {
@@ -262,7 +262,7 @@ export class ConnectBankModalComponent implements OnChanges, OnInit, OnDestroy {
     }
 
     public onSelectProvider() {
-        const inputRowControls = this.loginForm.controls['row'] as FormArray;
+        const inputRowControls = this.loginForm.controls['row'] as UntypedFormArray;
         if (inputRowControls?.controls?.length > 1) {
             inputRowControls.controls = inputRowControls.controls.splice(1);
         }

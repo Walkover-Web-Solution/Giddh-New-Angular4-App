@@ -10,7 +10,7 @@ import { ToasterService } from '../services/toaster.service';
 import { ShSelectComponent } from '../theme/ng-virtual-select/sh-select.component';
 import { take, takeUntil } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { FormControl, NgForm } from '@angular/forms';
+import { UntypedFormControl, NgForm } from '@angular/forms';
 import { CompanyService } from '../services/companyService.service';
 import { GeneralActions } from '../actions/general/general.actions';
 import { CompanyActions } from '../actions/company.actions';
@@ -93,7 +93,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
     /** control for the MatSelect filter keyword */
     public selectedCountry: any = '';
     /** control for the MatSelect filter keyword */
-    public searchCountry: FormControl = new FormControl();
+    public searchCountry: UntypedFormControl = new UntypedFormControl();
     /** Billing Country list */
     public countrySource: IOption[] = [];
     /** Billing Country list Observable */
@@ -670,7 +670,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
      * @param {*} value
      * @memberof BillingDetailComponent
      */
-    public checkAndResetValue(formControl: FormControl, value: any): void {
+    public checkAndResetValue(formControl: UntypedFormControl, value: any): void {
         if (typeof formControl?.value !== "object" && formControl?.value !== value) {
             formControl.setValue({ label: value });
         }

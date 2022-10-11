@@ -2,7 +2,7 @@ import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { takeUntil, take } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 import { Component, Input, OnInit, ViewChild, AfterViewInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, NgForm } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AppState } from '../../store';
 import { SettingsIntegrationActions } from '../../actions/settings/settings.integration.action';
@@ -57,7 +57,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public payoutAdded: boolean = false;
     public bankAccounts$: Observable<IOption[]>;
     public gmailAuthCodeUrl$: Observable<string> = null;
-    public amazonSellerForm: FormGroup;
+    public amazonSellerForm: UntypedFormGroup;
     public amazonEditItemIdx: number;
     public amazonSellerRes: AmazonSellerClass[];
     public isGmailIntegrated$: Observable<boolean>;
@@ -119,7 +119,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
     /** Form Group for create new account form */
-    public createNewAccountForm: FormGroup;
+    public createNewAccountForm: UntypedFormGroup;
     /** List of users to receive payment alerts */
     public paymentAlerts: any[] = [];
     /** Holds string for select all records */
@@ -135,9 +135,9 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     /** This will have payor account details */
     public activePayorAccount: any;
     /** Form Group for edit account user form */
-    public editAccountUserForm: FormGroup;
+    public editAccountUserForm: UntypedFormGroup;
     /** Form Group for edit account form */
-    public editAccountForm: FormGroup;
+    public editAccountForm: UntypedFormGroup;
     /** Holds unlimited text for amount limit */
     public unlimitedLimit: string = UNLIMITED_LIMIT;
     /** This will hold active company data */
@@ -155,7 +155,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         private toasty: ToasterService,
         private _companyActions: CompanyActions,
         private _authenticationService: AuthenticationService,
-        private _fb: FormBuilder,
+        private _fb: UntypedFormBuilder,
         private settingsPermissionActions: SettingsPermissionActions,
         private generalService: GeneralService,
         private settingsIntegrationService: SettingsIntegrationService,
@@ -443,7 +443,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     }
 
     public addAmazonSellerRow(i?: number, item?: any) {
-        const control = this.amazonSellerForm.controls['sellers'] as FormArray;
+        const control = this.amazonSellerForm.controls['sellers'] as UntypedFormArray;
         if (item) {
             if (control.controls[i]) {
                 control.controls[i]?.patchValue(item);
@@ -471,7 +471,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     // remove amazon Seller controls
     public removeAmazonSeller(i: number) {
         // remove address from the list
-        const control = this.amazonSellerForm.controls['sellers'] as FormArray;
+        const control = this.amazonSellerForm.controls['sellers'] as UntypedFormArray;
         if (control?.length > 1) {
             control.removeAt(i);
         } else {
@@ -491,7 +491,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * enableDisableAmazonControl
      */
     public enableDisableAmazonControl(idx, type) {
-        const control = this.amazonSellerForm.controls['sellers'] as FormArray;
+        const control = this.amazonSellerForm.controls['sellers'] as UntypedFormArray;
         if (type === 'enable') {
             control.controls[idx].enable();
         } else {

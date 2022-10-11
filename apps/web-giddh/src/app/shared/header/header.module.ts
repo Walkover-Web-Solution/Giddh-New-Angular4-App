@@ -51,9 +51,6 @@ import { HeaderComponent } from "./header.component";
         HeaderComponent,
         CompanyAddNewUiComponent,
         AsideSettingComponent
-    ],
-    entryComponents: [
-        CompanyAddNewUiComponent
     ]
 })
 
