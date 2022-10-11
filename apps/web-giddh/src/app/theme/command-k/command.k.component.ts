@@ -139,6 +139,7 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
     public closeMaster(): void {
         this.store.dispatch(this.generalAction.addAndManageClosed());
         this.store.dispatch(this.groupWithAccountsAction.HideAddAndManageFromOutside());
+        document.querySelector('body')?.classList?.remove('master-page');
     }
 
     /**

@@ -7,6 +7,7 @@ import { IServiceConfigArgs, ServiceConfig } from '../services/service.config';
 import { BlankLedgerVM } from './../material-ledger/ledger.vm';
 import { LEDGER_API } from '../services/apiurls/ledger.api';
 import { VOUCHERS } from './constants/accounting.constant';
+import { GeneralService } from '../services/general.service';
 
 export interface IPageInfo {
     page: string;
@@ -49,6 +50,7 @@ export class TallyModuleService {
 
     constructor(
         private http: HttpWrapperService,
+        private generalService: GeneralService,
         @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs,
     ) {
         // this.selectedFieldType.pipe(distinctUntilChanged((p, q) => p === q)).subscribe((type: string) => {
@@ -508,14 +510,14 @@ export class TallyModuleService {
     public getGroupByVoucher(voucherType: string, selectedTransactionType?: string): any {
         if (voucherType === VOUCHERS.CONTRA) {
             return {
-                group: encodeURIComponent('bankaccounts, cash, currentliabilities'),
+                group: (this.generalService.voucherApiVersion === 2) ? encodeURIComponent('bankaccounts, cash, loanandoverdraft, currentliabilities') : encodeURIComponent('bankaccounts, cash, currentliabilities'),
                 exceptGroups: encodeURIComponent('sundrycreditors, dutiestaxes')
             };
         } else if (voucherType === VOUCHERS.RECEIPT) {
             return {
                 group: selectedTransactionType === 'to' ?
                     encodeURIComponent('currentliabilities, sundrycreditors, sundrydebtors') :
-                    encodeURIComponent('bankaccounts, cash, currentliabilities, sundrycreditors, sundrydebtors'),
+                    (this.generalService.voucherApiVersion === 2) ? encodeURIComponent('bankaccounts, cash, loanandoverdraft, currentliabilities, sundrycreditors, sundrydebtors') : encodeURIComponent('bankaccounts, cash, currentliabilities, sundrycreditors, sundrydebtors'),
                 exceptGroups: encodeURIComponent('dutiestaxes')
             };
         } else {
