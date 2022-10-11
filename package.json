@@ -150,7 +150,7 @@
     "@angular/language-service": "14.2.5",
     "@ngrx/store-devtools": "13.2.0",
     "@nrwl/schematics": "8.12.11",
-    "@nstudio/schematics": "11.0.2",
+    "@nstudio/schematics": "13.4.3",
     "@types/file-saver": "2.0.1",
     "@types/highcharts": "7.0.0",
     "@types/jasmine": "3.6.11",
