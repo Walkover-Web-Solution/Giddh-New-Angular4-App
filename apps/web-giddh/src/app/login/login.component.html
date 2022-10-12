@@ -200,6 +200,16 @@
                                             >
                                         </li>
                                     </ul>
+                                    <p class="login-with" *ngIf="loginUsing !== 'userName'">
+                                        Login with
+                                        <a
+                                            href="javascript:;"
+                                            class="bold"
+                                            (click)="loginUsing = 'userName'; resetForgotPasswordProcess()"
+                                        >
+                                            email and password</a
+                                        >
+                                    </p>
                                     <div class="d-flex align-items-center account mt-1">
                                         <p class="mb-0 mr-2 bold text-light-2">Don't have an account?</p>
                                         <a routerLink="/signup" class="btn btn-secondary"> Signup</a>
