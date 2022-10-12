@@ -45,7 +45,7 @@
                                                 id="ledger-unit"
                                                 class="form-control"
                                                 [disabled]="shouldShowAdvanceReceiptMandatoryFields ? 'disabled' : null"
-                                                (change)="unitChanged($event?.target?.value)"
+                                                (selectionChange)="unitChanged($event?.value)"
                                                 [value]="currentTxn?.inventory?.unit?.code"
                                             >
                                                 <mat-option
