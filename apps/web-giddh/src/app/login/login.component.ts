@@ -229,6 +229,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.isLoginWithPasswordIsShowVerifyOtp$.subscribe(res => {
             if (res) {
                 this.showTwoWayAuthModal();
+                this.store.dispatch(this.loginAction.hideTwoWayOtpPopup());
             }
         });
     }
@@ -289,11 +290,11 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
 
     public showTwoWayAuthModal() {
-        this.twoWayAuthModal.show();
+        this.twoWayAuthModal?.show();
     }
 
     public hideTowWayAuthModal() {
-        this.twoWayAuthModal.hide();
+        this.twoWayAuthModal?.hide();
     }
 
     public resetTwoWayAuthModal() {
