@@ -824,7 +824,7 @@
                                         "
                                         class="form-control text-right"
                                         [(ngModel)]="vm.stockTrxEntry.inventory.unit.code"
-                                        (change)="vm.unitChanged($event?.target?.value)"
+                                        (selectionChange)="vm.unitChanged($event?.value)"
                                     >
                                         <mat-option
                                             *ngFor="let item of vm.stockTrxEntry?.unitRate"
