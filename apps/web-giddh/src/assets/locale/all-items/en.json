@@ -17,7 +17,7 @@
                 },
                 {
                     "label": "Cash Invoice",
-                    "link": "/pages/proforma-invoice/invoice/cash",
+                    "link": "/pages/material-proforma-invoice/invoice/cash",
                     "icon": "icon-invoice-new",
                     "description": "Generate cash invoice"
                 },
@@ -51,7 +51,7 @@
                 },
                 {
                     "label": "Sales Invoice",
-                    "link": "/pages/proforma-invoice/invoice/sales",
+                    "link": "/pages/material-proforma-invoice/invoice/sales",
                     "icon": "icon-invoice-new",
                     "description": "Generate sales invoice"
                 },
@@ -91,7 +91,7 @@
                 },
                 {
                     "label": "Purchase Bill",
-                    "link": "/pages/proforma-invoice/invoice/purchase",
+                    "link": "/pages/material-proforma-invoice/invoice/purchase",
                     "icon": "icon-invoice-new",
                     "description": "Purchase request, purchase bill, modify PO"
                 },

@@ -17,7 +17,7 @@
                 },
                 {
                     "label": "रोख चलन",
-                    "link": "/pages/proforma-invoice/invoice/cash",
+                    "link": "/pages/material-proforma-invoice/invoice/cash",
                     "icon": "icon-invoice-new",
                     "description": "रोखीची चलने तयार करा"
                 },
@@ -51,7 +51,7 @@
                 },
                 {
                     "label": "विक्री चलन",
-                    "link": "/pages/proforma-invoice/invoice/sales",
+                    "link": "/pages/material-proforma-invoice/invoice/sales",
                     "icon": "icon-invoice-new",
                     "description": "विक्री बीजक उत्पन्न"
                 },
@@ -91,7 +91,7 @@
                 },
                 {
                     "label": "खरेदी बिल",
-                    "link": "/pages/proforma-invoice/invoice/purchase",
+                    "link": "/pages/material-proforma-invoice/invoice/purchase",
                     "icon": "icon-invoice-new",
                     "description": "खरेदी विनंती, खरेदी बिल, पीओ सुधारित करा"
                 },

@@ -221,6 +221,7 @@
                                                             "
                                                             [createNewText]="customerNotFoundText"
                                                             [enableDynamicSearch]="true"
+                                                            [showValueInLabel]="true"
                                                             (dynamicSearchedQuery)="
                                                                 onSearchQueryChanged($event, 1, 'customer')
                                                             "
@@ -477,6 +478,10 @@
                                                                                 [options]="statesSource"
                                                                                 [name]="'billingDetails.stateCode'"
                                                                                 [allowValueReset]="true"
+                                                                                [defaultValue]="
+                                                                                    invFormData?.accountDetails
+                                                                                        ?.billingDetails?.state?.name
+                                                                                "
                                                                                 (onClear)="
                                                                                     fillShippingBillingDetails(
                                                                                         $event,
@@ -698,6 +703,11 @@
                                                                                     [options]="statesSource"
                                                                                     [name]="'shippingDetails.stateCode'"
                                                                                     [allowValueReset]="true"
+                                                                                    [defaultValue]="
+                                                                                        invFormData?.accountDetails
+                                                                                            ?.shippingDetails?.state
+                                                                                            ?.name
+                                                                                    "
                                                                                     (onClear)="
                                                                                         fillShippingBillingDetails(
                                                                                             $event,

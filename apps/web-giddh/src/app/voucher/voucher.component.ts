@@ -966,7 +966,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
                 this.store.dispatch(this.invoiceReceiptActions.ResetVoucherDetails());
                 if (this.accountUniqueName && this.invoiceType && this.invoiceNo) {
-                    this.store.dispatch(this._generalActions.setAppTitle('/pages/proforma-invoice/invoice/' + this.invoiceType));
+                    this.store.dispatch(this._generalActions.setAppTitle('/pages/material-proforma-invoice/invoice/' + this.invoiceType));
                     this.getVoucherDetailsFromInputs();
                     this.getDefaultTemplateData();
                 }
@@ -1025,7 +1025,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     } else {
                         this.store.dispatch(this.invoiceReceiptActions.ResetVoucherDetails());
                         if (this.accountUniqueName && this.invoiceType && this.invoiceNo) {
-                            this.store.dispatch(this._generalActions.setAppTitle('/pages/proforma-invoice/invoice/' + this.invoiceType));
+                            this.store.dispatch(this._generalActions.setAppTitle('/pages/material-proforma-invoice/invoice/' + this.invoiceType));
                             this.getVoucherDetailsFromInputs();
                             this.getDefaultTemplateData();
                         }
@@ -1840,7 +1840,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.sundryDebtorsAcList = [];
         this.customerAcList$ = observableOf([]);
         this.salesAccounts$ = observableOf([]);
-        this.router.navigate(['pages', 'proforma-invoice', 'invoice', val]);
+        this.router.navigate(['pages', 'material-proforma-invoice', 'invoice', val]);
         this.selectedVoucherType = val;
         if (this.selectedVoucherType === VoucherTypeEnum.creditNote || this.selectedVoucherType === VoucherTypeEnum.debitNote) {
             this.getInvoiceListsForCreditNote();
@@ -3643,7 +3643,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public toggleRecurringAsidePane(toggle?: string): void {
         if (toggle) {
             if (toggle === 'out' && this.asideMenuStateForRecurringEntry !== 'out') {
-                this.router.navigate(['/pages/proforma-invoice', 'invoice', 'sales']);
+                this.router.navigate(['/pages/material-proforma-invoice', 'invoice', 'sales']);
             }
             this.asideMenuStateForRecurringEntry = toggle;
         } else {
@@ -8034,11 +8034,11 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     }
 
     /**
- * Callback function for getLastInvoiceDetails function
- *
- * @param {PreviousInvoicesVm} item
- * @memberof VoucherComponent
- */
+     * Callback function for getLastInvoiceDetails function
+     *
+     * @param {PreviousInvoicesVm} item
+     * @memberof VoucherComponent
+     */
     public copyInvoice(item: PreviousInvoicesVm): void {
         this.getLastInvoiceDetails({ accountUniqueName: item.account?.uniqueName, invoiceNo: item.versionNumber, uniqueName: item.uniqueName });
     }

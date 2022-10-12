@@ -17,7 +17,7 @@
                 },
                 {
                     "label": "नकद चालान",
-                    "link": "/pages/proforma-invoice/invoice/cash",
+                    "link": "/pages/material-proforma-invoice/invoice/cash",
                     "icon": "icon-invoice-new",
                     "description": "नकद चालान उत्पन्न करें"
                 },
@@ -51,7 +51,7 @@
                 },
                 {
                     "label": "बिक्री चालान",
-                    "link": "/pages/proforma-invoice/invoice/sales",
+                    "link": "/pages/material-proforma-invoice/invoice/sales",
                     "icon": "icon-invoice-new",
                     "description": "बिक्री चालान उत्पन्न करें"
                 },
@@ -91,7 +91,7 @@
                 },
                 {
                     "label": "खरीद बिल",
-                    "link": "/pages/proforma-invoice/invoice/purchase",
+                    "link": "/pages/material-proforma-invoice/invoice/purchase",
                     "icon": "icon-invoice-new",
                     "description": "खरीद अनुरोध, खरीद बिल, पीओ संशोधित करें"
                 },

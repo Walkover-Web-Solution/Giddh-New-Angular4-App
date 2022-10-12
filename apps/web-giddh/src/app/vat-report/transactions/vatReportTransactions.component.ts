@@ -170,7 +170,7 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
      */
     public onSelectInvoice(invoice): void {
         if (invoice.voucherType === VoucherTypeEnum.purchase) {
-            this.router.navigate(['pages', 'proforma-invoice', 'invoice', 'purchase', invoice.accountUniqueName, invoice.purchaseRecordUniqueName, 'edit']);
+            this.router.navigate(['pages', 'material-proforma-invoice', 'invoice', 'purchase', invoice.accountUniqueName, invoice.purchaseRecordUniqueName, 'edit']);
         } else {
             if (invoice.voucherNumber) {
                 this.selectedInvoice = invoice;

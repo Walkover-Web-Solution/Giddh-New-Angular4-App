@@ -30,7 +30,7 @@ export const ROUTES: Routes = [
     { path: 'welcome', loadChildren: () => import('./welcome/welcome.module').then(module => module.WelcomeModule) },
     { path: 'onboarding', redirectTo: 'pages/onboarding', pathMatch: 'full' },
     { path: 'invoice', redirectTo: 'pages/invoice', pathMatch: 'full' },
-    { path: 'sales', redirectTo: 'pages/proforma-invoice/invoice/sales' },
+    { path: 'sales', redirectTo: 'pages/material-proforma-invoice/invoice/sales' },
     { path: 'daybook', redirectTo: 'pages/daybook', pathMatch: 'full' },
     { path: 'purchase', redirectTo: 'pages/purchase', pathMatch: 'full' },
     { path: 'user-details', redirectTo: 'pages/user-details', pathMatch: 'full' },
@@ -42,7 +42,7 @@ export const ROUTES: Routes = [
     { path: 'company-import-export', redirectTo: 'pages/company-import-export', pathMatch: 'full' },
     { path: 'new-vs-old-invoices', redirectTo: 'pages/new-vs-old-invoices', pathMatch: 'full' },
     { path: 'reports', redirectTo: 'pages/reports', pathMatch: 'full' },
-    { path: 'proforma-invoice', redirectTo: 'pages/proforma-invoice' },
+    { path: 'material-proforma-invoice', redirectTo: 'pages/material-proforma-invoice' },
     {
         path: 'pages', component: PageComponent,
         children: [

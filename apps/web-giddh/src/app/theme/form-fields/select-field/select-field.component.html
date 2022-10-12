@@ -22,7 +22,7 @@
             </div>
         </a>
         <mat-option *ngFor="let option of fieldFilteredOptions" [value]="option" [matTooltip]="option?.label">
-            <span class="option-value" [innerHTML]="option?.label"></span>
+            {{ option?.label }} <span class="option-value" *ngIf="showValueInLabel">{{ option?.value }}</span>
         </mat-option>
         <mat-option disabled *ngIf="fieldFilteredOptions?.length === 0">No results found</mat-option>
     </mat-autocomplete>

@@ -39,6 +39,8 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public enableDynamicSearch: boolean;
     /** True if selected value can be reset */
     @Input() public allowValueReset: boolean = false;
+    /** True if we need to show value also with label */
+    @Input() public showValueInLabel: boolean = false;
     /** Emits the scroll to bottom event when pagination is required  */
     @Output() public scrollEnd: EventEmitter<void> = new EventEmitter();
     /** Emits dynamic searched query */
