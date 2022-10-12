@@ -1,6 +1,6 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 import { ReplaySubject } from 'rxjs';
@@ -58,7 +58,7 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
         linkedEntities: []
     };
     /** Branch form */
-    public branchForm: UntypedFormGroup;
+    public branchForm: FormGroup;
     /** Stores all the addresses within a company */
     public addresses: Array<any>;
     /** True, if new address is in progress in the side menu */
@@ -80,7 +80,7 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
     constructor(
         private commonService: CommonService,
         private companyService: CompanyService,
-        private formBuilder: UntypedFormBuilder,
+        private formBuilder: FormBuilder,
         private generalActions: GeneralActions,
         private generalService: GeneralService,
         private router: Router,

@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { UntypedFormBuilder, UntypedFormGroup } from "@angular/forms";
+import { FormBuilder, FormGroup } from "@angular/forms";
 import { takeUntil } from "rxjs/operators";
 import { ReplaySubject } from "rxjs";
 import { COMMA, ENTER } from "@angular/cdk/keycodes";
@@ -42,12 +42,12 @@ export class CreateNewInventoryComponent implements OnInit {
     public isService: boolean = false;
     public isCombo: boolean = false;
     public isBulkCreation: boolean = false;
-    public formGroupRadio: UntypedFormGroup;
+    public formGroupRadio: FormGroup;
     /* this will store expense boolean value */
     public isExpense: boolean = true;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private fb: UntypedFormBuilder,
+    constructor(private fb: FormBuilder,
     ) {
     }
 

@@ -20,7 +20,7 @@ import {
 } from '@angular/core';
 import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
 import { Observable, of as observableOf, ReplaySubject, Subscription } from 'rxjs';
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import * as dayjs from 'dayjs';
 import { InventoryAction } from '../../../actions/inventory/inventory.actions';
 import { animate, state, style, transition, trigger } from '@angular/animations';
@@ -90,11 +90,11 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
     public selectedTransactionType: string = 'all';
     public entities$: Observable<CompanyResponse[]>;
     public showAdvanceSearchIcon: boolean = false;
-    public accountUniqueNameInput: UntypedFormControl = new UntypedFormControl();
+    public accountUniqueNameInput: FormControl = new FormControl();
     public showAccountSearch: boolean = false;
-    public entityAndInventoryTypeForm: UntypedFormGroup = new UntypedFormGroup({});
+    public entityAndInventoryTypeForm: FormGroup = new FormGroup({});
     // modal advance search
-    public advanceSearchForm: UntypedFormGroup;
+    public advanceSearchForm: FormGroup;
     public filterCategory: string = null;
     public filterCategoryType: string = null;
     public filterValueCondition: string = null;
@@ -276,7 +276,7 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
     constructor(private store: Store<AppState>, private sideBarAction: SidebarAction,
         private stockReportActions: StockReportActions,
         private _toasty: ToasterService,
-        private inventoryService: InventoryService, private fb: UntypedFormBuilder, private inventoryAction: InventoryAction,
+        private inventoryService: InventoryService, private fb: FormBuilder, private inventoryAction: InventoryAction,
         private settingsBranchActions: SettingsBranchActions,
         private invViewService: InvViewService,
         private cdr: ChangeDetectorRef,

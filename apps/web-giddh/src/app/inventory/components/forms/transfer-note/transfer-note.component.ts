@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { InventoryEntry, InventoryUser } from '../../../../models/api-models/Inventory-in-out';
-import { UntypedFormArray, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { IStocksItem } from '../../../../models/interfaces/stocksItem.interface';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
@@ -29,13 +29,13 @@ export class TransferNoteComponent implements OnChanges {
     public stockListOptions: IOption[];
     public stockUnitsOptions: IOption[];
     public userListOptions: IOption[];
-    public form: UntypedFormGroup;
+    public form: FormGroup;
     public config: Partial<BsDatepickerConfig> = { dateInputFormat: GIDDH_DATE_FORMAT };
     public today = new Date();
     /** This holds giddh date format */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
 
-    constructor(private _fb: UntypedFormBuilder) {
+    constructor(private _fb: FormBuilder) {
         this.form = this._fb.group({
             inventoryEntryDate: [dayjs().format(GIDDH_DATE_FORMAT), Validators.required],
             transactions: this._fb.array([]),
@@ -48,36 +48,36 @@ export class TransferNoteComponent implements OnChanges {
         });
     }
 
-    public get inventoryEntryDate(): UntypedFormControl {
-        return this.form.get('inventoryEntryDate') as UntypedFormControl;
+    public get inventoryEntryDate(): FormControl {
+        return this.form.get('inventoryEntryDate') as FormControl;
     }
 
-    public get description(): UntypedFormControl {
-        return this.form.get('description') as UntypedFormControl;
+    public get description(): FormControl {
+        return this.form.get('description') as FormControl;
     }
 
-    public get type(): UntypedFormControl {
-        return this.form.get('type') as UntypedFormControl;
+    public get type(): FormControl {
+        return this.form.get('type') as FormControl;
     }
 
-    public get quantity(): UntypedFormControl {
-        return this.form.get('quantity') as UntypedFormControl;
+    public get quantity(): FormControl {
+        return this.form.get('quantity') as FormControl;
     }
 
-    public get inventoryUser(): UntypedFormControl {
-        return this.form.get('inventoryUser') as UntypedFormControl;
+    public get inventoryUser(): FormControl {
+        return this.form.get('inventoryUser') as FormControl;
     }
 
-    public get stock(): UntypedFormControl {
-        return this.form.get('stock') as UntypedFormControl;
+    public get stock(): FormControl {
+        return this.form.get('stock') as FormControl;
     }
 
-    public get stockUnit(): UntypedFormControl {
-        return this.form.get('stockUnit') as UntypedFormControl;
+    public get stockUnit(): FormControl {
+        return this.form.get('stockUnit') as FormControl;
     }
 
-    public get transactions(): UntypedFormArray {
-        return this.form.get('transactions') as UntypedFormArray;
+    public get transactions(): FormArray {
+        return this.form.get('transactions') as FormArray;
     }
 
     public ngOnChanges(changes: SimpleChanges): void {

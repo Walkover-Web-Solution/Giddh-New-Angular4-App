@@ -1,6 +1,6 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
-import { UntypedFormControl } from '@angular/forms';
+import { FormControl } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { ReplaySubject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
@@ -92,11 +92,11 @@ export class AddressSettingsComponent implements OnInit, OnDestroy {
     @Output() public closeSidePaneChange: EventEmitter<boolean> = new EventEmitter<boolean>();
 
     /** Search address name input field form control */
-    public searchAddressNameInput: UntypedFormControl = new UntypedFormControl();
+    public searchAddressNameInput: FormControl = new FormControl();
     /** Search address input field form control */
-    public searchAddressInput: UntypedFormControl = new UntypedFormControl();
+    public searchAddressInput: FormControl = new FormControl();
     /** Search state input field form control */
-    public searchStateInput: UntypedFormControl = new UntypedFormControl();
+    public searchStateInput: FormControl = new FormControl();
     /** Stores the current state of side menu */
     public accountAsideMenuState: string = 'out';
     /** True, if search name input field is to be shown */

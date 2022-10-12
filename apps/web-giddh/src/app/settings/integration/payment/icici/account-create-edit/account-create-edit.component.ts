@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from "@angular/core";
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { select, Store } from "@ngrx/store";
 import { SELECT_ALL_RECORDS } from "apps/web-giddh/src/app/app.constant";
 import { IForceClear } from "apps/web-giddh/src/app/models/api-models/Sales";
@@ -31,7 +31,7 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
     /* This will hold local JSON data */
     public localeData: any = {};
     /** Form Group for account form */
-    public accountForm: UntypedFormGroup;
+    public accountForm: FormGroup;
     /** This will hold list of accounts */
     public bankAccounts$: Observable<IOption[]>;
     /** This will hold users list */
@@ -58,7 +58,7 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
         private settingsIntegrationService: SettingsIntegrationService,
         private salesService: SalesService,
         private store: Store<AppState>,
-        private formBuilder: UntypedFormBuilder,
+        private formBuilder: FormBuilder,
         private changeDetection: ChangeDetectorRef
     ) {
 

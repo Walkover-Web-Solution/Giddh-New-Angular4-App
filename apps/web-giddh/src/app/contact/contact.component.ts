@@ -50,7 +50,7 @@ import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from "../shared/helpers/d
 import { SettingsBranchActions } from "../actions/settings/branch/settings.branch.action";
 import { OrganizationType } from "../models/user-login-state";
 import { GiddhCurrencyPipe } from "../shared/helpers/pipes/currencyPipe/currencyType.pipe";
-import { UntypedFormControl } from "@angular/forms";
+import { FormControl } from "@angular/forms";
 import { Lightbox } from "ngx-lightbox";
 import { MatCheckboxChange } from "@angular/material/checkbox/checkbox";
 import { MatTableModule } from "@angular/material/table";
@@ -217,7 +217,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     /** This will store screen size */
     public isMobileView: boolean = false;
     /** Stores the searched name value for the Name filter */
-    public searchedName: UntypedFormControl = new UntypedFormControl();
+    public searchedName: FormControl = new FormControl();
     /** True, if name search field is to be shown in the filters */
     public showNameSearch: boolean;
     /** True if today selected */

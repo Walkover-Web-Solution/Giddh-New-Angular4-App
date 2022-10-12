@@ -12,7 +12,7 @@ import { SubscriptionsService } from "../../../services/subscriptions.service";
 import { cloneDeep, uniqBy } from "../../../lodash-optimized";
 import * as dayjs from "dayjs";
 import { GIDDH_DATE_FORMAT } from "../../../shared/helpers/defaultDateFormat";
-import { UntypedFormControl } from "@angular/forms";
+import { FormControl } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { CreateCompanyUsersPlan, SubscriptionRequest } from "../../../models/api-models/Company";
 import { CompanyActions } from "../../../actions/company.actions";
@@ -74,7 +74,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
     /* This will hold if plan option is choosen */
     public isPlanShow: boolean = false;
     /** Stores the current searched subscription */
-    public searchSubscription: UntypedFormControl = new UntypedFormControl();
+    public searchSubscription: FormControl = new FormControl();
     /** To destroy observers */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** True if api call in progress */

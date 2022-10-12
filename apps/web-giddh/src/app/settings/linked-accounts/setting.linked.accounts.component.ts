@@ -10,7 +10,7 @@ import { SettingsLinkedAccountsService } from '../../services/settings.linked.ac
 import { SettingsLinkedAccountsActions } from '../../actions/settings/linked-accounts/settings.linked.accounts.action';
 import { IEbankAccount } from '../../models/api-models/SettingsLinkedAccounts';
 import { BankAccountsResponse } from '../../models/api-models/Dashboard';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IServiceConfigArgs, ServiceConfig } from '../../services/service.config';
 import { GeneralService } from '../../services/general.service';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
@@ -35,7 +35,7 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
     public accounts: IOption[];
     public confirmationMessage: string;
     public dateToUpdate: string;
-    public yodleeForm: UntypedFormGroup;
+    public yodleeForm: FormGroup;
     public companyUniqueName: string;
     public selectedProvider: string;
     public isRefreshWithCredentials: boolean = true;
@@ -72,7 +72,7 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
         private store: Store<AppState>,
         private _settingsLinkedAccountsService: SettingsLinkedAccountsService,
         private settingsLinkedAccountsActions: SettingsLinkedAccountsActions,
-        private _fb: UntypedFormBuilder,
+        private _fb: FormBuilder,
         @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs,
         private _generalService: GeneralService,
         private searchService: SearchService,

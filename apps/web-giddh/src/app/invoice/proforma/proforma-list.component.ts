@@ -9,7 +9,7 @@ import {
     ViewChild,
     TemplateRef, ElementRef
 } from '@angular/core';
-import { UntypedFormControl } from '@angular/forms';
+import { FormControl } from '@angular/forms';
 import {
     ProformaFilter,
     ProformaGetRequest,
@@ -135,10 +135,10 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
     };
     public localStorageSelectedDate: string = '';
     public showVoucherNoSearch: boolean = false;
-    public voucherNumberInput: UntypedFormControl = new UntypedFormControl();
+    public voucherNumberInput: FormControl = new FormControl();
 
     public showCustomerSearch: boolean = false;
-    public customerNameInput: UntypedFormControl = new UntypedFormControl();
+    public customerNameInput: FormControl = new FormControl();
 
     public sortRequestForUi: { sortBy: string, sort: string } = { sortBy: '', sort: '' };
     public advanceSearchFilter: ProformaFilter = new ProformaFilter();

@@ -12,7 +12,7 @@ import { IRegistration, IntegratedBankList, BankTransactionForOTP, GetOTPRequest
 import { ToasterService } from "../../services/toaster.service";
 import { IOption } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-options.interface';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
-import { UntypedFormGroup, UntypedFormBuilder, UntypedFormArray, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, FormArray, Validators } from '@angular/forms';
 import { cloneDeep } from '../../lodash-optimized';
 import { ShSelectComponent } from '../../theme/ng-virtual-select/sh-select.component';
 import { GeneralService } from '../../services/general.service';
@@ -95,7 +95,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     /** Total selected account  */
     public totalSelectedLength: number;
     /** bulk payment form */
-    public addAccountBulkPaymentForm: UntypedFormGroup;
+    public addAccountBulkPaymentForm: FormGroup;
     public imgPath: string = '';
     /** Payment request id for OTP confirmation */
     public paymentRequestId: string = '';
@@ -133,7 +133,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     public paymentSuccessfulMessage: string = "";
 
     constructor(
-        private formBuilder: UntypedFormBuilder,
+        private formBuilder: FormBuilder,
         private modalService: BsModalService,
         private store: Store<AppState>,
         private companyActions: CompanyActions,
@@ -624,7 +624,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
      * @memberof PaymentAsideComponent
      */
     public addAccountTransactionsFormObject(value: any): any {    // commented code because we no need GSTIN No. to add new address
-        const transactions = this.addAccountBulkPaymentForm.get('bankPaymentTransactions') as UntypedFormArray;
+        const transactions = this.addAccountBulkPaymentForm.get('bankPaymentTransactions') as FormArray;
         transactions.push(this.initialAccountTransactionsForm(value));
         return;
     }
@@ -636,7 +636,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
      * @returns {FormGroup}
      * @memberof PaymentAsideComponent
      */
-    public initialAccountTransactionsForm(val: any): UntypedFormGroup {
+    public initialAccountTransactionsForm(val: any): FormGroup {
         let transactionsFields = this.formBuilder.group({
             remarks: ['', Validators.compose([Validators.required])],
             amount: [''],
@@ -656,7 +656,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
      * @memberof PaymentAsideComponent
      */
     public removeTransactionsDetailsForm(index: number): void {
-        const transactions = this.addAccountBulkPaymentForm.get('bankPaymentTransactions') as UntypedFormArray;
+        const transactions = this.addAccountBulkPaymentForm.get('bankPaymentTransactions') as FormArray;
         transactions.removeAt(index);
     }
 

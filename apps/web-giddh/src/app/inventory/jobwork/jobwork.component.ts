@@ -10,7 +10,7 @@ import { debounceTime, distinctUntilChanged, publishReplay, refCount, take, take
 import { ToasterService } from '../../services/toaster.service';
 import { InventoryService } from '../../services/inventory.service';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable, ReplaySubject } from 'rxjs';
 import { InvViewService } from '../inv.view.service';
 import { ShSelectComponent } from '../../theme/ng-virtual-select/sh-select.component';
@@ -44,9 +44,9 @@ export class JobworkComponent implements OnInit, OnDestroy {
     @ViewChild('comparisionFilter', { static: true }) public comparisionFilter: ShSelectComponent;
     @ViewChild(DaterangePickerComponent, { static: true }) public datePicker: DaterangePickerComponent;
 
-    public senderUniqueNameInput: UntypedFormControl = new UntypedFormControl();
-    public receiverUniqueNameInput: UntypedFormControl = new UntypedFormControl();
-    public productUniqueNameInput: UntypedFormControl = new UntypedFormControl();
+    public senderUniqueNameInput: FormControl = new FormControl();
+    public receiverUniqueNameInput: FormControl = new FormControl();
+    public productUniqueNameInput: FormControl = new FormControl();
     public showWelcomePage: boolean = true;
     public showSenderSearch: boolean = false;
     public showReceiverSearch: boolean = false;
@@ -54,7 +54,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
     public updateDescriptionIdx: number = null;
     // modal advance search
     public isFilterCorrect: boolean = false;
-    public advanceSearchForm: UntypedFormGroup;
+    public advanceSearchForm: FormGroup;
     public COMPARISON_FILTER = [
         { label: 'Equals', value: '=' },
         { label: 'Greater Than', value: '>' },
@@ -133,7 +133,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
         private inventoryReportActions: InventoryReportActions,
         private inventoryService: InventoryService,
         private _toasty: ToasterService,
-        private fb: UntypedFormBuilder,
+        private fb: FormBuilder,
         private invViewService: InvViewService,
         private _store: Store<AppState>,
         private cdr: ChangeDetectorRef) {

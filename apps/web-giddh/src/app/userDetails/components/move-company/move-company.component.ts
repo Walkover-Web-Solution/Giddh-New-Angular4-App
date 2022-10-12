@@ -8,7 +8,7 @@ import { SubscriptionRequest } from '../../../models/api-models/Company';
 import { SettingsProfileService } from '../../../services/settings.profile.service';
 import { takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
-import { UntypedFormControl } from '@angular/forms';
+import { FormControl } from '@angular/forms';
 
 @Component({
     selector: 'move-company',
@@ -36,7 +36,7 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
     /** Subject to release subscription memory */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Control for the MatSelect filter keyword */
-    public searchPlan: UntypedFormControl = new UntypedFormControl();
+    public searchPlan: FormControl = new FormControl();
     /** True if api call in progress */
     public isLoading: boolean = true;
 

@@ -5,7 +5,7 @@ import { Store, select } from '@ngrx/store';
 import { AfterViewInit, Component, Input, OnDestroy, OnInit, Output, EventEmitter, TemplateRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { InventoryService } from '../../../services/inventory.service';
 import { StockGroupRequest, StockGroupResponse } from '../../../models/api-models/Inventory';
 import { InventoryAction } from '../../../actions/inventory/inventory.actions';
@@ -32,7 +32,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
     public groupsData$: Observable<IOption[]>;
     public parentStockSearchString: string;
     public groupUniqueName: string;
-    public addGroupForm: UntypedFormGroup;
+    public addGroupForm: FormGroup;
     public selectedGroup: IOption;
     public fetchingGrpUniqueName$: Observable<boolean>;
     public isGroupNameAvailable$: Observable<boolean>;
@@ -60,7 +60,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
      * TypeScript public modifiers
      */
     constructor(private store: Store<AppState>, private route: ActivatedRoute, private sideBarAction: SidebarAction,
-        private _fb: UntypedFormBuilder, private _inventoryService: InventoryService, private inventoryActions: InventoryAction,
+        private _fb: FormBuilder, private _inventoryService: InventoryService, private inventoryActions: InventoryAction,
         private router: Router, private invoiceService: InvoiceService, private modalService: BsModalService) {
         this.fetchingGrpUniqueName$ = this.store.pipe(select(state => state.inventory.fetchingGrpUniqueName), takeUntil(this.destroyed$));
         this.isGroupNameAvailable$ = this.store.pipe(select(state => state.inventory.isGroupNameAvailable), takeUntil(this.destroyed$));

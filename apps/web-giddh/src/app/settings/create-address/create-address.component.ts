@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { SettingsAsideFormType } from '../constants/settings.constant';
@@ -9,7 +9,7 @@ import { ShSelectComponent } from '../../theme/ng-virtual-select/sh-select.compo
 import { SettingsAsideConfiguration } from '../constants/settings.constant';
 
 function validateFieldWithPatterns(patterns: Array<string>) {
-    return (field: UntypedFormControl): { [key: string]: any } => {
+    return (field: FormControl): { [key: string]: any } => {
         return !field.value || patterns.some(pattern => new RegExp(pattern).test(field.value)) ? null : {
             validateFieldWithPatterns: {
                 valid: false
@@ -33,7 +33,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
     @Output() public updateAddress: EventEmitter<any> = new EventEmitter();
 
     /** Address form */
-    public addressForm: UntypedFormGroup;
+    public addressForm: FormGroup;
     /** Force clears the sh-select dropdown */
     public forceClear$: Observable<IForceClear> = observableOf({ status: false });
 
@@ -63,7 +63,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
     public entityArchived: string[] = ["BRANCH", "WAREHOUSE"];
 
     constructor(
-        private formBuilder: UntypedFormBuilder,
+        private formBuilder: FormBuilder,
         private toasterService: ToasterService
     ) {
     }

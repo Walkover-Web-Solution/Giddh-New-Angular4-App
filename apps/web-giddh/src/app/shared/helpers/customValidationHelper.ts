@@ -1,7 +1,7 @@
-import { AbstractControl, UntypedFormArray, UntypedFormControl, ValidatorFn } from '@angular/forms';
+import { AbstractControl, FormArray, FormControl, ValidatorFn } from '@angular/forms';
 import { EMAIL_VALIDATION_REGEX } from '../../app.constant';
 
-export const emailValidator = (control: UntypedFormControl) => {
+export const emailValidator = (control: FormControl) => {
     return new Promise<any>((resolve, reject) => {
         if (!EMAIL_VALIDATION_REGEX.test(control.value)) {
             resolve({ notValid: true });
@@ -11,7 +11,7 @@ export const emailValidator = (control: UntypedFormControl) => {
     });
 };
 
-export const mobileValidator = (control: UntypedFormControl) => {
+export const mobileValidator = (control: FormControl) => {
     return new Promise<any>((resolve, reject) => {
         if (!EMAIL_VALIDATION_REGEX.test(control.value)) {
             resolve({ notValid: true });
@@ -21,7 +21,7 @@ export const mobileValidator = (control: UntypedFormControl) => {
     });
 };
 
-export const uniqueNameValidator = (control: UntypedFormControl) => {
+export const uniqueNameValidator = (control: FormControl) => {
     return new Promise<any>((resolve, reject) => {
         let pattern = /^[a-z0-9]*$/;
         let val = control.value.toLowerCase();
@@ -50,7 +50,7 @@ export const decimalDigits: ValidatorFn = (control: AbstractControl): { [key: st
 };
 
 export const equalSigns = (ocVal: string) => {
-    return (c: UntypedFormControl) => {
+    return (c: FormControl) => {
         let v = c.value;
         if (v && ocVal) {
             return Math.sign(v) !== Math.sign(parseFloat(ocVal)) ? null : { invalidSign: true };
@@ -61,7 +61,7 @@ export const equalSigns = (ocVal: string) => {
 };
 
 export const stockManufacturingDetailsValidator = (control: AbstractControl) => {
-    const linkedStocks = control.get('linkedStocks') as UntypedFormArray;
+    const linkedStocks = control.get('linkedStocks') as FormArray;
     const manufacturingQuantity = control.get('manufacturingQuantity');
     const manufacturingUnitCode = control.get('manufacturingUnitCode');
 
@@ -76,7 +76,7 @@ export const stockManufacturingDetailsValidator = (control: AbstractControl) => 
     }
 };
 
-export const dateValidator = (control: UntypedFormControl) => {
+export const dateValidator = (control: FormControl) => {
     let datePattern = /^\d{1,2}\-\d{1,2}\-\d{4}$/;
 
     if (!datePattern.test(control.value)) {

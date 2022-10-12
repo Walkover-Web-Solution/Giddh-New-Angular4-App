@@ -14,7 +14,7 @@ import {
     EventEmitter,
     Output
 } from '@angular/core';
-import { UntypedFormControl, NgForm } from '@angular/forms';
+import { FormControl, NgForm } from '@angular/forms';
 import { BsModalRef, ModalOptions, BsModalService } from 'ngx-bootstrap/modal';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
@@ -128,9 +128,9 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public isDeleteSuccess$: Observable<boolean>;
     public allItemsSelected: boolean = false;
     public selectedItems: string[] = [];
-    public voucherNumberInput: UntypedFormControl = new UntypedFormControl();
-    public accountUniqueNameInput: UntypedFormControl = new UntypedFormControl();
-    public ProformaPurchaseOrder: UntypedFormControl = new UntypedFormControl();
+    public voucherNumberInput: FormControl = new FormControl();
+    public accountUniqueNameInput: FormControl = new FormControl();
+    public ProformaPurchaseOrder: FormControl = new FormControl();
     public showAdvanceSearchIcon: boolean = false;
     public hoveredItemForAction: string = '';
     public clickedHoveredItemForAction: string = '';
@@ -188,7 +188,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     /* This will hold if we need to show/hide PO search */
     public showPurchaseOrderSearch: boolean = false;
     /* Field for search */
-    public purchaseOrderNumbersInput: UntypedFormControl = new UntypedFormControl();
+    public purchaseOrderNumbersInput: FormControl = new FormControl();
     /* Send email request params object */
     public sendEmailRequest: any = {};
     /* Company name observable */

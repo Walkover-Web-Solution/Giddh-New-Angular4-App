@@ -13,7 +13,7 @@ import {
     SimpleChanges,
     ViewChild,
 } from '@angular/core';
-import { UntypedFormControl } from '@angular/forms';
+import { FormControl } from '@angular/forms';
 import { each } from 'apps/web-giddh/src/app/lodash-optimized';
 import { Account, ChildGroup } from 'apps/web-giddh/src/app/models/api-models/Search';
 import { BalanceSheetData } from 'apps/web-giddh/src/app/models/api-models/tb-pl-bs';
@@ -41,7 +41,7 @@ export class BalanceSheetGridComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public to: string = '';
     @Output() public searchChange = new EventEmitter<string>();
     @ViewChild('searchInputEl', { static: true }) public searchInputEl: ElementRef;
-    public bsSearchControl: UntypedFormControl = new UntypedFormControl();
+    public bsSearchControl: FormControl = new FormControl();
     /** This holds giddh date format */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */

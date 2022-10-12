@@ -17,7 +17,7 @@ import {
     ViewChildren,
     ChangeDetectorRef,
 } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { TallyModuleService } from 'apps/web-giddh/src/app/accounting/tally-service';
@@ -147,7 +147,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     public inputForList: IOption[];
     public selectedField: 'account' | 'stock';
 
-    public chequeDetailForm: UntypedFormGroup;
+    public chequeDetailForm: FormGroup;
     public asideMenuStateForProductService: string = 'out';
     public isFirstRowDeleted: boolean = false;
     public autoFocusStockGroupField: boolean = false;
@@ -257,7 +257,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         private tallyModuleService: TallyModuleService,
         private componentFactoryResolver: ComponentFactoryResolver,
         private inventoryService: InventoryService,
-        private fb: UntypedFormBuilder,
+        private fb: FormBuilder,
         public bsConfig: BsDatepickerConfig,
         private salesAction: SalesActions,
         private modalService: BsModalService,

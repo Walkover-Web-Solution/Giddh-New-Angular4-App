@@ -1,4 +1,4 @@
-import { ControlValueAccessor, UntypedFormControl, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors } from '@angular/forms';
+import { ControlValueAccessor, FormControl, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors } from '@angular/forms';
 import { CustomKeyboardEvent } from './custom-keyboard-event';
 import { Directive, forwardRef, HostListener, Inject, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
@@ -235,7 +235,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, OnInit, O
     }
 
     // tslint:disable-next-line: cyclomatic-complexity
-    public validate({ value }: UntypedFormControl): ValidationErrors | null {
+    public validate({ value }: FormControl): ValidationErrors | null {
         if (!this._maskService.validation) {
             return null;
         }

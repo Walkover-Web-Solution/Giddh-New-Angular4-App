@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from "@angular/core";
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { select, Store } from "@ngrx/store";
 import { SettingsIntegrationService } from "apps/web-giddh/src/app/services/settings.integraion.service";
 import { ToasterService } from "apps/web-giddh/src/app/services/toaster.service";
@@ -30,7 +30,7 @@ export class PayorCreateEditComponent implements OnInit, OnDestroy {
     /* This will hold local JSON data */
     public localeData: any = {};
     /** Form Group for account user form */
-    public accountUserForm: UntypedFormGroup;
+    public accountUserForm: FormGroup;
     /** Holds the amount limit duration options */
     public amountLimitDurations: IOption[] = [];
     /** This will hold users list */
@@ -40,7 +40,7 @@ export class PayorCreateEditComponent implements OnInit, OnDestroy {
 
     constructor(
         private store: Store<AppState>,
-        private formBuilder: UntypedFormBuilder,
+        private formBuilder: FormBuilder,
         private toaster: ToasterService,
         private settingsIntegrationService: SettingsIntegrationService
     ) {

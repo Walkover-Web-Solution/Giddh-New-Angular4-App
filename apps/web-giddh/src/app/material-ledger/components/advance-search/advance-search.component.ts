@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ShSelectComponent } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-select.component';
 import * as dayjs from 'dayjs';
 import * as customParseFormat from 'dayjs/plugin/customParseFormat';
@@ -36,7 +36,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
     /** Output emitter for close modal event */
     @Output() public closeModelEvent: EventEmitter<{ advanceSearchData, isClose }> = new EventEmitter(null);
     public advanceSearchObject: ILedgerAdvanceSearchRequest = null;
-    public advanceSearchForm: UntypedFormGroup;
+    public advanceSearchForm: FormGroup;
     public showChequeDatePicker: boolean = false;
     public accounts$: Observable<IOption[]>;
     public groups$: Observable<IOption[]>;
@@ -139,7 +139,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
     constructor(
         private groupService: GroupService,
         private inventoryService: InventoryService,
-        private fb: UntypedFormBuilder,
+        private fb: FormBuilder,
         private modalService: BsModalService,
         private generalService: GeneralService,
         private searchService: SearchService,

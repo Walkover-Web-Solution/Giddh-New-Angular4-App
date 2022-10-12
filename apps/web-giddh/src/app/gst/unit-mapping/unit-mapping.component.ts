@@ -2,7 +2,7 @@ import { BreakpointObserver, BreakpointState } from "@angular/cdk/layout";
 import { Component, OnInit } from "@angular/core";
 import { ReplaySubject, Observable } from "rxjs";
 import { takeUntil, map, startWith } from "rxjs/operators";
-import { UntypedFormControl } from '@angular/forms';
+import { FormControl } from '@angular/forms';
 import { CommonService } from "../../services/common.service";
 import { StockUnitRequest } from "../../models/api-models/Inventory";
 import { select, Store } from "@ngrx/store";
@@ -24,7 +24,7 @@ export class UnitMappingComponent implements OnInit {
     public isMobileScreen: boolean = false;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public activeCompanyGstNumber = '';
-    myControl = new UntypedFormControl('');
+    myControl = new FormControl('');
     options: string[] = ['One', 'Two', 'Three'];
     filteredOptions: Observable<string[]>;
     public units: any = [];

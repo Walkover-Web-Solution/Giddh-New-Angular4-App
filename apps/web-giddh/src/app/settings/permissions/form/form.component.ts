@@ -3,7 +3,7 @@ import { GIDDH_DATE_FORMAT } from './../../../shared/helpers/defaultDateFormat';
 import * as isCidr from 'is-cidr';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Observable, ReplaySubject, of as observableOf } from 'rxjs';
-import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
 import { ShareRequestForm } from '../../../models/api-models/Permission';
@@ -46,7 +46,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
 
     public showTimeSpan: boolean = false;
     public showIPWrap: boolean = false;
-    public permissionForm: UntypedFormGroup;
+    public permissionForm: FormGroup;
     public allRoles: object[] = [];
     public selectedTimeSpan: string = '';
     // Selected Type of IP range
@@ -74,7 +74,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
         private _accountsAction: AccountsAction,
         private _toasty: ToasterService,
         private store: Store<AppState>,
-        private _fb: UntypedFormBuilder,
+        private _fb: FormBuilder,
         private generalService: GeneralService
     ) {
         this.createPermissionInProcess$ = this.store.pipe(select(permissionStore => permissionStore.permission.createPermissionInProcess), takeUntil(this.destroyed$));
@@ -216,8 +216,8 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
                 allowedIps: this._fb.array([]),
                 allowedCidrs: this._fb.array([])
             });
-            let allowedIps = this.permissionForm.get('allowedIps') as UntypedFormArray;
-            let allowedCidrs = this.permissionForm.get('allowedCidrs') as UntypedFormArray;
+            let allowedIps = this.permissionForm.get('allowedIps') as FormArray;
+            let allowedCidrs = this.permissionForm.get('allowedCidrs') as FormArray;
 
             if (data?.allowedIps?.length > 0) {
                 forEach(data.allowedIps, (val) => {
@@ -249,8 +249,8 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
                 allowedIps: this._fb.array([]),
                 allowedCidrs: this._fb.array([])
             });
-            let allowedIps = this.permissionForm.get('allowedIps') as UntypedFormArray;
-            let allowedCidrs = this.permissionForm.get('allowedCidrs') as UntypedFormArray;
+            let allowedIps = this.permissionForm.get('allowedIps') as FormArray;
+            let allowedCidrs = this.permissionForm.get('allowedCidrs') as FormArray;
             allowedCidrs.push(this.initRangeForm());
             allowedIps.push(this.initRangeForm());
             this.selectedTimeSpan = this.commonLocaleData?.app_date_range;
@@ -259,7 +259,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
         }
     }
 
-    public initRangeForm(val?: any): UntypedFormGroup {
+    public initRangeForm(val?: any): FormGroup {
         return this._fb.group({
             range: (val) ? [val] : [null]
         });
@@ -276,7 +276,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
         e.stopPropagation();
         let errFound: boolean = false;
         let msg: string;
-        let arow = this.permissionForm.get(type) as UntypedFormArray;
+        let arow = this.permissionForm.get(type) as FormArray;
         for (let control of arow.controls) {
             let val = control.get('range').value;
             if (isNull(val) || isEmpty(val)) {
@@ -307,7 +307,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
 
     public delRow(type: string, i: number, e: any) {
         e.stopPropagation();
-        const arow = this.permissionForm.get(type) as UntypedFormArray;
+        const arow = this.permissionForm.get(type) as FormArray;
         arow.removeAt(i);
     }
 

@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, NgZone, OnChanges, OnInit, Output, SimpleChanges, OnDestroy } from '@angular/core';
-import { AbstractControl, UntypedFormArray, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { InventoryEntry, InventoryUser } from '../../../../models/api-models/Inventory-in-out';
 import { IStocksItem } from '../../../../models/interfaces/stocksItem.interface';
@@ -31,7 +31,7 @@ export class InwardNoteComponent implements OnInit, OnChanges, OnDestroy {
     public stockListOptions: IOption[];
     public stockUnitsOptions: IOption[];
     public userListOptions: IOption[];
-    public form: UntypedFormGroup;
+    public form: FormGroup;
     public config: Partial<BsDatepickerConfig> = { dateInputFormat: GIDDH_DATE_FORMAT };
     public mode: 'sender' | 'product' = 'sender';
     public today = new Date();
@@ -43,37 +43,37 @@ export class InwardNoteComponent implements OnInit, OnChanges, OnDestroy {
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private _fb: UntypedFormBuilder, private _toasty: ToasterService, private _inventoryService: InventoryService,
+    constructor(private _fb: FormBuilder, private _toasty: ToasterService, private _inventoryService: InventoryService,
         private _zone: NgZone) {
         this.initializeForm(true);
     }
 
-    public get inventoryEntryDate(): UntypedFormControl {
-        return this.form.get('inventoryEntryDate') as UntypedFormControl;
+    public get inventoryEntryDate(): FormControl {
+        return this.form.get('inventoryEntryDate') as FormControl;
     }
 
-    public get inventoryUser(): UntypedFormControl {
-        return this.form.get('inventoryUser') as UntypedFormControl;
+    public get inventoryUser(): FormControl {
+        return this.form.get('inventoryUser') as FormControl;
     }
 
-    public get stock(): UntypedFormControl {
-        return this.form.get('stock') as UntypedFormControl;
+    public get stock(): FormControl {
+        return this.form.get('stock') as FormControl;
     }
 
-    public get transactions(): UntypedFormArray {
-        return this.form.get('transactions') as UntypedFormArray;
+    public get transactions(): FormArray {
+        return this.form.get('transactions') as FormArray;
     }
 
-    public get description(): UntypedFormControl {
-        return this.form.get('description') as UntypedFormControl;
+    public get description(): FormControl {
+        return this.form.get('description') as FormControl;
     }
 
-    public get manufacturingDetails(): UntypedFormGroup {
-        return this.form.get('manufacturingDetails') as UntypedFormGroup;
+    public get manufacturingDetails(): FormGroup {
+        return this.form.get('manufacturingDetails') as FormGroup;
     }
 
-    public get isManufactured(): UntypedFormControl {
-        return this.form.get('isManufactured') as UntypedFormControl;
+    public get isManufactured(): FormControl {
+        return this.form.get('isManufactured') as FormControl;
     }
 
     public ngOnInit() {
@@ -173,12 +173,12 @@ export class InwardNoteComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public deleteTransactionItem(index: number) {
-        const items = this.form.get('transactions') as UntypedFormArray;
+        const items = this.form.get('transactions') as FormArray;
         items.removeAt(index);
     }
 
     public userChanged(option: IOption, index: number) {
-        const items = this.form.get('transactions') as UntypedFormArray;
+        const items = this.form.get('transactions') as FormArray;
         const user = this.userList.find(p => p?.uniqueName === option.value);
         const inventoryUser = user ? { uniqueName: user?.uniqueName } : null;
 
@@ -245,7 +245,7 @@ export class InwardNoteComponent implements OnInit, OnChanges, OnDestroy {
      */
     public findAddedStock(uniqueName, i) {
         const manufacturingDetailsContorl = this.manufacturingDetails;
-        const control = manufacturingDetailsContorl.controls['linkedStocks'] as UntypedFormArray;
+        const control = manufacturingDetailsContorl.controls['linkedStocks'] as FormArray;
         let count = 0;
         _.forEach(control.controls, (o) => {
             if (o.value.stockUniqueName === uniqueName) {
@@ -267,7 +267,7 @@ export class InwardNoteComponent implements OnInit, OnChanges, OnDestroy {
 
     public addItemInLinkedStocks(item, i?: number, lastIdx?) {
         const manufacturingDetailsContorl = this.manufacturingDetails;
-        const control = manufacturingDetailsContorl.controls['linkedStocks'] as UntypedFormArray;
+        const control = manufacturingDetailsContorl.controls['linkedStocks'] as FormArray;
         let frmgrp = this.initialIManufacturingDetails();
         if (item) {
             if (item.controls) {
@@ -297,7 +297,7 @@ export class InwardNoteComponent implements OnInit, OnChanges, OnDestroy {
             this.editLinkedStockIdx = null;
         }
         const manufacturingDetailsContorl = this.manufacturingDetails;
-        const control = manufacturingDetailsContorl.controls['linkedStocks'] as UntypedFormArray;
+        const control = manufacturingDetailsContorl.controls['linkedStocks'] as FormArray;
         control.removeAt(i);
     }
 
@@ -348,7 +348,7 @@ export class InwardNoteComponent implements OnInit, OnChanges, OnDestroy {
      */
     public removeBlankLinkedStock(linkedStocks) {
         const manufacturingDetailsContorl = this.manufacturingDetails;
-        const control = manufacturingDetailsContorl.controls['linkedStocks'] as UntypedFormArray;
+        const control = manufacturingDetailsContorl.controls['linkedStocks'] as FormArray;
         let rawArr = control.getRawValue();
         _.forEach(rawArr, (o, i) => {
             if (!o.quantity || !o.stockUniqueName || !o.stockUnitCode) {

@@ -7,7 +7,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { take, takeUntil, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { ReplaySubject, Observable } from 'rxjs';
 import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
-import { UntypedFormControl } from '@angular/forms';
+import { FormControl } from '@angular/forms';
 import { PAGINATION_LIMIT } from '../../../app.constant';
 import { CurrentCompanyState } from '../../../store/Company/company.reducer';
 import { BreakpointObserver } from '@angular/cdk/layout';
@@ -39,7 +39,7 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
     @ViewChild('invoiceSearch', { static: true }) public invoiceSearch: ElementRef;
     @ViewChild('filterDropDownList', { static: true }) public filterDropDownList: BsDropdownDirective;
 
-    public voucherNumberInput: UntypedFormControl = new UntypedFormControl();
+    public voucherNumberInput: FormControl = new FormControl();
     public monthNames = [];
     public monthYear: string[] = [];
     public modalUniqueName: string;

@@ -1,6 +1,6 @@
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { TrialBalanceRequest } from '../../../models/api-models/tb-pl-bs';
 import { CompanyResponse } from '../../../models/api-models/Company';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
@@ -30,10 +30,10 @@ import { IForceClear } from '../../../models/api-models/Sales';
 export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
     public today: Date = new Date();
     public selectedDateOption: string = '0';
-    public filterForm: UntypedFormGroup;
+    public filterForm: FormGroup;
     public search: string = '';
     public financialOptions: IOption[] = [];
-    public accountSearchControl: UntypedFormControl = new UntypedFormControl();
+    public accountSearchControl: FormControl = new FormControl();
     public tags: TagRequest[] = [];
     public selectedTag: string;
     @Input() public tbExportPdf: boolean = false;
@@ -70,7 +70,7 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
     @Output() public onPropertyChanged = new EventEmitter<TrialBalanceRequest>();
     @ViewChild('createTagModal', { static: true }) public createTagModal: ModalDirective;
     public universalDate$: Observable<any>;
-    public newTagForm: UntypedFormGroup;
+    public newTagForm: FormGroup;
     /** Date format type */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     /** directive to get reference of element */
@@ -104,7 +104,7 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
     /* This will clear the select value in sh-select */
     public forceClear$: Observable<IForceClear> = observableOf({ status: false });
 
-    constructor(private fb: UntypedFormBuilder,
+    constructor(private fb: FormBuilder,
         private cd: ChangeDetectorRef,
         private store: Store<AppState>,
         private settingsTagService: SettingsTagService,
