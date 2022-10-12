@@ -121,7 +121,7 @@ export class SignupComponent implements OnInit, OnDestroy {
         this.userDetails$ = this.store.pipe(select(p => p.session.user), takeUntil(this.destroyed$));
         this.isTwoWayAuthInProcess$ = this.store.pipe(select(p => p.login.isTwoWayAuthInProcess), takeUntil(this.destroyed$));
         this.isTwoWayAuthInSuccess$ = this.store.pipe(select(p => p.login.isTwoWayAuthSuccess), takeUntil(this.destroyed$));
-        this.isLoginWithPasswordIsShowVerifyOtp$ = this.store.pipe(select(state => { return state.login.isLoginWithPasswordIsShowVerifyOtp;}), takeUntil(this.destroyed$));
+        this.isLoginWithPasswordIsShowVerifyOtp$ = this.store.pipe(select(state => state.login.isLoginWithPasswordIsShowVerifyOtp), takeUntil(this.destroyed$));
     }
 
     // tslint:disable-next-line:no-empty
@@ -181,6 +181,7 @@ export class SignupComponent implements OnInit, OnDestroy {
         this.isLoginWithPasswordIsShowVerifyOtp$.subscribe(res => {
             if (res) {
                 this.showTwoWayAuthModal();
+                this.store.dispatch(this.loginAction.hideTwoWayOtpPopup());
             }
         });
 
@@ -256,11 +257,11 @@ export class SignupComponent implements OnInit, OnDestroy {
     }
 
     public showTwoWayAuthModal() {
-        this.twoWayAuthModal.show();
+        this.twoWayAuthModal?.show();
     }
 
     public hideTowWayAuthModal() {
-        this.twoWayAuthModal.hide();
+        this.twoWayAuthModal?.hide();
     }
 
     public resetTwoWayAuthModal() {

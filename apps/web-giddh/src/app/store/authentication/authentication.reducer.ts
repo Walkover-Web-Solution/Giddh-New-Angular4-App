@@ -453,6 +453,11 @@ export function AuthenticationReducer(state: AuthenticationState = initialState,
                 });
             }
         }
+        case LoginActions.hideTwoWayOtpPopup: {
+            return Object.assign({}, state, {
+                isLoginWithPasswordIsShowVerifyOtp: false
+            });
+        }
         default:
             return state;
     }
