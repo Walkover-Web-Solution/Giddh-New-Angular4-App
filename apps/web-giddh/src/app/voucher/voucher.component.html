@@ -3593,6 +3593,58 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div
+                                        class="table-row"
+                                        *ngIf="
+                                            isCashInvoice &&
+                                            !(
+                                                isSalesInvoice ||
+                                                isPurchaseInvoice ||
+                                                isCreditNote ||
+                                                isDebitNote ||
+                                                isPendingVoucherType ||
+                                                isAccountHaveAdvanceReceipts ||
+                                                isInvoiceAdjustedWithAdvanceReceipts
+                                            )
+                                        "
+                                    >
+                                        <div class="table-cell deposit-section">
+                                            <div class="btn-group">
+                                                <div
+                                                    (click)="clickedInside($event)"
+                                                    id="deposit-dropdown"
+                                                    class="form-group pd-1"
+                                                >
+                                                    <p>{{ localeData?.deposit }}</p>
+                                                    <ul>
+                                                        <ng-container>
+                                                            <li role="menuitem" class="mr-t1">
+                                                                <div class="clearfix payment-mode number2">
+                                                                    <select-field
+                                                                        [cssClass]="
+                                                                            'form-control mat-field-border pull-right'
+                                                                        "
+                                                                        [name]="'depositAccountUniqueName'"
+                                                                        [options]="bankAccounts$ | async"
+                                                                        (selectedOption)="onSelectPaymentMode($event)"
+                                                                        [placeholder]="
+                                                                            commonLocaleData?.app_select_account
+                                                                        "
+                                                                        (onClear)="onSelectPaymentMode($event, true)"
+                                                                        [defaultValue]="'Cash'"
+                                                                    >
+                                                                    </select-field>
+                                                                    <label class="pull-right">{{
+                                                                        localeData?.account
+                                                                    }}</label>
+                                                                </div>
+                                                            </li>
+                                                        </ng-container>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <!--endregion-->
 
                                     <!-- region balance due for purchase -->
