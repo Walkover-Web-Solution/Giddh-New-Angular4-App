@@ -90,6 +90,8 @@ export class LoginActions {
 
     public static AutoLoginWithPasswdResponse = 'AutoLoginWithPasswdResponse';
 
+    public static hideTwoWayOtpPopup = 'hideTwoWayOtpPopup';
+
     public signupWithGoogle$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
             ofType(LoginActions.SIGNUP_WITH_GOOGLE_REQUEST),
@@ -934,6 +936,18 @@ export class LoginActions {
             type: LoginActions.AutoLoginWithPasswdResponse,
             payload: response
         };
+    }
+
+    /**
+     * Sets false in reducer
+     *
+     * @returns {CustomActions}
+     * @memberof LoginActions
+     */
+    public hideTwoWayOtpPopup(): CustomActions {
+        return {
+            type: LoginActions.hideTwoWayOtpPopup
+        }
     }
 
     private doSameStuffs(companies, isSocialLogin?: boolean) {
