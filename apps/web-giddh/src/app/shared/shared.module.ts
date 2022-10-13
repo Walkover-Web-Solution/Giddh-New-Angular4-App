@@ -176,12 +176,6 @@ export function provideConfig() {
         GenericAsideMenuAccountModule,
         MasterComponent
     ],
-    entryComponents: [
-        ManageGroupsAccountsComponent,
-        AccountOperationsComponent,
-        MasterComponent,
-        OnBoardingComponent
-    ],
     providers: [
         {
             provide: AuthServiceConfig,

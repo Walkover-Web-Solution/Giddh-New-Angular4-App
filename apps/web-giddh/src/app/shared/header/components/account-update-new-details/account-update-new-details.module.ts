@@ -41,9 +41,6 @@ import { AccountUpdateNewDetailsComponent } from "./account-update-new-details.c
         ModalModule,
         ConfirmModalModule,
         ConfirmationModalModule
-    ],
-    entryComponents: [
-        AccountUpdateNewDetailsComponent
     ]
 })
 
