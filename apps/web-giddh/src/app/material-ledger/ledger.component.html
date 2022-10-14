@@ -1353,8 +1353,9 @@
                                                                 voucherApiVersion === 2 &&
                                                                 (transactions.attachedFileUniqueName ||
                                                                     (transactions.voucherGenerated &&
-                                                                        transactions.voucherGeneratedType !==
-                                                                            'journal'))
+                                                                        !restrictedVouchersForDownload.includes(
+                                                                            transactions.voucherGeneratedType
+                                                                        )))
                                                             "
                                                             (click)="openAttachmentsDialog(attachments, transactions)"
                                                         >
@@ -1615,13 +1616,16 @@
                                             *ngIf="
                                                 voucherApiVersion === 2 &&
                                                 (txn.attachedFileUniqueName ||
-                                                    (txn.voucherGenerated && txn.voucherGeneratedType !== 'journal'))
+                                                    (txn.voucherGenerated &&
+                                                        !restrictedVouchersForDownload.includes(
+                                                            txn.voucherGeneratedType
+                                                        )))
                                             "
                                             (click)="openAttachmentsDialog(attachments, txn)"
                                             [matTooltip]="
                                                 txn.attachedFileUniqueName &&
                                                 txn.voucherGenerated &&
-                                                txn.voucherGeneratedType !== 'journal'
+                                                !restrictedVouchersForDownload.includes(txn.voucherGeneratedType)
                                                     ? (txn.voucherNumber || commonLocaleData?.app_not_available) +
                                                       ', ' +
                                                       txn.attachedFileName
@@ -2046,13 +2050,16 @@
                                             *ngIf="
                                                 voucherApiVersion === 2 &&
                                                 (txn.attachedFileUniqueName ||
-                                                    (txn.voucherGenerated && txn.voucherGeneratedType !== 'journal'))
+                                                    (txn.voucherGenerated &&
+                                                        !restrictedVouchersForDownload.includes(
+                                                            txn.voucherGeneratedType
+                                                        )))
                                             "
                                             (click)="openAttachmentsDialog(attachments, txn)"
                                             [matTooltip]="
                                                 txn.attachedFileUniqueName &&
                                                 txn.voucherGenerated &&
-                                                txn.voucherGeneratedType !== 'journal'
+                                                !restrictedVouchersForDownload.includes(txn.voucherGeneratedType)
                                                     ? (txn.voucherNumber || commonLocaleData?.app_not_available) +
                                                       ', ' +
                                                       txn.attachedFileName

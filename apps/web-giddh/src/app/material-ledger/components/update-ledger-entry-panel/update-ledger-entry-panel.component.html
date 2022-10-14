@@ -300,7 +300,9 @@
                                                     voucherApiVersion === 2 &&
                                                     (vm.selectedLedger.attachedFile?.length > 0 ||
                                                         (vm.selectedLedger.voucherGenerated &&
-                                                            vm.selectedLedger.voucherGeneratedType !== 'journal')) &&
+                                                            !restrictedVouchersForDownload.includes(
+                                                                vm.selectedLedger.voucherGeneratedType
+                                                            ))) &&
                                                     (txn?.particular?.name || txn?.particular?.uniqueName)
                                                 "
                                                 (click)="openAttachmentsDialog(attachments)"
@@ -309,7 +311,9 @@
                                                 [matTooltip]="
                                                     vm.selectedLedger.attachedFile?.length > 0 &&
                                                     vm.selectedLedger.voucherGenerated &&
-                                                    vm.selectedLedger.voucherGeneratedType !== 'journal'
+                                                    !restrictedVouchersForDownload.includes(
+                                                        vm.selectedLedger.voucherGeneratedType
+                                                    )
                                                         ? (vm.selectedLedger.voucherNumber ||
                                                               commonLocaleData?.app_not_available) +
                                                           ', ' +
@@ -632,7 +636,9 @@
                                                     voucherApiVersion === 2 &&
                                                     (vm.selectedLedger.attachedFile?.length > 0 ||
                                                         (vm.selectedLedger.voucherGenerated &&
-                                                            vm.selectedLedger.voucherGeneratedType !== 'journal')) &&
+                                                            !restrictedVouchersForDownload.includes(
+                                                                vm.selectedLedger.voucherGeneratedType
+                                                            ))) &&
                                                     (txn?.particular?.name || txn?.particular?.uniqueName)
                                                 "
                                                 (click)="openAttachmentsDialog(attachments)"
@@ -641,7 +647,9 @@
                                                 [matTooltip]="
                                                     vm.selectedLedger.attachedFile?.length > 0 &&
                                                     vm.selectedLedger.voucherGenerated &&
-                                                    vm.selectedLedger.voucherGeneratedType !== 'journal'
+                                                    !restrictedVouchersForDownload.includes(
+                                                        vm.selectedLedger.voucherGeneratedType
+                                                    )
                                                         ? (vm.selectedLedger.voucherNumber ||
                                                               commonLocaleData?.app_not_available) +
                                                           ', ' +
