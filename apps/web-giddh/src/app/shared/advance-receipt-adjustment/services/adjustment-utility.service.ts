@@ -135,6 +135,8 @@ export class AdjustmentUtilityService {
         const debtorCreditorParentGroups = ['sundrydebtors', 'sundrycreditors'];
         const cashBankParentGroups = ['cash', 'bankaccounts', 'loanandoverdraft'];
         const fixedAssetsGroups = ['fixedassets'];
+        const journalVoucherTypes = ["jr", "journal"];
+        const journalVoucherType = "journal";
 
         if (data?.particularAccount?.parentGroups?.length > 0) {
             if (data?.particularAccount?.parentGroups[0].uniqueName) {
@@ -195,6 +197,12 @@ export class AdjustmentUtilityService {
                     voucherType: data?.voucherType,
                     noteVoucherType: ((data?.voucherType === debitNoteVoucher || data?.voucherType === creditNoteVoucher) && isSalesLedger) ? "sales" : ((data?.voucherType === debitNoteVoucher || data?.voucherType === creditNoteVoucher) && isPurchaseLedger) ? "purchase" : undefined
                 };
+            } else if (journalVoucherTypes.includes(data?.voucherType)) {
+                request = {
+                    accountUniqueName: data?.ledgerAccount?.uniqueName,
+                    voucherType: journalVoucherType,
+                    noteVoucherType: undefined
+                };
             } else {
                 request = undefined;
             }
@@ -204,6 +212,12 @@ export class AdjustmentUtilityService {
                     accountUniqueName: data?.particularAccount?.uniqueName,
                     voucherType: data?.voucherType,
                     noteVoucherType: (data?.voucherType === creditNoteVoucher) ? "sales" : (data?.voucherType === debitNoteVoucher) ? "purchase" : undefined
+                };
+            } else if (journalVoucherTypes.includes(data?.voucherType)) {
+                request = {
+                    accountUniqueName: data?.ledgerAccount?.uniqueName,
+                    voucherType: journalVoucherType,
+                    noteVoucherType: undefined
                 };
             } else {
                 request = undefined;
@@ -220,6 +234,8 @@ export class AdjustmentUtilityService {
                 request.noteVoucherType = undefined;
             } else if (isFixedAssetsAccount) {
                 request.noteVoucherType = (data?.voucherType === creditNoteVoucher) ? "sales" : (data?.voucherType === debitNoteVoucher) ? "purchase" : undefined;
+            } else if (journalVoucherTypes.includes(data?.voucherType)) {
+                request.voucherType = journalVoucherType;
             } else {
                 request = undefined;
             }
@@ -228,6 +244,12 @@ export class AdjustmentUtilityService {
                 request = {
                     accountUniqueName: data?.particularAccount?.uniqueName,
                     voucherType: data?.voucherType,
+                    noteVoucherType: undefined
+                };
+            } else if (journalVoucherTypes.includes(data?.voucherType)) {
+                request = {
+                    accountUniqueName: data?.ledgerAccount?.uniqueName,
+                    voucherType: journalVoucherType,
                     noteVoucherType: undefined
                 };
             } else {
