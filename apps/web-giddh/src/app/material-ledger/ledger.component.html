@@ -1352,7 +1352,9 @@
                                                             *ngIf="
                                                                 voucherApiVersion === 2 &&
                                                                 (transactions.attachedFileUniqueName ||
-                                                                    transactions.voucherGenerated)
+                                                                    (transactions.voucherGenerated &&
+                                                                        transactions.voucherGeneratedType !==
+                                                                            'journal'))
                                                             "
                                                             (click)="openAttachmentsDialog(attachments, transactions)"
                                                         >
@@ -1612,11 +1614,13 @@
                                             class="download-invoice-ledger d-flex cursor-pointer"
                                             *ngIf="
                                                 voucherApiVersion === 2 &&
-                                                (txn.attachedFileUniqueName || txn.voucherGenerated)
+                                                (txn.attachedFileUniqueName ||
+                                                    (txn.voucherGenerated && txn.voucherGeneratedType !== 'journal'))
                                             "
                                             (click)="openAttachmentsDialog(attachments, txn)"
                                             [matTooltip]="
-                                                txn.attachedFileUniqueName && txn.voucherGenerated
+                                                txn.attachedFileUniqueName &&
+                                                txn.voucherGenerated && txn.voucherGeneratedType !== 'journal'
                                                     ? (txn.voucherNumber || commonLocaleData?.app_not_available) +
                                                       ', ' +
                                                       txn.attachedFileName
@@ -2040,11 +2044,13 @@
                                             class="download-invoice-ledger d-flex cursor-pointer"
                                             *ngIf="
                                                 voucherApiVersion === 2 &&
-                                                (txn.attachedFileUniqueName || txn.voucherGenerated)
+                                                (txn.attachedFileUniqueName ||
+                                                    (txn.voucherGenerated && txn.voucherGeneratedType !== 'journal'))
                                             "
                                             (click)="openAttachmentsDialog(attachments, txn)"
                                             [matTooltip]="
-                                                txn.attachedFileUniqueName && txn.voucherGenerated
+                                                txn.attachedFileUniqueName &&
+                                                txn.voucherGenerated && txn.voucherGeneratedType !== 'journal'
                                                     ? (txn.voucherNumber || commonLocaleData?.app_not_available) +
                                                       ', ' +
                                                       txn.attachedFileName
