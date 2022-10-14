@@ -149,6 +149,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
                 this.currencySymbol = this.baseCurrencySymbol;
             }
         });
+
         if (this.advanceReceiptAdjustmentUpdatedData) {
             this.advanceReceiptAdjustmentPreUpdatedData = cloneDeep(this.advanceReceiptAdjustmentUpdatedData);
             this.adjustVoucherForm = this.advanceReceiptAdjustmentUpdatedData?.adjustments?.length ? cloneDeep(this.advanceReceiptAdjustmentUpdatedData) : this.adjustVoucherForm;
@@ -160,6 +161,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
         } else {
             this.onClear();
         }
+
         if (this.invoiceFormDetails && this.invoiceFormDetails.voucherDetails) {
             if (typeof this.invoiceFormDetails.voucherDetails.voucherDate !== 'string') {
                 this.invoiceFormDetails.voucherDetails.voucherDate = dayjs(this.invoiceFormDetails.voucherDetails.voucherDate).format(GIDDH_DATE_FORMAT);
@@ -168,10 +170,12 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
             this.invoiceFormDetails.voucherDetails.tdsTotal = this.invoiceFormDetails.voucherDetails.tdsTotal || 0;
             this.assignVoucherDetails();
         }
+
         if (this.invoiceFormDetails?.accountDetails) {
             this.invoiceFormDetails.accountDetails.currencyCode = this.invoiceFormDetails?.accountDetails?.currencyCode || this.companyCurrency;
             this.isMultiCurrencyAccount = this.invoiceFormDetails?.accountDetails?.currencyCode !== this.companyCurrency;
         }
+
         if (!this.isVoucherModule) {
             this.getInvoiceList();
         } else {
@@ -740,7 +744,14 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
             this.adjustPayment.balanceDue = this.invoiceFormDetails.voucherDetails.balanceDue;
             this.adjustVoucherForm.adjustments.forEach(item => {
                 if (item && item.adjustmentAmount && item.adjustmentAmount.amountForAccount) {
-                    if (((this.adjustedVoucherType === AdjustedVoucherType.SalesInvoice || this.adjustedVoucherType === AdjustedVoucherType.Sales) && item.voucherType === AdjustedVoucherType.DebitNote) || ((this.adjustedVoucherType === AdjustedVoucherType.PurchaseInvoice || this.adjustedVoucherType === AdjustedVoucherType.Purchase) && item.voucherType === AdjustedVoucherType.CreditNote)) {
+                    if (
+                        ((this.adjustedVoucherType === AdjustedVoucherType.SalesInvoice || this.adjustedVoucherType === AdjustedVoucherType.Sales) && item.voucherType === AdjustedVoucherType.DebitNote) ||
+                        ((this.adjustedVoucherType === AdjustedVoucherType.PurchaseInvoice || this.adjustedVoucherType === AdjustedVoucherType.Purchase) && item.voucherType === AdjustedVoucherType.CreditNote) || 
+                        (this.adjustedVoucherType === AdjustedVoucherType.DebitNote && item.voucherType === AdjustedVoucherType.OpeningBalance && item.voucherBalanceType === "dr") ||
+                        (this.adjustedVoucherType === AdjustedVoucherType.DebitNote && item.voucherType === AdjustedVoucherType.Journal && item.voucherBalanceType === "dr") ||
+                        (this.adjustedVoucherType === AdjustedVoucherType.CreditNote && item.voucherType === AdjustedVoucherType.OpeningBalance && item.voucherBalanceType === "cr") ||
+                        (this.adjustedVoucherType === AdjustedVoucherType.CreditNote && item.voucherType === AdjustedVoucherType.Journal && item.voucherBalanceType === "cr")
+                    ) {
                         totalAmount -= Number(item.adjustmentAmount.amountForAccount);
                         convertedTotalAmount -= item.adjustmentAmount.amountForCompany;
                     } else {

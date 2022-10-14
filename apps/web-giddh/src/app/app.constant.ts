@@ -251,7 +251,8 @@ export enum AdjustedVoucherType {
     CreditNote = 'credit note',
     DebitNote = 'debit note',
     Payment = 'pay',
-    Journal = 'jr'
+    Journal = 'jr',
+    OpeningBalance = 'opening balance'
 }
 
 /** Collection of search field default text for empty results */
