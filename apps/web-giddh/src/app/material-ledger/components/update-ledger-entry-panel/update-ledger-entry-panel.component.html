@@ -299,7 +299,10 @@
                                                 *ngIf="
                                                     voucherApiVersion === 2 &&
                                                     (vm.selectedLedger.attachedFile?.length > 0 ||
-                                                        vm.selectedLedger.voucherGenerated) &&
+                                                        (vm.selectedLedger.voucherGenerated &&
+                                                            !restrictedVouchersForDownload.includes(
+                                                                vm.selectedLedger.voucherGeneratedType
+                                                            ))) &&
                                                     (txn?.particular?.name || txn?.particular?.uniqueName)
                                                 "
                                                 (click)="openAttachmentsDialog(attachments)"
@@ -307,7 +310,10 @@
                                                 [containerClass]="'col-xs-3'"
                                                 [matTooltip]="
                                                     vm.selectedLedger.attachedFile?.length > 0 &&
-                                                    vm.selectedLedger.voucherGenerated
+                                                    vm.selectedLedger.voucherGenerated &&
+                                                    !restrictedVouchersForDownload.includes(
+                                                        vm.selectedLedger.voucherGeneratedType
+                                                    )
                                                         ? (vm.selectedLedger.voucherNumber ||
                                                               commonLocaleData?.app_not_available) +
                                                           ', ' +
@@ -629,7 +635,10 @@
                                                 *ngIf="
                                                     voucherApiVersion === 2 &&
                                                     (vm.selectedLedger.attachedFile?.length > 0 ||
-                                                        vm.selectedLedger.voucherGenerated) &&
+                                                        (vm.selectedLedger.voucherGenerated &&
+                                                            !restrictedVouchersForDownload.includes(
+                                                                vm.selectedLedger.voucherGeneratedType
+                                                            ))) &&
                                                     (txn?.particular?.name || txn?.particular?.uniqueName)
                                                 "
                                                 (click)="openAttachmentsDialog(attachments)"
@@ -637,7 +646,10 @@
                                                 [containerClass]="'col-xs-3'"
                                                 [matTooltip]="
                                                     vm.selectedLedger.attachedFile?.length > 0 &&
-                                                    vm.selectedLedger.voucherGenerated
+                                                    vm.selectedLedger.voucherGenerated &&
+                                                    !restrictedVouchersForDownload.includes(
+                                                        vm.selectedLedger.voucherGeneratedType
+                                                    )
                                                         ? (vm.selectedLedger.voucherNumber ||
                                                               commonLocaleData?.app_not_available) +
                                                           ', ' +
@@ -1493,7 +1505,9 @@
                                                 *ngIf="
                                                     vm.selectedLedger?.voucher?.shortCode === 'sal' ||
                                                     vm.selectedLedger?.voucher?.shortCode === 'pur' ||
-                                                    vm.selectedLedger?.voucher?.shortCode == 'pay'
+                                                    vm.selectedLedger?.voucher?.shortCode == 'pay' ||
+                                                    (voucherApiVersion === 2 &&
+                                                        vm.selectedLedger?.voucher?.shortCode == 'jr')
                                                 "
                                             >
                                                 <div class="form-group mr-b05">
@@ -1737,10 +1751,9 @@
                                             </td>
                                             <td
                                                 *ngIf="
-                                                    vm.selectedLedger?.voucher?.shortCode !== 'jr' &&
-                                                    vm.selectedLedger?.voucher?.shortCode !== 'cntr' &&
-                                                    vm.selectedLedger?.voucher?.shortCode !== 'rcpt' &&
-                                                    vm.selectedLedger?.voucher?.shortCode !== 'advance-receipt'
+                                                    vm.selectedLedger.voucher?.shortCode !== 'cntr' &&
+                                                    vm.selectedLedger.voucher?.shortCode !== 'rcpt' &&
+                                                    vm.selectedLedger.voucher?.shortCode !== 'advance-receipt'
                                                 "
                                                 class="pd-r1 pb-1"
                                             >
