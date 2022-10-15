@@ -461,12 +461,15 @@
                                                                                 {{ customerCountryName }}
                                                                             </label>
                                                                         </div>
-                                                                        <div class="col-sm-12 col-md-6" #billingState>
+                                                                        <div
+                                                                            class="col-sm-12 col-md-6 billingStateOnly"
+                                                                            #billingState
+                                                                        >
                                                                             <select-field
                                                                                 [placeholder]="
                                                                                     commonLocaleData?.app_state
                                                                                 "
-                                                                                [cssClass]="'select-bdr-bottom'"
+                                                                                [cssClass]="'form-control input-custom'"
                                                                                 (selectedOption)="
                                                                                     fillShippingBillingDetails(
                                                                                         $event,
@@ -511,12 +514,12 @@
                                                                                     getStateCode(
                                                                                         'billingDetails',
                                                                                         statesBilling
-                                                                                    );
-                                                                                    autoFillShippingDetails()
+                                                                                    )
                                                                                 "
                                                                                 [placeholder]="
                                                                                     commonLocaleData?.app_gstin
                                                                                 "
+                                                                                (input)="autoFillShippingDetails()"
                                                                             ></text-field>
                                                                             <text-field
                                                                                 [maxlength]="15"
@@ -533,12 +536,12 @@
                                                                                     getStateCode(
                                                                                         'billingDetails',
                                                                                         statesBilling
-                                                                                    );
-                                                                                    autoFillShippingDetails()
+                                                                                    )
                                                                                 "
                                                                                 [placeholder]="
                                                                                     commonLocaleData?.app_trn
                                                                                 "
+                                                                                (input)="autoFillShippingDetails()"
                                                                             ></text-field>
                                                                         </div>
                                                                         <!-- static pin code  -->
@@ -559,7 +562,7 @@
                                                                                     "
                                                                                     autocomplete="false"
                                                                                     [name]="'billingPinCode'"
-                                                                                    (blur)="autoFillShippingDetails()"
+                                                                                    (input)="autoFillShippingDetails()"
                                                                                     [placeholder]="
                                                                                         commonLocaleData?.app_pin_code
                                                                                     "
@@ -1001,7 +1004,7 @@
                                 <!-- endregion-->
                                 <!-- warehouse selection -->
                                 <div
-                                    class="row mt-1"
+                                    class="row mt-1 warehouse-wrapper"
                                     *ngIf="shouldShowWarehouse && warehouses && warehouses.length > 1"
                                 >
                                     <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12">
@@ -1017,6 +1020,7 @@
                                                 (selectedOption)="onSelectWarehouse($event)"
                                                 [allowValueReset]="true"
                                                 (onClear)="onSelectWarehouse($event)"
+                                                [defaultValue]="selectedWarehouse"
                                             >
                                             </select-field>
                                         </div>
@@ -1397,48 +1401,61 @@
                                     </div>
                                     <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12">
                                         <div class="col-xl-6 col-lg-10 col-md-10 pl-0">
-                                            <sh-select
-                                                [options]="purchaseOrders"
-                                                [placeholder]="localeData?.select_order_placeholder"
-                                                [multiple]="true"
+                                            <mat-select
                                                 name="linkedPO"
-                                                [(ngModel)]="linkedPo"
-                                                (selected)="getPurchaseOrder($event, true)"
-                                                [isFilterEnabled]="true"
-                                                [useInBuiltFilterForIOptionTypeItems]="true"
+                                                [placeholder]="localeData?.select_order_placeholder"
+                                                [(value)]="linkedPo"
+                                                [multiple]="true"
                                             >
-                                                <ng-template #optionTemplate let-option="option">
-                                                    <ng-container>
-                                                        <a href="javascript:void(0)" class="list-item d-flex">
-                                                            <span
-                                                                ><input
-                                                                    type="checkbox"
-                                                                    [checked]="
-                                                                        linkedPo && linkedPo.includes(option.value)
-                                                                    "
-                                                                    [value]="option.value" /></span
-                                                            >&nbsp;
-                                                            <span>
-                                                                <div class="item">{{ option?.label }}</div>
-                                                                <div
-                                                                    class="item-unique"
-                                                                    *ngIf="option.additional?.pending"
-                                                                >
-                                                                    {{ localeData?.pending }}:
-                                                                    {{ option.additional?.pending }}
-                                                                </div>
-                                                                <div
-                                                                    class="item-unique"
-                                                                    *ngIf="option.additional?.grandTotal"
-                                                                >
-                                                                    {{ commonLocaleData?.app_amount }}:
-                                                                    {{ option.additional?.grandTotal }}
-                                                                </div>
-                                                            </span>
-                                                        </a>
-                                                    </ng-container>
-                                                </ng-template>
-                                            </sh-select>
+                                                <mat-option
+                                                    *ngFor="let option of purchaseOrders"
+                                                    [value]="option.value"
+                                                    (click)="getPurchaseOrder($event, true)"
+                                                    >{{ option?.label }}
+                                                </mat-option>
+                                            </mat-select>
+                                            <!-- <sh-select
+                                        [options]="purchaseOrders"
+                                        [placeholder]="localeData?.select_order_placeholder"
+                                        [multiple]="true"
+                                        name="linkedPO"
+                                        [(ngModel)]="linkedPo"
+                                        (selected)="getPurchaseOrder($event, true)"
+                                        [isFilterEnabled]="true"
+                                        [useInBuiltFilterForIOptionTypeItems]="true"
+                                    >
+                                        <ng-template #optionTemplate let-option="option">
+                                            <ng-container>
+                                                <a href="javascript:void(0)" class="list-item d-flex">
+                                                    <span
+                                                        ><input
+                                                            type="checkbox"
+                                                            [checked]="
+                                                                linkedPo && linkedPo.includes(option.value)
+                                                            "
+                                                            [value]="option.value" /></span
+                                                    >&nbsp;
+                                                    <span>
+                                                        <div class="item">{{ option?.label }}</div>
+                                                        <div
+                                                            class="item-unique"
+                                                            *ngIf="option.additional?.pending"
+                                                        >
+                                                            {{ localeData?.pending }}:
+                                                            {{ option.additional?.pending }}
+                                                        </div>
+                                                        <div
+                                                            class="item-unique"
+                                                            *ngIf="option.additional?.grandTotal"
+                                                        >
+                                                            {{ commonLocaleData?.app_amount }}:
+                                                            {{ option.additional?.grandTotal }}
+                                                        </div>
+                                                    </span>
+                                                </a>
+                                            </ng-container>
+                                        </ng-template>
+                                    </sh-select> -->
                                         </div>
                                     </div>
                                 </div>
@@ -1583,7 +1600,7 @@
                                                         ><i class="icon-trash"></i
                                                     ></span>
                                                 </div>
-                                                <div class="form-group">
+                                                <div class="form-group invoice-date-label">
                                                     <label>{{ invoiceDateLabel }}</label>
                                                     <div class="form-group col-xs-4 col-sm-4 mb-0">
                                                         <giddh-datepicker
@@ -1625,7 +1642,7 @@
                                                 </div>
 
                                                 <div
-                                                    class="form-group mr-l1"
+                                                    class="form-group invoice-due-label"
                                                     *ngIf="
                                                         currentVoucherFormDetails?.dueDate ||
                                                         isSalesInvoice ||
@@ -1828,7 +1845,7 @@
                                         </div>
                                         <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12">
                                             <div class="col-sm-12 col-xl-6 col-lg-10 col-md-10 pl-0">
-                                                <input
+                                                <!-- <input
                                                     type="text"
                                                     name="passportNumber"
                                                     #passportNumber
@@ -1837,7 +1854,16 @@
                                                     (blur)="allowAlphanumericChar(passportNumber)"
                                                     (keypress)="allowAlphanumericChar(passportNumber)"
                                                     [(ngModel)]="invFormData.passportNumber"
-                                                />
+                                                /> -->
+                                                <text-field
+                                                    [type]="'text'"
+                                                    [name]="'passportNumber'"
+                                                    [placeholder]="localeData?.passport_number"
+                                                    [cssClass]="'form-control attention-to mat-field-border'"
+                                                    [(ngModel)]="invFormData.passportNumber"
+                                                    (keypress)="allowAlphanumericChar()"
+                                                    (blur)="allowAlphanumericChar()"
+                                                ></text-field>
                                             </div>
                                         </div>
                                     </div>
@@ -2385,6 +2411,7 @@
                                                     (dynamicSearchedQuery)="onSearchQueryChanged($event, 1, 'item')"
                                                     (onClear)="onClearSalesAccount(transaction)"
                                                     (onHide)="noResultsFoundLabel = localeData?.search_acc"
+                                                    [showValueInLabel]="true"
                                                 >
                                                 </select-field>
                                             </div>
@@ -2570,7 +2597,18 @@
                                             [(ngModel)]="transaction.quantity"
                                             [mask]="inputMaskFormat"
                                         />
-
+                                        <!-- <text-field
+                                        type="text"
+                                        [disabled]="!transaction.isStockTxn"
+                                        (blur)="handleQuantityBlur(entry, transaction)"
+                                        [cssClass]="'form-control mat-field-border text-right"
+                                        decimalDigitsDirective
+                                        [readonly]="true"
+                                        [mask]="inputMaskFormat"
+                                        [(ngModel)]="transaction.quantity"
+                                        name="transaction.quantity_{{ entryIdx }}"
+                                        [placeholder]="commonLocaleData?.app_quantity"
+                                    ></text-field> -->
                                         <select
                                             class="form-control"
                                             [disabled]="!transaction.isStockTxn"

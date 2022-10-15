@@ -290,7 +290,7 @@ export class GeneralService {
      * @returns {string} Trimed value
      * @memberof GeneralService
      */
-    public allowAlphanumericChar(value: string): string {
+    public allowAlphanumericChar(value: any): string {        
         if (value) {
             return value?.replace(/[^a-zA-Z0-9]/g, '');
         } else {

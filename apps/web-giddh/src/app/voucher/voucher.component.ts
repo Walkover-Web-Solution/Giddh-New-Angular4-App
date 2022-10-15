@@ -6062,10 +6062,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @param {*} event
      * @memberof VoucherComponent
      */
-    public allowAlphanumericChar(event: any): void {
-        if (event && event.value) {
-            this.invFormData.passportNumber = this.generalService.allowAlphanumericChar(event.value)
-        }
+    public allowAlphanumericChar(): void {
+        this.generalService.allowAlphanumericChar(this.invFormData.passportNumber);
     }
 
     // Advance receipts adjustment start
