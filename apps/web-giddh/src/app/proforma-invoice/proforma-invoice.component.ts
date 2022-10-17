@@ -1386,6 +1386,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         }
                         this.saveCurrentPurchaseRecordDetails();
                     }
+
+                    if (this.voucherApiVersion === 2) {
+                        this.invFormData.voucherDetails.voucherUniqueName = (results[0] as any)?.uniqueName;
+                    }
                 }
 
                 // create account success then close sidebar, and add customer details

@@ -740,6 +740,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
     public calculateBalanceDue(): void {
         let totalAmount: number = 0;
         let convertedTotalAmount: number = 0;
+        console.log(this.invoiceFormDetails, this.adjustVoucherForm.adjustments);
         if (this.adjustVoucherForm && this.adjustVoucherForm.adjustments && this.adjustVoucherForm.adjustments.length) {
             this.adjustPayment.balanceDue = this.invoiceFormDetails.voucherDetails.balanceDue;
             this.adjustVoucherForm.adjustments.forEach(item => {
@@ -750,7 +751,8 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
                         (this.adjustedVoucherType === AdjustedVoucherType.DebitNote && item.voucherType === AdjustedVoucherType.OpeningBalance && item.voucherBalanceType === "dr") ||
                         ((this.adjustedVoucherType === AdjustedVoucherType.DebitNote || this.adjustedVoucherType === AdjustedVoucherType.SalesInvoice || this.adjustedVoucherType === AdjustedVoucherType.Sales || this.adjustedVoucherType === AdjustedVoucherType.Payment) && (item.voucherType === AdjustedVoucherType.Journal || item.voucherType === AdjustedVoucherType.JournalVoucher) && item.voucherBalanceType === "dr") ||
                         (this.adjustedVoucherType === AdjustedVoucherType.CreditNote && item.voucherType === AdjustedVoucherType.OpeningBalance && item.voucherBalanceType === "cr") ||
-                        ((this.adjustedVoucherType === AdjustedVoucherType.CreditNote || this.adjustedVoucherType === AdjustedVoucherType.Purchase || this.adjustedVoucherType === AdjustedVoucherType.Receipt || this.adjustedVoucherType === AdjustedVoucherType.AdvanceReceipt) && (item.voucherType === AdjustedVoucherType.Journal || item.voucherType === AdjustedVoucherType.JournalVoucher) && item.voucherBalanceType === "cr")
+                        ((this.adjustedVoucherType === AdjustedVoucherType.CreditNote || this.adjustedVoucherType === AdjustedVoucherType.Purchase || this.adjustedVoucherType === AdjustedVoucherType.Receipt || this.adjustedVoucherType === AdjustedVoucherType.AdvanceReceipt) && (item.voucherType === AdjustedVoucherType.Journal || item.voucherType === AdjustedVoucherType.JournalVoucher) && item.voucherBalanceType === "cr" || 
+                        ((this.adjustedVoucherType === AdjustedVoucherType.Journal || this.adjustedVoucherType === AdjustedVoucherType.JournalVoucher) && (item.voucherType === AdjustedVoucherType.Journal || item.voucherType === AdjustedVoucherType.JournalVoucher) && this.invoiceFormDetails.type === item.voucherBalanceType))
                     ) {
                         totalAmount -= Number(item.adjustmentAmount.amountForAccount);
                         convertedTotalAmount -= item.adjustmentAmount.amountForCompany;
@@ -1128,6 +1130,10 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
 
         if (!requestObject) {
             return;
+        }
+
+        if(this.voucherApiVersion === 2) {
+            requestObject.uniqueName = this.invoiceFormDetails?.voucherDetails?.voucherUniqueName;
         }
 
         this.salesService.getInvoiceList(requestObject, this.invoiceFormDetails.voucherDetails.voucherDate, this.paginationLimit).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
