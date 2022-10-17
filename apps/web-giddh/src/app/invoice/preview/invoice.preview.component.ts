@@ -1409,6 +1409,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         this.invFormData.accountDetails.currencyCode = item.account?.currency?.code ?? this.baseCurrency ?? '';
         this.invFormData.accountDetails.currencySymbol = item.accountCurrencySymbol ?? this.baseCurrencySymbol ?? '';
         this.invFormData.voucherDetails.gainLoss = item.gainLoss;
+        this.invFormData.voucherDetails.voucherUniqueName = item.uniqueName;
         this.changeStatusInvoiceUniqueName = item?.uniqueName;
 
         if (this.voucherApiVersion === 2) {
