@@ -740,7 +740,6 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
     public calculateBalanceDue(): void {
         let totalAmount: number = 0;
         let convertedTotalAmount: number = 0;
-        console.log(this.invoiceFormDetails, this.adjustVoucherForm.adjustments);
         if (this.adjustVoucherForm && this.adjustVoucherForm.adjustments && this.adjustVoucherForm.adjustments.length) {
             this.adjustPayment.balanceDue = this.invoiceFormDetails.voucherDetails.balanceDue;
             this.adjustVoucherForm.adjustments.forEach(item => {
