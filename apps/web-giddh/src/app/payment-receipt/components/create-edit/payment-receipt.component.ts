@@ -890,7 +890,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
      * @memberof PaymentReceiptComponent
      */
     private loadBankCashAccounts(customerCurrency: string): void {
-        this.salesService.getAccountsWithCurrency('cash, bankaccounts', `${customerCurrency}, ${this.activeCompany?.baseCurrency}`).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+        this.salesService.getAccountsWithCurrency((this.generalService.voucherApiVersion === 2 ? 'cash, bankaccounts, loanandoverdraft' : 'cash, bankaccounts'), `${customerCurrency}, ${this.activeCompany?.baseCurrency}`).pipe(takeUntil(this.destroyed$)).subscribe(data => {
             this.bankAccounts = this.updateBankAccountObject(data);
             this.bankAccounts$ = observableOf(this.bankAccounts);
         });
