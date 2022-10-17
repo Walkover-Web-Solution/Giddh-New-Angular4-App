@@ -2540,8 +2540,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
      */
     public getPurchaseSettings(): void {
         this.store.pipe(select(state => state.invoice.settings), takeUntil(this.destroyed$)).subscribe(response => {
-            if(response?.purchaseBillSettings?.enableVoucherDownload) {
-                
+            if(response?.purchaseBillSettings && !response?.purchaseBillSettings?.enableVoucherDownload) {
+                this.restrictedVouchersForDownload.push("purchase");
             }
         });
     }
