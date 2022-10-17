@@ -654,6 +654,7 @@
                             <div
                                 *ngIf="
                                     selectedItem?.voucherType === 'purchase' &&
+                                    isPdfAvailable &&
                                     attachedPdfFileUrl &&
                                     !(isVoucherDownloading || isVoucherDownloadError || isFileUploading)
                                 "
@@ -665,7 +666,7 @@
                             </div>
                             <div #attachedDocumentPreview class="pdf-preview">
                                 <h5
-                                    *ngIf="selectedItem?.voucherType === 'purchase'"
+                                    *ngIf="selectedItem?.voucherType === 'purchase' && isPdfAvailable"
                                     class="text-left pd-l15 font-16 pd-t1 pd-b1"
                                 >
                                     <strong>{{ localeData?.auto_generated_purchase_bill }}</strong>
@@ -681,7 +682,11 @@
                                     [src]="sanitizedPdfFileUrl"
                                 ></iframe>
                                 <giddh-page-loader
-                                    *ngIf="!sanitizedPdfFileUrl && selectedItem?.voucherType === 'purchase'"
+                                    *ngIf="
+                                        isPdfAvailable &&
+                                        !sanitizedPdfFileUrl &&
+                                        selectedItem?.voucherType === 'purchase'
+                                    "
                                     [cssClass]="'mb-0 mt-0'"
                                 ></giddh-page-loader>
                             </div>
