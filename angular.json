@@ -114,8 +114,7 @@
                         "styles": [
                             "apps/web-giddh/src/assets/css/style-1.scss",
                             "apps/web-giddh/src/assets/css/style-2.scss",
-                            "node_modules/ngx-lightbox/lightbox.css",
-                             "node_modules/intl-tel-input/build/css/intlTelInput.css"
+                            "node_modules/intl-tel-input/build/css/intlTelInput.css"
                         ],
                         "scripts": [
                             "node_modules/bootstrap-daterangepicker/daterangepicker.js"
@@ -388,8 +387,7 @@
                         "styles": [
                             "apps/web-giddh/src/assets/css/style-1.scss",
                             "apps/web-giddh/src/assets/css/style-2.scss",
-                            "node_modules/ngx-lightbox/lightbox.css",
-                             "node_modules/intl-tel-input/build/css/intlTelInput.css"
+                            "node_modules/intl-tel-input/build/css/intlTelInput.css"
                         ],
                         "scripts": [
                             "node_modules/bootstrap-daterangepicker/daterangepicker.js"
