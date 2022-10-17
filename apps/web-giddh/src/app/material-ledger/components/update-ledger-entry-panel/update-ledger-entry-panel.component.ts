@@ -62,6 +62,7 @@ import { MatAccordion } from '@angular/material/expansion';
 import { CommonService } from '../../../services/common.service';
 import { AdjustmentUtilityService } from '../../../shared/advance-receipt-adjustment/services/adjustment-utility.service';
 import { LedgerUtilityService } from '../../services/ledger-utility.service';
+import { InvoiceActions } from '../../../actions/invoice/invoice.actions';
 
 /** Info message to be displayed during adjustment if the voucher is not generated */
 const ADJUSTMENT_INFO_MESSAGE = 'Voucher should be generated in order to make adjustments';
@@ -295,7 +296,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         public dialog: MatDialog,
         private commonService: CommonService,
         private adjustmentUtilityService: AdjustmentUtilityService,
-        private ledgerUtilityService: LedgerUtilityService
+        private ledgerUtilityService: LedgerUtilityService,
+        private invoiceAction: InvoiceActions
     ) {
 
         this.vm = new UpdateLedgerVm(this.generalService, this.ledgerUtilityService);
@@ -328,6 +330,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         if (this.generalService.voucherApiVersion === 2) {
             this.allowParentGroup.push("loanandoverdraft");
         }
+
+        this.store.dispatch(this.invoiceAction.getInvoiceSetting());
+        this.getPurchaseSettings();
 
         this.settingsTagService.GetAllTags().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success" && response?.body?.length > 0) {
@@ -2477,5 +2482,18 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      */
     public calculateTax(): void {
         this.vm.generateGrandTotal();
+    }
+
+    /**
+     * This function is used to get purchase settings from store
+     *
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+    public getPurchaseSettings(): void {
+        this.store.pipe(select(state => state.invoice.settings), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.purchaseBillSettings && !response?.purchaseBillSettings?.enableVoucherDownload) {
+                this.restrictedVouchersForDownload.push("purchase");
+            }
+        });
     }
 }
