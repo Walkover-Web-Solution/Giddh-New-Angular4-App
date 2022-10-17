@@ -1265,9 +1265,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                             this.advanceReceiptAdjustmentData = results[0].voucherAdjustments;
                             this.originalVoucherAdjustments = cloneDeep(results[0].voucherAdjustments);
                             if (this.enableVoucherAdjustmentMultiCurrency) {
-                                if (!this.isMulticurrencyAccount) {
-                                    this.adjustPaymentData.totalAdjustedAmount = results[0].voucherAdjustments.totalAdjustmentAmount;
-                                } else {
+                                if (this.isMulticurrencyAccount) {
                                     this.adjustPaymentData.convertedTotalAdjustedAmount = results[0].voucherAdjustments.totalAdjustmentCompanyAmount;
                                 }
                             } else {
@@ -6109,7 +6107,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         (this.selectedVoucherType === AdjustedVoucherType.DebitNote && item.voucherType === AdjustedVoucherType.OpeningBalance && item.voucherBalanceType === "dr") ||
                         ((this.selectedVoucherType === AdjustedVoucherType.DebitNote || this.selectedVoucherType === AdjustedVoucherType.SalesInvoice || this.selectedVoucherType === AdjustedVoucherType.Sales || this.selectedVoucherType === AdjustedVoucherType.Payment) && (item.voucherType === AdjustedVoucherType.Journal || item.voucherType === AdjustedVoucherType.JournalVoucher) && item.voucherBalanceType === "dr") ||
                         (this.selectedVoucherType === AdjustedVoucherType.CreditNote && item.voucherType === AdjustedVoucherType.OpeningBalance && item.voucherBalanceType === "cr") ||
-                        ((this.selectedVoucherType === AdjustedVoucherType.CreditNote || this.selectedVoucherType === AdjustedVoucherType.Purchase || this.selectedVoucherType === AdjustedVoucherType.Receipt || this.selectedVoucherType === AdjustedVoucherType.AdvanceReceipt) && (item.voucherType === AdjustedVoucherType.Journal || item.voucherType === AdjustedVoucherType.JournalVoucher) && item.voucherBalanceType === "cr"))) {
+                        ((this.selectedVoucherType === AdjustedVoucherType.CreditNote || this.selectedVoucherType === AdjustedVoucherType.Purchase || this.selectedVoucherType === AdjustedVoucherType.Receipt || this.selectedVoucherType === AdjustedVoucherType.AdvanceReceipt) && (item.voucherType === AdjustedVoucherType.Journal || item.voucherType === AdjustedVoucherType.JournalVoucher) && item.voucherBalanceType === "cr") || 
+                        ((this.selectedVoucherType === AdjustedVoucherType.Purchase || this.selectedVoucherType === AdjustedVoucherType.PurchaseInvoice) && (item.voucherType === AdjustedVoucherType.Journal || item.voucherType === AdjustedVoucherType.JournalVoucher) && item.voucherBalanceType === "cr"))) {
                         totalAmount -= Number(item.adjustmentAmount ? item.adjustmentAmount.amountForAccount : 0);
                     } else {
                         totalAmount += Number(item.adjustmentAmount ? item.adjustmentAmount.amountForAccount : 0);
