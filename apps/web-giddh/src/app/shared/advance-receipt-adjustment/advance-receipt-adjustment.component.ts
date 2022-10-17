@@ -748,9 +748,9 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
                         ((this.adjustedVoucherType === AdjustedVoucherType.SalesInvoice || this.adjustedVoucherType === AdjustedVoucherType.Sales) && item.voucherType === AdjustedVoucherType.DebitNote) ||
                         ((this.adjustedVoucherType === AdjustedVoucherType.PurchaseInvoice || this.adjustedVoucherType === AdjustedVoucherType.Purchase) && item.voucherType === AdjustedVoucherType.CreditNote) || 
                         (this.adjustedVoucherType === AdjustedVoucherType.DebitNote && item.voucherType === AdjustedVoucherType.OpeningBalance && item.voucherBalanceType === "dr") ||
-                        (this.adjustedVoucherType === AdjustedVoucherType.DebitNote && item.voucherType === AdjustedVoucherType.Journal && item.voucherBalanceType === "dr") ||
+                        ((this.adjustedVoucherType === AdjustedVoucherType.DebitNote || this.adjustedVoucherType === AdjustedVoucherType.SalesInvoice || this.adjustedVoucherType === AdjustedVoucherType.Sales || this.adjustedVoucherType === AdjustedVoucherType.Payment) && (item.voucherType === AdjustedVoucherType.Journal || item.voucherType === AdjustedVoucherType.JournalVoucher) && item.voucherBalanceType === "dr") ||
                         (this.adjustedVoucherType === AdjustedVoucherType.CreditNote && item.voucherType === AdjustedVoucherType.OpeningBalance && item.voucherBalanceType === "cr") ||
-                        (this.adjustedVoucherType === AdjustedVoucherType.CreditNote && item.voucherType === AdjustedVoucherType.Journal && item.voucherBalanceType === "cr")
+                        ((this.adjustedVoucherType === AdjustedVoucherType.CreditNote || this.adjustedVoucherType === AdjustedVoucherType.Purchase || this.adjustedVoucherType === AdjustedVoucherType.Receipt || this.adjustedVoucherType === AdjustedVoucherType.AdvanceReceipt) && (item.voucherType === AdjustedVoucherType.Journal || item.voucherType === AdjustedVoucherType.JournalVoucher) && item.voucherBalanceType === "cr")
                     ) {
                         totalAmount -= Number(item.adjustmentAmount.amountForAccount);
                         convertedTotalAmount -= item.adjustmentAmount.amountForCompany;
@@ -853,6 +853,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
                     taxRate: 0,
                     uniqueName: '',
                     taxUniqueName: '',
+                    voucherBalanceType: ''
                 }
             ];
         } else {
@@ -874,6 +875,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
                     taxRate: 0,
                     uniqueName: '',
                     taxUniqueName: '',
+                    voucherBalanceType: ''
                 }
             ];
         }

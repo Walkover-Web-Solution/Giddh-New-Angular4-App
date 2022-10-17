@@ -252,6 +252,7 @@ export enum AdjustedVoucherType {
     DebitNote = 'debit note',
     Payment = 'pay',
     Journal = 'jr',
+    JournalVoucher = 'journal',
     OpeningBalance = 'opening balance'
 }
 
