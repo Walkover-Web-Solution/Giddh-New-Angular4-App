@@ -77,7 +77,6 @@
     "@angular/compiler": "13.3.9",
     "@angular/core": "^13.3.9",
     "@angular/forms": "^13.3.9",
-    "@angular/http": "7.2.16",
     "@angular/localize": "^13.3.9",
     "@angular/material": "13.3.9",
     "@angular/platform-browser": "^13.3.9",
