@@ -143,20 +143,20 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
         });
 
         this.store.pipe(select(state => state.groupwithaccounts.updateAccountIsSuccess), takeUntil(this.destroyed$)).subscribe(response => {
-            if (response && this.currentGroupColumnIndex > -1) {
+            if (response && this.currentGroupColumnIndex > -1 && this.masterColumnsData[this.currentGroupColumnIndex]?.groupUniqueName) {
                 this.onGroupClick({ uniqueName: this.masterColumnsData[this.currentGroupColumnIndex]?.groupUniqueName }, this.currentGroupColumnIndex - 1);
             }
         });
 
         this.store.pipe(select(state => state.groupwithaccounts.isDeleteAccSuccess), takeUntil(this.destroyed$)).subscribe(response => {
-            if (response && this.currentGroupColumnIndex > -1) {
+            if (response && this.currentGroupColumnIndex > -1 && this.masterColumnsData[this.currentGroupColumnIndex]?.groupUniqueName) {
                 this.getMasters(this.masterColumnsData[this.currentGroupColumnIndex]?.groupUniqueName, this.currentGroupColumnIndex, true);
                 this.currentGroupColumnIndex = this.currentGroupColumnIndex - 1;
             }
         });
 
         this.store.pipe(select(state => state.groupwithaccounts.moveAccountSuccess), takeUntil(this.destroyed$)).subscribe(response => {
-            if (response && this.currentGroupColumnIndex > -1) {
+            if (response && this.currentGroupColumnIndex > -1 && this.masterColumnsData[this.currentGroupColumnIndex]?.groupUniqueName) {
                 this.getMasters(this.masterColumnsData[this.currentGroupColumnIndex]?.groupUniqueName, this.currentGroupColumnIndex - 1);
                 this.currentGroupColumnIndex = this.currentGroupColumnIndex - 1;
                 this.store.dispatch(this.accountsAction.moveAccountReset());
@@ -164,14 +164,14 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
         });
 
         this.store.pipe(select(state => state.groupwithaccounts.isMergeAccountSuccess), takeUntil(this.destroyed$)).subscribe(response => {
-            if (response && this.currentGroupColumnIndex > -1) {
+            if (response && this.currentGroupColumnIndex > -1 && this.masterColumnsData[this.currentGroupColumnIndex]?.groupUniqueName) {
                 this.onGroupClick({ uniqueName: this.masterColumnsData[this.currentGroupColumnIndex]?.groupUniqueName }, this.currentGroupColumnIndex, false);
                 this.getMasters(this.masterColumnsData[this.currentGroupColumnIndex]?.groupUniqueName, this.currentGroupColumnIndex, true);
             }
         });
 
         this.store.pipe(select(state => state.groupwithaccounts.isUnmergeAccountSuccess), takeUntil(this.destroyed$)).subscribe(response => {
-            if (response && this.currentGroupColumnIndex > -1) {
+            if (response && this.currentGroupColumnIndex > -1 && this.masterColumnsData[this.currentGroupColumnIndex]?.groupUniqueName) {
                 this.onGroupClick({ uniqueName: this.masterColumnsData[this.currentGroupColumnIndex]?.groupUniqueName }, this.currentGroupColumnIndex, false);
                 this.getMasters(this.masterColumnsData[this.currentGroupColumnIndex]?.groupUniqueName, this.currentGroupColumnIndex, true);
             }
@@ -261,37 +261,6 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
                 });
             }
             this.masterColumnsData = cloneDeep(masterColumnsData);
-
-            /** Login to handle json like command k */
-            //let masterTempData = [];
-
-            //changes?.searchedMasterData?.currentValue.forEach(master => {
-            // master?.parentGroups?.forEach((masterParentGroup, index) => {
-            //     if (!masterTempData[masterParentGroup?.uniqueName]) {
-            //         masterTempData[masterParentGroup?.uniqueName] = masterParentGroup?.uniqueName;
-
-            //         masterParentGroup.type = "GROUP";
-
-            //         if (masterColumnsData[index]) {
-            //             const masterExists = masterColumnsData[index]?.results?.filter(data => data?.uniqueName === masterParentGroup?.uniqueName);
-            //             if (!masterExists?.length) {
-            //                 masterColumnsData[index].results.push(masterParentGroup);
-            //             }
-            //         } else {
-            //             masterColumnsData[index] = { results: [masterParentGroup], page: 1, totalPages: 1, groupUniqueName: '' };
-            //         }
-            //     }
-            // });
-
-            // if (masterColumnsData[master?.parentGroups?.length]) {
-            //     const masterExists = masterColumnsData[master?.parentGroups?.length]?.results?.filter(data => data?.uniqueName === master?.uniqueName);
-            //     if (!masterExists?.length) {
-            //         masterColumnsData[master?.parentGroups?.length].results.push(master);
-            //     }
-            // } else {
-            //     masterColumnsData[master?.parentGroups?.length] = { results: [master], page: 1, totalPages: 1, groupUniqueName: '' };
-            // }
-            //});
         }
 
         if (changes?.isSearchingGroups?.currentValue) {
