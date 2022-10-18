@@ -1937,6 +1937,7 @@
             [config]="{ animated: true, ignoreBackdropClick: true }"
             bsModal
             role="dialog"
+            (onHidden)="closeAdvanceReceiptModal()"
         >
             <div class="modal-dialog modal-xl">
                 <div class="modal-content">
