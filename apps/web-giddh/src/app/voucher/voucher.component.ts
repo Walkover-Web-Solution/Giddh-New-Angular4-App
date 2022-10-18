@@ -3806,7 +3806,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
     public resetCustomerName(event) {
         if (event) {
-            if (!event.target.value) {
+            if (!event.target?.value) {
                 this.onlyPhoneNumber();
                 this.intl?.setNumber("");
                 this.invFormData.voucherDetails.customerName = null;
