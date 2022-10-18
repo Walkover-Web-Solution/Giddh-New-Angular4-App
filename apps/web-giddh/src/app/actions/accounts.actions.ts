@@ -223,7 +223,9 @@ export class AccountsAction {
                         this.store.dispatch(this.getAccountDetails(resData.body?.uniqueName));
                     }
 
-                    this.store.dispatch(this.groupWithAccountsAction.getGroupDetails(resData.body?.parentGroups[resData.body.parentGroups?.length - 1]?.uniqueName));
+                    if (resData.body?.parentGroups[resData.body.parentGroups?.length - 1]?.uniqueName) {
+                        this.store.dispatch(this.groupWithAccountsAction.getGroupDetails(resData.body?.parentGroups[resData.body.parentGroups?.length - 1]?.uniqueName));
+                    }
                 }
                 return { type: 'EmptyAction' };
             })));
