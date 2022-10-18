@@ -222,6 +222,10 @@ export class AccountsAction {
                     if (!action.payload?.queryString?.isMasterOpen) {
                         this.store.dispatch(this.getAccountDetails(resData.body?.uniqueName));
                     }
+
+                    if (resData.body?.parentGroups[resData.body.parentGroups?.length - 1]?.uniqueName) {
+                        this.store.dispatch(this.groupWithAccountsAction.getGroupDetails(resData.body?.parentGroups[resData.body.parentGroups?.length - 1]?.uniqueName));
+                    }
                 }
                 return { type: 'EmptyAction' };
             })));

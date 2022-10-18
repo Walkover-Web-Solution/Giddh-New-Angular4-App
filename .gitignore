@@ -163,3 +163,4 @@ package-lock.json
 
 #
 .env
+.angular/

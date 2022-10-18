@@ -133,7 +133,7 @@ export class AdjustmentUtilityService {
         const salesParentGroups = ['revenuefromoperations', 'otherincome'];
         const purchaseParentGroups = ['operatingcost', 'indirectexpenses'];
         const debtorCreditorParentGroups = ['sundrydebtors', 'sundrycreditors'];
-        const cashBankParentGroups = ['cash', 'bankaccounts'];
+        const cashBankParentGroups = ['cash', 'bankaccounts', 'loanandoverdraft'];
         const fixedAssetsGroups = ['fixedassets'];
 
         if (data?.particularAccount?.parentGroups?.length > 0) {
