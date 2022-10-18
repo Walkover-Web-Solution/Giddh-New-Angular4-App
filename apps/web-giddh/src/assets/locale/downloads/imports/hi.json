@@ -1,0 +1,13 @@
+{
+    "import_date": "आयात तिथि",
+    "module": "मापांक",
+    "import_file": "फ़ाइल आयात करें",
+    "error_sheet": "त्रुटि पत्रक",
+    "succes_sheet": "सफलता पत्रक",
+    "expiry": "समाप्ति",
+    "expired": "खत्म हो चुका",
+    "success":"सफलता",
+    "failed":"असफल",
+    "total":"कुल"
+}
+

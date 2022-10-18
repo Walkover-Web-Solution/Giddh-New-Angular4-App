@@ -118,5 +118,11 @@
         "get_instant_overdraft": "तत्काल ओवरड्राफ्ट प्राप्त करें",
         "duration_error": "कृपया दी गई राशि के लिए अवधि चुनें",
         "required_field_error": "कृपया सभी आवश्यक फ़ील्ड भरें"
-	}
+	},
+    "tally":{
+        "help_documentation":"सहायता दस्तावेज़ीकरण",
+        "copied":"कॉपी किया गया...",
+        "api_url":"एपीआई यूआरएल:",
+        "heading":"टेली"
+    }
 }

@@ -103,9 +103,9 @@
                             <li *ngFor="let acc of accountItemsFromIndexDB">
                                 <a
                                     href="javascript:void(0);"
-                                    routerLink="ledger/{{ acc.uniqueName }}"
+                                    routerLink="ledger/{{ acc?.uniqueName }}"
                                     [routerLinkActive]="['active']"
-                                    [class.active]="isLedgerAccSelected && selectedLedgerName === acc.uniqueName"
+                                    [class.active]="isLedgerAccSelected && selectedLedgerName === acc?.uniqueName"
                                     (click)="analyzeAccounts($event, acc); companyDetailsDropDownWeb.hide()"
                                     >{{ acc.name }} {{ commonLocaleData?.app_ac }}</a
                                 >
@@ -146,7 +146,7 @@
                             <li *ngFor="let acc of accountItemsFromIndexDB">
                                 <a
                                     href="javascript:void(0);"
-                                    routerLink="ledger/{{ acc.uniqueName }}"
+                                    routerLink="ledger/{{ acc?.uniqueName }}"
                                     (click)="analyzeAccounts($event, acc); accountDropdown?.hide()"
                                     >{{ acc.name }} {{ commonLocaleData?.app_ac }}</a
                                 >

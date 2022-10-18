@@ -164,6 +164,8 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     public voucherApiVersion: 1 | 2;
     /** Holds selected item voucher */
     private selectedItemVoucher: any;
+    /** True if pdf is available */
+    public isPdfAvailable: boolean = true;
 
     constructor(
         private _cdr: ChangeDetectorRef,
@@ -423,16 +425,23 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
             this.commonService.downloadFile(getRequest, "ALL").pipe(takeUntil(this.destroyed$)).subscribe(result => {
                 if (result?.body) {
                     /** Creating voucher pdf start */
-                    if (this.selectedItem) {
+                    if (this.selectedItem && result.body.data) {
+                        this.isPdfAvailable = true;
                         this.selectedItem.blob = this._generalService.base64ToBlob(result.body.data, 'application/pdf', 512);
                         const file = new Blob([this.selectedItem.blob], { type: 'application/pdf' });
                         this.attachedDocumentBlob = file;
                         URL.revokeObjectURL(this.pdfFileURL);
                         this.pdfFileURL = URL.createObjectURL(file);
+
+                        this.sanitizedPdfFileUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(this.pdfFileURL);
+                        this.isVoucherDownloadError = false;
+                        this.pdfPreviewLoaded = true;
+                    } else {
+                        if (this.selectedItem?.voucherType === 'purchase') {
+                            this.pdfPreviewLoaded = false;
+                        }
+                        this.isPdfAvailable = false;
                     }
-                    this.sanitizedPdfFileUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(this.pdfFileURL);
-                    this.isVoucherDownloadError = false;
-                    this.pdfPreviewLoaded = true;
                     /** Creating voucher pdf finish */
 
                     if (result.body.attachments?.length > 0) {
@@ -699,14 +708,13 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     }
 
     /**
-     * This will use for print thermal pdf document
+     * This will use for print thermal print
      *
      * @memberof InvoicePreviewDetailsComponent
      */
     public printThermal(): void {
         this.voucherDetails$.subscribe((res) => {
             if (res) {
-                res = this._generalService.convertV1ResponseInV2(res);
                 this.thermalService.print(this.defaultTemplate, res);
             } else {
                 this.store.dispatch(this._invoiceReceiptActions.getVoucherDetailsV4(this.selectedItem?.account?.uniqueName, {
@@ -994,7 +1002,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         this.invoiceSearch = term;
         this.invoiceSearchEvent.emit(this.invoiceSearch);
         this.filteredData = this.items?.filter(item => {
-            return item.voucherNumber.toLowerCase().includes(term.toLowerCase()) ||
+            return item.voucherNumber?.toLowerCase()?.includes(term?.toLowerCase()) ||
                 item.account.name.toLowerCase().includes(term.toLowerCase()) ||
                 item.voucherDate.includes(term) ||
                 item.grandTotal?.toString().includes(term);

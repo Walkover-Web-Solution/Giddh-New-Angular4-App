@@ -250,11 +250,6 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         this.activityObj.entity = '';
         this.activityObj.operation = '';
         this.activityObj.userUniqueNames = [];
-        this.activityObjLabels = {
-            entity: "",
-            operation: "",
-            user: ""
-        };
         this.showDateReport = false;
         this.activityObjLabels = {
             entity: "",

@@ -251,7 +251,9 @@ export enum AdjustedVoucherType {
     CreditNote = 'credit note',
     DebitNote = 'debit note',
     Payment = 'pay',
-    Journal = 'jr'
+    Journal = 'jr',
+    JournalVoucher = 'journal',
+    OpeningBalance = 'opening balance'
 }
 
 /** Collection of search field default text for empty results */
@@ -283,7 +285,8 @@ export const SETTING_INTEGRATION_TABS = {
     EMAIL: { LABEL: 'email', VALUE: 0 },
     COLLECTION: { LABEL: 'collection', VALUE: 1 },
     E_COMMERCE: { LABEL: 'ecommerce', VALUE: 2 },
-    PAYMENT: { LABEL: 'payment', VALUE: 3 }
+    PAYMENT: { LABEL: 'payment', VALUE: 3 },
+    TALLY: { LABEL: 'tally', VALUE: 4 }
 };
 /** Email Validation Regex */
 export const EMAIL_VALIDATION_REGEX = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -301,13 +304,12 @@ export enum EInvoiceStatus {
 
 /** Length of entry description on vouchers */
 export const ENTRY_DESCRIPTION_LENGTH = 300;
-
 export const EMAIL_REGEX_PATTERN = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
 /** This will hold error status code for permission error from API */
 export const UNAUTHORISED = 401;
+export const SELECT_ALL_RECORDS = "selectallrecords";
 /** This will hide the filing feature of GST module  */
 export const SHOW_GST_FILING = false;
-export const SELECT_ALL_RECORDS = "selectallrecords";
 /** Stores the voucher wise form values to toggle fields in voucher module */
 export const GIDDH_VOUCHER_FORM = [
     {
@@ -462,3 +464,5 @@ export const MOBILE_NUMBER_SELF_URL = 'https://api.db-ip.com/v2/free/self';
 export const MOBILE_NUMBER_IP_ADDRESS_URL = 'http://ip-api.com/json/';
 export const MOBILE_NUMBER_ADDRESS_JSON_URL = 'https://ipinfo.io/';
 export const OTP_PROVIDER_URL = 'https://control.msg91.com/app/assets/otp-provider/otp-provider.js';
+
+export const RESTRICTED_VOUCHERS_FOR_DOWNLOAD = ['journal'];

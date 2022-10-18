@@ -29,13 +29,17 @@
   <button type="button" class="start-upload-btn" (click)="startUpload()">
   Start Upload
 </button> {{imagePreview}} -->
-    <div class="clearfix scroll-auto">
+    <div class="clearfix scroll-auto template-container-left-side">
         <ul class="design-tool">
-            <li [hidden]="templateUISectionVisibility.templates" (click)="onChangeVisibility('templates')">
-                <i class="ico-template"></i> <label>Change up to template</label>
+            <li
+                [hidden]="templateUISectionVisibility.templates"
+                (click)="onChangeVisibility('templates')"
+                class="d-flex align-items-center"
+            >
+                <i class="icon-change_template"></i> <label>Change up to template</label>
             </li>
             <li [hidden]="!templateUISectionVisibility.templates">
-                <i class="ico-template"></i> <label>Change up to template</label>
+                <i class="icon-change_template tab-expanded"></i> <label>Change up to template</label>
                 <div class="clearfix">
                     <ul class="template-view">
                         <!-- {{ sampleTemplates | json}} -->
@@ -103,11 +107,12 @@
                 [hidden]="templateUISectionVisibility.logo"
                 (click)="onChangeVisibility('logo')"
                 *ngIf="customTemplate.templateType !== 'thermal_template'"
+                class="d-flex align-items-center"
             >
-                <i class="ico-edit"></i> <label>Make logo edit</label>
+                <i class="icon-template_edit"></i> <label>Make logo edit</label>
             </li>
             <li [hidden]="!templateUISectionVisibility.logo" *ngIf="customTemplate.templateType !== 'thermal_template'">
-                <i class="ico-edit"></i> <label>Make logo edit</label>
+                <i class="icon-template_edit tab-expanded"></i> <label>Make logo edit</label>
                 <div class="clearfix mr-t1">
                     <div class="logo-tool">
                         <span class="logo-preview" [class.cursor-disable]="isFileUploaded">
@@ -202,12 +207,18 @@
                 [hidden]="templateUISectionVisibility.color"
                 (click)="onChangeVisibility('color')"
                 *ngIf="customTemplate.templateType !== 'thermal_template'"
+                class="d-flex align-items-center"
             >
-                <i class="ico-swatch"></i> <label>Try other colour</label>
+                <span class="icon-change_color"
+                    ><span class="path1"></span><span class="path2"></span><span class="path3"></span></span
+                ><label>Try other colour</label>
             </li>
             <!--<li *ngIf="ifColorSelected">-->
             <li [hidden]="!templateUISectionVisibility.color" *ngIf="templateType !== 'thermal_template'">
-                <i class="ico-swatch"></i> <label>Try other colour</label>
+                <span class="icon-change_color"
+                    ><span class="path1"></span><span class="path2"></span><span class="path3"></span
+                ></span>
+                <i class="icon-change_color"></i> <label>Try other colour</label>
                 <!-- edit color  start -->
                 <div class="clearfix mr-t1">
                     <div class="swatch text-center">
@@ -245,11 +256,12 @@
             <li
                 *ngIf="!templateUISectionVisibility.font && customTemplate.templateType !== 'thermal_template'"
                 (click)="onChangeVisibility('font')"
+                class="d-flex align-items-center"
             >
-                <i class="ico-txt"></i> <label>Select different fonts</label>
+                <i class="icon-font"></i> <label>Select different fonts</label>
             </li>
             <li *ngIf="templateUISectionVisibility.font && customTemplate.templateType !== 'thermal_template'">
-                <i class="ico-txt"></i> <label>Select different fonts</label>
+                <i class="icon-font tab-expanded"></i> <label>Select different fonts</label>
                 <div class="row font-selector mr-t1 form-group">
                     <div class="col-9">
                         <sh-select
@@ -267,11 +279,12 @@
                 <li
                     *ngIf="!templateUISectionVisibility.fontSize && customTemplate.templateType !== 'thermal_template'"
                     (click)="onChangeVisibility('fontSize')"
+                    class="d-flex align-items-center"
                 >
-                    <i class="ico-txt"></i> <label>Select different fonts size</label>
+                    <i class="icon-font"></i> <label>Select different fonts size</label>
                 </li>
                 <li *ngIf="templateUISectionVisibility.fontSize">
-                    <i class="ico-txt"></i> <label>Select different fonts size</label>
+                    <i class="icon-font tab-expanded"></i> <label>Select different fonts size</label>
                     <div class="row font-selector mr-t1 form-group">
                         <div class="col-9">
                             <sh-select
@@ -290,11 +303,12 @@
                 [hidden]="templateUISectionVisibility.print"
                 (click)="onChangeVisibility('print')"
                 *ngIf="customTemplate.templateType !== 'thermal_template'"
+                class="d-flex align-items-center"
             >
-                <i class="ico-print"></i> <label>Edit print setting</label>
+                <i class="icon-print_settings"></i> <label>Edit print setting</label>
             </li>
             <li [hidden]="!templateUISectionVisibility.print">
-                <i class="ico-print"></i> <label>Edit print setting</label>
+                <i class="icon-print_settings tab-expanded"></i> <label>Edit print setting</label>
 
                 <div class="clearfix mr-t1">
                     <div class="print-tool position-relative">

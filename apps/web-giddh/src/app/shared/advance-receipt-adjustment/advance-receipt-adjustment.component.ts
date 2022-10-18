@@ -149,6 +149,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
                 this.currencySymbol = this.baseCurrencySymbol;
             }
         });
+
         if (this.advanceReceiptAdjustmentUpdatedData) {
             this.advanceReceiptAdjustmentPreUpdatedData = cloneDeep(this.advanceReceiptAdjustmentUpdatedData);
             this.adjustVoucherForm = this.advanceReceiptAdjustmentUpdatedData?.adjustments?.length ? cloneDeep(this.advanceReceiptAdjustmentUpdatedData) : this.adjustVoucherForm;
@@ -160,6 +161,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
         } else {
             this.onClear();
         }
+
         if (this.invoiceFormDetails && this.invoiceFormDetails.voucherDetails) {
             if (typeof this.invoiceFormDetails.voucherDetails.voucherDate !== 'string') {
                 this.invoiceFormDetails.voucherDetails.voucherDate = dayjs(this.invoiceFormDetails.voucherDetails.voucherDate).format(GIDDH_DATE_FORMAT);
@@ -168,10 +170,12 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
             this.invoiceFormDetails.voucherDetails.tdsTotal = this.invoiceFormDetails.voucherDetails.tdsTotal || 0;
             this.assignVoucherDetails();
         }
+
         if (this.invoiceFormDetails?.accountDetails) {
             this.invoiceFormDetails.accountDetails.currencyCode = this.invoiceFormDetails?.accountDetails?.currencyCode || this.companyCurrency;
             this.isMultiCurrencyAccount = this.invoiceFormDetails?.accountDetails?.currencyCode !== this.companyCurrency;
         }
+
         if (!this.isVoucherModule) {
             this.getInvoiceList();
         } else {
@@ -675,7 +679,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
      */
     public calculateTax(entryData: Adjustment, index: number): void {
         if (this.isMultiCurrencyAccount) {
-            entryData.adjustmentAmount.amountForCompany = this.getConvertedCompanyAmount(entryData?.adjustmentAmount?.amountForAccount, entryData?.exchangeRate)
+            entryData.adjustmentAmount.amountForCompany = this.getConvertedCompanyAmount(entryData?.adjustmentAmount?.amountForAccount, entryData?.exchangeRate);
         } else {
             entryData.adjustmentAmount.amountForCompany = entryData?.adjustmentAmount?.amountForAccount;
         }
@@ -713,7 +717,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
             }
         }
         // To restrict user to enter amount less or equal selected voucher amount
-        if (selectedVoucherOptions && selectedVoucherOptions.additional && selectedVoucherOptions.additional.adjustmentAmount && this.adjustVoucherForm.adjustments[index].adjustmentAmount.amountForAccount > excessAmount) {
+        if (selectedVoucherOptions && selectedVoucherOptions.additional && selectedVoucherOptions.additional.adjustmentAmount && this.adjustVoucherForm.adjustments[index]?.adjustmentAmount?.amountForAccount > excessAmount) {
             this.adjustVoucherForm.adjustments[index].adjustmentAmount.amountForAccount = cloneDeep(excessAmount);
             entry.adjustmentAmount.amountForAccount = excessAmount;
             this.adjustVoucherForm.adjustments = cloneDeep(this.adjustVoucherForm.adjustments);
@@ -721,7 +725,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
         if (entry && entry.taxRate && entry.adjustmentAmount?.amountForAccount) {
             let taxAmount = this.calculateInclusiveTaxAmount(entry.adjustmentAmount.amountForAccount, entry.taxRate);
             this.adjustVoucherForm.adjustments[index].calculatedTaxAmount = Number(taxAmount);
-        } else {
+        } else if(this.adjustVoucherForm.adjustments[index]) {
             this.adjustVoucherForm.adjustments[index].calculatedTaxAmount = 0.0;
         }
         this.calculateBalanceDue();
@@ -740,7 +744,14 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
             this.adjustPayment.balanceDue = this.invoiceFormDetails.voucherDetails.balanceDue;
             this.adjustVoucherForm.adjustments.forEach(item => {
                 if (item && item.adjustmentAmount && item.adjustmentAmount.amountForAccount) {
-                    if (((this.adjustedVoucherType === AdjustedVoucherType.SalesInvoice || this.adjustedVoucherType === AdjustedVoucherType.Sales) && item.voucherType === AdjustedVoucherType.DebitNote) || ((this.adjustedVoucherType === AdjustedVoucherType.PurchaseInvoice || this.adjustedVoucherType === AdjustedVoucherType.Purchase) && item.voucherType === AdjustedVoucherType.CreditNote)) {
+                    if (
+                        ((this.adjustedVoucherType === AdjustedVoucherType.SalesInvoice || this.adjustedVoucherType === AdjustedVoucherType.Sales) && item.voucherType === AdjustedVoucherType.DebitNote) ||
+                        ((this.adjustedVoucherType === AdjustedVoucherType.PurchaseInvoice || this.adjustedVoucherType === AdjustedVoucherType.Purchase) && item.voucherType === AdjustedVoucherType.CreditNote) || 
+                        (this.adjustedVoucherType === AdjustedVoucherType.DebitNote && item.voucherType === AdjustedVoucherType.OpeningBalance && item.voucherBalanceType === "dr") ||
+                        ((this.adjustedVoucherType === AdjustedVoucherType.DebitNote || this.adjustedVoucherType === AdjustedVoucherType.SalesInvoice || this.adjustedVoucherType === AdjustedVoucherType.Sales || this.adjustedVoucherType === AdjustedVoucherType.Payment) && (item.voucherType === AdjustedVoucherType.Journal || item.voucherType === AdjustedVoucherType.JournalVoucher) && item.voucherBalanceType === "dr") ||
+                        (this.adjustedVoucherType === AdjustedVoucherType.CreditNote && item.voucherType === AdjustedVoucherType.OpeningBalance && item.voucherBalanceType === "cr") ||
+                        ((this.adjustedVoucherType === AdjustedVoucherType.CreditNote || this.adjustedVoucherType === AdjustedVoucherType.Purchase || this.adjustedVoucherType === AdjustedVoucherType.Receipt || this.adjustedVoucherType === AdjustedVoucherType.AdvanceReceipt) && (item.voucherType === AdjustedVoucherType.Journal || item.voucherType === AdjustedVoucherType.JournalVoucher) && item.voucherBalanceType === "cr")
+                    ) {
                         totalAmount -= Number(item.adjustmentAmount.amountForAccount);
                         convertedTotalAmount -= item.adjustmentAmount.amountForCompany;
                     } else {
@@ -842,6 +853,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
                     taxRate: 0,
                     uniqueName: '',
                     taxUniqueName: '',
+                    voucherBalanceType: ''
                 }
             ];
         } else {
@@ -863,6 +875,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
                     taxRate: 0,
                     uniqueName: '',
                     taxUniqueName: '',
+                    voucherBalanceType: ''
                 }
             ];
         }
@@ -1115,6 +1128,10 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
 
         if (!requestObject) {
             return;
+        }
+
+        if(this.voucherApiVersion === 2) {
+            requestObject.uniqueName = this.invoiceFormDetails?.voucherDetails?.voucherUniqueName;
         }
 
         this.salesService.getInvoiceList(requestObject, this.invoiceFormDetails.voucherDetails.voucherDate, this.paginationLimit).pipe(takeUntil(this.destroyed$)).subscribe((response) => {

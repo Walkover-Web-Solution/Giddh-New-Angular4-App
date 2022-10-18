@@ -116,7 +116,6 @@
     "ng-click-outside": "7.0.0",
     "ng-connection-service": "1.0.4",
     "ng-thermal-print": "^1.0.3",
-    "ng2-ckeditor": "1.2.9",
     "ng2-order-pipe": "0.1.5",
     "ng2-search-filter": "0.5.1",
     "ng2-ui-auth": "10.0.1",

@@ -663,25 +663,27 @@
                             >
                                 <iframe #pdfContainer width="100%" height="100%" [src]="attachedPdfFileUrl"></iframe>
                             </div>
-                            <div #attachedDocumentPreview class="pdf-preview">
+                            <div
+                                #attachedDocumentPreview
+                                class="pdf-preview"
+                                *ngIf="
+                                    sanitizedPdfFileUrl &&
+                                    !(isVoucherDownloading || isVoucherDownloadError || isFileUploading)
+                                "
+                            >
                                 <h5
-                                    *ngIf="selectedItem?.voucherType === 'purchase'"
+                                    *ngIf="selectedItem?.voucherType === 'purchase' && isPdfAvailable"
                                     class="text-left pd-l15 font-16 pd-t1 pd-b1"
                                 >
                                     <strong>{{ localeData?.auto_generated_purchase_bill }}</strong>
                                 </h5>
-                                <iframe
-                                    #pdfContainer
-                                    *ngIf="
-                                        sanitizedPdfFileUrl &&
-                                        !(isVoucherDownloading || isVoucherDownloadError || isFileUploading)
-                                    "
-                                    width="100%"
-                                    height="100%"
-                                    [src]="sanitizedPdfFileUrl"
-                                ></iframe>
+                                <iframe #pdfContainer width="100%" height="100%" [src]="sanitizedPdfFileUrl"></iframe>
                                 <giddh-page-loader
-                                    *ngIf="!sanitizedPdfFileUrl && selectedItem?.voucherType === 'purchase'"
+                                    *ngIf="
+                                        isPdfAvailable &&
+                                        !sanitizedPdfFileUrl &&
+                                        selectedItem?.voucherType === 'purchase'
+                                    "
                                     [cssClass]="'mb-0 mt-0'"
                                 ></giddh-page-loader>
                             </div>
