@@ -6,7 +6,7 @@ import { AccountService } from '../services/account.service';
 import { AppState } from '../store/roots';
 import { ToasterService } from '../services/toaster.service';
 import { BaseResponse } from '../models/api-models/BaseResponse';
-import { Action, Store } from '@ngrx/store';
+import { Action, select, Store } from '@ngrx/store';
 import { Actions, createEffect, Effect, ofType } from '@ngrx/effects';
 import { Injectable } from '@angular/core';
 import { GroupWithAccountsAction } from './groupwithaccounts.actions';
@@ -222,6 +222,8 @@ export class AccountsAction {
                     if (!action.payload?.queryString?.isMasterOpen) {
                         this.store.dispatch(this.getAccountDetails(resData.body?.uniqueName));
                     }
+
+                    this.store.dispatch(this.groupWithAccountsAction.getGroupDetails(resData.body?.parentGroups[resData.body.parentGroups?.length - 1]?.uniqueName));
                 }
                 return { type: 'EmptyAction' };
             })));
