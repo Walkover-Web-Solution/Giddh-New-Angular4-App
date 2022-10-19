@@ -138,8 +138,6 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     public purchaseOrderPreviewUniqueName: string = '';
     /* Send email request params object */
     public sendEmailRequest: any = {};
-    /* This will hold if attachment is expanded */
-    public isAttachmentExpanded: boolean = false;
     /* This will hold if pdf preview loaded */
     public pdfPreviewLoaded: boolean = false;
     /* This will hold if pdf preview has error */
@@ -449,7 +447,6 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                         if (this.selectedItem) {
                             this.selectedItem.hasAttachment = true;
                         }
-                        this.isAttachmentExpanded = false;
                         const fileExtention = result.body.attachments[0].type.toLowerCase();
                         if (FILE_ATTACHMENT_TYPE.IMAGE.includes(fileExtention)) {
                             // Attached file type is image
@@ -539,7 +536,6 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                         this.attachedPdfFileUrl = null;
                         this.imagePreviewSource = null;
                         if (data.body.fileType) {
-                            this.isAttachmentExpanded = false;
                             const fileExtention = data.body.fileType.toLowerCase();
                             if (FILE_ATTACHMENT_TYPE.IMAGE.includes(fileExtention)) {
                                 // Attached file type is image

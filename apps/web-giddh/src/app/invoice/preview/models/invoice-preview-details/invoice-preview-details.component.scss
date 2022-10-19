@@ -236,22 +236,12 @@
     .pdf-expand-collapse {
         padding: 50px 0px 0 0px;
     }
-    .image-collapsed {
-        max-height: 130px;
-        overflow: hidden;
-        img {
-            height: auto;
-        }
-    }
     .preview-not-supported-attachment {
         font-size: 15px;
         margin: 16px;
     }
     .pdf-preview {
         height: 100%;
-        // margin: 15px 200px;
-        // border: 2px dashed var(--color-iron);
-        // padding: 10px;
         margin-top: 50px;
         h5 {
             background-color: var(--color-primary-invoice-preview-details-background);
@@ -479,24 +469,6 @@ label.labeled {
 .scroll-half {
     height: 100vh !important;
     overflow-y: auto !important;
-}
-
-.expand-file {
-    position: absolute;
-    right: 15px;
-    font-size: 14px;
-    margin: 15px;
-    top: 0px;
-    a {
-        color: var(--color-abbey);
-        span {
-            margin-right: 5px;
-        }
-    }
-}
-
-.collapse-icon {
-    transform: rotate(180deg);
 }
 
 @keyframes loading {
