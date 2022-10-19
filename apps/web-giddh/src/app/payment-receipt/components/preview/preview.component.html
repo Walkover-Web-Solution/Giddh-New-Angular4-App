@@ -202,18 +202,13 @@
                                     <p>{{ attachedDocumentType?.name }}</p>
                                     <p>{{ commonLocaleData?.app_preview_formats }}</p>
                                 </div>
-                                <div
-                                    *ngIf="attachedDocumentType?.type === 'image'"
-                                    class="img-expand-collapse"
-                                    [ngClass]="{ 'image-collapsed': !isAttachmentExpanded }"
-                                >
+                                <div *ngIf="attachedDocumentType?.type === 'image'" class="img-expand-collapse">
                                     <img class="image-preview img-expand" [src]="imagePreviewSource" />
                                 </div>
                                 <div
                                     *ngIf="attachedDocumentType?.type === 'pdf' && attachedPdfFileUrl"
                                     #attachedDocumentPreview
                                     class="pdf-expand-collapse pdf-preview mt-0"
-                                    [ngClass]="{ 'image-collapsed': !isAttachmentExpanded }"
                                 >
                                     <iframe
                                         #pdfContainer
@@ -221,24 +216,6 @@
                                         height="100%"
                                         [src]="attachedPdfFileUrl"
                                     ></iframe>
-                                </div>
-                                <div class="expand-file" *ngIf="imagePreviewSource || attachedPdfFileUrl">
-                                    <a
-                                        href="javascript:;"
-                                        *ngIf="!isAttachmentExpanded"
-                                        class="cp"
-                                        (click)="isAttachmentExpanded = true"
-                                        ><span><img src="assets/images/expand.svg" /></span
-                                        >{{ commonLocaleData?.app_expand }}</a
-                                    >
-                                    <a
-                                        href="javascript:;"
-                                        *ngIf="isAttachmentExpanded"
-                                        class="cp"
-                                        (click)="isAttachmentExpanded = false"
-                                        ><span><img src="assets/images/expand.svg" class="collapse-icon" /></span
-                                        >{{ commonLocaleData?.app_collapse }}</a
-                                    >
                                 </div>
                                 <div class="error" [hidden]="!pdfPreviewHasError">
                                     <span>

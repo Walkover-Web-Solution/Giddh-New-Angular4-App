@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Even
 import { ActivatedRoute } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { LoginActions } from 'apps/web-giddh/src/app/actions/login.action';
-import { Configuration, SearchResultText, GIDDH_DATE_RANGE_PICKER_RANGES, RATE_FIELD_PRECISION, PAGINATION_LIMIT } from 'apps/web-giddh/src/app/app.constant';
+import { Configuration, SearchResultText, GIDDH_DATE_RANGE_PICKER_RANGES, RATE_FIELD_PRECISION, PAGINATION_LIMIT, RESTRICTED_VOUCHERS_FOR_DOWNLOAD, AdjustedVoucherType } from 'apps/web-giddh/src/app/app.constant';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI, GIDDH_DATE_FORMAT_MM_DD_YYYY } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { ShSelectComponent } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-select.component';
 import * as dayjs from 'dayjs';
@@ -47,6 +47,7 @@ import { ConfirmModalComponent } from '../theme/new-confirm-modal/confirm-modal.
 import { GenerateVoucherConfirmationModalComponent } from './components/generate-voucher-confirm-modal/generate-voucher-confirm-modal.component';
 import { CommonService } from '../services/common.service';
 import { AdjustmentUtilityService } from '../shared/advance-receipt-adjustment/services/adjustment-utility.service';
+import { InvoiceActions } from '../actions/invoice/invoice.actions';
 
 @Component({
     selector: 'ledger',
@@ -256,6 +257,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
         totalPages: 0,
         showPagination: false
     };
+    /** Holds restricted voucher types for download */
+    public restrictedVouchersForDownload: any[] = RESTRICTED_VOUCHERS_FOR_DOWNLOAD;
 
     constructor(
         private store: Store<AppState>,
@@ -276,7 +279,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
         private zone: NgZone,
         public dialog: MatDialog,
         private commonService: CommonService,
-        private adjustmentUtilityService: AdjustmentUtilityService
+        private adjustmentUtilityService: AdjustmentUtilityService,
+        private invoiceAction: InvoiceActions
     ) {
 
         this.lc = new LedgerVM();
@@ -517,6 +521,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.companyActions.getTax());
         // reset redirect state from login action
         this.store.dispatch(this.loginActions.ResetRedirectToledger());
+        this.store.dispatch(this.invoiceAction.getInvoiceSetting());
+        this.getPurchaseSettings();
 
         this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         this.currentOrganizationType = this.generalService.currentOrganizationType;
@@ -2524,6 +2530,21 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             this.getTransactionData();
+        });
+    }
+
+    /**
+     * This function is used to get purchase settings from store
+     *
+     * @memberof LedgerComponent
+     */
+    public getPurchaseSettings(): void {
+        this.store.pipe(select(state => state.invoice.settings), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.purchaseBillSettings && !response?.purchaseBillSettings?.enableVoucherDownload) {
+                this.restrictedVouchersForDownload.push(AdjustedVoucherType.PurchaseInvoice);
+            } else {
+                this.restrictedVouchersForDownload = this.restrictedVouchersForDownload?.filter(voucherType => voucherType !== AdjustedVoucherType.PurchaseInvoice);
+            }
         });
     }
 }

@@ -138,8 +138,6 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     public purchaseOrderPreviewUniqueName: string = '';
     /* Send email request params object */
     public sendEmailRequest: any = {};
-    /* This will hold if attachment is expanded */
-    public isAttachmentExpanded: boolean = false;
     /* This will hold if pdf preview loaded */
     public pdfPreviewLoaded: boolean = false;
     /* This will hold if pdf preview has error */
@@ -164,6 +162,8 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     public voucherApiVersion: 1 | 2;
     /** Holds selected item voucher */
     private selectedItemVoucher: any;
+    /** True if pdf is available */
+    public isPdfAvailable: boolean = true;
 
     constructor(
         private _cdr: ChangeDetectorRef,
@@ -423,16 +423,23 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
             this.commonService.downloadFile(getRequest, "ALL").pipe(takeUntil(this.destroyed$)).subscribe(result => {
                 if (result?.body) {
                     /** Creating voucher pdf start */
-                    if (this.selectedItem) {
+                    if (this.selectedItem && result.body.data) {
+                        this.isPdfAvailable = true;
                         this.selectedItem.blob = this._generalService.base64ToBlob(result.body.data, 'application/pdf', 512);
                         const file = new Blob([this.selectedItem.blob], { type: 'application/pdf' });
                         this.attachedDocumentBlob = file;
                         URL.revokeObjectURL(this.pdfFileURL);
                         this.pdfFileURL = URL.createObjectURL(file);
+
+                        this.sanitizedPdfFileUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(this.pdfFileURL);
+                        this.isVoucherDownloadError = false;
+                        this.pdfPreviewLoaded = true;
+                    } else {
+                        if (this.selectedItem?.voucherType === 'purchase') {
+                            this.pdfPreviewLoaded = false;
+                        }
+                        this.isPdfAvailable = false;
                     }
-                    this.sanitizedPdfFileUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(this.pdfFileURL);
-                    this.isVoucherDownloadError = false;
-                    this.pdfPreviewLoaded = true;
                     /** Creating voucher pdf finish */
 
                     if (result.body.attachments?.length > 0) {
@@ -440,7 +447,6 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                         if (this.selectedItem) {
                             this.selectedItem.hasAttachment = true;
                         }
-                        this.isAttachmentExpanded = false;
                         const fileExtention = result.body.attachments[0].type.toLowerCase();
                         if (FILE_ATTACHMENT_TYPE.IMAGE.includes(fileExtention)) {
                             // Attached file type is image
@@ -530,7 +536,6 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                         this.attachedPdfFileUrl = null;
                         this.imagePreviewSource = null;
                         if (data.body.fileType) {
-                            this.isAttachmentExpanded = false;
                             const fileExtention = data.body.fileType.toLowerCase();
                             if (FILE_ATTACHMENT_TYPE.IMAGE.includes(fileExtention)) {
                                 // Attached file type is image
