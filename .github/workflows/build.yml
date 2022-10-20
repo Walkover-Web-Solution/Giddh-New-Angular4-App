@@ -38,7 +38,7 @@ jobs:
       - name: Install Node.js & NPM
         uses: actions/setup-node@v2
         with:
-          node-version: "14"
+          node-version: "16"
 
 #       Runs npm i
       - uses: bahmutov/npm-install@v1
@@ -48,6 +48,7 @@ jobs:
           useLockFile: false
           useRollingCache: true
           working-directory: .
+          install-command: npm i --force
       - name: Creating Test bundle
         if: ${{ env.BUILD_ENV == 'Test' }}
         run: npm run build-test
@@ -133,8 +134,7 @@ jobs:
           mkdir public
           cp -r /home/runner/work/Giddh-New-Angular4-App/Giddh-New-Angular4-App/dist/apps/web-giddh /home/runner/work/Giddh-New-Angular4-App/Giddh-New-Angular4-App/public/website/
       - name: Create ZIP folder
-        run:
-          zip -r public.zip public
+        run: zip -r public.zip public
       - name: Deploy to TEST env.
         if: ${{ env.BUILD_ENV == 'Test' }}
         env:

@@ -134,7 +134,7 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
             this.activeCompany = activeCompany;
         });
 
-        this.store.pipe(select(createSelector([(states: AppState) => states.session.applicationDate], (dateObj: Date[]) => {
+        this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe((dateObj: Date[]) => {
             if (dateObj) {
                 this.universalDate = _.cloneDeep(dateObj);
 
@@ -157,7 +157,7 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
                     });
                 }, 100);
             }
-        })), takeUntil(this.destroyed$)).subscribe();
+        });
 
         this.store.pipe(
             select(state => state.session.activeCompany), takeUntil(this.destroyed$)

@@ -115,7 +115,7 @@ export class MaskApplierService {
             if (maskExpression.startsWith(Separators.SEPARATOR)) {
                 if (
                     inputValue.includes(',') &&
-                    inputValue.endsWith(',') &&
+                    inputValue?.endsWith(',') &&
                     inputValue.indexOf(',') !== inputValue.lastIndexOf(',')
                 ) {
                     inputValue = inputValue.substring(0, inputValue?.length - 1);
@@ -499,7 +499,7 @@ export class MaskApplierService {
             const precisionMatch: RegExpMatchArray | null = inputValue.match(precisionRegEx);
             if (precisionMatch && precisionMatch[0]?.length - 1 > precision) {
                 inputValue = inputValue.substring(0, inputValue?.length - 1);
-            } else if (precision === 0 && inputValue.endsWith(decimalMarker)) {
+            } else if (precision === 0 && inputValue?.endsWith(decimalMarker)) {
                 inputValue = inputValue.substring(0, inputValue?.length - 1);
             }
         }

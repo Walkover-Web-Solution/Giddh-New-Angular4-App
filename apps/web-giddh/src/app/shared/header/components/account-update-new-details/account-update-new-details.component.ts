@@ -36,7 +36,7 @@ import {
     IAccountAddress,
 } from '../../../../models/api-models/Account';
 import { CountryRequest, OnboardingFormRequest } from '../../../../models/api-models/Common';
-import { CompanyResponse, StateList, StatesRequest } from '../../../../models/api-models/Company';
+import { CompanyResponse, StateList, StatesRequest, TaxResponse } from '../../../../models/api-models/Company';
 import { IForceClear } from '../../../../models/api-models/Sales';
 import { ToasterService } from '../../../../services/toaster.service';
 import { AppState } from '../../../../store';
@@ -360,7 +360,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             (state: AppState) => state.groupwithaccounts.activeAccount,
             (state: AppState) => state.groupwithaccounts.activeAccountTaxHierarchy,
             (state: AppState) => state.company && state.company.taxes],
-            (activeAccount, activeAccountTaxHierarchy, taxes) => {
+            (activeAccount: AccountResponseV2, activeAccountTaxHierarchy: AccountsTaxHierarchyResponse, taxes: TaxResponse[]) => {
                 let arr: IOption[] = [];
                 if (taxes) {
                     if (activeAccount) {

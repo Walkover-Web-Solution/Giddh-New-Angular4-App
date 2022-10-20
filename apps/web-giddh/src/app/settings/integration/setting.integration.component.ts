@@ -608,7 +608,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             this.loadDefaultBankAccountsSuggestions();
             this.getAllBankAccounts();
             this.store.dispatch(this._companyActions.getAllRegistrations());
-            this.store.dispatch(this.settingsIntegrationActions.GetPaymentGateway());
             this.store.pipe(take(1)).subscribe(s => {
                 this.selectedCompanyUniqueName = s.session.companyUniqueName;
                 this.store.dispatch(this.settingsPermissionActions.GetUsersWithPermissions(this.selectedCompanyUniqueName));
