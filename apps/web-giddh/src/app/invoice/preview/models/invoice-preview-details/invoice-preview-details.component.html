@@ -610,7 +610,6 @@
                                     attachedDocumentType?.type === 'image'
                                 "
                                 class="img-expand-collapse"
-                                [ngClass]="{ 'image-collapsed': !isAttachmentExpanded }"
                             >
                                 <img class="image-preview img-expand w-100" [src]="imagePreviewSource" />
                             </div>
@@ -651,6 +650,22 @@
                                     </div>
                                 </div>
                             </div>
+                            <ng-container
+                                *ngIf="
+                                    voucherApiVersion === 2 &&
+                                    shouldShowUploadAttachment &&
+                                    isCompany &&
+                                    !isPdfAvailable &&
+                                    !(attachedPdfFileUrl || imagePreviewSource)
+                                "
+                            >
+                                <no-data
+                                    class="mr-t15 d-block"
+                                    [primaryMessage]="commonLocaleData?.app_attachment_not_allowed"
+                                    [primaryMessageClass]="'bold'"
+                                    [secondaryMessage]="' '"
+                                ></no-data>
+                            </ng-container>
                             <div
                                 *ngIf="
                                     selectedItem?.voucherType === 'purchase' &&
@@ -659,56 +674,32 @@
                                 "
                                 #attachedDocumentPreview
                                 class="pdf-expand-collapse pdf-preview mt-0"
-                                [ngClass]="{ 'image-collapsed': !isAttachmentExpanded }"
                             >
                                 <iframe #pdfContainer width="100%" height="100%" [src]="attachedPdfFileUrl"></iframe>
                             </div>
-                            <div #attachedDocumentPreview class="pdf-preview">
+                            <div
+                                #attachedDocumentPreview
+                                class="pdf-preview"
+                                *ngIf="
+                                    sanitizedPdfFileUrl &&
+                                    !(isVoucherDownloading || isVoucherDownloadError || isFileUploading)
+                                "
+                            >
                                 <h5
-                                    *ngIf="selectedItem?.voucherType === 'purchase'"
+                                    *ngIf="selectedItem?.voucherType === 'purchase' && isPdfAvailable"
                                     class="text-left pd-l15 font-16 pd-t1 pd-b1"
                                 >
                                     <strong>{{ localeData?.auto_generated_purchase_bill }}</strong>
                                 </h5>
-                                <iframe
-                                    #pdfContainer
-                                    *ngIf="
-                                        sanitizedPdfFileUrl &&
-                                        !(isVoucherDownloading || isVoucherDownloadError || isFileUploading)
-                                    "
-                                    width="100%"
-                                    height="100%"
-                                    [src]="sanitizedPdfFileUrl"
-                                ></iframe>
+                                <iframe #pdfContainer width="100%" height="100%" [src]="sanitizedPdfFileUrl"></iframe>
                                 <giddh-page-loader
-                                    *ngIf="!sanitizedPdfFileUrl && selectedItem?.voucherType === 'purchase'"
+                                    *ngIf="
+                                        isPdfAvailable &&
+                                        !sanitizedPdfFileUrl &&
+                                        selectedItem?.voucherType === 'purchase'
+                                    "
                                     [cssClass]="'mb-0 mt-0'"
                                 ></giddh-page-loader>
-                            </div>
-
-                            <div
-                                class="expand-file"
-                                *ngIf="
-                                    selectedItem?.voucherType === 'purchase' &&
-                                    (imagePreviewSource || attachedPdfFileUrl)
-                                "
-                            >
-                                <a
-                                    href="javascript:;"
-                                    *ngIf="!isAttachmentExpanded"
-                                    class="cp"
-                                    (click)="isAttachmentExpanded = true"
-                                    ><span><img src="assets/images/expand.svg" /></span
-                                    >{{ commonLocaleData?.app_expand }}</a
-                                >
-                                <a
-                                    href="javascript:;"
-                                    *ngIf="isAttachmentExpanded"
-                                    class="cp"
-                                    (click)="isAttachmentExpanded = false"
-                                    ><span><img src="assets/images/expand.svg" class="collapse-icon" /></span
-                                    >{{ commonLocaleData?.app_collapse }}</a
-                                >
                             </div>
                         </div>
                     </div>
