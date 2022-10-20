@@ -650,6 +650,22 @@
                                     </div>
                                 </div>
                             </div>
+                            <ng-container
+                                *ngIf="
+                                    voucherApiVersion === 2 &&
+                                    shouldShowUploadAttachment &&
+                                    isCompany &&
+                                    !isPdfAvailable &&
+                                    !(attachedPdfFileUrl || imagePreviewSource)
+                                "
+                            >
+                                <no-data
+                                    class="mr-t15 d-block"
+                                    [primaryMessage]="commonLocaleData?.app_attachment_not_allowed"
+                                    [primaryMessageClass]="'bold'"
+                                    [secondaryMessage]="' '"
+                                ></no-data>
+                            </ng-container>
                             <div
                                 *ngIf="
                                     selectedItem?.voucherType === 'purchase' &&
