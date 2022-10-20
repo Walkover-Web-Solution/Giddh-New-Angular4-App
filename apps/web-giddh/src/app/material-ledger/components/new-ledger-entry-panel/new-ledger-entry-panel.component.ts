@@ -241,7 +241,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     /** Stores the voucher API version of current company */
     public voucherApiVersion: 1 | 2;
     /** True if user itself checked the generate voucher  */
-    public manualGenerateVoucherChecked: boolean = false;
+    public manualGenerateVoucherChecked: boolean = true;
     /** Holds input to get invoice list request params */
     public invoiceListRequestParams: any = {};
     /** Round off amount */
@@ -383,6 +383,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 this.discountsList = response?.body;
             }
         });
+        this.blankLedger.generateInvoice = true;
     }
 
     @HostListener('click', ['$event'])
@@ -490,7 +491,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             warehouse: this.selectedWarehouse
         });
         this.blankLedger.voucherType = '';
-        this.blankLedger.generateInvoice = false;
     }
 
     /**
@@ -1398,8 +1398,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      * @memberof NewLedgerEntryPanelComponent
      */
     public handleVoucherAdjustment(): void {
-        if (this.isAdjustReceiptSelected || this.isAdjustAdvanceReceiptSelected ||
-            this.isAdjustVoucherSelected) {
+        if (this.isAdjustReceiptSelected || this.isAdjustAdvanceReceiptSelected || this.isAdjustVoucherSelected) {
             this.prepareAdjustVoucherConfiguration();
             this.openAdjustPaymentModal();
             this.blankLedger.generateInvoice = true;

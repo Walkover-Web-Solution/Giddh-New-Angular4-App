@@ -678,5 +678,6 @@
     "app_count": "मोजा",
     "app_invalid_country_code": "अवैध देश कोड",
     "app_invalid_contact_too_short": "खुप लहान",
-    "app_invalid_contact_too_long": "खूप लांब"
+    "app_invalid_contact_too_long": "खूप लांब",
+    "app_attachment_not_allowed": "संलग्नक अपलोड करण्यासाठी, शाखेत जा"
 }
