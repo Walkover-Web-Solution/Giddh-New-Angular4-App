@@ -614,7 +614,10 @@
                 </div>
 
                 <!-- pagination -->
-                <div class="mt-1" [hidden]="!daybookData?.entries?.length">
+                <div
+                    class="mt-1"
+                    [hidden]="!daybookData?.entries?.length || daybookData?.totalItems <= daybookData?.count"
+                >
                     <pagination
                         [totalItems]="daybookData?.totalItems"
                         [(ngModel)]="daybookData.page"
