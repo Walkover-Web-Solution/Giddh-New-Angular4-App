@@ -462,7 +462,6 @@
                                     width="19%"
                                     (dblclick)="selectedCustomerUniqueName = item?.uniqueName"
                                     class="cp no-dbl-click-select"
-                                    (clickOutside)="selectedCustomerUniqueName = ''"
                                     [attr.data-title]="commonLocaleData?.app_customer"
                                 >
                                     {{ item.customerName }}
@@ -473,6 +472,7 @@
                                         [from]="this.advanceSearchFilter.from"
                                         [to]="this.advanceSearchFilter.to"
                                         [isModalOpen]="selectedCustomerUniqueName === item?.uniqueName"
+                                        (modalClosed)="selectedCustomerUniqueName = ''"
                                     ></div>
                                 </td>
 

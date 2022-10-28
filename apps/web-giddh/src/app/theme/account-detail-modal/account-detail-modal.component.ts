@@ -1,21 +1,31 @@
+import { animate, state, style, transition, trigger } from '@angular/animations';
 import { ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, Output, SimpleChanges, ViewChild } from '@angular/core';
-import { Store } from '@ngrx/store';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
 import { VoucherTypeEnum } from '../../models/api-models/Sales';
 import { BulkEmailRequest } from '../../models/api-models/Search';
 import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccountsResultItem.interface';
 import { AccountService } from '../../services/account.service';
 import { CompanyService } from '../../services/companyService.service';
 import { ToasterService } from '../../services/toaster.service';
-import { AppState } from '../../store';
 
 @Component({
     selector: '[account-detail-modal-component]',
     templateUrl: './account-detail-modal.component.html',
-    styleUrls: ['./account-detail-modal.component.scss']
+    styleUrls: ['./account-detail-modal.component.scss'],
+    animations: [
+        trigger("slideInOut", [
+            state("in", style({
+                transform: "translate3d(0, 0, 0)",
+            })),
+            state("out", style({
+                transform: "translate3d(100%, 0, 0)",
+            })),
+            transition("in => out", animate("400ms ease-in-out")),
+            transition("out => in", animate("400ms ease-in-out")),
+        ]),
+    ],
 })
 
 export class AccountDetailModalComponent implements OnChanges, OnDestroy {
@@ -30,7 +40,10 @@ export class AccountDetailModalComponent implements OnChanges, OnDestroy {
     @Input() public voucherType: VoucherTypeEnum;
     /** Emits when modal needs to be opened */
     @Output() public modalOpened: EventEmitter<ModalDirective> = new EventEmitter<ModalDirective>();
-
+    /** Emits when modal needs to be closed */
+    @Output() public modalClosed: EventEmitter<boolean> = new EventEmitter();
+    /** Emits when modal needs to be closed temporary */
+    @Output() public modalClosedTemporary: EventEmitter<any> = new EventEmitter();
     @ViewChild('mailModal', { static: true }) public mailModal: ModalDirective;
     @ViewChild('messageBox', { static: true }) public messageBox: ElementRef;
 
@@ -51,15 +64,24 @@ export class AccountDetailModalComponent implements OnChanges, OnDestroy {
     };
     public dataVariables = [];
     @Input() public accInfo: IFlattenAccountsResultItem;
+    /** This will close modal on edit account icon click */
+    @Input() public closeOnEdit: boolean = false;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* This will hold local JSON data */
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** Account update modal state */
+    public accountAsideMenuState: string = "out";
+    /** Account group unique name */
+    public activeGroupUniqueName: string = "";
 
-    constructor(private store: Store<AppState>, private _companyServices: CompanyService,
-        private _toaster: ToasterService, private _groupWithAccountsAction: GroupWithAccountsAction, private _accountService: AccountService,
-        private changeDetectorRef: ChangeDetectorRef) {
+    constructor(
+        private _companyServices: CompanyService,
+        private _toaster: ToasterService, 
+        private _accountService: AccountService,
+        private changeDetectorRef: ChangeDetectorRef
+    ) {
     }
 
     public ngOnChanges(changes: SimpleChanges): void {
@@ -90,7 +112,13 @@ export class AccountDetailModalComponent implements OnChanges, OnDestroy {
     public performActions(type: number, event?: any) {
         switch (type) {
             case 0: // go to add and manage
-                this.store.dispatch(this._groupWithAccountsAction.OpenAddAndManageFromOutside(this.accInfo.name));
+                if (!this.closeOnEdit) {
+                    this.activeGroupUniqueName = this.accInfo?.parentGroups[this.accInfo?.parentGroups?.length - 1]?.uniqueName;
+                    this.toggleAccountAsidePane();
+                    event.stopPropagation();
+                } else {
+                    this.modalClosedTemporary.emit(this.accInfo);
+                }
                 break;
 
             case 1: // go to ledger
@@ -282,5 +310,41 @@ export class AccountDetailModalComponent implements OnChanges, OnDestroy {
                 }
             ];
         }
+    }
+
+    /**
+     * Toggle's account update modal
+     *
+     * @memberof AccountDetailModalComponent
+     */
+    public toggleAccountAsidePane(): void {
+        this.accountAsideMenuState = this.accountAsideMenuState === "out" ? "in" : "out";
+        this.toggleBodyClass();
+    }
+
+    /**
+     * Toggle's fixed class in body
+     *
+     * @memberof AccountDetailModalComponent
+     */
+    public toggleBodyClass() {
+        if (this.accountAsideMenuState === "in") {
+            document.querySelector("body").classList.add("fixed");
+        } else {
+            document.querySelector("body").classList.remove("fixed");
+        }
+    }
+
+    /**
+     * Callback function on account modal close
+     *
+     * @param {*} event
+     * @memberof AccountDetailModalComponent
+     */
+    public getUpdatedList(event: any): void {
+        if (this.accountAsideMenuState === "in") {
+            this.toggleAccountAsidePane();
+        }
+        this.modalClosed.emit(event);
     }
 }
