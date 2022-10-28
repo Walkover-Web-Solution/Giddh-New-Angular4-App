@@ -585,7 +585,7 @@
 
     <div class="aside-overlay" *ngIf="accountAsideMenuState === 'in'"></div>
 
-    <div class="abc" *ngIf="accountAsideMenuState === 'in'">
+    <div *ngIf="accountAsideMenuState === 'in'">
         <aside-menu-account
             [activeGroupUniqueName]="selectedGroupForCreateAcc"
             [activeAccountDetails]="activeAccountDetails"
@@ -600,7 +600,7 @@
     </div>
 
     <div class="aside-overlay" *ngIf="paymentAsideMenuState === 'in'"></div>
-    <div class="abc vendor-pay-now" *ngIf="paymentAsideMenuState === 'in'">
+    <div class="vendor-pay-now" *ngIf="paymentAsideMenuState === 'in'">
         <payment-aside
             class="account-aside-menu-state transform-inherit"
             [selectedAccForPayment]="selectedAccForPayment"
