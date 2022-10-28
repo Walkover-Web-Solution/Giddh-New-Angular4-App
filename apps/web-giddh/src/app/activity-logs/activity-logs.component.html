@@ -289,7 +289,10 @@
                 </div>
             </section>
         </div>
-        <div class="pagination-wrapper" *ngIf="activityObj?.totalItems > activityObj.count && !isLoading">
+        <div
+            class="pagination-wrapper"
+            *ngIf="activityObj?.totalItems > activityObj.count && activityObj.totalPages > 1 && !isLoading"
+        >
             <pagination
                 [totalItems]="activityObj?.totalItems"
                 [(ngModel)]="activityObj.page"
