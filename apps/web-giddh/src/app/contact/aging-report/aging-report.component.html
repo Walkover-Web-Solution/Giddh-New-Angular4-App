@@ -482,7 +482,7 @@
     </div>
 
     <div
-        *ngIf="(dueAmountReportData$ | async)?.totalItems >= 20"
+        *ngIf="(dueAmountReportData$ | async)?.totalPages > 1"
         class="pagination-wrapper"
         [hidden]="getAgingReportRequestInProcess$ | async"
     >
