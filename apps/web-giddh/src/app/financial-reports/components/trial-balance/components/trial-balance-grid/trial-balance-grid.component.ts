@@ -195,6 +195,12 @@ export class TrialBalanceGridComponent implements OnInit, OnChanges, OnDestroy {
         }
     }
 
+    /**
+     * Shows the account update modal
+     *
+     * @param {*} account
+     * @memberof TrialBalanceGridComponent
+     */
     public openAccountModal(account: any): void {
         this.accountDetails = account;
         this.activeGroupUniqueName = account?.parentGroups[account?.parentGroups?.length - 1]?.uniqueName;

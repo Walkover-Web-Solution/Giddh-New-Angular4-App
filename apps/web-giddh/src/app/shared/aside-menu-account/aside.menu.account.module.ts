@@ -21,6 +21,6 @@ import { ModalModule } from "ngx-bootstrap/modal";
         AsideMenuAccountInContactComponent
     ]
 })
-export class AsideMenuAccountModuleClass {
+export class AsideMenuAccountModule {
 
 }

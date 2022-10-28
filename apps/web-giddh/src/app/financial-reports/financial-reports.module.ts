@@ -11,7 +11,7 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 
 import { AmountFieldComponentModule } from '../shared/amount-field/amount-field.module';
-import { AsideMenuAccountModuleClass } from '../shared/aside-menu-account/aside.menu.account.module';
+import { AsideMenuAccountModule } from '../shared/aside-menu-account/aside.menu.account.module';
 import { DatepickerWrapperModule } from '../shared/datepicker-wrapper/datepicker.wrapper.module';
 import { GiddhPageLoaderModule } from '../shared/giddh-page-loader/giddh-page-loader.module';
 import { HamburgerMenuModule } from '../shared/header/components/hamburger-menu/hamburger-menu.module';
@@ -104,7 +104,7 @@ import { AccountsFilterPipe } from './pipes/accounts-filter.pipe';
         AmountFieldComponentModule,
         DatepickerWrapperModule,
         PopoverModule.forRoot(),
-        AsideMenuAccountModuleClass
+        AsideMenuAccountModule
     ],
 })
 export class FinancialReportsModule {
