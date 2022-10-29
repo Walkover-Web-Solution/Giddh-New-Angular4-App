@@ -25,7 +25,7 @@ describe('This is Global Search Test', function () {
 
     // });
 
-    it('Verify Invoice using Global Search', () => {
+    xit('Verify Invoice using Global Search', () => {
         cy.globalSearch('#giddh-page-heading-link > span', 'Invoice', 'Invoice ')
 
     });
