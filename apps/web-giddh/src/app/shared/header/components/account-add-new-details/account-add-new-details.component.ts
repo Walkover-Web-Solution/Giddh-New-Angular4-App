@@ -1239,8 +1239,9 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         const errorMsg = document.querySelector("#init-contact-add-error-msg");
         const validMsg = document.querySelector("#init-contact-add-valid-msg");
         let errorMap = [this.localeData?.invalid_contact_number, this.commonLocaleData?.app_invalid_country_code, this.commonLocaleData?.app_invalid_contact_too_short, this.commonLocaleData?.app_invalid_contact_too_long, this.localeData?.invalid_contact_number];
-        if (window['intlTelInput'] && input) {
-            this.intl = window['intlTelInput'](input, {
+        let intlTelInput = window['intlTelInput'] ?? window['intlTelInputGlobals'];
+        if (intlTelInput && input) {
+            this.intl = intlTelInput(input, {
                 nationalMode: true,
                 utilsScript: MOBILE_NUMBER_UTIL_URL,
                 autoHideDialCode: false,
