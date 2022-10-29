@@ -8,8 +8,7 @@ import { AccountsAction } from '../../actions/accounts.actions';
 import { IOption } from '../../theme/ng-select/option.interface';
 import { GroupResponse } from '../../models/api-models/Group';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
-import { AccountAddNewDetailsComponent } from '../../shared/header/components';
+import { AccountAddNewDetailsComponent } from '../header/components';
 import { AccountService } from '../../services/account.service';
 
 @Component({
@@ -54,8 +53,7 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
     constructor(
         private accountService: AccountService,
         private store: Store<AppState>,
-        private accountsAction: AccountsAction,
-        private groupWithAccountsAction: GroupWithAccountsAction
+        private accountsAction: AccountsAction
     ) {
         // account-add component's property
         this.createAccountInProcess$ = this.store.pipe(select(state => state.groupwithaccounts.createAccountInProcess), takeUntil(this.destroyed$));
