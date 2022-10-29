@@ -1,9 +1,9 @@
-// import TrialBalancePage from "../../support/pageObjects/TrialBalancePage";
-// import GlobalSearchPage from "../../support/pageObjects/GlobalSearchPage";
+import TrialBalancePage from "../../support/pageObjects/TrialBalancePage";
+import GlobalSearchPage from "../../support/pageObjects/GlobalSearchPage";
 
 describe('This is Global Search Test', function () {
 
-//     const globalSearchPage = new GlobalSearchPage()
+    const globalSearchPage = new GlobalSearchPage()
 
 //     let testData = "";
 //     let entryUniqueName = "";

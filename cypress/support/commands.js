@@ -25,12 +25,8 @@
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 
 import LoginPage from '../support/pageObjects/LoginPage'
-import MainPage from '../support/pageObjects/MainPage'
 import HeaderPage from "./pageObjects/HeaderPage";
-import DashboardPage from "./pageObjects/DashboardPage";
 import GlobalSearchPage from "./pageObjects/GlobalSearchPage";
-import TrialBalancePage from "./pageObjects/TrialBalancePage";
-import PLAndBSPage from "./pageObjects/PLAndBSPage";
 import LedgerPage from "./pageObjects/LedgerPage";
 import SignUpPage from "./pageObjects/SignUpPage";
 import CreateNewCompanyPage from "./pageObjects/CreateNewCompanyPage";
@@ -39,24 +35,17 @@ const signUpPage = new SignUpPage();
 const headerPage = new HeaderPage()
 const ledgerPage = new LedgerPage()
 const globalSearchPage = new GlobalSearchPage()
-const trialBalancePage = new TrialBalancePage()
-const plAndBSPage = new PLAndBSPage();
 const createNewCompanyPage = new CreateNewCompanyPage();
 
 
 Cypress.Commands.add("loginWithGoogle", (email, password) => {
     cy.visit(Cypress.env('url'))
-    //mainPage.getLoginButton().click()
     loginPage.getLoginWithGoogle().click()
-
-
 })
 
 Cypress.Commands.add("loginWithEmail", (email, password) => {
     const loginPage = new LoginPage()
-    const mainPage = new MainPage()
     cy.visit(Cypress.env('url'))
-    //mainPage.getLoginButton().click()
     loginPage.getLoginWithEmail().click()
     loginPage.enterEmailId().type(email)
     loginPage.enterPassword().type(password)
@@ -65,17 +54,12 @@ Cypress.Commands.add("loginWithEmail", (email, password) => {
 
     headerPage.clickGiddhLogoIcon().should('have.attr', 'src')
         .should('include', 'assets/images/giddh-white-logo.svg')
-    // headerPage.clickGiddhLogoIcon().find('img').should('have.attr', 'src').should('include','assets/images/giddh-white-logo.svg')
-    // headerPage.clickGiddhLogoIcon().click()
-    // expect(headerPage.clickGiddhLogoIcon()).to.deep.equal({src : 'assets/images/giddh-white-logo.svg'})
-
 })
 
 Cypress.Commands.add("globalSearch", (elementPath, searchValue, expectedText) => {
     cy.get('body').type('{ctrl}g', { force: true })
     if (globalSearchPage.getGlobalSearch(90000).should('be.visible')) {
         headerPage.clickGiddhLogoIcon().then(($ele1) => {
-            // headerPage.clickGiddhLogoIcon().type('{ctrl}g')
             globalSearchPage.typeGlobalSearch(searchValue)
             globalSearchPage.selectFirstValueAfterSearch().then(($btn) => {
                 cy.wait(2000)
@@ -85,7 +69,7 @@ Cypress.Commands.add("globalSearch", (elementPath, searchValue, expectedText) =>
                 cy.get(elementPath, { timeout: 50000 }).then((elementText) => {
                     cy.wait(5000).then(() => {
                         const text = elementText.text();
-                        //  expect(text).to.eq(expectedText)
+                        expect(text).to.eq(expectedText)
                     })
 
                 })
@@ -95,7 +79,6 @@ Cypress.Commands.add("globalSearch", (elementPath, searchValue, expectedText) =>
     }
     // cy.waitUntilVisible(trialBalancePage.getTrailBalanceText()).should('have.value', 'Trial Balance')
 })
-
 
 Cypress.Commands.add("createLedger", (accountName, accountElementPath, amount) => {
     ledgerPage.clickAccount().click()

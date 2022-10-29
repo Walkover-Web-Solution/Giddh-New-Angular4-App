@@ -1,7 +1,7 @@
 class HeaderPage {
 
     clickGiddhLogoIcon() {
-        return cy.get('.company-text > .giddh-logo', { timeout: 50000 })
+        return cy.get('.logo-wrapper > img', { timeout: 50000 })
     }
 
 }
