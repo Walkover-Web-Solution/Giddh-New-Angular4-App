@@ -1078,7 +1078,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         if (unAccountedTrx) {
             this.selectBlankTxn(unAccountedTrx);
 
-            this.dropDowns?.filter(dd => dd.idEl === unAccountedTrx.id).forEach(dd => {
+            this.dropDowns?.filter(dd => dd.idEl === unAccountedTrx.id)?.forEach(dd => {
                 setTimeout(() => {
                     dd.show(null);
                 }, 0);
@@ -1093,7 +1093,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.lc.blankLedger?.transactions.push(newTrx);
             this.selectBlankTxn(newTrx);
             setTimeout(() => {
-                this.dropDowns?.filter(dd => dd.idEl === newTrx.id).forEach(dd => {
+                this.dropDowns?.filter(dd => dd.idEl === newTrx.id)?.forEach(dd => {
                     dd.show(null);
                 });
             }, 0);
@@ -2119,7 +2119,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     index++;
                 });
             } else {
-                this.ledgerTransactions.debitTransactions.forEach(transaction => {
+                this.ledgerTransactions.debitTransactions?.forEach(transaction => {
                     if (this.allTransactionsList[transaction.entryDate] === undefined) {
                         this.allTransactionsList[transaction.entryDate] = [];
                     }
@@ -2127,7 +2127,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     this.allTransactionsList[transaction.entryDate].push(transaction);
                     index++;
                 });
-                this.ledgerTransactions.creditTransactions.forEach(transaction => {
+                this.ledgerTransactions.creditTransactions?.forEach(transaction => {
                     if (this.allTransactionsList[transaction.entryDate] === undefined) {
                         this.allTransactionsList[transaction.entryDate] = [];
                     }
