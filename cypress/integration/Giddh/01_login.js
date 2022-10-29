@@ -22,7 +22,7 @@ describe('This is Login Test', function() {
 
 
 
-    it('Login with Email1', () => {
+    xit('Login with Email', () => {
         cy.loginWithEmail(testData.Email, testData.Password)
 
     })

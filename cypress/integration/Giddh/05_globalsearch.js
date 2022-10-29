@@ -1,4 +1,4 @@
-import TrialBalancePage from "../../support/pageObjects/TrialBalancePage";
+// import TrialBalancePage from "../../support/pageObjects/TrialBalancePage";
 import GlobalSearchPage from "../../support/pageObjects/GlobalSearchPage";
 
 describe('This is Global Search Test', function () {
@@ -25,7 +25,7 @@ describe('This is Global Search Test', function () {
 
     // });
 
-    xit('Verify Invoice using Global Search', () => {
+    it('Verify Invoice using Global Search', () => {
         cy.globalSearch('#giddh-page-heading-link > span', 'Invoice', 'Invoice ')
 
     });
