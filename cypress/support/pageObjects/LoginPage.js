@@ -13,7 +13,7 @@ class LoginPage {
     }
 
     enterEmailId() {
-        return cy.get('#email');
+        return cy.xpath('//input[@placeholder=\'Email Id\']');
     }
 
     enterPassword() {
@@ -21,7 +21,7 @@ class LoginPage {
     }
 
     clickLoginButton() {
-        return cy.get('#demo > .btn')
+        return cy.xpath('//button[@type=\'submit\']');
     }
 
 }
