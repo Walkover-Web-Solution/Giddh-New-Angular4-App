@@ -705,7 +705,7 @@
     *ngIf="asideMenuStateForOtherTaxes === 'in'"
     [class]="asideMenuStateForOtherTaxes"
     [taxes]="companyTaxesList"
-    [otherTaxesModal]="updateLedgerComponent.vm.selectedLedger.otherTaxModal"
+    [otherTaxesModal]="updateLedgerComponent?.vm?.selectedLedger?.otherTaxModal"
     [commonLocaleData]="commonLocaleData"
     [@slideInOut]="asideMenuStateForOtherTaxes"
     (closeModal)="toggleOtherTaxesAsidePane(null)"

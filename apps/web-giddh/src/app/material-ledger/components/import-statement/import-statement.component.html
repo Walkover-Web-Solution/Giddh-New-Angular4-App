@@ -20,7 +20,6 @@
                         type="file"
                         name="file"
                         class="form-control file-upload-field"
-                        [(ngModel)]="selectedFile"
                         (change)="onFileChange($event.target.files)"
                         required
                         accept="application/pdf"

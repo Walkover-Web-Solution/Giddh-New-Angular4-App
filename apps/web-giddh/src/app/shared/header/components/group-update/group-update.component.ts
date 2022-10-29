@@ -505,7 +505,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
    public isDebtorCreditorGroup(activeGroup: GroupResponse, returnIndividualStatus?: boolean): boolean | {isCreditor?: boolean, isDebtor?: boolean} {
         let isTaxableGroup: boolean = false;
         if (activeGroup && activeGroup.parentGroups) {
-            isTaxableGroup = (activeGroup.uniqueName === 'sundrydebtors' || activeGroup.uniqueName === 'sundrycreditors') || activeGroup.parentGroups.some(groupName => groupName.uniqueName === 'sundrydebtors' || groupName.uniqueName === 'sundrycreditors');
+            isTaxableGroup = (activeGroup.uniqueName === 'sundrydebtors' || activeGroup.uniqueName === 'sundrycreditors') || activeGroup.parentGroups?.some(groupName => groupName.uniqueName === 'sundrydebtors' || groupName.uniqueName === 'sundrycreditors');
         }
         if (returnIndividualStatus) {
             if (activeGroup?.uniqueName === 'sundrydebtors' || activeGroup?.parentGroups?.some(groupName => groupName?.uniqueName === 'sundrydebtors')) {
