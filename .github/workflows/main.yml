@@ -36,6 +36,7 @@ jobs:
       - uses: bahmutov/npm-install@v1
         with:
           useLockFile: false
+          install-command: npm i --force
         env:
           CYPRESS_INSTALL_BINARY: 0
       # confirm there is no Cypress installed
