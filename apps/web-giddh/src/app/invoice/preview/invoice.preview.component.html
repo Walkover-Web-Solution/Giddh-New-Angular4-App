@@ -1048,7 +1048,6 @@
                                         selectedVoucher !== 'purchase' ? (modalUniqueName = item?.uniqueName) : ''
                                     "
                                     class="no-dbl-click-select"
-                                    (clickOutside)="modalUniqueName = ''"
                                 >
                                     <div dropdown container="body">
                                         {{ item?.account?.customerName || item?.account?.name }}
@@ -1060,6 +1059,7 @@
                                             [from]="invoiceSearchRequest.from"
                                             [to]="invoiceSearchRequest.to"
                                             [isModalOpen]="modalUniqueName === item?.uniqueName"
+                                            (modalClosed)="modalUniqueName = ''"
                                         ></div>
                                     </div>
                                 </td>
@@ -1332,7 +1332,6 @@
                                     [attr.data-title]="commonLocaleData?.app_customer"
                                     (dblclick)="modalUniqueName = item?.uniqueName"
                                     class="cp no-dbl-click-select"
-                                    (clickOutside)="modalUniqueName = ''"
                                 >
                                     <!-- Customer -->
                                     {{ item?.account?.customerName || item?.account?.name }}
@@ -1344,6 +1343,7 @@
                                         [from]="invoiceSearchRequest.from"
                                         [to]="invoiceSearchRequest.to"
                                         [isModalOpen]="modalUniqueName === item?.uniqueName"
+                                        (modalClosed)="modalUniqueName = ''"
                                     ></div>
                                 </td>
                                 <!-- Date -->
@@ -1583,7 +1583,6 @@
                                         <div
                                             (dblclick)="modalUniqueName = item?.uniqueName"
                                             class="cp no-dbl-click-select"
-                                            (clickOutside)="modalUniqueName = ''"
                                         >
                                             {{ item?.account?.customerName || item?.account?.name }}
                                             <div
@@ -1594,6 +1593,7 @@
                                                 [from]="invoiceSearchRequest.from"
                                                 [to]="invoiceSearchRequest.to"
                                                 [isModalOpen]="modalUniqueName === item?.uniqueName"
+                                                (modalClosed)="modalUniqueName = ''"
                                             ></div>
                                         </div>
                                     </td>

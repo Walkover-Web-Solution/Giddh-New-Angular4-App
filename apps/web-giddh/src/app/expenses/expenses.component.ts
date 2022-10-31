@@ -12,7 +12,7 @@ import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 import { GeneralService } from '../services/general.service';
 import { PendingListComponent } from './components/pending-list/pending-list.component';
 import { RejectedListComponent } from './components/rejected-list/rejected-list.component';
-import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../app.constant';
+import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from '../app.constant';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { ExpenseService } from '../services/expences.service';
 import { ToasterService } from '../services/toaster.service';
@@ -111,6 +111,7 @@ export class ExpensesComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        this.pettycashRequest.count = PAGINATION_LIMIT;
         this.getActiveTab();
 
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {

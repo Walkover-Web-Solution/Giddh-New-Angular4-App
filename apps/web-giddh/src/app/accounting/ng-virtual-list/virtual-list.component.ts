@@ -407,7 +407,7 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
 
     public ngOnChanges(changes: SimpleChanges): void {
         if ('forceClearReactive' in changes && !changes.forceClearReactive.firstChange) {
-            if (this.forceClearReactive.status) {
+            if (this.forceClearReactive?.status) {
                 this.filter = '';
                 this.clear();
             }

@@ -52,6 +52,7 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         count: PAGINATION_LIMIT,
         page: 1,
         totalItems: 0,
+        totalPages: 0,
         entity: "",
         operation: "",
         userUniqueNames: [],
@@ -193,9 +194,11 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
                 });
                 this.dataSource = response.body.results;
                 this.activityObj.totalItems = response.body.totalItems;
+                this.activityObj.totalPages = response.body.totalPages;
             } else {
                 this.dataSource = [];
                 this.activityObj.totalItems = 0;
+                this.activityObj.totalPages = 0;
             }
             this.changeDetection.detectChanges();
         });

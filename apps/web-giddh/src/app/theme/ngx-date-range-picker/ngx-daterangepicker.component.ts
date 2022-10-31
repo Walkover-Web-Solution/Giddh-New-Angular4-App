@@ -1154,7 +1154,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         this.updateCalendars();
     }
 
-    public mouseUp(e: MouseWheelEvent): void {
+    public mouseUp(e: WheelEvent): void {
         if (this.allowMouseScroll) {
             if (e.deltaY < 0) {
                 if (!this.isOnScrollActive) {

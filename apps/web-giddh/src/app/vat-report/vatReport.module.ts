@@ -24,9 +24,7 @@ import { TaxSidebarModule } from '../shared/tax-sidebar/tax-sidebar.module';
         VatReportComponent,
         VatReportTransactionsComponent
     ],
-    providers: [
-
-    ],
+    providers: [],
     imports: [
         VatReportRoutingModule,
         TabsModule.forRoot(),
@@ -49,8 +47,7 @@ import { TaxSidebarModule } from '../shared/tax-sidebar/tax-sidebar.module';
     ],
     exports: [
         VatReportRoutingModule
-    ],
-    entryComponents: [PaginationComponent]
+    ]
 })
 export class VatReportModule {
 }
