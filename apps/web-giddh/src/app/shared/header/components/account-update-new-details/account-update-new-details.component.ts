@@ -56,7 +56,7 @@ import { SettingsDiscountService } from 'apps/web-giddh/src/app/services/setting
 import { CustomFieldsService } from 'apps/web-giddh/src/app/services/custom-fields.service';
 import { FieldTypes } from 'apps/web-giddh/src/app/custom-fields/custom-fields.constant';
 import { HttpClient } from '@angular/common/http';
-declare var window;
+
 @Component({
     selector: 'account-update-new-details',
     templateUrl: './account-update-new-details.component.html',
@@ -1812,7 +1812,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         const errorMsg = document.querySelector("#init-contact-update-error-msg");
         const validMsg = document.querySelector("#init-contact-update-valid-msg");
         let errorMap = [this.localeData?.invalid_contact_number, this.commonLocaleData?.app_invalid_country_code, this.commonLocaleData?.app_invalid_contact_too_short, this.commonLocaleData?.app_invalid_contact_too_long, this.localeData?.invalid_contact_number];
-        let intlTelInput = window['intlTelInput'] ?? window['intlTelInputGlobals'];
+        let intlTelInput = window['intlTelInput'];
         if (intlTelInput && input) {
             this.intl = intlTelInput(input, {
                 nationalMode: true,
