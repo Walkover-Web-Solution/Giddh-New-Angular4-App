@@ -136,7 +136,7 @@ export class UpdateLedgerVm {
                 totalAmount = 0;
             }
 
-            this.discountArray?.filter(f => f.isActive && f.amount > 0).forEach((dx, index) => {
+            this.discountArray?.filter(f => f.isActive && f.amount > 0)?.forEach((dx, index) => {
                 let trx: ILedgerTransactionItem = this.blankTransactionItem(discountEntryType);
 
                 trx.particular.uniqueName = dx.discountUniqueName ? dx.discountUniqueName : 'discount';

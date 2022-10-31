@@ -103,9 +103,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         AccountUpdateNewDetailsModule,
         AsideMenuAccountModule
     ],
-    entryComponents: [
-        PaginationComponent
-    ],
     providers: [
         {
             provide: PERFECT_SCROLLBAR_CONFIG,

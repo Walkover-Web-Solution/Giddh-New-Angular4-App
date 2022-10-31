@@ -1,7 +1,7 @@
 import { Store, select, createSelector } from '@ngrx/store';
 import { AppState } from './../store/roots';
 import { Injectable } from '@angular/core';
-import { take } from 'rxjs/operators';
+import { CompanyResponse } from '../models/api-models/Company';
 
 export interface IScope {
     name: string;
@@ -23,7 +23,7 @@ export class PermissionDataService {
     private createdBy: CompanyData;
 
     constructor(private store: Store<AppState>) {
-        this.store.pipe(select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.session.companyUniqueName], (companies, uniqueName) => {
+        this.store.pipe(select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.session.companyUniqueName], (companies: CompanyResponse[], uniqueName) => {
             let currentCompany = companies.find((company) => company?.uniqueName === uniqueName);
             this.getCompany = currentCompany;
             this.store.pipe(select(state => state.session.companyUser)).subscribe(response => {

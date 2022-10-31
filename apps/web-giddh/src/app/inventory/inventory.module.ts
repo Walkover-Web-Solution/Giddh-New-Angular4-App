@@ -127,7 +127,6 @@ import { AsideMenuProductServiceModule } from '../shared/aside-menu-product-serv
         NgxBootstrapSwitchModule.forRoot(),
         PerfectScrollbarModule,
         AsideMenuProductServiceModule
-    ],
-    entryComponents: [PaginationComponent]
+    ]
 })
 export class InventoryModule { }
