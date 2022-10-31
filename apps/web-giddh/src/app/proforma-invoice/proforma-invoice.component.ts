@@ -125,8 +125,7 @@ const SEARCH_TYPE = {
     ITEM: 'item',
     BANK: 'bank'
 }
-/** Declare of window */
-declare var window;
+
 @Component({
     selector: 'proforma-invoice-component',
     templateUrl: './proforma-invoice.component.html',
@@ -7893,7 +7892,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         const errorMsg = document.querySelector("#init-contact-proforma-error-msg");
         const validMsg = document.querySelector("#init-contact-proforma-valid-msg");
         let errorMap = [this.localeData?.invalid_contact_number, this.commonLocaleData?.app_invalid_country_code, this.commonLocaleData?.app_invalid_contact_too_short, this.commonLocaleData?.app_invalid_contact_too_long, this.localeData?.invalid_contact_number];
-        let intlTelInput = new window['intlTelInput'];
+        let intlTelInput = window['intlTelInput'];
         if (intlTelInput && input) {
             this.intl = intlTelInput(input, {
                 nationalMode: true,
