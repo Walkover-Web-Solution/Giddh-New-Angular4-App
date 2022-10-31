@@ -28,20 +28,15 @@ import LoginPage from '../support/pageObjects/LoginPage'
 import HeaderPage from "./pageObjects/HeaderPage";
 import GlobalSearchPage from "./pageObjects/GlobalSearchPage";
 import LedgerPage from "./pageObjects/LedgerPage";
-import SignUpPage from "./pageObjects/SignUpPage";
-import CreateNewCompanyPage from "./pageObjects/CreateNewCompanyPage";
 const loginPage = new LoginPage()
-const signUpPage = new SignUpPage();
 const headerPage = new HeaderPage()
 const ledgerPage = new LedgerPage()
 const globalSearchPage = new GlobalSearchPage()
-const createNewCompanyPage = new CreateNewCompanyPage();
 
-
-// Cypress.Commands.add("loginWithGoogle", (email, password) => {
-//     cy.visit(Cypress.env('url'))
-//     loginPage.getLoginWithGoogle().click()
-// })
+Cypress.Commands.add("loginWithGoogle", (email, password) => {
+    cy.visit(Cypress.env('url'))
+    loginPage.getLoginWithGoogle().click()
+})
 
 Cypress.Commands.add("loginWithEmail", (email, password) => {
     const loginPage = new LoginPage()
@@ -118,10 +113,11 @@ Cypress.Commands.add("getAllLedger", (accountUniqueName) => {
 Cypress.Commands.add("deleteLedger", (accountUniqueName, entryUniqueID) => {
     cy.request({
         method: 'DELETE',
-        url: Cypress.env('apiBaseURI') + "/accounts/" + accountUniqueName + "/entries/" + entryUniqueID,
-        'content-type': 'application/json; charset=utf-8',
+        url: Cypress.env('apiBaseURI') + "/accounts/" + accountUniqueName + "/entries?voucherVersion=2",
+        body: '{"entryUniqueNames": ["' + entryUniqueID + '"]}',
         headers: {
-            'Auth-Key': Cypress.env('authKey')
+            'Auth-Key': Cypress.env('authKey'),
+            'content-type': 'application/json',
         }
     }).as('deleteLedgerAPI')
 
@@ -154,28 +150,3 @@ Cypress.Commands.add("createLedgerAPI", (accountUniqueName) => {
 
     return cy.get('@createLedgerAPI')
 })
-
-// Cypress.Commands.add("SignUp", (email, password) => {
-//     cy.visit(Cypress.env('url'))
-//     loginPage.signUpButton().click()
-//     loginPage.getLoginWithEmail().click()
-//     loginPage.enterEmailId().clear().type(email)
-//     loginPage.enterPassword().clear().type(password)
-//     loginPage.clickLoginButton().click()
-//     signUpPage.enterVerificationCode("123456")
-//     signUpPage.clickVerifyEmail()
-//     cy.wait(2000);
-//     //signUpPage.createNewCompany().should('have.value', 'Create New Company')
-//     createNewCompanyPage.companyName("giddhautomation")
-//     createNewCompanyPage.country().click()
-//     createNewCompanyPage.countryList().click()
-//     createNewCompanyPage.mobileNumber("1234567890")
-//     createNewCompanyPage.nextButton().then(() => {
-//         cy.wait(1500)
-//         createNewCompanyPage.submitButton().then(() => {
-//             cy.xpath('//div[@id=\'toast-container\']', { timeout: 5000 }).should('be.visible')
-//         })
-//     })
-// })
-
-

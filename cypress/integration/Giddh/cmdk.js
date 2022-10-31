@@ -40,10 +40,6 @@ describe('This is Global Search Test', function () {
         cy.globalSearch('.hamburger-menu', 'Settings', 'Settings > Taxes ')
     });
 
-    it('Verify Walkover Account module using Global Search', () => {
-        cy.globalSearch('.hamburger-menu', 'Walkover', 'Walkover Technologies Private Limited A/c')
-    });
-
     it('Verify Cash Account module using Global Search', () => {
         cy.get('body').type('{ctrl}g', { force: true })
         if (globalSearchPage.getGlobalSearch(20000).should('be.visible')) {
