@@ -204,7 +204,7 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
         if (this.addresses?.length > 1) {
             this.hideLinkEntity = false;
         } else {
-            combineLatest([this.store.pipe(select(state => state.warehouse.warehouses), takeUntil(this.destroyed$)), this.store.pipe(select(state => state.settings.branches), takeUntil(this.destroyed$))]).pipe(takeUntil(this.destroyed$)).subscribe((response: any[]) => {
+            combineLatest([this.store.pipe(select(state => state.warehouse.warehouses)), this.store.pipe(select(state => state.settings.branches))]).pipe(takeUntil(this.destroyed$)).subscribe((response: any[]) => {
                 if (response && response[0] && response[1]) {
                     if (response[0]?.results?.length > 1 || response[1]?.length > 1) {
                         this.hideLinkEntity = false;
