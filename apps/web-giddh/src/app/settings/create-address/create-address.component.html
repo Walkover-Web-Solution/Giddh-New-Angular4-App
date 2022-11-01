@@ -172,7 +172,11 @@
                                     </div>
                                 </div>
 
-                                <div *ngIf="addressConfiguration.type !== 'createBranchAddress'" class="row">
+                                <div
+                                    *ngIf="addressConfiguration.type !== 'createBranchAddress'"
+                                    [hidden]="hideLinkEntity"
+                                    class="row"
+                                >
                                     <div class="col-sm-12 form-group linked-entities">
                                         <label>{{ localeData?.link_entity }}</label>
                                         <div class="form-group">

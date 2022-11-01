@@ -138,6 +138,19 @@
                             <span>{{ localeData?.vat_report }}</span>
                         </a>
                     </li>
+                    <li>
+                        <a
+                            href="javascript:void(0);"
+                            class="d-block clearfix"
+                            [routerLink]="['/pages/settings/addresses']"
+                            routerLinkActive
+                            #addaddress="routerLinkActive"
+                            [class.active]="addaddress.isActive"
+                        >
+                            <span><i class="icon-warehouse1"></i></span>
+                            <span>{{ showVatMenus ? localeData?.add_trn : localeData?.add_gst }}</span>
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>

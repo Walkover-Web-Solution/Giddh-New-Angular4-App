@@ -1,12 +1,17 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { select, Store } from '@ngrx/store';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { ReplaySubject } from 'rxjs';
+import { combineLatest, of, ReplaySubject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
+import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
 import { PAGINATION_LIMIT } from '../../app.constant';
+import { BranchFilterRequest } from '../../models/api-models/Company';
 import { OrganizationType } from '../../models/user-login-state';
+import { AppState } from '../../store';
 import { OrganizationProfile, SettingsAsideFormType } from '../constants/settings.constant';
+import { WarehouseActions } from '../warehouse/action/warehouse.action';
 
 @Component({
     selector: 'address-settings',
@@ -25,10 +30,13 @@ import { OrganizationProfile, SettingsAsideFormType } from '../constants/setting
         ]),
     ]
 })
-export class AddressSettingsComponent implements OnInit, OnDestroy {
+export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
     /** Stores the confirmation modal instance */
     @ViewChild('deleteAddressConfirmationModal', { static: true }) public deleteAddressConfirmationModal: ModalDirective;
-
+    /** True if we need to show manage address section only */
+    @Input() public addressOnly: boolean = false;
+    /** Tax type (gst/trn) */
+    @Input() public taxType: string = '';
     /** Stores the type of the organization (company or profile)  */
     @Input() public organizationType: OrganizationType;
     /** Stores the addresses of an organization (company or profile)  */
@@ -95,6 +103,8 @@ export class AddressSettingsComponent implements OnInit, OnDestroy {
     public searchAddressNameInput: FormControl = new FormControl();
     /** Search address input field form control */
     public searchAddressInput: FormControl = new FormControl();
+    /** Search tax input field form control */
+    public searchTaxInput: FormControl = new FormControl();
     /** Search state input field form control */
     public searchStateInput: FormControl = new FormControl();
     /** Stores the current state of side menu */
@@ -103,6 +113,8 @@ export class AddressSettingsComponent implements OnInit, OnDestroy {
     public showSearchName: boolean;
     /** True, if search address input field is to be shown */
     public showSearchAddress: boolean;
+    /** True, if search tax input field is to be shown */
+    public showSearchTax: boolean;
     /** True, if search state input field is to be shown */
     public showSearchState: boolean;
     /** Stores the address search request */
@@ -115,12 +127,17 @@ export class AddressSettingsComponent implements OnInit, OnDestroy {
     public addressToUpdate: any;
     /** Selected address */
     public selectedAddress: any;
-
+    /** True if need to hide link entity */
+    public hideLinkEntity: boolean = true;
     /** Subject to release subscriptions */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     /** @ignore */
-    constructor() { }
+    constructor(
+        private store: Store<AppState>,
+        private warehouseActions: WarehouseActions,
+        private settingsBranchActions: SettingsBranchActions
+    ) { }
 
     /**
      * Initializes the component
@@ -128,6 +145,12 @@ export class AddressSettingsComponent implements OnInit, OnDestroy {
      * @memberof AddressSettingsComponent
      */
     public ngOnInit(): void {
+        this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, query: "", count: 2 })); // count is 2 because we only have to check if there are more than 1 records
+        let branchFilterRequest = new BranchFilterRequest();
+        branchFilterRequest.from = "";
+        branchFilterRequest.to = "";
+        this.store.dispatch(this.settingsBranchActions.GetALLBranches(branchFilterRequest));
+
         this.searchAddressNameInput.valueChanges.pipe(
             debounceTime(700),
             distinctUntilChanged(),
@@ -148,6 +171,16 @@ export class AddressSettingsComponent implements OnInit, OnDestroy {
                 this.searchAddress.emit(this.addressSearchRequest);
             }
         });
+        this.searchTaxInput.valueChanges.pipe(
+            debounceTime(700),
+            distinctUntilChanged(),
+            takeUntil(this.destroyed$)
+        ).subscribe(address => {
+            if (!this.searchTaxInput.pristine) {
+                this.addressSearchRequest.address = address;
+                this.searchAddress.emit(this.addressSearchRequest);
+            }
+        });
         this.searchStateInput.valueChanges.pipe(
             debounceTime(700),
             distinctUntilChanged(),
@@ -158,6 +191,27 @@ export class AddressSettingsComponent implements OnInit, OnDestroy {
                 this.searchAddress.emit(this.addressSearchRequest);
             }
         });
+    }
+
+    /**
+     * Checks the input data if changed
+     *
+     * @memberof AddressSettingsComponent
+     */
+    public ngOnChanges(): void {
+        this.hideLinkEntity = true;
+
+        if (this.addresses?.length > 1) {
+            this.hideLinkEntity = false;
+        } else {
+            combineLatest([this.store.pipe(select(state => state.warehouse.warehouses)), this.store.pipe(select(state => state.settings.branches))]).pipe(takeUntil(this.destroyed$)).subscribe((response: any[]) => {
+                if (response && response[0] && response[1]) {
+                    if (response[0]?.results?.length > 1 || response[1]?.length > 1) {
+                        this.hideLinkEntity = false;
+                    }
+                }
+            });
+        }
     }
 
     /**
@@ -174,7 +228,9 @@ export class AddressSettingsComponent implements OnInit, OnDestroy {
         this.searchStateInput.reset();
         this.showSearchState = false;
         this.searchAddressInput.reset();
+        this.searchTaxInput.reset();
         this.showSearchAddress = false;
+        this.showSearchTax = false;
         this.searchAddressNameInput.reset();
         this.showSearchName = false;
 
@@ -316,15 +372,23 @@ export class AddressSettingsComponent implements OnInit, OnDestroy {
         if (fieldName === 'searchAddressNameInput') {
             this.showSearchName = true;
             this.showSearchAddress = false;
+            this.showSearchTax = false;
             this.showSearchState = false;
         } else if (fieldName === 'searchAddressInput') {
             this.showSearchAddress = true;
+            this.showSearchTax = false;
+            this.showSearchName = false;
+            this.showSearchState = false;
+        } else if (fieldName === 'searchTaxInput') {
+            this.showSearchTax = true;
+            this.showSearchAddress = false;
             this.showSearchName = false;
             this.showSearchState = false;
         } else if (fieldName === 'searchStateInput') {
             this.showSearchState = true;
             this.showSearchName = false;
             this.showSearchAddress = false;
+            this.showSearchTax = false;
         }
         setTimeout(() => {
             el.focus();
@@ -349,6 +413,10 @@ export class AddressSettingsComponent implements OnInit, OnDestroy {
             if (this.searchAddressInput.value !== null && this.searchAddressInput.value !== '') {
                 return;
             }
+        } else if (fieldName === 'searchTaxInput') {
+            if (this.searchTaxInput.value !== null && this.searchTaxInput.value !== '') {
+                return;
+            }
         } else if (fieldName === 'searchStateInput') {
             if (this.searchStateInput.value !== null && this.searchStateInput.value !== '') {
                 return;
@@ -361,6 +429,8 @@ export class AddressSettingsComponent implements OnInit, OnDestroy {
                 this.showSearchName = false;
             } else if (fieldName === 'searchAddressInput') {
                 this.showSearchAddress = false;
+            } else if (fieldName === 'searchTaxInput') {
+                this.showSearchTax = false;
             } else if (fieldName === 'searchStateInput') {
                 this.showSearchState = false;
             }

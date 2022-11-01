@@ -59,6 +59,8 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
     @Input() public localeData: any = {};
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
+    /** True if we need to hide link entity field */
+    @Input() public hideLinkEntity: boolean = true;
     /** List of entities which can be archived */
     public entityArchived: string[] = ["BRANCH", "WAREHOUSE"];
 
@@ -145,6 +147,15 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
                         }
                     }
                 }
+            }
+
+            if (this.addressConfiguration.type === SettingsAsideFormType.CreateAddress && this.hideLinkEntity) {
+                this.addressConfiguration?.linkedEntities?.forEach(option => {
+                    this.addressForm.get('linkedEntity')?.patchValue([
+                        ...this.addressForm.get('linkedEntity').value,
+                        option.value
+                    ]);
+                });
             }
         }
 
