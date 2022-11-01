@@ -83,9 +83,6 @@ import { PushToPortalComponent } from './modals/push-to-portal/push-to-portal.co
         MatButtonModule,
     ],
     providers: [],
-    entryComponents: [
-        PaginationComponent
-    ],
     exports: [ViewTransactionsComponent]
 })
 export class GstModule {

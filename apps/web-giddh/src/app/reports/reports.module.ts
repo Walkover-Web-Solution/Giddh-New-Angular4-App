@@ -64,10 +64,6 @@ import { NgxBootstrapSwitchModule } from 'ngx-bootstrap-switch';
         PaymentAdvanceSearchComponent,
         PreviewComponent
     ],
-    entryComponents: [
-        ReceiptAdvanceSearchComponent,
-        PaymentAdvanceSearchComponent
-    ],
     exports: [
         ReportsComponent,
         ReportsDetailsComponent,
