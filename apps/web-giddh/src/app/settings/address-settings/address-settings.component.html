@@ -1,4 +1,4 @@
-<div class="container-fluid setting-profile-container">
+<div class="container-fluid" [ngClass]="{ 'setting-profile-container': !addressOnly }">
     <div class="row">
         <div
             *ngIf="organizationType === 'COMPANY'"
@@ -91,6 +91,27 @@
                                 </div>
                             </th>
                             <th
+                                #searchTaxInputField
+                                width="25%"
+                                class="td-search-box"
+                                (clickOutside)="clickedOutside($event, searchTaxInputField, 'searchTaxInput')"
+                            >
+                                <div>
+                                    <ng-container
+                                        *ngTemplateOutlet="
+                                            searchTemplate;
+                                            context: {
+                                                $implicit: showSearchTax,
+                                                title: taxType,
+                                                fieldName: 'searchTaxInput',
+                                                formControl: searchTaxInput
+                                            }
+                                        "
+                                    >
+                                    </ng-container>
+                                </div>
+                            </th>
+                            <th
                                 #searchStateInputField
                                 width="15%"
                                 class="td-search-box"
@@ -111,7 +132,7 @@
                                     </ng-container>
                                 </div>
                             </th>
-                            <th width="25%" class="td-search-box">
+                            <th width="25%" class="td-search-box" *ngIf="!hideLinkEntity">
                                 <div>
                                     <span>{{ localeData?.linked_with }}</span>
                                 </div>
@@ -129,18 +150,27 @@
                             <td [attr.data-title]="commonLocaleData?.app_address">
                                 <div>
                                     <p class="address-row">{{ address.address }}</p>
-                                    <ng-container *ngIf="address.taxType && address.taxNumber">
-                                        {{ address.taxType }} : {{ address.taxNumber }}&nbsp;
-                                    </ng-container>
                                     <ng-container *ngIf="address.pincode">
                                         {{ commonLocaleData?.app_pin }}: {{ address.pincode }}
+                                    </ng-container>
+                                </div>
+                            </td>
+                            <td [attr.data-title]="taxType">
+                                <div>
+                                    <ng-container *ngIf="address.taxType && address.taxNumber">
+                                        {{ address.taxNumber }}
                                     </ng-container>
                                 </div>
                             </td>
                             <td [attr.data-title]="commonLocaleData?.app_state">
                                 <div>{{ address.stateCode }} - {{ address.stateName }}</div>
                             </td>
-                            <td [attr.data-title]="localeData?.linked_with" width="30%" class="linked-with">
+                            <td
+                                [attr.data-title]="localeData?.linked_with"
+                                width="30%"
+                                class="linked-with"
+                                *ngIf="!hideLinkEntity"
+                            >
                                 <div class="d-flex wrap-linked-company">
                                     <div class="d-flex flex-column linked-with w-100">
                                         <span *ngFor="let entity of address.linkedEntities" class="pb-1">
@@ -274,6 +304,7 @@
         [addressConfiguration]="addressConfiguration"
         [localeData]="localeData"
         [commonLocaleData]="commonLocaleData"
+        [hideLinkEntity]="addresses?.length <= 0 && hideLinkEntity"
     >
     </create-address>
 </div>

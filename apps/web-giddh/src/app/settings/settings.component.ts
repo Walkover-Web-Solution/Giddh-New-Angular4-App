@@ -108,7 +108,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
                         this.eBankComp.getInitialEbankInfo();
                     }
                 }, 0);
-            } else if (this.activeTab === "profile") {
+            } else if (this.activeTab === "profile" || this.activeTab === "addresses") {
                 setTimeout(() => {
                     if (this.profileComponent) {
                         this.profileComponent.getInitialProfileData();
@@ -205,7 +205,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     }
 
     public tabChanged(tab: string) {
-        if ((tab === 'integration' || tab === 'profile') && this.integrationtab) {
+        if ((tab === 'integration' || tab === 'profile' || tab === 'addresses') && this.integrationtab) {
             this.store.dispatch(this._generalActions.setAppTitle('/pages/settings/' + tab + '/' + this.integrationtab));
             this.loadModuleData(tab);
             this.router.navigate(['pages/settings/', tab, this.integrationtab], { replaceUrl: true });
