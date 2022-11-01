@@ -65,7 +65,16 @@
                                 </span>
                             </div>
                         </div>
-
+                        <div *ngIf="activeTab === 'addresses'">
+                            <hamburger-menu [pageHeading]="profileTabHeading"></hamburger-menu>
+                            <div class="setting-container">
+                                <setting-profile
+                                    [addressOnly]="true"
+                                    (pageHeading)="profileTabHeading = $event"
+                                    #profileComponent
+                                ></setting-profile>
+                            </div>
+                        </div>
                         <div *ngIf="activeTab === 'financial-year'">
                             <hamburger-menu [pageHeading]="localeData?.setting_financial_year"></hamburger-menu>
                             <div class="setting-container">
