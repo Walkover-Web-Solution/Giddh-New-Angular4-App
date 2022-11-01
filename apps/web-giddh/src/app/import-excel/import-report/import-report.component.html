@@ -75,7 +75,11 @@
                     </div>
                 </div>
             </div>
-            <div class="pagination-wrap" [hidden]="isLoading" *ngIf="importStatusResponse?.totalItems > 10">
+            <div
+                class="pagination-wrap"
+                [hidden]="isLoading"
+                *ngIf="importStatusResponse?.totalItems > importStatusResponse?.count"
+            >
                 <pagination
                     [totalItems]="importStatusResponse?.totalItems"
                     [(ngModel)]="importPaginatedRequest.page"

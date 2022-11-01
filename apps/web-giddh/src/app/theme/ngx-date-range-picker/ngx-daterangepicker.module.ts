@@ -30,15 +30,12 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         TranslateDirectiveModule
     ],
     providers: [{
-        provide: PERFECT_SCROLLBAR_CONFIG,
-        useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
-    }],
+            provide: PERFECT_SCROLLBAR_CONFIG,
+            useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
+        }],
     exports: [
         NgxDaterangepickerComponent,
         NgxDaterangepickerDirective
-    ],
-    entryComponents: [
-        NgxDaterangepickerComponent
     ]
 })
 

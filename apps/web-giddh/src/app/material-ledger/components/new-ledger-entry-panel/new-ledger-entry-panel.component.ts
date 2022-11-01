@@ -241,7 +241,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     /** Stores the voucher API version of current company */
     public voucherApiVersion: 1 | 2;
     /** True if user itself checked the generate voucher  */
-    public manualGenerateVoucherChecked: boolean = true;
+    public manualGenerateVoucherChecked: boolean = false;
     /** Holds input to get invoice list request params */
     public invoiceListRequestParams: any = {};
     /** Round off amount */
@@ -383,7 +383,14 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 this.discountsList = response?.body;
             }
         });
-        this.blankLedger.generateInvoice = true;
+
+        if (this.voucherApiVersion === 2) {
+            this.manualGenerateVoucherChecked = true;
+        } else {
+            this.manualGenerateVoucherChecked = false;
+        }
+
+        this.blankLedger.generateInvoice = cloneDeep(this.manualGenerateVoucherChecked);
     }
 
     @HostListener('click', ['$event'])

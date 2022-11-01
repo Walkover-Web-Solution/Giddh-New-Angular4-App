@@ -271,6 +271,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
             viewContainerRef.insert(componentInstanceView.hostView);
 
             let componentInstance = componentInstanceView.instance as PaginationComponent;
+            componentInstance.totalPages = s.totalPages;
             componentInstance.totalItems = s.count * s.totalPages;
             componentInstance.itemsPerPage = s.count;
             componentInstance.maxSize = 5;
