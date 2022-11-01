@@ -3,10 +3,12 @@ import {
     ChangeDetectionStrategy,
     ChangeDetectorRef,
     Component,
+    EventEmitter,
     Inject,
     Input,
     OnChanges,
     OnDestroy,
+    Output,
     Renderer2,
     SimpleChanges,
 } from '@angular/core';
@@ -37,6 +39,13 @@ export class GridRowComponent implements OnChanges, OnDestroy {
     public minimumViewportLimit = TRIAL_BALANCE_VIEWPORT_LIMIT;
     /** True, when expand all button is toggled while search is enabled */
     @Input() public isExpandToggledDuringSearch: boolean;
+    /**
+     * Emits open account modal with account details
+     *
+     * @type {EventEmitter<any>}
+     * @memberof GridRowComponent
+     */
+    @Output() public openAccountModal: EventEmitter<any> = new EventEmitter();
     /** Subject to release subscription memory */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 

@@ -1912,7 +1912,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      */
     private prepareAdjustVoucherConfiguration(): void {
         let customerUniqueName = [];
-        this.vm.selectedLedger.transactions.forEach(transaction => {
+        this.vm.selectedLedger.transactions?.forEach(transaction => {
             if (transaction.particular && transaction.particular?.uniqueName) {
                 const uniqueName = transaction.particular?.uniqueName.split('#')[0];
                 customerUniqueName.push(uniqueName);

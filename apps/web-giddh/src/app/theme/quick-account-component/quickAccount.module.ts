@@ -22,8 +22,7 @@ import { LaddaModule } from 'angular2-ladda';
             spinnerSize: 30
         })
     ],
-    declarations: [QuickAccountComponent],
-    entryComponents: [QuickAccountComponent]
+    declarations: [QuickAccountComponent]
 })
 
 export class QuickAccountModule { }

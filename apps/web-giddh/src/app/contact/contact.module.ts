@@ -12,7 +12,6 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { PaginationComponent, PaginationModule } from 'ngx-bootstrap/pagination';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { ModalModule } from 'ngx-bootstrap/modal';
-import { AsideMenuAccountInContactComponent } from './aside-menu-account/aside.menu.account.component';
 import { SharedModule } from '../shared/shared.module';
 import { SelectModule } from '../theme/ng-select/ng-select';
 import { ClickOutsideModule } from 'ng-click-outside';
@@ -42,6 +41,7 @@ import { MatInputModule } from "@angular/material/input";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatDialogModule } from "@angular/material/dialog";
 import { AccountUpdateNewDetailsModule } from '../shared/header/components/account-update-new-details/account-update-new-details.module';
+import { AsideMenuAccountModule } from '../shared/aside-menu-account/aside.menu.account.module';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: false,
@@ -51,14 +51,13 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 @NgModule({
     declarations: [
         ContactComponent,
-        AsideMenuAccountInContactComponent,
         ContactAdvanceSearchComponent,
         AgingReportComponent,
         AgingDropdownComponent,
         PaymentAsideComponent
     ],
     exports: [
-        AsideMenuAccountInContactComponent, CurrencyModule
+        CurrencyModule
     ],
     imports: [
         CommonModule,
@@ -101,10 +100,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         MatInputModule,
         MatTooltipModule,
         MatDialogModule,
-        AccountUpdateNewDetailsModule
-    ],
-    entryComponents: [
-        PaginationComponent
+        AccountUpdateNewDetailsModule,
+        AsideMenuAccountModule
     ],
     providers: [
         {

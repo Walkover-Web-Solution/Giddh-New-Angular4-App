@@ -1,9 +1,7 @@
 ng-select {
-    display: inline-block;
+    display: block;
     margin: 0;
     position: relative;
-    vertical-align: middle;
-    // width: 100%;
     outline: none;
     font-size: 14px;
     * {
@@ -17,12 +15,8 @@ ng-select {
         cursor: pointer;
         user-select: none;
         width: 100%;
-        &.open {
-        }
         &.focus {
             outline: none;
-        }
-        &.below {
         }
         &.disabled {
             background-color: var(--color-dark-fog);
@@ -129,17 +123,8 @@ ng-select {
 
 ng-select.splSales {
     width: 190px;
-    // height: 42px;
     > div {
         border-color: var(--color-iron);
-        // height: 41px;
-        > .single {
-            // height: 39px;
-            .placeholder,
-            .value {
-                // line-height: 39px;
-            }
-        }
     }
     .glyphicon {
         top: 7px;

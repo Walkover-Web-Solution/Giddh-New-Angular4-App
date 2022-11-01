@@ -466,7 +466,6 @@
                                 [attr.data-title]="commonLocaleData?.app_account"
                                 (dblclick)="modalUniqueName = item.uniqueName"
                                 class="cp no-dbl-click-select"
-                                (clickOutside)="modalUniqueName = ''"
                             >
                                 {{ item.account.name }}
                                 <div
@@ -477,6 +476,7 @@
                                     [from]="this.from"
                                     [to]="this.to"
                                     [isModalOpen]="modalUniqueName === item.uniqueName"
+                                    (modalClosed)="modalUniqueName = ''"
                                 ></div>
                                 <ng-container *ngIf="expand">
                                     <ng-container *ngFor="let stock of item.stocks">

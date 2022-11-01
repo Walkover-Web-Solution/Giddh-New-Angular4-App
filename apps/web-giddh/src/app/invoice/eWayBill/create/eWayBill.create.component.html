@@ -583,7 +583,7 @@
                     </tr>
                 </table>
             </div>
-            <div class="text-center mt-4 mb-4" *ngIf="transporterListDetails">
+            <div class="text-center mt-4 mb-4" *ngIf="transporterListDetails?.totalPages > 1">
                 <pagination
                     [totalItems]="transporterListDetails.totalPages"
                     [(ngModel)]="transporterListDetails.page"
