@@ -1,7 +1,7 @@
 import { Observable, BehaviorSubject } from 'rxjs';
 import { ILedgerTransactionItem } from '../../../models/interfaces/ledger.interface';
 import { LedgerResponse } from '../../../models/api-models/Ledger';
-import { cloneDeep, filter, find, sumBy } from '../../../lodash-optimized';
+import { clone, cloneDeep, filter, find, sumBy } from '../../../lodash-optimized';
 import { IFlattenAccountsResultItem } from '../../../models/interfaces/flattenAccountsResultItem.interface';
 import { UpdateLedgerTaxData } from '../update-ledger-tax-control/update-ledger-tax-control.component';
 import { UpdateLedgerDiscountComponent } from '../update-ledger-discount/update-ledger-discount.component';
@@ -521,7 +521,7 @@ export class UpdateLedgerVm {
         this.generateCompoundTotal();
     }
 
-    public inventoryTotalChanged() {
+    public inventoryTotalChanged(initialLoad: boolean = false) {
         let fixDiscount = 0;
         let percentageDiscount = 0;
 
@@ -544,8 +544,12 @@ export class UpdateLedgerVm {
             this.totalAmount = this.grandTotal;
             this.generateGrandTotal();
         } else {
-            this.totalAmount = giddhRoundOff(Number(((Number(this.grandTotal) + fixDiscount + 0.01 * fixDiscount * Number(taxTotal)) /
-                (1 - 0.01 * percentageDiscount + 0.01 * Number(taxTotal) - 0.0001 * percentageDiscount * Number(taxTotal)))), this.giddhBalanceDecimalPlaces);
+            if (initialLoad) {
+                this.totalAmount = cloneDeep(this.grandTotal);
+            } else {
+                this.totalAmount = giddhRoundOff(Number(((Number(this.grandTotal) + fixDiscount + 0.01 * fixDiscount * Number(taxTotal)) /
+                    (1 - 0.01 * percentageDiscount + 0.01 * Number(taxTotal) - 0.0001 * percentageDiscount * Number(taxTotal)))), this.giddhBalanceDecimalPlaces);
+            }
         }
 
         this.convertedTotalAmount = this.calculateConversionRate(this.totalAmount);
