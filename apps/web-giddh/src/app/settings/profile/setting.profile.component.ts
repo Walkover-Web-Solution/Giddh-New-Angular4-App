@@ -542,7 +542,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
-        document.querySelector('body').classList.remove('gst-sidebar-open');
         this.asideGstSidebarMenuState === 'out';
     }
 
@@ -1239,7 +1238,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                         this.loadTaxDetails(this.currentCompanyDetails.countryV2.alpha2CountryCode);
                         this.loadStates(this.currentCompanyDetails.countryV2.alpha2CountryCode);
                     }
-                    document.querySelector('body').classList.add('gst-sidebar-open');
         
                     this.store.pipe(select(appState => appState.general.openGstSideMenu), takeUntil(this.destroyed$)).subscribe(shouldOpen => {
                         if (this.isMobileScreen) {
