@@ -7,7 +7,7 @@
 >
     <giddh-page-loader *ngIf="getCompanyProfileInProgress$ | async"></giddh-page-loader>
     <!--Tabs of Company Profile-->
-    <div class="settings-profile-tabs">
+    <div class="settings-profile-tabs" *ngIf="!addressOnly">
         <tabset #staticTabs class="profile-tab-container">
             <tab
                 [active]="this.currentTab === 'personal'"
@@ -56,6 +56,7 @@
                     [organizationType]="currentOrganizationType"
                     [localeData]="localeData"
                     [commonLocaleData]="commonLocaleData"
+                    [taxType]="taxType"
                 ></address-settings>
             </tab>
             <tab
@@ -74,6 +75,45 @@
                 </other-settings>
             </tab>
         </tabset>
+    </div>
+    <div class="settings-profile-tabs" *ngIf="addressOnly">
+        <div
+            class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper"
+            *ngIf="asideGstSidebarMenuState === 'in'"
+        >
+            <tax-sidebar
+                (navigateEvent)="handleNavigation()"
+                (clickOutside)="isMobileScreen ? (asideGstSidebarMenuState = 'out') : ''"
+                [exclude]="'#primary-new-header'"
+                class="gst-sidebar"
+            ></tax-sidebar>
+        </div>
+        <div class="profile-tab-container">
+            <address-settings
+                *ngIf="!(getCompanyProfileInProgress$ | async)"
+                [addresses]="addresses"
+                [(isAddressChangeInProgress)]="isAddressChangeInProgress"
+                [(closeSidePane)]="closeAddressSidePane"
+                [currentOrganizationUniqueName]="currentOrganizationUniqueName"
+                (searchAddress)="handleSearchInAddress($event)"
+                (pageChanged)="handlePageChanged($event)"
+                [addressConfiguration]="addressConfiguration"
+                (saveNewAddress)="createNewAddress($event)"
+                (updatedAddress)="updateAddress($event)"
+                (deleteAddress)="handleDeleteAddress($event)"
+                (unLinkAddress)="handleAddressUnlinking($event)"
+                (setDefaultAddress)="handleDefaultAddress($event)"
+                [profileData]="companyProfileObj"
+                [shouldShowLoader]="shouldShowAddressLoader"
+                [paginationConfig]="addressTabPaginationData"
+                [paginationLimit]="20"
+                [organizationType]="currentOrganizationType"
+                [localeData]="localeData"
+                [commonLocaleData]="commonLocaleData"
+                [addressOnly]="true"
+                [taxType]="taxType"
+            ></address-settings>
+        </div>
     </div>
     <br />
     <br />

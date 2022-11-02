@@ -9,5 +9,7 @@
     "reverse_charge": "Reverse Charge",
     "setting": "Setting",
     "vat_report": "Vat Report",
-    "unit_mapping": "Unit Mapping"
+    "unit_mapping": "Unit Mapping",
+    "add_gst": "Add GST",
+    "add_trn": "Add TRN"
 }
