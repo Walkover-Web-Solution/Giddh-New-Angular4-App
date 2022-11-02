@@ -432,7 +432,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 this.resetPreviousSearchResults();
                 this.baseAccountChanged = false;
                 setTimeout(() => {
-                    this.vm.inventoryTotalChanged();
+                    this.vm.inventoryTotalChanged(true);
                 }, 50);
             }
         });
