@@ -3,9 +3,11 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
-import { ReplaySubject } from 'rxjs';
+import { combineLatest, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
 import { OnboardingFormRequest } from '../../../models/api-models/Common';
+import { BranchFilterRequest } from '../../../models/api-models/Company';
 import { CommonService } from '../../../services/common.service';
 import { CompanyService } from '../../../services/companyService.service';
 import { GeneralService } from '../../../services/general.service';
@@ -14,6 +16,7 @@ import { ToasterService } from '../../../services/toaster.service';
 import { AppState } from '../../../store';
 import { SettingsAsideConfiguration, SettingsAsideFormType } from '../../constants/settings.constant';
 import { SettingsUtilityService } from '../../services/settings-utility.service';
+import { WarehouseActions } from '../action/warehouse.action';
 
 @Component({
     selector: 'create-warehouse',
@@ -77,6 +80,8 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
     public profileLocaleData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** True if need to hide link entity */
+    public hideLinkEntity: boolean = true;
 
     constructor(
         private commonService: CommonService,
@@ -87,7 +92,9 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
         private store: Store<AppState>,
         private settingsProfileService: SettingsProfileService,
         private settingsUtilityService: SettingsUtilityService,
-        private toastService: ToasterService
+        private toastService: ToasterService,
+        private warehouseActions: WarehouseActions,
+        private settingsBranchActions: SettingsBranchActions
     ) {
         this.warehouseForm = this.formBuilder.group({
             name: ['', Validators.required],
@@ -404,6 +411,7 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
                         label: address.name,
                         value: address.uniqueName
                     }));
+                this.checkLinkEntity();    
             }
         });
     }
@@ -468,4 +476,30 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
         this.destroyed$.complete();
     }
 
+    /**
+     * Checks if we need to hide link entity
+     *
+     * @memberof CreateWarehouseComponent
+     */
+    public checkLinkEntity(): void {
+        this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, query: "", count: 2 })); // count is 2 because we only have to check if there are more than 1 records
+        let branchFilterRequest = new BranchFilterRequest();
+        branchFilterRequest.from = "";
+        branchFilterRequest.to = "";
+        this.store.dispatch(this.settingsBranchActions.GetALLBranches(branchFilterRequest));
+
+        this.hideLinkEntity = true;
+
+        if (this.addresses?.length > 1) {
+            this.hideLinkEntity = false;
+        } else {
+            combineLatest([this.store.pipe(select(state => state.warehouse.warehouses)), this.store.pipe(select(state => state.settings.branches))]).pipe(takeUntil(this.destroyed$)).subscribe((response: any[]) => {
+                if (response && response[0] && response[1]) {
+                    if (response[0]?.results?.length > 1 || response[1]?.length > 1) {
+                        this.hideLinkEntity = false;
+                    }
+                }
+            });
+        }
+    }
 }

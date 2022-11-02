@@ -269,6 +269,7 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
         this.closeSidePaneChange.emit(this.closeSidePane);
         if (this.accountAsideMenuState === 'out') {
             this.addressConfiguration.type = SettingsAsideFormType.CreateAddress;
+            this.addressToUpdate = null;
         }
         this.toggleBodyClass();
     }
