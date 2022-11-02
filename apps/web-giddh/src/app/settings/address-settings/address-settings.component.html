@@ -319,7 +319,9 @@
         [addressConfiguration]="addressConfiguration"
         [localeData]="localeData"
         [commonLocaleData]="commonLocaleData"
-        [hideLinkEntity]="addresses?.length <= 0 && hideLinkEntity"
+        [hideLinkEntity]="
+            (addressToUpdate && hideLinkEntity) || (!addressToUpdate && addresses?.length <= 0 && hideLinkEntity)
+        "
     >
     </create-address>
 </div>
