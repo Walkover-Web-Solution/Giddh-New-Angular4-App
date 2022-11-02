@@ -137,6 +137,7 @@
                                     <span>{{ localeData?.linked_with }}</span>
                                 </div>
                             </th>
+                            <th width="25%" class="td-search-box" *ngIf="hideLinkEntity">&nbsp;</th>
                         </tr>
                     </thead>
                     <tbody *ngIf="!shouldShowLoader">
@@ -188,6 +189,20 @@
                                         </span>
                                     </div>
 
+                                    <div class="ml-auto">
+                                        <div class="action-icon">
+                                            <a href="javascript:void(0);" (click)="handleUpdateAddress(address)">
+                                                <span class="icon-edit"></span
+                                            ></a>
+                                            <a href="javascript:void(0);" (click)="showConfirmationModal(address)">
+                                                <span class="icon-trash"></span
+                                            ></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td width="30%" class="linked-with" *ngIf="hideLinkEntity">
+                                <div class="d-flex wrap-linked-company">
                                     <div class="ml-auto">
                                         <div class="action-icon">
                                             <a href="javascript:void(0);" (click)="handleUpdateAddress(address)">
