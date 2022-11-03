@@ -9,5 +9,7 @@
     "reverse_charge": "रिवर्स चार्ज",
     "setting": "सेटिंग",
     "vat_report": "वैट रिपोर्ट",
-    "unit_mapping": "यूनिट मैपिंग"
+    "unit_mapping": "यूनिट मैपिंग",
+    "add_gst": "जीएसटी जोड़ें",
+    "add_trn": "टीआरएन जोड़ें"
 }
