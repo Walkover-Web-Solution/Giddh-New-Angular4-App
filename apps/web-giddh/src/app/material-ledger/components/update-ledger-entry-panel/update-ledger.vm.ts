@@ -521,7 +521,7 @@ export class UpdateLedgerVm {
         this.generateCompoundTotal();
     }
 
-    public inventoryTotalChanged(initialLoad: boolean = false) {
+    public inventoryTotalChanged() {
         let fixDiscount = 0;
         let percentageDiscount = 0;
 
@@ -544,12 +544,7 @@ export class UpdateLedgerVm {
             this.totalAmount = this.grandTotal;
             this.generateGrandTotal();
         } else {
-            if (initialLoad) {
-                this.totalAmount = cloneDeep(this.grandTotal);
-            } else {
-                this.totalAmount = giddhRoundOff(Number(((Number(this.grandTotal) + fixDiscount + 0.01 * fixDiscount * Number(taxTotal)) /
-                    (1 - 0.01 * percentageDiscount + 0.01 * Number(taxTotal) - 0.0001 * percentageDiscount * Number(taxTotal)))), this.giddhBalanceDecimalPlaces);
-            }
+            this.totalAmount = giddhRoundOff(Number(((Number(this.grandTotal) + fixDiscount + 0.01 * fixDiscount * Number(taxTotal)) / (1 - 0.01 * percentageDiscount + 0.01 * Number(taxTotal) - 0.0001 * percentageDiscount * Number(taxTotal)))), this.giddhBalanceDecimalPlaces);
         }
 
         this.convertedTotalAmount = this.calculateConversionRate(this.totalAmount);

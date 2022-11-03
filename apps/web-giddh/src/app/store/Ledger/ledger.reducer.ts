@@ -210,7 +210,6 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
                     ...state,
                     isTxnUpdateInProcess: false,
                     isTxnUpdateSuccess: true,
-                    transactionDetails: updateResponse.body,
                     showDuplicateVoucherConfirmation: {}
                 };
             }
