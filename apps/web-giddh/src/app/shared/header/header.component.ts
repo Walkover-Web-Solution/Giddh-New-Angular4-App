@@ -739,7 +739,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         /* intlTelInputGlobals */
         if (window['intlTelInputGlobals'] === undefined) {
             let scriptTag = document.createElement('script');
-            scriptTag.src = 'https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.17/js/intlTelInput.min.js';
+            scriptTag.src = 'https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/intlTelInput.min.js';
             scriptTag.type = 'text/javascript';
             scriptTag.defer = true;
             document.body.appendChild(scriptTag);
