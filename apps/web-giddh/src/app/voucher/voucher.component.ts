@@ -755,104 +755,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.voucherApiVersion = this.generalService.voucherApiVersion;
     }
 
-    public ngAfterViewInit() {
-        let interval = setInterval(() => {
-            if (this.initContactProforma) {
-                this.onlyPhoneNumber();
-                clearInterval(interval);
-            }
-        }, 1000);
-        if (!this.isUpdateMode) {
-            this.toggleBodyClass();
-        }
-        this.openAccountSelectionDropdown = !this.isUpdateMode;
-        // this.selectAccount.changes.pipe(distinctUntilChanged((firstItem, nextItem) => {
-        //     return firstItem?.first?.filter === nextItem?.first?.filter;
-        // }), takeUntil(this.destroyed$)).subscribe((queryChanges: QueryList<ShSelectComponent>) => {
-        //     if ((this.invFormData?.voucherDetails?.customerUniquename || this.invFormData?.voucherDetails?.customerName) && !queryChanges?.first?.isOpen) {
-        //         setTimeout(() => {
-        //             queryChanges?.first?.show();
-        //         });
-        //     }
-        // });
-    }
-
-    /**
-     * Toggle the RCM checkbox based on user confirmation
-     *
-     * @param {*} event Click event
-     * @memberof VoucherComponent
-     */
-    public toggleRcmCheckbox(event: any, element: string): void {
-        let isChecked;
-        if (element === "checkbox") {
-            isChecked = event?.checked;
-            this.rcmCheckbox['checked'] = !isChecked;
-        } else {
-            isChecked = !event?._checked;
-        }
-        this.rcmConfiguration = this.generalService.getRcmConfiguration(isChecked, this.commonLocaleData);
-
-        let dialogRef = this.dialog.open(NewConfirmationModalComponent, {
-            width: '630px',
-            data: {
-                configuration: this.rcmConfiguration
-            }
-        });
-
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
-            this.handleRcmChange(response);
-        });
-    }
-
-    /**
-     * This will use for open add bulk item modal
-     *
-     * @memberof VoucherComponent
-     */
-    public addBulkItems(): void {
-        this.dialog.open(this.bulkItemsModal, {
-            width: 'auto',
-        });
-    }
-    /**
-     * This will use for cancel bulk item modal
-     *
-     * @memberof VoucherComponent
-     */
-    public cancelBulkItemsModal(): void {
-        this.dialog.closeAll();
-    }
-
-    /**
-     * RCM change handler, triggerreed when the user performs any
-     * action with the RCM popup
-     *
-     * @param {string} action Action performed by user
-     * @memberof VoucherComponent
-     */
-    public handleRcmChange(action: string): void {
-        if (action === this.commonLocaleData?.app_yes) {
-            // Toggle the state of RCM as user accepted the terms of RCM modal
-            this.isRcmEntry = !this.isRcmEntry;
-            this.recalculateConvertedTotal();
-            this.calculateGrandTotal();
-            this.calculateBalanceDue();
-        }
-        this._cdr.detectChanges();
-    }
-
-    /**
- * This will reset the state of checkbox and ngModel to make sure we update it based on user confirmation later
- *
- * @param {*} event
- * @memberof VoucherComponent
- */
-    public changeRcmCheckboxState(event: any): void {
-        this.isRcmEntry = !this.isRcmEntry;
-        this.toggleRcmCheckbox(event, 'checkbox');
-    }
-
     public ngOnInit() {
         if (this.callFromOutside) {
             if (document.getElementsByClassName("sidebar-collapse")?.length > 0) {
@@ -1678,6 +1580,19 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 this.onSearchQueryChanged(value[1]?.body?.name, 1, 'customer');
             }
         });
+    }
+
+    public ngAfterViewInit() {
+        let interval = setInterval(() => {
+            if (this.initContactProforma) {
+                this.onlyPhoneNumber();
+                clearInterval(interval);
+            }
+        }, 1000);
+        if (!this.isUpdateMode) {
+            this.toggleBodyClass();
+        }
+        this.openAccountSelectionDropdown = !this.isUpdateMode;
     }
 
     /**
@@ -8044,13 +7959,89 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     }
 
     /**
- * Callback function for getLastInvoiceDetails function
- *
- * @param {PreviousInvoicesVm} item
- * @memberof VoucherComponent
- */
+     * Callback function for getLastInvoiceDetails function
+     *
+     * @param {PreviousInvoicesVm} item
+     * @memberof VoucherComponent
+     */
     public copyInvoice(item: PreviousInvoicesVm): void {
         this.getLastInvoiceDetails({ accountUniqueName: item.account?.uniqueName, invoiceNo: item.versionNumber, uniqueName: item.uniqueName });
     }
-}
 
+    /**
+     * Toggle the RCM checkbox based on user confirmation
+     *
+     * @param {*} event Click event
+     * @memberof VoucherComponent
+     */
+     public toggleRcmCheckbox(event: any, element: string): void {
+        let isChecked;
+        if (element === "checkbox") {
+            isChecked = event?.checked;
+            this.rcmCheckbox['checked'] = !isChecked;
+        } else {
+            isChecked = !event?._checked;
+        }
+        this.rcmConfiguration = this.generalService.getRcmConfiguration(isChecked, this.commonLocaleData);
+
+        let dialogRef = this.dialog.open(NewConfirmationModalComponent, {
+            width: '630px',
+            data: {
+                configuration: this.rcmConfiguration
+            }
+        });
+
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            this.handleRcmChange(response);
+        });
+    }
+
+    /**
+     * This will use for open add bulk item modal
+     *
+     * @memberof VoucherComponent
+     */
+    public addBulkItems(): void {
+        this.dialog.open(this.bulkItemsModal, {
+            width: 'auto',
+        });
+    }
+    /**
+     * This will use for cancel bulk item modal
+     *
+     * @memberof VoucherComponent
+     */
+    public cancelBulkItemsModal(): void {
+        this.dialog.closeAll();
+    }
+
+    /**
+     * RCM change handler, triggerreed when the user performs any
+     * action with the RCM popup
+     *
+     * @param {string} action Action performed by user
+     * @memberof VoucherComponent
+     */
+    public handleRcmChange(action: string): void {
+        if (action === this.commonLocaleData?.app_yes) {
+            // Toggle the state of RCM as user accepted the terms of RCM modal
+            this.isRcmEntry = !this.isRcmEntry;
+            this.rcmCheckbox['checked'] = this.isRcmEntry;
+            this.recalculateConvertedTotal();
+            this.calculateGrandTotal();
+            this.calculateBalanceDue();
+        }
+        this._cdr.detectChanges();
+    }
+
+    /**
+     * This will reset the state of checkbox and ngModel to make sure we update it based on user confirmation later
+     *
+     * @param {*} event
+     * @memberof VoucherComponent
+     */
+    public changeRcmCheckboxState(event: any): void {
+        this.isRcmEntry = !this.isRcmEntry;
+        this.toggleRcmCheckbox(event, 'checkbox');
+    }
+}
