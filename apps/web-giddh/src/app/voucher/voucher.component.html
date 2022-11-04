@@ -226,7 +226,7 @@
                                                                 onSearchQueryChanged($event, 1, 'customer')
                                                             "
                                                             [allowValueReset]="true"
-                                                            (onClear)="resetCustomerName(null)"
+                                                            (onClear)="resetCustomerName($event)"
                                                         >
                                                         </select-field>
                                                     </ng-container>
@@ -1023,7 +1023,7 @@
                                                 (selectedOption)="onSelectWarehouse($event)"
                                                 [allowValueReset]="true"
                                                 (onClear)="onSelectWarehouse($event)"
-                                                [defaultValue]="selectedWarehouse"
+                                                [selectedValue]="selectedWarehouse"
                                             >
                                             </select-field>
                                         </div>
@@ -1621,13 +1621,13 @@
                                                                     ? 'disabled'
                                                                     : null
                                                             "
-                                                            (focus)="onFocusInvoiceDate()"
-                                                            (blur)="onBlurInvoiceDate(0)"
-                                                            (ngModelChange)="
+                                                            (datepickerState)="onFocusInvoiceDate()"
+                                                            (dateSelected)="
                                                                 onVoucherDateChanged(
                                                                     $event,
                                                                     invFormData.voucherDetails.voucherDate
-                                                                )
+                                                                );
+                                                                onBlurInvoiceDate(0)
                                                             "
                                                         >
                                                         </giddh-datepicker>

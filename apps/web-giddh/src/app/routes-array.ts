@@ -1,4 +1,5 @@
-export const ROUTES = [
+import { Routes } from "@angular/router";
+export const ROUTES: Routes = [
     { path: 'download', loadChildren: () => import('./download/download.module').then(module => module.DownloadModule) },
     { path: '', redirectTo: 'login', pathMatch: 'full' },
     { path: '404' },

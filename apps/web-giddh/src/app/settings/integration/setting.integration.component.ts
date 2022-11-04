@@ -593,7 +593,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             this.loadDefaultBankAccountsSuggestions();
             this.getAllBankAccounts();
             this.store.dispatch(this._companyActions.getAllRegistrations());
-            this.store.dispatch(this.settingsIntegrationActions.GetPaymentGateway());
             this.store.pipe(take(1)).subscribe(s => {
                 this.selectedCompanyUniqueName = s.session.companyUniqueName;
                 this.store.dispatch(this.settingsPermissionActions.GetUsersWithPermissions(this.selectedCompanyUniqueName));
@@ -802,7 +801,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @memberof SettingIntegrationComponent
      */
     private loadDefaultBankAccountsSuggestions(): void {
-        this.salesService.getAccountsWithCurrency('bankaccounts').pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.salesService.getAccountsWithCurrency('bankaccounts,loanandoverdraft').pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.body?.results) {
                 const bankAccounts = response.body.results.map(account => ({
                     label: account?.name,

@@ -812,7 +812,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      */
     public addBulkItems(): void {
         this.dialog.open(this.bulkItemsModal, {
-            width: '50%',
+            width: 'auto',
         });
     }
     /**
@@ -1161,6 +1161,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         if (!this.isUpdateMode) {
             this.addBlankRow(null);
             this.selectedWarehouse = String(this.defaultWarehouse);
+            console.log(this.selectedWarehouse);
+            
         }
 
         this.uploadInput = new EventEmitter<UploadInput>();
@@ -3783,14 +3785,14 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             case ActionTypeAfterVoucherGenerateOrUpdate.generateAndPrint: {
                 this.startLoader(false);
                 this.dialog.open(this.printVoucherModal, {
-                    width: '50%'
+                    width: '100%'
                 });
                 break;
             }
             case ActionTypeAfterVoucherGenerateOrUpdate.generateAndSend: {
                 this.startLoader(false);
                 this.dialog.open(this.sendEmailModal, {
-                    width: '630px'
+                    width: '650px'
                 });
                 break;
             }
@@ -3808,7 +3810,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
     public resetCustomerName(event) {
         if (event) {
-            if (!event.target?.value) {
+            if (!event?.value) {
                 this.onlyPhoneNumber();
                 this.intl?.setNumber("");
                 this.invFormData.voucherDetails.customerName = null;
@@ -5359,7 +5361,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             this.dateChangeType = "voucher";
             this.dateChangeConfiguration = this.generalService.getDateChangeConfiguration(this.localeData, this.commonLocaleData, true);
             this.dialog.open(this.dateChangeConfirmationModel, {
-                width: '50%',
+                width: '650px',
             });
         }
 
@@ -5869,7 +5871,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                         this.matchingPurchaseRecord.entries.forEach((entry => delete entry.uniqueName));
                     }
                     this.dialog.open(this.purchaseRecordConfirmationPopup, {
-                        width: '50%',
+                        width: 'auto'
                     });
                 } else {
                     this.matchingPurchaseRecord = null;
@@ -6114,7 +6116,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.isAdjustAmount = true;
         this.invFormData.voucherDetails.exchangeRate = this.exchangeRate;
         this.dialog.open(this.adjustPaymentModal, {
-            width: '50%',
+            width: '1000px'
         });
     }
 
@@ -7319,7 +7321,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             this.updatedEntryIndex = entryIdx;
             this.dateChangeConfiguration = this.generalService.getDateChangeConfiguration(this.localeData, this.commonLocaleData, false);
             this.dialog.open(this.dateChangeConfirmationModel, {
-                width: '50%',
+                width: '650px',
             });
         }
     }
@@ -7358,7 +7360,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      *
      * @memberof VoucherComponent
      */
-    public onFocusInvoiceDate(): void {
+    public onFocusInvoiceDate(): void {        
         this.voucherDateBeforeUpdate = this.invFormData.voucherDetails.voucherDate;
     }
 

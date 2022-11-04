@@ -26,7 +26,6 @@ import { cloneDeep, find, isEqual, map as lodashMap, uniq } from "../../app/loda
 import { CommonActions } from "../actions/common.actions";
 import { CompanyActions } from "../actions/company.actions";
 import { GeneralActions } from "../actions/general/general.actions";
-import { GroupWithAccountsAction } from "../actions/groupwithaccounts.actions";
 import { SettingsProfileActions } from "../actions/settings/profile/settings.profile.action";
 import { SettingsIntegrationActions } from "../actions/settings/settings.integration.action";
 import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from "../app.constant";
@@ -258,8 +257,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     public defaultLoad: boolean = true;
 
     constructor(public dialog: MatDialog, private store: Store<AppState>, private router: Router, private companyServices: CompanyService, private commonActions: CommonActions, private toaster: ToasterService,
-        private contactService: ContactService, private settingsIntegrationActions: SettingsIntegrationActions, private companyActions: CompanyActions, private componentFactoryResolver: ComponentFactoryResolver,
-        private groupWithAccountsAction: GroupWithAccountsAction, private cdRef: ChangeDetectorRef, private generalService: GeneralService, private route: ActivatedRoute, private generalAction: GeneralActions,
+        private contactService: ContactService, private settingsIntegrationActions: SettingsIntegrationActions, private companyActions: CompanyActions, private componentFactoryResolver: ComponentFactoryResolver, private cdRef: ChangeDetectorRef, private generalService: GeneralService, private route: ActivatedRoute, private generalAction: GeneralActions,
         private breakPointObservar: BreakpointObserver, private modalService: BsModalService, private settingsProfileActions: SettingsProfileActions,
         private settingsBranchAction: SettingsBranchActions, public currencyPipe: GiddhCurrencyPipe, private lightbox: Lightbox, private renderer: Renderer2, private customFieldsService: CustomFieldsService) {
         this.searchLoader$ = this.store.pipe(select(p => p.search.searchLoader), takeUntil(this.destroyed$));
@@ -914,6 +912,7 @@ export class ContactComponent implements OnInit, OnDestroy {
             viewContainerRef.insert(componentInstanceView.hostView);
 
             let componentInstance = componentInstanceView.instance as PaginationComponent;
+            componentInstance.totalPages = s.totalPages;
             componentInstance.totalItems = s.count * s.totalPages;
             componentInstance.itemsPerPage = this.paginationLimit;
             componentInstance.maxSize = 5;

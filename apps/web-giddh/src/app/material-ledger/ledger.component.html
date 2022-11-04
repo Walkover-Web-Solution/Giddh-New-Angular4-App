@@ -1170,6 +1170,7 @@
                                         >{{ bankTransactionsResponse?.totalPages }} {{ localeData?.pages }}</span
                                     >
                                     <pagination
+                                        *ngIf="bankTransactionsResponse?.totalPages > 1"
                                         [totalItems]="
                                             bankTransactionsResponse?.countPerPage *
                                             bankTransactionsResponse?.totalPages
@@ -1352,7 +1353,10 @@
                                                             *ngIf="
                                                                 voucherApiVersion === 2 &&
                                                                 (transactions.attachedFileUniqueName ||
-                                                                    transactions.voucherGenerated)
+                                                                    (transactions.voucherGenerated &&
+                                                                        !restrictedVouchersForDownload.includes(
+                                                                            transactions.voucherGeneratedType
+                                                                        )))
                                                             "
                                                             (click)="openAttachmentsDialog(attachments, transactions)"
                                                         >
@@ -1612,11 +1616,17 @@
                                             class="download-invoice-ledger d-flex cursor-pointer"
                                             *ngIf="
                                                 voucherApiVersion === 2 &&
-                                                (txn.attachedFileUniqueName || txn.voucherGenerated)
+                                                (txn.attachedFileUniqueName ||
+                                                    (txn.voucherGenerated &&
+                                                        !restrictedVouchersForDownload.includes(
+                                                            txn.voucherGeneratedType
+                                                        )))
                                             "
                                             (click)="openAttachmentsDialog(attachments, txn)"
                                             [matTooltip]="
-                                                txn.attachedFileUniqueName && txn.voucherGenerated
+                                                txn.attachedFileUniqueName &&
+                                                txn.voucherGenerated &&
+                                                !restrictedVouchersForDownload.includes(txn.voucherGeneratedType)
                                                     ? (txn.voucherNumber || commonLocaleData?.app_not_available) +
                                                       ', ' +
                                                       txn.attachedFileName
@@ -2040,11 +2050,17 @@
                                             class="download-invoice-ledger d-flex cursor-pointer"
                                             *ngIf="
                                                 voucherApiVersion === 2 &&
-                                                (txn.attachedFileUniqueName || txn.voucherGenerated)
+                                                (txn.attachedFileUniqueName ||
+                                                    (txn.voucherGenerated &&
+                                                        !restrictedVouchersForDownload.includes(
+                                                            txn.voucherGeneratedType
+                                                        )))
                                             "
                                             (click)="openAttachmentsDialog(attachments, txn)"
                                             [matTooltip]="
-                                                txn.attachedFileUniqueName && txn.voucherGenerated
+                                                txn.attachedFileUniqueName &&
+                                                txn.voucherGenerated &&
+                                                !restrictedVouchersForDownload.includes(txn.voucherGeneratedType)
                                                     ? (txn.voucherNumber || commonLocaleData?.app_not_available) +
                                                       ', ' +
                                                       txn.attachedFileName

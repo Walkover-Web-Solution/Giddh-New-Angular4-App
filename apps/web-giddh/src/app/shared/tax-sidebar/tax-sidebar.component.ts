@@ -131,7 +131,7 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
-        if (!this.router.url.includes('pages/gstfiling') && !this.router.url.includes('pages/invoice/ewaybill') && !this.router.url.includes('pages/reports/reverse-charge') && !this.router.url.includes('pages/settings/taxes')) {
+        if (!this.router.url.includes('pages/gstfiling') && !this.router.url.includes('pages/invoice/ewaybill') && !this.router.url.includes('pages/reports/reverse-charge') && !this.router.url.includes('pages/settings/taxes') && !this.router.url.includes('pages/settings/addresses')) {
             this.store.dispatch(this.gstAction.SetActiveCompanyGstin(''));
         }
         this.store.dispatch(this.gstAction.resetGstr1OverViewResponse());

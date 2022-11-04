@@ -180,11 +180,10 @@ const DEFAULT_FONT_PICKER_CONFIG: FontPickerConfigInterface = {
         DownloadOrSendInvoiceOnMailComponent,
         InvoicePreviewComponent
     ],
-    entryComponents: [DownloadOrSendInvoiceOnMailComponent],
     providers: [InvoiceUiDataService, {
-        provide: FONT_PICKER_CONFIG,
-        useValue: DEFAULT_FONT_PICKER_CONFIG
-    }
+            provide: FONT_PICKER_CONFIG,
+            useValue: DEFAULT_FONT_PICKER_CONFIG
+        }
     ]
 })
 export class InvoiceModule {

@@ -463,3 +463,6 @@ export const MOBILE_NUMBER_UTIL_URL = 'https://cdnjs.cloudflare.com/ajax/libs/in
 export const MOBILE_NUMBER_SELF_URL = 'https://api.db-ip.com/v2/free/self';
 export const MOBILE_NUMBER_IP_ADDRESS_URL = 'http://ip-api.com/json/';
 export const MOBILE_NUMBER_ADDRESS_JSON_URL = 'https://ipinfo.io/';
+export const OTP_PROVIDER_URL = 'https://control.msg91.com/app/assets/otp-provider/otp-provider.js';
+
+export const RESTRICTED_VOUCHERS_FOR_DOWNLOAD = [];

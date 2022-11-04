@@ -7,7 +7,7 @@ import { AppState } from '../store/roots';
 import { ToasterService } from '../services/toaster.service';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { Action, Store } from '@ngrx/store';
-import { Actions, createEffect, Effect, ofType } from '@ngrx/effects';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Injectable } from '@angular/core';
 import { GroupWithAccountsAction } from './groupwithaccounts.actions';
 import { GeneralActions } from './general/general.actions';
@@ -221,6 +221,10 @@ export class AccountsAction {
                     this._toasty.successToast(this.localeService.translate("app_messages.account_updated"));
                     if (!action.payload?.queryString?.isMasterOpen) {
                         this.store.dispatch(this.getAccountDetails(resData.body?.uniqueName));
+                    }
+
+                    if (resData.body?.parentGroups[resData.body.parentGroups?.length - 1]?.uniqueName) {
+                        this.store.dispatch(this.groupWithAccountsAction.getGroupDetails(resData.body?.parentGroups[resData.body.parentGroups?.length - 1]?.uniqueName));
                     }
                 }
                 return { type: 'EmptyAction' };

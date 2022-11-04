@@ -75,7 +75,11 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy {
         if (this.enableDynamicSearch) {
             this.searchFormControl.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(search => {
                 if (search) {
-                    this.dynamicSearchedQuery.emit(search);
+                    if (typeof search === "string") {
+                        this.dynamicSearchedQuery.emit(search);
+                    } else {
+                        this.dynamicSearchedQuery.emit(search?.label || "");
+                    }
                 } else {
                     if (this.allowValueReset) {
                         this.selectedValue = "";

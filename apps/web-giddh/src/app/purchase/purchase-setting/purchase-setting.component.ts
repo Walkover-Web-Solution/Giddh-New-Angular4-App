@@ -22,7 +22,7 @@ import { AppState } from '../../store';
 
 export class PurchaseSettingComponent implements OnInit, OnDestroy {
     /* This will hold the invoice settings */
-    public invoiceSettings: any = { purchaseBillSettings: {sendThroughGmail: false,changePOStatusOnExpiry: false,useCustomPONumber:false,enableNarration:false} };
+    public invoiceSettings: any = { purchaseBillSettings: {sendThroughGmail: false,changePOStatusOnExpiry: false,useCustomPONumber:false,enableNarration:false, enableVoucherDownload: false } };
     /* This will hold the PB lock date */
     public lockDate: Date = new Date();
     /* This will hold if email updated */
@@ -49,6 +49,8 @@ export class PurchaseSettingComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
     /** This will hold toggle buttons value and size */
     public bootstrapToggleSwitch = BootstrapToggleSwitch;
+    /** Stores the voucher API version of company */
+    public voucherApiVersion: 1 | 2;
 
     constructor(private store: Store<AppState>, private toaster: ToasterService, private settingsIntegrationActions: SettingsIntegrationActions, private invoiceService: InvoiceService, public purchaseOrderService: PurchaseOrderService, private generalService: GeneralService, public authenticationService: AuthenticationService, private route: ActivatedRoute) {
         this.activeCompanyUniqueName$ = this.store.pipe(select(state => state.session.companyUniqueName), (takeUntil(this.destroyed$)));
@@ -63,6 +65,8 @@ export class PurchaseSettingComponent implements OnInit, OnDestroy {
      * @memberof PurchaseSettingComponent
      */
     public ngOnInit(): void {
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
+        
         this.activeCompanyUniqueName$.subscribe(response => {
             this.companyUniqueName = response;
         });
@@ -96,6 +100,10 @@ export class PurchaseSettingComponent implements OnInit, OnDestroy {
         this.invoiceService.GetInvoiceSetting().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.status === "success" && response.body) {
                 this.invoiceSettings = _.cloneDeep(response.body);
+
+                if (!this.invoiceSettings.purchaseBillSettings.enableVoucherDownload) {
+                    this.invoiceSettings.purchaseBillSettings.enableVoucherDownload = false;
+                }
 
                 this.originalEmail = _.cloneDeep(this.invoiceSettings.purchaseBillSettings.email);
 

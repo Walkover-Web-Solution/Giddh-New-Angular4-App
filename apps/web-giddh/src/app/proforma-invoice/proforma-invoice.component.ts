@@ -125,8 +125,7 @@ const SEARCH_TYPE = {
     ITEM: 'item',
     BANK: 'bank'
 }
-/** Declare of window */
-declare var window;
+
 @Component({
     selector: 'proforma-invoice-component',
     templateUrl: './proforma-invoice.component.html',
@@ -745,11 +744,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
     public ngAfterViewInit() {
         let interval = setInterval(() => {
-            if(this.initContactProforma) {
-                    this.onlyPhoneNumber();
-                    clearInterval(interval);
+            if (this.initContactProforma) {
+                clearInterval(interval);
+                this.onlyPhoneNumber();
             }
-        }, 1000);
+        }, 500);
         if (!this.isUpdateMode) {
             this.toggleBodyClass();
         }
@@ -1996,7 +1995,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.isCashBankAccount = false;
 
         data?.parentGroups?.forEach(parentGroup => {
-            if (parentGroup?.uniqueName === "cash" || parentGroup?.uniqueName === "bankaccounts") {
+            if (parentGroup?.uniqueName === "cash" || parentGroup?.uniqueName === "bankaccounts" || (this.voucherApiVersion === 2 && parentGroup?.uniqueName === "loanandoverdraft")) {
                 this.isCashBankAccount = true;
             }
         });
@@ -6343,7 +6342,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.searchCustomerResultsPaginationData.query = query;
             group = (this.invoiceType === VoucherTypeEnum.debitNote) ? 'sundrycreditors' :
                 (this.invoiceType === VoucherTypeEnum.purchase) ?
-                    'sundrycreditors, bankaccounts, cash' : 'sundrydebtors';
+                (this.voucherApiVersion === 2) ? 'sundrycreditors, bankaccounts, cash, loanandoverdraft' : 'sundrycreditors, bankaccounts, cash' : 'sundrydebtors';
             this.selectedGrpUniqueNameForAddEditAccountModal = (this.invoiceType === VoucherTypeEnum.debitNote || this.invoiceType === VoucherTypeEnum.purchase) ?
                 'sundrycreditors' : 'sundrydebtors';
         } else if (searchType === SEARCH_TYPE.ITEM) {
@@ -6356,6 +6355,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             }
         } else if (searchType === SEARCH_TYPE.BANK) {
             group = 'bankaccounts, cash';
+
+            if (this.voucherApiVersion === 2) {
+                group += ", loanandoverdraft";
+            }
         }
         const requestObject = {
             q: encodeURIComponent(query),
@@ -6498,9 +6501,13 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.selectedPaymentMode = null;
         this.forceClearDepositAccount$ = observableOf({ status: true });
         this.userDeposit = null;
+        let groups = "cash, bankaccounts";
 
-        this.salesService.getAccountsWithCurrency('cash, bankaccounts', `${customerCurrency}, ${this.companyCurrency}`).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+        if (this.voucherApiVersion === 2) {
+            groups += ", loanandoverdraft";
+        }
 
+        this.salesService.getAccountsWithCurrency(groups, `${customerCurrency}, ${this.companyCurrency}`).pipe(takeUntil(this.destroyed$)).subscribe(data => {
             this.bankAccounts$ = observableOf(this.updateBankAccountObject(data));
         });
     }
@@ -7781,7 +7788,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.hideDepositSection = false;
         if (this.voucherApiVersion === 2 && this.isPurchaseInvoice && accountDetails?.parentGroups?.length > 0) {
             accountDetails?.parentGroups.forEach(group => {
-                if (group.uniqueName === "cash" || group.uniqueName === "bankaccounts") {
+                if (group.uniqueName === "cash" || group.uniqueName === "bankaccounts" || (this.voucherApiVersion === 2 && group.uniqueName === "loanandoverdraft")) {
                     this.hideDepositSection = true;
                 }
             });
@@ -7876,8 +7883,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         const errorMsg = document.querySelector("#init-contact-proforma-error-msg");
         const validMsg = document.querySelector("#init-contact-proforma-valid-msg");
         let errorMap = [this.localeData?.invalid_contact_number, this.commonLocaleData?.app_invalid_country_code, this.commonLocaleData?.app_invalid_contact_too_short, this.commonLocaleData?.app_invalid_contact_too_long, this.localeData?.invalid_contact_number];
-        if (window['intlTelInput'] && input) {
-            this.intl = window['intlTelInput'](input, {
+        let intlTelInput = window['intlTelInput'];
+        if (intlTelInput && input) {
+            this.intl = intlTelInput(input, {
                 nationalMode: true,
                 utilsScript: MOBILE_NUMBER_UTIL_URL,
                 autoHideDialCode: false,

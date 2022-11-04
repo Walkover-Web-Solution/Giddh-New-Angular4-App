@@ -37,7 +37,8 @@
                                 class="filings-empty-state"
                                 *ngIf="
                                     !(gstReconcileInvoiceRequestInProcess$ | async) &&
-                                    (gstNotFoundOnPortalData$ | async)?.count > 20
+                                    (gstNotFoundOnPortalData$ | async)?.data?.totalItems >
+                                        (gstNotFoundOnPortalData$ | async)?.data?.count
                                 "
                             >
                                 <pagination
@@ -87,7 +88,8 @@
                                 class="filings-empty-state"
                                 *ngIf="
                                     !(gstReconcileInvoiceRequestInProcess$ | async) &&
-                                    (gstNotFoundOnGiddhData$ | async)?.count > 20
+                                    (gstNotFoundOnGiddhData$ | async)?.data?.totalItems >
+                                        (gstNotFoundOnGiddhData$ | async)?.data?.count
                                 "
                             >
                                 <pagination
@@ -137,7 +139,8 @@
                                 class="filings-empty-state"
                                 *ngIf="
                                     !(gstReconcileInvoiceRequestInProcess$ | async) &&
-                                    (gstPartiallyMatchedData$ | async)?.count > 20
+                                    (gstPartiallyMatchedData$ | async)?.data?.totalItems >
+                                        (gstPartiallyMatchedData$ | async)?.data?.count
                                 "
                             >
                                 <pagination
@@ -187,8 +190,7 @@
                                 class="filings-empty-state"
                                 *ngIf="
                                     !(gstReconcileInvoiceRequestInProcess$ | async) &&
-                                    (gstMatchedData$ | async)?.count &&
-                                    (gstMatchedData$ | async)?.count > 20
+                                    (gstMatchedData$ | async)?.data?.totalItems > (gstMatchedData$ | async)?.data?.count
                                 "
                             >
                                 <pagination

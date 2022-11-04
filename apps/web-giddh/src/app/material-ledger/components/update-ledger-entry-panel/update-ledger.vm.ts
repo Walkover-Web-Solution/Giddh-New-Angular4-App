@@ -98,7 +98,7 @@ export class UpdateLedgerVm {
     }
 
     public get stockTrxEntry(): ILedgerTransactionItem {
-        return find(this.selectedLedger.transactions, (t => !!(t.inventory && t.inventory.stock))) || null;
+        return find(this.selectedLedger?.transactions, (t => !!(t.inventory && t.inventory.stock))) || null;
     }
 
     public blankTransactionItem(type: string = 'DEBIT'): ILedgerTransactionItem {
@@ -117,7 +117,7 @@ export class UpdateLedgerVm {
         this.discountTrxTotal = amount;
         this.convertedDiscountTrxTotal = this.calculateConversionRate(amount);
 
-        if (this.selectedLedger.transactions) {
+        if (this.selectedLedger?.transactions) {
             this.selectedLedger.transactions = this.selectedLedger.transactions.filter(f => !f.isDiscount);
             let incomeExpenseEntryIndex = this.selectedLedger.transactions.findIndex((trx: ILedgerTransactionItem) => {
                 if (trx?.particular?.uniqueName && !trx?.isTax) {
@@ -136,7 +136,7 @@ export class UpdateLedgerVm {
                 totalAmount = 0;
             }
 
-            this.discountArray?.filter(f => f.isActive && f.amount > 0).forEach((dx, index) => {
+            this.discountArray?.filter(f => f.isActive && f.amount > 0)?.forEach((dx, index) => {
                 let trx: ILedgerTransactionItem = this.blankTransactionItem(discountEntryType);
 
                 trx.particular.uniqueName = dx.discountUniqueName ? dx.discountUniqueName : 'discount';
@@ -190,14 +190,14 @@ export class UpdateLedgerVm {
 
     public isThereStockEntry(uniqueName: string): boolean {
         // check if entry with same stock added multiple times
-        let isAvailable = this.selectedLedger.transactions?.filter(f => f.particular?.uniqueName === uniqueName);
+        let isAvailable = this.selectedLedger?.transactions?.filter(f => f.particular?.uniqueName === uniqueName);
         let count: number = isAvailable && isAvailable.length;
 
         if (count > 1) {
             return true;
         }
         // check if is there any stock entry or not
-        return find(this.selectedLedger.transactions,
+        return find(this.selectedLedger?.transactions,
             (f: ILedgerTransactionItem) => {
                 if (f.particular?.uniqueName && f.particular?.uniqueName !== uniqueName) {
                     return !!(f.inventory && f.inventory.stock);
@@ -207,7 +207,7 @@ export class UpdateLedgerVm {
     }
 
     public isThereIncomeOrExpenseEntry(): number {
-        let isAvailable = filter(this.selectedLedger.transactions, (trx: ILedgerTransactionItem) => {
+        let isAvailable = filter(this.selectedLedger?.transactions, (trx: ILedgerTransactionItem) => {
             if (trx?.particular?.uniqueName && !trx?.isTax) {
                 let category = this.getAccountCategory(trx.particular, trx.particular?.uniqueName);
                 return this.isValidCategory(category) || trx.inventory;
@@ -225,13 +225,13 @@ export class UpdateLedgerVm {
     }
 
     public getEntryTotal() {
-        this.entryTotal.drTotal = giddhRoundOff(sumBy(this.selectedLedger.transactions, (tr) => {
+        this.entryTotal.drTotal = giddhRoundOff(sumBy(this.selectedLedger?.transactions, (tr) => {
             if (tr.type === 'DEBIT') {
                 return Number(tr.amount) || 0;
             }
             return 0;
         }), this.giddhBalanceDecimalPlaces);
-        this.entryTotal.crTotal = giddhRoundOff(sumBy(this.selectedLedger.transactions, (tr) => {
+        this.entryTotal.crTotal = giddhRoundOff(sumBy(this.selectedLedger?.transactions, (tr) => {
             if (tr.type === 'CREDIT') {
                 return Number(tr.amount) || 0;
             }
@@ -271,7 +271,7 @@ export class UpdateLedgerVm {
 
     // FIXME: fix amount calculation
     public generatePanelAmount() {
-        if (this.selectedLedger.transactions && this.selectedLedger.transactions.length) {
+        if (this.selectedLedger?.transactions && this.selectedLedger?.transactions?.length) {
             if (this.stockTrxEntry) {
                 this.totalAmount = this.stockTrxEntry.amount;
             } else {
@@ -324,7 +324,7 @@ export class UpdateLedgerVm {
                 let tdsTaxPercentage = null;
                 let tcsTaxPercentage = null;
 
-                let transactions = this.selectedLedger.transactions?.filter(transaction => !transaction.isTax);
+                let transactions = this.selectedLedger?.transactions?.filter(transaction => !transaction.isTax);
                 let totalAmount = (transactions?.length > 0) ? Number(transactions[0].amount) : Number(this.selectedLedger.actualAmount);
 
                 if (this.selectedLedger.otherTaxType === "tcs") {
@@ -486,14 +486,14 @@ export class UpdateLedgerVm {
             this.convertedRate = this.calculateConversionRate(this.stockTrxEntry.inventory.rate, this.ratePrecision);
 
             // update every transaction conversion rates for multi-currency
-            this.selectedLedger.transactions?.filter(f => f.particular?.uniqueName !== this.stockTrxEntry.particular?.uniqueName).map(trx => {
+            this.selectedLedger?.transactions?.filter(f => f.particular?.uniqueName !== this.stockTrxEntry.particular?.uniqueName).map(trx => {
                 trx.convertedAmount = this.calculateConversionRate(trx.amount);
                 return trx;
             });
         } else {
 
             // update every transaction conversion rates for multi-currency
-            if (this.selectedLedger.transactions && this.selectedLedger.transactions.length > 0) {
+            if (this.selectedLedger?.transactions && this.selectedLedger?.transactions?.length > 0) {
                 this.selectedLedger.transactions = this.selectedLedger.transactions.map((t, i) => {
                     let category = this.getAccountCategory(t?.particular, t?.particular?.uniqueName);
 
@@ -650,18 +650,13 @@ export class UpdateLedgerVm {
     public prepare4Submit(): LedgerResponse {
         let requestObj: any = cloneDeep(this.selectedLedger);
         let discounts: LedgerDiscountClass[] = cloneDeep(this.discountArray);
-        // Taxes checkbox will be false in case of receipt and payment voucher 
-        if (this.voucherApiVersion === 2 && (this.selectedLedger?.voucher?.shortCode === 'rcpt' || this.selectedLedger?.voucher?.shortCode === 'pay') && !this.isAdvanceReceipt) {
-            this.selectedTaxes = [];
-        }
         let taxes: UpdateLedgerTaxData[] = cloneDeep(this.selectedTaxes);
-
 
         requestObj.voucherType = requestObj?.voucher?.shortCode;
         requestObj.transactions = requestObj?.transactions ? requestObj.transactions.filter(p => p.particular?.uniqueName && !p.isDiscount) : [];
         requestObj.generateInvoice = this.selectedLedger?.generateInvoice;
 
-        requestObj.transactions.map(trx => {
+        requestObj?.transactions.map(trx => {
             if (trx.inventory && trx.inventory.stock) {
                 trx.particular.uniqueName = trx.particular?.uniqueName.split('#')[0];
             }
@@ -768,7 +763,7 @@ export class UpdateLedgerVm {
      * @memberof UpdateLedgerVm
      */
     public updateFirstEntryAmount(): void {
-        if (this.selectedLedger.transactions && this.selectedLedger.transactions.length > 0) {
+        if (this.selectedLedger?.transactions && this.selectedLedger?.transactions?.length > 0) {
             this.selectedLedger.transactions = this.selectedLedger.transactions.map(transaction => {
                 if (transaction?.particular?.uniqueName && !transaction.isTax) {
                     transaction.amount = giddhRoundOff(Number(this.totalAmount), this.giddhBalanceDecimalPlaces);

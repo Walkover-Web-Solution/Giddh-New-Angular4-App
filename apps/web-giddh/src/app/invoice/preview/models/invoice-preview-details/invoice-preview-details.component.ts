@@ -138,8 +138,6 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     public purchaseOrderPreviewUniqueName: string = '';
     /* Send email request params object */
     public sendEmailRequest: any = {};
-    /* This will hold if attachment is expanded */
-    public isAttachmentExpanded: boolean = false;
     /* This will hold if pdf preview loaded */
     public pdfPreviewLoaded: boolean = false;
     /* This will hold if pdf preview has error */
@@ -164,6 +162,8 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     public voucherApiVersion: 1 | 2;
     /** Holds selected item voucher */
     private selectedItemVoucher: any;
+    /** True if pdf is available */
+    public isPdfAvailable: boolean = true;
 
     constructor(
         private _cdr: ChangeDetectorRef,
@@ -415,30 +415,38 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
 
         if (this._generalService.voucherApiVersion === 2 && ![VoucherTypeEnum.generateEstimate, VoucherTypeEnum.generateProforma].includes(this.voucherType)) {
             let getRequest = {
-                voucherType: this.selectedItem.voucherType,
-                uniqueName: this.selectedItem.uniqueName
+                voucherType: this.selectedItem?.voucherType,
+                uniqueName: this.selectedItem?.uniqueName
             };
 
             this.sanitizedPdfFileUrl = null;
             this.commonService.downloadFile(getRequest, "ALL").pipe(takeUntil(this.destroyed$)).subscribe(result => {
                 if (result?.body) {
                     /** Creating voucher pdf start */
-                    if (this.selectedItem) {
+                    if (this.selectedItem && result.body.data) {
+                        this.isPdfAvailable = true;
                         this.selectedItem.blob = this._generalService.base64ToBlob(result.body.data, 'application/pdf', 512);
                         const file = new Blob([this.selectedItem.blob], { type: 'application/pdf' });
                         this.attachedDocumentBlob = file;
                         URL.revokeObjectURL(this.pdfFileURL);
                         this.pdfFileURL = URL.createObjectURL(file);
+
+                        this.sanitizedPdfFileUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(this.pdfFileURL);
+                        this.isVoucherDownloadError = false;
+                        this.pdfPreviewLoaded = true;
+                    } else {
+                        if (this.selectedItem?.voucherType === 'purchase') {
+                            this.pdfPreviewLoaded = false;
+                        }
+                        this.isPdfAvailable = false;
                     }
-                    this.sanitizedPdfFileUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(this.pdfFileURL);
-                    this.isVoucherDownloadError = false;
-                    this.pdfPreviewLoaded = true;
                     /** Creating voucher pdf finish */
 
                     if (result.body.attachments?.length > 0) {
                         /** Creating attachment start */
-                        this.selectedItem.hasAttachment = true;
-                        this.isAttachmentExpanded = false;
+                        if (this.selectedItem) {
+                            this.selectedItem.hasAttachment = true;
+                        }
                         const fileExtention = result.body.attachments[0].type.toLowerCase();
                         if (FILE_ATTACHMENT_TYPE.IMAGE.includes(fileExtention)) {
                             // Attached file type is image
@@ -528,7 +536,6 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                         this.attachedPdfFileUrl = null;
                         this.imagePreviewSource = null;
                         if (data.body.fileType) {
-                            this.isAttachmentExpanded = false;
                             const fileExtention = data.body.fileType.toLowerCase();
                             if (FILE_ATTACHMENT_TYPE.IMAGE.includes(fileExtention)) {
                                 // Attached file type is image
@@ -642,7 +649,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
             }
         } else if (this.selectedItem?.voucherType === VoucherTypeEnum.creditNote || this.selectedItem?.voucherType === VoucherTypeEnum.debitNote) {
             if (this._generalService.voucherApiVersion === 2) {
-                if (this.selectedItem.hasAttachment) {
+                if (this.selectedItem?.hasAttachment) {
                     this.downloadVoucherModal?.show();
                 } else {
                     if (this.selectedItem) {
@@ -707,9 +714,9 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                 res = this._generalService.convertV1ResponseInV2(res);
                 this.thermalService.print(this.defaultTemplate, res);
             } else {
-                this.store.dispatch(this._invoiceReceiptActions.getVoucherDetailsV4(this.selectedItem.account?.uniqueName, {
+                this.store.dispatch(this._invoiceReceiptActions.getVoucherDetailsV4(this.selectedItem?.account?.uniqueName, {
                     invoiceNumber: this.selectedItem?.voucherNumber,
-                    voucherType: this.selectedItem.voucherType,
+                    voucherType: this.selectedItem?.voucherType,
                     uniqueName: this.selectedItem?.uniqueName
                 }));
             }
@@ -951,7 +958,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         if (this.pdfPreviewHasError || !this.pdfPreviewLoaded) {
             return;
         }
-        if (this._generalService.voucherApiVersion === 2 && this.selectedItem.hasAttachment) {
+        if (this._generalService.voucherApiVersion === 2 && this.selectedItem?.hasAttachment) {
             this.downloadVoucherModal?.show();
         } else {
             let voucherNumber = (this.selectedItem?.voucherNumber) ? this.selectedItem?.voucherNumber : this.commonLocaleData?.app_not_available;
@@ -966,14 +973,14 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
      */
     public getLinkedPurchaseOrders(): void {
         this.purchaseOrderNumbers = [];
-        if (this.selectedItem.voucherType === VoucherTypeEnum.purchase) {
+        if (this.selectedItem?.voucherType === VoucherTypeEnum.purchase) {
             const apiCallObservable = this._generalService.voucherApiVersion === 2 ?
-                this._receiptService.getVoucherDetailsV4(this.selectedItem.account?.uniqueName, {
+                this._receiptService.getVoucherDetailsV4(this.selectedItem?.account?.uniqueName, {
                     invoiceNumber: this.selectedItem?.voucherNumber,
-                    voucherType: this.selectedItem.voucherType,
+                    voucherType: this.selectedItem?.voucherType,
                     uniqueName: this.selectedItem?.uniqueName
                 }) :
-                this._receiptService.GetPurchaseRecordDetails(this.selectedItem.account?.uniqueName, this.selectedItem?.uniqueName);
+                this._receiptService.GetPurchaseRecordDetails(this.selectedItem?.account?.uniqueName, this.selectedItem?.uniqueName);
             apiCallObservable.pipe(takeUntil(this.destroyed$)).subscribe((res: any) => {
                 if (res && res.body) {
                     this.purchaseOrderNumbers = res.body.purchaseOrderDetails;
@@ -1038,7 +1045,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
             voucherType
         };
         if (voucherType) {
-            this.invoiceService.DownloadInvoice(this.selectedItem.account.uniqueName, dataToSend).pipe(takeUntil(this.destroyed$))
+            this.invoiceService.DownloadInvoice(this.selectedItem?.account?.uniqueName, dataToSend).pipe(takeUntil(this.destroyed$))
                 .subscribe(res => {
                     if (res) {
                         saveAs(res, `${dataToSend.voucherNumber[0]}.` + 'pdf');
