@@ -26,7 +26,6 @@ import {
 } from 'ngx-bootstrap/modal';
 import { BsDatepickerDirective } from 'ngx-bootstrap/datepicker';
 import { PopoverDirective } from 'ngx-bootstrap/popover';
-import { ModalDirective } from 'ngx-bootstrap/modal';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../store';
 import { SalesActions } from '../actions/sales/sales.action';
@@ -63,7 +62,7 @@ import {
     VoucherDetailsClass,
     VoucherTypeEnum
 } from '../models/api-models/Sales';
-import { auditTime, debounceTime, delay, distinctUntilChanged, filter, take, takeUntil } from 'rxjs/operators';
+import { auditTime, debounceTime, delay, filter, take, takeUntil } from 'rxjs/operators';
 import { IOption } from '../theme/ng-select/option.interface';
 import { combineLatest, Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
@@ -84,7 +83,6 @@ import { LedgerDiscountClass } from '../models/api-models/SettingsDiscount';
 import { Configuration, SubVoucher, RATE_FIELD_PRECISION, HIGH_RATE_FIELD_PRECISION, SearchResultText, TCS_TDS_TAXES_TYPES, ENTRY_DESCRIPTION_LENGTH, EMAIL_REGEX_PATTERN, AdjustedVoucherType, MOBILE_NUMBER_UTIL_URL, MOBILE_NUMBER_SELF_URL, MOBILE_NUMBER_IP_ADDRESS_URL, MOBILE_NUMBER_ADDRESS_JSON_URL } from '../app.constant';
 import { LEDGER_API } from '../services/apiurls/ledger.api';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
-import { ShSelectComponent } from '../theme/ng-virtual-select/sh-select.component';
 import { ProformaActions } from '../actions/proforma/proforma.actions';
 import { PreviousInvoicesVm, ProformaFilter, ProformaGetRequest, ProformaResponse } from '../models/api-models/proforma';
 import { giddhRoundOff } from '../shared/helpers/helperFunctions';
@@ -118,7 +116,6 @@ import { VoucherForm } from '../models/api-models/Voucher';
 import { AdjustmentUtilityService } from '../shared/advance-receipt-adjustment/services/adjustment-utility.service';
 import { GstReconcileActions } from '../actions/gst-reconcile/GstReconcile.actions';
 import { SettingsDiscountService } from '../services/settings.discount.service';
-import { ConfirmationModalComponent } from '../common/confirmation-modal/confirmation-modal.component';
 import { MatDialog } from '@angular/material/dialog';
 import { HttpClient } from '@angular/common/http';
 import { NewConfirmationModalComponent } from '../theme/new-confirmation-modal/confirmation-modal.component';
@@ -308,8 +305,12 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public warehouses: Array<any>;
     /** Stores the unique name of default warehouse of a company */
     public defaultWarehouse: string;
+    /** Stores the name of default warehouse of a company */
+    public defaultWarehouseName: string;
     /** Stores the unique name of selected warehouse */
     public selectedWarehouse: string;
+    /** Stores the name of selected warehouse */
+    public selectedWarehouseName: string;
     /** True, if warehouse drop down should be displayed */
     public shouldShowWarehouse: boolean;
     /** True, if the entry contains RCM applicable taxes */
@@ -655,6 +656,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     /** This will hold selected cash account */
     public selectedBankAccount: any = 'Cash';
     public linkPoDropdown: FormControl = new FormControl();
+    /** Filtered options to show in autocomplete list */
+    public fieldFilteredOptions: IOption[] = [];
+    compareFn = (a, b) => a && b && a.id === b.id;
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -757,6 +761,12 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     }
 
     public ngOnInit() {
+
+        /** This will use for filter link purchase orders  */
+        this.linkPoDropdown.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(search => {
+            this.filterPurchaseOrder(search);
+        });
+
         if (this.callFromOutside) {
             if (document.getElementsByClassName("sidebar-collapse")?.length > 0) {
                 this.isSidebarExpanded = false;
@@ -1064,6 +1074,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         if (!this.isUpdateMode) {
             this.addBlankRow(null);
             this.selectedWarehouse = String(this.defaultWarehouse);
+            this.selectedWarehouseName = String(this.defaultWarehouseName);
         }
 
         this.uploadInput = new EventEmitter<UploadInput>();
@@ -2155,6 +2166,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.isCustomerSelected = false;
         this.selectedFileName = '';
         this.selectedWarehouse = '';
+        this.selectedWarehouseName = '';
         this.isRcmEntry = false;
         this.matchingPurchaseRecord = null;
         this.purchaseRecordCustomerUniqueName = '';
@@ -3390,6 +3402,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             if ((this.isMultiCurrencyModule()) && !this.shouldShowWarehouse) {
                 this.shouldShowWarehouse = true;
                 this.selectedWarehouse = String(this.defaultWarehouse);
+                this.selectedWarehouseName = String(this.defaultWarehouseName);
             }
         } else {
             transaction.isStockTxn = false;
@@ -4964,7 +4977,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             delete obj.account.customerName;
         }
         if (this.shouldShowWarehouse) {
-            obj['warehouse'] = { name: '', uniqueName: this.selectedWarehouse };
+            obj['warehouse'] = { name: this.selectedWarehouseName, uniqueName: this.selectedWarehouse };
         }
         return obj;
     }
@@ -5226,6 +5239,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
                     if (!this.linkedPoNumbers[order?.uniqueName]) {
                         this.purchaseOrders.push({ label: order.number, value: order?.uniqueName, additional: { amount: order.grandTotal?.amountForAccount } });
+                        this.filterPurchaseOrder('');
                     }
 
                     this.linkedPoNumbers[order.uniqueName] = [];
@@ -5487,9 +5501,10 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @memberof VoucherComponent
      */
     public handleCustomerChange(event: any): void {
-        if (!event.target.value) {
+        if (!event?.value) {
             // Input is cleared reset to default warehouse
             this.selectedWarehouse = String(this.defaultWarehouse);
+            this.selectedWarehouseName = String(this.defaultWarehouseName);
         }
     }
 
@@ -5683,6 +5698,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 const warehouseData = this.settingsUtilityService.getFormattedWarehouseData(warehouseResults);
                 this.warehouses = warehouseData.formattedWarehouses;
                 this.defaultWarehouse = (warehouseData.defaultWarehouse?.uniqueName) ? warehouseData.defaultWarehouse?.uniqueName : '';
+                this.defaultWarehouseName = (warehouseData.defaultWarehouse?.name) ? warehouseData.defaultWarehouse?.name : '';
 
                 if ((!this.isUpdateMode || (this.isUpdateMode && warehouse))) {
                     if (this.isPurchaseInvoice && warehouseData && warehouseData.defaultWarehouse && !this.isUpdateMode) {
@@ -5692,6 +5708,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     if (warehouse) {
                         // Update flow is carried out and we have received warehouse details
                         this.selectedWarehouse = warehouse.uniqueName;
+                        this.selectedWarehouseName = warehouse.name;
                         this.shouldShowWarehouse = true;
                     } else {
                         if (this.isUpdateMode) {
@@ -5702,6 +5719,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                         } else {
                             // Create flow is carried out
                             this.selectedWarehouse = String(this.defaultWarehouse);
+                            this.selectedWarehouseName = String(this.defaultWarehouseName);
                             this.shouldShowWarehouse = true;
                         }
                     }
@@ -6104,7 +6122,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                         (this.selectedVoucherType === AdjustedVoucherType.DebitNote && item.voucherType === AdjustedVoucherType.OpeningBalance && item.voucherBalanceType === "dr") ||
                         ((this.selectedVoucherType === AdjustedVoucherType.DebitNote || this.selectedVoucherType === AdjustedVoucherType.SalesInvoice || this.selectedVoucherType === AdjustedVoucherType.Sales || this.selectedVoucherType === AdjustedVoucherType.Payment) && (item.voucherType === AdjustedVoucherType.Journal || item.voucherType === AdjustedVoucherType.JournalVoucher) && item.voucherBalanceType === "dr") ||
                         (this.selectedVoucherType === AdjustedVoucherType.CreditNote && item.voucherType === AdjustedVoucherType.OpeningBalance && item.voucherBalanceType === "cr") ||
-                        ((this.selectedVoucherType === AdjustedVoucherType.CreditNote || this.selectedVoucherType === AdjustedVoucherType.Purchase || this.selectedVoucherType === AdjustedVoucherType.Receipt || this.selectedVoucherType === AdjustedVoucherType.AdvanceReceipt) && (item.voucherType === AdjustedVoucherType.Journal || item.voucherType === AdjustedVoucherType.JournalVoucher) && item.voucherBalanceType === "cr") || 
+                        ((this.selectedVoucherType === AdjustedVoucherType.CreditNote || this.selectedVoucherType === AdjustedVoucherType.Purchase || this.selectedVoucherType === AdjustedVoucherType.Receipt || this.selectedVoucherType === AdjustedVoucherType.AdvanceReceipt) && (item.voucherType === AdjustedVoucherType.Journal || item.voucherType === AdjustedVoucherType.JournalVoucher) && item.voucherBalanceType === "cr") ||
                         ((this.selectedVoucherType === AdjustedVoucherType.Purchase || this.selectedVoucherType === AdjustedVoucherType.PurchaseInvoice) && (item.voucherType === AdjustedVoucherType.Journal || item.voucherType === AdjustedVoucherType.JournalVoucher) && item.voucherBalanceType === "cr"))) {
                         totalAmount -= Number(item.adjustmentAmount ? item.adjustmentAmount.amountForAccount : 0);
                     } else {
@@ -6607,7 +6625,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                                 }
 
                                 this.purchaseOrders.push({ label: item.number, value: item.uniqueName, additional: { grandTotal: item.pendingDetails.grandTotal, pending: pending.join(", "), totalPending: totalPending } });
-
+                                this.filterPurchaseOrder('');
                                 this.linkedPoNumbers[item.uniqueName] = [];
                                 this.linkedPoNumbers[item.uniqueName]['voucherNumber'] = item.voucherNumber;
                                 this.linkedPoNumbers[item.uniqueName]['items'] = [];
@@ -6630,16 +6648,16 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public getPurchaseOrder(event: any, addRemove: boolean): void {
         if (event && event.length > 0) {
             let order = event[event.length - 1];
-            if (!this.selectedPoItems.includes(order.value)) {
+            if (!this.selectedPoItems.includes(order)) {
                 this.startLoader(true);
-                let getRequest = { companyUniqueName: this.selectedCompany?.uniqueName, poUniqueName: order.value };
+                let getRequest = { companyUniqueName: this.selectedCompany?.uniqueName, poUniqueName: order };
                 this.purchaseOrderService.get(getRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     if (response) {
                         if (response.status === "success" && response.body) {
                             if (this.linkedPo.includes(response.body.uniqueName)) {
                                 if (response.body && response.body.entries && response.body.entries.length > 0) {
                                     this.selectedPoItems.push(response.body.uniqueName);
-                                    this.linkedPoNumbers[order.value]['items'] = response.body.entries;
+                                    this.linkedPoNumbers[order]['items'] = response.body.entries;
                                     if (addRemove) {
                                         this.addPoItems(response.body.uniqueName, response.body.entries, order.additional.totalPending);
                                     } else {
@@ -6647,7 +6665,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                                     }
                                 } else {
                                     this.startLoader(false);
-                                    this.linkedPoNumbers[order.value]['items'] = [];
+                                    this.linkedPoNumbers[order]['items'] = [];
                                 }
                             } else {
                                 this.startLoader(false);
@@ -7043,6 +7061,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      */
     public onSelectWarehouse(warehouse: any): void {
         this.selectedWarehouse = warehouse?.uniqueName;
+        this.selectedWarehouseName = warehouse?.name;
         if (this.isPurchaseInvoice) {
             this.autoFillDeliverToWarehouseAddress(warehouse);
         }
@@ -7274,7 +7293,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      *
      * @memberof VoucherComponent
      */
-    public onFocusInvoiceDate(): void {        
+    public onFocusInvoiceDate(): void {
         this.voucherDateBeforeUpdate = this.invFormData.voucherDetails.voucherDate;
     }
 
@@ -7973,7 +7992,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @param {*} event Click event
      * @memberof VoucherComponent
      */
-     public toggleRcmCheckbox(event: any, element: string): void {
+    public toggleRcmCheckbox(event: any, element: string): void {
         let isChecked;
         if (element === "checkbox") {
             isChecked = event?.checked;
@@ -8042,5 +8061,21 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public changeRcmCheckboxState(event: any): void {
         this.isRcmEntry = !this.isRcmEntry;
         this.toggleRcmCheckbox(event, 'checkbox');
+    }
+
+    /**
+     * This will use for filter purchase orders
+     *
+     * @param {*} search
+     * @memberof VoucherComponent
+     */
+    public filterPurchaseOrder(search: any): void {
+        let filteredOptions: IOption[] = [];
+        this.purchaseOrders.forEach(option => {
+            if (typeof search !== "string" || option?.label?.toLowerCase()?.indexOf(search?.toLowerCase()) > -1) {
+                filteredOptions.push({ label: option.label, value: option.value, additional: option?.additional });
+            }
+        });
+        this.fieldFilteredOptions = filteredOptions;
     }
 }

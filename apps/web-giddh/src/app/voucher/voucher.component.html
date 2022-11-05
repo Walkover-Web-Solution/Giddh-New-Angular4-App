@@ -1012,7 +1012,7 @@
                                                 (selectedOption)="onSelectWarehouse($event)"
                                                 [allowValueReset]="true"
                                                 (onClear)="onSelectWarehouse($event)"
-                                                [defaultValue]="selectedWarehouse"
+                                                [defaultValue]="selectedWarehouseName"
                                             >
                                             </select-field>
                                         </div>
@@ -1392,41 +1392,39 @@
                                         <label>{{ localeData?.link_purchase_order }}</label>
                                     </div>
                                     <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12">
-                                        <div class="col-xl-6 col-lg-10 col-md-10 pl-0">
-                                            <mat-form-field>
-                                                <mat-select
-                                                    name="linkedPO"
-                                                    [placeholder]="localeData?.select_order_placeholder"
-                                                    [multiple]="true"
-                                                    #multiSelect
-                                                >
-                                                    <mat-option>
-                                                        <ngx-mat-select-search
-                                                            [formControl]="linkPoDropdown"
-                                                        ></ngx-mat-select-search>
-                                                    </mat-option>
-
-                                                    <mat-option
-                                                        *ngFor="let option of purchaseOrders"
-                                                        [value]="option.value"
-                                                    >
-                                                        {{ option?.label }}
-                                                    </mat-option>
-                                                </mat-select>
-                                            </mat-form-field>
-                                            <!-- <mat-select
+                                        <div class="col-xl-6 col-lg-10 col-md-10 pl-0 purchase-link">
+                                            <mat-select
                                                 name="linkedPO"
                                                 [placeholder]="localeData?.select_order_placeholder"
-                                                [(value)]="linkedPo"
                                                 [multiple]="true"
+                                                [ngModel]="linkedPo"
+                                                (ngModelChange)="getPurchaseOrder($event, true)"
+                                                [compareWith]="compareFn"
+                                                class="po-mat-salect"
                                             >
-                                                <mat-option
-                                                    *ngFor="let option of purchaseOrders"
-                                                    [value]="option.value"
-                                                    (click)="getPurchaseOrder($event, true)"
-                                                    >{{ option?.label }}
+                                                <mat-option class="po-options-line">
+                                                    <ngx-mat-select-search
+                                                        [formControl]="linkPoDropdown"
+                                                    ></ngx-mat-select-search>
                                                 </mat-option>
-                                            </mat-select> -->
+
+                                                <mat-option
+                                                    *ngFor="let option of fieldFilteredOptions"
+                                                    [value]="option.value"
+                                                    class="po-options-line"
+                                                >
+                                                    <span class="po-option-label"> {{ option?.label }}</span>
+                                                    <span class="po-option-value" *ngIf="option?.additional?.pending">
+                                                        {{ localeData?.pending }}:
+                                                        {{ option?.additional?.pending }}</span
+                                                    >
+                                                    <span class="po-option-value" *ngIf="option.additional?.grandTotal">
+                                                        {{ commonLocaleData?.app_amount }}:
+                                                        {{ option?.additional?.grandTotal }}</span
+                                                    >
+                                                </mat-option>
+                                            </mat-select>
+
                                             <!-- <sh-select
                                         [options]="purchaseOrders"
                                         [placeholder]="localeData?.select_order_placeholder"

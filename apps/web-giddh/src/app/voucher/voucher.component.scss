@@ -7,15 +7,19 @@
     @if $d== "B" {
         margin-bottom: $num;
     }
+
     @if $d== "T" {
         margin-top: $num;
     }
+
     @if $d== "L" {
         margin-left: $num;
     }
+
     @if $d== "R" {
         margin-right: $num;
     }
+
     @if $d== "A" {
         margin: $num;
     }
@@ -29,15 +33,19 @@
     @if $d== "B" {
         padding-bottom: $num;
     }
+
     @if $d== "T" {
         padding-top: $num;
     }
+
     @if $d== "L" {
         padding-left: $num;
     }
+
     @if $d== "R" {
         padding-right: $num;
     }
+
     @if $d== "A" {
         padding: $num;
     }
@@ -83,6 +91,7 @@
 
 .flex-row {
     display: flex;
+
     .flex-row-child {
         align-self: center;
         // flex-grow: 1;
@@ -93,6 +102,7 @@
 .item-unique {
     font-size: 12px;
 }
+
 // select box
 .pure-css-select-wrapper {
     position: relative;
@@ -102,6 +112,7 @@
     line-height: 3;
     overflow: hidden;
     border-radius: 0.25em;
+
     /* Reset Select */
     select {
         -webkit-appearance: none;
@@ -118,9 +129,11 @@
         padding: 0 0 0 0.5em;
         cursor: pointer;
     }
+
     select::-ms-expand {
         display: none;
     }
+
     /* Arrow */
     &::after {
         content: "\25BC";
@@ -132,10 +145,12 @@
         color: var(--color-iron);
         pointer-events: none;
     }
+
     /* Transition */
     &:hover::after {
         color: var(--color-gray);
     }
+
     &::after {
         -webkit-transition: 0.25s all ease;
         -o-transition: 0.25s all ease;
@@ -152,16 +167,19 @@
     .form-control {
         @include radius(3px);
     }
+
     textarea.form-control {
         resize: none;
         padding-left: 7px !important;
         overflow-y: auto;
     }
+
     label {
         display: block;
         font-weight: 400;
         @include marg(B, 0px);
     }
+
     &.size-175 {
         input:not([type="checkbox"]),
         select,
@@ -169,6 +187,7 @@
             width: 175px;
         }
     }
+
     &.size-240 {
         input:not([type="checkbox"]),
         select,
@@ -176,6 +195,7 @@
             width: 240px;
         }
     }
+
     &.size-340 {
         input:not([type="checkbox"]),
         select,
@@ -183,6 +203,7 @@
             width: 340px;
         }
     }
+
     &.size-380 {
         input:not([type="checkbox"]),
         select,
@@ -190,9 +211,11 @@
             width: 380px;
         }
     }
+
     &.no-margin {
         @include marg(A, 0);
     }
+
     .form-control.voucher-selector {
         width: 200px;
         text-transform: capitalize;
@@ -204,6 +227,7 @@
         // @include marg(R, 20px);
         vertical-align: top;
     }
+
     .form-control {
         width: 100%;
     }
@@ -247,6 +271,7 @@ a[type="button"] {
 // collapse
 .collapse-pane {
     padding: 0 0;
+
     .collapse-pane-heading {
         @extend .cp;
         @include marg(B, 0px);
@@ -254,12 +279,14 @@ a[type="button"] {
         display: flex;
         align-items: center;
         height: 30px;
+
         .ico-box-wrap,
         .ico-head {
             align-self: stretch;
             display: flex;
             align-items: center;
         }
+
         .ico-box {
             @include bdr(1px, solid, var(--color-common-secondary-border));
             @include box(20px, 20px);
@@ -268,6 +295,7 @@ a[type="button"] {
             align-self: center;
             display: flex;
             justify-content: center;
+
             span {
                 align-self: center;
                 font-size: 12px;
@@ -279,6 +307,7 @@ a[type="button"] {
 .action-panel-td {
     width: 80px;
     padding: 0 !important;
+
     span {
         padding: 5px;
         display: inline-block;
@@ -311,9 +340,11 @@ a[type="button"] {
 .table-sec {
     display: table;
     width: 100%;
+
     .table-row {
         display: table-row;
         vertical-align: top;
+
         .table-cell {
             // line-height: 40px;
             vertical-align: middle;
@@ -321,9 +352,11 @@ a[type="button"] {
             padding-bottom: 7px;
             display: table-cell;
         }
+
         .figure-cell {
             width: 140px;
             padding-right: 0;
+
             input {
                 max-width: 130px;
                 float: right;
@@ -373,9 +406,11 @@ ng-select.splSales {
     border: 1px solid var(--color-common-secondary-border);
     padding: 5px;
     padding-bottom: 10px;
+
     &.disabled {
         background: var(--color-dark-fog);
     }
+
     textarea {
         border: none;
         width: 100%;
@@ -383,6 +418,7 @@ ng-select.splSales {
         height: auto !important;
         overflow: hidden;
     }
+
     :focus {
         outline: none !important;
     }
@@ -420,20 +456,24 @@ textarea:focus {
                 padding: 10px 8px;
                 white-space: nowrap;
                 text-align: right;
+
                 &:first-child {
                     // border-left: none !important;
                     text-align: left;
                 }
+
                 &:nth-child(2) {
                     text-align: left;
                     white-space: normal;
                     width: 350px;
                 }
+
                 &:nth-child(3) {
                     white-space: normal;
                     width: 100px;
                     min-width: 100px;
                 }
+
                 &:last-child {
                     //border-right: none !important;
                     vertical-align: middle !important;
@@ -442,6 +482,7 @@ textarea:focus {
             }
         }
     }
+
     > tbody {
         > tr {
             > td {
@@ -449,14 +490,17 @@ textarea:focus {
                 padding: 10px 8px;
                 white-space: nowrap;
                 position: relative;
+
                 &:nth-child(2) {
                     white-space: normal;
                     width: 350px;
                 }
+
                 &:nth-child(3) {
                     white-space: normal;
                     width: 100px;
                 }
+
                 &.error-box.item-tax {
                     border: 2px solid var(--color-danger) !important;
                 }
@@ -538,6 +582,7 @@ textarea:focus {
     max-width: 330px;
     text-align: center;
     line-height: 45px;
+
     em {
         top: -7px;
         position: absolute;
@@ -545,6 +590,7 @@ textarea:focus {
         left: 0;
         overflow: hidden;
     }
+
     .delete-image {
         top: -7px;
         position: absolute;
@@ -748,6 +794,7 @@ a.copy-invoice img {
 .p-0 {
     padding: 0;
 }
+
 .shipping-address textarea {
     border-bottom: 1px solid var(--color-iron) !important;
 }
@@ -864,6 +911,7 @@ span.edit-icon {
     box-shadow: 0 6px 12px var(--color-primary-common-box-shadow);
     right: 0;
     z-index: 4;
+
     .btn-group {
         .cancel-button {
             color: var(--color-primary-basic-button-text);
@@ -954,6 +1002,7 @@ table.table.customer-invoice-table {
     margin-bottom: 0;
     width: 100%;
 }
+
 .customer-invoice-table td {
     padding: 8px 15px;
 }
@@ -999,11 +1048,13 @@ section.static-invoice-table {
 .wrap-billing-address.clearfix {
     margin-top: 15px;
     margin-bottom: 5px;
+
     input,
     .sales-country-label,
     sales-sh-select input {
         padding: 0 !important;
     }
+
     .bottom-border-only {
         padding-left: 0 !important;
     }
@@ -1088,10 +1139,12 @@ section.new-table {
 .total-amount-description {
     display: none;
 }
+
 .custom-file-label::after,
 .dropdown-toggle::after {
     display: none !important;
 }
+
 // card css
 .card-invoice-table-wrapper {
     max-width: 400px;
@@ -1195,6 +1248,7 @@ section.new-table {
     border-bottom: 1px solid var(--color-secondary-input-bar-border);
     margin-bottom: 1px !important;
 }
+
 .loader-class {
     height: calc(100% - 150px);
     display: flex;
@@ -1607,19 +1661,23 @@ span.eligible-ITC {
     cursor: pointer;
     padding-top: 5px;
     display: inline-block;
+
     span {
         color: var(--color-blue);
         font-size: 10px;
     }
 }
+
 .deposit-payment-mode {
     display: flex;
     align-items: flex-start;
     flex-direction: row-reverse;
+
     label {
         padding-bottom: 0;
     }
 }
+
 .payment-mode {
     select-field {
         float: right;
@@ -1628,11 +1686,13 @@ span.eligible-ITC {
         text-align: left;
     }
 }
+
 .linking-dropdown {
     .linking-item {
         flex-direction: column;
     }
 }
+
 .remove-invoice {
     display: inline-flex;
     align-items: center;
@@ -1640,31 +1700,38 @@ span.eligible-ITC {
     margin-right: 15px;
     height: 33px;
     font-size: 14px;
+
     span:first-child {
         font-size: 16px;
         vertical-align: middle;
         color: var(--color-abbey);
     }
+
     .label {
         vertical-align: middle;
         color: var(--color-abbey);
         font-size: 13px;
     }
 }
+
 .for-mobile-screen {
     display: none;
 }
+
 .payment-mode-amount {
     flex-direction: row-reverse;
 }
+
 .dropdown-menu-right {
     top: 0 !important;
 }
+
 #button-dropup {
     .caret {
         transform: rotate(180deg);
     }
 }
+
 .height-rate {
     height: 1px;
 }
@@ -1674,11 +1741,13 @@ span.eligible-ITC {
         min-height: 100px;
     }
 }
+
 .bill-add {
     label {
         min-width: 110px;
     }
 }
+
 .change-address-dropdown {
     ul {
         margin-top: 22px;
@@ -1687,6 +1756,7 @@ span.eligible-ITC {
         right: auto !important;
         max-height: 200px;
         overflow-y: auto;
+
         li {
             a {
                 white-space: normal;
@@ -1695,6 +1765,7 @@ span.eligible-ITC {
         }
     }
 }
+
 #button-focus-proforma {
     .btn {
         &:focus {
@@ -1704,6 +1775,7 @@ span.eligible-ITC {
         }
     }
 }
+
 /* resposnvie */
 @media (max-width: 1199px) {
     .invoice-date-due-date {
@@ -1711,50 +1783,63 @@ span.eligible-ITC {
         max-width: 430px;
     }
 }
+
 @media (min-width: 768px) {
     .table.customer-invoice-table .form-group {
         display: block;
         margin-bottom: 0;
     }
+
     .form-inline .wrap-billing-address .form-group {
         display: block !important;
     }
+
     .form-inline .wrap-billing-address .form-group.deliver-same-address {
         display: flex !important;
     }
+
     .pro-invoice-heading {
         margin-left: 0;
     }
 }
+
 @media (max-width: 1199px) {
     .invoice-date-due-date {
         margin-left: 40%;
     }
+
     .form-inline .wrap-billing-address .form-group {
         padding-right: 12px;
     }
 }
+
 @media (max-width: 990px) {
     .search-arrow-image {
         left: 181px;
         max-width: 280px;
     }
+
     .wrap-billing-address .bill-add {
         width: 100%;
     }
+
     .customer-invoice-table label {
         font-size: 13px;
     }
+
     .invoice-date-due-date {
         display: none;
     }
+
     .wrapper-customer-table .col-sm-2 {
         padding-right: 0;
     }
+
     .cash-invoice-input {
         max-width: 63% !important;
         width: 100% !important;
     }
+
     .for-mobile-screen {
         display: flex !important;
         float: right;
@@ -1770,9 +1855,11 @@ span.eligible-ITC {
         position: relative;
         right: 35px;
     }
+
     .customer-invoice-form::before {
         top: 130px;
     }
+
     .customer-invoice-form-purchase::before {
         top: 132px;
     }
@@ -1785,20 +1872,24 @@ span.eligible-ITC {
         padding: 0 15px;
         display: block;
     }
+
     .balance-due-absolute {
         display: none;
     }
+
     .collapse-pane {
         .form-group {
             margin-bottom: 15px !important;
         }
     }
+
     .card-invoice-table-wrapper,
     .add-btn,
     .other-detail-card,
     .total-amount-description {
         display: block;
     }
+
     .customer-invoice-table.bg-white {
         margin-top: 10px;
         border-bottom: none;
@@ -1811,15 +1902,18 @@ span.eligible-ITC {
         padding-right: 15px;
         padding-left: 15px;
     }
+
     .static-invoice-table.sales-invoice-table {
         display: none;
     }
+
     .card-invoice-table-wrapper,
     .other-detail-card,
     .total-amount-description {
         width: 100%;
         max-width: 100%;
     }
+
     .other-taxes-input {
         width: 99px;
         background-color: var(--color-dark-fog);
@@ -1827,13 +1921,16 @@ span.eligible-ITC {
         padding: 3px;
         font-size: 13px;
     }
+
     .other-taxes div {
         align-items: flex-end !important;
         justify-content: flex-end !important;
     }
+
     .other-taxes {
         text-align: right;
     }
+
     .billing-address .col-sm-6.pd {
         width: 100%;
     }
@@ -1843,9 +1940,11 @@ span.eligible-ITC {
     .wrapper-customer-table {
         padding-top: 0 !important;
     }
+
     .search-arrow-image {
         left: 143px;
     }
+
     .for-mobile-screen {
         display: flex !important;
         position: absolute;
@@ -1853,14 +1952,17 @@ span.eligible-ITC {
         float: none;
     }
 }
+
 @media (max-width: 767px) {
     .mobile-view-padding {
         padding: 0 15px;
         margin-bottom: 10px;
     }
+
     .more-btn-dropdown {
         padding-top: 0 !important;
     }
+
     .invoice-date-due-date {
         position: static;
         width: 100%;
@@ -1872,14 +1974,17 @@ span.eligible-ITC {
     .sales-proforma-estimate.customer-invoice-form::before {
         top: 135px;
     }
+
     .search-arrow-image {
         left: 15px;
         top: 80px;
     }
+
     .sales-proforma-estimate .search-arrow-image {
         left: 15px;
         top: 130px;
     }
+
     .for-multi-currency.sales-proforma-estimate .search-arrow-image {
         top: 160px;
     }
@@ -1889,12 +1994,15 @@ span.eligible-ITC {
         max-width: 100%;
         padding-right: 30px !important;
     }
+
     .sp-rupees {
         font-size: 20px;
     }
+
     .wrap-other-tax {
         padding-top: 2px;
     }
+
     .cash-invoice-input {
         max-width: 100% !important;
         width: 100% !important;
@@ -1907,6 +2015,7 @@ span.eligible-ITC {
         ul {
             left: auto !important;
             right: 0 !important;
+
             li {
                 a {
                     white-space: normal;
@@ -1915,23 +2024,29 @@ span.eligible-ITC {
             }
         }
     }
+
     #actionPane .btn-group.dropup {
         display: block;
         margin-top: 5px;
     }
+
     #actionPane .d-inline-block {
         display: block !important;
     }
+
     #actionPane .btn-danger {
         margin-bottom: 5px;
     }
+
     #actionPane .update-mode {
         display: flex;
         flex-direction: column;
     }
+
     #actionPane .generate-invoice {
         min-width: 189px;
     }
+
     .last-estimate-modal {
         left: auto;
         right: 30px;
@@ -1942,16 +2057,20 @@ span.eligible-ITC {
     .quantity-unit-w100 .col-xs-6 {
         width: 100%;
     }
+
     .search-arrow-image {
         max-width: 270px;
     }
+
     .qty-unit .col-xs-6:first-child {
         padding-right: 10px !important;
         margin-bottom: 10px;
     }
+
     .other-detail-card .form-group.col-xs-4 {
         width: 50%;
     }
+
     .deposit-section {
         transform: translateX(100px);
     }
@@ -1961,31 +2080,38 @@ span.eligible-ITC {
     .deposit-section {
         transform: translateX(30px);
     }
+
     .total-amount-description .table-sec {
         display: block;
         width: 100%;
     }
+
     .total-amount-description .table-sec .table-row {
         display: flex;
         justify-content: space-between;
     }
+
     .total-amount-description .table-sec .table-row .table-cell {
         min-width: 160px;
         text-align: left;
     }
+
     .total-amount-description .table-sec .table-row .figure-cell {
         min-width: 150px;
         padding-right: 0 !important;
         text-align: right;
     }
+
     .balance-due-text {
         text-align: right;
     }
+
     #actionPane .update-mode {
         justify-content: center;
         align-items: center;
         width: 100%;
     }
+
     label.checkbox-custom-label {
         line-height: initial !important;
         left: 0;
@@ -1993,27 +2119,34 @@ span.eligible-ITC {
         vertical-align: middle;
     }
 }
+
 .due-amount-field {
     width: 50% !important;
 }
+
 .create-send-menu {
     min-width: 160px !important;
+
     a {
         color: var(--color-dropdown-list);
         background-color: var(--color-dropdown-primary-background);
         font-size: 16px;
+
         &:hover {
             color: var(--color-dropdown-list-hover-text) !important;
             background: var(--color-dropdown-list-hover-background) !important;
         }
     }
 }
+
 .bottom-dropdown-menu {
 }
+
 @media (max-width: 320px) {
     .deposit-section {
         transform: translateX(20px);
     }
+
     .total-amount-description .table-sec .table-row .figure-cell {
         padding-right: 20px !important;
     }
@@ -2026,16 +2159,19 @@ span.eligible-ITC {
     -moz-animation: spin 4s linear infinite;
     animation: spin 4s linear infinite;
 }
+
 @-moz-keyframes spin {
     100% {
         -moz-transform: rotate(360deg);
     }
 }
+
 @-webkit-keyframes spin {
     100% {
         -webkit-transform: rotate(360deg);
     }
 }
+
 @keyframes spin {
     100% {
         -webkit-transform: rotate(360deg);
