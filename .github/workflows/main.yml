@@ -4,56 +4,56 @@ name: CI
 
 # Controls when the action will run.
 on:
-  # Triggers the workflow on push or pull request events but only for the two branches
-  push:
-    branches:
-      - beta-stage
-      - beta-branch
-      - production
-  pull_request:
-    branches:
-      - beta-stage
-      - beta-branch
-      - production
+    # Triggers the workflow on push or pull request events but only for the two branches
+    push:
+        branches:
+            - beta-stage
+            - beta-branch
+            - production
+    pull_request:
+        branches:
+            - beta-stage
+            - beta-branch
+            - production
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  tests:
-    runs-on: windows-latest
-    name: Giddh test cases
-    env:
-      # prevents extra Cypress installation progress messages
-      CI: 1
-      # avoid warnings like "tput: No value for $TERM and no -T specified"
-      TERM: xterm
-    steps:
-      # Checkout pull request HEAD commit
-      - uses: actions/checkout@v2
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
-      # install NPM dependencies but SKIP Cypress binary installation
-      # see https://on.cypress.io/installing-cypress#Environment-variables
-      - uses: bahmutov/npm-install@v1
-        with:
-          useLockFile: false
-          install-command: npm i --force
+    tests:
+        runs-on: windows-latest
+        name: Giddh test cases
         env:
-          CYPRESS_INSTALL_BINARY: 0
-      # confirm there is no Cypress installed
-      - run: npx cypress cache path
-      # should return empty list of installed versions
-      - run: npx cypress cache list
-      # restore / cache the binary ourselves on Linux
-      # see https://github.com/actions/cache
-      - name: Cache Cypress
-        id: cache-cypress
-        uses: actions/cache@v1
-        with:
-          path: ~/.cache/Cypress
-          key: cypress-cache-v2-${{ runner.os }}-${{ hashFiles('**/package.json') }}
-      # now let's install Cypress binary
-      - run: npx cypress install
-      - run: npx cypress cache list
-      # and run Cypress tests
-      - run: npm run cy:run1
-      # Cypress binary will be cached after successful workflow finish
+            # prevents extra Cypress installation progress messages
+            CI: 1
+            # avoid warnings like "tput: No value for $TERM and no -T specified"
+            TERM: xterm
+        steps:
+            # Checkout pull request HEAD commit
+            - uses: actions/checkout@v3
+              with:
+                  ref: ${{ github.event.pull_request.head.sha }}
+            # install NPM dependencies but SKIP Cypress binary installation
+            # see https://on.cypress.io/installing-cypress#Environment-variables
+            - uses: bahmutov/npm-install@v1
+              with:
+                  useLockFile: false
+                  install-command: npm i --force
+              env:
+                  CYPRESS_INSTALL_BINARY: 0
+            # confirm there is no Cypress installed
+            - run: npx cypress cache path
+            # should return empty list of installed versions
+            - run: npx cypress cache list
+            # restore / cache the binary ourselves on Linux
+            # see https://github.com/actions/cache
+            - name: Cache Cypress
+              id: cache-cypress
+              uses: actions/cache@v1
+              with:
+                  path: ~/.cache/Cypress
+                  key: cypress-cache-v2-${{ runner.os }}-${{ hashFiles('**/package.json') }}
+            # now let's install Cypress binary
+            - run: npx cypress install
+            - run: npx cypress cache list
+            # and run Cypress tests
+            - run: npm run cy:run1
+            # Cypress binary will be cached after successful workflow finish
