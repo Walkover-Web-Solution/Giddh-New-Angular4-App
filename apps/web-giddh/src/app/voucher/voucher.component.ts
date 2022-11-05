@@ -67,7 +67,7 @@ import { auditTime, debounceTime, delay, distinctUntilChanged, filter, take, tak
 import { IOption } from '../theme/ng-select/option.interface';
 import { combineLatest, Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
-import { NgForm } from '@angular/forms';
+import { FormControl, NgForm } from '@angular/forms';
 import { DiscountListComponent } from '../sales/discount-list/discountList.component';
 import { IContentCommon, InvoicePreviewDetailsVm } from '../models/api-models/Invoice';
 import { TaxResponse } from '../models/api-models/Company';
@@ -654,6 +654,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public openProductSelectionDropdown: boolean = false;
     /** This will hold selected cash account */
     public selectedBankAccount: any = 'Cash';
+    public linkPoDropdown: FormControl = new FormControl();
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we

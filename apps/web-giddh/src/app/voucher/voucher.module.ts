@@ -43,6 +43,7 @@ import { VoucherPrintInPlaceComponent } from "./components/voucher-print-inplace
 import { VoucherRendererComponent } from "./voucher-renderer.component";
 import { VoucherComponent } from "./voucher.component";
 import { VoucherRoutingModule } from "./voucher.routing.module";
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 
 
 @NgModule({
@@ -90,7 +91,8 @@ import { VoucherRoutingModule } from "./voucher.routing.module";
         MatFormFieldModule,
         MatInputModule,
         MatRadioModule,
-        FormFieldsModule
+        FormFieldsModule,
+        NgxMatSelectSearchModule
     ],
     exports: [VoucherComponent],
     declarations: [

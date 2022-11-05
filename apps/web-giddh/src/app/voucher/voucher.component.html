@@ -1012,7 +1012,7 @@
                                                 (selectedOption)="onSelectWarehouse($event)"
                                                 [allowValueReset]="true"
                                                 (onClear)="onSelectWarehouse($event)"
-                                                [selectedValue]="selectedWarehouse"
+                                                [defaultValue]="selectedWarehouse"
                                             >
                                             </select-field>
                                         </div>
@@ -1393,7 +1393,28 @@
                                     </div>
                                     <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12">
                                         <div class="col-xl-6 col-lg-10 col-md-10 pl-0">
-                                            <mat-select
+                                            <mat-form-field>
+                                                <mat-select
+                                                    name="linkedPO"
+                                                    [placeholder]="localeData?.select_order_placeholder"
+                                                    [multiple]="true"
+                                                    #multiSelect
+                                                >
+                                                    <mat-option>
+                                                        <ngx-mat-select-search
+                                                            [formControl]="linkPoDropdown"
+                                                        ></ngx-mat-select-search>
+                                                    </mat-option>
+
+                                                    <mat-option
+                                                        *ngFor="let option of purchaseOrders"
+                                                        [value]="option.value"
+                                                    >
+                                                        {{ option?.label }}
+                                                    </mat-option>
+                                                </mat-select>
+                                            </mat-form-field>
+                                            <!-- <mat-select
                                                 name="linkedPO"
                                                 [placeholder]="localeData?.select_order_placeholder"
                                                 [(value)]="linkedPo"
@@ -1405,7 +1426,7 @@
                                                     (click)="getPurchaseOrder($event, true)"
                                                     >{{ option?.label }}
                                                 </mat-option>
-                                            </mat-select>
+                                            </mat-select> -->
                                             <!-- <sh-select
                                         [options]="purchaseOrders"
                                         [placeholder]="localeData?.select_order_placeholder"
