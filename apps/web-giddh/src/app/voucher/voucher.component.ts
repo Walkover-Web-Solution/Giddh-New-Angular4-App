@@ -1063,8 +1063,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         if (!this.isUpdateMode) {
             this.addBlankRow(null);
             this.selectedWarehouse = String(this.defaultWarehouse);
-            console.log(this.selectedWarehouse);
-            
         }
 
         this.uploadInput = new EventEmitter<UploadInput>();
@@ -5243,8 +5241,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         return voucherClassConversion;
     }
 
-    public updateExchangeRate(val) {
-        val = (val) ? val?.replace(this.baseCurrencySymbol, '') : '';
+    public updateExchangeRate(val: any): void {
+        val = (val) ? String(val)?.replace(this.baseCurrencySymbol, '') : '';
         let total = (val) ? (parseFloat(this.generalService.removeSpecialCharactersFromAmount(val)) || 0) : 0;
         if (this.isMulticurrencyAccount) {
             this.exchangeRate = total / this.invFormData.voucherDetails.grandTotal || 0;

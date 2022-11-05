@@ -41,6 +41,8 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public allowValueReset: boolean = false;
     /** True if we need to show value also with label */
     @Input() public showValueInLabel: boolean = false;
+    /** True if we need to show stock unique name also with label */
+    @Input() public hasStock: boolean = false;
     /** Emits the scroll to bottom event when pagination is required  */
     @Output() public scrollEnd: EventEmitter<void> = new EventEmitter();
     /** Emits dynamic searched query */
@@ -207,10 +209,10 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
-   * Emits true if create new option is selected
-   *
-   * @memberof SelectFieldComponent
-   */
+     * Emits true if create new option is selected
+     *
+     * @memberof SelectFieldComponent
+     */
     public createNewRecord(): void {
         this.trigger?.closePanel();
         this.createOption.emit(true);

@@ -207,18 +207,7 @@
                                                                         invoiceType !== 'debit note' &&
                                                                         invoiceType !== 'credit note'))
                                                             "
-                                                            [defaultValue]="
-                                                                isUpdateMode &&
-                                                                invoiceType !== 'sales' &&
-                                                                invoiceType !== 'cash' &&
-                                                                invoiceType !== 'purchase' &&
-                                                                (voucherApiVersion === 1 ||
-                                                                    (voucherApiVersion === 2 &&
-                                                                        invoiceType !== 'debit note' &&
-                                                                        invoiceType !== 'credit note'))
-                                                                    ? invFormData.voucherDetails.customerName
-                                                                    : ''
-                                                            "
+                                                            [defaultValue]="invFormData.voucherDetails.customerName"
                                                             [createNewText]="customerNotFoundText"
                                                             [enableDynamicSearch]="true"
                                                             [showValueInLabel]="true"
@@ -2400,7 +2389,8 @@
                                                             false,
                                                             false,
                                                             entryIdx
-                                                        )
+                                                        );
+                                                        noResultsFoundLabel = localeData?.search_acc
                                                     "
                                                     [defaultValue]="
                                                         transaction.stockDetails && transaction.stockDetails.name
@@ -2413,8 +2403,8 @@
                                                     [enableDynamicSearch]="true"
                                                     (dynamicSearchedQuery)="onSearchQueryChanged($event, 1, 'item')"
                                                     (onClear)="onClearSalesAccount(transaction)"
-                                                    (onHide)="noResultsFoundLabel = localeData?.search_acc"
                                                     [showValueInLabel]="true"
+                                                    [hasStock]="true"
                                                 >
                                                 </select-field>
                                             </div>
@@ -3293,19 +3283,20 @@
                                         </div>
 
                                         <div class="table-cell figure-cell">
-                                            <input
+                                            <text-field
                                                 #grandTotalInr
-                                                type="text"
-                                                class="form-control"
-                                                name="grandTotalMulDum"
+                                                [type]="'text'"
+                                                [cssClass]="'form-control mat-field-border'"
+                                                [name]="'grandTotalMulDum'"
                                                 [prefix]="baseCurrencySymbol"
                                                 [suffix]="selectedSuffixForCurrency"
                                                 [mask]="inputMaskFormat"
+                                                [useMask]="true"
                                                 [(ngModel)]="grandTotalMulDum"
-                                                (blur)="
+                                                (change)="
                                                     updateExchangeRate(grandTotalInr.value); recalculateConvertedTotal()
                                                 "
-                                            />
+                                            ></text-field>
                                         </div>
                                     </div>
 

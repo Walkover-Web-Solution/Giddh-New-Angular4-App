@@ -13,6 +13,7 @@ import { TextFieldComponent } from "./text-field/text-field.component";
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { DigitsOnlyModule } from "../../shared/helpers/directives/digitsOnly/digitsOnly.module";
 import { TranslateDirectiveModule } from "../translate/translate.directive.module";
+import { NgxMaskModule } from "../../shared/helpers/directives/ngx-mask";
 
 @NgModule({
     declarations: [
@@ -32,7 +33,8 @@ import { TranslateDirectiveModule } from "../translate/translate.directive.modul
         DecimalDigitsModule,
         MatTooltipModule,
         TranslateDirectiveModule,
-        DigitsOnlyModule
+        DigitsOnlyModule,
+        NgxMaskModule
     ],
     exports: [
         TextFieldComponent,
