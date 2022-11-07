@@ -3791,6 +3791,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 this.invFormData.accountDetails.uniqueName = event.value;
             }
             this.depositAccountUniqueName = event.value;
+
             if (event.additional) {
                 // If currency of item is null or undefined then treat it to be equivalent of company currency
                 event.additional['currency'] = event.additional.currency || this.companyCurrency;
@@ -5234,7 +5235,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
             if (voucherClassConversion.purchaseOrderDetails && voucherClassConversion.purchaseOrderDetails.length > 0) {
                 voucherClassConversion.purchaseOrderDetails.forEach(order => {
-                    this.linkedPo.push(order?.uniqueName);
+                    this.linkedPo.push({ label: order.number, value: order?.uniqueName, additional: { amount: order.grandTotal?.amountForAccount } });
                     this.selectedPoItems.push(order?.uniqueName);
 
                     if (!this.linkedPoNumbers[order?.uniqueName]) {
@@ -6529,6 +6530,12 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             groups += ", loanandoverdraft";
         }
         this.salesService.getAccountsWithCurrency(groups, `${customerCurrency}, ${this.companyCurrency}`).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+            const bankAccounts = data?.body?.results?.filter(response => response?.uniqueName == this.selectedBankAccount.toLowerCase());
+            if (this.invoiceType == VoucherTypeEnum.cash) {
+                if (bankAccounts.length > 0) {
+                    this.onSelectPaymentMode({ label: bankAccounts[0]?.name, value: bankAccounts[0]?.uniqueName, additional: bankAccounts[0] });
+                }
+            }
             this.bankAccounts$ = observableOf(this.updateBankAccountObject(data));
         });
     }
@@ -6648,24 +6655,25 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public getPurchaseOrder(event: any, addRemove: boolean): void {
         if (event && event.length > 0) {
             let order = event[event.length - 1];
-            if (!this.selectedPoItems.includes(order)) {
+            if (!this.selectedPoItems.includes(order.value)) {
                 this.startLoader(true);
-                let getRequest = { companyUniqueName: this.selectedCompany?.uniqueName, poUniqueName: order };
+                let getRequest = { companyUniqueName: this.selectedCompany?.uniqueName, poUniqueName: order?.value };
                 this.purchaseOrderService.get(getRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     if (response) {
                         if (response.status === "success" && response.body) {
-                            if (this.linkedPo.includes(response.body.uniqueName)) {
+                            let linkedPo = this.linkedPo?.map(po => { return po?.value });
+                            if (linkedPo.includes(response.body.uniqueName)) {
                                 if (response.body && response.body.entries && response.body.entries.length > 0) {
                                     this.selectedPoItems.push(response.body.uniqueName);
-                                    this.linkedPoNumbers[order]['items'] = response.body.entries;
+                                    this.linkedPoNumbers[order?.value]['items'] = response.body.entries;
                                     if (addRemove) {
-                                        this.addPoItems(response.body.uniqueName, response.body.entries, order.additional.totalPending);
+                                        this.addPoItems(response.body.uniqueName, response.body.entries, order?.additional?.totalPending);
                                     } else {
                                         this.startLoader(false);
                                     }
                                 } else {
                                     this.startLoader(false);
-                                    this.linkedPoNumbers[order]['items'] = [];
+                                    this.linkedPoNumbers[order?.value]['items'] = [];
                                 }
                             } else {
                                 this.startLoader(false);
@@ -6696,7 +6704,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      */
     public addPoItems(poUniqueName: string, entries: any, totalPending: number): void {
         this.startLoader(true);
-
         let blankItemIndex = this.invFormData.entries.findIndex(entry => !entry.transactions[0].accountUniqueName);
         let isBlankItemPresent;
         let startIndex = this.invFormData.entries?.length;
@@ -6797,8 +6804,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             this.startLoader(true);
             setTimeout(() => {
                 let selectedPoItems = [];
+                let linkedPo = this.linkedPo?.map(po => { return po?.value });
                 this.selectedPoItems.forEach(order => {
-                    if (!this.linkedPo.includes(order)) {
+                    if (!linkedPo.includes(order)) {
                         let entries = this.linkedPoNumbers[order]['items'];
 
                         if (entries && entries.length > 0 && this.invFormData.entries && this.invFormData.entries.length > 0) {

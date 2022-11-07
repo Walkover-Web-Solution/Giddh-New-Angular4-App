@@ -166,6 +166,19 @@ $custom-typography: mat-typography-config(
         overflow-y: auto !important;
         min-width: 230px;
     }
+
+    .multicurrency-grandtotal {
+        width: 80%;
+        float: right;
+    }
+
+    .exchange-rate-original {
+        display: inline-block;
+        width: 80px;
+        height: 26px !important;
+        text-align: center;
+        border-radius: 5px;
+    }
 }
 
 .tax-control-menu {
@@ -203,6 +216,10 @@ $custom-typography: mat-typography-config(
         height: 30px !important;
         margin-top: 0;
         font-size: 14px;
+    }
+
+    .mat-datepicker-input:disabled {
+        margin-top: 5px !important;
     }
 }
 
@@ -7757,6 +7774,7 @@ highcharts-chart {
         border: 1px solid var(--color-secondary-input-bar-border);
         border-radius: 5px !important;
         padding: 5px;
+        font-size: 12px;
     }
 
     .po-options-line {

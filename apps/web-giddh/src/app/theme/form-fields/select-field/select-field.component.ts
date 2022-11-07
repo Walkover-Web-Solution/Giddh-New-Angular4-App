@@ -158,7 +158,7 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy {
      */
     private filterOptions(search: string): void {
         let filteredOptions: IOption[] = [];
-        this.options.forEach(option => {
+        this.options?.forEach(option => {
             if (typeof search !== "string" || option?.label?.toLowerCase()?.indexOf(search?.toLowerCase()) > -1) {
                 filteredOptions.push({ label: option.label, value: option.value, additional: option });
             }
