@@ -153,6 +153,29 @@
                             <div class="col-sm-3">
                                 <div class="form-group">
                                     <div class="select-error select-caret relative">
+                                        <!-- <select-field
+                                            [readonly]="
+                                                shouldDisableEdit(entry) || entry.linkingAdjustment ? 'disabled' : null
+                                            "
+                                            *ngIf="voucherApiVersion === 2"
+                                            [cssClass]="'form-control mat-field-border text-left'"
+                                            [name]="'voucherName{{ entry.uniqueName }}'"
+                                            [placeholder]="localeData?.select_voucher"
+                                            [options]="adjustVoucherOptions$ | async"
+                                            (selectedOption)="selectVoucher($event, entry, entryIdx)"
+                                            [defaultValue]="entry.voucherNumber"
+                                            [enableDynamicSearch]="true"
+                                            (dynamicSearchedQuery)="
+                                                searchReferenceVoucher = $event; resetInvoiceList(); loadVouchers()
+                                            "
+                                            (onClear)="onClearSalesAccount(transaction)"
+                                            [showValueInLabel]="true"
+                                            [hasStock]="true"
+                                            [(ngModel)]="entry.uniqueName"
+                                            name="voucherName{{ entry.uniqueName }}"
+                                            (click)="clickSelectVoucher(entryIdx, adjustAdvancePaymentForm)"
+                                        >
+                                        </select-field> -->
                                         <sh-select
                                             *ngIf="voucherApiVersion === 2"
                                             [disabled]="

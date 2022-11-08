@@ -509,7 +509,8 @@
                                                                                     commonLocaleData?.app_gstin
                                                                                 "
                                                                                 (input)="autoFillShippingDetails()"
-                                                                            ></text-field>
+                                                                            >
+                                                                            </text-field>
                                                                             <text-field
                                                                                 [maxlength]="15"
                                                                                 autocomplete="None"
@@ -531,7 +532,8 @@
                                                                                     commonLocaleData?.app_trn
                                                                                 "
                                                                                 (input)="autoFillShippingDetails()"
-                                                                            ></text-field>
+                                                                            >
+                                                                            </text-field>
                                                                         </div>
                                                                         <!-- static pin code  -->
                                                                         <div
@@ -560,7 +562,8 @@
                                                                                             .billingDetails.pincode
                                                                                     "
                                                                                     [allowDecimalDigitsOnly]="true"
-                                                                                ></text-field>
+                                                                                >
+                                                                                </text-field>
                                                                             </div>
                                                                         </div>
                                                                         <!-- static pin code end-->
@@ -792,7 +795,8 @@
                                                                                                 .shippingDetails.pincode
                                                                                         "
                                                                                         [allowDecimalDigitsOnly]="true"
-                                                                                    ></text-field>
+                                                                                    >
+                                                                                    </text-field>
                                                                                 </div>
                                                                             </div>
                                                                             <!-- static pin code end-->
@@ -1211,7 +1215,8 @@
                                                                                     autoFillCompanyShippingDetails()
                                                                                 "
                                                                                 [allowDecimalDigitsOnly]="true"
-                                                                            ></text-field>
+                                                                            >
+                                                                            </text-field>
                                                                         </div>
                                                                     </div>
                                                                     <!-- static pin code end-->
@@ -1365,7 +1370,8 @@
                                                                                             .shippingDetails.pincode
                                                                                     "
                                                                                     [allowDecimalDigitsOnly]="true"
-                                                                                ></text-field>
+                                                                                >
+                                                                                </text-field>
                                                                             </div>
                                                                         </div>
                                                                         <!-- static pin code end-->
@@ -1403,9 +1409,8 @@
                                                 class="po-mat-salect"
                                             >
                                                 <mat-option class="po-options-line">
-                                                    <ngx-mat-select-search
-                                                        [formControl]="linkPoDropdown"
-                                                    ></ngx-mat-select-search>
+                                                    <ngx-mat-select-search [formControl]="linkPoDropdown">
+                                                    </ngx-mat-select-search>
                                                 </mat-option>
 
                                                 <mat-option
@@ -1450,7 +1455,8 @@
                                                             : null
                                                     "
                                                     [(ngModel)]="invFormData.voucherDetails.voucherNumber"
-                                                ></text-field>
+                                                >
+                                                </text-field>
                                                 <ng-container *ngIf="isCreditNote || isDebitNote">
                                                     <sh-select
                                                         *ngIf="voucherApiVersion === 2"
@@ -1665,7 +1671,8 @@
                                                             : null
                                                     "
                                                     [(ngModel)]="invFormData.voucherDetails.voucherNumber"
-                                                ></text-field>
+                                                >
+                                                </text-field>
                                             </div>
                                         </div>
                                     </div>
@@ -2405,7 +2412,6 @@
                                                     {{ transaction.sku_and_customfields }}
                                                 </p>
                                             </div>
-
                                             <!-- region entry date/ hsncode -->
                                             <div class="date-hsn-code">
                                                 <div class="row mr-0 ml-0">
@@ -2478,21 +2484,21 @@
                                                                 </span>
                                                             </div>
                                                             <div class="hsn-code-dropdown" *ngIf="hsnDropdownShow">
-                                                                <mat-radio-group class="d-flex mb-2">
+                                                                <mat-radio-group
+                                                                    class="d-flex mb-2"
+                                                                    [(ngModel)]="transaction.showCodeType"
+                                                                    name="showCodeType{{ entryIdx }}"
+                                                                >
                                                                     <mat-radio-button
                                                                         color="primary"
-                                                                        name="showCodeType{{ entryIdx }}"
                                                                         id="hsnCodeType{{ entryIdx }}"
-                                                                        [(ngModel)]="transaction.showCodeType"
-                                                                        value="hsn"
+                                                                        [value]="'hsn'"
                                                                         >{{ commonLocaleData?.app_hsn_code }}
                                                                     </mat-radio-button>
                                                                     <mat-radio-button
                                                                         color="primary"
-                                                                        name="showCodeType{{ entryIdx }}"
                                                                         id="sacCodeType{{ entryIdx }}"
-                                                                        [(ngModel)]="transaction.showCodeType"
-                                                                        value="sac"
+                                                                        [value]="'sac'"
                                                                         >{{ commonLocaleData?.app_sac_code }}
                                                                     </mat-radio-button>
                                                                 </mat-radio-group>
@@ -2546,17 +2552,6 @@
                                         *ngIf="!currentVoucherFormDetails || currentVoucherFormDetails?.quantityAllowed"
                                         class="text-right stock-unit"
                                     >
-                                        <!-- <input
-                                            type="text"
-                                            [disabled]="!transaction.isStockTxn"
-                                            (blur)="handleQuantityBlur(entry, transaction)"
-                                            [placeholder]="commonLocaleData?.app_quantity"
-                                            decimalDigitsDirective
-                                            name="transaction.quantity_{{ entryIdx }}"
-                                            class="form-control text-right"
-                                            [(ngModel)]="transaction.quantity"
-                                            [mask]="inputMaskFormat"
-                                        /> -->
                                         <text-field
                                             [placeholder]="commonLocaleData?.app_quantity"
                                             [readonly]="!transaction.isStockTxn"
@@ -2567,23 +2562,23 @@
                                             [useMask]="true"
                                             [(ngModel)]="transaction.quantity"
                                             (change)="handleQuantityBlur(entry, transaction)"
-                                        ></text-field>
-
-                                        <select
+                                            decimalDigitsDirective
+                                        >
+                                        </text-field>
+                                        <mat-select
                                             class="form-control"
                                             [disabled]="!transaction.isStockTxn"
-                                            name="transaction.stockUnit_{{ entryIdx }}"
-                                            [(ngModel)]="transaction.stockUnit"
-                                            (ngModelChange)="
+                                            (selectionChange)="
                                                 onChangeUnit(transaction, $event);
                                                 transaction.setAmount(entry);
                                                 calculateWhenTrxAltered(entry, transaction)
                                             "
+                                            [value]="transaction.stockUnit"
                                         >
-                                            <option *ngFor="let stock of transaction.stockList" [ngValue]="stock.id">
+                                            <mat-option *ngFor="let stock of transaction.stockList" [value]="stock.id">
                                                 {{ stock.text }}
-                                            </option>
-                                        </select>
+                                            </mat-option>
+                                        </mat-select>
                                     </td>
 
                                     <td
@@ -2593,22 +2588,7 @@
                                     >
                                         <div class="td-wrapper">
                                             <div class="flex-fill">
-                                                <!-- <input
-                                                    type="text"
-                                                    [disabled]="!transaction.isStockTxn"
-                                                    (blur)="
-                                                        calculateStockEntryAmount(transaction);
-                                                        calculateWhenTrxAltered(entry, transaction)
-                                                    "
-                                                    [placeholder]="commonLocaleData?.app_rate"
-                                                    name="transaction.rate_{{ entryIdx }}"
-                                                    class="form-control transaction-rate text-right"
-                                                    [(ngModel)]="transaction.rate"
-                                                    [prefix]="invFormData.accountDetails.currencySymbol"
-                                                    [suffix]="selectedSuffixForCurrency"
-                                                    [mask]="inputMaskFormat"
-                                                    [customDecimalPlaces]="highPrecisionRate"
-                                                /> -->
+                                                <!-- [customDecimalPlaces]="highPrecisionRate" -->
                                                 <text-field
                                                     [readOnly]="!transaction.isStockTxn"
                                                     [placeholder]="commonLocaleData?.app_rate"
@@ -2653,19 +2633,6 @@
                                     >
                                         <div class="td-wrapper">
                                             <div class="flex-fill">
-                                                <!-- <input
-                                                    type="text"
-                                                    (blur)="calculateWhenTrxAltered(entry, transaction, true, $event)"
-                                                    (click)="transactionAmountClicked(transaction)"
-                                                    [placeholder]="commonLocaleData?.app_amount"
-                                                    name="transaction.amount_{{ entryIdx }}"
-                                                    class="form-control text-right"
-                                                    [(ngModel)]="transaction.amount"
-                                                    decimalDigitsDirective
-                                                    [prefix]="invFormData.accountDetails.currencySymbol"
-                                                    [suffix]="selectedSuffixForCurrency"
-                                                    [mask]="inputMaskFormat"
-                                                /> -->
                                                 <text-field
                                                     (click)="transactionAmountClicked(transaction)"
                                                     [placeholder]="commonLocaleData?.app_amount"
@@ -2678,6 +2645,7 @@
                                                     [useMask]="true"
                                                     [(ngModel)]="transaction.amount"
                                                     (change)="calculateWhenTrxAltered(entry, transaction, true, $event)"
+                                                    decimalDigitsDirective
                                                 ></text-field>
                                             </div>
                                             <div class="differ-currency" *ngIf="isMulticurrencyAccount">
@@ -2778,17 +2746,6 @@
                                     >
                                         <div class="td-wrapper">
                                             <div class="flex-fill">
-                                                <!-- <input
-                                                    type="text"
-                                                    name="transaction.total_{{ entryIdx }}"
-                                                    class="form-control text-right"
-                                                    [(ngModel)]="transaction.total"
-                                                    decimalDigitsDirective
-                                                    [prefix]="invFormData.accountDetails.currencySymbol"
-                                                    [suffix]="selectedSuffixForCurrency"
-                                                    [mask]="inputMaskFormat"
-                                                    (change)="calculateTransactionValueInclusively(entry, transaction)"
-                                                /> -->
                                                 <text-field
                                                     [type]="'text'"
                                                     [cssClass]="'form-control mat-field-border text-right '"
@@ -2800,29 +2757,31 @@
                                                     decimalDigitsDirective
                                                     [(ngModel)]="transaction.total"
                                                     (change)="calculateTransactionValueInclusively(entry, transaction)"
-                                                ></text-field>
+                                                >
+                                                </text-field>
 
                                                 <div *ngIf="isTcsTdsApplicable" class="wrap-other-tax">
-                                                    <input
-                                                        type="checkbox"
-                                                        [checked]="entry.isOtherTaxApplicable"
-                                                        class="other-taxes-checkbox"
-                                                        [(ngModel)]="entry.isOtherTaxApplicable"
-                                                        (click)="tcsTdsIndex = entryIdx"
+                                                    <mat-checkbox
                                                         *ngIf="!entry.isOtherTaxApplicable"
-                                                        name="entry.isOtherTaxApplicable_{{ entryIdx }}"
+                                                        [checked]="entry.isOtherTaxApplicable"
+                                                        color="primary"
                                                         id="entry.isOtherTaxApplicable_{{ entryIdx }}"
-                                                        (ngModelChange)="
+                                                        [(ngModel)]="entry.isOtherTaxApplicable"
+                                                        (change)="
                                                             toggleOtherTaxesAsidePane(
                                                                 entry.isOtherTaxApplicable,
                                                                 entryIdx
                                                             )
                                                         "
-                                                    />
+                                                        class="other-taxes-checkbox"
+                                                        name="entry.isOtherTaxApplicable_{{ entryIdx }}"
+                                                    >
+                                                    </mat-checkbox>
                                                     <label
                                                         for="entry.isOtherTaxApplicable_{{ entryIdx }}"
                                                         *ngIf="!entry.isOtherTaxApplicable"
                                                         class="other-tax-label font-13 align-middle"
+                                                        (click)="tcsTdsIndex = entryIdx"
                                                         >{{ localeData?.other_tax }}</label
                                                     >
                                                 </div>
@@ -2837,15 +2796,6 @@
                                                                     <img src="assets/images/edit-pencilicon.svg" />
                                                                 </a>
                                                             </span>
-                                                            <!-- <input
-                                                                class="text-right form-control other-taxes-input"
-                                                                disabled="disabled"
-                                                                [(ngModel)]="entry.otherTaxSum"
-                                                                [prefix]="invFormData.accountDetails.currencySymbol"
-                                                                [suffix]="selectedSuffixForCurrency"
-                                                                [mask]="inputMaskFormat"
-                                                                name="entry.otherTaxesSum_{{ entryIdx }}"
-                                                            /> -->
                                                             <text-field
                                                                 [readOnly]="disabled"
                                                                 [cssClass]="'text-right form-control other-taxes-input'"
@@ -2953,6 +2903,7 @@
                                             <div class="row">
                                                 <div class="form-group col-xs-4 col-sm-4 mb-0">
                                                     <giddh-datepicker
+                                                        [cssClass]="'shipping-date'"
                                                         #shippingDate="ngModel"
                                                         [placeholder]="templatePlaceholder?.shippedDateLabel"
                                                         name="shippingDate"
@@ -3050,7 +3001,7 @@
                                         class="form-control textarea-height"
                                         hasFocus
                                         #message2="hasFocus"
-                                        [class.error-box]="invoiceForm?.controls['message2']?.errors?.maxlength"
+                                        [class.error-box]="(invoiceForm?.controls)['message2']?.errors?.maxlength"
                                         name="message2"
                                         [maxlength]="shouldApplyMaxLengthOnNotes && !showNotesAtLastPage ? 200 : null"
                                         [(ngModel)]="invFormData.templateDetails.other.message2"
@@ -3062,7 +3013,7 @@
                                             invFormData?.templateDetails?.other?.message2?.length &&
                                             !showNotesAtLastPage &&
                                             (message2?.isFocused ||
-                                                invoiceForm?.controls['message2']?.errors?.maxlength)
+                                                (invoiceForm?.controls)['message2']?.errors?.maxlength)
                                         "
                                     >
                                         <span class="max-character-label"
@@ -3415,50 +3366,28 @@
                                                                             class="clearfix mr-b1 text-left"
                                                                             *ngIf="voucherApiVersion !== 2"
                                                                         >
-                                                                            <span class="p-0 mr-2 d-inline-block">
-                                                                                <input
-                                                                                    class="radio-custom cp ml-0"
-                                                                                    name="advanceReceipt"
-                                                                                    [value]="false"
-                                                                                    name="isAdjustAmount"
-                                                                                    [(ngModel)]="isAdjustAmount"
-                                                                                    (ngModelChange)="
-                                                                                        clickAdjustAmount($event)
-                                                                                    "
+                                                                            <mat-radio-group
+                                                                                class="d-flex mb-2"
+                                                                                [(ngModel)]="isAdjustAmount"
+                                                                                name="advanceReceipt"
+                                                                            >
+                                                                                <mat-radio-button
+                                                                                    color="primary"
                                                                                     id="adjustAmountNo"
-                                                                                    type="radio"
-                                                                                />
-                                                                                <label
-                                                                                    class="radio-custom-label"
-                                                                                    for="adjustAmountNo"
+                                                                                    [value]="false"
                                                                                     (click)="clickAdjustAmount(false)"
-                                                                                    >{{
-                                                                                        commonLocaleData?.app_no
-                                                                                    }}</label
-                                                                                >
-                                                                            </span>
-                                                                            <span class="p-0 d-inline-block">
-                                                                                <input
-                                                                                    class="radio-custom cp ml-0"
-                                                                                    name="advanceReceipt"
+                                                                                    (change)="clickAdjustAmount($event)"
+                                                                                    >{{ commonLocaleData?.app_no }}
+                                                                                </mat-radio-button>
+                                                                                <mat-radio-button
+                                                                                    color="primary"
+                                                                                    id="sacCodeType{{ entryIdx }}"
                                                                                     [value]="true"
-                                                                                    name="isAdjustAmount"
-                                                                                    (ngModelChange)="
-                                                                                        clickAdjustAmount($event)
-                                                                                    "
-                                                                                    [(ngModel)]="isAdjustAmount"
-                                                                                    id="adjustAmountYes"
-                                                                                    type="radio"
-                                                                                />
-                                                                                <label
-                                                                                    class="radio-custom-label"
-                                                                                    for="adjustAmountYes"
                                                                                     (click)="clickAdjustAmount(true)"
-                                                                                    >{{
-                                                                                        commonLocaleData?.app_yes
-                                                                                    }}</label
-                                                                                >
-                                                                            </span>
+                                                                                    (change)="clickAdjustAmount($event)"
+                                                                                    >{{ commonLocaleData?.app_yes }}
+                                                                                </mat-radio-button>
+                                                                            </mat-radio-group>
                                                                         </div>
 
                                                                         <div class="clearfix mr-t05">
@@ -3545,13 +3474,13 @@
                                                                 "
                                                             >
                                                                 <text-field
-                                                                    (blur)="
+                                                                    (change)="
                                                                         calculateBalanceDue();
                                                                         updateDepositAmount($event.target.value)
                                                                     "
                                                                     [placeholder]="commonLocaleData?.app_amount"
                                                                     [cssClass]="
-                                                                        ' form-control
+                                                                        'form-control
                                                                         amount-field
                                                                         due-amount-field
                                                                         text-right
@@ -3571,32 +3500,6 @@
                                                                     "
                                                                     [type]="text"
                                                                 ></text-field>
-                                                                <!-- <input
-                                                                    matInput
-                                                                    type="text"
-                                                                    (blur)="
-                                                                        calculateBalanceDue();
-                                                                        updateDepositAmount($event.target.value)
-                                                                    "
-                                                                    [placeholder]="commonLocaleData?.app_amount"
-                                                                    name="dueAmount"
-                                                                    class="
-                                                                        form-control
-                                                                        amount-field
-                                                                        due-amount-field
-                                                                        text-right
-                                                                        pull-right
-                                                                        max-width-100
-                                                                        mat-field-border
-                                                                    "
-                                                                    [(ngModel)]="depositAmount"
-                                                                    [prefix]="depositCurrSymbol"
-                                                                    [suffix]="selectedSuffixForCurrency"
-                                                                    [mask]="inputMaskFormat"
-                                                                    [attr.required]="
-                                                                        depositAccountUniqueName ? true : false
-                                                                    "
-                                                                /> -->
                                                                 <label class="pull-right">{{
                                                                     commonLocaleData?.app_amount
                                                                 }}</label>
@@ -4225,51 +4128,35 @@
                                                                             class="hsn-code-dropdown"
                                                                             *ngIf="hsnDropdownShow"
                                                                         >
-                                                                            <div class="d-flex wrap-hsn-sac mb-2 mt-3">
-                                                                                <span>
-                                                                                    <input
-                                                                                        type="radio"
-                                                                                        class="radio-custom radio-theme"
-                                                                                        name="showCodeType{{
-                                                                                            entryIdx
-                                                                                        }}"
-                                                                                        id="hsnCodeType{{ entryIdx }}"
-                                                                                        [(ngModel)]="
-                                                                                            transaction.showCodeType
-                                                                                        "
-                                                                                        value="hsn"
-                                                                                    />
-                                                                                    <label
-                                                                                        for="hsnCodeType{{ entryIdx }}"
-                                                                                        class="radio-custom-label"
-                                                                                        >{{
-                                                                                            commonLocaleData?.app_hsn_code
-                                                                                        }}</label
-                                                                                    >
-                                                                                </span>
-                                                                                <span>
-                                                                                    <input
-                                                                                        type="radio"
-                                                                                        class="radio-custom radio-theme"
-                                                                                        name="showCodeType{{
-                                                                                            entryIdx
-                                                                                        }}"
-                                                                                        id="sacCodeType{{ entryIdx }}"
-                                                                                        [(ngModel)]="
-                                                                                            transaction.showCodeType
-                                                                                        "
-                                                                                        value="sac"
-                                                                                    />
-                                                                                    <label
-                                                                                        for="sacCodeType{{ entryIdx }}"
-                                                                                        class="radio-custom-label"
-                                                                                        >{{
-                                                                                            commonLocaleData?.app_sac_code
-                                                                                        }}</label
-                                                                                    >
-                                                                                </span>
-                                                                            </div>
-                                                                            <input
+                                                                            <mat-radio-group
+                                                                                class="d-flex mb-2 wrap-hsn-sac"
+                                                                            >
+                                                                                <mat-radio-button
+                                                                                    color="primary"
+                                                                                    name="showCodeType{{ entryIdx }}"
+                                                                                    id="hsnCodeType{{ entryIdx }}"
+                                                                                    [(ngModel)]="
+                                                                                        transaction.showCodeType
+                                                                                    "
+                                                                                    value="hsn"
+                                                                                    >{{
+                                                                                        commonLocaleData?.app_hsn_code
+                                                                                    }}
+                                                                                </mat-radio-button>
+                                                                                <mat-radio-button
+                                                                                    color="primary"
+                                                                                    name="showCodeType{{ entryIdx }}"
+                                                                                    id="sacCodeType{{ entryIdx }}"
+                                                                                    [(ngModel)]="
+                                                                                        transaction.showCodeType
+                                                                                    "
+                                                                                    value="sac"
+                                                                                    >{{
+                                                                                        commonLocaleData?.app_sac_code
+                                                                                    }}
+                                                                                </mat-radio-button>
+                                                                            </mat-radio-group>
+                                                                            <text-field
                                                                                 type="text"
                                                                                 maxLength="10"
                                                                                 decimalDigitsDirective
@@ -4281,8 +4168,9 @@
                                                                                     transaction.showCodeType === 'hsn'
                                                                                 "
                                                                                 [(ngModel)]="transaction.hsnNumber"
-                                                                            />
-                                                                            <input
+                                                                            >
+                                                                            </text-field>
+                                                                            <text-field
                                                                                 type="text"
                                                                                 maxLength="10"
                                                                                 decimalDigitsDirective
@@ -4294,7 +4182,9 @@
                                                                                     transaction.showCodeType === 'sac'
                                                                                 "
                                                                                 [(ngModel)]="transaction.sacNumber"
-                                                                            />
+                                                                            >
+                                                                            </text-field>
+
                                                                             <div class="btn-group mt-2 pt-1 d-flex">
                                                                                 <button
                                                                                     class="btn btn-sm btn-success"
@@ -4357,24 +4247,24 @@
                                                             <label class="card-label text-right">{{
                                                                 commonLocaleData?.app_unit
                                                             }}</label>
-                                                            <select
+                                                            <mat-select
+                                                                name="transaction.stockUnit_{{ entryIdx }}"
                                                                 class="form-control"
                                                                 [disabled]="!transaction.isStockTxn"
-                                                                name="transaction.stockUnit_{{ entryIdx }}"
-                                                                [(ngModel)]="transaction.stockUnit"
-                                                                (ngModelChange)="
+                                                                (selectionChange)="
                                                                     onChangeUnit(transaction, $event);
                                                                     transaction.setAmount(entry);
                                                                     calculateWhenTrxAltered(entry, transaction)
                                                                 "
+                                                                [value]="transaction.stockUnit"
                                                             >
-                                                                <option
+                                                                <mat-option
                                                                     *ngFor="let stock of transaction.stockList"
-                                                                    [ngValue]="stock.id"
+                                                                    [value]="stock.id"
                                                                 >
                                                                     {{ stock.text }}
-                                                                </option>
-                                                            </select>
+                                                                </mat-option>
+                                                            </mat-select>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -4391,10 +4281,23 @@
                                                         commonLocaleData?.app_rate
                                                     }}</label>
                                                     <div class="flex-fill">
-                                                        <input
-                                                            type="text"
-                                                            [disabled]="!transaction.isStockTxn"
-                                                            (blur)="
+                                                        <!--
+                                                        [customDecimalPlaces]="highPrecisionRate"
+                                                        -->
+                                                        <text-field
+                                                            [readOnly]="!transaction.isStockTxn"
+                                                            [placeholder]="commonLocaleData?.app_rate"
+                                                            [type]="'text'"
+                                                            [cssClass]="
+                                                                'form-control mat-field-border transaction-rate text-right '
+                                                            "
+                                                            [name]="'transaction.rate_{{ entryIdx }}'"
+                                                            [prefix]="invFormData.accountDetails.currencySymbol"
+                                                            [suffix]="selectedSuffixForCurrency"
+                                                            [mask]="inputMaskFormat"
+                                                            [useMask]="true"
+                                                            [(ngModel)]="transaction.rate"
+                                                            (change)="
                                                                 calculateStockEntryAmount(transaction);
                                                                 calculateWhenTrxAltered(
                                                                     entry,
@@ -4403,15 +4306,7 @@
                                                                     $event
                                                                 )
                                                             "
-                                                            [placeholder]="commonLocaleData?.app_rate"
-                                                            name="transaction.rate_{{ entryIdx }}"
-                                                            class="form-control transaction-rate text-right"
-                                                            [(ngModel)]="transaction.rate"
-                                                            [prefix]="invFormData.accountDetails.currencySymbol"
-                                                            [suffix]="selectedSuffixForCurrency"
-                                                            [mask]="inputMaskFormat"
-                                                            [customDecimalPlaces]="highPrecisionRate"
-                                                        />
+                                                        ></text-field>
                                                     </div>
                                                     <!-- please add condition for show and hide -->
                                                     <div class="differ-currency" *ngIf="isMulticurrencyAccount">
@@ -4440,9 +4335,21 @@
                                                         commonLocaleData?.app_amount
                                                     }}</label>
                                                     <div class="flex-fill">
-                                                        <input
-                                                            type="tel"
-                                                            (blur)="
+                                                        <text-field
+                                                            (click)="transactionAmountClicked(transaction)"
+                                                            [placeholder]="commonLocaleData?.app_amount"
+                                                            [type]="'tel'"
+                                                            [cssClass]="
+                                                                'form-control mat-field-border text-right hello'
+                                                            "
+                                                            [name]="'transaction.amount_{{ entryIdx }}'"
+                                                            [prefix]="invFormData.accountDetails.currencySymbol"
+                                                            [suffix]="selectedSuffixForCurrency"
+                                                            [mask]="inputMaskFormat"
+                                                            [useMask]="true"
+                                                            decimalDigitsDirective
+                                                            [(ngModel)]="transaction.amount"
+                                                            (change)="
                                                                 calculateWhenTrxAltered(
                                                                     entry,
                                                                     transaction,
@@ -4450,16 +4357,7 @@
                                                                     $event
                                                                 )
                                                             "
-                                                            (click)="transactionAmountClicked(transaction)"
-                                                            [placeholder]="commonLocaleData?.app_amount"
-                                                            name="transaction.amount_{{ entryIdx }}"
-                                                            class="form-control text-right"
-                                                            [(ngModel)]="transaction.amount"
-                                                            decimalDigitsDirective
-                                                            [prefix]="invFormData.accountDetails.currencySymbol"
-                                                            [suffix]="selectedSuffixForCurrency"
-                                                            [mask]="inputMaskFormat"
-                                                        />
+                                                        ></text-field>
                                                     </div>
                                                     <div class="differ-currency" *ngIf="isMulticurrencyAccount">
                                                         <amount-field
@@ -4576,41 +4474,44 @@
                                                         commonLocaleData?.app_total
                                                     }}</label>
                                                     <div class="flex-fill">
-                                                        <input
-                                                            type="tel"
-                                                            name="transaction.total_{{ entryIdx }}"
-                                                            class="form-control text-right"
-                                                            (change)="
-                                                                calculateTransactionValueInclusively(entry, transaction)
-                                                            "
-                                                            [(ngModel)]="transaction.total"
-                                                            decimalDigitsDirective
+                                                        <text-field
+                                                            [type]="'tel'"
+                                                            [cssClass]="'form-control mat-field-border text-right '"
+                                                            [name]="'transaction.total_{{ entryIdx }}'"
                                                             [prefix]="invFormData.accountDetails.currencySymbol"
                                                             [suffix]="selectedSuffixForCurrency"
                                                             [mask]="inputMaskFormat"
-                                                        />
+                                                            [useMask]="true"
+                                                            decimalDigitsDirective
+                                                            [(ngModel)]="transaction.total"
+                                                            (change)="
+                                                                calculateTransactionValueInclusively(entry, transaction)
+                                                            "
+                                                        >
+                                                        </text-field>
 
                                                         <div *ngIf="isTcsTdsApplicable" class="wrap-other-tax">
-                                                            <input
-                                                                [checked]="entry.isOtherTaxApplicable"
-                                                                type="checkbox"
-                                                                class="other-taxes-checkbox"
-                                                                [(ngModel)]="entry.isOtherTaxApplicable"
+                                                            <mat-checkbox
                                                                 *ngIf="!entry.isOtherTaxApplicable"
-                                                                (click)="tcsTdsIndex = entryIdx"
-                                                                name="entry.isOtherTaxApplicable_{{ entryIdx }}"
+                                                                [checked]="entry.isOtherTaxApplicable"
+                                                                color="primary"
                                                                 id="entry.isOtherTaxApplicable_{{ entryIdx }}"
-                                                                (ngModelChange)="
+                                                                [(ngModel)]="entry.isOtherTaxApplicable"
+                                                                (change)="
                                                                     toggleOtherTaxesAsidePane(
                                                                         entry.isOtherTaxApplicable,
                                                                         entryIdx
                                                                     )
                                                                 "
-                                                            />
+                                                                class="other-taxes-checkbox"
+                                                                name="entry.isOtherTaxApplicable_{{ entryIdx }}"
+                                                            >
+                                                            </mat-checkbox>
                                                             <label
                                                                 for="entry.isOtherTaxApplicable_{{ entryIdx }}"
                                                                 *ngIf="!entry.isOtherTaxApplicable"
                                                                 class="other-tax-label font-13 align-middle"
+                                                                (click)="tcsTdsIndex = entryIdx"
                                                                 >{{ localeData?.other_tax }}</label
                                                             >
                                                         </div>
@@ -4635,22 +4536,22 @@
                                                                             />
                                                                         </a>
                                                                     </span>
-
-                                                                    <input
-                                                                        class="
-                                                                            text-right
-                                                                            form-control
-                                                                            other-taxes-input
+                                                                    <text-field
+                                                                        [readonly]="disabled"
+                                                                        type="text"
+                                                                        [cssClass]="
+                                                                            'form-control mat-field-border text-right  other-taxes-input'
                                                                         "
-                                                                        disabled="disabled"
-                                                                        [(ngModel)]="entry.otherTaxSum"
                                                                         [prefix]="
                                                                             invFormData.accountDetails.currencySymbol
                                                                         "
                                                                         [suffix]="selectedSuffixForCurrency"
+                                                                        [name]="'entry.otherTaxesSum_{{ entryIdx }}'"
                                                                         [mask]="inputMaskFormat"
-                                                                        name="entry.otherTaxesSum_{{ entryIdx }}"
-                                                                    />
+                                                                        [useMask]="true"
+                                                                        [(ngModel)]="entry.otherTaxSum"
+                                                                    >
+                                                                    </text-field>
                                                                 </div>
 
                                                                 <p class="mr-t05 font-12 text-capitalize mr-b2">
@@ -4724,112 +4625,6 @@
 
                         <div class="other-detail-card">
                             <div *ngIf="!currentVoucherFormDetails || currentVoucherFormDetails?.otherDetails">
-                                <!-- <div class="collapse-pane clearfix">
-                                    <div
-                                        class="collapse-pane-heading"
-                                        (click)="isOthrDtlCollapsed = !isOthrDtlCollapsed"
-                                    >
-                                        <div class="ico-box-wrap">
-                                            <div class="ico-box">
-                                                <span
-                                                    [ngClass]="isOthrDtlCollapsed ? 'icon-add' : 'icon-minus'"
-                                                    aria-hidden="true"
-                                                ></span>
-                                            </div>
-                                        </div>
-                                        <div class="ico-head">{{ commonLocaleData?.app_other_details }}</div>
-                                    </div>
-
-                                    <div [collapse]="isOthrDtlCollapsed" class="clearfix max-width-600 mr-0">
-                                        <div class="row">
-                                            <div class="form-group col-12 col-sm-4 mb-0">
-                                                <giddh-datepicker
-                                                    #shippingDate="ngModel"
-                                                    [placeholder]="templatePlaceholder?.shippedDateLabel"
-                                                    name="shippingDate"
-                                                    [(ngModel)]="invFormData.templateDetails.other.shippingDate"
-                                                    [class.invalid-inp]="
-                                                        shippingDate.errors &&
-                                                        (shippingDate.dirty || shippingDate.touched)
-                                                    "
-                                                    [showToggleIcon]="false"
-                                                >
-                                                </giddh-datepicker>
-                                                <p
-                                                    class="text-danger"
-                                                    *ngIf="
-                                                        shippingDate.errors &&
-                                                        (shippingDate.dirty || shippingDate.touched)
-                                                    "
-                                                >
-                                                    {{ localeData?.invalid_date }}
-                                                </p>
-                                            </div>
-
-                                            <div class="form-group col-12 col-sm-4 mb-0">
-                                                <input
-                                                    type="text"
-                                                    name="shippedVia"
-                                                    [(ngModel)]="invFormData.templateDetails.other.shippedVia"
-                                                    class="form-control"
-                                                    [placeholder]="
-                                                        templatePlaceholder?.shippedViaLabel || localeData?.ship_via
-                                                    "
-                                                />
-                                            </div>
-
-                                            <div class="form-group col-12 col-sm-4 mb-0">
-                                                <input
-                                                    type="text"
-                                                    name="trackingNumber"
-                                                    [(ngModel)]="invFormData.templateDetails.other.trackingNumber"
-                                                    class="form-control"
-                                                    [placeholder]="
-                                                        templatePlaceholder?.trackingNumber ||
-                                                        localeData?.tracking_number
-                                                    "
-                                                />
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="form-group col-12 col-sm-4 mb-0">
-                                                <input
-                                                    type="text"
-                                                    name="customField1"
-                                                    [(ngModel)]="invFormData.templateDetails.other.customField1"
-                                                    class="form-control"
-                                                    [placeholder]="
-                                                        templatePlaceholder?.customField1Label || localeData?.field1
-                                                    "
-                                                />
-                                            </div>
-
-                                            <div class="form-group col-12 col-sm-4 mb-0">
-                                                <input
-                                                    type="text"
-                                                    name="customField2"
-                                                    [(ngModel)]="invFormData.templateDetails.other.customField2"
-                                                    class="form-control"
-                                                    [placeholder]="
-                                                        templatePlaceholder?.customField2Label || localeData?.field2
-                                                    "
-                                                />
-                                            </div>
-
-                                            <div class="form-group col-12 col-sm-4 mb-0">
-                                                <input
-                                                    type="text"
-                                                    name="customField3"
-                                                    [(ngModel)]="invFormData.templateDetails.other.customField3"
-                                                    class="form-control"
-                                                    [placeholder]="
-                                                        templatePlaceholder?.customField3Label || localeData?.field3
-                                                    "
-                                                />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div> -->
                                 <mat-expansion-panel class="other-details-expansion-panel">
                                     <mat-expansion-panel-header>
                                         <mat-panel-title>
@@ -4839,6 +4634,7 @@
                                     <div class="row invoice-other-details-row">
                                         <div class="form-group col-xs-4 col-sm-4 mb-0">
                                             <giddh-datepicker
+                                                [cssClass]="'shipping-date'"
                                                 #shippingDate="ngModel"
                                                 [placeholder]="templatePlaceholder?.shippedDateLabel"
                                                 name="shippingDate"
@@ -4924,7 +4720,7 @@
                                     class="form-control textarea-height mat-field-border"
                                     hasFocus
                                     #message2="hasFocus"
-                                    [class.error-box]="invoiceForm?.controls['message2']?.errors?.maxlength"
+                                    [class.error-box]="(invoiceForm?.controls)['message2']?.errors?.maxlength"
                                     name="message2"
                                     [maxlength]="shouldApplyMaxLengthOnNotes && !showNotesAtLastPage ? 200 : null"
                                     [(ngModel)]="invFormData.templateDetails.other.message2"
@@ -5239,7 +5035,8 @@
                                                             [suffix]="selectedSuffixForCurrency"
                                                             [mask]="inputMaskFormat"
                                                             [attr.required]="depositAccountUniqueName ? true : false"
-                                                        ></text-field>
+                                                        >
+                                                        </text-field>
                                                         <label class="pull-right pt-1">{{
                                                             commonLocaleData?.app_amount
                                                         }}</label>
@@ -5370,7 +5167,7 @@
                                         [disabled]="
                                             isFileUploading ||
                                             !hasVoucherEntry ||
-                                            invoiceForm?.controls['message2']?.errors?.maxlength ||
+                                            (invoiceForm?.controls)['message2']?.errors?.maxlength ||
                                             isMobileNumberInvalid
                                         "
                                         (click)="doAction(0); triggerSubmitInvoiceForm(invoiceForm, false)"
@@ -5390,7 +5187,7 @@
                                         mat-button
                                         [disabled]="
                                             !hasVoucherEntry ||
-                                            invoiceForm?.controls['message2']?.errors?.maxlength ||
+                                            (invoiceForm?.controls)['message2']?.errors?.maxlength ||
                                             isMobileNumberInvalid
                                         "
                                         (click)="doAction(0); triggerSubmitInvoiceForm(invoiceForm, true)"
@@ -5406,7 +5203,7 @@
                                         class="btn-group"
                                         [isDisabled]="
                                             !hasVoucherEntry ||
-                                            invoiceForm?.controls['message2']?.errors?.maxlength ||
+                                            (invoiceForm?.controls)['message2']?.errors?.maxlength ||
                                             isMobileNumberInvalid
                                         "
                                     >
@@ -5414,7 +5211,7 @@
                                             mat-button
                                             [disabled]="
                                                 !hasVoucherEntry ||
-                                                invoiceForm?.controls['message2']?.errors?.maxlength ||
+                                                (invoiceForm?.controls)['message2']?.errors?.maxlength ||
                                                 isMobileNumberInvalid
                                             "
                                             (click)="doAction(0); triggerSubmitInvoiceForm(invoiceForm, false)"
@@ -5477,14 +5274,15 @@
                                     <div
                                         class="btn-group"
                                         [isDisabled]="
-                                            !hasVoucherEntry || invoiceForm?.controls['message2']?.errors?.maxlength
+                                            !hasVoucherEntry || (invoiceForm?.controls)['message2']?.errors?.maxlength
                                         "
                                     >
                                         <button
                                             *ngIf="!isCompany"
                                             mat-button
                                             [disabled]="
-                                                !hasVoucherEntry || invoiceForm?.controls['message2']?.errors?.maxlength
+                                                !hasVoucherEntry ||
+                                                (invoiceForm?.controls)['message2']?.errors?.maxlength
                                             "
                                             (click)="doAction(0); triggerSubmitInvoiceForm(invoiceForm, false)"
                                             class="btn btn-default h3"
@@ -5545,7 +5343,7 @@
                                     [disabled]="
                                         isFileUploading ||
                                         !hasVoucherEntry ||
-                                        invoiceForm?.controls['message2']?.errors?.maxlength ||
+                                        (invoiceForm?.controls)['message2']?.errors?.maxlength ||
                                         isMobileNumberInvalid
                                     "
                                     (click)="submitUpdateForm(invoiceForm)"
@@ -5597,7 +5395,8 @@
         [selectedVoucherType]="selectedVoucherType"
         [@slideInOut]="asideMenuStateForProductService"
         (closeAsideEvent)="onNoResultsClicked()"
-    ></aside-menu-product-service>
+    >
+    </aside-menu-product-service>
 
     <app-aside-recurring-entry
         *ngIf="asideMenuStateForRecurringEntry === 'in'"

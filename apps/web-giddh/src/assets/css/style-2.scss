@@ -7765,8 +7765,16 @@ highcharts-chart {
             font-size: 12px;
         }
 
+        .option-value-stock {
+            float: left !important;
+            width: 100% !important;
+            line-height: 1.2 !important;
+            color: var(--color-primary-virtual-scroll-scrollable-content-item-a-item-stock);
+            font-size: 12px;
+        }
+
         .mat-option-text {
-            line-height: 2 !important;
+            line-height: 1 !important;
         }
     }
 
@@ -11754,6 +11762,10 @@ body.update-scroll-hidden {
 
     .invoice-modal-content .modal-dialog {
         margin: 70px auto;
+    }
+
+    .shipping-date {
+        padding-top: 50px !important;
     }
 
     .top-content {

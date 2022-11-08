@@ -29,7 +29,7 @@
         >
             <span class="option-label"> {{ option?.label }}</span>
             <span class="option-value" *ngIf="showValueInLabel">{{ option.additional?.uniqueName }}</span>
-            <span class="option-value" *ngIf="hasStock && option.additional?.stock">
+            <span class="option-value-stock" *ngIf="hasStock && option.additional?.stock">
                 {{ commonLocaleData?.app_stock }}: {{ option.additional?.stock?.uniqueName }}</span
             >
         </mat-option>
