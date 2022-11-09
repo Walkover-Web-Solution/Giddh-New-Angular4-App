@@ -655,10 +655,12 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public openProductSelectionDropdown: boolean = false;
     /** This will hold selected cash account */
     public selectedBankAccount: any = 'Cash';
+    /** This will use for instance of linkPO Dropdown */
     public linkPoDropdown: FormControl = new FormControl();
     /** Filtered options to show in autocomplete list */
     public fieldFilteredOptions: IOption[] = [];
-    compareFn = (a, b) => a && b && a.id === b.id;
+    /** Compare function of link PO reference list */
+    public compareFn = (a, b) => a && b && a.id === b.id;
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -760,8 +762,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.voucherApiVersion = this.generalService.voucherApiVersion;
     }
 
-    public ngOnInit() {
-
+    public ngOnInit() {        
         /** This will use for filter link purchase orders  */
         this.linkPoDropdown.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(search => {
             this.filterPurchaseOrder(search);
@@ -1014,7 +1015,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             if (accountDetails) {
                 this.hideDepositSectionForCashBankGroups(accountDetails);
                 this.assignAccountDetailsValuesInForm(accountDetails);
-                this.openAccountSelectionDropdown;
+                this.openAccountSelectionDropdown = true;
             }
         });
 
@@ -3984,8 +3985,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public addNewAccount() {
         this.allowFocus = false;
         this.selectedCustomerForDetails = null;
-        this.invFormData.voucherDetails.customerName = null;
-        this.invFormData.voucherDetails.customerUniquename = null;
         this.isCustomerSelected = false;
         this.invFormData.accountDetails = new AccountDetailsClass();
         this.toggleAccountAsidePane();
@@ -8085,5 +8084,25 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             }
         });
         this.fieldFilteredOptions = filteredOptions;
+    }
+
+    public onChangeHsnSacType(transaction :any ):void{
+        console.log(transaction);
+        if (transaction.showCodeType ==='hsn'){
+            console.log(transaction.hsnNumber);
+
+            let cloneHsnNumber = cloneDeep(transaction.hsnNumber);
+            console.log(cloneHsnNumber);
+            
+            transaction.sacNumber = cloneHsnNumber
+            transaction.hsnNumber = null;
+        }else {
+            console.log(transaction.sacNumber);
+            
+            let cloneSacNumber = cloneDeep(transaction.sacNumber);
+            console.log(cloneSacNumber);
+            transaction.hsnNumber = cloneSacNumber;
+            transaction.sacNumber = null;
+        }
     }
 }

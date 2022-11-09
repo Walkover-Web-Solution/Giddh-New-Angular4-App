@@ -2487,6 +2487,7 @@
                                                                 <mat-radio-group
                                                                     class="d-flex mb-2"
                                                                     [(ngModel)]="transaction.showCodeType"
+                                                                    (change)="onChangeHsnSacType(transaction)"
                                                                     name="showCodeType{{ entryIdx }}"
                                                                 >
                                                                     <mat-radio-button
@@ -2502,6 +2503,7 @@
                                                                         >{{ commonLocaleData?.app_sac_code }}
                                                                     </mat-radio-button>
                                                                 </mat-radio-group>
+                                                                {{ transaction.hsnNumber }}
                                                                 <text-field
                                                                     type="text"
                                                                     maxLength="10"
@@ -2511,6 +2513,7 @@
                                                                     *ngIf="transaction.showCodeType === 'hsn'"
                                                                     [(ngModel)]="transaction.hsnNumber"
                                                                 ></text-field>
+                                                                {{ transaction.sacNumber }}
                                                                 <text-field
                                                                     type="text"
                                                                     maxLength="10"

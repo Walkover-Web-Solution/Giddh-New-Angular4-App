@@ -152,6 +152,10 @@ $custom-typography: mat-typography-config(
 }
 
 .voucher-preview-edit {
+    .shipping-date {
+        padding-top: 6px !important;
+    }
+
     .line-height-initial {
         line-height: 1.5 !important;
         font-size: 12px;
