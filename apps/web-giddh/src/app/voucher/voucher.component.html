@@ -2418,33 +2418,28 @@
                                                     <div class="col-6 col-sm-6 pl-0">
                                                         <div class="entry-date">
                                                             <label>{{ localeData?.entry_date }}: </label>
-                                                            <span *ngIf="!isUpdateMode">
-                                                                <input
-                                                                    type="text"
-                                                                    [placeholder]="giddhDateFormat"
-                                                                    bsDatepicker
-                                                                    name="transaction.date_{{ entryIdx }}"
-                                                                    id="transaction.date_{{ entryIdx }}"
-                                                                    class="form-control text-left"
-                                                                    [(ngModel)]="entry.entryDate"
-                                                                    [disabled]="isUpdateMode"
-                                                                    (onShown)="hsnDropdownShow = false"
-                                                                    [bsConfig]="{ dateInputFormat: giddhDateFormat }"
-                                                                    (bsValueChange)="
+                                                            <span *ngIf="!isUpdateMode" class="custom-date-entries">
+                                                                <giddh-datepicker
+                                                                    [showToggleIcon]="true"
+                                                                    #dp="ngModel"
+                                                                    (dateSelected)="
                                                                         onBlurEntryDate(entryIdx, dp.isOpen)
                                                                     "
-                                                                    #dp="bsDatepicker"
-                                                                    placement="right"
-                                                                />
+                                                                    id="transaction.date_{{ entryIdx }}"
+                                                                    [disabled]="isUpdateMode"
+                                                                    [cssClass]="'entry-custom-date'"
+                                                                    [placeholder]="giddhDateFormat"
+                                                                    name="transaction.date_{{ entryIdx }}"
+                                                                    [(ngModel)]="entry.entryDate"
+                                                                >
+                                                                </giddh-datepicker>
                                                                 <span
-                                                                    class="edit-icon cp"
-                                                                    (click)="dp.toggle()"
+                                                                    class="edit-icon-custom-entry-date cp"
                                                                     [attr.aria-expanded]="dp.isOpen"
                                                                 >
                                                                     <img src="assets/images/edit-pencilicon.svg" />
                                                                 </span>
                                                             </span>
-
                                                             <span *ngIf="isUpdateMode">
                                                                 {{ entry.entryDate }}
                                                             </span>
@@ -2915,7 +2910,6 @@
                                                         "
                                                     >
                                                     </giddh-datepicker>
-
                                                     <p
                                                         class="text-danger"
                                                         *ngIf="
@@ -4053,29 +4047,26 @@
                                                                 <div class="col-xs-6 col-sm-6 pr-0">
                                                                     <div class="entry-date">
                                                                         <label>{{ localeData?.entry_date }}: </label>
-
-                                                                        <span *ngIf="!isUpdateMode">
-                                                                            <input
-                                                                                type="text"
-                                                                                [placeholder]="giddhDateFormat"
-                                                                                bsDatepicker
-                                                                                name="transaction.date_{{ entryIdx }}"
-                                                                                id="transaction.date_{{ entryIdx }}"
-                                                                                class="form-control text-left"
-                                                                                [(ngModel)]="entry.entryDate"
-                                                                                [disabled]="isUpdateMode"
-                                                                                (onShown)="hsnDropdownShow = false"
-                                                                                [bsConfig]="{
-                                                                                    dateInputFormat: giddhDateFormat
-                                                                                }"
-                                                                                (bsValueChange)="
+                                                                        <span
+                                                                            *ngIf="!isUpdateMode"
+                                                                            class="custom-date-entries"
+                                                                        >
+                                                                            <giddh-datepicker
+                                                                                [showToggleIcon]="true"
+                                                                                #dp="ngModel"
+                                                                                (dateSelected)="
                                                                                     onBlurEntryDate(entryIdx, dp.isOpen)
                                                                                 "
-                                                                                #dp="bsDatepicker"
-                                                                            />
+                                                                                id="transaction.date_{{ entryIdx }}"
+                                                                                [disabled]="isUpdateMode"
+                                                                                [cssClass]="'entry-custom-date'"
+                                                                                [placeholder]="giddhDateFormat"
+                                                                                name="transaction.date_{{ entryIdx }}"
+                                                                                [(ngModel)]="entry.entryDate"
+                                                                            >
+                                                                            </giddh-datepicker>
                                                                             <span
-                                                                                class="edit-icon cp"
-                                                                                (click)="dp.toggle()"
+                                                                                class="edit-icon-custom-entry-date cp"
                                                                                 [attr.aria-expanded]="dp.isOpen"
                                                                             >
                                                                                 <img
@@ -4083,7 +4074,6 @@
                                                                                 />
                                                                             </span>
                                                                         </span>
-
                                                                         <span *ngIf="isUpdateMode">
                                                                             {{ entry.entryDate }}
                                                                         </span>

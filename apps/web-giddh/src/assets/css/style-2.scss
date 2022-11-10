@@ -156,6 +156,41 @@ $custom-typography: mat-typography-config(
         padding-top: 6px !important;
     }
 
+    .custom-date-entries {
+        .edit-icon-custom-entry-date {
+            position: absolute;
+            right: 50%;
+            margin-top: -35px;
+            z-index: 0;
+        }
+
+        giddh-datepicker {
+            .mat-form-field-wrapper
+                .mat-form-field-infix
+                .mat-input-element.mat-form-field-autofill-control.mat-datepicker-input {
+                position: absolute;
+                height: 23px !important;
+                margin-top: 0;
+                font-size: 12px;
+                padding-bottom: 0 !important;
+                padding-left: 0;
+            }
+
+            .mat-form-field-flex {
+                border: none !important;
+                align-items: inherit !important;
+            }
+
+            .mat-datepicker-toggle {
+                position: absolute;
+                right: 41%;
+                top: -3px;
+                opacity: 0;
+                z-index: 99;
+            }
+        }
+    }
+
     .line-height-initial {
         line-height: 1.5 !important;
         font-size: 12px;
@@ -215,10 +250,10 @@ $custom-typography: mat-typography-config(
         .mat-form-field-infix
         .mat-input-element.mat-form-field-autofill-control.mat-datepicker-input {
         position: absolute;
-        padding-top: 18px;
+        padding-top: 11px;
         padding-left: 36px;
-        height: 30px !important;
-        margin-top: 0;
+        height: 37px !important;
+        margin-top: 0 !important;
         font-size: 14px;
     }
 
