@@ -2503,7 +2503,6 @@
                                                                         >{{ commonLocaleData?.app_sac_code }}
                                                                     </mat-radio-button>
                                                                 </mat-radio-group>
-                                                                {{ transaction.hsnNumber }}
                                                                 <text-field
                                                                     type="text"
                                                                     maxLength="10"
@@ -2513,7 +2512,6 @@
                                                                     *ngIf="transaction.showCodeType === 'hsn'"
                                                                     [(ngModel)]="transaction.hsnNumber"
                                                                 ></text-field>
-                                                                {{ transaction.sacNumber }}
                                                                 <text-field
                                                                     type="text"
                                                                     maxLength="10"
@@ -4132,28 +4130,25 @@
                                                                             *ngIf="hsnDropdownShow"
                                                                         >
                                                                             <mat-radio-group
-                                                                                class="d-flex mb-2 wrap-hsn-sac"
+                                                                                class="d-flex mb-2"
+                                                                                [(ngModel)]="transaction.showCodeType"
+                                                                                (change)="
+                                                                                    onChangeHsnSacType(transaction)
+                                                                                "
+                                                                                name="showCodeType{{ entryIdx }}"
                                                                             >
                                                                                 <mat-radio-button
                                                                                     color="primary"
-                                                                                    name="showCodeType{{ entryIdx }}"
                                                                                     id="hsnCodeType{{ entryIdx }}"
-                                                                                    [(ngModel)]="
-                                                                                        transaction.showCodeType
-                                                                                    "
-                                                                                    value="hsn"
+                                                                                    [value]="'hsn'"
                                                                                     >{{
                                                                                         commonLocaleData?.app_hsn_code
                                                                                     }}
                                                                                 </mat-radio-button>
                                                                                 <mat-radio-button
                                                                                     color="primary"
-                                                                                    name="showCodeType{{ entryIdx }}"
                                                                                     id="sacCodeType{{ entryIdx }}"
-                                                                                    [(ngModel)]="
-                                                                                        transaction.showCodeType
-                                                                                    "
-                                                                                    value="sac"
+                                                                                    [value]="'sac'"
                                                                                     >{{
                                                                                         commonLocaleData?.app_sac_code
                                                                                     }}
@@ -4171,8 +4166,7 @@
                                                                                     transaction.showCodeType === 'hsn'
                                                                                 "
                                                                                 [(ngModel)]="transaction.hsnNumber"
-                                                                            >
-                                                                            </text-field>
+                                                                            ></text-field>
                                                                             <text-field
                                                                                 type="text"
                                                                                 maxLength="10"
@@ -4185,9 +4179,7 @@
                                                                                     transaction.showCodeType === 'sac'
                                                                                 "
                                                                                 [(ngModel)]="transaction.sacNumber"
-                                                                            >
-                                                                            </text-field>
-
+                                                                            ></text-field>
                                                                             <div class="btn-group mt-2 pt-1 d-flex">
                                                                                 <button
                                                                                     class="btn btn-sm btn-success"

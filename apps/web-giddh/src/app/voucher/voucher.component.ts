@@ -762,7 +762,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.voucherApiVersion = this.generalService.voucherApiVersion;
     }
 
-    public ngOnInit() {        
+    public ngOnInit() {
         /** This will use for filter link purchase orders  */
         this.linkPoDropdown.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(search => {
             this.filterPurchaseOrder(search);
@@ -5531,7 +5531,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         if (!this.isSalesInvoice && !this.isPurchaseInvoice && !this.isProformaInvoice && !this.isEstimateInvoice) {
             // FOR CASH INVOICE, DEBIT NOTE AND CREDIT NOTE
             this.setActiveIndx(index);
-            this.openProductSelectionDropdown = true;
+                this.openProductSelectionDropdown = true;
         }
     }
 
@@ -8086,23 +8086,22 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.fieldFilteredOptions = filteredOptions;
     }
 
-    public onChangeHsnSacType(transaction :any ):void{
-        console.log(transaction);
-        if (transaction.showCodeType ==='hsn'){
-            console.log(transaction.hsnNumber);
-
-            let cloneHsnNumber = cloneDeep(transaction.hsnNumber);
-            console.log(cloneHsnNumber);
-            
-            transaction.sacNumber = cloneHsnNumber
-            transaction.hsnNumber = null;
-        }else {
-            console.log(transaction.sacNumber);
-            
-            let cloneSacNumber = cloneDeep(transaction.sacNumber);
-            console.log(cloneSacNumber);
-            transaction.hsnNumber = cloneSacNumber;
-            transaction.sacNumber = null;
-        }
+    /**
+     * This will use for set hsn/sac value default
+     *
+     * @param {*} transaction
+     * @memberof VoucherComponent
+     */
+    public onChangeHsnSacType(transaction: any): void {
+        setTimeout(() => {
+            if (transaction.showCodeType === 'hsn') {
+                transaction.hsnNumber = cloneDeep(transaction.sacNumber);
+                transaction.sacNumber = null;
+            } else {
+                transaction.sacNumber = cloneDeep(transaction.hsnNumber);;
+                transaction.hsnNumber = null;
+            }
+            this._cdr.detectChanges();
+        }, 100);
     }
 }
