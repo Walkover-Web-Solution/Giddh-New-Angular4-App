@@ -21,6 +21,7 @@
         "trial_balance_account_wise_report_file_name": "ट्रायल-बैलेंस_खाता-वार.csv",
         "condensed_report": "संघनित रिपोर्ट",
         "account_wise_report": "खाता वार रिपोर्ट",
+        "flat_report": "फ्लैट रिपोर्ट",
         "trial_balance": {
             "name": "नाम",
             "opening_balance": "प्रारंभिक शेष",

@@ -681,7 +681,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
                 this.groupExportLedgerBodyRequest.showEntryVoucherNo = response.body.showEntryVoucherNo;
                 this.groupExportLedgerBodyRequest.groupUniqueName = grpUniqueName;
                 this.groupExportLedgerBodyRequest.sort = response.body.sort ? 'ASC' : 'DESC';
-                this.ledgerService.groupLedgerExport(this.groupExportLedgerBodyRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                this.ledgerService.exportData(this.groupExportLedgerBodyRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     if (response?.status === 'success') {
                         this.router.navigate(["/pages/downloads/exports"]);
                         this.toaster.showSnackBar("success", response?.body);
