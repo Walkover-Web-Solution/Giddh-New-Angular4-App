@@ -1767,9 +1767,15 @@ span.eligible-ITC {
         }
     }
 }
+
 .other-taxes-checkbox {
     padding-right: 5px;
 }
+
+.update-mode .btn-danger:hover {
+    background: var(--color-dark-fog) !important;
+}
+
 /* resposnvie */
 @media (max-width: 1199px) {
     .invoice-date-due-date {
