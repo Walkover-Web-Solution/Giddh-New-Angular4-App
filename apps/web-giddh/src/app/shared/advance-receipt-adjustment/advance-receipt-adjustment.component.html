@@ -22,15 +22,13 @@
                     <div class="col-md-8 mr-t05">
                         <div class="form-group">
                             <label>{{ localeData?.customer_name }} </label>
-                            <input
-                                matInput
+                            <text-field
                                 type="text"
-                                class="form-control mat-field-border"
                                 name="customerName"
+                                [cssClass]="'form-control mat-field-border'"
                                 [(ngModel)]="adjustPayment.customerName"
-                                readonly
-                                disabled
-                            />
+                                [readonly]="true"
+                            ></text-field>
                         </div>
                     </div>
                     <div class="col-md-4 text-right font-14 pt-2">
@@ -170,18 +168,19 @@
                                             "
                                             (onClear)="onClearSalesAccount(transaction)"
                                             (click)="clickSelectVoucher(entryIdx, adjustAdvancePaymentForm)"
+                                            [hasMoreValue]="true"
                                         >
                                             <ng-template #optionTemplate let-option="option">
-                                                <a href="javascript:void(0)" class="list-item">
-                                                    <div class="item">
+                                                <a href="javascript:void(0)">
+                                                    <div class="option-label">
                                                         {{ option?.label }}
                                                     </div>
                                                     <div class="item-unique">
-                                                        <p class="font-12 text-gray mb-0">
+                                                        <p class="option-value">
                                                             ({{ commonLocaleData?.app_dated }}:
                                                             {{ option?.additional.voucherDate }})
                                                         </p>
-                                                        <p class="font-12 text-gray mb-0">
+                                                        <p class="option-value-more">
                                                             ({{ commonLocaleData?.app_amount }}:
                                                             {{ option?.additional?.currency?.symbol }}
                                                             <span class="d-inline-flex">
@@ -199,85 +198,32 @@
                                                 </a>
                                             </ng-template>
                                         </select-field>
-                                        <!-- <sh-select
-                                            *ngIf="voucherApiVersion === 2"
-                                            [disabled]="
-                                                shouldDisableEdit(entry) || entry.linkingAdjustment ? 'disabled' : null
-                                            "
-                                            class="text-left"
-                                            name="voucherName{{ entry.uniqueName }}"
-                                            [defaultValue]="entry.voucherNumber"
-                                            [fixedValue]="entry.voucherNumber"
-                                            (click)="clickSelectVoucher(entryIdx, adjustAdvancePaymentForm)"
-                                            required
-                                            [placeholder]="localeData?.select_voucher"
-                                            [(ngModel)]="entry.uniqueName"
-                                            (selected)="selectVoucher($event, entry, entryIdx)"
-                                            [options]="adjustVoucherOptions$ | async"
-                                            [multiple]="false"
-                                            [isPaginationEnabled]="true"
-                                            (scrollEnd)="!searchReferenceVoucher ? loadVouchers() : ''"
-                                            [enableDynamicSearch]="true"
-                                            (dynamicSearchedQuery)="
-                                                searchReferenceVoucher = $event; resetInvoiceList(); loadVouchers()
-                                            "
-                                        >
-                                            <ng-template #optionTemplate let-option="option">
-                                                <a href="javascript:void(0)" class="list-item">
-                                                    <div class="item">
-                                                        {{ option.label }}
-                                                    </div>
-                                                    <div class="item-unique">
-                                                        <p class="font-12 text-gray mb-0">
-                                                            ({{ commonLocaleData?.app_dated }}:
-                                                            {{ option.additional.voucherDate }})
-                                                        </p>
-                                                        <p class="font-12 text-gray mb-0">
-                                                            ({{ commonLocaleData?.app_amount }}:
-                                                            {{ option?.additional?.currency?.symbol }}
-                                                            <span class="d-inline-flex">
-                                                                <amount-field
-                                                                    [amount]="
-                                                                        option?.additional?.balanceDue?.amountForAccount
-                                                                    "
-                                                                    [currencySymbol]="false"
-                                                                    [currencyCode]="false"
-                                                                >
-                                                                </amount-field>
-                                                            </span>
-                                                        </p>
-                                                    </div>
-                                                </a>
-                                            </ng-template>
-                                        </sh-select> -->
-                                        <sh-select
+
+                                        <select-field
                                             *ngIf="voucherApiVersion !== 2"
-                                            [disabled]="
+                                            [readonly]="
                                                 shouldDisableEdit(entry) || entry.linkingAdjustment ? 'disabled' : null
                                             "
-                                            class="text-left"
-                                            name="voucherName{{ entry.uniqueName }}"
+                                            [cssClass]="'form-control mat-field-border text-left'"
+                                            [name]="'voucherName{{ entry.uniqueName }}'"
                                             [defaultValue]="entry.voucherNumber"
-                                            [fixedValue]="entry.voucherNumber"
                                             (click)="clickSelectVoucher(entryIdx, adjustAdvancePaymentForm)"
-                                            required
+                                            [attr.required]="true"
                                             [placeholder]="localeData?.select_voucher"
-                                            [(ngModel)]="entry.uniqueName"
-                                            (selected)="selectVoucher($event, entry, entryIdx)"
+                                            (selectedOption)="selectVoucher($event, entry, entryIdx)"
                                             [options]="adjustVoucherOptions"
-                                            [multiple]="false"
                                         >
                                             <ng-template #optionTemplate let-option="option">
-                                                <a href="javascript:void(0)" class="list-item">
-                                                    <div class="item">
-                                                        {{ option.label }}
+                                                <a href="javascript:void(0)">
+                                                    <div class="option-label">
+                                                        {{ option?.label }}
                                                     </div>
                                                     <div class="item-unique">
-                                                        <p class="font-12 text-gray mb-0">
+                                                        <p class="option-value">
                                                             ({{ commonLocaleData?.app_dated }}:
-                                                            {{ option.additional.voucherDate }})
+                                                            {{ option?.additional.voucherDate }})
                                                         </p>
-                                                        <p class="font-12 text-gray mb-0">
+                                                        <p class="option-value-more">
                                                             ({{ commonLocaleData?.app_amount }}:
                                                             {{ option?.additional?.currency?.symbol }}
                                                             <span class="d-inline-flex">
@@ -294,28 +240,27 @@
                                                     </div>
                                                 </a>
                                             </ng-template>
-                                        </sh-select>
+                                        </select-field>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="col-sm-3">
                                 <div class="form-group">
-                                    <input
-                                        [disabled]="
+                                    <text-field
+                                        [readonly]="
                                             shouldDisableEdit(entry) || entry.linkingAdjustment ? 'disabled' : null
                                         "
-                                        required
-                                        decimalDigitsDirective
-                                        type="text"
-                                        class="form-control"
                                         [placeholder]="localeData?.enter_amount"
-                                        name="amount{{ entry.uniqueName }}"
-                                        [(ngModel)]="entry.adjustmentAmount.amountForAccount"
-                                        (ngModelChange)="calculateTax(entry, entryIdx)"
+                                        [type]="'text'"
+                                        [cssClass]="'form-control mat-field-border'"
+                                        [name]="'amount{{ entry.uniqueName }}'"
                                         [prefix]="currencySymbol"
                                         [mask]="inputMaskFormat"
-                                    />
+                                        [useMask]="true"
+                                        [(ngModel)]="entry.adjustmentAmount.amountForAccount"
+                                        (change)="calculateTax(entry, entryIdx)"
+                                    ></text-field>
                                     <span
                                         *ngIf="
                                             enableVoucherAdjustmentMultiCurrency &&
@@ -347,18 +292,9 @@
                                             entry.voucherType === 'receipt' && entry.subVoucher === 'ADVANCE_RECEIPT'
                                         "
                                     >
-                                        <input
+                                        <text-field
+                                            [readonly]="'true'"
                                             id="name_{{ entry.uniqueName }}"
-                                            type="text"
-                                            class="form-control"
-                                            name="calculatedTaxAmount_{{ entry.uniqueName }}"
-                                            decimalDigitsDirective
-                                            [(ngModel)]="entry.calculatedTaxAmount"
-                                            [prefix]="
-                                                enableVoucherAdjustmentMultiCurrency
-                                                    ? entry.accountCurrency?.symbol
-                                                    : ''
-                                            "
                                             [placeholder]="
                                                 commonLocaleData?.app_numbers?.zero +
                                                 '' +
@@ -368,9 +304,18 @@
                                                 '' +
                                                 commonLocaleData?.app_numbers?.zero
                                             "
-                                            disabled
+                                            [type]="'text'"
+                                            [cssClass]="'form-control mat-field-border'"
+                                            [name]="'calculatedTaxAmount_{{ entry.uniqueName }}'"
+                                            [prefix]="
+                                                enableVoucherAdjustmentMultiCurrency
+                                                    ? entry.accountCurrency?.symbol
+                                                    : ''
+                                            "
                                             [mask]="enableVoucherAdjustmentMultiCurrency ? inputMaskFormat : ''"
-                                        />
+                                            [useMask]="true"
+                                            decimalDigitsDirective
+                                        ></text-field>
                                         <span
                                             *ngIf="
                                                 enableVoucherAdjustmentMultiCurrency &&
@@ -463,18 +408,17 @@
                                         <label class="col-md-2">{{ commonLocaleData?.app_tds }}</label>
                                         <div class="col-md-3">
                                             <div #tdsTypeBox>
-                                                <sh-select
-                                                    class="text-left dropdown-arrow"
-                                                    name="tdsTaxUniqueName"
+                                                <select-field
                                                     [placeholder]="commonLocaleData?.app_select_tax"
-                                                    [(ngModel)]="adjustVoucherForm.tdsTaxUniqueName"
+                                                    [cssClass]="
+                                                        'form-control mat-field-border text-left dropdown-arrow'
+                                                    "
+                                                    (selectedOption)="tdsTaxSelected($event)"
                                                     [options]="availableTdsTaxes"
-                                                    (selected)="tdsTaxSelected($event)"
-                                                    [notFoundLink]="false"
-                                                    [multiple]="false"
-                                                    [ItemHeight]="33"
+                                                    [name]="'tdsTaxUniqueName'"
+                                                    [defaultValue]="adjustVoucherForm.tdsTaxUniqueName"
                                                 >
-                                                </sh-select>
+                                                </select-field>
                                             </div>
                                         </div>
                                     </div>
@@ -485,19 +429,19 @@
                                             <span class="text-danger">* </span></label
                                         >
                                         <div class="col-md-3">
-                                            <input
-                                                type="text"
-                                                class="form-control"
-                                                required
+                                            <text-field
                                                 #tdsAmountBox
-                                                decimalDigitsDirective
+                                                [placeholder]="commonLocaleData?.app_amount"
+                                                [type]="'text'"
+                                                [cssClass]="'form-control mat-field-border'"
+                                                [name]="'calculatedTaxAmount_{{ entry.uniqueName }}'"
                                                 [prefix]="currencySymbol"
                                                 [mask]="inputMaskFormat"
-                                                name="tdsAmount.amountForAccount"
-                                                (ngModelChange)="changeTdsAmount($event)"
+                                                [useMask]="true"
+                                                decimalDigitsDirective
+                                                (change)="changeTdsAmount($event)"
                                                 [(ngModel)]="adjustVoucherForm.tdsAmount.amountForAccount"
-                                                [placeholder]="commonLocaleData?.app_amount"
-                                            />
+                                            ></text-field>
                                             <span
                                                 *ngIf="enableVoucherAdjustmentMultiCurrency && isMultiCurrencyAccount"
                                                 class="company-currency"

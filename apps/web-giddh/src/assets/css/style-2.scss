@@ -7793,8 +7793,72 @@ highcharts-chart {
         }
     }
 
+    .options-line-stock {
+        padding: 10px;
+        vertical-align: middle;
+        min-height: 65px !important;
+        border-bottom: 1px solid var(--color-common-primary-border);
+
+        .option-label {
+            color: var(--color-common-primary-text);
+        }
+
+        .option-value {
+            float: left !important;
+            width: 100% !important;
+            color: var(--color-primary-virtual-scroll-scrollable-content-item-a-item-stock);
+            font-size: 13px;
+        }
+
+        .mat-option-text {
+            line-height: 23px;
+        }
+    }
+
+    .option-value-more {
+        float: left !important;
+        width: 100% !important;
+        line-height: 1.2 !important;
+        color: var(--color-primary-virtual-scroll-scrollable-content-item-a-item-stock);
+        font-size: 12px;
+    }
+
+    .options-line-value {
+        padding: 10px;
+        vertical-align: middle;
+        min-height: 65px !important;
+        border-bottom: 1px solid var(--color-common-primary-border);
+
+        .option-label {
+            color: var(--color-common-primary-text);
+        }
+
+        .option-value {
+            float: left !important;
+            width: 100% !important;
+            color: var(--color-primary-virtual-scroll-scrollable-content-item-a-item-stock);
+            font-size: 13px;
+        }
+
+        .option-value-stock {
+            float: left !important;
+            width: 100% !important;
+            line-height: 1.2 !important;
+            color: var(--color-primary-virtual-scroll-scrollable-content-item-a-item-stock);
+            font-size: 12px;
+        }
+
+        .mat-option-text {
+            line-height: 23px;
+        }
+    }
+
     .options-line {
         padding: 5px;
+
+        .option-label {
+            color: var(--color-common-primary-text);
+        }
 
         .option-value {
             float: left !important;
@@ -7813,7 +7877,7 @@ highcharts-chart {
         }
 
         .mat-option-text {
-            line-height: 1 !important;
+            line-height: 1.5 !important;
         }
     }
 

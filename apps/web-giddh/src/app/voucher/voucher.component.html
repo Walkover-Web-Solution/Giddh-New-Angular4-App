@@ -210,13 +210,22 @@
                                                             [defaultValue]="invFormData.voucherDetails.customerName"
                                                             [createNewText]="customerNotFoundText"
                                                             [enableDynamicSearch]="true"
-                                                            [showValueInLabel]="true"
                                                             (dynamicSearchedQuery)="
                                                                 onSearchQueryChanged($event, 1, 'customer')
                                                             "
                                                             [allowValueReset]="true"
                                                             (onClear)="resetCustomerName($event)"
                                                         >
+                                                            <ng-template #optionTemplate let-option="option">
+                                                                <a href="javascript:void(0)">
+                                                                    <div class="option-label">
+                                                                        {{ option.label }}
+                                                                    </div>
+                                                                    <div class="option-value">
+                                                                        {{ option.value }}
+                                                                    </div>
+                                                                </a>
+                                                            </ng-template>
                                                         </select-field>
                                                     </ng-container>
                                                     <!-- endregion -->
@@ -232,7 +241,7 @@
                                                             "
                                                             [(ngModel)]="invFormData.voucherDetails.customerName"
                                                             (change)="handleCustomerChange($event)"
-                                                            [readOnly]="
+                                                            [readonly]="
                                                                 isUpdateMode &&
                                                                 invoiceType !== 'sales' &&
                                                                 invoiceType !== 'cash'
@@ -1449,7 +1458,7 @@
                                                     name="accountDetails.invoiceNum"
                                                     class="form-control invoice-date attention-to"
                                                     [ngClass]="{ 'date-invoice': !isPurchaseInvoice }"
-                                                    [disabled]="
+                                                    [readonly]="
                                                         isUpdateMode && !(isDebitNote || isPurchaseInvoice)
                                                             ? 'disabled'
                                                             : null
@@ -1458,26 +1467,15 @@
                                                 >
                                                 </text-field>
                                                 <ng-container *ngIf="isCreditNote || isDebitNote">
-                                                    <sh-select
+                                                    <select-field
                                                         *ngIf="voucherApiVersion === 2"
-                                                        [options]="invoiceList$ | async"
+                                                        [cssClass]="'form-control mat-field-border linking-dropdown'"
+                                                        [name]="'invoiceLinking'"
                                                         [placeholder]="commonLocaleData?.app_select_accounts"
-                                                        [fixedValue]="invoiceSelected?.label"
-                                                        [forceClearReactive]="invoiceForceClearReactive$ | async"
-                                                        class="linking-dropdown"
-                                                        [notFoundLink]="false"
-                                                        [(ngModel)]="selectedInvoice"
-                                                        name="invoiceLinking"
-                                                        (selected)="creditNoteInvoiceSelected($event)"
-                                                        [multiple]="false"
-                                                        [ItemHeight]="67"
-                                                        [showClear]="false"
-                                                        [isPaginationEnabled]="true"
-                                                        (scrollEnd)="
-                                                            !searchReferenceVoucher
-                                                                ? getInvoiceListsForCreditNote()
-                                                                : ''
-                                                        "
+                                                        [options]="invoiceList$ | async"
+                                                        (selectedOption)="creditNoteInvoiceSelected($event)"
+                                                        [defaultValue]="invoiceSelected?.label"
+                                                        [hasMoreValue]="true"
                                                         [enableDynamicSearch]="true"
                                                         (dynamicSearchedQuery)="
                                                             searchReferenceVoucher = $event;
@@ -1489,14 +1487,14 @@
                                                             <a
                                                                 *ngIf="option"
                                                                 href="javascript:void(0)"
-                                                                class="linking-item list-item sh-template"
+                                                                class="linking-item"
                                                             >
-                                                                <div class="item">{{ option?.label }}</div>
-                                                                <div class="item-unique">
+                                                                <div class="option-label">{{ option?.label }}</div>
+                                                                <div class="option-value">
                                                                     ({{ commonLocaleData?.app_dated }}:
                                                                     {{ option.additional?.voucherDate }})
                                                                 </div>
-                                                                <div class="item-unique">
+                                                                <div class="option-value-stock">
                                                                     ({{ commonLocaleData?.app_amount }}:
                                                                     {{
                                                                         voucherApiVersion === 2
@@ -1508,34 +1506,29 @@
                                                                 </div>
                                                             </a>
                                                         </ng-template>
-                                                    </sh-select>
-                                                    <sh-select
+                                                    </select-field>
+                                                    <select-field
                                                         *ngIf="voucherApiVersion !== 2"
-                                                        [options]="invoiceList"
+                                                        [cssClass]="'form-control mat-field-border'"
+                                                        [name]="'invoiceLinking'"
                                                         [placeholder]="commonLocaleData?.app_select_accounts"
-                                                        [fixedValue]="invoiceSelected?.label"
-                                                        [forceClearReactive]="invoiceForceClearReactive$ | async"
-                                                        class="linking-dropdown"
-                                                        [notFoundLink]="false"
-                                                        [(ngModel)]="selectedInvoice"
-                                                        name="invoiceLinking"
-                                                        (selected)="creditNoteInvoiceSelected($event)"
-                                                        [multiple]="false"
-                                                        [ItemHeight]="67"
-                                                        [showClear]="false"
+                                                        [options]="invoiceList"
+                                                        (selectedOption)="creditNoteInvoiceSelected($event)"
+                                                        [defaultValue]="invoiceSelected?.label"
+                                                        [hasMoreValue]="true"
                                                     >
                                                         <ng-template #optionTemplate let-option="option">
                                                             <a
                                                                 *ngIf="option"
                                                                 href="javascript:void(0)"
-                                                                class="linking-item list-item sh-template"
+                                                                class="linking-item"
                                                             >
-                                                                <div class="item">{{ option?.label }}</div>
-                                                                <div class="item-unique">
+                                                                <div class="option-label">{{ option?.label }}</div>
+                                                                <div class="option-value">
                                                                     ({{ commonLocaleData?.app_dated }}:
                                                                     {{ option.additional?.voucherDate }})
                                                                 </div>
-                                                                <div class="item-unique">
+                                                                <div class="option-value-stock">
                                                                     ({{ commonLocaleData?.app_amount }}:
                                                                     {{
                                                                         voucherApiVersion === 2
@@ -1547,7 +1540,7 @@
                                                                 </div>
                                                             </a>
                                                         </ng-template>
-                                                    </sh-select>
+                                                    </select-field>
                                                 </ng-container>
                                             </div>
                                             <div
@@ -1665,7 +1658,7 @@
                                                     name="accountDetails.invoiceNum"
                                                     class="form-control invoice-date attention-to"
                                                     [ngClass]="{ 'date-invoice': !isPurchaseInvoice }"
-                                                    [disabled]="
+                                                    [readonly]="
                                                         isUpdateMode && !(isDebitNote || isPurchaseInvoice)
                                                             ? 'disabled'
                                                             : null
@@ -2377,9 +2370,30 @@
                                                     [enableDynamicSearch]="true"
                                                     (dynamicSearchedQuery)="onSearchQueryChanged($event, 1, 'item')"
                                                     (onClear)="onClearSalesAccount(transaction)"
-                                                    [showValueInLabel]="true"
-                                                    [hasStock]="true"
+                                                    [hasMoreValue]="true"
                                                 >
+                                                    <ng-template #optionTemplate let-option="option">
+                                                        <ng-container *ngIf="!option.additional?.stock">
+                                                            <a href="javascript:void(0)" class="flex-column">
+                                                                <div class="option-label">{{ option?.label }}</div>
+                                                                <div class="option-value">
+                                                                    {{ option.additional?.uniqueName }}
+                                                                </div>
+                                                            </a>
+                                                        </ng-container>
+                                                        <ng-container *ngIf="option.additional?.stock">
+                                                            <a href="javascript:void(0)" class="flex-column">
+                                                                <div class="option-label">{{ option?.label }}</div>
+                                                                <div class="option-value">
+                                                                    {{ option.additional?.uniqueName }}
+                                                                </div>
+                                                                <div class="option-value-stock">
+                                                                    {{ commonLocaleData?.app_stock }}:
+                                                                    {{ option.additional?.stock?.uniqueName }}
+                                                                </div>
+                                                            </a>
+                                                        </ng-container>
+                                                    </ng-template>
                                                 </select-field>
                                             </div>
                                         </div>
@@ -2586,7 +2600,7 @@
                                             <div class="flex-fill">
                                                 <!-- [customDecimalPlaces]="highPrecisionRate" -->
                                                 <text-field
-                                                    [readOnly]="!transaction.isStockTxn"
+                                                    [readonly]="!transaction.isStockTxn"
                                                     [placeholder]="commonLocaleData?.app_rate"
                                                     [type]="'text'"
                                                     [cssClass]="
@@ -2793,7 +2807,7 @@
                                                                 </a>
                                                             </span>
                                                             <text-field
-                                                                [readOnly]="disabled"
+                                                                [readonly]="disabled"
                                                                 [cssClass]="'text-right form-control other-taxes-input'"
                                                                 [name]="'transaction.amount_{{ entryIdx }}'"
                                                                 [prefix]="invFormData.accountDetails.currencySymbol"
@@ -3942,12 +3956,15 @@
                                                     }}</label>
                                                     <div class="product-name">
                                                         <div class="ng-select-wrap">
-                                                            <sh-select
+                                                            <select-field
                                                                 [options]="salesAccounts$ | async"
                                                                 #selectAccount
-                                                                [(ngModel)]="transaction.fakeAccForSelect2"
-                                                                name="transaction.fakeAccForSelect2_{{ entryIdx }}"
-                                                                (selected)="
+                                                                [openDropdown]="openProductSelectionDropdown"
+                                                                [cssClass]="'form-control mat-field-border'"
+                                                                [name]="'transaction.fakeAccForSelect2_{{ entryIdx }}'"
+                                                                [placeholder]="localeData?.select_acc"
+                                                                (selectedOption)="
+                                                                    transaction.fakeAccForSelect2 = $event.value;
                                                                     onSelectSalesAccount(
                                                                         $event,
                                                                         transaction,
@@ -3955,33 +3972,35 @@
                                                                         false,
                                                                         false,
                                                                         entryIdx
-                                                                    )
+                                                                    );
+                                                                    noResultsFoundLabel = localeData?.search_acc
                                                                 "
-                                                                [placeholder]="localeData?.select_acc"
-                                                                [notFoundLink]="true"
-                                                                [isPaginationEnabled]="true"
-                                                                (scrollEnd)="handleScrollEnd('item')"
+                                                                [defaultValue]="
+                                                                    transaction.stockDetails &&
+                                                                    transaction.stockDetails.name
+                                                                        ? transaction.accountName +
+                                                                          ' (' +
+                                                                          transaction.stockDetails?.name +
+                                                                          ')'
+                                                                        : transaction.accountName
+                                                                "
+                                                                [enableDynamicSearch]="true"
                                                                 (dynamicSearchedQuery)="
                                                                     onSearchQueryChanged($event, 1, 'item')
                                                                 "
-                                                                [notFoundMsg]="noResultsFoundLabel"
-                                                                [enableDynamicSearch]="true"
-                                                                (onHide)="resetPreviousSearchResults(true, 'item')"
-                                                                [forceClearReactive]="forceClear$ | async"
-                                                                (noResultsClicked)="onNoResultsClicked(entryIdx)"
-                                                                [multiple]="false"
-                                                                [ItemHeight]="67"
                                                                 (onClear)="onClearSalesAccount(transaction)"
-                                                                [useInBuiltFilterForFlattenAc]="true"
+                                                                [hasMoreValue]="true"
                                                             >
                                                                 <ng-template #optionTemplate let-option="option">
                                                                     <ng-container *ngIf="!option.additional?.stock">
                                                                         <a
                                                                             href="javascript:void(0)"
-                                                                            class="list-item flex-column"
+                                                                            class="flex-column"
                                                                         >
-                                                                            <div class="item">{{ option?.label }}</div>
-                                                                            <div class="item-unique">
+                                                                            <div class="option-label">
+                                                                                {{ option?.label }}
+                                                                            </div>
+                                                                            <div class="option-value">
                                                                                 {{ option.additional?.uniqueName }}
                                                                             </div>
                                                                         </a>
@@ -3989,13 +4008,15 @@
                                                                     <ng-container *ngIf="option.additional?.stock">
                                                                         <a
                                                                             href="javascript:void(0)"
-                                                                            class="list-item flex-column"
+                                                                            class="flex-column"
                                                                         >
-                                                                            <div class="item">{{ option?.label }}</div>
-                                                                            <div class="item-unique">
+                                                                            <div class="option-label">
+                                                                                {{ option?.label }}
+                                                                            </div>
+                                                                            <div class="option-value">
                                                                                 {{ option.additional?.uniqueName }}
                                                                             </div>
-                                                                            <div class="item-stock">
+                                                                            <div class="option-value-stock">
                                                                                 {{ commonLocaleData?.app_stock }}:
                                                                                 {{
                                                                                     option.additional?.stock?.uniqueName
@@ -4004,7 +4025,7 @@
                                                                         </a>
                                                                     </ng-container>
                                                                 </ng-template>
-                                                            </sh-select>
+                                                            </select-field>
                                                         </div>
                                                     </div>
 
@@ -4219,7 +4240,7 @@
                                                             }}</label>
                                                             <text-field
                                                                 type="text"
-                                                                [readOnly]="!transaction.isStockTxn"
+                                                                [readonly]="!transaction.isStockTxn"
                                                                 (change)="handleQuantityBlur(entry, transaction)"
                                                                 [placeholder]="commonLocaleData?.app_quantity"
                                                                 decimalDigitsDirective
@@ -4270,7 +4291,7 @@
                                                         [customDecimalPlaces]="highPrecisionRate"
                                                         -->
                                                         <text-field
-                                                            [readOnly]="!transaction.isStockTxn"
+                                                            [readonly]="!transaction.isStockTxn"
                                                             [placeholder]="commonLocaleData?.app_rate"
                                                             [type]="'text'"
                                                             [cssClass]="
