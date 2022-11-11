@@ -152,6 +152,7 @@
                                 <div class="form-group">
                                     <div class="select-error select-caret relative">
                                         <select-field
+                                            [autocomplete]="off"
                                             [readonly]="
                                                 shouldDisableEdit(entry) || entry.linkingAdjustment ? 'disabled' : null
                                             "

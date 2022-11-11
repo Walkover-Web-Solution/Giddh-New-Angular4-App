@@ -192,8 +192,4 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges, OnDe
             ];
         }
     }
-    public onIntervalChange(event:any):void{
-console.log(event);
-
-    }
 }

@@ -17,6 +17,12 @@ export class VoucherGstTreatmentComponent {
     constructor() {
     }
 
+    /**
+     * This will use for click inside
+     *
+     * @param {*} event
+     * @memberof VoucherGstTreatmentComponent
+     */
     public clickInside(event) {
         event.preventDefault();
         event.stopPropagation();  // <- that will stop propagation on lower layers

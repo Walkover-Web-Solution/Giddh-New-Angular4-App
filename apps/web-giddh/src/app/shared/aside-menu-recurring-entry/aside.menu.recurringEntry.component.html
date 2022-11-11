@@ -57,12 +57,23 @@
                             [name]="'duration'"
                             [placeholder]="localeData?.select_interval"
                             [options]="intervalOptions"
-                            (selectedOption)="onIntervalChange($event)"
                         >
+                            <ng-template #optionTemplate let-option="option">
+                                <a *ngIf="option" href="javascript:void(0)" class="linking-item">
+                                    <div class="option-label">{{ option?.label }}</div>
+                                    <div class="option-value">
+                                        {{ option?.label }}
+                                    </div>
+                                </a>
+                            </ng-template>
                         </select-field>
                     </div>
                     <div class="clearfix text-right" *ngIf="mode === 'create'">
-                        <button mat-button class="btn btn-sm mat-field-border" (click)="closeAsidePane($event)">
+                        <button
+                            mat-button
+                            class="btn btn-sm mat-field-border cancel-button"
+                            (click)="closeAsidePane($event)"
+                        >
                             {{ commonLocaleData?.app_cancel }}
                         </button>
                         <button
