@@ -1,8 +1,12 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { CompanyResponse } from 'apps/web-giddh/src/app/models/api-models/Company';
+import { ExportBodyRequest } from 'apps/web-giddh/src/app/models/api-models/DaybookRequest';
 import { ChildGroup } from 'apps/web-giddh/src/app/models/api-models/Search';
 import { TrialBalanceRequest } from 'apps/web-giddh/src/app/models/api-models/tb-pl-bs';
+import { LedgerService } from 'apps/web-giddh/src/app/services/ledger.service';
+import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
 import { RecTypePipe } from 'apps/web-giddh/src/app/shared/helpers/pipes/recType/recType.pipe';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import { saveAs } from 'file-saver';
@@ -72,7 +76,10 @@ export class TrialBalanceExportCsvComponent implements OnInit, OnDestroy {
 
     constructor(
         private store: Store<AppState>,
-        private recType: RecTypePipe) {
+        private recType: RecTypePipe,
+        private ledgerService: LedgerService,
+        private router: Router,
+        private toaster: ToasterService) {
         this.store.pipe(select(p => p.tlPl.tb.exportData), takeUntil(this.destroyed$)).subscribe(p => {
             this.exportData = p;
             this.dataFormatter = new DataFormatter(p, this.selectedCompany, recType);
@@ -142,4 +149,23 @@ export class TrialBalanceExportCsvComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Exports flat report
+     *
+     * @memberof TrialBalanceExportCsvComponent
+     */
+    public exportFlatTrialBalanceReport(): void {
+        let exportBodyRequest: ExportBodyRequest = new ExportBodyRequest();
+        exportBodyRequest.from = this.trialBalanceRequest.from;
+        exportBodyRequest.to = this.trialBalanceRequest.to;
+        exportBodyRequest.exportType = "FLAT_TRIAL_BALANCE_EXPORT";
+        this.ledgerService.exportData(exportBodyRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === 'success') {
+                this.router.navigate(["/pages/downloads"]);
+                this.toaster.showSnackBar("success", response?.body);
+            } else {
+                this.toaster.showSnackBar("error", response?.message, response?.code);
+            }
+        });
+    }
 }
