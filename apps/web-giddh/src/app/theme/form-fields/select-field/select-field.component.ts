@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from "@angular/core";
+import { ChangeDetectionStrategy, Component, ContentChild, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, TemplateRef, ViewChild } from "@angular/core";
 import { FormControl } from "@angular/forms";
 import { MatAutocompleteTrigger } from "@angular/material/autocomplete";
 import { ReplaySubject } from "rxjs";
@@ -13,6 +13,8 @@ import { IOption } from "../../ng-virtual-select/sh-options.interface";
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy {
+    /** Holds template of options on the component itself */
+    @ContentChild('optionTemplate', { static: false }) public optionTemplate: TemplateRef<any>;
     /** Trigger instance for auto complete */
     @ViewChild('trigger', { static: false, read: MatAutocompleteTrigger }) trigger: MatAutocompleteTrigger;
     /** CSS class name to add on the field */

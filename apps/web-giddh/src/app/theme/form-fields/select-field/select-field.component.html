@@ -27,11 +27,17 @@
             [matTooltip]="option?.label"
             class="options-line"
         >
-            <span class="option-label"> {{ option?.label }}</span>
-            <span class="option-value" *ngIf="showValueInLabel">{{ option.additional?.uniqueName }}</span>
-            <span class="option-value-stock" *ngIf="hasStock && option.additional?.stock">
-                {{ commonLocaleData?.app_stock }}: {{ option.additional?.stock?.uniqueName }}</span
-            >
+            <ng-template
+                [ngTemplateOutletContext]="{ option: option }"
+                [ngTemplateOutlet]="optionTemplate"
+            ></ng-template>
+            <ng-container *ngIf="!optionTemplate">
+                <span class="option-label"> {{ option?.label }}</span>
+                <span class="option-value" *ngIf="showValueInLabel">{{ option.additional?.uniqueName }}</span>
+                <span class="option-value-stock" *ngIf="hasStock && option.additional?.stock">
+                    {{ commonLocaleData?.app_stock }}: {{ option.additional?.stock?.uniqueName }}</span
+                >
+            </ng-container>
         </mat-option>
         <mat-option disabled *ngIf="fieldFilteredOptions?.length === 0">No results found</mat-option>
     </mat-autocomplete>

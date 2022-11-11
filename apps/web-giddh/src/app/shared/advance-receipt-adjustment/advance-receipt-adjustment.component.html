@@ -153,7 +153,7 @@
                             <div class="col-sm-3">
                                 <div class="form-group">
                                     <div class="select-error select-caret relative">
-                                        <!-- <select-field
+                                        <select-field
                                             [readonly]="
                                                 shouldDisableEdit(entry) || entry.linkingAdjustment ? 'disabled' : null
                                             "
@@ -169,14 +169,37 @@
                                                 searchReferenceVoucher = $event; resetInvoiceList(); loadVouchers()
                                             "
                                             (onClear)="onClearSalesAccount(transaction)"
-                                            [showValueInLabel]="true"
-                                            [hasStock]="true"
-                                            [(ngModel)]="entry.uniqueName"
-                                            name="voucherName{{ entry.uniqueName }}"
                                             (click)="clickSelectVoucher(entryIdx, adjustAdvancePaymentForm)"
                                         >
-                                        </select-field> -->
-                                        <sh-select
+                                            <ng-template #optionTemplate let-option="option">
+                                                <a href="javascript:void(0)" class="list-item">
+                                                    <div class="item">
+                                                        {{ option?.label }}
+                                                    </div>
+                                                    <div class="item-unique">
+                                                        <p class="font-12 text-gray mb-0">
+                                                            ({{ commonLocaleData?.app_dated }}:
+                                                            {{ option?.additional.voucherDate }})
+                                                        </p>
+                                                        <p class="font-12 text-gray mb-0">
+                                                            ({{ commonLocaleData?.app_amount }}:
+                                                            {{ option?.additional?.currency?.symbol }}
+                                                            <span class="d-inline-flex">
+                                                                <amount-field
+                                                                    [amount]="
+                                                                        option?.additional?.balanceDue?.amountForAccount
+                                                                    "
+                                                                    [currencySymbol]="false"
+                                                                    [currencyCode]="false"
+                                                                >
+                                                                </amount-field>
+                                                            </span>
+                                                        </p>
+                                                    </div>
+                                                </a>
+                                            </ng-template>
+                                        </select-field>
+                                        <!-- <sh-select
                                             *ngIf="voucherApiVersion === 2"
                                             [disabled]="
                                                 shouldDisableEdit(entry) || entry.linkingAdjustment ? 'disabled' : null
@@ -226,7 +249,7 @@
                                                     </div>
                                                 </a>
                                             </ng-template>
-                                        </sh-select>
+                                        </sh-select> -->
                                         <sh-select
                                             *ngIf="voucherApiVersion !== 2"
                                             [disabled]="
