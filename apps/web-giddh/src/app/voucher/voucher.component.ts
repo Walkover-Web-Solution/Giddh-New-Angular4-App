@@ -119,6 +119,7 @@ import { SettingsDiscountService } from '../services/settings.discount.service';
 import { MatDialog } from '@angular/material/dialog';
 import { HttpClient } from '@angular/common/http';
 import { NewConfirmationModalComponent } from '../theme/new-confirmation-modal/confirmation-modal.component';
+import { SelectFieldComponent } from '../theme/form-fields/select-field/select-field.component';
 
 /** Type of search: customer and item (product/service) search */
 const SEARCH_TYPE = {
@@ -651,8 +652,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     @ViewChild('dateChangeConfirmationModel', { static: true }) public dateChangeConfirmationModel: any;
     /** True if we have to open account selection dropdown */
     public openAccountSelectionDropdown: boolean = false;
-    /** True if we have to open product selection dropdown */
-    public openProductSelectionDropdown: boolean = false;
     /** This will hold selected cash account */
     public selectedBankAccount: any = 'Cash';
     /** This will use for instance of linkPO Dropdown */
@@ -1015,7 +1014,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             if (accountDetails) {
                 this.hideDepositSectionForCashBankGroups(accountDetails);
                 this.assignAccountDetailsValuesInForm(accountDetails);
-                this.openAccountSelectionDropdown = true;
+                this.openProductDropdown();
             }
         });
 
@@ -3621,7 +3620,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.createEmbeddedViewAtIndex(this.invFormData.entries?.length - 1);
         this.activeIndx = (this.invFormData.entries && this.invFormData.entries.length) ? this.invFormData.entries.length - 1 : 0;
         setTimeout(() => {
-            this.openProductSelectionDropdown = true
+            this.openProductDropdown();
         }, 200);
     }
 
@@ -5531,7 +5530,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         if (!this.isSalesInvoice && !this.isPurchaseInvoice && !this.isProformaInvoice && !this.isEstimateInvoice) {
             // FOR CASH INVOICE, DEBIT NOTE AND CREDIT NOTE
             this.setActiveIndx(index);
-            this.openProductSelectionDropdown = true;
+            this.openProductDropdown();
         }
     }
 
@@ -7429,6 +7428,23 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         if (this.template) {
             const view = this.template.createEmbeddedView(context);
             this.container.insert(view);
+        }
+    }
+
+    /**
+     * Opens product dropdown
+     *
+     * @private
+     * @memberof VoucherComponent
+     */
+     public openProductDropdown(): void {
+        if (this.invFormData?.voucherDetails?.customerUniquename || this.invFormData?.voucherDetails?.customerName) {
+            setTimeout(() => {
+                const shSelectField: any = !this.isMobileScreen ? this.selectAccount?.first : this.selectAccount?.last;
+                if (shSelectField) {
+                    shSelectField.openDropdownPanel();
+                }
+            }, 200);
         }
     }
 

@@ -221,4 +221,8 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy {
         this.trigger?.closePanel();
         this.createOption.emit(true);
     }
+
+    public openDropdownPanel(): void {
+        this.trigger.openPanel();
+    }
 }

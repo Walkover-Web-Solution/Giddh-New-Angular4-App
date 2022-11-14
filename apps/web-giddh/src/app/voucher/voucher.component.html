@@ -1982,11 +1982,7 @@
                                 <!-- added new element in td which is content amount element class is 'differ-currency' (multicurrency feature) -->
                                 <!-- region static entries-->
                                 <tr
-                                    (click)="
-                                        setActiveIndx(entryIdx);
-                                        openProductSelectionDropdown = true;
-                                        $event.stopPropagation()
-                                    "
+                                    (click)="setActiveIndx(entryIdx); $event.stopPropagation()"
                                     *ngIf="activeIndx !== entryIdx"
                                     class="entries-tr set-active"
                                     [ngClass]="{ 'is-other-tax': entry.isOtherTaxApplicable && isMulticurrencyAccount }"
@@ -2346,7 +2342,6 @@
                                             <div class="ng-select-wrap">
                                                 <select-field
                                                     #selectAccount
-                                                    [openDropdown]="openProductSelectionDropdown"
                                                     [cssClass]="'form-control mat-field-border'"
                                                     [name]="'transaction.fakeAccForSelect2_{{ entryIdx }}'"
                                                     [placeholder]="localeData?.select_acc"
@@ -2361,8 +2356,7 @@
                                                             false,
                                                             entryIdx
                                                         );
-                                                        noResultsFoundLabel = localeData?.search_acc;
-                                                        openProductSelectionDropdown = false
+                                                        noResultsFoundLabel = localeData?.search_acc
                                                     "
                                                     [defaultValue]="
                                                         transaction.stockDetails && transaction.stockDetails.name
@@ -2653,7 +2647,7 @@
                                                     [placeholder]="commonLocaleData?.app_amount"
                                                     [type]="'text'"
                                                     [cssClass]="'form-control mat-field-border text-right '"
-                                                    [name]="'transaction.amount_{{ entryIdx }}'"
+                                                    [name]="'transaction.amount_' + entryIdx"
                                                     [prefix]="invFormData.accountDetails.currencySymbol"
                                                     [suffix]="selectedSuffixForCurrency"
                                                     [mask]="inputMaskFormat"
@@ -2763,7 +2757,7 @@
                                                 <text-field
                                                     [type]="'text'"
                                                     [cssClass]="'form-control mat-field-border text-right '"
-                                                    [name]="'transaction.amount_{{ entryIdx }}'"
+                                                    [name]="'transaction.total_' + entryIdx"
                                                     [prefix]="invFormData.accountDetails.currencySymbol"
                                                     [suffix]="selectedSuffixForCurrency"
                                                     [mask]="inputMaskFormat"
@@ -2813,7 +2807,7 @@
                                                             <text-field
                                                                 [readonly]="disabled"
                                                                 [cssClass]="'text-right form-control other-taxes-input'"
-                                                                [name]="'transaction.amount_{{ entryIdx }}'"
+                                                                [name]="'entry.otherTaxesSum_' + entryIdx"
                                                                 [prefix]="invFormData.accountDetails.currencySymbol"
                                                                 [suffix]="selectedSuffixForCurrency"
                                                                 [mask]="inputMaskFormat"
@@ -3963,7 +3957,6 @@
                                                             <select-field
                                                                 [options]="salesAccounts$ | async"
                                                                 #selectAccount
-                                                                [openDropdown]="openProductSelectionDropdown"
                                                                 [cssClass]="'form-control mat-field-border'"
                                                                 [name]="'transaction.fakeAccForSelect2_{{ entryIdx }}'"
                                                                 [placeholder]="localeData?.select_acc"
@@ -3977,8 +3970,7 @@
                                                                         false,
                                                                         entryIdx
                                                                     );
-                                                                    noResultsFoundLabel = localeData?.search_acc;
-                                                                    openProductSelectionDropdown = false
+                                                                    noResultsFoundLabel = localeData?.search_acc
                                                                 "
                                                                 [defaultValue]="
                                                                     transaction.stockDetails &&
@@ -4353,7 +4345,7 @@
                                                             [cssClass]="
                                                                 'form-control mat-field-border text-right hello'
                                                             "
-                                                            [name]="'transaction.amount_{{ entryIdx }}'"
+                                                            [name]="'transaction.amount_' + entryIdx"
                                                             [prefix]="invFormData.accountDetails.currencySymbol"
                                                             [suffix]="selectedSuffixForCurrency"
                                                             [mask]="inputMaskFormat"
