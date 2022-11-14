@@ -49,6 +49,7 @@ export class TextFieldComponent implements OnInit, OnChanges, OnDestroy, Control
     @Input() public prefix: any;
     /** It will show suffix in the text field */
     @Input() public suffix: any;
+    @Input() public customDecimalPlaces: any;
     /** ngModel of input */
     public ngModel: any;
     /** Used for change detection */

@@ -17,6 +17,7 @@
         [attr.min]="min"
         [attr.max]="max"
         [maxLength]="maxlength"
+        [customDecimalPlaces]="customDecimalPlaces"
         *ngIf="!allowDecimalDigitsOnly && !allowDigitsOnly && !useMask"
         #textField
     />
@@ -37,6 +38,7 @@
         [attr.min]="min"
         [attr.max]="max"
         *ngIf="allowDecimalDigitsOnly && !useMask"
+        [customDecimalPlaces]="customDecimalPlaces"
         decimalDigitsDirective
         #textField
     />
@@ -57,6 +59,7 @@
         [attr.min]="min"
         [attr.max]="max"
         *ngIf="allowDigitsOnly && !useMask"
+        [customDecimalPlaces]="customDecimalPlaces"
         digitsOnlyDirective
         #textField
     />
@@ -80,7 +83,7 @@
         *ngIf="!allowDigitsOnly && useMask"
         #textField
     />
-    <!-- <input
+    <input
         matInput
         [name]="name"
         type="type"
@@ -98,7 +101,8 @@
         [suffix]="suffix"
         [mask]="mask"
         *ngIf="allowDigitsOnly && useMask"
+        [customDecimalPlaces]="customDecimalPlaces"
         digitsOnlyDirective
         #textField
-    /> -->
+    />
 </div>
