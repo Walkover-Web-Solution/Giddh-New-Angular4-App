@@ -108,8 +108,10 @@ export class AsideMenuOtherTaxes implements OnInit, OnChanges, OnDestroy {
      *
      * @memberof AsideMenuOtherTaxes
      */
-    public closeTaxesModal(): void {
-        this.closeModal.emit(true);
+    public closeTaxesModal(event: any): void {
+        if (event?.target?.className?.indexOf("option") === -1) {
+            this.closeModal.emit(true);
+        }
     }
     
     /**

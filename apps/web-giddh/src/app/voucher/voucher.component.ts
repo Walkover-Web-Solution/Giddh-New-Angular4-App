@@ -5531,7 +5531,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         if (!this.isSalesInvoice && !this.isPurchaseInvoice && !this.isProformaInvoice && !this.isEstimateInvoice) {
             // FOR CASH INVOICE, DEBIT NOTE AND CREDIT NOTE
             this.setActiveIndx(index);
-                this.openProductSelectionDropdown = true;
+            this.openProductSelectionDropdown = true;
         }
     }
 
@@ -5577,9 +5577,11 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      *
      * @memberof VoucherComponent
      */
-    handleOutsideClick(): void {
-        this.activeIndx = null;
-        this.checkVoucherEntries();
+    public handleOutsideClick(event: any): void {
+        if (event?.target?.className?.indexOf("option") === -1 && this.accountAsideMenuState === 'out' && this.asideMenuStateForProductService === 'out' && this.asideMenuStateForRecurringEntry === 'out' && this.asideMenuStateForOtherTaxes === 'out') {
+            this.activeIndx = null;
+            this.checkVoucherEntries();
+        }
     }
 
     /**

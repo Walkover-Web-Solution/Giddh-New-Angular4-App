@@ -194,7 +194,7 @@
                                                             [name]="'voucherDetails.customerName'"
                                                             [placeholder]="customerPlaceHolder"
                                                             [options]="customerAcList$ | async"
-                                                            [openDropdown]="openProductSelectionDropdown"
+                                                            [openDropdown]="openAccountSelectionDropdown"
                                                             (selectedOption)="onSelectCustomer($event)"
                                                             (createOption)="addNewAccount()"
                                                             [disabled]="
@@ -1964,8 +1964,8 @@
                             </thead>
                             <tbody
                                 [hidden]="showBulkLoader"
-                                (clickOutside)="handleOutsideClick()"
-                                [exclude]="'.entries-tr, .add-line-bulk-item'"
+                                (clickOutside)="handleOutsideClick($event)"
+                                [exclude]="'.entries-tr, .add-line-bulk-item, .mat-option'"
                             >
                                 <ng-container #itemsContainer></ng-container>
                             </tbody>
@@ -1982,7 +1982,11 @@
                                 <!-- added new element in td which is content amount element class is 'differ-currency' (multicurrency feature) -->
                                 <!-- region static entries-->
                                 <tr
-                                    (click)="setActiveIndx(entryIdx); $event.stopPropagation()"
+                                    (click)="
+                                        setActiveIndx(entryIdx);
+                                        openProductSelectionDropdown = true;
+                                        $event.stopPropagation()
+                                    "
                                     *ngIf="activeIndx !== entryIdx"
                                     class="entries-tr set-active"
                                     [ngClass]="{ 'is-other-tax': entry.isOtherTaxApplicable && isMulticurrencyAccount }"
@@ -2357,7 +2361,8 @@
                                                             false,
                                                             entryIdx
                                                         );
-                                                        noResultsFoundLabel = localeData?.search_acc
+                                                        noResultsFoundLabel = localeData?.search_acc;
+                                                        openProductSelectionDropdown = false
                                                     "
                                                     [defaultValue]="
                                                         transaction.stockDetails && transaction.stockDetails.name
@@ -3972,7 +3977,8 @@
                                                                         false,
                                                                         entryIdx
                                                                     );
-                                                                    noResultsFoundLabel = localeData?.search_acc
+                                                                    noResultsFoundLabel = localeData?.search_acc;
+                                                                    openProductSelectionDropdown = false
                                                                 "
                                                                 [defaultValue]="
                                                                     transaction.stockDetails &&
@@ -4603,7 +4609,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="save-card-data pointer" (click)="handleOutsideClick()">
+                                    <div class="save-card-data pointer" (click)="handleOutsideClick($event)">
                                         <i class="icon-save" aria-hidden="true"></i>
                                     </div>
 

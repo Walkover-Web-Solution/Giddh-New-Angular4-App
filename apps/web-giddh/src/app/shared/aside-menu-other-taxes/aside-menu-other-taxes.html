@@ -1,10 +1,10 @@
 <div
     class="aside-pane aside-pane-other-tax text-left"
-    (clickOutside)="closeTaxesModal()"
+    (clickOutside)="closeTaxesModal($event)"
     [keyboardShortcut]="'esc'"
-    (onShortcutPress)="closeTaxesModal()"
+    (onShortcutPress)="closeTaxesModal($event)"
 >
-    <button id="close" type="button" (click)="closeTaxesModal()">
+    <button id="close" type="button" (click)="closeTaxesModal($event)">
         <i class="icon-cross"></i>
     </button>
 
