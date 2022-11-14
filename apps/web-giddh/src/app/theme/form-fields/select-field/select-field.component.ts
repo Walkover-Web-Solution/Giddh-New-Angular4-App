@@ -27,6 +27,8 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public name: any = "";
     /** True if field is readonly */
     @Input() public readonly: boolean;
+    /** True if field is autocomplete */
+    @Input() public autocomplete: boolean;
     /** Default value to prefill */
     @Input() public defaultValue: any = "";
     /** True if field is required */

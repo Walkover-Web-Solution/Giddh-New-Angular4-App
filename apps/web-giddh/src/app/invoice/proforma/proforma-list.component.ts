@@ -661,7 +661,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     public goToInvoice(voucherType: string) {
-        this.router.navigate(['/pages/material-proforma-invoice/invoice/', voucherType]);
+        this.router.navigate(['/pages/proforma-invoice/invoice/', voucherType]);
     }
 
     public updateVoucherAction(action: string, item?: ProformaItem) {

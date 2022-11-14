@@ -25,14 +25,23 @@
                                 [cssClass]="'form-control mat-field-border'"
                                 [placeholder]="commonLocaleData?.app_select_tax"
                                 [options]="taxesOptions"
-                                (selectedOption)="
-                        applyTax($event);
-                        "
+                                (selectedOption)="applyTax($event);"
                                 [required]="true"
                                 [defaultValue]="selectedTaxUniqueName"
                                 (onClear)="onClear()"
+                                [allowValueReset]="true"
                             >
                             </select-field>
+                            <!-- <sh-select
+                                name="selectTax"
+                                [placeholder]="commonLocaleData?.app_select_tax"
+                                [options]="taxesOptions"
+                                [(ngModel)]="selectedTaxUniqueName"
+                                (selected)="applyTax($event)"
+                                (onClear)="onClear()"
+                                [showClear]="true"
+                            >
+                            </sh-select> -->
                             <label class="label-tax" *ngIf="defaultOtherTaxesModal?.appliedOtherTax?.name">
                                 {{ defaultOtherTaxesModal?.appliedOtherTax?.name | uppercase}}
                             </label>

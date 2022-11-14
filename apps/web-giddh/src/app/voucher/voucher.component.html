@@ -2655,7 +2655,6 @@
                                                     [useMask]="true"
                                                     [(ngModel)]="transaction.amount"
                                                     (change)="calculateWhenTrxAltered(entry, transaction, true, $event)"
-                                                    decimalDigitsDirective
                                                 ></text-field>
                                             </div>
                                             <div class="differ-currency" *ngIf="isMulticurrencyAccount">

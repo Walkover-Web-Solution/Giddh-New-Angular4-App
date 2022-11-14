@@ -813,7 +813,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public goToInvoice(voucherType: string) {
-        this._router.navigate(['/pages/material-proforma-invoice/invoice/', voucherType]);
+        this._router.navigate(['/pages/proforma-invoice/invoice/', voucherType]);
     }
 
     /**

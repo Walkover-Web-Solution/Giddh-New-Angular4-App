@@ -42,7 +42,6 @@ export const ROUTES: Routes = [
     { path: 'new-vs-old-invoices', redirectTo: 'pages/new-vs-old-invoices', pathMatch: 'full' },
     { path: 'reports', redirectTo: 'pages/reports' },
     { path: 'proforma-invoice', redirectTo: 'pages/proforma-invoice' },
-    { path: 'material-proforma-invoice', redirectTo: 'pages/material-proforma-invoice' },
     { path: 'select-plan' },
     {
         path: 'pages',

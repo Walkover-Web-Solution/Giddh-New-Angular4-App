@@ -1772,7 +1772,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.sundryDebtorsAcList = [];
         this.customerAcList$ = observableOf([]);
         this.salesAccounts$ = observableOf([]);
-        this.router.navigate(['pages', 'proforma-invoice', 'invoice', val]);
+        this.router.navigate(['pages', 'material-proforma-invoice', 'invoice', val]);
         this.selectedVoucherType = val;
         if (this.selectedVoucherType === VoucherTypeEnum.creditNote || this.selectedVoucherType === VoucherTypeEnum.debitNote) {
             this.getInvoiceListsForCreditNote();

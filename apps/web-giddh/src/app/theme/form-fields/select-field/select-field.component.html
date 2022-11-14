@@ -11,7 +11,7 @@
         [formControl]="searchFormControl"
         [readonly]="readonly"
         (click)="!readonly ? trigger?.openPanel() : trigger?.closePanel()"
-        autocomplete="disabled"
+        [autocomplete]="autocomplete"
         #trigger="matAutocompleteTrigger"
     />
     <mat-autocomplete [displayWith]="displayLabel" (optionSelected)="optionSelected($event)" #auto="matAutocomplete">

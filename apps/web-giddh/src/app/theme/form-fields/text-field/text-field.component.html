@@ -77,7 +77,28 @@
         [prefix]="prefix"
         [suffix]="suffix"
         [mask]="mask"
-        *ngIf="useMask"
+        *ngIf="!allowDigitsOnly && useMask"
         #textField
     />
+    <!-- <input
+        matInput
+        [name]="name"
+        type="type"
+        [id]="id"
+        [class]="cssClass"
+        [placeholder]="placeholder"
+        [(ngModel)]="ngModel"
+        (ngModelChange)="handleChange()"
+        (input)="handleInput()"
+        [readonly]="readonly"
+        [ngClass]="{ 'error-box': showError }"
+        [attr.pattern]="pattern"
+        [required]="required"
+        [prefix]="prefix"
+        [suffix]="suffix"
+        [mask]="mask"
+        *ngIf="allowDigitsOnly && useMask"
+        digitsOnlyDirective
+        #textField
+    /> -->
 </div>

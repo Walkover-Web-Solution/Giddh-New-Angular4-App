@@ -262,11 +262,11 @@ $custom-typography: mat-typography-config(
     }
 }
 
-// .aside-menu-othertax-open{
-//     .cdk-overlay-container{
-//         z-index: 99999;
-//     }
-// }
+.aside-menu-othertax-open {
+    .cdk-overlay-container {
+        z-index: 99999 !important;
+    }
+}
 .account-aside-menu-state {
     .mat-datepicker-toggle .mat-button-wrapper .mat-datepicker-toggle-default-icon {
         color: var(--color-datepicker-date-icon);
@@ -851,7 +851,7 @@ input {
         font-size: 12px;
     }
 
-    .options-line-value {
+    .options-line {
         padding: 10px;
         vertical-align: middle;
         min-height: 65px !important;
