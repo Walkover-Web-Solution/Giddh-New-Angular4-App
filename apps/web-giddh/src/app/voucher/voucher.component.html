@@ -2409,7 +2409,7 @@
                                                     type="text"
                                                     rows="3"
                                                     [placeholder]="localeData?.add_description"
-                                                    name="transaction.description_{{ entryIdx }}"
+                                                    name="transaction.description_'+entryIdx"
                                                     class="form-control"
                                                     [(ngModel)]="transaction.description"
                                                     [maxlength]="entryDescriptionLength"
@@ -2439,11 +2439,11 @@
                                                                     (dateSelected)="
                                                                         onBlurEntryDate(entryIdx, dp.isOpen)
                                                                     "
-                                                                    id="transaction.date_{{ entryIdx }}"
+                                                                    id="transaction.date_'+entryIdx"
                                                                     [disabled]="isUpdateMode"
                                                                     [cssClass]="'entry-custom-date'"
                                                                     [placeholder]="giddhDateFormat"
-                                                                    name="transaction.date_{{ entryIdx }}"
+                                                                    name="transaction.date_'+entryIdx"
                                                                     [(ngModel)]="entry.entryDate"
                                                                 >
                                                                 </giddh-datepicker>
@@ -2566,7 +2566,7 @@
                                             [placeholder]="commonLocaleData?.app_quantity"
                                             [readonly]="!transaction.isStockTxn"
                                             type="text"
-                                            [cssClass]="'form-control mat-field-border text-right'"
+                                            [cssClass]="'form-control mat-field-border text-right stock1'"
                                             [name]="'transaction.quantity_' + entryIdx"
                                             [mask]="inputMaskFormat"
                                             [useMask]="true"
@@ -2774,7 +2774,7 @@
                                                         *ngIf="!entry.isOtherTaxApplicable"
                                                         [checked]="entry.isOtherTaxApplicable"
                                                         color="primary"
-                                                        id="entry.isOtherTaxApplicable_{{ entryIdx }}"
+                                                        id="entry.isOtherTaxApplicable_'+entryIdx}"
                                                         [(ngModel)]="entry.isOtherTaxApplicable"
                                                         (change)="
                                                             toggleOtherTaxesAsidePane(
@@ -2783,11 +2783,11 @@
                                                             )
                                                         "
                                                         class="other-taxes-checkbox"
-                                                        name="entry.isOtherTaxApplicable_{{ entryIdx }}"
+                                                        name="entry.isOtherTaxApplicable_'+entryIdx"
                                                     >
                                                     </mat-checkbox>
                                                     <label
-                                                        for="entry.isOtherTaxApplicable_{{ entryIdx }}"
+                                                        for="entry.isOtherTaxApplicable_'+entryIdx}"
                                                         *ngIf="!entry.isOtherTaxApplicable"
                                                         class="other-tax-label font-13 align-middle"
                                                         (click)="tcsTdsIndex = entryIdx"
@@ -2806,7 +2806,7 @@
                                                                 </a>
                                                             </span>
                                                             <text-field
-                                                                [readonly]="disabled"
+                                                                [readonly]="'disabled'"
                                                                 [cssClass]="'text-right form-control other-taxes-input'"
                                                                 [name]="'entry.otherTaxesSum_' + entryIdx"
                                                                 [prefix]="invFormData.accountDetails.currencySymbol"
@@ -4039,7 +4039,7 @@
                                                                 rows="3"
                                                                 [placeholder]="localeData?.add_description"
                                                                 #description
-                                                                name="transaction.description_{{ entryIdx }}"
+                                                                name="transaction.description_'+entryIdx"
                                                                 class="form-control"
                                                                 [(ngModel)]="transaction.description"
                                                                 [maxlength]="entryDescriptionLength"
@@ -4076,11 +4076,11 @@
                                                                                 (dateSelected)="
                                                                                     onBlurEntryDate(entryIdx, dp.isOpen)
                                                                                 "
-                                                                                id="transaction.date_{{ entryIdx }}"
+                                                                                id="transaction.date_'+entryIdx"
                                                                                 [disabled]="isUpdateMode"
                                                                                 [cssClass]="'entry-custom-date'"
                                                                                 [placeholder]="giddhDateFormat"
-                                                                                name="transaction.date_{{ entryIdx }}"
+                                                                                name="transaction.date_'+entryIdx"
                                                                                 [(ngModel)]="entry.entryDate"
                                                                             >
                                                                             </giddh-datepicker>
@@ -4168,9 +4168,9 @@
                                                                                 maxLength="10"
                                                                                 decimalDigitsDirective
                                                                                 [placeholder]="localeData?.hsn_number"
-                                                                                name="transaction.hsnNumber_{{
-                                                                                    entryIdx
-                                                                                }}"
+                                                                                [name]="
+                                                                                    'transaction.hsnNumber_' + entryIdx
+                                                                                "
                                                                                 *ngIf="
                                                                                     transaction.showCodeType === 'hsn'
                                                                                 "
@@ -4181,9 +4181,9 @@
                                                                                 maxLength="10"
                                                                                 decimalDigitsDirective
                                                                                 [placeholder]="localeData?.sac_number"
-                                                                                name="transaction.hsnNumber_{{
-                                                                                    entryIdx
-                                                                                }}"
+                                                                                [name]="
+                                                                                    'transaction.sacNumber_' + entryIdx
+                                                                                "
                                                                                 *ngIf="
                                                                                     transaction.showCodeType === 'sac'
                                                                                 "
@@ -4252,7 +4252,7 @@
                                                                 commonLocaleData?.app_unit
                                                             }}</label>
                                                             <mat-select
-                                                                name="transaction.stockUnit_{{ entryIdx }}"
+                                                                name="transaction.stockUnit_'+entryIdx"
                                                                 class="form-control"
                                                                 [disabled]="!transaction.isStockTxn"
                                                                 (selectionChange)="
@@ -4497,7 +4497,7 @@
                                                                 *ngIf="!entry.isOtherTaxApplicable"
                                                                 [checked]="entry.isOtherTaxApplicable"
                                                                 color="primary"
-                                                                id="entry.isOtherTaxApplicable_{{ entryIdx }}"
+                                                                id="entry.isOtherTaxApplicable_'+entryIdx}"
                                                                 [(ngModel)]="entry.isOtherTaxApplicable"
                                                                 (change)="
                                                                     toggleOtherTaxesAsidePane(
@@ -4506,11 +4506,11 @@
                                                                     )
                                                                 "
                                                                 class="other-taxes-checkbox"
-                                                                name="entry.isOtherTaxApplicable_{{ entryIdx }}"
+                                                                name="entry.isOtherTaxApplicable_'+entryIdx"
                                                             >
                                                             </mat-checkbox>
                                                             <label
-                                                                for="entry.isOtherTaxApplicable_{{ entryIdx }}"
+                                                                for="entry.isOtherTaxApplicable_'+entryIdx"
                                                                 *ngIf="!entry.isOtherTaxApplicable"
                                                                 class="other-tax-label font-13 align-middle"
                                                                 (click)="tcsTdsIndex = entryIdx"
@@ -4539,8 +4539,8 @@
                                                                         </a>
                                                                     </span>
                                                                     <text-field
-                                                                        [readonly]="disabled"
-                                                                        type="text"
+                                                                        [readonly]="'true'"
+                                                                        [type]="'text'"
                                                                         [cssClass]="
                                                                             'form-control mat-field-border text-right  other-taxes-input'
                                                                         "

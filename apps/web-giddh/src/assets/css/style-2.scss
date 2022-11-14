@@ -204,6 +204,12 @@ $custom-typography: mat-typography-config(
         max-height: calc(210px);
         overflow-y: auto !important;
         min-width: 230px;
+
+        .line-height-initial {
+            &:focus {
+                box-shadow: none !important;
+            }
+        }
     }
 
     .multicurrency-grandtotal {
@@ -267,6 +273,7 @@ $custom-typography: mat-typography-config(
         z-index: 99999 !important;
     }
 }
+
 .account-aside-menu-state {
     .mat-datepicker-toggle .mat-button-wrapper .mat-datepicker-toggle-default-icon {
         color: var(--color-datepicker-date-icon);
@@ -7778,6 +7785,18 @@ highcharts-chart {
 }
 
 .voucher-preview-edit {
+    .other-taxes-input {
+        border: 1px solid var(--color-secondary-input-bar-border) !important;
+    }
+
+    .stock-unit {
+        .stock1 {
+            float: left;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+    }
+
     .primary-main-header {
         z-index: 99 !important;
     }
