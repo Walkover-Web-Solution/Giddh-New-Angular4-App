@@ -3590,6 +3590,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     }
 
     public addBlankRow(txn: SalesTransactionItemClass) {
+        console.log(txn);
+
         if (!txn) {
             let entry: SalesEntryClass = new SalesEntryClass();
             if (this.isUpdateMode) {
@@ -3615,6 +3617,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 return;
             }
             let entry: SalesEntryClass = new SalesEntryClass();
+            console.log(entry);
+
             this.invFormData.entries.push(entry);
         }
         this.createEmbeddedViewAtIndex(this.invFormData.entries?.length - 1);
@@ -7437,7 +7441,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @private
      * @memberof VoucherComponent
      */
-     public openProductDropdown(): void {
+    public openProductDropdown(): void {
         if (this.invFormData?.voucherDetails?.customerUniquename || this.invFormData?.voucherDetails?.customerName) {
             setTimeout(() => {
                 const shSelectField: any = !this.isMobileScreen ? this.selectAccount?.first : this.selectAccount?.last;

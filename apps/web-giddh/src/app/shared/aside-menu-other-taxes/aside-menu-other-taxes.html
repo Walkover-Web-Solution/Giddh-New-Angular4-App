@@ -59,7 +59,7 @@
                             [cssClass]="'form-control mat-field-border'"
                             [placeholder]="commonLocaleData?.app_select_method"
                             [options]="calculationMethodOptions"
-                            [defaultValue]="defaultOtherTaxesModal.tcsCalculationMethod"
+                            [defaultValue]="calculationMethodOptions[0].label"
                             [name]="'tcsCalculationMethod'"
                             (selectedOption)="
                         onCalculateTax($event);
