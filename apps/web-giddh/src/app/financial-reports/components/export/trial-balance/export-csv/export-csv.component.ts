@@ -159,6 +159,8 @@ export class TrialBalanceExportCsvComponent implements OnInit, OnDestroy {
         exportBodyRequest.from = this.trialBalanceRequest.from;
         exportBodyRequest.to = this.trialBalanceRequest.to;
         exportBodyRequest.exportType = "FLAT_TRIAL_BALANCE_EXPORT";
+        exportBodyRequest.tagName = this.trialBalanceRequest.tagName;
+        exportBodyRequest.branchUniqueName = this.trialBalanceRequest.branchUniqueName;
         this.ledgerService.exportData(exportBodyRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === 'success') {
                 this.router.navigate(["/pages/downloads"]);
