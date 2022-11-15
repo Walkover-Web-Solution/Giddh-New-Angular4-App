@@ -17,7 +17,8 @@
         [attr.min]="min"
         [attr.max]="max"
         [maxLength]="maxlength"
-        *ngIf="!allowDecimalDigitsOnly"
+        [customDecimalPlaces]="customDecimalPlaces"
+        *ngIf="!allowDecimalDigitsOnly && !allowDigitsOnly && !useMask"
         #textField
     />
     <input
@@ -36,8 +37,72 @@
         [required]="required"
         [attr.min]="min"
         [attr.max]="max"
-        *ngIf="allowDecimalDigitsOnly"
+        *ngIf="allowDecimalDigitsOnly && !useMask"
+        [customDecimalPlaces]="customDecimalPlaces"
         decimalDigitsDirective
+        #textField
+    />
+    <input
+        matInput
+        [name]="name"
+        type="number"
+        [id]="id"
+        [class]="cssClass"
+        [placeholder]="placeholder"
+        [(ngModel)]="ngModel"
+        (ngModelChange)="handleChange()"
+        (input)="handleInput()"
+        [readonly]="readonly"
+        [ngClass]="{ 'error-box': showError }"
+        [attr.pattern]="pattern"
+        [required]="required"
+        [attr.min]="min"
+        [attr.max]="max"
+        *ngIf="allowDigitsOnly && !useMask"
+        [customDecimalPlaces]="customDecimalPlaces"
+        digitsOnlyDirective
+        #textField
+    />
+    <input
+        matInput
+        [name]="name"
+        type="type"
+        [id]="id"
+        [class]="cssClass"
+        [placeholder]="placeholder"
+        [(ngModel)]="ngModel"
+        (ngModelChange)="handleChange()"
+        (input)="handleInput()"
+        [readonly]="readonly"
+        [ngClass]="{ 'error-box': showError }"
+        [attr.pattern]="pattern"
+        [required]="required"
+        [prefix]="prefix"
+        [suffix]="suffix"
+        [mask]="mask"
+        *ngIf="!allowDigitsOnly && useMask"
+        #textField
+    />
+    <input
+        matInput
+        [name]="name"
+        type="type"
+        [id]="id"
+        [class]="cssClass"
+        [placeholder]="placeholder"
+        [(ngModel)]="ngModel"
+        (ngModelChange)="handleChange()"
+        (input)="handleInput()"
+        [readonly]="readonly"
+        [ngClass]="{ 'error-box': showError }"
+        [attr.pattern]="pattern"
+        [required]="required"
+        [prefix]="prefix"
+        [suffix]="suffix"
+        [mask]="mask"
+        *ngIf="allowDigitsOnly && useMask"
+        [customDecimalPlaces]="customDecimalPlaces"
+        digitsOnlyDirective
         #textField
     />
 </div>

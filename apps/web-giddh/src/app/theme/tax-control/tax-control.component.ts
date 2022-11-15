@@ -206,12 +206,6 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
         return tax.uniqueName; // or item.id
     }
 
-    /**
-     * hide menus on outside click of span
-     */
-    public toggleTaxPopup(action: any) {
-        this.showTaxPopup = action;
-    }
 
     public ngOnDestroy() {
         this.taxAmountSumEvent.unsubscribe();
@@ -225,10 +219,6 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
      * select/deselect tax checkbox
      */
     public change(event?: any) {
-        if (event) {
-            event.stopPropagation();
-            event.preventDefault();
-        }
         this.selectedTaxes = [];
         this.taxSum = this.calculateSum();
         this.calculateInclusiveOrExclusiveTaxes();
@@ -313,7 +303,6 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
             let nextElement = focussable[index + 1] || focussable[0];
             nextElement.focus();
         }
-        this.toggleTaxPopup(false);
         return false;
     }
 
@@ -323,7 +312,6 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
      * @memberof TaxControlComponent
      */
     public handleInputFocus(): void {
-        this.showTaxPopup = true;
         this.hideOtherPopups.emit(true);
         this.taxInputElement?.nativeElement.classList.remove('error-box');
     }
@@ -372,25 +360,5 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
             // Exclusive tax rate
             this.taxTotalAmount = giddhRoundOff(((this.totalForTax * this.taxSum) / 100), this.giddhBalanceDecimalPlaces);
         }
-    }
-
-    /**
-     * Adds styling on focused Dropdown List
-     *
-     * @param {HTMLElement} taxLabel
-     * @memberof TaxControlComponent
-     */
-    public taxLabelFocusing(taxLabel: HTMLElement): void {
-        this.generalService.dropdownFocusIn(taxLabel);
-    }
-
-    /**
-     * Removes styling from focused Dropdown List
-     *
-     * @param {HTMLElement} taxLabel
-     * @memberof TaxControlComponent
-     */
-    public taxLabelBluring(taxLabel: HTMLElement): void {
-        this.generalService.dropdownFocusOut(taxLabel);
     }
 }

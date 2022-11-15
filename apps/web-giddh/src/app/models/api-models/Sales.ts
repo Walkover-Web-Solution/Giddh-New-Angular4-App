@@ -508,7 +508,7 @@ export class VoucherDetailsClass {
     public exchangeRate?: number;
     public referenceVoucher?: ReferenceVoucher;
     public gainLoss?: number;
-    public voucherUniqueName?: string;
+    public voucherUniqueName?: any;
 
     constructor() {
         this.customerName = null;

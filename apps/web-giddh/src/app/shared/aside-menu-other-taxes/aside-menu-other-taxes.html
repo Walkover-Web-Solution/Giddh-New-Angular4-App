@@ -1,10 +1,10 @@
 <div
     class="aside-pane aside-pane-other-tax text-left"
-    (clickOutside)="closeTaxesModal()"
+    (clickOutside)="closeTaxesModal($event)"
     [keyboardShortcut]="'esc'"
-    (onShortcutPress)="closeTaxesModal()"
+    (onShortcutPress)="closeTaxesModal($event)"
 >
-    <button id="close" type="button" (click)="closeTaxesModal()">
+    <button id="close" type="button" (click)="closeTaxesModal($event)">
         <i class="icon-cross"></i>
     </button>
 
@@ -18,38 +18,41 @@
                 <div class="col-sm-6">
                     <div class="select-tax-dropdown d-flex flex-column">
                         <label>{{commonLocaleData?.app_select_tax}}<span class="text-danger">*</span></label>
-
                         <div class="mr-b2">
-                            <sh-select
-                                name="selectTax"
+                            <select-field
+                                [name]="'selectTax'"
+                                [cssClass]="'form-control mat-field-border'"
                                 [placeholder]="commonLocaleData?.app_select_tax"
                                 [options]="taxesOptions"
-                                [(ngModel)]="selectedTaxUniqueName"
-                                (selected)="applyTax($event)"
+                                (selectedOption)="applyTax($event);"
+                                [required]="true"
+                                [defaultValue]="selectedTaxUniqueName"
                                 (onClear)="onClear()"
-                                [showClear]="true"
+                                [allowValueReset]="true"
                             >
-                            </sh-select>
-
+                            </select-field>
                             <label class="label-tax" *ngIf="defaultOtherTaxesModal?.appliedOtherTax?.name">
                                 {{ defaultOtherTaxesModal?.appliedOtherTax?.name | uppercase}}
                             </label>
                         </div>
                     </div>
                 </div>
-
                 <div class="col-sm-6">
                     <div>
                         <label>{{commonLocaleData?.app_calculation_method}}<span class="text-danger">*</span></label>
                     </div>
-
                     <div class="mb-2">
-                        <sh-select
-                            [options]="calculationMethodOptions"
-                            name="tcsCalculationMethod"
+                        <select-field
+                            [cssClass]="'form-control mat-field-border'"
                             [placeholder]="commonLocaleData?.app_select_method"
-                            [(ngModel)]="defaultOtherTaxesModal.tcsCalculationMethod"
-                        ></sh-select>
+                            [options]="calculationMethodOptions"
+                            [defaultValue]="calculationMethodOptions[0].label"
+                            [name]="'tcsCalculationMethod'"
+                            (selectedOption)="
+                        onCalculateTax($event);
+                        "
+                        >
+                        </select-field>
                     </div>
                 </div>
             </div>

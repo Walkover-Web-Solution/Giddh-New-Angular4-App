@@ -1,21 +1,48 @@
-<input
-    type="text"
-    [ngClass]="cssClass"
-    class="select-field-input"
-    [placeholder]="placeholder"
-    matInput
-    [matAutocomplete]="auto"
-    (blur)="onBlur()"
-    [name]="name"
-    [formControl]="searchFormControl"
-    [readonly]="readonly"
-    [required]="required"
-    (click)="!readonly ? trigger?.openPanel() : trigger?.closePanel()"
-    #trigger="matAutocompleteTrigger"
-/>
-<mat-autocomplete [displayWith]="displayLabel" (optionSelected)="optionSelected($event)" #auto="matAutocomplete">
-    <mat-option *ngFor="let option of fieldFilteredOptions" [value]="option" [matTooltip]="option?.label">
-        {{ option?.label }}
-    </mat-option>
-    <mat-option disabled *ngIf="fieldFilteredOptions?.length === 0"> No results found </mat-option>
-</mat-autocomplete>
+<ng-container appTranslate (commonLocaleData)="commonLocaleData = $event">
+    <input
+        type="text"
+        [ngClass]="cssClass"
+        class="select-field-input"
+        [placeholder]="placeholder"
+        matInput
+        [matAutocomplete]="auto"
+        (blur)="onBlur()"
+        [name]="name"
+        [formControl]="searchFormControl"
+        [readonly]="readonly"
+        (click)="!readonly ? trigger?.openPanel() : trigger?.closePanel()"
+        [autocomplete]="autocomplete"
+        #trigger="matAutocompleteTrigger"
+    />
+    <mat-autocomplete
+        [displayWith]="displayLabel"
+        (optionSelected)="optionSelected($event)"
+        #auto="matAutocomplete"
+        [ngClass]="customPanelClass"
+    >
+        <a href="javascript:;" *ngIf="createNewText" (click)="createNewRecord()" class="custom-class-create">
+            <div class="item create-new">{{ createNewText }}</div>
+            <div class="item create-new-command">
+                {{ commonLocaleData?.app_alt_c }}
+            </div>
+        </a>
+        <ng-container>
+            <mat-option
+                *ngFor="let option of fieldFilteredOptions"
+                [value]="option"
+                [matTooltip]="option?.label"
+                [ngClass]="hasMoreValue ? 'options-line-value' : 'options-line'"
+            >
+                <ng-template
+                    [ngTemplateOutletContext]="{ option: option }"
+                    [ngTemplateOutlet]="optionTemplate"
+                ></ng-template>
+                <ng-container *ngIf="!optionTemplate">
+                    <span class="option-label"> {{ option?.label }}</span>
+                    <span class="option-value" *ngIf="showValueInLabel">{{ option.additional?.uniqueName }}</span>
+                </ng-container>
+            </mat-option>
+            <mat-option disabled *ngIf="fieldFilteredOptions?.length === 0">No results found</mat-option>
+        </ng-container>
+    </mat-autocomplete>
+</ng-container>

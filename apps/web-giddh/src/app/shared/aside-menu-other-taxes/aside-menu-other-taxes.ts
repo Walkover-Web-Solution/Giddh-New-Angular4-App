@@ -108,7 +108,21 @@ export class AsideMenuOtherTaxes implements OnInit, OnChanges, OnDestroy {
      *
      * @memberof AsideMenuOtherTaxes
      */
-    public closeTaxesModal(): void {
-        this.closeModal.emit(true);
+    public closeTaxesModal(event: any): void {
+        if (event?.target?.className?.indexOf("option") === -1) {
+            this.closeModal.emit(true);
+        }
+    }
+    
+    /**
+     * This will use for onCalculate tax method
+     *
+     * @param {IOption} tax
+     * @memberof AsideMenuOtherTaxes
+     */
+    public onCalculateTax(tax: IOption): void {
+        if (tax && tax.value) {
+            this.defaultOtherTaxesModal.tcsCalculationMethod == tax.value;
+        }
     }
 }
