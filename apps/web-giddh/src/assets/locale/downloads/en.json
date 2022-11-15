@@ -1,6 +1,4 @@
 {
-    "requested_date": "Requested Date",
-    "user":"User",
-    "expiry": "Expiry",
-    "expired": "Expired"
+    "exports": "Exports",
+    "imports": "Imports"
 }
