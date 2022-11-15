@@ -555,7 +555,7 @@
                                                                                         invFormData.accountDetails
                                                                                             .billingDetails.pincode
                                                                                     "
-                                                                                    [allowDecimalDigitsOnly]="'true'"
+                                                                                    [allowDecimalDigitsOnly]="true"
                                                                                 >
                                                                                 </text-field>
                                                                             </div>
@@ -783,9 +783,7 @@
                                                                                             invFormData.accountDetails
                                                                                                 .shippingDetails.pincode
                                                                                         "
-                                                                                        [allowDecimalDigitsOnly]="
-                                                                                            'true'
-                                                                                        "
+                                                                                        [allowDecimalDigitsOnly]="true"
                                                                                     >
                                                                                     </text-field>
                                                                                 </div>
@@ -1195,7 +1193,7 @@
                                                                                 (blur)="
                                                                                     autoFillCompanyShippingDetails()
                                                                                 "
-                                                                                [allowDecimalDigitsOnly]="'true'"
+                                                                                [allowDecimalDigitsOnly]="true"
                                                                             >
                                                                             </text-field>
                                                                         </div>
@@ -1349,7 +1347,7 @@
                                                                                         purchaseBillCompany
                                                                                             .shippingDetails.pincode
                                                                                     "
-                                                                                    [allowDecimalDigitsOnly]="'true'"
+                                                                                    [allowDecimalDigitsOnly]="true"
                                                                                 >
                                                                                 </text-field>
                                                                             </div>
@@ -2468,7 +2466,7 @@
                                                                 <text-field
                                                                     [type]="'text'"
                                                                     maxLength="10"
-                                                                    [allowDecimalDigitsOnly]="'true'"
+                                                                    [allowDecimalDigitsOnly]="true"
                                                                     [placeholder]="localeData?.hsn_number"
                                                                     [name]="'transaction.hsnNumber_' + entryIdx"
                                                                     *ngIf="transaction.showCodeType === 'hsn'"
@@ -2477,7 +2475,7 @@
                                                                 <text-field
                                                                     [type]="'text'"
                                                                     maxLength="10"
-                                                                    [allowDecimalDigitsOnly]="'true'"
+                                                                    [allowDecimalDigitsOnly]="true"
                                                                     [placeholder]="localeData?.sac_number"
                                                                     [name]="'transaction.hsnNumber_' + entryIdx"
                                                                     *ngIf="transaction.showCodeType === 'sac'"
@@ -2523,7 +2521,7 @@
                                             [useMask]="true"
                                             [(ngModel)]="transaction.quantity"
                                             (change)="handleQuantityBlur(entry, transaction)"
-                                            [allowDecimalDigitsOnly]="'true'"
+                                            [allowDecimalDigitsOnly]="true"
                                         >
                                         </text-field>
                                         <mat-select
@@ -2709,7 +2707,7 @@
                                                     [suffix]="selectedSuffixForCurrency"
                                                     [mask]="inputMaskFormat"
                                                     [useMask]="true"
-                                                    [allowDecimalDigitsOnly]="'true'"
+                                                    [allowDecimalDigitsOnly]="true"
                                                     [(ngModel)]="transaction.total"
                                                     (change)="calculateTransactionValueInclusively(entry, transaction)"
                                                 >
@@ -4014,7 +4012,7 @@
                                                                             <text-field
                                                                                 [type]="'text'"
                                                                                 maxLength="10"
-                                                                                [allowDecimalDigitsOnly]="'true'"
+                                                                                [allowDecimalDigitsOnly]="true"
                                                                                 [placeholder]="localeData?.hsn_number"
                                                                                 [name]="
                                                                                     'transaction.hsnNumber_' + entryIdx
@@ -4028,7 +4026,7 @@
                                                                             <text-field
                                                                                 [type]="'text'"
                                                                                 maxLength="10"
-                                                                                [allowDecimalDigitsOnly]="'true'"
+                                                                                [allowDecimalDigitsOnly]="true"
                                                                                 [placeholder]="localeData?.sac_number"
                                                                                 [name]="
                                                                                     'transaction.sacNumber_' + entryIdx
@@ -4090,7 +4088,7 @@
                                                                 [readonly]="!transaction.isStockTxn"
                                                                 (change)="handleQuantityBlur(entry, transaction)"
                                                                 [placeholder]="commonLocaleData?.app_quantity"
-                                                                [allowDecimalDigitsOnly]="'true'"
+                                                                [allowDecimalDigitsOnly]="true"
                                                                 [name]="'transaction.quantity_' + entryIdx"
                                                                 [cssClass]="'form-control mat-field-border text-right'"
                                                                 [(ngModel)]="transaction.quantity"
@@ -4196,7 +4194,7 @@
                                                             [suffix]="selectedSuffixForCurrency"
                                                             [mask]="inputMaskFormat"
                                                             [useMask]="true"
-                                                            [allowDecimalDigitsOnly]="'true'"
+                                                            [allowDecimalDigitsOnly]="true"
                                                             [(ngModel)]="transaction.amount"
                                                             (change)="
                                                                 calculateWhenTrxAltered(
@@ -4327,7 +4325,7 @@
                                                             [suffix]="selectedSuffixForCurrency"
                                                             [mask]="inputMaskFormat"
                                                             [useMask]="true"
-                                                            [allowDecimalDigitsOnly]="'true'"
+                                                            [allowDecimalDigitsOnly]="true"
                                                             [(ngModel)]="transaction.total"
                                                             (change)="
                                                                 calculateTransactionValueInclusively(entry, transaction)
