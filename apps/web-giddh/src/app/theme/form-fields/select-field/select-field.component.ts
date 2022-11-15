@@ -182,24 +182,6 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy {
         return option?.label;
     }
 
-    /**
-     * Resets the selected value if option not selected after new search
-     *
-     * @memberof SelectFieldComponent
-     */
-    public resetValueIfOptionNotSelected(): void {
-        setTimeout(() => {
-            if (typeof this.searchFormControl?.value !== "object" && this.searchFormControl?.value !== this.selectedValue) {
-                if (this.allowValueReset) {
-                    this.selectedValue = "";
-                    this.searchFormControl.setValue({ label: "" });
-                    this.onClear.emit({ label: "", value: "" });
-                } else {
-                    this.searchFormControl.setValue({ label: this.selectedValue });
-                }
-            }
-        }, 200);
-    }
 
     /**
      * Emits the selected option data
@@ -229,5 +211,19 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy {
      */
     public openDropdownPanel(): void {
         this.trigger.openPanel();
+    }
+
+    /**
+     * Callback event on blur
+     *
+     * @memberof SelectFieldComponent
+     */
+    public onBlur(): void {
+        setTimeout(() => {
+            if (!this.searchFormControl?.value) {
+                this.selectedValue = "";
+                this.selectedOption.emit({ label: '', value: '' });
+            }
+        }, 200);
     }
 }
