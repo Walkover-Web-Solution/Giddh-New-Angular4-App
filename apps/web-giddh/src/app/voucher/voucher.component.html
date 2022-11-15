@@ -3241,7 +3241,7 @@
                                     </div>
                                     <!--region balance due for non-purchase-->
                                     <div
-                                        class="table-row sect1"
+                                        class="table-row"
                                         *ngIf="
                                             (isSalesInvoice ||
                                                 currentVoucherFormDetails?.depositAllowed ||
@@ -3366,7 +3366,7 @@
                                                                 <div class="clearfix payment-mode">
                                                                     <select-field
                                                                         [cssClass]="
-                                                                            'form-control mat-field-border pull-right hello'
+                                                                            'form-control mat-field-border pull-right'
                                                                         "
                                                                         [name]="'depositAccountUniqueName'"
                                                                         [options]="bankAccounts$ | async"
@@ -4792,7 +4792,7 @@
                                 </div>
                                 <!--region balance due for non-purchase-->
                                 <div
-                                    class="table-row sect2"
+                                    class="table-row"
                                     *ngIf="
                                         !hideDepositSection &&
                                         (isSalesInvoice || currentVoucherFormDetails?.depositAllowed) &&
