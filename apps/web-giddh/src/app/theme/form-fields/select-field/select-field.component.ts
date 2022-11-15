@@ -19,6 +19,8 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy {
     @ViewChild('trigger', { static: false, read: MatAutocompleteTrigger }) trigger: MatAutocompleteTrigger;
     /** CSS class name to add on the field */
     @Input() public cssClass: string = "";
+    /** CSS class name to add on the mat autocomplete panel class */
+    @Input() public customPanelClass: string = "";
     /** Placeholder of search field */
     @Input() public placeholder: any = "";
     /** List of data */
@@ -133,11 +135,11 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy {
         }
 
         if (changes?.openDropdown) {
-                if (changes?.openDropdown?.currentValue) {
-                    this.trigger?.openPanel();
-                } else {
-                    this.trigger?.closePanel();
-                }
+            if (changes?.openDropdown?.currentValue) {
+                this.trigger?.openPanel();
+            } else {
+                this.trigger?.closePanel();
+            }
         }
     }
 
@@ -220,6 +222,11 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy {
         this.createOption.emit(true);
     }
 
+    /**
+     * This will use for open dropdown panel
+     *
+     * @memberof SelectFieldComponent
+     */
     public openDropdownPanel(): void {
         this.trigger.openPanel();
     }

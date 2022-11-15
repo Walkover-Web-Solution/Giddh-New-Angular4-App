@@ -23,8 +23,8 @@
                         <div class="form-group">
                             <label>{{ localeData?.customer_name }} </label>
                             <text-field
-                                type="text"
-                                name="customerName"
+                                [type]="'text'"
+                                [name]="'customerName'"
                                 [cssClass]="'form-control mat-field-border'"
                                 [(ngModel)]="adjustPayment.customerName"
                                 [readonly]="true"
@@ -209,7 +209,7 @@
                                             [name]="'voucherName{{ entry.uniqueName }}'"
                                             [defaultValue]="entry.voucherNumber"
                                             (click)="clickSelectVoucher(entryIdx, adjustAdvancePaymentForm)"
-                                            [attr.required]="true"
+                                            [required]="'true'"
                                             [placeholder]="localeData?.select_voucher"
                                             (selectedOption)="selectVoucher($event, entry, entryIdx)"
                                             [options]="adjustVoucherOptions"
@@ -315,7 +315,7 @@
                                             "
                                             [mask]="enableVoucherAdjustmentMultiCurrency ? inputMaskFormat : ''"
                                             [useMask]="true"
-                                            decimalDigitsDirective
+                                            [allowDecimalDigitsOnly]="'true'"
                                         ></text-field>
                                         <span
                                             *ngIf="
@@ -439,7 +439,7 @@
                                                 [prefix]="currencySymbol"
                                                 [mask]="inputMaskFormat"
                                                 [useMask]="true"
-                                                decimalDigitsDirective
+                                                [allowDecimalDigitsOnly]="'true'"
                                                 (change)="changeTdsAmount($event)"
                                                 [(ngModel)]="adjustVoucherForm.tdsAmount.amountForAccount"
                                             ></text-field>
