@@ -212,6 +212,14 @@ $custom-typography: mat-typography-config(
         }
     }
 
+    .tax-control-menu {
+        button {
+            &:focus {
+                box-shadow: none !important;
+            }
+        }
+    }
+
     .multicurrency-grandtotal {
         width: 77%;
         float: right;

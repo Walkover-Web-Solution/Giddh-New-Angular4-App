@@ -27,7 +27,6 @@
                             <span *ngIf="isCashInvoice; else invoiceTypeDisplayRef">
                                 {{ localeData?.invoice_types?.cash }}
                             </span>
-
                             <small *ngIf="invoiceType === 'estimates'"> ({{ commonLocaleData?.app_beta }}) </small>
                             <span class="caret"></span>
                         </button>
@@ -41,11 +40,9 @@
                             <span *ngIf="isCashInvoice; else invoiceTypeDisplayRef">
                                 {{ localeData?.invoice_types?.cash }}
                             </span>
-
                             <small *ngIf="invoiceType === 'estimates'"> ({{ commonLocaleData?.app_beta }}) </small>
                             <span class="caret" *ngIf="!isUpdateMode"></span>
                         </button>
-
                         <ng-container *ngIf="!isUpdateMode">
                             <ul
                                 id="dropdown1-basic"
@@ -67,9 +64,7 @@
                 </div>
             </div>
         </div>
-
         <!-- endregion -->
-
         <!-- region update mode loader-->
         <ng-container *ngIf="isUpdateDataInProcess">
             <div class="loader-class">
@@ -119,7 +114,6 @@
                                                     ? commonLocaleData?.app_total_amount
                                                     : localeData?.balance_due
                                             }}</span>
-
                                             <span
                                                 class="sp-rupees d-flex justify-content-end"
                                                 *ngIf="isMulticurrencyAccount"
@@ -131,7 +125,6 @@
                                                 >
                                                 </amount-field>
                                             </span>
-
                                             <!-- added multicurrency feature make it functional to change into appropriate currency -->
                                             <span
                                                 class="sp-rupees d-flex justify-content-end"
@@ -148,7 +141,6 @@
                                                 >
                                                 </amount-field>
                                             </span>
-
                                             <span
                                                 class="sp-rupees d-flex justify-content-end"
                                                 *ngIf="!isMulticurrencyAccount"
@@ -163,7 +155,6 @@
                                         </p>
                                     </div>
                                 </div>
-
                                 <!-- region customer section -->
                                 <div class="clearfix">
                                     <div class="row">
@@ -178,7 +169,6 @@
                                             >
                                         </div>
                                         <!-- endregion -->
-
                                         <!-- region customer dropdown -->
                                         <div
                                             class="col-sm-12 col-xl-7 col-lg-8 col-md-9 col-xs-12 select-customers-name"
@@ -232,8 +222,8 @@
                                                     <!-- region if not cashinvoice show customer dropdown -->
                                                     <ng-container *ngIf="isCashInvoice">
                                                         <text-field
-                                                            type="text"
-                                                            name="voucherDetails.customerName"
+                                                            [type]="'text'"
+                                                            [name]="'voucherDetails.customerName'"
                                                             [autoFocus]="true"
                                                             #inputCustomerName
                                                             [cssClass]="
@@ -249,7 +239,6 @@
                                                         ></text-field>
                                                     </ng-container>
                                                     <!-- endregion -->
-
                                                     <!-- region previous details commented for multicurrency changes-->
                                                     <div
                                                         class="d-flex cp aqua-color align-items-center ml-3"
@@ -310,7 +299,6 @@
                                                         "
                                                     >
                                                     </ng-container>
-
                                                     <span
                                                         class="cp aqua-color mr-r05"
                                                         *ngIf="!isCashInvoice && !isUpdateMode"
@@ -332,7 +320,6 @@
                                                     *ngIf="!invFormData.voucherDetails.customerName"
                                                 />
                                             </ng-container>
-
                                             <!-- need to show this image on purchase invoice module -->
                                             <ng-container *ngIf="isPurchaseInvoice">
                                                 <img
@@ -341,7 +328,6 @@
                                                     *ngIf="!invFormData.voucherDetails.customerName"
                                                 />
                                             </ng-container>
-
                                             <ng-container *ngIf="isCashInvoice">
                                                 <img
                                                     src="assets/images/new/search_customer_Cash Invoice.svg"
@@ -355,7 +341,6 @@
                                     </div>
                                 </div>
                                 <!-- endregion -->
-
                                 <!-- region customer address section -->
                                 <div
                                     class="row"
@@ -452,7 +437,6 @@
                                                                         aria-autocomplete="none"
                                                                         #customerBillingAddress
                                                                     ></textarea>
-
                                                                     <div class="row">
                                                                         <div class="col-sm-12 col-md-6">
                                                                             <label class="sales-country-label">
@@ -500,9 +484,11 @@
                                                                             <text-field
                                                                                 [maxlength]="15"
                                                                                 autocomplete="None"
-                                                                                type="text"
+                                                                                [type]="'text'"
                                                                                 [name]="'billingDetails.gstNumber'"
-                                                                                [cssClass]="'form-control input-custom'"
+                                                                                [cssClass]="
+                                                                                    'form-control input-custom mat-field-border'
+                                                                                "
                                                                                 *ngIf="showGSTINNo"
                                                                                 [(ngModel)]="
                                                                                     invFormData.accountDetails
@@ -521,8 +507,8 @@
                                                                             >
                                                                             </text-field>
                                                                             <text-field
-                                                                                [maxlength]="15"
-                                                                                autocomplete="None"
+                                                                                [maxlength]="'15'"
+                                                                                autocomplete="none"
                                                                                 [type]="'text'"
                                                                                 [name]="'billingDetails.gstNumber'"
                                                                                 [cssClass]="'form-control input-custom'"
@@ -581,7 +567,6 @@
                                                             </div>
                                                         </div>
                                                         <!-- endregion -->
-
                                                         <!-- region shipping address -->
                                                         <div class="col-sm-12 col-xl-6 col-md-10 bill-add">
                                                             <div class="form-group p-0 width-100">
@@ -643,7 +628,6 @@
                                                                                 >
                                                                                     {{ address.address }}
                                                                                     {{ address.state?.name }}
-
                                                                                     <p class="font-12">
                                                                                         {{
                                                                                             address.gstNumber
@@ -677,7 +661,6 @@
                                                                         rows="3"
                                                                         autocomplete="off"
                                                                     ></textarea>
-
                                                                     <div class="clearfix form-group mb-0">
                                                                         <div class="row">
                                                                             <div class="col-sm-12 col-md-6">
@@ -687,7 +670,6 @@
                                                                                     </label>
                                                                                 </div>
                                                                             </div>
-
                                                                             <div
                                                                                 class="
                                                                                     col-sm-12 col-md-6
@@ -724,7 +706,6 @@
                                                                                 >
                                                                                 </select-field>
                                                                             </div>
-
                                                                             <div
                                                                                 class="col-sm-6"
                                                                                 *ngIf="shouldShowTrnGstField"
@@ -844,7 +825,6 @@
                                                 ? commonLocaleData?.app_total_amount
                                                 : localeData?.balance_due
                                         }}</span>
-
                                         <span
                                             class="sp-rupees d-flex justify-content-end"
                                             *ngIf="isMulticurrencyAccount"
@@ -860,7 +840,6 @@
                                             >
                                             </amount-field>
                                         </span>
-
                                         <!-- added multicurrency feature make it functional to change into appropriate currency -->
                                         <span
                                             *ngIf="
@@ -904,7 +883,6 @@
                                             >
                                             </amount-field>
                                         </span>
-
                                         <span
                                             class="sp-rupees d-flex justify-content-end"
                                             *ngIf="!isMulticurrencyAccount"
@@ -942,7 +920,6 @@
                             <!-- endregion -->
                         </div>
                         <!-- endregion -->
-
                         <!-- region attention to, email, mobile, voucher section -->
                         <div class="customer-invoice-table bg-white pd-b2 pd-t2">
                             <div class="inner-container">
@@ -951,7 +928,6 @@
                                     <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12">
                                         <label>{{ localeData?.attention_to }}</label>
                                     </div>
-
                                     <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12">
                                         <div class="pl-0 col-sm-12 col-xl-6 col-lg-10 col-md-10">
                                             <text-field
@@ -965,7 +941,6 @@
                                     </div>
                                 </div>
                                 <!-- endregion-->
-
                                 <!-- region email -->
                                 <div class="row mt-1">
                                     <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3">
@@ -983,15 +958,12 @@
                                         </div>
                                     </div>
                                 </div>
-
                                 <!-- endregion-->
-
                                 <!-- region mobile no -->
                                 <div class="row mt-1 mobile-number-wrapper">
                                     <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3">
                                         <label>{{ commonLocaleData?.app_mobile_number }}</label>
                                     </div>
-
                                     <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12">
                                         <div class="col-sm-12 col-xl-6 col-lg-10 col-md-10 pl-0 mobile-number">
                                             <input
@@ -1032,7 +1004,6 @@
                                     </div>
                                 </div>
                                 <!-- end warehouse field -->
-
                                 <div class="row mt-1 delivery-from-field" *ngIf="isPurchaseInvoice">
                                     <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3">
                                         <label>{{ localeData?.deliver_to }}<span class="red-text">*</span></label>
@@ -1177,8 +1148,8 @@
                                                                         "
                                                                     >
                                                                         <text-field
-                                                                            [maxlength]="15"
-                                                                            autocomplete="None"
+                                                                            [maxlength]="'15'"
+                                                                            autocomplete="none"
                                                                             [type]="'text'"
                                                                             [name]="'companyBillingDetailsTax'"
                                                                             [(ngModel)]="
@@ -1234,7 +1205,6 @@
                                                         </div>
                                                     </div>
                                                     <!-- endregion -->
-
                                                     <!-- region shipping address -->
                                                     <div class="col-sm-12 col-xl-6 col-md-10 bill-add">
                                                         <div class="form-group p-0 width-100">
@@ -1330,8 +1300,8 @@
                                                                             "
                                                                         >
                                                                             <text-field
-                                                                                [maxlength]="15"
-                                                                                autocomplete="None"
+                                                                                [maxlength]="'15'"
+                                                                                autocomplete="none"
                                                                                 [type]="'text'"
                                                                                 [name]="'companyShippingDetailsTax'"
                                                                                 [(ngModel)]="
@@ -1421,7 +1391,6 @@
                                                     <ngx-mat-select-search [formControl]="linkPoDropdown">
                                                     </ngx-mat-select-search>
                                                 </mat-option>
-
                                                 <mat-option
                                                     *ngFor="let option of fieldFilteredOptions"
                                                     [value]="option"
@@ -1442,7 +1411,6 @@
                                     </div>
                                 </div>
                                 <!-- end Link purchase order -->
-
                                 <!-- region invoice no, invoice date, Expiry date -->
                                 <div class="row mt-1">
                                     <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3">
@@ -1454,9 +1422,9 @@
                                             <div>
                                                 <text-field
                                                     *ngIf="!isCreditNote && !isDebitNote"
-                                                    type="text"
-                                                    name="accountDetails.invoiceNum"
-                                                    class="form-control invoice-date attention-to"
+                                                    [type]="'text'"
+                                                    [name]="'accountDetails.invoiceNum'"
+                                                    [cssClass]="'form-control invoice-date attention-to mat-field-border"
                                                     [ngClass]="{ 'date-invoice': !isPurchaseInvoice }"
                                                     [readonly]="
                                                         isUpdateMode && !(isDebitNote || isPurchaseInvoice)
@@ -1595,7 +1563,6 @@
                                                             "
                                                         >
                                                         </giddh-datepicker>
-
                                                         <p
                                                             class="text-danger"
                                                             *ngIf="
@@ -1607,7 +1574,6 @@
                                                         </p>
                                                     </div>
                                                 </div>
-
                                                 <div
                                                     class="form-group invoice-due-label"
                                                     *ngIf="
@@ -1645,7 +1611,6 @@
                                         </div>
                                     </div>
                                 </div>
-
                                 <div class="row mt-1" *ngIf="voucherApiVersion === 2 && (isCreditNote || isDebitNote)">
                                     <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3">
                                         <label> {{ commonLocaleData?.app_number }} </label>
@@ -1654,9 +1619,11 @@
                                         <div class="col-sm-12 col-xl-6 col-lg-5 col-md-10 pl-0">
                                             <div>
                                                 <text-field
-                                                    type="text"
-                                                    name="accountDetails.invoiceNum"
-                                                    class="form-control invoice-date attention-to"
+                                                    [type]="'text'"
+                                                    [name]="'accountDetails.invoiceNum'"
+                                                    [cssClass]="
+                                                        'form-control invoice-date attention-to mat-field-border'
+                                                    "
                                                     [ngClass]="{ 'date-invoice': !isPurchaseInvoice }"
                                                     [readonly]="
                                                         isUpdateMode && !(isDebitNote || isPurchaseInvoice)
@@ -1670,7 +1637,6 @@
                                         </div>
                                     </div>
                                 </div>
-
                                 <div class="row mt-1 mobile-invoice-date-due-date" *ngIf="isMobileScreen">
                                     <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3">
                                         <label>{{ invoiceDateLabel }}</label>
@@ -1706,7 +1672,6 @@
                                         </div>
                                     </div>
                                 </div>
-
                                 <div
                                     class="row mt-1 mobile-invoice-date-due-date"
                                     *ngIf="
@@ -1744,7 +1709,6 @@
                                         </div>
                                     </div>
                                 </div>
-
                                 <!-- reverse charge transction start -->
                                 <!-- for purchase record start -->
                                 <div
@@ -1802,7 +1766,6 @@
                                             </div>
                                         </div>
                                     </div>
-
                                     <!-- endregion -->
                                     <div
                                         class="row mt-1"
@@ -1866,16 +1829,14 @@
                                         originalExchangeRate | giddhCurrency
                                     }}</span>
                                     <text-field
-                                        type="number"
-                                        [name]="exchangeRate"
+                                        [type]="'number'"
+                                        [name]="'exchangeRate'"
                                         [(ngModel)]="newExchangeRate"
-                                        class="form-control edit-currency"
+                                        [cssClass]="'form-control edit-currency exchange-rate-original'"
                                         *ngIf="showCurrencyValue"
-                                        class="exchange-rate-original"
                                     ></text-field>
                                     {{ companyCurrency }}
                                 </span>
-
                                 <span class="edit-icon cp">
                                     <img
                                         src="assets/images/edit-pencilicon.svg"
@@ -1919,15 +1880,14 @@
                                         originalReverseExchangeRate | giddhCurrency
                                     }}</span>
                                     <text-field
-                                        type="number"
-                                        name="exchangeRate"
+                                        [type]="'number'"
+                                        [name]="'exchangeRate'"
                                         [(ngModel)]="reverseExchangeRate"
-                                        class="form-control edit-currency"
+                                        [cssClass]="'form-control edit-currency'"
                                         *ngIf="showCurrencyValue"
                                     ></text-field>
                                     {{ companyCurrencyName }}
                                 </span>
-
                                 <span class="edit-icon cp">
                                     <img
                                         *ngIf="!autoSaveIcon"
@@ -1976,7 +1936,6 @@
                                     </td>
                                 </tr>
                             </tbody>
-
                             <ng-template #entry let-entry let-entryIdx="entryIdx" let-transaction="transaction">
                                 <!-- <ng-container *ngFor="let transaction of entry.transactions;"> -->
                                 <!-- added new element in td which is content amount element class is 'differ-currency' (multicurrency feature) -->
@@ -1988,7 +1947,6 @@
                                     [ngClass]="{ 'is-other-tax': entry.isOtherTaxApplicable && isMulticurrencyAccount }"
                                 >
                                     <td>{{ entryIdx + 1 }}</td>
-
                                     <td>
                                         <div class="product-name">
                                             <label *ngIf="!transaction.accountName" class="select-account-label">{{
@@ -1999,12 +1957,10 @@
                                                 >({{ transaction.stockDetails?.name }})</span
                                             >
                                         </div>
-
                                         <div class="sku-number">
                                             <label>{{ commonLocaleData?.app_sku }}:</label
                                             >{{ commonLocaleData?.app_number }}
                                         </div>
-
                                         <div class="description">
                                             {{ transaction.description }}
                                         </div>
@@ -2025,7 +1981,6 @@
                                                         </span>
                                                     </div>
                                                 </div>
-
                                                 <div
                                                     class="col-6 col-sm-6 pl-0"
                                                     *ngIf="transaction.hsnNumber || transaction.sacNumber"
@@ -2243,7 +2198,6 @@
                                                         </amount-field>
                                                         <br />
                                                     </span>
-
                                                     <span
                                                         class="d-flex justify-content-end"
                                                         *ngIf="
@@ -2311,7 +2265,6 @@
                                                 </span>
                                             </div>
                                         </div>
-
                                         <div
                                             class="trash-icon-delete"
                                             (click)="
@@ -2326,9 +2279,7 @@
                                         </div>
                                     </td>
                                 </tr>
-
                                 <!-- endregion -->
-
                                 <!-- region dynamic entries-->
                                 <!-- added new element in td which is content amount element class is 'differ-currency' (multicurrency feature)-->
                                 <tr
@@ -2396,13 +2347,11 @@
                                                 </select-field>
                                             </div>
                                         </div>
-
                                         <div *ngIf="transaction.fakeAccForSelect2">
                                             <div class="sku-number">
                                                 <label>{{ commonLocaleData?.app_sku }}:</label
                                                 >{{ commonLocaleData?.app_number }}
                                             </div>
-
                                             <div class="description">
                                                 <textarea
                                                     matInput
@@ -2459,7 +2408,6 @@
                                                             </span>
                                                         </div>
                                                     </div>
-
                                                     <div class="col-6 col-sm-6 pl-0">
                                                         <div class="wrap-hsn-box">
                                                             <div
@@ -2503,13 +2451,15 @@
                                                                         color="primary"
                                                                         id="hsnCodeType{{ entryIdx }}"
                                                                         [value]="'hsn'"
-                                                                        >{{ commonLocaleData?.app_hsn_code }}
+                                                                    >
+                                                                        {{ commonLocaleData?.app_hsn_code }}
                                                                     </mat-radio-button>
                                                                     <mat-radio-button
                                                                         color="primary"
                                                                         id="sacCodeType{{ entryIdx }}"
                                                                         [value]="'sac'"
-                                                                        >{{ commonLocaleData?.app_sac_code }}
+                                                                    >
+                                                                        {{ commonLocaleData?.app_sac_code }}
                                                                     </mat-radio-button>
                                                                 </mat-radio-group>
                                                                 <text-field
@@ -2530,7 +2480,6 @@
                                                                     *ngIf="transaction.showCodeType === 'sac'"
                                                                     [(ngModel)]="transaction.sacNumber"
                                                                 ></text-field>
-
                                                                 <div class="btn-group mt-2 pt-1 d-flex">
                                                                     <button
                                                                         mat-button
@@ -2556,7 +2505,6 @@
                                             <!-- endregion -->
                                         </div>
                                     </td>
-
                                     <td
                                         (click)="closeDiscountPopup(); closeTaxControlPopup()"
                                         *ngIf="!currentVoucherFormDetails || currentVoucherFormDetails?.quantityAllowed"
@@ -2565,7 +2513,7 @@
                                         <text-field
                                             [placeholder]="commonLocaleData?.app_quantity"
                                             [readonly]="!transaction.isStockTxn"
-                                            type="text"
+                                            [type]="'text'"
                                             [cssClass]="'form-control mat-field-border text-right stock1'"
                                             [name]="'transaction.quantity_' + entryIdx"
                                             [mask]="inputMaskFormat"
@@ -2590,7 +2538,6 @@
                                             </mat-option>
                                         </mat-select>
                                     </td>
-
                                     <td
                                         (click)="closeDiscountPopup(); closeTaxControlPopup()"
                                         class="text-right item-rate"
@@ -2636,7 +2583,6 @@
                                             </div>
                                         </div>
                                     </td>
-
                                     <td
                                         (click)="closeDiscountPopup(); closeTaxControlPopup()"
                                         class="text-right item-amount"
@@ -2655,7 +2601,8 @@
                                                     [useMask]="true"
                                                     [(ngModel)]="transaction.amount"
                                                     (change)="calculateWhenTrxAltered(entry, transaction, true, $event)"
-                                                ></text-field>
+                                                >
+                                                </text-field>
                                             </div>
                                             <div class="differ-currency" *ngIf="isMulticurrencyAccount">
                                                 <span>
@@ -2669,7 +2616,6 @@
                                             </div>
                                         </div>
                                     </td>
-
                                     <td
                                         (click)="closeTaxControlPopup()"
                                         class="item-discount"
@@ -2707,7 +2653,6 @@
                                             </div>
                                         </div>
                                     </td>
-
                                     <td
                                         (click)="closeDiscountPopup()"
                                         *ngIf="!currentVoucherFormDetails || currentVoucherFormDetails?.taxesAllowed"
@@ -2735,7 +2680,6 @@
                                                 >
                                                 </tax-control>
                                             </div>
-
                                             <div class="differ-currency" *ngIf="isMulticurrencyAccount">
                                                 <span>
                                                     <amount-field
@@ -2748,7 +2692,6 @@
                                             </div>
                                         </div>
                                     </td>
-
                                     <td
                                         (click)="closeDiscountPopup(); closeTaxControlPopup()"
                                         class="text-right item-total delete-btn-absolute"
@@ -2768,13 +2711,12 @@
                                                     (change)="calculateTransactionValueInclusively(entry, transaction)"
                                                 >
                                                 </text-field>
-
                                                 <div *ngIf="isTcsTdsApplicable" class="wrap-other-tax">
                                                     <mat-checkbox
                                                         *ngIf="!entry.isOtherTaxApplicable"
                                                         [checked]="entry.isOtherTaxApplicable"
                                                         color="primary"
-                                                        id="entry.isOtherTaxApplicable_'+entryIdx}"
+                                                        id="entry.isOtherTaxApplicable_'+entryIdx"
                                                         [(ngModel)]="entry.isOtherTaxApplicable"
                                                         (change)="
                                                             toggleOtherTaxesAsidePane(
@@ -2787,7 +2729,7 @@
                                                     >
                                                     </mat-checkbox>
                                                     <label
-                                                        for="entry.isOtherTaxApplicable_'+entryIdx}"
+                                                        for="entry.isOtherTaxApplicable_'+entryIdx"
                                                         *ngIf="!entry.isOtherTaxApplicable"
                                                         class="other-tax-label font-13 align-middle"
                                                         (click)="tcsTdsIndex = entryIdx"
@@ -2816,7 +2758,6 @@
                                                                 [(ngModel)]="entry.otherTaxSum"
                                                             ></text-field>
                                                         </div>
-
                                                         <p class="mr-r05 font-12 text-capitalize mr-b2">
                                                             {{ entry.otherTaxModal?.appliedOtherTax?.name }}
                                                         </p>
@@ -2850,13 +2791,11 @@
                                                     </amount-field>
                                                 </span>
                                             </div>
-
                                             <ng-container
                                                 *ngTemplateOutlet="otherTaxesModal; context: { $implicit: entry }"
                                             >
                                             </ng-container>
                                         </div>
-
                                         <div
                                             class="trash-icon-delete"
                                             (click)="
@@ -2874,7 +2813,6 @@
                                 <!-- endregion -->
                                 <!-- </ng-container> -->
                             </ng-template>
-
                             <!-- region add bulk items -->
                             <div class="p-1 aqua-color add-line-bulk-item width-100">
                                 <a href="javascript:;" (click)="addBlankRow(null)">{{ localeData?.add_new_line }}</a>
@@ -2883,7 +2821,6 @@
                             </div>
                             <!-- endregion -->
                         </table>
-
                         <div class="row mr-0 ml-0 other-details-section">
                             <div class="col-md-6">
                                 <!-- region other details-->
@@ -2901,10 +2838,8 @@
                                                     ></span>
                                                 </div>
                                             </div>
-
                                             <div class="ico-head">{{ commonLocaleData?.app_other_details }}</div>
                                         </div>
-
                                         <div
                                             [collapse]="isOthrDtlCollapsed"
                                             class="clearfix max-width-600 pd-l3 m-0 other-details-section-list"
@@ -2933,25 +2868,23 @@
                                                         {{ localeData?.invalid_date }}
                                                     </p>
                                                 </div>
-
                                                 <div class="form-group col-xs-4 col-sm-4 mb-0">
                                                     <text-field
-                                                        type="text"
-                                                        name="shippedVia"
+                                                        [type]="'text'"
+                                                        [name]="'shippedVia'"
                                                         [(ngModel)]="invFormData.templateDetails.other.shippedVia"
-                                                        class="form-control"
+                                                        [cssClass]="'form-control mat-field-border'"
                                                         [placeholder]="
                                                             templatePlaceholder?.shippedViaLabel || localeData?.ship_via
                                                         "
                                                     ></text-field>
                                                 </div>
-
                                                 <div class="form-group col-xs-4 col-sm-4 mb-0">
                                                     <text-field
-                                                        type="text"
-                                                        name="trackingNumber"
+                                                        [type]="'text'"
+                                                        [name]="'trackingNumber'"
                                                         [(ngModel)]="invFormData.templateDetails.other.trackingNumber"
-                                                        class="form-control"
+                                                        [cssClass]="'form-control mat-field-border'"
                                                         [placeholder]="
                                                             templatePlaceholder?.trackingNumber ||
                                                             localeData?.tracking_number
@@ -2962,34 +2895,32 @@
                                             <div class="row">
                                                 <div class="form-group col-xs-4 col-sm-4 mb-0">
                                                     <text-field
-                                                        type="text"
-                                                        name="customField1"
+                                                        [type]="'text'"
+                                                        [name]="'customField1'"
                                                         [(ngModel)]="invFormData.templateDetails.other.customField1"
-                                                        class="form-control"
+                                                        [cssClass]="'form-control mat-field-border'"
                                                         [placeholder]="
                                                             templatePlaceholder?.customField1Label || localeData?.field1
                                                         "
                                                     ></text-field>
                                                 </div>
-
                                                 <div class="form-group col-xs-4 col-sm-4 mb-0">
                                                     <text-field
-                                                        type="text"
-                                                        name="customField2"
+                                                        [type]="'text'"
+                                                        [name]="'customField2'"
                                                         [(ngModel)]="invFormData.templateDetails.other.customField2"
-                                                        class="form-control"
+                                                        [cssClass]="'form-control mat-field-border'"
                                                         [placeholder]="
                                                             templatePlaceholder?.customField2Label || localeData?.field2
                                                         "
                                                     ></text-field>
                                                 </div>
-
                                                 <div class="form-group col-xs-4 col-sm-4 mb-0">
                                                     <text-field
-                                                        type="text"
-                                                        name="customField3"
+                                                        [type]="'text'"
+                                                        [name]="'customField3'"
                                                         [(ngModel)]="invFormData.templateDetails.other.customField3"
-                                                        class="form-control"
+                                                        [cssClass]="'form-control mat-field-border'"
                                                         [placeholder]="
                                                             templatePlaceholder?.customField3Label || localeData?.field3
                                                         "
@@ -2999,9 +2930,7 @@
                                         </div>
                                     </div>
                                 </div>
-
                                 <!-- endregion -->
-
                                 <!-- region note/messages -->
                                 <div class="pd-t1 pl-0 max-width-600" *ngIf="!isPurchaseInvoice">
                                     <label class="mr-b1">{{ commonLocaleData?.app_note }}</label>
@@ -3032,7 +2961,6 @@
                                     </ng-container>
                                 </div>
                                 <!-- endregion -->
-
                                 <div
                                     class="pd-t1 pl-0 max-width-600 position-relative"
                                     *ngIf="currentVoucherFormDetails?.attachmentAllowed || isPurchaseInvoice"
@@ -3040,7 +2968,6 @@
                                     <label class="mr-b1"
                                         ><i class="icon-file-path"></i> {{ localeData?.attachment }}</label
                                     >
-
                                     <label
                                         class="custom-file-label form-control cp position-relative"
                                         for="invoiceFile"
@@ -3106,7 +3033,6 @@
                                             </span>
                                         </div>
                                     </div>
-
                                     <div class="table-row">
                                         <div class="table-cell">{{ commonLocaleData?.app_discount }}</div>
                                         <div class="table-cell figure-cell">
@@ -3128,7 +3054,6 @@
                                             </span>
                                         </div>
                                     </div>
-
                                     <div class="table-row">
                                         <div class="table-cell">{{ commonLocaleData?.app_taxable_value }}</div>
                                         <div class="table-cell figure-cell">
@@ -3150,7 +3075,6 @@
                                             </span>
                                         </div>
                                     </div>
-
                                     <div class="table-row" *ngIf="!excludeTax">
                                         <div class="table-cell">{{ commonLocaleData?.app_tax }}</div>
                                         <div class="table-cell figure-cell">
@@ -3172,7 +3096,6 @@
                                             </span>
                                         </div>
                                     </div>
-
                                     <div class="table-row" *ngIf="!excludeTax">
                                         <div class="table-cell">{{ commonLocaleData?.app_cess }}</div>
                                         <div class="table-cell figure-cell">
@@ -3198,7 +3121,6 @@
                                         <div class="table-cell">
                                             <strong>{{ commonLocaleData?.app_round_off }}</strong>
                                         </div>
-
                                         <div class="table-cell figure-cell">
                                             <strong>
                                                 <span class="d-flex justify-content-end">
@@ -3220,7 +3142,6 @@
                                             </strong>
                                         </div>
                                     </div>
-
                                     <div class="table-row">
                                         <div class="table-cell bigger-dollar">
                                             <strong
@@ -3230,7 +3151,6 @@
                                                 }}</span>
                                             </strong>
                                         </div>
-
                                         <div class="table-cell figure-cell">
                                             <strong>
                                                 <span class="d-flex justify-content-end">
@@ -3260,11 +3180,10 @@
                                                 <span>{{ baseCurrencySymbol }}</span>
                                             </strong>
                                         </div>
-
                                         <div class="table-cell figure-cell">
                                             <text-field
                                                 #grandTotalInr
-                                                type="text"
+                                                [type]="'text'"
                                                 [cssClass]="'form-control mat-field-border multicurrency-grandtotal '"
                                                 [name]="'grandTotalMulDum'"
                                                 [prefix]="baseCurrencySymbol"
@@ -3278,7 +3197,6 @@
                                             ></text-field>
                                         </div>
                                     </div>
-
                                     <div class="table-row" *ngIf="isTcsPresent">
                                         <div class="table-cell">{{ commonLocaleData?.app_tcs }}</div>
                                         <div class="table-cell figure-cell">
@@ -3300,7 +3218,6 @@
                                             </span>
                                         </div>
                                     </div>
-
                                     <div class="table-row" *ngIf="isTdsPresent">
                                         <div class="table-cell">{{ commonLocaleData?.app_tds }}</div>
                                         <div class="table-cell figure-cell">
@@ -3322,7 +3239,6 @@
                                             </span>
                                         </div>
                                     </div>
-
                                     <!--region balance due for non-purchase-->
                                     <div
                                         class="table-row"
@@ -3385,7 +3301,8 @@
                                                                                     [value]="false"
                                                                                     (click)="clickAdjustAmount(false)"
                                                                                     (change)="clickAdjustAmount($event)"
-                                                                                    >{{ commonLocaleData?.app_no }}
+                                                                                >
+                                                                                    {{ commonLocaleData?.app_no }}
                                                                                 </mat-radio-button>
                                                                                 <mat-radio-button
                                                                                     color="primary"
@@ -3393,11 +3310,11 @@
                                                                                     [value]="true"
                                                                                     (click)="clickAdjustAmount(true)"
                                                                                     (change)="clickAdjustAmount($event)"
-                                                                                    >{{ commonLocaleData?.app_yes }}
+                                                                                >
+                                                                                    {{ commonLocaleData?.app_yes }}
                                                                                 </mat-radio-button>
                                                                             </mat-radio-group>
                                                                         </div>
-
                                                                         <div class="clearfix mr-t05">
                                                                             <span class="pull-left">
                                                                                 <p class="text-light">
@@ -3438,7 +3355,6 @@
                                                                 </div>
                                                             </li>
                                                         </ng-container>
-
                                                         <ng-container
                                                             *ngIf="
                                                                 !isUpdateMode &&
@@ -3461,13 +3377,11 @@
                                                                         (onClear)="onSelectPaymentMode($event, true)"
                                                                     >
                                                                     </select-field>
-
                                                                     <label class="pull-right">{{
                                                                         commonLocaleData?.app_payment_mode
                                                                     }}</label>
                                                                 </div>
                                                             </li>
-
                                                             <li
                                                                 class="
                                                                     clearfix
@@ -3489,13 +3403,13 @@
                                                                     [placeholder]="commonLocaleData?.app_amount"
                                                                     [cssClass]="
                                                                         'form-control
-                                                                        amount-field
-                                                                        due-amount-field
-                                                                        text-right
-                                                                        pull-right
-                                                                        max-width-100
-                                                                        mat-field-border 
-                                                                        multicurrency-grandtotal'
+                                    amount-field
+                                    due-amount-field
+                                    text-right
+                                    pull-right
+                                    max-width-100
+                                    mat-field-border 
+                                    multicurrency-grandtotal'
                                                                     "
                                                                     [name]="'dueAmount'"
                                                                     [prefix]="depositCurrSymbol"
@@ -3506,13 +3420,12 @@
                                                                     [attr.required]="
                                                                         depositAccountUniqueName ? true : false
                                                                     "
-                                                                    [type]="text"
+                                                                    [type]="'text'"
                                                                 ></text-field>
                                                                 <label class="pull-right">{{
                                                                     commonLocaleData?.app_amount
                                                                 }}</label>
                                                             </li>
-
                                                             <li
                                                                 class="
                                                                     clearfix
@@ -3543,7 +3456,6 @@
                                                                     commonLocaleData?.app_amount
                                                                 }}</label>
                                                             </li>
-
                                                             <li
                                                                 class="clearfix mr-t1 bigger-dollar"
                                                                 *ngIf="
@@ -3616,7 +3528,7 @@
                                                                 <div class="clearfix payment-mode">
                                                                     <select-field
                                                                         [cssClass]="
-                                                                            'form-control mat-field-border pull-right'
+                                                                            'form-control mat-field-border pull-right yes'
                                                                         "
                                                                         [name]="'depositAccountUniqueName'"
                                                                         [options]="bankAccounts$ | async"
@@ -3640,7 +3552,6 @@
                                         </div>
                                     </div>
                                     <!--endregion-->
-
                                     <!-- region balance due for purchase -->
                                     <div class="table-row" *ngIf="isPurchaseInvoice && voucherApiVersion !== 2">
                                         <div class="table-cell">
@@ -3662,7 +3573,6 @@
                         </div>
                     </section>
                     <!-- endregion -->
-
                     <!-- region mobile view -->
                     <div class="show-in-mobile" *ngIf="isMobileScreen">
                         <div
@@ -3689,7 +3599,6 @@
                                                         >({{ transaction.stockDetails?.name }})</span
                                                     >
                                                 </div>
-
                                                 <p class="description">
                                                     {{ transaction.description }}
                                                 </p>
@@ -3699,7 +3608,6 @@
                                                 >
                                                     {{ transaction.sku_and_customfields }}
                                                 </p>
-
                                                 <div class="date-hsn-code pr-0">
                                                     <div class="row">
                                                         <div class="col-sm-6" *ngIf="entry.entryDate">
@@ -3710,7 +3618,6 @@
                                                                 </label>
                                                             </div>
                                                         </div>
-
                                                         <div
                                                             class="col-sm-6 pl-0"
                                                             *ngIf="transaction.hsnNumber || transaction.sacNumber"
@@ -3735,7 +3642,6 @@
                                             </div>
                                         </div>
                                     </div>
-
                                     <div class="row">
                                         <div class="col-sm-6">
                                             <div class="single-card-row">
@@ -3747,7 +3653,6 @@
                                                 </div>
                                             </div>
                                         </div>
-
                                         <div class="col-sm-6">
                                             <div class="single-card-row">
                                                 <div class="card-rate">
@@ -3788,7 +3693,6 @@
                                             </div>
                                         </div>
                                     </div>
-
                                     <div class="row">
                                         <div class="col-sm-6">
                                             <div class="single-card-row">
@@ -3810,7 +3714,6 @@
                                                         >
                                                         </amount-field>
                                                     </p>
-
                                                     <div class="differ-currency" *ngIf="isMulticurrencyAccount">
                                                         <amount-field
                                                             [amount]="transaction.convertedAmount"
@@ -3822,7 +3725,6 @@
                                                 </div>
                                             </div>
                                         </div>
-
                                         <div class="col-sm-6">
                                             <div class="single-card-row">
                                                 <div class="card-discount">
@@ -3857,7 +3759,6 @@
                                             </div>
                                         </div>
                                     </div>
-
                                     <div class="row">
                                         <div class="col-sm-6">
                                             <div class="single-card-row">
@@ -3890,7 +3791,6 @@
                                                 </div>
                                             </div>
                                         </div>
-
                                         <div class="col-sm-6">
                                             <div class="single-card-row">
                                                 <div class="card-total">
@@ -3923,11 +3823,9 @@
                                             </div>
                                         </div>
                                     </div>
-
                                     <div class="edit-card" (click)="setActiveIndx(entryIdx); $event.stopPropagation()">
                                         <img src="assets/images/edit-pencilicon.svg" />
                                     </div>
-
                                     <div
                                         class="del-card"
                                         (click)="
@@ -3940,7 +3838,6 @@
                                     </div>
                                 </div>
                                 <!-- endregion -->
-
                                 <!-- region dynamic entry -->
                                 <div
                                     class="card-invoice-table edit-card-invoice-table"
@@ -4026,13 +3923,11 @@
                                                             </select-field>
                                                         </div>
                                                     </div>
-
                                                     <div *ngIf="transaction.fakeAccForSelect2">
                                                         <div class="sku-number">
                                                             <label>{{ commonLocaleData?.app_sku }}:</label
                                                             >{{ commonLocaleData?.app_number }}
                                                         </div>
-
                                                         <div class="description">
                                                             <textarea
                                                                 matInput
@@ -4059,7 +3954,6 @@
                                                                 {{ transaction.sku_and_customfields }}
                                                             </p>
                                                         </div>
-
                                                         <!-- region entry date/ hsncode -->
                                                         <div class="date-hsn-code">
                                                             <div class="row">
@@ -4098,7 +3992,6 @@
                                                                         </span>
                                                                     </div>
                                                                 </div>
-
                                                                 <div class="col-6 pl-0">
                                                                     <div class="wrap-hsn-box 1">
                                                                         <div
@@ -4133,7 +4026,6 @@
                                                                                 </span>
                                                                             </span>
                                                                         </div>
-
                                                                         <div
                                                                             class="hsn-code-dropdown"
                                                                             *ngIf="hsnDropdownShow"
@@ -4164,7 +4056,7 @@
                                                                                 </mat-radio-button>
                                                                             </mat-radio-group>
                                                                             <text-field
-                                                                                type="text"
+                                                                                [type]="'text'"
                                                                                 maxLength="10"
                                                                                 decimalDigitsDirective
                                                                                 [placeholder]="localeData?.hsn_number"
@@ -4175,9 +4067,10 @@
                                                                                     transaction.showCodeType === 'hsn'
                                                                                 "
                                                                                 [(ngModel)]="transaction.hsnNumber"
-                                                                            ></text-field>
+                                                                            >
+                                                                            </text-field>
                                                                             <text-field
-                                                                                type="text"
+                                                                                [type]="'text'"
                                                                                 maxLength="10"
                                                                                 decimalDigitsDirective
                                                                                 [placeholder]="localeData?.sac_number"
@@ -4188,7 +4081,8 @@
                                                                                     transaction.showCodeType === 'sac'
                                                                                 "
                                                                                 [(ngModel)]="transaction.sacNumber"
-                                                                            ></text-field>
+                                                                            >
+                                                                            </text-field>
                                                                             <div class="btn-group mt-2 pt-1 d-flex">
                                                                                 <button
                                                                                     class="btn btn-sm btn-success"
@@ -4221,7 +4115,6 @@
                                             </div>
                                         </div>
                                     </div>
-
                                     <div class="row quantity-unit-w100">
                                         <div
                                             class="col-xs-6 col-sm-6"
@@ -4237,7 +4130,7 @@
                                                                 localeData?.qty
                                                             }}</label>
                                                             <text-field
-                                                                type="text"
+                                                                [type]="'text'"
                                                                 [readonly]="!transaction.isStockTxn"
                                                                 (change)="handleQuantityBlur(entry, transaction)"
                                                                 [placeholder]="commonLocaleData?.app_quantity"
@@ -4274,7 +4167,6 @@
                                                 </div>
                                             </div>
                                         </div>
-
                                         <div
                                             class="col-xs-6 col-sm-6"
                                             *ngIf="!currentVoucherFormDetails || currentVoucherFormDetails?.rateAllowed"
@@ -4328,7 +4220,6 @@
                                             </div>
                                         </div>
                                     </div>
-
                                     <div class="row">
                                         <div class="col-xs-6 col-sm-6">
                                             <div class="single-card-row">
@@ -4372,7 +4263,6 @@
                                                 </div>
                                             </div>
                                         </div>
-
                                         <div
                                             class="col-xs-6 col-sm-6"
                                             *ngIf="
@@ -4420,7 +4310,6 @@
                                             </div>
                                         </div>
                                     </div>
-
                                     <div class="row">
                                         <div
                                             class="col-xs-6 col-sm-6"
@@ -4433,7 +4322,6 @@
                                                     <label class="card-label text-right">{{
                                                         commonLocaleData?.app_tax
                                                     }}</label>
-
                                                     <div class="text-right flex-fill">
                                                         <tax-control
                                                             #taxControlComponent
@@ -4468,7 +4356,6 @@
                                                 </div>
                                             </div>
                                         </div>
-
                                         <div class="col-xs-6 col-sm-6">
                                             <div class="single-card-row">
                                                 <div class="card-total">
@@ -4491,7 +4378,6 @@
                                                             "
                                                         >
                                                         </text-field>
-
                                                         <div *ngIf="isTcsTdsApplicable" class="wrap-other-tax">
                                                             <mat-checkbox
                                                                 *ngIf="!entry.isOtherTaxApplicable"
@@ -4506,7 +4392,7 @@
                                                                     )
                                                                 "
                                                                 class="other-taxes-checkbox"
-                                                                name="entry.isOtherTaxApplicable_'+entryIdx"
+                                                                [name]="'entry.isOtherTaxApplicable_' + entryIdx"
                                                             >
                                                             </mat-checkbox>
                                                             <label
@@ -4555,7 +4441,6 @@
                                                                     >
                                                                     </text-field>
                                                                 </div>
-
                                                                 <p class="mr-t05 font-12 text-capitalize mr-b2">
                                                                     {{ entry.otherTaxModal?.appliedOtherTax?.name }}
                                                                 </p>
@@ -4587,7 +4472,6 @@
                                                         >
                                                         </amount-field>
                                                     </div>
-
                                                     <ng-container
                                                         *ngTemplateOutlet="
                                                             otherTaxesModal;
@@ -4599,11 +4483,9 @@
                                             </div>
                                         </div>
                                     </div>
-
                                     <div class="save-card-data pointer" (click)="handleOutsideClick($event)">
                                         <i class="icon-save" aria-hidden="true"></i>
                                     </div>
-
                                     <div
                                         class="del-card pointer"
                                         (click)="
@@ -4618,13 +4500,11 @@
                                 <!-- endregion -->
                             </ng-container>
                         </div>
-
                         <div class="add-btn">
                             <button class="btn btn-sm btn-success" (click)="addBlankRow(null)">
                                 {{ commonLocaleData?.app_add_more }}
                             </button>
                         </div>
-
                         <div class="other-detail-card">
                             <div *ngIf="!currentVoucherFormDetails || currentVoucherFormDetails?.otherDetails">
                                 <mat-expansion-panel class="other-details-expansion-panel">
@@ -4657,10 +4537,10 @@
                                         </div>
                                         <div class="form-group col-xs-4 col-sm-4 mb-0">
                                             <text-field
-                                                type="text"
-                                                name="shippedVia"
+                                                [type]="'text'"
+                                                [name]="'shippedVia'"
                                                 [(ngModel)]="invFormData.templateDetails.other.shippedVia"
-                                                class="form-control"
+                                                [cssClass]="'form-control mat-field-border'"
                                                 [placeholder]="
                                                     templatePlaceholder?.shippedViaLabel || localeData?.ship_via
                                                 "
@@ -4668,10 +4548,10 @@
                                         </div>
                                         <div class="form-group col-xs-4 col-sm-4 mb-0">
                                             <text-field
-                                                type="text"
-                                                name="trackingNumber"
+                                                [type]="'text'"
+                                                [name]="'trackingNumber'"
                                                 [(ngModel)]="invFormData.templateDetails.other.trackingNumber"
-                                                class="form-control"
+                                                [cssClass]="'form-control mat-field-border'"
                                                 [placeholder]="
                                                     templatePlaceholder?.trackingNumber || localeData?.tracking_number
                                                 "
@@ -4681,8 +4561,8 @@
                                     <div class="row invoice-other-details-row">
                                         <div class="form-group col-xs-4 col-sm-4 mb-0">
                                             <text-field
-                                                type="text"
-                                                name="customField1"
+                                                [type]="'text'"
+                                                [name]="'customField1'"
                                                 [(ngModel)]="invFormData.templateDetails.other.customField1"
                                                 [cssClass]="'form-control mat-field-border'"
                                                 [placeholder]="
@@ -4692,8 +4572,8 @@
                                         </div>
                                         <div class="form-group col-xs-4 col-sm-4 mb-0">
                                             <text-field
-                                                type="text"
-                                                name="customField2"
+                                                [type]="'text'"
+                                                [name]="'customField2'"
                                                 [(ngModel)]="invFormData.templateDetails.other.customField2"
                                                 [cssClass]="'form-control mat-field-border'"
                                                 [placeholder]="
@@ -4703,8 +4583,8 @@
                                         </div>
                                         <div class="form-group col-xs-4 col-sm-4 mb-0">
                                             <text-field
-                                                type="text"
-                                                name="customField3"
+                                                [type]="'text'"
+                                                [name]="'customField3'"
                                                 [(ngModel)]="invFormData.templateDetails.other.customField3"
                                                 [cssClass]="'form-control mat-field-border'"
                                                 [placeholder]="
@@ -4730,7 +4610,6 @@
                                 </textarea>
                             </div>
                         </div>
-
                         <div class="total-amount-description">
                             <section class="table-sec form-group">
                                 <div class="table-row">
@@ -4754,7 +4633,6 @@
                                         </span>
                                     </div>
                                 </div>
-
                                 <div class="table-row">
                                     <div class="table-cell">{{ commonLocaleData?.app_discount }}</div>
                                     <div class="table-cell figure-cell">
@@ -4776,7 +4654,6 @@
                                         </span>
                                     </div>
                                 </div>
-
                                 <div class="table-row">
                                     <div class="table-cell">{{ commonLocaleData?.app_taxable_value }}</div>
                                     <div class="table-cell figure-cell">
@@ -4798,7 +4675,6 @@
                                         </span>
                                     </div>
                                 </div>
-
                                 <div class="table-row" *ngIf="!excludeTax">
                                     <div class="table-cell">{{ commonLocaleData?.app_tax }}</div>
                                     <div class="table-cell figure-cell">
@@ -4820,7 +4696,6 @@
                                         </span>
                                     </div>
                                 </div>
-
                                 <div class="table-row" *ngIf="!excludeTax">
                                     <div class="table-cell">{{ commonLocaleData?.app_cess }}</div>
                                     <div class="table-cell figure-cell">
@@ -4846,7 +4721,6 @@
                                     <div class="table-cell">
                                         <strong>{{ commonLocaleData?.app_round_off }}</strong>
                                     </div>
-
                                     <div class="table-cell figure-cell">
                                         <strong>
                                             <span class="d-flex justify-content-end">
@@ -4877,7 +4751,6 @@
                                             }}</span></strong
                                         >
                                     </div>
-
                                     <div class="table-cell figure-cell">
                                         <strong>
                                             <span class="d-flex justify-content-end">
@@ -4905,13 +4778,12 @@
                                             >{{ commonLocaleData?.app_total }} <span>{{ baseCurrencySymbol }}</span>
                                         </strong>
                                     </div>
-
                                     <div class="table-cell figure-cell">
                                         <text-field
                                             #grandTotalInr
-                                            type="text"
+                                            [type]="'text'"
                                             [cssClass]="'form-control mat-field-border multicurrency-grandtotal '"
-                                            name="grandTotalMulDum"
+                                            [name]="'grandTotalMulDum'"
                                             [prefix]="baseCurrencySymbol"
                                             [suffix]="selectedSuffixForCurrency"
                                             [mask]="inputMaskFormat"
@@ -4923,7 +4795,6 @@
                                         ></text-field>
                                     </div>
                                 </div>
-
                                 <div class="table-row" *ngIf="isTcsPresent">
                                     <div class="table-cell">{{ commonLocaleData?.app_tcs }}</div>
                                     <div class="table-cell figure-cell">
@@ -4945,7 +4816,6 @@
                                         </span>
                                     </div>
                                 </div>
-
                                 <div class="table-row" *ngIf="isTdsPresent">
                                     <div class="table-cell">{{ commonLocaleData?.app_tds }}</div>
                                     <div class="table-cell figure-cell">
@@ -4996,13 +4866,11 @@
                                                                 (onClear)="onSelectPaymentMode($event, true)"
                                                             >
                                                             </select-field>
-
                                                             <label class="pull-right pt-1">{{
                                                                 commonLocaleData?.app_payment_mode
                                                             }}</label>
                                                         </div>
                                                     </li>
-
                                                     <li
                                                         class="
                                                             clearfix
@@ -5016,7 +4884,7 @@
                                                         "
                                                     >
                                                         <text-field
-                                                            type="text"
+                                                            [type]="'text'"
                                                             (change)="
                                                                 calculateBalanceDue();
                                                                 updateDepositAmount($event.target.value)
@@ -5025,12 +4893,12 @@
                                                             [name]="'dueAmount'"
                                                             [cssClass]="
                                                                 '
-                                                                form-control
-                                                                amount-field
-                                                                text-right
-                                                                pull-right
-                                                                max-width-100
-                                                                multicurrency-grandtotal'
+                              form-control
+                              amount-field
+                              text-right
+                              pull-right
+                              max-width-100
+                              multicurrency-grandtotal'
                                                             "
                                                             [(ngModel)]="depositAmount"
                                                             [prefix]="depositCurrSymbol"
@@ -5043,7 +4911,6 @@
                                                             commonLocaleData?.app_amount
                                                         }}</label>
                                                     </li>
-
                                                     <li
                                                         class="
                                                             clearfix
@@ -5081,7 +4948,6 @@
                                                             commonLocaleData?.app_amount
                                                         }}</label>
                                                     </li>
-
                                                     <li class="clearfix mr-t1 bigger-dollar" *ngIf="isSalesInvoice">
                                                         <strong class="pull-right balance-due-text">
                                                             <span>
@@ -5111,7 +4977,6 @@
                                     </div>
                                 </div>
                                 <!--endregion-->
-
                                 <!-- region balance due for purchase -->
                                 <div class="table-row" *ngIf="isPurchaseInvoice">
                                     <div class="table-cell">
@@ -5140,9 +5005,7 @@
                     <!-- endregion -->
                 </ng-container>
                 <!-- endregion -->
-
                 <!-- endregion -->
-
                 <!-- region submit actions-->
                 <section class="clearfix mr-b5">
                     <section
@@ -5160,7 +5023,6 @@
                                 >
                                     {{ commonLocaleData?.app_clear }}
                                 </button>
-
                                 <!-- region purchase invoice -->
                                 <span class="d-inline-block v-align-middle" *ngIf="isPurchaseInvoice">
                                     <button
@@ -5179,7 +5041,6 @@
                                     </button>
                                 </span>
                                 <!-- endregion -->
-
                                 <!-- region non purchase -->
                                 <span
                                     class="d-inline-block v-align-middle"
@@ -5199,7 +5060,6 @@
                                         {{ generateInvoiceText }}
                                         {{ localeData?.and_update_acc }}
                                     </button>
-
                                     <div
                                         *ngIf="!isCompany"
                                         class="btn-group"
@@ -5222,7 +5082,6 @@
                                             {{ generateInvoiceText }}
                                         </button>
                                     </div>
-
                                     <div *ngIf="!isCompany" class="btn-group">
                                         <mat-menu #dropdownMenu="matMenu" class="bottom-dropdown-menu">
                                             <ul id="dropdown-dropup" class="create-send-menu h1">
@@ -5235,7 +5094,6 @@
                                                         >{{ localeData?.create_send }}</a
                                                     >
                                                 </li>
-
                                                 <li role="menuitem">
                                                     <a
                                                         class="dropdown-item cp"
@@ -5245,7 +5103,6 @@
                                                         >{{ localeData?.create_print }}</a
                                                     >
                                                 </li>
-
                                                 <li
                                                     role="menuitem"
                                                     (click)="doAction(4); triggerSubmitInvoiceForm(invoiceForm, false)"
@@ -5267,7 +5124,6 @@
                                     </div>
                                 </span>
                                 <!-- endregion -->
-
                                 <!-- region proforma/estimates -->
                                 <span
                                     class="d-inline-block v-align-middle"
@@ -5310,7 +5166,6 @@
                                                         >{{ localeData?.create_send }}</a
                                                     >
                                                 </li>
-
                                                 <li role="menuitem">
                                                     <a
                                                         class="dropdown-item cp"
@@ -5327,7 +5182,6 @@
                                 <!-- endregion -->
                             </div>
                             <!-- endregion -->
-
                             <!-- region update mode -->
                             <div class="pull-right pr" *ngIf="isUpdateMode">
                                 <button
@@ -5337,7 +5191,6 @@
                                 >
                                     {{ commonLocaleData?.app_cancel }}
                                 </button>
-
                                 <button
                                     *ngIf="!isCompany"
                                     mat-button
@@ -5362,7 +5215,6 @@
         </div>
         <!-- endregion -->
     </div>
-
     <!-- region models section -->
     <!-- open account aside -->
     <div
@@ -5375,7 +5227,6 @@
         "
         (click)="closeAsideMenuStateForOtherTaxes()"
     ></div>
-
     <generic-aside-menu-account
         [class]="accountAsideMenuState"
         [@slideInOut]="accountAsideMenuState"
@@ -5389,7 +5240,6 @@
         (updateEvent)="updateSidebarAccount($event)"
     >
     </generic-aside-menu-account>
-
     <!--&lt;!&ndash; open product service aside &ndash;&gt;-->
     <aside-menu-product-service
         *ngIf="asideMenuStateForProductService === 'in'"
@@ -5399,7 +5249,6 @@
         (closeAsideEvent)="onNoResultsClicked()"
     >
     </aside-menu-product-service>
-
     <app-aside-recurring-entry
         *ngIf="asideMenuStateForRecurringEntry === 'in'"
         [voucherType]="invoiceType"
@@ -5426,9 +5275,7 @@
         </ng-container>
     </ng-template>
     <!-- endregion -->
-
     <!-- region bulk items -->
-
     <ng-template #bulkItemsModal>
         <ng-container>
             <voucher-add-bulk-items-component
@@ -5439,7 +5286,6 @@
         </ng-container>
     </ng-template>
     <!-- endregion -->
-
     <!-- region gst treatment modal-->
     <ng-template #gstTreatmentModal let-show>
         <div *ngIf="show" class="gst-treatment-modal">
@@ -5452,7 +5298,6 @@
         </div>
     </ng-template>
     <!-- endregion -->
-
     <ng-template let-entry #otherTaxesModal>
         <div id="top0">
             <app-aside-menu-other-taxes
@@ -5472,7 +5317,6 @@
             </app-aside-menu-other-taxes>
         </div>
     </ng-template>
-
     <!-- region print voucher popup -->
     <ng-template #printVoucherModal>
         <ng-container *ngIf="actionAfterGenerateORUpdate === 3 && invoiceNo && accountUniqueName">
@@ -5493,7 +5337,6 @@
     <ng-template #invoiceTypeDisplayRef>
         {{ getInvoiceType() | titlecase }}
     </ng-template>
-
     <!-- region purchase  order  popup -->
     <ng-template #purchaseRecordConfirmationPopup>
         <div class="modal-dialog">

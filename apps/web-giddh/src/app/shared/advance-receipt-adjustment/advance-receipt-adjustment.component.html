@@ -255,7 +255,7 @@
                                         [placeholder]="localeData?.enter_amount"
                                         [type]="'text'"
                                         [cssClass]="'form-control mat-field-border'"
-                                        [name]="'amount{{ entry.uniqueName }}'"
+                                        [name]="'amount' + entry.uniqueName"
                                         [prefix]="currencySymbol"
                                         [mask]="inputMaskFormat"
                                         [useMask]="true"
@@ -295,7 +295,7 @@
                                     >
                                         <text-field
                                             [readonly]="'true'"
-                                            id="name_{{ entry.uniqueName }}"
+                                            [id]="'name_' + entry.uniqueName"
                                             [placeholder]="
                                                 commonLocaleData?.app_numbers?.zero +
                                                 '' +
@@ -307,7 +307,7 @@
                                             "
                                             [type]="'text'"
                                             [cssClass]="'form-control mat-field-border'"
-                                            [name]="'calculatedTaxAmount_{{ entry.uniqueName }}'"
+                                            [name]="'calculatedTaxAmount_' + entry.uniqueName"
                                             [prefix]="
                                                 enableVoucherAdjustmentMultiCurrency
                                                     ? entry.accountCurrency?.symbol
@@ -435,7 +435,7 @@
                                                 [placeholder]="commonLocaleData?.app_amount"
                                                 [type]="'text'"
                                                 [cssClass]="'form-control mat-field-border'"
-                                                [name]="'calculatedTaxAmount_{{ entry.uniqueName }}'"
+                                                [name]="'calculatedTaxAmount_' + entry.uniqueName"
                                                 [prefix]="currencySymbol"
                                                 [mask]="inputMaskFormat"
                                                 [useMask]="true"
