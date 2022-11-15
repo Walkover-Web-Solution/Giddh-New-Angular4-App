@@ -1774,15 +1774,6 @@ span.eligible-ITC {
     z-index: 99 !important;
 }
 
-::ng-deep .cdk-overlay-pane {
-    position: absolute !important;
-    pointer-events: auto !important;
-    box-sizing: border-box !important;
-    display: flex !important;
-    max-width: 100% !important;
-    max-height: 100% !important;
-}
-
 /* resposnvie */
 @media (max-width: 1199px) {
     .invoice-date-due-date {

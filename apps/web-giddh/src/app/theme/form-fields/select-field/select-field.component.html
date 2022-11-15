@@ -6,7 +6,7 @@
         [placeholder]="placeholder"
         matInput
         [matAutocomplete]="auto"
-        (blur)="resetValueIfOptionNotSelected()"
+        (blur)="onBlur()"
         [name]="name"
         [formControl]="searchFormControl"
         [readonly]="readonly"
@@ -14,37 +14,24 @@
         [autocomplete]="autocomplete"
         #trigger="matAutocompleteTrigger"
     />
-    <mat-autocomplete [displayWith]="displayLabel" (optionSelected)="optionSelected($event)" #auto="matAutocomplete">
+    <mat-autocomplete
+        [displayWith]="displayLabel"
+        (optionSelected)="optionSelected($event)"
+        #auto="matAutocomplete"
+        [ngClass]="customPanelClass"
+    >
         <a href="javascript:;" *ngIf="createNewText" (click)="createNewRecord()" class="custom-class-create">
             <div class="item create-new">{{ createNewText }}</div>
             <div class="item create-new-command">
                 {{ commonLocaleData?.app_alt_c }}
             </div>
         </a>
-        <ng-container *ngIf="hasMoreValue">
+        <ng-container>
             <mat-option
                 *ngFor="let option of fieldFilteredOptions"
                 [value]="option"
                 [matTooltip]="option?.label"
-                class="options-line-value"
-            >
-                <ng-template
-                    [ngTemplateOutletContext]="{ option: option }"
-                    [ngTemplateOutlet]="optionTemplate"
-                ></ng-template>
-                <ng-container *ngIf="!optionTemplate">
-                    <span class="option-label"> {{ option?.label }}</span>
-                    <span class="option-value" *ngIf="showValueInLabel">{{ option.additional?.uniqueName }}</span>
-                </ng-container>
-            </mat-option>
-            <mat-option disabled *ngIf="fieldFilteredOptions?.length === 0">No results found</mat-option>
-        </ng-container>
-        <ng-container *ngIf="!hasMoreValue">
-            <mat-option
-                *ngFor="let option of fieldFilteredOptions"
-                [value]="option"
-                [matTooltip]="option?.label"
-                class="options-line"
+                [ngClass]="hasMoreValue ? 'options-line-value' : 'options-line'"
             >
                 <ng-template
                     [ngTemplateOutletContext]="{ option: option }"

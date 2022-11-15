@@ -18,7 +18,6 @@
                 <div class="col-sm-6">
                     <div class="select-tax-dropdown d-flex flex-column">
                         <label>{{commonLocaleData?.app_select_tax}}<span class="text-danger">*</span></label>
-
                         <div class="mr-b2">
                             <select-field
                                 [name]="'selectTax'"
@@ -32,28 +31,16 @@
                                 [allowValueReset]="true"
                             >
                             </select-field>
-                            <!-- <sh-select
-                                name="selectTax"
-                                [placeholder]="commonLocaleData?.app_select_tax"
-                                [options]="taxesOptions"
-                                [(ngModel)]="selectedTaxUniqueName"
-                                (selected)="applyTax($event)"
-                                (onClear)="onClear()"
-                                [showClear]="true"
-                            >
-                            </sh-select> -->
                             <label class="label-tax" *ngIf="defaultOtherTaxesModal?.appliedOtherTax?.name">
                                 {{ defaultOtherTaxesModal?.appliedOtherTax?.name | uppercase}}
                             </label>
                         </div>
                     </div>
                 </div>
-
                 <div class="col-sm-6">
                     <div>
                         <label>{{commonLocaleData?.app_calculation_method}}<span class="text-danger">*</span></label>
                     </div>
-
                     <div class="mb-2">
                         <select-field
                             [cssClass]="'form-control mat-field-border'"
