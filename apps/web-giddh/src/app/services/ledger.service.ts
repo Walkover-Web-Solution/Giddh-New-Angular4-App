@@ -411,6 +411,12 @@ export class LedgerService {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let api = this.config.apiUrl + LEDGER_API.EXPORT;
         let url = api?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
+
+        if (model.branchUniqueName) {
+            url = url.concat(`?branchUniqueName=${model.branchUniqueName}`);
+            model.branchUniqueName = undefined;
+        }
+
         return this.http.post(url, model).pipe(
             map((res) => {
                 let data: BaseResponse<any, ExportBodyRequest> = res;
