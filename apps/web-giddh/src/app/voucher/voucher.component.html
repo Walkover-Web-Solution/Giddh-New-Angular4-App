@@ -486,9 +486,7 @@
                                                                                 autocomplete="None"
                                                                                 [type]="'text'"
                                                                                 [name]="'billingDetails.gstNumber'"
-                                                                                [cssClass]="
-                                                                                    'form-control input-custom mat-field-border'
-                                                                                "
+                                                                                [cssClass]="'form-control input-custom'"
                                                                                 *ngIf="showGSTINNo"
                                                                                 [(ngModel)]="
                                                                                     invFormData.accountDetails
@@ -1424,7 +1422,9 @@
                                                     *ngIf="!isCreditNote && !isDebitNote"
                                                     [type]="'text'"
                                                     [name]="'accountDetails.invoiceNum'"
-                                                    [cssClass]="'form-control invoice-date attention-to mat-field-border"
+                                                    [cssClass]="
+                                                        'form-control invoice-date attention-to mat-field-border'
+                                                    "
                                                     [ngClass]="{ 'date-invoice': !isPurchaseInvoice }"
                                                     [readonly]="
                                                         isUpdateMode && !(isDebitNote || isPurchaseInvoice)
@@ -2716,7 +2716,7 @@
                                                         *ngIf="!entry.isOtherTaxApplicable"
                                                         [checked]="entry.isOtherTaxApplicable"
                                                         color="primary"
-                                                        id="entry.isOtherTaxApplicable_'+entryIdx"
+                                                        id="entry.isOtherTaxApplicable_{{ entryIdx }}"
                                                         [(ngModel)]="entry.isOtherTaxApplicable"
                                                         (change)="
                                                             toggleOtherTaxesAsidePane(
@@ -2729,7 +2729,7 @@
                                                     >
                                                     </mat-checkbox>
                                                     <label
-                                                        for="entry.isOtherTaxApplicable_'+entryIdx"
+                                                        for="entry.isOtherTaxApplicable_{{ entryIdx }}"
                                                         *ngIf="!entry.isOtherTaxApplicable"
                                                         class="other-tax-label font-13 align-middle"
                                                         (click)="tcsTdsIndex = entryIdx"
@@ -3241,7 +3241,7 @@
                                     </div>
                                     <!--region balance due for non-purchase-->
                                     <div
-                                        class="table-row"
+                                        class="table-row sect1"
                                         *ngIf="
                                             (isSalesInvoice ||
                                                 currentVoucherFormDetails?.depositAllowed ||
@@ -3366,7 +3366,7 @@
                                                                 <div class="clearfix payment-mode">
                                                                     <select-field
                                                                         [cssClass]="
-                                                                            'form-control mat-field-border pull-right'
+                                                                            'form-control mat-field-border pull-right hello'
                                                                         "
                                                                         [name]="'depositAccountUniqueName'"
                                                                         [options]="bankAccounts$ | async"
@@ -3375,10 +3375,15 @@
                                                                             commonLocaleData?.app_select_account
                                                                         "
                                                                         (onClear)="onSelectPaymentMode($event, true)"
+                                                                        [defaultValue]="
+                                                                            isCashInvoice ? selectedBankAccount : ''
+                                                                        "
                                                                     >
                                                                     </select-field>
                                                                     <label class="pull-right">{{
-                                                                        commonLocaleData?.app_payment_mode
+                                                                        !isCashInvoice
+                                                                            ? commonLocaleData?.app_payment_mode
+                                                                            : localeData?.account
                                                                     }}</label>
                                                                 </div>
                                                             </li>
@@ -3391,25 +3396,26 @@
                                                                     payment-mode-amount
                                                                 "
                                                                 *ngIf="
-                                                                    isSalesInvoice ||
-                                                                    currentVoucherFormDetails?.depositAllowed
+                                                                    (isSalesInvoice ||
+                                                                        currentVoucherFormDetails?.depositAllowed) &&
+                                                                    !isCashInvoice
                                                                 "
                                                             >
                                                                 <text-field
                                                                     (change)="
                                                                         calculateBalanceDue();
-                                                                        updateDepositAmount($event.target.value)
+                                                                        updateDepositAmount($event.value)
                                                                     "
                                                                     [placeholder]="commonLocaleData?.app_amount"
                                                                     [cssClass]="
                                                                         'form-control
-                                    amount-field
-                                    due-amount-field
-                                    text-right
-                                    pull-right
-                                    max-width-100
-                                    mat-field-border 
-                                    multicurrency-grandtotal'
+                                                                        amount-field
+                                                                        due-amount-field
+                                                                        text-right
+                                                                        pull-right
+                                                                        max-width-100
+                                                                        mat-field-border 
+                                                                        multicurrency-grandtotal'
                                                                     "
                                                                     [name]="'dueAmount'"
                                                                     [prefix]="depositCurrSymbol"
@@ -3434,7 +3440,7 @@
                                                                     align-items-center
                                                                     payment-mode-amount
                                                                 "
-                                                                *ngIf="isCashInvoice"
+                                                                *ngIf="!isCashInvoice"
                                                             >
                                                                 <span
                                                                     class="
@@ -3497,60 +3503,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div
-                                        class="table-row"
-                                        *ngIf="
-                                            !hideDepositSection &&
-                                            !isUpdateMode &&
-                                            isCashInvoice &&
-                                            !(
-                                                isSalesInvoice ||
-                                                isPurchaseInvoice ||
-                                                isCreditNote ||
-                                                isDebitNote ||
-                                                isPendingVoucherType ||
-                                                isAccountHaveAdvanceReceipts ||
-                                                isInvoiceAdjustedWithAdvanceReceipts
-                                            )
-                                        "
-                                    >
-                                        <div class="table-cell deposit-section">
-                                            <div class="btn-group">
-                                                <div
-                                                    (click)="clickedInside($event)"
-                                                    id="deposit-dropdown"
-                                                    class="form-group pd-1"
-                                                >
-                                                    <p>{{ localeData?.deposit }}</p>
-                                                    <ul>
-                                                        <ng-container>
-                                                            <li role="menuitem" class="mr-t1">
-                                                                <div class="clearfix payment-mode">
-                                                                    <select-field
-                                                                        [cssClass]="
-                                                                            'form-control mat-field-border pull-right yes'
-                                                                        "
-                                                                        [name]="'depositAccountUniqueName'"
-                                                                        [options]="bankAccounts$ | async"
-                                                                        (selectedOption)="onSelectPaymentMode($event)"
-                                                                        [placeholder]="
-                                                                            commonLocaleData?.app_select_account
-                                                                        "
-                                                                        (onClear)="onSelectPaymentMode($event, true)"
-                                                                        [defaultValue]="selectedBankAccount"
-                                                                    >
-                                                                    </select-field>
-                                                                    <label class="pull-right">{{
-                                                                        localeData?.account
-                                                                    }}</label>
-                                                                </div>
-                                                            </li>
-                                                        </ng-container>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+
                                     <!--endregion-->
                                     <!-- region balance due for purchase -->
                                     <div class="table-row" *ngIf="isPurchaseInvoice && voucherApiVersion !== 2">
@@ -4839,7 +4792,7 @@
                                 </div>
                                 <!--region balance due for non-purchase-->
                                 <div
-                                    class="table-row"
+                                    class="table-row sect2"
                                     *ngIf="
                                         !hideDepositSection &&
                                         (isSalesInvoice || currentVoucherFormDetails?.depositAllowed) &&
@@ -4886,8 +4839,7 @@
                                                         <text-field
                                                             [type]="'text'"
                                                             (change)="
-                                                                calculateBalanceDue();
-                                                                updateDepositAmount($event.target.value)
+                                                                calculateBalanceDue(); updateDepositAmount($event.value)
                                                             "
                                                             [placeholder]="commonLocaleData?.app_amount"
                                                             [name]="'dueAmount'"

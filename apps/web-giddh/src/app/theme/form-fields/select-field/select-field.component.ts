@@ -133,13 +133,11 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy {
         }
 
         if (changes?.openDropdown) {
-            setTimeout(() => {
                 if (changes?.openDropdown?.currentValue) {
-                    this.trigger.openPanel();
+                    this.trigger?.openPanel();
                 } else {
-                    this.trigger.closePanel();
+                    this.trigger?.closePanel();
                 }
-            }, 20);
         }
     }
 

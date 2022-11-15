@@ -1745,15 +1745,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
     public makeCustomerList() {
         if (!(this.invoiceType === VoucherTypeEnum.debitNote || this.invoiceType === VoucherTypeEnum.purchase)) {
-            let customerList: IOption[] = [];
             this.customerAcList$ = observableOf(orderBy(this.sundryDebtorsAcList, 'label'));
-            // this.customerAcList$?.subscribe(response => {
-            //     if (response) {
-            //         response.forEach(account => {
-            //             customerList.push({ label: account.label, value: account.value });
-            //         });
-            //     }
-            // });
 
             this.salesAccounts$ = observableOf(orderBy(this.prdSerAcListForDeb, 'label'));
             this.selectedGrpUniqueNameForAddEditAccountModal = 'sundrydebtors';
@@ -1771,7 +1763,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.sundryDebtorsAcList = [];
         this.customerAcList$ = observableOf([]);
         this.salesAccounts$ = observableOf([]);
-        this.router.navigate(['pages', 'material-proforma-invoice', 'invoice', val]);
+        this.router.navigate(['pages', 'proforma-invoice', 'invoice', val]);
         this.selectedVoucherType = val;
         if (this.selectedVoucherType === VoucherTypeEnum.creditNote || this.selectedVoucherType === VoucherTypeEnum.debitNote) {
             this.getInvoiceListsForCreditNote();
@@ -2444,7 +2436,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         let exRate = this.originalExchangeRate;
         let requestObject: any;
         let voucherDate: any;
-        const deposit = this.getDeposit();
+        const deposit = this.getDeposit();   
+             
         data.accountDetails.mobileNumber = this.intl?.getNumber();
         if (!this.isPurchaseInvoice) {
             voucherDate = data.voucherDetails.voucherDate;
@@ -3620,6 +3613,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.createEmbeddedViewAtIndex(this.invFormData.entries?.length - 1);
         this.activeIndx = (this.invFormData.entries && this.invFormData.entries.length) ? this.invFormData.entries.length - 1 : 0;
         setTimeout(() => {
+            if(this.activeIndx > 0){
+                this.onSearchQueryChanged('', 1, 'item');
+            }
             this.openProductDropdown();
         }, 200);
     }
@@ -3785,6 +3781,10 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     }
 
     public onSelectPaymentMode(event: any, isCleared: boolean = false) {
+
+        if(this.isCashInvoice){
+            this.updateDepositAmount(0);
+        }
         if (event && event.value && !isCleared) {
             if (this.isCashInvoice && this.invFormData.accountDetails) {
                 this.invFormData.accountDetails.name = event.label;
@@ -6535,7 +6535,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 if (bankAccounts.length > 0) {
                     this.onSelectPaymentMode({ label: bankAccounts[0]?.name, value: bankAccounts[0]?.uniqueName, additional: bankAccounts[0] });
                 }
-            }
+            }            
             this.bankAccounts$ = observableOf(this.updateBankAccountObject(data));
         });
     }
@@ -7791,7 +7791,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         let deposit = new AmountClassMulticurrency();
         if ((this.userDeposit !== null && this.userDeposit !== undefined) || this.voucherApiVersion !== 2) {
             deposit.accountUniqueName = this.depositAccountUniqueName;
-
+            
             if (this.voucherApiVersion === 2) {
                 if (this.selectedPaymentMode?.additional?.currency?.code === this.invFormData?.accountDetails?.currency?.code) {
                     deposit.amountForAccount = this.depositAmount;

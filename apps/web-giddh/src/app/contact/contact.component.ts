@@ -501,10 +501,10 @@ export class ContactComponent implements OnInit, OnDestroy {
             case 2: // go to sales or purchase
                 this.purchaseOrSales = this.activeTab === "customer" ? "sales" : "purchase";
                 if (this.purchaseOrSales === "purchase") {
-                    this.goToRoute("material-proforma-invoice/invoice/purchase", "", account?.uniqueName);
+                    this.goToRoute("proforma-invoice/invoice/purchase", "", account?.uniqueName);
                 } else {
                     let isCashInvoice = account?.uniqueName === "cash";
-                    this.goToRoute(`material-proforma-invoice/invoice/${isCashInvoice ? "cash" : "sales"}`, "", account?.uniqueName);
+                    this.goToRoute(`proforma-invoice/invoice/${isCashInvoice ? "cash" : "sales"}`, "", account?.uniqueName);
                 }
                 break;
             // case 3: // send sms

@@ -129,10 +129,10 @@ export class AccountDetailModalComponent implements OnChanges, OnDestroy {
                 if (this.voucherType === VoucherTypeEnum.sales) {
                     // special case, because we don't have cash invoice as voucher type at api side so we are handling it ui side
                     let isCashInvoice = this.accountUniqueName === 'cash';
-                    this.goToRoute(`material-proforma-invoice/invoice/${isCashInvoice ? 'cash' : 'sales'}`);
+                    this.goToRoute(`proforma-invoice/invoice/${isCashInvoice ? 'cash' : 'sales'}`);
                 } else {
                     // for purchase/ debit and credit note
-                    this.goToRoute('material-proforma-invoice/invoice/' + this.voucherType);
+                    this.goToRoute('proforma-invoice/invoice/' + this.voucherType);
                 }
                 break;
             case 3: // send sms
