@@ -315,7 +315,7 @@
                                             "
                                             [mask]="enableVoucherAdjustmentMultiCurrency ? inputMaskFormat : ''"
                                             [useMask]="true"
-                                            [allowDecimalDigitsOnly]="'true'"
+                                            [allowDecimalDigitsOnly]="true"
                                         ></text-field>
                                         <span
                                             *ngIf="
@@ -439,7 +439,7 @@
                                                 [prefix]="currencySymbol"
                                                 [mask]="inputMaskFormat"
                                                 [useMask]="true"
-                                                [allowDecimalDigitsOnly]="'true'"
+                                                [allowDecimalDigitsOnly]="true"
                                                 (change)="changeTdsAmount($event)"
                                                 [(ngModel)]="adjustVoucherForm.tdsAmount.amountForAccount"
                                             ></text-field>
