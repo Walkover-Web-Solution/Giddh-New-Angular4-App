@@ -47,6 +47,10 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public allowValueReset: boolean = false;
     /** True if we need to show value also with label */
     @Input() public showValueInLabel: boolean = false;
+    /** True if we need to show create new label */
+    @Input() public showCreateNew: boolean = false;
+    /** Holds text to show to create new data */
+    @Input() public createNewOptionsText: any = "";
     /** True if we need to show more value also with label */
     @Input() public hasMoreValue: boolean = false;
     /** Emits the scroll to bottom event when pagination is required  */
