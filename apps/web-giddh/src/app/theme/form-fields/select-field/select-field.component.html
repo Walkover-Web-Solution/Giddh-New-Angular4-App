@@ -43,6 +43,11 @@
                 </ng-container>
             </mat-option>
             <mat-option disabled *ngIf="fieldFilteredOptions?.length === 0">No results found</mat-option>
+            <mat-option *ngIf="fieldFilteredOptions?.length === 0 && showCreateNew">
+                <a href="javascript:;" (click)="createNewRecord()" class="options-class-create">
+                    Create New
+                </a></mat-option
+            >
         </ng-container>
     </mat-autocomplete>
 </ng-container>

@@ -2309,9 +2309,10 @@
                                                             false,
                                                             false,
                                                             entryIdx
-                                                        );
-                                                        noResultsFoundLabel = localeData?.search_acc
+                                                        )
                                                     "
+                                                    (createOption)="onNoResultsClicked(entryIdx)"
+                                                    [showCreateNew]="'true'"
                                                     [defaultValue]="
                                                         transaction.stockDetails && transaction.stockDetails.name
                                                             ? transaction.accountName +
