@@ -93,4 +93,39 @@ export class CommonService {
                 return data;
             }));
     }
+
+    /**
+     * GST Mapped Units for GST Filing
+     *
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof CommonService
+     */
+    public getGstUnits(): Observable<BaseResponse<any, any>> {
+        let url = this.config.apiUrl + COMMON_API.GST_STOCK_UNITS;
+        let companyUniqueName = this.generalService.companyUniqueName;
+        url = url?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName));
+        return this.http.get(url).pipe(
+            map((res) => {
+                let data: BaseResponse<any, any> = res;
+                return data;
+            }));
+    }
+
+    /**
+     * This will use for patch mapped gst unit 
+     *
+     * @param {*} params
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof CommonService
+     */
+    public updateStockUnits(params: any): Observable<BaseResponse<any, any>> {
+        const companyUniqueName = this.generalService.companyUniqueName;
+        const contextPath = COMMON_API.GST_STOCK_UNITS?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName));
+        return this.http.patch(this.config.apiUrl + contextPath, params).pipe(
+            map((response) => {
+                let data: BaseResponse<any, any> = response;
+                data.request = params;
+                return data;
+            }), catchError((error) => this.errorHandler.HandleCatch<any, any>(error, params)));
+    }
 }
