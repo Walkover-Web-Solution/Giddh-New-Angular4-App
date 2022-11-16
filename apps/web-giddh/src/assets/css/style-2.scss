@@ -12655,6 +12655,12 @@ hamburger-menu {
     .cdk-overlay-container-z-index {
         z-index: 1000 !important;
     }
+
+    .activity-log-page {
+        .cdk-overlay-container {
+            z-index: 9999 !important;
+        }
+    }
 }
 
 //inventory control styling
