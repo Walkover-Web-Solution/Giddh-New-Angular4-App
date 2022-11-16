@@ -1,5 +1,5 @@
 import { BreakpointObserver, BreakpointState } from "@angular/cdk/layout";
-import { Component, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
 import { ReplaySubject, Observable, combineLatest } from "rxjs";
 import { takeUntil, map, startWith } from "rxjs/operators";
 import { CommonService } from "../../services/common.service";
@@ -15,10 +15,11 @@ import { ToasterService } from "../../services/toaster.service";
 @Component({
     selector: 'unit-mapping',
     templateUrl: './unit-mapping.component.html',
-    styleUrls: ['./unit-mapping.component.scss']
+    styleUrls: ['./unit-mapping.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class UnitMappingComponent implements OnInit {
+export class UnitMappingComponent implements OnInit, OnDestroy {
     /** This will hold the value out/in to open/close setting sidebar popup */
     public asideGstSidebarMenuState: string = 'in';
     /** this will check mobile screen size */
@@ -34,7 +35,7 @@ export class UnitMappingComponent implements OnInit {
     /** Holds unit array list */
     public unitsArray: any[] = [];
 
-    constructor(private breakpointObserver: BreakpointObserver, private commonService: CommonService, private store: Store<AppState>, private toasty: ToasterService, private customStockAction: CustomStockUnitAction, private router: Router) {
+    constructor(private breakpointObserver: BreakpointObserver, private commonService: CommonService, private store: Store<AppState>, private toasty: ToasterService, private customStockAction: CustomStockUnitAction, private router: Router, private changeDetection: ChangeDetectorRef) {
         this.stockUnit$ = this.store.pipe(select(state => state.inventory.stockUnits), takeUntil(this.destroyed$));
         this.store.pipe(select(appState => appState.gstR.activeCompanyGst), takeUntil(this.destroyed$)).subscribe(response => {
             if (response && this.activeCompanyGstNumber !== response) {
@@ -72,6 +73,7 @@ export class UnitMappingComponent implements OnInit {
                 giddhUnits.forEach(res => {
                     this.unitsArray.push({ giddhUnit: res?.code, mappedGstUnit: gstUnit[res?.code], giddhUnitName: res?.name });
                 });
+                this.changeDetection.detectChanges();
             }
         });
 
@@ -82,7 +84,7 @@ export class UnitMappingComponent implements OnInit {
      * 
      * @memberof UnitMappingComponent
      */
-    public ngDestroy(): void {
+    public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
         document.querySelector('body').classList.remove('unit-mapping-page');
@@ -127,10 +129,10 @@ export class UnitMappingComponent implements OnInit {
             };
         });
         this.commonService.updateStockUnits(unitsArray).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response?.status === 'error') {
-                this.toasty.errorToast(response?.message);
+            if (response?.status === 'success') {
+                this.toasty.showSnackBar("success", response?.body);
             } else {
-                this.toasty.successToast(response?.message);
+                this.toasty.showSnackBar("error", response?.message);
             }
         });
 
