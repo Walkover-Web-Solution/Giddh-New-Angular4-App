@@ -10,7 +10,13 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title pull-left">{{ localeData?.add_bulk_items }}</h4>
-                    <button type="button" class="close pull-right" aria-label="Close" (click)="closeEvent.emit()">
+                    <button
+                        mat-button
+                        type="button"
+                        class="close pull-right"
+                        aria-label="Close"
+                        (click)="closeEvent.emit()"
+                    >
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -22,22 +28,24 @@
                             <div class="left-content">
                                 <div class="search-box">
                                     <input
+                                        matInput
                                         type="text"
                                         [placeholder]="localeData?.search_stock"
                                         #searchElement
-                                        class="pr-1 pl-1 form-control"
+                                        class="pr-1 pl-1 form-control mat-field-border"
                                     />
                                 </div>
 
                                 <div class="product-list">
                                     <perfect-scrollbar (psYReachEnd)="onScrollEnd()">
-                                        <div
-                                            class="single-product-wrapper cp"
+                                        <button
+                                            mat-button
+                                            class="single-product-wrapper cp w-100"
                                             *ngFor="let item of filteredData"
                                             (click)="addItemToSelectedArr(item)"
                                         >
                                             <h5>{{ item?.name }}</h5>
-                                        </div>
+                                        </button>
                                     </perfect-scrollbar>
                                 </div>
                             </div>
@@ -76,8 +84,14 @@
                                                     <div class="input-group add-item-btn">
                                                         <span class="input-group-btn">
                                                             <button
-                                                                type="button"
-                                                                class="btn btn-default btn-number minus-btn"
+                                                                mat-button
+                                                                disableRipple
+                                                                class="
+                                                                    btn-number
+                                                                    d-flex
+                                                                    align-items-center
+                                                                    justify-content-center
+                                                                "
                                                                 (click)="alterQuantity(item, 'minus')"
                                                             >
                                                                 <span class="fa fa-minus"></span>
@@ -85,26 +99,35 @@
                                                         </span>
 
                                                         <input
+                                                            matInput
                                                             type="number"
                                                             name="quantity"
-                                                            class="form-control input-number"
+                                                            class="form-control input-number text-align-center"
                                                             value="1"
                                                             min="1"
                                                             [(ngModel)]="item.quantity"
                                                         />
 
-                                                        <span class="input-group-btn">
-                                                            <button
-                                                                type="button"
-                                                                class="btn btn-default btn-number"
-                                                                (click)="alterQuantity(item)"
-                                                            >
-                                                                <span class="fa fa-plus"></span>
-                                                            </button>
-                                                        </span>
+                                                        <button
+                                                            mat-button
+                                                            disableRipple
+                                                            class="
+                                                                btn-number
+                                                                d-flex
+                                                                align-items-center
+                                                                justify-content-center
+                                                            "
+                                                            (click)="alterQuantity(item)"
+                                                        >
+                                                            <span class="fa fa-plus"></span>
+                                                        </button>
                                                     </div>
 
-                                                    <span class="mr-l15" (click)="removeSelectedItem(item?.uniqueName)">
+                                                    <span
+                                                        disableRipple
+                                                        class="remove-stock-list"
+                                                        (click)="removeSelectedItem(item?.uniqueName)"
+                                                    >
                                                         <i class="icon-cross"></i>
                                                     </span>
                                                 </div>
@@ -115,18 +138,17 @@
 
                                 <div class="template-footer">
                                     <hr />
-
                                     <div class="btn-group bulk-item-btn-group">
                                         <button
-                                            class="btn btn-sm btn-success"
-                                            type="button"
+                                            mat-button
+                                            class="btn-sm btn-success align-items-center justify-content-center"
                                             (click)="saveItemsEvent.emit(selectedItems); closeEvent.emit()"
                                         >
                                             {{ commonLocaleData?.app_add }}
                                         </button>
                                         <button
-                                            class="btn btn-sm btn-primary"
-                                            type="button"
+                                            mat-stroked-button
+                                            class="btn-sm btn-primary align-items-center justify-content-center"
                                             (click)="closeEvent.emit()"
                                         >
                                             {{ commonLocaleData?.app_cancel }}

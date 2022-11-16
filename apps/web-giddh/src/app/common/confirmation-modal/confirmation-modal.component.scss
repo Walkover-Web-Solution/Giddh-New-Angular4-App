@@ -1,6 +1,6 @@
 .custom-confirmation-modal {
     display: inline-block;
-    max-width: 630px;
+    max-width: 650px;
     position: relative;
     width: 100%;
     box-shadow: 0 0 6px var(--color-primary-common-box-shadow);
@@ -18,5 +18,17 @@
     p {
         font-size: 14px;
         color: var(--color-nero);
+    }
+}
+@media (max-width: 1366px) {
+    .custom-confirmation-modal {
+        max-width: 100%;
+        width: 100%;
+    }
+}
+@media (max-width: 1280px) {
+    .custom-confirmation-modal {
+        max-width: 100%;
+        width: 100%;
     }
 }

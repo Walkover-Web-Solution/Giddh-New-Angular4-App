@@ -109,9 +109,9 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
         private store: Store<AppState>,
         private settingsTagService: SettingsTagService,
         private generalService: GeneralService,
+        private modalService: BsModalService,
         private breakPointObservar: BreakpointObserver,
         private settingsBranchAction: SettingsBranchActions,
-        private modalService: BsModalService,
         private toaster: ToasterService
     ) {
         this.filterForm = this.fb.group({
@@ -185,19 +185,13 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
 
         this.universalDate$.subscribe((a) => {
             if (a) {
-                let date = cloneDeep(a);
-                if (date[0].getDate() === (new Date().getDate() + 1) && date[1].getDate() === new Date().getDate()) {
-                    this.universalDateICurrent = true;
-                    this.setCurrentFY();
-                } else {
-                    this.universalDateICurrent = false;
-                    // assign dates
+                this.universalDateICurrent = false;
+                // assign dates
 
-                    this.filterForm?.patchValue({
-                        from: dayjs(a[0]).format(GIDDH_DATE_FORMAT),
-                        to: dayjs(a[1]).format(GIDDH_DATE_FORMAT)
-                    });
-                }
+                this.filterForm?.patchValue({
+                    from: dayjs(a[0]).format(GIDDH_DATE_FORMAT),
+                    to: dayjs(a[1]).format(GIDDH_DATE_FORMAT)
+                });
 
                 // if filter type is not date picker then set filter as datepicker
                 if (this.filterForm.get('selectedDateOption').value === '0') {
@@ -356,7 +350,7 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
                 this.getTags();
                 this.toaster.successToast(this.commonLocaleData?.app_messages?.tag_created, this.commonLocaleData?.app_success);
             } else {
-                this.toaster.errorToast(response?.message, response?.code);                
+                this.toaster.errorToast(response?.message, response?.code);
             }
         });
         this.toggleTagsModal();

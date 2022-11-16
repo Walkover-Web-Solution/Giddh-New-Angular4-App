@@ -290,7 +290,7 @@ export class GeneralService {
      * @returns {string} Trimed value
      * @memberof GeneralService
      */
-    public allowAlphanumericChar(value: string): string {
+    public allowAlphanumericChar(value: any): string {        
         if (value) {
             return value?.replace(/[^a-zA-Z0-9]/g, '');
         } else {
@@ -857,6 +857,7 @@ export class GeneralService {
             case AdjustedVoucherType.CreditNote: return commonLocaleData?.app_voucher_types.credit_note;
             case AdjustedVoucherType.DebitNote: return commonLocaleData?.app_voucher_types.debit_note;
             case AdjustedVoucherType.Payment: return commonLocaleData?.app_voucher_types.payment;
+            case AdjustedVoucherType.Journal: return commonLocaleData?.app_voucher_types.journal;
             default: return '';
         }
     }

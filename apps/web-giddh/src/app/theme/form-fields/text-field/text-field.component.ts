@@ -26,6 +26,7 @@ export class TextFieldComponent implements OnInit, OnChanges, OnDestroy, Control
     @Input() public min: number = null;
     @Input() public max: number = null;
     @Input() public allowDecimalDigitsOnly: boolean = false;
+    @Input() public allowDigitsOnly: boolean = false;
     @Input() public cssClass: string = "";
     @Input() public cssStyle: string = "";
     /** Taking placeholder as input */
@@ -40,6 +41,15 @@ export class TextFieldComponent implements OnInit, OnChanges, OnDestroy, Control
     @Input() public showError: boolean = false;
     /** It will focus in the text field */
     @Input() public autoFocus: boolean = false;
+    /** It will enable mask in the text field */
+    @Input() public useMask: boolean = false;
+    /** It will show mask in the text field */
+    @Input() public mask: any;
+    /** It will show prefix in the text field */
+    @Input() public prefix: any;
+    /** It will show suffix in the text field */
+    @Input() public suffix: any;
+    @Input() public customDecimalPlaces: any;
     /** ngModel of input */
     public ngModel: any;
     /** Used for change detection */

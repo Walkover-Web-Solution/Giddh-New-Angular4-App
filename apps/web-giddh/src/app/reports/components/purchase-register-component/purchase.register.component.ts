@@ -48,14 +48,15 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
     public currentBranch: any = { name: '', uniqueName: '' };
     /** Stores the current company */
     public activeCompany: any;
-    /** Stores the current organization type */
-    public currentOrganizationType: OrganizationType;
     /* This will hold local JSON data */
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** Stores the current organization type */
+    public currentOrganizationType: OrganizationType;
     /* This will hold if it's mobile screen or not */
     public isMobileScreen: boolean = false;
+
     constructor(
         private router: Router,
         private store: Store<AppState>,
@@ -239,6 +240,7 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
                 }
                 this.currentBranch.uniqueName = currentBranchUniqueName ? currentBranchUniqueName : this.currentBranch?.uniqueName;
                 this.selectedType = currentTimeFilter ? currentTimeFilter.toLowerCase() : this.selectedType;
+                this.currentBranch.uniqueName = currentBranchUniqueName ? currentBranchUniqueName : this.currentBranch.uniqueName;
                 this.populateRecords(this.selectedType);
                 this.purchaseRegisterTotal.particular = this.activeFinacialYr?.uniqueName;
             }
@@ -385,16 +387,6 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Releases memory
-     *
-     * @memberof PurchaseRegisterComponent
-     */
-    public ngOnDestroy(): void {
-        this.destroyed$.next(true);
-        this.destroyed$.complete();
-    }
-
-    /*
      * Callback for translation response complete
      *
      * @param {boolean} event
@@ -406,5 +398,15 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
 
             this.setCurrentFY();
         }
+    }
+
+    /**
+     * Releases memory
+     *
+     * @memberof PurchaseRegisterComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 }

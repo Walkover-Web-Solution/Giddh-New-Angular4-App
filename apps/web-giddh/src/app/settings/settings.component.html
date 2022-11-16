@@ -27,6 +27,7 @@
                                 <setting-taxes></setting-taxes>
                             </div>
                         </div>
+
                         <div *ngIf="activeTab === 'integration'">
                             <hamburger-menu [pageHeading]="localeData?.setting_integration"></hamburger-menu>
                             <div class="setting-container">
@@ -34,12 +35,14 @@
                                 </setting-integration>
                             </div>
                         </div>
+
                         <div *ngIf="activeTab === 'linked-accounts'">
                             <hamburger-menu [pageHeading]="localeData?.setting_linked_accounts"></hamburger-menu>
                             <div class="setting-container">
                                 <setting-linked-accounts #eBankComp></setting-linked-accounts>
                             </div>
                         </div>
+
                         <div *ngIf="activeTab === 'profile'">
                             <hamburger-menu [pageHeading]="profileTabHeading"></hamburger-menu>
                             <div class="setting-container">
@@ -78,36 +81,42 @@
                                 <financial-year #financialYearComp></financial-year>
                             </div>
                         </div>
+
                         <div *ngIf="activeTab === 'permission'">
                             <hamburger-menu [pageHeading]="localeData?.setting_permission"></hamburger-menu>
                             <div class="setting-container">
                                 <setting-permission #permissionComp></setting-permission>
                             </div>
                         </div>
+
                         <div *ngIf="activeTab === 'branch'">
                             <hamburger-menu [pageHeading]="localeData?.setting_branch"></hamburger-menu>
                             <div class="setting-container">
                                 <setting-branch></setting-branch>
                             </div>
                         </div>
+
                         <div *ngIf="activeTab === 'tag'">
                             <hamburger-menu [pageHeading]="localeData?.setting_tag"></hamburger-menu>
                             <div class="setting-container">
                                 <setting-tags #tagComp></setting-tags>
                             </div>
                         </div>
+
                         <div *ngIf="activeTab === 'trigger'">
                             <hamburger-menu [pageHeading]="localeData?.setting_trigger"></hamburger-menu>
                             <div class="setting-container">
                                 <setting-trigger></setting-trigger>
                             </div>
                         </div>
+
                         <div *ngIf="activeTab === 'discount'">
                             <hamburger-menu [pageHeading]="localeData?.setting_discount"></hamburger-menu>
                             <div class="setting-container">
                                 <setting-discount></setting-discount>
                             </div>
                         </div>
+
                         <div *ngIf="activeTab === 'warehouse'">
                             <hamburger-menu [pageHeading]="localeData?.setting_warehouse"></hamburger-menu>
                             <div class="setting-container">

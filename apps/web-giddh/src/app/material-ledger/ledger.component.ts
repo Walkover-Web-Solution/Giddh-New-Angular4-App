@@ -259,6 +259,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     };
     /** Holds restricted voucher types for download */
     public restrictedVouchersForDownload: any[] = RESTRICTED_VOUCHERS_FOR_DOWNLOAD;
+    /** Holds side of entry (dr/cr) */
+    public entrySide: string = "";
 
     constructor(
         private store: Store<AppState>,
@@ -282,7 +284,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
         private adjustmentUtilityService: AdjustmentUtilityService,
         private invoiceAction: InvoiceActions
     ) {
-
         this.lc = new LedgerVM();
         this.advanceSearchRequest = new AdvanceSearchRequest();
         this.trxRequest = new TransactionsRequest();
@@ -1208,7 +1209,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.lc.showNewLedgerPanel = false;
     }
 
-    public showUpdateLedgerModal(txn: ITransactionItem) {
+    public showUpdateLedgerModal(txn: ITransactionItem, type: string) {
         let transactions: TransactionsResponse = null;
         this.store.pipe(select(t => t?.ledger?.transactionsResponse), take(1)).subscribe(trx => transactions = trx);
         if (transactions) {
@@ -1216,7 +1217,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }
         this.store.dispatch(this.ledgerActions.setTxnForEdit(txn.entryUniqueName));
         this.lc.selectedTxnUniqueName = txn.entryUniqueName;
-
+        this.entrySide = type;
         this.loadUpdateLedgerComponent();
     }
 
@@ -1473,7 +1474,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             const currentLedgerCategory = this.lc.activeAccount ? this.generalService.getAccountCategory(this.lc.activeAccount, this.lc.activeAccount?.uniqueName) : '';
             // If current ledger is of income or expense category then send current ledger as stockAccountUniqueName. Only required for ledger.
             const accountUniqueName = (currentLedgerCategory === 'income' || currentLedgerCategory === 'expenses') ?
-                this.lc.activeAccount ? this.lc.activeAccount?.uniqueName : '' :
+                this.lc.activeAccount ? this.lc.activeAccount.uniqueName : '' :
                 '';
             const requestObject = {
                 q: encodeURIComponent(query),
@@ -2438,9 +2439,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @param {ITransactionItem} txn
      * @memberof LedgerComponent
      */
-    public showUpdateLedgerModalIpad(txn: ITransactionItem): void {
+    public showUpdateLedgerModalIpad(txn: ITransactionItem, type: string): void {
         if (this.touchedTransaction?.entryUniqueName === txn?.entryUniqueName) {
-            this.showUpdateLedgerModal(txn);
+            this.showUpdateLedgerModal(txn, type);
         } else {
             this.touchedTransaction = txn;
         }

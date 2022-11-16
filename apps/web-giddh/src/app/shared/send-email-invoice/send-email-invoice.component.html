@@ -13,14 +13,14 @@
         <div class="row mr-b1">
             <div class="col-sm-12">
                 <input
+                    matInput
                     type="text"
-                    class="form-control"
+                    class="form-control mat-field-border"
                     [placeholder]="localeData?.enter_email_address"
                     [(ngModel)]="emailAddresses"
                 />
             </div>
         </div>
-
         <div
             class="clearfix"
             *ngIf="
@@ -37,38 +37,38 @@
 
             <div class="checkbox" *ngIf="voucherApiVersion === 2">
                 <label>
-                    <input
+                    <mat-checkbox
                         name="originalCopy"
-                        type="checkbox"
                         value="Original"
+                        color="primary"
                         checked
                         [(ngModel)]="isOriginal"
                         (change)="invoiceTypeChanged($event)"
-                    />
+                    ></mat-checkbox>
                     {{ localeData?.original }}
                 </label>
             </div>
 
             <div class="checkbox">
                 <label>
-                    <input
-                        type="checkbox"
-                        value="Transport"
-                        (change)="invoiceTypeChanged($event)"
+                    <mat-checkbox
                         [(ngModel)]="isTransport"
-                    />
+                        color="primary"
+                        (change)="invoiceTypeChanged($event)"
+                        value="Transport"
+                    >
+                    </mat-checkbox>
                     {{ localeData?.transport }}
                 </label>
             </div>
-
             <div class="checkbox">
                 <label>
-                    <input
-                        type="checkbox"
+                    <mat-checkbox
+                        color="primary"
                         value="Customer"
                         (change)="invoiceTypeChanged($event)"
                         [(ngModel)]="isCustomer"
-                    />
+                    ></mat-checkbox>
                     {{ commonLocaleData?.app_customer }}
                 </label>
             </div>
@@ -79,7 +79,7 @@
             <div class="col-sm-12">
                 <div class="btn-group" role="group">
                     <button
-                        type="button"
+                        mat-button
                         class="btn btn-success"
                         [disabled]="!emailAddresses || (!isTransport && !isOriginal && !isCustomer)"
                         (click)="sendEmail()"
@@ -87,7 +87,7 @@
                         {{ commonLocaleData?.app_send }}
                     </button>
 
-                    <button type="button" class="btn btn-danger" (click)="cancel()">
+                    <button mat-button class="btn btn-danger" (click)="cancel()">
                         {{ commonLocaleData?.app_cancel }}
                     </button>
                 </div>
