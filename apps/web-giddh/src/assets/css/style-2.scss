@@ -10273,7 +10273,11 @@ body.update-scroll-hidden {
     .right-bar {
         width: 100% !important;
     }
-
+    .activity-log-page {
+        .cdk-overlay-container {
+            z-index: 99999;
+        }
+    }
     .unit-mapping-page {
         .unit-mapping-grid-list {
             .grid-box-content {

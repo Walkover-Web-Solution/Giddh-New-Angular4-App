@@ -1,5 +1,5 @@
 import { BreakpointObserver, BreakpointState } from "@angular/cdk/layout";
-import { Component, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ReplaySubject, Observable } from "rxjs";
 import { takeUntil, map, startWith } from "rxjs/operators";
 import { FormControl } from '@angular/forms';
@@ -17,7 +17,7 @@ import { Router } from "@angular/router";
     styleUrls: ['./unit-mapping.component.scss']
 })
 
-export class UnitMappingComponent implements OnInit {
+export class UnitMappingComponent implements OnInit, OnDestroy {
     /** This will hold the value out/in to open/close setting sidebar popup */
     public asideGstSidebarMenuState: string = 'in';
     /** this will check mobile screen size */
@@ -82,7 +82,7 @@ export class UnitMappingComponent implements OnInit {
      * 
      * @memberof UnitMappingComponent
      */
-    public ngDestroy(): void {
+    public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
         document.querySelector('body').classList.remove('unit-mapping-page');
