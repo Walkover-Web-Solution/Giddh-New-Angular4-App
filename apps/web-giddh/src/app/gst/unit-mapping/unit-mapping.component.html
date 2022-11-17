@@ -4,11 +4,9 @@
         *ngIf="asideGstSidebarMenuState === 'in'"
     >
         <tax-sidebar
-            (navigateEvent)="handleNavigation($event)"
+            (navigateEvent)="handleNavigation()"
             (clickOutside)="isMobileScreen ? (asideGstSidebarMenuState = 'out') : ''"
             [exclude]="'#primary-new-header'"
-            [isMonthSelected]="false"
-            [isGstModule]="true"
             class="gst-sidebar"
         ></tax-sidebar>
     </div>
