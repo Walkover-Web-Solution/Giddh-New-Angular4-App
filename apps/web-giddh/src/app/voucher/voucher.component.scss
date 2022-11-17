@@ -569,12 +569,16 @@ textarea:focus {
 
 #invoiceFile {
     position: absolute;
-    top: 0;
     opacity: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
+    inset: 0;
     width: 100%;
+}
+
+.delete-image {
+    width: 3%;
+    position: absolute;
+    right: 25%;
+    top: 55px;
 }
 
 .custom-file-label {
@@ -589,14 +593,6 @@ textarea:focus {
         width: 100%;
         left: 0;
         overflow: hidden;
-    }
-
-    .delete-image {
-        top: -7px;
-        position: absolute;
-        right: -20px;
-        width: 4%;
-        cursor: pointer;
     }
 }
 

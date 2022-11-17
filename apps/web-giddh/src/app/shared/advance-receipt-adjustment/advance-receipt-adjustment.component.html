@@ -170,6 +170,7 @@
                                             (onClear)="onClearSalesAccount(transaction)"
                                             (click)="clickSelectVoucher(entryIdx, adjustAdvancePaymentForm)"
                                             [hasMoreValue]="true"
+                                            [required]="true"
                                         >
                                             <ng-template #optionTemplate let-option="option">
                                                 <a href="javascript:void(0)">
@@ -209,7 +210,7 @@
                                             [name]="'voucherName{{ entry.uniqueName }}'"
                                             [defaultValue]="entry.voucherNumber"
                                             (click)="clickSelectVoucher(entryIdx, adjustAdvancePaymentForm)"
-                                            [required]="'true'"
+                                            [required]="true"
                                             [placeholder]="localeData?.select_voucher"
                                             (selectedOption)="selectVoucher($event, entry, entryIdx)"
                                             [options]="adjustVoucherOptions"
