@@ -1770,10 +1770,6 @@ span.eligible-ITC {
     background: var(--color-dark-fog) !important;
 }
 
-::ng-deep .cdk-overlay-container {
-    z-index: 99 !important;
-}
-
 /* resposnvie */
 @media (max-width: 1199px) {
     .invoice-date-due-date {

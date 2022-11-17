@@ -467,7 +467,7 @@
                                                                                 [allowValueReset]="true"
                                                                                 [defaultValue]="
                                                                                     invFormData?.accountDetails
-                                                                                        ?.billingDetails?.state?.name
+                                                                                        ?.billingDetails?.state?.code
                                                                                 "
                                                                                 (onClear)="
                                                                                     fillShippingBillingDetails(
@@ -488,13 +488,15 @@
                                                                                 autocomplete="None"
                                                                                 [type]="'text'"
                                                                                 [name]="'billingDetails.gstNumber'"
-                                                                                [cssClass]="'form-control input-custom'"
+                                                                                [cssClass]="
+                                                                                    'form-control input-custom billing'
+                                                                                "
                                                                                 *ngIf="showGSTINNo"
                                                                                 [(ngModel)]="
                                                                                     invFormData.accountDetails
                                                                                         .billingDetails.gstNumber
                                                                                 "
-                                                                                (change)="
+                                                                                (ngModelChange)="
                                                                                     getStateCode(
                                                                                         'billingDetails',
                                                                                         statesBilling
@@ -507,17 +509,17 @@
                                                                             >
                                                                             </text-field>
                                                                             <text-field
-                                                                                [maxlength]="'15'"
+                                                                                [maxlength]="15"
                                                                                 autocomplete="none"
                                                                                 [type]="'text'"
-                                                                                [name]="'billingDetails.gstNumber'"
+                                                                                [name]="billingDetails.gstNumber"
                                                                                 [cssClass]="'form-control input-custom'"
                                                                                 *ngIf="showTRNNo"
                                                                                 [(ngModel)]="
                                                                                     invFormData.accountDetails
                                                                                         .billingDetails.gstNumber
                                                                                 "
-                                                                                (change)="
+                                                                                (ngModelChange)="
                                                                                     getStateCode(
                                                                                         'billingDetails',
                                                                                         statesBilling
@@ -695,7 +697,7 @@
                                                                                     [defaultValue]="
                                                                                         invFormData?.accountDetails
                                                                                             ?.shippingDetails?.state
-                                                                                            ?.name
+                                                                                            ?.code
                                                                                     "
                                                                                     (onClear)="
                                                                                         fillShippingBillingDetails(
@@ -724,7 +726,7 @@
                                                                                         invFormData.accountDetails
                                                                                             .shippingDetails.gstNumber
                                                                                     "
-                                                                                    (change)="
+                                                                                    (ngModelChange)="
                                                                                         getStateCode(
                                                                                             'shippingDetails',
                                                                                             statesShipping
@@ -748,7 +750,7 @@
                                                                                         invFormData.accountDetails
                                                                                             .shippingDetails.gstNumber
                                                                                     "
-                                                                                    (change)="
+                                                                                    (ngModelChange)="
                                                                                         getStateCode(
                                                                                             'shippingDetails',
                                                                                             statesShipping
@@ -3413,13 +3415,13 @@
                                                                     [placeholder]="commonLocaleData?.app_amount"
                                                                     [cssClass]="
                                                                         'form-control
-                                                                        amount-field
-                                                                        due-amount-field
-                                                                        text-right
-                                                                        pull-right
-                                                                        max-width-100
-                                                                        mat-field-border 
-                                                                        multicurrency-grandtotal no1'
+                                    amount-field
+                                    due-amount-field
+                                    text-right
+                                    pull-right
+                                    max-width-100
+                                    mat-field-border 
+                                    multicurrency-grandtotal'
                                                                     "
                                                                     [name]="'dueAmount'"
                                                                     [prefix]="depositCurrSymbol"
@@ -3505,7 +3507,6 @@
                                             </div>
                                         </div>
                                     </div>
-
                                     <!--endregion-->
                                     <!-- region balance due for purchase -->
                                     <div class="table-row" *ngIf="isPurchaseInvoice && voucherApiVersion !== 2">

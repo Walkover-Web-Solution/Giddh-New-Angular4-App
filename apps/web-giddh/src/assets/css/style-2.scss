@@ -148,7 +148,8 @@ $custom-typography: mat-typography-config(
     }
 }
 
-.voucher-preview-edit {
+.voucher-preview-edit,
+.page-has-tabs {
     .shipping-date {
         padding-top: 6px !important;
     }
@@ -852,8 +853,8 @@ input {
         }
     }
 }
-
-.invoice-preview-page {
+.invoice-preview-page,
+.page-has-tabs {
     .option-value-more {
         float: left !important;
         width: 100% !important;
@@ -866,7 +867,6 @@ input {
         padding: 10px;
         vertical-align: middle;
         min-height: 65px !important;
-        border-bottom: 1px solid var(--color-common-primary-border);
 
         .option-label {
             color: var(--color-common-primary-text);
@@ -877,14 +877,6 @@ input {
             width: 100% !important;
             color: var(--color-primary-virtual-scroll-scrollable-content-item-a-item-stock);
             font-size: 13px;
-        }
-
-        .option-value-stock {
-            float: left !important;
-            width: 100% !important;
-            line-height: 1.2 !important;
-            color: var(--color-primary-virtual-scroll-scrollable-content-item-a-item-stock);
-            font-size: 12px;
         }
 
         .mat-option-text {
@@ -7820,7 +7812,8 @@ highcharts-chart {
     top: 0 !important;
 }
 
-.voucher-preview-edit {
+.voucher-preview-edit,
+.page-has-tabs {
     .other-taxes-input {
         border: 1px solid var(--color-secondary-input-bar-border) !important;
     }
@@ -7887,28 +7880,6 @@ highcharts-chart {
         &:hover {
             background: var(--color-dark-fog);
             text-decoration: underline;
-        }
-    }
-
-    .options-line-stock {
-        padding: 10px;
-        vertical-align: middle;
-        min-height: 65px !important;
-        border-bottom: 1px solid var(--color-common-primary-border);
-
-        .option-label {
-            color: var(--color-common-primary-text);
-        }
-
-        .option-value {
-            float: left !important;
-            width: 100% !important;
-            color: var(--color-primary-virtual-scroll-scrollable-content-item-a-item-stock);
-            font-size: 13px;
-        }
-
-        .mat-option-text {
-            line-height: 23px;
         }
     }
 

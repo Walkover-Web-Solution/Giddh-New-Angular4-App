@@ -77,7 +77,6 @@ import * as dayjs from 'dayjs';
 import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { cloneDeep, find, forEach, isEqual, isUndefined, omit, orderBy, uniqBy } from '../lodash-optimized';
 import { InvoiceSetting } from '../models/interfaces/invoice.setting.interface';
-import { SalesShSelectComponent } from '../theme/sales-ng-virtual-select/sh-select.component';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { LedgerDiscountClass } from '../models/api-models/SettingsDiscount';
 import { Configuration, SubVoucher, RATE_FIELD_PRECISION, HIGH_RATE_FIELD_PRECISION, SearchResultText, TCS_TDS_TAXES_TYPES, ENTRY_DESCRIPTION_LENGTH, EMAIL_REGEX_PATTERN, AdjustedVoucherType, MOBILE_NUMBER_UTIL_URL, MOBILE_NUMBER_SELF_URL, MOBILE_NUMBER_IP_ADDRESS_URL, MOBILE_NUMBER_ADDRESS_JSON_URL } from '../app.constant';
@@ -188,9 +187,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     /** Template reference for each entry */
     @ViewChild('entry', { read: TemplateRef, static: false }) template: TemplateRef<any>;
     /** Billing state field instance */
-    @ViewChild('statesBilling', { static: false }) statesBilling: SalesShSelectComponent;
+    @ViewChild('statesBilling', { static: false }) statesBilling: SelectFieldComponent;
     /** Billing state field instance */
-    @ViewChild('statesShipping', { static: false }) statesShipping: SalesShSelectComponent;
+    @ViewChild('statesShipping', { static: false }) statesShipping: SelectFieldComponent;;
     public showAdvanceReceiptAdjust: boolean = false;
     /** This will reload voucher pdf and attachments on preview page */
     @Output() public reloadFiles: EventEmitter<boolean> = new EventEmitter<boolean>();
@@ -2064,14 +2063,15 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @param {SalesShSelectComponent} statesEle state input box
      * @memberof VoucherComponent
      */
-    public getStateCode(type: string, statesEle: SalesShSelectComponent) {
+    public getStateCode(type: string, statesEle: SelectFieldComponent) {
         let gstVal = cloneDeep(this.invFormData.accountDetails[type].gstNumber)?.toString();
         if (gstVal && gstVal.length >= 2) {
             const selectedState = this.statesSource.find(item => item.stateGstCode === gstVal.substring(0, 2));
             if (selectedState) {
                 this.invFormData.accountDetails[type].stateCode = selectedState.value;
                 this.invFormData.accountDetails[type].state.code = selectedState.value;
-                statesEle.disabled = true;
+                statesEle.readonly = true;
+                this._cdr.detectChanges();
             } else {
                 this._toasty.clearAllToaster();
                 this.checkGstNumValidation(gstVal);
@@ -2081,10 +2081,13 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     this.invFormData.accountDetails[type].stateCode = null;
                     this.invFormData.accountDetails[type].state.code = null;
                 }
-                statesEle.disabled = false;
+                statesEle.readonly = false;
+                this._cdr.detectChanges();
             }
         } else {
-            statesEle.disabled = false;
+            statesEle.readonly = false;
+            this._cdr.detectChanges();
+
         }
         this.checkGstNumValidation(gstVal);
     }
@@ -2148,11 +2151,11 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.forceClearDepositAccount$ = observableOf({ status: true });
         this.invoiceForceClearReactive$ = observableOf({ status: true });
         this.billingShippingForceClearReactive$ = observableOf({ status: true });
-        if (this.statesBilling?.disabled) {
-            this.statesBilling.disabled = false;
+        if (this.statesBilling?.readonly) {
+            this.statesBilling.readonly = false;
         }
-        if (this.statesShipping?.disabled) {
-            this.statesShipping.disabled = false;
+        if (this.statesShipping?.readonly) {
+            this.statesShipping.readonly = false;
         }
         this.invoiceSelected = '';
         this.isCustomerSelected = false;
@@ -2436,8 +2439,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         let exRate = this.originalExchangeRate;
         let requestObject: any;
         let voucherDate: any;
-        const deposit = this.getDeposit();   
-             
+        const deposit = this.getDeposit();
+
         data.accountDetails.mobileNumber = this.intl?.getNumber();
         if (!this.isPurchaseInvoice) {
             voucherDate = data.voucherDetails.voucherDate;
@@ -3613,7 +3616,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.createEmbeddedViewAtIndex(this.invFormData.entries?.length - 1);
         this.activeIndx = (this.invFormData.entries && this.invFormData.entries.length) ? this.invFormData.entries.length - 1 : 0;
         setTimeout(() => {
-            if(this.activeIndx > 0){
+            if (this.activeIndx > 0) {
                 this.onSearchQueryChanged('', 1, 'item');
             }
             this.openProductDropdown();
@@ -3782,7 +3785,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
     public onSelectPaymentMode(event: any, isCleared: boolean = false) {
 
-        if(this.isCashInvoice){
+        if (this.isCashInvoice) {
             this.updateDepositAmount(0);
         }
         if (event && event.value && !isCleared) {
@@ -6535,7 +6538,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 if (bankAccounts.length > 0) {
                     this.onSelectPaymentMode({ label: bankAccounts[0]?.name, value: bankAccounts[0]?.uniqueName, additional: bankAccounts[0] });
                 }
-            }            
+            }
             this.bankAccounts$ = observableOf(this.updateBankAccountObject(data));
         });
     }
@@ -7437,7 +7440,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @private
      * @memberof VoucherComponent
      */
-     public openProductDropdown(): void {
+    public openProductDropdown(): void {
         if (this.invFormData?.voucherDetails?.customerUniquename || this.invFormData?.voucherDetails?.customerName) {
             setTimeout(() => {
                 const shSelectField: any = !this.isMobileScreen ? this.selectAccount?.first : this.selectAccount?.last;
@@ -7791,7 +7794,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         let deposit = new AmountClassMulticurrency();
         if ((this.userDeposit !== null && this.userDeposit !== undefined) || this.voucherApiVersion !== 2) {
             deposit.accountUniqueName = this.depositAccountUniqueName;
-            
+
             if (this.voucherApiVersion === 2) {
                 if (this.selectedPaymentMode?.additional?.currency?.code === this.invFormData?.accountDetails?.currency?.code) {
                     deposit.amountForAccount = this.depositAmount;
@@ -7848,13 +7851,17 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             if (this.invFormData.accountDetails.billingDetails?.gstNumber) {
                 this.getStateCode('billingDetails', this.statesBilling);
                 this.autoFillShippingDetails();
+                // this._cdr.detectChanges();
             } else {
-                this.statesBilling.disabled = false;
+                this.statesBilling.readonly = false;
+                // this._cdr.detectChanges();
             }
             if (this.invFormData.accountDetails.shippingDetails?.gstNumber) {
                 this.getStateCode('shippingDetails', this.statesShipping);
+                // this._cdr.detectChanges();
             } else {
-                this.statesShipping.disabled = false;
+                this.statesShipping.readonly = false;
+                // this._cdr.detectChanges();
             }
 
             setTimeout(() => {
