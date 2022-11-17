@@ -124,6 +124,9 @@
                         <a
                             href="javascript:void(0);"
                             class="d-block clearfix"
+                            routerLinkActive
+                            #unitMapping="routerLinkActive"
+                            [class.active]="unitMapping.isActive"
                             [routerLink]="['/pages/gstfiling/unit-mapping']"
                         >
                             <span
