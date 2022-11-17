@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ContentChild, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, TemplateRef, ViewChild } from "@angular/core";
+import { ChangeDetectionStrategy, Component, ContentChild, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, TemplateRef, ViewChild } from "@angular/core";
 import { FormControl } from "@angular/forms";
 import { MatAutocompleteTrigger } from "@angular/material/autocomplete";
 import { ReplaySubject } from "rxjs";
@@ -17,6 +17,8 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy {
     @ContentChild('optionTemplate', { static: false }) public optionTemplate: TemplateRef<any>;
     /** Trigger instance for auto complete */
     @ViewChild('trigger', { static: false, read: MatAutocompleteTrigger }) trigger: MatAutocompleteTrigger;
+    /** Select Field instance for auto focus */
+    @ViewChild('selectField', { static: false }) public selectField: ElementRef;
     /** CSS class name to add on the field */
     @Input() public cssClass: string = "";
     /** CSS class name to add on the mat autocomplete panel class */
@@ -31,6 +33,8 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public readonly: boolean;
     /** True if field is autocomplete */
     @Input() public autocomplete: boolean;
+    /** It will focus in the select field */
+    @Input() public autofocus: boolean = false;
     /** Default value to prefill */
     @Input() public defaultValue: any = "";
     /** True if field is required */
@@ -47,6 +51,10 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public allowValueReset: boolean = false;
     /** True if we need to show value also with label */
     @Input() public showValueInLabel: boolean = false;
+    /** True if we need to show create new label */
+    @Input() public showCreateNew: boolean = false;
+    /** Holds text to show to create new data */
+    @Input() public createNewOptionsText: any = "";
     /** True if we need to show more value also with label */
     @Input() public hasMoreValue: boolean = false;
     /** Emits the scroll to bottom event when pagination is required  */
@@ -132,6 +140,12 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy {
 
         if (changes?.defaultValue) {
             this.searchFormControl.setValue({ label: changes?.defaultValue.currentValue });
+        }
+
+        if (this.autofocus) {
+            setTimeout(() => {
+                this.selectField?.nativeElement?.focus();
+            }, 20);
         }
 
         if (changes?.openDropdown) {
