@@ -290,7 +290,7 @@ export class GeneralService {
      * @returns {string} Trimed value
      * @memberof GeneralService
      */
-    public allowAlphanumericChar(value: any): string {        
+    public allowAlphanumericChar(value: any): string {
         if (value) {
             return value?.replace(/[^a-zA-Z0-9]/g, '');
         } else {
@@ -653,6 +653,40 @@ export class GeneralService {
             headerText,
             headerCssClass,
             messageText: localeData?.change_all_entry_dates,
+            messageCssClass,
+            footerText: '',
+            footerCssClass,
+            buttons
+        };
+    }
+
+    /**
+     * This will use for confirmation delete attachment in vocher
+     *
+     * @param {*} localeData
+     * @param {*} commonLocaleData
+     * @param {boolean} isVoucherDateSelected
+     * @return {*}  {ConfirmationModalConfiguration}
+     * @memberof GeneralService
+     */
+    public getAttachmentDeleteConfiguration(localeData: any, commonLocaleData: any): ConfirmationModalConfiguration {
+        const buttons: Array<ConfirmationModalButton> = [{
+            text: commonLocaleData?.app_yes,
+            cssClass: 'btn btn-success'
+        },
+        {
+            text: commonLocaleData?.app_no,
+            cssClass: 'btn btn-danger'
+        }];
+        // localeData?.confirm_delete_file
+        const headerText: string = commonLocaleData?.app_confirmation;
+        const headerCssClass: string = 'd-inline-block mr-1';
+        const messageCssClass: string = 'mr-b1 text-light';
+        const footerCssClass: string = 'mr-b1';
+        return {
+            headerText,
+            headerCssClass,
+            messageText: localeData?.confirm_delete_file,
             messageCssClass,
             footerText: '',
             footerCssClass,
