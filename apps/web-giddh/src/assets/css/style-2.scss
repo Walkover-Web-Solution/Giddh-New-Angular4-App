@@ -12656,10 +12656,8 @@ hamburger-menu {
         z-index: 1000 !important;
     }
 
-    .activity-log-page {
-        .cdk-overlay-container {
-            z-index: 9999 !important;
-        }
+    .cdk-overlay-container {
+        z-index: 9999 !important;
     }
 }
 
