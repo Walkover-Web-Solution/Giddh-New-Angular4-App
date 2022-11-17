@@ -181,6 +181,7 @@
                                                             [cssClass]="
                                                                 'form-control mat-field-border customer-dropdown'
                                                             "
+                                                            [autofocus]="true"
                                                             [customPanelClass]="'panel-cl'"
                                                             [name]="'voucherDetails.customerName'"
                                                             [placeholder]="customerPlaceHolder"
@@ -2295,6 +2296,7 @@
                                         <div class="product-name">
                                             <div class="ng-select-wrap">
                                                 <select-field
+                                                    [autofocus]="true"
                                                     #selectAccount
                                                     [cssClass]="'form-control mat-field-border'"
                                                     [name]="'transaction.fakeAccForSelect2_' + entryIdx"
@@ -3408,7 +3410,7 @@
                                                                 <text-field
                                                                     (change)="
                                                                         calculateBalanceDue();
-                                                                        updateDepositAmount($event.value)
+                                                                        updateDepositAmount($event.target.value)
                                                                     "
                                                                     [placeholder]="commonLocaleData?.app_amount"
                                                                     [cssClass]="
@@ -3427,9 +3429,7 @@
                                                                     [mask]="inputMaskFormat"
                                                                     [useMask]="true"
                                                                     [(ngModel)]="depositAmount"
-                                                                    [attr.required]="
-                                                                        depositAccountUniqueName ? true : false
-                                                                    "
+                                                                    [required]="depositAccountUniqueName ? true : false"
                                                                     [type]="'text'"
                                                                 ></text-field>
                                                                 <label class="pull-right">{{
@@ -4842,24 +4842,25 @@
                                                         <text-field
                                                             [type]="'text'"
                                                             (change)="
-                                                                calculateBalanceDue(); updateDepositAmount($event.value)
+                                                                calculateBalanceDue();
+                                                                updateDepositAmount($event.target.value)
                                                             "
                                                             [placeholder]="commonLocaleData?.app_amount"
                                                             [name]="'dueAmount'"
                                                             [cssClass]="
                                                                 '
-                              form-control
-                              amount-field
-                              text-right
-                              pull-right
-                              max-width-100
-                              multicurrency-grandtotal'
+                                                            form-control
+                                                            amount-field
+                                                            text-right
+                                                            pull-right
+                                                            max-width-100
+                                                            multicurrency-grandtotal no2'
                                                             "
                                                             [(ngModel)]="depositAmount"
                                                             [prefix]="depositCurrSymbol"
                                                             [suffix]="selectedSuffixForCurrency"
                                                             [mask]="inputMaskFormat"
-                                                            [attr.required]="depositAccountUniqueName ? true : false"
+                                                            [required]="depositAccountUniqueName ? true : false"
                                                         >
                                                         </text-field>
                                                         <label class="pull-right pt-1">{{
