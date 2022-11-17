@@ -13,6 +13,7 @@
         (click)="!readonly ? trigger?.openPanel() : trigger?.closePanel()"
         [autocomplete]="autocomplete"
         #trigger="matAutocompleteTrigger"
+        #selectField
     />
     <mat-autocomplete
         [displayWith]="displayLabel"
