@@ -866,7 +866,7 @@ input {
         font-size: 12px;
     }
 
-    .options-line {
+    .options-line-value {
         padding: 10px;
         vertical-align: middle;
         min-height: 65px !important;
@@ -881,14 +881,6 @@ input {
             width: 100% !important;
             color: var(--color-primary-virtual-scroll-scrollable-content-item-a-item-stock);
             font-size: 13px;
-        }
-
-        .option-value-stock {
-            float: left !important;
-            width: 100% !important;
-            line-height: 1.2 !important;
-            color: var(--color-primary-virtual-scroll-scrollable-content-item-a-item-stock);
-            font-size: 12px;
         }
 
         .mat-option-text {

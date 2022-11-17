@@ -650,6 +650,10 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     @ViewChild('purchaseRecordConfirmationPopup', { static: true }) public purchaseRecordConfirmationPopup: any;
     /** Date change confirmation modal */
     @ViewChild('dateChangeConfirmationModel', { static: true }) public dateChangeConfirmationModel: any;
+    /** Delete attachment modal */
+    @ViewChild('attachmentDeleteConfirmationModel', { static: true }) public attachmentDeleteConfirmationModel: any;
+    /** RCM modal configuration */
+    public attachmentDeleteConfiguration: ConfirmationModalConfiguration;
     /** True if we have to open account selection dropdown */
     public openAccountSelectionDropdown: boolean = false;
     /** This will hold selected cash account */
@@ -660,6 +664,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public fieldFilteredOptions: IOption[] = [];
     /** Compare function of link PO reference list */
     public compareFn = (a, b) => a && b && a.id === b.id;
+    /** True if we have to open account selection dropdown with auto focus */
+    public isActive: boolean = false;
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -1603,6 +1609,11 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             this.toggleBodyClass();
         }
         this.openAccountSelectionDropdown = !this.isUpdateMode;
+        console.log(this.openAccountSelectionDropdown);
+        
+        if (this.openAccountSelectionDropdown){
+        this.isActive = true;
+        }
     }
 
     /**
@@ -2436,8 +2447,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         let exRate = this.originalExchangeRate;
         let requestObject: any;
         let voucherDate: any;
-        const deposit = this.getDeposit();   
-             
+        const deposit = this.getDeposit();
+
         data.accountDetails.mobileNumber = this.intl?.getNumber();
         if (!this.isPurchaseInvoice) {
             voucherDate = data.voucherDetails.voucherDate;
@@ -3613,7 +3624,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.createEmbeddedViewAtIndex(this.invFormData.entries?.length - 1);
         this.activeIndx = (this.invFormData.entries && this.invFormData.entries.length) ? this.invFormData.entries.length - 1 : 0;
         setTimeout(() => {
-            if(this.activeIndx > 0){
+            if (this.activeIndx > 0) {
                 this.onSearchQueryChanged('', 1, 'item');
             }
             this.openProductDropdown();
@@ -3781,8 +3792,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     }
 
     public onSelectPaymentMode(event: any, isCleared: boolean = false) {
-
-        if(this.isCashInvoice){
+        if (this.isCashInvoice) {
             this.updateDepositAmount(0);
         }
         if (event && event.value && !isCleared) {
@@ -5544,6 +5554,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         } else {
             if (!this.isPendingVoucherType && !this.isUpdateMode) {
                 this.openAccountSelectionDropdown = true;
+                this.isActive = true;
             }
         }
     }
@@ -6535,7 +6546,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 if (bankAccounts.length > 0) {
                     this.onSelectPaymentMode({ label: bankAccounts[0]?.name, value: bankAccounts[0]?.uniqueName, additional: bankAccounts[0] });
                 }
-            }            
+            }
             this.bankAccounts$ = observableOf(this.updateBankAccountObject(data));
         });
     }
@@ -7437,7 +7448,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @private
      * @memberof VoucherComponent
      */
-     public openProductDropdown(): void {
+    public openProductDropdown(): void {
         if (this.invFormData?.voucherDetails?.customerUniquename || this.invFormData?.voucherDetails?.customerName) {
             setTimeout(() => {
                 const shSelectField: any = !this.isMobileScreen ? this.selectAccount?.first : this.selectAccount?.last;
@@ -7763,6 +7774,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 if (!this.callFromOutside) {
                     this.reloadFiles.emit(true);
                 }
+                if (this.attachmentDeleteConfirmationModel) {
+                    this.dialog.closeAll();
+                }
                 this._cdr.detectChanges();
             } else {
                 this._toasty.errorToast(response?.message)
@@ -7791,7 +7805,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         let deposit = new AmountClassMulticurrency();
         if ((this.userDeposit !== null && this.userDeposit !== undefined) || this.voucherApiVersion !== 2) {
             deposit.accountUniqueName = this.depositAccountUniqueName;
-            
+
             if (this.voucherApiVersion === 2) {
                 if (this.selectedPaymentMode?.additional?.currency?.code === this.invFormData?.accountDetails?.currency?.code) {
                     deposit.amountForAccount = this.depositAmount;
@@ -8121,5 +8135,39 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             }
             this._cdr.detectChanges();
         }, 100);
+    }
+
+    /**
+     * This will use for delete attachment confirmation
+     *
+     * @memberof VoucherComponent
+     */
+    public deleteAttachementConfirmation(): void {
+        this.attachmentDeleteConfiguration = this.generalService.getAttachmentDeleteConfiguration(this.localeData, this.commonLocaleData);
+        let dialogRef = this.dialog.open(this.attachmentDeleteConfirmationModel, {
+            width: '630px',
+            data: {
+                configuration: this.attachmentDeleteConfiguration
+            }
+        });
+
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            this.handleAttachmentDelete(response);
+        });
+    }
+
+    /**
+     * Delete attachment handler, triggerreed when the user performs any
+     * action with the RCM popup
+     * @param {string} action
+     * @memberof VoucherComponent
+     */
+    public handleAttachmentDelete(action: string): void {
+        if (action === this.commonLocaleData?.app_yes) {
+            this.deleteAttachment();
+        }
+        else {
+            this.dialog.closeAll();
+        }
     }
 }
