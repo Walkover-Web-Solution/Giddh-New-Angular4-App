@@ -26,6 +26,7 @@ export class ExportBodyRequest {
     exportType?: string;
     branchUniqueName?: string;
     fileType?: string;
+    tagName?: string;
 }
 
 export interface DayBookRequestModel {
