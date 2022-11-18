@@ -493,7 +493,7 @@
                                                                                     invFormData.accountDetails
                                                                                         .billingDetails.gstNumber
                                                                                 "
-                                                                                (change)="
+                                                                                (ngModelChange)="
                                                                                     getStateCode(
                                                                                         'billingDetails',
                                                                                         statesBilling
@@ -516,7 +516,7 @@
                                                                                     invFormData.accountDetails
                                                                                         .billingDetails.gstNumber
                                                                                 "
-                                                                                (change)="
+                                                                                (ngModelChange)="
                                                                                     getStateCode(
                                                                                         'billingDetails',
                                                                                         statesBilling
@@ -3004,7 +3004,7 @@
                                     </label>
                                     <span
                                         class="delete-image"
-                                        (click)="attachmentDeleteConfirmationModel.show(); $event.preventDefault()"
+                                        (click)="deleteAttachementConfirmation()"
                                         *ngIf="voucherApiVersion === 2 && selectedFileName && !isFileUploading"
                                     >
                                         <img src="assets/images/multiply.svg" />
