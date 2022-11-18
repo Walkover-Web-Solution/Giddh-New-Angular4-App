@@ -185,19 +185,13 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
 
         this.universalDate$.subscribe((a) => {
             if (a) {
-                let date = cloneDeep(a);
-                if (date[0].getDate() === (new Date().getDate() + 1) && date[1].getDate() === new Date().getDate()) {
-                    this.universalDateICurrent = true;
-                    this.setCurrentFY();
-                } else {
-                    this.universalDateICurrent = false;
-                    // assign dates
+                this.universalDateICurrent = false;
+                // assign dates
 
-                    this.filterForm?.patchValue({
-                        from: dayjs(a[0]).format(GIDDH_DATE_FORMAT),
-                        to: dayjs(a[1]).format(GIDDH_DATE_FORMAT)
-                    });
-                }
+                this.filterForm?.patchValue({
+                    from: dayjs(a[0]).format(GIDDH_DATE_FORMAT),
+                    to: dayjs(a[1]).format(GIDDH_DATE_FORMAT)
+                });
 
                 // if filter type is not date picker then set filter as datepicker
                 if (this.filterForm.get('selectedDateOption').value === '0') {
