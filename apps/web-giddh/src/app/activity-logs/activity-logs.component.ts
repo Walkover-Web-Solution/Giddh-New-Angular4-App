@@ -458,11 +458,11 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
      * @param {*} event
      * @memberof ActivityLogsComponent
      */
-    public resetEntity(event: any):void {
-            if (!event?.value) {
-                this.activityObjLabels.entity = '';
-                this.activityObj.entity = '';
-            }
+    public resetEntity(event: any): void {
+        if (!event?.value) {
+            this.activityObjLabels.entity = '';
+            this.activityObj.entity = '';
+        }
     }
 
     /**
@@ -471,10 +471,11 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
      * @param {*} event
      * @memberof ActivityLogsComponent
      */
-    public resetUser(event: any):void {
-            if (!event?.value) {
-                this.activityObjLabels.user = '';
-            }
+    public resetUser(event: any): void {
+        if (!event?.value) {
+            this.activityObjLabels.user = '';
+            this.activityObj.userUniqueNames = [];
+        }
     }
 
     /**
@@ -483,10 +484,10 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
     * @param {*} event
     * @memberof ActivityLogsComponent
     */
-    public resetOperation(event: any):void {
-            if (!event?.value) {
-                this.activityObjLabels.operation = '';
-                this.activityObj.operation = '';
-            }
+    public resetOperation(event: any): void {
+        if (!event?.value) {
+            this.activityObjLabels.operation = '';
+            this.activityObj.operation = '';
+        }
     }
 }

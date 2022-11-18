@@ -1,4 +1,8 @@
-<span class="position-relative tax-control-cmp" (click)="$event.stopPropagation()">
+<span
+    class="position-relative tax-control-cmp"
+    (click)="$event.stopPropagation()"
+    (clickOutside)="showTaxPopup = false"
+>
     <label class="font-12" *ngIf="showHeading"
         >{{ customHeading ? customHeading : commonLocaleData?.app_tax }}
         <sup class="mandatory-asterisk" *ngIf="isMandatory">*</sup></label
@@ -30,23 +34,23 @@
                 [mask]="maskInput"
                 [prefix]="prefixInput"
                 [suffix]="suffixInput"
-                [matMenuTriggerFor]="menu"
                 (focus)="handleInputFocus()"
             />
         </div>
     </a>
 
     <div class="position-relative">
-        <mat-menu #menu="matMenu" yPosition="below" class="tax-control-menu">
-            <button mat-menu-item *ngIf="taxRenderData.length === 0">
+        <ul
+            class="dropdown-menu tax-dropdown pd"
+            [ngStyle]="{ 'display': showTaxPopup ? 'block' : 'none' }"
+            (click)="$event.stopPropagation()"
+            [style.max-height.px]="102"
+            [style.min-height.px]="100"
+        >
+            <li *ngIf="taxRenderData.length === 0">
                 <p class="lead pd">{{ commonLocaleData?.app_no_tax_found }}</p>
-            </button>
-
-            <button
-                mat-menu-item
-                class="relative"
-                *ngFor="let tax of taxRenderData; trackBy: trackByFn; let idx = index"
-            >
+            </li>
+            <li class="relative" *ngFor="let tax of taxRenderData; trackBy: trackByFn; let idx = index">
                 <mat-checkbox
                     color="primary"
                     *ngIf="taxRenderData.length - 1 !== idx"
@@ -77,7 +81,7 @@
                 >
                     {{ tax.name }}
                 </mat-checkbox>
-            </button>
-        </mat-menu>
+            </li>
+        </ul>
     </div>
 </span>

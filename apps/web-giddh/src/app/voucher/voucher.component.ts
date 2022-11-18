@@ -1770,6 +1770,10 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.salesAccounts$ = observableOf([]);
         this.router.navigate(['pages', 'proforma-invoice', 'invoice', val]);
         this.selectedVoucherType = val;
+        if(this.selectedVoucherType){
+            this.openAccountSelectionDropdown = true;
+            this._cdr.detectChanges();
+        }
         if (this.selectedVoucherType === VoucherTypeEnum.creditNote || this.selectedVoucherType === VoucherTypeEnum.debitNote) {
             this.getInvoiceListsForCreditNote();
         }
@@ -2078,7 +2082,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 this.invFormData.accountDetails[type].state.code = selectedState.value;
                 this.invFormData.accountDetails[type].state.name = selectedState.label;
                 statesEle.readonly = true;
-                this._cdr.detectChanges();
             } else {
                 this._toasty.clearAllToaster();
                 this.checkGstNumValidation(gstVal);
@@ -2090,11 +2093,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     this.invFormData.accountDetails[type].state.name = null;
                 }
                 statesEle.readonly = false;
-                this._cdr.detectChanges();
             }
         } else {
             statesEle.readonly = false;
-            this._cdr.detectChanges();
 
         }
         this.checkGstNumValidation(gstVal);
