@@ -33,8 +33,6 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public readonly: boolean;
     /** True if field is autocomplete */
     @Input() public autocomplete: boolean;
-    /** It will focus in the select field */
-    @Input() public autofocus: boolean = false;
     /** Default value to prefill */
     @Input() public defaultValue: any = "";
     /** True if field is required */
@@ -140,12 +138,6 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy {
 
         if (changes?.defaultValue) {
             this.searchFormControl.setValue({ label: changes?.defaultValue.currentValue });
-        }
-
-        if (this.autofocus) {
-            setTimeout(() => {
-                this.selectField?.nativeElement?.focus();
-            }, 20);
         }
 
         if (changes?.openDropdown) {

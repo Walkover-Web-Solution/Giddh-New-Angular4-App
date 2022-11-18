@@ -181,7 +181,6 @@
                                                             [cssClass]="
                                                                 'form-control mat-field-border customer-dropdown'
                                                             "
-                                                            [autofocus]="true"
                                                             [customPanelClass]="'panel-cl'"
                                                             [name]="'voucherDetails.customerName'"
                                                             [placeholder]="customerPlaceHolder"
@@ -494,7 +493,7 @@
                                                                                     invFormData.accountDetails
                                                                                         .billingDetails.gstNumber
                                                                                 "
-                                                                                (change)="
+                                                                                (ngModelChange)="
                                                                                     getStateCode(
                                                                                         'billingDetails',
                                                                                         statesBilling
@@ -517,7 +516,7 @@
                                                                                     invFormData.accountDetails
                                                                                         .billingDetails.gstNumber
                                                                                 "
-                                                                                (change)="
+                                                                                (ngModelChange)="
                                                                                     getStateCode(
                                                                                         'billingDetails',
                                                                                         statesBilling
@@ -2389,9 +2388,7 @@
                                                                 <giddh-datepicker
                                                                     [showToggleIcon]="true"
                                                                     #dp="ngModel"
-                                                                    (dateSelected)="
-                                                                        onBlurEntryDate(entryIdx, dp.isOpen)
-                                                                    "
+                                                                    (dateSelected)="onBlurEntryDate(entryIdx, true)"
                                                                     id="transaction.date_'+entryIdx"
                                                                     [disabled]="isUpdateMode"
                                                                     [cssClass]="'entry-custom-date'"
@@ -2991,13 +2988,6 @@
                                         <span class="text-success"
                                             ><i class="fa fa-check" *ngIf="selectedFileName && !isFileUploading"></i
                                         ></span>
-                                        <span
-                                            class="delete-image"
-                                            (click)="attachmentDeleteConfirmationModel.show(); $event.preventDefault()"
-                                            *ngIf="voucherApiVersion === 2 && selectedFileName && !isFileUploading"
-                                        >
-                                            <img src="assets/images/multiply.svg" />
-                                        </span>
                                         <input
                                             type="file"
                                             name="invoiceFile"
@@ -3010,6 +3000,13 @@
                                             droppable="true"
                                         />
                                     </label>
+                                    <span
+                                        class="delete-image"
+                                        (click)="deleteAttachementConfirmation()"
+                                        *ngIf="voucherApiVersion === 2 && selectedFileName && !isFileUploading"
+                                    >
+                                        <img src="assets/images/multiply.svg" />
+                                    </span>
                                 </div>
                                 <!-- endregion -->
                             </div>
@@ -3923,7 +3920,7 @@
                                                                                 [showToggleIcon]="true"
                                                                                 #dp="ngModel"
                                                                                 (dateSelected)="
-                                                                                    onBlurEntryDate(entryIdx, dp.isOpen)
+                                                                                    onBlurEntryDate(entryIdx, true)
                                                                                 "
                                                                                 id="transaction.date_'+entryIdx"
                                                                                 [disabled]="isUpdateMode"
@@ -5337,15 +5334,14 @@
             </div>
         </div>
     </ng-template>
-    <!-- region  date change confirmation popup -->
-    <ng-template #dateChangeConfirmationModel>
+    <!-- region delete attachment confirmation popup -->
+    <ng-template #attachmentDeleteConfirmationModel>
         <div class="modal-dialog modal-md">
-            <div class="modal-content" *ngIf="attachmentDeleteConfirmationModel?.isShown">
-                <confirm-modal
-                    [body]="localeData?.confirm_delete_file"
-                    (successCallBack)="deleteAttachment(); attachmentDeleteConfirmationModel.hide()"
-                    (cancelCallBack)="attachmentDeleteConfirmationModel.hide()"
-                ></confirm-modal>
+            <div class="modal-content">
+                <confirmation-modal
+                    (buttonClicked)="handleAttachmentDelete($event)"
+                    [configuration]="attachmentDeleteConfiguration"
+                ></confirmation-modal>
             </div>
         </div>
     </ng-template>

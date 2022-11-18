@@ -20,6 +20,7 @@
         [customDecimalPlaces]="customDecimalPlaces"
         *ngIf="!allowDecimalDigitsOnly && !allowDigitsOnly && !useMask"
         #textField
+        (keydown.enter)="$event.preventDefault()"
     />
     <input
         matInput
@@ -41,6 +42,7 @@
         [customDecimalPlaces]="customDecimalPlaces"
         decimalDigitsDirective
         #textField
+        (keydown.enter)="$event.preventDefault()"
     />
     <input
         matInput
@@ -62,6 +64,7 @@
         [customDecimalPlaces]="customDecimalPlaces"
         digitsOnlyDirective
         #textField
+        (keydown.enter)="$event.preventDefault()"
     />
     <input
         matInput
@@ -82,6 +85,7 @@
         [mask]="mask"
         *ngIf="!allowDigitsOnly && useMask"
         #textField
+        (keydown.enter)="$event.preventDefault()"
     />
     <input
         matInput
@@ -104,5 +108,6 @@
         [customDecimalPlaces]="customDecimalPlaces"
         digitsOnlyDirective
         #textField
+        (keydown.enter)="$event.preventDefault()"
     />
 </div>
