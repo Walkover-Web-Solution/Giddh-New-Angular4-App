@@ -8,7 +8,7 @@ import { Observable, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { CompanyActions } from '../actions/company.actions';
 import { TaxResponse } from '../models/api-models/Company';
-import { DaybookQueryRequest } from '../models/api-models/DaybookRequest';
+import { DaybookQueryRequest, ExportBodyRequest } from '../models/api-models/DaybookRequest';
 import { DaterangePickerComponent } from '../theme/ng2-daterangepicker/daterangepicker.component';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../shared/helpers/defaultDateFormat';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../app.constant';
@@ -24,6 +24,8 @@ import { DaybookService } from '../services/daybook.service';
 import { ToasterService } from '../services/toaster.service';
 import { MatDialog } from '@angular/material/dialog';
 import { BreakpointObserver } from '@angular/cdk/layout';
+import { LedgerService } from '../services/ledger.service';
+
 @Component({
     selector: 'daybook',
     templateUrl: './daybook.component.html',
@@ -140,7 +142,8 @@ export class DaybookComponent implements OnInit, OnDestroy {
         private daybookService: DaybookService,
         private toasterService: ToasterService,
         private dialog: MatDialog,
-        private breakpointObserver: BreakpointObserver
+        private breakpointObserver: BreakpointObserver,
+        private ledgerService: LedgerService
     ) {
 
         this.daybookQueryRequest = new DaybookQueryRequest();
@@ -359,19 +362,42 @@ export class DaybookComponent implements OnInit, OnDestroy {
             this.daybookQueryRequest.format = response.fileType;
             this.daybookQueryRequest.sort = response.order;
             if (this.daybookExportRequestType === 'post') {
-                this.daybookService.ExportDaybookPost(this.searchFilterData, this.daybookQueryRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                    if (response?.status === 'success') {
-                        if (response?.body?.type === "message") {
-                            this.toasterService.showSnackBar("success", response?.body?.file);
+                if (response.fileType === "csv") {
+                    let exportBodyRequest: ExportBodyRequest = new ExportBodyRequest();
+                    exportBodyRequest.from = this.daybookQueryRequest.from;
+                    exportBodyRequest.to = this.daybookQueryRequest.to;
+                    exportBodyRequest.exportType = "DAYBOOK";
+                    exportBodyRequest.showVoucherNumber = response.showVoucherNumber;
+                    exportBodyRequest.showEntryVoucher = response.showEntryVoucher;
+                    exportBodyRequest.sort = response.order?.toUpperCase();
+                    exportBodyRequest.fileType = "CSV";
+                    this.ledgerService.exportData(exportBodyRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                        if (response?.status === 'success') {
+                            if (typeof response?.body === "string") {
+                                this.toasterService.showSnackBar("success", response?.body);
+                            } else {
+                                let blob = this.generalService.base64ToBlob(response?.body?.encodedData, response?.queryString?.requestType, 512);
+                                saveAs(blob, response?.body?.name);
+                            }
                         } else {
-                            let blob = this.generalService.base64ToBlob(response?.body?.file, response?.queryString?.requestType, 512);
-                            let type = response?.queryString?.requestType === 'application/pdf' ? '.pdf' : '.xls';
-                            saveAs(blob, 'response' + type);
+                            this.toasterService.showSnackBar("error", response?.message);
                         }
-                    } else {
-                        this.toasterService.showSnackBar("error", response?.message);
-                    }
-                });
+                    });
+                } else {
+                    this.daybookService.ExportDaybookPost(this.searchFilterData, this.daybookQueryRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                        if (response?.status === 'success') {
+                            if (response?.body?.type === "message") {
+                                this.toasterService.showSnackBar("success", response?.body?.file);
+                            } else {
+                                let blob = this.generalService.base64ToBlob(response?.body?.file, response?.queryString?.requestType, 512);
+                                let type = response?.queryString?.requestType === 'application/pdf' ? '.pdf' : '.xls';
+                                saveAs(blob, 'Daybook' + type);
+                            }
+                        } else {
+                            this.toasterService.showSnackBar("error", response?.message);
+                        }
+                    });
+                }
             } else if (this.daybookExportRequestType === 'get') {
                 this.daybookService.ExportDaybook(null, this.daybookQueryRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     if (response?.status === 'success') {
