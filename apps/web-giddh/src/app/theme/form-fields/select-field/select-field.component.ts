@@ -140,12 +140,6 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy {
             this.searchFormControl.setValue({ label: changes?.defaultValue.currentValue });
         }
 
-        if (this.autofocus) {
-            setTimeout(() => {
-                this.selectField?.nativeElement?.focus();
-            }, 20);
-        }
-
         if (changes?.openDropdown) {
             if (changes?.openDropdown?.currentValue) {
                 this.trigger?.openPanel();
