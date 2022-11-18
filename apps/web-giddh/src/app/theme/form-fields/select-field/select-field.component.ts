@@ -33,8 +33,6 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public readonly: boolean;
     /** True if field is autocomplete */
     @Input() public autocomplete: boolean;
-    /** It will focus in the select field */
-    @Input() public autofocus: boolean;
     /** Default value to prefill */
     @Input() public defaultValue: any = "";
     /** True if field is required */
@@ -88,11 +86,6 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof SelectFieldComponent
      */
     public ngOnInit(): void {
-        if (this.autofocus) {
-            setTimeout(() => {
-                this.selectField?.nativeElement?.focus();
-            }, 20);
-        }
         if (this.enableDynamicSearch) {
             this.searchFormControl.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(search => {
                 if (search) {

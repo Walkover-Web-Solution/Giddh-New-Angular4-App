@@ -181,7 +181,6 @@
                                                             [cssClass]="
                                                                 'form-control mat-field-border customer-dropdown'
                                                             "
-                                                            [autofocus]="isActive"
                                                             [customPanelClass]="'panel-cl'"
                                                             [name]="'voucherDetails.customerName'"
                                                             [placeholder]="customerPlaceHolder"
@@ -199,9 +198,7 @@
                                                                         invoiceType !== 'debit note' &&
                                                                         invoiceType !== 'credit note'))
                                                             "
-                                                            [defaultValue]="
-                                                                invFormData.voucherDetails.customerUniquename
-                                                            "
+                                                            [defaultValue]="invFormData.voucherDetails.customerName"
                                                             [createNewText]="customerNotFoundText"
                                                             [enableDynamicSearch]="true"
                                                             (dynamicSearchedQuery)="
@@ -469,7 +466,7 @@
                                                                                 [allowValueReset]="true"
                                                                                 [defaultValue]="
                                                                                     invFormData?.accountDetails
-                                                                                        ?.billingDetails?.state?.code
+                                                                                        ?.billingDetails?.state?.name
                                                                                 "
                                                                                 (onClear)="
                                                                                     fillShippingBillingDetails(
@@ -699,7 +696,7 @@
                                                                                     [defaultValue]="
                                                                                         invFormData?.accountDetails
                                                                                             ?.shippingDetails?.state
-                                                                                            ?.code
+                                                                                            ?.name
                                                                                     "
                                                                                     (onClear)="
                                                                                         fillShippingBillingDetails(

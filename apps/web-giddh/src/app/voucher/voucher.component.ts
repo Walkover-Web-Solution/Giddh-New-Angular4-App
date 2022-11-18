@@ -1608,11 +1608,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             this.toggleBodyClass();
         }
         this.openAccountSelectionDropdown = !this.isUpdateMode;
-        console.log(this.openAccountSelectionDropdown);
-
-        if (this.openAccountSelectionDropdown) {
-            this.isActive = true;
-        }
     }
 
     /**
@@ -2081,6 +2076,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             if (selectedState) {
                 this.invFormData.accountDetails[type].stateCode = selectedState.value;
                 this.invFormData.accountDetails[type].state.code = selectedState.value;
+                this.invFormData.accountDetails[type].state.name = selectedState.label;
                 statesEle.readonly = true;
                 this._cdr.detectChanges();
             } else {
@@ -2091,6 +2087,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                         and clear the state only when valid number is not provided */
                     this.invFormData.accountDetails[type].stateCode = null;
                     this.invFormData.accountDetails[type].state.code = null;
+                    this.invFormData.accountDetails[type].state.name = null;
                 }
                 statesEle.readonly = false;
                 this._cdr.detectChanges();
@@ -3553,6 +3550,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         /** To reset advance receipt data */
         this.resetAdvanceReceiptAdjustData();
         this.clickAdjustAmount(false);
+        if (this.isCustomerSelected){
+        this.openAccountSelectionDropdown = false;
+        }
     }
 
     public onSelectBankCash(item: IOption) {
@@ -4523,6 +4523,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
     public getLastInvoiceDetails(obj: { accountUniqueName: string, invoiceNo: string, uniqueName?: string }) {
         this.accountUniqueName = obj.accountUniqueName;
+        
         this.invoiceNo = obj.invoiceNo;
         this.voucherUniqueName = obj.uniqueName
         this.isLastInvoiceCopied = true;
@@ -5557,7 +5558,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         } else {
             if (!this.isPendingVoucherType && !this.isUpdateMode) {
                 this.openAccountSelectionDropdown = true;
-                this.isActive = true;
             }
         }
     }
@@ -6948,6 +6948,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             if (selectedState) {
                 this.purchaseBillCompany[type].stateCode = selectedState.value;
                 this.purchaseBillCompany[type].state.code = selectedState.value;
+                this.purchaseBillCompany[type].state.name = selectedState.label;
             } else {
                 this.purchaseBillCompany[type].stateCode = null;
                 this.purchaseBillCompany[type].state.code = null;
@@ -6956,6 +6957,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         } else {
             this.purchaseBillCompany[type].stateCode = null;
             this.purchaseBillCompany[type].state.code = null;
+            this.purchaseBillCompany[type].state.name = null ;
         }
         this.checkGstNumValidation(gstVal);
     }
