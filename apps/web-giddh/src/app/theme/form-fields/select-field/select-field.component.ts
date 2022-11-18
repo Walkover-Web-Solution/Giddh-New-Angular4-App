@@ -33,8 +33,6 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public readonly: boolean;
     /** True if field is autocomplete */
     @Input() public autocomplete: boolean;
-    /** It will focus in the select field */
-    @Input() public autofocus: boolean = false;
     /** Default value to prefill */
     @Input() public defaultValue: any = "";
     /** True if field is required */

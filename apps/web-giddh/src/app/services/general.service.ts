@@ -678,7 +678,6 @@ export class GeneralService {
             text: commonLocaleData?.app_no,
             cssClass: 'btn btn-danger'
         }];
-        // localeData?.confirm_delete_file
         const headerText: string = commonLocaleData?.app_confirmation;
         const headerCssClass: string = 'd-inline-block mr-1';
         const messageCssClass: string = 'mr-b1 text-light';
@@ -688,7 +687,7 @@ export class GeneralService {
             headerCssClass,
             messageText: localeData?.confirm_delete_file,
             messageCssClass,
-            footerText: '',
+            footerText: commonLocaleData?.app_permanently_delete_message,
             footerCssClass,
             buttons
         };

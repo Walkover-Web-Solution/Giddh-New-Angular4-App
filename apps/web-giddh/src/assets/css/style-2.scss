@@ -213,6 +213,10 @@ $custom-typography: mat-typography-config(
             &:focus {
                 box-shadow: none !important;
             }
+            .mat-checkbox-layout {
+                display: block !important;
+                width: 100% !important;
+            }
         }
     }
 
