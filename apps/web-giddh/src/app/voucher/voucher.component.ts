@@ -651,7 +651,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     @ViewChild('dateChangeConfirmationModel', { static: true }) public dateChangeConfirmationModel: any;
     /** Delete attachment modal */
     @ViewChild('attachmentDeleteConfirmationModel', { static: true }) public attachmentDeleteConfirmationModel: any;
-    /** RCM modal configuration */
+    /** Attachment modal configuration */
     public attachmentDeleteConfiguration: ConfirmationModalConfiguration;
     /** True if we have to open account selection dropdown */
     public openAccountSelectionDropdown: boolean = false;
@@ -3550,8 +3550,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         /** To reset advance receipt data */
         this.resetAdvanceReceiptAdjustData();
         this.clickAdjustAmount(false);
-        if (this.isCustomerSelected){
-        this.openAccountSelectionDropdown = false;
+        if (this.isCustomerSelected) {
+            this.openAccountSelectionDropdown = false;
         }
     }
 
@@ -4523,7 +4523,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
     public getLastInvoiceDetails(obj: { accountUniqueName: string, invoiceNo: string, uniqueName?: string }) {
         this.accountUniqueName = obj.accountUniqueName;
-        
+
         this.invoiceNo = obj.invoiceNo;
         this.voucherUniqueName = obj.uniqueName
         this.isLastInvoiceCopied = true;
@@ -6952,12 +6952,13 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             } else {
                 this.purchaseBillCompany[type].stateCode = null;
                 this.purchaseBillCompany[type].state.code = null;
+                this.purchaseBillCompany[type].state.name = null;
                 this._toasty.clearAllToaster();
             }
         } else {
             this.purchaseBillCompany[type].stateCode = null;
             this.purchaseBillCompany[type].state.code = null;
-            this.purchaseBillCompany[type].state.name = null ;
+            this.purchaseBillCompany[type].state.name = null;
         }
         this.checkGstNumValidation(gstVal);
     }
