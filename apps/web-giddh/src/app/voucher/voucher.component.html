@@ -2388,9 +2388,7 @@
                                                                 <giddh-datepicker
                                                                     [showToggleIcon]="true"
                                                                     #dp="ngModel"
-                                                                    (dateSelected)="
-                                                                        onBlurEntryDate(entryIdx, dp.isOpen)
-                                                                    "
+                                                                    (dateSelected)="onBlurEntryDate(entryIdx, true)"
                                                                     id="transaction.date_'+entryIdx"
                                                                     [disabled]="isUpdateMode"
                                                                     [cssClass]="'entry-custom-date'"
@@ -3922,7 +3920,7 @@
                                                                                 [showToggleIcon]="true"
                                                                                 #dp="ngModel"
                                                                                 (dateSelected)="
-                                                                                    onBlurEntryDate(entryIdx, dp.isOpen)
+                                                                                    onBlurEntryDate(entryIdx, true)
                                                                                 "
                                                                                 id="transaction.date_'+entryIdx"
                                                                                 [disabled]="isUpdateMode"
