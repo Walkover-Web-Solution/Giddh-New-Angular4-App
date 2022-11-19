@@ -376,25 +376,19 @@
                                 class="d-flex"
                                 name="isTaxDeducted"
                                 [(ngModel)]="isTaxDeducted"
+                                (change)="isTdsSelected($event)"
                             >
                                 <mat-radio-button
                                     color="primary"
                                     id="deductedNo"
                                     [value]="false"
-                                    (change)="isTdsSelected($event)"
                                     class="font-size-14 mr-3"
                                 >
                                     <label for="deductedNo" class="radio-custom-label">{{
                                         commonLocaleData?.app_no
                                     }}</label>
                                 </mat-radio-button>
-                                <mat-radio-button
-                                    color="primary"
-                                    id="deductedYes"
-                                    [value]="true"
-                                    class="font-size-14"
-                                    (change)="isTdsSelected($event)"
-                                >
+                                <mat-radio-button color="primary" id="deductedYes" [value]="true" class="font-size-14">
                                     <label for="deductedYes" class="radio-custom-label">{{
                                         commonLocaleData?.app_yes
                                     }}</label>
@@ -435,7 +429,7 @@
                                                 [placeholder]="commonLocaleData?.app_amount"
                                                 [type]="'text'"
                                                 [cssClass]="'form-control mat-field-border'"
-                                                [name]="'calculatedTaxAmount_' + entry.uniqueName"
+                                                [name]="'calculatedTaxAmount_' + entry?.uniqueName"
                                                 [prefix]="currencySymbol"
                                                 [mask]="inputMaskFormat"
                                                 [useMask]="true"

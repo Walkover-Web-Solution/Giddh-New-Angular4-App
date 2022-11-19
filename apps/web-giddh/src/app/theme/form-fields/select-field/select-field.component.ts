@@ -232,4 +232,13 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy {
             }
         }, 200);
     }
+
+    /**
+    * This will use for close dropdown panel
+    *
+    * @memberof SelectFieldComponent
+    */
+    public closeDropdownPanel(): void {
+        this.trigger?.closePanel();
+    }
 }
