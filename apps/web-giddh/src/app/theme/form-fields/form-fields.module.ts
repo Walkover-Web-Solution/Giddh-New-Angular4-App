@@ -14,6 +14,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { DigitsOnlyModule } from "../../shared/helpers/directives/digitsOnly/digitsOnly.module";
 import { TranslateDirectiveModule } from "../translate/translate.directive.module";
 import { NgxMaskModule } from "../../shared/helpers/directives/ngx-mask";
+import { ClickOutsideModule } from "ng-click-outside";
 
 @NgModule({
     declarations: [
@@ -34,7 +35,9 @@ import { NgxMaskModule } from "../../shared/helpers/directives/ngx-mask";
         MatTooltipModule,
         TranslateDirectiveModule,
         DigitsOnlyModule,
-        NgxMaskModule
+        NgxMaskModule,
+        ClickOutsideModule
+
     ],
     exports: [
         TextFieldComponent,
