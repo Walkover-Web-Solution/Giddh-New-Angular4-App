@@ -127,7 +127,7 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges, OnDe
     }
 
     public saveRecurringInvoice() {
-        if (this.mode === 'update') {
+       if (this.mode === 'update') {
             if (this.form.controls.cronEndDate.invalid) {
                 this._toaster.errorToast(this.localeData?.recurring_date_error);
                 return;

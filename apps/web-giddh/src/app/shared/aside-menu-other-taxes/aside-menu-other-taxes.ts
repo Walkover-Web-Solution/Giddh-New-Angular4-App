@@ -42,6 +42,7 @@ export class AsideMenuOtherTaxes implements OnInit, OnChanges, OnDestroy {
 
     public ngOnInit(): void {
         document.querySelector("body").classList.add("aside-menu-othertax-open");
+        this.addZindexCdkOverlay();
         this.taxesOptions = this.taxes
             ?.filter(f => ['tcsrc', 'tcspay', 'tdsrc', 'tdspay'].includes(f.taxType))
             .map(m => {
@@ -99,6 +100,7 @@ export class AsideMenuOtherTaxes implements OnInit, OnChanges, OnDestroy {
      */
     public ngOnDestroy(): void {
         document.querySelector("body").classList.remove("aside-menu-othertax-open");
+        this.removeZindexCdkOverlay();
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
@@ -113,7 +115,7 @@ export class AsideMenuOtherTaxes implements OnInit, OnChanges, OnDestroy {
             this.closeModal.emit(true);
         }
     }
-    
+
     /**
      * This will use for onCalculate tax method
      *
@@ -124,5 +126,23 @@ export class AsideMenuOtherTaxes implements OnInit, OnChanges, OnDestroy {
         if (tax && tax.value) {
             this.defaultOtherTaxesModal.tcsCalculationMethod == tax.value;
         }
+    }
+
+    /**
+     * Adds Z-index class to cdk-overlay element
+     *
+     * @memberof AsideMenuOtherTaxes
+     */
+    public addZindexCdkOverlay(): void {
+        document.querySelector('.cdk-overlay-container')?.classList?.add('cdk-overlay-container-z-index');
+    }
+
+    /**
+     * Removes Z-index class to cdk-overlay element
+     *
+     * @memberof AsideMenuOtherTaxes
+     */
+    public removeZindexCdkOverlay(): void {
+        document.querySelector('.cdk-overlay-container')?.classList?.remove('cdk-overlay-container-z-index');
     }
 }

@@ -4,6 +4,7 @@
     <a id="discount">
         <div class="multi-select adjust">
             <input
+                (keydown.enter)="$event.preventDefault()"
                 matInput
                 type="text"
                 decimalDigitsDirective
@@ -32,6 +33,7 @@
 
                 <div class="position-relative">
                     <input
+                        (keydown.enter)="$event.preventDefault()"
                         matInput
                         type="text"
                         class="form-control text-right cursor-pointer w-100 percentage-width"
@@ -49,6 +51,7 @@
             <div class="d-flex mr-b1">
                 <label class="mr-1 align-items-center d-flex width-50">{{commonLocaleData?.app_value}}</label>
                 <input
+                    (keydown.enter)="$event.preventDefault()"
                     matInput
                     type="text"
                     class="form-control text-right cursor-pointer value-width"

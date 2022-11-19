@@ -15,6 +15,7 @@
         #trigger="matAutocompleteTrigger"
         #selectField
         (keydown.enter)="$event.preventDefault()"
+        (clickOutside)="closeDropdownPanel()"
     />
     <mat-autocomplete
         [displayWith]="displayLabel"
@@ -32,7 +33,6 @@
             <mat-option
                 *ngFor="let option of fieldFilteredOptions"
                 [value]="option"
-                [matTooltip]="option?.label"
                 [ngClass]="hasMoreValue ? 'options-line-value' : 'options-line'"
             >
                 <ng-template

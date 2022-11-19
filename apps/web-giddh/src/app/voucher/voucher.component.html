@@ -972,6 +972,7 @@
                                                 type="tel"
                                                 #initContactProforma
                                                 id="init-contact-proforma"
+                                                (keydown.enter)="$event.preventDefault()"
                                                 [placeholder]="localeData?.mobile_number_placeholder"
                                             />
                                             <span id="init-contact-proforma-valid-msg" class="d-none"></span>
@@ -1022,63 +1023,59 @@
                                                                 }}</span>
                                                                 <span>
                                                                     <div
+                                                                        [attachOutsideOnClick]="true"
                                                                         class="
                                                                             btn-group btn-block
                                                                             change-address-dropdown
                                                                         "
-                                                                        [attachOutsideOnClick]="true"
                                                                         *ngIf="companyAddressList?.length > 1"
                                                                     >
                                                                         <a
+                                                                            mat-menu-item
+                                                                            class="dropdown-toggle cp"
                                                                             [matMenuTriggerFor]="
                                                                                 companyBillingAddressDropDownWeb
                                                                             "
-                                                                            type="button"
-                                                                            class="dropdown-toggle"
                                                                         >
                                                                             {{ localeData?.change }}</a
                                                                         >
                                                                         <mat-menu
                                                                             #companyBillingAddressDropDownWeb="matMenu"
                                                                         >
-                                                                            <ul
-                                                                                *dropdownMenu
+                                                                            <a
+                                                                                mat-menu-item
                                                                                 class="
-                                                                                    dropdown-menu dropdown-menu-right
+                                                                                    d-flex
+                                                                                    flex-column
+                                                                                    justify-content-center
+                                                                                    line-height-initial
                                                                                 "
-                                                                                role="menu"
+                                                                                *ngFor="
+                                                                                    let address of companyAddressList
+                                                                                "
+                                                                                (click)="
+                                                                                    selectAddress(
+                                                                                        purchaseBillCompany.billingDetails,
+                                                                                        address,
+                                                                                        true
+                                                                                    )
+                                                                                "
                                                                             >
-                                                                                <li
-                                                                                    role="menuitem"
-                                                                                    *ngFor="
-                                                                                        let address of companyAddressList
-                                                                                    "
-                                                                                >
-                                                                                    <a
-                                                                                        class="dropdown-item"
-                                                                                        (click)="
-                                                                                            selectAddress(
-                                                                                                purchaseBillCompany.billingDetails,
-                                                                                                address,
-                                                                                                true
-                                                                                            )
-                                                                                        "
-                                                                                    >
-                                                                                        {{ address.address }}
-                                                                                        {{ address.stateName }}
-                                                                                        <span class="d-block">{{
-                                                                                            address.taxNumber
-                                                                                                ? (showGSTINNo
-                                                                                                      ? commonLocaleData?.app_gstin +
-                                                                                                        ": "
-                                                                                                      : commonLocaleData?.app_trn +
-                                                                                                        ": ") +
-                                                                                                  address.taxNumber
-                                                                                                : ""
-                                                                                        }}</span>
-                                                                                    </a>
-                                                                                </li>
-                                                                            </ul>
+                                                                                {{ address.address }}
+                                                                                {{ address.stateName }}
+                                                                                <p class="font-12">
+                                                                                    {{
+                                                                                        address.taxNumber
+                                                                                            ? (showGSTINNo
+                                                                                                  ? commonLocaleData?.app_gstin +
+                                                                                                    ": "
+                                                                                                  : commonLocaleData?.app_trn +
+                                                                                                    ": ") +
+                                                                                              address.taxNumber
+                                                                                            : ""
+                                                                                    }}
+                                                                                </p>
+                                                                            </a>
                                                                         </mat-menu>
                                                                     </div>
                                                                 </span>
@@ -1108,7 +1105,9 @@
                                                                     >
                                                                         <select-field
                                                                             [placeholder]="commonLocaleData?.app_state"
-                                                                            [cssClass]="'select-border-bottom'"
+                                                                            [cssClass]="
+                                                                                'form-control input-custom select-border-bottom'
+                                                                            "
                                                                             (selectedOption)="
                                                                                 fillShippingBillingCompanyDetails(
                                                                                     $event,
@@ -1157,9 +1156,11 @@
                                                                                 purchaseBillCompany.billingDetails
                                                                                     .gstNumber
                                                                             "
-                                                                            [cssClass]="'form-control input-custom'"
-                                                                            (blur)="autoFillCompanyShippingDetails()"
-                                                                            (change)="
+                                                                            [cssClass]="
+                                                                                'form-control input-custom billing'
+                                                                            "
+                                                                            (input)="autoFillCompanyShippingDetails()"
+                                                                            (ngModelChange)="
                                                                                 getStateCodeCompany('billingDetails')
                                                                             "
                                                                             [placeholder]="
@@ -1192,7 +1193,7 @@
                                                                                     purchaseBillCompany.billingDetails
                                                                                         .pincode
                                                                                 "
-                                                                                (blur)="
+                                                                                (input)="
                                                                                     autoFillCompanyShippingDetails()
                                                                                 "
                                                                                 [allowDecimalDigitsOnly]="true"
@@ -1215,6 +1216,7 @@
                                                                         autocomplete="None"
                                                                         name="autoFillCompanyShipping"
                                                                         [(ngModel)]="autoFillCompanyShipping"
+                                                                        [ngModelOptions]="{ standalone: true }"
                                                                         (change)="autoFillCompanyShippingDetails()"
                                                                     >
                                                                         {{ localeData?.shipping_billing_same }}
@@ -1255,7 +1257,7 @@
                                                                                 [placeholder]="
                                                                                     commonLocaleData?.app_state
                                                                                 "
-                                                                                [cssClass]="'select-border-bottom'"
+                                                                                [cssClass]="'select-bdr-bottom'"
                                                                                 [ngClass]="{
                                                                                     'disabled': autoFillCompanyShipping
                                                                                 }"
@@ -1310,7 +1312,7 @@
                                                                                         .gstNumber
                                                                                 "
                                                                                 [cssClass]="'form-control input-custom'"
-                                                                                (change)="
+                                                                                (ngModelChange)="
                                                                                     getStateCodeCompany(
                                                                                         'shippingDetails'
                                                                                     )
@@ -1544,6 +1546,7 @@
                                                         <giddh-datepicker
                                                             type="text"
                                                             #voucherDate="ngModel"
+                                                            (keydown.enter)="$event.preventDefault()"
                                                             [placeholder]="giddhDateFormat"
                                                             name="voucherDate"
                                                             [(ngModel)]="invFormData.voucherDetails.voucherDate"
@@ -1592,6 +1595,7 @@
                                                         <giddh-datepicker
                                                             type="text"
                                                             [placeholder]="giddhDateFormat"
+                                                            (keydown.enter)="$event.preventDefault()"
                                                             #dueDate="ngModel"
                                                             name="dueDate"
                                                             class="date-invoice"
@@ -1649,6 +1653,7 @@
                                             <giddh-datepicker
                                                 type="text"
                                                 [placeholder]="giddhDateFormat"
+                                                (keydown.enter)="$event.preventDefault()"
                                                 #voucherDate="ngModel"
                                                 name="voucherDate"
                                                 class="date-invoice"
@@ -1694,6 +1699,7 @@
                                             <giddh-datepicker
                                                 type="text"
                                                 [placeholder]="giddhDateFormat"
+                                                (keydown.enter)="$event.preventDefault()"
                                                 #dueDate="ngModel"
                                                 name="dueDate"
                                                 class="date-invoice"
@@ -1835,7 +1841,8 @@
                                         [type]="'number'"
                                         [name]="'exchangeRate'"
                                         [(ngModel)]="newExchangeRate"
-                                        [cssClass]="'form-control edit-currency exchange-rate-original'"
+                                        class="exchange-rate-original"
+                                        [cssClass]="'form-control edit-currency '"
                                         *ngIf="showCurrencyValue"
                                     ></text-field>
                                     {{ companyCurrency }}
@@ -1885,6 +1892,7 @@
                                     <text-field
                                         [type]="'number'"
                                         [name]="'exchangeRate'"
+                                        class="exchange-rate-original"
                                         [(ngModel)]="reverseExchangeRate"
                                         [cssClass]="'form-control edit-currency'"
                                         *ngIf="showCurrencyValue"
@@ -2389,6 +2397,7 @@
                                                                 <giddh-datepicker
                                                                     [showToggleIcon]="true"
                                                                     #dp="ngModel"
+                                                                    (keydown.enter)="$event.preventDefault()"
                                                                     (dateSelected)="onBlurEntryDate(entryIdx, true)"
                                                                     id="transaction.date_'+entryIdx"
                                                                     [disabled]="isUpdateMode"
@@ -2525,20 +2534,27 @@
                                             [allowDecimalDigitsOnly]="true"
                                         >
                                         </text-field>
-                                        <mat-select
-                                            class="form-control"
-                                            [disabled]="!transaction.isStockTxn"
-                                            (selectionChange)="
-                                                onChangeUnit(transaction, $event);
-                                                transaction.setAmount(entry);
-                                                calculateWhenTrxAltered(entry, transaction)
-                                            "
-                                            [value]="transaction.stockUnit"
-                                        >
-                                            <mat-option *ngFor="let stock of transaction.stockList" [value]="stock.id">
-                                                {{ stock.text }}
-                                            </mat-option>
-                                        </mat-select>
+                                        <div class="select-quantity">
+                                            <mat-select
+                                                class="form-control"
+                                                [disabled]="!transaction.isStockTxn"
+                                                (selectionChange)="
+                                                    onChangeUnit(transaction, $event);
+                                                    transaction.setAmount(entry);
+                                                    calculateWhenTrxAltered(entry, transaction)
+                                                "
+                                                [value]="transaction.stockUnit"
+                                            >
+                                                <div class="select-quantity-option">
+                                                    <mat-option
+                                                        *ngFor="let stock of transaction.stockList"
+                                                        [value]="stock.id"
+                                                    >
+                                                        {{ stock.text }}
+                                                    </mat-option>
+                                                </div>
+                                            </mat-select>
+                                        </div>
                                     </td>
                                     <td
                                         (click)="closeDiscountPopup(); closeTaxControlPopup()"
@@ -2850,6 +2866,7 @@
                                                 <div class="form-group col-xs-4 col-sm-4 mb-0">
                                                     <giddh-datepicker
                                                         [cssClass]="'shipping-date'"
+                                                        (keydown.enter)="$event.preventDefault()"
                                                         #shippingDate="ngModel"
                                                         [placeholder]="templatePlaceholder?.shippedDateLabel"
                                                         name="shippingDate"
@@ -2894,7 +2911,7 @@
                                                     ></text-field>
                                                 </div>
                                             </div>
-                                            <div class="row">
+                                            <div class="row bottom-other-section">
                                                 <div class="form-group col-xs-4 col-sm-4 mb-0">
                                                     <text-field
                                                         [type]="'text'"
@@ -3245,6 +3262,7 @@
                                     <div
                                         class="table-row"
                                         *ngIf="
+                                            !hideDepositSection &&
                                             (isSalesInvoice ||
                                                 currentVoucherFormDetails?.depositAllowed ||
                                                 (voucherApiVersion === 2 &&
@@ -3432,23 +3450,12 @@
                                                                     commonLocaleData?.app_amount
                                                                 }}</label>
                                                             </li>
-                                                            <li
-                                                                class="
-                                                                    clearfix
-                                                                    mr-t1
-                                                                    d-flex
-                                                                    align-items-center
-                                                                    payment-mode-amount
-                                                                "
-                                                                *ngIf="!isCashInvoice"
+                                                            <!-- <li
+                                                                class="clearfix mr-t1 d-flex align-items-center payment-mode-amount"
+                                                                *ngIf="isCashInvoice"
                                                             >
                                                                 <span
-                                                                    class="
-                                                                        amount-field
-                                                                        pull-right
-                                                                        max-width-100
-                                                                        amount-filed-cash
-                                                                    "
+                                                                    class="amount-field pull-right max-width-100 amount-filed-cash"
                                                                 >
                                                                     <span *ngIf="isMulticurrencyAccount">{{
                                                                         invFormData.accountDetails.currencySymbol
@@ -3461,7 +3468,7 @@
                                                                 <label class="pull-right">{{
                                                                     commonLocaleData?.app_amount
                                                                 }}</label>
-                                                            </li>
+                                                            </li> -->
                                                             <li
                                                                 class="clearfix mr-t1 bigger-dollar"
                                                                 *ngIf="
@@ -3918,6 +3925,9 @@
                                                                         >
                                                                             <giddh-datepicker
                                                                                 [showToggleIcon]="true"
+                                                                                (keydown.enter)="
+                                                                                    $event.preventDefault()
+                                                                                "
                                                                                 #dp="ngModel"
                                                                                 (dateSelected)="
                                                                                     onBlurEntryDate(entryIdx, true)
@@ -4184,9 +4194,7 @@
                                                             (click)="transactionAmountClicked(transaction)"
                                                             [placeholder]="commonLocaleData?.app_amount"
                                                             [type]="'tel'"
-                                                            [cssClass]="
-                                                                'form-control mat-field-border text-right hello'
-                                                            "
+                                                            [cssClass]="'form-control mat-field-border text-right'"
                                                             [name]="'transaction.amount_' + entryIdx"
                                                             [prefix]="invFormData.accountDetails.currencySymbol"
                                                             [suffix]="selectedSuffixForCurrency"
@@ -4470,6 +4478,7 @@
                                             <giddh-datepicker
                                                 [cssClass]="'shipping-date'"
                                                 #shippingDate="ngModel"
+                                                (keydown.enter)="$event.preventDefault()"
                                                 [placeholder]="templatePlaceholder?.shippedDateLabel"
                                                 name="shippingDate"
                                                 [(ngModel)]="invFormData.templateDetails.other.shippingDate"
@@ -4845,12 +4854,12 @@
                                                             [name]="'dueAmount'"
                                                             [cssClass]="
                                                                 '
-                                                            form-control
-                                                            amount-field
-                                                            text-right
-                                                            pull-right
-                                                            max-width-100
-                                                            multicurrency-grandtotal no2'
+                              form-control
+                              amount-field
+                              text-right
+                              pull-right
+                              max-width-100
+                              multicurrency-grandtotal no2'
                                                             "
                                                             [(ngModel)]="depositAmount"
                                                             [prefix]="depositCurrSymbol"
