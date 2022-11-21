@@ -1770,9 +1770,19 @@ span.eligible-ITC {
 ::ng-deep.cdk-overlay-transparent-backdrop.cdk-overlay-backdrop-showing {
     visibility: hidden !important;
 }
+
 .bottom-other-section {
     margin-top: 10px;
 }
+
+.create-send-menu {
+    li {
+        display: block !important;
+        margin-top: 10px !important;
+        margin-bottom: 10px !important;
+    }
+}
+
 /* resposnvie */
 @media (max-width: 1199px) {
     .invoice-date-due-date {

@@ -57,6 +57,7 @@
                             [name]="'duration'"
                             [placeholder]="localeData?.select_interval"
                             [options]="intervalOptions"
+                            (selectedOption)="onSelectInterval($event)"
                         >
                             <ng-template #optionTemplate let-option="option">
                                 <a *ngIf="option" href="javascript:void(0)" class="linking-item">

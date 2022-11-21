@@ -59,7 +59,7 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges, OnDe
         this.form.controls.nextCronDate.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(p => {
             this.maxEndDate = p;
             const { cronEndDate } = this.form.value;
-            const end = dayjs(cronEndDate, cronEndDate instanceof Date ? null : GIDDH_DATE_FORMAT);
+            const end = dayjs(cronEndDate);
             const next = dayjs(p);
             if (end.isValid() && next.isAfter(end)) {
                 this.form.controls.cronEndDate?.patchValue('');
@@ -129,7 +129,7 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges, OnDe
     public saveRecurringInvoice() {
         let convertCronEndDate = dayjs(this.form.controls.cronEndDate.value).format(GIDDH_DATE_FORMAT);
         let convertNextCronDate = dayjs(this.form.controls.nextCronDate.value).format(GIDDH_DATE_FORMAT);
-       if (this.mode === 'update') {
+        if (this.mode === 'update') {
             if (this.form.controls.cronEndDate.invalid) {
                 this._toaster.errorToast(this.localeData?.recurring_date_error);
                 return;
@@ -158,12 +158,6 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges, OnDe
             this._toaster.errorToast(this.localeData?.recurring_all_field_required);
         }
 
-    }
-
-    public getFormattedDate(date): string {
-        console.log(date);
-        
-        return dayjs(date, date instanceof Date ? null : GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
     }
 
     public ngOnDestroy() {
@@ -195,5 +189,15 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges, OnDe
                 { label: this.localeData?.time_options?.fifth, value: '5' },
             ];
         }
+    }
+
+    /**
+     * This will use for on select interval
+     *
+     * @param {*} duration
+     * @memberof AsideMenuRecurringEntryComponent
+     */
+    public onSelectInterval(duration: any): void {
+        this.form.controls.duration?.patchValue(duration?.value);
     }
 }
