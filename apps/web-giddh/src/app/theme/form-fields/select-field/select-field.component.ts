@@ -143,9 +143,9 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy {
 
         if (changes?.openDropdown) {
             if (changes?.openDropdown?.currentValue) {
-                this.trigger?.openPanel();
+                this.openDropdownPanel();
             } else {
-                this.trigger?.closePanel();
+                this.closeDropdownPanel();
             }
         }
     }
@@ -217,7 +217,8 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof SelectFieldComponent
      */
     public openDropdownPanel(): void {
-        this.trigger.openPanel();
+        this.selectField?.nativeElement?.focus();
+        this.trigger?.openPanel();
     }
 
     /**

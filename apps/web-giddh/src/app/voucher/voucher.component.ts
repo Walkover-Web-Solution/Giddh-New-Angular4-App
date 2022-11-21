@@ -161,6 +161,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     @ViewChild('copyPreviousEstimate', { static: true }) public copyPreviousEstimate: ElementRef;
     @ViewChild('unregisteredBusiness', { static: true }) public unregisteredBusiness: ElementRef;
     @ViewChild('invoiceForm', { static: false }) public invoiceForm: NgForm;
+    @ViewChild('openAccountSelectionDropdown', { static: false }) public openAccountSelectionDropdown: SelectFieldComponent;
     @ViewChildren('discountComponent') public discountComponent: QueryList<DiscountListComponent>;
     @ViewChildren('taxControlComponent') public taxControlComponent: QueryList<TaxControlComponent>;
     @ViewChildren('selectAccount') public selectAccount: QueryList<ElementRef>;
@@ -565,8 +566,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public companyAddressList: any[] = [];
     /** Stores the voucher eligible for adjustment */
     public voucherForAdjustment: Array<Adjustment>;
-    /** This will handle if focus should go in customer/vendor dropdown */
-    public allowFocus: boolean = true;
     /** True, when bulk items are added */
     public showBulkLoader: boolean;
     /** This will hold how many linked po items added */
@@ -653,8 +652,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     @ViewChild('attachmentDeleteConfirmationModel', { static: true }) public attachmentDeleteConfirmationModel: any;
     /** Attachment modal configuration */
     public attachmentDeleteConfiguration: ConfirmationModalConfiguration;
-    /** True if we have to open account selection dropdown */
-    public openAccountSelectionDropdown: boolean = false;
     /** This will hold selected cash account */
     public selectedBankAccount: any = 'Cash';
     /** This will use for instance of linkPO Dropdown */
@@ -1097,9 +1094,11 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     if (this.voucherApiVersion === 2) {
                         results[0] = this.adjustmentUtilityService.getVoucherAdjustmentObject(results[0], this.selectedVoucherType);
 
-                        this.previousExchangeRate = results[0].exchangeRate;
-                        this.originalExchangeRate = results[0].exchangeRate;
-                        this.exchangeRate = results[0].exchangeRate;
+                        if (!this.isLastInvoiceCopied) {
+                            this.previousExchangeRate = results[0].exchangeRate;
+                            this.originalExchangeRate = results[0].exchangeRate;
+                            this.exchangeRate = results[0].exchangeRate;
+                        }
                     }
 
                     if (this.isLastInvoiceCopied) {
@@ -1132,7 +1131,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                         obj.templateUniqueName = cloneDeep(this.invFormData.templateUniqueName);
                         obj.number = cloneDeep(this.invFormData.number);
                         obj.entries = cloneDeep(results[0].entries);
-                        obj.exchangeRate = cloneDeep(results[0].exchangeRate);
+                        obj.exchangeRate = cloneDeep(this.exchangeRate);
 
                         if (this.isMultiCurrencyModule()) {
                             // parse normal response to multi currency response
@@ -1607,7 +1606,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         if (!this.isUpdateMode) {
             this.toggleBodyClass();
         }
-        this.openAccountSelectionDropdown = !this.isUpdateMode;
+        this.toggleAccountSelectionDropdown(!this.isUpdateMode);
     }
 
     /**
@@ -1771,7 +1770,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.router.navigate(['pages', 'proforma-invoice', 'invoice', val]);
         this.selectedVoucherType = val;
         if(this.selectedVoucherType){
-            this.openAccountSelectionDropdown = true;
+            this.toggleAccountSelectionDropdown(true);
             this._cdr.detectChanges();
         }
         if (this.selectedVoucherType === VoucherTypeEnum.creditNote || this.selectedVoucherType === VoucherTypeEnum.debitNote) {
@@ -2208,7 +2207,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         if (!this.isUpdateMode) {
             this.toggleBodyClass();
         }
-        this.allowFocus = true;
         this.clickAdjustAmount(false);
         this.autoFillCompanyShipping = false;
         this.userDeposit = null;
@@ -3552,7 +3550,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.resetAdvanceReceiptAdjustData();
         this.clickAdjustAmount(false);
         if (this.isCustomerSelected) {
-            this.openAccountSelectionDropdown = false;
+            this.toggleAccountSelectionDropdown(false);
         }
     }
 
@@ -3577,7 +3575,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.accountAsideMenuState = this.accountAsideMenuState === 'out' ? 'in' : 'out';
         this.toggleBodyClass();
         if (!this.invFormData.voucherDetails.customerUniquename && this.accountAsideMenuState === 'out') {
-            this.openAccountSelectionDropdown = true;
+            this.toggleAccountSelectionDropdown(true);
         }
     }
 
@@ -3807,6 +3805,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             this.depositAccountUniqueName = event.value;
 
             if (event.additional) {
+                if (event.additional.additional) {
+                    event.additional = event.additional.additional;
+                }
                 // If currency of item is null or undefined then treat it to be equivalent of company currency
                 event.additional['currency'] = event.additional.currency || this.companyCurrency;
                 // only for cash invoice
@@ -3996,10 +3997,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     }
 
     public addNewAccount() {
-        this.allowFocus = false;
-        this.selectedCustomerForDetails = null;
-        this.isCustomerSelected = false;
-        this.invFormData.accountDetails = new AccountDetailsClass();
         this.toggleAccountAsidePane();
     }
 
@@ -4009,7 +4006,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     }
 
     public addAccountFromShortcut() {
-        this.openAccountSelectionDropdown = false;
+        this.toggleAccountSelectionDropdown(false);
         if (!this.isCustomerSelected) {
             this.selectedCustomerForDetails = null;
         }
@@ -5240,7 +5237,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             this.depositAccountUniqueName = result.account.uniqueName;
             this.selectedBankAccount = result.account.name;
         } else {
-            voucherDetails.customerName = result.account?.name;
+            voucherDetails.customerName = result.account?.name || result.voucherDetails?.customerName;
         }
 
         if (this.isPurchaseInvoice && !this.copyPurchaseBill) {
@@ -5558,7 +5555,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             }, 200);
         } else {
             if (!this.isPendingVoucherType && !this.isUpdateMode) {
-                this.openAccountSelectionDropdown = true;
+                this.toggleAccountSelectionDropdown(true);
             }
         }
     }
@@ -8179,6 +8176,19 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         }
         else {
             this.dialog.closeAll();
+        }
+    }
+
+    /**
+     * This will toggle account selection dropdown
+     *
+     * @private
+     * @param {boolean} status
+     * @memberof VoucherComponent
+     */
+    private toggleAccountSelectionDropdown(status: boolean): void {
+        if (status) {
+            this.openAccountSelectionDropdown?.openDropdownPanel();
         }
     }
 }
