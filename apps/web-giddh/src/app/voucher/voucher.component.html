@@ -3434,13 +3434,13 @@
                                                                     [placeholder]="commonLocaleData?.app_amount"
                                                                     [cssClass]="
                                                                         'form-control
-                                    amount-field
-                                    due-amount-field
-                                    text-right
-                                    pull-right
-                                    max-width-100
-                                    mat-field-border 
-                                    multicurrency-grandtotal'
+                                                                        amount-field
+                                                                        due-amount-field
+                                                                        text-right
+                                                                        pull-right
+                                                                        max-width-100
+                                                                        mat-field-border 
+                                                                        multicurrency-grandtotal'
                                                                     "
                                                                     [name]="'dueAmount'"
                                                                     [prefix]="depositCurrSymbol"
@@ -4831,10 +4831,15 @@
                                                                 (selectedOption)="onSelectPaymentMode($event)"
                                                                 [placeholder]="commonLocaleData?.app_select_account"
                                                                 (onClear)="onSelectPaymentMode($event, true)"
+                                                                [defaultValue]="
+                                                                    isCashInvoice ? selectedBankAccount : ''
+                                                                "
                                                             >
                                                             </select-field>
-                                                            <label class="pull-right pt-1">{{
-                                                                commonLocaleData?.app_payment_mode
+                                                            <label class="pull-right">{{
+                                                                !isCashInvoice
+                                                                    ? commonLocaleData?.app_payment_mode
+                                                                    : localeData?.account
                                                             }}</label>
                                                         </div>
                                                     </li>
@@ -4847,7 +4852,9 @@
                                                             payment-mode-amount
                                                         "
                                                         *ngIf="
-                                                            isSalesInvoice || currentVoucherFormDetails?.depositAllowed
+                                                            isSalesInvoice ||
+                                                            (currentVoucherFormDetails?.depositAllowed &&
+                                                                !isCashInvoice)
                                                         "
                                                     >
                                                         <text-field
@@ -4860,12 +4867,12 @@
                                                             [name]="'dueAmount'"
                                                             [cssClass]="
                                                                 '
-                              form-control
-                              amount-field
-                              text-right
-                              pull-right
-                              max-width-100
-                              multicurrency-grandtotal no2'
+                                                                form-control
+                                                                amount-field
+                                                                text-right
+                                                                pull-right
+                                                                max-width-100
+                                                                multicurrency-grandtotal no2'
                                                             "
                                                             [(ngModel)]="depositAmount"
                                                             [prefix]="depositCurrSymbol"
@@ -4878,7 +4885,7 @@
                                                             commonLocaleData?.app_amount
                                                         }}</label>
                                                     </li>
-                                                    <li
+                                                    <!-- <li
                                                         class="
                                                             clearfix
                                                             mr-t1
@@ -4914,7 +4921,7 @@
                                                         <label class="pull-right pt-1">{{
                                                             commonLocaleData?.app_amount
                                                         }}</label>
-                                                    </li>
+                                                    </li> -->
                                                     <li class="clearfix mr-t1 bigger-dollar" *ngIf="isSalesInvoice">
                                                         <strong class="pull-right balance-due-text">
                                                             <span>
