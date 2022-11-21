@@ -574,6 +574,7 @@
                                                                 <div class="d-flex align-items-center pb-1">
                                                                     <span class="pb-0 pd-r15">
                                                                         <mat-checkbox
+                                                                            (keydown.enter)="$event.preventDefault()"
                                                                             (change)="autoFillShippingDetails()"
                                                                             name="autoFillShipping"
                                                                             color="primary"
@@ -1213,6 +1214,7 @@
                                                             <div class="d-flex align-items-center pb-1">
                                                                 <span class="pd-r15">
                                                                     <mat-checkbox
+                                                                        (keydown.enter)="$event.preventDefault()"
                                                                         autocomplete="None"
                                                                         name="autoFillCompanyShipping"
                                                                         [(ngModel)]="autoFillCompanyShipping"
@@ -1733,6 +1735,7 @@
                                     <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12">
                                         <div class="col-sm-6 col-xl-6 col-lg-10 col-md-10 pl-0">
                                             <mat-checkbox
+                                                (keydown.enter)="$event.preventDefault()"
                                                 #rcmCheckbox
                                                 color="primary"
                                                 id="reverse-charge"
@@ -1765,6 +1768,7 @@
                                         <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12">
                                             <div class="col-sm-12 col-xl-6 col-lg-10 col-md-10 pl-0">
                                                 <mat-checkbox
+                                                    (keydown.enter)="$event.preventDefault()"
                                                     id="tourist-scheme"
                                                     name="touristSchemeApplicable"
                                                     [(ngModel)]="invFormData.touristSchemeApplicable"
@@ -2731,6 +2735,7 @@
                                                 </text-field>
                                                 <div *ngIf="isTcsTdsApplicable" class="wrap-other-tax">
                                                     <mat-checkbox
+                                                        (keydown.enter)="$event.preventDefault()"
                                                         *ngIf="!entry.isOtherTaxApplicable"
                                                         [checked]="entry.isOtherTaxApplicable"
                                                         color="primary"
@@ -4340,6 +4345,7 @@
                                                         </text-field>
                                                         <div *ngIf="isTcsTdsApplicable" class="wrap-other-tax">
                                                             <mat-checkbox
+                                                                (keydown.enter)="$event.preventDefault()"
                                                                 *ngIf="!entry.isOtherTaxApplicable"
                                                                 [checked]="entry.isOtherTaxApplicable"
                                                                 color="primary"
