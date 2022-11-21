@@ -16,6 +16,7 @@
         #selectField
         (keydown.enter)="$event.preventDefault()"
         (clickOutside)="closeDropdownPanel()"
+        matAutocompletePosition="below"
     />
     <mat-autocomplete
         [displayWith]="displayLabel"
