@@ -149,6 +149,7 @@ $custom-typography: mat-typography-config(
 }
 
 .voucher-preview-edit,
+.update-ledger-entry-panel-popup,
 .page-has-tabs,
 .ledger-body {
     .shipping-date {
@@ -408,7 +409,12 @@ $custom-typography: mat-typography-config(
     .text-left-sm {
         text-align: left !important;
     }
-
+    .edit-icon-custom-entry-date {
+        position: absolute;
+        right: 78%;
+        margin-top: 6px;
+        z-index: 0;
+    }
     .on-mobile-view tbody tr,
     .on-mobile-view tbody .mat-row {
         box-shadow: 0 0px 5px var(--color-primary-common-box-shadow);
@@ -865,6 +871,7 @@ input {
 }
 
 .invoice-preview-page,
+.update-ledger-entry-panel-popup,
 .page-has-tabs,
 .ledger-body {
     .option-value-more {
@@ -7884,6 +7891,7 @@ highcharts-chart {
 }
 
 .voucher-preview-edit,
+.update-ledger-entry-panel-popup,
 .page-has-tabs,
 .ledger-body {
     .other-taxes-input {
@@ -11839,6 +11847,14 @@ body.update-scroll-hidden {
 @media (max-width: 1024px) {
     .dropdown-menu > li > a {
         padding: 7px 10px;
+    }
+    .voucher-preview-edit {
+        .shipping-date {
+            padding-top: 50px !important;
+        }
+        .invoice-other-details-row {
+            margin-top: 10px;
+        }
     }
 
     .sm-d-block {

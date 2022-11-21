@@ -1435,6 +1435,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
                     this.updateNewAccountInVoucher(item.account);
                     this.advanceReceiptAdjustmentData = { adjustments: this.adjustmentUtilityService.formatAdjustmentsObject(response.body?.adjustments) };
+                    this.isUpdateMode = (response?.body?.adjustments?.length) ? true : false;
                     this.showAdvanceReceiptAdjust = true;
                     this.adjustPaymentModal?.show();
                 } else {

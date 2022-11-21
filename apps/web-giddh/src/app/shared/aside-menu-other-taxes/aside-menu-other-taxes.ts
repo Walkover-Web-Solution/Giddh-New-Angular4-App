@@ -29,6 +29,8 @@ export class AsideMenuOtherTaxes implements OnInit, OnChanges, OnDestroy {
     @Input() public commonLocaleData: any = {};
     /** This will hold default data of other taxes */
     public defaultOtherTaxesModal: SalesOtherTaxesModal;
+    /** Selected calculation method label */
+    public selectedCalculationMethod: any;
 
     constructor(
         private breakPointObservar: BreakpointObserver
@@ -51,8 +53,10 @@ export class AsideMenuOtherTaxes implements OnInit, OnChanges, OnDestroy {
 
         this.calculationMethodOptions = [
             { label: this.commonLocaleData?.app_on_taxable_value, value: 'OnTaxableAmount' },
-            { label: this.commonLocaleData?.app_on_total_value, value: 'OnTotalAmount' },
+            { label: this.commonLocaleData?.app_on_total_value, value: 'OnTotalAmount' }
         ];
+
+        this.selectedCalculationMethod = this.calculationMethodOptions?.filter(method => method.value === this.otherTaxesModal?.tcsCalculationMethod);
     }
 
     public ngOnChanges(changes: SimpleChanges): void {
@@ -64,6 +68,10 @@ export class AsideMenuOtherTaxes implements OnInit, OnChanges, OnDestroy {
             if (this.defaultOtherTaxesModal.appliedOtherTax) {
                 this.selectedTaxUniqueName = this.defaultOtherTaxesModal.appliedOtherTax.uniqueName;
                 this.applyTax({ label: this.defaultOtherTaxesModal.appliedOtherTax.name, value: this.defaultOtherTaxesModal.appliedOtherTax.uniqueName });
+            }
+
+            if (this.calculationMethodOptions?.length > 0) {
+                this.selectedCalculationMethod = this.calculationMethodOptions?.filter(method => method.value === this.otherTaxesModal.tcsCalculationMethod);
             }
         }
     }
@@ -124,7 +132,7 @@ export class AsideMenuOtherTaxes implements OnInit, OnChanges, OnDestroy {
      */
     public onCalculateTax(tax: IOption): void {
         if (tax && tax.value) {
-            this.defaultOtherTaxesModal.tcsCalculationMethod == tax.value;
+            this.defaultOtherTaxesModal.tcsCalculationMethod = (tax.value === SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount) ? SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount : SalesOtherTaxesCalculationMethodEnum.OnTotalAmount;
         }
     }
 

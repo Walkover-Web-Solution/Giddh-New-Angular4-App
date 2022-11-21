@@ -178,6 +178,7 @@
                                                     <!-- region if not cashinvoice show customer dropdown -->
                                                     <ng-container *ngIf="!isCashInvoice">
                                                         <select-field
+                                                            #openAccountSelectionDropdown
                                                             [cssClass]="
                                                                 'form-control mat-field-border customer-dropdown'
                                                             "
@@ -493,16 +494,16 @@
                                                                                     invFormData.accountDetails
                                                                                         .billingDetails.gstNumber
                                                                                 "
-                                                                                (ngModelChange)="
+                                                                                (change)="
                                                                                     getStateCode(
                                                                                         'billingDetails',
                                                                                         statesBilling
-                                                                                    )
+                                                                                    );
+                                                                                    autoFillShippingDetails()
                                                                                 "
                                                                                 [placeholder]="
                                                                                     commonLocaleData?.app_gstin
                                                                                 "
-                                                                                (input)="autoFillShippingDetails()"
                                                                             >
                                                                             </text-field>
                                                                             <text-field
@@ -516,16 +517,16 @@
                                                                                     invFormData.accountDetails
                                                                                         .billingDetails.gstNumber
                                                                                 "
-                                                                                (ngModelChange)="
+                                                                                (change)="
                                                                                     getStateCode(
                                                                                         'billingDetails',
                                                                                         statesBilling
-                                                                                    )
+                                                                                    );
+                                                                                    autoFillShippingDetails()
                                                                                 "
                                                                                 [placeholder]="
                                                                                     commonLocaleData?.app_trn
                                                                                 "
-                                                                                (input)="autoFillShippingDetails()"
                                                                             >
                                                                             </text-field>
                                                                         </div>
@@ -547,7 +548,7 @@
                                                                                     "
                                                                                     autocomplete="false"
                                                                                     [name]="'billingPinCode'"
-                                                                                    (input)="autoFillShippingDetails()"
+                                                                                    (change)="autoFillShippingDetails()"
                                                                                     [placeholder]="
                                                                                         commonLocaleData?.app_pin_code
                                                                                     "
@@ -572,6 +573,7 @@
                                                                 <div class="d-flex align-items-center pb-1">
                                                                     <span class="pb-0 pd-r15">
                                                                         <mat-checkbox
+                                                                            (keydown.enter)="$event.preventDefault()"
                                                                             (change)="autoFillShippingDetails()"
                                                                             name="autoFillShipping"
                                                                             color="primary"
@@ -1157,7 +1159,7 @@
                                                                             [cssClass]="
                                                                                 'form-control input-custom billing'
                                                                             "
-                                                                            (input)="autoFillCompanyShippingDetails()"
+                                                                            (change)="autoFillCompanyShippingDetails()"
                                                                             (ngModelChange)="
                                                                                 getStateCodeCompany('billingDetails')
                                                                             "
@@ -1211,6 +1213,7 @@
                                                             <div class="d-flex align-items-center pb-1">
                                                                 <span class="pd-r15">
                                                                     <mat-checkbox
+                                                                        (keydown.enter)="$event.preventDefault()"
                                                                         autocomplete="None"
                                                                         name="autoFillCompanyShipping"
                                                                         [(ngModel)]="autoFillCompanyShipping"
@@ -1426,7 +1429,7 @@
                                                     [type]="'text'"
                                                     [name]="'accountDetails.invoiceNum'"
                                                     [cssClass]="
-                                                        'form-control invoice-date attention-to mat-field-border'
+                                                        'form-control invoice-date attention-to mat-field-border invoice-number-class'
                                                     "
                                                     [ngClass]="{ 'date-invoice': !isPurchaseInvoice }"
                                                     [readonly]="
@@ -1627,7 +1630,7 @@
                                                     [type]="'text'"
                                                     [name]="'accountDetails.invoiceNum'"
                                                     [cssClass]="
-                                                        'form-control invoice-date attention-to mat-field-border'
+                                                        'form-control invoice-date attention-to mat-field-border invoice-number-class'
                                                     "
                                                     [ngClass]="{ 'date-invoice': !isPurchaseInvoice }"
                                                     [readonly]="
@@ -1731,6 +1734,7 @@
                                     <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12">
                                         <div class="col-sm-6 col-xl-6 col-lg-10 col-md-10 pl-0">
                                             <mat-checkbox
+                                                (keydown.enter)="$event.preventDefault()"
                                                 #rcmCheckbox
                                                 color="primary"
                                                 id="reverse-charge"
@@ -1763,6 +1767,7 @@
                                         <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12">
                                             <div class="col-sm-12 col-xl-6 col-lg-10 col-md-10 pl-0">
                                                 <mat-checkbox
+                                                    (keydown.enter)="$event.preventDefault()"
                                                     id="tourist-scheme"
                                                     name="touristSchemeApplicable"
                                                     [(ngModel)]="invFormData.touristSchemeApplicable"
@@ -2730,6 +2735,7 @@
                                                 </text-field>
                                                 <div *ngIf="isTcsTdsApplicable" class="wrap-other-tax">
                                                     <mat-checkbox
+                                                        (keydown.enter)="$event.preventDefault()"
                                                         *ngIf="!entry.isOtherTaxApplicable"
                                                         [checked]="entry.isOtherTaxApplicable"
                                                         color="primary"
@@ -3434,7 +3440,7 @@
                                                                         pull-right
                                                                         max-width-100
                                                                         mat-field-border 
-                                                                        multicurrency-grandtotal no1'
+                                                                        multicurrency-grandtotal'
                                                                     "
                                                                     [name]="'dueAmount'"
                                                                     [prefix]="depositCurrSymbol"
@@ -3449,25 +3455,7 @@
                                                                     commonLocaleData?.app_amount
                                                                 }}</label>
                                                             </li>
-                                                            <!-- <li
-                                                                class="clearfix mr-t1 d-flex align-items-center payment-mode-amount"
-                                                                *ngIf="isCashInvoice"
-                                                            >
-                                                                <span
-                                                                    class="amount-field pull-right max-width-100 amount-filed-cash"
-                                                                >
-                                                                    <span *ngIf="isMulticurrencyAccount">{{
-                                                                        invFormData.accountDetails.currencySymbol
-                                                                    }}</span>
-                                                                    {{
-                                                                        invFormData.voucherDetails.balanceDue
-                                                                            | giddhCurrency
-                                                                    }}</span
-                                                                >
-                                                                <label class="pull-right">{{
-                                                                    commonLocaleData?.app_amount
-                                                                }}</label>
-                                                            </li> -->
+
                                                             <li
                                                                 class="clearfix mr-t1 bigger-dollar"
                                                                 *ngIf="
@@ -4340,6 +4328,7 @@
                                                         </text-field>
                                                         <div *ngIf="isTcsTdsApplicable" class="wrap-other-tax">
                                                             <mat-checkbox
+                                                                (keydown.enter)="$event.preventDefault()"
                                                                 *ngIf="!entry.isOtherTaxApplicable"
                                                                 [checked]="entry.isOtherTaxApplicable"
                                                                 color="primary"
@@ -4825,10 +4814,15 @@
                                                                 (selectedOption)="onSelectPaymentMode($event)"
                                                                 [placeholder]="commonLocaleData?.app_select_account"
                                                                 (onClear)="onSelectPaymentMode($event, true)"
+                                                                [defaultValue]="
+                                                                    isCashInvoice ? selectedBankAccount : ''
+                                                                "
                                                             >
                                                             </select-field>
-                                                            <label class="pull-right pt-1">{{
-                                                                commonLocaleData?.app_payment_mode
+                                                            <label class="pull-right">{{
+                                                                !isCashInvoice
+                                                                    ? commonLocaleData?.app_payment_mode
+                                                                    : localeData?.account
                                                             }}</label>
                                                         </div>
                                                     </li>
@@ -4841,7 +4835,9 @@
                                                             payment-mode-amount
                                                         "
                                                         *ngIf="
-                                                            isSalesInvoice || currentVoucherFormDetails?.depositAllowed
+                                                            isSalesInvoice ||
+                                                            (currentVoucherFormDetails?.depositAllowed &&
+                                                                !isCashInvoice)
                                                         "
                                                     >
                                                         <text-field
@@ -4854,12 +4850,12 @@
                                                             [name]="'dueAmount'"
                                                             [cssClass]="
                                                                 '
-                              form-control
-                              amount-field
-                              text-right
-                              pull-right
-                              max-width-100
-                              multicurrency-grandtotal no2'
+                                                                form-control
+                                                                amount-field
+                                                                text-right
+                                                                pull-right
+                                                                max-width-100
+                                                                multicurrency-grandtotal no2'
                                                             "
                                                             [(ngModel)]="depositAmount"
                                                             [prefix]="depositCurrSymbol"
@@ -4872,7 +4868,7 @@
                                                             commonLocaleData?.app_amount
                                                         }}</label>
                                                     </li>
-                                                    <li
+                                                    <!-- <li
                                                         class="
                                                             clearfix
                                                             mr-t1
@@ -4908,7 +4904,7 @@
                                                         <label class="pull-right pt-1">{{
                                                             commonLocaleData?.app_amount
                                                         }}</label>
-                                                    </li>
+                                                    </li> -->
                                                     <li class="clearfix mr-t1 bigger-dollar" *ngIf="isSalesInvoice">
                                                         <strong class="pull-right balance-due-text">
                                                             <span>
