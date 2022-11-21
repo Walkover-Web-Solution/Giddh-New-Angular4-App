@@ -178,6 +178,7 @@
                                                     <!-- region if not cashinvoice show customer dropdown -->
                                                     <ng-container *ngIf="!isCashInvoice">
                                                         <select-field
+                                                            #openAccountSelectionDropdown
                                                             [cssClass]="
                                                                 'form-control mat-field-border customer-dropdown'
                                                             "
@@ -493,16 +494,16 @@
                                                                                     invFormData.accountDetails
                                                                                         .billingDetails.gstNumber
                                                                                 "
-                                                                                (ngModelChange)="
+                                                                                (change)="
                                                                                     getStateCode(
                                                                                         'billingDetails',
                                                                                         statesBilling
-                                                                                    )
+                                                                                    );
+                                                                                    autoFillShippingDetails()
                                                                                 "
                                                                                 [placeholder]="
                                                                                     commonLocaleData?.app_gstin
                                                                                 "
-                                                                                (input)="autoFillShippingDetails()"
                                                                             >
                                                                             </text-field>
                                                                             <text-field
@@ -516,16 +517,16 @@
                                                                                     invFormData.accountDetails
                                                                                         .billingDetails.gstNumber
                                                                                 "
-                                                                                (ngModelChange)="
+                                                                                (change)="
                                                                                     getStateCode(
                                                                                         'billingDetails',
                                                                                         statesBilling
-                                                                                    )
+                                                                                    );
+                                                                                    autoFillShippingDetails()
                                                                                 "
                                                                                 [placeholder]="
                                                                                     commonLocaleData?.app_trn
                                                                                 "
-                                                                                (input)="autoFillShippingDetails()"
                                                                             >
                                                                             </text-field>
                                                                         </div>
@@ -547,7 +548,7 @@
                                                                                     "
                                                                                     autocomplete="false"
                                                                                     [name]="'billingPinCode'"
-                                                                                    (input)="autoFillShippingDetails()"
+                                                                                    (change)="autoFillShippingDetails()"
                                                                                     [placeholder]="
                                                                                         commonLocaleData?.app_pin_code
                                                                                     "
@@ -1158,7 +1159,7 @@
                                                                             [cssClass]="
                                                                                 'form-control input-custom billing'
                                                                             "
-                                                                            (input)="autoFillCompanyShippingDetails()"
+                                                                            (change)="autoFillCompanyShippingDetails()"
                                                                             (ngModelChange)="
                                                                                 getStateCodeCompany('billingDetails')
                                                                             "

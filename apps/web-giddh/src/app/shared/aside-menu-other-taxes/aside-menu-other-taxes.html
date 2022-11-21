@@ -46,11 +46,9 @@
                             [cssClass]="'form-control mat-field-border'"
                             [placeholder]="commonLocaleData?.app_select_method"
                             [options]="calculationMethodOptions"
-                            [defaultValue]="calculationMethodOptions[0].label"
+                            [defaultValue]="selectedCalculationMethod ? selectedCalculationMethod[0]?.label : calculationMethodOptions[0]?.label"
                             [name]="'tcsCalculationMethod'"
-                            (selectedOption)="
-                        onCalculateTax($event);
-                        "
+                            (selectedOption)="onCalculateTax($event);"
                         >
                         </select-field>
                     </div>
