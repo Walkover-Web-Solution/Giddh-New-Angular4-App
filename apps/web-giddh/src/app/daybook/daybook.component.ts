@@ -25,7 +25,6 @@ import { ToasterService } from '../services/toaster.service';
 import { MatDialog } from '@angular/material/dialog';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { LedgerService } from '../services/ledger.service';
-import { Router } from '@angular/router';
 
 @Component({
     selector: 'daybook',
@@ -144,8 +143,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
         private toasterService: ToasterService,
         private dialog: MatDialog,
         private breakpointObserver: BreakpointObserver,
-        private ledgerService: LedgerService,
-        private router: Router
+        private ledgerService: LedgerService
     ) {
 
         this.daybookQueryRequest = new DaybookQueryRequest();
@@ -377,7 +375,6 @@ export class DaybookComponent implements OnInit, OnDestroy {
                         if (response?.status === 'success') {
                             if (typeof response?.body === "string") {
                                 this.toasterService.showSnackBar("success", response?.body);
-                                this.router.navigate(["/pages/downloads"]);
                             } else {
                                 let blob = this.generalService.base64ToBlob(response?.body?.encodedData, response?.queryString?.requestType, 512);
                                 saveAs(blob, response?.body?.name);
