@@ -392,6 +392,7 @@
                                                                                         flex-column
                                                                                         justify-content-center
                                                                                         line-height-initial
+                                                                                        billingCompanyAddress
                                                                                     "
                                                                                     *ngFor="
                                                                                         let address of accountAddressList
@@ -617,6 +618,7 @@
                                                                                         flex-column
                                                                                         justify-content-center
                                                                                         line-height-initial
+                                                                                        billingCompanyAddress
                                                                                     "
                                                                                     *ngFor="
                                                                                         let address of accountAddressList
@@ -1102,14 +1104,12 @@
                                                                         </label>
                                                                     </div>
                                                                     <div
-                                                                        class="col-sm-12 col-md-6"
+                                                                        class="col-sm-12 col-md-6 billingStateOnly"
                                                                         #billingStateCompany
                                                                     >
                                                                         <select-field
                                                                             [placeholder]="commonLocaleData?.app_state"
-                                                                            [cssClass]="
-                                                                                'form-control input-custom select-border-bottom'
-                                                                            "
+                                                                            [cssClass]="' select-bdr-bottom '"
                                                                             (selectedOption)="
                                                                                 fillShippingBillingCompanyDetails(
                                                                                     $event,
@@ -1217,6 +1217,7 @@
                                                                     <mat-checkbox
                                                                         (keydown.enter)="$event.preventDefault()"
                                                                         autocomplete="None"
+                                                                        color="primary"
                                                                         name="autoFillCompanyShipping"
                                                                         [(ngModel)]="autoFillCompanyShipping"
                                                                         [ngModelOptions]="{ standalone: true }"
@@ -1253,14 +1254,14 @@
                                                                             </div>
                                                                         </div>
                                                                         <div
-                                                                            class="col-sm-12 col-md-6"
+                                                                            class="col-sm-12 col-md-6 billingStateOnly"
                                                                             #shippingStateCompany
                                                                         >
                                                                             <select-field
                                                                                 [placeholder]="
                                                                                     commonLocaleData?.app_state
                                                                                 "
-                                                                                [cssClass]="'select-bdr-bottom'"
+                                                                                [cssClass]="'select-bdr-bottom '"
                                                                                 [ngClass]="{
                                                                                     'disabled': autoFillCompanyShipping
                                                                                 }"
@@ -1738,13 +1739,13 @@
                                             <mat-checkbox
                                                 (keydown.enter)="$event.preventDefault()"
                                                 #rcmCheckbox
-                                                color="primary"
                                                 id="reverse-charge"
                                                 [(ngModel)]="isRcmEntry"
                                                 (change)="changeRcmCheckboxState($event)"
                                                 class="mr-r1"
                                                 name="rcmEntry"
                                                 [disabled]="isReadOnly"
+                                                color="primary"
                                             >
                                             </mat-checkbox>
                                             <label
@@ -1769,6 +1770,7 @@
                                         <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12">
                                             <div class="col-sm-12 col-xl-6 col-lg-10 col-md-10 pl-0">
                                                 <mat-checkbox
+                                                    color="primary"
                                                     (keydown.enter)="$event.preventDefault()"
                                                     id="tourist-scheme"
                                                     name="touristSchemeApplicable"
