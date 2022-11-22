@@ -661,8 +661,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public fieldFilteredOptions: IOption[] = [];
     /** Compare function of link PO reference list */
     public compareFn = (a, b) => a && b && a.id === b.id;
-    /** True if we have to open account selection dropdown with auto focus */
-    public isActive: boolean = false;
     /** Use for trigger instance */
     @ViewChild(MatMenuTrigger) public trigger: MatMenuTrigger;
 

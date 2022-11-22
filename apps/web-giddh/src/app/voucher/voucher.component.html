@@ -4993,7 +4993,7 @@
                                 <button
                                     mat-button
                                     (click)="resetInvoiceForm(invoiceForm)"
-                                    class="btn btn-danger d-inline-block v-align-middle cashin3"
+                                    class="btn btn-danger d-inline-block v-align-middle"
                                 >
                                     {{ commonLocaleData?.app_clear }}
                                 </button>
@@ -5009,7 +5009,7 @@
                                             isMobileNumberInvalid
                                         "
                                         (click)="doAction(0); triggerSubmitInvoiceForm(invoiceForm, false)"
-                                        class="btn btn-default cashin2"
+                                        class="btn btn-default"
                                     >
                                         {{ commonLocaleData?.app_save }}
                                     </button>
@@ -5028,7 +5028,7 @@
                                             isMobileNumberInvalid
                                         "
                                         (click)="doAction(0); triggerSubmitInvoiceForm(invoiceForm, true)"
-                                        class="btn btn-default cashin"
+                                        class="btn btn-default"
                                         *ngIf="!isCompany && isCustomerSelected && !isPendingVoucherType"
                                     >
                                         {{ generateInvoiceText }}
