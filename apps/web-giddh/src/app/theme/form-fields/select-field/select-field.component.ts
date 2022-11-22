@@ -135,7 +135,6 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy {
                 this.fieldFilteredOptions = cloneDeep(changes.options.currentValue);
             }
         }
-
         if (changes?.defaultValue) {
             this.searchFormControl.setValue({ label: changes?.defaultValue.currentValue });
         }

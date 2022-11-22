@@ -376,6 +376,8 @@
                                                                             *ngIf="accountAddressList?.length > 1"
                                                                         >
                                                                             <a
+                                                                                (clickOutside)="trigger?.closeMenu()"
+                                                                                #trigger="matMenuTrigger"
                                                                                 [matMenuTriggerFor]="
                                                                                     changeBillingAddress
                                                                                 "
@@ -383,7 +385,10 @@
                                                                             >
                                                                                 {{ localeData?.change }}</a
                                                                             >
-                                                                            <mat-menu #changeBillingAddress="matMenu">
+                                                                            <mat-menu
+                                                                                #changeBillingAddress="matMenu"
+                                                                                class="billing-company"
+                                                                            >
                                                                                 <a
                                                                                     mat-menu-item
                                                                                     disableRipple="true"
@@ -392,7 +397,7 @@
                                                                                         flex-column
                                                                                         justify-content-center
                                                                                         line-height-initial
-                                                                                        billingCompanyAddress
+                                                                                        billing-company-address
                                                                                     "
                                                                                     *ngFor="
                                                                                         let address of accountAddressList
@@ -598,6 +603,8 @@
                                                                             "
                                                                         >
                                                                             <a
+                                                                                (clickOutside)="trigger?.closeMenu()"
+                                                                                #trigger="matMenuTrigger"
                                                                                 [matMenuTriggerFor]="
                                                                                     shippingBillingAddressSame
                                                                                 "
@@ -606,9 +613,14 @@
                                                                                 {{ localeData?.change }}</a
                                                                             >
                                                                             <mat-menu
+                                                                                class="billing-company"
                                                                                 #shippingBillingAddressSame="matMenu"
                                                                             >
                                                                                 <a
+                                                                                    (clickOutside)="
+                                                                                        trigger?.closeMenu()
+                                                                                    "
+                                                                                    #trigger="matMenuTrigger"
                                                                                     mat-menu-item
                                                                                     disableRipple="true"
                                                                                     class="
@@ -616,7 +628,7 @@
                                                                                         flex-column
                                                                                         justify-content-center
                                                                                         line-height-initial
-                                                                                        billingCompanyAddress
+                                                                                        billing-company-address
                                                                                     "
                                                                                     *ngFor="
                                                                                         let address of accountAddressList
@@ -1033,6 +1045,8 @@
                                                                         *ngIf="companyAddressList?.length > 1"
                                                                     >
                                                                         <a
+                                                                            (clickOutside)="trigger?.closeMenu()"
+                                                                            #trigger="matMenuTrigger"
                                                                             mat-menu-item
                                                                             class="dropdown-toggle cp"
                                                                             [matMenuTriggerFor]="
@@ -1042,6 +1056,7 @@
                                                                             {{ localeData?.change }}</a
                                                                         >
                                                                         <mat-menu
+                                                                            class="billing-company"
                                                                             #companyBillingAddressDropDownWeb="matMenu"
                                                                         >
                                                                             <a
@@ -5072,6 +5087,8 @@
                                             </ul>
                                         </mat-menu>
                                         <button
+                                            (clickOutside)="trigger?.closeMenu()"
+                                            #trigger="matMenuTrigger"
                                             [matMenuTriggerFor]="dropdownMenu"
                                             id="button-dropup"
                                             *ngIf="invoiceType === 'sales'"
@@ -5107,6 +5124,8 @@
                                             {{ commonLocaleData?.app_create }}
                                         </button>
                                         <button
+                                            (clickOutside)="trigger?.closeMenu()"
+                                            #trigger="matMenuTrigger"
                                             [matMenuTriggerFor]="dropdownMenu2"
                                             id="button-dropup"
                                             mat-button
@@ -5234,16 +5253,6 @@
         </ng-container>
     </ng-template>
     <!-- endregion -->
-    <!-- region bulk items -->
-    <ng-template #bulkItemsModal>
-        <ng-container>
-            <voucher-add-bulk-items-component
-                [invoiceType]="invoiceType"
-                (saveItemsEvent)="addBulkStockItems($event)"
-                (closeEvent)="cancelBulkItemsModal()"
-            ></voucher-add-bulk-items-component>
-        </ng-container>
-    </ng-template>
     <!-- endregion -->
     <!-- region gst treatment modal-->
     <ng-template #gstTreatmentModal let-show>
@@ -5306,6 +5315,14 @@
                 ></confirmation-modal>
             </div>
         </div>
+    </ng-template>
+    <!-- region bulk items -->
+    <ng-template #bulkItemsModal>
+        <voucher-add-bulk-items-component
+            [invoiceType]="invoiceType"
+            (saveItemsEvent)="addBulkStockItems($event)"
+            (closeEvent)="cancelBulkItemsModal()"
+        ></voucher-add-bulk-items-component>
     </ng-template>
     <!-- region  adjust payment  popup -->
     <ng-template #adjustPaymentModal>
