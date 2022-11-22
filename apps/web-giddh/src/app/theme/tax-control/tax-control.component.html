@@ -54,6 +54,7 @@
             </li>
             <li class="relative" *ngFor="let tax of taxRenderData; trackBy: trackByFn; let idx = index">
                 <mat-checkbox
+                    (keydown.enter)="$event.preventDefault()"
                     color="primary"
                     *ngIf="taxRenderData.length - 1 !== idx"
                     (click)="$event.stopPropagation()"
@@ -69,6 +70,7 @@
                     {{ tax.name }}
                 </mat-checkbox>
                 <mat-checkbox
+                    (keydown.enter)="$event.preventDefault()"
                     color="primary"
                     *ngIf="taxRenderData.length - 1 === idx"
                     (click)="$event.stopPropagation()"
