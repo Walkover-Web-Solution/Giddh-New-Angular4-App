@@ -193,9 +193,11 @@ $custom-typography: mat-typography-config(
 
     .line-height-initial {
         line-height: 1.5 !important;
-        font-size: 12px;
+        font-size: 11px;
         border-bottom: 1px solid var(--color-iron);
         padding-right: 12px;
+        min-height: 51px;
+        overflow-y: scroll;
     }
 
     .copy-invoice-menu {
@@ -328,7 +330,13 @@ $custom-typography: mat-typography-config(
 .hsn-code-dropdown {
     .mat-input-element {
         text-align: left !important;
+        padding-left: 5px !important;
     }
+}
+.billingCompanyAddress {
+    white-space: break-spaces !important;
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
 }
 @media screen and (max-width: 1366px) and (orientation: portrait) {
     .subscription-form-select {
@@ -7996,13 +8004,13 @@ highcharts-chart {
         }
 
         .mat-option-text {
-            line-height: 23px;
+            line-height: 16px;
         }
     }
 
     .options-line {
         padding: 5px;
-
+        min-height: 55px !important;
         .option-label {
             color: var(--color-common-primary-text);
         }
@@ -12035,6 +12043,23 @@ body.update-scroll-hidden {
 }
 
 @media (min-width: 768px) {
+    .voucher-preview-edit {
+        .custom-date-entries {
+            .edit-icon-custom-entry-date {
+                right: 73% !important;
+                margin-top: 5px !important;
+            }
+        }
+        .tax-dropdown {
+            li {
+                label {
+                    .mat-checkbox-label {
+                        margin-left: 0 !important;
+                    }
+                }
+            }
+        }
+    }
     .mobile-invoice-date-due-date {
         .mat-datepicker-toggle .mat-button-wrapper .mat-datepicker-toggle-default-icon {
             color: var(--color-datepicker-date-icon);
