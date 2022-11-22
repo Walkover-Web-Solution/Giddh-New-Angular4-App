@@ -214,6 +214,7 @@
                                             [placeholder]="localeData?.select_voucher"
                                             (selectedOption)="selectVoucher($event, entry, entryIdx)"
                                             [options]="adjustVoucherOptions"
+                                            [hasMoreValue]="true"
                                         >
                                             <ng-template #optionTemplate let-option="option">
                                                 <a href="javascript:void(0)">

@@ -119,6 +119,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { HttpClient } from '@angular/common/http';
 import { NewConfirmationModalComponent } from '../theme/new-confirmation-modal/confirmation-modal.component';
 import { SelectFieldComponent } from '../theme/form-fields/select-field/select-field.component';
+import { MatMenuTrigger } from '@angular/material/menu';
 
 /** Type of search: customer and item (product/service) search */
 const SEARCH_TYPE = {
@@ -662,6 +663,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public compareFn = (a, b) => a && b && a.id === b.id;
     /** True if we have to open account selection dropdown with auto focus */
     public isActive: boolean = false;
+    /** Use for trigger instance */
+    @ViewChild(MatMenuTrigger) public trigger: MatMenuTrigger;
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -1023,7 +1026,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.updatedAccountDetails$.subscribe(accountDetails => {
             if (accountDetails) {
                 this.hideDepositSectionForCashBankGroups(accountDetails);
-                this.accountAddressList = accountDetails.addresses;
+                this.accountAddressList = accountDetails.addresses;                
                 this.updateAccountDetails(accountDetails);
             }
         });
@@ -2014,7 +2017,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             this.initializeWarehouse();
         }
 
-        this.checkIfNeedToExcludeTax(data);
+        this.checkIfNeedToExcludeTax(data);        
         this.updateAccountDetails(data);
     }
 
@@ -2072,7 +2075,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @param {SalesShSelectComponent} statesEle state input box
      * @memberof VoucherComponent
      */
-    public getStateCode(type: string, statesEle: SelectFieldComponent) {
+    public getStateCode(type: string, statesEle: SelectFieldComponent) {        
         let gstVal = cloneDeep(this.invFormData.accountDetails[type].gstNumber)?.toString();
         if (gstVal && gstVal.length >= 2) {
             const selectedState = this.statesSource.find(item => item.stateGstCode === gstVal.substring(0, 2));
@@ -2152,6 +2155,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.depositAccountUniqueName = '';
         this.accountUniqueName = "";
         this.invoiceNo = "";
+        this.selectedBankAccount = 'Cash';
         this.typeaheadNoResultsOfCustomer = false;
         // toggle all collapse
         this.isOthrDtlCollapsed = false;
@@ -2215,7 +2219,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.onSearchQueryChanged('', 1, 'customer');
     }
 
-    public triggerSubmitInvoiceForm(form: NgForm, isUpdate) {
+    public triggerSubmitInvoiceForm(form: NgForm, isUpdate) {        
         this.updateAccount = isUpdate;
         if (this.isPendingVoucherType) {
             this.startLoader(true);
@@ -3706,9 +3710,10 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.actionAfterGenerateORUpdate = action;
     }
 
-    public postResponseAction(voucherNo: string) {
+    public postResponseAction(voucherNo: string) {        
         switch (this.actionAfterGenerateORUpdate) {
             case ActionTypeAfterVoucherGenerateOrUpdate.generate: {
+
                 this.getAllLastInvoices();
                 this.depositAccountUniqueName = '';
                 this.depositAmount = 0;
@@ -3744,7 +3749,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         }
     }
 
-    public resetCustomerName(event) {
+    public resetCustomerName(event) {        
         if (event) {
             if (!event?.value) {
                 this.onlyPhoneNumber();
@@ -3787,7 +3792,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             this.pageChanged(VoucherTypeEnum.purchase, this.commonLocaleData?.app_purchase);
             this.isSalesInvoice = false;
         }
-
+        
         if ('accountUniqueName' in s && s.accountUniqueName.currentValue && (s.accountUniqueName.currentValue !== s.accountUniqueName.previousValue)) {
             this.isCashInvoice = s.accountUniqueName.currentValue === 'cash';
         }
@@ -3802,6 +3807,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 this.invFormData.accountDetails.name = event.label;
                 this.invFormData.accountDetails.uniqueName = event.value;
             }
+            this.selectedBankAccount = event.label;
             this.depositAccountUniqueName = event.value;
 
             if (event.additional) {
@@ -6542,7 +6548,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             groups += ", loanandoverdraft";
         }
         this.salesService.getAccountsWithCurrency(groups, `${customerCurrency}, ${this.companyCurrency}`).pipe(takeUntil(this.destroyed$)).subscribe(data => {
-            const bankAccounts = data?.body?.results?.filter(response => response?.uniqueName == this.selectedBankAccount.toLowerCase());
+            const bankAccounts = data?.body?.results?.filter(response => response?.uniqueName == this.selectedBankAccount?.toLowerCase());
             if (this.invoiceType == VoucherTypeEnum.cash) {
                 if (bankAccounts.length > 0) {
                     this.onSelectPaymentMode({ label: bankAccounts[0]?.name, value: bankAccounts[0]?.uniqueName, additional: bankAccounts[0] });
@@ -7457,11 +7463,11 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             setTimeout(() => {
                 const shSelectField: any = !this.isMobileScreen ? this.selectAccount?.first : this.selectAccount?.last;
                 if (shSelectField) {
-                    shSelectField.openDropdownPanel();
+                        shSelectField.openDropdownPanel();
                 }
-            }, 200);
+                  }, 200);
+            }
         }
-    }
 
     /**
      * Focuses on description field
@@ -7862,21 +7868,20 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             }
             // auto fill all the details
             this.invFormData.accountDetails = new AccountDetailsClass(data);
-
-            if (this.invFormData.accountDetails.billingDetails?.gstNumber) {
+            
+            if (this.invFormData.accountDetails) {
                 this.getStateCode('billingDetails', this.statesBilling);
+                this._cdr.detectChanges();
                 this.autoFillShippingDetails();
-                // this._cdr.detectChanges();
             } else {
                 this.statesBilling.readonly = false;
-                // this._cdr.detectChanges();
+                this._cdr.detectChanges();
             }
             if (this.invFormData.accountDetails.shippingDetails?.gstNumber) {
                 this.getStateCode('shippingDetails', this.statesShipping);
-                // this._cdr.detectChanges();
             } else {
                 this.statesShipping.readonly = false;
-                // this._cdr.detectChanges();
+                this._cdr.detectChanges();
             }
 
             setTimeout(() => {
