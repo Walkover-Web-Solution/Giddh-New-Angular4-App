@@ -4981,7 +4981,6 @@
                 <!-- endregion -->
                 <!-- endregion -->
                 <!-- region submit actions-->
-                {{ selectedBankAccount }}
                 <section class="clearfix mr-b5">
                     <section
                         id="actionPane"
@@ -5254,16 +5253,6 @@
         </ng-container>
     </ng-template>
     <!-- endregion -->
-    <!-- region bulk items -->
-    <ng-template #bulkItemsModal>
-        <ng-container>
-            <voucher-add-bulk-items-component
-                [invoiceType]="invoiceType"
-                (saveItemsEvent)="addBulkStockItems($event)"
-                (closeEvent)="cancelBulkItemsModal()"
-            ></voucher-add-bulk-items-component>
-        </ng-container>
-    </ng-template>
     <!-- endregion -->
     <!-- region gst treatment modal-->
     <ng-template #gstTreatmentModal let-show>
@@ -5326,6 +5315,14 @@
                 ></confirmation-modal>
             </div>
         </div>
+    </ng-template>
+    <!-- region bulk items -->
+    <ng-template #bulkItemsModal>
+        <voucher-add-bulk-items-component
+            [invoiceType]="invoiceType"
+            (saveItemsEvent)="addBulkStockItems($event)"
+            (closeEvent)="cancelBulkItemsModal()"
+        ></voucher-add-bulk-items-component>
     </ng-template>
     <!-- region  adjust payment  popup -->
     <ng-template #adjustPaymentModal>

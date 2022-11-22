@@ -161,10 +161,10 @@ $custom-typography: mat-typography-config(
 
     .custom-date-entries {
         .edit-icon-custom-entry-date {
-            position: absolute;
-            right: 50%;
-            margin-top: -35px;
-            z-index: 0;
+            position: absolute !important;
+            right: 50% !important;
+            margin-top: -35px !important;
+            z-index: 0 !important;
         }
 
         giddh-datepicker {
@@ -423,10 +423,10 @@ $custom-typography: mat-typography-config(
         text-align: left !important;
     }
     .edit-icon-custom-entry-date {
-        position: absolute;
-        right: 78%;
-        margin-top: 6px;
-        z-index: 0;
+        position: absolute !important;
+        right: 78% !important;
+        margin-top: 6px !important;
+        z-index: 0 !important;
     }
     .on-mobile-view tbody tr,
     .on-mobile-view tbody .mat-row {
@@ -4471,7 +4471,7 @@ label {
             }
 
             .mat-checkbox-label {
-                margin-left: -17px;
+                margin-left: -17px !important;
             }
         }
 
@@ -7982,7 +7982,6 @@ highcharts-chart {
 
     .options-line {
         padding: 5px;
-        min-height: 55px !important;
         .option-label {
             color: var(--color-common-primary-text);
         }
@@ -11979,15 +11978,15 @@ body.update-scroll-hidden {
     .voucher-preview-edit {
         .custom-date-entries {
             .edit-icon-custom-entry-date {
-                right: 73% !important;
-                margin-top: 5px !important;
+                right: 73%;
+                margin-top: 5px;
             }
         }
         .tax-dropdown {
             li {
                 label {
                     .mat-checkbox-label {
-                        margin-left: 0 !important;
+                        margin-left: 0;
                     }
                 }
             }
