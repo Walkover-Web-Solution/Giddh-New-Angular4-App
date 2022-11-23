@@ -6,108 +6,82 @@
     (translationComplete)="translationComplete($event)"
 >
     <div class="add-bulk-item-modal" *ngIf="localeData?.add_bulk_items">
-        <div class="modal-dialog modal-xl">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title pull-left">{{ localeData?.add_bulk_items }}</h4>
-                    <button
-                        mat-button
-                        type="button"
-                        class="close pull-right"
-                        aria-label="Close"
-                        (click)="closeEvent.emit()"
-                    >
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title pull-left">{{ localeData?.add_bulk_items }}</h4>
+                <button
+                    mat-button
+                    type="button"
+                    class="close pull-right"
+                    aria-label="Close"
+                    (click)="closeEvent.emit()"
+                >
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
 
-                <div class="modal-body">
-                    <div class="row">
-                        <!-- region left side -->
-                        <div class="col-md-6 col-sm-6">
-                            <div class="left-content">
-                                <div class="search-box">
-                                    <input
-                                        matInput
-                                        type="text"
-                                        [placeholder]="localeData?.search_stock"
-                                        #searchElement
-                                        class="pr-1 pl-1 form-control mat-field-border"
-                                    />
-                                </div>
+            <div class="modal-body">
+                <div class="row">
+                    <!-- region left side -->
+                    <div class="col-md-6 col-sm-6">
+                        <div class="left-content">
+                            <div class="search-box">
+                                <input
+                                    matInput
+                                    type="text"
+                                    [placeholder]="localeData?.search_stock"
+                                    #searchElement
+                                    class="pr-1 pl-1 form-control mat-field-border"
+                                />
+                            </div>
 
-                                <div class="product-list">
-                                    <perfect-scrollbar (psYReachEnd)="onScrollEnd()">
-                                        <button
-                                            mat-button
-                                            class="single-product-wrapper cp w-100"
-                                            *ngFor="let item of filteredData"
-                                            (click)="addItemToSelectedArr(item)"
-                                        >
-                                            <h5>{{ item?.name }}</h5>
-                                        </button>
-                                    </perfect-scrollbar>
-                                </div>
+                            <div class="product-list">
+                                <perfect-scrollbar (psYReachEnd)="onScrollEnd()">
+                                    <button
+                                        mat-button
+                                        class="single-product-wrapper cp w-100"
+                                        *ngFor="let item of filteredData"
+                                        (click)="addItemToSelectedArr(item)"
+                                    >
+                                        <h5>{{ item?.name }}</h5>
+                                    </button>
+                                </perfect-scrollbar>
                             </div>
                         </div>
-                        <!-- endregion-->
+                    </div>
+                    <!-- endregion-->
 
-                        <!-- region right side -->
-                        <div class="col-md-6 pl-0 col-sm-6">
-                            <div class="right-content">
-                                <h4>
-                                    {{ localeData?.selected_stocks }}
-                                    <span class="selected-stock-number">({{ selectedItems?.length }})</span>
-                                </h4>
-                                <hr />
+                    <!-- region right side -->
+                    <div class="col-md-6 pl-0 col-sm-6">
+                        <div class="right-content">
+                            <h4>
+                                {{ localeData?.selected_stocks }}
+                                <span class="selected-stock-number">({{ selectedItems?.length }})</span>
+                            </h4>
+                            <hr />
 
-                                <div class="right-side-wrapper">
-                                    <perfect-scrollbar>
-                                        <div class="wrap-selected-stocks" *ngFor="let item of selectedItems">
-                                            <div class="single-selected-stock clearfix d-flex">
-                                                <div class="flex-fill">
-                                                    <div class="stock-name">
-                                                        <p>{{ item?.name }}</p>
-                                                        <p>
-                                                            <span *ngIf="item?.additional?.skuCode" class="stockSku"
-                                                                ><label>{{ commonLocaleData?.app_sku }}: </label
-                                                                >{{ item?.additional?.skuCode }}</span
-                                                            >
-                                                            <span [class.rate-stock]="item?.additional?.skuCode"
-                                                                ><label>{{ commonLocaleData?.app_rate }}:</label> </span
-                                                            >{{ item?.rate }}
-                                                        </p>
-                                                    </div>
+                            <div class="right-side-wrapper">
+                                <perfect-scrollbar>
+                                    <div class="wrap-selected-stocks" *ngFor="let item of selectedItems">
+                                        <div class="single-selected-stock clearfix d-flex">
+                                            <div class="flex-fill">
+                                                <div class="stock-name">
+                                                    <p>{{ item?.name }}</p>
+                                                    <p>
+                                                        <span *ngIf="item?.additional?.skuCode" class="stockSku"
+                                                            ><label>{{ commonLocaleData?.app_sku }}: </label
+                                                            >{{ item?.additional?.skuCode }}</span
+                                                        >
+                                                        <span [class.rate-stock]="item?.additional?.skuCode"
+                                                            ><label>{{ commonLocaleData?.app_rate }}:</label> </span
+                                                        >{{ item?.rate }}
+                                                    </p>
                                                 </div>
+                                            </div>
 
-                                                <div class="d-flex align-items-center">
-                                                    <div class="input-group add-item-btn">
-                                                        <span class="input-group-btn">
-                                                            <button
-                                                                mat-button
-                                                                disableRipple
-                                                                class="
-                                                                    btn-number
-                                                                    d-flex
-                                                                    align-items-center
-                                                                    justify-content-center
-                                                                "
-                                                                (click)="alterQuantity(item, 'minus')"
-                                                            >
-                                                                <span class="fa fa-minus"></span>
-                                                            </button>
-                                                        </span>
-
-                                                        <input
-                                                            matInput
-                                                            type="number"
-                                                            name="quantity"
-                                                            class="form-control input-number text-align-center"
-                                                            value="1"
-                                                            min="1"
-                                                            [(ngModel)]="item.quantity"
-                                                        />
-
+                                            <div class="d-flex align-items-center">
+                                                <div class="input-group add-item-btn">
+                                                    <span class="input-group-btn">
                                                         <button
                                                             mat-button
                                                             disableRipple
@@ -117,48 +91,72 @@
                                                                 align-items-center
                                                                 justify-content-center
                                                             "
-                                                            (click)="alterQuantity(item)"
+                                                            (click)="alterQuantity(item, 'minus')"
                                                         >
-                                                            <span class="fa fa-plus"></span>
+                                                            <span class="fa fa-minus"></span>
                                                         </button>
-                                                    </div>
-
-                                                    <span
-                                                        disableRipple
-                                                        class="remove-stock-list"
-                                                        (click)="removeSelectedItem(item?.uniqueName)"
-                                                    >
-                                                        <i class="icon-cross"></i>
                                                     </span>
+
+                                                    <input
+                                                        matInput
+                                                        type="number"
+                                                        name="quantity"
+                                                        class="form-control input-number text-align-center"
+                                                        value="1"
+                                                        min="1"
+                                                        [(ngModel)]="item.quantity"
+                                                    />
+
+                                                    <button
+                                                        mat-button
+                                                        disableRipple
+                                                        class="
+                                                            btn-number
+                                                            d-flex
+                                                            align-items-center
+                                                            justify-content-center
+                                                        "
+                                                        (click)="alterQuantity(item)"
+                                                    >
+                                                        <span class="fa fa-plus"></span>
+                                                    </button>
                                                 </div>
+
+                                                <span
+                                                    disableRipple
+                                                    class="remove-stock-list"
+                                                    (click)="removeSelectedItem(item?.uniqueName)"
+                                                >
+                                                    <i class="icon-cross"></i>
+                                                </span>
                                             </div>
                                         </div>
-                                    </perfect-scrollbar>
-                                </div>
-
-                                <div class="template-footer">
-                                    <hr />
-                                    <div class="btn-group bulk-item-btn-group">
-                                        <button
-                                            mat-button
-                                            class="btn-sm btn-success align-items-center justify-content-center"
-                                            (click)="saveItemsEvent.emit(selectedItems); closeEvent.emit()"
-                                        >
-                                            {{ commonLocaleData?.app_add }}
-                                        </button>
-                                        <button
-                                            mat-stroked-button
-                                            class="btn-sm btn-primary align-items-center justify-content-center"
-                                            (click)="closeEvent.emit()"
-                                        >
-                                            {{ commonLocaleData?.app_cancel }}
-                                        </button>
                                     </div>
+                                </perfect-scrollbar>
+                            </div>
+
+                            <div class="template-footer">
+                                <hr />
+                                <div class="btn-group bulk-item-btn-group">
+                                    <button
+                                        mat-button
+                                        class="btn-sm btn-success align-items-center justify-content-center"
+                                        (click)="saveItemsEvent.emit(selectedItems); closeEvent.emit()"
+                                    >
+                                        {{ commonLocaleData?.app_add }}
+                                    </button>
+                                    <button
+                                        mat-stroked-button
+                                        class="btn-sm btn-primary align-items-center justify-content-center"
+                                        (click)="closeEvent.emit()"
+                                    >
+                                        {{ commonLocaleData?.app_cancel }}
+                                    </button>
                                 </div>
                             </div>
                         </div>
-                        <!-- endregion-->
                     </div>
+                    <!-- endregion-->
                 </div>
             </div>
         </div>
