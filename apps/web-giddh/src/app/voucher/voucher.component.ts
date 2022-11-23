@@ -664,6 +664,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public compareFn = (a, b) => a && b && a.id === b.id;
     /** Use for trigger instance */
     @ViewChild(MatMenuTrigger) public trigger: MatMenuTrigger;
+    /** This will hold selected payment account value */
+    public selectPaymentValue :string = '';
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -1400,6 +1402,11 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                             this.companyCurrencyName = tempSelectedAcc.currency;
                         } else {
                             this.invFormData.accountDetails = new AccountDetailsClass(tempSelectedAcc);
+                        }
+                        if (this.invFormData.accountDetails.billingDetails?.gstNumber) {
+                            this.statesBilling.readonly = true;
+                        } else {
+                            this.statesBilling.readonly = false;
                         }
                         // reset customer details so we don't have conflicts when we create voucher second time
                         this.store.dispatch(this.salesAction.resetAccountDetailsForSales());
@@ -2153,6 +2160,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.depositAccountUniqueName = '';
         this.accountUniqueName = "";
         this.invoiceNo = "";
+        this.selectPaymentValue = "";
         this.selectedBankAccount = 'Cash';
         this.typeaheadNoResultsOfCustomer = false;
         // toggle all collapse
@@ -2259,10 +2267,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     }
 
     public onSubmitInvoiceForm(form?: NgForm) {
+
         if ((this.isSalesInvoice || this.isPurchaseInvoice) && this.depositAccountUniqueName && (this.userDeposit === null || this.userDeposit === undefined)) {
-            this._toasty.errorToast(this.localeData?.enter_amount);
-            this.startLoader(false);
-            return;
+            this.userDeposit = 0;
         }
 
         let data: VoucherClass = cloneDeep(this.invFormData);
@@ -3807,6 +3814,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 this.invFormData.accountDetails.uniqueName = event.value;
             }
             this.selectedBankAccount = event.label;
+            this.selectPaymentValue = event.label;
             this.depositAccountUniqueName = event.value;
 
             if (event.additional) {
@@ -3835,6 +3843,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     this.depositCurrSymbol = this.invFormData.accountDetails.currencySymbol;
                 }
                 if (this.isSalesInvoice || (this.voucherApiVersion === 2 && this.isPurchaseInvoice)) {
+                 
                     this.depositCurrSymbol = event.additional && event.additional.currency.symbol || this.baseCurrencySymbol;
                 }
             } else {
