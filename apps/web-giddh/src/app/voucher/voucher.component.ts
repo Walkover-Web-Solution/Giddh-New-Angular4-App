@@ -664,7 +664,11 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     /** Use for trigger instance */
     @ViewChild(MatMenuTrigger) public trigger: MatMenuTrigger;
     /** This will hold selected payment account value */
-    public selectPaymentValue :string = '';
+    public selectPaymentValue: string = '';
+    /** This observable use for loader status */
+    public loaderStatus: Subject<any> = new Subject();
+    /** This will hold loader is default value */
+    public isDefault: boolean = true;
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -767,6 +771,12 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     }
 
     public ngOnInit() {
+        this.loaderStatus.pipe(debounceTime(1500), takeUntil(this.destroyed$)).subscribe((event: any) => {
+            if (this.isDefault) {
+                this.isDefault = false;
+                this.focusInCustomerName();
+            }
+        });
         /** This will use for filter link purchase orders  */
         this.linkPoDropdown.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(search => {
             this.filterPurchaseOrder(search);
@@ -1026,7 +1036,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.updatedAccountDetails$.subscribe(accountDetails => {
             if (accountDetails) {
                 this.hideDepositSectionForCashBankGroups(accountDetails);
-                this.accountAddressList = accountDetails.addresses;                
+                this.accountAddressList = accountDetails.addresses;
                 this.updateAccountDetails(accountDetails);
             }
         });
@@ -1620,7 +1630,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         if (!this.isUpdateMode) {
             this.toggleBodyClass();
         }
-        this.toggleAccountSelectionDropdown(!this.isUpdateMode);
     }
 
     /**
@@ -1645,7 +1654,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     if (data && data.body && data.body.results) {
                         this.prepareSearchLists(data.body.results, 1, SEARCH_TYPE.CUSTOMER);
                         this.makeCustomerList();
-                        this.focusInCustomerName();
                         const item = data.body.results.find(result => result.uniqueName === this.accountUniqueName);
                         if (item) {
                             this.invFormData.voucherDetails.customerName = item.name;
@@ -1661,7 +1669,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     uniqueName: this.invFormData.accountDetails?.uniqueName
                 }], 1, SEARCH_TYPE.CUSTOMER);
                 this.makeCustomerList();
-                this.focusInCustomerName();
                 this.invFormData.voucherDetails.customerName = this.invFormData.accountDetails?.name;
                 this.invFormData.voucherDetails.customerUniquename = this.invFormData.accountDetails?.uniqueName;
             }
@@ -1673,7 +1680,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             }
         }
         this.startLoader(false);
-        this.focusInCustomerName();
     }
 
     private async prepareCompanyCountryAndCurrencyFromProfile(profile) {
@@ -1744,6 +1750,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @memberof VoucherComponent
      */
     public startLoader(shouldStartLoader: boolean): void {
+        this.loaderStatus.next(true);
         this.showLoader = shouldStartLoader;
         this._cdr.detectChanges();
     }
@@ -1783,7 +1790,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.salesAccounts$ = observableOf([]);
         this.router.navigate(['pages', 'proforma-invoice', 'invoice', val]);
         this.selectedVoucherType = val;
-        if(this.selectedVoucherType){
+        if (this.selectedVoucherType) {
             this.toggleAccountSelectionDropdown(true);
             this._cdr.detectChanges();
         }
@@ -2028,7 +2035,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             this.initializeWarehouse();
         }
 
-        this.checkIfNeedToExcludeTax(data);        
+        this.checkIfNeedToExcludeTax(data);
         this.updateAccountDetails(data);
     }
 
@@ -2086,7 +2093,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @param {SalesShSelectComponent} statesEle state input box
      * @memberof VoucherComponent
      */
-    public getStateCode(type: string, statesEle: SelectFieldComponent) {        
+    public getStateCode(type: string, statesEle: SelectFieldComponent) {
         let gstVal = cloneDeep(this.invFormData.accountDetails[type].gstNumber)?.toString();
         if (gstVal && gstVal.length >= 2) {
             const selectedState = this.statesSource.find(item => item.stateGstCode === gstVal.substring(0, 2));
@@ -2231,7 +2238,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.onSearchQueryChanged('', 1, 'customer');
     }
 
-    public triggerSubmitInvoiceForm(form: NgForm, isUpdate) {        
+    public triggerSubmitInvoiceForm(form: NgForm, isUpdate) {
         this.updateAccount = isUpdate;
         if (this.isPendingVoucherType) {
             this.startLoader(true);
@@ -3721,7 +3728,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.actionAfterGenerateORUpdate = action;
     }
 
-    public postResponseAction(voucherNo: string) {        
+    public postResponseAction(voucherNo: string) {
         switch (this.actionAfterGenerateORUpdate) {
             case ActionTypeAfterVoucherGenerateOrUpdate.generate: {
 
@@ -3760,7 +3767,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         }
     }
 
-    public resetCustomerName(event) {        
+    public resetCustomerName(event) {
         if (event) {
             if (!event?.value) {
                 this.onlyPhoneNumber();
@@ -3803,7 +3810,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             this.pageChanged(VoucherTypeEnum.purchase, this.commonLocaleData?.app_purchase);
             this.isSalesInvoice = false;
         }
-        
+
         if ('accountUniqueName' in s && s.accountUniqueName.currentValue && (s.accountUniqueName.currentValue !== s.accountUniqueName.previousValue)) {
             this.isCashInvoice = s.accountUniqueName.currentValue === 'cash';
         }
@@ -3848,7 +3855,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     this.depositCurrSymbol = this.invFormData.accountDetails.currencySymbol;
                 }
                 if (this.isSalesInvoice || (this.voucherApiVersion === 2 && this.isPurchaseInvoice)) {
-                 
+
                     this.depositCurrSymbol = event.additional && event.additional.currency.symbol || this.baseCurrencySymbol;
                 }
             } else {
@@ -7176,7 +7183,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             ];
             this.assignSearchResultToList(SEARCH_TYPE.CUSTOMER);
             this.makeCustomerList();
-            this.focusInCustomerName();
         });
         this.onSearchQueryChanged('', 1, SEARCH_TYPE.ITEM, (response) => {
             this.defaultItemSuggestions = response.map(result => {
@@ -7476,11 +7482,11 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             setTimeout(() => {
                 const shSelectField: any = !this.isMobileScreen ? this.selectAccount?.first : this.selectAccount?.last;
                 if (shSelectField) {
-                        shSelectField.openDropdownPanel();
+                    shSelectField.openDropdownPanel();
                 }
-                  }, 200);
-            }
+            }, 200);
         }
+    }
 
     /**
      * Focuses on description field
@@ -7881,7 +7887,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             }
             // auto fill all the details
             this.invFormData.accountDetails = new AccountDetailsClass(data);
-            
+
             if (this.invFormData.accountDetails) {
                 this.getStateCode('billingDetails', this.statesBilling);
                 this._cdr.detectChanges();
