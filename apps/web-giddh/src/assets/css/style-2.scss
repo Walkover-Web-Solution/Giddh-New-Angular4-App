@@ -4474,7 +4474,7 @@ label {
             }
 
             .mat-checkbox-label {
-                margin-left: -17px !important;
+                margin-left: -17px;
             }
         }
 
@@ -11978,23 +11978,6 @@ body.update-scroll-hidden {
 }
 
 @media (min-width: 768px) {
-    .voucher-preview-edit {
-        .custom-date-entries {
-            .edit-icon-custom-entry-date {
-                right: 73%;
-                margin-top: 5px;
-            }
-        }
-        .tax-dropdown {
-            li {
-                label {
-                    .mat-checkbox-label {
-                        margin-left: 0;
-                    }
-                }
-            }
-        }
-    }
     .mobile-invoice-date-due-date {
         .mat-datepicker-toggle .mat-button-wrapper .mat-datepicker-toggle-default-icon {
             color: var(--color-datepicker-date-icon);
