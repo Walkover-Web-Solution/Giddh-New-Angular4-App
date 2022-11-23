@@ -410,17 +410,24 @@
                                                                                         )
                                                                                     "
                                                                                 >
-                                                                                    {{ address.address }}
-                                                                                    {{ address.state?.name }}
+                                                                                    <p class="font-12 pl-0">
+                                                                                        {{ address.address }}
+                                                                                    </p>
                                                                                     <p class="font-12">
+                                                                                        {{ address.state?.name }}
+                                                                                    </p>
+                                                                                    <p
+                                                                                        class="font-12"
+                                                                                        *ngIf="address.gstNumber"
+                                                                                    >
                                                                                         {{
-                                                                                            address.gstNumber
+                                                                                            address.taxNumber
                                                                                                 ? (showGSTINNo
                                                                                                       ? commonLocaleData?.app_gstin +
                                                                                                         ": "
                                                                                                       : commonLocaleData?.app_trn +
                                                                                                         ": ") +
-                                                                                                  address.gstNumber
+                                                                                                  address.taxNumber
                                                                                                 : ""
                                                                                         }}
                                                                                     </p>
@@ -641,17 +648,24 @@
                                                                                         )
                                                                                     "
                                                                                 >
-                                                                                    {{ address.address }}
-                                                                                    {{ address.state?.name }}
+                                                                                    <p class="font-12 pl-0">
+                                                                                        {{ address.address }}
+                                                                                    </p>
                                                                                     <p class="font-12">
+                                                                                        {{ address.state?.name }}
+                                                                                    </p>
+                                                                                    <p
+                                                                                        class="font-12"
+                                                                                        *ngIf="address.gstNumber"
+                                                                                    >
                                                                                         {{
-                                                                                            address.gstNumber
+                                                                                            address.taxNumber
                                                                                                 ? (showGSTINNo
                                                                                                       ? commonLocaleData?.app_gstin +
                                                                                                         ": "
                                                                                                       : commonLocaleData?.app_trn +
                                                                                                         ": ") +
-                                                                                                  address.gstNumber
+                                                                                                  address.taxNumber
                                                                                                 : ""
                                                                                         }}
                                                                                     </p>
@@ -1078,9 +1092,16 @@
                                                                                     )
                                                                                 "
                                                                             >
-                                                                                {{ address.address }}
-                                                                                {{ address.stateName }}
+                                                                                <p class="font-12 pl-0">
+                                                                                    {{ address.address }}
+                                                                                </p>
                                                                                 <p class="font-12">
+                                                                                    {{ address.stateName }}
+                                                                                </p>
+                                                                                <p
+                                                                                    class="font-12"
+                                                                                    *ngIf="address.gstNumber"
+                                                                                >
                                                                                     {{
                                                                                         address.taxNumber
                                                                                             ? (showGSTINNo
@@ -3386,7 +3407,7 @@
                                                                             <a
                                                                                 href="javascript:void(0)"
                                                                                 (click)="clickAdjustAmount(true)"
-                                                                                class="font-12 pl-1 color-primary"
+                                                                                class="font-12 pl-0 color-primary"
                                                                                 ><i class="icon-edit11"></i
                                                                             ></a>
                                                                         </div>
@@ -3418,7 +3439,9 @@
                                                                         "
                                                                         (onClear)="onSelectPaymentMode($event, true)"
                                                                         [defaultValue]="
-                                                                            isCashInvoice ? selectedBankAccount : ''
+                                                                            isCashInvoice
+                                                                                ? selectedBankAccount
+                                                                                : selectPaymentValue
                                                                         "
                                                                     >
                                                                     </select-field>
@@ -4832,7 +4855,9 @@
                                                                 [placeholder]="commonLocaleData?.app_select_account"
                                                                 (onClear)="onSelectPaymentMode($event, true)"
                                                                 [defaultValue]="
-                                                                    isCashInvoice ? selectedBankAccount : ''
+                                                                    isCashInvoice
+                                                                        ? selectedBankAccount
+                                                                        : selectPaymentValue
                                                                 "
                                                             >
                                                             </select-field>
