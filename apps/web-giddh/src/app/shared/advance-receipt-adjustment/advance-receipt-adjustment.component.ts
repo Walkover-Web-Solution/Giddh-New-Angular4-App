@@ -880,7 +880,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
         if (isNaN(exchangeRate)) {
             return amountForAccount;
         }
-        return exchangeRate > 1 ? amountForAccount * exchangeRate : giddhRoundOff((amountForAccount / exchangeRate), 4);
+        return amountForAccount * exchangeRate;
     }
 
     /**
