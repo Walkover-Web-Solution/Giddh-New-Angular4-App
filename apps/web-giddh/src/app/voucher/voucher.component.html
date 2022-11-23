@@ -186,10 +186,9 @@
                                                             [name]="'voucherDetails.customerName'"
                                                             [placeholder]="customerPlaceHolder"
                                                             [options]="customerAcList$ | async"
-                                                            [openDropdown]="openAccountSelectionDropdown"
                                                             (selectedOption)="onSelectCustomer($event)"
                                                             (createOption)="addNewAccount()"
-                                                            [disabled]="
+                                                            [readonly]="
                                                                 isUpdateMode &&
                                                                 invoiceType !== 'sales' &&
                                                                 invoiceType !== 'cash' &&
@@ -372,12 +371,9 @@
                                                                                 btn-group btn-block
                                                                                 change-address-dropdown
                                                                             "
-                                                                            [attachOutsideOnClick]="true"
                                                                             *ngIf="accountAddressList?.length > 1"
                                                                         >
                                                                             <a
-                                                                                (clickOutside)="trigger?.closeMenu()"
-                                                                                #trigger="matMenuTrigger"
                                                                                 [matMenuTriggerFor]="
                                                                                     changeBillingAddress
                                                                                 "
@@ -459,14 +455,19 @@
                                                                             </label>
                                                                         </div>
                                                                         <div
-                                                                            class="col-sm-12 col-md-6 billingStateOnly"
+                                                                            class="
+                                                                                col-sm-12 col-md-6
+                                                                                billing-shipping-value
+                                                                            "
                                                                             #billingState
                                                                         >
                                                                             <select-field
                                                                                 [placeholder]="
                                                                                     commonLocaleData?.app_state
                                                                                 "
-                                                                                [cssClass]="'form-control input-custom'"
+                                                                                [cssClass]="
+                                                                                    'select-bdr-bottom form-control  '
+                                                                                "
                                                                                 (selectedOption)="
                                                                                     fillShippingBillingDetails(
                                                                                         $event,
@@ -612,8 +613,6 @@
                                                                             "
                                                                         >
                                                                             <a
-                                                                                (clickOutside)="trigger?.closeMenu()"
-                                                                                #trigger="matMenuTrigger"
                                                                                 [matMenuTriggerFor]="
                                                                                     shippingBillingAddressSame
                                                                                 "
@@ -626,10 +625,6 @@
                                                                                 #shippingBillingAddressSame="matMenu"
                                                                             >
                                                                                 <a
-                                                                                    (clickOutside)="
-                                                                                        trigger?.closeMenu()
-                                                                                    "
-                                                                                    #trigger="matMenuTrigger"
                                                                                     mat-menu-item
                                                                                     disableRipple="true"
                                                                                     class="
@@ -704,7 +699,7 @@
                                                                             <div
                                                                                 class="
                                                                                     col-sm-12 col-md-6
-                                                                                    billingStateOnly
+                                                                                    billing-shipping-value
                                                                                 "
                                                                                 #shippingState
                                                                             >
@@ -712,7 +707,7 @@
                                                                                     [placeholder]="
                                                                                         commonLocaleData?.app_state
                                                                                     "
-                                                                                    [cssClass]="'select-bdr-bottom'"
+                                                                                    [cssClass]="'select-bdr-bottom '"
                                                                                     #statesShipping
                                                                                     (selectedOption)="
                                                                                         fillShippingBillingDetails(
@@ -1061,8 +1056,6 @@
                                                                         *ngIf="companyAddressList?.length > 1"
                                                                     >
                                                                         <a
-                                                                            (clickOutside)="trigger?.closeMenu()"
-                                                                            #trigger="matMenuTrigger"
                                                                             mat-menu-item
                                                                             class="dropdown-toggle cp"
                                                                             [matMenuTriggerFor]="
@@ -1140,12 +1133,17 @@
                                                                         </label>
                                                                     </div>
                                                                     <div
-                                                                        class="col-sm-12 col-md-6 billingStateOnly"
+                                                                        class="
+                                                                            col-sm-12 col-md-6
+                                                                            billing-shipping-value
+                                                                        "
                                                                         #billingStateCompany
                                                                     >
                                                                         <select-field
                                                                             [placeholder]="commonLocaleData?.app_state"
-                                                                            [cssClass]="' select-bdr-bottom '"
+                                                                            [cssClass]="
+                                                                                ' select-bdr-bottom form-control '
+                                                                            "
                                                                             (selectedOption)="
                                                                                 fillShippingBillingCompanyDetails(
                                                                                     $event,
@@ -1290,14 +1288,19 @@
                                                                             </div>
                                                                         </div>
                                                                         <div
-                                                                            class="col-sm-12 col-md-6 billingStateOnly"
+                                                                            class="
+                                                                                col-sm-12 col-md-6
+                                                                                billing-shipping-value
+                                                                            "
                                                                             #shippingStateCompany
                                                                         >
                                                                             <select-field
                                                                                 [placeholder]="
                                                                                     commonLocaleData?.app_state
                                                                                 "
-                                                                                [cssClass]="'select-bdr-bottom '"
+                                                                                [cssClass]="
+                                                                                    'select-bdr-bottom form-control '
+                                                                                "
                                                                                 [ngClass]="{
                                                                                     'disabled': autoFillCompanyShipping
                                                                                 }"
@@ -1487,7 +1490,7 @@
                                                         [placeholder]="commonLocaleData?.app_select_accounts"
                                                         [options]="invoiceList$ | async"
                                                         (selectedOption)="creditNoteInvoiceSelected($event)"
-                                                        [defaultValue]="invoiceSelected?.label"
+                                                        [defaultValue]="selectedInvoiceLabel"
                                                         [hasMoreValue]="true"
                                                         [enableDynamicSearch]="true"
                                                         (dynamicSearchedQuery)="
@@ -1495,6 +1498,7 @@
                                                             resetInvoiceList();
                                                             getInvoiceListsForCreditNote()
                                                         "
+                                                        (onClear)="invoiceForceClearReactive$ | async"
                                                     >
                                                         <ng-template #optionTemplate let-option="option">
                                                             <a
@@ -1527,7 +1531,7 @@
                                                         [placeholder]="commonLocaleData?.app_select_accounts"
                                                         [options]="invoiceList"
                                                         (selectedOption)="creditNoteInvoiceSelected($event)"
-                                                        [defaultValue]="invoiceSelected?.label"
+                                                        [defaultValue]="invoiceSelectedLabel"
                                                         [hasMoreValue]="true"
                                                     >
                                                         <ng-template #optionTemplate let-option="option">
@@ -5112,8 +5116,6 @@
                                             </ul>
                                         </mat-menu>
                                         <button
-                                            (clickOutside)="trigger?.closeMenu()"
-                                            #trigger="matMenuTrigger"
                                             [matMenuTriggerFor]="dropdownMenu"
                                             id="button-dropup"
                                             *ngIf="invoiceType === 'sales'"
@@ -5149,8 +5151,6 @@
                                             {{ commonLocaleData?.app_create }}
                                         </button>
                                         <button
-                                            (clickOutside)="trigger?.closeMenu()"
-                                            #trigger="matMenuTrigger"
                                             [matMenuTriggerFor]="dropdownMenu2"
                                             id="button-dropup"
                                             mat-button
