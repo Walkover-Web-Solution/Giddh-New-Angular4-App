@@ -1369,6 +1369,12 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     }
                 }
 
+                if (this.invFormData.accountDetails.billingDetails?.gstNumber) {
+                    this.statesBilling.readonly = true;
+                } else {
+                    this.statesBilling.readonly = false;
+                }
+
                 // create account success then close sidebar, and add customer details
                 if (results[1]) {
                     // toggle sidebar if it's open
