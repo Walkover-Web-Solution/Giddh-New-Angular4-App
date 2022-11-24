@@ -895,7 +895,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         if (!this.taxOnlyTransactions) {
             requestObj.transactions = requestObj.transactions?.filter(tx => !tx.isTax);
         }
-        if (this.voucherApiVersion === 2 && (requestObj.voucherGenerated || requestObj.generateInvoice)) {
+        if (this.voucherApiVersion === 2 && (requestObj.voucherGenerated || requestObj.generateInvoice) && requestObj.voucherType !== "jr") {
             requestObj.transactions = requestObj.transactions?.filter(tx => tx.particular?.uniqueName !== "roundoff");
         }
         requestObj.transactions.map((transaction: any) => {
