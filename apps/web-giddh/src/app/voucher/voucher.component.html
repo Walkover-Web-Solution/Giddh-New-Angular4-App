@@ -407,14 +407,14 @@
                                                                                         )
                                                                                     "
                                                                                 >
-                                                                                    <p class="font-12 pl-0">
+                                                                                    <p class="font-12 pl-0 text-indent">
                                                                                         {{ address.address }}
                                                                                     </p>
-                                                                                    <p class="font-12">
+                                                                                    <p class="font-12 text-indent">
                                                                                         {{ address.state?.name }}
                                                                                     </p>
                                                                                     <p
-                                                                                        class="font-12"
+                                                                                        class="font-12 text-indent"
                                                                                         *ngIf="address.gstNumber"
                                                                                     >
                                                                                         {{
@@ -646,14 +646,14 @@
                                                                                         )
                                                                                     "
                                                                                 >
-                                                                                    <p class="font-12 pl-0">
+                                                                                    <p class="font-12 pl-0 text-indent">
                                                                                         {{ address.address }}
                                                                                     </p>
-                                                                                    <p class="font-12">
+                                                                                    <p class="font-12 text-indent">
                                                                                         {{ address.state?.name }}
                                                                                     </p>
                                                                                     <p
-                                                                                        class="font-12"
+                                                                                        class="font-12 text-indent"
                                                                                         *ngIf="address.gstNumber"
                                                                                     >
                                                                                         {{
@@ -1047,72 +1047,65 @@
                                                                 <span class="pd-r15">{{
                                                                     localeData?.billing_address
                                                                 }}</span>
-                                                                <span>
-                                                                    <div
-                                                                        [attachOutsideOnClick]="true"
-                                                                        class="
-                                                                            btn-group btn-block
-                                                                            change-address-dropdown
+                                                                <div
+                                                                    [attachOutsideOnClick]="true"
+                                                                    class="change-address-dropdown"
+                                                                    *ngIf="companyAddressList?.length > 1"
+                                                                >
+                                                                    <a
+                                                                        mat-menu-item
+                                                                        class="dropdown-toggle cp mat-menu-btn"
+                                                                        [matMenuTriggerFor]="
+                                                                            companyBillingAddressDropDownWeb
                                                                         "
-                                                                        *ngIf="companyAddressList?.length > 1"
+                                                                    >
+                                                                        {{ localeData?.change }}</a
+                                                                    >
+                                                                    <mat-menu
+                                                                        class="billing-company"
+                                                                        #companyBillingAddressDropDownWeb="matMenu"
                                                                     >
                                                                         <a
                                                                             mat-menu-item
-                                                                            class="dropdown-toggle cp"
-                                                                            [matMenuTriggerFor]="
-                                                                                companyBillingAddressDropDownWeb
+                                                                            class="
+                                                                                d-flex
+                                                                                flex-column
+                                                                                justify-content-center
+                                                                                line-height-initial
+                                                                            "
+                                                                            *ngFor="let address of companyAddressList"
+                                                                            (click)="
+                                                                                selectAddress(
+                                                                                    purchaseBillCompany.billingDetails,
+                                                                                    address,
+                                                                                    true
+                                                                                )
                                                                             "
                                                                         >
-                                                                            {{ localeData?.change }}</a
-                                                                        >
-                                                                        <mat-menu
-                                                                            class="billing-company"
-                                                                            #companyBillingAddressDropDownWeb="matMenu"
-                                                                        >
-                                                                            <a
-                                                                                mat-menu-item
-                                                                                class="
-                                                                                    d-flex
-                                                                                    flex-column
-                                                                                    justify-content-center
-                                                                                    line-height-initial
-                                                                                "
-                                                                                *ngFor="
-                                                                                    let address of companyAddressList
-                                                                                "
-                                                                                (click)="
-                                                                                    selectAddress(
-                                                                                        purchaseBillCompany.billingDetails,
-                                                                                        address,
-                                                                                        true
-                                                                                    )
-                                                                                "
+                                                                            <p class="font-12 pl-0 text-indent">
+                                                                                {{ address.address }}
+                                                                            </p>
+                                                                            <p class="font-12 text-indent">
+                                                                                {{ address.stateName }}
+                                                                            </p>
+                                                                            <p
+                                                                                class="font-12 text-indent"
+                                                                                *ngIf="address.gstNumber"
                                                                             >
-                                                                                <p class="font-12 pl-0">
-                                                                                    {{ address.address }}
-                                                                                </p>
-                                                                                <p class="font-12">
-                                                                                    {{ address.stateName }}
-                                                                                </p>
-                                                                                <p
-                                                                                    class="font-12"
-                                                                                    *ngIf="address.gstNumber"
-                                                                                >
-                                                                                    {{
-                                                                                        address.taxNumber
-                                                                                            ? (showGSTINNo
-                                                                                                  ? commonLocaleData?.app_gstin +
-                                                                                                    ": "
-                                                                                                  : commonLocaleData?.app_trn +
-                                                                                                    ": ") +
-                                                                                              address.taxNumber
-                                                                                            : ""
-                                                                                    }}
-                                                                                </p>
-                                                                            </a>
-                                                                        </mat-menu>
-                                                                    </div>
-                                                                </span>
+                                                                                {{
+                                                                                    address.taxNumber
+                                                                                        ? (showGSTINNo
+                                                                                              ? commonLocaleData?.app_gstin +
+                                                                                                ": "
+                                                                                              : commonLocaleData?.app_trn +
+                                                                                                ": ") +
+                                                                                          address.taxNumber
+                                                                                        : ""
+                                                                                }}
+                                                                            </p>
+                                                                        </a>
+                                                                    </mat-menu>
+                                                                </div>
                                                             </div>
                                                             <div class="billing-address clearfix">
                                                                 <textarea
