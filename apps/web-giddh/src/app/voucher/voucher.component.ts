@@ -162,6 +162,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     @ViewChild('unregisteredBusiness', { static: true }) public unregisteredBusiness: ElementRef;
     @ViewChild('invoiceForm', { static: false }) public invoiceForm: NgForm;
     @ViewChild('openAccountSelectionDropdown', { static: false }) public openAccountSelectionDropdown: SelectFieldComponent;
+    @ViewChild('openSalesSelectDropdown', { static: false }) public openSalesSelectDropdown: SelectFieldComponent;
     @ViewChildren('discountComponent') public discountComponent: QueryList<DiscountListComponent>;
     @ViewChildren('taxControlComponent') public taxControlComponent: QueryList<TaxControlComponent>;
     @ViewChildren('selectAccount') public selectAccount: QueryList<ElementRef>;
@@ -191,6 +192,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     @ViewChild('statesBilling', { static: false }) statesBilling: SelectFieldComponent;
     /** Billing state field instance */
     @ViewChild('statesShipping', { static: false }) statesShipping: SelectFieldComponent;;
+
     public showAdvanceReceiptAdjust: boolean = false;
     /** This will reload voucher pdf and attachments on preview page */
     @Output() public reloadFiles: EventEmitter<boolean> = new EventEmitter<boolean>();
@@ -667,7 +669,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     /** This will hold loader is default value */
     public isDefault: boolean = true;
     /** Stores the current invoice selected */
-    public invoiceSelectedLabel: any ='';
+    public invoiceSelectedLabel: any = '';
     /** Stores the current invoice selected */
     public selectedInvoiceLabel: any = '';
 
@@ -1379,7 +1381,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                         this.invFormData.voucherDetails.voucherUniqueName = (results[0] as any)?.uniqueName;
                     }
                 }
-                if (this.invFormData.accountDetails.billingDetails?.gstNumber) {
+                if (this.invFormData.accountDetails.billingDetails?.gstNumber && this.purchaseBillCompany.billingDetails
+                    .gstNumber) {
                     this.statesBilling.readonly = true;
                 } else {
                     this.statesBilling.readonly = false;
@@ -1418,7 +1421,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                         } else {
                             this.invFormData.accountDetails = new AccountDetailsClass(tempSelectedAcc);
                         }
-                        if (this.invFormData.accountDetails.billingDetails?.gstNumber) {
+                        if (this.invFormData.accountDetails.billingDetails?.gstNumber && this.purchaseBillCompany.billingDetails
+                            .gstNumbe) {
                             this.statesBilling.readonly = true;
                         } else {
                             this.statesBilling.readonly = false;
@@ -1791,11 +1795,10 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.router.navigate(['pages', 'proforma-invoice', 'invoice', val]);
         this.selectedVoucherType = val;
         if (this.selectedVoucherType) {
-            this.toggleAccountSelectionDropdown(true);
+
             this._cdr.detectChanges();
         }
         if (this.selectedVoucherType === VoucherTypeEnum.creditNote || this.selectedVoucherType === VoucherTypeEnum.debitNote) {
-            this.toggleAccountSelectionDropdown(true);
             this._cdr.detectChanges();
             this.getInvoiceListsForCreditNote();
         }
@@ -2767,6 +2770,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         }
         this.asideMenuStateForOtherTaxes = this.asideMenuStateForOtherTaxes === 'out' ? 'in' : 'out';
         this.toggleBodyClass();
+        this.closeDialog(this.openAccountSelectionDropdown);
+        this.closeDialog(this.openSalesSelectDropdown);
     }
 
     /**
@@ -5558,6 +5563,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     }
 
     public onBlurDueDate(index) {
+        console.log("called");
+        
         if (this.invFormData.voucherDetails.customerUniquename || this.invFormData.voucherDetails.customerName) {
             this.setActiveIndx(index);
         }
@@ -7025,7 +7032,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     pincode: company?.shippingDetails?.pincode
                 }
             }
-
             this.autoFillCompanyShipping = isEqual(this.purchaseBillCompany.billingDetails, this.purchaseBillCompany.shippingDetails);
         }
     }
@@ -7384,6 +7390,24 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             }
         }
     }
+
+    // public selectCompanyShippingAddress(address: any): void {
+    //     if (address) {
+    //         this.purchaseBillCompany.shippingDetails.address[0] = address.address;
+    //         if (!this.purchaseBillCompany.shippingDetails.state) {
+    //             this.purchaseBillCompany.shippingDetails.state = {};
+    //         }
+    //         this.purchaseBillCompany.shippingDetails.state.code = address.stateCode;
+    //         this.purchaseBillCompany.shippingDetails.stateCode = address.stateCode;
+    //         this.purchaseBillCompany.shippingDetails.state.name = address.stateName;
+    //         this.purchaseBillCompany.shippingDetails.stateName = address.stateName;
+    //         this.purchaseBillCompany.shippingDetails.gstNumber = address.gstNumber ?? address.taxNumber;
+    //         this.purchaseBillCompany.shippingDetails.pincode = address.pincode;
+    //         console.log(cloneDeep(this.purchaseBillCompany.shippingDetails), address);
+            
+    //         this._cdr.detectChanges();
+    //     }
+    // }
 
     /**
      * Recalculates the entries total value
@@ -7902,7 +7926,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
             if (this.invFormData.accountDetails) {
                 this.getStateCode('billingDetails', this.statesBilling);
-                this._cdr.detectChanges();
                 this.autoFillShippingDetails();
             } else {
                 this.statesBilling.readonly = false;
@@ -8227,6 +8250,14 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             this.openAccountSelectionDropdown?.openDropdownPanel();
             this._cdr.detectChanges();
         }
-       
+    }
+    /**
+     * This will use for open dialog close on action
+     *
+     * @param {*} selectedDropdown
+     * @memberof VoucherComponent
+     */
+    public closeDialog(selectedDropdown): void {
+        selectedDropdown?.closeDropdownPanel();
     }
 }
