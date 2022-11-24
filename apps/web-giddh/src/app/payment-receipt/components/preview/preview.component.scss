@@ -143,13 +143,6 @@
             .pdf-expand-collapse {
                 padding: 50px 0px 0 0px;
             }
-            .image-collapsed {
-                max-height: 130px;
-                overflow: hidden;
-                img {
-                    height: auto;
-                }
-            }
             .preview-not-supported-attachment {
                 font-size: 15px;
                 margin: 16px;
@@ -161,20 +154,6 @@
                     background-color: var(--color-wild-sand);
                     strong {
                         color: var(--color-giddh-blue);
-                    }
-                }
-            }
-            .expand-file {
-                position: absolute;
-                right: 15px;
-                font-size: 14px;
-                margin: 15px;
-                top: 0;
-
-                a {
-                    color: var(--color-gray);
-                    span {
-                        margin-right: 5px;
                     }
                 }
             }

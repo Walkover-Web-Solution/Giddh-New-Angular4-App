@@ -1,7 +1,7 @@
 import { Observable, BehaviorSubject } from 'rxjs';
 import { ILedgerTransactionItem } from '../../../models/interfaces/ledger.interface';
 import { LedgerResponse } from '../../../models/api-models/Ledger';
-import { cloneDeep, filter, find, sumBy } from '../../../lodash-optimized';
+import { clone, cloneDeep, filter, find, sumBy } from '../../../lodash-optimized';
 import { IFlattenAccountsResultItem } from '../../../models/interfaces/flattenAccountsResultItem.interface';
 import { UpdateLedgerTaxData } from '../update-ledger-tax-control/update-ledger-tax-control.component';
 import { UpdateLedgerDiscountComponent } from '../update-ledger-discount/update-ledger-discount.component';
@@ -136,7 +136,7 @@ export class UpdateLedgerVm {
                 totalAmount = 0;
             }
 
-            this.discountArray?.filter(f => f.isActive && f.amount > 0).forEach((dx, index) => {
+            this.discountArray?.filter(f => f.isActive && f.amount > 0)?.forEach((dx, index) => {
                 let trx: ILedgerTransactionItem = this.blankTransactionItem(discountEntryType);
 
                 trx.particular.uniqueName = dx.discountUniqueName ? dx.discountUniqueName : 'discount';
@@ -544,8 +544,7 @@ export class UpdateLedgerVm {
             this.totalAmount = this.grandTotal;
             this.generateGrandTotal();
         } else {
-            this.totalAmount = giddhRoundOff(Number(((Number(this.grandTotal) + fixDiscount + 0.01 * fixDiscount * Number(taxTotal)) /
-                (1 - 0.01 * percentageDiscount + 0.01 * Number(taxTotal) - 0.0001 * percentageDiscount * Number(taxTotal)))), this.giddhBalanceDecimalPlaces);
+            this.totalAmount = giddhRoundOff(Number(((Number(this.grandTotal) + fixDiscount + 0.01 * fixDiscount * Number(taxTotal)) / (1 - 0.01 * percentageDiscount + 0.01 * Number(taxTotal) - 0.0001 * percentageDiscount * Number(taxTotal)))), this.giddhBalanceDecimalPlaces);
         }
 
         this.convertedTotalAmount = this.calculateConversionRate(this.totalAmount);

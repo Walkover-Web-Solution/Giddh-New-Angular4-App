@@ -25,38 +25,22 @@
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 
 import LoginPage from '../support/pageObjects/LoginPage'
-import MainPage from '../support/pageObjects/MainPage'
 import HeaderPage from "./pageObjects/HeaderPage";
-import DashboardPage from "./pageObjects/DashboardPage";
 import GlobalSearchPage from "./pageObjects/GlobalSearchPage";
-import TrialBalancePage from "./pageObjects/TrialBalancePage";
-import PLAndBSPage from "./pageObjects/PLAndBSPage";
 import LedgerPage from "./pageObjects/LedgerPage";
-import SignUpPage from "./pageObjects/SignUpPage";
-import CreateNewCompanyPage from "./pageObjects/CreateNewCompanyPage";
 const loginPage = new LoginPage()
-const signUpPage = new SignUpPage();
 const headerPage = new HeaderPage()
 const ledgerPage = new LedgerPage()
 const globalSearchPage = new GlobalSearchPage()
-const trialBalancePage = new TrialBalancePage()
-const plAndBSPage = new PLAndBSPage();
-const createNewCompanyPage = new CreateNewCompanyPage();
-
 
 Cypress.Commands.add("loginWithGoogle", (email, password) => {
     cy.visit(Cypress.env('url'))
-    //mainPage.getLoginButton().click()
     loginPage.getLoginWithGoogle().click()
-
-
 })
 
 Cypress.Commands.add("loginWithEmail", (email, password) => {
     const loginPage = new LoginPage()
-    const mainPage = new MainPage()
     cy.visit(Cypress.env('url'))
-    //mainPage.getLoginButton().click()
     loginPage.getLoginWithEmail().click()
     loginPage.enterEmailId().type(email)
     loginPage.enterPassword().type(password)
@@ -65,66 +49,44 @@ Cypress.Commands.add("loginWithEmail", (email, password) => {
 
     headerPage.clickGiddhLogoIcon().should('have.attr', 'src')
         .should('include', 'assets/images/giddh-white-logo.svg')
-    // headerPage.clickGiddhLogoIcon().find('img').should('have.attr', 'src').should('include','assets/images/giddh-white-logo.svg')
-    // headerPage.clickGiddhLogoIcon().click()
-    // expect(headerPage.clickGiddhLogoIcon()).to.deep.equal({src : 'assets/images/giddh-white-logo.svg'})
-
 })
 
 Cypress.Commands.add("globalSearch", (elementPath, searchValue, expectedText) => {
     cy.get('body').type('{ctrl}g', { force: true })
-    if (globalSearchPage.getGlobalSearch(90000).should('be.visible')) {
+    if (globalSearchPage.getGlobalSearch(20000).should('be.visible')) {
         headerPage.clickGiddhLogoIcon().then(($ele1) => {
-            // headerPage.clickGiddhLogoIcon().type('{ctrl}g')
             globalSearchPage.typeGlobalSearch(searchValue)
             globalSearchPage.selectFirstValueAfterSearch().then(($btn) => {
                 cy.wait(2000)
                 $btn.click();
                 cy.wait(5000)
-                cy.get(elementPath, { timeout: 50000 }).should('be.visible')
-                cy.get(elementPath, { timeout: 50000 }).then((elementText) => {
-                    cy.wait(5000).then(() => {
-                        const text = elementText.text();
-                        //  expect(text).to.eq(expectedText)
-                    })
-
-                })
-
             })
         })
     }
-    // cy.waitUntilVisible(trialBalancePage.getTrailBalanceText()).should('have.value', 'Trial Balance')
 })
-
 
 Cypress.Commands.add("createLedger", (accountName, accountElementPath, amount) => {
     ledgerPage.clickAccount().click()
     ledgerPage.inputAccount().type(accountName, { delay: 300 })
     cy.wait(2000)
-    //cy.contains(accountElementPath).click();
-    //ledgerPage.selectSalesAccount().click({force : true})
     cy.xpath('//input[@id=\'giddh-datepicker\']').scrollIntoView({ easing: 'linear' }).should('be.visible')
     cy.xpath('//div[@id=\'select-menu-0\']/a/div[1]').scrollIntoView({ offset: { top: 500, left: 0 } })
     cy.get('body').type('{pageup}')
     cy.xpath('//div[@id=\'select-menu-0\']/a/div[1]').scrollIntoView({ easing: 'linear' }).should('be.visible').then(() => {
         cy.wait(1000)
         cy.get(accountElementPath).click({ force: true })
-        // cy.xpath('//div[@id=\'select-menu-0\']/a/div[1]').click()
         ledgerPage.enterAmount().clear().type(amount)
         ledgerPage.saveButton().click().then(() => {
-            cy.xpath('//div[@id=\'toast-container\']', { timeout: 5000 }).should('be.visible')
+            cy.get('div.snack-container', { timeout: 5000 }).should('be.visible')
         })
     })
 
 })
 
 Cypress.Commands.add("createLedgerWithTaxes", (accountName, accountElementPath, amount) => {
-    cy.log("This is for testing")
     ledgerPage.clickAccount().click()
     ledgerPage.inputAccount().type(accountName, { delay: 300 })
     cy.wait(2000)
-    //cy.contains(accountElementPath).click();
-    //ledgerPage.selectSalesAccount().click({force : true})
     cy.get('body').type('{pageup}')
     cy.scrollTo(10, 10);
     cy.get(accountElementPath).scrollIntoView({ easing: 'linear' }).should('be.visible')
@@ -132,7 +94,7 @@ Cypress.Commands.add("createLedgerWithTaxes", (accountName, accountElementPath, 
     ledgerPage.selectTax()
     ledgerPage.enterAmount().clear().type(amount)
     ledgerPage.saveButton().click().then(() => {
-        cy.xpath('//div[@id=\'toast-container\']', { timeout: 5000 }).should('be.visible')
+        cy.get('div.snack-container', { timeout: 5000 }).should('be.visible')
     })
 })
 
@@ -151,10 +113,11 @@ Cypress.Commands.add("getAllLedger", (accountUniqueName) => {
 Cypress.Commands.add("deleteLedger", (accountUniqueName, entryUniqueID) => {
     cy.request({
         method: 'DELETE',
-        url: Cypress.env('apiBaseURI') + "/accounts/" + accountUniqueName + "/entries/" + entryUniqueID,
-        'content-type': 'application/json; charset=utf-8',
+        url: Cypress.env('apiBaseURI') + "/accounts/" + accountUniqueName + "/entries?voucherVersion=2",
+        body: '{"entryUniqueNames": ["' + entryUniqueID + '"]}',
         headers: {
-            'Auth-Key': Cypress.env('authKey')
+            'Auth-Key': Cypress.env('authKey'),
+            'content-type': 'application/json',
         }
     }).as('deleteLedgerAPI')
 
@@ -187,28 +150,3 @@ Cypress.Commands.add("createLedgerAPI", (accountUniqueName) => {
 
     return cy.get('@createLedgerAPI')
 })
-
-Cypress.Commands.add("SignUp", (email, password) => {
-    cy.visit(Cypress.env('url'))
-    loginPage.signUpButton().click()
-    loginPage.getLoginWithEmail().click()
-    loginPage.enterEmailId().clear().type(email)
-    loginPage.enterPassword().clear().type(password)
-    loginPage.clickLoginButton().click()
-    signUpPage.enterVerificationCode("123456")
-    signUpPage.clickVerifyEmail()
-    cy.wait(2000);
-    //signUpPage.createNewCompany().should('have.value', 'Create New Company')
-    createNewCompanyPage.companyName("giddhautomation")
-    createNewCompanyPage.country().click()
-    createNewCompanyPage.countryList().click()
-    createNewCompanyPage.mobileNumber("1234567890")
-    createNewCompanyPage.nextButton().then(() => {
-        cy.wait(1500)
-        createNewCompanyPage.submitButton().then(() => {
-            cy.xpath('//div[@id=\'toast-container\']', { timeout: 5000 }).should('be.visible')
-        })
-    })
-})
-
-

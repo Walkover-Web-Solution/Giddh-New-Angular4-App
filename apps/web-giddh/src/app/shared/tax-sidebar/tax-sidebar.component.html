@@ -120,10 +120,13 @@
                             <span>{{ localeData?.setting }}</span>
                         </a>
                     </li>
-                    <!-- <li>
+                    <li>
                         <a
                             href="javascript:void(0);"
                             class="d-block clearfix"
+                            routerLinkActive
+                            #unitMapping="routerLinkActive"
+                            [class.active]="unitMapping.isActive"
                             [routerLink]="['/pages/gstfiling/unit-mapping']"
                         >
                             <span
@@ -131,11 +134,24 @@
                             /></span>
                             <span>{{ localeData?.unit_mapping }}</span>
                         </a>
-                    </li> -->
+                    </li>
                     <li *ngIf="showVatMenus">
                         <a href="javascript:void(0);" class="d-block clearfix" [routerLink]="['/pages/vat-report']">
                             <span><i class="icon-vat1"></i></span>
                             <span>{{ localeData?.vat_report }}</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a
+                            href="javascript:void(0);"
+                            class="d-block clearfix"
+                            [routerLink]="['/pages/settings/addresses']"
+                            routerLinkActive
+                            #addaddress="routerLinkActive"
+                            [class.active]="addaddress.isActive"
+                        >
+                            <span><i class="icon-warehouse1"></i></span>
+                            <span>{{ showVatMenus ? localeData?.add_trn : localeData?.add_gst }}</span>
                         </a>
                     </li>
                 </ul>

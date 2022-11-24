@@ -283,7 +283,9 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
         let file = new Image();
         file.src = this.previewedFile.originalSrc;
         let windowObject = window.open("");
-        windowObject.document.write(file.outerHTML);
+        if (windowObject?.document) {
+            windowObject.document.write(file.outerHTML);
+        }
     }
 
     /**

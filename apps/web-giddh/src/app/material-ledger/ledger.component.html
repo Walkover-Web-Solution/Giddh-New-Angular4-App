@@ -1172,6 +1172,7 @@
                                         >{{ bankTransactionsResponse?.totalPages }} {{ localeData?.pages }}</span
                                     >
                                     <pagination
+                                        *ngIf="bankTransactionsResponse?.totalPages > 1"
                                         [totalItems]="
                                             bankTransactionsResponse?.countPerPage *
                                             bankTransactionsResponse?.totalPages

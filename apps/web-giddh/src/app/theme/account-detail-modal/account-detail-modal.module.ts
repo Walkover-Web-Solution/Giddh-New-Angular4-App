@@ -4,9 +4,18 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { TranslateDirectiveModule } from '../translate/translate.directive.module';
+import { AsideMenuAccountModule } from '../../shared/aside-menu-account/aside.menu.account.module';
+import { ClickOutsideModule } from 'ng-click-outside';
 
 @NgModule({
-    imports: [CommonModule, FormsModule, ModalModule, TranslateDirectiveModule],
+    imports: [
+        CommonModule, 
+        FormsModule, 
+        ModalModule, 
+        TranslateDirectiveModule, 
+        AsideMenuAccountModule,
+        ClickOutsideModule
+    ],
     exports: [AccountDetailModalComponent],
     declarations: [AccountDetailModalComponent],
     providers: [],

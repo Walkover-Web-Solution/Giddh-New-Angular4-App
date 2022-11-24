@@ -4,11 +4,9 @@
         *ngIf="asideGstSidebarMenuState === 'in'"
     >
         <tax-sidebar
-            (navigateEvent)="handleNavigation($event)"
+            (navigateEvent)="handleNavigation()"
             (clickOutside)="isMobileScreen ? (asideGstSidebarMenuState = 'out') : ''"
             [exclude]="'#primary-new-header'"
-            [isMonthSelected]="false"
-            [isGstModule]="true"
             class="gst-sidebar"
         ></tax-sidebar>
     </div>
@@ -22,20 +20,27 @@
             <div class="map-unit-box">Map Unit</div>
         </mat-grid-tile>
         <form class="map-unit-value-form">
-            <mat-grid-tile class="grid-box grid-box-content" *ngFor="let unit of stockUnit$ | async">
-                <div class="unit-value">{{ unit.name }} ({{ unit.code }})</div>
+            <mat-grid-tile class="grid-box grid-box-content" *ngFor="let unit of unitsArray">
+                <div class="unit-value">{{ unit.giddhUnitName }} ({{ unit.giddhUnit }})</div>
                 <div class="map-unit-value">
                     <select-field
                         [cssClass]="'form-control mat-field-border'"
-                        class="map-unit-select-field"
                         [placeholder]="'Select Unit'"
                         [options]="units"
+                        [defaultValue]="unit?.mappedGstUnit"
+                        (selectedOption)="unit.mappedGstUnit = $event.value"
                     ></select-field>
                 </div>
             </mat-grid-tile>
         </form>
     </mat-grid-list>
     <div class="button-wrapper">
-        <button [ngClass]="{ 'mat-button-disabled': disabled, 'save-button': !disabled }" mat-flat-button>Save</button>
+        <button
+            [ngClass]="{ 'mat-button-disabled': disabled, 'save-button': !disabled }"
+            (click)="saveMapping()"
+            mat-flat-button
+        >
+            Save
+        </button>
     </div>
 </div>
