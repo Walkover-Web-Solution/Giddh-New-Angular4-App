@@ -120,7 +120,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { HttpClient } from '@angular/common/http';
 import { NewConfirmationModalComponent } from '../theme/new-confirmation-modal/confirmation-modal.component';
 import { SelectFieldComponent } from '../theme/form-fields/select-field/select-field.component';
-import { MatMenuTrigger } from '@angular/material/menu';
 
 /** Type of search: customer and item (product/service) search */
 const SEARCH_TYPE = {
@@ -662,14 +661,16 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public fieldFilteredOptions: IOption[] = [];
     /** Compare function of link PO reference list */
     public compareFn = (a, b) => a && b && a.id === b.id;
-    /** Use for trigger instance */
-    @ViewChild(MatMenuTrigger) public trigger: MatMenuTrigger;
     /** This will hold selected payment account value */
     public selectPaymentValue: string = '';
     /** This observable use for loader status */
     public loaderStatus: Subject<any> = new Subject();
     /** This will hold loader is default value */
     public isDefault: boolean = true;
+    /** Stores the current invoice selected */
+    public invoiceSelectedLabel: any ='';
+    /** Stores the current invoice selected */
+    public selectedInvoiceLabel: any = '';
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -1795,6 +1796,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             this._cdr.detectChanges();
         }
         if (this.selectedVoucherType === VoucherTypeEnum.creditNote || this.selectedVoucherType === VoucherTypeEnum.debitNote) {
+            this.toggleAccountSelectionDropdown(true);
+            this._cdr.detectChanges();
             this.getInvoiceListsForCreditNote();
         }
     }
@@ -1857,6 +1860,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                         items?.forEach(invoice => this.invoiceList.push({ label: invoice.voucherNumber ? invoice.voucherNumber : this.commonLocaleData?.app_not_available, value: invoice.uniqueName, additional: invoice }));
                     } else {
                         this.invoiceSelected = '';
+                        this.invoiceSelectedLabel = '';
                     }
                     let invoiceSelected;
                     if (this.isUpdateMode) {
@@ -1894,7 +1898,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     uniqBy(this.invoiceList, 'value');
                     this.invoiceList$ = observableOf(this.invoiceList);
                     this.invoiceSelected = invoiceSelected;
+                    this.invoiceSelectedLabel = invoiceSelected?.label
                     this.selectedInvoice = (invoiceSelected) ? invoiceSelected.value : '';
+                    this.selectedInvoiceLabel = (invoiceSelected) ? invoiceSelected.label : '';
                     this._cdr.detectChanges();
                 }
             });
@@ -1907,9 +1913,16 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @memberof VoucherComponent
      */
     public removeSelectedInvoice(): void {
-        this.invoiceForceClearReactive$ = observableOf({ status: true });
+        this.invoiceSelectedLabel = '';
+        this.selectedInvoiceLabel = '';
         this.selectedInvoice = '';
         this.invoiceSelected = '';
+
+        if (this.voucherApiVersion === 2) {
+            this.invFormData.voucherDetails.referenceVoucher = null;
+        } else {
+            this.invFormData.voucherDetails.invoiceLinkingRequest = null;
+        }
     }
 
     public prepareInvoiceTypeFlags() {
@@ -7466,7 +7479,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             entryIdx: entryIndex
         };
         if (this.template) {
-            const view = this.template.createEmbeddedView(context);
+            const view = this.template?.createEmbeddedView(context);
             this.container.insert(view);
         }
     }
@@ -8213,6 +8226,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     private toggleAccountSelectionDropdown(status: boolean): void {
         if (status) {
             this.openAccountSelectionDropdown?.openDropdownPanel();
+            this._cdr.detectChanges();
         }
+       
     }
 }
