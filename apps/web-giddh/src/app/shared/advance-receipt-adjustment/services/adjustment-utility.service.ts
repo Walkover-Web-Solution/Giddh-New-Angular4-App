@@ -71,7 +71,9 @@ export class AdjustmentUtilityService {
                 return adjustment;
             });
 
-            data.transactions[0].adjustments = data.voucherAdjustments.adjustments;
+            if (data.transactions?.length > 0) {
+                data.transactions[0].adjustments = data.voucherAdjustments.adjustments;
+            }
         } else if (data?.transactions?.length > 0) {
             data?.transactions?.forEach(transaction => {
                 if (transaction?.voucherAdjustments?.adjustments?.length > 0) {
