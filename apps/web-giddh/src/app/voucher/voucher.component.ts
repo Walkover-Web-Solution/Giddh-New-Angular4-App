@@ -2770,8 +2770,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         }
         this.asideMenuStateForOtherTaxes = this.asideMenuStateForOtherTaxes === 'out' ? 'in' : 'out';
         this.toggleBodyClass();
-        this.closeDialog(this.openAccountSelectionDropdown);
-        this.closeDialog(this.openSalesSelectDropdown);
     }
 
     /**

@@ -13115,3 +13115,9 @@ body.hide-scroll-body.master-page {
     color: var(--color-primary-input-bar-text) !important;
     background-color: var(--color-primary-input-bar-background) !important;
 }
+
+.mat-menu-btn {
+    line-height: 16px !important;
+    height: 16px !important;
+    padding: 0 0px !important;
+}
