@@ -1860,9 +1860,23 @@ span.eligible-ITC {
     }
 
     .custom-date-entries {
+        float: left;
+        width: 25%;
+    }
+
+    .custom-date-entries {
         .edit-icon-custom-entry-date {
-            right: 73% !important;
+            right: 77% !important;
             margin-top: 5px !important;
+            top: 28px;
+        }
+
+        .voucher-preview-edit .custom-date-entries giddh-datepicker .mat-datepicker-toggle {
+            position: absolute;
+            right: 35%;
+            top: -3px;
+            opacity: 0;
+            z-index: 99;
         }
     }
 
@@ -1955,7 +1969,15 @@ span.eligible-ITC {
     .wrapper-customer-table {
         padding-top: 0 !important;
     }
+    .custom-date-entries {
+        width: 54% !important;
 
+        .edit-icon-custom-entry-date {
+            right: 70% !important;
+            margin-top: 5px !important;
+            top: 28px;
+        }
+    }
     .search-arrow-image {
         left: 143px;
     }

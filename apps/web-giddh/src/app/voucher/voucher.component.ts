@@ -1897,7 +1897,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     uniqBy(this.invoiceList, 'value');
                     this.invoiceList$ = observableOf(this.invoiceList);
                     this.invoiceSelected = invoiceSelected;
-                    this.invoiceSelectedLabel = invoiceSelected.label
+                    this.invoiceSelectedLabel = invoiceSelected?.label
                     this.selectedInvoice = (invoiceSelected) ? invoiceSelected.value : '';
                     this.selectedInvoiceLabel = (invoiceSelected) ? invoiceSelected.label : '';
                     this._cdr.detectChanges();
@@ -1912,12 +1912,16 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @memberof VoucherComponent
      */
     public removeSelectedInvoice(): void {
-        this.invoiceForceClearReactive$ = observableOf({ status: true });
-        this.invoiceSelectedLabel ='';
-        this.selectedInvoiceLabel ='';
+        this.invoiceSelectedLabel = '';
+        this.selectedInvoiceLabel = '';
         this.selectedInvoice = '';
         this.invoiceSelected = '';
-        this._cdr.detectChanges();
+
+        if (this.voucherApiVersion === 2) {
+            this.invFormData.voucherDetails.referenceVoucher = null;
+        } else {
+            this.invFormData.voucherDetails.invoiceLinkingRequest = null;
+        }
     }
 
     public prepareInvoiceTypeFlags() {
