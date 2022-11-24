@@ -1045,6 +1045,8 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
                 voucherType = VoucherTypeEnum.payment
             } else if (voucherType === AdjustedVoucherType.Receipt) {
                 voucherType = VoucherTypeEnum.receipt
+            } else if (voucherType === AdjustedVoucherType.Journal) {
+                voucherType = AdjustedVoucherType.JournalVoucher
             }
 
             if (this.invoiceListRequestParams) {
