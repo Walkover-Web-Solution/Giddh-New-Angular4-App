@@ -665,7 +665,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     /** This will hold selected payment account value */
     public selectPaymentValue: string = '';
     /** This observable use for loader status */
-    public loaderStatus: Subject<any> = new Subject();
+    // public loaderStatus: Subject<any> = new Subject();
     /** This will hold loader is default value */
     public isDefault: boolean = true;
     /** Stores the current invoice selected */
@@ -774,12 +774,12 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     }
 
     public ngOnInit() {
-        this.loaderStatus.pipe(debounceTime(1500), takeUntil(this.destroyed$)).subscribe((event: any) => {
-            if (this.isDefault) {
-                this.isDefault = false;
-                this.focusInCustomerName();
-            }
-        });
+        // this.loaderStatus.pipe(debounceTime(1500), takeUntil(this.destroyed$)).subscribe((event: any) => {
+        //     if (this.isDefault) {
+        //         this.isDefault = false;
+        //         this.focusInCustomerName();
+        //     }
+        // });
         /** This will use for filter link purchase orders  */
         this.linkPoDropdown.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(search => {
             this.filterPurchaseOrder(search);
@@ -1387,7 +1387,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 } else {
                     this.statesBilling.readonly = false;
                 }
-                this.openAccountSelectionDropdown?.closeDropdownPanel();
+                if (results[1] || results[2]) {
+                    this.openAccountSelectionDropdown?.closeDropdownPanel();
+                }
                 // create account success then close sidebar, and add customer details
                 if (results[1]) {
                     // toggle sidebar if it's open
@@ -1687,7 +1689,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     }
 
     private async prepareCompanyCountryAndCurrencyFromProfile(profile) {
-        if (profile) {
+        if (profile && Object.keys(profile).length) {
             this.customerCountryName = profile.country;
             this.showGstAndTrnUsingCountryName(profile.country);
 
@@ -1704,7 +1706,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             }
             if (!this.isUpdateMode) {
                 await this.getUpdatedStateCodes(this.companyCountryCode);
-                await this.getUpdatedStateCodes(this.companyCountryCode, true);
+                if (this.isPurchaseInvoice) {
+                    await this.getUpdatedStateCodes(this.companyCountryCode, true);
+                }
             }
         } else {
             this.customerCountryName = '';
@@ -1754,7 +1758,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @memberof VoucherComponent
      */
     public startLoader(shouldStartLoader: boolean): void {
-        this.loaderStatus.next(true);
+        // this.loaderStatus.next(true);
         this.showLoader = shouldStartLoader;
         this._cdr.detectChanges();
     }
@@ -5447,6 +5451,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @memberof VoucherComponent
      */
     private getUpdatedStateCodes(countryCode: any, isCompanyStates?: boolean): Promise<any> {
+        if (!countryCode) {
+            return;
+        }
         this.startLoader(true);
         return new Promise((resolve: Function) => {
             if (countryCode) {
@@ -5564,7 +5571,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
     public onBlurDueDate(index) {
         console.log("called");
-        
+
         if (this.invFormData.voucherDetails.customerUniquename || this.invFormData.voucherDetails.customerName) {
             this.setActiveIndx(index);
         }
@@ -7404,7 +7411,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     //         this.purchaseBillCompany.shippingDetails.gstNumber = address.gstNumber ?? address.taxNumber;
     //         this.purchaseBillCompany.shippingDetails.pincode = address.pincode;
     //         console.log(cloneDeep(this.purchaseBillCompany.shippingDetails), address);
-            
+
     //         this._cdr.detectChanges();
     //     }
     // }
@@ -7969,8 +7976,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             if (profile) {
                 this.companyCountryName = profile.country;
                 await this.prepareCompanyCountryAndCurrencyFromProfile(profile);
-            } else {
-                this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
             }
         });
     }
