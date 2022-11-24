@@ -1258,6 +1258,70 @@
                                                                         {{ localeData?.shipping_billing_same }}
                                                                     </mat-checkbox>
                                                                 </span>
+                                                                <!-- <div class="d-flex align-items-center pb-1">
+                                                                    <div
+                                                                        [attachOutsideOnClick]="true"
+                                                                        class="
+                                                                            btn-group btn-block
+                                                                            change-address-dropdown no3
+                                                                        "
+                                                                        *ngIf="companyAddressList?.length > 1 && !autoFillCompanyShipping"
+                                                                    >
+                                                                        <a
+                                                                            mat-menu-item
+                                                                            class="dropdown-toggle cp"
+                                                                            [matMenuTriggerFor]="
+                                                                                companyShippingAddressDropDownWeb
+                                                                            "
+                                                                        >
+                                                                            {{ localeData?.change }}</a
+                                                                        >
+                                                                        <mat-menu
+                                                                            class="billing-company"
+                                                                            #companyShippingAddressDropDownWeb="matMenu"
+                                                                        >
+                                                                            <a
+                                                                                mat-menu-item
+                                                                                class="
+                                                                                    d-flex
+                                                                                    flex-column
+                                                                                    justify-content-center
+                                                                                    line-height-initial
+                                                                                "
+                                                                                *ngFor="
+                                                                                    let address of companyAddressList
+                                                                                "
+                                                                                (click)="
+                                                                                    selectCompanyShippingAddress(
+                                                                                        address
+                                                                                    )
+                                                                                "
+                                                                            >
+                                                                                <p class="font-12 pl-0">
+                                                                                    {{ address.address }}
+                                                                                </p>
+                                                                                <p class="font-12">
+                                                                                    {{ address.stateName }}
+                                                                                </p>
+                                                                                <p
+                                                                                    class="font-12"
+                                                                                    *ngIf="address.gstNumber"
+                                                                                >
+                                                                                    {{
+                                                                                        address.taxNumber
+                                                                                            ? (showGSTINNo
+                                                                                                  ? commonLocaleData?.app_gstin +
+                                                                                                    ": "
+                                                                                                  : commonLocaleData?.app_trn +
+                                                                                                    ": ") +
+                                                                                              address.taxNumber
+                                                                                            : ""
+                                                                                    }}
+                                                                                </p>
+                                                                            </a>
+                                                                        </mat-menu>
+                                                                    </div>
+                                                            </div> -->
                                                             </div>
                                                             <div
                                                                 [ngClass]="{
@@ -2349,6 +2413,7 @@
                                                 <select-field
                                                     [autofocus]="true"
                                                     #selectAccount
+                                                    #openSalesSelectDropdown
                                                     [cssClass]="'form-control mat-field-border'"
                                                     [name]="'transaction.fakeAccForSelect2_' + entryIdx"
                                                     [placeholder]="localeData?.select_acc"
@@ -4900,7 +4965,7 @@
                                                                 text-right
                                                                 pull-right
                                                                 max-width-100
-                                                                multicurrency-grandtotal no2'
+                                                                multicurrency-grandtotal'
                                                             "
                                                             [(ngModel)]="depositAmount"
                                                             [prefix]="depositCurrSymbol"

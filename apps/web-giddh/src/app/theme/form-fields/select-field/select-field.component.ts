@@ -86,6 +86,7 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof SelectFieldComponent
      */
     public ngOnInit(): void {
+        // this.addEventListenerWrapper(this.closeDropdownPanel, 'scroll');
         if (this.enableDynamicSearch) {
             this.searchFormControl.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(search => {
                 if (search) {
@@ -154,6 +155,7 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof SelectFieldComponent
      */
     public ngOnDestroy(): void {
+        // this.removeEventListenerWrapper(this.closeDropdownPanel, 'scroll');
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
@@ -241,4 +243,28 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy {
     public closeDropdownPanel(): void {
         this.trigger?.closePanel();
     }
+    
+    /**
+     * This will use for add listner for wrapper
+     *
+     * @param {Function} fun
+     * @param {string} event
+     * @param {*} [options]
+     * @memberof SelectFieldComponent
+     */
+    public addEventListenerWrapper(fun: Function, event: string, options?: any) {
+        document?.addEventListener(event, fun.bind(this), options || {});
+    }
+    /**
+     *This will use for remove listner for wrapper
+     *
+     * @param {Function} fun
+     * @param {string} event
+     * @param {*} [options]
+     * @memberof SelectFieldComponent
+     */
+    public removeEventListenerWrapper(fun: Function, event: string, options?: any) {
+        document?.removeEventListener(event, fun.bind(this), options || {});
+    }
+
 }
