@@ -1896,8 +1896,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     }
                     uniqBy(this.invoiceList, 'value');
                     this.invoiceList$ = observableOf(this.invoiceList);
-                    console.log(invoiceSelected);
-                    
                     this.invoiceSelected = invoiceSelected;
                     this.invoiceSelectedLabel = invoiceSelected.label
                     this.selectedInvoice = (invoiceSelected) ? invoiceSelected.value : '';
@@ -1915,8 +1913,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      */
     public removeSelectedInvoice(): void {
         this.invoiceForceClearReactive$ = observableOf({ status: true });
-        console.log(this.selectedInvoice);
-        console.log(this.invoiceSelected);
         this.invoiceSelectedLabel ='';
         this.selectedInvoiceLabel ='';
         this.selectedInvoice = '';
