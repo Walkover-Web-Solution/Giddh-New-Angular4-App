@@ -3611,7 +3611,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public toggleAccountAsidePane(event?): void {
         if (event) {
             event.preventDefault();
-        }
+        }        
         this.accountAsideMenuState = this.accountAsideMenuState === 'out' ? 'in' : 'out';
         this.toggleBodyClass();
         if (!this.invFormData.voucherDetails.customerUniquename && this.accountAsideMenuState === 'out') {
@@ -4042,6 +4042,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     }
 
     public addNewAccount() {
+        this.selectedCustomerForDetails = null;
         this.toggleAccountAsidePane();
     }
 
@@ -6979,6 +6980,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 this.purchaseBillCompany.shippingDetails.state.code = stateCode;
             }
         }
+        this._cdr.detectChanges();
     }
 
     /**
@@ -7075,6 +7077,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 }
             }
         });
+        this._cdr.detectChanges();
     }
 
     /**
