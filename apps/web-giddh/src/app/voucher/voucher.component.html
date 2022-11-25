@@ -1164,8 +1164,8 @@
                                                                                     : null
                                                                             "
                                                                             [defaultValue]="
-                                                                                purchaseBillCompany.billingDetails.state
-                                                                                    .name
+                                                                                purchaseBillCompany?.billingDetails
+                                                                                    ?.state.name
                                                                             "
                                                                         >
                                                                         </select-field>
@@ -1189,9 +1189,9 @@
                                                                             [cssClass]="
                                                                                 'form-control input-custom billing'
                                                                             "
-                                                                            (change)="autoFillCompanyShippingDetails()"
-                                                                            (ngModelChange)="
-                                                                                getStateCodeCompany('billingDetails')
+                                                                            (change)="
+                                                                                getStateCodeCompany('billingDetails');
+                                                                                autoFillCompanyShippingDetails()
                                                                             "
                                                                             [placeholder]="
                                                                                 showGSTINNo

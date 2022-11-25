@@ -852,7 +852,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             this.voucherTypeChanged = false;
             this.copyPurchaseBill = false;
             this.isDefaultLoad = true;
-
+            
             if (params['invoiceType']) {
                 // Reset voucher due to advance receipt model set voucher in invoice management
                 this.store.dispatch(this.invoiceReceiptActions.ResetVoucherDetails());
@@ -864,6 +864,10 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
                     // reset customer company when invoice type changes, re-check for company currency and country
                     this.store.pipe(select(s => s.settings.profile), take(1)).subscribe(profile => {
+                        setTimeout(() => {
+                            this.openAccountSelectionDropdown.openDropdownPanel();
+                        }, 500);
+                        this._cdr.detectChanges();
                         this.prepareCompanyCountryAndCurrencyFromProfile(profile);
                     });
 
@@ -1394,6 +1398,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     // toggle sidebar if it's open
                     if (this.accountAsideMenuState === 'in') {
                         this.toggleAccountAsidePane();
+                        this.openAccountSelectionDropdown?.closeDropdownPanel();
                     }
 
                     let tempSelectedAcc: AccountResponseV2;
@@ -1789,8 +1794,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     }
 
     public pageChanged(val: string, label: string) {
-
-        
         this.voucherTypeChanged = true;
         this.resetPreviousSearchResults();
         this.sundryCreditorsAcList = [];
@@ -3834,11 +3837,13 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         if (s && s['isPurchaseInvoice'] && s['isPurchaseInvoice'].currentValue) {
             this.pageChanged(VoucherTypeEnum.purchase, this.commonLocaleData?.app_purchase);
             this.isSalesInvoice = false;
+
         }
 
         if ('accountUniqueName' in s && s.accountUniqueName.currentValue && (s.accountUniqueName.currentValue !== s.accountUniqueName.previousValue)) {
             this.isCashInvoice = s.accountUniqueName.currentValue === 'cash';
         }
+
     }
 
     public onSelectPaymentMode(event: any, isCleared: boolean = false) {
