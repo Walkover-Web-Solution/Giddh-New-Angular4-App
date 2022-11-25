@@ -343,6 +343,28 @@ $custom-typography: mat-typography-config(
     padding-top: 10px !important;
     padding-bottom: 10px !important;
 }
+.invoice-date-due-date {
+    .date-invoice-parent-form {
+        padding-left: 0 !important;
+
+        .date-invoice-label {
+            padding-left: 0 !important;
+        }
+    }
+
+    .due-invoice-parent-form {
+        margin-left: -20px !important;
+        padding-left: 0 !important;
+
+        .due-invoice-label {
+            padding-left: 0 !important;
+        }
+
+        .due-invoice-formgroup {
+            padding-left: 10px !important;
+        }
+    }
+}
 @media screen and (max-width: 1366px) and (orientation: portrait) {
     .subscription-form-select {
         float: left !important;
