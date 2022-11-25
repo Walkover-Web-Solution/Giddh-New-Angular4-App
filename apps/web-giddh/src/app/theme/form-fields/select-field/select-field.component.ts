@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ContentChild, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, TemplateRef, ViewChild } from "@angular/core";
+import { AfterViewInit, ChangeDetectionStrategy, Component, ContentChild, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, TemplateRef, ViewChild } from "@angular/core";
 import { FormControl } from "@angular/forms";
 import { MatAutocompleteTrigger } from "@angular/material/autocomplete";
 import { ReplaySubject } from "rxjs";
@@ -12,13 +12,13 @@ import { IOption } from "../../ng-virtual-select/sh-options.interface";
     templateUrl: "./select-field.component.html",
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy {
+export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, AfterViewInit {
     /** Holds template of options on the component itself */
     @ContentChild('optionTemplate', { static: false }) public optionTemplate: TemplateRef<any>;
     /** Trigger instance for auto complete */
     @ViewChild('trigger', { static: false, read: MatAutocompleteTrigger }) trigger: MatAutocompleteTrigger;
     /** Select Field instance for auto focus */
-    @ViewChild('selectField', { static: false }) public selectField: ElementRef;
+    @ViewChild('selectField', { static: true }) public selectField: ElementRef;
     /** CSS class name to add on the field */
     @Input() public cssClass: string = "";
     /** CSS class name to add on the mat autocomplete panel class */
@@ -86,6 +86,7 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof SelectFieldComponent
      */
     public ngOnInit(): void {
+        // this.addEventListenerWrapper(this.closeDropdownPanel, 'scroll');
         if (this.enableDynamicSearch) {
             this.searchFormControl.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(search => {
                 if (search) {
@@ -138,14 +139,14 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy {
         if (changes?.defaultValue) {
             this.searchFormControl.setValue({ label: changes?.defaultValue.currentValue });
         }
+    }
 
-        if (changes?.openDropdown) {
-            if (changes?.openDropdown?.currentValue) {
+    public ngAfterViewInit(): void {
+        setTimeout(() => {
+            if (this.openDropdown) {
                 this.openDropdownPanel();
-            } else {
-                this.closeDropdownPanel();
             }
-        }
+        }, 500);
     }
 
     /**
@@ -154,6 +155,7 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof SelectFieldComponent
      */
     public ngOnDestroy(): void {
+        // this.removeEventListenerWrapper(this.closeDropdownPanel, 'scroll');
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
@@ -241,4 +243,28 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy {
     public closeDropdownPanel(): void {
         this.trigger?.closePanel();
     }
+
+    /**
+     * This will use for add listner for wrapper
+     *
+     * @param {Function} fun
+     * @param {string} event
+     * @param {*} [options]
+     * @memberof SelectFieldComponent
+     */
+    public addEventListenerWrapper(fun: Function, event: string, options?: any) {
+        document?.addEventListener(event, fun.bind(this), options || {});
+    }
+    /**
+     *This will use for remove listner for wrapper
+     *
+     * @param {Function} fun
+     * @param {string} event
+     * @param {*} [options]
+     * @memberof SelectFieldComponent
+     */
+    public removeEventListenerWrapper(fun: Function, event: string, options?: any) {
+        document?.removeEventListener(event, fun.bind(this), options || {});
+    }
+
 }

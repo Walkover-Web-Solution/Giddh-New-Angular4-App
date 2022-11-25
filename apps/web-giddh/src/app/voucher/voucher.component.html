@@ -184,6 +184,7 @@
                                                             "
                                                             [customPanelClass]="'panel-cl'"
                                                             [name]="'voucherDetails.customerName'"
+                                                            [openDropdown]="true"
                                                             [placeholder]="customerPlaceHolder"
                                                             [options]="customerAcList$ | async"
                                                             (selectedOption)="onSelectCustomer($event)"
@@ -406,14 +407,14 @@
                                                                                         )
                                                                                     "
                                                                                 >
-                                                                                    <p class="font-12 pl-0">
+                                                                                    <p class="font-12 pl-0 text-indent">
                                                                                         {{ address.address }}
                                                                                     </p>
-                                                                                    <p class="font-12">
+                                                                                    <p class="font-12 text-indent">
                                                                                         {{ address.state?.name }}
                                                                                     </p>
                                                                                     <p
-                                                                                        class="font-12"
+                                                                                        class="font-12 text-indent"
                                                                                         *ngIf="address.gstNumber"
                                                                                     >
                                                                                         {{
@@ -643,14 +644,14 @@
                                                                                         )
                                                                                     "
                                                                                 >
-                                                                                    <p class="font-12 pl-0">
+                                                                                    <p class="font-12 pl-0 text-indent">
                                                                                         {{ address.address }}
                                                                                     </p>
-                                                                                    <p class="font-12">
+                                                                                    <p class="font-12 text-indent">
                                                                                         {{ address.state?.name }}
                                                                                     </p>
                                                                                     <p
-                                                                                        class="font-12"
+                                                                                        class="font-12 text-indent"
                                                                                         *ngIf="address.gstNumber"
                                                                                     >
                                                                                         {{
@@ -1044,72 +1045,65 @@
                                                                 <span class="pd-r15">{{
                                                                     localeData?.billing_address
                                                                 }}</span>
-                                                                <span>
-                                                                    <div
-                                                                        [attachOutsideOnClick]="true"
-                                                                        class="
-                                                                            btn-group btn-block
-                                                                            change-address-dropdown
+                                                                <div
+                                                                    [attachOutsideOnClick]="true"
+                                                                    class="change-address-dropdown"
+                                                                    *ngIf="companyAddressList?.length > 1"
+                                                                >
+                                                                    <a
+                                                                        mat-menu-item
+                                                                        class="dropdown-toggle cp mat-menu-btn"
+                                                                        [matMenuTriggerFor]="
+                                                                            companyBillingAddressDropDownWeb
                                                                         "
-                                                                        *ngIf="companyAddressList?.length > 1"
+                                                                    >
+                                                                        {{ localeData?.change }}</a
+                                                                    >
+                                                                    <mat-menu
+                                                                        class="billing-company"
+                                                                        #companyBillingAddressDropDownWeb="matMenu"
                                                                     >
                                                                         <a
                                                                             mat-menu-item
-                                                                            class="dropdown-toggle cp"
-                                                                            [matMenuTriggerFor]="
-                                                                                companyBillingAddressDropDownWeb
+                                                                            class="
+                                                                                d-flex
+                                                                                flex-column
+                                                                                justify-content-center
+                                                                                line-height-initial
+                                                                            "
+                                                                            *ngFor="let address of companyAddressList"
+                                                                            (click)="
+                                                                                selectAddress(
+                                                                                    purchaseBillCompany.billingDetails,
+                                                                                    address,
+                                                                                    true
+                                                                                )
                                                                             "
                                                                         >
-                                                                            {{ localeData?.change }}</a
-                                                                        >
-                                                                        <mat-menu
-                                                                            class="billing-company"
-                                                                            #companyBillingAddressDropDownWeb="matMenu"
-                                                                        >
-                                                                            <a
-                                                                                mat-menu-item
-                                                                                class="
-                                                                                    d-flex
-                                                                                    flex-column
-                                                                                    justify-content-center
-                                                                                    line-height-initial
-                                                                                "
-                                                                                *ngFor="
-                                                                                    let address of companyAddressList
-                                                                                "
-                                                                                (click)="
-                                                                                    selectAddress(
-                                                                                        purchaseBillCompany.billingDetails,
-                                                                                        address,
-                                                                                        true
-                                                                                    )
-                                                                                "
+                                                                            <p class="font-12 pl-0 text-indent">
+                                                                                {{ address.address }}
+                                                                            </p>
+                                                                            <p class="font-12 text-indent">
+                                                                                {{ address.stateName }}
+                                                                            </p>
+                                                                            <p
+                                                                                class="font-12 text-indent"
+                                                                                *ngIf="address.gstNumber"
                                                                             >
-                                                                                <p class="font-12 pl-0">
-                                                                                    {{ address.address }}
-                                                                                </p>
-                                                                                <p class="font-12">
-                                                                                    {{ address.stateName }}
-                                                                                </p>
-                                                                                <p
-                                                                                    class="font-12"
-                                                                                    *ngIf="address.gstNumber"
-                                                                                >
-                                                                                    {{
-                                                                                        address.taxNumber
-                                                                                            ? (showGSTINNo
-                                                                                                  ? commonLocaleData?.app_gstin +
-                                                                                                    ": "
-                                                                                                  : commonLocaleData?.app_trn +
-                                                                                                    ": ") +
-                                                                                              address.taxNumber
-                                                                                            : ""
-                                                                                    }}
-                                                                                </p>
-                                                                            </a>
-                                                                        </mat-menu>
-                                                                    </div>
-                                                                </span>
+                                                                                {{
+                                                                                    address.taxNumber
+                                                                                        ? (showGSTINNo
+                                                                                              ? commonLocaleData?.app_gstin +
+                                                                                                ": "
+                                                                                              : commonLocaleData?.app_trn +
+                                                                                                ": ") +
+                                                                                          address.taxNumber
+                                                                                        : ""
+                                                                                }}
+                                                                            </p>
+                                                                        </a>
+                                                                    </mat-menu>
+                                                                </div>
                                                             </div>
                                                             <div class="billing-address clearfix">
                                                                 <textarea
@@ -1258,6 +1252,70 @@
                                                                         {{ localeData?.shipping_billing_same }}
                                                                     </mat-checkbox>
                                                                 </span>
+                                                                <!-- <div class="d-flex align-items-center pb-1">
+                                                                    <div
+                                                                        [attachOutsideOnClick]="true"
+                                                                        class="
+                                                                            btn-group btn-block
+                                                                            change-address-dropdown no3
+                                                                        "
+                                                                        *ngIf="companyAddressList?.length > 1 && !autoFillCompanyShipping"
+                                                                    >
+                                                                        <a
+                                                                            mat-menu-item
+                                                                            class="dropdown-toggle cp"
+                                                                            [matMenuTriggerFor]="
+                                                                                companyShippingAddressDropDownWeb
+                                                                            "
+                                                                        >
+                                                                            {{ localeData?.change }}</a
+                                                                        >
+                                                                        <mat-menu
+                                                                            class="billing-company"
+                                                                            #companyShippingAddressDropDownWeb="matMenu"
+                                                                        >
+                                                                            <a
+                                                                                mat-menu-item
+                                                                                class="
+                                                                                    d-flex
+                                                                                    flex-column
+                                                                                    justify-content-center
+                                                                                    line-height-initial
+                                                                                "
+                                                                                *ngFor="
+                                                                                    let address of companyAddressList
+                                                                                "
+                                                                                (click)="
+                                                                                    selectCompanyShippingAddress(
+                                                                                        address
+                                                                                    )
+                                                                                "
+                                                                            >
+                                                                                <p class="font-12 pl-0">
+                                                                                    {{ address.address }}
+                                                                                </p>
+                                                                                <p class="font-12">
+                                                                                    {{ address.stateName }}
+                                                                                </p>
+                                                                                <p
+                                                                                    class="font-12"
+                                                                                    *ngIf="address.gstNumber"
+                                                                                >
+                                                                                    {{
+                                                                                        address.taxNumber
+                                                                                            ? (showGSTINNo
+                                                                                                  ? commonLocaleData?.app_gstin +
+                                                                                                    ": "
+                                                                                                  : commonLocaleData?.app_trn +
+                                                                                                    ": ") +
+                                                                                              address.taxNumber
+                                                                                            : ""
+                                                                                    }}
+                                                                                </p>
+                                                                            </a>
+                                                                        </mat-menu>
+                                                                    </div>
+                                                            </div> -->
                                                             </div>
                                                             <div
                                                                 [ngClass]="{
@@ -1569,6 +1627,7 @@
                                         </div>
                                         <div
                                             class="col-sm-12 col-xl-6 col-lg-10 col-md-10 invoice-date-due-date"
+                                            [ngClass]="{ 'date-invoice': isPurchaseInvoice }"
                                             *ngIf="!isMobileScreen"
                                         >
                                             <div class="form-inline flex-row flex-nowrap">
@@ -1581,9 +1640,20 @@
                                                         ><i class="icon-trash"></i
                                                     ></span>
                                                 </div>
-                                                <div class="form-group invoice-date-label">
-                                                    <label>{{ invoiceDateLabel }}</label>
-                                                    <div class="form-group col-xs-4 col-sm-4 mb-0">
+                                                <div
+                                                    class="form-group invoice-date-label"
+                                                    [ngClass]="{
+                                                        'date-invoice-parent-form':
+                                                            isPurchaseInvoice || isEstimateInvoice
+                                                    }"
+                                                >
+                                                    <label [ngClass]="{ 'date-invoice-label': isPurchaseInvoice }">{{
+                                                        invoiceDateLabel
+                                                    }}</label>
+                                                    <div
+                                                        class="form-group col-xs-4 col-sm-4 mb-0"
+                                                        [ngClass]="{ 'date-invoice-formgroup': isPurchaseInvoice }"
+                                                    >
                                                         <giddh-datepicker
                                                             type="text"
                                                             #voucherDate="ngModel"
@@ -1630,9 +1700,18 @@
                                                         isProformaInvoice ||
                                                         isEstimateInvoice
                                                     "
+                                                    [ngClass]="{ 'due-invoice-parent-form': isPurchaseInvoice }"
                                                 >
-                                                    <label>{{ invoiceDueDateLabel }}</label>
-                                                    <div class="form-group col-xs-4 col-sm-4 mb-0">
+                                                    <label
+                                                        [ngClass]="{
+                                                            'due-invoice-label': isPurchaseInvoice || isEstimateInvoice
+                                                        }"
+                                                        >{{ invoiceDueDateLabel }}</label
+                                                    >
+                                                    <div
+                                                        class="form-group col-xs-4 col-sm-4 mb-0"
+                                                        [ngClass]="{ 'due-invoice-formgroup': isPurchaseInvoice }"
+                                                    >
                                                         <giddh-datepicker
                                                             type="text"
                                                             [placeholder]="giddhDateFormat"
@@ -4900,7 +4979,7 @@
                                                                 text-right
                                                                 pull-right
                                                                 max-width-100
-                                                                multicurrency-grandtotal no2'
+                                                                multicurrency-grandtotal'
                                                             "
                                                             [(ngModel)]="depositAmount"
                                                             [prefix]="depositCurrSymbol"
