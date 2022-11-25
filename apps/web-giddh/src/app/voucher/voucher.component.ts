@@ -1790,6 +1790,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     }
 
     public pageChanged(val: string, label: string) {
+
+        
         this.voucherTypeChanged = true;
         this.resetPreviousSearchResults();
         this.sundryCreditorsAcList = [];
@@ -1799,12 +1801,17 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.router.navigate(['pages', 'proforma-invoice', 'invoice', val]);
         this.selectedVoucherType = val;
         if (this.selectedVoucherType) {
-
+            setTimeout(() => {
+                this.openAccountSelectionDropdown.openDropdownPanel();
+            }, 500);
             this._cdr.detectChanges();
         }
         if (this.selectedVoucherType === VoucherTypeEnum.creditNote || this.selectedVoucherType === VoucherTypeEnum.debitNote) {
-            this._cdr.detectChanges();
             this.getInvoiceListsForCreditNote();
+            setTimeout(() => {
+                this.openAccountSelectionDropdown.openDropdownPanel();
+            }, 500);
+            this._cdr.detectChanges();
         }
     }
 
