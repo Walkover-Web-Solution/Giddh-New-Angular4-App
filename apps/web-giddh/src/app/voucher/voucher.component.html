@@ -1629,6 +1629,7 @@
                                         </div>
                                         <div
                                             class="col-sm-12 col-xl-6 col-lg-10 col-md-10 invoice-date-due-date"
+                                            [ngClass]="{ 'date-invoice': isPurchaseInvoice }"
                                             *ngIf="!isMobileScreen"
                                         >
                                             <div class="form-inline flex-row flex-nowrap">
@@ -1641,9 +1642,20 @@
                                                         ><i class="icon-trash"></i
                                                     ></span>
                                                 </div>
-                                                <div class="form-group invoice-date-label">
-                                                    <label>{{ invoiceDateLabel }}</label>
-                                                    <div class="form-group col-xs-4 col-sm-4 mb-0">
+                                                <div
+                                                    class="form-group invoice-date-label"
+                                                    [ngClass]="{
+                                                        'date-invoice-parent-form':
+                                                            isPurchaseInvoice || isEstimateInvoice
+                                                    }"
+                                                >
+                                                    <label [ngClass]="{ 'date-invoice-label': isPurchaseInvoice }">{{
+                                                        invoiceDateLabel
+                                                    }}</label>
+                                                    <div
+                                                        class="form-group col-xs-4 col-sm-4 mb-0"
+                                                        [ngClass]="{ 'date-invoice-formgroup': isPurchaseInvoice }"
+                                                    >
                                                         <giddh-datepicker
                                                             type="text"
                                                             #voucherDate="ngModel"
@@ -1690,9 +1702,18 @@
                                                         isProformaInvoice ||
                                                         isEstimateInvoice
                                                     "
+                                                    [ngClass]="{ 'due-invoice-parent-form': isPurchaseInvoice }"
                                                 >
-                                                    <label>{{ invoiceDueDateLabel }}</label>
-                                                    <div class="form-group col-xs-4 col-sm-4 mb-0">
+                                                    <label
+                                                        [ngClass]="{
+                                                            'due-invoice-label': isPurchaseInvoice || isEstimateInvoice
+                                                        }"
+                                                        >{{ invoiceDueDateLabel }}</label
+                                                    >
+                                                    <div
+                                                        class="form-group col-xs-4 col-sm-4 mb-0"
+                                                        [ngClass]="{ 'due-invoice-formgroup': isPurchaseInvoice }"
+                                                    >
                                                         <giddh-datepicker
                                                             type="text"
                                                             [placeholder]="giddhDateFormat"
@@ -2408,7 +2429,6 @@
                                             <div class="ng-select-wrap">
                                                 <select-field
                                                     #selectAccount
-                                                    #openSalesSelectDropdown
                                                     [cssClass]="'form-control mat-field-border'"
                                                     [name]="'transaction.fakeAccForSelect2_' + entryIdx"
                                                     [placeholder]="localeData?.select_acc"

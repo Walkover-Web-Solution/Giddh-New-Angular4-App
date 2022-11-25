@@ -146,8 +146,6 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
         setTimeout(() => {
             if (this.openDropdown) {
                 this.openDropdownPanel();
-            } else {
-                this.closeDropdownPanel();
             }
         }, 500);
     }

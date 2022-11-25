@@ -162,7 +162,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     @ViewChild('unregisteredBusiness', { static: true }) public unregisteredBusiness: ElementRef;
     @ViewChild('invoiceForm', { static: false }) public invoiceForm: NgForm;
     @ViewChild('openAccountSelectionDropdown', { static: false }) public openAccountSelectionDropdown: SelectFieldComponent;
-    @ViewChild('openSalesSelectDropdown', { static: false }) public openSalesSelectDropdown: SelectFieldComponent;
     @ViewChildren('discountComponent') public discountComponent: QueryList<DiscountListComponent>;
     @ViewChildren('taxControlComponent') public taxControlComponent: QueryList<TaxControlComponent>;
     @ViewChildren('selectAccount') public selectAccount: QueryList<ElementRef>;
@@ -5568,8 +5567,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     }
 
     public onBlurDueDate(index) {
-        console.log("called");
-
         if (this.invFormData.voucherDetails.customerUniquename || this.invFormData.voucherDetails.customerName) {
             this.setActiveIndx(index);
         }
