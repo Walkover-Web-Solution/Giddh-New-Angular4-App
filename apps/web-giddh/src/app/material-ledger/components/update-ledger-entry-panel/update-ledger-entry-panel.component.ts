@@ -892,7 +892,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             requestObj.subVoucher = (this.isRcmEntry) ? SubVoucher.ReverseCharge : (this.isAdvanceReceipt) ? SubVoucher.AdvanceReceipt : '';
             requestObj.transactions = requestObj.transactions?.filter(f => !f.isDiscount);
         }
-        if (!this.taxOnlyTransactions) {
+        if (!this.taxOnlyTransactions && (requestObj.voucherType !== "jr" || (requestObj.voucherType === "jr" && requestObj.transactions?.length > 1))) {
             requestObj.transactions = requestObj.transactions?.filter(tx => !tx.isTax);
         }
         if (this.voucherApiVersion === 2 && (requestObj.voucherGenerated || requestObj.generateInvoice) && requestObj.voucherType !== "jr") {
