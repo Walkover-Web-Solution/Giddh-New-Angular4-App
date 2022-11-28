@@ -204,6 +204,17 @@
                     "icon": "icon-settings-cog",
                     "description": "कर सेटिंग्ज",
                     "hide": "sidebar"
+                },
+                {
+                    "label": "युनिट मॅपिंग",
+                    "link": "/pages/gstfiling/unit-mapping",
+                    "icon": "unit-mapping-icon",
+                    "description": "युनिट मॅपिंग",
+                    "alwaysPresent": true,
+                    "hide": "sidebar",
+                    "additional": {
+                        "countrySpecific": ["IN"]
+                    }
                 }
             ]
         },
