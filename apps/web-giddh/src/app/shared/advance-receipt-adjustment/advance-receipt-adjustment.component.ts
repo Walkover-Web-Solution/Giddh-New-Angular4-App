@@ -1134,6 +1134,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
 
         if(this.voucherApiVersion === 2) {
             requestObject.uniqueName = this.invoiceFormDetails?.voucherDetails?.voucherUniqueName;
+            requestObject.voucherBalanceType = this.invoiceFormDetails?.type;
         }
 
         this.salesService.getInvoiceList(requestObject, this.invoiceFormDetails.voucherDetails.voucherDate, this.paginationLimit).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
