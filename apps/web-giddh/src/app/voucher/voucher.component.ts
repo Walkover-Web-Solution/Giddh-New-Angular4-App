@@ -120,7 +120,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { HttpClient } from '@angular/common/http';
 import { NewConfirmationModalComponent } from '../theme/new-confirmation-modal/confirmation-modal.component';
 import { SelectFieldComponent } from '../theme/form-fields/select-field/select-field.component';
-import { MatMenuTrigger } from '@angular/material/menu';
 
 /** Type of search: customer and item (product/service) search */
 const SEARCH_TYPE = {
@@ -171,8 +170,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     @ViewChild('inputCustomerName', { static: true }) public inputCustomerName: ElementRef;
     @ViewChild('customerBillingAddress', { static: true }) public customerBillingAddress: ElementRef;
     @ViewChildren(BsDatepickerDirective) public datePickers: QueryList<BsDatepickerDirective>;
-    @ViewChild(MatMenuTrigger) trigger: MatMenuTrigger;
-
     /** RCM popup instance */
     @ViewChild('rcmPopup', { static: false }) public rcmPopup: PopoverDirective;
     /** Billing state instance */
