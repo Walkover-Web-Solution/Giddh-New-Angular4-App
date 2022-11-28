@@ -317,6 +317,9 @@ $custom-typography: mat-typography-config(
         min-width: 120px !important;
     }
     width: 48%;
+    .due-invoice-label {
+        padding-left: 15px;
+    }
 }
 
 .invoice-date-label {
