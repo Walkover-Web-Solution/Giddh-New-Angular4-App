@@ -1163,7 +1163,7 @@
                                                                             "
                                                                             [defaultValue]="
                                                                                 purchaseBillCompany?.billingDetails
-                                                                                    ?.state.name
+                                                                                    ?.state?.name
                                                                             "
                                                                         >
                                                                         </select-field>
@@ -1389,7 +1389,7 @@
                                                                                 "
                                                                                 [defaultValue]="
                                                                                     purchaseBillCompany.shippingDetails
-                                                                                        .state.name
+                                                                                        .state?.name
                                                                                 "
                                                                             >
                                                                             </select-field>
@@ -1644,7 +1644,7 @@
                                                     class="form-group invoice-date-label"
                                                     [ngClass]="{
                                                         'date-invoice-parent-form':
-                                                            isPurchaseInvoice || isEstimateInvoice
+                                                            isPurchaseInvoice || isEstimateInvoice || isProformaInvoice
                                                     }"
                                                 >
                                                     <label [ngClass]="{ 'date-invoice-label': isPurchaseInvoice }">{{
@@ -1704,7 +1704,10 @@
                                                 >
                                                     <label
                                                         [ngClass]="{
-                                                            'due-invoice-label': isPurchaseInvoice || isEstimateInvoice
+                                                            'due-invoice-label':
+                                                                isPurchaseInvoice ||
+                                                                isEstimateInvoice ||
+                                                                isProformaInvoice
                                                         }"
                                                         >{{ invoiceDueDateLabel }}</label
                                                     >

@@ -19,6 +19,7 @@
         matAutocompletePosition="below"
     />
     <mat-autocomplete
+        autoActiveFirstOption
         [displayWith]="displayLabel"
         (optionSelected)="optionSelected($event)"
         #auto="matAutocomplete"

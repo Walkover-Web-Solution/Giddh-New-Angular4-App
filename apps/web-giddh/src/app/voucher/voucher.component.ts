@@ -866,7 +866,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     // reset customer company when invoice type changes, re-check for company currency and country
                     this.store.pipe(select(s => s.settings.profile), take(1)).subscribe(profile => {
                         setTimeout(() => {
-                            this.openAccountSelectionDropdown.openDropdownPanel();
+                            this.openAccountSelectionDropdown?.openDropdownPanel();
                         }, 500);
                         this._cdr.detectChanges();
                         this.prepareCompanyCountryAndCurrencyFromProfile(profile);
@@ -1805,14 +1805,14 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.selectedVoucherType = val;
         if (this.selectedVoucherType) {
             setTimeout(() => {
-                this.openAccountSelectionDropdown.openDropdownPanel();
+                this.openAccountSelectionDropdown?.openDropdownPanel();
             }, 500);
             this._cdr.detectChanges();
         }
         if (this.selectedVoucherType === VoucherTypeEnum.creditNote || this.selectedVoucherType === VoucherTypeEnum.debitNote) {
             this.getInvoiceListsForCreditNote();
             setTimeout(() => {
-                this.openAccountSelectionDropdown.openDropdownPanel();
+                this.openAccountSelectionDropdown?.openDropdownPanel();
             }, 500);
             this._cdr.detectChanges();
         }
@@ -5522,7 +5522,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             this.invFormData.accountDetails.billingDetails.state.name = stateName;
             this.invFormData.accountDetails.billingDetails.stateName = stateName;
             this.invFormData.accountDetails.billingDetails.stateCode = stateCode;
-            this.invFormData.accountDetails.billingDetails.state.code = stateCode;
         } else {
             if (this.shippingState && this.shippingState.nativeElement) {
                 this.shippingState.nativeElement.classList.remove('error-box');
@@ -5533,7 +5532,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 this.invFormData.accountDetails.shippingDetails.stateName = stateName;
                 this.invFormData.accountDetails.shippingDetails.stateCode = stateCode;
                 this.invFormData.accountDetails.shippingDetails.state.name = stateName;
-                this.invFormData.accountDetails.shippingDetails.state.code = stateCode;
             }
         }
     }
@@ -5991,6 +5989,10 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             return;
         }
         this.updateAccount = false;
+        setTimeout(() => {
+            this.openAccountSelectionDropdown?.openDropdownPanel();
+        }, 500);
+        this._cdr.detectChanges();
 
         if (!this.isPendingVoucherType || (this.isPendingVoucherType && this.actionAfterGenerateORUpdate === 0)) {
             this.store.dispatch(this.invoiceReceiptActions.ResetVoucherDetails());
@@ -6978,7 +6980,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             this.purchaseBillCompany.billingDetails.state.name = stateName;
             this.purchaseBillCompany.billingDetails.stateName = stateName;
             this.purchaseBillCompany.billingDetails.stateCode = stateCode;
-            this.purchaseBillCompany.billingDetails.state.code = stateCode;
         } else {
             if (this.shippingStateCompany && this.shippingStateCompany.nativeElement) {
                 this.shippingStateCompany.nativeElement.classList.remove('error-box');
@@ -7389,7 +7390,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @param {boolean} isCompanyAddress
      * @memberof VoucherComponent
      */
-    public selectAddress(data: any, address: any, isCompanyAddress: boolean = false): void {
+    public selectAddress(data: any, address: any, isCompanyAddress: boolean = false): void {        
         if (data && address) {
             data.address[0] = address.address;
             if (!data.state) {
