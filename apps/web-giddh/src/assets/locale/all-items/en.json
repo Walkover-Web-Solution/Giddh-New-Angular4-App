@@ -207,6 +207,17 @@
                     "icon": "icon-settings-cog",
                     "description": "Tax setting",
                     "hide": "sidebar"
+                },
+                {
+                    "label": "Unit Mapping",
+                    "link": "/pages/gstfiling/unit-mapping",
+                    "icon": "unit-mapping-icon",
+                    "description": "Unit Mapping",
+                    "alwaysPresent": true,
+                    "hide": "sidebar",
+                    "additional": {
+                        "countrySpecific": ["IN"]
+                    }
                 }
             ],
             "link": "/pages/settings/taxes"
