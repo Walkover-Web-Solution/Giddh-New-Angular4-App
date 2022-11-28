@@ -107,6 +107,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     @Input() public activeCompany: any;
     @Input() public searchResultsPaginationPage: any;
     @Input() public searchResultsPaginationTotalPages: any;
+    /** Holds side of entry (dr/cr) */
+    @Input() public entrySide: string;
     /** fileinput element ref for clear value after remove attachment **/
     @ViewChild('fileInputUpdate', { static: false }) public fileInputElement: ElementRef;
     @ViewChild('discount', { static: false }) public discountComponent: UpdateLedgerDiscountComponent;
@@ -890,10 +892,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             requestObj.subVoucher = (this.isRcmEntry) ? SubVoucher.ReverseCharge : (this.isAdvanceReceipt) ? SubVoucher.AdvanceReceipt : '';
             requestObj.transactions = requestObj.transactions?.filter(f => !f.isDiscount);
         }
-        if (!this.taxOnlyTransactions) {
+        if (!this.taxOnlyTransactions && (requestObj.voucherType !== "jr" || (requestObj.voucherType === "jr" && requestObj.transactions?.length > 1))) {
             requestObj.transactions = requestObj.transactions?.filter(tx => !tx.isTax);
         }
-        if (this.voucherApiVersion === 2 && (requestObj.voucherGenerated || requestObj.generateInvoice)) {
+        if (this.voucherApiVersion === 2 && (requestObj.voucherGenerated || requestObj.generateInvoice) && requestObj.voucherType !== "jr") {
             requestObj.transactions = requestObj.transactions?.filter(tx => tx.particular?.uniqueName !== "roundoff");
         }
         requestObj.transactions.map((transaction: any) => {
@@ -1951,13 +1953,15 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 totalTaxableValue: this.vm.selectedLedger.actualAmount,
                 subTotal: this.vm.selectedLedger.total.amount,
                 exchangeRate: this.vm.selectedLedger?.exchangeRate ?? 1,
-                gainLoss: this.vm.selectedLedger.gainLoss
+                gainLoss: this.vm.selectedLedger.gainLoss,
+                voucherUniqueName: this.vm.selectedLedger.voucherUniqueName
             },
             accountDetails: {
                 currencySymbol: enableVoucherAdjustmentMultiCurrency ? this.vm.selectedLedger?.particular?.currency?.symbol ?? this.profileObj?.baseCurrencySymbol ?? '' : this.profileObj?.baseCurrencySymbol ?? '',
                 currencyCode: enableVoucherAdjustmentMultiCurrency ? this.vm.selectedLedger?.particular?.currency?.code ?? this.profileObj?.baseCurrency ?? '' : this.profileObj?.baseCurrency ?? ''
             },
-            activeAccountUniqueName: this.activeAccount?.uniqueName
+            activeAccountUniqueName: this.activeAccount?.uniqueName,
+            type: this.entrySide
         };
     }
 

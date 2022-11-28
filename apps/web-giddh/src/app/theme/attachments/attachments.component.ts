@@ -184,7 +184,7 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
 
                     this.attachments = this.attachments?.map(attachment => {
                         let fileExtention = attachment?.type?.toLowerCase();
-                        let objectURL
+                        let objectURL;
                         let fileSource;
 
                         if (FILE_ATTACHMENT_TYPE.IMAGE.includes(fileExtention)) {

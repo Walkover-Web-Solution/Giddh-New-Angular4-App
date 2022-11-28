@@ -1505,7 +1505,9 @@
                                                 *ngIf="
                                                     vm.selectedLedger?.voucher?.shortCode === 'sal' ||
                                                     vm.selectedLedger?.voucher?.shortCode === 'pur' ||
-                                                    vm.selectedLedger?.voucher?.shortCode == 'pay'
+                                                    vm.selectedLedger?.voucher?.shortCode == 'pay' ||
+                                                    (voucherApiVersion === 2 &&
+                                                        vm.selectedLedger?.voucher?.shortCode == 'jr')
                                                 "
                                             >
                                                 <div class="form-group mr-b05">
@@ -1750,7 +1752,6 @@
                                             </td>
                                             <td
                                                 *ngIf="
-                                                    vm.selectedLedger.voucher?.shortCode !== 'jr' &&
                                                     vm.selectedLedger.voucher?.shortCode !== 'cntr' &&
                                                     vm.selectedLedger.voucher?.shortCode !== 'rcpt' &&
                                                     vm.selectedLedger.voucher?.shortCode !== 'advance-receipt'
