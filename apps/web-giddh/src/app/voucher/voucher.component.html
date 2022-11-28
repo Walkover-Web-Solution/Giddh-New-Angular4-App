@@ -5,8 +5,8 @@
     (commonLocaleData)="commonLocaleData = $event"
     (translationComplete)="translationComplete($event)"
 >
-    <giddh-page-loader *ngIf="showLoader"></giddh-page-loader>
-    <div [ngStyle]="{ 'display': !showLoader ? 'block' : 'none' }">
+    <giddh-page-loader *ngIf="showLoader && isUpdateMode"></giddh-page-loader>
+    <div [ngStyle]="{ 'display': !isUpdateMode || !showLoader ? 'block' : 'none' }">
         <!-- region page change menu -->
         <div class="d-flex border-bottom mobile-view-padding">
             <hamburger-menu
@@ -184,7 +184,7 @@
                                                             "
                                                             [customPanelClass]="'panel-cl'"
                                                             [name]="'voucherDetails.customerName'"
-                                                            [openDropdown]="true"
+                                                            [openDropdown]="openCustomerDropdown"
                                                             [placeholder]="customerPlaceHolder"
                                                             [options]="customerAcList$ | async"
                                                             (selectedOption)="onSelectCustomer($event)"

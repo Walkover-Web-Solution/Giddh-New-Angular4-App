@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, ContentChild, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, TemplateRef, ViewChild } from "@angular/core";
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, TemplateRef, ViewChild } from "@angular/core";
 import { FormControl } from "@angular/forms";
 import { MatAutocompleteTrigger } from "@angular/material/autocomplete";
 import { ReplaySubject } from "rxjs";
@@ -76,7 +76,7 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
 
-    constructor(
+    constructor(private cdr: ChangeDetectorRef
     ) {
     }
 
@@ -86,7 +86,6 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
      * @memberof SelectFieldComponent
      */
     public ngOnInit(): void {
-        // this.addEventListenerWrapper(this.closeDropdownPanel, 'scroll');
         if (this.enableDynamicSearch) {
             this.searchFormControl.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(search => {
                 if (search) {
@@ -156,7 +155,6 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
      * @memberof SelectFieldComponent
      */
     public ngOnDestroy(): void {
-        // this.removeEventListenerWrapper(this.closeDropdownPanel, 'scroll');
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
@@ -218,8 +216,9 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
      * @memberof SelectFieldComponent
      */
     public openDropdownPanel(): void {
-        this.selectField?.nativeElement?.focus();
         this.trigger?.openPanel();
+        this.selectField?.nativeElement?.focus();
+        this.cdr.detectChanges();
     }
 
     /**

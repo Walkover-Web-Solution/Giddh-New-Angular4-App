@@ -119,6 +119,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { HttpClient } from '@angular/common/http';
 import { NewConfirmationModalComponent } from '../theme/new-confirmation-modal/confirmation-modal.component';
 import { SelectFieldComponent } from '../theme/form-fields/select-field/select-field.component';
+import { MatMenuTrigger } from '@angular/material/menu';
 
 /** Type of search: customer and item (product/service) search */
 const SEARCH_TYPE = {
@@ -169,6 +170,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     @ViewChild('inputCustomerName', { static: true }) public inputCustomerName: ElementRef;
     @ViewChild('customerBillingAddress', { static: true }) public customerBillingAddress: ElementRef;
     @ViewChildren(BsDatepickerDirective) public datePickers: QueryList<BsDatepickerDirective>;
+    @ViewChild(MatMenuTrigger) trigger: MatMenuTrigger;
 
     /** RCM popup instance */
     @ViewChild('rcmPopup', { static: false }) public rcmPopup: PopoverDirective;
@@ -663,10 +665,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public compareFn = (a, b) => a && b && a.id === b.id;
     /** This will hold selected payment account value */
     public selectPaymentValue: string = '';
-    /** This observable use for loader status */
-    // public loaderStatus: Subject<any> = new Subject();
-    /** This will hold loader is default value */
-    public isDefault: boolean = true;
+    /** This will hold dropdown is active */
+    public openCustomerDropdown: boolean = false;
     /** Stores the current invoice selected */
     public invoiceSelectedLabel: any = '';
     /** Stores the current invoice selected */
@@ -773,12 +773,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     }
 
     public ngOnInit() {
-        // this.loaderStatus.pipe(debounceTime(1500), takeUntil(this.destroyed$)).subscribe((event: any) => {
-        //     if (this.isDefault) {
-        //         this.isDefault = false;
-        //         this.focusInCustomerName();
-        //     }
-        // });
         /** This will use for filter link purchase orders  */
         this.linkPoDropdown.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(search => {
             this.filterPurchaseOrder(search);
@@ -852,7 +846,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             this.voucherTypeChanged = false;
             this.copyPurchaseBill = false;
             this.isDefaultLoad = true;
-            
+
             if (params['invoiceType']) {
                 // Reset voucher due to advance receipt model set voucher in invoice management
                 this.store.dispatch(this.invoiceReceiptActions.ResetVoucherDetails());
@@ -983,6 +977,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                         }
                     }
                 }
+                this.openCustomerDropdown = false;
+            } else {
+                this.openCustomerDropdown = true;
             }
 
             if (this.isPurchaseInvoice) {
@@ -1390,9 +1387,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 } else {
                     this.statesBilling.readonly = false;
                 }
-                if (results[1] || results[2]) {
-                    this.openAccountSelectionDropdown?.closeDropdownPanel();
-                }
+                this.openAccountSelectionDropdown?.closeDropdownPanel();
                 // create account success then close sidebar, and add customer details
                 if (results[1]) {
                     // toggle sidebar if it's open
@@ -1762,7 +1757,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @memberof VoucherComponent
      */
     public startLoader(shouldStartLoader: boolean): void {
-        // this.loaderStatus.next(true);
         this.showLoader = shouldStartLoader;
         this._cdr.detectChanges();
     }
@@ -2264,6 +2258,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.fillDeliverToAddress();
         this.createEmbeddedViewAtIndex(0);
         this.onSearchQueryChanged('', 1, 'customer');
+        setTimeout(() => {
+            this.openAccountSelectionDropdown?.openDropdownPanel();
+        }, 500);
     }
 
     public triggerSubmitInvoiceForm(form: NgForm, isUpdate) {
@@ -3621,7 +3618,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public toggleAccountAsidePane(event?): void {
         if (event) {
             event.preventDefault();
-        }        
+        }
         this.accountAsideMenuState = this.accountAsideMenuState === 'out' ? 'in' : 'out';
         this.toggleBodyClass();
         if (!this.invFormData.voucherDetails.customerUniquename && this.accountAsideMenuState === 'out') {
@@ -5521,6 +5518,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             this.invFormData.accountDetails.billingDetails.state.name = stateName;
             this.invFormData.accountDetails.billingDetails.stateName = stateName;
             this.invFormData.accountDetails.billingDetails.stateCode = stateCode;
+            this.invFormData.accountDetails.billingDetails.state.code = stateCode;
         } else {
             if (this.shippingState && this.shippingState.nativeElement) {
                 this.shippingState.nativeElement.classList.remove('error-box');
@@ -5531,6 +5529,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 this.invFormData.accountDetails.shippingDetails.stateName = stateName;
                 this.invFormData.accountDetails.shippingDetails.stateCode = stateCode;
                 this.invFormData.accountDetails.shippingDetails.state.name = stateName;
+                this.invFormData.accountDetails.shippingDetails.state.code = stateCode;
             }
         }
     }
@@ -6979,6 +6978,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             this.purchaseBillCompany.billingDetails.state.name = stateName;
             this.purchaseBillCompany.billingDetails.stateName = stateName;
             this.purchaseBillCompany.billingDetails.stateCode = stateCode;
+            this.purchaseBillCompany.billingDetails.state.code = stateCode;
         } else {
             if (this.shippingStateCompany && this.shippingStateCompany.nativeElement) {
                 this.shippingStateCompany.nativeElement.classList.remove('error-box');
@@ -6989,6 +6989,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 this.purchaseBillCompany.shippingDetails.stateName = stateName;
                 this.purchaseBillCompany.shippingDetails.stateCode = stateCode;
                 this.purchaseBillCompany.shippingDetails.state.name = stateName;
+                this.purchaseBillCompany.shippingDetails.state.code = stateCode;
                 this.purchaseBillCompany.shippingDetails.state.code = stateCode;
             }
         }
@@ -7389,7 +7390,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @param {boolean} isCompanyAddress
      * @memberof VoucherComponent
      */
-    public selectAddress(data: any, address: any, isCompanyAddress: boolean = false): void {        
+    public selectAddress(data: any, address: any, isCompanyAddress: boolean = false): void {
         if (data && address) {
             data.address[0] = address.address;
             if (!data.state) {
