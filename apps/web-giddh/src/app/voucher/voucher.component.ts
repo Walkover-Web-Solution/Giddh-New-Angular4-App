@@ -671,23 +671,23 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public selectedInvoiceLabel: any = '';
     /** Stores the current active entry */
     public activeEntry: any;
-    // Thsi will use for instance of warehouse
+    // This will use for instance of warehouse
     @ViewChild('selectWarehouse', { static: false }) public selectWarehouse: SelectFieldComponent;
-    // Thsi will use for instance of linking dropdown
+    // This will use for instance of linking dropdown
     @ViewChild('linkingDropdown', { static: false }) public linkingDropdown: SelectFieldComponent;
-    // Thsi will use for instance of invoice list
+    // This will use for instance of invoice list
     @ViewChild('invoiceListDropdown', { static: false }) public invoiceListDropdown: SelectFieldComponent;
-    // Thsi will use for instance of sales deposit dropdown
+    // This will use for instance of sales deposit dropdown
     @ViewChild('salesDepositDropdown', { static: false }) public salesDepositDropdown: SelectFieldComponent;
-    // Thsi will use for instance of deposit dropdown
+    // This will use for instance of deposit dropdown
     @ViewChild('depositDropdown', { static: false }) public depositDropdown: SelectFieldComponent;
-    // Thsi will use for instance of customer billing state
+    // This will use for instance of customer billing state
     @ViewChild('customerBillingState', { static: false }) public customerBillingState: SelectFieldComponent;
-    // Thsi will use for instance of customer shipping state
+    // This will use for instance of customer shipping state
     @ViewChild('customerShippingState', { static: false }) public customerShippingState: SelectFieldComponent;
-    // Thsi will use for instance of company billing state
+    // This will use for instance of company billing state
     @ViewChild('companyBillingState', { static: false }) public companyBillingState: SelectFieldComponent;
-    // Thsi will use for instance of company shipping state
+    // This will use for instance of company shipping state
     @ViewChild('companyShippingState', { static: false }) public companyShippingState: SelectFieldComponent;
 
     /**
@@ -2782,8 +2782,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
 
     public toggleOtherTaxesAsidePane(modalBool: boolean, index: number = null) {
-        const shSelectField: any = !this.isMobileScreen ? this.selectAccount?.first : this.selectAccount?.last;
-        shSelectField.closeDropdownPanel();
+        const salesSelect: any = !this.isMobileScreen ? this.selectAccount?.first : this.selectAccount?.last;
+        salesSelect?.closeDropdownPanel();
         this.openAccountSelectionDropdown?.closeDropdownPanel();
         this.selectWarehouse?.closeDropdownPanel();
         this.linkingDropdown?.closeDropdownPanel();
@@ -7562,9 +7562,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public openProductDropdown(): void {
         if (this.invFormData?.voucherDetails?.customerUniquename || this.invFormData?.voucherDetails?.customerName) {
             setTimeout(() => {
-                const shSelectField: any = !this.isMobileScreen ? this.selectAccount?.first : this.selectAccount?.last;
-                if (shSelectField) {
-                    shSelectField.openDropdownPanel();
+                const salesSelect: any = !this.isMobileScreen ? this.selectAccount?.first : this.selectAccount?.last;
+                if (salesSelect) {
+                    salesSelect.openDropdownPanel();
                 }
             }, 200);
         }
