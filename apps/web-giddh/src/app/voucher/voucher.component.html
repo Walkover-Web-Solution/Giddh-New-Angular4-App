@@ -1288,10 +1288,12 @@
                                                                                     let address of companyAddressList
                                                                                 "
                                                                                 (click)="
-                                                                                    selectCompanyShippingAddress(
-                                                                                        address
-                                                                                    )
-                                                                                "
+                                                                                        selectAddress(
+                                                                                            purchaseBillCompany
+                                                                                                .shippingDetails,
+                                                                                            address
+                                                                                        )
+                                                                                    "
                                                                             >
                                                                                 <p class="font-12 pl-0">
                                                                                     {{ address.address }}
