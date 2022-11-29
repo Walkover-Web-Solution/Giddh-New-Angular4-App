@@ -975,9 +975,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                         }
                     }
                 }
-                this.openCustomerDropdown = false;
-            } else {
                 this.openCustomerDropdown = true;
+            } else {
+                this.openCustomerDropdown = false;
             }
 
             if (this.isPurchaseInvoice) {
@@ -1385,7 +1385,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 } else {
                     this.statesBilling.readonly = false;
                 }
-                this.openAccountSelectionDropdown?.closeDropdownPanel();
                 // create account success then close sidebar, and add customer details
                 if (results[1]) {
                     // toggle sidebar if it's open
@@ -3971,6 +3970,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @memberof VoucherComponent
      */
     public cancelUpdate(): void {
+        this.openCustomerDropdown = false;
         if (this.callFromOutside) {
             this.location?.back();
         } else {
@@ -6988,7 +6988,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 this.purchaseBillCompany.shippingDetails.stateCode = stateCode;
                 this.purchaseBillCompany.shippingDetails.state.name = stateName;
                 this.purchaseBillCompany.shippingDetails.state.code = stateCode;
-                this.purchaseBillCompany.shippingDetails.state.code = stateCode;
             }
         }
         this._cdr.detectChanges();
@@ -7007,17 +7006,14 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             if (selectedState) {
                 this.purchaseBillCompany[type].stateCode = selectedState.value;
                 this.purchaseBillCompany[type].state.code = selectedState.value;
-                this.purchaseBillCompany[type].state.name = selectedState.label;
             } else {
                 this.purchaseBillCompany[type].stateCode = null;
                 this.purchaseBillCompany[type].state.code = null;
-                this.purchaseBillCompany[type].state.name = null;
                 this._toasty.clearAllToaster();
             }
         } else {
             this.purchaseBillCompany[type].stateCode = null;
             this.purchaseBillCompany[type].state.code = null;
-            this.purchaseBillCompany[type].state.name = null;
         }
         this.checkGstNumValidation(gstVal);
     }
