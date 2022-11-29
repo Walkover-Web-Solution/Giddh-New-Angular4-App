@@ -671,6 +671,24 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public selectedInvoiceLabel: any = '';
     /** Stores the current active entry */
     public activeEntry: any;
+    // This will use for instance of warehouse
+    @ViewChild('selectWarehouse', { static: false }) public selectWarehouse: SelectFieldComponent;
+    // This will use for instance of linking dropdown
+    @ViewChild('linkingDropdown', { static: false }) public linkingDropdown: SelectFieldComponent;
+    // This will use for instance of invoice list
+    @ViewChild('invoiceListDropdown', { static: false }) public invoiceListDropdown: SelectFieldComponent;
+    // This will use for instance of sales deposit dropdown
+    @ViewChild('salesDepositDropdown', { static: false }) public salesDepositDropdown: SelectFieldComponent;
+    // This will use for instance of deposit dropdown
+    @ViewChild('depositDropdown', { static: false }) public depositDropdown: SelectFieldComponent;
+    // This will use for instance of customer billing state
+    @ViewChild('customerBillingState', { static: false }) public customerBillingState: SelectFieldComponent;
+    // This will use for instance of customer shipping state
+    @ViewChild('customerShippingState', { static: false }) public customerShippingState: SelectFieldComponent;
+    // This will use for instance of company billing state
+    @ViewChild('companyBillingState', { static: false }) public companyBillingState: SelectFieldComponent;
+    // This will use for instance of company shipping state
+    @ViewChild('companyShippingState', { static: false }) public companyShippingState: SelectFieldComponent;
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -2764,6 +2782,18 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
 
     public toggleOtherTaxesAsidePane(modalBool: boolean, index: number = null) {
+        const salesSelect: any = !this.isMobileScreen ? this.selectAccount?.first : this.selectAccount?.last;
+        salesSelect?.closeDropdownPanel();
+        this.openAccountSelectionDropdown?.closeDropdownPanel();
+        this.selectWarehouse?.closeDropdownPanel();
+        this.linkingDropdown?.closeDropdownPanel();
+        this.invoiceListDropdown?.closeDropdownPanel();
+        this.customerBillingState?.closeDropdownPanel();
+        this.customerShippingState?.closeDropdownPanel();
+        this.companyBillingState?.closeDropdownPanel();
+        this.companyShippingState?.closeDropdownPanel();
+        this.depositDropdown?.closeDropdownPanel();
+        this.salesDepositDropdown?.closeDropdownPanel();
         this.activeEntry = this.invFormData.entries[index];
         if (!modalBool) {
             let entry = this.invFormData.entries[this.activeIndx];
@@ -7532,9 +7562,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public openProductDropdown(): void {
         if (this.invFormData?.voucherDetails?.customerUniquename || this.invFormData?.voucherDetails?.customerName) {
             setTimeout(() => {
-                const shSelectField: any = !this.isMobileScreen ? this.selectAccount?.first : this.selectAccount?.last;
-                if (shSelectField) {
-                    shSelectField.openDropdownPanel();
+                const salesSelect: any = !this.isMobileScreen ? this.selectAccount?.first : this.selectAccount?.last;
+                if (salesSelect) {
+                    salesSelect.openDropdownPanel();
                 }
             }, 200);
         }
