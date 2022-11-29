@@ -2939,10 +2939,6 @@
                                                     </amount-field>
                                                 </span>
                                             </div>
-                                            <ng-container
-                                                *ngTemplateOutlet="otherTaxesModal; context: { $implicit: entry }"
-                                            >
-                                            </ng-container>
                                         </div>
                                         <div
                                             class="trash-icon-delete"
@@ -4548,13 +4544,6 @@
                                                         >
                                                         </amount-field>
                                                     </div>
-                                                    <ng-container
-                                                        *ngTemplateOutlet="
-                                                            otherTaxesModal;
-                                                            context: { $implicit: entry }
-                                                        "
-                                                    >
-                                                    </ng-container>
                                                 </div>
                                             </div>
                                         </div>
@@ -5374,25 +5363,23 @@
         </div>
     </ng-template>
     <!-- endregion -->
-    <ng-template let-entry #otherTaxesModal>
-        <div id="top0">
-            <app-aside-menu-other-taxes
-                *ngIf="asideMenuStateForOtherTaxes === 'in'"
-                [class]="asideMenuStateForOtherTaxes"
-                [taxes]="companyTaxesList"
-                [otherTaxesModal]="entry.otherTaxModal"
-                [commonLocaleData]="commonLocaleData"
-                [@slideInOut]="asideMenuStateForOtherTaxes"
-                (closeModal)="closeAsideMenuStateForOtherTaxes()"
-                (applyTaxes)="
-                    calculateOtherTaxes($event, entry);
-                    toggleOtherTaxesAsidePane(true, null);
-                    calculateAffectedThingsFromOtherTaxChanges()
-                "
-            >
-            </app-aside-menu-other-taxes>
-        </div>
-    </ng-template>
+    <div id="top0">
+        <app-aside-menu-other-taxes
+            *ngIf="asideMenuStateForOtherTaxes === 'in'"
+            [class]="asideMenuStateForOtherTaxes"
+            [taxes]="companyTaxesList"
+            [otherTaxesModal]="activeEntry.otherTaxModal"
+            [commonLocaleData]="commonLocaleData"
+            [@slideInOut]="asideMenuStateForOtherTaxes"
+            (closeModal)="closeAsideMenuStateForOtherTaxes()"
+            (applyTaxes)="
+                calculateOtherTaxes($event, activeEntry);
+                toggleOtherTaxesAsidePane(true, null);
+                calculateAffectedThingsFromOtherTaxChanges()
+            "
+        >
+        </app-aside-menu-other-taxes>
+    </div>
     <!-- region print voucher popup -->
     <ng-template #printVoucherModal>
         <ng-container *ngIf="actionAfterGenerateORUpdate === 3 && invoiceNo && accountUniqueName">
