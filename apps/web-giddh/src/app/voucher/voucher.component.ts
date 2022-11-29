@@ -668,6 +668,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public invoiceSelectedLabel: any = '';
     /** Stores the current invoice selected */
     public selectedInvoiceLabel: any = '';
+    /** Stores the current active entry */
+    public activeEntry: any;
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -2762,6 +2764,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
 
     public toggleOtherTaxesAsidePane(modalBool: boolean, index: number = null) {
+        this.activeEntry = this.invFormData.entries[index];
         if (!modalBool) {
             let entry = this.invFormData.entries[this.activeIndx];
             if (entry) {
