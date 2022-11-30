@@ -55,6 +55,7 @@ import { MasterComponent } from './header/components/master/master.component';
 import { CheckPermissionModule } from '../permissions/check-permission.module';
 import { GenericAsideMenuAccountModule } from './generic-aside-menu-account/generic.aside.menu.account.module';
 import { AccountUpdateNewDetailsModule } from './header/components/account-update-new-details/account-update-new-details.module';
+import { MatRadioModule } from '@angular/material/radio';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true
@@ -133,7 +134,8 @@ export function provideConfig() {
         NgxBootstrapSwitchModule.forRoot(),
         MatSlideToggleModule,
         CheckPermissionModule,
-        AccountUpdateNewDetailsModule
+        AccountUpdateNewDetailsModule,
+        MatRadioModule
     ],
     exports: [
         CommonModule,
