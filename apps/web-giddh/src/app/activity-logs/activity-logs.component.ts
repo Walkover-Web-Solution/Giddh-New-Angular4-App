@@ -60,6 +60,9 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         toDate: "",
         entityId: "",
         isChecked: false,
+        entryFromDate:"",
+        entryToDate:""
+
     }
     /** Activity log form's company entity type list */
     public entities: IOption[] = [];
@@ -73,16 +76,26 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
     public selectedToDate: Date;
     /** Directive to get reference of element */
     @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+    /** Directive to get reference of element */
+    @ViewChild('datepickerEntryTemplate') public datepickerEntryTemplate: ElementRef;
     /** Universal date observer */
     public universalDate$: Observable<any>;
     /** This will store selected date range to use in api */
     public selectedDateRange: any;
     /** This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
+    /** This will store selected date range to use in api */
+    public selectedEntryDateRange: any;
+    /** This will store selected date range to show on UI */
+    public selectedEntryDateRangeUi: any;
     /** This will store available date ranges */
     public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
+    /** This will store available date ranges */
+    public entryDatePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /** Selected range label */
     public selectedRangeLabel: any = "";
+    /** Selected range label */
+    public selectedEntryRangeLabel: any = "";
     /** This will store modal reference */
     public modalRef: BsModalRef;
     /** This will store the x/y position of the field to show datepicker under it */
@@ -91,12 +104,16 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
     public universalDate: any;
     /** To show clear filter */
     public showDateReport: boolean = false;
+    /** To show clear filter */
+    public entryshowDateReport: boolean = false;
     /** Holds label of selected values */
     public activityObjLabels: any = {
         entity: "",
         operation: "",
         user: ""
     };
+    /** To show entry date filter */
+    public isShow: boolean = false;
 
     constructor(
         public activityService: ActivityLogsService,
@@ -140,6 +157,11 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
                 this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                 this.activityObj.fromDate = dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
                 this.activityObj.toDate = dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
+                this.selectedEntryDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
+                this.selectedEntryDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                this.activityObj.entryFromDate = dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
+                this.activityObj.entryToDate = dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
+         
             }
         });
     }
@@ -205,7 +227,7 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * To select entity type
+     * To select user type
      *
      * @param {IOption} event Selected item object
      * @memberof ActivityLogsComponent
@@ -216,6 +238,18 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
             this.activityObj.userUniqueNames.push(event.value);
         } else {
             this.activityObj.userUniqueNames = [];
+        }
+    }
+
+    /**
+     * To select entity type
+     *
+     * @param {IOption} event Selected item object
+     * @memberof ActivityLogsComponent
+     */
+    public selecteEntityType(event: IOption): void {
+        if (event && event.value) {
+            this.isShow = true;
         }
     }
 
@@ -254,6 +288,7 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         this.activityObj.operation = '';
         this.activityObj.userUniqueNames = [];
         this.showDateReport = false;
+        this.entryshowDateReport = false;
         this.activityObjLabels = {
             entity: "",
             operation: "",
@@ -263,6 +298,10 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         this.selectedDateRangeUi = dayjs(this.universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(this.universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
         this.activityObj.fromDate = dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
         this.activityObj.toDate = dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
+        this.selectedEntryDateRange = { startDate: dayjs(this.universalDate[0]), endDate: dayjs(this.universalDate[1]) };
+        this.selectedEntryDateRangeUi = dayjs(this.universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(this.universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+        this.activityObj.entryFromDate = dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
+        this.activityObj.entryToDate = dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
         this.getActivityLogs(true);
         this.changeDetection.detectChanges();
     }
@@ -293,6 +332,32 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         }
     }
 
+/**
+ * Call back function for date/range selection in datepicker
+ *
+ * @param {*} value
+ * @memberof ActivityLogsComponent
+ */
+    public entryDateSelectedCallback(value?: any): void {
+        if (value && value.event === "cancel") {
+            this.hideGiddhDatepicker();
+            return;
+        }
+        this.selectedEntryRangeLabel = "";
+
+        if (value && value.name) {
+            this.selectedEntryRangeLabel = value.name;
+        }
+        this.hideGiddhDatepicker();
+        if (value && value.startDate && value.endDate) {
+            this.entryshowDateReport = true;
+            this.selectedEntryDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
+            this.selectedEntryDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.activityObj.entryFromDate = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
+            this.activityObj.entryToDate = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
+        }
+    }
+
     /**
     * This will hide the datepicker
     *
@@ -317,6 +382,23 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
             Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
         );
     }
+
+    /**
+     *To show the datepicker
+     *
+     * @param {*} element
+     * @memberof ActivityLogsComponent
+     */
+    public showEntryGiddhDatepicker(element: any): void {
+        if (element) {
+            this.dateFieldPosition = this.generalService.getPosition(element.target);
+        }
+        this.modalRef = this.modalService.show(
+            this.datepickerEntryTemplate,
+            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
+        );
+    }
+
 
     /**
      * To check is entry expanded
