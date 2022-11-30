@@ -2328,10 +2328,11 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.fillDeliverToAddress();
         this.createEmbeddedViewAtIndex(0);
         this.onSearchQueryChanged('', 1, 'customer');
+
         setTimeout(() => {
             this.openAccountSelectionDropdown?.openDropdownPanel();
         }, 500);
-        this._cdr.detectChanges();
+
         if (this.asideMenuStateForRecurringEntry === 'in') {
             this.openAccountSelectionDropdown?.closeDropdownPanel();
         }
@@ -2820,7 +2821,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
              */
             if (!this.isUpdateMode) {
                 document.querySelector('body').classList.add('fixed');
-                this.openAccountSelectionDropdown.closeDropdownPanel();
+                this.openAccountSelectionDropdown?.closeDropdownPanel();
                 this.openCustomerDropdown = false;
             }
         } else {
