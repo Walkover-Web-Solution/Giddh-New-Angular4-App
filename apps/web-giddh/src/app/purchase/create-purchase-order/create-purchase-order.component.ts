@@ -3811,7 +3811,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     /**
      * This will use for cancel bulk item modal
      *
-     * @memberof VoucherComponent
+     * @memberof CreatePurchaseOrderComponent
      */
     public cancelBulkItemsModal(): void {
         this.dialog.closeAll();
