@@ -7505,25 +7505,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             }
         }
     }
-
-    // public selectCompanyShippingAddress(address: any): void {
-    //     if (address) {
-    //         this.purchaseBillCompany.shippingDetails.address[0] = address.address;
-    //         if (!this.purchaseBillCompany.shippingDetails.state) {
-    //             this.purchaseBillCompany.shippingDetails.state = {};
-    //         }
-    //         this.purchaseBillCompany.shippingDetails.state.code = address.stateCode;
-    //         this.purchaseBillCompany.shippingDetails.stateCode = address.stateCode;
-    //         this.purchaseBillCompany.shippingDetails.state.name = address.stateName;
-    //         this.purchaseBillCompany.shippingDetails.stateName = address.stateName;
-    //         this.purchaseBillCompany.shippingDetails.gstNumber = address.gstNumber ?? address.taxNumber;
-    //         this.purchaseBillCompany.shippingDetails.pincode = address.pincode;
-    //         console.log(cloneDeep(this.purchaseBillCompany.shippingDetails), address);
-
-    //         this._cdr.detectChanges();
-    //     }
-    // }
-
+    
     /**
      * Recalculates the entries total value
      *
