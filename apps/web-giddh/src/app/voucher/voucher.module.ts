@@ -33,12 +33,8 @@ import { SharedModule } from "../shared/shared.module";
 import { VoucherAddBulkItemsModule } from "../shared/voucher-add-bulk-items/voucher-add-bulk-items.module";
 import { DiscountControlModule } from "../theme/discount-control/discount-control.module";
 import { FormFieldsModule } from "../theme/form-fields/form-fields.module";
-// import { GiddhDatepickerModule } from "../theme/giddh-datepicker/giddh-datepicker.module";
 import { SelectModule } from "../theme/ng-select/ng-select";
-import { ShSelectModule } from "../theme/ng-virtual-select/sh-select.module";
-import { SalesShSelectModule } from "../theme/sales-ng-virtual-select/sh-select.module";
 import { TaxControlModule } from "../theme/tax-control/tax-control.module";
-import { VoucherGstTreatmentComponent } from "./components/voucher-gst-treatment/voucher-gst-treatment.component";
 import { VoucherPrintInPlaceComponent } from "./components/voucher-print-inplace/voucher-print-in-place.component";
 import { VoucherRendererComponent } from "./voucher-renderer.component";
 import { VoucherComponent } from "./voucher.component";
@@ -52,9 +48,7 @@ import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
         FormsModule,
         CommonModule,
         ReactiveFormsModule,
-        ShSelectModule,
         KeyboardShortutModule,
-        SalesShSelectModule,
         DecimalDigitsModule,
         CollapseModule,
         NgxUploaderModule,
@@ -98,7 +92,6 @@ import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
     declarations: [
         VoucherRendererComponent,
         VoucherComponent,
-        VoucherGstTreatmentComponent,
         VoucherPrintInPlaceComponent
     ],
     providers: [TitleCasePipe],
