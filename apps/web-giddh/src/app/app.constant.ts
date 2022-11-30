@@ -465,4 +465,4 @@ export const MOBILE_NUMBER_IP_ADDRESS_URL = 'http://ip-api.com/json/';
 export const MOBILE_NUMBER_ADDRESS_JSON_URL = 'https://ipinfo.io/';
 export const OTP_PROVIDER_URL = 'https://control.msg91.com/app/assets/otp-provider/otp-provider.js';
 
-export const RESTRICTED_VOUCHERS_FOR_DOWNLOAD = [];
+export const RESTRICTED_VOUCHERS_FOR_DOWNLOAD = ['journal'];
