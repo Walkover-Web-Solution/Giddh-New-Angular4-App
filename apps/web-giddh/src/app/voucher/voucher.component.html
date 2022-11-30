@@ -1491,21 +1491,29 @@
                                         <div class="col-xl-6 col-lg-10 col-md-10 pl-0 purchase-link">
                                             <mat-select
                                                 name="linkedPO"
-                                                [placeholder]="localeData?.select_order_placeholder"
-                                                [multiple]="true"
                                                 [(ngModel)]="linkedPo"
-                                                (ngModelChange)="getPurchaseOrder($event, true)"
-                                                [compareWith]="compareFn"
+                                                [multiple]="true"
+                                                (selectionChange)="getPurchaseOrder($event?.value, true)"
                                                 class="po-mat-salect"
                                             >
+                                                <mat-select-trigger *ngIf="linkedPo?.length">
+                                                    <ng-container *ngFor="let poNumber of linkedPo; let i = index"
+                                                        >{{ purchaseOrderNumberValueMapping[poNumber]
+                                                        }}<ng-container *ngIf="linkedPo[i + 1]">, </ng-container>
+                                                    </ng-container>
+                                                </mat-select-trigger>
                                                 <mat-option class="po-options-line">
-                                                    <ngx-mat-select-search [formControl]="linkPoDropdown">
+                                                    <ngx-mat-select-search
+                                                        [formControl]="linkPoDropdown"
+                                                        [placeholderLabel]="localeData?.select_order_placeholder"
+                                                    >
                                                     </ngx-mat-select-search>
                                                 </mat-option>
                                                 <mat-option
                                                     *ngFor="let option of fieldFilteredOptions"
-                                                    [value]="option"
+                                                    [value]="option.value"
                                                     class="po-options-line"
+                                                    [disabled]="showLoader"
                                                 >
                                                     <span class="po-option-label"> {{ option?.label }}</span>
                                                     <span class="po-option-value" *ngIf="option?.additional?.pending">
