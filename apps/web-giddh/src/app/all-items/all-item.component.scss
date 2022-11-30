@@ -49,6 +49,12 @@
                         color: var(--color-primary-all-items-page-single-menu-items-heading);
                         i {
                             font-size: 22px;
+
+                            &.unit-mapping-icon {
+                                background-image: url("../../assets/images/unit-mapping.svg");
+                                width: 24px;
+                                height: 24px;
+                            }
                         }
                     }
                     p {
