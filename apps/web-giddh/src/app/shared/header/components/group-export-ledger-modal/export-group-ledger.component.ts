@@ -28,7 +28,6 @@ export class ExportGroupLedgerComponent implements OnInit {
     public emailTypeMini: string = '';
     public emailTypeDetail: string;
     public emailData: string = '';
-    public fileType: string = 'pdf';
     public order: string = 'asc';
     public dateRange: { from: string, to: string } = { from: '', to: '' };
     /** Date format type */
@@ -70,6 +69,8 @@ export class ExportGroupLedgerComponent implements OnInit {
         exportType: 'GROUP_LEDGER_EXPORT',
         showEntryVoucherNo: false
     }
+    /** To hold export request object */
+    public fileType: string = 'CSV';
 
 
     constructor(private store: Store<AppState>, private _permissionDataService: PermissionDataService, private generalService: GeneralService, private modalService: BsModalService) {
