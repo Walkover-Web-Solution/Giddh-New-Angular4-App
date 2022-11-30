@@ -166,7 +166,7 @@ export class VoucherPrintInPlaceComponent implements OnInit, OnDestroy {
     /**
      * Releases memory
      *
-     * @memberof ProformaPrintInPlaceComponent
+     * @memberof VoucherPrintInPlaceComponent
      */
     public ngOnDestroy(): void {
         this.destroyed$.next(true);

@@ -158,7 +158,7 @@
                                             "
                                             *ngIf="voucherApiVersion === 2"
                                             [cssClass]="'form-control mat-field-border text-left'"
-                                            [name]="'voucherName{{ entry.uniqueName }}'"
+                                            [name]="'voucherName' + entry.uniqueName"
                                             [placeholder]="localeData?.select_voucher"
                                             [options]="adjustVoucherOptions$ | async"
                                             (selectedOption)="selectVoucher($event, entry, entryIdx)"
@@ -206,7 +206,7 @@
                                                 shouldDisableEdit(entry) || entry.linkingAdjustment ? 'disabled' : null
                                             "
                                             [cssClass]="'form-control mat-field-border text-left'"
-                                            [name]="'voucherName{{ entry.uniqueName }}'"
+                                            [name]="'voucherName' + entry.uniqueName"
                                             [defaultValue]="entry.voucherNumber"
                                             (click)="clickSelectVoucher(entryIdx, adjustAdvancePaymentForm)"
                                             [required]="true"

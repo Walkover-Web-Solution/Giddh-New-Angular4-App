@@ -5,8 +5,8 @@
     (commonLocaleData)="commonLocaleData = $event"
     (translationComplete)="translationComplete($event)"
 >
-    <giddh-page-loader *ngIf="showLoader && isUpdateMode"></giddh-page-loader>
-    <div [ngStyle]="{ 'display': !isUpdateMode || !showLoader ? 'block' : 'none' }">
+    <giddh-page-loader *ngIf="(showLoader && isUpdateMode) || isShowLoader"></giddh-page-loader>
+    <div [ngStyle]="{ 'display': (!isUpdateMode || !showLoader) && !isShowLoader ? 'block' : 'none' }">
         <!-- region page change menu -->
         <div class="d-flex border-bottom mobile-view-padding">
             <hamburger-menu
@@ -294,13 +294,6 @@
                                                     class="d-flex aqua-color"
                                                     *ngIf="invFormData.voucherDetails.customerName"
                                                 >
-                                                    <ng-container
-                                                        *ngTemplateOutlet="
-                                                            gstTreatmentModal;
-                                                            context: { $implicit: showGstTreatmentModal }
-                                                        "
-                                                    >
-                                                    </ng-container>
                                                     <span
                                                         class="cp aqua-color mr-r05"
                                                         *ngIf="!isCashInvoice && !isUpdateMode"
@@ -5367,19 +5360,6 @@
                 (cancelEvent)="cancelEmailModal()"
             ></app-send-email-invoice-component>
         </ng-container>
-    </ng-template>
-    <!-- endregion -->
-    <!-- endregion -->
-    <!-- region gst treatment modal-->
-    <ng-template #gstTreatmentModal let-show>
-        <div *ngIf="show" class="gst-treatment-modal">
-            <voucher-gst-treatment-component
-                [localeData]="localeData"
-                [commonLocaleData]="commonLocaleData"
-                (closeEvent)="showGstTreatmentModal = false"
-            >
-            </voucher-gst-treatment-component>
-        </div>
     </ng-template>
     <!-- endregion -->
     <div id="top0">

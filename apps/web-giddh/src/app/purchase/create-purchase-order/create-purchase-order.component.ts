@@ -53,6 +53,7 @@ import { SearchService } from '../../services/search.service';
 import { SalesShSelectComponent } from '../../theme/sales-ng-virtual-select/sh-select.component';
 import { LedgerService } from '../../services/ledger.service';
 import { SettingsDiscountService } from '../../services/settings.discount.service';
+import { MatDialog } from '@angular/material/dialog';
 
 /** Type of search: vendor and item (product/service) search */
 const SEARCH_TYPE = {
@@ -92,8 +93,6 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     @ViewChild('rcmPopup') public rcmPopup: PopoverDirective;
     /* PO Form instance */
     @ViewChild('poForm', { read: NgForm }) public poForm: NgForm;
-    /* Bulk item modal instance */
-    @ViewChild('bulkItemsModal') public bulkItemsModal: ModalDirective;
     /* Bootstrap directive instance */
     @ViewChildren(BsDatepickerDirective) public datePickers: QueryList<BsDatepickerDirective>;
     /* Select account instance */
@@ -110,6 +109,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     @ViewChild('itemsContainer', { read: ViewContainerRef, static: false }) container: ViewContainerRef;
     /** Template reference for each entry */
     @ViewChild('entry', { read: TemplateRef, static: false }) template: TemplateRef<any>;
+    /* Selector for bulk items  modal */
+    @ViewChild('bulkItemsModal', { static: true }) public bulkItemsModal: any;
     /* Modal instance */
     public modalRef: BsModalRef;
     /* This will hold if it's multi currency account */
@@ -370,6 +371,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     public voucherApiVersion: 1 | 2;
     /** List of discounts */
     public discountsList: any[] = [];
+    /** Stores the current active entry */
+    public activeEntry: any;
 
     constructor(
         private store: Store<AppState>,
@@ -394,7 +397,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         private searchService: SearchService,
         private ngZone: NgZone,
         private changeDetection: ChangeDetectorRef,
-        private settingsDiscountService: SettingsDiscountService
+        private settingsDiscountService: SettingsDiscountService,
+        public dialog: MatDialog
     ) {
         this.selectedAccountDetails$ = this.store.pipe(select(state => state.sales.acDtl), takeUntil(this.destroyed$));
         this.createAccountIsSuccess$ = this.store.pipe(select(state => state.sales.createAccountSuccess), takeUntil(this.destroyed$));
@@ -1510,7 +1514,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
      * @param {SalesTransactionItemClass} transaction Current edited transaction
      * @memberof CreatePurchaseOrderComponent
      */
-     public calculateConvertedAmount(transaction: SalesTransactionItemClass): void {
+    public calculateConvertedAmount(transaction: SalesTransactionItemClass): void {
         if (this.isMulticurrencyAccount) {
             if (transaction.isStockTxn) {
                 transaction.convertedAmount = giddhRoundOff(transaction.quantity * ((transaction.rate * this.exchangeRate) ? transaction.rate * this.exchangeRate : 0), 2);
@@ -1923,7 +1927,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         if (this.container) {
             for (let index = entryIdx + 1; index < this.purchaseOrder.entries?.length; index++) {
                 const viewRef: any = this.container.get(index);
-                if(viewRef) {
+                if (viewRef) {
                     viewRef.context.entryIdx -= 1;
                 }
             }
@@ -2031,7 +2035,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
      * @memberof CreatePurchaseOrderComponent
      */
     public savePurchaseOrder(type: string): void {
-        if(this.isFormSaveInProgress) {
+        if (this.isFormSaveInProgress) {
             return;
         }
 
@@ -2466,6 +2470,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
      * @memberof CreatePurchaseOrderComponent
      */
     public toggleOtherTaxesAsidePane(modalBool: boolean, index: number = null): void {
+        this.activeEntry = this.purchaseOrder.entries[index];
         if (!modalBool) {
             let entry = this.purchaseOrder.entries[this.activeIndex];
             if (entry) {
@@ -3141,7 +3146,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             group = 'operatingcost, indirectexpenses';
             withStocks = !!query;
 
-            if(this.voucherApiVersion === 2) {
+            if (this.voucherApiVersion === 2) {
                 group += ", fixedassets";
             }
         }
@@ -3785,11 +3790,30 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
      * @private
      * @memberof CreatePurchaseOrderComponent
      */
-     private getDiscounts(): void {
+    private getDiscounts(): void {
         this.settingsDiscountService.GetDiscounts().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success" && response?.body?.length > 0) {
                 this.discountsList = response?.body;
             }
         });
+    }
+
+    /**
+     * This will use for open add bulk item modal
+     *
+     * @memberof CreatePurchaseOrderComponent
+     */
+    public addBulkItems(): void {
+        this.dialog.open(this.bulkItemsModal, {
+            width: '1000px',
+        });
+    }
+    /**
+     * This will use for cancel bulk item modal
+     *
+     * @memberof CreatePurchaseOrderComponent
+     */
+    public cancelBulkItemsModal(): void {
+        this.dialog.closeAll();
     }
 }
