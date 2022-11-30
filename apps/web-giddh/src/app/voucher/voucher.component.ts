@@ -8358,9 +8358,15 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             this._cdr.detectChanges();
         }
     }
-
-    public closeAllDropdown(event : boolean):void{
-        if(event){
+    
+    /**
+     * This will use for closs all dropdown
+     *
+     * @param {boolean} event
+     * @memberof VoucherComponent
+     */
+    public closeAllDropdown(event: boolean): void {
+        if (event) {
             const salesSelect: any = !this.isMobileScreen ? this.selectAccount?.first : this.selectAccount?.last;
             salesSelect?.closeDropdownPanel();
             this.openAccountSelectionDropdown?.closeDropdownPanel();
