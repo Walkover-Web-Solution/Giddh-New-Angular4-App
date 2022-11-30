@@ -149,25 +149,41 @@ declare var window;
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges {
+    /** True if it is purchase invoice */
     @Input() public isPurchaseInvoice: boolean = false;
+    /** Hold the account number */
     @Input() public accountUniqueName: string = '';
+    /** Hold the invoice number */
     @Input() public invoiceNo = '';
+    /** Hold the invoice type */
     @Input() public invoiceType: VoucherTypeEnum = VoucherTypeEnum.sales;
+    /** Hold the selected items */
     @Input() public selectedItem: InvoicePreviewDetailsVm;
     /** True if this component is called directly */
     @Input() public callFromOutside: boolean = true;
-
+    /** Element View Container instance */
     @ViewChild(ElementViewContainerRef, { static: true }) public elementViewContainerRef: ElementViewContainerRef;
+    /** Copy from previous instance */
     @ViewChild('copyPreviousEstimate', { static: true }) public copyPreviousEstimate: ElementRef;
+    /** Unregistered business instance */
     @ViewChild('unregisteredBusiness', { static: true }) public unregisteredBusiness: ElementRef;
+    /** Invoice Form instance */
     @ViewChild('invoiceForm', { static: false }) public invoiceForm: NgForm;
+    /** Open Account Selection Dropdown instance */
     @ViewChild('openAccountSelectionDropdown', { static: false }) public openAccountSelectionDropdown: SelectFieldComponent;
+    /** Discount Compomnent instance */
     @ViewChildren('discountComponent') public discountComponent: QueryList<DiscountListComponent>;
+    /** Tax Compomnent instance */
     @ViewChildren('taxControlComponent') public taxControlComponent: QueryList<TaxControlComponent>;
+    /** Service dropdown instance */
     @ViewChildren('selectAccount') public selectAccount: QueryList<ElementRef>;
+    /** Description instance */
     @ViewChildren('description') public description: QueryList<ElementRef>;
+    /** Input customer name instance */
     @ViewChild('inputCustomerName', { static: true }) public inputCustomerName: ElementRef;
+    /** Customer billing address instance */
     @ViewChild('customerBillingAddress', { static: true }) public customerBillingAddress: ElementRef;
+    /** Datepicker instance */
     @ViewChildren(BsDatepickerDirective) public datePickers: QueryList<BsDatepickerDirective>;
     /** RCM popup instance */
     @ViewChild('rcmPopup', { static: false }) public rcmPopup: PopoverDirective;
@@ -175,12 +191,11 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     @ViewChild('billingState', { static: true }) billingState: ElementRef;
     /** Shipping state instance */
     @ViewChild('shippingState', { static: true }) shippingState: ElementRef;
-
     /** Billing state instance */
     @ViewChild('billingStateCompany', { static: false }) billingStateCompany: ElementRef;
     /** Shipping state instance */
     @ViewChild('shippingStateCompany', { static: false }) shippingStateCompany: ElementRef;
-
+    /** Advance Receipt Compomnent instance */
     @ViewChild('advanceReceiptComponent', { static: true }) public advanceReceiptComponent: AdvanceReceiptAdjustmentComponent;
     /** Container element for all the entries */
     @ViewChild('itemsContainer', { read: ViewContainerRef, static: false }) container: ViewContainerRef;
@@ -190,83 +205,168 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     @ViewChild('statesBilling', { static: false }) statesBilling: SelectFieldComponent;
     /** Billing state field instance */
     @ViewChild('statesShipping', { static: false }) statesShipping: SelectFieldComponent;;
-
-    public showAdvanceReceiptAdjust: boolean = false;
+    /** Mobile Number state instance */
+    @ViewChild('initContactProforma', { static: false }) initContactProforma: ElementRef;
+    /** Instance of RCM checkbox */
+    @ViewChild("rcmCheckbox") public rcmCheckbox: ElementRef;
+    /* Selector for send email  modal */
+    @ViewChild('sendEmailModal', { static: true }) public sendEmailModal: any;
+    /* Selector for print  modal */
+    @ViewChild('printVoucherModal', { static: true }) public printVoucherModal: any;
+    /* Selector for bulk items  modal */
+    @ViewChild('bulkItemsModal', { static: true }) public bulkItemsModal: any;
+    /**Adjust advance receipts */
+    @ViewChild('adjustPaymentModal', { static: true }) public adjustPaymentModal: any;
+    /** Purchase record modal instance */
+    @ViewChild('purchaseRecordConfirmationPopup', { static: true }) public purchaseRecordConfirmationPopup: any;
+    /** Date change confirmation modal */
+    @ViewChild('dateChangeConfirmationModel', { static: true }) public dateChangeConfirmationModel: any;
+    /** Delete attachment modal */
+    @ViewChild('attachmentDeleteConfirmationModel', { static: true }) public attachmentDeleteConfirmationModel: any;
+    // This will use for instance of warehouse
+    @ViewChild('selectWarehouse', { static: false }) public selectWarehouse: SelectFieldComponent;
+    // This will use for instance of linking dropdown
+    @ViewChild('linkingDropdown', { static: false }) public linkingDropdown: SelectFieldComponent;
+    // This will use for instance of invoice list
+    @ViewChild('invoiceListDropdown', { static: false }) public invoiceListDropdown: SelectFieldComponent;
+    // This will use for instance of sales deposit dropdown
+    @ViewChild('salesDepositDropdown', { static: false }) public salesDepositDropdown: SelectFieldComponent;
+    // This will use for instance of deposit dropdown
+    @ViewChild('depositDropdown', { static: false }) public depositDropdown: SelectFieldComponent;
+    // This will use for instance of customer billing state
+    @ViewChild('customerBillingState', { static: false }) public customerBillingState: SelectFieldComponent;
+    // This will use for instance of customer shipping state
+    @ViewChild('customerShippingState', { static: false }) public customerShippingState: SelectFieldComponent;
+    // This will use for instance of company billing state
+    @ViewChild('companyBillingState', { static: false }) public companyBillingState: SelectFieldComponent;
+    // This will use for instance of company shipping state
+    @ViewChild('companyShippingState', { static: false }) public companyShippingState: SelectFieldComponent;
     /** This will reload voucher pdf and attachments on preview page */
     @Output() public reloadFiles: EventEmitter<boolean> = new EventEmitter<boolean>();
+    /** This will hold cancel voucher update */
     @Output() public cancelVoucherUpdate: EventEmitter<boolean> = new EventEmitter<boolean>();
-
-    public editCurrencyInputField: boolean = false;
-    public showCurrencyValue: boolean = false;
-    public autoSaveIcon: boolean = false;
-    public editPencilIcon: boolean = true;
     /* This will hold if it's mobile/desktop */
     public isMobileScreen: boolean = true;
-    public isSalesInvoice: boolean = true;
-    public isCashInvoice: boolean = false;
-    public isProformaInvoice: boolean = false;
-    public isEstimateInvoice: boolean = false;
-    public isCreditNote: boolean = false;
-    public isDebitNote: boolean = false;
-    public isUpdateMode = false;
-    public isLastInvoiceCopied: boolean = false;
-
-    public customerCountryName: string = '';
     /** Stores the customer country code */
     public customerCountryCode: string = '';
-    public showGSTINNo: boolean;
-    public showTRNNo: boolean;
-
-    public hsnDropdownShow: boolean = false;
-    public customerPlaceHolder: string = '';
-    public customerNotFoundText: string = '';
-    public invoiceNoLabel: string = '';
-    public invoiceDateLabel: string = '';
-    public invoiceDueDateLabel: string = '';
-
-    public isOthrDtlCollapsed: boolean = false;
-    public typeaheadNoResultsOfCustomer: boolean = false;
-    public invFormData: VoucherClass;
     /** Invoice list array */
     public invoiceList: any[];
     /** Invoice list observable */
     public invoiceList$: Observable<any[]>;
     /** Selected invoice for credit note */
     public selectedInvoice: any = null;
-    public customerAcList$: Observable<IOption[]>;
-    public bankAccounts$: Observable<IOption[]>;
-    public salesAccounts$: Observable<IOption[]> = observableOf(null);
-    public accountAsideMenuState: string = 'out';
-    public asideMenuStateForProductService: string = 'out';
-    public asideMenuStateForRecurringEntry: string = 'out';
-    public asideMenuStateForOtherTaxes: string = 'out';
-    public theadArrReadOnly: IContentCommon[] = [];
-    public companyTaxesList: TaxResponse[] = [];
-    public newlyCreatedAc$: Observable<INameUniqueName>;
-    public newlyCreatedStockAc$: Observable<INameUniqueName>;
-    public countrySource: IOption[] = [];
-    public statesSource: IOption[] = [];
-    public activeAccount$: Observable<AccountResponseV2>;
-    public autoFillShipping: boolean = true;
-    public toggleFieldForSales: boolean = true;
-    public depositAmount: number = 0;
-    public depositAmountAfterUpdate: number = 0;
-    public giddhDateFormat: string = GIDDH_DATE_FORMAT;
-    public voucherDetails$: Observable<VoucherClass | GenericRequestForGenerateSCD>;
-    public forceClear$: Observable<IForceClear> = observableOf({ status: false });
     /** This will clear the selected value in sh-select */
     public forceClearDepositAccount$: Observable<IForceClear> = observableOf({ status: false });
+    /** Show gst number */
+    public showGSTINNo: boolean;
+    /** Show TRN number */
+    public showTRNNo: boolean;
+    /** Show other details collapsed */
+    public isOthrDtlCollapsed: boolean = false;
+    /** Show type head number of results */
+    public typeaheadNoResultsOfCustomer: boolean = false;
+    /** Show is sales invoice */
+    public isSalesInvoice: boolean = true;
+    /** Show is cash invoice */
+    public isCashInvoice: boolean = false;
+    /** Show is proforma invoice */
+    public isProformaInvoice: boolean = false;
+    /** Show is estimate invoice */
+    public isEstimateInvoice: boolean = false;
+    /** Show is credit note */
+    public isCreditNote: boolean = false;
+    /** Show is debit note */
+    public isDebitNote: boolean = false;
+    /** Show is update mode */
+    public isUpdateMode = false;
+    /** Show is last invoice copied */
+    public isLastInvoiceCopied: boolean = false;
+    /** Show advance receipts adjust */
+    public showAdvanceReceiptAdjust: boolean = false;
+    /** Show edit currency input field */
+    public editCurrencyInputField: boolean = false;
+    /** Show currency value */
+    public showCurrencyValue: boolean = false;
+    /** Show auto save icon */
+    public autoSaveIcon: boolean = false;
+    /** Show hsn dropdown */
+    public hsnDropdownShow: boolean = false;
+    /** Show edit pencil icon */
+    public editPencilIcon: boolean = true;
+    /** Hold customer country name */
+    public customerCountryName: string = '';
+    /** Hold customer placeholder */
+    public customerPlaceHolder: string = '';
+    /** Hold customer not found */
+    public customerNotFoundText: string = '';
+    /** Hold invoice label  */
+    public invoiceNoLabel: string = '';
+    /** Hold invoice date label */
+    public invoiceDateLabel: string = '';
+    /** Hold invoice due date label */
+    public invoiceDueDateLabel: string = '';
+    /** Instance of invoice form data */
+    public invFormData: VoucherClass;
+    /** Hold customer account list */
+    public customerAcList$: Observable<IOption[]>;
+    /** Hold bank account list observable  */
+    public bankAccounts$: Observable<IOption[]>;
+    /** Hold sales account list observable  */
+    public salesAccounts$: Observable<IOption[]> = observableOf(null);
+    /** Hold account aside menu state  */
+    public accountAsideMenuState: string = 'out';
+    /** Hold aside menu state for product service  */
+    public asideMenuStateForProductService: string = 'out';
+    /** Hold aside menu state for recurring entry  */
+    public asideMenuStateForRecurringEntry: string = 'out';
+    /** Hold aside menu state for other tax  */
+    public asideMenuStateForOtherTaxes: string = 'out';
+    /**This will use for thead array read only */
+    public theadArrReadOnly: IContentCommon[] = [];
+    /** Hold company tax list  */
+    public companyTaxesList: TaxResponse[] = [];
+    /** Hold newly create account observable  */
+    public newlyCreatedAc$: Observable<INameUniqueName>;
+    /** Hold newly create stock account */
+    public newlyCreatedStockAc$: Observable<INameUniqueName>;
+    /** Hold country source */
+    public countrySource: IOption[] = [];
+    /** Hold state source array  */
+    public statesSource: IOption[] = [];
+    /** Hold active account observable */
+    public activeAccount$: Observable<AccountResponseV2>;
+    /** This will use for auto fill shipping */
+    public autoFillShipping: boolean = true;
+    /**  This will use for toggle field for sales  */
+    public toggleFieldForSales: boolean = true;
+    /**  This will use for deposit amount  */
+    public depositAmount: number = 0;
+    /**  This will use for deposit amount after update  */
+    public depositAmountAfterUpdate: number = 0;
+    /**  This will use for giddh date format  */
+    public giddhDateFormat: string = GIDDH_DATE_FORMAT;
+    /**  This will use for voucher details observable */
+    public voucherDetails$: Observable<VoucherClass | GenericRequestForGenerateSCD>;
+    /**  This will use for forcely clear */
+    public forceClear$: Observable<IForceClear> = observableOf({ status: false });
+    /**  This will use for calculated round off */
     public calculatedRoundOff: number = 0;
+    /**  This will use for select voucher type  */
     public selectedVoucherType: string = 'sales';
+    /**  This will use for template params */
     public tempDateParams: any = {};
+    /**  This will use for modal config  */
     public modalConfig: ModalOptions = {
         animated: true,
         keyboard: false,
         backdrop: 'static',
         ignoreBackdropClick: true
     };
+    /**  This will use for page list array  */
     public pageList: IOption[] = VOUCHER_TYPE_LIST;
+    /**  This will use for universal date */
     public universalDate: any;
+    /**  This will use for dayjs */
     public dayjs = dayjs;
     public GIDDH_DATE_FORMAT = GIDDH_DATE_FORMAT;
     public activeIndx: number;
@@ -298,10 +398,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public modalRef: BsModalRef;
     public message: string;
     public isDropup: boolean = true;
+    public exceptTaxTypes: string[];
     /** this is showing pending sales page **/
     public isPendingSales: boolean = false;
-
-    public exceptTaxTypes: string[];
     /** Stores warehouses for a company */
     public warehouses: Array<any>;
     /** Stores the unique name of default warehouse of a company */
@@ -341,13 +440,12 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public highPrecisionRate = HIGH_RATE_FIELD_PRECISION;
     /** Force clear for invoice drop down */
     public invoiceForceClearReactive$: Observable<IForceClear> = observableOf({ status: false });
-    public selectedCompany: any;
-    public formFields: any[] = [];
-
     //Multi-currency changes
     /** Ng model of exchange rate field */
     public newExchangeRate = 1;
     public exchangeRate = 1;
+    public selectedCompany: any;
+    public formFields: any[] = [];
     public originalExchangeRate = 1;
     /** Stores the previous exchange rate of previous debtor */
     public previousExchangeRate = 1;
@@ -364,6 +462,25 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public grandTotalMulDum;
     public showSwitchedCurr = false;
     public reverseExchangeRate: number;
+    public adjustPaymentBalanceDueData: number = 0;
+    public totalAdvanceReceiptsAdjustedAmount: number = 0;
+    public isAdjustAmount = false;
+    public adjustPaymentData: AdjustAdvancePaymentModal = {
+        customerName: '',
+        customerUniquename: '',
+        voucherDate: '',
+        balanceDue: 0,
+        dueDate: '',
+        grandTotal: 0,
+        gstTaxesTotal: 0,
+        subTotal: 0,
+        totalTaxableValue: 0,
+        totalAdjustedAmount: 0,
+        convertedTotalAdjustedAmount: 0
+    }
+    public applyRoundOff: boolean = true;
+    public customerAccount: any = { email: '' };
+    public companyCountryCode: string = '';
     public originalReverseExchangeRate: number;
     /** to check is tourist scheme applicable(Note true if voucher type will be sales invoice)  */
     public isTouristScheme: boolean = false;
@@ -412,27 +529,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     private purchaseRecordInvoiceNumber: string = '';
     /** Inventory Settings */
     public inventorySettings: any;
-    public companyCountryCode: string = '';
     /** Stores the adjustment data */
     public advanceReceiptAdjustmentData: VoucherAdjustments;
-    public adjustPaymentBalanceDueData: number = 0;
-    public totalAdvanceReceiptsAdjustedAmount: number = 0;
-    public isAdjustAmount = false;
-    public adjustPaymentData: AdjustAdvancePaymentModal = {
-        customerName: '',
-        customerUniquename: '',
-        voucherDate: '',
-        balanceDue: 0,
-        dueDate: '',
-        grandTotal: 0,
-        gstTaxesTotal: 0,
-        subTotal: 0,
-        totalTaxableValue: 0,
-        totalAdjustedAmount: 0,
-        convertedTotalAdjustedAmount: 0
-    }
-    public applyRoundOff: boolean = true;
-    public customerAccount: any = { email: '' };
     /** To check is selected account/customer have advance receipts */
     public isAccountHaveAdvanceReceipts: boolean = false;
     /** To check is selected invoice already adjusted with at least one advance receipts  */
@@ -632,24 +730,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public selectedCustomerNumber: any = '';
     /** This will hold isMobileNumberInvalid */
     public isMobileNumberInvalid: boolean = false;
-    /** Mobile Number state instance */
-    @ViewChild('initContactProforma', { static: false }) initContactProforma: ElementRef;
-    /** Instance of RCM checkbox */
-    @ViewChild("rcmCheckbox") public rcmCheckbox: ElementRef;
-    /* Selector for send email  modal */
-    @ViewChild('sendEmailModal', { static: true }) public sendEmailModal: any;
-    /* Selector for print  modal */
-    @ViewChild('printVoucherModal', { static: true }) public printVoucherModal: any;
-    /* Selector for bulk items  modal */
-    @ViewChild('bulkItemsModal', { static: true }) public bulkItemsModal: any;
-    /**Adjust advance receipts */
-    @ViewChild('adjustPaymentModal', { static: true }) public adjustPaymentModal: any;
-    /** Purchase record modal instance */
-    @ViewChild('purchaseRecordConfirmationPopup', { static: true }) public purchaseRecordConfirmationPopup: any;
-    /** Date change confirmation modal */
-    @ViewChild('dateChangeConfirmationModel', { static: true }) public dateChangeConfirmationModel: any;
-    /** Delete attachment modal */
-    @ViewChild('attachmentDeleteConfirmationModel', { static: true }) public attachmentDeleteConfirmationModel: any;
     /** Attachment modal configuration */
     public attachmentDeleteConfiguration: ConfirmationModalConfiguration;
     /** This will hold selected cash account */
@@ -670,24 +750,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public selectedInvoiceLabel: any = '';
     /** Stores the current active entry */
     public activeEntry: any;
-    // This will use for instance of warehouse
-    @ViewChild('selectWarehouse', { static: false }) public selectWarehouse: SelectFieldComponent;
-    // This will use for instance of linking dropdown
-    @ViewChild('linkingDropdown', { static: false }) public linkingDropdown: SelectFieldComponent;
-    // This will use for instance of invoice list
-    @ViewChild('invoiceListDropdown', { static: false }) public invoiceListDropdown: SelectFieldComponent;
-    // This will use for instance of sales deposit dropdown
-    @ViewChild('salesDepositDropdown', { static: false }) public salesDepositDropdown: SelectFieldComponent;
-    // This will use for instance of deposit dropdown
-    @ViewChild('depositDropdown', { static: false }) public depositDropdown: SelectFieldComponent;
-    // This will use for instance of customer billing state
-    @ViewChild('customerBillingState', { static: false }) public customerBillingState: SelectFieldComponent;
-    // This will use for instance of customer shipping state
-    @ViewChild('customerShippingState', { static: false }) public customerShippingState: SelectFieldComponent;
-    // This will use for instance of company billing state
-    @ViewChild('companyBillingState', { static: false }) public companyBillingState: SelectFieldComponent;
-    // This will use for instance of company shipping state
-    @ViewChild('companyShippingState', { static: false }) public companyShippingState: SelectFieldComponent;
+    /** Stores the purchase order number value mapping */
+    public purchaseOrderNumberValueMapping: any[] = [];
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -5329,7 +5393,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
             if (voucherClassConversion.purchaseOrderDetails && voucherClassConversion.purchaseOrderDetails.length > 0) {
                 voucherClassConversion.purchaseOrderDetails.forEach(order => {
-                    this.linkedPo.push({ label: order.number, value: order?.uniqueName, additional: { amount: order.grandTotal?.amountForAccount } });
+                    this.linkedPo.push(order?.uniqueName);
                     this.selectedPoItems.push(order?.uniqueName);
 
                     if (!this.linkedPoNumbers[order?.uniqueName]) {
@@ -6748,7 +6812,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             });
         }
     }
-
     /**
      * This will get the PO details
      *
@@ -6756,16 +6819,17 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @memberof VoucherComponent
      */
     public getPurchaseOrder(event: any, addRemove: boolean): void {
-        if (event && event.length > 0) {
-            let order = event[event.length - 1];
-            if (!this.selectedPoItems.includes(order.value)) {
+        if (event) {
+            let newPo = this.linkedPo?.filter(po => !this.selectedPoItems?.includes(po));
+            let selectedOption = this.fieldFilteredOptions?.filter(option => option.value === newPo[0]);
+            let order = selectedOption[0];
+            if (order && !this.selectedPoItems.includes(order?.value)) {
                 this.startLoader(true);
                 let getRequest = { companyUniqueName: this.selectedCompany?.uniqueName, poUniqueName: order?.value };
                 this.purchaseOrderService.get(getRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     if (response) {
                         if (response.status === "success" && response.body) {
-                            let linkedPo = this.linkedPo?.map(po => { return po?.value });
-                            if (linkedPo.includes(response.body.uniqueName)) {
+                            if (this.linkedPo.includes(response.body.uniqueName)) { 
                                 if (response.body && response.body.entries && response.body.entries.length > 0) {
                                     this.selectedPoItems.push(response.body.uniqueName);
                                     this.linkedPoNumbers[order?.value]['items'] = response.body.entries;
@@ -6797,6 +6861,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 this.removePoItem();
             }
         }
+        this._cdr.detectChanges();
     }
 
     /**
@@ -6867,7 +6932,13 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     }
 
                     this.activeIndx = lastIndex;
-                    this.invFormData.entries[lastIndex].entryDate = this.invFormData.voucherDetails.voucherDate || this.universalDate;
+                    const entryDate = this.invFormData.voucherDetails.voucherDate || this.universalDate;
+
+                    if (typeof (entryDate) === "object") {
+                        this.invFormData.entries[lastIndex].entryDate = dayjs(entryDate).format(GIDDH_DATE_FORMAT);
+                    } else {
+                        this.invFormData.entries[lastIndex].entryDate = dayjs(entryDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                    }
                     this.invFormData.entries[lastIndex].transactions[transactionLoop].accountUniqueName = item.uniqueName;
                     this.invFormData.entries[lastIndex].transactions[transactionLoop].fakeAccForSelect2 = item.uniqueName;
                     this.invFormData.entries[lastIndex].isNewEntryInUpdateMode = true;
@@ -6907,9 +6978,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             this.startLoader(true);
             setTimeout(() => {
                 let selectedPoItems = [];
-                let linkedPo = this.linkedPo?.map(po => { return po?.value });
                 this.selectedPoItems.forEach(order => {
-                    if (!linkedPo.includes(order)) {
+                    if (!this.linkedPo.includes(order)) {
                         let entries = this.linkedPoNumbers[order]['items'];
 
                         if (entries && entries.length > 0 && this.invFormData.entries && this.invFormData.entries.length > 0) {
@@ -8220,9 +8290,11 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      */
     public filterPurchaseOrder(search: any): void {
         let filteredOptions: IOption[] = [];
+        this.purchaseOrderNumberValueMapping = [];
         this.purchaseOrders.forEach(option => {
             if (typeof search !== "string" || option?.label?.toLowerCase()?.indexOf(search?.toLowerCase()) > -1) {
                 filteredOptions.push({ label: option.label, value: option.value, additional: option?.additional });
+                this.purchaseOrderNumberValueMapping[option.value] = option.label;
             }
         });
         this.fieldFilteredOptions = filteredOptions;
