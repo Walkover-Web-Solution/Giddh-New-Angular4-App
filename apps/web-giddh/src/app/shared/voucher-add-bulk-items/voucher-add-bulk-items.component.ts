@@ -5,8 +5,6 @@ import { SalesAddBulkStockItems, VoucherTypeEnum } from '../../models/api-models
 import { SearchService } from '../../services/search.service';
 import { ToasterService } from '../../services/toaster.service';
 import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
-
-
 @Component({
     selector: 'voucher-add-bulk-items-component',
     templateUrl: './voucher-add-bulk-items.component.html',

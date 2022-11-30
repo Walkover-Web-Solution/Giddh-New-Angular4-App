@@ -1312,7 +1312,7 @@
                         </td>
                         <td class="text-right item-tax delete-btn-absolute">
                             <div class="td-wrapper">
-                                <div>
+                                <div class="flex-fill">
                                     <div class="wrap-td-data">
                                         <span>
                                             <span class="d-flex justify-content-end">
@@ -1333,7 +1333,7 @@
                                             </span>
                                         </span>
                                         <br />
-                                        <span *ngIf="entry.isOtherTaxApplicable">
+                                        <span class="d-flex justify-content-end" *ngIf="entry.isOtherTaxApplicable">
                                             {{ entry.otherTaxModal?.appliedOtherTax?.name }} :
                                             <span class="d-flex justify-content-end">
                                                 <amount-field
@@ -1833,9 +1833,6 @@
                                         </amount-field>
                                     </span>
                                 </div>
-
-                                <ng-container *ngTemplateOutlet="otherTaxesModal; context: { $implicit: entry }">
-                                </ng-container>
                             </div>
 
                             <div
@@ -1855,7 +1852,7 @@
                 <div class="p-1 aqua-color add-line-bulk-item">
                     <a href="javascript:void 0" (click)="addBlankRow(null)">{{ localeData?.add_new_line }}</a>
                     <span class="font-14"> | </span>
-                    <a (click)="bulkItemsModal.show()" href="javascript:void(0)">{{ localeData?.add_bulk_entries }}</a>
+                    <a (click)="addBulkItems()" href="javascript:;">{{ localeData?.add_bulk_entries }}</a>
                 </div>
                 <!-- endregion -->
                 <tfoot>
@@ -2934,11 +2931,6 @@
                                                 </amount-field>
                                             </span>
                                         </div>
-
-                                        <ng-container
-                                            *ngTemplateOutlet="otherTaxesModal; context: { $implicit: entry }"
-                                        >
-                                        </ng-container>
                                     </div>
                                 </div>
                             </div>
@@ -3312,42 +3304,31 @@
     </aside-menu-product-service>
 
     <!-- region bulk items -->
-    <div
-        bsModal
-        #bulkItemsModal="bs-modal"
-        tabindex="-1"
-        class="modal fade"
-        role="dialog"
-        [config]="{ animated: true, keyboard: false, backdrop: false, ignoreBackdropClick: true }"
-    >
-        <ng-container *ngIf="bulkItemsModal?.isShown">
-            <voucher-add-bulk-items-component
-                [invoiceType]="invoiceType"
-                (saveItemsEvent)="addBulkStockItems($event)"
-                (closeEvent)="bulkItemsModal.hide()"
-            ></voucher-add-bulk-items-component>
-        </ng-container>
-    </div>
-    <!-- endregion -->
-    <ng-template let-entry #otherTaxesModal>
-        <div id="top0">
-            <app-aside-menu-other-taxes
-                *ngIf="asideMenuStateForOtherTaxes === 'in'"
-                [class]="asideMenuStateForOtherTaxes"
-                [taxes]="companyTaxesList"
-                [otherTaxesModal]="entry.otherTaxModal"
-                [commonLocaleData]="commonLocaleData"
-                [@slideInOut]="asideMenuStateForOtherTaxes"
-                (closeModal)="toggleOtherTaxesAsidePane(true, null)"
-                (applyTaxes)="
-                    calculateOtherTaxes($event, entry);
-                    toggleOtherTaxesAsidePane(true, null);
-                    calculateAffectedThingsFromOtherTaxChanges()
-                "
-            >
-            </app-aside-menu-other-taxes>
-        </div>
+    <ng-template #bulkItemsModal>
+        <voucher-add-bulk-items-component
+            [invoiceType]="invoiceType"
+            (saveItemsEvent)="addBulkStockItems($event)"
+            (closeEvent)="cancelBulkItemsModal()"
+        ></voucher-add-bulk-items-component>
     </ng-template>
+    <!-- endregion -->
+    <div id="top0">
+        <app-aside-menu-other-taxes
+            *ngIf="asideMenuStateForOtherTaxes === 'in'"
+            [class]="asideMenuStateForOtherTaxes"
+            [taxes]="companyTaxesList"
+            [otherTaxesModal]="activeEntry.otherTaxModal"
+            [commonLocaleData]="commonLocaleData"
+            [@slideInOut]="asideMenuStateForOtherTaxes"
+            (closeModal)="closeAsideMenuStateForOtherTaxes()"
+            (applyTaxes)="
+                calculateOtherTaxes($event, activeEntry);
+                toggleOtherTaxesAsidePane(true, null);
+                calculateAffectedThingsFromOtherTaxChanges()
+            "
+        >
+        </app-aside-menu-other-taxes>
+    </div>
     <ng-template #purchaseOrderPreviewModal>
         <purchase-order-preview-modal
             [purchaseOrderUniqueName]="purchaseOrderPreviewUniqueName"

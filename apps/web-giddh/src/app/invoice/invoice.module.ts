@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { InvoiceRoutingModule } from './invoice.routing.module';
-import { ProformaInvoiceModule } from '../proforma-invoice/proforma-invoice.module';
 import { DigitsOnlyModule } from '../shared/helpers/directives/digitsOnly/digitsOnly.module';
 import { EWayBillCreateComponent } from './eWayBill/create/eWayBill.create.component';
 import { EWayBillComponent } from './eWayBill/eWayBill/eWayBill.component';
@@ -78,6 +77,7 @@ import { SalesShSelectModule } from '../theme/sales-ng-virtual-select/sh-select.
 import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
 import { DeleteTemplateConfirmationModalModule } from './templates/edit-template/modals/confirmation-modal/confirmation.modal.module';
 import { InvoiceTemplatesModule } from './templates/invoice.templates.module';
+import { VoucherModule } from '../voucher/voucher.module';
 
 const DEFAULT_FONT_PICKER_CONFIG: FontPickerConfigInterface = {
     // Change this to your Google API key
@@ -114,7 +114,7 @@ const DEFAULT_FONT_PICKER_CONFIG: FontPickerConfigInterface = {
     ],
     imports: [
         InvoiceRoutingModule,
-        ProformaInvoiceModule,
+        VoucherModule,
         DigitsOnlyModule,
         FormsModule,
         CommonModule,
@@ -146,7 +146,7 @@ const DEFAULT_FONT_PICKER_CONFIG: FontPickerConfigInterface = {
         AccountDetailModalModule,
         CurrencyModule,
         PerfectScrollbarModule,
-        ProformaInvoiceModule,
+        VoucherModule,
         DigitsOnlyModule,
         UniqueNameModule,
         ConfirmModalModule,

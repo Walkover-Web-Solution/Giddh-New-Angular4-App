@@ -12,7 +12,6 @@ import { NgxUploaderModule } from "ngx-uploader";
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatMenuModule } from "@angular/material/menu";
 import { AmountFieldComponentModule } from "../shared/amount-field/amount-field.module";
-import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { DecimalDigitsModule } from "../shared/helpers/directives/decimalDigits/decimalDigits.module";
 import { NgxMaskModule } from "../shared/helpers/directives/ngx-mask";
 import { TranslateDirectiveModule } from "../theme/translate/translate.directive.module";

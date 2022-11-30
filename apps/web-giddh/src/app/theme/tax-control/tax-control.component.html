@@ -1,16 +1,17 @@
 <span
     class="position-relative tax-control-cmp"
-    (clickOutside)="showTaxPopup = false"
     (click)="$event.stopPropagation()"
+    (clickOutside)="showTaxPopup = false"
 >
     <label class="font-12" *ngIf="showHeading"
         >{{ customHeading ? customHeading : commonLocaleData?.app_tax }}
         <sup class="mandatory-asterisk" *ngIf="isMandatory">*</sup></label
     >
-
     <a id="tax" class="clearfix">
         <div class="multi-select adjust" id="tax-control-multi-select">
             <input
+                (keydown.enter)="$event.preventDefault()"
+                matInput
                 #taxInputElement
                 type="text"
                 id="tax-control-input"
@@ -21,8 +22,9 @@
                 [(ngModel)]="taxTotalAmount"
                 (focus)="handleInputFocus()"
             />
-
             <input
+                (keydown.enter)="$event.preventDefault()"
+                matInput
                 #taxInputElement
                 type="text"
                 id="tax-control-input-mask"
@@ -41,64 +43,49 @@
 
     <div class="position-relative">
         <ul
-            class="dropdown-menu pd"
+            class="dropdown-menu tax-dropdown pd"
             [ngStyle]="{ 'display': showTaxPopup ? 'block' : 'none' }"
             (click)="$event.stopPropagation()"
             [style.max-height.px]="102"
-            [style.min-height.px]="70"
+            [style.min-height.px]="100"
         >
-            <li *ngIf="taxRenderData?.length === 0">
+            <li *ngIf="taxRenderData.length === 0">
                 <p class="lead pd">{{ commonLocaleData?.app_no_tax_found }}</p>
             </li>
-
             <li class="relative" *ngFor="let tax of taxRenderData; trackBy: trackByFn; let idx = index">
-                <label
-                    class="checkbox overflow-hidden width-100 bd-rb pd-b05 custom-item d-flex align-items-center"
-                    placement="bottom"
-                    *ngIf="taxRenderData?.length - 1 !== idx"
+                <mat-checkbox
+                    (keydown.enter)="$event.preventDefault()"
+                    color="primary"
+                    *ngIf="taxRenderData.length - 1 !== idx"
                     (click)="$event.stopPropagation()"
                     [ngClass]="{ 'disabled-label': tax.isDisabled }"
-                    #taxLabelOne
+                    class="pull-left w-100"
+                    id="{{ 'tax-control-checkbox-' + idx }}"
+                    name="tax_{{ idx }}"
+                    [(ngModel)]="tax.isChecked"
+                    (change)="change($event)"
+                    (click)="$event.stopPropagation()"
+                    [disabled]="tax.isDisabled"
                 >
-                    <input
-                        class="pull-left"
-                        id="{{ 'tax-control-checkbox-' + idx }}"
-                        name="tax_{{ idx }}"
-                        type="checkbox"
-                        [(ngModel)]="tax.isChecked"
-                        (change)="change($event)"
-                        (click)="$event.stopPropagation()"
-                        [disabled]="tax.isDisabled"
-                        (focus)="taxLabelFocusing(taxLabelOne)"
-                        (blur)="taxLabelBluring(taxLabelOne)"
-                    />
-                    <span class="pull-left text-ellipsis">{{ tax.name }}</span>
-                </label>
-                <label
-                    class="checkbox overflow-hidden width-100 bd-rb pd-b05 custom-item"
-                    placement="top"
-                    *ngIf="taxRenderData?.length - 1 === idx"
+                    {{ tax.name }}
+                </mat-checkbox>
+                <mat-checkbox
+                    (keydown.enter)="$event.preventDefault()"
+                    color="primary"
+                    *ngIf="taxRenderData.length - 1 === idx"
                     (click)="$event.stopPropagation()"
                     [ngClass]="{ 'disabled-label': tax.isDisabled }"
-                    #taxLabelTwo
+                    class="pull-left w-100"
+                    id="{{ 'tax-checkbox-' + idx }}"
+                    name="tax_{{ idx }}"
+                    [(ngModel)]="tax.isChecked"
+                    (change)="change($event)"
+                    (click)="$event.stopPropagation()"
+                    [disabled]="tax.isDisabled"
                 >
-                    <input
-                        class="pull-left"
-                        id="{{ 'tax-checkbox-' + idx }}"
-                        name="tax_{{ idx }}"
-                        type="checkbox"
-                        [(ngModel)]="tax.isChecked"
-                        (change)="change($event)"
-                        (click)="$event.stopPropagation()"
-                        [disabled]="tax.isDisabled"
-                        (focus)="taxLabelFocusing(taxLabelTwo)"
-                        (blur)="taxLabelBluring(taxLabelTwo)"
-                    />
-                    <span class="pull-left text-ellipsis">{{ tax.name }}</span>
-                </label>
+                    {{ tax.name }}
+                </mat-checkbox>
             </li>
         </ul>
     </div>
-
-    <div tabindex="0" (focus)="onFocusLastDiv($event)"></div>
 </span>
