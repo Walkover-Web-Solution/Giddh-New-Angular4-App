@@ -36,11 +36,11 @@
                 </div>
                 <div class="clearfix mr-b2">
                     <div class="due">
-                        <span class="mr-b1 due-amount">{{ localeData?.customer_due }}</span>
+                        <span class="mr-b1 due-amount">{{ localeData?.invoice_due }}</span>
                         <span class="total-amount pull-right vendor-due-text">
                             <span class="d-inline-flex">
                                 <amount-field
-                                    [amount]="totalRecievable"
+                                    [amount]="invoiceDue"
                                     [currencySymbol]="amountSettings.baseCurrencySymbol"
                                     [currencyCode]="activeCompany.baseCurrency"
                                 >
@@ -48,26 +48,22 @@
                             </span>
                         </span>
                     </div>
-                    <!--Hide this feature (Approved by Shubhendra Sir )-->
-                    <!-- <div class="clearfix">
+                    <div class="clearfix">
                         <small>{{ localeData?.pending_invoices }}</small>
                         <small class="d-inline-flex pull-right">
-                            <amount-field
-                                [amount]="ReceivableDurationAmt"
-                                [currencySymbol]="false"
-                                [currencyCode]="false"
-                            >
-                            </amount-field>
+                            {{ pendingInvoices }}
+                            &nbsp;
+                            <span [tooltip]="localeData?.hold_invoices">({{ holdInvoices }})</span>
                         </small>
-                    </div> -->
+                    </div>
                 </div>
                 <div class="clearfix mr-b2">
                     <div class="due">
-                        <span class="mr-b1 due-amount">{{ localeData?.vendor_due }}</span>
+                        <span class="mr-b1 due-amount">{{ localeData?.bill_due }}</span>
                         <span class="total-amount pull-right customer-due-text">
                             <span class="d-inline-flex">
                                 <amount-field
-                                    [amount]="totalPayable"
+                                    [amount]="billDue"
                                     [currencySymbol]="amountSettings.baseCurrencySymbol"
                                     [currencyCode]="activeCompany.baseCurrency"
                                 >
@@ -75,14 +71,14 @@
                             </span>
                         </span>
                     </div>
-                    <!--Hide this feature (Approved by Shubhendra Sir )-->
-                    <!-- <div class="clearfix">
-                        <small>{{ localeData?.pending_invoices }}</small>
+                    <div class="clearfix">
+                        <small>{{ localeData?.pending_bills }}</small>
                         <small class="d-inline-flex pull-right">
-                            <amount-field [amount]="PaybaleDurationAmt" [currencySymbol]="false" [currencyCode]="false">
-                            </amount-field>
+                            {{ pendingBills }}
+                            &nbsp;
+                            <span [tooltip]="localeData?.hold_bills">({{ holdBills }})</span>
                         </small>
-                    </div> -->
+                    </div>
                 </div>
             </div>
         </div>
