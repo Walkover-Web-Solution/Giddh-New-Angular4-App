@@ -871,6 +871,7 @@
                                                                     (saveOtherTax)="saveOtherTax(item, $event)"
                                                                     [localeData]="localeData"
                                                                     [commonLocaleData]="commonLocaleData"
+                                                                    [entrySide]="'dr'"
                                                                 >
                                                                 </new-ledger-entry-panel>
                                                             </div>
@@ -1152,6 +1153,7 @@
                                                                     (saveOtherTax)="saveOtherTax(item, $event)"
                                                                     [localeData]="localeData"
                                                                     [commonLocaleData]="commonLocaleData"
+                                                                    [entrySide]="'cr'"
                                                                 >
                                                                 </new-ledger-entry-panel>
                                                             </div>
@@ -1540,9 +1542,9 @@
                                     let i = index;
                                     trackBy: trackByTransactionUniqueName
                                 "
-                                (touchend)="showUpdateLedgerModalIpad(txn)"
-                                (dblclick)="showUpdateLedgerModal(txn)"
-                                (keydown.enter)="showUpdateLedgerModal(txn)"
+                                (touchend)="showUpdateLedgerModalIpad(txn, 'dr')"
+                                (dblclick)="showUpdateLedgerModal(txn, 'dr')"
+                                (keydown.enter)="showUpdateLedgerModal(txn, 'dr')"
                                 [ngClass]="{
                                     'compound-entry': txn.entryUniqueName === lc.selectedTxnUniqueName || txn.isChecked
                                 }"
@@ -1848,6 +1850,7 @@
                                                 (saveOtherTax)="saveOtherTax(lc.blankLedger, $event)"
                                                 [localeData]="localeData"
                                                 [commonLocaleData]="commonLocaleData"
+                                                [entrySide]="'dr'"
                                             >
                                             </new-ledger-entry-panel>
                                         </div>
@@ -1974,10 +1977,10 @@
                                     let i = index;
                                     trackBy: trackByTransactionUniqueName
                                 "
-                                (touchend)="showUpdateLedgerModalIpad(txn)"
-                                (dblclick)="showUpdateLedgerModal(txn)"
+                                (touchend)="showUpdateLedgerModalIpad(txn, 'cr')"
+                                (dblclick)="showUpdateLedgerModal(txn, 'cr')"
                                 tabindex="-1"
-                                (keydown.enter)="showUpdateLedgerModal(txn)"
+                                (keydown.enter)="showUpdateLedgerModal(txn, 'cr')"
                                 [ngClass]="{
                                     'compound-entry': txn.entryUniqueName === lc.selectedTxnUniqueName || txn.isChecked
                                 }"
@@ -2272,6 +2275,7 @@
                                                 (saveOtherTax)="saveOtherTax(lc.blankLedger, $event)"
                                                 [localeData]="localeData"
                                                 [commonLocaleData]="commonLocaleData"
+                                                [entrySide]="'cr'"
                                             >
                                             </new-ledger-entry-panel>
                                         </div>
@@ -2832,6 +2836,7 @@
                     [searchResultsPaginationPage]="defaultResultsPaginationData.page"
                     [searchResultsPaginationTotalPages]="defaultResultsPaginationData.totalPages"
                     [activeCompany]="activeCompany"
+                    [entrySide]="entrySide"
                     (toggleOtherTaxesAsideMenu)="toggleOtherTaxesAsidePane($event)"
                     (closeUpdateLedgerModal)="hideUpdateLedgerModal()"
                     (showQuickAccountModalFromUpdateLedger)="toggleAsidePane()"
