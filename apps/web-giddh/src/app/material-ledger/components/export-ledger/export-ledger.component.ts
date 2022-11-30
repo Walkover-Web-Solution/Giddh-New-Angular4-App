@@ -85,6 +85,8 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
     public emailTypeBillToBill: string;
     /** This will use for stop multiple hit api*/
     public isLoading: boolean = false;
+    /** This will use for export as file type*/
+    public fileType: string = 'CSV';
 
     constructor(private ledgerService: LedgerService, private toaster: ToasterService, private permissionDataService: PermissionDataService, private store: Store<AppState>, private generalService: GeneralService, @Inject(MAT_DIALOG_DATA) public inputData, public dialogRef: MatDialogRef<any>, private changeDetectorRef: ChangeDetectorRef, private modalService: BsModalService, private router: Router) {
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
@@ -164,6 +166,7 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
             body.dataToSend.showVoucherTotal = this.exportRequest.showVoucherTotal;
             body.dataToSend.showEntryVoucher = this.exportRequest.showEntryVoucher;
             body.dataToSend.showDescription = this.exportRequest.showDescription;
+            body.dataToSend.fileType = this.fileType;
         }
         if (this.voucherApiVersion === 2 && this.emailTypeSelected === 'billToBill') {
             this.ledgerService.exportBillToBillLedger(exportRequest, this.inputData?.accountUniqueName).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {

@@ -35,6 +35,18 @@
                         </div>
                     </div>
                 </div>
+                <div
+                    class="pd-b2 clearfix d-flex"
+                    [hidden]="emailTypeSelected === 'columnar' || emailTypeSelected === 'billToBill'"
+                >
+                    <label class="w100 d-sm-inline-flex d-flex">{{ commonLocaleData?.app_export_as }}: </label>
+                    <mat-radio-group color="primary" name="fileType" [(ngModel)]="fileType">
+                        <mat-radio-button id="csv" [value]="'CSV'">{{ commonLocaleData?.app_csv }}</mat-radio-button>
+                        <mat-radio-button id="excel" [value]="'XLSX'">{{
+                            commonLocaleData?.app_excel
+                        }}</mat-radio-button>
+                    </mat-radio-group>
+                </div>
                 <div class="pd-b2 clearfix">
                     <label class="w125">{{ commonLocaleData?.app_order }}:</label>
                     <label class="radio-inline p-0">
