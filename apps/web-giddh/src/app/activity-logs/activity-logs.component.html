@@ -37,7 +37,7 @@
                 >
                 </select-field>
             </div>
-            <div class="mr-t15 mr-b15 custom-datepicker-wrapper" *ngIf="isShow">
+            <div class="mr-t15 mr-b15 custom-datepicker-wrapper" *ngIf="isShowEntryDatepicker">
                 <div class="custom-datepicker" (click)="showEntryGiddhDatepicker($event)">
                     <i class="icon-calender calendar-addon"></i>
                     <input
@@ -78,7 +78,7 @@
             <div
                 class="clear-filter form-group mb-0"
                 *ngIf="
-                    entryshowDateReport ||
+                    entryShowDateReport ||
                     showDateReport ||
                     activityObj.entity ||
                     activityObj.operation ||
