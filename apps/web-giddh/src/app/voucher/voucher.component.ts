@@ -926,6 +926,12 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             this.isDefaultLoad = true;
 
             if (params['invoiceType']) {
+
+                // Close account side bar when create from cmd + k
+                if (this.accountAsideMenuState === 'in') {
+                    this.toggleAccountAsidePane();
+                }
+                
                 // Reset voucher due to advance receipt model set voucher in invoice management
                 this.store.dispatch(this.invoiceReceiptActions.ResetVoucherDetails());
                 this.selectedVoucherType = params['invoiceType'];
@@ -2336,6 +2342,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             this.openAccountSelectionDropdown?.openDropdownPanel();
         }, 500);
 
+        
         if (this.asideMenuStateForRecurringEntry === 'in') {
             this.openAccountSelectionDropdown?.closeDropdownPanel();
         }
@@ -8358,7 +8365,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             this._cdr.detectChanges();
         }
     }
-    
+
     /**
      * This will use for closs all dropdown
      *
