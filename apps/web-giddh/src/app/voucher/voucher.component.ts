@@ -931,7 +931,15 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 if (this.accountAsideMenuState === 'in') {
                     this.toggleAccountAsidePane();
                 }
-                
+                if (this.asideMenuStateForOtherTaxes === 'in') {
+                    this.toggleOtherTaxesAsidePane(true);
+                }
+
+                if (this.asideMenuStateForRecurringEntry === 'in') {
+                    this.openAccountSelectionDropdown?.closeDropdownPanel();
+                    this.openCustomerDropdown = false;
+                }
+
                 // Reset voucher due to advance receipt model set voucher in invoice management
                 this.store.dispatch(this.invoiceReceiptActions.ResetVoucherDetails());
                 this.selectedVoucherType = params['invoiceType'];
@@ -1061,7 +1069,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                         }
                     }
                 }
-                this.openCustomerDropdown = true;
+                if (!this.isPendingVoucherType) {
+                    this.openCustomerDropdown = true;
+                }
             } else {
                 this.openCustomerDropdown = false;
             }
@@ -1127,7 +1137,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 this.updateAccountDetails(accountDetails);
             }
         });
-
         this.getOnboardingFormInProcess$.subscribe(inProcess => {
             this.startLoader(inProcess);
         });
@@ -2338,13 +2347,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.createEmbeddedViewAtIndex(0);
         this.onSearchQueryChanged('', 1, 'customer');
 
-        setTimeout(() => {
-            this.openAccountSelectionDropdown?.openDropdownPanel();
-        }, 500);
 
-        
-        if (this.asideMenuStateForRecurringEntry === 'in') {
-            this.openAccountSelectionDropdown?.closeDropdownPanel();
+        if (this.asideMenuStateForRecurringEntry === 'out' && !this.dialog.openDialogs) {
+            this.openAccountSelectionDropdown?.openDropdownPanel();
         }
     }
 
@@ -6094,14 +6099,11 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         }
         this.updateAccount = false;
         setTimeout(() => {
-            this.openAccountSelectionDropdown?.openDropdownPanel();
+            if (this.asideMenuStateForRecurringEntry === 'out' && !this.dialog.openDialogs ) {
+                this.openAccountSelectionDropdown?.openDropdownPanel();
+            }
         }, 500);
-        this._cdr.detectChanges();
 
-        if (this.asideMenuStateForRecurringEntry === 'in') {
-            this.openAccountSelectionDropdown?.closeDropdownPanel();
-            this._cdr.detectChanges();
-        }
 
         if (!this.isPendingVoucherType || (this.isPendingVoucherType && this.actionAfterGenerateORUpdate === 0)) {
             this.store.dispatch(this.invoiceReceiptActions.ResetVoucherDetails());
