@@ -1,0 +1,150 @@
+/* ADD BULK ITEM */
+
+.add-bulk-item-modal.modal-dialog {
+    width: 870px !important;
+    margin: 30px auto;
+}
+
+.search-box input[type="text"] {
+    outline: none;
+    width: 100%;
+    height: 34px !important;
+}
+
+.rate-stock {
+    margin-left: 10px;
+}
+
+.add-bulk-item-modal .single-product-wrapper {
+    margin-bottom: 20px;
+    padding: 12px;
+
+    &:hover {
+        background-color: var(--color-dark-fog);
+        color: var(--color-blue);
+    }
+
+    &:hover h5 {
+        color: var(--color-blue);
+    }
+}
+
+.stock-name {
+    max-width: 240px;
+    width: 100%;
+    vertical-align: middle;
+}
+
+.add-bulk-item-modal .single-product-wrapper h5 {
+    color: var(--color-nero);
+    font-size: 14px;
+}
+
+.add-bulk-item-modal .single-product-wrapper p {
+    font-size: 12px;
+    padding-top: 4px;
+}
+
+.add-bulk-item-modal .product-list {
+    padding-top: 15px;
+    height: 600px;
+    overflow-y: auto;
+}
+
+.add-bulk-item-modal .right-content span.selected-stock-number {
+    font-size: 20px;
+}
+
+.add-bulk-item-modal .right-content h4 {
+    font-size: 14px;
+}
+
+.add-bulk-item-modal .right-content hr {
+    color: var(--color-nero);
+    border-color: var(--color-common-secondary-border);
+    margin: 10px -15px;
+    margin-left: -15px;
+}
+
+.add-bulk-item-modal .pl-0 {
+    padding-left: 0;
+}
+
+.add-bulk-item-modal .single-selected-stock p {
+    font-size: 14px;
+}
+
+.add-bulk-item-modal .wrap-selected-stocks {
+    margin-top: 15px;
+    padding-right: 20px;
+}
+
+.add-bulk-item-modal .input-group {
+    position: relative;
+    display: table;
+    border-collapse: separate;
+    width: 138px;
+}
+
+.add-bulk-item-modal input.form-control.input-number {
+    width: 60px !important;
+    text-align: center;
+    height: 28px !important;
+}
+
+.add-bulk-item-modal .input-group .input-group-btn .btn {
+    background: var(--color-white);
+    border-left: 1px solid var(--color-common-secondary-border);
+}
+
+.add-bulk-item-modal .btn {
+    padding: 6px 13px;
+}
+
+.add-bulk-item-modal .input-group-btn .fa {
+    color: var(--color-gray);
+}
+
+.add-bulk-item-modal .single-selected-stock {
+    margin-bottom: 20px;
+}
+
+.add-bulk-item-modal .left-content {
+    padding-right: 15px;
+    border-right: 1px solid var(--color-common-secondary-border);
+}
+
+.add-bulk-item-modal .modal-title {
+    font-size: 22px !important;
+    color: var(--color-popup-list-head-text);
+}
+
+.table-custom-invoice .sales-tax .dropdown-menu-right li label {
+    padding-left: 10px;
+}
+
+.template-footer {
+    position: absolute;
+    bottom: 0;
+    width: calc(100% - 30px);
+    max-width: 100%;
+}
+
+.right-side-wrapper {
+    height: 600px;
+    overflow-y: auto;
+    padding-bottom: 60px;
+}
+.add-item-btn {
+    display: flex !important;
+    flex-wrap: nowrap;
+    .btn-number {
+        margin-right: 0;
+    }
+    .minus-btn {
+        border-right: none;
+    }
+    input.form-control.input-number {
+        height: 35px !important;
+    }
+}

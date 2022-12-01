@@ -1,10 +1,9 @@
-@import "../../../../../../web-giddh/src/assets/css/color.scss";
 .invisible {
     visibility: hidden;
     display: none;
 }
 .parent-group > ul > li ul li div {
-    color: $gray;
+    color: var(--color-abbey);
 }
 .btn-group.show {
     display: inline-block !important;
@@ -13,7 +12,7 @@
     margin-left: 8px;
     margin-top: -3px;
     background: none;
-    color: $gray;
+    color: var(--color-abbey);
     padding: 6px;
     margin-right: 0px !important;
     width: 23px;
@@ -22,17 +21,17 @@
     box-shadow: none;
 }
 .dropdown-menu > li > a:hover {
-    background: $whisper;
+    background: var(--color-dark-fog);
     cursor: pointer;
 }
 .dropdown-menu > li > a {
-    color: $chetwode-blue;
+    color: var(--color-blue);
 }
 span.caret {
     display: none;
 }
 #inventory-sidebar {
-    background: $white;
+    background: var(--color-white);
     width: 260px !important;
     div.clearfix {
         height: 100vh;

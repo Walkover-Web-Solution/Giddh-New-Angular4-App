@@ -1,5 +1,3 @@
-@import "../../../../assets/css/color.scss";
-
 .day-date {
     display: flex;
     .voucher-date-field {
@@ -10,19 +8,20 @@
 .current-balance {
     font-size: 14px;
     font-style: italic;
+    color: var(--color-table-primary-content);
 }
 
 .cheque-popup .new-account-form .modal-body {
     .check-clearance-date {
         .form-control[readonly] {
-            background-color: $white !important;
+            background-color: var(--color-white) !important;
         }
     }
 }
 .debtor-details-form {
     display: flex;
     font-size: 14px;
-    background-color: $silver;
+    background-color: var(--color-gray);
     padding: 10px 9px;
     margin-bottom: 10px;
     .form-fields {
@@ -40,8 +39,8 @@
                 display: none;
             }
             input.form-control {
-                background-color: $white !important;
-                border: 1px solid $gainsboro;
+                background-color: var(--color-white) !important;
+                border: 1px solid var(--color-iron);
                 border-radius: 5px !important;
             }
             &.set-width {
@@ -55,12 +54,12 @@
                 position: absolute;
                 right: 5px;
                 top: 7px;
-                color: $nero;
+                color: var(--color-nero);
             }
         }
 
         .icon-cross {
-            color: $gray;
+            color: var(--color-abbey);
             cursor: pointer;
             padding: 5px;
         }

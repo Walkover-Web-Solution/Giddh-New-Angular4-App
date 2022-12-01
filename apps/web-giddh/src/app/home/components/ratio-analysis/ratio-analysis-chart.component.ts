@@ -5,7 +5,7 @@ import { Observable, ReplaySubject } from 'rxjs';
 import { HomeActions } from '../../../actions/home/home.actions';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 
 @Component({
@@ -35,7 +35,7 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        this.store.dispatch(this.homeActions.getRatioAnalysis(moment().format(GIDDH_DATE_FORMAT), this.refresh));
+        this.store.dispatch(this.homeActions.getRatioAnalysis(dayjs().format(GIDDH_DATE_FORMAT), this.refresh));
     }
 
     public hardRefresh() {
@@ -45,7 +45,7 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
 
     public fetchChartData() {
         this.requestInFlight = true;
-        this.store.dispatch(this.homeActions.getRatioAnalysis(moment().format(GIDDH_DATE_FORMAT), this.refresh));
+        this.store.dispatch(this.homeActions.getRatioAnalysis(dayjs().format(GIDDH_DATE_FORMAT), this.refresh));
         this.refresh = false;
     }
 
@@ -62,7 +62,7 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
                 verticalAlign: 'middle',
                 align: 'center',
                 text: '<span class="pie-text_center">' + this.ratioObj?.currentRatio + '</span>',
-                style: { color: '#005b77', fontSize: '26px' },
+                style: { color: '#005b77', fontSize: '21px' },
                 useHTML: true,
                 y: 8
             },
@@ -130,7 +130,7 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
                 verticalAlign: 'middle',
                 align: 'center',
                 text: '<span class="pie-text_center">' + this.ratioObj?.debtEquityRatio + '</span>',
-                style: { color: '#005b77', fontSize: '26px' },
+                style: { color: '#005b77', fontSize: '21px' },
                 useHTML: true,
                 y: 8
             },
@@ -198,7 +198,7 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
                 verticalAlign: 'middle',
                 align: 'center',
                 text: '<span class="pie-text_center">' + this.ratioObj?.proprietaryRatio + '</span>',
-                style: { color: '#005b77', fontSize: '26px' },
+                style: { color: '#005b77', fontSize: '21px' },
                 useHTML: true,
                 y: 8
             },
@@ -267,7 +267,7 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
                 verticalAlign: 'middle',
                 align: 'center',
                 text: '<span class="pie-text_center">' + this.ratioObj?.fixedAssetRatio + '</span>',
-                style: { color: '#005b77', fontSize: '26px' },
+                style: { color: '#005b77', fontSize: '21px' },
                 useHTML: true,
                 y: 8
             },

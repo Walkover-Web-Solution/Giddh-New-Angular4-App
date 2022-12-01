@@ -8,8 +8,6 @@ import { SettingProfileComponent } from './profile/setting.profile.component';
 import { SettingIntegrationComponent } from './integration/setting.integration.component';
 import { PermissionDataService } from 'apps/web-giddh/src/app/permissions/permission-data.service';
 import { Component, OnInit, Output, ViewChild, OnDestroy, EventEmitter } from '@angular/core';
-import { StateDetailsRequest } from '../models/api-models/Company';
-import { CompanyActions } from '../actions/company.actions';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../store/roots';
 import { SettingsTagsComponent } from './tags/tags.component';
@@ -63,7 +61,6 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
     constructor(
         private store: Store<AppState>,
-        private companyActions: CompanyActions,
         private _permissionDataService: PermissionDataService,
         public _route: ActivatedRoute,
         private router: Router,
@@ -102,7 +99,6 @@ export class SettingsComponent implements OnInit, OnDestroy {
             } else {
                 this.integrationtab = params['referrer'];
             }
-            this.setStateDetails(params['type'], params['referrer']);
 
             this.tabChanged(this.activeTab);
 
@@ -112,7 +108,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
                         this.eBankComp.getInitialEbankInfo();
                     }
                 }, 0);
-            } else if (this.activeTab === "profile") {
+            } else if (this.activeTab === "profile" || this.activeTab === "addresses") {
                 setTimeout(() => {
                     if (this.profileComponent) {
                         this.profileComponent.getInitialProfileData();
@@ -133,7 +129,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
                 }, 0);
             }
 
-            if(this.activeTab === "taxes") {
+            if(this.activeTab === "taxes" || this.activeTab === "addresses") {
                 this.asideGstSidebarMenuState = "in";
                 document.querySelector('body').classList.remove('setting-sidebar-open');
                 document.querySelector('body').classList.add('gst-sidebar-open');
@@ -209,7 +205,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     }
 
     public tabChanged(tab: string) {
-        if ((tab === 'integration' || tab === 'profile') && this.integrationtab) {
+        if ((tab === 'integration' || tab === 'profile' || tab === 'addresses') && this.integrationtab) {
             this.store.dispatch(this._generalActions.setAppTitle('/pages/settings/' + tab + '/' + this.integrationtab));
             this.loadModuleData(tab);
             this.router.navigate(['pages/settings/', tab, this.integrationtab], { replaceUrl: true });
@@ -242,11 +238,10 @@ export class SettingsComponent implements OnInit, OnDestroy {
                 "refresh_token": p.refresh_token
             };
             this._authenticationService.saveGmailToken(dataToSave).pipe(take(1)).subscribe((res) => {
-
-                if (res.status === 'success') {
+                if (res?.status === 'success') {
                     this._toast.successToast(this.localeData?.gmail_account_added, this.commonLocaleData?.app_success);
                 } else {
-                    this._toast.errorToast(res.message, res.code);
+                    this._toast.errorToast(res?.message, res?.code);
                 }
                 this.store.dispatch(this.settingsIntegrationActions.GetGmailIntegrationStatus());
             });
@@ -255,20 +250,6 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
     private getRedirectUrl(baseHref: string) {
         return `${baseHref}pages/settings?tab=integration`;
-    }
-
-    private setStateDetails(type, referer?: string) {
-        let companyUniqueName = null;
-        this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
-        let stateDetailsRequest = new StateDetailsRequest();
-        stateDetailsRequest.companyUniqueName = companyUniqueName;
-        if (referer) {
-            stateDetailsRequest.lastState = 'pages/settings/' + type + '/' + referer;
-        } else {
-            stateDetailsRequest.lastState = 'pages/settings/' + type;
-        }
-
-        this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
     }
 
     /**

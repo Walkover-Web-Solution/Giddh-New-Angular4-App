@@ -222,7 +222,7 @@ export function EwayBillreducer(state: EwayBillState = initialState, action: Cus
         case EWAYBILL_ACTIONS.DELETE_TRANSPORTER_RESPONSE:
             if ((action.payload as BaseResponse<string, string>).status === 'success') {
                 return Object.assign({}, state, {
-                    TransporterList: state.TransporterList.filter(p => p.transporterId !== (action.payload as BaseResponse<string, string>).request),
+                    TransporterList: state.TransporterList?.filter(p => p.transporterId !== (action.payload as BaseResponse<string, string>).request),
                 });
             }
             return state;

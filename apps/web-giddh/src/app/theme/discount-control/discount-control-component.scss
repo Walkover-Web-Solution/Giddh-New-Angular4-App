@@ -1,12 +1,10 @@
-@import "../../../assets/css/color.scss";
-
 .multi-select .caret {
     display: block !important;
 }
 .fa-percent {
     top: 9px;
     right: 6px;
-    color: $dim-gray;
+    color: var(--color-gray);
 }
 .discount-name-ul {
     list-style: none;

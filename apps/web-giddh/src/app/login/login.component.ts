@@ -1,10 +1,10 @@
 import { take, takeUntil } from "rxjs/operators";
 import { LoginActions } from "../actions/login.action";
 import { AppState } from "../store";
-import { Component, Inject, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import { Component, Inject, NgZone, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ModalDirective } from "ngx-bootstrap/modal";
-import { Configuration } from "../app.constant";
+import { Configuration, OTP_PROVIDER_URL } from "../app.constant";
 import { Store, select } from "@ngrx/store";
 import { Observable, ReplaySubject } from "rxjs";
 import {
@@ -22,9 +22,12 @@ import {
 import { IOption } from "../theme/ng-virtual-select/sh-options.interface";
 import { DOCUMENT } from "@angular/common";
 import { userLoginStateEnum } from "../models/user-login-state";
-import { isCordova } from "@giddh-workspaces/utils";
-import { GeneralService } from "../services/general.service";
 import { contriesWithCodes } from "../shared/helpers/countryWithCodes";
+import { LoaderService } from "../loader/loader.service";
+import { ToasterService } from "../services/toaster.service";
+import { AuthenticationService } from "../services/authentication.service";
+
+declare var initSendOTP: any;
 
 @Component({
     selector: "login",
@@ -36,7 +39,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     @ViewChild("emailVerifyModal", { static: true }) public emailVerifyModal: ModalDirective;
     public isLoginWithEmailSubmited$: Observable<boolean>;
     @ViewChild("mobileVerifyModal", { static: true }) public mobileVerifyModal: ModalDirective;
-    @ViewChild("twoWayAuthModal", { static: true }) public twoWayAuthModal: ModalDirective;
+    @ViewChild("twoWayAuthModal", { static: false }) public twoWayAuthModal: ModalDirective;
 
     public isSubmited: boolean = false;
     public mobileVerifyForm: FormGroup;
@@ -75,10 +78,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     /** To Observe is google login inprocess */
     public isLoginWithGoogleInProcess$: Observable<boolean>;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    /** Modal config */
-    public modalConfig: {
-        backdrop: 'static'
-    };
 
     // tslint:disable-next-line:no-empty
     constructor(private _fb: FormBuilder,
@@ -86,9 +85,12 @@ export class LoginComponent implements OnInit, OnDestroy {
         private loginAction: LoginActions,
         private authService: AuthService,
         @Inject(DOCUMENT) private document: Document,
-        private _generalService: GeneralService
+        private loaderService: LoaderService,
+        private toaster: ToasterService,
+        private authenticationService: AuthenticationService,
+        private ngZone: NgZone
     ) {
-        this.urlPath = (isElectron || isCordova()) ? "" : AppUrl + APP_FOLDER;
+        this.urlPath = isElectron ? "" : AppUrl + APP_FOLDER;
         this.isLoginWithEmailInProcess$ = this.store.pipe(select(state => {
             return state.login.isLoginWithEmailInProcess;
         }), takeUntil(this.destroyed$));
@@ -129,10 +131,10 @@ export class LoginComponent implements OnInit, OnDestroy {
             return state.login.isLoginWithGoogleInProcess;
         }), takeUntil(this.destroyed$));
         contriesWithCodes.map(c => {
-            this.countryCodeList.push({ value: c.countryName, label: c.value });
+            this.countryCodeList.push({ value: c?.countryName, label: c?.value });
         });
-        this.userLoginState$ = this.store.pipe(select(p => p.session.userLoginState), takeUntil(this.destroyed$));
-        this.userDetails$ = this.store.pipe(select(p => p.session.user), takeUntil(this.destroyed$));
+        this.userLoginState$ = this.store.pipe(select(p => p?.session?.userLoginState), takeUntil(this.destroyed$));
+        this.userDetails$ = this.store.pipe(select(p => p?.session?.user), takeUntil(this.destroyed$));
         this.isTwoWayAuthInProcess$ = this.store.pipe(select(p => p.login.isTwoWayAuthInProcess), takeUntil(this.destroyed$));
         this.isTwoWayAuthInSuccess$ = this.store.pipe(select(p => p.login.isTwoWayAuthSuccess), takeUntil(this.destroyed$));
     }
@@ -177,7 +179,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.setCountryCode({ value: "India", label: "India" });
 
         // get user object when google auth is complete
-        if (!(Configuration.isElectron || Configuration.isCordova)) {
+        if (!Configuration.isElectron) {
             this.authService.authState.pipe(takeUntil(this.destroyed$)).subscribe((user: SocialUser) => {
                 this.isSocialLogoutAttempted$.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                     if (!res && user) {
@@ -227,6 +229,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.isLoginWithPasswordIsShowVerifyOtp$.subscribe(res => {
             if (res) {
                 this.showTwoWayAuthModal();
+                this.store.dispatch(this.loginAction.hideTwoWayOtpPopup());
             }
         });
     }
@@ -264,9 +267,9 @@ export class LoginComponent implements OnInit, OnDestroy {
         let user: VerifyEmailResponseModel;
         this.userDetails$.pipe(take(1)).subscribe(p => user = p);
         let data = new VerifyMobileModel();
-        data.countryCode = Number(user.countryCode);
-        data.mobileNumber = user.contactNumber;
-        data.oneTimePassword = this.twoWayOthForm.value.otp;
+        data.countryCode = Number(user?.countryCode);
+        data.mobileNumber = user?.contactNumber;
+        data.oneTimePassword = this.twoWayOthForm?.value?.otp;
         this.store.dispatch(this.loginAction.VerifyTwoWayAuthRequest(data));
     }
 
@@ -287,11 +290,11 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
 
     public showTwoWayAuthModal() {
-        this.twoWayAuthModal.show();
+        this.twoWayAuthModal?.show();
     }
 
     public hideTowWayAuthModal() {
-        this.twoWayAuthModal.hide();
+        this.twoWayAuthModal?.hide();
     }
 
     public resetTwoWayAuthModal() {
@@ -323,33 +326,20 @@ export class LoginComponent implements OnInit, OnDestroy {
                     this.store.dispatch(this.loginAction.signupWithGoogle(arg.access_token));
                 });
             }
-
-        } else if (isCordova()) {
-
-            (window as any).plugins.googleplus.login(
-                {
-                    'scopes': 'email', // optional, space-separated list of scopes, If not included or empty, defaults to `profile` and `email`.
-                    'webClientId': GOOGLE_CLIENT_ID,
-                    'offline': true // optional, but requires the webClientId - if set to true the plugin will also return a serverAuthCode, which can be used to grant offline access to a non-Google server
-                },
-                (obj) => {
-                    this.store.dispatch(this.loginAction.signupWithGoogle(obj.accessToken));
-                    // console.log((JSON.stringify(obj))); // do something useful instead of alerting
-                },
-                (msg) => {
-                    console.log(('error: ' + msg));
-                }
-            );
-
         } else {
             //  web social authentication
             this.store.dispatch(this.loginAction.resetSocialLogoutAttempt());
             if (provider === "google") {
                 this.authService.signIn(GoogleLoginProvider.PROVIDER_ID);
+
+                if (!isElectron) {
+                    setTimeout(() => {
+                        this.authService.signIn(GoogleLoginProvider.PROVIDER_ID);
+                    }, 500);
+                }
             }
         }
     }
-
 
     public ngOnDestroy() {
         this.document.body.classList.add("unresponsive");
@@ -361,8 +351,8 @@ export class LoginComponent implements OnInit, OnDestroy {
      * setCountryCode
      */
     public setCountryCode(event: IOption) {
-        if (event.value) {
-            let country = this.countryCodeList?.filter((obj) => obj.value === event.value);
+        if (event?.value) {
+            let country = this.countryCodeList?.filter((obj) => obj?.value === event?.value);
             this.selectedCountry = country[0].label;
         }
     }
@@ -377,7 +367,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
 
     public loginWithPasswd(model: FormGroup) {
-        let ObjToSend = model.value;
+        let ObjToSend = model?.value;
         if (ObjToSend) {
             this.store.dispatch(this.loginAction.LoginWithPasswdRequest(ObjToSend));
         }
@@ -396,7 +386,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
 
     public resetPassword(form) {
-        let ObjToSend = form.value;
+        let ObjToSend = form?.value;
         ObjToSend.uniqueKey = _.cloneDeep(this.userUniqueKey);
         this.store.dispatch(this.loginAction.resetPasswordRequest(ObjToSend));
     }
@@ -408,4 +398,58 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.userUniqueKey = null;
     }
 
+    /**
+     * This will open the login with otp popup
+     *
+     * @memberof LoginComponent
+     */
+    public signInWithOtp(): void {
+        this.loaderService.show();
+
+        let configuration = {
+            widgetId: OTP_WIDGET_ID,
+            tokenAuth: OTP_TOKEN_AUTH,
+            success: (data: any) => {
+                this.ngZone.run(() => {
+                    this.initiateLogin(data);
+                });
+            },
+            failure: (error: any) => {
+                this.toaster.errorToast(error?.message);
+            }
+        };
+
+        /* OTP LOGIN */
+        if (window['initSendOTP'] === undefined) {
+            let scriptTag = document.createElement('script');
+            scriptTag.src = OTP_PROVIDER_URL;
+            scriptTag.type = 'text/javascript';
+            scriptTag.defer = true;
+            scriptTag.onload = () => {
+                initSendOTP(configuration);
+                this.loaderService.hide();
+            };
+            document.body.appendChild(scriptTag);
+        } else {
+            initSendOTP(configuration);
+            this.loaderService.hide();
+        }
+    }
+
+    /**
+     * Initiate the login process using otp
+     *
+     * @private
+     * @param {*} data
+     * @memberof LoginComponent
+     */
+    private initiateLogin(data: any): void {
+        this.authenticationService.loginWithOtp({ accessToken: data?.message }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === "success") {
+                this.store.dispatch(this.loginAction.LoginWithPasswdResponse(response));
+            } else {
+                this.toaster.errorToast(response?.message);
+            }
+        });
+    }
 }

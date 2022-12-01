@@ -1,0 +1,174 @@
+<ng-container
+    appTranslate
+    [file]="'attachments'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
+    <div class="wrapper">
+        <div class="header">
+            <button
+                aria-hidden="true"
+                class="cursor-pointer font-16 d-flex p-0 attachment-back-button"
+                [attr.aria-label]="commonLocaleData?.app_back"
+                #close
+                disableRipple
+                type="button"
+                mat-button
+                [mat-dialog-close]="refreshAfterClose"
+            >
+                <i class="icon-left"></i> {{ commonLocaleData?.app_back }}
+            </button>
+        </div>
+        <div class="section" *ngIf="!isLoading">
+            <div class="left-side">
+                <mat-checkbox
+                    *ngIf="voucherPdf || attachments?.length > 0"
+                    class="select-all font-14"
+                    color="primary"
+                    [(ngModel)]="selectAll"
+                    (change)="selectAllAttachments($event)"
+                    >{{ commonLocaleData?.app_select_all }}
+                </mat-checkbox>
+                <ng-container *ngIf="voucherPdf">
+                    <p class="left-side-subhead">{{ commonLocaleData?.app_voucher }}</p>
+                    <div class="invoice-head">
+                        <mat-checkbox
+                            color="primary"
+                            [(ngModel)]="voucherPdf.isChecked"
+                            (change)="selectAttachment($event, voucherPdf)"
+                            >&nbsp;</mat-checkbox
+                        >
+                        <span
+                            class="cursor-pointer font-14"
+                            [ngClass]="{
+                                'active-file': !isMobileView && voucherPdf?.uniqueName === previewedFile?.uniqueName
+                            }"
+                            (click)="showVoucherPreview()"
+                            >{{ voucherPdf?.name || commonLocaleData?.app_not_available }}</span
+                        >
+                        <a class="cursor-pointer" *ngIf="!isCompany" (click)="showDeleteVoucherModal(i)"
+                            ><i class="icon-trash"></i
+                        ></a>
+                    </div>
+                </ng-container>
+                <ng-container *ngIf="attachments?.length > 0">
+                    <p class="attachment">{{ localeData?.attachments }}</p>
+                    <div class="attachment-list">
+                        <mat-list role="list" *ngFor="let attachment of attachments; let i = index">
+                            <mat-list-item role="listitem">
+                                <mat-checkbox
+                                    color="primary"
+                                    [(ngModel)]="attachment.isChecked"
+                                    (change)="selectAttachment($event, attachment)"
+                                    >&nbsp;</mat-checkbox
+                                >
+                                <span
+                                    class="file-name cursor-pointer font-14"
+                                    [ngClass]="{
+                                        'active-file':
+                                            !isMobileView && attachment?.uniqueName === previewedFile?.uniqueName
+                                    }"
+                                    (click)="showFilePreview(attachment)"
+                                    >{{ attachment?.name }}</span
+                                >
+                                <a class="cursor-pointer" *ngIf="!isCompany" (click)="showDeleteAttachedFileModal(i)"
+                                    ><i class="icon-trash"></i
+                                ></a>
+                            </mat-list-item>
+                        </mat-list>
+                    </div>
+                </ng-container>
+                <!-- <label class="upload-div">
+                    <input [disabled]="
+                            !isPettyCash &&
+                            currentOrganizationType === 'COMPANY' &&
+                            branches?.length > 1
+                        " type="file" name="invoiceFile" #fileInputUpdate id="invoiceFile" ngFileSelect
+                        [uploadInput]="uploadInput" [options]="fileUploadOptions" (uploadOutput)="onUploadOutput($event)" />
+                    <label for="invoiceFile" class="cp font-16">
+                        <i [ngClass]="
+                                !isFileUploading ? 'icon-file-path' : 'fa fa-spinner rotate'
+                            "></i>
+                        Attach File</label>
+                </label> -->
+                <div class="right-side-buttons" *ngIf="isMobileView">
+                    <a
+                        href="javascript:;"
+                        (click)="downloadFiles()"
+                        [matTooltip]="commonLocaleData?.app_download"
+                        [matTooltipPosition]="'above'"
+                    >
+                        <i class="icon-file"></i>
+                    </a>
+                    <a
+                        href="javascript:;"
+                        (click)="printFiles()"
+                        [matTooltip]="commonLocaleData?.app_print"
+                        [matTooltipPosition]="'above'"
+                    >
+                        <i class="fa fa-print"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="right-side" *ngIf="!isMobileView">
+                <div class="right-side-buttons" *ngIf="previewedFile">
+                    <span [ngClass]="{ 'disabled': previewedFile?.type === 'unsupported' }" *ngIf="previewedFile?.type">
+                        <a
+                            *ngIf="previewedFile?.type === 'pdf'"
+                            [href]="previewedFile?.src"
+                            target="_blank"
+                            [disabled]="selectAll || previewedFile?.type === 'unsupported'"
+                            [matTooltip]="commonLocaleData?.app_preview"
+                            [matTooltipPosition]="'above'"
+                            ><i class="icon-search"></i
+                        ></a>
+                        <a
+                            *ngIf="previewedFile?.type === 'image'"
+                            (click)="openPreview()"
+                            [matTooltip]="commonLocaleData?.app_preview"
+                            [matTooltipPosition]="'above'"
+                            ><i class="icon-search"></i
+                        ></a>
+                        <a
+                            *ngIf="previewedFile?.type === 'unsupported'"
+                            [matTooltip]="commonLocaleData?.app_preview"
+                            [matTooltipPosition]="'above'"
+                            ><i class="icon-search"></i
+                        ></a>
+                    </span>
+                    <span>
+                        <a
+                            (click)="downloadFiles()"
+                            [matTooltip]="commonLocaleData?.app_download"
+                            [matTooltipPosition]="'above'"
+                            ><i class="icon-file"></i
+                        ></a>
+                    </span>
+                    <span>
+                        <a
+                            (click)="printFiles()"
+                            [matTooltip]="commonLocaleData?.app_print"
+                            [matTooltipPosition]="'above'"
+                        >
+                            <i class="fa fa-print"></i>
+                        </a>
+                    </span>
+                </div>
+                <div class="display-area">
+                    <img *ngIf="previewedFile?.type === 'image'" [src]="previewedFile?.src" />
+                    <iframe
+                        *ngIf="previewedFile?.type === 'pdf'"
+                        #pdfContainer
+                        width="100%"
+                        height="100%"
+                        [src]="previewedFile?.src"
+                    ></iframe>
+                    <p class="unsupported-format" *ngIf="previewedFile?.type === 'unsupported'">
+                        <img [src]="imgPath + 'img-' + previewedFile?.originalFileExtension + '.png'" />
+                    </p>
+                </div>
+            </div>
+        </div>
+        <giddh-page-loader *ngIf="isLoading"></giddh-page-loader>
+    </div>
+</ng-container>

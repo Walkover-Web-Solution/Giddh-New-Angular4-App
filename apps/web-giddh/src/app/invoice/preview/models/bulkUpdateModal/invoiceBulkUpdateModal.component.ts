@@ -14,11 +14,12 @@ import { Configuration } from '../../../../app.constant';
 import { BulkUpdateInvoiceNote, BulkUpdateInvoiceImageSignature, BulkUpdateInvoiceTemplates, BulkUpdateInvoiceDueDates, BulkUpdateInvoiceSlogan, BulkUpdateInvoiceShippingDetails, BulkUpdateInvoiceCustomfields } from 'apps/web-giddh/src/app/models/api-models/Contact';
 import { InvoiceBulkUpdateService } from 'apps/web-giddh/src/app/services/invoice.bulkupdate.service';
 import { NgForm } from '@angular/forms';
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { IForceClear } from 'apps/web-giddh/src/app/models/api-models/Sales';
 import { ModalOptions, ModalDirective } from 'ngx-bootstrap/modal';
 import { CustomTemplateState } from 'apps/web-giddh/src/app/store/Invoice/invoice.template.reducer';
+import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 
 @Component({
     selector: 'invoice-bulk-update-modal-component',
@@ -72,11 +73,11 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges, OnDes
     /** True, if user has opted to show notes at the last page of sales invoice */
     public showNotesAtLastPage: boolean;
     public isDefaultTemplateSignatureImage: boolean;
-
+    /** Stores the voucher API version of company */
+    public voucherApiVersion: 1 | 2;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private store: Store<AppState>, private invoiceActions: InvoiceActions, private _toaster: ToasterService, private _invoiceBulkUpdateService: InvoiceBulkUpdateService,
-        private _loaderService: LoaderService) {
+    constructor(private store: Store<AppState>, private invoiceActions: InvoiceActions, private _toaster: ToasterService, private _invoiceBulkUpdateService: InvoiceBulkUpdateService, private _loaderService: LoaderService, private generalService: GeneralService) {
         this.fileUploadOptions = { concurrency: 0 };
         this.sessionId$ = this.store.pipe(select(p => p.session.user.session.id), takeUntil(this.destroyed$));
         this.companyUniqueName$ = this.store.pipe(select(p => p.session.companyUniqueName), takeUntil(this.destroyed$));
@@ -88,6 +89,7 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges, OnDes
      * @memberof InvoiceBulkUpdateModalComponent
      */
     public ngOnInit() {
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.uploadInput = new EventEmitter<UploadInput>();
         this.getTemplates();
         this.store.pipe(select(appState => appState.invoiceTemplate), takeUntil(this.destroyed$)).subscribe((templateData: CustomTemplateState) => {
@@ -117,7 +119,7 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges, OnDes
             this.companyUniqueName$.pipe(take(1)).subscribe(a => this.companyUniqueName = a);
             const event: UploadInput = {
                 type: 'uploadAll',
-                url: Configuration.ApiUrl + INVOICE_API.UPLOAD_LOGO.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)),
+                url: Configuration.ApiUrl + INVOICE_API.UPLOAD_LOGO?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)),
                 method: 'POST',
                 headers: { 'Session-Id': sessionId },
             };
@@ -127,12 +129,12 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges, OnDes
             this._loaderService.show();
         } else if (output.type === 'done') {
             this._loaderService.hide();
-            if (output.file.response.status === 'success') {
+            if (output.file.response?.status === 'success') {
                 this.updateInProcess = false;
                 this.updateImageSignatureRequest.imageSignatureUniqueName = '';
-                if (output.file.response.body && output.file.response.body.uniqueName) {
-                    this.signatureSrc = ApiUrl + 'company/' + this.companyUniqueName + '/image/' + output.file.response.body.uniqueName;
-                    this.updateImageSignatureRequest.imageSignatureUniqueName = output.file.response.body.uniqueName;
+                if (output.file.response.body && output.file.response.body?.uniqueName) {
+                    this.signatureSrc = ApiUrl + 'company/' + this.companyUniqueName + '/image/' + output.file.response.body?.uniqueName;
+                    this.updateImageSignatureRequest.imageSignatureUniqueName = output.file.response.body?.uniqueName;
                 }
                 this._toaster.successToast(this.localeData?.file_uploaded);
             } else {
@@ -234,7 +236,7 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges, OnDes
                 this.allTemplatesOptions = [];
                 templates.forEach(tmpl => {
                     this.allTemplatesOptions.push({
-                        label: tmpl.name, value: tmpl.uniqueName
+                        label: tmpl.name, value: tmpl?.uniqueName
                     });
                 });
             }
@@ -268,7 +270,7 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges, OnDes
 
                 this.voucherType = simpleChanges.voucherType.currentValue;
                 if (this.voucherType === "credit note" || this.voucherType === "debit note") {
-                    this.fieldOptions = this.fieldOptions.filter(item => item.value !== 'dueDate' && item.label !== this.localeData?.bulk_update_fields?.due_date);
+                    this.fieldOptions = this.fieldOptions?.filter(item => item.value !== 'dueDate' && item.label !== this.localeData?.bulk_update_fields?.due_date);
                 }
             }
             if (simpleChanges.selectedInvoices && simpleChanges.selectedInvoices.currentValue) {
@@ -302,13 +304,13 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges, OnDes
                 case 'signature':
                     if (this.signatureOptions === 'image') {
                         if (!this.isDefaultTemplateSignatureImage) {
-                            this.bulkUpdateImageSlogan.show();
+                            this.bulkUpdateImageSlogan?.show();
                         } else {
                             this.onConfirmationUpdateImageSlogan();
                         }
                     } else {
                         if (this.isDefaultTemplateSignatureImage) {
-                            this.bulkUpdateImageSlogan.show();
+                            this.bulkUpdateImageSlogan?.show();
                         } else {
                             this.onConfirmationUpdateImageSlogan();
                         }
@@ -317,7 +319,7 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges, OnDes
 
                 case 'dueDate':
                     if (this.updateDueDatesRequest.dueDate) {
-                        this.updateDueDatesRequest.dueDate = moment(this.updateDueDatesRequest.dueDate, this.giddhDateFormat).format(this.giddhDateFormat);
+                        this.updateDueDatesRequest.dueDate = (typeof this.updateDueDatesRequest.dueDate === "object") ? dayjs(this.updateDueDatesRequest.dueDate).format(this.giddhDateFormat) : dayjs(this.updateDueDatesRequest.dueDate, this.giddhDateFormat).format(this.giddhDateFormat);
                     }
                     this.bulkUpdateRequest(this.updateDueDatesRequest, 'duedate');
 
@@ -344,7 +346,7 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges, OnDes
      * @memberof InvoiceBulkUpdateModalComponent
      */
     public onConfirmationUpdateImageSlogan(): void {
-        this.bulkUpdateImageSlogan.hide();
+        this.bulkUpdateImageSlogan?.hide();
         if (this.signatureOptions === 'image') {
 
             if (this.updateImageSignatureRequest.imageSignatureUniqueName) {
@@ -365,7 +367,7 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges, OnDes
      * @memberof InvoiceBulkUpdateModalComponent
      */
     public onCancelBulkUpdateImageSloganModal(): void {
-        this.bulkUpdateImageSlogan.hide();
+        this.bulkUpdateImageSlogan?.hide();
         this.clearImage();
         this.forceClear$ = observableOf({ status: true });
         this.updateSloganRequest.slogan = '';
@@ -379,28 +381,39 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges, OnDes
      * @memberof InvoiceBulkUpdateModalComponent
      */
     public bulkUpdateRequest(requestModel, actionType): void {
-
         if (requestModel && actionType) {
+            let selectedVouchers = [];
+
+            if (this.voucherApiVersion === 2) {
+                this.selectedInvoicesLists.forEach(item => {
+                    selectedVouchers.push(item?.uniqueName);
+                });
+                requestModel.voucherUniqueNames = selectedVouchers;
+            } else {
+                this.selectedInvoicesLists.forEach(item => {
+                    selectedVouchers.push(item?.voucherNumber);
+                });
+                requestModel.voucherNumbers = selectedVouchers;
+            }
 
             let invoiceUniqueName = [];
-            if (this.selectedInvoicesLists.length) {
+            if (this.selectedInvoicesLists?.length) {
                 this.selectedInvoicesLists.forEach(invoice => {
                     if (invoice.voucherNumber) {
                         invoiceUniqueName.push(invoice.voucherNumber)
                     }
                 })
             }
-            requestModel.voucherNumbers = invoiceUniqueName;
             requestModel.voucherType = this.voucherType;
 
-            if (requestModel.voucherNumbers && requestModel.voucherType) {
+            if (selectedVouchers?.length && requestModel.voucherType) {
                 this.updateInProcess = true;
                 this._invoiceBulkUpdateService.bulkUpdateInvoice(requestModel, actionType).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                    if (response.status === "success") {
-                        this._toaster.successToast(response.body);
+                    if (response?.status === "success") {
+                        this._toaster.successToast(response?.body);
                         this.onCancel(true);
                     } else {
-                        this._toaster.errorToast(response.message);
+                        this._toaster.errorToast(response?.message);
                     }
                     this.updateInProcess = false;
                 });

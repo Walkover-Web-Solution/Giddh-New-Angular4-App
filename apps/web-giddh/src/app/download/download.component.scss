@@ -1,7 +1,5 @@
-@import "../../assets/css/color.scss";
-
 .header {
-    background-color: $midnight-blue;
+    background-color: var(--color-giddh-blue);
     padding: 15px;
     min-height: 60px;
 }

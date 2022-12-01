@@ -3,58 +3,8 @@
         <nav class="navbar">
             <div class="invoice-control w-100 white-bg">
                 <div class="row mr-0 ml-0">
-                    <div
-                        class="btn-group tabs-dropdown"
-                        dropdown
-                        *ngIf="
-                            selectedVoucherType !== 'debit note' &&
-                            selectedVoucherType !== 'credit note' &&
-                            tabsDropdown
-                        "
-                    >
-                        <button
-                            id="button1-basic"
-                            dropdownToggle
-                            type="button"
-                            class="btn more-btn-dropdown dropdown-toggle"
-                            aria-controls="dropdown-basic"
-                        >
-                            Estimates
-                            <span class="caret"></span>
-                        </button>
-                        <ul
-                            id="dropdown1-basic"
-                            *dropdownMenu
-                            class="dropdown-menu"
-                            role="menu"
-                            aria-labelledby="button-basic"
-                        >
-                            <li role="menuitem">
-                                <a class="dropdown-item cp">estimates</a>
-                            </li>
-                            <li role="menuitem">
-                                <a class="dropdown-item cp">proformas</a>
-                            </li>
-                            <li role="menuitem">
-                                <a class="dropdown-item cp">sales</a>
-                            </li>
-                            <li role="menuitem">
-                                <a class="dropdown-item cp">recurring</a>
-                            </li>
-                            <li role="menuitem">
-                                <a class="dropdown-item cp">pending</a>
-                            </li>
-                            <li role="menuitem">
-                                <a class="dropdown-item cp">settings</a>
-                            </li>
-                            <li role="menuitem">
-                                <a class="dropdown-item cp">template</a>
-                            </li>
-                        </ul>
-                    </div>
-
                     <div id="setting-tab" class="w-100">
-                        <hamburger-menu *ngIf="localeData?.tabs" [pageHeading]="getPageHeading()"></hamburger-menu>
+                        <hamburger-menu class="header-hamburger-menu" *ngIf="localeData?.tabs"></hamburger-menu>
                         <ng-template
                             [ngIf]="selectedVoucherType === 'debit note' || selectedVoucherType === 'credit note'"
                         >
@@ -168,6 +118,7 @@
                                     (selectTab)="tabChanged('recurring', $event)"
                                     [active]="activeTab === 'recurring'"
                                     [id]="activeTab === 'recurring' ? 'giddh-page-heading' : ''"
+                                    [customClass]="voucherApiVersion === 2 ? 'd-none' : ''"
                                 >
                                     <div *ngIf="activeTab === 'recurring'">
                                         <app-recurring></app-recurring>

@@ -34,7 +34,6 @@
                                         class="dropdown-item"
                                         (click)="(false)"
                                         (click)="downloadAllInventoryReports('allgroup', 'xlsx')"
-                                        href=""
                                         >XLS</a
                                     >
                                 </li>
@@ -102,6 +101,11 @@
                 </div>
             </div>
         </div>
-        <stockgrp-list class="parent-group stock-group-parent" [Groups]="stockGroupData"> </stockgrp-list>
+        <stockgrp-list
+            class="parent-group stock-group-parent"
+            [Groups]="stockGroupData"
+            [page]="currentPage"
+            (loadMore)="loadMore()"
+        ></stockgrp-list>
     </div>
 </section>

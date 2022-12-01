@@ -5,7 +5,7 @@
     (commonLocaleData)="commonLocaleData = $event"
     (translationComplete)="translationComplete($event)"
 >
-    <div validateSectionPermission [hasPermission]="hasInvoiceSettingPermissions">
+    <div validateSectionPermission [hasPermission]="hasInvoiceSettingPermissions" validateSubscription>
         <section id="invoice-setting">
             <tabset class="tab-integration">
                 <!-- region general tab-->
@@ -23,23 +23,33 @@
 
                                     <div class="clearfix pd-t1">
                                         <div class="row">
-                                            <div class="col-sm-12 col-md-12 col-lg-3">
-                                                <input
-                                                    type="checkbox"
-                                                    [(ngModel)]="invoiceSetting.enableNarrationOnInvAndVoucher"
+                                            <div class="col-sm-12 col-md-12 col-lg-3 flex-container">
+                                                <ngx-switch
+                                                    [(status)]="invoiceSetting.enableNarrationOnInvAndVoucher"
                                                     name="enableNarrationOnInvAndVoucher"
                                                     class="show-on-mobile"
-                                                />
+                                                    [onText]="commonLocaleData?.app_on"
+                                                    [offText]="commonLocaleData?.app_off"
+                                                    [onColor]="bootstrapToggleSwitch?.On"
+                                                    [offColor]="bootstrapToggleSwitch?.Off"
+                                                    [size]="bootstrapToggleSwitch?.Size"
+                                                >
+                                                </ngx-switch>
                                                 <label>{{ localeData?.narration_on_mobile }}</label>
                                             </div>
 
                                             <div class="col-sm-6 col-md-9 col-lg-8 form-group">
-                                                <input
-                                                    type="checkbox"
-                                                    [(ngModel)]="invoiceSetting.enableNarrationOnInvAndVoucher"
+                                                <ngx-switch
+                                                    [(status)]="invoiceSetting.enableNarrationOnInvAndVoucher"
                                                     name="enableNarrationOnInvAndVoucher"
                                                     class="hide-on-mobile"
-                                                />
+                                                    [onText]="commonLocaleData?.app_on"
+                                                    [offText]="commonLocaleData?.app_off"
+                                                    [onColor]="bootstrapToggleSwitch?.On"
+                                                    [offColor]="bootstrapToggleSwitch?.Off"
+                                                    [size]="bootstrapToggleSwitch?.Size"
+                                                >
+                                                </ngx-switch>
                                             </div>
                                         </div>
                                     </div>
@@ -111,7 +121,7 @@
                                                         (click)="verfiyEmail(invoiceSetting.email)"
                                                         [disabled]="
                                                             !isEmailChanged &&
-                                                            (!invoiceSetting.email || invoiceSetting.email.length < 4)
+                                                            (!invoiceSetting.email || invoiceSetting.email?.length < 4)
                                                         "
                                                         *ngIf="!invoiceSetting.emailVerified"
                                                     >
@@ -125,13 +135,14 @@
                                                         [ngClass]="{
                                                             'delete-icon-opacity':
                                                                 !invoiceSetting.email ||
-                                                                invoiceSetting.email.length < 4,
+                                                                invoiceSetting.email?.length < 4,
                                                             'cursor-pointer': !(
-                                                                !invoiceSetting.email || invoiceSetting.email.length < 4
+                                                                !invoiceSetting.email ||
+                                                                invoiceSetting.email?.length < 4
                                                             )
                                                         }"
                                                         (click)="
-                                                            !(!invoiceSetting.email || invoiceSetting.email.length < 4)
+                                                            !(!invoiceSetting.email || invoiceSetting.email?.length < 4)
                                                                 ? deleteEmail(invoiceSetting.email)
                                                                 : ''
                                                         "
@@ -147,25 +158,35 @@
 
                             <div class="clearfix pd-t1">
                                 <div class="row">
-                                    <div class="col-lg-3 col-md-12 col-sm-12">
-                                        <input
-                                            type="checkbox"
-                                            [(ngModel)]="companyEmailSettings.sendThroughGmail"
+                                    <div class="col-lg-3 col-md-12 col-sm-12 flex-container">
+                                        <ngx-switch
+                                            [(status)]="companyEmailSettings.sendThroughGmail"
                                             name="sendThroughGmail"
-                                            [disabled]="!isGmailIntegrated"
                                             class="show-on-mobile"
-                                        />
+                                            [disabled]="!isGmailIntegrated"
+                                            [onText]="commonLocaleData?.app_on"
+                                            [offText]="commonLocaleData?.app_off"
+                                            [onColor]="bootstrapToggleSwitch?.On"
+                                            [offColor]="bootstrapToggleSwitch?.Off"
+                                            [size]="bootstrapToggleSwitch?.Size"
+                                        >
+                                        </ngx-switch>
                                         <label>{{ localeData?.send_email_gmail }}</label>
                                     </div>
 
                                     <div class="col-lg-9 col-md-12 col-sm-12 form-group d-flex align-items-center">
-                                        <input
-                                            type="checkbox"
-                                            [(ngModel)]="companyEmailSettings.sendThroughGmail"
+                                        <ngx-switch
+                                            [(status)]="companyEmailSettings.sendThroughGmail"
                                             name="sendThroughGmail"
-                                            [disabled]="!isGmailIntegrated"
                                             class="hide-on-mobile"
-                                        />
+                                            [disabled]="!isGmailIntegrated"
+                                            [onText]="commonLocaleData?.app_on"
+                                            [offText]="commonLocaleData?.app_off"
+                                            [onColor]="bootstrapToggleSwitch?.On"
+                                            [offColor]="bootstrapToggleSwitch?.Off"
+                                            [size]="bootstrapToggleSwitch?.Size"
+                                        >
+                                        </ngx-switch>
 
                                         <span class="ml-1 integrated-email" *ngIf="!isGmailIntegrated">
                                             <a [href]="gmailAuthCodeUrl$ | async">{{ localeData?.integrate_gmail }}</a>
@@ -250,7 +271,7 @@
                                         >
                                     </div>
 
-                                    <div class="col-sm-12 col-md-12 col-lg-12">
+                                    <div class="col-sm-12 col-md-12 col-lg-7">
                                         <div class="select-estimate mr-r3">
                                             <div class="col-md-12 col-xs-12 p-0">
                                                 <span class="p-0 mr-r3">
@@ -287,45 +308,65 @@
 
                                 <div class="clearfix pd-t1">
                                     <div class="row">
-                                        <div class="col-sm-12 col-md-12 col-lg-3">
-                                            <input
-                                                type="checkbox"
-                                                [(ngModel)]="estimateSetting.autoChangeStatusOnExp"
+                                        <div class="col-sm-12 col-md-12 col-lg-3 flex-container">
+                                            <ngx-switch
+                                                [(status)]="estimateSetting.autoChangeStatusOnExp"
                                                 name="estimateAutoChange"
                                                 class="show-on-mobile"
-                                            />
+                                                [onText]="commonLocaleData?.app_on"
+                                                [offText]="commonLocaleData?.app_off"
+                                                [onColor]="bootstrapToggleSwitch?.On"
+                                                [offColor]="bootstrapToggleSwitch?.Off"
+                                                [size]="bootstrapToggleSwitch?.Size"
+                                            >
+                                            </ngx-switch>
                                             <label>{{ localeData?.auto_change_status_expiry }}</label>
                                         </div>
 
                                         <div class="col-sm-12 col-md-12 col-lg-9 form-group">
-                                            <input
-                                                type="checkbox"
-                                                [(ngModel)]="estimateSetting.autoChangeStatusOnExp"
+                                            <ngx-switch
+                                                [(status)]="estimateSetting.autoChangeStatusOnExp"
                                                 name="estimateAutoChange"
                                                 class="hide-on-mobile"
-                                            />
+                                                [onText]="commonLocaleData?.app_on"
+                                                [offText]="commonLocaleData?.app_off"
+                                                [onColor]="bootstrapToggleSwitch?.On"
+                                                [offColor]="bootstrapToggleSwitch?.Off"
+                                                [size]="bootstrapToggleSwitch?.Size"
+                                            >
+                                            </ngx-switch>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="clearfix pd-t1">
                                     <div class="row">
-                                        <div class="col-sm-12 col-md-12 col-lg-3">
-                                            <input
-                                                type="checkbox"
-                                                [(ngModel)]="estimateSetting.autoMail"
+                                        <div class="col-sm-12 col-md-12 col-lg-3 flex-container">
+                                            <ngx-switch
+                                                [(status)]="estimateSetting.autoMail"
                                                 name="estimateAutomail"
                                                 class="show-on-mobile"
-                                            />
+                                                [onText]="commonLocaleData?.app_on"
+                                                [offText]="commonLocaleData?.app_off"
+                                                [onColor]="bootstrapToggleSwitch?.On"
+                                                [offColor]="bootstrapToggleSwitch?.Off"
+                                                [size]="bootstrapToggleSwitch?.Size"
+                                            >
+                                            </ngx-switch>
                                             <label>{{ localeData?.auto_email_generate }}</label>
                                         </div>
                                         <div class="col-sm-12 col-md-12 col-lg-9 form-group">
-                                            <input
-                                                type="checkbox"
-                                                [(ngModel)]="estimateSetting.autoMail"
+                                            <ngx-switch
+                                                [(status)]="estimateSetting.autoMail"
                                                 name="estimateAutomail"
                                                 class="hide-on-mobile"
-                                            />
+                                                [onText]="commonLocaleData?.app_on"
+                                                [offText]="commonLocaleData?.app_off"
+                                                [onColor]="bootstrapToggleSwitch?.On"
+                                                [offColor]="bootstrapToggleSwitch?.Off"
+                                                [size]="bootstrapToggleSwitch?.Size"
+                                            >
+                                            </ngx-switch>
                                         </div>
                                     </div>
                                 </div>
@@ -417,44 +458,64 @@
 
                                 <div class="clearfix pd-t1">
                                     <div class="row">
-                                        <div class="col-sm-12 col-md-12 col-lg-3">
-                                            <input
-                                                type="checkbox"
-                                                [(ngModel)]="proformaSetting.autoChangeStatusOnExp"
+                                        <div class="col-sm-12 col-md-12 col-lg-3 flex-container">
+                                            <ngx-switch
+                                                [(status)]="proformaSetting.autoChangeStatusOnExp"
                                                 name="proformaAutoChange"
                                                 class="show-on-mobile"
-                                            />
+                                                [onText]="commonLocaleData?.app_on"
+                                                [offText]="commonLocaleData?.app_off"
+                                                [onColor]="bootstrapToggleSwitch?.On"
+                                                [offColor]="bootstrapToggleSwitch?.Off"
+                                                [size]="bootstrapToggleSwitch?.Size"
+                                            >
+                                            </ngx-switch>
                                             <label>{{ localeData?.auto_change_status_expiry }}</label>
                                         </div>
                                         <div class="col-sm-12 col-md-12 col-lg-9 form-group">
-                                            <input
-                                                type="checkbox"
-                                                [(ngModel)]="proformaSetting.autoChangeStatusOnExp"
+                                            <ngx-switch
+                                                [(status)]="proformaSetting.autoChangeStatusOnExp"
                                                 name="proformaAutoChange"
                                                 class="hide-on-mobile"
-                                            />
+                                                [onText]="commonLocaleData?.app_on"
+                                                [offText]="commonLocaleData?.app_off"
+                                                [onColor]="bootstrapToggleSwitch?.On"
+                                                [offColor]="bootstrapToggleSwitch?.Off"
+                                                [size]="bootstrapToggleSwitch?.Size"
+                                            >
+                                            </ngx-switch>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="clearfix pd-t1">
                                     <div class="row">
-                                        <div class="col-sm-12 col-md-12 col-lg-3">
-                                            <input
-                                                type="checkbox"
-                                                [(ngModel)]="proformaSetting.autoMail"
+                                        <div class="col-sm-12 col-md-12 col-lg-3 flex-container">
+                                            <ngx-switch
+                                                [(status)]="proformaSetting.autoMail"
                                                 name="proformaAutomail"
                                                 class="show-on-mobile"
-                                            />
+                                                [onText]="commonLocaleData?.app_on"
+                                                [offText]="commonLocaleData?.app_off"
+                                                [onColor]="bootstrapToggleSwitch?.On"
+                                                [offColor]="bootstrapToggleSwitch?.Off"
+                                                [size]="bootstrapToggleSwitch?.Size"
+                                            >
+                                            </ngx-switch>
                                             <label>{{ localeData?.auto_mail_generate_update }}</label>
                                         </div>
                                         <div class="col-sm-12 col-md-12 col-lg-9 form-group">
-                                            <input
-                                                type="checkbox"
-                                                [(ngModel)]="proformaSetting.autoMail"
+                                            <ngx-switch
+                                                [(status)]="proformaSetting.autoMail"
                                                 name="proformaAutomail"
                                                 class="hide-on-mobile"
-                                            />
+                                                [onText]="commonLocaleData?.app_on"
+                                                [offText]="commonLocaleData?.app_off"
+                                                [onColor]="bootstrapToggleSwitch?.On"
+                                                [offColor]="bootstrapToggleSwitch?.Off"
+                                                [size]="bootstrapToggleSwitch?.Size"
+                                            >
+                                            </ngx-switch>
                                         </div>
                                     </div>
                                 </div>
@@ -540,44 +601,64 @@
 
                                 <div class="clearfix pd-t1">
                                     <div class="row">
-                                        <div class="col-sm-12 col-md-12 col-lg-3">
-                                            <input
-                                                type="checkbox"
+                                        <div class="col-sm-12 col-md-12 col-lg-3 flex-container">
+                                            <ngx-switch
+                                                [(status)]="invoiceSetting.showSeal"
                                                 name="invoiceStatusPayment"
-                                                [(ngModel)]="invoiceSetting.showSeal"
                                                 class="show-on-mobile"
-                                            />
+                                                [onText]="commonLocaleData?.app_on"
+                                                [offText]="commonLocaleData?.app_off"
+                                                [onColor]="bootstrapToggleSwitch?.On"
+                                                [offColor]="bootstrapToggleSwitch?.Off"
+                                                [size]="bootstrapToggleSwitch?.Size"
+                                            >
+                                            </ngx-switch>
                                             <label>{{ localeData?.show_seal }}</label>
                                         </div>
                                         <div class="col-sm-12 col-md-9 form-group">
-                                            <input
-                                                type="checkbox"
+                                            <ngx-switch
+                                                [(status)]="invoiceSetting.showSeal"
                                                 name="invoiceStatusPayment"
-                                                [(ngModel)]="invoiceSetting.showSeal"
                                                 class="hide-on-mobile"
-                                            />
+                                                [onText]="commonLocaleData?.app_on"
+                                                [offText]="commonLocaleData?.app_off"
+                                                [onColor]="bootstrapToggleSwitch?.On"
+                                                [offColor]="bootstrapToggleSwitch?.Off"
+                                                [size]="bootstrapToggleSwitch?.Size"
+                                            >
+                                            </ngx-switch>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="clearfix pd-t1">
                                     <div class="row">
-                                        <div class="col-sm-12 col-md-12 col-lg-3">
-                                            <input
-                                                type="checkbox"
-                                                [(ngModel)]="invoiceSetting.autoMail"
+                                        <div class="col-sm-12 col-md-12 col-lg-3 flex-container">
+                                            <ngx-switch
+                                                [(status)]="invoiceSetting.autoMail"
                                                 name="invoiceAutomail"
                                                 class="show-on-mobile"
-                                            />
+                                                [onText]="commonLocaleData?.app_on"
+                                                [offText]="commonLocaleData?.app_off"
+                                                [onColor]="bootstrapToggleSwitch?.On"
+                                                [offColor]="bootstrapToggleSwitch?.Off"
+                                                [size]="bootstrapToggleSwitch?.Size"
+                                            >
+                                            </ngx-switch>
                                             <label>{{ localeData?.auto_mail_update }}</label>
                                         </div>
                                         <div class="col-sm-12 col-md-9 form-group">
-                                            <input
-                                                type="checkbox"
-                                                [(ngModel)]="invoiceSetting.autoMail"
+                                            <ngx-switch
+                                                [(status)]="invoiceSetting.autoMail"
                                                 name="invoiceAutomail"
                                                 class="hide-on-mobile"
-                                            />
+                                                [onText]="commonLocaleData?.app_on"
+                                                [offText]="commonLocaleData?.app_off"
+                                                [onColor]="bootstrapToggleSwitch?.On"
+                                                [offColor]="bootstrapToggleSwitch?.Off"
+                                                [size]="bootstrapToggleSwitch?.Size"
+                                            >
+                                            </ngx-switch>
                                         </div>
                                     </div>
                                 </div>
@@ -614,25 +695,35 @@
                                         </div>
                                     </div>
                                 </div> -->
-                                <div class="clearfix pd-t1">
+                                <div class="clearfix pt-1">
                                     <div class="row">
-                                        <div class="col-sm-12 col-md-12 col-lg-3">
-                                            <input
-                                                type="checkbox"
-                                                [(ngModel)]="invoiceSetting.useCustomInvoiceNumber"
-                                                class="pull-left estimation-check show-on-mobile"
+                                        <div class="col-sm-12 col-md-12 col-lg-3 flex-container">
+                                            <ngx-switch
+                                                [(status)]="invoiceSetting.useCustomInvoiceNumber"
                                                 name="customInvoice"
-                                            />
+                                                class="pull-left estimation-check show-on-mobile"
+                                                [onText]="commonLocaleData?.app_on"
+                                                [offText]="commonLocaleData?.app_off"
+                                                [onColor]="bootstrapToggleSwitch?.On"
+                                                [offColor]="bootstrapToggleSwitch?.Off"
+                                                [size]="bootstrapToggleSwitch?.Size"
+                                            >
+                                            </ngx-switch>
                                             <label>{{ localeData?.custom_invoice_no }}</label>
                                         </div>
                                         <div class="col-sm-12 col-md-9">
-                                            <div class="form-group clearfix">
-                                                <input
-                                                    type="checkbox"
-                                                    [(ngModel)]="invoiceSetting.useCustomInvoiceNumber"
-                                                    class="pull-left estimation-check hide-on-mobile"
+                                            <div class="form-group clearfix d-flex">
+                                                <ngx-switch
+                                                    [(status)]="invoiceSetting.useCustomInvoiceNumber"
                                                     name="customInvoice"
-                                                />
+                                                    class="pull-left estimation-check hide-on-mobile"
+                                                    [onText]="commonLocaleData?.app_on"
+                                                    [offText]="commonLocaleData?.app_off"
+                                                    [onColor]="bootstrapToggleSwitch?.On"
+                                                    [offColor]="bootstrapToggleSwitch?.Off"
+                                                    [size]="bootstrapToggleSwitch?.Size"
+                                                >
+                                                </ngx-switch>
                                                 <div
                                                     class="d-inline-flex custom-estimation"
                                                     *ngIf="invoiceSetting.useCustomInvoiceNumber"
@@ -670,24 +761,34 @@
                                     </div>
                                 </div>
 
-                                <div class="clearfix pt-1">
+                                <div class="clearfix pd-t1">
                                     <div class="row">
-                                        <div class="col-sm-12 col-md-12 col-lg-3">
-                                            <input
-                                                type="checkbox"
-                                                [(ngModel)]="invoiceSetting.autoDeleteEntries"
+                                        <div class="col-sm-12 col-md-12 col-lg-3 flex-container">
+                                            <ngx-switch
+                                                [(status)]="invoiceSetting.autoDeleteEntries"
                                                 name="invoiceAutoDeleteEntries"
                                                 class="show-on-mobile"
-                                            />
+                                                [onText]="commonLocaleData?.app_on"
+                                                [offText]="commonLocaleData?.app_off"
+                                                [onColor]="bootstrapToggleSwitch?.On"
+                                                [offColor]="bootstrapToggleSwitch?.Off"
+                                                [size]="bootstrapToggleSwitch?.Size"
+                                            >
+                                            </ngx-switch>
                                             <label>{{ localeData?.auto_delete_entries }}</label>
                                         </div>
                                         <div class="col-sm-12 col-md-9 form-group">
-                                            <input
-                                                type="checkbox"
-                                                [(ngModel)]="invoiceSetting.autoDeleteEntries"
+                                            <ngx-switch
+                                                [(status)]="invoiceSetting.autoDeleteEntries"
                                                 name="invoiceAutoDeleteEntries"
                                                 class="hide-on-mobile"
-                                            />
+                                                [onText]="commonLocaleData?.app_on"
+                                                [offText]="commonLocaleData?.app_off"
+                                                [onColor]="bootstrapToggleSwitch?.On"
+                                                [offColor]="bootstrapToggleSwitch?.Off"
+                                                [size]="bootstrapToggleSwitch?.Size"
+                                            >
+                                            </ngx-switch>
                                         </div>
                                     </div>
                                 </div>
@@ -696,17 +797,32 @@
                                     class="clearfix pd-t1"
                                 >
                                     <div class="row">
-                                        <div class="col-sm-12 col-md-12 col-lg-3">
-                                            <input type="checkbox" class="show-on-mobile" />
-                                            <label>E-invoicing Authentication</label>
+                                        <div class="col-sm-12 col-md-12 col-lg-3 flex-container">
+                                            <ngx-switch
+                                                [(status)]="invoiceSetting.gstEInvoiceEnable"
+                                                class="show-on-mobile"
+                                                [onText]="commonLocaleData?.app_on"
+                                                [offText]="commonLocaleData?.app_off"
+                                                [onColor]="bootstrapToggleSwitch?.On"
+                                                [offColor]="bootstrapToggleSwitch?.Off"
+                                                [size]="bootstrapToggleSwitch?.Size"
+                                                (statusChange)="handleEInvoiceChange($event)"
+                                            >
+                                            </ngx-switch>
+                                            <label>{{ localeData?.e_invoice_authentication_label }}</label>
                                         </div>
-                                        <div class="col-sm-12 col-md-9 form-group user-authenticate">
-                                            <input
-                                                [(ngModel)]="invoiceSetting.gstEInvoiceEnable"
-                                                (ngModelChange)="handleEInvoiceChange($event)"
-                                                type="checkbox"
+                                        <div class="col-sm-12 col-md-9 form-group user-authenticate d-flex">
+                                            <ngx-switch
+                                                [(status)]="invoiceSetting.gstEInvoiceEnable"
                                                 class="hide-on-mobile"
-                                            />
+                                                [onText]="commonLocaleData?.app_on"
+                                                [offText]="commonLocaleData?.app_off"
+                                                [onColor]="bootstrapToggleSwitch?.On"
+                                                [offColor]="bootstrapToggleSwitch?.Off"
+                                                [size]="bootstrapToggleSwitch?.Size"
+                                                (statusChange)="handleEInvoiceChange($event)"
+                                            >
+                                            </ngx-switch>
                                             <div *ngIf="invoiceSetting.gstEInvoiceEnable" class="d-inline-flex">
                                                 <div class="d-inline-flex position-relative mr-l15">
                                                     <label>Username</label>

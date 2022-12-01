@@ -1,4 +1,3 @@
-@import "../../../../../assets/css/color.scss";
 .invoice-preview-sidebar {
     z-index: 200;
 }
@@ -8,7 +7,7 @@
     content: "";
     width: 100%;
     height: 100%;
-    background-color: $white;
+    background-color: var(--color-white);
     top: 170px;
     bottom: 0;
     left: 240px;
@@ -29,7 +28,7 @@
     position: fixed;
     top: 57px;
     width: calc(100% - 240px);
-    background-color: $white;
+    background-color: var(--color-white);
     margin: 0 0;
     height: 100vh;
     z-index: 99;
@@ -37,7 +36,7 @@
 }
 
 .invoice-sidebar {
-    background-color: $white;
+    background-color: var(--color-white);
     padding: 0;
     height: calc(100vh - 120px);
 }
@@ -54,15 +53,15 @@
 }
 
 .invoice-sidebar .invoice-number-date span.invoice-number {
-    color: $primary;
+    color: var(--color-blue);
 }
 
 .invoice-sidebar .invoice-number-date span.invoice-date {
-    color: $dark-gray;
+    color: var(--color-abbey);
 }
 
 .invoice-sidebar .invoice-holder-name p {
-    color: $night-rider;
+    color: var(--color-nero);
     font-size: 14px;
     margin-top: 3px;
     white-space: normal;
@@ -71,16 +70,16 @@
 
 .invoice-sidebar .single-invoice-detail {
     padding: 10px 15px;
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--color-common-primary-border);
     list-style: none;
 }
 
 .invoice-sidebar .single-invoice-detail:hover {
-    background-color: $gray-95;
+    background-color: var(--color-primary-invoice-preview-details-left-sidebar-list-background-active-hover);
 }
 
 .invoice-sidebar .single-invoice-detail.activeItem {
-    background-color: $gray-95;
+    background-color: var(--color-primary-invoice-preview-details-left-sidebar-list-background-active-hover);
 }
 
 .invoice-sidebar .single-invoice-detail:last-child {
@@ -124,7 +123,7 @@
 }
 
 .invoice-detail-header .edit-change-status .edit-link {
-    color: $primary;
+    color: var(--color-blue);
     padding-right: 10px;
     font-size: 16px;
 }
@@ -135,12 +134,12 @@
 
 .invoice-detail-header .edit-change-status .edit-action-btn-groups {
     display: flex;
-    background-color: $white;
-    border: 1px solid $gainsboro;
+    background-color: var(--color-white);
+    border: 1px solid var(--color-common-secondary-border);
     margin-right: 10px;
     border-radius: 5px;
     span {
-        border-left: 1px solid $gainsboro;
+        border-left: 1px solid var(--color-common-secondary-border);
         padding: 5px;
         display: flex;
         justify-content: center;
@@ -151,13 +150,13 @@
             border-left: none;
         }
         a {
-            color: $dark-gray;
+            color: var(--color-abbey);
             display: block;
             text-align: center;
         }
     }
     .disabled {
-        background: $gainsboro !important;
+        background: var(--color-iron) !important;
         cursor: not-allowed;
         a {
             cursor: not-allowed;
@@ -178,7 +177,7 @@
 .payment-detail .payment-icon {
     width: 35px;
     height: 35px;
-    background-color: $very-light-gray;
+    background-color: var(--color-iron);
     border-radius: 50%;
     text-align: center;
     vertical-align: middle;
@@ -189,13 +188,13 @@
 }
 
 .single-payment-detail a {
-    color: $primary;
+    color: var(--color-blue);
 }
 
 .payment-detail p.payment-content {
     font-size: 14px;
     margin-bottom: 5px;
-    color: $night-rider;
+    color: var(--color-nero);
 }
 
 .payment-log {
@@ -204,7 +203,7 @@
 
 .invoice-image-section {
     text-align: center;
-    background-color: $white;
+    background-color: var(--color-white);
     margin-bottom: 35px;
     z-index: -9;
     height: 100%;
@@ -229,7 +228,7 @@
         font-size: 36px;
         max-width: 60%;
         margin: 0 auto;
-        color: $red;
+        color: var(--color-danger);
     }
     .img-expand-collapse {
         padding: 50px 50px 0 50px;
@@ -237,27 +236,17 @@
     .pdf-expand-collapse {
         padding: 50px 0px 0 0px;
     }
-    .image-collapsed {
-        max-height: 130px;
-        overflow: hidden;
-        img {
-            height: auto;
-        }
-    }
     .preview-not-supported-attachment {
-        font-size: 18px;
+        font-size: 15px;
         margin: 16px;
     }
     .pdf-preview {
         height: 100%;
-        // margin: 15px 200px;
-        // border: 2px dashed #d9d9d9;
-        // padding: 10px;
         margin-top: 50px;
         h5 {
-            background-color: $alice-blue-light;
+            background-color: var(--color-primary-invoice-preview-details-background);
             strong {
-                color: $midnight-blue;
+                color: var(--color-giddh-blue);
             }
         }
     }
@@ -268,7 +257,7 @@
 }
 
 .single-payment-detail {
-    color: $primary;
+    color: var(--color-blue);
 }
 
 .payment-log-div li {
@@ -284,23 +273,23 @@
 .payment-log-div span.small-circle {
     height: 10px;
     width: 10px;
-    border: 1px solid $dark-gray;
+    border: 1px solid var(--color-abbey);
     border-radius: 50%;
     display: inline-block;
     margin-right: 7px;
 }
 
 .payment-log-div .activeLog span.small-circle {
-    background-color: $primary;
-    border-color: $primary;
+    background-color: var(--color-blue);
+    border-color: var(--color-blue);
 }
 
 .payment-log-div .about-payment-log {
-    color: $dark-gray;
+    color: var(--color-abbey);
 }
 
 .payment-log-div .activeLog .about-payment-log {
-    color: $primary;
+    color: var(--color-blue);
 }
 
 .payment-log-div ul {
@@ -312,7 +301,7 @@
     content: "";
     height: calc(100% - 30px);
     width: 1px;
-    border-left: 1px dashed $gainsboro;
+    border-left: 1px dashed var(--color-iron);
     top: 16px;
     left: 4.5px;
 }
@@ -322,8 +311,8 @@
 }
 
 .invoice-detail {
-    background-color: $alice-blue-light;
     padding-bottom: 0px;
+    background-color: var(--color-primary-invoice-preview-details-background);
 }
 
 span.close-modal.cp.pull-right {
@@ -332,8 +321,8 @@ span.close-modal.cp.pull-right {
     align-items: center;
     height: 34px;
     width: 34px;
-    background-color: $gainsboro-light;
-    border: 1px solid $gainsboro;
+    background-color: var(--color-invoice-preview-span-close-modal-background);
+    border: 1px solid var(--color-iron);
     border-radius: 5px;
     position: static;
     transform: inherit;
@@ -361,19 +350,20 @@ span.close-modal.cp.pull-right {
 }
 
 .dropdown-menu > li > a:hover {
-    color: $chetwode-blue;
-    background: $whisper;
+    color: var(--color-blue);
+    background: var(--color-dark-fog);
 }
 
 .invoice-search-box input {
     flex: 1;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--color-secondary-input-bar-border);
     border-radius: 5px;
     height: 37px;
     padding: 0 30px;
     background-image: url("../../../../../assets/images/searchIcon.svg");
     background-position: 10px 13px;
     background-repeat: no-repeat;
+    background-color: var(--color-primary-input-bar-background);
 }
 
 .invoice-search-box button {
@@ -388,7 +378,7 @@ span.close-modal.cp.pull-right {
 }
 
 .invoice-sidebar-wrapper {
-    box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 3px 3px 6px var(--color-primary-common-box-shadow);
 }
 
 .unresponsive {
@@ -407,9 +397,9 @@ span.close-modal.cp.pull-right {
         display: flex;
         justify-content: space-between;
         height: 54px;
-        background-color: $white;
-        border-top: 1px solid $gainsboro;
-        border-bottom: 1px solid $gainsboro;
+        background-color: var(--color-white);
+        border-top: 1px solid var(--color-iron);
+        border-bottom: 1px solid var(--color-iron);
         align-items: center;
         span {
             padding: 10px;
@@ -421,8 +411,8 @@ span.close-modal.cp.pull-right {
         span.close-modal {
             height: 34px;
             width: 34px;
-            background-color: $gainsboro-light;
-            border: 1px solid $gainsboro;
+            background-color: var(--color-invoice-preview-span-close-modal-background);
+            border: 1px solid var(--color-iron);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -461,17 +451,17 @@ span.close-modal.cp.pull-right {
     top: 0px;
     width: 200px;
     height: 4px;
-    background-color: $chetwode-blue;
+    background-color: var(--color-blue);
     animation: loading 2s linear infinite;
 }
 
 label.labeled {
-    border: 1px solid $gainsboro;
-    color: $night-rider;
+    border: 1px solid var(--color-iron);
+    color: var(--color-nero);
     padding: 5px 10px;
     border-radius: 3px;
     margin: 0 10px 0 0;
-    background-color: $light-gray;
+    background-color: var(--color-iron);
     position: relative;
     top: -1px;
 }
@@ -479,24 +469,6 @@ label.labeled {
 .scroll-half {
     height: 100vh !important;
     overflow-y: auto !important;
-}
-
-.expand-file {
-    position: absolute;
-    right: 15px;
-    font-size: 14px;
-    margin: 15px;
-    top: 0px;
-    a {
-        color: $gray;
-        span {
-            margin-right: 5px;
-        }
-    }
-}
-
-.collapse-icon {
-    transform: rotate(180deg);
 }
 
 @keyframes loading {
@@ -527,15 +499,15 @@ label.labeled {
     top: 40px;
     z-index: 10;
     right: 0;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--color-iron);
     .send-email-modal-wrapper {
-        background-color: $white;
-        box-shadow: 0 0 6px rgba(0, 0, 0, 0.2);
+        background-color: var(--color-white);
+        box-shadow: 0 0 6px var(--color-primary-common-box-shadow);
         height: 200px;
         .send-email-modal-header {
-            background-color: $whisper;
+            background-color: var(--color-dark-fog);
             padding: 8px 10px;
-            border-bottom: 1px solid $gainsboro;
+            border-bottom: 1px solid var(--color-iron);
             span {
                 width: unset;
             }
@@ -549,13 +521,13 @@ label.labeled {
         margin-bottom: 7px;
     }
     .btn-success {
-        background: $success-green;
-        color: $white;
+        background: var(--color-success-enable);
+        color: var(--color-white);
     }
     .aqua-color {
         cursor: pointer;
         a {
-            color: $deep-sky-blue;
+            color: var(--color-blue);
             font-size: 12px;
         }
     }
@@ -564,12 +536,12 @@ label.labeled {
 .linked-purchase-order {
     padding: 0 15px;
     .purchase-order-number {
-        color: $gray;
+        color: var(--color-abbey);
         .aqua-color {
-            color: $deep-sky-blue;
+            color: var(--color-blue);
             cursor: pointer;
             span {
-                color: $very-light-gray;
+                color: var(--color-iron);
                 margin: 0 10px;
             }
         }
@@ -598,7 +570,7 @@ label.labeled {
 }
 
 .dashed-border {
-    border: 2px dashed $gainsboro;
+    border: 2px dashed var(--color-iron);
 }
 
 #csv-upload-input {
@@ -613,16 +585,16 @@ label.labeled {
 }
 
 .select-file {
-    color: $success-green;
+    color: var(--color-success-enable);
 }
 
 .file-upload-panel {
     width: 100%;
     text-align: left;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--color-iron);
     padding: 8px;
     border-radius: 4px;
-    color: $very-light-gray;
+    color: var(--color-iron);
 }
 
 .file-input-wrapper img {
@@ -682,12 +654,12 @@ p {
 
 #default {
     overflow: auto;
-    background: $white;
+    background: var(--color-white);
     padding: 0;
     font-size: 14px;
     max-width: 760px;
     margin: 20px auto 120px;
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 3px 6px var(--color-primary-common-box-shadow);
 }
 
 #default::-webkit-scrollbar {
@@ -697,13 +669,13 @@ p {
 /* Track */
 
 #default::-webkit-scrollbar-track {
-    background: $white-smoke;
+    background: var(--color-wild-sand);
 }
 
 /* Handle */
 
 #default::-webkit-scrollbar-thumb {
-    background: $nobel;
+    background: var(--color-gray);
     border-radius: 20px;
 }
 #default body {
@@ -713,16 +685,16 @@ p {
     padding: 0.1in;
     letter-spacing: 0;
     width: 100%;
-    background: $white;
+    background: var(--color-white);
     border-radius: 1px;
 }
 
 /* header */
 
 #default header {
-    background: $white;
+    background: var(--color-white);
     padding: 10px 15px;
-    border-bottom: 2px solid $bitter-sweet;
+    border-bottom: 2px solid var(--color-invoice-preview-details-default-header);
 }
 
 #default header:after {
@@ -751,7 +723,7 @@ p {
     border: 0;
     padding: 0;
     text-align: left;
-    color: $nero;
+    color: var(--color-nero);
 }
 
 .hidden-label {
@@ -825,7 +797,7 @@ p {
 
 .warehouse-table {
     width: 100%;
-    border-bottom: 1px solid $light-gray;
+    border-bottom: 1px solid var(--color-iron);
     margin-bottom: 10px;
     padding-bottom: 5px;
     padding-right: 0px;
@@ -852,13 +824,13 @@ p {
     position: relative;
     padding: 8px 7px;
     line-height: 1.2rem;
-    background-color: $white-smoke;
+    background-color: var(--color-wild-sand);
     font-size: 12px;
 }
 
 #default table.item tfoot tr th {
     padding-right: 7px;
-    border-top: 1px solid $light-gray;
+    border-top: 1px solid var(--color-iron);
 }
 
 /* tcs */
@@ -866,7 +838,7 @@ p {
 .tcs hr {
     margin-top: 50px;
     width: 100%;
-    border-bottom: 1px solid $cinnabar-orange;
+    border-bottom: 1px solid var(--color-red);
 }
 
 .tcs table {
@@ -880,7 +852,7 @@ p {
 .tcs table th {
     border-radius: 0;
     padding: 5px;
-    border: 1px solid $light-gray;
+    border: 1px solid var(--color-iron);
     vertical-align: top;
     text-align: right;
 }
@@ -924,13 +896,13 @@ p {
 #default table.item td {
     border-radius: 0;
     padding: 7px;
-    border-top: 1px solid $light-gray;
+    border-top: 1px solid var(--color-iron);
     line-height: 1.2rem;
     vertical-align: top;
 }
 
 #default table.item td p {
-    color: $zambezi;
+    color: var(--color-abbey);
 }
 
 #default table.balance {
@@ -956,17 +928,17 @@ p {
 }
 
 #default aside h1 {
-    border-color: $nobel;
+    border-color: var(--color-gray);
     border-bottom-style: solid;
 }
 
 /*footer*/
 
 #default footer {
-    border-top: 1px solid $eastern-blue;
+    border-top: 1px solid var(--color-invoice-preview-default-footer-border);
     padding: 16px 0px 30px 0;
     margin: 8px 0 0;
-    background: $white;
+    background: var(--color-white);
 }
 
 #default .company-address p {
@@ -985,7 +957,7 @@ p {
 
 #default .subfooter hr {
     width: 100%;
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--color-iron);
     margin: 3px 0;
 }
 
@@ -1014,7 +986,7 @@ p {
     content: attr(title);
     width: auto;
     position: relative;
-    background: $white;
+    background: var(--color-white);
     margin: 0 auto;
     padding: 6px 16px;
     right: 0;
@@ -1059,7 +1031,7 @@ p {
 }
 
 strong {
-    font-weight: bold;
+    font-weight: 500;
 }
 
 .invoice-preview-sidebar {
@@ -1072,11 +1044,11 @@ strong {
 .wrap-edit-history-btn {
     .history-btn {
         i.icon-history-icon {
-            color: $gray;
+            color: var(--color-abbey);
         }
-        &:hover {
+        .history-button:hover {
             i.icon-history-icon {
-                color: $white;
+                color: var(--color-white-tertiary);
             }
         }
     }
@@ -1102,12 +1074,6 @@ strong {
 }
 
 /*responsive*/
-@media (max-width: 1199px) {
-    .invoice-search-box input {
-        max-width: 180px;
-    }
-}
-
 @media (max-width: 1199px) {
     .invoice-search-box input {
         max-width: 180px;
@@ -1178,13 +1144,13 @@ strong {
     .invoice-sidebar .invoice-number-date span.invoice-date:before {
         position: absolute;
         content: "";
-        background-color: $white;
+        background-color: var(--color-white);
         width: 3px;
         height: 12px;
         top: 3px;
     }
     .invoice-sidebar li.activeItem .invoice-number-date span.invoice-date:before {
-        background-color: $gray-95;
+        background-color: var(--color-wild-sand);
     }
     .invoice-preview-sidebar {
         padding-right: 15px;
@@ -1216,7 +1182,7 @@ strong {
         display: none;
     }
     .invoice-sidebar {
-        background-color: $white;
+        background-color: var(--color-white);
         padding: 0;
         height: inherit;
         max-height: 46vmax;
@@ -1284,5 +1250,19 @@ strong {
 @media (min-width: 992px) {
     .po-preview-modal {
         width: 1003px !important;
+    }
+}
+
+@media (max-width: 1158px) and (min-width: 992px) {
+    .invoice-detail-wrapper {
+        .wrap-edit-history-btn {
+            .history-btn {
+                .history-button {
+                    position: relative;
+                    top: 10px;
+                    right: 33px;
+                }
+            }
+        }
     }
 }

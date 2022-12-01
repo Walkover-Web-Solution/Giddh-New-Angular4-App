@@ -1,16 +1,17 @@
 import { Component, EventEmitter, Output, Input, ChangeDetectionStrategy, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
-import { Router } from '@angular/router';
+import { NavigationStart, Router } from '@angular/router';
 import { GstReport } from '../../gst/constants/gst.constant';
 import { AppState } from '../../store';
 import { select, Store } from '@ngrx/store';
-import { take, takeUntil } from 'rxjs/operators';
+import { filter, take, takeUntil } from 'rxjs/operators';
 import { Observable, of, ReplaySubject } from 'rxjs';
 import { VAT_SUPPORTED_COUNTRIES } from '../../app.constant';
 import { GstReconcileService } from '../../services/GstReconcile.service';
 import { OrganizationType } from '../../models/user-login-state';
 import { GIDDH_DATE_FORMAT } from '../helpers/defaultDateFormat';
-import * as moment from 'moment';
+import * as dayjs from 'dayjs';
+import { GstReconcileActions } from '../../actions/gst-reconcile/GstReconcile.actions';
 
 @Component({
     selector: 'tax-sidebar',
@@ -31,7 +32,7 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
     /** this is store navigate event */
     @Output() public navigateEvent: EventEmitter<string> = new EventEmitter();
     /** this is store actvie company gst number */
-    @Input() public activeCompanyGstNumber: string;
+    public activeCompanyGstNumber: string;
     /** Stores the selected GST module */
     @Input() public selectedGstModule: string = 'dashboard';
     /** True if tax sidebar is included on gst module */
@@ -57,13 +58,16 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
     public currentPeriod: any = {};
     /** Observable to get current GST period  */
     public getCurrentPeriod$: Observable<any> = of(null);
+    /** Holds images folder path */
+    public imgPath: string = "";
 
     constructor(
         private router: Router,
         private generalService: GeneralService,
         private store: Store<AppState>,
         private gstReconcileService: GstReconcileService,
-        private changeDetectionRef: ChangeDetectorRef
+        private changeDetectionRef: ChangeDetectorRef,
+        private gstAction: GstReconcileActions
     ) { }
 
     /**
@@ -74,6 +78,10 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch;
         this.getCurrentPeriod$ = this.store.pipe(select(store => store.gstR.currentPeriod), take(1));
+
+        this.store.pipe(select(state => state.gstR?.activeCompanyGst), takeUntil(this.destroyed$)).subscribe(response => {
+            this.activeCompanyGstNumber = response;
+        });
 
         this.loadTaxDetails();
 
@@ -92,8 +100,8 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
         this.getCurrentPeriod$.subscribe(period => {
             if (period && period.from) {
                 let date = {
-                    startDate: moment(period.from, GIDDH_DATE_FORMAT).startOf('month').format(GIDDH_DATE_FORMAT),
-                    endDate: moment(period.to, GIDDH_DATE_FORMAT).endOf('month').format(GIDDH_DATE_FORMAT)
+                    startDate: dayjs(period.from, GIDDH_DATE_FORMAT).startOf('month').format(GIDDH_DATE_FORMAT),
+                    endDate: dayjs(period.to, GIDDH_DATE_FORMAT).endOf('month').format(GIDDH_DATE_FORMAT)
                 };
                 if (date.startDate === period.from && date.endDate === period.to) {
                     this.isMonthSelected = true;
@@ -106,12 +114,13 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
                 };
             } else {
                 this.currentPeriod = {
-                    from: moment().startOf('month').format(GIDDH_DATE_FORMAT),
-                    to: moment().endOf('month').format(GIDDH_DATE_FORMAT)
+                    from: dayjs().startOf('month').format(GIDDH_DATE_FORMAT),
+                    to: dayjs().endOf('month').format(GIDDH_DATE_FORMAT)
                 };
                 this.isMonthSelected = true;
             }
         });
+        this.imgPath = isElectron ? "assets/images/" : AppUrl + APP_FOLDER + "assets/images/";
     }
 
     /**
@@ -122,6 +131,11 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+        if (!this.router.url.includes('pages/gstfiling') && !this.router.url.includes('pages/invoice/ewaybill') && !this.router.url.includes('pages/reports/reverse-charge') && !this.router.url.includes('pages/settings/taxes') && !this.router.url.includes('pages/settings/addresses')) {
+            this.store.dispatch(this.gstAction.SetActiveCompanyGstin(''));
+        }
+        this.store.dispatch(this.gstAction.resetGstr1OverViewResponse());
+        this.store.dispatch(this.gstAction.resetGstr2OverViewResponse());
     }
 
     /**
@@ -158,7 +172,7 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
         this.gstReconcileService.getTaxDetails().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.body) {
                 let taxes = response.body;
-                if(!this.activeCompanyGstNumber && taxes?.length === 1) {
+                if (!this.activeCompanyGstNumber && taxes?.length === 1) {
                     this.activeCompanyGstNumber = taxes[0];
                 }
             }

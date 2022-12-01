@@ -31,6 +31,10 @@ export class Adjustment {
     voucherType?: string;
     subVoucher?: string;
     linkingAdjustment?: boolean;
+    amount?: DueAmount;
+    unadjustedAmount?: DueAmount;
+    currency?: { symbol: string; code: string; };
+    voucherBalanceType?: string;
 
     constructor() {
         this.voucherNumber = '';
@@ -42,6 +46,7 @@ export class Adjustment {
         this.balanceDue = new DueAmount();
         this.adjustmentAmount = new DueAmount();
         this.calculatedTaxAmount = 0;
+        this.voucherBalanceType = '';
     }
 }
 

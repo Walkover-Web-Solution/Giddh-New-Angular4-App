@@ -70,4 +70,5 @@ export class PreviousInvoicesVm {
     account: INameUniqueName;
     grandTotal: any;
     date: string;
+    uniqueName?: string;
 }

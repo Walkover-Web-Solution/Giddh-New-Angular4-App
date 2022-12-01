@@ -9,10 +9,11 @@ import { ExpenseService } from '../../../services/expences.service';
 import { CommonPaginatedRequest } from '../../../models/api-models/Invoice';
 import { FormControl } from '@angular/forms';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
 import { Lightbox } from 'ngx-lightbox';
+import { GeneralService } from '../../../services/general.service';
 
 @Component({
     selector: 'app-pending-list',
@@ -22,6 +23,8 @@ import { Lightbox } from 'ngx-lightbox';
 export class PendingListComponent implements OnInit, OnChanges {
     /** Instance of approve confirm dialog */
     @ViewChild("approveConfirm") public approveConfirm;
+    /** Instance of approve confirm dialog */
+    @ViewChild("rejectConfirm") public rejectConfirm;
     /** Instance of sort header */
     @ViewChild(MatSort) sortBy: MatSort;
     @Input() public isClearFilter: boolean = false;
@@ -40,6 +43,7 @@ export class PendingListComponent implements OnInit, OnChanges {
     @Output() public reportDates: EventEmitter<any> = new EventEmitter();
     /** This will emit the filter object to reload the report */
     @Output() public reloadReportList: EventEmitter<any> = new EventEmitter();
+    @Output() public reloadRejectReportList: EventEmitter<any> = new EventEmitter();
     public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public expensesItems: ExpenseResults[] = [];
     public universalDate$: Observable<any>;
@@ -80,7 +84,8 @@ export class PendingListComponent implements OnInit, OnChanges {
         private toaster: ToasterService,
         private cdRef: ChangeDetectorRef,
         public dialog: MatDialog,
-        private lightbox: Lightbox
+        private lightbox: Lightbox,
+        private generalService: GeneralService
     ) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
         this.todaySelected$ = this.store.pipe(select(state => state.session.todaySelected), takeUntil(this.destroyed$));
@@ -93,8 +98,8 @@ export class PendingListComponent implements OnInit, OnChanges {
             this.todaySelected = resp[1];
             if (dateObj && !this.todaySelected) {
                 let universalDate = _.cloneDeep(dateObj);
-                let from = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
-                let to = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
+                let from = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);
+                let to = dayjs(universalDate[1]).format(GIDDH_DATE_FORMAT);
                 if (from && to) {
                     this.pettycashRequest.from = from;
                     this.pettycashRequest.to = to;
@@ -138,26 +143,28 @@ export class PendingListComponent implements OnInit, OnChanges {
     /**
      * Hides approve confirm dialog
      *
-     * @param {boolean} isApproved
+     * @param {*} event
      * @memberof PendingListComponent
      */
-    public hideApproveConfirmPopup(isApproved: boolean): void {
-        if (!isApproved) {
+    public hideApproveConfirmPopup(event: any): void {
+        if (typeof event === "boolean") {
+            this.getPettyCashPendingReports(this.pettycashRequest);
             this.approveEntryModalRef.close();
             this.selectedEntryForApprove = null;
         } else {
-            this.approveEntry();
+            this.approveEntry(event);
         }
     }
 
     /**
      * Approves the entry
      *
+     * @param {*} event
      * @returns
      * @memberof PendingListComponent
      */
-    public async approveEntry() {
-        if (!this.selectedEntryForApprove.baseAccount.uniqueName) {
+    public async approveEntry(event: any) {
+        if (!event?.baseAccount?.uniqueName) {
             this.toaster.showSnackBar("error", this.localeData?.approve_entry_error);
             this.hideApproveConfirmPopup(false);
             return;
@@ -167,11 +174,11 @@ export class PendingListComponent implements OnInit, OnChanges {
         let ledgerRequest;
         let actionType: ActionPettycashRequest = {
             actionType: 'approve',
-            uniqueName: this.selectedEntryForApprove.uniqueName,
-            accountUniqueName: this.selectedEntryForApprove.baseAccount.uniqueName
+            uniqueName: event?.uniqueName,
+            accountUniqueName: event.baseAccount?.uniqueName
         };
         try {
-            ledgerRequest = await this.expenseService.getPettycashEntry(this.selectedEntryForApprove.uniqueName).toPromise();
+            ledgerRequest = await this.expenseService.getPettycashEntry(event?.uniqueName).toPromise();
         } catch (e) {
             this.approveEntryRequestInProcess = false;
             this.toaster.showSnackBar("error", e);
@@ -179,15 +186,20 @@ export class PendingListComponent implements OnInit, OnChanges {
             return;
         }
 
-        this.expenseService.actionPettycashReports(actionType, { ledgerRequest: ledgerRequest.body }).subscribe((res) => {
+        let model = ledgerRequest.body;
+        if (model.attachedFileUniqueNames?.length > 0) {
+            model.attachedFile = model.attachedFileUniqueNames[0];
+        }
+
+        this.expenseService.actionPettycashReports(actionType, { ledgerRequest: model }).subscribe((res) => {
             this.approveEntryRequestInProcess = false;
-            if (res.status === 'success') {
-                this.toaster.showSnackBar("success", res.body);
-                // if entry approved successfully then re get all entries with already sated filter params
-                this.getPettyCashPendingReports(this.pettycashRequest);
+            if (res?.status === 'success') {
+                this.toaster.showSnackBar("success", res?.body);
             } else {
-                this.toaster.showSnackBar("error", res.message);
+                this.toaster.showSnackBar("error", res?.message);
             }
+            this.selectedEntryForApprove = null;
+            this.getPettyCashPendingReports(this.pettycashRequest);
             this.hideApproveConfirmPopup(false);
         });
     }
@@ -327,7 +339,7 @@ export class PendingListComponent implements OnInit, OnChanges {
      */
     private isCashBankAccount(particular: any): boolean {
         if (particular) {
-            return particular.parentGroups.some(parent => parent.uniqueName === 'bankaccounts' || parent.uniqueName === 'cash');
+            return particular.parentGroups.some(parent => parent?.uniqueName === 'bankaccounts' || parent?.uniqueName === 'cash' || (this.generalService.voucherApiVersion === 2 && parent?.uniqueName === 'loanandoverdraft'));
         }
         return false;
     }
@@ -359,5 +371,48 @@ export class PendingListComponent implements OnInit, OnChanges {
             images.push({ src: ApiUrl + 'company/' + this.companyUniqueName + '/image/' + file });
         });
         this.lightbox.open(images, 0);
+    }
+
+    /**
+     * Shows approve confirm dialog
+     *
+     * @param {TemplateRef<any>} ref
+     * @param {ExpenseResults} item
+     * @memberof PendingListComponent
+     */
+    public showRejectConfirmPopup(ref: TemplateRef<any>, item: ExpenseResults): void {
+        this.selectedEntryForApprove = item;
+        this.approveEntryModalRef = this.dialog.open(ref, {
+            width: '500px',
+            disableClose: true
+        });
+    }
+
+    /**
+     * Hides approve confirm dialog
+     *
+     * @param {boolean} isApproved
+     * @memberof PendingListComponent
+     */
+    public hideRejectConfirmPopup(isRejected: boolean): void {
+        this.approveEntryModalRef.close();
+
+        if (isRejected) {
+            this.getPettyCashPendingReports(this.pettycashRequest);
+            this.getPettyCashRejectedReports(this.pettycashRequest);
+        }
+    }
+
+    /**
+     * Emits the filter to reload report
+     *
+     * @param {CommonPaginatedRequest} salesDetailedfilter
+     * @memberof RejectedListComponent
+     */
+    public getPettyCashRejectedReports(salesDetailedfilter: CommonPaginatedRequest): void {
+        salesDetailedfilter.status = 'rejected';
+        salesDetailedfilter.sort = this.pettycashRequest.sort;
+        salesDetailedfilter.sortBy = this.pettycashRequest.sortBy;
+        this.reloadRejectReportList.emit(salesDetailedfilter);
     }
 }

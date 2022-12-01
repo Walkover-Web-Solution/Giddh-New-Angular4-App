@@ -1,3 +1,4 @@
+import { trigger, state, style, transition, animate } from '@angular/animations';
 import {
     ChangeDetectionStrategy,
     ChangeDetectorRef,
@@ -24,7 +25,19 @@ import { debounceTime, takeUntil } from 'rxjs/operators';
     selector: 'trial-balance-grid',
     templateUrl: './trial-balance-grid.component.html',
     styleUrls: [`./trial-balance-grid.component.scss`],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    animations: [
+        trigger("slideInOut", [
+            state("in", style({
+                transform: "translate3d(0, 0, 0)",
+            })),
+            state("out", style({
+                transform: "translate3d(100%, 0, 0)",
+            })),
+            transition("in => out", animate("400ms ease-in-out")),
+            transition("out => in", animate("400ms ease-in-out")),
+        ]),
+    ],
 })
 export class TrialBalanceGridComponent implements OnInit, OnChanges, OnDestroy {
 
@@ -51,6 +64,12 @@ export class TrialBalanceGridComponent implements OnInit, OnChanges, OnDestroy {
     public hideData: boolean;
     /** True, when expand all button is toggled while search is enabled */
     public isExpandToggledDuringSearch: boolean;
+    /** Account update modal state */
+    public accountAsideMenuState: string = "out";
+    /** Account group unique name */
+    public activeGroupUniqueName: string = "";
+    /** Holds account details */
+    public accountDetails: any;
 
     constructor(private cd: ChangeDetectorRef, private zone: NgZone) {
 
@@ -116,7 +135,7 @@ export class TrialBalanceGridComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public trackByFn(index, item: ChildGroup) {
-        return item.uniqueName;
+        return item?.uniqueName;
     }
 
     public toggleSearch() {
@@ -156,13 +175,13 @@ export class TrialBalanceGridComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof TrialBalanceGridComponent
      */
     public toggleGroupVisibility(group: Array<ChildGroup>, isVisible: boolean): void {
-        for (let groupIndex = 0; groupIndex < group.length; groupIndex++) {
+        for (let groupIndex = 0; groupIndex < group?.length; groupIndex++) {
             const currentGroup: ChildGroup = group[groupIndex];
             if (currentGroup.isIncludedInSearch) {
                 currentGroup.isCreated = isVisible;
                 currentGroup.isVisible = isVisible;
                 currentGroup.isOpen = isVisible;
-                for (let accountIndex = 0; accountIndex < currentGroup.accounts.length; accountIndex++) {
+                for (let accountIndex = 0; accountIndex < currentGroup.accounts?.length; accountIndex++) {
                     const currentAccount: Account = currentGroup.accounts[accountIndex];
                     if (currentAccount.isIncludedInSearch) {
                         currentAccount.isCreated = isVisible;
@@ -174,5 +193,50 @@ export class TrialBalanceGridComponent implements OnInit, OnChanges, OnDestroy {
                 }
             }
         }
+    }
+
+    /**
+     * Shows the account update modal
+     *
+     * @param {*} account
+     * @memberof TrialBalanceGridComponent
+     */
+    public openAccountModal(account: any): void {
+        this.accountDetails = account;
+        this.activeGroupUniqueName = account?.parentGroups[account?.parentGroups?.length - 1]?.uniqueName;
+        this.toggleAccountAsidePane();
+    }
+
+    /**
+     * Toggle's account update modal
+     *
+     * @memberof TrialBalanceGridComponent
+     */
+     public toggleAccountAsidePane(): void {
+        this.accountAsideMenuState = this.accountAsideMenuState === "out" ? "in" : "out";
+        this.toggleBodyClass();
+    }
+
+    /**
+     * Toggle's fixed class in body
+     *
+     * @memberof TrialBalanceGridComponent
+     */
+    public toggleBodyClass() {
+        if (this.accountAsideMenuState === "in") {
+            document.querySelector("body").classList.add("fixed");
+        } else {
+            document.querySelector("body").classList.remove("fixed");
+        }
+    }
+
+    /**
+     * Callback function on account modal close
+     *
+     * @param {*} event
+     * @memberof TrialBalanceGridComponent
+     */
+    public getUpdatedList(event: any): void {
+        this.toggleAccountAsidePane();
     }
 }

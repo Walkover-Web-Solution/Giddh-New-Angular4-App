@@ -1,6 +1,5 @@
-@import "../../../../assets/css/color.scss";
 .active {
-    color: $chetwode-blue !important;
+    color: var(--color-blue) !important;
 }
 
 .stock-grp-list li > i:focus {
@@ -8,7 +7,7 @@
 }
 
 .group-open {
-    background: $white;
+    background: var(--color-white);
 }
 
 .group-open li {
@@ -25,11 +24,11 @@
 .stock-grp-list .active a,
 .stock-grp-list .active i,
 .stock-grp-list .active .btn-link i {
-    color: $chetwode-blue !important;
+    color: var(--color-blue) !important;
 }
 
 .stock-grp-list .active {
-    background-color: $lavender;
+    background-color: var(--color-dark-fog);
 }
 
 .item-group {
@@ -52,17 +51,17 @@
 }
 
 stock-list ::ng-deep.in-list a div {
-    color: $black !important;
+    color: var(--color-nero) !important;
 }
 .text-black {
-    color: $black;
+    color: var(--color-nero);
 }
 
 .item-group {
     text-transform: unset !important;
 }
 .no-data-box {
-    border-top: 1px solid $whisper !important;
+    border-top: 1px solid var(--color-dark-fog) !important;
 }
 .stock-grp-list li .btn {
     line-height: 14px;
@@ -72,9 +71,9 @@ stock-list ::ng-deep.in-list a div {
         .item-group {
             &:hover {
                 a {
-                    color: $chetwode-blue !important;
+                    color: var(--color-blue) !important;
                 }
-                background-color: $lavender;
+                background-color: var(--color-dark-fog);
             }
             span {
                 .btn {
@@ -90,7 +89,7 @@ stock-list ::ng-deep.in-list a div {
             display: flex;
             align-items: center;
             flex: 1;
-            color: $nero;
+            color: var(--color-nero);
             i {
                 margin: 0 15px;
                 font-size: 9px;

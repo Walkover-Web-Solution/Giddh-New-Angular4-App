@@ -47,7 +47,7 @@
         </div>
     </div>
     <div class="top-bar">
-        <div class="form-inline d-flex justify-content-between">
+        <div class="form-inline d-flex justify-content-between top-bar-content">
             <div class="form-group expand-collapse-btn mr-1 mb-0">
                 <a
                     class="cp"
@@ -70,7 +70,18 @@
                     <span class="icon-collapse"></span>
                 </a>
             </div>
-            <div class="dis middle">
+            <div
+                class="clear-filter align-items-center d-flex justify-content-xl-center justify-content-lg-start w-50"
+                *ngIf="showClearFilter"
+            >
+                <button class="btn btn-filters mr-0" (click)="resetAdvanceSearch()">
+                    <span class="icon-cross"></span> {{ commonLocaleData?.app_clear_filter }}
+                </button>
+            </div>
+            <div class="dis middle top-bar-content-right-side">
+                <button mat-flat-button color="primary" class="back-btn" (click)="gotoSalesRegister()">
+                    {{ commonLocaleData?.app_back }}
+                </button>
                 <div
                     class="advance-icon cursor-pointer align-items-center btn-group mr-0"
                     #filterDropDownList="bs-dropdown"
@@ -446,25 +457,25 @@
                             </th>
                         </tr>
                     </thead>
-                    <tbody *ngIf="(salesRegisteDetailedResponse$ | async).items.length">
-                        <tr *ngFor="let item of (salesRegisteDetailedResponse$ | async).items">
+                    <tbody *ngIf="(salesRegisteDetailedResponse$ | async)?.items?.length">
+                        <tr *ngFor="let item of (salesRegisteDetailedResponse$ | async)?.items">
                             <td [attr.data-title]="commonLocaleData?.app_date">{{ item.date }}</td>
 
                             <td
                                 [attr.data-title]="commonLocaleData?.app_account"
                                 (dblclick)="modalUniqueName = item.uniqueName"
                                 class="cp no-dbl-click-select"
-                                (clickOutside)="modalUniqueName = ''"
                             >
                                 {{ item.account.name }}
                                 <div
                                     *ngIf="modalUniqueName === item.uniqueName"
                                     account-detail-modal-component
-                                    [accountUniqueName]="item.account.uniqueName"
+                                    [accountUniqueName]="item.account?.uniqueName"
                                     [voucherType]="'sales'"
                                     [from]="this.from"
                                     [to]="this.to"
                                     [isModalOpen]="modalUniqueName === item.uniqueName"
+                                    (modalClosed)="modalUniqueName = ''"
                                 ></div>
                                 <ng-container *ngIf="expand">
                                     <ng-container *ngFor="let stock of item.stocks">
@@ -622,7 +633,9 @@
         </div>
         <div
             class="no-data"
-            *ngIf="(salesRegisteDetailedResponse$ | async).items.length === 0 && !(isGetSalesDetailsInProcess$ | async)"
+            *ngIf="
+                (salesRegisteDetailedResponse$ | async)?.items?.length === 0 && !(isGetSalesDetailsInProcess$ | async)
+            "
         >
             <no-data></no-data>
         </div>

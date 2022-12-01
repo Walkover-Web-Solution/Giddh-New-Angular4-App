@@ -1,16 +1,14 @@
-@import "../../../assets/css/color.scss";
-
 .menu {
     margin: 0;
     padding: 0;
     position: absolute;
-    background-color: $white;
+    background-color: var(--color-white);
     width: 100%;
     overflow: auto;
     box-sizing: border-box;
     z-index: 999;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
-    border: 1px solid rgba(0, 0, 0, 0.15);
+    box-shadow: 0 6px 12px var(--color-primary-common-box-shadow);
+    border: 1px solid var(--color-common-secondary-border);
     border-radius: 0 0 2px 2px;
     min-width: max-content;
     margin-top: 1px;
@@ -28,23 +26,23 @@
 }
 
 .item.selected {
-    color: $chetwode-blue !important;
-    background: $lavender !important;
+    color: var(--color-blue) !important;
+    background: var(--color-dark-fog) !important;
 }
 
 .item.hilighted {
-    color: $chetwode-blue !important;
-    background: $lavender !important;
+    color: var(--color-blue) !important;
+    background: var(--color-dark-fog) !important;
 }
 .item.hilighted > a {
-    color: $chetwode-blue !important;
+    color: var(--color-blue) !important;
 }
 .item > a {
     padding: 2px 10px;
 }
 
 .no-result-link > a {
-    color: $deep-sky-blue-hover !important;
+    color: var(--color-blue) !important;
 }
 
 #noresult:hover {
@@ -52,7 +50,7 @@
 }
 
 .list-item {
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--color-iron);
 }
 
 :host ::ng-deep .total-padding {

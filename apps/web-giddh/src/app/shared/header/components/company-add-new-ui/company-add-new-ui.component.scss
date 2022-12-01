@@ -1,25 +1,23 @@
 /**new modal design**/
 
-@import "../../../../../assets/css/color.scss";
-
 .modal-body label {
-    color: $gray;
+    color: var(--color-abbey);
     margin-bottom: 5px;
 }
 
 label .required {
     position: relative;
     top: 0px;
-    color: $red;
+    color: var(--color-danger);
 }
 
 .form-control {
-    color: $gray;
+    color: var(--color-nero) !important;
 }
 
 .modal-body p {
     font-size: 14px;
-    color: $silver;
+    color: var(--color-gray);
     text-align: center;
     margin-left: -28px;
     margin-right: -28px;
@@ -29,6 +27,7 @@ label .required {
     max-width: 200px;
     margin: 30px auto;
     display: block;
+    filter: var(--color-primary-giddh-logo);
 }
 
 .welcome-wrapper {
@@ -40,14 +39,15 @@ label .required {
 }
 
 .add-company-detail {
-    background-color: $alice-blue-light;
     margin-bottom: 0 !important;
+    background-color: var(--color-common-primary-background-for-all-components);
 }
 
 .welcome-header h1 {
     font-size: 30px;
     font-family: "opensans-regular";
-    color: $midnight-blue;
+    color: var(--color-common-senary-text);
+    background-color: var(--color-common-primary-background-for-all-components);
 }
 
 .add-company-detail p {
@@ -63,7 +63,7 @@ label .required {
 }
 
 .add-company-detail {
-    background-color: $alice-blue-light;
+    background-color: var(--color-common-primary-background-for-all-components);
 }
 #share-modal .btn-sky-blue {
     width: 100%;
@@ -72,6 +72,10 @@ label .required {
 .phone-code-caret {
     width: 85px;
     margin-right: 28px;
+}
+
+input::placeholder {
+    color: var(--color-common-primary-input-placeholder);
 }
 
 @media (max-width: 767px) {

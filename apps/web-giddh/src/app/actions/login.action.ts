@@ -90,6 +90,8 @@ export class LoginActions {
 
     public static AutoLoginWithPasswdResponse = 'AutoLoginWithPasswdResponse';
 
+    public static hideTwoWayOtpPopup = 'hideTwoWayOtpPopup';
+
     public signupWithGoogle$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
             ofType(LoginActions.SIGNUP_WITH_GOOGLE_REQUEST),
@@ -229,7 +231,7 @@ export class LoginActions {
                             this.store.dispatch(this.companyActions.setCompanyBranch(organization));
                         }
                         cmpUniqueName = stateDetail.body.companyUniqueName;
-                        if (companies?.body?.findIndex(p => p.uniqueName === cmpUniqueName) > -1 && ROUTES.findIndex(p => p.path.split('/')[0] === stateDetail.body.lastState.split('/')[0]) > -1) {
+                        if (companies?.body?.findIndex(p => p?.uniqueName === cmpUniqueName) > -1 && ROUTES.findIndex(p => p.path.split('/')[0] === stateDetail.body.lastState.split('/')[0]) > -1) {
                             return this.finalThingTodo(stateDetail, companies);
                         } else {
                             // old user fail safe scenerio
@@ -280,6 +282,7 @@ export class LoginActions {
                     if (stateDetail.body && stateDetail.status === 'success') {
                         this._generalService.companyUniqueName = stateDetail.body.companyUniqueName;
                         this._generalService.currentBranchUniqueName = stateDetail.body.branchUniqueName || '';
+                        this._generalService.voucherApiVersion = stateDetail.body.voucherVersion || 1;
                         if (stateDetail.body.branchUniqueName) {
                             const details = {
                                 branchDetails: {
@@ -294,7 +297,7 @@ export class LoginActions {
                             this.store.dispatch(this.companyActions.setCompanyBranch(organization));
                         }
                         cmpUniqueName = stateDetail.body.companyUniqueName;
-                        if (companies?.body?.findIndex(p => p.uniqueName === cmpUniqueName) > -1 && ROUTES.findIndex(p => p.path.split('/')[0] === stateDetail.body.lastState.split('/')[0]) > -1) {
+                        if (companies?.body?.findIndex(p => p?.uniqueName === cmpUniqueName) > -1 && ROUTES.findIndex(p => p.path.split('/')[0] === stateDetail.body.lastState.split('/')[0]) > -1) {
                             return this.finalThingTodo(stateDetail, companies, results[2]);
                         } else {
                             // old user fail safe scenerio
@@ -315,13 +318,8 @@ export class LoginActions {
         .pipe(
             ofType(LoginActions.LogOut),
             map((action: CustomActions) => {
-                if (PRODUCTION_ENV && !(isElectron || isCordova)) {
-                    window.location.href = 'https://stage.giddh.com/login/';
-                } else if (isCordova) {
-                    this.zone.run(() => {
-                        this._generalService.invokeEvent.next('logoutCordova');
-                        this._router.navigate(['login']);
-                    });
+                if (PRODUCTION_ENV && !isElectron) {
+                    window.location.href = 'https://giddh.com/login/';
                 } else if (isElectron) {
                     this._router.navigate(['/login']);
                     window.location.reload();
@@ -417,16 +415,16 @@ export class LoginActions {
                         });
                     } else {
                         if (this.activatedRoute.children && this.activatedRoute.children.length > 0) {
-                            if (this.activatedRoute.firstChild.children && this.activatedRoute.firstChild.children.length > 0) {
+                            if (this.activatedRoute.firstChild.children && this.activatedRoute.firstChild.children?.length > 0) {
                                 let path = [];
                                 let parament = {};
                                 this.activatedRoute.firstChild.firstChild.url.pipe(take(1)).subscribe(p => {
-                                    if (p.length > 0) {
+                                    if (p?.length > 0) {
                                         path = [p[0].path];
                                         parament = { queryParams: p[0].parameters };
                                     }
                                 });
-                                if (path.length > 0 && parament) {
+                                if (path?.length > 0 && parament) {
                                     this._router.navigateByUrl('/dummy', { skipLocationChange: true }).then(() => {
                                         if (ROUTES.findIndex(p => p.path.split('/')[0] === path[0].split('/')[0]) > -1) {
                                             this.finalNavigate(path[0], parament);
@@ -448,8 +446,6 @@ export class LoginActions {
             ofType(CompanyActions.CHANGE_COMPANY_RESPONSE),
             map((action: CustomActions) => {
                 if (action.payload.status === 'success') {
-                    // get groups with accounts for general use
-                    this.store.dispatch(this._generalAction.getGroupWithAccounts());
                     this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
                 }
                 return { type: 'EmptyAction' };
@@ -942,15 +938,27 @@ export class LoginActions {
         };
     }
 
+    /**
+     * Sets false in reducer
+     *
+     * @returns {CustomActions}
+     * @memberof LoginActions
+     */
+    public hideTwoWayOtpPopup(): CustomActions {
+        return {
+            type: LoginActions.hideTwoWayOtpPopup
+        }
+    }
+
     private doSameStuffs(companies, isSocialLogin?: boolean) {
         let respState = new BaseResponse<StateDetailsResponse, string>();
         respState.body = new StateDetailsResponse();
         companies.body = sortBy(companies.body, ['name']);
         // now take first company from the companies
-        let cArr = companies.body.sort((a, b) => a.name.length - b.name.length);
+        let cArr = companies.body.sort((a, b) => a?.name?.length - b?.name?.length);
         let company = cArr[0];
         if (company) {
-            respState.body.companyUniqueName = company.uniqueName;
+            respState.body.companyUniqueName = company?.uniqueName;
         } else {
             respState.body.companyUniqueName = "";
         }
@@ -961,10 +969,10 @@ export class LoginActions {
         try {
             if (company && company.userEntityRoles && company.userEntityRoles.length) {
                 // find sorted userEntityRoles
-                let entitiesArr = company.userEntityRoles.sort((a, b) => a.entity.name.length - b.entity.name.length);
+                let entitiesArr = company.userEntityRoles.sort((a, b) => a?.entity?.name?.length - b?.entity?.name?.length);
                 let entityObj = entitiesArr[0].entity;
                 if (entityObj.entity === 'ACCOUNT') {
-                    respState.body.lastState = `ledger/${entityObj.uniqueName}`;
+                    respState.body.lastState = `ledger/${entityObj?.uniqueName}`;
                 } else if (entityObj.entity === 'GROUP') {
                     // get a/c`s of group and set first a/c
                     this.store.dispatch(this.SetRedirectToledger());
@@ -982,7 +990,7 @@ export class LoginActions {
 
     private finalThingTodo(stateDetail: any, companies: any, isSocialLogin?: boolean) {
         this.store.pipe(select(state => state.session.user), take(1)).subscribe(response => {
-            let request = { userUniqueName: response.user.uniqueName, companyUniqueName: stateDetail.body.companyUniqueName };
+            let request = { userUniqueName: response.user?.uniqueName, companyUniqueName: stateDetail.body.companyUniqueName };
             this.store.dispatch(this.companyActions.getCompanyUser(request));
         });
         this.store.dispatch(this.companyActions.GetStateDetailsResponse(stateDetail));

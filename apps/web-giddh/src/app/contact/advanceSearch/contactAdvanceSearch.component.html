@@ -1,9 +1,11 @@
 <div>
-    <div class="modal-header theme-bg pd-2 pd-l2 pd-r2 clearfix">
-        <h3 class="modal-title bg" id="modal-title">{{ commonLocaleData?.app_advance_search }}</h3>
-        <i class="icon-cross text-right close-modal" aria-hidden="true" (click)="onCancel()"></i>
+    <div class="modal-header advance-header theme-bg pd-2 pd-l2 pd-r2 clearfix">
+        <div class="d-flex justify-content-between w-100 align-items-center">
+            <h3 class="modal-title bg" id="modal-title">{{ commonLocaleData?.app_advance_search }}</h3>
+            <button mat-icon-button (click)="onCancel()"><i class="icon-cross" aria-hidden="true"></i></button>
+        </div>
     </div>
-    <div class="modal-body pd-l2 pd-r2 clearfix" id="export-body">
+    <div class="modal-body pd-l2 pd-r2 clearfix ipad-responsive-modal" id="export-body">
         <form name="newRole" novalidate autocomplete="off">
             <!--region invoice-->
             <div class="modal-wrap mr-b2">
@@ -38,15 +40,15 @@
                                 </sh-select>
                             </div>
                             <div class="col-sm-4 col-xs-6">
-                                <input
-                                    class="form-control"
+                                <text-field
+                                    [cssClass]="'form-control mat-field-border'"
                                     type="tel"
                                     [placeholder]="
                                         commonLocaleData?.app_numbers?.zero + '' + commonLocaleData?.app_numbers?.zero
                                     "
                                     name="total"
                                     [(ngModel)]="request.amount"
-                                />
+                                ></text-field>
                             </div>
                         </div>
                     </div>
@@ -54,10 +56,10 @@
             </div>
             <!--endregion-->
             <div class="pull-right">
-                <button type="submit" class="btn btn-md btn-success mr-r1" (click)="save()">
+                <button mat-raised-button type="submit" class="btn-md btn-success mr-r1" (click)="save()">
                     {{ commonLocaleData?.app_search }}
                 </button>
-                <button type="submit" class="btn btn-md btn-cancel" (click)="onCancel()">
+                <button mat-raised-button type="submit" class="btn-md btn-cancel" (click)="onCancel()">
                     {{ commonLocaleData?.app_cancel }}
                 </button>
             </div>

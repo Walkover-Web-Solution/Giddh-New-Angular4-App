@@ -22,7 +22,7 @@ export class SettingsTagService {
     */
     public GetAllTags(): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.get(this.config.apiUrl + SETTINGS_TAG_API.GET_ALL_TAGS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
+        return this.http.get(this.config.apiUrl + SETTINGS_TAG_API.GET_ALL_TAGS?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
             let data: BaseResponse<any, any> = res;
             data.queryString = {};
             return data;
@@ -34,7 +34,7 @@ export class SettingsTagService {
      */
     public CreateTag(model: TagRequest): Observable<BaseResponse<TagRequest, TagRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.post(this.config.apiUrl + SETTINGS_TAG_API.CREATE_TAG.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(map((res) => {
+        return this.http.post(this.config.apiUrl + SETTINGS_TAG_API.CREATE_TAG?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(map((res) => {
             let data: BaseResponse<TagRequest, TagRequest> = res;
             data.request = model;
             return data;
@@ -50,7 +50,7 @@ export class SettingsTagService {
             description: model.description
         };
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.put(this.config.apiUrl + SETTINGS_TAG_API.UPDATE_TAG.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':tagUniqueName', encodeURIComponent(model.uniqueName)), body).pipe(map((res) => {
+        return this.http.put(this.config.apiUrl + SETTINGS_TAG_API.UPDATE_TAG?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':tagUniqueName', encodeURIComponent(model.uniqueName)), body).pipe(map((res) => {
             let data: BaseResponse<TagRequest, TagRequest> = res;
             data.request = model;
             return data;
@@ -62,7 +62,7 @@ export class SettingsTagService {
      */
     public DeleteTag(model: TagRequest): Observable<BaseResponse<TagRequest, TagRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.delete(this.config.apiUrl + SETTINGS_TAG_API.DELETE_TAG.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':tagUniqueName', encodeURIComponent(model.uniqueName))).pipe(map((res) => {
+        return this.http.delete(this.config.apiUrl + SETTINGS_TAG_API.DELETE_TAG?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':tagUniqueName', encodeURIComponent(model.uniqueName))).pipe(map((res) => {
             let data: BaseResponse<TagRequest, TagRequest> = res;
             data.request = model;
             return data;

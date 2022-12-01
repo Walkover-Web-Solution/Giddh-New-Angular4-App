@@ -1,7 +1,7 @@
 .giddh-table {
-    background: #fff;
+    background: var(--color-white);
     font-family: "opensans-semibold";
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--color-iron);
     width: 100%;
     max-width: 100%;
     border-collapse: collapse;
@@ -13,19 +13,20 @@
         font-size: 14px;
         border-left: none;
         border-right: none;
-        background: #fff;
+        background: var(--color-table-heading-primary-background);
         padding: 15px 11px;
-        border-bottom: 1px solid $gainsboro;
+        border-bottom: 1px solid var(--color-iron);
         font-family: "opensans-semibold";
     }
     thead > tr > th {
         border-top: none;
         white-space: nowrap;
-        color: $midnight-blue !important;
+        color: var(--color-table-secondary-heading) !important;
         position: sticky !important;
         top: 0;
         z-index: 1;
-        border-bottom: 1px solid $link-water !important;
+        border-bottom: 1px solid var(--color-table-primary-header-bar-border) !important;
+        background-color: var(--color-table-heading-primary-background);
         .d-flex {
             align-items: center;
         }
@@ -35,9 +36,9 @@
         }
     }
     thead > .register-table-th > th {
-        color: $black !important;
+        color: var(--color-nero) !important;
         border-bottom: none !important;
-        background: $light-orange;
+        background: var(--color-table-primary-giddh-table-thead-register-table-th-background);
         font-size: 16px;
     }
     thead > .register-sales-purchase > th {
@@ -60,14 +61,15 @@
         font-family: "opensans-regular";
         border-bottom: none !important;
         white-space: nowrap !important;
-        color: $omiod;
-        border-top: 1px solid $dark-fog !important;
+        color: var(--color-table-quaternary-content);
+        border-top: 1px solid var(--color-table-primary-content-bar-border) !important;
+        background-color: var(--color-table-body-primary-background) !important;
         &.text-break {
             white-space: normal !important;
         }
     }
     tbody > tr > td:first-child {
-        color: $black-pearl;
+        color: var(--color-table-tertiary-content);
     }
     thead > tr > th:first-child,
     tbody > tr > td:first-child {
@@ -89,10 +91,10 @@
         white-space: nowrap;
     }
     tbody tr:hover td {
-        background: $light-alice-blue;
+        background: var(--color-table-row-hover-primary-background) !important;
     }
     tbody tr:last-child td {
-        border-bottom: 1px solid $gainsboro !important;
+        border-bottom: 1px solid var(--color-table-primary-content-bar-border) !important;
     }
     tbody tr:last-child .status-mobile {
         border-bottom: none !important;
@@ -101,11 +103,11 @@
         border-top: none !important;
     }
     .icon-sort-asc {
-        color: $omiod;
+        color: var(--color-table-icon-sort-asc);
         font-size: 16px !important;
     }
     .icon-pointer .active-text-color {
-        color: $deep-sky-blue;
+        color: var(--color-blue);
         opacity: 1;
     }
     .td-search-box {
@@ -120,7 +122,7 @@
         }
         div i {
             margin-top: 1px;
-            color: $midnight-blue;
+            color: var(--color-giddh-blue);
             padding-right: 8px;
             cursor: pointer;
             display: flex;
@@ -133,9 +135,9 @@
             min-width: 100%;
             padding: 11px;
             padding-right: 40px;
-            color: $nero;
+            color: var(--color-nero);
             border: none;
-            background-color: $white-smoke;
+            background-color: var(--color-table-searchbar-background) !important;
             border-radius: 5px;
         }
     }
@@ -194,8 +196,8 @@
             background: transparent;
         }
         tbody tr {
-            box-shadow: 0 0px 5px rgba(0, 0, 0, 0.1);
-            background: #fff;
+            box-shadow: 0 0px 5px var(--color-primary-common-box-shadow);
+            background: var(--color-white);
             border-bottom: none;
             cursor: pointer;
             display: block;
@@ -240,7 +242,7 @@
             top: -6px;
         }
         tbody td:before {
-            color: rgba(0, 0, 0, 0.55);
+            color: var(--color-slate);
             font-size: 14px;
             content: attr(data-title);
             display: table-cell;
@@ -262,7 +264,7 @@
         }
 
         tbody .td-mobile-head:before {
-            color: $black !important;
+            color: var(--color-nero) !important;
             font-weight: 600 !important;
         }
 

@@ -2,7 +2,7 @@ import { Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, map, switchMap, take, takeUntil } from 'rxjs/operators';
 import { IOption } from '../../theme/ng-select/option.interface';
 import { select, Store } from '@ngrx/store';
-import { ChangeDetectorRef, Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { AppState } from '../../store';
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
 import { ToasterService } from '../../services/toaster.service';
@@ -25,6 +25,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { LocaleService } from '../../services/locale.service';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { cloneDeep, uniqBy, without } from '../../lodash-optimized';
+import { VAT_SUPPORTED_COUNTRIES } from '../../app.constant';
 export interface IGstObj {
     newGstNumber: string;
     newstateCode: number;
@@ -58,6 +59,8 @@ export interface IGstObj {
     ]
 })
 export class SettingProfileComponent implements OnInit, OnDestroy {
+    /** True if we need to hide tab and show manage address section only */
+    @Input() public addressOnly: boolean = false;
     /** This will emit pageHeading */
     @Output() public pageHeading: EventEmitter<string> = new EventEmitter();
 
@@ -166,6 +169,14 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     public personalInformationTabHeading: string = "";
     /* This will store screen size */
     public isMobileScreen: boolean = false;
+    /** True if initial data is fetched */
+    private initialDataFetched: boolean = false;
+    /* This will hold the value out/in to open/close setting sidebar popup */
+    public asideGstSidebarMenuState: string = 'in';
+    /* This will hold list of vat supported countries */
+    public vatSupportedCountries = VAT_SUPPORTED_COUNTRIES;
+    /** Tax type (gst/trn) */
+    public taxType: string = '';
 
     constructor(
         private commonService: CommonService,
@@ -190,6 +201,9 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             '(max-width: 767px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.isMobileScreen = result.matches;
+            if (!this.isMobileScreen) {
+                this.asideGstSidebarMenuState = 'in';
+            }
         });
 
         this.getCompanyProfileInProgress$ = this.store.pipe(select(settingsStore => settingsStore.settings.getProfileInProgress), takeUntil(this.destroyed$));
@@ -257,7 +271,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             this.currentTab = (params['referrer']) ? params['referrer'] : "personal";
         });
 
-        this.imgPath = (isElectron || isCordova) ? 'assets/images/warehouse-vector.svg' : AppUrl + APP_FOLDER + 'assets/images/warehouse-vector.svg';
+        this.imgPath = isElectron ? 'assets/images/warehouse-vector.svg' : AppUrl + APP_FOLDER + 'assets/images/warehouse-vector.svg';
 
         this.store.pipe(select(state => state.session.currentLocale), takeUntil(this.destroyed$)).subscribe(response => {
             if (this.activeLocale && this.activeLocale !== response?.value) {
@@ -272,21 +286,24 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
 
     public getInitialProfileData() {
         this.store.pipe(select(appStore => appStore.session.currentOrganizationDetails), takeUntil(this.destroyed$)).subscribe((organization: Organization) => {
-            if (organization) {
-                if (organization.type === OrganizationType.Branch) {
-                    this.store.dispatch(this.settingsProfileActions.getBranchInfo());
-                    this.currentOrganizationType = OrganizationType.Branch;
-                } else if (organization.type === OrganizationType.Company) {
+            if (!this.initialDataFetched) {
+                this.initialDataFetched = true;
+                if (organization) {
+                    if (organization.type === OrganizationType.Branch) {
+                        this.store.dispatch(this.settingsProfileActions.getBranchInfo());
+                        this.currentOrganizationType = OrganizationType.Branch;
+                    } else if (organization.type === OrganizationType.Company) {
+                        this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
+                        this.currentOrganizationType = OrganizationType.Company;
+                    }
+                } else {
+                    // Treat it as company
                     this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
                     this.currentOrganizationType = OrganizationType.Company;
                 }
-            } else {
-                // Treat it as company
-                this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
-                this.currentOrganizationType = OrganizationType.Company;
-            }
 
-            this.loadAddresses('GET');
+                this.loadAddresses('GET');
+            }
         });
     }
 
@@ -310,7 +327,11 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
 
         this.store.pipe(select(appState => appState.settings.profile), takeUntil(this.destroyed$)).subscribe((response) => {
             if (response) {
+                const loadTabChangeApi = (this.currentCompanyDetails?.countryV2) ? false : true;
                 this.currentCompanyDetails = response;
+                if (loadTabChangeApi && this.currentTab === "address") {
+                    this.handleTabChanged("address");
+                }
                 if (this.currentOrganizationType === OrganizationType.Company) {
                     this.handleCompanyProfileResponse(response);
                 } else if (this.currentOrganizationType === OrganizationType.Branch) {
@@ -521,6 +542,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+        this.asideGstSidebarMenuState === 'out';
     }
 
     public isValidPAN(ele: HTMLInputElement) {
@@ -917,7 +939,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     public createNewAddress(addressDetails: any): void {
         this.isAddressChangeInProgress = true;
         const chosenState = addressDetails.addressDetails.stateList.find(selectedState => selectedState.value === addressDetails.formValue.state);
-        let linkEntity = addressDetails.addressDetails.linkedEntities.filter(entity => (addressDetails.formValue.linkedEntity.includes(entity.uniqueName))).map(filteredEntity => ({
+        let linkEntity = addressDetails.addressDetails.linkedEntities?.filter(entity => (addressDetails.formValue.linkedEntity.includes(entity.uniqueName))).map(filteredEntity => ({
             uniqueName: filteredEntity.uniqueName,
             isDefault: filteredEntity.isDefault,
             entity: filteredEntity.entity
@@ -934,7 +956,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         };
 
         this.settingsProfileService.createNewAddress(requestObj).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response.status === 'success') {
+            if (response?.status === 'success') {
                 this.closeAddressSidePane = true;
                 if (this.currentOrganizationType === OrganizationType.Company) {
                     this.loadAddresses('GET');
@@ -943,7 +965,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 }
                 this._toasty.successToast('Address created successfully');
             } else {
-                this._toasty.errorToast(response.message);
+                this._toasty.errorToast(response?.message);
             }
             this.isAddressChangeInProgress = false;
             this.changeDetectorRef.detectChanges();
@@ -962,7 +984,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         this.isAddressChangeInProgress = true;
         addressDetails.formValue.linkedEntity = addressDetails.formValue.linkedEntity || [];
         const chosenState = addressDetails.addressDetails.stateList.find(selectedState => selectedState.value === addressDetails.formValue.state);
-        const linkEntity = addressDetails.addressDetails.linkedEntities.filter(entity => (addressDetails.formValue.linkedEntity.includes(entity.uniqueName))).map(filteredEntity => ({
+        const linkEntity = addressDetails.addressDetails.linkedEntities?.filter(entity => (addressDetails.formValue.linkedEntity.includes(entity.uniqueName))).map(filteredEntity => ({
             uniqueName: filteredEntity.uniqueName,
             isDefault: filteredEntity.isDefault,
             entity: filteredEntity.entity
@@ -978,12 +1000,12 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             linkEntity
         };
         this.settingsProfileService.updateAddress(requestObj).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response.status === 'success') {
+            if (response?.status === 'success') {
                 this.closeAddressSidePane = true;
                 this.loadAddresses('GET');
                 this._toasty.successToast('Address updated successfully');
             } else {
-                this._toasty.errorToast(response.message);
+                this._toasty.errorToast(response?.message);
             }
             this.isAddressChangeInProgress = false;
         }, () => {
@@ -1014,7 +1036,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         const requestObject = {
             name: this.currentBranchDetails.name,
             alias: this.currentBranchDetails.alias,
-            linkAddresses: this.currentBranchDetails.addresses.filter(address => address.uniqueName !== addressDetails.uniqueName)
+            linkAddresses: this.currentBranchDetails.addresses?.filter(address => address.uniqueName !== addressDetails.uniqueName)
         }
         this.settingsProfileService.updateBranchInfo(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.store.dispatch(this.settingsProfileActions.getBranchInfo());
@@ -1072,7 +1094,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 profileObj.addresses = profileObj.addresses.slice(0, 3);
             }
 
-            if (profileObj.addresses && !profileObj.addresses.length) {
+            if (profileObj.addresses && !profileObj.addresses?.length) {
                 let newGstObj = {
                     taxNumber: '',
                     stateCode: '',
@@ -1199,6 +1221,54 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 } else {
                     this.personalInformationTabHeading = this.localeData?.company_information;
                 }
+
+                this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+                    if (activeCompany) {
+                        if (this.vatSupportedCountries.includes(activeCompany.countryV2?.alpha2CountryCode)) {
+                            this.taxType = this.commonLocaleData?.app_trn;
+                        } else {
+                            this.taxType = this.commonLocaleData?.app_gstin;
+                        }
+                    }
+                });
+
+                if (this.addressOnly) {
+                    this.loadLinkedEntities();
+                    if (this.currentCompanyDetails && this.currentCompanyDetails.countryV2) {
+                        this.loadTaxDetails(this.currentCompanyDetails.countryV2.alpha2CountryCode);
+                        this.loadStates(this.currentCompanyDetails.countryV2.alpha2CountryCode);
+                    }
+        
+                    this.store.pipe(select(appState => appState.general.openGstSideMenu), takeUntil(this.destroyed$)).subscribe(shouldOpen => {
+                        if (this.isMobileScreen) {
+                            if (shouldOpen) {
+                                this.asideGstSidebarMenuState = 'in';
+                            } else {
+                                this.asideGstSidebarMenuState = 'out';
+                            }
+                        }
+                    });
+        
+                    this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+                        if (activeCompany) {
+                            if (this.vatSupportedCountries.includes(activeCompany.countryV2?.alpha2CountryCode)) {
+                                this.taxType = this.commonLocaleData?.app_trn;
+                                this.localeData.company_address_list = this.localeData.company_trn_list;
+                                this.localeData.add_address = this.localeData.add_trn;
+                                this.localeData.address_list = this.localeData.trn_list;
+                                this.localeData.create_address = this.localeData.create_trn;
+                                this.localeData.update_address = this.localeData.update_trn;
+                            } else {
+                                this.taxType = this.commonLocaleData?.app_gstin;
+                                this.localeData.company_address_list = this.localeData.company_gst_list;
+                                this.localeData.add_address = this.localeData.add_gst;
+                                this.localeData.address_list = this.localeData.gst_list;
+                                this.localeData.create_address = this.localeData.create_gst;
+                                this.localeData.update_address = this.localeData.update_gst;
+                            }
+                        }
+                    });
+                }
             });
 
             this.getPageHeading();
@@ -1228,5 +1298,14 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             }
         }
         this.pageHeading.emit(pageHeading);
+    }
+
+    /**
+     * Handles GST Sidebar Navigation
+     *
+     * @memberof SettingProfileComponent
+     */
+    public handleNavigation(): void {
+        this.router.navigate(['pages', 'gstfiling']);
     }
 }

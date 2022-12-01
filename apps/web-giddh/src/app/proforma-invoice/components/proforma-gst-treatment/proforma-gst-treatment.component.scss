@@ -1,13 +1,12 @@
-@import "../../../../assets/css/color.scss";
 .gst-treatment-wrapper {
-    background-color: $white;
-    box-shadow: 0 0 6px rgba(0, 0, 0, 0.2);
+    background-color: var(--color-white);
+    box-shadow: 0 0 6px var(--color-primary-common-box-shadow);
     height: 290px;
 
     .gst-treatment-header {
-        background-color: $whisper;
+        background-color: var(--color-dark-fog);
         padding: 8px 10px;
-        border-bottom: 1px solid $gainsboro;
+        border-bottom: 1px solid var(--color-iron);
     }
 }
 .gst-treatment-body {
@@ -18,10 +17,10 @@
     margin-bottom: 7px;
 }
 .btn-success {
-    background: $success-green;
-    color: $white;
+    background: var(--color-success-enable);
+    color: var(--color-white);
 }
 .aqua-color a {
-    color: $deep-sky-blue;
+    color: var(--color-blue);
     font-size: 12px;
 }

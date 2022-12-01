@@ -110,6 +110,15 @@ export function GstRReducer(state: GstRReducerState = initialState, action: Cust
             newState.gstr1OverViewData = new GstOverViewResult();
             return newState;
         }
+
+        case GSTR_ACTIONS.RESET_GSTR1_OVERVIEW_RESPONSE: {
+            return {
+                ...state,
+                gstr1OverViewDataInProgress: false,
+                gstr1OverViewDataFetchedSuccessfully: false
+            };
+        }
+
         case GSTR_ACTIONS.GET_GSTR3B_OVERVIEW: {
             return {
                 ...state,
@@ -134,6 +143,15 @@ export function GstRReducer(state: GstRReducerState = initialState, action: Cust
             newState.gstr3BOverViewData = new Gstr3bOverviewResult();
             return newState;
         }
+
+        case GSTR_ACTIONS.RESET_GSTR3B_OVERVIEW_RESPONSE: {
+            return {
+                ...state,
+                gstr3BOverViewDataInProgress: false,
+                gstr3BOverViewDataFetchedSuccessfully: false
+            };
+        }
+
         // endregion
 
         // region GSTR2
@@ -161,6 +179,14 @@ export function GstRReducer(state: GstRReducerState = initialState, action: Cust
             return newState;
         }
         // endregion
+
+        case GSTR_ACTIONS.RESET_GSTR2_OVERVIEW_RESPONSE: {
+            return {
+                ...state,
+                gstr2OverViewDataInProgress: false,
+                gstr2OverViewDataFetchedSuccessfully: false
+            };
+        }
         // endregion
 
         // region transactions

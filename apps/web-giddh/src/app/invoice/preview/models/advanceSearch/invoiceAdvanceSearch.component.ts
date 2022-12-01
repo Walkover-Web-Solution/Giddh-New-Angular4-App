@@ -2,7 +2,7 @@ import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, 
 import { IOption } from '../../../../theme/ng-select/option.interface';
 import { InvoiceFilterClassForInvoicePreview } from '../../../../models/api-models/Invoice';
 import { ShSelectComponent } from '../../../../theme/ng-virtual-select/sh-select.component';
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../../shared/helpers/defaultDateFormat';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
@@ -46,8 +46,6 @@ export class InvoiceAdvanceSearchComponent implements OnInit, OnChanges {
     public selectedDateRangeUi: any;
     /* This will store available date ranges */
     public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
-    /* Moment object */
-    public moment = moment;
     /* Selected from date */
     public fromDate: string;
     /* Selected to date */
@@ -60,6 +58,8 @@ export class InvoiceAdvanceSearchComponent implements OnInit, OnChanges {
     public dateFieldPosition: any = { x: 0, y: 0 };
     /** Stores the E-invoice status */
     public eInvoiceStatusDropdownOptions: IOption[] = [];
+    /** Stores the voucher API version of company */
+    public voucherApiVersion: 1 | 2;
 
     constructor(private generalService: GeneralService, private modalService: BsModalService) {
 
@@ -94,6 +94,8 @@ export class InvoiceAdvanceSearchComponent implements OnInit, OnChanges {
             { label: this.commonLocaleData?.app_date_options?.after, value: 'after' },
             { label: this.commonLocaleData?.app_date_options?.before, value: 'before' },
         ];
+        
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
     }
 
     public invoiceTotalRangeChanged(item: IOption) {
@@ -172,18 +174,36 @@ export class InvoiceAdvanceSearchComponent implements OnInit, OnChanges {
 
     public dateChanged(item: IOption, type: string) {
         if (type === 'invoice') {
-            this.request.invoiceDateEqual = false;
-            this.request.invoiceDateAfter = false;
-            this.request.invoiceDateBefore = false;
+            if (this.generalService.voucherApiVersion === 2) {
+                this.request.voucherDateEqual = false;
+                this.request.voucherDateAfter = false;
+                this.request.voucherDateBefore = false;
+            } else {
+                this.request.invoiceDateEqual = false;
+                this.request.invoiceDateAfter = false;
+                this.request.invoiceDateBefore = false;
+            }
             switch (item.value) {
                 case 'on':
-                    this.request.invoiceDateEqual = true;
+                    if (this.generalService.voucherApiVersion === 2) {
+                        this.request.voucherDateEqual = true;
+                    } else {
+                        this.request.invoiceDateEqual = true;
+                    }
                     break;
                 case 'after':
-                    this.request.invoiceDateAfter = true;
+                    if (this.generalService.voucherApiVersion === 2) {
+                        this.request.voucherDateAfter = true;
+                    } else {
+                        this.request.invoiceDateAfter = true;
+                    }
                     break;
                 case 'before':
-                    this.request.invoiceDateBefore = true;
+                    if (this.generalService.voucherApiVersion === 2) {
+                        this.request.voucherDateBefore = true;
+                    } else {
+                        this.request.invoiceDateBefore = true;
+                    }
                     break;
             }
         } else {
@@ -206,18 +226,18 @@ export class InvoiceAdvanceSearchComponent implements OnInit, OnChanges {
 
     public dateRangeChanged(event: any) {
         if (event) {
-            this.request.expireFrom = moment(event.picker.startDate).format(GIDDH_DATE_FORMAT);
-            this.request.expireTo = moment(event.picker.endDate).format(GIDDH_DATE_FORMAT);
+            this.request.expireFrom = dayjs(event.picker.startDate).format(GIDDH_DATE_FORMAT);
+            this.request.expireTo = dayjs(event.picker.endDate).format(GIDDH_DATE_FORMAT);
         }
     }
 
     public parseAllDateField() {
         if (this.request.invoiceDate) {
-            this.request.invoiceDate = moment(this.request.invoiceDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+            this.request.invoiceDate = (typeof this.request.invoiceDate === "object") ? dayjs(this.request.invoiceDate).format(GIDDH_DATE_FORMAT) : dayjs(this.request.invoiceDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
         }
 
         if (this.request.dueDate) {
-            this.request.dueDate = moment(this.request.dueDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+            this.request.dueDate = (typeof this.request.dueDate === "object") ? dayjs(this.request.dueDate).format(GIDDH_DATE_FORMAT) : dayjs(this.request.dueDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
         }
     }
 
@@ -241,10 +261,10 @@ export class InvoiceAdvanceSearchComponent implements OnInit, OnChanges {
         if ('request' in changes && changes.request.currentValue) {
             if (changes.request.currentValue && changes.request.currentValue.from && changes.request.currentValue.to) {
                 let dateRange = this.generalService.dateConversionToSetComponentDatePicker(changes.request.currentValue.from, changes.request.currentValue.to);
-                this.selectedDateRange = { startDate: moment(dateRange.fromDate), endDate: moment(dateRange.toDate) };
-                this.selectedDateRangeUi = moment(dateRange.fromDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateRange.toDate).format(GIDDH_NEW_DATE_FORMAT_UI);
-                this.fromDate = moment(dateRange.fromDate).format(GIDDH_DATE_FORMAT);
-                this.toDate = moment(dateRange.toDate).format(GIDDH_DATE_FORMAT);
+                this.selectedDateRange = { startDate: dayjs(dateRange.fromDate), endDate: dayjs(dateRange.toDate) };
+                this.selectedDateRangeUi = dayjs(dateRange.fromDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateRange.toDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+                this.fromDate = dayjs(dateRange.fromDate).format(GIDDH_DATE_FORMAT);
+                this.toDate = dayjs(dateRange.toDate).format(GIDDH_DATE_FORMAT);
                 this.request.expireFrom = this.fromDate;
                 this.request.expireTo = this.toDate;
             }
@@ -307,10 +327,10 @@ export class InvoiceAdvanceSearchComponent implements OnInit, OnChanges {
         }
         this.hideGiddhDatepicker();
         if (value && value.startDate && value.endDate) {
-            this.selectedDateRange = { startDate: moment(value.startDate), endDate: moment(value.endDate) };
-            this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
-            this.fromDate = moment(value.startDate).format(GIDDH_DATE_FORMAT);
-            this.toDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
+            this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
+            this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.fromDate = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
+            this.toDate = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
             this.request.expireFrom = this.fromDate;
             this.request.expireTo = this.toDate;
         }

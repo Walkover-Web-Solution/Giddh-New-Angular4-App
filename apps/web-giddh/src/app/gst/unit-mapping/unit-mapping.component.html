@@ -1,0 +1,46 @@
+<div class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper" *ngIf="asideGstSidebarMenuState === 'in'">
+    <div
+        class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper"
+        *ngIf="asideGstSidebarMenuState === 'in'"
+    >
+        <tax-sidebar
+            (navigateEvent)="handleNavigation()"
+            (clickOutside)="isMobileScreen ? (asideGstSidebarMenuState = 'out') : ''"
+            [exclude]="'#primary-new-header'"
+            class="gst-sidebar"
+        ></tax-sidebar>
+    </div>
+    <mat-grid-list class="unit-mapping-grid-list" cols="2" gutterSize="0px" rowHeight="70px">
+        <mat-grid-tile class="grid-box grid-box-head">
+            <div class="unit-box">Unit</div>
+            <div class="map-unit-box">Map Unit</div>
+        </mat-grid-tile>
+        <mat-grid-tile class="grid-box grid-box-head">
+            <div class="unit-box">Unit</div>
+            <div class="map-unit-box">Map Unit</div>
+        </mat-grid-tile>
+        <form class="map-unit-value-form">
+            <mat-grid-tile class="grid-box grid-box-content" *ngFor="let unit of unitsArray">
+                <div class="unit-value">{{ unit.giddhUnitName }} ({{ unit.giddhUnit }})</div>
+                <div class="map-unit-value">
+                    <select-field
+                        [cssClass]="'form-control mat-field-border'"
+                        [placeholder]="'Select Unit'"
+                        [options]="units"
+                        [defaultValue]="unit?.mappedGstUnit"
+                        (selectedOption)="unit.mappedGstUnit = $event.value"
+                    ></select-field>
+                </div>
+            </mat-grid-tile>
+        </form>
+    </mat-grid-list>
+    <div class="button-wrapper">
+        <button
+            [ngClass]="{ 'mat-button-disabled': disabled, 'save-button': !disabled }"
+            (click)="saveMapping()"
+            mat-flat-button
+        >
+            Save
+        </button>
+    </div>
+</div>

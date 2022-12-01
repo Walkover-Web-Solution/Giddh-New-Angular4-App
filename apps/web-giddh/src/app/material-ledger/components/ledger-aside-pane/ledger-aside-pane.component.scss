@@ -1,12 +1,10 @@
-@import "../../../../assets/css/color.scss";
-
 #close.close-btn-absolute {
     position: absolute !important;
     left: auto !important;
     right: 0 !important;
     z-index: 9999999 !important;
     background-color: transparent;
-    color: $white;
+    color: var(--color-white);
     font-size: 17px;
     top: 9px !important;
     margin-right: 0;
@@ -31,7 +29,7 @@
     left: auto;
     z-index: 9999999;
     background-color: transparent;
-    color: $white;
+    color: var(--color-primary-right-side-popup-header-text);
     font-size: 17px;
     top: 10px !important;
     margin-right: 0 !important;
@@ -48,7 +46,7 @@
 :host .aside-pane {
     width: 100%;
     max-width: 760px;
-    background: $white;
+    background: var(--color-white);
 }
 
 .aside-pane {
@@ -92,16 +90,16 @@
     border: 0;
     border-radius: 0;
     right: 58px;
-    background-color: transparent;
-    border: 1px solid $white;
-    color: $white;
+    background-color: var(--color-secondary-button-background);
+    border: 1px solid var(--color-secondary-button-background);
+    color: var(--color-secondary-button-text);
     padding: 3px 14px;
     font-size: 14px;
 }
 :host.in #back:hover {
-    color: $midnight-blue;
-    background-color: $white;
-    border-color: $white;
+    color: var(--color-giddh-blue);
+    background-color: var(--color-white);
+    border-color: var(--color-white);
 }
 .btn-lg {
     min-width: 130px;

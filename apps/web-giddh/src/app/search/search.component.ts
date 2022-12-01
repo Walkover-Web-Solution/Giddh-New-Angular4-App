@@ -1,17 +1,14 @@
-import { take } from 'rxjs/operators';
-import { Store, select } from '@ngrx/store';
+import { Store } from '@ngrx/store';
 import { AppState } from '../store/roots';
-import { Component, EventEmitter, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy } from '@angular/core';
 import { SearchRequest } from '../models/api-models/Search';
 import { SearchActions } from '../actions/search.actions';
-import { StateDetailsRequest } from '../models/api-models/Company';
-import { CompanyActions } from '../actions/company.actions';
 
 @Component({
     selector: 'search',
     templateUrl: './search.component.html'
 })
-export class SearchComponent implements OnInit, OnDestroy {
+export class SearchComponent implements OnDestroy {
     public searchRequestEmitter = new EventEmitter<SearchRequest>();
     public _searchRequest: SearchRequest;
     public pageChangeEvent: any;
@@ -23,7 +20,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
 
-    constructor(private store: Store<AppState>, private searchActions: SearchActions, private companyActions: CompanyActions) {
+    constructor(private store: Store<AppState>, private searchActions: SearchActions) {
     }
 
     public get searchRequest(): SearchRequest {
@@ -34,16 +31,6 @@ export class SearchComponent implements OnInit, OnDestroy {
     public set searchRequest(search: SearchRequest) {
         this.searchRequestEmitter.emit(search);
         this._searchRequest = search;
-    }
-
-    public ngOnInit() {
-        let companyUniqueName = null;
-        this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
-        let stateDetailsRequest = new StateDetailsRequest();
-        stateDetailsRequest.companyUniqueName = companyUniqueName;
-        stateDetailsRequest.lastState = 'search';
-
-        this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
     }
 
     public ngOnDestroy(): void {

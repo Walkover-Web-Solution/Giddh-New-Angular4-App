@@ -7,7 +7,7 @@
 
 import { ILedgerTransactionItem, ITotalItem } from '../interfaces/ledger.interface';
 import { IPagination } from '../interfaces/paginatedResponse.interface';
-import { OtherSalesItemClass, SalesEntryClass, VoucherTypeEnum } from './Sales';
+import { AmountClassMulticurrency, OtherSalesItemClass, VoucherTypeEnum } from './Sales';
 import { INameUniqueName } from './Inventory';
 
 export interface IInvoiceResult {
@@ -51,9 +51,9 @@ export class InvoiceFilterClassForInvoicePreview extends CommonPaginatedRequest 
     public totalEqual: boolean;
     public totalLessThan: boolean;
     public totalMoreThan: boolean;
-    public invoiceDateEqual: boolean;
-    public invoiceDateAfter: boolean;
-    public invoiceDateBefore: boolean;
+    public invoiceDateEqual?: boolean;
+    public invoiceDateAfter?: boolean;
+    public invoiceDateBefore?: boolean;
     public dueDateEqual: boolean;
     public dueDateAfter: boolean;
     public dueDateBefore: boolean;
@@ -80,6 +80,10 @@ export class InvoiceFilterClassForInvoicePreview extends CommonPaginatedRequest 
     public expireTo?: string;
     public purchaseOrderNumber?: any;
     public status?: string;
+    public voucherDateEqual?: boolean;
+    public voucherDateAfter?: boolean;
+    public voucherDateBefore?: boolean;
+    public voucherDate?: any;
 }
 
 export class InvoiceFilterClass extends CommonPaginatedRequest {
@@ -370,6 +374,10 @@ export class GenBulkInvoiceFinalObj {
     public entries: string[];
 }
 
+export class GenerateBulkInvoiceObject {
+    public entryUniqueNames: string[];
+}
+
 /*
 * Get invoice template details response model
 */
@@ -512,6 +520,7 @@ export class GenerateEwayBill {
     public transactionType: string;
     public docType: string;
     public toGstIn: string;
+    public uniqueName: string;
 }
 
 export class UpdateEwayVehicle {
@@ -660,6 +669,8 @@ export class IEwayBillfilter {
     toDate?: any;
     page?: number;
     count?: number;
+    branchUniqueName?: string;
+    gstin?: string;
 }
 
 export class InvoicePreviewDetailsVm {
@@ -672,6 +683,8 @@ export class InvoicePreviewDetailsVm {
     blob?: Blob;
     voucherStatus?: string;
     accountCurrencySymbol?: string;
+    hasAttachment?: boolean;
+    balanceDue?: AmountClassMulticurrency;
 }
 
 export class InvoicePaymentRequest {
@@ -683,4 +696,5 @@ export class InvoicePaymentRequest {
     paymentDate: string | Date;
     tagUniqueName?: string;
     description?: string;
+    uniqueName?: string;
 }

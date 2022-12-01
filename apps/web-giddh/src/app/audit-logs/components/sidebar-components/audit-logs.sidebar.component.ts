@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit, Input } from '@angular/core';
 import { select, Store } from '@ngrx/store';
-import * as moment from 'moment/moment';
-import { of as observableOf, ReplaySubject } from 'rxjs';
+import * as dayjs from 'dayjs';
+import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { map as lodashMap } from '../../../lodash-optimized';
 import { AuditLogsActions } from '../../../actions/audit-logs/audit-logs.actions';
@@ -15,6 +15,7 @@ import { AuditLogsSidebarVM } from './Vm';
 import { GroupService } from '../../../services/group.service';
 import { SearchService } from '../../../services/search.service';
 import { API_COUNT_LIMIT } from '../../../app.constant';
+import { IForceClear } from '../../../models/api-models/Sales';
 
 @Component({
     selector: 'audit-logs-sidebar',
@@ -66,6 +67,18 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
     };
     /** Stores the value of groups */
     public searchedGroups: IOption[];
+    /** To clear filter by sh-select options   */
+    public forceClearFilterBy$: Observable<IForceClear> = observableOf({ status: false });
+    /** To clear entity sh-select options   */
+    public forceClearEntity$: Observable<IForceClear> = observableOf({ status: false });
+    /** To clear operations sh-select options   */
+    public forceClearOperations$: Observable<IForceClear> = observableOf({ status: false });
+    /** To clear account sh-select options   */
+    public forceClearAccount$: Observable<IForceClear> = observableOf({ status: false });
+    /** To clear group sh-select options   */
+    public forceClearGroup$: Observable<IForceClear> = observableOf({ status: false });
+    /** To clear user sh-select options   */
+    public forceClearUser$: Observable<IForceClear> = observableOf({ status: false });
 
     constructor(
         private store: Store<AppState>,
@@ -94,7 +107,7 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
         }), takeUntil(this.destroyed$));
 
         this.companyService.getComapnyUsers().pipe(takeUntil(this.destroyed$)).subscribe(data => {
-            if (data.status === 'success') {
+            if (data?.status === 'success') {
                 let users: IOption[] = [];
                 data.body.map((d) => {
                     users.push({ label: d.userName, value: d.userUniqueName, additional: d });
@@ -106,7 +119,7 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.vm.reset();
+        this.resetFilters();
         this.loadDefaultAccountsSuggestions();
         this.loadDefaultGroupsSuggestions();
     }
@@ -119,11 +132,11 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
             newParents = union([], parents);
             newParents.push({
                 name: listItem.name,
-                uniqueName: listItem.uniqueName
+                uniqueName: listItem?.uniqueName
             });
             listItem = Object.assign({}, listItem, { parentGroups: [] });
             listItem.parentGroups = newParents;
-            if (listItem.groups.length > 0) {
+            if (listItem.groups?.length > 0) {
                 result = this.flattenGroup(listItem.groups, newParents);
                 result.push(omit(listItem, 'groups'));
             } else {
@@ -135,22 +148,9 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
     }
 
     public ngOnDestroy() {
-        this.vm.reset();
-        this.store.dispatch(this.auditLogsActions.ResetLogs());
+        this.resetFilters();
         this.destroyed$.next(true);
         this.destroyed$.complete();
-    }
-
-    public selectDateOption(v) {
-        this.vm.selectedDateOption = v.value || '';
-    }
-
-    public selectEntityOption(v) {
-        this.vm.selectedEntity = v.value || '';
-    }
-
-    public selectOperationOption(v) {
-        this.vm.selectedOperation = v.value || '';
     }
 
     public selectAccount(v) {
@@ -185,17 +185,17 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
             reqBody.fromDate = null;
             reqBody.toDate = null;
             if (this.vm.logOrEntry === 'logDate') {
-                reqBody.logDate = this.vm.selectedLogDate ? moment(this.vm.selectedLogDate).format(GIDDH_DATE_FORMAT) : '';
+                reqBody.logDate = this.vm.selectedLogDate ? dayjs(this.vm.selectedLogDate).format(GIDDH_DATE_FORMAT) : '';
                 reqBody.entryDate = null;
             } else if (this.vm.logOrEntry === 'entryDate') {
-                reqBody.entryDate = this.vm.selectedLogDate ? moment(this.vm.selectedLogDate).format(GIDDH_DATE_FORMAT) : '';
+                reqBody.entryDate = this.vm.selectedLogDate ? dayjs(this.vm.selectedLogDate).format(GIDDH_DATE_FORMAT) : '';
                 reqBody.logDate = null;
             }
         } else {
             reqBody.logDate = null;
             reqBody.entryDate = null;
-            reqBody.fromDate = this.vm.selectedFromDate ? moment(this.vm.selectedFromDate).format(GIDDH_DATE_FORMAT) : '';
-            reqBody.toDate = this.vm.selectedToDate ? moment(this.vm.selectedToDate).format(GIDDH_DATE_FORMAT) : '';
+            reqBody.fromDate = this.vm.selectedFromDate ? dayjs(this.vm.selectedFromDate).format(GIDDH_DATE_FORMAT) : '';
+            reqBody.toDate = this.vm.selectedToDate ? dayjs(this.vm.selectedToDate).format(GIDDH_DATE_FORMAT) : '';
         }
         this.store.dispatch(this.auditLogsActions.GetLogs(reqBody, 1));
     }
@@ -207,7 +207,97 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
 
     public resetFilters() {
         this.vm.reset();
+        this.resetFilterBy();
+        this.resetEntity();
+        this.resetGroup();
+        this.resetAccount();
+        this.resetUser();
+        this.resetOperation();
         this.store.dispatch(this.auditLogsActions.ResetLogs());
+    }
+
+    /**
+     * Resets filter by
+     *
+     * @memberof AuditLogsSidebarComponent
+     */
+    public resetFilterBy(): void {
+        this.forceClearFilterBy$ = observableOf({ status: true });
+
+        setTimeout(() => {
+            this.forceClearFilterBy$ = observableOf({ status: false });
+            this.vm.selectedDateOption = "0";
+        }, 100);
+    }
+
+    /**
+     * Resets entity
+     *
+     * @memberof AuditLogsSidebarComponent
+     */
+    public resetEntity(): void {
+        this.forceClearEntity$ = observableOf({ status: true });
+        this.vm.selectedEntity = "";
+
+        setTimeout(() => {
+            this.forceClearEntity$ = observableOf({ status: false });
+        }, 500);
+    }
+
+    /**
+     * Resets group
+     *
+     * @memberof AuditLogsSidebarComponent
+     */
+    public resetGroup(): void {
+        this.forceClearGroup$ = observableOf({ status: true });
+        this.vm.selectedGroupUnq = "";
+
+        setTimeout(() => {
+            this.forceClearGroup$ = observableOf({ status: false });
+        }, 500);
+    }
+
+    /**
+     * Resets account
+     *
+     * @memberof AuditLogsSidebarComponent
+     */
+    public resetAccount(): void {
+        this.forceClearAccount$ = observableOf({ status: true });
+        this.vm.selectedAccountUnq = "";
+
+        setTimeout(() => {
+            this.forceClearAccount$ = observableOf({ status: false });
+        }, 500);
+    }
+
+    /**
+     * Resets user
+     *
+     * @memberof AuditLogsSidebarComponent
+     */
+    public resetUser(): void {
+        this.forceClearUser$ = observableOf({ status: true });
+        this.vm.selectedUserUnq = "";
+
+        setTimeout(() => {
+            this.forceClearUser$ = observableOf({ status: false });
+        }, 500);
+    }
+
+    /**
+     * Resets operation
+     *
+     * @memberof AuditLogsSidebarComponent
+     */
+    public resetOperation(): void {
+        this.forceClearOperations$ = observableOf({ status: true });
+        this.vm.selectedOperation = "";
+
+        setTimeout(() => {
+            this.forceClearOperations$ = observableOf({ status: false });
+        }, 500);
     }
 
     /**
@@ -232,7 +322,7 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
                 if (data && data.body && data.body.results) {
                     const searchResults = data.body.results.map(result => {
                         return {
-                            value: result.uniqueName,
+                            value: result?.uniqueName,
                             label: result.name
                         }
                     }) || [];
@@ -281,7 +371,7 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
                     if (!this.accountsSearchResultsPaginationData.query) {
                         const results = response.map(result => {
                             return {
-                                value: result.uniqueName,
+                                value: result?.uniqueName,
                                 label: result.name
                             }
                         }) || [];
@@ -316,7 +406,7 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
                 if (data && data.body && data.body.results) {
                     const searchResults = data.body.results.map(result => {
                         return {
-                            value: result.uniqueName,
+                            value: result?.uniqueName,
                             label: result.name
                         }
                     }) || [];
@@ -365,7 +455,7 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
                     if (!this.groupsSearchResultsPaginationData.query) {
                         const results = response.map(result => {
                             return {
-                                value: result.uniqueName,
+                                value: result?.uniqueName,
                                 label: result.name
                             }
                         }) || [];
@@ -387,7 +477,7 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
         this.onGroupSearchQueryChanged('', 1, (response) => {
             this.defaultGroupSuggestions = response.map(result => {
                 return {
-                    value: result.uniqueName,
+                    value: result?.uniqueName,
                     label: result.name
                 }
             }) || [];
@@ -407,7 +497,7 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
         this.onAccountSearchQueryChanged('', 1, (response) => {
             this.defaultAccountSuggestions = response.map(result => {
                 return {
-                    value: result.uniqueName,
+                    value: result?.uniqueName,
                     label: result.name
                 }
             }) || [];

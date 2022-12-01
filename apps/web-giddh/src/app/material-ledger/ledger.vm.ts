@@ -2,7 +2,7 @@ import { IELedgerResponse, IELedgerTransaction, TransactionsResponse } from '../
 import { Observable } from 'rxjs';
 import { AccountResponse, AccountResponseV2 } from '../models/api-models/Account';
 import { ITransactionItem } from '../models/interfaces/ledger.interface';
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { IFlattenAccountsResultItem } from '../models/interfaces/flattenAccountsResultItem.interface';
 import { v4 as uuidv4 } from 'uuid';
 import { cloneDeep, forEach, remove } from '../lodash-optimized';
@@ -128,22 +128,22 @@ export class LedgerVM {
         requestObj = cloneDeep(this.blankLedger);
 
         // filter transactions which have selected account
-        requestObj.transactions = requestObj.transactions.filter((bl: TransactionVM) => bl.particular);
+        requestObj.transactions = requestObj.transactions?.filter((bl: TransactionVM) => bl.particular);
 
         // map over transactions array
         requestObj.transactions.map((bl) => {
             // set transaction.particular to selectedAccount uniqueName
-            bl.particular = bl.selectedAccount ? bl.selectedAccount.uniqueName : bl.particular;
+            bl.particular = bl.selectedAccount ? bl.selectedAccount?.uniqueName : bl.particular;
             bl.isInclusiveTax = false;
             // filter taxes uniqueNames
-            bl.taxes = [...bl.taxesVm.filter(p => p.isChecked).map(p => p?.uniqueName)];
+            bl.taxes = [...bl.taxesVm?.filter(p => p.isChecked).map(p => p?.uniqueName)];
             // filter discount
-            bl.discounts = bl.discounts.filter(p => p.amount && p.isActive);
+            bl.discounts = bl.discounts?.filter(p => p.amount && p.isActive);
             // delete local id
             delete bl['id'];
 
             if (requestObj.isOtherTaxesApplicable && requestObj.otherTaxModal.appliedOtherTax) {
-                bl.taxes.push(requestObj.otherTaxModal.appliedOtherTax.uniqueName);
+                bl.taxes.push(requestObj.otherTaxModal.appliedOtherTax?.uniqueName);
             }
         });
         if (requestObj.voucherType === 'advance-receipt') {
@@ -197,17 +197,17 @@ export class LedgerVM {
 
             if (data) {
                 if (data.balanceText && data.balanceText.cr) {
-                    data.balanceText.cr = data.balanceText.cr.replace('<accountName>', accountName);
+                    data.balanceText.cr = data.balanceText.cr?.replace('<accountName>', accountName);
                 }
                 if (data.balanceText && data.balanceText.dr) {
-                    data.balanceText.dr = data.balanceText.dr.replace('<accountName>', accountName);
+                    data.balanceText.dr = data.balanceText.dr?.replace('<accountName>', accountName);
                 }
 
                 if (data.text && data.text.dr) {
-                    data.text.dr = data.text.dr.replace('<accountName>', accountName);
+                    data.text.dr = data.text.dr?.replace('<accountName>', accountName);
                 }
                 if (data.text && data.text.cr) {
-                    data.text.cr = data.text.cr.replace('<accountName>', accountName);
+                    data.text.cr = data.text.cr?.replace('<accountName>', accountName);
                 }
                 this.ledgerUnderStandingObj = _.cloneDeep(data);
             }
@@ -264,7 +264,7 @@ export class LedgerVM {
                         return n.type === bankTxn.type;
                     });
                 });
-                if(item.transactions[0].type === "CREDIT") {
+                if (item.transactions[0].type === "CREDIT") {
                     item.index = creditLoop;
                     this.bankTransactionsCreditData.push(item);
                     creditLoop++;
@@ -290,16 +290,16 @@ export class LedgerVM {
         requestObj = cloneDeep(this.currentBankEntry);
 
         // filter transactions which have selected account
-        requestObj.transactions = requestObj.transactions.filter((bl: TransactionVM) => bl.particular);
+        requestObj.transactions = requestObj.transactions?.filter((bl: TransactionVM) => bl.particular);
 
         // map over transactions array
         requestObj.transactions.map((bl: any) => {
             // set transaction.particular to selectedAccount uniqueName
             bl.particular = bl.selectedAccount ? bl.selectedAccount.uniqueName : bl.particular;
             // filter taxes uniqueNames
-            bl.taxes = [...bl.taxesVm.filter(p => p.isChecked).map(p => p?.uniqueName)];
+            bl.taxes = [...bl.taxesVm?.filter(p => p.isChecked).map(p => p?.uniqueName)];
             // filter discount
-            bl.discounts = bl.discounts.filter(p => p.amount && p.isActive);
+            bl.discounts = bl.discounts?.filter(p => p.amount && p.isActive);
             // delete local id
             delete bl['id'];
         });
@@ -351,7 +351,7 @@ export class LedgerVM {
                     isInclusiveTax: true,
                 }],
             voucherType: 'sal',
-            entryDate: moment().format(GIDDH_DATE_FORMAT),
+            entryDate: dayjs().format(GIDDH_DATE_FORMAT),
             unconfirmedEntry: false,
             attachedFile: '',
             attachedFileName: '',
@@ -409,6 +409,8 @@ export class BlankLedgerVM {
     public passportNumber?: string;
     public touristSchemeApplicable?: boolean;
     public index?: number;
+    public mergePB?: boolean;
+    public referenceVoucher?: ReferenceVoucher;
 }
 
 export class IInvoiceLinkingRequest {
@@ -418,6 +420,13 @@ export class IInvoiceLinkingRequest {
 export class ILinkedInvoice {
     public invoiceUniqueName: string;
     public voucherType: string;
+}
+
+export class ReferenceVoucher {
+    public uniqueName: string;
+    public number?: any;
+    public voucherType?: string;
+    public date?: string;
 }
 
 export class TransactionVM {
@@ -452,6 +461,8 @@ export class TransactionVM {
     public invoiceLinkingRequest?: IInvoiceLinkingRequest;
     public voucherAdjustments?: VoucherAdjustments;
     public showDropdown?: boolean = false;
+    public referenceVoucher?: ReferenceVoucher;
+    public showOtherTax: boolean = false;
 }
 
 export interface IInventory {

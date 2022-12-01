@@ -93,18 +93,18 @@ export class BulkExportModal implements OnInit, OnDestroy {
 
         let getRequest: any = { from: "", to: "", type: "", mail: false, q: "" };
         let postRequest: any;
-
-        if (!this.advanceSearch.invoiceDate && !this.advanceSearch.dueDate) {
-            getRequest.from = this.dateRange.from;
-            getRequest.to = this.dateRange.to;
-        }
-
+        getRequest.from = this.dateRange.from;
+        getRequest.to = this.dateRange.to;
         getRequest.type = this.type;
         getRequest.mail = event;
         getRequest.q = (this.advanceSearch.q) ? this.advanceSearch.q : "";
 
         postRequest = this.advanceSearch;
-        postRequest.voucherUniqueNames = this.voucherUniqueNames;
+        if (this.generalService.voucherApiVersion === 2) {
+            postRequest.uniqueNames = this.voucherUniqueNames;
+        } else {
+            postRequest.voucherUniqueNames = this.voucherUniqueNames;
+        }
         postRequest.copyTypes = this.copyTypes;
 
         delete postRequest.count;
@@ -132,7 +132,14 @@ export class BulkExportModal implements OnInit, OnDestroy {
                     }
                 });
             }
-            postRequest.sendTo = { recipients: validEmails };
+            if (this.generalService.voucherApiVersion === 2) {
+                postRequest.email = { to: validEmails };
+            } else {
+                postRequest.sendTo = { recipients: validEmails };
+            }
+        } else {
+            postRequest.email = undefined;
+            postRequest.sendTo = undefined;
         }
 
         if (!validRecipients) {
@@ -143,7 +150,7 @@ export class BulkExportModal implements OnInit, OnDestroy {
 
         this.bulkVoucherExportService.bulkExport(getRequest, postRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.isLoading = false;
-            if (response.status === "success" && response.body) {
+            if (response?.status === "success" && response?.body) {
                 if (response.body.type === "base64") {
                     this.closeModal();
                     let blob = this.generalService.base64ToBlob(response.body.file, 'application/zip', 512);
@@ -155,7 +162,7 @@ export class BulkExportModal implements OnInit, OnDestroy {
                 }
             } else {
                 this.toaster.clearAllToaster();
-                this.toaster.errorToast(response.message);
+                this.toaster.errorToast(response?.message);
                 this.closeModal();
             }
         });

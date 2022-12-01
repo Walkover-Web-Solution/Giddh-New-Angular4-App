@@ -28,9 +28,9 @@ export class SettingsBranchService {
         let to = (request.to) ? request.to : "";
 
         let url = this.config.apiUrl + COMPANY_API.GET_ALL_BRANCHES;
-        url = url.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
-        url = url.replace(':from', from);
-        url = url.replace(':to', to);
+        url = url?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
+        url = url?.replace(':from', from);
+        url = url?.replace(':to', to);
 
         let delimiter = '?';
         if (request.query !== undefined) {
@@ -51,7 +51,7 @@ export class SettingsBranchService {
      */
     public CreateBranches(model): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.post(this.config.apiUrl + SETTINGS_BRANCH_API.CREATE_BRANCHES.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(map((res) => {
+        return this.http.post(this.config.apiUrl + SETTINGS_BRANCH_API.CREATE_BRANCHES?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(map((res) => {
             let data: BaseResponse<any, any> = res;
             data.request = model;
             return data;
@@ -63,10 +63,30 @@ export class SettingsBranchService {
     */
     public RemoveBranch(branchUniqueName: string): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.delete(this.config.apiUrl + SETTINGS_BRANCH_API.REMOVE_BRANCH.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':childUniqueName', encodeURIComponent(branchUniqueName))).pipe(map((res) => {
+        return this.http.delete(this.config.apiUrl + SETTINGS_BRANCH_API.REMOVE_BRANCH?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':childUniqueName', encodeURIComponent(branchUniqueName))).pipe(map((res) => {
             let data: BaseResponse<any, any> = res;
             data.queryString = {};
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
+    }
+
+    /**
+     * Updates the branch status
+     *
+     * @param {*} model
+     * @param {string} branchUniqueName
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof SettingsBranchService
+     */
+    public updateBranchStatus(model: any, branchUniqueName: string): Observable<BaseResponse<any, any>> {
+        const companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.patch(this.config.apiUrl + SETTINGS_BRANCH_API.UPDATE_BRANCH_STATUS
+            ?.replace(':companyUniqueName', companyUniqueName)
+            ?.replace(':branchUniqueName', branchUniqueName), model).pipe(
+                map((res) => {
+                    let data: BaseResponse<any, string> = res;
+                    data.queryString = {};
+                    return data;
+                }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
     }
 }

@@ -128,39 +128,6 @@
                         </button>
                     </div>
                 </div>
-                <div class="d-md-none d-flex justify-content-between mr-t1">
-                    <button
-                        mat-raised-button
-                        type="button"
-                        class="btn btn-default bdr mr-0"
-                        (click)="exportDaybook()"
-                        *ngIf="daybookData?.entries?.length > 0"
-                    >
-                        {{ commonLocaleData?.app_export }}
-                    </button>
-                    <div class="expand-collapse-btn">
-                        <a
-                            class="cp"
-                            (click)="toggleExpand()"
-                            [matTooltip]="commonLocaleData?.app_expand_all"
-                            [matTooltipPosition]="'above'"
-                            matTooltipClass="tooltip-black"
-                            *ngIf="!isAllExpanded"
-                        >
-                            <span class="icon-expandIcon"></span>
-                        </a>
-                        <a
-                            class="cp"
-                            (click)="toggleExpand()"
-                            [matTooltip]="commonLocaleData?.app_collapse_all"
-                            [matTooltipPosition]="'above'"
-                            matTooltipClass="tooltip-black"
-                            *ngIf="isAllExpanded"
-                        >
-                            <span class="icon-collapse"></span>
-                        </a>
-                    </div>
-                </div>
                 <div class="d-none clear-filter-responsive mr-t1 clear-filter" *ngIf="showAdvanceSearchIcon">
                     <button mat-raised-button class="btn btn-filter" (click)="initialRequest()">
                         <span class="icon-cross"></span> {{ commonLocaleData?.app_clear_filter }}
@@ -247,7 +214,13 @@
                                 class="text-right"
                                 [attr.data-title]="localeData?.voucher_no"
                             >
-                                {{ entry.voucherNo }}
+                                {{
+                                    entry.voucherNo
+                                        ? entry.voucherNo
+                                        : entry.voucherName === "purchase"
+                                        ? commonLocaleData?.app_not_available
+                                        : ""
+                                }}
                             </td>
                         </ng-container>
                         <ng-container matColumnDef="debit_amount">
@@ -641,7 +614,10 @@
                 </div>
 
                 <!-- pagination -->
-                <div class="mt-1" [hidden]="!daybookData?.entries?.length">
+                <div
+                    class="mt-1"
+                    [hidden]="!daybookData?.entries?.length || daybookData?.totalItems <= daybookData?.count"
+                >
                     <pagination
                         [totalItems]="daybookData?.totalItems"
                         [(ngModel)]="daybookData.page"
@@ -729,7 +705,7 @@
     *ngIf="asideMenuStateForOtherTaxes === 'in'"
     [class]="asideMenuStateForOtherTaxes"
     [taxes]="companyTaxesList"
-    [otherTaxesModal]="updateLedgerComponent.vm.selectedLedger.otherTaxModal"
+    [otherTaxesModal]="updateLedgerComponent?.vm?.selectedLedger?.otherTaxModal"
     [commonLocaleData]="commonLocaleData"
     [@slideInOut]="asideMenuStateForOtherTaxes"
     (closeModal)="toggleOtherTaxesAsidePane(null)"

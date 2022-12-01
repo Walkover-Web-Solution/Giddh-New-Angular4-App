@@ -82,12 +82,19 @@
                                 <div class="col-xs-6 col-sm-6">
                                     <div class="pd-b1" [hidden]="defaultGrpActive">
                                         <label for="isSelfParentUpdt">
-                                            <input
-                                                type="checkbox"
-                                                formControlName="isSubGroup"
+                                            <ngx-switch
+                                                [status]="addGroupForm.get('isSubGroup').value ? true : false"
                                                 id="isSelfParentUpdt"
                                                 name="parentStockGroup"
-                                            />Is it a sub group?</label
+                                                [onText]="'On'"
+                                                [offText]="'Off'"
+                                                [onColor]="bootstrapToggleSwitch?.On"
+                                                [offColor]="bootstrapToggleSwitch?.Off"
+                                                [size]="bootstrapToggleSwitch?.Size"
+                                                (statusChange)="addGroupForm.get('isSubGroup').setValue($event)"
+                                            >
+                                            </ngx-switch>
+                                            Is it a sub group?</label
                                         >
                                     </div>
                                     <div class="form-group">
@@ -119,7 +126,7 @@
                                             type="button"
                                             class="dropdown-toggle form-control text-left"
                                         >
-                                            Selected ({{ taxTempArray.length }})
+                                            Selected ({{ taxTempArray?.length }})
                                             <span class="pull-right"><span class="caret"></span></span>
                                         </button>
                                         <ul *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu">
@@ -138,7 +145,7 @@
                                                     {{ tax.name }}
                                                 </a>
                                             </li>
-                                            <li *ngIf="(companyTaxesList$ | async).length < 1">
+                                            <li *ngIf="(companyTaxesList$ | async)?.length < 1">
                                                 <a class="dropdown-item" (click)="$event.stopPropagation()"
                                                     >No Tax Found</a
                                                 >

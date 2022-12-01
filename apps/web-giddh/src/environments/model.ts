@@ -7,7 +7,6 @@ export interface Environment {
     AppUrl: string;
     ApiUrl: string;
     isElectron: boolean;
-    isCordova: boolean;
     APP_FOLDER: string;
     decorateModuleRef(modRef: NgModuleRef<any>): NgModuleRef<any>;
 }

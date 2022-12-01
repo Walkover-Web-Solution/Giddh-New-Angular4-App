@@ -4,7 +4,6 @@ import { ToasterService } from '../../../services/toaster.service';
 import { ExpenseService } from '../../../services/expences.service';
 import { AppState } from '../../../store';
 import { select, Store } from '@ngrx/store';
-import { FormControl } from '@angular/forms';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
@@ -23,6 +22,7 @@ import { SearchService } from '../../../services/search.service';
 import { MatDialog } from '@angular/material/dialog';
 import { CompanyActions } from '../../../actions/company.actions';
 import { Lightbox } from 'ngx-lightbox';
+import { GeneralService } from '../../../services/general.service';
 
 @Component({
     selector: 'app-expense-details',
@@ -63,7 +63,6 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
     public message: string;
     public actionPettyCashRequestBody: ExpenseActionRequest;
     public selectedItem: ExpenseResults;
-    public rejectReason = new FormControl();
     public actionPettycashRequest: ActionPettycashRequest = new ActionPettycashRequest();
     public imgAttached: boolean = false;
     public imgUploadInprogress: boolean = false;
@@ -145,8 +144,6 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
         query: ''
     };
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    /** This will hold creator name */
-    public byCreator: string = '';
     /** True if account belongs to cash/bank account */
     private cashOrBankEntry: any;
     /** Stores the petty cash entry type */
@@ -164,7 +161,8 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
         private searchService: SearchService,
         private dialog: MatDialog,
         private companyActions: CompanyActions,
-        private lightbox: Lightbox
+        private lightbox: Lightbox,
+        private generalService: GeneralService
     ) {
         this.files = [];
         this.uploadInput = new EventEmitter<UploadInput>();
@@ -184,7 +182,6 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
         this.store.pipe(select(state => state.company && state.company.taxes), takeUntil(this.destroyed$)).subscribe(res => {
             this.companyTaxesList = res || [];
         });
-        this.buildCreatorString();
     }
 
     /**
@@ -340,8 +337,8 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
         this.approveEntryRequestInProcess = true;
         let actionType: ActionPettycashRequest = {
             actionType: 'approve',
-            uniqueName: this.accountEntryPettyCash.uniqueName,
-            accountUniqueName: this.accountEntryPettyCash.particular.uniqueName
+            uniqueName: this.accountEntryPettyCash?.uniqueName,
+            accountUniqueName: this.accountEntryPettyCash.particular?.uniqueName
         };
 
         let ledgerRequest = cloneDeep(this.updateLedgerComponentInstance.saveLedgerTransaction());
@@ -360,7 +357,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
         if (this.accountEntryPettyCash && this.accountEntryPettyCash.attachedFileUniqueNames && this.accountEntryPettyCash.attachedFileUniqueNames.length) {
             ledgerRequest.attachedFile = this.accountEntryPettyCash.attachedFileUniqueNames[0];
         } else {
-            ledgerRequest.attachedFile = (this.DownloadAttachedImgResponse && this.DownloadAttachedImgResponse.length > 0) ? this.DownloadAttachedImgResponse[0].uniqueName : '';
+            ledgerRequest.attachedFile = (this.DownloadAttachedImgResponse && this.DownloadAttachedImgResponse.length > 0) ? this.DownloadAttachedImgResponse[0]?.uniqueName : '';
         }
         if (this.accountEntryPettyCash && this.accountEntryPettyCash.attachedFile) {
             ledgerRequest.attachedFileName = this.accountEntryPettyCash.attachedFile;
@@ -370,11 +367,12 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
 
         this.expenseService.actionPettycashReports(actionType, { ledgerRequest }).pipe(takeUntil(this.destroyed$)).subscribe(res => {
             this.approveEntryRequestInProcess = false;
-            if (res.status === 'success') {
+            if (res?.status === 'success') {
                 this.hideApproveConfirmPopup(false);
-                this.processNextRecord(res);
+                this.toaster.showSnackBar("success", res?.body);
+                this.processNextRecord();
             } else {
-                this.toaster.showSnackBar("error", res.message);
+                this.toaster.showSnackBar("error", res?.message);
                 this.approveEntryRequestInProcess = false;
             }
         }, (error => {
@@ -390,26 +388,9 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
      */
     public prepareApproveRequestObject(pettyCashEntryObj: PettyCashResonse): void {
         if (pettyCashEntryObj && this.actionPettyCashRequestBody) {
-            this.actionPettyCashRequestBody.ledgerRequest.attachedFile = (this.DownloadAttachedImgResponse.length > 0) ? this.DownloadAttachedImgResponse[0].uniqueName : '';
-            this.actionPettyCashRequestBody.ledgerRequest.attachedFileName = (this.DownloadAttachedImgResponse.length > 0) ? this.DownloadAttachedImgResponse[0].name : '';
+            this.actionPettyCashRequestBody.ledgerRequest.attachedFile = (this.DownloadAttachedImgResponse?.length > 0) ? this.DownloadAttachedImgResponse[0]?.uniqueName : '';
+            this.actionPettyCashRequestBody.ledgerRequest.attachedFileName = (this.DownloadAttachedImgResponse?.length > 0) ? this.DownloadAttachedImgResponse[0]?.name : '';
         }
-    }
-
-    /**
-     * Performs action on petty cash entry
-     *
-     * @param {ActionPettycashRequest} actionType
-     * @memberof ExpenseDetailsComponent
-     */
-    public pettyCashAction(actionType: ActionPettycashRequest): void {
-        this.expenseService.actionPettycashReports(actionType, this.actionPettyCashRequestBody).pipe(takeUntil(this.destroyed$)).subscribe(res => {
-            if (res.status === 'success') {
-                this.processNextRecord(res);
-            } else {
-                this.toaster.showSnackBar("error", res.body ?? res.message);
-            }
-            this.modalRef.close();
-        });
     }
 
     /**
@@ -421,24 +402,10 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
     public ngOnChanges(changes: SimpleChanges): void {
         if (changes['selectedRowItem'] && changes['selectedRowItem'].currentValue !== changes['selectedRowItem'].previousValue) {
             this.selectedItem = changes['selectedRowItem'].currentValue;
-            this.getPettyCashEntry(this.selectedItem.uniqueName);
-            this.store.dispatch(this.ledgerActions.setAccountForEdit(this.selectedItem.baseAccount.uniqueName || null));
-            this.buildCreatorString();
+            this.getPettyCashEntry(this.selectedItem?.uniqueName);
+            this.store.dispatch(this.ledgerActions.setAccountForEdit(this.selectedItem.baseAccount?.uniqueName || null));
             this.showEntryAgainstRequired = false;
         }
-    }
-
-    /**
-     * Rejects entry
-     *
-     * @memberof ExpenseDetailsComponent
-     */
-    public submitReject(): void {
-        this.actionPettyCashRequestBody = new ExpenseActionRequest();
-        this.actionPettyCashRequestBody.message = this.rejectReason.value;
-        this.actionPettycashRequest.actionType = 'reject';
-        this.actionPettycashRequest.uniqueName = this.selectedItem.uniqueName;
-        this.pettyCashAction(this.actionPettycashRequest);
     }
 
     /**
@@ -468,17 +435,17 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
         } else if (output.type === 'start') {
             this.imgUploadInprogress = true;
         } else if (output.type === 'done') {
-            if (output.file.response.status === 'success') {
-                this.signatureSrc = ApiUrl + 'company/' + this.companyUniqueName + '/image/' + output.file.response.body.uniqueName;
+            if (output.file.response?.status === 'success') {
+                this.signatureSrc = ApiUrl + 'company/' + this.companyUniqueName + '/image/' + output.file.response?.body?.uniqueName;
                 let img = {
-                    src: ApiUrl + 'company/' + this.companyUniqueName + '/image/' + output.file.response.body.uniqueName
+                    src: ApiUrl + 'company/' + this.companyUniqueName + '/image/' + output.file.response?.body?.uniqueName
                 }
-                this.DownloadAttachedImgResponse.push(output.file.response.body);
-                this.imgAttachedFileName = output.file.response.body.name;
+                this.DownloadAttachedImgResponse.push(output.file.response?.body);
+                this.imgAttachedFileName = output.file.response?.body?.name;
                 this.imageURL.push(img);
                 this.toaster.showSnackBar("success", this.localeData?.file_upload_success);
             } else {
-                this.toaster.showSnackBar("error", output.file.response.message, output.file.response.code);
+                this.toaster.showSnackBar("error", output.file.response?.message, output.file.response?.code);
             }
             this.imgUploadInprogress = false;
             this.imgAttached = true;
@@ -497,7 +464,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
         this.companyUniqueName$.pipe(take(1)).subscribe(a => this.companyUniqueName = a);
         const event: UploadInput = {
             type: 'uploadAll',
-            url: Configuration.ApiUrl + LEDGER_API.UPLOAD_FILE.replace(':companyUniqueName', this.companyUniqueName),
+            url: Configuration.ApiUrl + LEDGER_API.UPLOAD_FILE?.replace(':companyUniqueName', this.companyUniqueName),
             method: 'POST',
             headers: { 'Session-Id': sessionId },
         };
@@ -588,7 +555,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
      */
     private isCashBankAccount(particular: any): boolean {
         if (particular) {
-            return particular.parentGroups.some(parent => parent.uniqueName === 'bankaccounts' || parent.uniqueName === 'cash');
+            return particular.parentGroups.some(parent => parent?.uniqueName === 'bankaccounts' || parent?.uniqueName === 'cash' || (this.generalService.voucherApiVersion === 2 && parent?.uniqueName === 'loanandoverdraft'));
         }
         return false;
     }
@@ -662,7 +629,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
                 if (data && data.body && data.body.results) {
                     const searchResults = data.body.results.map(result => {
                         return {
-                            value: result.uniqueName,
+                            value: result?.uniqueName,
                             label: result.name
                         }
                     }) || [];
@@ -711,7 +678,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
                     if (!this.debtorAccountsSearchResultsPaginationData.query) {
                         const results = response.map(result => {
                             return {
-                                value: result.uniqueName,
+                                value: result?.uniqueName,
                                 label: result.name
                             }
                         }) || [];
@@ -733,7 +700,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
         this.onDebtorAccountSearchQueryChanged('', 1, (response) => {
             this.defaultDebtorAccountSuggestions = response.map(result => {
                 return {
-                    value: result.uniqueName,
+                    value: result?.uniqueName,
                     label: result.name
                 }
             }) || [];
@@ -765,7 +732,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
                 if (data && data.body && data.body.results) {
                     const searchResults = data.body.results.map(result => {
                         return {
-                            value: result.uniqueName,
+                            value: result?.uniqueName,
                             label: result.name
                         }
                     }) || [];
@@ -814,7 +781,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
                     if (!this.creditorAccountsSearchResultsPaginationData.query) {
                         const results = response.map(result => {
                             return {
-                                value: result.uniqueName,
+                                value: result?.uniqueName,
                                 label: result.name
                             }
                         }) || [];
@@ -836,7 +803,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
         this.onCreditorAccountSearchQueryChanged('', 1, (response) => {
             this.defaultCreditorAccountSuggestions = response.map(result => {
                 return {
-                    value: result.uniqueName,
+                    value: result?.uniqueName,
                     label: result.name
                 }
             }) || [];
@@ -862,13 +829,13 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
             const requestObject: any = {
                 q: encodeURIComponent(query),
                 page,
-                group: encodeURIComponent('cash, bankaccounts')
+                group: (this.generalService.voucherApiVersion === 2) ? encodeURIComponent('cash, bankaccounts, loanandoverdraft') : encodeURIComponent('cash, bankaccounts')
             }
             this.searchService.searchAccountV2(requestObject).subscribe(data => {
                 if (data && data.body && data.body.results) {
                     const searchResults = data.body.results.map(result => {
                         return {
-                            value: result.uniqueName,
+                            value: result?.uniqueName,
                             label: result.name
                         }
                     }) || [];
@@ -917,7 +884,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
                     if (!this.cashBankAccountsSearchResultsPaginationData.query) {
                         const results = response.map(result => {
                             return {
-                                value: result.uniqueName,
+                                value: result?.uniqueName,
                                 label: result.name
                             }
                         }) || [];
@@ -939,7 +906,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
         this.onCashBankAccountSearchQueryChanged('', 1, (response) => {
             this.defaultCreditorAccountSuggestions = response.map(result => {
                 return {
-                    value: result.uniqueName,
+                    value: result?.uniqueName,
                     label: result.name
                 }
             }) || [];
@@ -957,20 +924,6 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
-    }
-
-    /**
-     * This will build the creator name string
-     *
-     * @memberof ExpenseDetailsComponent
-     */
-    public buildCreatorString(): void {
-        if (this.selectedItem && this.selectedItem.createdBy) {
-            this.byCreator = this.localeData?.by_creator;
-            this.byCreator = this.byCreator.replace("[CREATOR_NAME]", this.selectedItem.createdBy.name);
-        } else {
-            this.byCreator = "";
-        }
     }
 
     /**
@@ -996,13 +949,14 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
      * This will emit true to show next record in preview mode
      *
      * @private
-     * @param {*} response
+     * @param {*} [event]
      * @memberof ExpenseDetailsComponent
      */
-    private processNextRecord(response: any): void {
-        this.toaster.showSnackBar("success", response?.body);
-        this.rejectReason.setValue("");
-        this.previewNextItem.emit(true);
+    private processNextRecord(event?: any): void {
+        this.modalRef?.close();
+        if (event) {
+            this.previewNextItem.emit(true);
+        }
     }
 
     /**

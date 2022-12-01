@@ -1,16 +1,16 @@
 import { debounceTime, takeUntil } from 'rxjs/operators';
-import { GroupsAccountSidebarComponent } from '../new-group-account-sidebar/groups-account-sidebar.component';
 import { AfterViewChecked, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, OnDestroy, OnInit, Output, Renderer2, ViewChild } from '@angular/core';
-import { GroupsWithAccountsResponse } from '../../../../models/api-models/GroupsWithAccounts';
 import { AppState } from '../../../../store/roots';
 import { Store, select } from '@ngrx/store';
 import { Observable, ReplaySubject, Subject } from 'rxjs';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 import { GroupWithAccountsAction } from '../../../../actions/groupwithaccounts.actions';
-import { GroupAccountSidebarVM } from '../new-group-account-sidebar/VM';
 import { PerfectScrollbarComponent } from 'ngx-perfect-scrollbar';
 import { GeneralService } from "../../../../services/general.service";
-import { TabsetComponent } from 'ngx-bootstrap/tabs';
+import { GeneralActions } from 'apps/web-giddh/src/app/actions/general/general.actions';
+import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
+import { AccountsAction } from 'apps/web-giddh/src/app/actions/accounts.actions';
+import { MasterComponent } from '../master/master.component';
 
 @Component({
     selector: 'app-manage-groups-accounts',
@@ -19,23 +19,19 @@ import { TabsetComponent } from 'ngx-bootstrap/tabs';
 })
 export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterViewChecked {
     @Output() public closeEvent: EventEmitter<boolean> = new EventEmitter(true);
+    /** Instance of master component */
+    @ViewChild('master', {static: false}) public master: MasterComponent;
     @ViewChild('header', { static: true }) public header: ElementRef;
     @ViewChild('grpSrch', { static: true }) public groupSrch: ElementRef;
     public headerRect: any;
     public showForm: boolean = false;
     @ViewChild('myModel', { static: true }) public myModel: ElementRef;
-    @ViewChild('groupsidebar', { static: true }) public groupsidebar: GroupsAccountSidebarComponent;
     public config: PerfectScrollbarConfigInterface = { suppressScrollX: false, suppressScrollY: false };
     @ViewChild('perfectdirective', { static: true }) public directiveScroll: PerfectScrollbarComponent;
-    /** Tabset instance */
-    @ViewChild('staticTabs', { static: true }) public staticTabs: TabsetComponent;
     public breadcrumbPath: string[] = [];
     public breadcrumbUniquePath: string[] = [];
     public myModelRect: any;
     public searchLoad: Observable<boolean>;
-    public groupList$: Observable<GroupsWithAccountsResponse[]>;
-    public currentColumns: GroupAccountSidebarVM;
-    public psConfig: PerfectScrollbarConfigInterface;
     public groupAndAccountSearchString$: Observable<string>;
     private groupSearchTerms = new Subject<string>();
     public searchString: any = '';
@@ -48,10 +44,10 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
     public commonLocaleData: any = {};
     /** True if initial component load */
     public initialLoad: boolean = true;
-    /** This holds active tab */
-    public activeTab: string = "master";
-    /** True if custom fields api needs to be called again */
-    public reloadCustomFields: boolean = false;
+    /** List of top shared groups */
+    public topSharedGroups: any[] = [];
+    /** List of data searched */
+    public searchedMasterData: any[] = [];
 
     // tslint:disable-next-line:no-empty
     constructor(
@@ -59,12 +55,13 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
         private groupWithAccountsAction: GroupWithAccountsAction,
         private cdRef: ChangeDetectorRef,
         private renderer: Renderer2,
-        private _generalService: GeneralService
+        private generalService: GeneralService,
+        private generalAction: GeneralActions,
+        private groupService: GroupService,
+        private accountsAction: AccountsAction
     ) {
         this.searchLoad = this.store.pipe(select(state => state.groupwithaccounts.isGroupWithAccountsLoading), takeUntil(this.destroyed$));
         this.groupAndAccountSearchString$ = this.store.pipe(select(s => s.groupwithaccounts.groupAndAccountSearchString), takeUntil(this.destroyed$));
-        this.psConfig = { maxScrollbarLength: 80 };
-        this.groupList$ = this.store.pipe(select(state => state.groupwithaccounts.groupswithaccounts), takeUntil(this.destroyed$));
     }
 
     @HostListener('window:resize', ['$event'])
@@ -81,7 +78,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
      */
     @HostListener('keyup', ['$event'])
     public onKeyUp(event: any): void {
-        if (!this.keyupInitialized && this._generalService.allowCharactersNumbersSpecialCharacters(event)) {
+        if (!this.keyupInitialized && this.generalService.allowCharactersNumbersSpecialCharacters(event)) {
             this.groupSrch?.nativeElement.focus();
             this.searchString = event.key;
             this.keyupInitialized = true;
@@ -90,20 +87,28 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
 
     // tslint:disable-next-line:no-empty
     public ngOnInit() {
+        this.store.dispatch(this.generalAction.addAndManageClosed());
+        this.store.dispatch(this.groupWithAccountsAction.hideAddNewForm());
+        this.getTopSharedGroups();
         // search groups
         this.groupSearchTerms.pipe(
             debounceTime(700), takeUntil(this.destroyed$))
             .subscribe(term => {
-                if(!this.initialLoad) {
-                    this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(term));
+                if (!this.initialLoad) {
+                    this.store.dispatch(this.groupWithAccountsAction.hideAddNewForm());
+                    this.store.dispatch(this.accountsAction.resetActiveAccount());
+                    this.store.dispatch(this.groupWithAccountsAction.showEditAccountForm());
+                    if (term) {
+                        this.searchMasters(term);
+                    } else {
+                        this.searchedMasterData = [];
+                    }
                 } else {
-                    this.searchLoad.subscribe(response => {
-                        if(!response && this.initialLoad) {
-                            this.initialLoad = false;
-                            this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(term));
-                        }
-                    });
+                    if (term) {
+                        this.searchMasters(term);
+                    }
                 }
+                this.initialLoad = false;
             });
 
         this.groupAndAccountSearchString$.subscribe(s => {
@@ -114,28 +119,21 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
             this.breadcrumbUniquePath = [];
         });
 
-        this._generalService.invokeEvent.pipe(takeUntil(this.destroyed$)).subscribe(value => {
+        this.generalService.invokeEvent.pipe(takeUntil(this.destroyed$)).subscribe(value => {
             if (value[0] === "accountdeleted") {
                 if (this.searchString) {
                     this.store.dispatch(this.groupWithAccountsAction.resetAddAndMangePopup());
-                    this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(this.searchString));
                 }
             }
         });
 
-        this.groupList$.subscribe(response => {
-            if (this.keyupInitialized) {
-                setTimeout(() => {
-                    this.groupSrch?.nativeElement.focus();
-                }, 200);
-            }
-        });
+        if (this.keyupInitialized) {
+            setTimeout(() => {
+                this.groupSrch?.nativeElement.focus();
+            }, 200);
+        }
 
-        this.store.pipe(select(state => state.groupwithaccounts.activeTab), takeUntil(this.destroyed$)).subscribe(activeTab => {
-            if(activeTab !== null && activeTab !== undefined) {
-                this.staticTabs.tabs[activeTab].active = true;
-            }
-        });
+        document.querySelector('body')?.classList?.add('master-page');
     }
 
     public ngAfterViewChecked() {
@@ -155,12 +153,15 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
             this.store.dispatch(this.groupWithAccountsAction.resetAddAndMangePopup());
         }
 
+        this.master?.showTopLevelGroups();
         this.breadcrumbPath = [];
         this.breadcrumbUniquePath = [];
         this.renderer.setProperty(this.groupSrch?.nativeElement, 'value', '');
+        this.searchString = "";
     }
 
     public closePopupEvent() {
+        this.store.dispatch(this.generalAction.addAndManageClosed());
         this.store.dispatch(this.groupWithAccountsAction.HideAddAndManageFromOutside());
         this.closeEvent.emit(true);
     }
@@ -168,9 +169,10 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+        document.querySelector('body')?.classList?.remove('master-page');
     }
 
-    public ScrollToRight() {
+    public scrollToRight(): void {
         if (this.directiveScroll) {
             this.directiveScroll.directiveRef.scrollToRight();
         }
@@ -182,29 +184,33 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
     }
 
     /**
-     * This will show custom fields tab if clicked create custom field from add/update account
+     * Get master data based on search
      *
-     * @param {boolean} event
+     * @private
+     * @param {*} term
      * @memberof ManageGroupsAccountsComponent
      */
-    public showCustomFieldsTab(event: boolean) {
-        if(event) {
-            this.staticTabs.tabs[1].active = true;
-        }
+    private searchMasters(term: any): void {
+        this.searchedMasterData = [];
+        this.groupService.GetGroupsWithAccounts(term).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
+            if (response?.status === "success") {
+                this.searchedMasterData = response?.body;
+            }
+        });
     }
 
     /**
-     * Callback for tab change
+     * Get top shared groups
      *
-     * @param {string} tab
+     * @private
      * @memberof ManageGroupsAccountsComponent
      */
-    public onTabChange(tab: string): void {
-        if(tab === "master" && this.activeTab === "custom") {
-            this.reloadCustomFields = true;
-        } else {
-            this.reloadCustomFields = false;
-        }
-        this.activeTab = tab;
+    private getTopSharedGroups(): void {
+        this.topSharedGroups = [];
+        this.groupService.getTopSharedGroups().pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
+            if (response?.status === "success") {
+                this.topSharedGroups = response?.body?.results;
+            }
+        });
     }
 }

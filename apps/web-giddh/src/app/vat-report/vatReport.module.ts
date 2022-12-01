@@ -24,23 +24,21 @@ import { TaxSidebarModule } from '../shared/tax-sidebar/tax-sidebar.module';
         VatReportComponent,
         VatReportTransactionsComponent
     ],
-    providers: [
-
-    ],
+    providers: [],
     imports: [
         VatReportRoutingModule,
-        TabsModule,
+        TabsModule.forRoot(),
         CommonModule,
-        TooltipModule,
-        BsDatepickerModule,
+        TooltipModule.forRoot(),
+        BsDatepickerModule.forRoot(),
         CurrencyModule,
-        BsDropdownModule,
+        BsDropdownModule.forRoot(),
         ClickOutsideModule,
-        DatepickerModule,
+        DatepickerModule.forRoot(),
         FormsModule,
         Daterangepicker,
-        PaginationModule,
-        ModalModule,
+        PaginationModule.forRoot(),
+        ModalModule.forRoot(),
         ElementViewChildModule,
         InvoiceModule,
         ShSelectModule,
@@ -49,8 +47,7 @@ import { TaxSidebarModule } from '../shared/tax-sidebar/tax-sidebar.module';
     ],
     exports: [
         VatReportRoutingModule
-    ],
-    entryComponents: [PaginationComponent]
+    ]
 })
 export class VatReportModule {
 }

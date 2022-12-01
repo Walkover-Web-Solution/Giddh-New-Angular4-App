@@ -1,4 +1,4 @@
-@import "../../../../assets/css/color.scss";
+@import "../../../../assets/css/mixin-common.scss";
 .flex-fill {
     flex: 1 1 auto;
 }
@@ -21,7 +21,7 @@
 
 .td-search-box div i {
     margin-top: 1px;
-    color: $wild-blue-yonder;
+    color: var(--color-blue);
     padding-right: 8px;
     cursor: pointer;
     display: flex;
@@ -38,20 +38,20 @@
     min-width: 100%;
     padding: 11px;
     padding-right: 40px;
-    color: $nero;
+    color: var(--color-nero);
     border: none;
-    background-color: $gray-95;
+    background-color: var(--color-wild-sand);
     border-radius: 5px;
 }
 
 .p-modal-tooltip {
     position: absolute;
-    background-color: $white;
+    background-color: var(--color-white);
     z-index: 1000;
     width: 257px;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--color-iron);
     border-radius: 4px;
-    box-shadow: 0 7px 24px $black-russian;
+    box-shadow: 0 7px 24px var(--color-primary-common-box-shadow);
 }
 
 .account-detail-modal-div {
@@ -63,7 +63,7 @@
     border-right: 0;
     padding: 11px 10px 10px 10px;
     width: 100%;
-    background: $chablis;
+    background: var(--color-primary-purchase-register-expand-account-detail-custom-header-background);
 }
 
 .account-detail-custom-title {
@@ -77,7 +77,7 @@
 }
 
 .custom-detail h4 {
-    color: $gray;
+    color: var(--color-abbey);
     margin-top: 7px;
     font-size: 14px !important;
     font-family: "opensans-regular" !important;
@@ -85,11 +85,11 @@
 
 .height-82px {
     padding: 10px 10px 15px 10px;
-    border-top: 1px solid $gainsboro;
+    border-top: 1px solid var(--color-iron);
 }
 
 ul.list-unstyled li a {
-    color: $black;
+    color: var(--color-nero);
 }
 
 .li-link {
@@ -97,7 +97,7 @@ ul.list-unstyled li a {
 }
 
 .btn-group > a {
-    color: $night-rider;
+    color: var(--color-nero);
 }
 
 .ac-detail,
@@ -113,7 +113,7 @@ ul.list-unstyled li a {
 }
 
 .text-purple {
-    color: $chetwode-blue !important;
+    color: var(--color-blue) !important;
 }
 
 .responsive {
@@ -172,7 +172,7 @@ ul#dropdown-nested li .caret {
 }
 
 .custom-month-select li:hover a.dropdown-item {
-    background-color: $whisper;
+    background-color: var(--color-dark-fog);
 }
 
 .custom-month-select button.btn {
@@ -207,11 +207,11 @@ table th {
 }
 .icon-pointer {
     cursor: pointer;
-    color: $wild-blue-yonder;
+    color: var(--color-blue);
     margin-left: 6px;
 }
 .icon-pointer .active-text-color {
-    color: $deep-sky-blue;
+    color: var(--color-blue);
 }
 .table-middle th .d-flex {
     align-items: center;
@@ -227,43 +227,57 @@ table th {
     justify-content: center;
     -webkit-box-align: center;
     align-items: center;
-    background-color: $white;
+    background-color: var(--color-white);
     font-size: 18px;
-    color: $midnight-blue;
-    border: 1px solid $gainsboro;
+    color: var(--color-giddh-blue);
+    border: 1px solid var(--color-primary-button-border);
     border-radius: 5px;
     &:hover {
-        background: $chetwode-blue;
-        color: $white;
+        background: var(--color-blue);
+        color: var(--color-white);
     }
 }
 .top-bar {
     .icon-options {
         width: 36px;
         height: 36px;
-        border: 1px solid $gainsboro;
+        border: 1px solid var(--color-primary-button-border);
         border-radius: 5px;
-        background-color: $white;
-        color: $midnight-blue;
+        background-color: var(--color-white);
+        color: var(--color-giddh-blue);
         font-size: 20px;
         position: relative;
         padding: 7px;
         &:hover {
-            background: $chetwode-blue;
-            color: $white;
-            border-color: $chetwode-blue;
+            background: var(--color-blue);
+            color: var(--color-white);
+            border-color: var(--color-blue);
         }
     }
     .btn-group.d-flex.open.show {
         display: flex !important;
     }
+    .top-bar-content {
+        .top-bar-content-right-side {
+            .back-btn {
+                position: relative;
+                top: 1px;
+                right: 10px;
+                background-color: var(--color-secondary-button-background);
+
+                &:hover {
+                    background-color: var(--color-secondary-button-background-hover);
+                }
+            }
+        }
+    }
 }
 
 .verticle-align-top a {
-    color: $chetwode-blue;
+    color: var(--color-blue);
 
     &:hover {
-        color: $deep-sky-blue;
+        color: var(--color-blue);
     }
 }
 
@@ -278,19 +292,19 @@ table th {
     left: 0;
     width: 100%;
     padding: 7px 0px 10px 36px !important;
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--color-common-secondary-border);
     .nav-report {
         li {
             font-family: "opensans-semibold";
             font-size: 20px;
             a {
-                color: $midnight-blue;
+                color: var(--color-giddh-blue);
             }
         }
     }
     .custom-month-select {
         font-family: "opensans-semibold";
-        color: $midnight-blue;
+        color: var(--color-giddh-blue);
         .btn {
             font-size: 19px;
             padding: 0;
@@ -309,6 +323,14 @@ table th {
             }
         }
     }
+}
+
+.btn-filters {
+    @include common-filters(
+        var(--color-giddh-blue),
+        var(--color-primary-filter-background),
+        1px solid var(--color-primary-button-border)
+    );
 }
 
 @media screen and (max-width: 768px) {

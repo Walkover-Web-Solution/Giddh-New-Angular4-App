@@ -193,7 +193,7 @@
                                         type="text"
                                         [ngClass]="{ 'gstin-width': isBranch || isOnBoardingInProgress }"
                                         class="form-control"
-                                        autocomplete="false"
+                                        autocomplete="disabled"
                                         required
                                         #gstNumberField
                                         (change)="handleGstChange(gstNumberField, states)"
@@ -240,24 +240,47 @@
                             >
                                 <div class="">
                                     <label for="taxes-dd">{{ localeData?.applicable_tax }}</label>
-                                    <div class="btn-group btn-block select-caret invoice-btn" dropdown>
+                                    <div
+                                        class="btn-group btn-block select-caret invoice-btn"
+                                        dropdown
+                                        #dropdown="bs-dropdown"
+                                        (blur)="dropdown.hide()"
+                                    >
                                         <button
-                                            dropdownToggle
+                                            (focus)="dropdown.show()"
+                                            (click)="dropdown.show()"
+                                            (clickOutside)="dropdown.hide()"
                                             type="button"
-                                            class="form-control text-left btn-block dropdown-toggle"
+                                            class="form-control text-left btn-block dropdown-toggle applicable-tax-btn"
+                                            [ngClass]="{ 'select-tax-placeholder': !selectedTaxes?.length }"
                                         >
                                             {{ localeData?.select_taxes }}
                                             <span class="select-drop pull-right mr-t1"></span>
                                         </button>
-                                        <ul class="dropdown-menu dropdown-menu-2 width-100" role="menu">
+                                        <ul
+                                            class="dropdown-menu dropdown-menu-2 width-100"
+                                            role="menu"
+                                            (click)="$event.stopPropagation()"
+                                        >
                                             <li *ngIf="taxesList?.length == 0">
                                                 {{ commonLocaleData?.app_no_result_found }}
                                             </li>
-                                            <li *ngFor="let tax of taxesList">
+                                            <li
+                                                *ngFor="let tax of taxesList; let last = last"
+                                                (click)="selectingApplicableTaxes(!tax.isSelected, tax, $event)"
+                                                (keydown.enter)="selectingApplicableTaxes(!tax.isSelected, tax, $event)"
+                                                class="select-applicable-tax-list"
+                                                #selectedApplicableTaxList
+                                            >
                                                 <input
                                                     type="checkbox"
                                                     (click)="selectApplicableTaxes(tax, $event)"
                                                     [checked]="tax?.isSelected"
+                                                    (focus)="selectApplicableTaxesFocus(selectedApplicableTaxList)"
+                                                    (blur)="
+                                                        selectApplicableTaxesBlur(selectedApplicableTaxList);
+                                                        closeApplicableTaxesDropdown(last)
+                                                    "
                                                 />
                                                 {{ tax?.label }}
                                             </li>
@@ -287,9 +310,8 @@
                                             <input
                                                 type="text"
                                                 class="form-control"
-                                                autocomplete="false"
                                                 [placeholder]="commonLocaleData?.app_pin_code"
-                                                autocomplete="false"
+                                                autocomplete="disabled"
                                                 name="pinCodeNum"
                                                 decimalDigitsDirective
                                                 [preventDecimal]="true"
@@ -315,6 +337,7 @@
                                     >
                                 </ng-template>
                                 <textarea
+                                    autocomplete="disabled"
                                     #address
                                     [required]="selectedBusinesstype === 'Registered' || isWarehouse"
                                     (focus)="isWarehouse ? removeAddressFieldError() : ''"
@@ -329,9 +352,11 @@
                         <div class="col-12">
                             <p class="change-preference">{{ localeData?.onboarding_note }}</p>
                             <br />
-                            <p class="taxation-not-supported" *ngIf="!formFields['taxName']">
-                                {{ localeData?.tax_reports_note }}
-                            </p>
+                            <p
+                                class="taxation-not-supported"
+                                [innerHTML]="localeData?.tax_reports_note"
+                                *ngIf="!formFields['taxName']"
+                            ></p>
                         </div>
                         <div class="col-12 d-flex mr-t5">
                             <button class="btn btn-primary" (click)="back(isBranch)">

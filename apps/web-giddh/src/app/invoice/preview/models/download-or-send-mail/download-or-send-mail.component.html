@@ -6,7 +6,7 @@
 >
     <div class="modal-header clearfix" *ngIf="!isMobileScreen">
         <span *ngIf="showPdfWrap">
-            <button type="button" class="btn btn-md btn-info mr-r1" *ngIf="showEditButton" (click)="goToedit('sales')">
+            <button type="button" class="btn btn-md btn-info mr-r1" *ngIf="showEditButton" (click)="editVoucher()">
                 {{ commonLocaleData?.app_edit }}
             </button>
             <button
@@ -65,24 +65,49 @@
                 <div [hidden]="!smsTabActive" class="mr-b2">
                     <textarea class="form-control" #smsList [placeholder]="localeData?.enter_mobile_no"></textarea>
                 </div>
-                <div class="clearfix" [hidden]="smsTabActive">
-                    <h3 class="font-16 mr-b05">{{ localeData?.invoice_copy }}</h3>
-                    <hr />
-                    <div class="checkbox">
-                        <label
-                            ><input type="checkbox" value="Transport" (change)="onSelectInvoiceCopy($event)" />{{
-                                localeData?.transport
-                            }}</label
+                <ng-container *ngIf="currentVoucherFilter === 'invoices'">
+                    <div class="clearfix" [hidden]="smsTabActive">
+                        <h3 class="font-16 mr-b05">{{ localeData?.invoice_copy }}</h3>
+                        <hr />
+                        <div class="checkbox" *ngIf="voucherApiVersion === 2">
+                            <label
+                                ><input
+                                    type="checkbox"
+                                    value="Original"
+                                    checked
+                                    (change)="onSelectInvoiceCopy($event)"
+                                />{{ localeData?.original }}</label
+                            >
+                        </div>
+                        <div class="checkbox">
+                            <label
+                                ><input type="checkbox" value="Transport" (change)="onSelectInvoiceCopy($event)" />{{
+                                    localeData?.transport
+                                }}</label
+                            >
+                        </div>
+                        <div class="checkbox">
+                            <label
+                                ><input type="checkbox" value="Customer" (change)="onSelectInvoiceCopy($event)" />{{
+                                    commonLocaleData?.app_customer
+                                }}</label
+                            >
+                        </div>
+                        <div
+                            class="checkbox"
+                            *ngIf="voucherApiVersion === 2 && voucherHasAttachments && downloadTabActive"
                         >
+                            <label
+                                ><input
+                                    name="attachment"
+                                    type="checkbox"
+                                    value="Attachment"
+                                    [(ngModel)]="isAttachment"
+                                />{{ localeData?.attachment }}</label
+                            >
+                        </div>
                     </div>
-                    <div class="checkbox">
-                        <label
-                            ><input type="checkbox" value="Customer" (change)="onSelectInvoiceCopy($event)" />{{
-                                commonLocaleData?.app_customer
-                            }}</label
-                        >
-                    </div>
-                </div>
+                </ng-container>
 
                 <div class="clearfix">
                     <button
@@ -97,7 +122,7 @@
                         type="button"
                         class="btn btn-sm btn-success"
                         (click)="downloadInvoice()"
-                        [disabled]="!invoiceType.length"
+                        [disabled]="!invoiceType?.length && !isAttachment"
                         [hidden]="emailTabActive || smsTabActive"
                     >
                         {{ localeData?.download_invoice }}
@@ -196,6 +221,7 @@
             <div class="clearfix mt-2">
                 <button
                     [hidden]="!emailTabActive"
+                    [disabled]="!emailList?.value || (currentVoucherFilter === 'invoices' && !invoiceType?.length)"
                     type="button"
                     class="btn btn-sm btn-success"
                     (click)="onSendInvoiceOnMail(emailList.value)"
@@ -206,7 +232,7 @@
                     type="button"
                     class="btn btn-sm btn-success"
                     (click)="downloadInvoice()"
-                    [disabled]="!invoiceType.length"
+                    [disabled]="!invoiceType?.length && !isAttachment && currentVoucherFilter === 'invoices'"
                     [hidden]="emailTabActive || smsTabActive"
                 >
                     {{ localeData?.download_invoice }}

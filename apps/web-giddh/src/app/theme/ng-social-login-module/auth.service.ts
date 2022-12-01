@@ -15,7 +15,7 @@ export class AuthServiceConfig {
     constructor(providers: AuthServiceConfigItem[], autoLogin: boolean) {
         this.autoLogin = autoLogin;
         // tslint:disable-next-line:prefer-for-of
-        for (let i = 0; i < providers.length; i++) {
+        for (let i = 0; i < providers?.length; i++) {
             const element = providers[i];
             this.providers.set(element.id, element.provider);
         }

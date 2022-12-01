@@ -114,17 +114,17 @@ export class UpdateLedgerDiscountComponent implements OnInit, OnChanges, OnDestr
      * @memberof UpdateLedgerDiscountComponent
      */
     private processDiscountList(): void {
-        this.discountsList.forEach(acc => {
+        this.discountsList?.forEach(acc => {
             if (this.discountAccountsDetails) {
-                let hasItem = this.discountAccountsDetails.some(s => s.discountUniqueName === acc.uniqueName);
+                let hasItem = this.discountAccountsDetails.some(s => s.discountUniqueName === acc?.uniqueName);
                 if (!hasItem) {
                     let obj: LedgerDiscountClass = new LedgerDiscountClass();
                     obj.amount = acc.discountValue;
                     obj.discountValue = acc.discountValue;
                     obj.discountType = acc.discountType;
                     obj.isActive = false;
-                    obj.particular = acc.linkAccount.uniqueName;
-                    obj.discountUniqueName = acc.uniqueName;
+                    obj.particular = acc.linkAccount?.uniqueName;
+                    obj.discountUniqueName = acc?.uniqueName;
                     obj.name = acc.name;
                     this.discountAccountsDetails.push(obj);
                 }
@@ -167,14 +167,14 @@ export class UpdateLedgerDiscountComponent implements OnInit, OnChanges, OnDestr
      * @returns {number}
      */
     public generateTotal(): number {
-        let percentageListTotal = this.discountAccountsDetails.filter(f => f.isActive)
-            .filter(s => s.discountType === 'PERCENTAGE')
+        let percentageListTotal = this.discountAccountsDetails?.filter(f => f.isActive)
+            ?.filter(s => s.discountType === 'PERCENTAGE')
             .reduce((pv, cv) => {
                 return Number(cv.discountValue) ? Number(pv) + Number(cv.discountValue) : Number(pv);
             }, 0) || 0;
 
-        let fixedListTotal = this.discountAccountsDetails.filter(f => f.isActive)
-            .filter(s => s.discountType === 'FIX_AMOUNT')
+        let fixedListTotal = this.discountAccountsDetails?.filter(f => f.isActive)
+            ?.filter(s => s.discountType === 'FIX_AMOUNT')
             .reduce((pv, cv) => {
                 return Number(cv.discountValue) ? Number(pv) + Number(cv.discountValue) : Number(pv);
             }, 0) || 0;

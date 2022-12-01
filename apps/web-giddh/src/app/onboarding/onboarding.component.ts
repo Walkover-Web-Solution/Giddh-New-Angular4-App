@@ -1,15 +1,12 @@
 import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { GeneralService } from '../services/general.service';
-import { take, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../store';
 import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
-import { StateDetailsRequest } from 'apps/web-giddh/src/app/models/api-models/Company';
-import { CompanyActions } from 'apps/web-giddh/src/app/actions/company.actions';
 import { ReplaySubject } from 'rxjs';
 import { GeneralActions } from '../actions/general/general.actions';
-import { SUPPORT_TEAM_NUMBERS } from '../app.constant';
 
 @Component({
     selector: 'onboarding-component',
@@ -24,8 +21,6 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public imgPath: string = '';
     public companyCountry: string;
-    /** This will hold displayed support team number */
-    public supportTeamNumber: any = [];
     /* This will hold local JSON data */
     public localeData: any = {};
     /* This will hold common JSON data */
@@ -35,21 +30,13 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
         private _router: Router, private _generalService: GeneralService,
         private store: Store<AppState>,
         private settingsProfileActions: SettingsProfileActions,
-        private companyActions: CompanyActions,
         private generalActions: GeneralActions
     ) {
         
     }
 
     public ngOnInit() {
-        this.supportTeamNumber = SUPPORT_TEAM_NUMBERS[Math.floor(Math.random() * SUPPORT_TEAM_NUMBERS.length)];
-        this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
-        let companyUniqueName = null;
-        this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
-        let stateDetailsRequest = new StateDetailsRequest();
-        stateDetailsRequest.companyUniqueName = companyUniqueName;
-        stateDetailsRequest.lastState = 'pages/onboarding';
-        this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
+        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
 
         this.store.pipe(select(s => s.session.currentCompanyCurrency), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
@@ -82,9 +69,7 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     public scheduleNow() {
-        if (window['SOE'] !== undefined) {
-            window['SOE'].prototype.toggleLightBox('giddhbooks');
-        }
+        this.store.dispatch(this.generalActions.isOpenCalendlyModel(true));
     }
 
     public sidebarStatusChange(event) {

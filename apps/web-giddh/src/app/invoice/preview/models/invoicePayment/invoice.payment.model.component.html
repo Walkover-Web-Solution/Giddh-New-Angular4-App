@@ -1,7 +1,7 @@
 <div>
     <div class="modal-header">
         <h3>{{ localeData?.perform_payment_action }}</h3>
-        <span aria-hidden="true" class="close" data-dismiss="modal" (click)="onCancel()">×</span>
+        <button aria-hidden="true" class="close" data-dismiss="modal" (click)="onCancel()">×</button>
     </div>
 
     <div class="modal-body clearfix" id="export-body" autocomplete="off">
@@ -24,13 +24,16 @@
                     <input
                         type="text"
                         class="form-control"
-                        decimalDigitsDirective
                         [(ngModel)]="paymentActionFormObj.amount"
                         [placeholder]="localeData?.enter_amount"
                         name="amount"
                         #amountField
                         autocomplete="off"
                         required
+                        [mask]="inputMaskFormat"
+                        [prefix]="amountCurrency"
+                        [validation]="false"
+                        [allowUnsupportedPrefix]="true"
                     />
                 </div>
             </div>

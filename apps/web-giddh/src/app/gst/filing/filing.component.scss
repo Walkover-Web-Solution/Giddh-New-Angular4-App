@@ -1,13 +1,11 @@
-@import "../../../../../web-giddh/src/assets/css/color.scss";
-
 :host ::ng-deep .dropdown-menu > li > a:hover {
-    color: $chetwode-blue;
-    background: $whisper;
+    color: var(--color-blue);
+    background: var(--color-dark-fog);
 }
 /* my css */
 .successful-file-detail h3,
 .gst-return-date h3 {
-    color: $night-rider;
+    color: var(--color-nero);
     font-size: 24px;
     margin: 20px 0 7px;
 }
@@ -17,6 +15,6 @@
     font-size: 14px;
 }
 .file-your-return {
-    border: 1px solid $chetwode-blue;
+    border: 1px solid var(--color-blue);
     border-radius: 2px;
 }

@@ -11,7 +11,7 @@ export interface ChangeEvent {
 @Component({
     selector: 'virtual-scroll',
     template: `
-    <div class="total-padding" [style.height]="(items.length === 0 ? noResultLinkEnabled ? NoFoundMsgHeight + NoFoundLinkHeight : NoFoundMsgHeight : scrollHeight) + 'px'"></div>
+    <div class="total-padding" [style.height]="(items?.length === 0 ? noResultLinkEnabled ? NoFoundMsgHeight + NoFoundLinkHeight : NoFoundMsgHeight : scrollHeight) + 'px'"></div>
     <div class="scrollable-content" #content [style.transform]="'translateY(' + topPadding + 'px)'" [style.padding-top.px]="salesShSelectPading">
       <ng-content></ng-content>
     </div>
@@ -31,6 +31,7 @@ export interface ChangeEvent {
       width: 100%;
       height: 100%;
       position: absolute;
+      background-color: var(--color-dropdown-primary-background);
     }
 
     .total-padding {
@@ -93,7 +94,9 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
      * @memberof VirtualScrollComponent
      */
     handleScroll(): void {
-        this.refresh();
+        if (this.element?.nativeElement.scrollTop >= 0) {
+            this.refresh();
+        }
         if (this.element && this.element?.nativeElement && this.isPaginationEnabled) {
             // Scrolled to bottom
             if ((this.element?.nativeElement.scrollHeight - this.element?.nativeElement.scrollTop) === this.element?.nativeElement.clientHeight) {
@@ -128,7 +131,7 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
 
     public ngAfterViewInit() {
         if (this.selectedValues && this.selectedValues.length > 0) {
-            let item = this.items.find(p => p.value === (this.selectedValues.length > 0 ? this.selectedValues[0].value : (this.items.length > 0 ? this.items[0].value : null)));
+            let item = this.items?.find(p => p.value === (this.selectedValues.length > 0 ? this.selectedValues[0].value : (this.items?.length > 0 ? this.items[0].value : null)));
             setTimeout(() => {
                 this.scrollInto(item);
             }, 50);
@@ -141,15 +144,15 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
 
     public scrollInto(item: any) {
         let index: number = (this.items || []).indexOf(item);
-        if (index < 0 || index >= (this.items || []).length) {
+        if (index < 0 || index >= (this.items || [])?.length) {
             return;
         }
 
         let d = this.calculateDimensions();
         if ((index + 1) < d.itemsPerCol) {
             this.element.nativeElement.scrollTop = 0;
-        } else if (((this.items || []).length - d.itemsPerCol) > 0 && ((this.items || []).length - d.itemsPerCol) < index) {
-            this.element.nativeElement.scrollTop = Math.floor(((this.items || []).length - d.itemsPerCol) / d.itemsPerRow) * d.childHeight;
+        } else if (((this.items || [])?.length - d.itemsPerCol) > 0 && ((this.items || [])?.length - d.itemsPerCol) < index) {
+            this.element.nativeElement.scrollTop = Math.floor(((this.items || [])?.length - d.itemsPerCol) / d.itemsPerRow) * d.childHeight;
         } else {
             this.element.nativeElement.scrollTop = Math.floor(index / d.itemsPerRow) * d.childHeight;
         }
@@ -177,8 +180,8 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
     }
 
     public getNextHilightledOption(): IOption {
-        let index = this.items.findIndex(p => p.isHilighted);
-        if (index < this.items.length) {
+        let index = this.items?.findIndex(p => p.isHilighted);
+        if (index < this.items?.length) {
             return this.items[index + 1];
         } else {
             return this.items[0];
@@ -189,7 +192,7 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
         let offsetTop;
         let itemsPerRow;
         let children = this.contentElementRef?.nativeElement.children;
-        for (itemsPerRow = 0; itemsPerRow < children.length; itemsPerRow++) {
+        for (itemsPerRow = 0; itemsPerRow < children?.length; itemsPerRow++) {
             if (offsetTop !== undefined && offsetTop !== children[itemsPerRow].offsetTop) {
                 break;
             }
@@ -203,7 +206,7 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
         let content = this.contentElementRef?.nativeElement;
 
         let items = this.items || [];
-        let itemCount = items.length === 0 ? 2 : this.items.length;
+        let itemCount = items?.length === 0 ? 2 : this.items?.length;
         let viewWidth = el.clientWidth - this.scrollbarWidth;
         let viewHeight = el.clientHeight - this.scrollbarHeight;
 

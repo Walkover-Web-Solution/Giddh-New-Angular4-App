@@ -1,0 +1,103 @@
+.activity-container {
+    .custom-datepicker-wrapper {
+        display: flex;
+        text-align: center;
+        justify-content: center;
+    }
+    .clear-filter {
+        color: var(--color-giddh-blue);
+        cursor: pointer;
+    }
+    .activity-filter-wrap {
+        display: flex;
+        align-items: center;
+        padding-left: 9px;
+        padding-top: 9px;
+    }
+    .filter-button {
+        float: left;
+        width: 15%;
+    }
+    .table-content {
+        max-height: calc(100vh - 200px);
+        overflow-y: auto;
+        height: calc(100vh - 200px);
+    }
+    .activity-table {
+        .activity-td {
+            width: 18%;
+            position: relative;
+        }
+        .history-icon {
+            display: none;
+        }
+        .mat-column-history {
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+        tr {
+            &:hover {
+                .history-icon {
+                    display: inline-block !important;
+                    z-index: 9999;
+                }
+            }
+        }
+        td {
+            .history-icon {
+                padding: 13px 20px;
+                width: 66px;
+                float: left;
+            }
+        }
+    }
+    .activity-child-table {
+        .activity-history {
+            min-height: 0;
+        }
+        .mat-column-operation {
+            padding-right: 0;
+            margin-right: 0;
+        }
+        .history-child-row {
+            position: relative;
+            .history-checkbox {
+                padding: 13px 0px;
+                z-index: 99;
+                position: relative;
+            }
+        }
+        .compare-json {
+            text-decoration: underline;
+            text-decoration: underline;
+            color: var(--color-blue);
+            z-index: 99;
+            padding: 13px 20px;
+            &:hover {
+                color: var(--color-blue);
+            }
+        }
+        .child-td-name {
+            padding-left: 30px !important;
+        }
+    }
+}
+@media (max-width: 1180px) {
+    .activity-container {
+        .activity-table {
+            .activity-td {
+                width: 16.9%;
+            }
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .activity-container {
+        .activity-table {
+            .activity-td {
+                width: 16%;
+            }
+        }
+    }
+}

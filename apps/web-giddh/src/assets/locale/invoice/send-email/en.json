@@ -2,5 +2,6 @@
     "page_heading": "Send Mail",
     "enter_email_address": "Enter email addresses",
     "invoice_copy": "Invoice Copy",
-    "transport": "Transport"
+    "transport": "Transport",
+    "original": "Original"
 }

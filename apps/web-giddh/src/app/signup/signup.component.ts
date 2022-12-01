@@ -1,10 +1,10 @@
 import { take, takeUntil } from "rxjs/operators";
 import { LoginActions } from "../actions/login.action";
 import { AppState } from "../store";
-import { Component, Inject, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import { Component, Inject, NgZone, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ModalDirective } from "ngx-bootstrap/modal";
-import { Configuration } from "../app.constant";
+import { Configuration, OTP_PROVIDER_URL } from "../app.constant";
 import { Store, select } from "@ngrx/store";
 import { Observable, ReplaySubject } from "rxjs";
 import {
@@ -23,6 +23,11 @@ import { IOption } from "../theme/ng-virtual-select/sh-options.interface";
 import { DOCUMENT } from "@angular/common";
 import { userLoginStateEnum } from "../models/user-login-state";
 import { contriesWithCodes } from "../shared/helpers/countryWithCodes";
+import { LoaderService } from "../loader/loader.service";
+import { ToasterService } from "../services/toaster.service";
+import { AuthenticationService } from "../services/authentication.service";
+
+declare var initSendOTP: any;
 
 @Component({
     selector: "signup",
@@ -34,7 +39,7 @@ export class SignupComponent implements OnInit, OnDestroy {
     @ViewChild("emailVerifyModal", { static: true }) public emailVerifyModal: ModalDirective;
     public isLoginWithEmailSubmited$: Observable<boolean>;
     @ViewChild("mobileVerifyModal", { static: true }) public mobileVerifyModal: ModalDirective;
-    @ViewChild("twoWayAuthModal", { static: true }) public twoWayAuthModal: ModalDirective;
+    @ViewChild("twoWayAuthModal", { static: false }) public twoWayAuthModal: ModalDirective;
     public urlPath: string = "";
     public isSubmited: boolean = false;
     public mobileVerifyForm: FormGroup;
@@ -60,19 +65,22 @@ export class SignupComponent implements OnInit, OnDestroy {
     public retryCount: number = 0;
     public signupVerifyEmail$: Observable<string>;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    /** Used only to refer in the template */
-    public isCordova: boolean = isCordova;
     /** To Observe is google login inprocess */
     public isLoginWithGoogleInProcess$: Observable<boolean>;
+    public isLoginWithPasswordIsShowVerifyOtp$: Observable<boolean>;
 
     // tslint:disable-next-line:no-empty
     constructor(private fb: FormBuilder,
         private store: Store<AppState>,
         private loginAction: LoginActions,
         private authService: AuthService,
-        @Inject(DOCUMENT) private document: Document
+        @Inject(DOCUMENT) private document: Document,
+        private loaderService: LoaderService,
+        private toaster: ToasterService,
+        private authenticationService: AuthenticationService,
+        private ngZone: NgZone
     ) {
-        this.urlPath = (isElectron || isCordova) ? "" : AppUrl + APP_FOLDER;
+        this.urlPath = isElectron ? "" : AppUrl + APP_FOLDER;
         this.isLoginWithEmailInProcess$ = this.store.pipe(select(state => {
             return state.login.isLoginWithEmailInProcess;
         }), takeUntil(this.destroyed$));
@@ -113,6 +121,7 @@ export class SignupComponent implements OnInit, OnDestroy {
         this.userDetails$ = this.store.pipe(select(p => p.session.user), takeUntil(this.destroyed$));
         this.isTwoWayAuthInProcess$ = this.store.pipe(select(p => p.login.isTwoWayAuthInProcess), takeUntil(this.destroyed$));
         this.isTwoWayAuthInSuccess$ = this.store.pipe(select(p => p.login.isTwoWayAuthSuccess), takeUntil(this.destroyed$));
+        this.isLoginWithPasswordIsShowVerifyOtp$ = this.store.pipe(select(state => state.login.isLoginWithPasswordIsShowVerifyOtp), takeUntil(this.destroyed$));
     }
 
     // tslint:disable-next-line:no-empty
@@ -143,7 +152,7 @@ export class SignupComponent implements OnInit, OnDestroy {
         this.setCountryCode({ value: "India", label: "India" });
 
         // get user object when google auth is complete
-        if (!Configuration.isElectron && !Configuration.isCordova) {
+        if (!Configuration.isElectron) {
             this.authService.authState.pipe(takeUntil(this.destroyed$)).subscribe((user: SocialUser) => {
                 this.isSocialLogoutAttempted$.subscribe((res) => {
                     if (!res && user) {
@@ -168,6 +177,14 @@ export class SignupComponent implements OnInit, OnDestroy {
                 this.showTwoWayAuthModal();
             }
         });
+
+        this.isLoginWithPasswordIsShowVerifyOtp$.subscribe(res => {
+            if (res) {
+                this.showTwoWayAuthModal();
+                this.store.dispatch(this.loginAction.hideTwoWayOtpPopup());
+            }
+        });
+
         // check if two way auth is successfully done
         this.isTwoWayAuthInSuccess$.subscribe(a => {
             if (a) {
@@ -240,11 +257,11 @@ export class SignupComponent implements OnInit, OnDestroy {
     }
 
     public showTwoWayAuthModal() {
-        this.twoWayAuthModal.show();
+        this.twoWayAuthModal?.show();
     }
 
     public hideTowWayAuthModal() {
-        this.twoWayAuthModal.hide();
+        this.twoWayAuthModal?.hide();
     }
 
     public resetTwoWayAuthModal() {
@@ -260,32 +277,29 @@ export class SignupComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.loginAction.SignupWithMobileRequest(data));
     }
 
+
+    /**
+     * This will use for sign with providers
+     *
+     * @param {string} provider
+     * @memberof SignupComponent
+     */
     public async signInWithProviders(provider: string) {
         if (Configuration.isElectron) {
-
+            // electronOauth2
             const { ipcRenderer } = (window as any).require("electron");
             if (provider === "google") {
                 // google
+                const t = ipcRenderer.send("authenticate", provider);
+                ipcRenderer.once('take-your-gmail-token', (sender, arg) => {
+                    this.store.dispatch(this.loginAction.signupWithGoogle(arg.access_token));
+                });
+
+            } else {
                 ipcRenderer.once('take-your-gmail-token', (sender, arg) => {
                     this.store.dispatch(this.loginAction.signupWithGoogle(arg.access_token));
                 });
             }
-
-        } else if (Configuration.isCordova) {
-            (window as any).plugins.googleplus.login(
-                {
-                    'scopes': 'email', // optional, space-separated list of scopes, If not included or empty, defaults to `profile` and `email`.
-                    'webClientId': GOOGLE_CLIENT_ID,
-                    'offline': true // optional, but requires the webClientId - if set to true the plugin will also return a serverAuthCode, which can be used to grant offline access to a non-Google server
-                },
-                (obj) => {
-                    this.store.dispatch(this.loginAction.signupWithGoogle(obj.accessToken));
-                },
-                (msg) => {
-                    console.log(('error: ' + msg));
-                }
-            );
-
         } else {
             //  web social authentication
             this.store.dispatch(this.loginAction.resetSocialLogoutAttempt());
@@ -309,7 +323,7 @@ export class SignupComponent implements OnInit, OnDestroy {
      */
     public setCountryCode(event: IOption) {
         if (event.value) {
-            let country = this.countryCodeList.filter((obj) => obj.value === event.value);
+            let country = this.countryCodeList?.filter((obj) => obj.value === event.value);
             this.selectedCountry = country[0].label;
         }
     }
@@ -330,5 +344,60 @@ export class SignupComponent implements OnInit, OnDestroy {
         if (ObjToSend) {
             this.store.dispatch(this.loginAction.SignupWithPasswdRequest(ObjToSend));
         }
+    }
+
+    /**
+     * This will open the signup with otp popup
+     *
+     * @memberof SignupComponent
+     */
+    public signUpWithOtp(): void {
+        this.loaderService.show();
+
+        let configuration = {
+            widgetId: OTP_WIDGET_ID,
+            tokenAuth: OTP_TOKEN_AUTH,
+            success: (data: any) => {
+                this.ngZone.run(() => {
+                    this.initiateSignup(data);
+                });
+            },
+            failure: (error: any) => {
+                this.toaster.errorToast(error?.message);
+            }
+        };
+
+        /* OTP SIGNUP */
+        if (window['initSendOTP'] === undefined) {
+            let scriptTag = document.createElement('script');
+            scriptTag.src = OTP_PROVIDER_URL;
+            scriptTag.type = 'text/javascript';
+            scriptTag.defer = true;
+            scriptTag.onload = () => {
+                initSendOTP(configuration);
+                this.loaderService.hide();
+            };
+            document.body.appendChild(scriptTag);
+        } else {
+            initSendOTP(configuration);
+            this.loaderService.hide();
+        }
+    }
+
+    /**
+     * Initiate the signup process using otp
+     *
+     * @private
+     * @param {*} data
+     * @memberof SignupComponent
+     */
+     private initiateSignup(data: any): void {
+        this.authenticationService.loginWithOtp({ accessToken: data?.message }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === "success") {
+                this.store.dispatch(this.loginAction.LoginWithPasswdResponse(response));
+            } else {
+                this.toaster.errorToast(response?.message);
+            }
+        });
     }
 }

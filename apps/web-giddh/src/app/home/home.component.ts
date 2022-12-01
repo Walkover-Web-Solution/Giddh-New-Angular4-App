@@ -4,8 +4,6 @@ import { Store, select } from '@ngrx/store';
 import { AppState } from '../store/roots';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Observable, ReplaySubject } from 'rxjs';
-import { StateDetailsRequest } from '../models/api-models/Company';
-import { CompanyActions } from '../actions/company.actions';
 import { HomeActions } from '../actions/home/home.actions';
 import { Router } from '@angular/router';
 import { AccountService } from 'apps/web-giddh/src/app/services/account.service';
@@ -29,10 +27,11 @@ export class HomeComponent implements OnInit, OnDestroy {
     public hideallcharts: boolean = false;
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** Holds company unique name */
+    public companyUniqueName: string = "";
 
     constructor(
         private store: Store<AppState>,
-        private companyActions: CompanyActions,
         private homeActions: HomeActions,
         private router: Router,
         private accountService: AccountService,
@@ -42,22 +41,17 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        
         this.needsToRedirectToLedger$.pipe(take(1)).subscribe(result => {
             if (result) {
                 this.accountService.getFlattenAccounts('', '').pipe(takeUntil(this.destroyed$)).subscribe(data => {
-                    if (data.status === 'success' && data.body.results.length > 0) {
-                        this.router.navigate([`ledger/${data.body.results[0].uniqueName}`]);
+                    if (data?.status === 'success' && data?.body?.results?.length > 0) {
+                        this.router.navigate([`ledger/${data?.body?.results[0]?.uniqueName}`]);
                     }
                 });
             }
         });
-        
-        let companyUniqueName = null;
-        this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
-        let stateDetailsRequest = new StateDetailsRequest();
-        stateDetailsRequest.companyUniqueName = companyUniqueName;
-        stateDetailsRequest.lastState = 'home';
-        this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
 
         this.generalService.invokeEvent.pipe(takeUntil(this.destroyed$)).subscribe(value => {
             if (value === 'hideallcharts') {

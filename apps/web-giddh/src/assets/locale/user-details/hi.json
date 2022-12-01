@@ -113,6 +113,39 @@
 		"activation_key": "सक्रियण कुंजी",
 		"activation_key_note": "आपको पुनर्विक्रेताओं से सक्रियण कुंजी मिल जाएगी।",
 		"enter_activation_key": "सक्रियण कुंजी डालें",
-		"activate": "सक्रिय"
+		"activate": "सक्रिय",
+		"transaction_balance": "लेन-देन संतुलन",
+		"left": "बाएं",
+		"plan_timeline": "योजना समयरेखा",
+		"overall_summary": "समग्र सारांश",
+		"select_plan_summary": "इसे देखने के लिए एक योजना का चयन करें  ",
+		"select_plan_consumptions": "समग्र उपभोग और शेष राशि का सारांश ",
+		"you_have_total": "आपके पास कुल है",
+		"plans": " योजनाओं",
+		"benefits": "लाभ",
+		"renew": "नवीकरण",
+		"buy_plan": "अभी खरीदें",
+		"redeem": "एवज",
+		"extra_addons": "* अतिरिक्त ऐड-ऑन",
+		"per_transaction": "0.10 प्रति लेनदेन",
+		"search_companies": "कंपनियों को खोजें",
+		"transaction_used": "इस्तेमाल किया लेनदेन",
+		"expiring_within": "के भीतर समाप्त हो रहा है",
+		"expires": "समय-सीमा समाप्त",
+		"timeline":"समयरेखा",
+		"search_plans":"सदस्यता और कंपनियां खोजें"
+	},
+	"expiring_list": {
+		"seven_days": "7 दिन",
+		"fifteen_days": "15 दिन",
+		"one_month": "1 महीना",
+		"six_months": "6 महीने",
+		"one_year": "1 वर्ष"
+	},
+	"transaction_balance_list": {
+		"less_than_1k": "1,000 . से कम",
+		"less_than_5k": "5,000 . से कम",
+		"less_than_10k": "10,000 . से कम",
+		"less_than_50k": "50,000 . से कम"
 	}
 }

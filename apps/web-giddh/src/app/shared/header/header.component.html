@@ -54,7 +54,12 @@
 
             <div class="d-flex justify-content-between align-items-center">
                 <div class="logo-wrapper pd-l4">
-                    <img src="{{ imgPath }}giddh-white-logo.svg" [alt]="localeData?.giddh_logo" />
+                    <img
+                        src="{{ imgPath }}giddh-white-logo.svg"
+                        width="127"
+                        height="25"
+                        [alt]="localeData?.giddh_logo"
+                    />
                 </div>
                 <ul class="nav universal-date mr-r1" *ngIf="selectedCompany | async">
                     <li class="border-none pd-r15 notification" [ngClass]="{ 'mr-0': isTodaysDateSelected }">
@@ -113,6 +118,7 @@
             </p>
         </div>
     </div>
+
     <div
         class="plan-wrapper"
         *ngIf="subscribedPlan !== undefined && subscribedPlan.status === 'expired'"
@@ -125,6 +131,7 @@
             </p>
         </div>
     </div>
+
     <div
         class="plan-wrapper"
         *ngIf="subscribedPlan !== undefined && subscribedPlan.additionalCharges"
@@ -298,4 +305,15 @@
         </div>
     </ng-template>
 </ng-container>
-<a class="schedule-now-link" id="SOIBTN_giddhbooks" data-psz="00" data-so-page="giddhbooks" data-delay="1"></a>
+<div class="overlay-cal" *ngIf="isCalendlyModelActivate">
+    <div id="scheduleCall" class="tab-pane active vertical-center modal-body">
+        <div class="calendly-box" #reder>
+            <div class="calendly-inline-widget">
+                <button id="close" class="close-2" (click)="hideScheduleCalendlyModel()">
+                    <i class="icon-cross"></i>
+                </button>
+                <object [data]="calendlyUrl"></object>
+            </div>
+        </div>
+    </div>
+</div>

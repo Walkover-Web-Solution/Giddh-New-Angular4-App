@@ -1,0 +1,82 @@
+.selling-product-block {
+    .box {
+        min-height: 325px;
+    }
+    .top-selling-btn {
+        font-family: "opensans-semibold";
+    }
+    .selling-container {
+        .no-data-contain {
+            min-height: 200px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        .location-data {
+            position: relative;
+            &::before {
+                position: absolute;
+                width: 1px;
+                height: 100%;
+                background-color: var(--color-iron);
+                content: "";
+                top: 0;
+                left: 200px;
+            }
+            .state-location-data {
+                margin-bottom: 16px;
+                align-items: center;
+                label {
+                    min-width: 200px;
+                    font-size: 14px;
+                }
+                .progress-bar {
+                    background-color: var(--color-solitude-light);
+                    border-radius: 0 10px 10px 0;
+                    height: 10px;
+                    margin-right: 10px;
+                }
+                &:first-child .progress-bar {
+                    width: 80%;
+                }
+                &:nth-child(2) .progress-bar {
+                    width: 60%;
+                }
+                &:nth-child(3) .progress-bar {
+                    width: 50%;
+                }
+                &:nth-child(4) .progress-bar {
+                    width: 70%;
+                }
+                &:nth-child(5) .progress-bar {
+                    width: 40%;
+                }
+            }
+        }
+    }
+}
+/*responsive*/
+@media (max-width: 767px) {
+    .selling-product-block {
+        .selling-container {
+            .location-data {
+                &::before {
+                    display: none;
+                }
+                .state-location-data {
+                    flex-direction: column;
+                    align-items: flex-start;
+                    label {
+                        min-width: 100%;
+                        font-size: 14px;
+                    }
+                    .progress-bar {
+                        border-radius: 10px 10px;
+                        margin: 7px 0;
+                    }
+                }
+            }
+        }
+    }
+}

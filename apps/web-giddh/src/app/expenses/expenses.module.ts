@@ -32,9 +32,18 @@ import { MatListModule } from '@angular/material/list';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatInputModule } from '@angular/material/input';
 import { LightboxModule } from 'ngx-lightbox';
+import { RejectPettyCashEntryConfirmDialogComponent } from './components/reject-petty-cash-entry-confirm-dialog/reject-petty-cash-entry-confirm-dialog.component';
 
 @NgModule({
-    declarations: [ExpensesComponent, PendingListComponent, RejectedListComponent, FilterListComponent, ExpenseDetailsComponent, ApprovePettyCashEntryConfirmDialogComponent],
+    declarations: [
+        ExpensesComponent,
+        PendingListComponent,
+        RejectedListComponent,
+        FilterListComponent,
+        ExpenseDetailsComponent,
+        ApprovePettyCashEntryConfirmDialogComponent,
+        RejectPettyCashEntryConfirmDialogComponent
+    ],
     providers: [],
     imports: [CommonModule,
         ReactiveFormsModule,
@@ -46,7 +55,7 @@ import { LightboxModule } from 'ngx-lightbox';
         LedgerModule,
         CurrencyModule,
         NgxUploaderModule,
-        PaginationModule,
+        PaginationModule.forRoot(),
         SharedModule,
         ShSelectModule,
         ModalModule,

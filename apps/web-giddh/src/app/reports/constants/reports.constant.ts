@@ -26,3 +26,16 @@ export interface ReceiptAdvanceSearchModel {
     totalAmountFilter: AmountFilter;
     unusedAmountFilter: AmountFilter;
 }
+
+/** Payment modal for advance search */
+export interface PaymentAdvanceSearchModel {
+    totalAmountFilter: AmountFilter;
+    unusedAmountFilter: AmountFilter;
+}
+
+/** List of payment report filters */
+export const PAYMENT_REPORT_FILTERS = {
+    PAYMENT_FILTER: 'payment',
+    CUSTOMER_FILTER: 'customerName',
+    VENDOR_FILTER: 'vendorName'
+}

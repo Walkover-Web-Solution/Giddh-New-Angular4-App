@@ -21,8 +21,9 @@
         "trial_balance_account_wise_report_file_name": "ट्रायल_बॅलेंस_अकाऊंट-वार.csv",
         "condensed_report": "कंडेन्डेड रिपोर्ट",
         "account_wise_report": "खातेनिहाय अहवाल",
+        "flat_report": "सपाट अहवाल",
         "trial_balance": {
-            "name": "Name",
+            "name": "नाव",
             "opening_balance": "प्रारंभिक शिल्लक",
             "debit": "डेबिट",
             "credit": "जमा",

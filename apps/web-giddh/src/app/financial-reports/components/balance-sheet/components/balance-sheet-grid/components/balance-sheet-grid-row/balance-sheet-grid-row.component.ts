@@ -37,13 +37,11 @@ export class BalanceSheetGridRowComponent implements OnChanges {
     }
 
     public entryClicked(acc) {
-        let url = location.href + '?returnUrl=ledger/' + acc.uniqueName + '/' + this.from + '/' + this.to;
+        let url = location.href + '?returnUrl=ledger/' + acc?.uniqueName + '/' + this.from + '/' + this.to;
         if (isElectron) {
             let ipcRenderer = (window as any).require('electron').ipcRenderer;
-            url = location.origin + location.pathname + '#./pages/ledger/' + acc.uniqueName + '/' + this.from + '/' + this.to;
+            url = location.origin + location.pathname + '#./pages/ledger/' + acc?.uniqueName + '/' + this.from + '/' + this.to;
             console.log(ipcRenderer.send('open-url', url));
-        } else if (isCordova) {
-            // todo: Entry Click need to be handeled in cordova
         } else {
             (window as any).open(url);
         }
@@ -59,6 +57,6 @@ export class BalanceSheetGridRowComponent implements OnChanges {
      * @memberof BalanceSheetGridRowComponent
      */
     public trackByFn(index, item: Account): string {
-        return item.uniqueName;
+        return item?.uniqueName;
     }
 }

@@ -247,12 +247,12 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
         } else if (this._options && this.useInBuiltFilterForIOptionTypeItems) {
             this.filteredData = this.filterByIOption(this._options, lowercaseFilter);
         } else {
-            let filteredData = this._options ? this._options?.filter(item => {
+            let filteredData = lowercaseFilter ? (this._options ? this._options?.filter(item => {
                 if (this.customFilter) {
                     return this.customFilter(lowercaseFilter, item);
                 }
                 return !lowercaseFilter || String(item?.label).toLocaleLowerCase().indexOf(lowercaseFilter) !== -1;
-            }) : [];
+            }) : []) : ((this._options) ? this._options : []);
 
             if (this.customSorting) {
                 this.filteredData = filteredData.sort(this.customSorting);
@@ -334,7 +334,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
         this.isOpen = true;
         this.focusFilter();
         this.onShow.emit();
-        if (this.menuEle && this.menuEle.virtualScrollElm && this.menuEle.virtualScrollElm) {
+        if (this.menuEle && this.menuEle.virtualScrollElm) {
             let item = this.rows.find(p => p?.value === (this._selectedValues?.length > 0 ? this._selectedValues[0] : (this.rows?.length > 0 ? this.rows[0].value : null)));
             if (item !== null) {
                 this.menuEle.virtualScrollElm.scrollInto(item);
@@ -349,14 +349,14 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
             if (key === this.KEYS.ESC || key === this.KEYS.TAB || (key === this.KEYS.UP && event.altKey)) {
                 this.hide();
             } else if (key === this.KEYS.ENTER) {
-                if (this.menuEle && this.menuEle.virtualScrollElm && this.menuEle.virtualScrollElm) {
+                if (this.menuEle && this.menuEle.virtualScrollElm) {
                     let item = this.menuEle.virtualScrollElm.getHighlightedOption();
                     if (item !== null) {
                         this.toggleSelected(item);
                     }
                 }
             } else if (key === this.KEYS.UP) {
-                if (this.menuEle && this.menuEle.virtualScrollElm && this.menuEle.virtualScrollElm) {
+                if (this.menuEle && this.menuEle.virtualScrollElm) {
                     let item = this.menuEle.virtualScrollElm.getPreviousHilightledOption();
                     if (item !== null) {
                         this.menuEle.virtualScrollElm.scrollInto(item);
@@ -366,7 +366,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
                     }
                 }
             } else if (key === this.KEYS.DOWN) {
-                if (this.menuEle && this.menuEle.virtualScrollElm && this.menuEle.virtualScrollElm) {
+                if (this.menuEle && this.menuEle.virtualScrollElm) {
                     let item = this.menuEle.virtualScrollElm.getNextHilightledOption();
                     if (item !== null) {
                         this.menuEle.virtualScrollElm.scrollInto(item);

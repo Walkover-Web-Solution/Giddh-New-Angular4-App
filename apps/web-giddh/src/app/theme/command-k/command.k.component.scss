@@ -1,12 +1,10 @@
-@import "../../../assets/css/color.scss";
-
 :host {
     .search-wrapper {
         padding: 1.25rem 2rem 1.25rem 4.2rem;
         display: flex;
         flex-direction: row;
         align-items: center;
-        background-color: $white;
+        background-color: var(--color-popup-background);
         flex-wrap: wrap !important;
         width: 100% !important;
         max-width: 580px;
@@ -17,6 +15,7 @@
             font-weight: normal;
             line-height: initial;
             width: 95%;
+            background-color: var(--color-popup-background);
         }
         .icon-search-icon {
             position: absolute;
@@ -24,7 +23,7 @@
             right: 0;
             width: 4.2rem;
             text-align: center;
-            color: $gray;
+            color: var(--color-abbey);
         }
     }
     .vR {
@@ -56,7 +55,7 @@
 }
 
 .universal-data-list-wrapper {
-    background-color: $white;
+    background-color: var(--color-popup-background);
     overflow: auto;
     display: none;
     box-sizing: border-box;
@@ -68,8 +67,8 @@
     &.isFlying {
         position: absolute;
         z-index: 10;
-        box-shadow: 0 2px 3px 0 rgba(34, 36, 38, 0.15);
-        border: 1px solid rgba(34, 36, 38, 0.15);
+        box-shadow: 0 2px 3px 0 var(--color-primary-common-box-shadow);
+        border: 1px solid var(--color-common-secondary-border);
         border-radius: 2px;
     }
     &:not(.isFlying),
@@ -112,7 +111,7 @@
                 min-height: auto;
             }
             .item-icon {
-                color: $nobel;
+                color: var(--color-gray);
                 font-size: 14px;
                 .icon-account {
                     font-size: 11px;
@@ -124,7 +123,7 @@
             .item-details {
                 position: relative;
                 font-size: 14px;
-                color: $night-rider;
+                color: var(--color-popup-secondary-list-head-text);
                 text-transform: capitalize;
                 margin-left: 25px;
                 padding: 5px 0;
@@ -140,10 +139,10 @@
                 }
                 small {
                     font-size: 12px;
-                    color: $gray;
+                    color: var(--color-abbey);
                 }
                 .command-hover-text {
-                    color: $white;
+                    color: var(--color-common-primary-text);
                     right: 0;
                     text-transform: initial;
                     width: 25%;
@@ -157,15 +156,15 @@
             }
             // hover effect
             &.selected {
-                background-color: $chetwode-blue;
+                background-color: var(--color-popup-list-hover);
                 .item-details {
-                    color: $white;
+                    color: var(--color-popup-list-input-text-hover);
                     small {
-                        color: $white;
+                        color: var(--color-popup-list-input-text-hover);
                     }
                 }
                 .item-icon {
-                    color: $white;
+                    color: var(--color-popup-list-input-text-hover);
                 }
             }
         }
@@ -182,7 +181,17 @@
     padding: 10px;
     font-size: 20px;
     cursor: pointer;
+    color: var(--color-popup-list-input-text);
 }
+
+::ng-deep {
+    .jumper-results {
+        .block {
+            color: var(--color-popup-list-input-text);
+        }
+    }
+}
+
 /*responsive*/
 @media (max-width: 767px) {
     :host {

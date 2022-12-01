@@ -1,9 +1,10 @@
-export const ROUTES = [
-    { path: 'download' },
+import { Routes } from "@angular/router";
+export const ROUTES: Routes = [
+    { path: 'download', loadChildren: () => import('./download/download.module').then(module => module.DownloadModule) },
     { path: '', redirectTo: 'login', pathMatch: 'full' },
     { path: '404' },
     { path: 'app-login-success' },
-    { path: 'token-verify' },
+    { path: 'token-verify', loadChildren: () => import('./login/token-verify.module').then(module => module.TokenVerifyModule) },
     { path: 'login', loadChildren: () => import('./login/login.module').then(module => module.LoginModule) },
     { path: 'signup', loadChildren: () => import('./signup/signup.module').then(module => module.SignupModule) },
     { path: 'inventory', redirectTo: 'pages/inventory', pathMatch: 'full' },
@@ -17,14 +18,13 @@ export const ROUTES = [
     { path: 'trial-balance-and-profit-loss', redirectTo: 'pages/trial-balance-and-profit-loss', pathMatch: 'full' },
     { path: 'giddh-all-items', redirectTo: 'pages/giddh-all-items', pathMatch: 'full' },
     { path: 'audit-logs', redirectTo: 'pages/audit-logs', pathMatch: 'full' },
+    { path: 'activity-logs', redirectTo: 'pages/activity-logs', pathMatch: 'full' },
     { path: 'ledger/:accountUniqueName', redirectTo: 'pages/ledger/:accountUniqueName', pathMatch: 'full' },
-    { path: 'old-ledger/:accountUniqueName', redirectTo: 'pages/old-ledger/:accountUniqueName', pathMatch: 'full' },
-    { path: 'dummy' },
-    { path: 'browser-support' },
+    { path: 'dummy', loadChildren: () => import('./dummy/dummy.module').then(module => module.DummyModule) },
     { path: 'proforma-invoice' },
-    { path: 'new-user' },
-    { path: 'welcome' },
-    { path: 'onboarding' },
+    { path: 'new-user', loadChildren: () => import('./new-user/new-user.module').then(module => module.NewUserModule) },
+    { path: 'welcome', loadChildren: () => import('./welcome/welcome.module').then(module => module.WelcomeModule) },
+    { path: 'onboarding', loadChildren: () => import('./onboarding/onboarding.module').then(module => module.OnboardingModule) },
     { path: 'social-login-callback' },
     { path: 'invoice', redirectTo: 'pages/invoice', pathMatch: 'full' },
     { path: 'sales', redirectTo: 'pages/sales' },
@@ -34,7 +34,7 @@ export const ROUTES = [
     { path: 'journal-voucher', redirectTo: 'pages/journal-voucher', pathMatch: 'full' },
     { path: 'contact', redirectTo: 'pages/contact' },
     { path: 'aging-report', redirectTo: 'pages/aging-report', pathMatch: 'full' },
-    { path: 'import', redirectTo: 'pages/import', pathMatch: 'full' },
+    // { path: 'import', redirectTo: 'pages/import', pathMatch: 'full' },
     // { path: 'tallysync', redirectTo: 'pages/tallysync', pathMatch: 'full' },
     { path: 'gstfiling', redirectTo: 'pages/gstfiling', pathMatch: 'full' },
     { path: 'company-import-export', redirectTo: 'pages/company-import-export', pathMatch: 'full' },
@@ -42,9 +42,7 @@ export const ROUTES = [
     { path: 'new-vs-old-invoices', redirectTo: 'pages/new-vs-old-invoices', pathMatch: 'full' },
     { path: 'reports', redirectTo: 'pages/reports' },
     { path: 'proforma-invoice', redirectTo: 'pages/proforma-invoice' },
-    { path: 'mobile-home', redirectTo: 'pages/mobile-home', pathMatch: 'full' },
     { path: 'select-plan' },
-    //{ path: 'new-inventory/create-group', component: InventoryCreateGroupComponent },
     {
         path: 'pages',
         children: [
@@ -53,6 +51,7 @@ export const ROUTES = [
             { path: 'daybook', loadChildren: () => import('./daybook/daybook.module').then(module => module.DaybookModule) },
             { path: 'purchase', loadChildren: () => import('./purchase/purchase.module').then(module => module.PurchaseModule) },
             { path: 'inventory', loadChildren: () => import('./inventory/inventory.module').then(module => module.InventoryModule) },
+            { path: 'new-inventory', loadChildren: () => import('./new-inventory/new-inventory.module').then(module => module.NewInventoryModule) },
             {
                 path: 'inventory-in-out',
                 loadChildren: () => import('./inventory-in-out/inventory-in-out.module').then(module => module.InventoryInOutModule),
@@ -65,11 +64,7 @@ export const ROUTES = [
                 data: { preload: true }
             },
             { path: 'audit-logs', loadChildren: () => import('./audit-logs/audit-logs.module').then(module => module.AuditLogsModule) },
-            {
-                path: 'old-ledger/:accountUniqueName',
-                loadChildren: () => import('./ledger/ledger.module').then(module => module.LedgerModule),
-                data: { preload: true }
-            },
+            { path: 'activity-logs', loadChildren: () => import('./activity-logs/activity-logs.module').then(module => module.ActivityLogsModule) },
             {
                 path: 'ledger/:accountUniqueName',
                 loadChildren: () => import('./material-ledger/ledger.module').then(module => module.LedgerModule),
@@ -105,6 +100,10 @@ export const ROUTES = [
             { path: 'verify-email', loadChildren: () => import('./verify-email/verify-email.module').then(module => module.VerifyEmailModule) },
             { path: 'billing-detail' },
             { path: 'billing-detail/buy-plan' },
+            { path: 'mobile', loadChildren: () => import('./mobile-home/mobile-home.module').then(module => module.MobileHomeModule) },
+            { path: 'voucher', loadChildren: () => import('./payment-receipt/payment-receipt.module').then(module => module.PaymentReceiptModule) },
+            { path: 'downloads', loadChildren: () => import('./downloads/downloads.module').then(module => module.DownloadsModule) },
+            { path: 'custom-fields', loadChildren: () => import('./custom-fields/custom-fields.module').then(module => module.CustomFieldsModule) },
             { path: '**', redirectTo: 'home', pathMatch: 'full' }
         ]
     },

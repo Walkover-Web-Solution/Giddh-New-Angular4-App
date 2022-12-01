@@ -39,7 +39,7 @@ export class GeneralActions {
             ofType(GENERAL_ACTIONS.UPDATE_INDEX_DB),
             switchMap((action: CustomActions) => {
                 const payload: IUpdateDbRequest = action.payload;
-                return this._dbService.getItemDetails(payload.uniqueName).pipe(map(itemData => ({ itemData, payload })))
+                return this._dbService.getItemDetails(payload?.uniqueName).pipe(map(itemData => ({ itemData, payload })))
             }),
             switchMap(data => {
                 if (data.itemData && data.payload) {
@@ -47,13 +47,13 @@ export class GeneralActions {
                     const items = data.itemData;
                     switch (payload.type) {
                         case "accounts": {
-                            const matchedIndex = (items && items.aidata && items.aidata.accounts) ? items.aidata.accounts.findIndex(item => item && item.uniqueName && item.uniqueName === payload.oldUniqueName) : -1;
+                            const matchedIndex = (items && items.aidata && items.aidata.accounts) ? items.aidata.accounts.findIndex(item => item && item?.uniqueName && item?.uniqueName === payload.oldUniqueName) : -1;
                             if (matchedIndex > -1) {
                                 items.aidata.accounts[matchedIndex] = {
                                     ...items.aidata.accounts[matchedIndex],
                                     uniqueName: payload.newUniqueName,
                                     name: payload.name,
-                                    route: items.aidata.accounts[matchedIndex].route.replace(payload.oldUniqueName, payload.newUniqueName)
+                                    route: items.aidata.accounts[matchedIndex]?.route?.replace(payload.oldUniqueName, payload.newUniqueName)
                                 }
                                 return this._dbService.insertFreshData(items).pipe(map(() => {
                                     if (this.route.url.includes('/ledger/' + payload.oldUniqueName)) {
@@ -80,10 +80,10 @@ export class GeneralActions {
             ofType(GENERAL_ACTIONS.DELETE_ENTRY_FROM_INDEX_DB),
             switchMap((action: CustomActions) => {
                 const payload: IUpdateDbRequest = action.payload;
-                return this._dbService.removeItem(payload.uniqueName, payload.type, payload.deleteUniqueName).then(res => {
+                return this._dbService.removeItem(payload?.uniqueName, payload.type, payload.deleteUniqueName).then(res => {
                     if (res && res.aidata && res.aidata.accounts && res.aidata.accounts.length) {
                         if (this.route.url.includes('/ledger/' + payload.deleteUniqueName)) {
-                            this.route.navigate(['pages', 'ledger', res.aidata.accounts[0].uniqueName]);
+                            this.route.navigate(['pages', 'ledger', res.aidata.accounts[0]?.uniqueName]);
                         }
                         return this.deleteEntryFromIndexDbComplete();
                     }
@@ -248,6 +248,20 @@ export class GeneralActions {
         return {
             type: GENERAL_ACTIONS.OPEN_GST_SIDE_MENU,
             payload: shouldOpen
+        }
+    }
+
+    /**
+     * Hide/Show calendly model
+     *
+     * @param {boolean} isOpen
+     * @returns
+     * @memberof GeneralActions
+     */
+    public isOpenCalendlyModel(isOpen: boolean) {
+        return {
+            type: GENERAL_ACTIONS.OPEN_CALENDLY_MODEL,
+            payload: isOpen
         }
     }
 }

@@ -11,7 +11,6 @@ import { ToasterService } from '../../services/toaster.service';
 import { Router } from '@angular/router';
 import {
     CommonPaginatedRequest,
-    GenerateBulkInvoiceRequest,
     GenerateInvoiceRequestClass,
     GetAllLedgersForInvoiceResponse,
     GetInvoiceTemplateDetailsResponse,
@@ -121,13 +120,13 @@ export class InvoiceActions {
         .pipe(
             ofType(INVOICE_ACTIONS.GENERATE_BULK_INVOICE_RESPONSE),
             map((response: CustomActions) => {
-                let data: BaseResponse<any, GenerateBulkInvoiceRequest[]> = response.payload;
+                let data: BaseResponse<any, any> = response.payload;
                 if (data.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 } else {
                     if (typeof data.body === 'string') {
                         this._toasty.successToast(data.body);
-                    } else if (_.isArray(data.body) && data.body.length > 0) {
+                    } else if (_.isArray(data.body) && data.body?.length > 0) {
                         _.forEach(data.body, (item: IBulkInvoiceGenerationFalingError) => {
                             this._toasty.warningToast(item.reason);
                         });
@@ -372,10 +371,10 @@ export class InvoiceActions {
                 } else {
                     let type = 'pdf';
                     let req = data.queryString.dataToSend;
-                    if (req.typeOfInvoice.length > 1) {
+                    if (req?.typeOfInvoice?.length > 1) {
                         type = 'zip';
                     }
-                    let fileName = req.voucherNumber[0];
+                    let fileName = req?.voucherNumber[0];
                     this.downloadFile(data.body, type, fileName);
                 }
                 return { type: 'EmptyAction' };
@@ -724,7 +723,7 @@ export class InvoiceActions {
     public setTemplateAsDefault$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(INVOICE.TEMPLATE.SET_TEMPLATE_AS_DEFAULT),
-            switchMap((action: CustomActions) => this._invoiceTemplatesService.setTemplateAsDefault(action.payload.templateUniqueName, action.payload.templateType)),
+            switchMap((action: CustomActions) => this._invoiceTemplatesService.setTemplateAsDefault(action.payload?.templateUniqueName, action.payload?.templateType)),
             map(response => {
                 return this.setTemplateAsDefaultResponse(response);
             })));
@@ -757,10 +756,10 @@ export class InvoiceActions {
             ofType(INVOICE.TEMPLATE.DELETE_TEMPLATE_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, any> = response.payload;
-                if (data.status === 'error') {
-                    this._toasty.errorToast(data.message, data.code);
+                if (data?.status === 'error') {
+                    this._toasty.errorToast(data?.message, data?.code);
                 } else {
-                    this._toasty.successToast(data.body);
+                    this._toasty.successToast(data?.body);
                 }
                 return { type: 'EmptyAction' };
             })));
@@ -897,7 +896,7 @@ export class InvoiceActions {
         };
     }
 
-    public GenerateBulkInvoice(reqObj: { combined: boolean }, model: GenerateBulkInvoiceRequest[], requestedFrom?: string): CustomActions {
+    public GenerateBulkInvoice(reqObj: { combined: boolean }, model: any, requestedFrom?: string): CustomActions {
         return {
             type: INVOICE_ACTIONS.GENERATE_BULK_INVOICE,
             payload: { reqObj, body: model, requestedFrom }
@@ -1124,7 +1123,7 @@ export class InvoiceActions {
         };
     }
 
-    public SendInvoiceOnMail(accountUniqueName: string, dataToSend: { emailId: string[], voucherNumber: string[], typeOfInvoice: string[], voucherType?: string }): CustomActions {
+    public SendInvoiceOnMail(accountUniqueName: string, dataToSend: any): CustomActions {
         return {
             type: INVOICE_ACTIONS.SEND_MAIL,
             payload: { accountUniqueName, dataToSend }

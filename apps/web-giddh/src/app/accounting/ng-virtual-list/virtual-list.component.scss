@@ -1,5 +1,3 @@
-@import "../../../assets/css/color.scss";
-
 :host {
     display: block;
     position: relative;
@@ -30,7 +28,7 @@
 
 .header.open {
     border-radius: 2px 2px 0 0;
-    box-shadow: 0 2px 3px 0 rgba(34, 36, 38, 0.15);
+    box-shadow: 0 2px 3px 0 var(--color-primary-common-box-shadow);
     border-bottom: none;
 }
 
@@ -73,11 +71,11 @@ i.close.icon.clear::after {
     content: "✕";
     padding-right: 8px;
     font-weight: 800;
-    color: $gray;
+    color: var(--color-abbey);
 }
 
 i.close.icon.clear:hover::after {
-    color: $red;
+    color: var(--color-danger);
 }
 
 .clear {
@@ -91,13 +89,13 @@ i.close.icon.clear:hover::after {
     font-weight: 500;
     line-height: 100%;
     opacity: 0.5;
-    color: $black;
+    color: var(--color-nero);
     transform: translateY(-50%);
 }
 
 .sh-select-disabled {
-    background-color: $whisper;
-    color: $bay-of-many;
+    background-color: var(--color-dark-fog);
+    color: var(--color-primary-sh-select-disabled);
     cursor: not-allowed;
 }
 
@@ -108,7 +106,7 @@ i.close.icon.clear:hover::after {
     font-size: 14px;
     line-height: 30px;
     border-radius: 4px;
-    background-color: $solitude;
+    background-color: var(--color-wild-sand);
     margin: 8px 0 5px 8px;
     /* color: white; */
 }
@@ -125,24 +123,24 @@ i.close.icon.clear:hover::after {
 .chip-close-btn:hover {
     font-weight: 700;
     opacity: 0.5;
-    color: $black;
+    color: var(--color-nero);
 }
 
 .sh-select-disabled .selected-val,
 .sh-select-disabled .form-control {
-    background: $whisper-light !important;
+    background: var(--color-dark-fog) !important;
     pointer-events: none;
     cursor: not-allowed;
 }
 
 .selected-val {
-    border: 1px solid $light-gray !important;
+    border: 1px solid var(--color-iron) !important;
     padding-right: 22px !important;
-    background: $white !important;
+    background: var(--color-white) !important;
 }
 
 .header.open > input[type="text"] {
-    border-color: $light-gray;
+    border-color: var(--color-iron);
 }
 
 .header .bdr > input[type="text"] {

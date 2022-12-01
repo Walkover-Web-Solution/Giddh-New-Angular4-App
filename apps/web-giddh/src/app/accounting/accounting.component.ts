@@ -1,11 +1,8 @@
-import { take, takeUntil } from 'rxjs/operators';
-import { AccountService } from 'apps/web-giddh/src/app/services/account.service';
+import { takeUntil } from 'rxjs/operators';
 import { TallyModuleService } from './tally-service';
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
-import { CompanyActions } from '../actions/company.actions';
 import { AppState } from '../store/roots';
-import { Store, select } from '@ngrx/store';
-import { StateDetailsRequest } from '../models/api-models/Company';
+import { Store } from '@ngrx/store';
 import { ReplaySubject } from 'rxjs';
 import { SidebarAction } from '../actions/inventory/sidebar.actions';
 
@@ -99,11 +96,7 @@ export class AccountingComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(private store: Store<AppState>,
-        private companyActions: CompanyActions,
-        // private _router: Router,
-        // private _keyboardService: KeyboardService,
         private _tallyModuleService: TallyModuleService,
-        private _accountService: AccountService,
         private sidebarAction: SidebarAction) {
         this._tallyModuleService.selectedPageInfo.pipe(takeUntil(this.destroyed$)).subscribe((d) => {
             if (d) {
@@ -139,7 +132,7 @@ export class AccountingComponent implements OnInit, OnDestroy {
             if (PAGES_WITH_CHILD.indexOf(selectedPage.page) > -1) {
                 this._tallyModuleService.setVoucher({
                     page: selectedPage.page,
-                    uniqueName: selectedPage.uniqueName,
+                    uniqueName: selectedPage?.uniqueName,
                     gridType: 'voucher'
                 });
             } else {
@@ -150,7 +143,7 @@ export class AccountingComponent implements OnInit, OnDestroy {
             if (PAGES_WITH_CHILD.indexOf(selectedPage.page) > -1) {
                 this._tallyModuleService.setVoucher({
                     page: selectedPage.page,
-                    uniqueName: selectedPage.uniqueName,
+                    uniqueName: selectedPage?.uniqueName,
                     gridType: 'invoice'
                 });
             } else {
@@ -185,29 +178,7 @@ export class AccountingComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit(): void {
-        let companyUniqueName = null;
-        this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
-        let stateDetailsRequest = new StateDetailsRequest();
-        stateDetailsRequest.companyUniqueName = companyUniqueName;
-        stateDetailsRequest.lastState = 'journal-voucher';
-
-        this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
-
         this.store.dispatch(this.sidebarAction.GetGroupsWithStocksHierarchyMin());
-    }
-
-    /**
-     * setAccount to send accountObj to service
-     */
-    public setAccount(accountObj) {
-        //
-    }
-
-    /**
-     * setStock to send stockObj to service
-     */
-    public setStock(stockObj) {
-        //
     }
 
     public ngOnDestroy() {

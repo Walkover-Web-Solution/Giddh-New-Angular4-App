@@ -116,7 +116,7 @@ export class DiscountListComponent implements OnInit, OnChanges, OnDestroy {
                     obj.discountValue = acc.discountValue;
                     obj.discountType = acc.discountType;
                     obj.isActive = false;
-                    obj.particular = acc.linkAccount.uniqueName;
+                    obj.particular = acc.linkAccount?.uniqueName;
                     obj.discountUniqueName = acc.uniqueName;
                     obj.name = acc.name;
                     this.discountAccountsDetails.push(obj);
@@ -160,13 +160,13 @@ export class DiscountListComponent implements OnInit, OnChanges, OnDestroy {
      * @returns {number}
      */
     public generateTotal() {
-        let percentageListTotal = this.discountAccountsDetails.filter(f => f.isActive)
+        let percentageListTotal = this.discountAccountsDetails?.filter(f => f.isActive)
             .filter(s => s.discountType === 'PERCENTAGE')
             .reduce((pv, cv) => {
                 return Number(cv.discountValue) ? Number(pv) + Number(cv.discountValue) : Number(pv);
             }, 0) || 0;
 
-        let fixedListTotal = this.discountAccountsDetails.filter(f => f.isActive)
+        let fixedListTotal = this.discountAccountsDetails?.filter(f => f.isActive)
             .filter(s => s.discountType === 'FIX_AMOUNT')
             .reduce((pv, cv) => {
                 return Number(cv.discountValue) ? Number(pv) + Number(cv.discountValue) : Number(pv);

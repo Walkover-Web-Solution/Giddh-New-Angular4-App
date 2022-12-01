@@ -58,6 +58,8 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
     /* This will hold if it's mobile screen or not */
     public isMobileScreen: boolean = false;
+    /** True, if custom date filter is selected or custom searching or sorting is performed */
+    public showClearFilter: boolean = false;
 
     constructor(private store: Store<AppState>, private invoiceReceiptActions: InvoiceReceiptActions, private activeRoute: ActivatedRoute, private router: Router, private _cd: ChangeDetectorRef, private breakPointObservar: BreakpointObserver) {
         this.purchaseRegisteDetailedResponse$ = this.store.pipe(select(appState => appState.receipt.PurchaseRegisteDetailedResponse), takeUntil(this.destroyed$));
@@ -71,7 +73,7 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.imgPath = (isElectron || isCordova) ? 'assets/icon/' : AppUrl + APP_FOLDER + 'assets/icon/';
+        this.imgPath = isElectron ? 'assets/icon/' : AppUrl + APP_FOLDER + 'assets/icon/';
         this.getDetailedPurchaseRequestFilter.page = 1;
         this.getDetailedPurchaseRequestFilter.count = this.paginationLimit;
         this.getDetailedPurchaseRequestFilter.q = '';
@@ -111,11 +113,12 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
             distinctUntilChanged(),
             takeUntil(this.destroyed$)
         ).subscribe(s => {
-            this.getDetailedPurchaseRequestFilter.sort = null;
-            this.getDetailedPurchaseRequestFilter.sortBy = null;
-            this.getDetailedPurchaseRequestFilter.q = s;
-            this.getDetailedPurchaseReport(this.getDetailedPurchaseRequestFilter);
-            if (s === '') {
+            if (s !== null && s !== undefined) {
+                this.showClearFilter = true;
+                this.getDetailedPurchaseRequestFilter.sort = null;
+                this.getDetailedPurchaseRequestFilter.sortBy = null;
+                this.getDetailedPurchaseRequestFilter.q = s;
+                this.getDetailedPurchaseReport(this.getDetailedPurchaseRequestFilter);
                 this.showSearchInvoiceNo = false;
             }
         });
@@ -135,10 +138,21 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
     }
 
     public sortbyApi(ord, key) {
+        this.showClearFilter = true;
         this.getDetailedPurchaseRequestFilter.sortBy = key;
         this.getDetailedPurchaseRequestFilter.sort = ord;
         this.getDetailedPurchaseReport(this.getDetailedPurchaseRequestFilter);
     }
+
+    /**
+     * Redirects to Purchase Register Page
+     *
+     * @memberof PurchaseRegisterExpandComponent
+     */
+    public gotoPurchaseRegister(): void {
+        this.router.navigate(['/pages/reports/purchase-register']);
+    }
+
     /**
     * emitExpand
     */
@@ -168,7 +182,8 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
 
     public getDateToDMY(selecteddate) {
         let date = selecteddate.split('-');
-        if (date.length === 3) {
+        if (date?.length === 3) {
+            this.translationComplete(true);
             let month = this.monthNames[parseInt(date[1]) - 1]?.substr(0, 3);
             let year = date[2]?.substr(2, 4);
             return date[0] + ' ' + month + ' ' + year;
@@ -215,7 +230,7 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
         let startDateSplit = startDate.split('-');
         let dt = new Date(startDateSplit[2], startDateSplit[1], startDateSplit[0]);
         // GET THE MONTH AND YEAR OF THE SELECTED DATE.
-        let month = (dt.getMonth() + 1).toString(),
+        let month = (dt.getMonth() + 1)?.toString(),
             year = dt.getFullYear();
 
         // GET THE FIRST AND LAST DATE OF THE MONTH.
@@ -262,6 +277,23 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
 
             this.getCurrentMonthYear();
         }
+    }
+
+    /**
+     * Resets the advance search when user clicks on Clear Filter
+     *
+     * @memberof PurchaseRegisterExpandComponent
+     */
+    public resetAdvanceSearch() {
+        this.showClearFilter = false;
+        this.voucherNumberInput?.reset();
+        this.showSearchInvoiceNo = false;
+        this.getDetailedPurchaseRequestFilter.page = 1;
+        this.getDetailedPurchaseRequestFilter.count = this.paginationLimit;
+        this.getDetailedPurchaseRequestFilter.q = '';
+        this.getDetailedPurchaseRequestFilter.sort = null;
+        this.getDetailedPurchaseRequestFilter.sortBy = null;
+        this.getDetailedPurchaseReport(this.getDetailedPurchaseRequestFilter);
     }
 
     /**

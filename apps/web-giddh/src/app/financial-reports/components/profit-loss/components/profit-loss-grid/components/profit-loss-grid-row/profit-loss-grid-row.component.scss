@@ -1,4 +1,3 @@
-@import "../../../../../../../../assets/css/color.scss";
 .account {
     div {
         -webkit-line-clamp: 1;
@@ -8,5 +7,5 @@
     }
 }
 .trial-balance-viewport {
-    background-color: $solitude;
+    background-color: var(--color-wild-sand);
 }

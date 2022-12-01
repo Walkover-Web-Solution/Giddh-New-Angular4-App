@@ -48,99 +48,6 @@
         <div class="cube1"></div>
         <div class="cube2"></div>
     </div>
-    <div
-        *ngIf="(branches$ | async)?.length > 0 && branchViewType === 'table' && !isMobileScreen"
-        class="table-responsive"
-    >
-        <table class="table basic giddh-table on-mobile-view">
-            <thead>
-                <tr>
-                    <th>{{ commonLocaleData?.app_branch_name }}</th>
-                    <th *ngIf="formFields['taxName']">{{ formFields["taxName"].label }}</th>
-                    <th>{{ localeData?.parent }}</th>
-                    <th class="text-right">{{ localeData?.total_sales }}</th>
-                    <th class="text-right">{{ localeData?.total_expenses }}</th>
-                    <th class="text-right">{{ localeData?.total_taxes }}</th>
-                    <th class="text-right">{{ commonLocaleData?.app_action }}</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let branch of branches$ | async">
-                    <td [attr.data-title]="commonLocaleData?.app_branch_name">{{ branch.alias }}</td>
-                    <td [attr.data-title]="formFields['taxName'].label" *ngIf="formFields['taxName']">
-                        {{ branch?.addresses[0]?.taxNumber || "-" }}
-                    </td>
-                    <td [attr.data-title]="localeData?.parent">{{ branch?.parentBranch?.name || "-" }}</td>
-                    <td [attr.data-title]="localeData?.total_sales" class="text-right">
-                        <span
-                            *ngIf="
-                                branch &&
-                                branch.companyTotals &&
-                                branch.companyTotals.sales &&
-                                branch.companyTotals.sales.amount
-                            "
-                            >{{ branch.companyTotals.sales.amount | giddhCurrency }}</span
-                        ><span
-                            *ngIf="
-                                !(
-                                    branch &&
-                                    branch.companyTotals &&
-                                    branch.companyTotals.sales &&
-                                    branch.companyTotals.sales.amount
-                                )
-                            "
-                            >0</span
-                        >
-                    </td>
-                    <td class="text-right" [attr.data-title]="localeData?.total_expenses">
-                        <span
-                            *ngIf="
-                                branch &&
-                                branch.companyTotals &&
-                                branch.companyTotals.expenses &&
-                                branch.companyTotals.expenses.amount
-                            "
-                            >{{ branch.companyTotals.expenses.amount | giddhCurrency }}</span
-                        ><span
-                            *ngIf="
-                                !(
-                                    branch &&
-                                    branch.companyTotals &&
-                                    branch.companyTotals.expenses &&
-                                    branch.companyTotals.expenses.amount
-                                )
-                            "
-                            >0</span
-                        >
-                    </td>
-                    <td class="text-right" [attr.data-title]="localeData?.total_taxes">
-                        <span
-                            *ngIf="
-                                branch &&
-                                branch.companyTotals &&
-                                branch.companyTotals.taxes &&
-                                branch.companyTotals.taxes.amount
-                            "
-                            >{{ branch.companyTotals.taxes.amount | giddhCurrency }}</span
-                        ><span
-                            *ngIf="
-                                !(
-                                    branch &&
-                                    branch.companyTotals &&
-                                    branch.companyTotals.taxes &&
-                                    branch.companyTotals.taxes.amount
-                                )
-                            "
-                            >0</span
-                        >
-                    </td>
-                    <td [attr.data-title]="commonLocaleData?.app_action" class="text-right unlink">
-                        <a (click)="updateBranch(branch)">{{ commonLocaleData?.app_edit }}</a>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
     <div *ngIf="(branches$ | async)?.length > 0 && !showLoader">
         <div class="branch-card-view" *ngIf="branchViewType === 'card'">
             <div class="row">
@@ -158,6 +65,19 @@
                                     </div>
                                 </div>
                                 <div class="pull-right right-card-section">
+                                    <span
+                                        class="branch-status"
+                                        [ngClass]="{
+                                            'branch-archived': branch.isArchived,
+                                            'branch-active': !branch.isArchived
+                                        }"
+                                        ><span>&nbsp;</span>
+                                        {{
+                                            branch.isArchived
+                                                ? commonLocaleData?.app_archived
+                                                : commonLocaleData?.app_unarchived
+                                        }}</span
+                                    >
                                     <div class="btn-group align-items-center" dropdown [autoClose]="true">
                                         <a
                                             id="button-basic"
@@ -176,6 +96,11 @@
                                             <li role="menuitem">
                                                 <a class="dropdown-item" (click)="updateBranch(branch)">{{
                                                     commonLocaleData?.app_edit
+                                                }}</a>
+                                                <a class="dropdown-item" (click)="confirmStatusUpdate(branch)">{{
+                                                    branch?.isArchived
+                                                        ? commonLocaleData?.app_unarchive
+                                                        : commonLocaleData?.app_archive
                                                 }}</a>
                                             </li>
                                         </ul>
@@ -274,9 +199,9 @@
                 <div class="modal-content">
                     <div class="modal-header clearfix">
                         <h3>{{ localeData?.create_new_branch }}</h3>
-                        <span aria-hidden="true" class="close" (click)="hideAddBranchModal()" data-dismiss="modal"
-                            >×</span
-                        >
+                        <button aria-hidden="true" class="close" (click)="hideAddBranchModal()" data-dismiss="modal">
+                            ×
+                        </button>
                     </div>
                     <div class="modal-body">
                         <div>
@@ -306,7 +231,7 @@
                                     <li *ngFor="let cmp of companies$ | async">
                                         <input
                                             type="checkbox"
-                                            [checked]="selectedCompaniesUniquename.indexOf(cmp.uniqueName) !== -1"
+                                            [checked]="selectedCompaniesUniquename?.indexOf(cmp?.uniqueName) !== -1"
                                             (click)="checkUncheckMe(cmp, $event)"
                                         />
                                         {{ cmp.name }} <span *ngIf="cmp.nameAlias"> ({{ cmp.nameAlias }})</span>
@@ -377,9 +302,14 @@
                 <div class="modal-content">
                     <div class="modal-header clearfix">
                         <h3>{{ commonLocaleData?.app_confirmation }}</h3>
-                        <span aria-hidden="true" class="close" (click)="onUserConfirmation(false)" data-dismiss="modal"
-                            >×</span
+                        <button
+                            aria-hidden="true"
+                            class="close"
+                            (click)="onUserConfirmation(false)"
+                            data-dismiss="modal"
                         >
+                            ×
+                        </button>
                     </div>
                     <div class="modal-body" [innerHTML]="confirmationMessage"></div>
                     <div class="modal-footer clearfix">
@@ -419,6 +349,25 @@
                 (closeAsideEvent)="toggleAsidePane($event)"
             >
             </create-address>
+        </div>
+    </div>
+    <div bsModal #statusModal="bs-modal" class="modal fade aaa" role="dialog">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <confirm-modal
+                    *ngIf="statusModal?.isShown"
+                    [title]="commonLocaleData?.app_confirmation"
+                    [body]="
+                        branchStatusToUpdate?.isArchived
+                            ? localeData?.confirm_unarchive_title
+                            : localeData?.confirm_archive_title
+                    "
+                    [permanentlyDeleteMessage]="' '"
+                    (cancelCallBack)="branchStatusToUpdate = ''; statusModal?.hide()"
+                    (successCallBack)="updateBranchStatus()"
+                >
+                </confirm-modal>
+            </div>
         </div>
     </div>
 </ng-container>

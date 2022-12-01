@@ -43,6 +43,9 @@ import { InventoryComponent } from './inventory.component';
 import { InventoryRoutingModule } from './inventory.routing.module';
 import { JobworkSidebarComponent } from './jobwork/sidebar-components/jobwork.sidebar.component';
 import { ManufacturingComponent } from './manufacturing/manufacturing.component';
+import { NgxBootstrapSwitchModule } from 'ngx-bootstrap-switch';
+import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
+import { AsideMenuProductServiceModule } from '../shared/aside-menu-product-service/aside-menu-product-service.module';
 
 @NgModule({
     declarations: [
@@ -107,21 +110,23 @@ import { ManufacturingComponent } from './manufacturing/manufacturing.component'
     providers: [ExceptionLogService],
     imports: [
         InventoryRoutingModule,
-        TooltipModule,
+        TooltipModule.forRoot(),
         SharedModule,
         Daterangepicker,
         TextCaseChangeModule,
-        BsDropdownModule,
+        BsDropdownModule.forRoot(),
         CurrencyModule,
-        TabsModule,
+        TabsModule.forRoot(),
         ReactiveFormsModule,
         DigitsOnlyModule,
         NgxMaskModule.forRoot(),
         ProformaInvoiceModule,
         GiddhRoundOffPipeModule,
         InventoryAddStockModule,
-        ConfirmModalModule
-    ],
-    entryComponents: [PaginationComponent]
+        ConfirmModalModule,
+        NgxBootstrapSwitchModule.forRoot(),
+        PerfectScrollbarModule,
+        AsideMenuProductServiceModule
+    ]
 })
 export class InventoryModule { }

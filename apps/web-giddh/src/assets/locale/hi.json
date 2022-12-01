@@ -37,7 +37,7 @@
     "app_trn": "टीआरएन",
     "app_no_record_found": "कोई रिकॉर्ड नहीं मिला !!",
     "app_no_records_found": "कोई रिकॉर्ड नहीं मिला",
-    "app_pay_now": "अब भुगतान करें",
+    "app_pay_now": "भुगतान करें",
     "app_add_bank_details": "बैंक विवरण जोड़ें",
     "app_advance_search": "उन्नत खोज",
     "app_select_category": "श्रेणी चुनना",
@@ -148,7 +148,7 @@
     "app_invalid_transporter_name_message": "ट्रांसपोर्टर नाम में कम से कम 5 अक्षर होने चाहिए और इसमें कोई विशेष वर्ण नहीं होना चाहिए।",
     "app_transporter_id": "ट्रांसपोर्टर आईडी",
     "app_transporter_id_placeholder": "उल्लेख संख्या",
-    "app_invalid_transporter_id_message": "ट्रांसपोर्टर आईडी में कम से कम 4 अक्षर होने चाहिए और उसमें केवल अंक होना चाहिए।",
+    "app_invalid_transporter_id_message": "ट्रांसपोर्टर आईडी में कम से कम 4 अक्षर होने चाहिए।",
     "app_transporter_table_name": "नाम",
     "app_transporter_table_id": "ट्रांसपोर्टर आईडी",
     "app_transporter": "ट्रांसपोर्टर",
@@ -469,7 +469,8 @@
     "app_datatype_list": {
         "string": "तार / स्ट्रिंग",
         "number": "संख्या",
-        "boolean": "बूलियन"
+        "boolean": "बूलियन",
+        "barcode": "बारकोड"
     },
     "app_rc_heading": "रिवर्स चार्ज पुष्टिकरण",
     "app_rc_selected_note": "नोट: यदि आप रिवर्स चार्ज के लिए इस लेनदेन की जांच करते हैं, तो लागू करों को रिवर्स चार्ज करों के तहत माना जाएगा और कर रिपोर्ट में जोड़ा जाएगा।",
@@ -635,7 +636,9 @@
 		"receive_otp": "आपको शीघ्र ही आपके मोबाइल पर एक सत्यापन कोड प्राप्त होगा।",
 		"otp_sent_email": "आपके ईमेल खाते पर एक सत्यापन कोड भेज दिया गया है।",
 		"internet_error": "कृपया अपने इंटरनेट कनेक्शन की जाँच करें।",
-		"internet_disconnected": "इंटरनेट डिस्कनेक्ट"
+		"internet_disconnected": "इंटरनेट डिस्कनेक्ट",
+        "voucher_saved": "वाउचर सफलतापूर्वक जेनरेट हुआ",
+        "file_uploaded": "फ़ाइल सफलतापूर्वक अपलोड की गई"
 	},
 	"app_supported_languages": {
 		"english": "अंग्रेज़ी",
@@ -655,5 +658,25 @@
         "monthly": "महीने के",
         "unlimited": "असीमित"
     },
-    "app_create_custom_field": "कस्टम फ़ील्डस बनाएं"
+    "app_voucher_unavailable": "समायोजन के लिए कोई वाउचर नहीं है।",
+    "app_reference_invoice": "संदर्भ चालान",
+    "app_create_custom_field": "कस्टम फ़ील्डस बनाएं",
+    "app_validation": "मान्यकरण",
+    "app_archive": "पुरालेख",
+    "app_unarchive": "संग्रह से निकालें",
+    "app_archived": "संग्रहीत",
+    "app_unarchived": "सक्रिय",
+    "app_not_available": "N/A",
+    "app_true": "सही",
+    "app_false": "गलत",
+    "app_preview": "पूर्वावलोकन",
+    "app_purchase_bill": "खरीद बिल",
+    "app_on": "On",
+    "app_off": "Off",
+    "app_preview_formats": "पूर्वावलोकन के लिए ये फ़ाइल प्रारूप समर्थित नहीं हैं (xls, xlsx, doc, CSV)",
+    "app_count": "गिनती",
+    "app_invalid_country_code": "अमान्य देश कोड",
+    "app_invalid_contact_too_short": "बहुत छोटा",
+    "app_invalid_contact_too_long": "बहुत लंबा",
+    "app_attachment_not_allowed": "अटैचमेंट अपलोड करने के लिए ब्रांच में जाएं"
 }

@@ -1,5 +1,5 @@
 import { take, takeUntil, distinctUntilChanged } from 'rxjs/operators';
-import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { VerifyMobileActions } from '../../../../actions/verifyMobile.actions';
 import { CompanyActions } from '../../../../actions/company.actions';
@@ -14,7 +14,6 @@ import { AppState } from '../../../../store';
 import {
     CompanyResponse,
     SocketNewCompanyRequest,
-    StateDetailsRequest,
     CompanyCreateRequest
 } from '../../../../models/api-models/Company';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
@@ -33,7 +32,7 @@ import { parsePhoneNumberFromString, CountryCode } from 'libphonenumber-js/min';
     styleUrls: ['./company-add-new-ui.component.scss']
 })
 
-export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
+export class CompanyAddNewUiComponent implements OnInit, OnDestroy, AfterViewInit {
     @Output() public closeCompanyModal: EventEmitter<any> = new EventEmitter();
     @Output() public closeCompanyModalAndShowAddManege: EventEmitter<string> = new EventEmitter();
     @ViewChild('logoutModal', { static: true }) public logoutModal: ModalDirective;
@@ -45,6 +44,8 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
     @Input() public isUpdateMode: boolean = false;
     /** Stores the entity details to be updated */
     @Input() public entityDetails: any;
+    /** Stores company name input field reference */
+    @ViewChild('companyNameInputField') companyNameInputField: ElementRef<HTMLElement>;
 
     public imgPath: string = '';
     public countrySource: IOption[] = [];
@@ -124,11 +125,11 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
         this.getCountry();
         this.getCallingCodes();
 
-        this.imgPath = (isElectron || isCordova) ? '' : AppUrl + APP_FOLDER + '';
+        this.imgPath = isElectron ? '' : AppUrl + APP_FOLDER + '';
         this.logedInuser = this._generalService.user;
         if (this._generalService.createNewCompany) {
             this.company = this._generalService.createNewCompany;
-            if (this.company.contactNo.toString().includes('-')) {
+            if (this.company.contactNo?.toString().includes('-')) {
                 let contact = this.company.contactNo.split('-');
                 this.company.contactNo = contact[1];
             }
@@ -150,16 +151,10 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
                 this.store.pipe(select(ss => ss.session.lastState), take(1)).subscribe(se => {
                     prevTab = se;
                 });
-                let stateDetailsRequest = new StateDetailsRequest();
-                stateDetailsRequest.companyUniqueName = this.company.uniqueName;
-                stateDetailsRequest.lastState = this.isNewUser ? 'welcome' : 'onboarding';
-                this._generalService.companyUniqueName = this.company.uniqueName;
-                if (prevTab !== 'user-details') {
-                    this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
-                }
+                this._generalService.companyUniqueName = this.company?.uniqueName;
                 setTimeout(() => {
                     if (prevTab !== 'user-details') {
-                        this.store.dispatch(this._loginAction.ChangeCompany(this.company.uniqueName));
+                        this.store.dispatch(this._loginAction.ChangeCompany(this.company?.uniqueName));
                         this._route.navigate([this.isNewUser ? 'welcome' : 'onboarding']);
                     }
                     this.closeModal();
@@ -167,8 +162,8 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
             }
         });
         this.store.pipe(select(p => p.session.companyUniqueName), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(a => {
-            if (a && a !== '' && this.company.uniqueName) {
-                if (a.includes(this.company.uniqueName.substring(0, 8))) {
+            if (a && a !== '' && this.company?.uniqueName) {
+                if (a.includes(this.company?.uniqueName?.substring(0, 8))) {
                     this.company.name = '';
                     this.company.country = '';
                     this.company.baseCurrency = '';
@@ -196,6 +191,17 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * Runs after view child variable are properly loaded
+     *
+     * @memberof CompanyAddNewUiComponent
+     */
+    public ngAfterViewInit(): void {
+        setTimeout(() => {
+            this.companyNameInputField?.nativeElement?.focus();
+        }, 200);
+    }
+
+    /**
      * createCompany
      */
     public createCompany(mobileNoEl) {
@@ -219,7 +225,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
                 this._generalService.createNewCompany = this.company;
                 this.store.dispatch(this.companyActions.userStoreCreateCompany(this.company));
                 if (this.isProdMode && companies) {
-                    if (companies.length === 0) {
+                    if (companies?.length === 0) {
                         this.fireSocketCompanyCreateRequest();
                     } else {
                         this.closeCompanyModal.emit();
@@ -237,7 +243,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
         this.socketCompanyRequest.CompanyName = this.company.name;
         this.socketCompanyRequest.Timestamp = Date.now();
         this.socketCompanyRequest.LoggedInEmailID = this._generalService.user.email;
-        this.socketCompanyRequest.MobileNo = this.company.contactNo.toString();
+        this.socketCompanyRequest.MobileNo = this.company.contactNo?.toString();
         this.socketCompanyRequest.Name = this._generalService.user.name;
         this.socketCompanyRequest.utm_source = this._generalService.getUtmParameter('utm_source');
         this.socketCompanyRequest.utm_medium = this._generalService.getUtmParameter('utm_medium');
@@ -258,13 +264,12 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
         if (companies) {
             if (companies.length > 0) {
                 let previousState;
-                this.store.dispatch(this._generalActions.getGroupWithAccounts());
                 this.store.pipe(select(ss => ss.session.lastState), take(1)).subscribe(se => {
                     previousState = se;
                 });
                 if (previousState) {
                     if (!this.createBranch) {
-                        previousState = previousState.replace('pages/', '');
+                        previousState = previousState?.replace('pages/', '');
                         this._route.navigate([`pages/${previousState}`]);
                     }
                 }
@@ -291,12 +296,6 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
         this.closeCompanyModal.emit();
         if (isElectron) {
             this.store.dispatch(this._loginAction.ClearSession());
-        } else if (isCordova) {
-            (window as any).plugins.googleplus.logout(
-                (msg) => {
-                    this.store.dispatch(this._loginAction.ClearSession());
-                }
-            );
         } else {
             this.isLoggedInWithSocialAccount$.subscribe((val) => {
                 if (val) {
@@ -340,6 +339,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
                 if (parsedNumber.isValid()) {
                     ele.classList.remove('error-box');
                     this.isMobileNumberValid = true;
+                    this.companyForm.form.controls['contactNo'].setErrors(null);
                 } else {
                     this.isMobileNumberValid = false;
                     this._toaster.errorToast(this.localeData?.invalid_contact_number_error);
@@ -349,6 +349,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
             } else {
                 // branch on-boarding is carried out where no mobile field is there
                 this.isMobileNumberValid = true;
+                this.companyForm.form.controls['contactNo'].setErrors(null);
             }
         } catch (error) {
             this.isMobileNumberValid = false;
@@ -372,7 +373,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
         comnanyName = this.removeSpecialCharacters(comnanyName);
         city = this.removeSpecialCharacters(city);
         d = new Date();
-        dateString = d.getTime().toString();
+        dateString = d.getTime()?.toString();
         randomGenerate = this.getSixCharRandom();
         strings = [comnanyName, city, dateString, randomGenerate];
         return strings.join('');
@@ -380,12 +381,12 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
 
     private removeSpecialCharacters(str) {
         let finalString;
-        finalString = str.replace(/[^a-zA-Z0-9]/g, '');
+        finalString = str?.replace(/[^a-zA-Z0-9]/g, '');
         return finalString.substr(0, 6).toLowerCase();
     }
 
     private getSixCharRandom() {
-        return Math.random().toString(36).replace(/[^a-zA-Z0-9]+/g, '').substr(0, 6);
+        return Math.random().toString(36)?.replace(/[^a-zA-Z0-9]+/g, '')?.substr(0, 6);
     }
 
     public getCountry() {
@@ -463,8 +464,8 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
      */
     public updateBranch(): void {
         this._companyService.updateBranch({
-            companyUniqueName: this.activeCompanyDetails.uniqueName,
-            branchUniqueName: this.entityDetails.uniqueName,
+            companyUniqueName: this.activeCompanyDetails?.uniqueName,
+            branchUniqueName: this.entityDetails?.uniqueName,
             name: this.company.name,
             alias: this.company.nameAlias
         }).pipe(takeUntil(this.destroyed$)).subscribe(data => {

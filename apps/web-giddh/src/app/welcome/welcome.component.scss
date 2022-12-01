@@ -1,5 +1,3 @@
-@import "../../assets/css/color.scss";
-
 .welcome-header {
     display: flex;
     justify-content: center;
@@ -9,15 +7,18 @@
 
 .welcome-container {
     hr {
-        background: $gray;
+        background: var(--color-abbey);
     }
     form {
         flex: 0;
     }
     .name-error {
-        color: $red;
+        color: var(--color-danger);
         font-size: 11px;
         float: right;
+    }
+    .applicable-tax-btn:focus {
+        box-shadow: none !important;
     }
 }
 
@@ -36,11 +37,11 @@
 
 .welcome-container form label {
     font-size: 14px;
-    color: $nero;
+    color: var(--color-nero);
 }
 
 .box {
-    background: rgba(255, 255, 255, 0.5);
+    background: var(--color-common-primary-background-for-all-components);
     padding: 30px 40px;
 }
 
@@ -55,16 +56,16 @@
 }
 
 .welcome-outer hr {
-    border: 0.5px solid $gray;
+    border: 0.5px solid var(--color-common-secondary-border);
 }
 
 .skip {
-    color: $deep-sky-blue-hover;
+    color: var(--color-blue);
     margin-left: 16px;
 }
 
 .btn-default:hover {
-    background: $whisper;
+    background: var(--color-dark-fog);
 }
 
 ::ng-deep sh-select .header.open > input[type="text"],
@@ -80,14 +81,14 @@
 }
 
 .addCmpnyAddrs p {
-    color: $deep-sky-blue-hover;
+    color: var(--color-blue);
     font-size: 12px;
 }
 
 .change-preference,
 .taxation-not-supported {
     font-size: 14px;
-    color: $gray;
+    color: var(--color-abbey);
 }
 
 .welcome-container .btn-sky-blue {
@@ -95,18 +96,18 @@
 }
 
 .btn-default {
-    background: $very-light-gray;
-    color: $night-rider;
+    background: var(--color-iron);
+    color: var(--color-nero);
 }
 .welcome-container p.welcome-title {
     font-size: 14px;
-    color: $nobel;
+    color: var(--color-gray);
     margin-top: 25px;
 }
 .form-control[disabled],
 .form-control[readonly],
 fieldset[disabled] {
-    color: $gray !important;
+    color: var(--color-abbey) !important;
 }
 .welcome-container sup {
     top: 0;
@@ -118,15 +119,15 @@ fieldset[disabled] {
     top: 38px;
     z-index: 9;
     cursor: pointer;
-    color: $deep-sky-blue;
+    color: var(--color-blue);
 }
 .position-relative {
     position: relative;
 }
 .custom-multi-select {
     li {
-        background: $white-smoke;
-        color: $white;
+        background: var(--color-chips-primary-background);
+        color: var(--color-white);
         margin: 4px;
         padding: 2px 10px;
         font-size: 14px;
@@ -134,7 +135,7 @@ fieldset[disabled] {
         cursor: pointer;
         display: inline-block;
         a {
-            color: $gray;
+            color: var(--color-abbey);
         }
     }
 }
@@ -149,6 +150,9 @@ span.same-as-head {
     margin-right: 10px;
     float: left;
 }
+.select-tax-placeholder {
+    color: var(--color-common-primary-input-placeholder) !important;
+}
 
 .select-caret-contact {
     width: 90px !important;
@@ -157,4 +161,18 @@ span.same-as-head {
 
 .min-height-100 {
     min-height: 100px;
+}
+
+.select-box {
+    .dropdown-menu {
+        .select-applicable-tax-list {
+            height: 35px;
+            margin-bottom: 0px;
+            display: flex;
+            align-items: center;
+            &:hover {
+                background-color: var(--color-dropdown-list-hover-background);
+            }
+        }
+    }
 }

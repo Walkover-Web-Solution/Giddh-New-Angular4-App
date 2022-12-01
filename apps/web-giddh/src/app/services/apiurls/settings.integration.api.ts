@@ -29,5 +29,6 @@ export const SETTINGS_INTEGRATION_COMMUNICATION_API = {
     DELETE_PLATFORM: COMMON + 'communication/platform/:platformUniqueName',
     GET_TRIGGERS: COMMON + 'communication/trigger',
     DELETE_TRIGGER: COMMON + 'communication/trigger/:triggerUniqueName',
-    GET_TRIGGER_FORM: COMMON + 'communication/platform/:platform/trigger/form'
+    GET_TRIGGER_FORM: COMMON + 'communication/platform/:platform/trigger/form',
+    GET_FIELD_SUGGESTIONS: COMMON + 'communication/suggestions/:platform/:entity'
 }

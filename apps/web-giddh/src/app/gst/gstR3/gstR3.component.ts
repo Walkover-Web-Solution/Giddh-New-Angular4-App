@@ -1,4 +1,5 @@
-import { Component, OnInit, OnDestroy} from '@angular/core';
+import * as dayjs from 'dayjs';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Observable, ReplaySubject, of } from 'rxjs';
 import {
     GstOverViewRequest,
@@ -11,7 +12,6 @@ import { AppState } from '../../store';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ToasterService } from '../../services/toaster.service';
 import { GstReconcileActions } from '../../actions/gst-reconcile/GstReconcile.actions';
-import * as moment from 'moment/moment';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { InvoicePurchaseActions } from '../../actions/purchase-invoice/purchase-invoice.action';
 import { GstReport } from '../constants/gst.constant';
@@ -60,6 +60,8 @@ export class FileGstR3Component implements OnInit, OnDestroy {
     public isMonthSelected: boolean = true;
     /** True, if GST filing needs to be shown */
     public showGstFiling: boolean = SHOW_GST_FILING;
+    /** This will use for string date show */
+    public visibleSelectMonth: string = '';
 
     constructor(
         private store: Store<AppState>,
@@ -71,7 +73,7 @@ export class FileGstR3Component implements OnInit, OnDestroy {
         private breakpointObserver: BreakpointObserver
     ) {
         this.gstAuthenticated$ = this.store.pipe(select(p => p.gstR.gstAuthenticated), takeUntil(this.destroyed$));
-        this.gstr3BOverviewDataFetchedSuccessfully$ = this.store.pipe(select(p => p.gstR.gstr3BOverViewDataFetchedSuccessfully, takeUntil(this.destroyed$)));
+        this.gstr3BOverviewDataFetchedSuccessfully$ = this.store.pipe(select(p => p.gstR.gstr3BOverViewDataFetchedSuccessfully), takeUntil(this.destroyed$));
         this.gstFileSuccess$ = this.store.pipe(select(p => p.gstR.gstReturnFileSuccess), takeUntil(this.destroyed$));
         this.store.pipe(select(appState => appState.gstR.activeCompanyGst), takeUntil(this.destroyed$)).subscribe(response => {
             if (response && this.activeCompanyGstNumber !== response) {
@@ -80,18 +82,18 @@ export class FileGstR3Component implements OnInit, OnDestroy {
         });
         this.gstFileSuccess$.subscribe(a => this.fileReturnSucces = a);
     }
-    
+
     public ngOnInit(): void {
         document.querySelector('body').classList.add('gst-sidebar-open');
         this.breakpointObserver
-        .observe(['(max-width: 767px)'])
-        .pipe(takeUntil(this.destroyed$))
-        .subscribe((state: BreakpointState) => {
-            this.isMobileScreen = state.matches;
-            if (!this.isMobileScreen) {
-                this.asideGstSidebarMenuState = 'in';
-            }
-        });
+            .observe(['(max-width: 767px)'])
+            .pipe(takeUntil(this.destroyed$))
+            .subscribe((state: BreakpointState) => {
+                this.isMobileScreen = state.matches;
+                if (!this.isMobileScreen) {
+                    this.asideGstSidebarMenuState = 'in';
+                }
+            });
         this.activatedRoute.queryParams.pipe(take(1)).subscribe(params => {
             this.currentPeriod = {
                 from: params['from'],
@@ -102,8 +104,9 @@ export class FileGstR3Component implements OnInit, OnDestroy {
                 this.store.dispatch(this.gstAction.SetActiveCompanyGstin(this.activeCompanyGstNumber));
             }
             this.isCompany = params['isCompany'] === 'true';
-            this.selectedMonth = moment(this.currentPeriod.from, GIDDH_DATE_FORMAT).toISOString();
-            this.selectedMonth = moment(this.selectedMonth).format('MMMM YYYY');
+            this.selectedMonth = dayjs(this.currentPeriod.from, GIDDH_DATE_FORMAT).toISOString();
+            this.selectedMonth = dayjs(this.selectedMonth).format('MMMM YYYY');
+            this.visibleSelectMonth = this.selectedMonth;
             this.store.dispatch(this.gstAction.SetSelectedPeriod(this.currentPeriod));
             this.selectedGstr = params['return_type'];
         });
@@ -203,8 +206,8 @@ export class FileGstR3Component implements OnInit, OnDestroy {
         this.getCurrentPeriod$.subscribe(currentPeriod => {
             if (currentPeriod && currentPeriod.from) {
                 let date = {
-                    startDate: moment(currentPeriod.from, GIDDH_DATE_FORMAT).startOf('month').format(GIDDH_DATE_FORMAT),
-                    endDate: moment(currentPeriod.to, GIDDH_DATE_FORMAT).endOf('month').format(GIDDH_DATE_FORMAT)
+                    startDate: dayjs(currentPeriod.from, GIDDH_DATE_FORMAT).startOf('month').format(GIDDH_DATE_FORMAT),
+                    endDate: dayjs(currentPeriod.to, GIDDH_DATE_FORMAT).endOf('month').format(GIDDH_DATE_FORMAT)
                 };
                 if (date.startDate === currentPeriod.from && date.endDate === currentPeriod.to) {
                     this.isMonthSelected = true;
@@ -226,11 +229,12 @@ export class FileGstR3Component implements OnInit, OnDestroy {
 
     public periodChanged(ev) {
         if (ev) {
-            this.selectedMonth = moment(ev).format('MMMM YYYY');
             this.currentPeriod = {
-                from: moment(ev).startOf('month').format(GIDDH_DATE_FORMAT),
-                to: moment(ev).endOf('month').format(GIDDH_DATE_FORMAT)
+                from: dayjs(ev).startOf('month').format(GIDDH_DATE_FORMAT),
+                to: dayjs(ev).endOf('month').format(GIDDH_DATE_FORMAT)
             };
+            this.selectedMonth = dayjs(ev).format('MMMM YYYY');
+            this.visibleSelectMonth = this.selectedMonth;
             this.dateSelected = true;
             this.store.dispatch(this.gstAction.SetSelectedPeriod(this.currentPeriod));
             let request: GstOverViewRequest = new GstOverViewRequest();
@@ -260,8 +264,8 @@ export class FileGstR3Component implements OnInit, OnDestroy {
             return this.toasty.errorToast(this.localeData?.email_required_error);
         }
         // Note:- appended ",1" with selectedMonth (July 2020) because "July 2020" format does not support for firefox browser and ("July 2020, 1") is valid format for chrome and firefox browser
-        let convertValidDateFormatForMoment = this.selectedMonth + ',1';
-        let monthToSend = moment(convertValidDateFormatForMoment).format("MM") + "-" + moment(convertValidDateFormatForMoment).format("YYYY");
+        let convertValidDateFormat = this.selectedMonth + ',1';
+        let monthToSend = dayjs(convertValidDateFormat).format("MM") + "-" + dayjs(convertValidDateFormat).format("YYYY");
         if (!monthToSend) {
             this.toasty.errorToast(this.localeData?.month_required_error);
         } else if (!this.activeCompanyGstNumber) {
@@ -271,7 +275,7 @@ export class FileGstR3Component implements OnInit, OnDestroy {
             this.userEmail = '';
         }
     }
-    
+
     /**
     * Unsubscribes from subscription
     *
@@ -281,6 +285,7 @@ export class FileGstR3Component implements OnInit, OnDestroy {
         this.destroyed$.next(true);
         this.destroyed$.complete();
         document.querySelector('body').classList.remove('gst-sidebar-open');
+        this.store.dispatch(this.gstAction.resetGstr3BOverViewResponse());
     }
 
     /**
@@ -290,7 +295,7 @@ export class FileGstR3Component implements OnInit, OnDestroy {
      * @memberof FileGstR3Component
      */
     public handleNavigation(type: string): void {
-        switch(type) {
+        switch (type) {
             case GstReport.Gstr1: case GstReport.Gstr2:
                 this.navigateToOverview(type);
                 break;
@@ -307,7 +312,7 @@ export class FileGstR3Component implements OnInit, OnDestroy {
      * @param {*} type Type of report (gstr1, gstr2, gstr3b)
      * @memberof FileGstR3Component
      */
-     public navigateToOverview(type): void {
+    public navigateToOverview(type): void {
         this.router.navigate(['pages', 'gstfiling', 'filing-return'], { queryParams: { return_type: type, from: this.currentPeriod.from, to: this.currentPeriod.to, tab: 0, selectedGst: this.activeCompanyGstNumber } });
     }
 

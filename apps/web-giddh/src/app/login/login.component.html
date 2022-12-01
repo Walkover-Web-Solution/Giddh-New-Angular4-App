@@ -29,7 +29,7 @@
                                     <h4 class="mb-4">Login to your secure accounting space</h4>
                                     <form
                                         class="position-relative mt-2 mb-3"
-                                        id="login-with-pwd"
+                                        id="demo"
                                         [formGroup]="loginWithPasswdForm"
                                         (ngSubmit)="loginWithPasswd(loginWithPasswdForm)"
                                         *ngIf="loginUsing === 'userName'"
@@ -190,6 +190,16 @@
                                             >
                                         </li>
                                     </ul>
+                                    <ul class="social-login">
+                                        <li class="google-ico msg91-ico">
+                                            <a href="javascript:void(0);" (click)="signInWithOtp()">
+                                                <i class="ico-google ico-msg91">
+                                                    <img src="./assets/images/msg91-icon-blue.svg" />
+                                                </i>
+                                                <span>Login with OTP</span></a
+                                            >
+                                        </li>
+                                    </ul>
                                     <p class="login-with" *ngIf="loginUsing !== 'userName'">
                                         Login with
                                         <a
@@ -200,7 +210,6 @@
                                             email and password</a
                                         >
                                     </p>
-
                                     <div class="d-flex align-items-center account mt-1">
                                         <p class="mb-0 mr-2 bold text-light-2">Don't have an account?</p>
                                         <a routerLink="/signup" class="btn btn-secondary"> Signup</a>
@@ -224,14 +233,14 @@
     #emailVerifyModal="bs-modal"
     role="dialog"
     aria-hidden="true"
-    [config]="modalConfig"
+    [config]="{ backdrop: 'static' }"
 >
     <div class="modal-dialog modal-md">
         <div class="modal-content">
             <div class="border-radius-0">
                 <div class="modal-header">
                     <h3>Sign Up with Giddh</h3>
-                    <span aria-hidden="true" class="close" data-dismiss="modal" (click)="hideEmailModal()">×</span>
+                    <button aria-hidden="true" class="close" data-dismiss="modal" (click)="hideEmailModal()">×</button>
                 </div>
                 <div class="modal-body clearfix">
                     <form class="col-12" name="verifyEmailForm" novalidate [formGroup]="emailVerifyForm">
@@ -296,14 +305,14 @@
     #mobileVerifyModal="bs-modal"
     role="dialog"
     aria-hidden="true"
-    [config]="modalConfig"
+    [config]="{ backdrop: 'static' }"
 >
     <div class="modal-dialog modal-md">
         <div class="modal-content">
             <div class="border-radius-0">
                 <div class="modal-header">
                     <h3>Sign Up with Giddh</h3>
-                    <span aria-hidden="true" class="close" data-dismiss="modal" (click)="hideMobileModal()">×</span>
+                    <button aria-hidden="true" class="close" data-dismiss="modal" (click)="hideMobileModal()">×</button>
                 </div>
                 <div class="modal-body clearfix">
                     <form
@@ -378,7 +387,7 @@
     #twoWayAuthModal="bs-modal"
     role="dialog"
     aria-hidden="true"
-    [config]="modalConfig"
+    [config]="{ backdrop: 'static' }"
     (onHidden)="onHiddenAuthModal($event)"
 >
     <div class="modal-dialog modal-md">
@@ -386,9 +395,9 @@
             <div class="border-radius-0">
                 <div class="modal-header">
                     <h3>Sign Up with Giddh</h3>
-                    <span aria-hidden="true" class="close" data-dismiss="modal" (click)="resetTwoWayAuthModal()"
-                        >×</span
-                    >
+                    <button aria-hidden="true" class="close" data-dismiss="modal" (click)="resetTwoWayAuthModal()">
+                        ×
+                    </button>
                 </div>
                 <div class="modal-body clearfix">
                     <form class="col-12" id="authModal" name="verifyEmailForm" novalidate [formGroup]="twoWayOthForm">

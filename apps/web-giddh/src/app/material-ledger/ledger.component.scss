@@ -1,11 +1,10 @@
-@import "../../assets/css/color.scss";
 .wrap-transaction-map {
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--color-common-primary-border);
     border-bottom: none !important;
     .ledger-book {
         box-shadow: none;
         .left-col-new {
-            border-right: 1px solid $gainsboro;
+            border-right: 1px solid var(--color-common-primary-border);
         }
         .checkbox-span {
             height: 49px;
@@ -68,16 +67,16 @@
 }
 #ledger-transaction-left-list .mat-grid-tile,
 #ledger-transaction-right-list .mat-grid-tile {
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--color-table-primary-content-bar-border) !important;
 }
 #ledger-transaction-right-list,
 #ledger-transaction-left-list {
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--color-table-primary-content-bar-border) !important;
 }
 
 .form-control,
 input {
-    color: $nero;
+    color: var(--color-nero);
 }
 .notfound-option {
     display: flex;
@@ -86,10 +85,9 @@ input {
 .ledg-head .mat-grid-list .mat-grid-tile,
 .ledg-head .mat-grid-list .mat-grid-tile .select2-container {
     padding: 8px 10px;
-    border-bottom: 1px solid $gainsboro;
-    border-right: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--color-ledger-grid-border-color) !important;
+    border-right: 1px solid var(--color-ledger-grid-border-color);
     font-size: 13px;
-    color: $nero;
     text-overflow: ellipsis;
     white-space: nowrap;
     display: flex;
@@ -104,10 +102,11 @@ input {
 }
 .transaction-mapped-table .mat-grid-tile {
     padding: 10px 15px !important;
-    border-bottom: 1px solid $gainsboro !important;
+    border-bottom: 1px solid var(--color-iron) !important;
 }
 table.ledger-footer-1 td[class*="col-"] {
     justify-content: flex-end;
+    background-color: var(--color-common-primary-background-for-all-components);
 }
 .ledg-head table td.pd-r25 {
     padding-right: 25px !important;
@@ -116,8 +115,8 @@ table.ledger-footer-1 td[class*="col-"] {
 .ledg-head.entry-popup table td[class*="col-"] {
     padding: 0px !important;
     padding-bottom: 1px !important;
-    border-bottom: 1px solid $gainsboro;
-    border-right: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--color-iron);
+    border-right: 1px solid var(--color-iron);
     font-size: 13px;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -141,7 +140,7 @@ table.ledger-footer-1 td[class*="col-"] {
         .ledger-row.row {
             td,
             th {
-                border-bottom: 1px solid $gainsboro !important;
+                border-bottom: 1px solid var(--color-iron) !important;
                 border-top: none !important;
             }
             td[class*="col-"] {
@@ -175,7 +174,7 @@ table.ledger-footer-1 td[class*="col-"] {
     .single-search-box {
         position: relative;
         i {
-            color: $gray;
+            color: var(--color-sidebar-search-bar-text);
             left: 8px;
             top: -8px;
             z-index: 1;
@@ -189,8 +188,8 @@ table.ledger-footer-1 td[class*="col-"] {
     }
 }
 .ledger-head-top i.icon-search.position-absolute {
-    background-color: $chetwode-blue;
-    color: $white;
+    background-color: var(--color-blue);
+    color: var(--color-white);
     width: 32px;
     height: 36px;
     top: 0px !important;
@@ -203,10 +202,12 @@ table.ledger-footer-1 td[class*="col-"] {
 }
 .ledger-stat {
     padding: 10px 15px 0;
-    background: $white;
-    color: $gray;
+    background: var(--color-common-primary-background-for-all-components);
+    color: var(--color-abbey);
     font-size: 18px;
-    box-shadow: 0px 2px 6px $black-russian;
+    box-shadow: 0px 2px 6px var(--color-primary-ledger-box-shadow);
+    position: relative;
+    z-index: -1;
 }
 .ledger-stat .row {
     display: flex;
@@ -236,7 +237,7 @@ table.ledger-footer-1 td[class*="col-"] {
 }
 
 .ledger-head .mat-grid-list .mat-grid-tile {
-    color: $jacksons-purple;
+    color: var(--color-giddh-blue);
     padding-top: 5px !important;
     padding-bottom: 10px !important;
     border-right: none;
@@ -263,7 +264,7 @@ table.ledger-footer-1 td[class*="col-"] {
     left: 5% !important;
     right: 5%;
     bottom: 100px;
-    background: $white;
+    background: var(--color-common-primary-background-for-all-components);
     padding: 5px;
     font-size: 12px;
     z-index: 0;
@@ -275,7 +276,7 @@ table.ledger-footer-1 td[class*="col-"] {
     text-align: center;
 }
 .pagination > li > a:hover {
-    color: $cinnabar-orange;
+    color: var(--color-red);
 }
 .ledger-panel label {
     font-weight: 400;
@@ -284,7 +285,7 @@ table.ledger-footer-1 td[class*="col-"] {
     float: left;
     text-decoration: underline;
     margin: 0px 5px;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--color-iron);
 }
 .upload-div label {
     padding: 6px;
@@ -293,30 +294,30 @@ table.ledger-footer-1 td[class*="col-"] {
     padding-right: 25px !important;
 }
 .thead-background1 th {
-    background: $white;
-    color: $black;
-    border-right: 1px solid $gainsboro;
+    background: var(--color-white);
+    color: var(--color-nero);
+    border-right: 1px solid var(--color-iron);
     padding: 15px 11px !important;
     font-weight: 400;
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--color-iron);
     font-family: "opensans-semibold";
     font-size: 14px;
-    border-top: 1px solid $gainsboro;
+    border-top: 1px solid var(--color-iron);
 }
 .ledger-main .form-control,
 .ledger-main input {
-    color: $nero;
+    color: var(--color-nero);
 }
 
 .ledger-book {
-    border: 0px solid $gainsboro;
+    border: 0px solid var(--color-common-primary-border);
     clear: both;
     position: relative;
     float: left;
     width: 100%;
     margin-bottom: 16px;
-    background: $white;
-    box-shadow: 0 0 6px $black-russian;
+    background: var(--color-common-primary-background-for-all-components);
+    box-shadow: 0 0 6px var(--color-primary-ledger-box-shadow);
 }
 .Width600 {
     position: absolute;
@@ -350,7 +351,7 @@ table.ledger-footer-1 td[class*="col-"] {
     display: block;
     height: 36px;
     width: 1px;
-    background-color: $gainsboro;
+    background-color: var(--color-iron);
     left: 37px !important;
     z-index: 100;
     top: 0;
@@ -380,29 +381,25 @@ input[type="date"]::-webkit-outer-spin-button {
 .focus-unset.ledger-main .form-control:focus {
     border: unset !important;
 }
-tr[vr-item]:focus {
-    background-color: $alice-blue-light;
-    outline: 0;
-}
 sh-select:focus {
-    outline: 1px $cinnabar-orange solid;
+    outline: 1px var(--color-red) solid;
 }
 .notfound-option.active {
-    background: $lavender !important;
+    background: var(--color-dark-fog) !important;
     padding: 2px 5px !important;
 }
 .amount-total {
     font-size: 12px;
-    color: $nobel;
+    color: var(--color-gray);
     padding-left: 5px;
 }
 .ledger-book {
     .left-col-new {
-        background: $white;
+        background: var(--color-common-primary-background-for-all-components);
         padding: 0 0px 350px;
     }
     .right-col-new {
-        background: $white;
+        background: var(--color-common-primary-background-for-all-components);
         padding: 0 0px 350px;
     }
 }
@@ -412,31 +409,31 @@ sh-select:focus {
 }
 .left-col-new .mat-grid-list .mat-grid-title:first-child,
 .left-col-new .mat-grid-list .mat-grid-title:first-child {
-    border-left: 1px solid $gainsboro !important;
+    border-left: 1px solid var(--color-iron) !important;
 }
 .custom-tabs {
     display: none;
 }
 .ledg-head .icomoon-ico {
-    color: $gray;
+    color: var(--color-abbey);
     width: 36px;
     min-width: 36px;
     height: 36px;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--color-secondary-input-bar-border);
     padding: 3px;
     display: flex;
     justify-content: center;
     border-top-width: 1px;
-    background-color: $white;
+    background-color: var(--color-white);
     border-radius: 5px;
 }
 .advance-search-block input {
-    background: $solitude !important;
+    background: var(--color-wild-sand) !important;
     height: 28px;
-    border-color: $solitude !important;
+    border-color: var(--color-wild-sand) !important;
 }
 .advance-search-block input::placeholder {
-    color: $dark-gray;
+    color: var(--color-abbey);
 }
 
 .left-col-new,
@@ -446,20 +443,25 @@ sh-select:focus {
 }
 .ledger-section {
     display: flex;
+    .particular-label {
+        width: 80% !important;
+        min-width: 80% !important;
+        max-width: 80% !important;
+    }
 }
 .advance-search-block .icon-search {
     right: 0;
     top: 0;
-    background-color: $chetwode-blue;
+    background-color: var(--color-blue);
     padding: 6px 9px;
-    color: $white;
+    color: var(--color-white);
 }
 .left-col-new .width-100.h-table#blank-ledger-container .no-left-border {
     border-left: none !important;
 }
 
 .ledger-book .ledger-footer-1 .total-col .border-top {
-    border-top: 1px solid $gainsboro !important;
+    border-top: 1px solid var(--color-table-primary-header-bar-border) !important;
 }
 .ledger-book .ledger-footer-1 .total-col .bd-rt {
     border: none;
@@ -474,7 +476,7 @@ sh-select:focus {
     content: "";
     height: 1px;
     width: 32%;
-    background-color: $gainsboro;
+    background-color: var(--color-secondary-input-bar-border);
     left: -32%;
     top: 17px;
 }
@@ -483,7 +485,7 @@ sh-select:focus {
     content: "";
     height: 1px;
     width: 32%;
-    background-color: $gainsboro;
+    background-color: var(--color-secondary-input-bar-border);
     right: -32%;
     top: 17px;
 }
@@ -492,15 +494,15 @@ sh-select:focus {
     margin-top: 25px;
 }
 .ledger-stat h1 {
-    color: $nero;
+    color: var(--color-common-primary-text);
     font-size: 14px;
     margin-bottom: 10px;
 }
 .digit-blue {
-    color: $midnight-blue;
+    color: var(--color-common-senary-text);
 }
 .grey-text-color {
-    color: $dark-gray !important;
+    color: var(--color-common-secondary-text) !important;
     font-size: 14px;
 }
 
@@ -508,35 +510,35 @@ sh-select:focus {
     font-size: 14px;
 }
 .stat-block {
-    border-right: 1px solid $gainsboro;
+    border-right: 1px solid var(--color-common-secondary-border);
     padding-left: 30px;
     padding-top: 20px;
     padding-bottom: 20px;
 }
 .stat-block:first-child {
-    border-bottom: 8px solid $midnight-express;
+    border-bottom: 8px solid var(--color-common-primary-blue-border);
 }
 .stat-block:nth-child(2) {
-    border-bottom: 8px solid $jacksons-purple;
+    border-bottom: 8px solid var(--color-giddh-blue);
 }
 .stat-block:nth-child(3) {
-    border-bottom: 8px solid $chetwode-blue;
+    border-bottom: 8px solid var(--color-blue);
 }
 .stat-block:last-child {
     border-right: none;
-    border-bottom: 8px solid $portage;
+    border-bottom: 8px solid var(--color-primary-ledger-stat-block-border);
 }
 .advance-search-filter {
     justify-content: center;
     align-items: center;
     margin-right: 8px;
     border-radius: 5px;
-    background-color: $white;
-    border: 1px solid $gainsboro;
+    background-color: var(--color-white);
+    border: 1px solid var(--color-secondary-input-bar-border);
     padding: 5px;
     width: 36px;
     height: 36px;
-    color: $gray;
+    color: var(--color-abbey);
     img {
         width: 18px;
     }
@@ -566,10 +568,10 @@ sh-select:focus {
 }
 .clear-filter-btn {
     border-radius: 5px;
-    border: 1px solid $gainsboro;
-    color: $gray;
+    border: 1px solid var(--color-primary-button-border);
+    color: var(--color-abbey);
     font-size: 14px;
-    background-color: $white;
+    background-color: var(--color-white);
     width: 36px;
     height: 36px;
     display: flex;
@@ -624,20 +626,22 @@ sh-select:focus {
     min-width: 180px !important;
     border-radius: 30px;
     box-sizing: content-box !important;
+    color: var(--color-primary-head-datepicker-text) !important;
     &:focus {
-        border-color: $chetwode-blue;
+        border-color: var(--color-blue);
     }
 }
 .ipad-view-datepicker {
     .date-range-picker {
-        border: 1px solid $gainsboro;
+        border: 1px solid var(--color-iron);
         border-radius: 20px;
         width: 203px !important;
     }
 }
 
 .download-invoice-ledger {
-    position: unset !important;
+    position: absolute !important;
+    right: 0px;
     align-items: center;
 }
 .icon-download-circle {
@@ -660,7 +664,7 @@ sh-select:focus {
     table {
         width: 100%;
         tbody {
-            background-color: $white;
+            background-color: var(--color-white);
             .transaction-date {
                 font-size: 16px;
                 font-family: "opensans-semibold";
@@ -668,13 +672,13 @@ sh-select:focus {
             td {
                 padding-top: 8px;
                 padding-bottom: 8px;
-                border-bottom: 1px solid $gainsboro;
+                border-bottom: 1px solid var(--color-iron);
                 font-size: 14px;
             }
             .second-row {
                 td {
                     &:first-child {
-                        border-right: 1px solid $gainsboro;
+                        border-right: 1px solid var(--color-iron);
                         width: 60%;
                     }
                     span.account-holder-checkbox {
@@ -696,12 +700,13 @@ sh-select:focus {
         justify-content: center;
     }
     .mat-grid-list {
-        border-top: 1px solid $gainsboro;
+        border-top: 1px solid var(--color-iron);
     }
 }
 
 .debit-credit-amount {
     justify-content: space-between;
+    flex-wrap: wrap;
 }
 .input-wrapper.ipad-view-datepicker {
     display: none !important;
@@ -724,10 +729,10 @@ sh-select:focus {
             padding-top: 10px;
             &:first-child {
                 padding-right: 15px;
-                border-left: 1px solid $gainsboro;
+                border-left: 1px solid var(--color-iron);
             }
             &:last-child {
-                border-right: 1px solid $gainsboro;
+                border-right: 1px solid var(--color-iron);
             }
         }
     }
@@ -754,7 +759,7 @@ sh-select:focus {
         }
     }
     .transaction-table-row table td {
-        border-bottom: 1px solid $gainsboro;
+        border-bottom: 1px solid var(--color-iron);
     }
     .transaction-table-row table:last-child td {
         border-bottom: none;
@@ -777,7 +782,7 @@ sh-select:focus {
 }
 
 .list-item {
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--color-common-secondary-border);
 }
 
 .ledger-row {
@@ -791,24 +796,32 @@ sh-select:focus {
     font-size: 16px;
 }
 .account-placeholder {
-    color: $nobel;
+    color: var(--color-gray);
     padding-left: 12px;
     font-size: 14px;
     min-height: 49px;
     display: flex;
     padding-top: 14px;
-    border-bottom: 1px solid $white;
+    border-bottom: 1px solid var(--color-white);
 }
 .account-placeholder-text {
-    color: $black !important;
+    color: var(--color-nero) !important;
 }
 a#reload-bank-transaction i.icon-refresh {
     font-size: 18px !important;
 }
 input#ledger-search {
-    border: 1px solid $gainsboro;
     padding-left: 27px !important;
+    background-color: transparent !important;
+    border: 1px solid var(--color-secondary-input-bar-border);
+    &:focus {
+        border: 1px solid var(--color-secondary-input-bar-border) !important;
+    }
+    &::placeholder {
+        color: var(--color-sidebar-search-bar-text);
+    }
 }
+
 .mat-grid-tile.select2-ledger {
     overflow: visible !important;
 }
@@ -819,7 +832,7 @@ input#ledger-search {
     margin-right: 8px;
 }
 .blue-heading {
-    color: $jacksons-purple;
+    color: var(--color-ledger-heading);
 }
 
 /*responsive*/
@@ -834,8 +847,8 @@ input#ledger-search {
     position: sticky;
     top: 55px;
     z-index: 1;
-    background-color: $white;
-    border-bottom: 1px solid $gainsboro;
+    background-color: var(--color-common-primary-background-for-all-components);
+    border-bottom: 1px solid var(--color-table-primary-header-bar-border);
 }
 .show-if-ledger-open {
     height: 300px;
@@ -858,10 +871,10 @@ input#ledger-search {
             align-items: center;
             display: flex;
             &:hover:after {
-                color: $rich-blue;
+                color: var(--color-blue);
             }
             .icon-favorite-selected {
-                color: $rich-blue;
+                color: var(--color-blue);
             }
         }
     }
@@ -870,6 +883,17 @@ input#ledger-search {
         line-height: normal;
     }
 }
+
+::ng-deep {
+    .ledg-head .mat-grid-tile-content {
+        color: var(--color-table-primary-content);
+    }
+
+    .ledg-head .ledger-row .mat-input-element {
+        color: var(--color-table-primary-content) !important;
+    }
+}
+
 @media only screen and (max-width: 1540px) {
     .modal-ledger {
         width: 85%;
@@ -970,7 +994,7 @@ input#ledger-search {
         margin-bottom: 0;
     }
     .amount-total {
-        background: $whisper-color;
+        background: var(--color-dark-fog);
     }
     .page-count {
         width: 100% !important;
@@ -1007,7 +1031,7 @@ input#ledger-search {
         display: block;
     }
     .right-col-new .ledger-head {
-        background: $alice-blue-light;
+        background: var(--color-wild-sand);
     }
     .ledger-row td:empty {
         display: none !important;
@@ -1031,7 +1055,7 @@ input#ledger-search {
     }
     .left-col-new .width-100.h-table .mat-grid-list .mat-grid-title:first-child,
     .left-col-new .width-100.h-table .mat-grid-list .mat-grid-title:first-child {
-        border-left: 0px solid $gainsboro !important;
+        border-left: 0px solid var(--color-iron) !important;
     }
     .ledg-head.some.transactions-page {
         margin-top: 50px;
@@ -1075,7 +1099,7 @@ input#ledger-search {
                 i {
                     left: -3px;
                     top: 0;
-                    color: $midnight-blue;
+                    color: var(--color-giddh-blue);
                 }
             }
         }
@@ -1091,8 +1115,8 @@ input#ledger-search {
         .ledger-datepicker {
             width: 36px;
             height: 36px;
-            background-color: $white;
-            border: 1px solid $gainsboro;
+            background-color: var(--color-white);
+            border: 1px solid var(--color-iron);
             text-align: center;
             align-items: center;
             justify-content: center;
@@ -1107,7 +1131,7 @@ input#ledger-search {
         right: 0px;
         .btn {
             background-color: transparent;
-            color: $nero;
+            color: var(--color-nero);
             font-size: 18px;
         }
         ul {
@@ -1153,7 +1177,7 @@ input#ledger-search {
         padding: 0;
         i {
             top: 0;
-            color: $gray;
+            color: var(--color-abbey);
         }
     }
     .ledger-head .mat-grid-list .mat-grid-tile.active {
@@ -1186,7 +1210,7 @@ input#ledger-search {
         position: fixed;
         .btn {
             background-color: transparent;
-            color: $white;
+            color: var(--color-white);
             font-size: 18px;
         }
     }

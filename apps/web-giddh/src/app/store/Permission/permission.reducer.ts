@@ -86,7 +86,7 @@ export function PermissionReducer(state = initialState, action: CustomActions): 
             if (action.payload.status === 'success') {
                 return {
                     ...state,
-                    roles: state.roles.filter(role => role.uniqueName !== action.payload.queryString.roleUniqueName)
+                    roles: state.roles?.filter(role => role.uniqueName !== action.payload.queryString.roleUniqueName)
                 };
             }
             return state;

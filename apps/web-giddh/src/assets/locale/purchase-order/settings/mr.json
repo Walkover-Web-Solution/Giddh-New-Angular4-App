@@ -20,5 +20,6 @@
     "bill_lock_date": "बिल लॉक तारीख",
     "show_narration_ledger": "लेजरला कथन दर्शवा",
     "invalid_email": "अवैध ई - मेल पत्ता.",
-    "gmail_account_added": "जी मेल खाते यशस्वीरित्या जोडले."
+    "gmail_account_added": "जी मेल खाते यशस्वीरित्या जोडले.",
+    "enable_voucher_download": "व्हाउचर डाउनलोड सक्षम करा"
 }

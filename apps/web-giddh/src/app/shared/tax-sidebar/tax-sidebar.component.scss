@@ -1,17 +1,15 @@
-@import "../../../assets/css/color.scss";
-
 :host.gst-sidebar {
     position: fixed;
     top: 57px;
     bottom: 0;
     min-height: 100vh;
-    background: $white;
+    background: var(--color-white);
     width: 240px;
     left: 0;
     z-index: 999;
-    box-shadow: -2px -2px 15px rgba(0, 0, 0, 0.2) !important;
+    box-shadow: -2px -2px 15px var(--color-primary-common-box-shadow) !important;
     .aside-pane {
-        background: $white;
+        background: var(--color-common-primary-background-for-all-components);
         overflow: initial;
         z-index: unset;
         .back-to-main-slider {
@@ -31,23 +29,32 @@
                             margin-bottom: 4px;
                             span {
                                 i {
-                                    color: $gray;
+                                    color: var(--color-sidebar-create-company-list-text);
                                     margin-right: 10px;
                                     font-size: 20px;
                                 }
                             }
                             &.disabled {
                                 span {
-                                    color: $gray !important;
+                                    color: var(--color-common-primary-disabled) !important;
+                                }
+                                .icon-GSTR,
+                                .icon-GSTR:hover {
+                                    color: var(--color-common-primary-disabled) !important;
                                 }
                             }
                             &.active {
-                                background-color: $cornflower !important;
+                                background-color: var(--color-primary-tax-sidebar-list-active) !important;
                                 span,
                                 span i {
-                                    color: $white !important;
+                                    color: var(--color-white) !important;
                                 }
                             }
+                        }
+                        .unit-mapping-icon {
+                            height: 20px;
+                            width: 20px;
+                            filter: var(--color-image-filter-secondary);
                         }
                     }
                 }
@@ -63,7 +70,7 @@
         list-style: none;
         font-size: 14px;
         font-family: "opensans-semibold";
-        color: $trout;
+        color: var(--color-primary-tax-sidebar-gst-menu-items-ul);
         li {
             padding: 6px 20px;
             margin-bottom: 0px;
@@ -72,7 +79,7 @@
                     background-color: transparent;
                     span {
                         i {
-                            color: $gray !important;
+                            color: var(--color-abbey) !important;
                         }
                     }
                 }
@@ -87,7 +94,7 @@
                     margin-right: 12px;
                 }
                 span {
-                    color: $trout;
+                    color: var(--color-primary-tax-sidebar-text);
                     &:first-child {
                         line-height: 1.6;
                         height: 20px;
@@ -104,10 +111,10 @@
                 }
             }
             &:hover {
-                background-color: $lavender;
+                background-color: var(--color-primary-tax-sidebar-list-hover);
                 span {
                     i {
-                        color: $nero !important;
+                        color: var(--color-nero) !important;
                     }
                 }
             }

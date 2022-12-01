@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import * as moment from 'moment';
+import * as dayjs from 'dayjs';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store';
 import { InventoryReportActions } from '../../actions/inventory/inventory.report.actions';
@@ -91,36 +91,36 @@ export class JobworkComponent implements OnInit, OnDestroy {
         },
         ranges: {
             'Last 1 Day': [
-                moment().subtract(1, 'days'),
-                moment()
+                dayjs().subtract(1, 'day'),
+                dayjs()
             ],
             'Last 7 Days': [
-                moment().subtract(6, 'days'),
-                moment()
+                dayjs().subtract(6, 'day'),
+                dayjs()
             ],
             'Last 30 Days': [
-                moment().subtract(29, 'days'),
-                moment()
+                dayjs().subtract(29, 'day'),
+                dayjs()
             ],
             'Last 6 Months': [
-                moment().subtract(6, 'months'),
-                moment()
+                dayjs().subtract(6, 'month'),
+                dayjs()
             ],
             'Last 1 Year': [
-                moment().subtract(12, 'months'),
-                moment()
+                dayjs().subtract(12, 'month'),
+                dayjs()
             ]
         },
-        startDate: moment().subtract(30, 'days'),
-        endDate: moment()
+        startDate: dayjs().subtract(30, 'day'),
+        endDate: dayjs()
     };
     public inventoryReport: InventoryReport;
     public stocksList$: Observable<IStocksItem[]>;
     public inventoryUsers$: Observable<InventoryUser[]>;
     public filter: InventoryFilter = {};
     public stockOptions: IOption[] = [];
-    public startDate: string = moment().subtract(30, 'days').format(GIDDH_DATE_FORMAT);
-    public endDate: string = moment().format(GIDDH_DATE_FORMAT);
+    public startDate: string = dayjs().subtract(30, 'day').format(GIDDH_DATE_FORMAT);
+    public endDate: string = dayjs().format(GIDDH_DATE_FORMAT);
     public uniqueName: string;
     public type: string;
     public reportType: string;
@@ -142,7 +142,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
         this.inventoryUsers$ = this._store.pipe(select(s => s.inventoryInOutState.inventoryUsers && s.inventoryInOutState.inventoryUsers), takeUntil(this.destroyed$));
         this.universalDate$ = this._store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
         // on reload page
-        let len = document.location.pathname.split('/').length;
+        let len = document.location.pathname.split('/')?.length;
         if (len === 6) {
             this.uniqueName = document.location.pathname.split('/')[len - 1];
             this.type = document.location.pathname.split('/')[len - 2];
@@ -175,7 +175,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
             this.nameStockOrPerson = v.name;
             if (v.uniqueName) {
                 this.uniqueName = v.uniqueName;
-                let length = document.location.pathname.split('/').length;
+                let length = document.location.pathname.split('/')?.length;
                 if (!v.uniqueName && length === 6) {
                     this.uniqueName = document.location.pathname.split('/')[length - 1];
                 }
@@ -225,7 +225,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
             }
 
         });
-        
+
         // initialization for voucher type array initially all selected
         this.initVoucherType();
         // Advance search modal
@@ -281,8 +281,8 @@ export class JobworkComponent implements OnInit, OnDestroy {
         this.universalDate$.subscribe(a => {
             if (a) {
                 this.datePickerOptions = { ...this.datePickerOptions, startDate: a[0], endDate: a[1], chosenLabel: a[2] };
-                this.startDate = moment(a[0]).format(GIDDH_DATE_FORMAT);
-                this.endDate = moment(a[1]).format(GIDDH_DATE_FORMAT);
+                this.startDate = dayjs(a[0]).format(GIDDH_DATE_FORMAT);
+                this.endDate = dayjs(a[1]).format(GIDDH_DATE_FORMAT);
                 this.applyFilters(1, true);
             }
         });
@@ -323,7 +323,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
     public updateDescription(txn: any) {
         this.updateDescriptionIdx = null;
         this.inventoryService.updateDescription(txn.uniqueName, txn.description).pipe(takeUntil(this.destroyed$)).subscribe(res => {
-            if (res.status === 'success') {
+            if (res?.status === 'success') {
                 this.updateDescriptionIdx = null;
             } else {
                 txn.description = null;
@@ -477,8 +477,8 @@ export class JobworkComponent implements OnInit, OnDestroy {
         this.universalDate$.pipe(take(1)).subscribe(a => {
             if (a) {
                 this.datePickerOptions = { ...this.datePickerOptions, startDate: a[0], endDate: a[1], chosenLabel: a[2] };
-                this.startDate = moment(a[0]).format(GIDDH_DATE_FORMAT);
-                this.endDate = moment(a[1]).format(GIDDH_DATE_FORMAT);
+                this.startDate = dayjs(a[0]).format(GIDDH_DATE_FORMAT);
+                this.endDate = dayjs(a[1]).format(GIDDH_DATE_FORMAT);
             }
         });
         //Reset Date
@@ -490,7 +490,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
     }
 
     public onOpenAdvanceSearch() {
-        this.advanceSearchModel.show();
+        this.advanceSearchModel?.show();
     }
 
     public advanceSearchAction(type: string) {
@@ -567,7 +567,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
                 this.filter.jobWorkTransactionType.splice(index, 1);
             }
         }
-        if (this.filter.jobWorkTransactionType.length > 0 && this.filter.jobWorkTransactionType.length < this.VOUCHER_TYPES.length) {
+        if (this.filter.jobWorkTransactionType?.length > 0 && this.filter.jobWorkTransactionType?.length < this.VOUCHER_TYPES.length) {
             idx = this.filter.jobWorkTransactionType.indexOf('ALL');
             if (idx !== -1) {
                 this.filter.jobWorkTransactionType.splice(idx, 1);
@@ -577,10 +577,10 @@ export class JobworkComponent implements OnInit, OnDestroy {
                 this.filter.jobWorkTransactionType.splice(idx, 1);
             }
         }
-        if (this.filter.jobWorkTransactionType.length === this.VOUCHER_TYPES.length) {
+        if (this.filter.jobWorkTransactionType?.length === this.VOUCHER_TYPES.length) {
             this.filter.jobWorkTransactionType = ['ALL'];
         }
-        if (this.filter.jobWorkTransactionType.length === 0) {
+        if (this.filter.jobWorkTransactionType?.length === 0) {
             this.filter.jobWorkTransactionType = ['NONE'];
         }
         this.isFilterCorrect = true;
@@ -637,10 +637,10 @@ export class JobworkComponent implements OnInit, OnDestroy {
         this.inventoryService.downloadJobwork(this.uniqueName, this.type, format, this.startDate, this.endDate, this.filter)
             .pipe(takeUntil(this.destroyed$))
             .subscribe(d => {
-                if (d.status === 'success') {
-                    this._toasty.infoToast(d.body);
+                if (d?.status === 'success') {
+                    this._toasty.infoToast(d?.body);
                 } else {
-                    this._toasty.errorToast(d.message);
+                    this._toasty.errorToast(d?.message);
                 }
             });
     }

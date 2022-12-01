@@ -20,5 +20,12 @@
         "advance_receipts": "आगाऊ पावती"
     },
     "entry_date": "प्रवेश तारीख",
-    "suppliers_name": "पुरवठादार नाव"
+    "suppliers_name": "पुरवठादार नाव",
+    "new_voucher": "+ नवीन पावती",
+    "preview_unavailable": "पूर्वावलोकन आत्ता उपलब्ध नाही! कृपया पुन्हा प्रयत्न करा...",
+    "delete_voucher": "तुम्हाला पावती हटवायची आहे का?",
+    "delete_vouchers": "तुम्हाला व्हाउचर/ पावती हटवायची आहे का?",
+    "uploaded_bill": "बिल अपलोड केले",
+    "currency_conversion": "[BASE_CURRENCY] मध्ये: [AMOUNT]<br />(रूपांतरण दर: [CONVERSION_RATE])",
+    "exchange_gain_loss_label": "[BASE_CURRENCY] मध्ये: [AMOUNT]<br />एक्सचेंज [PROFIT_TYPE]: "
 }

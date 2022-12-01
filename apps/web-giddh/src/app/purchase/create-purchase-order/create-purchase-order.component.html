@@ -64,7 +64,7 @@
                                                     [notFoundLinkText]="localeData?.add_vendor"
                                                     (keyup)="resetVendor($event)"
                                                     (onClear)="resetVendor(null)"
-                                                    [isOpen]="!isUpdateMode && !purchaseOrder.account.uniqueName"
+                                                    [isOpen]="!isUpdateMode && !purchaseOrder.account?.uniqueName"
                                                 >
                                                     <ng-template #optionTemplate let-option="option">
                                                         <a
@@ -988,7 +988,7 @@
                 </div>
             </div>
         </div>
-        <ng-container *ngIf="!purchaseOrder.account.uniqueName">
+        <ng-container *ngIf="!purchaseOrder.account?.uniqueName">
             <img src="assets/images/new/search-vendor.svg" class="img-responsive search-arrow-image" />
         </ng-container>
         <section
@@ -1010,7 +1010,7 @@
                     <input
                         type="number"
                         name="exchangeRate"
-                        [(ngModel)]="exchangeRate"
+                        [(ngModel)]="newExchangeRate"
                         *ngIf="showCurrencyValue"
                         class="form-control edit-currency"
                     />
@@ -1025,13 +1025,14 @@
                         (click)="
                             showCurrencyValue = !showCurrencyValue;
                             autoSaveIcon = !autoSaveIcon;
-                            exchangeRate = originalExchangeRate
+                            newExchangeRate = originalExchangeRate
                         "
                     />
                     <img
                         src="assets/images/autosave.svg"
                         class="edit-pencil"
                         (click)="
+                            exchangeRate = newExchangeRate;
                             originalExchangeRate = exchangeRate;
                             previousExchangeRate = exchangeRate;
                             autoSaveIcon = !autoSaveIcon;
@@ -1227,7 +1228,7 @@
                             <div class="differ-currency" *ngIf="isMulticurrencyAccount">
                                 <span class="d-flex justify-content-end">
                                     <amount-field
-                                        [amount]="transaction.amount * exchangeRate || 0"
+                                        [amount]="transaction.convertedAmount || 0"
                                         [currencySymbol]="baseCurrencySymbol"
                                         [currencyCode]="companyCurrency"
                                     >
@@ -1371,7 +1372,7 @@
                                 <div class="differ-currency" *ngIf="isMulticurrencyAccount">
                                     <span class="d-flex justify-content-end">
                                         <amount-field
-                                            [amount]="transaction.total * exchangeRate"
+                                            [amount]="transaction.convertedTotal"
                                             [currencySymbol]="baseCurrencySymbol"
                                             [currencyCode]="companyCurrency"
                                         >
@@ -1667,7 +1668,7 @@
                                 <div class="differ-currency" *ngIf="isMulticurrencyAccount">
                                     <span class="d-flex justify-content-end">
                                         <amount-field
-                                            [amount]="transaction.amount * exchangeRate || 0"
+                                            [amount]="transaction.convertedAmount || 0"
                                             [currencySymbol]="baseCurrencySymbol"
                                             [currencyCode]="companyCurrency"
                                         >
@@ -1683,6 +1684,7 @@
                                     <discount-control-component
                                         #discountComponent
                                         [discountMenu]="false"
+                                        [discountsList]="discountsList"
                                         [discountAccountsDetails]="entry.discounts"
                                         [discountSum]="entry.discountSum"
                                         [showHeaderText]="false"
@@ -1824,7 +1826,7 @@
                                 <div class="differ-currency" *ngIf="isMulticurrencyAccount">
                                     <span class="d-flex justify-content-end">
                                         <amount-field
-                                            [amount]="transaction.total * exchangeRate"
+                                            [amount]="transaction.convertedTotal"
                                             [currencySymbol]="baseCurrencySymbol"
                                             [currencyCode]="companyCurrency"
                                         >
@@ -2425,7 +2427,7 @@
                                         <div class="differ-currency" *ngIf="isMulticurrencyAccount">
                                             <span>
                                                 <amount-field
-                                                    [amount]="transaction.total * exchangeRate"
+                                                    [amount]="transaction.convertedTotal"
                                                     [currencySymbol]="baseCurrencySymbol"
                                                     [currencyCode]="companyCurrency"
                                                 >
@@ -2496,7 +2498,7 @@
                                                                 </div>
                                                                 <div class="item-stock">
                                                                     {{ commonLocaleData?.app_stock }}:
-                                                                    {{ option.additional?.stock.uniqueName }}
+                                                                    {{ option.additional?.stock?.uniqueName }}
                                                                 </div>
                                                             </a>
                                                         </ng-container>
@@ -2776,6 +2778,7 @@
                                             <discount-control-component
                                                 #discountComponent
                                                 [discountMenu]="false"
+                                                [discountsList]="discountsList"
                                                 [discountAccountsDetails]="entry.discounts"
                                                 [discountSum]="entry.discountSum"
                                                 [showHeaderText]="false"
@@ -2924,7 +2927,7 @@
                                         <div class="differ-currency" *ngIf="isMulticurrencyAccount">
                                             <span>
                                                 <amount-field
-                                                    [amount]="transaction.total * exchangeRate"
+                                                    [amount]="transaction.convertedTotal"
                                                     [currencySymbol]="baseCurrencySymbol"
                                                     [currencyCode]="companyCurrency"
                                                 >
@@ -3318,11 +3321,11 @@
         [config]="{ animated: true, keyboard: false, backdrop: false, ignoreBackdropClick: true }"
     >
         <ng-container *ngIf="bulkItemsModal?.isShown">
-            <proforma-add-bulk-items-component
+            <voucher-add-bulk-items-component
                 [invoiceType]="invoiceType"
                 (saveItemsEvent)="addBulkStockItems($event)"
                 (closeEvent)="bulkItemsModal.hide()"
-            ></proforma-add-bulk-items-component>
+            ></voucher-add-bulk-items-component>
         </ng-container>
     </div>
     <!-- endregion -->

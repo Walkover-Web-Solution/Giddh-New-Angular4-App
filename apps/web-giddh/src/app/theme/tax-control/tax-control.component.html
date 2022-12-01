@@ -47,17 +47,18 @@
             [style.max-height.px]="102"
             [style.min-height.px]="70"
         >
-            <li *ngIf="taxRenderData.length === 0">
+            <li *ngIf="taxRenderData?.length === 0">
                 <p class="lead pd">{{ commonLocaleData?.app_no_tax_found }}</p>
             </li>
 
             <li class="relative" *ngFor="let tax of taxRenderData; trackBy: trackByFn; let idx = index">
                 <label
-                    class="checkbox overflow-hidden width-100 bd-rb pd-b05 custom-item"
+                    class="checkbox overflow-hidden width-100 bd-rb pd-b05 custom-item d-flex align-items-center"
                     placement="bottom"
-                    *ngIf="taxRenderData.length - 1 !== idx"
+                    *ngIf="taxRenderData?.length - 1 !== idx"
                     (click)="$event.stopPropagation()"
                     [ngClass]="{ 'disabled-label': tax.isDisabled }"
+                    #taxLabelOne
                 >
                     <input
                         class="pull-left"
@@ -68,15 +69,18 @@
                         (change)="change($event)"
                         (click)="$event.stopPropagation()"
                         [disabled]="tax.isDisabled"
+                        (focus)="taxLabelFocusing(taxLabelOne)"
+                        (blur)="taxLabelBluring(taxLabelOne)"
                     />
                     <span class="pull-left text-ellipsis">{{ tax.name }}</span>
                 </label>
                 <label
                     class="checkbox overflow-hidden width-100 bd-rb pd-b05 custom-item"
                     placement="top"
-                    *ngIf="taxRenderData.length - 1 === idx"
+                    *ngIf="taxRenderData?.length - 1 === idx"
                     (click)="$event.stopPropagation()"
                     [ngClass]="{ 'disabled-label': tax.isDisabled }"
+                    #taxLabelTwo
                 >
                     <input
                         class="pull-left"
@@ -87,6 +91,8 @@
                         (change)="change($event)"
                         (click)="$event.stopPropagation()"
                         [disabled]="tax.isDisabled"
+                        (focus)="taxLabelFocusing(taxLabelTwo)"
+                        (blur)="taxLabelBluring(taxLabelTwo)"
                     />
                     <span class="pull-left text-ellipsis">{{ tax.name }}</span>
                 </label>

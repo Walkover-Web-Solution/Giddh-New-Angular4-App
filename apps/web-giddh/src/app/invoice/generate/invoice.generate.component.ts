@@ -6,8 +6,8 @@ import { FormControl, NgForm } from '@angular/forms';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
-import * as moment from 'moment/moment';
-import { GenBulkInvoiceFinalObj, GenBulkInvoiceGroupByObj, GenerateBulkInvoiceRequest, GetAllLedgersForInvoiceResponse, GetAllLedgersOfInvoicesResponse, ILedgersInvoiceResult, InvoiceFilterClass, InvoicePreviewDetailsVm } from '../../models/api-models/Invoice';
+import * as dayjs from 'dayjs';
+import { GenBulkInvoiceFinalObj, GenBulkInvoiceGroupByObj, GenerateBulkInvoiceObject, GenerateBulkInvoiceRequest, GetAllLedgersForInvoiceResponse, GetAllLedgersOfInvoicesResponse, ILedgersInvoiceResult, InvoiceFilterClass, InvoicePreviewDetailsVm } from '../../models/api-models/Invoice';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
@@ -40,7 +40,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     @ViewChild('accountUniqueNameSearch', { static: true }) public accountUniqueNameSearch: ElementRef;
     @Input() public selectedVoucher: string = 'invoice';
 
-    public moment = moment;
+    public dayjs = dayjs;
     public showFromDatePicker: boolean = false;
     public showToDatePicker: boolean = false;
     public togglePrevGenBtn: boolean = false;
@@ -134,6 +134,10 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     public customDateSelected: boolean = false;
     /* this will store active company data */
     public activeCompany: any = {};
+    /** Stores the voucher API version of company */
+    private voucherApiVersion: 1 | 2;
+    /** True if voucher generate in process */
+    public generateVoucherInProcess: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -170,7 +174,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.branches = response || [];
-                this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && this.branches.length > 1;
+                this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && this.branches?.length > 1;
             }
         });
 
@@ -178,10 +182,10 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
             takeUntil(this.destroyed$))
             .subscribe((res: GetAllLedgersForInvoiceResponse) => {
                 if (res && res.results) {
-                    let response = cloneDeep(res);
 
+                    let response = cloneDeep(res);
                     response.results = orderBy(response.results, (item: ILedgersInvoiceResult) => {
-                        return moment(item.entryDate, GIDDH_DATE_FORMAT);
+                        return dayjs(item.entryDate, GIDDH_DATE_FORMAT);
                     }, 'desc');
 
                     if (response && response.results) {
@@ -192,14 +196,13 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
                     }
                     this.ledgersData = response;
                     this.isGetAllRequestInProcess$ = of(false);
-
                     if(this.todaySelected) {
                         this.ledgerSearchRequest.dateRange = [response.fromDate, response.toDate];
                         this.ledgerSearchRequest.from = response.fromDate;
                         this.ledgerSearchRequest.to = response.toDate;
 
-                        this.selectedDateRange = { startDate: moment(response.fromDate, GIDDH_DATE_FORMAT), endDate: moment(response.toDate, GIDDH_DATE_FORMAT) };
-                        this.selectedDateRangeUi = moment(response.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(response.toDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
+                        this.selectedDateRange = { startDate: dayjs(response.fromDate, GIDDH_DATE_FORMAT), endDate: dayjs(response.toDate, GIDDH_DATE_FORMAT) };
+                        this.selectedDateRangeUi = dayjs(response.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(response.toDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
                     }
 
                     setTimeout(() => {
@@ -225,7 +228,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
             distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe((voucher: any) => {
                 if (voucher) {
                     this.voucherDetails = voucher;
-                    if (voucher && voucher.templateDetails && voucher.templateDetails.templateUniqueName) {
+                    if (voucher?.templateDetails?.templateUniqueName) {
                         this.getInvoiceTemplateDetails(voucher.templateDetails.templateUniqueName)
                     }
                     this.store.dispatch(this.generalActions.setAppTitle('/pages/invoice/preview/' + this.selectedVoucher));
@@ -262,11 +265,11 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
                         if (this.universalDate && !this.todaySelected) {
                             this.ledgerSearchRequest.dateRange = this.universalDate;
 
-                            this.selectedDateRange = { startDate: moment(dateObj[0]), endDate: moment(dateObj[1]) };
-                            this.selectedDateRangeUi = moment(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                            this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
+                            this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
 
-                            this.ledgerSearchRequest.from = moment(dateObj[0]).format(GIDDH_DATE_FORMAT);
-                            this.ledgerSearchRequest.to = moment(dateObj[1]).format(GIDDH_DATE_FORMAT);
+                            this.ledgerSearchRequest.from = dayjs(dateObj[0]).format(GIDDH_DATE_FORMAT);
+                            this.ledgerSearchRequest.to = dayjs(dateObj[1]).format(GIDDH_DATE_FORMAT);
 
                             this.isUniversalDateApplicable = true;
                         } else {
@@ -313,6 +316,14 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         this.store.pipe(select(state => state.invoice.hasPendingVouchersListPermissions), takeUntil(this.destroyed$)).subscribe(response => {
             this.hasPendingVouchersListPermissions = response;
         });
+
+        this.store.pipe(select(state => state.receipt.invoiceDataHasError), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.generateVoucherInProcess = false;
+            }
+        });
+
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
     }
 
     public ngOnChanges(changes: SimpleChanges): void {
@@ -350,9 +361,9 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
                 item.isSelected = this.allItemsSelected ? true : false;
 
                 if (this.allItemsSelected) {
-                    this.selectedInvoices = this.generalService.addValueInArray(this.selectedInvoices, item.uniqueName);
+                    this.selectedInvoices = this.generalService.addValueInArray(this.selectedInvoices, item?.uniqueName);
                 } else {
-                    this.selectedInvoices = this.generalService.removeValueFromArray(this.selectedInvoices, item.uniqueName);
+                    this.selectedInvoices = this.generalService.removeValueFromArray(this.selectedInvoices, item?.uniqueName);
                 }
 
                 return item;
@@ -374,21 +385,39 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public previewInvoice() {
-        let model = {
-            uniqueNames: uniq(this.selectedLedgerItems)
-        };
+        this.generateVoucherInProcess = false;
+
+        let model;
+        
+        if (this.voucherApiVersion === 2) {
+            model = {
+                entryUniqueNames: uniq(this.selectedLedgerItems)
+            };
+        } else {
+            model = {
+                uniqueNames: uniq(this.selectedLedgerItems)
+            };
+        }
+
         let res = find(this.ledgersData.results, (item: ILedgersInvoiceResult) => {
-            return item.uniqueName === this.selectedLedgerItems[0];
+            return item?.uniqueName === this.selectedLedgerItems[0];
         });
         this.selectedItem = cloneDeep(res);
-        if (this.selectedItem && this.selectedItem.account && this.selectedItem.account.uniqueName) {
-            this.selectedAccountUniqueName = this.selectedItem.account.uniqueName;
+        if (this.selectedItem && this.selectedItem.account && this.selectedItem.account?.uniqueName) {
+            this.selectedAccountUniqueName = this.selectedItem.account?.uniqueName;
         } else {
             this.selectedAccountUniqueName = '';
         }
-        this.store.dispatch(this.invoiceActions.ModifiedInvoiceStateData(model?.uniqueNames));
+
+        if (this.voucherApiVersion === 2) {
+            this.store.dispatch(this.invoiceActions.ModifiedInvoiceStateData(model?.entryUniqueNames));
+        } else {
+            this.store.dispatch(this.invoiceActions.ModifiedInvoiceStateData(model?.uniqueNames));
+        }
+        
         if (res?.account?.uniqueName) {
-            this.store.dispatch(this.invoiceActions.PreviewInvoice(res.account.uniqueName, model));
+            this.generateVoucherInProcess = true;
+            this.store.dispatch(this.invoiceActions.PreviewInvoice(res.account?.uniqueName, model));
         }
 
         this.toggleBodyClass();
@@ -400,6 +429,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof InvoiceGenerateComponent
      */
     public closeModel(): void {
+        this.generateVoucherInProcess = false;
         this.showEditMode = false;
         this.getLedgersOfInvoice();
         this.selectedItem = null;
@@ -411,7 +441,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public generateBulkInvoice(action: boolean) {
-        if (this.selectedLedgerItems.length <= 0) {
+        if (this.selectedLedgerItems?.length <= 0) {
             return false;
         }
         let arr: GenBulkInvoiceGroupByObj[] = [];
@@ -421,23 +451,34 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
             }
         });
         let res = groupBy(arr, 'accUniqueName');
-        let model: GenerateBulkInvoiceRequest[] = [];
-        forEach(res, (item: any): void => {
-            let obj: GenBulkInvoiceFinalObj = new GenBulkInvoiceFinalObj();
-            obj.entries = [];
-            forEach(item, (o: GenBulkInvoiceGroupByObj): void => {
-                obj.accountUniqueName = o.accUniqueName;
-                obj.entries.push(o.uniqueName);
+        if (this.voucherApiVersion === 2) {
+            let model: GenerateBulkInvoiceObject[] = [];
+            forEach(res, (item: any): void => {
+                forEach(item, (obj: GenBulkInvoiceGroupByObj): void => {
+                    model.push(obj?.uniqueName);
+                });
             });
-            model.push(obj);
-        });
-        this.store.dispatch(this.invoiceActions.GenerateBulkInvoice({ combined: action }, model));
+            this.store.dispatch(this.invoiceActions.GenerateBulkInvoice({ combined: action }, { entryUniqueNames: model }));
+        } else {
+            let model: GenerateBulkInvoiceRequest[] = [];
+            forEach(res, (item: any): void => {
+                let obj: GenBulkInvoiceFinalObj = new GenBulkInvoiceFinalObj();
+                obj.entries = [];
+                forEach(item, (o: GenBulkInvoiceGroupByObj): void => {
+                    obj.accountUniqueName = o.accUniqueName;
+                    obj.entries.push(o?.uniqueName);
+                });
+                model.push(obj);
+            });
+            this.store.dispatch(this.invoiceActions.GenerateBulkInvoice({ combined: action }, model));
+        }
+        
         this.selectedLedgerItems = [];
         this.selectedCountOfAccounts = [];
     }
 
     public setToday(model: string) {
-        this.ledgerSearchRequest[model] = String(moment());
+        this.ledgerSearchRequest[model] = String(dayjs());
     }
 
     public clearDate(model: string) {
@@ -495,8 +536,8 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         let fromDate = null;
         let toDate = null;
         if (this.universalDate && this.universalDate.length) {
-            fromDate = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
-            toDate = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
+            fromDate = dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
+            toDate = dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
         }
 
         return {
@@ -509,7 +550,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public countAndToggleVar() {
-        let total: number = this.ledgersData.results.length;
+        let total: number = this.ledgersData.results?.length;
         let count: number = 0;
         forEach(this.ledgersData.results, (item: ILedgersInvoiceResult) => {
             if (item.isSelected) {
@@ -524,11 +565,11 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     public insertItemsIntoArr() {
         if (this.ledgersData) {
             forEach(this.ledgersData.results, (item: ILedgersInvoiceResult) => {
-                let idx = indexOf(this.selectedLedgerItems, item.uniqueName);
+                let idx = indexOf(this.selectedLedgerItems, item?.uniqueName);
                 if (item.isSelected) {
                     if (idx === -1) {
-                        this.selectedLedgerItems.push(item.uniqueName);
-                        this.selectedCountOfAccounts.push(item.account.uniqueName);
+                        this.selectedLedgerItems.push(item?.uniqueName);
+                        this.selectedCountOfAccounts.push(item.account?.uniqueName);
                     }
                 } else {
                     if (idx !== -1) {
@@ -621,8 +662,8 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         this.ledgerSearchRequest.dateRange = this.universalDate;
         this.customDateSelected = false;
         if (this.universalDate && !this.todaySelected) {
-            this.selectedDateRange = { startDate: moment(this.universalDate[0]), endDate: moment(this.universalDate[1]) };
-            this.selectedDateRangeUi = moment(this.universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(this.universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.selectedDateRange = { startDate: dayjs(this.universalDate[0]), endDate: dayjs(this.universalDate[1]) };
+            this.selectedDateRangeUi = dayjs(this.universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(this.universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
 
             this.isUniversalDateApplicable = true;
         } else {
@@ -728,10 +769,10 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         this.hideGiddhDatepicker();
         if (value && value.startDate && value.endDate) {
             this.customDateSelected = true;
-            this.selectedDateRange = { startDate: moment(value.startDate), endDate: moment(value.endDate) };
-            this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
-            this.ledgerSearchRequest.from = moment(value.startDate).format(GIDDH_DATE_FORMAT);
-            this.ledgerSearchRequest.to = moment(value.endDate).format(GIDDH_DATE_FORMAT);
+            this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
+            this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.ledgerSearchRequest.from = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
+            this.ledgerSearchRequest.to = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
             this.isUniversalDateApplicable = false;
             this.getLedgersOfInvoice();
         }

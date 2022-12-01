@@ -1,7 +1,5 @@
-@import "../../../../../../assets/css/color.scss";
-
 .icici-payor-account-create-edit {
     label {
-        color: $omiod;
+        color: var(--color-payor-create-edit-icici-payor-account-create-edit);
     }
 }

@@ -4,7 +4,7 @@ import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@ang
 import { IStocksItem } from '../../../../models/interfaces/stocksItem.interface';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
-import * as moment from 'moment';
+import * as dayjs from 'dayjs';
 import { StockUnitRequest } from '../../../../models/api-models/Inventory';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 
@@ -37,7 +37,7 @@ export class TransferNoteComponent implements OnChanges {
 
     constructor(private _fb: FormBuilder) {
         this.form = this._fb.group({
-            inventoryEntryDate: [moment().format(GIDDH_DATE_FORMAT), Validators.required],
+            inventoryEntryDate: [dayjs().format(GIDDH_DATE_FORMAT), Validators.required],
             transactions: this._fb.array([]),
             description: [''],
             type: ['SENDER', Validators.required],
@@ -82,18 +82,18 @@ export class TransferNoteComponent implements OnChanges {
 
     public ngOnChanges(changes: SimpleChanges): void {
         if (changes.stockList && this.stockList) {
-            this.stockListOptions = this.stockList.map(p => ({ label: p.name, value: p.uniqueName }));
+            this.stockListOptions = this.stockList.map(p => ({ label: p.name, value: p?.uniqueName }));
         }
         if (changes.stockUnits && this.stockUnits) {
             this.stockUnitsOptions = this.stockUnits.map(p => ({ label: `${p.name} (${p.code})`, value: p.code }));
         }
         if (changes.userList && this.userList) {
-            this.userListOptions = this.userList.map(p => ({ label: p.name, value: p.uniqueName }));
+            this.userListOptions = this.userList.map(p => ({ label: p.name, value: p?.uniqueName }));
         }
     }
 
     public stockChanged(option: IOption) {
-        const stockItem = this.stockList.find(p => p.uniqueName === option.value);
+        const stockItem = this.stockList.find(p => p?.uniqueName === option.value);
         const stockUnit = stockItem ? stockItem.stockUnit.code : null;
         this.form?.patchValue({ ...this.form.value, stockUnit });
     }
@@ -102,7 +102,7 @@ export class TransferNoteComponent implements OnChanges {
         if (this.form.valid) {
 
             let value: any = {
-                inventoryEntryDate: moment(this.inventoryEntryDate.value, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT),
+                inventoryEntryDate: dayjs(this.inventoryEntryDate.value, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT),
                 description: this.description.value,
                 transactions: [{
                     stock: { uniqueName: this.stock.value },

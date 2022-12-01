@@ -1,36 +1,26 @@
-import {
-    AfterViewInit,
-    ChangeDetectorRef,
-    Component,
-    ComponentFactoryResolver,
-    ElementRef,
-    OnDestroy,
-    OnInit,
-    ViewChild,
-} from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { select, Store } from '@ngrx/store';
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal';
 import { fromEvent, merge, Observable, ReplaySubject } from 'rxjs';
 import { debounceTime, takeUntil, take } from 'rxjs/operators';
 import { GeneralActions } from '../../../actions/general/general.actions';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
 import { OrganizationType } from '../../../models/user-login-state';
-import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from '../../../app.constant';
+import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT, SubVoucher } from '../../../app.constant';
 import { cloneDeep, isArray } from '../../../lodash-optimized';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
-import { AdvanceReceiptSummaryRequest, GetAllAdvanceReceiptsRequest } from '../../../models/api-models/Reports';
+import { AdvanceReceiptSummaryRequest } from '../../../models/api-models/Reports';
 import { GeneralService } from '../../../services/general.service';
 import { ReceiptService } from '../../../services/receipt.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
 import { ElementViewContainerRef } from '../../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { AppState } from '../../../store';
-import {
-    ADVANCE_RECEIPT_REPORT_FILTERS,
-    ReceiptAdvanceSearchModel,
-} from '../../constants/reports.constant';
+import { ADVANCE_RECEIPT_REPORT_FILTERS, ReceiptAdvanceSearchModel } from '../../constants/reports.constant';
 import { ReceiptAdvanceSearchComponent } from '../receipt-advance-search/receipt-advance-search.component';
+import { ActivatedRoute, Router } from '@angular/router';
+import { InvoiceBulkUpdateService } from '../../../services/invoice.bulkupdate.service';
 
 @Component({
     selector: 'advance-receipt-report',
@@ -38,35 +28,34 @@ import { ReceiptAdvanceSearchComponent } from '../receipt-advance-search/receipt
     styleUrls: ['./advance-receipt-report.component.scss']
 })
 export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, OnInit {
-
     /** Customer name search bar */
-    @ViewChild('customerName', { static: true }) public customerName: ElementRef;
+    @ViewChild('customerName', { static: false }) public customerName: ElementRef;
     /** Parent of customer name search bar */
-    @ViewChild('customerNameParent', { static: true }) public customerNameParent: ElementRef;
+    @ViewChild('customerNameParent', { static: false }) public customerNameParent: ElementRef;
     /** Receipt number search bar */
-    @ViewChild('receiptNumber', { static: true }) public receiptNumber: ElementRef;
+    @ViewChild('receiptNumber', { static: false }) public receiptNumber: ElementRef;
     /** Parent of receipt number search bar */
-    @ViewChild('receiptNumberParent', { static: true }) public receiptNumberParent: ElementRef;
+    @ViewChild('receiptNumberParent', { static: false }) public receiptNumberParent: ElementRef;
     /** Payment mode search bar */
-    @ViewChild('paymentMode', { static: true }) public paymentMode: ElementRef;
+    @ViewChild('paymentMode', { static: false }) public paymentMode: ElementRef;
     /** Parent of payment mode search bar */
-    @ViewChild('paymentModeParent', { static: true }) public paymentModeParent: ElementRef;
+    @ViewChild('paymentModeParent', { static: false }) public paymentModeParent: ElementRef;
     /** Invoice number search bar */
-    @ViewChild('invoiceNumber', { static: true }) public invoiceNumber: ElementRef;
+    @ViewChild('invoiceNumber', { static: false }) public invoiceNumber: ElementRef;
     /** Parent of invoice number search bar */
-    @ViewChild('invoiceNumberParent', { static: true }) public invoiceNumberParent: ElementRef;
+    @ViewChild('invoiceNumberParent', { static: false }) public invoiceNumberParent: ElementRef;
     /** Advance search modal instance */
-    @ViewChild('receiptAdvanceSearchFilterModal', { static: true }) public receiptAdvanceSearchFilterModal: ElementViewContainerRef;
+    @ViewChild('receiptAdvanceSearchFilterModal', { static: false }) public receiptAdvanceSearchFilterModal: ElementViewContainerRef;
     /** Container of Advance search modal instance */
-    @ViewChild('receiptAdvanceSearchModalContainer', { static: true }) public receiptAdvanceSearchModalContainer: ModalDirective;
-
-    /** Moment method */
-    public moment = moment;
+    @ViewChild('receiptAdvanceSearchModalContainer', { static: false }) public receiptAdvanceSearchModalContainer: ModalDirective;
+    /** Instance of receipt confirmation modal */
+    @ViewChild('receiptConfirmationModel', { static: false }) public receiptConfirmationModel: ModalDirective;
+    /** dayjs method */
+    public dayjs = dayjs;
     /** Receipt type for filter */
     public receiptType: Array<any>;
+    /** Modal reference */
     public modalRef: BsModalRef;
-    public message: string;
-    public showEntryDate = true;
     /** Stores the list of all receipts */
     public allReceipts: Array<any>;
     /** Stores summary data of all receipts based on filters applied */
@@ -87,7 +76,8 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
         particularName: '', // Payment Mode
         invoiceNumber: '',  // Invoice Number
         sortBy: '',  // Sort by
-        sort: '' // Sort value
+        sort: '',
+        q: ''
     };
     /** True, if the user clicks to search Receipt */
     public showReceiptSearchBar: boolean = false;
@@ -111,13 +101,12 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
     public currentOrganizationType: OrganizationType;
     /** True if api call in progress */
     public isLoading: boolean = false;
-
     /** Advance search model to initialize the advance search fields */
     private advanceSearchModel: ReceiptAdvanceSearchModel = {
         adjustmentVoucherDetails: {
             vouchers: [],
             selectedValue: this.searchQueryParams.receiptTypes[0],
-            isDisabled: !!this.searchQueryParams.receiptTypes.length
+            isDisabled: !!this.searchQueryParams.receiptTypes?.length
         },
         totalAmountFilter: {
             filterValues: [],
@@ -138,7 +127,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
     private activeCompanyUniqueName: string;
     /** Date format type */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
-    /** directive to get reference of element */
+    /** Directive to get reference of element */
     @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
     /* This will store selected date range to use in api */
     public selectedDateRange: any;
@@ -164,6 +153,21 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
     public advanceReceiptAdvanceSearchAmountFilters: any;
     /** List of receipt types for filters */
     public receiptTypes: any;
+    /** Stores the voucher API version of current company */
+    public voucherApiVersion: 1 | 2;
+    /** Voucher params */
+    public previewVoucherParams: any = {};
+    /** List of selected receipts */
+    public selectedReceipts: any[] = [];
+    /** True if all receipts are selected */
+    public allReceiptsSelected: boolean = false;
+    /** Uniquename of receipt user hovered */
+    public hoveredReceiptUniqueName: string = "";
+    /** True if table is hovered */
+    public hoveredReceiptTable: boolean = false;
+    /** Holds currency */
+    public baseCurrency: string = '';
+
     /** @ignore */
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
@@ -174,11 +178,29 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
         private toastService: ToasterService,
         private generalService: GeneralService,
         private settingsBranchAction: SettingsBranchActions,
-        private modalService: BsModalService
-    ) { }
+        private modalService: BsModalService,
+        private router: Router,
+        private route: ActivatedRoute,
+        private invoiceBulkUpdateService: InvoiceBulkUpdateService
+    ) {
+        this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
+            if (params?.uniqueName && params?.accountUniqueName) {
+                this.previewVoucherParams = params;
+            } else {
+                this.previewVoucherParams = {};
+            }
+        });
+
+        this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$)).subscribe(profile => {
+            if (profile) {
+                this.baseCurrency = profile.baseCurrency;
+            }
+        });
+    }
 
     /** Subscribe to universal date and set header title */
     public ngOnInit(): void {
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.store.dispatch(this.generalAction.setAppTitle('/pages/reports/receipt'));
         this.store.pipe(select(state => state.session.companyUniqueName), take(1)).subscribe(uniqueName => this.activeCompanyUniqueName = uniqueName);
@@ -186,16 +208,14 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
             if (applicationDate) {
                 this.universalDate = applicationDate;
                 let universalDate = _.cloneDeep(applicationDate);
-                this.selectedDateRange = { startDate: moment(universalDate[0]), endDate: moment(universalDate[1]) };
-                this.selectedDateRangeUi = moment(applicationDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(applicationDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-                this.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
-                this.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
+                this.selectedDateRange = { startDate: dayjs(universalDate[0]), endDate: dayjs(universalDate[1]) };
+                this.selectedDateRangeUi = dayjs(applicationDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(applicationDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                this.fromDate = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);
+                this.toDate = dayjs(universalDate[1]).format(GIDDH_DATE_FORMAT);
             }
             this.fetchReceiptsData();
         });
-        this.store.pipe(
-            select(state => state.session.activeCompany), takeUntil(this.destroyed$)
-        ).subscribe(activeCompany => {
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             this.activeCompany = activeCompany;
         });
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
@@ -203,30 +223,30 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
             if (response && response.length) {
                 this.currentCompanyBranches = response.map(branch => ({
                     label: branch.alias,
-                    value: branch.uniqueName,
+                    value: branch?.uniqueName,
                     name: branch.name,
                     parentBranch: branch.parentBranch
                 }));
                 this.currentCompanyBranches.unshift({
                     label: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
                     name: this.activeCompany ? this.activeCompany.name : '',
-                    value: this.activeCompany ? this.activeCompany.uniqueName : '',
+                    value: this.activeCompany ? this.activeCompany?.uniqueName : '',
                     isCompany: true
                 });
-                if (!this.currentBranch.uniqueName) {
+                if (!this.currentBranch?.uniqueName) {
                     // Assign the current branch only when it is not selected. This check is necessary as
                     // opening the branch switcher would reset the current selected branch as this subscription is run everytime
                     // branches are loaded
                     let currentBranchUniqueName;
                     if (this.currentOrganizationType === OrganizationType.Branch) {
                         currentBranchUniqueName = this.generalService.currentBranchUniqueName;
-                        this.currentBranch = _.cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName)) || this.currentBranch;
+                        this.currentBranch = _.cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName)) || this.currentBranch;
                     } else {
-                        currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : '';
+                        currentBranchUniqueName = this.activeCompany ? this.activeCompany?.uniqueName : '';
                         this.currentBranch = {
                             name: this.activeCompany ? this.activeCompany.name : '',
                             alias: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
-                            uniqueName: this.activeCompany ? this.activeCompany.uniqueName : '',
+                            uniqueName: this.activeCompany ? this.activeCompany?.uniqueName : '',
                         };
                     }
                 }
@@ -245,7 +265,9 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
      * @memberof AdvanceReceiptReportComponent
      */
     public ngAfterViewInit(): void {
-        this.subscribeToEvents();
+        if (!this.previewVoucherParams?.uniqueName) {
+            this.subscribeToEvents();
+        }
     }
 
     /**
@@ -269,8 +291,8 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
         viewContainerRef.clear();
         const componentRef = viewContainerRef.createComponent(componentFactory);
 
-        this.advanceSearchModel.adjustmentVoucherDetails.selectedValue = this.searchQueryParams.receiptTypes[0];
-        this.advanceSearchModel.adjustmentVoucherDetails.isDisabled = !!this.searchQueryParams.receiptTypes.length;
+        this.advanceSearchModel.adjustmentVoucherDetails.selectedValue = (this.searchQueryParams.receiptTypes?.length) ? this.searchQueryParams.receiptTypes[0] : undefined;
+        this.advanceSearchModel.adjustmentVoucherDetails.isDisabled = !!this.searchQueryParams.receiptTypes?.length;
         (componentRef.instance as ReceiptAdvanceSearchComponent).searchModel = cloneDeep(this.advanceSearchModel);
         (componentRef.instance as ReceiptAdvanceSearchComponent).localeData = cloneDeep(this.localeData);
         (componentRef.instance as ReceiptAdvanceSearchComponent).commonLocaleData = cloneDeep(this.commonLocaleData);
@@ -367,8 +389,8 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
      * @returns {boolean} True, if element is child of parent
      * @memberof AdvanceReceiptReportComponent
      */
-    public childOf(element, parent): boolean {
-        return parent.contains(element);
+    public childOf(element: any, parent: any): boolean {
+        return parent?.contains(element);
     }
 
     /**
@@ -378,10 +400,10 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
      */
     public resetAdvanceSearch(): void {
         this.showClearFilter = false;
-        this.selectedDateRange = { startDate: moment(this.universalDate[0]), endDate: moment(this.universalDate[1]) };
-        this.selectedDateRangeUi = moment(this.universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(this.universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-        this.fromDate = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
-        this.toDate = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
+        this.selectedDateRange = { startDate: dayjs(this.universalDate[0]), endDate: dayjs(this.universalDate[1]) };
+        this.selectedDateRangeUi = dayjs(this.universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(this.universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+        this.fromDate = dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
+        this.toDate = dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
 
         this.searchQueryParams = {
             receiptTypes: [],
@@ -396,7 +418,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
             adjustmentVoucherDetails: {
                 vouchers: [...this.receiptTypes],
                 selectedValue: this.searchQueryParams.receiptTypes[0],
-                isDisabled: !!this.searchQueryParams.receiptTypes.length
+                isDisabled: !!this.searchQueryParams.receiptTypes?.length
             },
             totalAmountFilter: {
                 filterValues: [...this.advanceReceiptAdvanceSearchAmountFilters],
@@ -472,38 +494,101 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
      * @returns {Observable<BaseResponse<any, GetAllAdvanceReceiptsRequest>>} Observable to carry out further operations
      * @memberof AdvanceReceiptReportComponent
      */
-    private fetchAllReceipts(additionalRequestParameters?: GetAllAdvanceReceiptsRequest): Observable<BaseResponse<any, GetAllAdvanceReceiptsRequest>> {
+    private fetchAllReceipts(additionalRequestParameters?: any): Observable<BaseResponse<any, any>> {
         this.isLoading = true;
-        let requestObject: GetAllAdvanceReceiptsRequest = {
-            companyUniqueName: this.activeCompanyUniqueName,
-            from: this.fromDate,
-            to: this.toDate,
-            count: PAGINATION_LIMIT,
-            receiptTypes: this.searchQueryParams.receiptTypes,
-            receiptNumber: this.searchQueryParams.receiptNumber,
-            baseAccountName: this.searchQueryParams.baseAccountName,
-            particularName: this.searchQueryParams.particularName,
-            invoiceNumber: this.searchQueryParams.invoiceNumber,
-            totalAmount: (this.advanceSearchModel.totalAmountFilter) ? this.advanceSearchModel.totalAmountFilter.amount : "",
-            totalAmountOperation: (this.advanceSearchModel.totalAmountFilter) ? this.advanceSearchModel.totalAmountFilter.selectedValue : "",
-            unUsedAmount: (this.advanceSearchModel.unusedAmountFilter) ? this.advanceSearchModel.unusedAmountFilter.amount : "",
-            unUsedAmountOperation: (this.advanceSearchModel.unusedAmountFilter) ? this.advanceSearchModel.unusedAmountFilter.selectedValue : "",
-            sort: this.searchQueryParams.sort,
-            sortBy: this.searchQueryParams.sortBy,
-            branchUniqueName: this.currentBranch.uniqueName
-        };
+        let requestObject: any = {};
+
+        if (this.voucherApiVersion === 2) {
+            requestObject = {
+                companyUniqueName: this.activeCompanyUniqueName,
+                from: this.fromDate,
+                to: this.toDate,
+                count: this.paginationLimit,
+                q: this.searchQueryParams.q,
+                total: (this.advanceSearchModel.totalAmountFilter) ? this.advanceSearchModel.totalAmountFilter.amount : "",
+                balanceDue: (this.advanceSearchModel.unusedAmountFilter) ? this.advanceSearchModel.unusedAmountFilter.amount : "",
+                sort: this.searchQueryParams.sort,
+                sortBy: this.searchQueryParams.sortBy,
+                branchUniqueName: this.currentBranch?.uniqueName
+            };
+
+            if (additionalRequestParameters.receiptTypes?.length > 0) {
+                if (additionalRequestParameters.receiptTypes[0] === "advance receipt") {
+                    requestObject.receiptType = SubVoucher.AdvanceReceipt;
+                } else {
+                    requestObject.receiptType = "NORMAL_RECEIPT";
+                }
+            }
+            delete additionalRequestParameters['receiptTypes'];
+
+            requestObject.balanceMoreThan = false;
+            requestObject.balanceLessThan = false;
+            requestObject.balanceEqual = false;
+
+            if (this.advanceSearchModel.unusedAmountFilter.selectedValue === 'GREATER_THAN') {
+                requestObject.balanceMoreThan = true;
+            } else if(this.advanceSearchModel.unusedAmountFilter.selectedValue === 'GREATER_THAN_OR_EQUALS') {
+                requestObject.balanceEqual = true;
+                requestObject.balanceMoreThan = true;
+            } else if (this.advanceSearchModel.unusedAmountFilter.selectedValue === 'LESS_THAN_OR_EQUALS') {
+                requestObject.balanceEqual = true;
+                requestObject.balanceLessThan = true;
+            } else if (this.advanceSearchModel.unusedAmountFilter.selectedValue === 'EQUALS') {
+                requestObject.balanceEqual = true;
+            }
+
+            requestObject.totalMoreThan = false;
+            requestObject.totalLessThan = false;
+            requestObject.totalEqual = false;
+
+            if (this.advanceSearchModel.totalAmountFilter.selectedValue === 'GREATER_THAN') {
+                requestObject.totalMoreThan = true;
+            } else if(this.advanceSearchModel.totalAmountFilter.selectedValue === 'GREATER_THAN_OR_EQUALS') {
+                requestObject.totalEqual = true;
+                requestObject.totalMoreThan = true;
+            } else if (this.advanceSearchModel.totalAmountFilter.selectedValue === 'LESS_THAN_OR_EQUALS') {
+                requestObject.totalEqual = true;
+                requestObject.totalLessThan = true;
+            } else if (this.advanceSearchModel.totalAmountFilter.selectedValue === 'EQUALS') {
+                requestObject.totalEqual = true;
+            }
+
+            delete additionalRequestParameters['unUsedAmount'];
+            delete additionalRequestParameters['unUsedAmountOperation'];
+            delete additionalRequestParameters['totalAmount'];
+            delete additionalRequestParameters['totalAmountOperation'];
+        } else {
+            requestObject = {
+                companyUniqueName: this.activeCompanyUniqueName,
+                from: this.fromDate,
+                to: this.toDate,
+                count: this.paginationLimit,
+                receiptTypes: this.searchQueryParams.receiptTypes,
+                receiptNumber: this.searchQueryParams.receiptNumber,
+                baseAccountName: this.searchQueryParams.baseAccountName,
+                particularName: this.searchQueryParams.particularName,
+                invoiceNumber: this.searchQueryParams.invoiceNumber,
+                totalAmount: (this.advanceSearchModel.totalAmountFilter) ? this.advanceSearchModel.totalAmountFilter.amount : "",
+                totalAmountOperation: (this.advanceSearchModel.totalAmountFilter) ? this.advanceSearchModel.totalAmountFilter.selectedValue : "",
+                unUsedAmount: (this.advanceSearchModel.unusedAmountFilter) ? this.advanceSearchModel.unusedAmountFilter.amount : "",
+                unUsedAmountOperation: (this.advanceSearchModel.unusedAmountFilter) ? this.advanceSearchModel.unusedAmountFilter.selectedValue : "",
+                sort: this.searchQueryParams.sort,
+                sortBy: this.searchQueryParams.sortBy,
+                branchUniqueName: this.currentBranch?.uniqueName
+            };
+        }
 
         const optionalParams = cloneDeep(additionalRequestParameters);
         if (optionalParams) {
             for (let key in optionalParams) {
-                if ((optionalParams[key] === undefined || optionalParams[key] === null) || (optionalParams[key] && isArray(optionalParams[key]) && !optionalParams[key].length)) {
+                if ((optionalParams[key] === undefined || optionalParams[key] === null) || (optionalParams[key] && isArray(optionalParams[key]) && !optionalParams[key]?.length)) {
                     // Delete empty keys or keys with empty arrays as values
                     delete optionalParams[key]; // Delete falsy values
                 }
             }
             requestObject = { ...requestObject, ...optionalParams };
         }
-        return this.receiptService.getAllAdvanceReceipts(requestObject);
+        return (this.voucherApiVersion === 2) ? this.receiptService.GetAllReceipt(requestObject, 'receipt') : this.receiptService.getAllAdvanceReceipts(requestObject);
     }
 
     /**
@@ -514,13 +599,22 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
      * @memberof AdvanceReceiptReportComponent
      */
     private fetchSummary(): Observable<BaseResponse<any, AdvanceReceiptSummaryRequest>> {
-        const requestObject: AdvanceReceiptSummaryRequest = {
-            companyUniqueName: this.activeCompanyUniqueName,
-            from: this.fromDate,
-            to: this.toDate,
-            branchUniqueName: this.currentBranch.uniqueName
-        };
-        return this.receiptService.fetchSummary(requestObject);
+        if (this.voucherApiVersion === 2) {
+            const requestObj = {
+                from: this.fromDate,
+                to: this.toDate,
+                q: this.searchQueryParams.q
+            };
+            return this.receiptService.getAllReceiptBalanceDue(requestObj, "receipt");
+        } else {
+            const requestObject: AdvanceReceiptSummaryRequest = {
+                companyUniqueName: this.activeCompanyUniqueName,
+                from: this.fromDate,
+                to: this.toDate,
+                branchUniqueName: this.currentBranch?.uniqueName
+            };
+            return this.receiptService.fetchSummary(requestObject);
+        }
     }
 
     /**
@@ -538,7 +632,16 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
                 this.pageConfiguration.currentPage = response.body.page;
                 this.pageConfiguration.totalPages = response.body.totalPages;
                 this.pageConfiguration.totalItems = response.body.totalItems;
-                this.allReceipts = response.body.results;
+                this.allReceipts = (this.voucherApiVersion === 2) ? response.body.items : response.body.results;
+
+                this.allReceipts.forEach(receipt => {
+                    let isSeleted = this.selectedReceipts?.some(selectedReceipt => selectedReceipt === receipt?.uniqueName);
+                    if(isSeleted) {
+                        receipt.isSelected = true;
+                    }
+                    receipt = this.generalService.addToolTipText("receipt", this.baseCurrency, receipt, this.localeData, this.commonLocaleData);
+                });
+
                 this.changeDetectorRef.detectChanges();
                 return response.body;
             } else {
@@ -607,10 +710,10 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
         }
         this.hideGiddhDatepicker();
         if (value && value.startDate && value.endDate) {
-            this.selectedDateRange = { startDate: moment(value.startDate), endDate: moment(value.endDate) };
-            this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
-            this.fromDate = moment(value.startDate).format(GIDDH_DATE_FORMAT);
-            this.toDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
+            this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
+            this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.fromDate = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
+            this.toDate = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
             this.showClearFilter = true;
             this.fetchReceiptsData();
         }
@@ -624,13 +727,22 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
      */
     public translationComplete(event: boolean): void {
         if (event) {
-            this.advanceReceiptAdvanceSearchAmountFilters = [
-                { label: this.commonLocaleData?.app_comparision_filters.greater_than, value: 'GREATER_THAN' },
-                { label: this.commonLocaleData?.app_comparision_filters.greater_than_equals, value: 'GREATER_THAN_OR_EQUALS' },
-                { label: this.commonLocaleData?.app_comparision_filters.less_than_equals, value: 'LESS_THAN_OR_EQUALS' },
-                { label: this.commonLocaleData?.app_comparision_filters.equals, value: 'EQUALS' },
-                { label: this.commonLocaleData?.app_comparision_filters.not_equals, value: 'NOT_EQUALS' }
-            ];
+            if (this.voucherApiVersion === 2) {
+                this.advanceReceiptAdvanceSearchAmountFilters = [
+                    { label: this.commonLocaleData?.app_comparision_filters.greater_than, value: 'GREATER_THAN' },
+                    { label: this.commonLocaleData?.app_comparision_filters.greater_than_equals, value: 'GREATER_THAN_OR_EQUALS' },
+                    { label: this.commonLocaleData?.app_comparision_filters.less_than_equals, value: 'LESS_THAN_OR_EQUALS' },
+                    { label: this.commonLocaleData?.app_comparision_filters.equals, value: 'EQUALS' }
+                ];
+            } else {
+                this.advanceReceiptAdvanceSearchAmountFilters = [
+                    { label: this.commonLocaleData?.app_comparision_filters.greater_than, value: 'GREATER_THAN' },
+                    { label: this.commonLocaleData?.app_comparision_filters.greater_than_equals, value: 'GREATER_THAN_OR_EQUALS' },
+                    { label: this.commonLocaleData?.app_comparision_filters.less_than_equals, value: 'LESS_THAN_OR_EQUALS' },
+                    { label: this.commonLocaleData?.app_comparision_filters.equals, value: 'EQUALS' },
+                    { label: this.commonLocaleData?.app_comparision_filters.not_equals, value: 'NOT_EQUALS' }
+                ];
+            }
 
             this.receiptTypes = [
                 { label: this.localeData?.receipt_types.normal_receipts, value: 'normal receipt' },
@@ -642,5 +754,117 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
             this.advanceSearchModel.totalAmountFilter.filterValues = this.advanceReceiptAdvanceSearchAmountFilters;
             this.advanceSearchModel.unusedAmountFilter.filterValues = this.advanceReceiptAdvanceSearchAmountFilters;
         }
+    }
+
+    /**
+     * This will update the search query param
+     *
+     * @param {*} value
+     * @memberof AdvanceReceiptReportComponent
+     */
+    public updateSearchQuery(value): void {
+        this.searchQueryParams.q = value;
+    }
+
+    /**
+     * This will preview voucher
+     *
+     * @param {*} receipt
+     * @memberof AdvanceReceiptReportComponent
+     */
+    public previewVoucher(receipt: any): void {
+        // if (this.voucherApiVersion === 2) {
+        //     this.router.navigate(['/pages/voucher/receipt/preview/' + receipt.uniqueName + '/' + receipt.account?.uniqueName]);
+        // }
+    }
+
+    /**
+     * This will check/uncheck the selected receipt for bulk operations
+     *
+     * @param {*} receipt
+     * @memberof AdvanceReceiptReportComponent
+     */
+    public toggleReceipt(receipt: any): void {
+        if (receipt.isSelected) {
+            this.selectedReceipts = this.selectedReceipts?.filter(selectedReceipt => selectedReceipt !== receipt?.uniqueName);
+            this.allReceiptsSelected = false;
+        } else {
+            this.selectedReceipts.push(receipt?.uniqueName);
+        }
+        receipt.isSelected = !receipt.isSelected;
+    }
+
+    /**
+     * This will check/uncheck all receipts for bulk operations
+     *
+     * @param {boolean} [uncheckAll]
+     * @memberof AdvanceReceiptReportComponent
+     */
+    public toggleAllReceipts(uncheckAll?: boolean): void {
+        if (this.allReceiptsSelected || uncheckAll) {
+            this.selectedReceipts = [];
+
+            this.allReceipts.map(receipt => {
+                receipt.isSelected = false;
+                return receipt;
+            });
+        } else {
+            this.allReceipts.forEach(receipt => {
+                receipt.isSelected = true;
+                this.selectedReceipts.push(receipt?.uniqueName);
+            });
+        }
+
+        if (uncheckAll) {
+            this.allReceiptsSelected = false;
+        } else {
+            this.allReceiptsSelected = !this.allReceiptsSelected;
+        }
+    }
+
+    /**
+     * This will delete the receipt if confirmed to delete
+     *
+     * @memberof AdvanceReceiptReportComponent
+     */
+    public deleteReceipts(): void {
+        this.closeConfirmationPopup();
+
+        let bulkDeleteModel = {
+            voucherUniqueNames: this.selectedReceipts,
+            voucherType: "receipt"
+        }
+
+        this.invoiceBulkUpdateService.bulkUpdateInvoice(bulkDeleteModel, 'delete').subscribe(response => {
+            if (response) {
+                if (response.status === "success") {
+                    this.toastService.successToast(response.body);
+                    this.fetchReceiptsData();
+                    this.toggleAllReceipts(true);
+                } else {
+                    this.toastService.errorToast(response.message);
+                }
+            } else {
+                this.toastService.errorToast(this.commonLocaleData?.app_something_went_wrong);
+            }
+        });
+    }
+
+    /**
+     * This will open delete confirmation modal
+     *
+     * @memberof AdvanceReceiptReportComponent
+     */
+    public openConfirmationPopup() {
+        this.receiptConfirmationModel?.show();
+    }
+
+    /**
+     * This will close delete confirmation modal
+     *
+     * @memberof AdvanceReceiptReportComponent
+     */
+    public closeConfirmationPopup() {
+        this.receiptConfirmationModel?.hide();
     }
 }

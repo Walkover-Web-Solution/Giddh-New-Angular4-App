@@ -7,6 +7,7 @@
     <div class="setting-page user-detail-page relative" id="setting-tab" *ngIf="!isCreateAndSwitchCompanyInProcess">
         <hamburger-menu *ngIf="localeData?.auth_key" [pageHeading]="getPageHeading()"></hamburger-menu>
         <!-- start of tab set -->
+
         <tabset #staticTabs>
             <!-- start auth tab tab -->
             <tab
@@ -170,7 +171,16 @@
                         <div class="mr-t2">
                             <!--two way auth-->
                             <h1 class="section-head">
-                                <input type="checkbox" (change)="changeTwoWayAuth()" [(ngModel)]="twoWayAuth" />
+                                <ngx-switch
+                                    [(status)]="twoWayAuth"
+                                    [onText]="commonLocaleData?.app_on"
+                                    [offText]="commonLocaleData?.app_off"
+                                    [onColor]="bootstrapToggleSwitch?.On"
+                                    [offColor]="bootstrapToggleSwitch?.Off"
+                                    [size]="bootstrapToggleSwitch?.Size"
+                                    (statusChange)="changeTwoWayAuth()"
+                                >
+                                </ngx-switch>
                                 {{ localeData?.mobile_number?.two_way_auth_label }}
                             </h1>
                             <p class="grey" *ngIf="twoWayAuth">{{ localeData?.mobile_number?.two_way_auth_content }}</p>
@@ -208,7 +218,7 @@
                                         <th class="text-center">{{ commonLocaleData?.app_action }}</th>
                                     </tr>
                                 </thead>
-                                <tbody *ngIf="userSessionList.length">
+                                <tbody *ngIf="userSessionList?.length">
                                     <tr
                                         *ngFor="
                                             let session of userSessionList;
@@ -255,7 +265,7 @@
                                 </tbody>
                             </table>
                         </div>
-                        <div class="no-data" *ngIf="!userSessionList.length">
+                        <div class="no-data" *ngIf="!userSessionList?.length">
                             <no-data
                                 [primaryMessage]="commonLocaleData?.app_no_entries_found"
                                 [secondaryMessage]="commonLocaleData?.app_search_suggestion"
@@ -273,11 +283,7 @@
                 [id]="activeTab == 'subscription' ? 'giddh-page-heading' : ''"
             >
                 <div class="wrap-tab-content-pd-15">
-                    <subscriptions
-                        [activeTab]="activeTab"
-                        [localeData]="localeData"
-                        [commonLocaleData]="commonLocaleData"
-                    ></subscriptions>
+                    <subscription [localeData]="localeData" [commonLocaleData]="commonLocaleData"></subscription>
                 </div>
             </tab>
         </tabset>

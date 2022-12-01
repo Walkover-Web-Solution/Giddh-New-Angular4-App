@@ -3,10 +3,12 @@ import {
     ChangeDetectionStrategy,
     ChangeDetectorRef,
     Component,
+    EventEmitter,
     Inject,
     Input,
     OnChanges,
     OnDestroy,
+    Output,
     Renderer2,
     SimpleChanges,
 } from '@angular/core';
@@ -37,6 +39,13 @@ export class GridRowComponent implements OnChanges, OnDestroy {
     public minimumViewportLimit = TRIAL_BALANCE_VIEWPORT_LIMIT;
     /** True, when expand all button is toggled while search is enabled */
     @Input() public isExpandToggledDuringSearch: boolean;
+    /**
+     * Emits open account modal with account details
+     *
+     * @type {EventEmitter<any>}
+     * @memberof GridRowComponent
+     */
+    @Output() public openAccountModal: EventEmitter<any> = new EventEmitter();
     /** Subject to release subscription memory */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -58,27 +67,25 @@ export class GridRowComponent implements OnChanges, OnDestroy {
     }
 
     public entryClicked(acc) {
-        let url = location.href + '?returnUrl=ledger/' + acc.uniqueName + '/' + this.from + '/' + this.to;
+        let url = location.href + '?returnUrl=ledger/' + acc?.uniqueName + '/' + this.from + '/' + this.to;
         if (isElectron) {
             let ipcRenderer = (window as any).require('electron').ipcRenderer;
-            url = location.origin + location.pathname + '#./pages/ledger/' + acc.uniqueName + '/' + this.from + '/' + this.to;
+            url = location.origin + location.pathname + '#./pages/ledger/' + acc?.uniqueName + '/' + this.from + '/' + this.to;
             ipcRenderer.send('open-url', url);
-        } else if (isCordova) {
-            //todo: entry Clicked
         } else {
             (window as any).open(url);
         }
     }
 
     public accountInfo(acc, e: Event) {
-        this.searchService.loadDetails(acc.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.searchService.loadDetails(acc?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.body) {
                 this.accountDetails = response.body;
                 const parentGroups = response.body.parentGroups?.join(', ');
                 const creditorsString = 'currentliabilities, sundrycreditors';
                 const debtorsString = 'currentassets, sundrydebtors';
                 if (parentGroups.indexOf(creditorsString) > -1 || parentGroups.indexOf(debtorsString) > -1) {
-                    this.modalUniqueName = response.body.uniqueName;
+                    this.modalUniqueName = response.body?.uniqueName;
                 } else {
                     this.modalUniqueName = '';
                     this.entryClicked(acc);
@@ -93,7 +100,7 @@ export class GridRowComponent implements OnChanges, OnDestroy {
     }
 
     public trackByFn(index, item: Account) {
-        return item.uniqueName;
+        return item?.uniqueName;
     }
 
     /**

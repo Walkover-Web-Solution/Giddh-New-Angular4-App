@@ -13,7 +13,7 @@
             </button>
         </div>
     </div>
-    <div class="col-12 col-sm-12 mf-report-head">
+    <div class="col-12 col-sm-12 mf-report-head" [ngClass]="{ 'parent': fromParentComponent }">
         <div class="row">
             <div
                 class="col-12"
@@ -240,7 +240,7 @@
                     </thead>
                     <tbody>
                         <tr *ngFor="let item of reportData.results" (dblclick)="editMFItem(item)">
-                            <td data-title="Date">{{ moment(item.date, "DD-MM-YYYY") | date: "d MMM y" }}</td>
+                            <td data-title="Date">{{ dayjs(item.date, "DD-MM-YYYY") | date: "d MMM y" }}</td>
                             <td data-title="Voucher No." class="cursor-pointer">{{ item.voucherNumber }}</td>
                             <td data-title="Product Name">{{ item.stockName }}</td>
                             <td data-title="Qty Outwards">{{ item.manufacturingQuantity }}</td>

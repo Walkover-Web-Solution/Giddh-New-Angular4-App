@@ -19,15 +19,14 @@ export class BalanceSheetExportXlsComponent implements OnInit {
     constructor(
         private store: Store<AppState>,
         private tbPlActions: TBPlBsActions) {
-
-    }
-
-    public downloadBsXls() {
-        let request = { from: this.filters.from, to: this.filters.to, branchUniqueName: this.filters.branchUniqueName, filename: this.localeData?.xls.balance_sheet.download_filename };
-        this.store.dispatch(this.tbPlActions.DownloadBalanceSheetExcel(request));
     }
 
     public ngOnInit() {
-        this.imgPath = (isElectron || isCordova) ? 'assets/images/xls-icon.svg' : AppUrl + APP_FOLDER + 'assets/images/xls-icon.svg';
+        this.imgPath = isElectron ? 'assets/images/xls-icon.svg' : AppUrl + APP_FOLDER + 'assets/images/xls-icon.svg';
+    }
+
+    public downloadBsXls(value: boolean): void {
+        let request = { from: this.filters.from, to: this.filters.to, branchUniqueName: this.filters.branchUniqueName, filename: this.localeData?.xls.balance_sheet.download_filename, view: (value === true) ? "expanded" : "collapsed" };
+        this.store.dispatch(this.tbPlActions.DownloadBalanceSheetExcel(request));
     }
 }

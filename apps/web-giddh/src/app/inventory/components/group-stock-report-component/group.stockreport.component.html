@@ -171,7 +171,7 @@
                     <span class="icon-advance-filter"></span>
                 </div>
             </div>
-            <div class="clear-filter" *ngIf="isFilterCorrect">
+            <div class="clear-filter" *ngIf="isFilterCorrect && productName?.value?.length > 0">
                 <button class="btn btn-filter" (click)="resetFilter()">
                     <span class="icon-cross"></span> Clear Filter
                 </button>
@@ -189,7 +189,7 @@
                         aria-controls="dropdown-alignment"
                         tooltip="Download"
                     >
-                        <i class="icon-download strong"></i>
+                        <i class="icon-download-circle strong"></i>
                     </button>
                     <ul
                         id="dropdown-alignment"
@@ -259,14 +259,14 @@
                                 />
                             </div>
                         </th>
-                        <ng-container *ngIf="groupStockReport?.count && !GroupStockReportRequest?.stockName">
+                        <ng-container *ngIf="groupStockReport?.count">
                             <th class="text-center bd-rr bd-rb" width="20%" colspan="2">Opening stock</th>
                             <th class="text-center bd-rr bd-rb" width="20%" colspan="2">Inwards</th>
                             <th class="text-center bd-rr bd-rb" width="20%" colspan="2">Outwards</th>
                             <th class="text-center bd-rb" width="20%" colspan="2">Closing Stock</th>
                         </ng-container>
                     </tr>
-                    <tr class="bd-rt" [hidden]="!groupStockReport?.count && !GroupStockReportRequest?.stockName">
+                    <tr class="bd-rt" [hidden]="!groupStockReport?.count">
                         <th
                             colspan="2"
                             class="bd-rr td-search-box max-width-140"
@@ -964,9 +964,9 @@
         <div class="modal-content">
             <div class="modal-header theme-bg">
                 <h3 class="modal-title bg" id="modal-title">Advance Search</h3>
-                <span aria-hidden="true" class="close" data-dismiss="modal" (click)="advanceSearchAction('cancel')"
-                    >×</span
-                >
+                <button aria-hidden="true" class="close" data-dismiss="modal" (click)="advanceSearchAction('cancel')">
+                    ×
+                </button>
             </div>
             <div class="modal-body clearfix" [hidden]="!showAdvanceSearchModal">
                 <form action="" [formGroup]="advanceSearchForm">

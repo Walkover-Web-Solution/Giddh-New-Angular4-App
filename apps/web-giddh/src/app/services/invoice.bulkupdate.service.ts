@@ -27,7 +27,11 @@ export class InvoiceBulkUpdateService {
     public bulkUpdateInvoice(model: any, actionType: string) {
         let url;
         if (actionType) {
-            url = this.config.apiUrl + BULK_UPDATE_VOUCHER.BULK_UPDATE_VOUCHER_ACTION.replace(':companyUniqueName', this.generalService.companyUniqueName).replace(':actionType', actionType);
+            url = this.config.apiUrl + BULK_UPDATE_VOUCHER.BULK_UPDATE_VOUCHER_ACTION?.replace(':companyUniqueName', this.generalService.companyUniqueName)?.replace(':actionType', actionType);
+            
+            if (this.generalService.voucherApiVersion === 2) {
+                url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
+            }
         }
         return this.http.post(url, model).pipe(
             map(res => {

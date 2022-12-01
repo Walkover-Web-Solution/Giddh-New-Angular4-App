@@ -17,7 +17,6 @@ class LedgerPage {
     }
 
     enterAmount() {
-        // cy.xpath('//td[@class=\'col-xs-4 col-md-3 col-lg-3 position-relative\']//input[@class=\'form-control text-right ng-untouched ng-valid ng-dirtyl\']').click()
         return cy.xpath('//input[@name=\'totalAmount\']')
     }
 
@@ -30,16 +29,13 @@ class LedgerPage {
     }
 
     checkBoxTax() {
-        return cy.xpath("//input[@id='tax-checkbox-0']")
+        return cy.xpath("//input[@id='tax-control-checkbox-0']")
     }
-
 
     selectTax() {
         this.taxField().click();
         this.checkBoxTax().click()
     }
-
-
 }
 
 export default LedgerPage

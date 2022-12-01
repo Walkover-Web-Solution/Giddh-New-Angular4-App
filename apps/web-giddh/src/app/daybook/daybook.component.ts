@@ -2,13 +2,13 @@ import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild 
 import { Store, select } from '@ngrx/store';
 import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 import { AppState } from 'apps/web-giddh/src/app/store';
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Observable, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { CompanyActions } from '../actions/company.actions';
-import { StateDetailsRequest, TaxResponse } from '../models/api-models/Company';
-import { DaybookQueryRequest } from '../models/api-models/DaybookRequest';
+import { TaxResponse } from '../models/api-models/Company';
+import { DaybookQueryRequest, ExportBodyRequest } from '../models/api-models/DaybookRequest';
 import { DaterangePickerComponent } from '../theme/ng2-daterangepicker/daterangepicker.component';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../shared/helpers/defaultDateFormat';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../app.constant';
@@ -24,6 +24,9 @@ import { DaybookService } from '../services/daybook.service';
 import { ToasterService } from '../services/toaster.service';
 import { MatDialog } from '@angular/material/dialog';
 import { BreakpointObserver } from '@angular/cdk/layout';
+import { LedgerService } from '../services/ledger.service';
+import { Router } from '@angular/router';
+
 @Component({
     selector: 'daybook',
     templateUrl: './daybook.component.html',
@@ -74,8 +77,8 @@ export class DaybookComponent implements OnInit, OnDestroy {
     public selectedDateRangeUi: any;
     /* This will store available date ranges */
     public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
-    /* Moment object */
-    public moment = moment;
+    /* dayjs object */
+    public dayjs = dayjs;
     /* Selected from date */
     public fromDate: string;
     /* Selected to date */
@@ -140,7 +143,9 @@ export class DaybookComponent implements OnInit, OnDestroy {
         private daybookService: DaybookService,
         private toasterService: ToasterService,
         private dialog: MatDialog,
-        private breakpointObserver: BreakpointObserver
+        private breakpointObserver: BreakpointObserver,
+        private ledgerService: LedgerService,
+        private router: Router
     ) {
 
         this.daybookQueryRequest = new DaybookQueryRequest();
@@ -151,12 +156,6 @@ export class DaybookComponent implements OnInit, OnDestroy {
     public ngOnInit() {
         this.lc = new LedgerVM();
         this.currentOrganizationType = this.generalService.currentOrganizationType;
-        let companyUniqueName = null;
-        this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
-        let stateDetailsRequest = new StateDetailsRequest();
-        stateDetailsRequest.companyUniqueName = companyUniqueName;
-        stateDetailsRequest.lastState = 'daybook';
-        this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
 
         this.store.pipe(
             select(appState => appState.session.activeCompany), takeUntil(this.destroyed$)
@@ -168,34 +167,34 @@ export class DaybookComponent implements OnInit, OnDestroy {
             if (response && response.length) {
                 this.currentCompanyBranches = response.map(branch => ({
                     label: branch.alias,
-                    value: branch.uniqueName,
+                    value: branch?.uniqueName,
                     name: branch.name,
                     parentBranch: branch.parentBranch
                 }));
                 this.currentCompanyBranches.unshift({
                     label: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
                     name: this.activeCompany ? this.activeCompany.name : '',
-                    value: this.activeCompany ? this.activeCompany.uniqueName : '',
+                    value: this.activeCompany ? this.activeCompany?.uniqueName : '',
                     isCompany: true
                 });
                 let currentBranchUniqueName;
-                if (!this.currentBranch || !this.currentBranch.uniqueName) {
+                if (!this.currentBranch || !this.currentBranch?.uniqueName) {
                     // Assign the current branch only when it is not selected. This check is necessary as
                     // opening the branch switcher would reset the current selected branch as this subscription is run everytime
                     // branches are loaded
                     if (this.currentOrganizationType === OrganizationType.Branch) {
                         currentBranchUniqueName = this.generalService.currentBranchUniqueName;
-                        this.currentBranch = _.cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName)) || this.currentBranch;
+                        this.currentBranch = _.cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName)) || this.currentBranch;
                     } else {
-                        currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : '';
+                        currentBranchUniqueName = this.activeCompany ? this.activeCompany?.uniqueName : '';
                         this.currentBranch = {
                             name: this.activeCompany ? this.activeCompany.name : '',
                             alias: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
-                            uniqueName: this.activeCompany ? this.activeCompany.uniqueName : '',
+                            uniqueName: this.activeCompany ? this.activeCompany?.uniqueName : '',
                         };
                     }
                 }
-                this.daybookQueryRequest.branchUniqueName = (this.currentBranch) ? this.currentBranch.uniqueName : "";
+                this.daybookQueryRequest.branchUniqueName = (this.currentBranch) ? this.currentBranch?.uniqueName : "";
                 if (!this.initialApiCalled) {
                     this.initialApiCalled = true;
                     this.initialRequest();
@@ -207,7 +206,6 @@ export class DaybookComponent implements OnInit, OnDestroy {
                 }
             }
         });
-    
         this.breakpointObserver.observe([
             '(max-width: 767px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
@@ -219,8 +217,8 @@ export class DaybookComponent implements OnInit, OnDestroy {
     }
 
     public selectedDate(value: any) {
-        let from = moment(value.picker.startDate).format(GIDDH_DATE_FORMAT);
-        let to = moment(value.picker.endDate).format(GIDDH_DATE_FORMAT);
+        let from = dayjs(value.picker.startDate).format(GIDDH_DATE_FORMAT);
+        let to = dayjs(value.picker.endDate).format(GIDDH_DATE_FORMAT);
         if ((this.daybookQueryRequest.from !== from) || (this.daybookQueryRequest.to !== to)) {
             this.daybookQueryRequest.from = from;
             this.daybookQueryRequest.to = to;
@@ -269,24 +267,28 @@ export class DaybookComponent implements OnInit, OnDestroy {
     public getDaybook(withFilters = null): void {
         this.showLoader = true;
         this.daybookService.GetDaybook(withFilters, this.daybookQueryRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response?.status === "success" && response?.body?.entries?.length > 0) {
-                this.daybookQueryRequest.page = response?.body?.page;
-                response?.body?.entries.map(item => {
-                    item.isExpanded = this.isAllExpanded;
-                });
+            if (response?.status === "success") {
+                if (response?.body?.entries?.length > 0) {
+                    this.daybookQueryRequest.page = response?.body?.page;
+                    response?.body?.entries.map(item => {
+                        item.isExpanded = this.isAllExpanded;
+                    });
 
+                    this.daybookData = response?.body;
+                    this.checkIsStockEntryAvailable();
+                } else {
+                    this.daybookData = { entries: [], totalItems: 0, page: 0 };
+                }
                 if (this.todaySelected) {
-                    this.daybookQueryRequest.from = moment(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
-                    this.daybookQueryRequest.to = moment(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                    this.daybookQueryRequest.from = dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                    this.daybookQueryRequest.to = dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
 
-                    this.selectedDateRange = { startDate: moment(response?.body?.fromDate, GIDDH_DATE_FORMAT), endDate: moment(response?.body?.toDate, GIDDH_DATE_FORMAT) };
-                    this.selectedDateRangeUi = moment(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
-                    this.fromDate = moment(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
-                    this.toDate = moment(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                    this.fromDate = dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                    this.toDate = dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                    this.selectedDateRange = { startDate: dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT), endDate: dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT) };
+                    this.selectedDateRangeUi = dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
                 }
 
-                this.daybookData = response?.body;
-                this.checkIsStockEntryAvailable();
             } else {
                 if (response?.message) {
                     this.daybookData = { entries: [], totalItems: 0, page: 0 };
@@ -321,14 +323,15 @@ export class DaybookComponent implements OnInit, OnDestroy {
 
                 this.store.pipe(select(state => state.session.todaySelected), take(1)).subscribe(response => {
                     this.todaySelected = response;
-                    if (!response) {
-                        this.selectedDateRange = { startDate: moment(universalDate[0]), endDate: moment(universalDate[1]) };
-                        this.selectedDateRangeUi = moment(universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-                        this.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
-                        this.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
 
-                        this.daybookQueryRequest.from = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
-                        this.daybookQueryRequest.to = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
+                    if (!this.todaySelected) {
+                        this.selectedDateRange = { startDate: dayjs(universalDate[0]), endDate: dayjs(universalDate[1]) };
+                        this.selectedDateRangeUi = dayjs(universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                        this.fromDate = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);
+                        this.toDate = dayjs(universalDate[1]).format(GIDDH_DATE_FORMAT);
+
+                        this.daybookQueryRequest.from = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);
+                        this.daybookQueryRequest.to = dayjs(universalDate[1]).format(GIDDH_DATE_FORMAT);
                     } else {
                         this.daybookQueryRequest.from = "";
                         this.daybookQueryRequest.to = "";
@@ -361,19 +364,43 @@ export class DaybookComponent implements OnInit, OnDestroy {
             this.daybookQueryRequest.format = response.fileType;
             this.daybookQueryRequest.sort = response.order;
             if (this.daybookExportRequestType === 'post') {
-                this.daybookService.ExportDaybookPost(this.searchFilterData, this.daybookQueryRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                    if (response?.status === 'success') {
-                        if (response?.body?.type === "message") {
-                            this.toasterService.showSnackBar("success", response?.body?.file);
+                if (response.fileType === "csv") {
+                    let exportBodyRequest: ExportBodyRequest = new ExportBodyRequest();
+                    exportBodyRequest.from = this.daybookQueryRequest.from;
+                    exportBodyRequest.to = this.daybookQueryRequest.to;
+                    exportBodyRequest.exportType = "DAYBOOK";
+                    exportBodyRequest.showVoucherNumber = response.showVoucherNumber;
+                    exportBodyRequest.showEntryVoucher = response.showEntryVoucher;
+                    exportBodyRequest.sort = response.order?.toUpperCase();
+                    exportBodyRequest.fileType = "CSV";
+                    this.ledgerService.exportData(exportBodyRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                        if (response?.status === 'success') {
+                            if (typeof response?.body === "string") {
+                                this.toasterService.showSnackBar("success", response?.body);
+                                this.router.navigate(["/pages/downloads"]);
+                            } else {
+                                let blob = this.generalService.base64ToBlob(response?.body?.encodedData, response?.queryString?.requestType, 512);
+                                saveAs(blob, response?.body?.name);
+                            }
                         } else {
-                            let blob = this.generalService.base64ToBlob(response?.body?.file, response?.queryString?.requestType, 512);
-                            let type = response?.queryString?.requestType === 'application/pdf' ? '.pdf' : '.xls';
-                            saveAs(blob, 'response' + type);
+                            this.toasterService.showSnackBar("error", response?.message);
                         }
-                    } else {
-                        this.toasterService.showSnackBar("error", response?.message);
-                    }
-                });
+                    });
+                } else {
+                    this.daybookService.ExportDaybookPost(this.searchFilterData, this.daybookQueryRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                        if (response?.status === 'success') {
+                            if (response?.body?.type === "message") {
+                                this.toasterService.showSnackBar("success", response?.body?.file);
+                            } else {
+                                let blob = this.generalService.base64ToBlob(response?.body?.file, response?.queryString?.requestType, 512);
+                                let type = response?.queryString?.requestType === 'application/pdf' ? '.pdf' : '.xls';
+                                saveAs(blob, 'Daybook' + type);
+                            }
+                        } else {
+                            this.toasterService.showSnackBar("error", response?.message);
+                        }
+                    });
+                }
             } else if (this.daybookExportRequestType === 'get') {
                 this.daybookService.ExportDaybook(null, this.daybookQueryRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     if (response?.status === 'success') {
@@ -491,16 +518,15 @@ export class DaybookComponent implements OnInit, OnDestroy {
         this.todaySelected = false;
         this.hideGiddhDatepicker();
         if (value && value.startDate && value.endDate) {
-            this.selectedDateRange = { startDate: moment(value.startDate), endDate: moment(value.endDate) };
-            this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
-            this.fromDate = moment(value.startDate).format(GIDDH_DATE_FORMAT);
-            this.toDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
-            if ((this.daybookQueryRequest.from !== this.fromDate) || (this.daybookQueryRequest.to !== this.toDate)) {
-                this.daybookQueryRequest.from = this.fromDate;
-                this.daybookQueryRequest.to = this.toDate;
-                this.daybookQueryRequest.page = 0;
-                this.getDaybook(this.searchFilterData);
-            }
+            this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
+            this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.fromDate = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
+            this.toDate = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
+
+            this.daybookQueryRequest.from = this.fromDate;
+            this.daybookQueryRequest.to = this.toDate;
+            this.daybookQueryRequest.page = 0;
+            this.getDaybook(this.searchFilterData);
         }
     }
 
@@ -523,8 +549,8 @@ export class DaybookComponent implements OnInit, OnDestroy {
      */
     public showUpdateLedgerModal(txn: any): void {
         this.store.dispatch(this.ledgerActions.setAccountForEdit(txn?.otherTransactions[0]?.particular?.uniqueName));
-        this.store.dispatch(this.ledgerActions.setTxnForEdit(txn.uniqueName));
-        this.lc.selectedTxnUniqueName = txn.uniqueName;
+        this.store.dispatch(this.ledgerActions.setTxnForEdit(txn?.uniqueName));
+        this.lc.selectedTxnUniqueName = txn?.uniqueName;
         this.modalDialogRef = this.dialog.open(this.updateLedgerModal, {
             width: '70%',
             height: '650px',
@@ -597,7 +623,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
             this.companyTaxesList = res || [];
         });
     }
-    
+
     /**
      * This will keep the track of touch event and will check if double clicked on any transaction, it will open the update ledger modal
      *
@@ -605,7 +631,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
      * @memberof DaybookComponent
      */
     public showUpdateLedgerModalIpad(txn: any): void {
-        if (!this.isMobile){
+        if (!this.isMobile) {
             if (this.touchedTransaction?.uniqueName === txn?.uniqueName) {
                 this.showUpdateLedgerModal(txn);
             } else {

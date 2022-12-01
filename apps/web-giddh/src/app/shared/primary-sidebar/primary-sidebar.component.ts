@@ -100,13 +100,15 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     /** This will holds true if we added ledger item in local db once */
     public isItemAdded: boolean = false;
     /** This will open company branch switch dropdown */
-    public showCompanyBranchSwitch:boolean = false;
+    public showCompanyBranchSwitch: boolean = false;
     /** This will show/hide account sidepan */
     public accountAsideMenuState: string = 'out';
     /** This will hold group unique name from CMD+k for creating account */
     public selectedGroupForCreateAccount: any = '';
     /* Observable for create account success */
     private createAccountIsSuccess$: Observable<boolean>;
+    /* This will hold the active route url */
+    public isActiveRoute: string;
 
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
@@ -186,6 +188,14 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     public ngOnChanges(changes: SimpleChanges): void {
         if ('apiMenuItems' in changes && changes.apiMenuItems.previousValue !== changes.apiMenuItems.currentValue && changes.apiMenuItems.currentValue.length && this.localeData?.page_heading) {
             this.allItems = this.generalService.getVisibleMenuItems("sidebar", changes.apiMenuItems.currentValue, this.localeData?.items);
+            this.allItems?.map(items => {
+                items?.items?.map(item => {
+                    if (item?.additional?.voucherVersion) {
+                        delete item?.additional?.voucherVersion;
+                    }
+                    return item;
+                });
+            });
         }
     }
 
@@ -212,7 +222,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
                     this.activeCompanyForDb.uniqueName = selectedCmp.uniqueName;
                 }
                 if (this.generalService.companyUniqueName) {
-                    this.dbService.getAllItems(this.activeCompanyForDb.uniqueName, 'accounts').subscribe(accountList => {
+                    this.dbService.getAllItems(this.activeCompanyForDb?.uniqueName, 'accounts').subscribe(accountList => {
                         if (accountList?.length) {
                             if (window.innerWidth > 1440 && window.innerHeight > 717) {
                                 this.accountItemsFromIndexDB = accountList.slice(0, 7);
@@ -267,8 +277,9 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
                 const queryParamsIndex = this.router.url.indexOf('?');
                 const baseUrl = queryParamsIndex === -1 ? this.router.url :
                     this.router.url.slice(0, queryParamsIndex);
+                this.isActiveRoute = baseUrl;
                 this.allItems.forEach(item => item.isActive = (item.link === decodeURI(baseUrl) || item?.items?.some((subItem: AllItem) => {
-                    if (subItem.link === decodeURI(baseUrl)) {
+                    if (subItem.link === decodeURI(baseUrl) || subItem?.additionalRoutes?.includes(decodeURI(baseUrl))) {
                         return true;
                     }
                 })));
@@ -285,7 +296,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
         });
 
         this.store.pipe(select(state => state.session.currentLocale), takeUntil(this.destroyed$)).subscribe(response => {
-            if(this.activeLocale && this.activeLocale !== response?.value) {
+            if (this.activeLocale && this.activeLocale !== response?.value) {
                 this.localeService.getLocale('all-items', response?.value).subscribe(response => {
                     this.localeData = response;
                     this.translationComplete(true);
@@ -300,9 +311,9 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
             }
         });
 
-        if(this.router.url.includes("/ledger")) {
+        if (this.router.url.includes("/ledger")) {
             this.activeAccount$.pipe(takeUntil(this.destroyed$)).subscribe(account => {
-                if(account && !this.isItemAdded) {
+                if (account && !this.isItemAdded) {
                     this.isItemAdded = true;
                     // save data to db
                     let item: any = {};
@@ -367,11 +378,22 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
      */
     public handleNewTeamCreationEmitter(e: any): void {
         this.modelRef.hide();
-        if(e[0] === "group") {
+        if (e[0] === "group") {
+            if (this.accountAsideMenuState === "in") {
+                this.toggleAccountAsidePane();
+            }
             this.showManageGroupsModal(e[1]?.name);
-        } else if(e[0] === "account") {
+        } else if (e[0] === "account") {
             this.selectedGroupForCreateAccount = e[1]?.uniqueName;
-            this.toggleAccountAsidePane();
+            if (this.accountAsideMenuState === "out") {
+                this.toggleAccountAsidePane();
+            } else {
+                this.toggleAccountAsidePane();
+                setTimeout(() => {
+                    this.toggleAccountAsidePane();
+                    this.changeDetection.detectChanges();
+                }, 50);
+            }
         }
     }
 
@@ -386,7 +408,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
         if (!this.activeCompanyForDb) {
             return;
         }
-        if (!this.activeCompanyForDb.uniqueName) {
+        if (!this.activeCompanyForDb?.uniqueName) {
             return;
         }
         if (dbResult) {
@@ -419,9 +441,6 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof PrimarySidebarComponent
      */
     public showManageGroupsModal(search: any = ""): void {
-        if(search) {
-            this.store.dispatch(this.groupWithAction.getGroupWithAccounts());
-        }
         this.store.dispatch(this.groupWithAction.OpenAddAndManageFromOutside(search));
     }
 
@@ -454,7 +473,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
             if (item && item.type === 'MENU') {
                 if (item.additional && item.additional.tab) {
                     if (item.uniqueName.includes('?')) {
-                        item.uniqueName = item.uniqueName.split('?')[0];
+                        item.uniqueName = item.uniqueName?.split('?')[0];
                     }
                     this.router.navigate([item.uniqueName], {
                         queryParams: {
@@ -647,7 +666,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     public toggleBodyClass() {
         if (this.accountAsideMenuState === 'in') {
             document.querySelector('body')?.classList?.add('fixed');
-            if(document.getElementsByClassName("gst-sidebar-open")?.length > 0) {
+            if (document.getElementsByClassName("gst-sidebar-open")?.length > 0) {
                 document.querySelector(".nav-left-bar").classList.add("create-account");
             }
             document.querySelector(".sidebar-slide-right")?.classList?.add("z-index-990");
@@ -664,7 +683,31 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
      * @param {AddAccountRequest} item
      * @memberof PrimarySidebarComponent
      */
-     public addNewAccount(item: AddAccountRequest) {
+    public addNewAccount(item: AddAccountRequest) {
         this.store.dispatch(this.salesAction.addAccountDetailsForSales(item));
+    }
+
+    /**
+     * Closes account modal
+     *
+     * @param {*} event
+     * @memberof PrimarySidebarComponent
+     */
+    public closeAccountModal(event: any): void {
+        if (event) {
+            this.accountAsideMenuState = 'out';
+            this.toggleBodyClass();
+        }
+    }
+
+    /**
+     * Shows Primary bar accounts and menu items when clicked outside primary sidebar
+     *
+     * @memberof PrimarySidebarComponent
+     */
+    public hidePrimarySidebarCompanyList(): void {
+        if (this.showCompanyBranchSwitch) {
+            this.showCompanyBranchSwitch = false;
+        }
     }
 }

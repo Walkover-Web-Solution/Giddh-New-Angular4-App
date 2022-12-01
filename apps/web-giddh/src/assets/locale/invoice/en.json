@@ -39,7 +39,6 @@
     "voucher_log": "[ACTION] for [TOTAL] by [USER]",
     "linked_po": "Linked Purchase Order(s):",
     "invoice_preview_unavailable": "Invoice Preview is not available right now! Please try again...",
-    "preview_formats": "Supported format for preview: Images (.jpg, .jpeg, .png) and PDF (.pdf); to print other formats, download them.",
     "upload_excel_csv": "Upload an EXCEL or CSV file",
     "drop_file": "Drop file to upload",
     "browse_file": "Browse file",
@@ -112,7 +111,8 @@
     "invoice_copy_options": {
         "original": "Original",
         "customer": "Customer",
-        "transport": "Transport"
+        "transport": "Transport",
+        "attachment": "Attachment"
     },
     "invalid_email": "[EMAIL] is invalid email!",
     "select_copy": "Select Copy",
@@ -174,5 +174,7 @@
     "exchange_gain_loss_label": "In [BASE_CURRENCY]: [AMOUNT]<br />Exchange [PROFIT_TYPE]: ",
     "works_for_single_entry": "Works only for single entry.",
     "uploaded_purchase_bill": "Uploaded Bill",
-    "auto_generated_purchase_bill": "Giddh/Auto Generated Bill"
+    "auto_generated_purchase_bill": "Giddh Auto Generated Bill",
+    "amount_adjusted": "Amount adjusted successfully",
+    "pincode_required": "Please update pincode in voucher before creating eway bill."
 }

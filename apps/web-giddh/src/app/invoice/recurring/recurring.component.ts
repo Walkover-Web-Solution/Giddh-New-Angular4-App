@@ -6,7 +6,7 @@ import { Observable, ReplaySubject } from 'rxjs';
 import { AppState } from '../../store';
 import { select, Store } from '@ngrx/store';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
-import * as moment from 'moment';
+import * as dayjs from 'dayjs';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
@@ -114,7 +114,7 @@ export class RecurringComponent implements OnInit, OnDestroy {
         this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.branches = response || [];
-                this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && this.branches.length > 1;
+                this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && this.branches?.length > 1;
             }
         });
 
@@ -190,9 +190,9 @@ export class RecurringComponent implements OnInit, OnDestroy {
                 item.isSelected = this.allItemsSelected;
 
                 if (this.allItemsSelected) {
-                    this.selectedInvoices = this.generalService.addValueInArray(this.selectedInvoices, item.uniqueName);
+                    this.selectedInvoices = this.generalService.addValueInArray(this.selectedInvoices, item?.uniqueName);
                 } else {
-                    this.selectedInvoices = this.generalService.removeValueFromArray(this.selectedInvoices, item.uniqueName);
+                    this.selectedInvoices = this.generalService.removeValueFromArray(this.selectedInvoices, item?.uniqueName);
                 }
 
                 return item;
@@ -203,12 +203,12 @@ export class RecurringComponent implements OnInit, OnDestroy {
     public toggleItem(item: any, action: boolean) {
         item.isSelected = action;
         if (action) {
-            this.selectedInvoices = this.generalService.addValueInArray(this.selectedInvoices, item.uniqueName);
+            this.selectedInvoices = this.generalService.addValueInArray(this.selectedInvoices, item?.uniqueName);
         } else {
-            this.selectedInvoices = this.generalService.removeValueFromArray(this.selectedInvoices, item.uniqueName);
+            this.selectedInvoices = this.generalService.removeValueFromArray(this.selectedInvoices, item?.uniqueName);
             this.allItemsSelected = false;
         }
-        this.itemStateChanged(item.uniqueName);
+        this.itemStateChanged(item?.uniqueName);
     }
 
     public clickedOutside(event, el, fieldName: string) {
@@ -267,7 +267,7 @@ export class RecurringComponent implements OnInit, OnDestroy {
         let index = (this.selectedItems) ? this.selectedItems.findIndex(f => f === uniqueName) : -1;
 
         if (index > -1) {
-            this.selectedItems = this.selectedItems.filter(f => f !== uniqueName);
+            this.selectedItems = this.selectedItems?.filter(f => f !== uniqueName);
         } else {
             this.selectedItems.push(uniqueName);
         }
@@ -287,7 +287,7 @@ export class RecurringComponent implements OnInit, OnDestroy {
     public submit() {
         const filter = { ...this.filter };
         if (filter.lastInvoiceDate) {
-            filter.lastInvoiceDate = moment(filter.lastInvoiceDate).format(GIDDH_DATE_FORMAT);
+            filter.lastInvoiceDate = dayjs(filter.lastInvoiceDate).format(GIDDH_DATE_FORMAT);
         }
         if (Object.keys(filter).some(p => filter[p])) {
             this.isLoading = true;

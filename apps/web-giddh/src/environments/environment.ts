@@ -12,7 +12,6 @@ export const environment: Environment = {
     AppUrl: 'http://localhost:3000/',
     ApiUrl: 'https://apitest.giddh.com/',
     isElectron: false,
-    isCordova: false,
     APP_FOLDER: '',
     showDevModule: true,
 

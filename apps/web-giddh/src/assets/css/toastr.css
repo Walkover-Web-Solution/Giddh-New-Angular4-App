@@ -7,10 +7,10 @@
 }
 .toast-message a,
 .toast-message label {
-    color: #ffffff;
+    color: var(--color-white);
 }
 .toast-message a:hover {
-    color: #cccccc;
+    color: var(--color-iron);
     text-decoration: none;
 }
 .toast-close-button {
@@ -19,7 +19,7 @@
     top: 6px;
     float: right;
     font-size: 25px;
-    color: #ffffff;
+    color: var(--color-white);
     opacity: 1;
     font-weight: normal;
 }
@@ -28,7 +28,7 @@
     content: "";
     width: 26px;
     height: 26px;
-    background-color: rgba(256, 256, 256, 0.2);
+    background-color: var(--color-solitude-light);
     top: 5px;
     right: -6px;
     border-radius: 50%;
@@ -38,7 +38,7 @@
 }
 .toast-close-button:hover,
 .toast-close-button:focus {
-    color: #ffffff;
+    color: var(--color-white);
     text-decoration: none;
     cursor: pointer;
     opacity: 0.4;
@@ -57,8 +57,8 @@ button.toast-close-button {
 .toast-center-center {
     top: 50%;
     left: 50%;
-    -webkit-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
 }
 .toast-top-center {
     top: 0;
@@ -112,6 +112,7 @@ button.toast-close-button {
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
+    color: var(--color-toast-primary-text);
 }
 #toast-container .toast {
     position: relative;
@@ -123,10 +124,10 @@ button.toast-close-button {
     border-radius: 5px;
     background-position: 15px center;
     background-repeat: no-repeat;
-    -moz-box-shadow: 0 3px 6px #00000029;
-    -webkit-box-shadow: 0 3px 6px #00000029;
-    box-shadow: 0 3px 6px #00000029;
-    color: #ffffff;
+    box-shadow: 0 3px 6px var(--color-primary-common-box-shadow);
+    -moz-box-shadow: 0 3px 6px var(--color-primary-common-box-shadow);
+    -webkit-box-shadow: 0 3px 6px var(--color-primary-common-box-shadow);
+    color: var(--color-white);
     opacity: 0.8;
     display: flex;
     flex-direction: column;
@@ -137,18 +138,18 @@ button.toast-close-button {
     white-space: normal;
     word-break: break-word;
     flex-basis: auto;
-    max-width: 400px;
+    max-width: 500px;
     display: flex;
     flex-direction: row;
-    min-width: 400px;
+    min-width: 500px;
     width: 100%;
 }
 #toast-container .toast:hover {
-    -moz-box-shadow: 0 0 12px #00000061;
-    -webkit-box-shadow: 0 0 12px #00000061;
-    box-shadow: 0 0 12px #00000061;
     opacity: 1;
     cursor: pointer;
+    box-shadow: 0 0 12px var(--color-primary-common-box-shadow);
+    -moz-box-shadow: 0 0 12px var(--color-primary-common-box-shadow);
+    -webkit-box-shadow: 0 0 12px var(--color-primary-common-box-shadow);
 }
 #toast-container .toast.toast-info {
     background-image: url("../images/info-white.svg") !important;
@@ -198,30 +199,30 @@ button.toast-close-button {
     margin-right: auto;
 }
 .toast {
-    background-color: #030303;
+    background-color: var(--color-nero);
     pointer-events: auto;
     animation: none !important;
 }
 .toast-success {
-    background-color: #51a351;
+    background-color: var(--color-green-toast);
 }
 .toast-error {
-    background-color: #e55b5b;
+    background-color: var(--color-red-toast);
 }
 
 .toast-info {
-    background-color: #2f96b4;
+    background-color: var(--color-info-toast);
 }
 .toast-info .toast-title {
-    color: #ffffff;
+    color: var(--color-white);
     font-size: 13px;
     margin-right: 10px;
 }
 .toast-warning {
-    background-color: #f89406;
+    background-color: var(--color-warning-toast);
 }
 .toast-warning .toast-title {
-    color: #ffffff;
+    color: var(--color-white);
     font-size: 13px;
     margin-right: 10px;
 }
@@ -230,21 +231,21 @@ button.toast-close-button {
     left: 0;
     bottom: 0;
     height: 4px;
-    background-color: #000000;
+    background-color: var(--color-nero);
     opacity: 0.4;
 }
 .toast-error .toast-title {
     font-size: 13px;
     margin-right: 10px;
-    color: #ffffff;
+    color: var(--color-white);
 }
 .toast-success .toast-title {
     word-break: break-word;
-    color: #ffffff;
+    color: var(--color-white);
     margin-right: 10px;
 }
 .toast-message {
-    color: #ffffff;
+    color: var(--color-toast-primary-text);
     position: relative;
     top: -1px;
 }

@@ -1,11 +1,7 @@
-@import "../../../assets/css/color.scss";
-
 ng-select {
-    display: inline-block;
+    display: block;
     margin: 0;
     position: relative;
-    vertical-align: middle;
-    // width: 100%;
     outline: none;
     font-size: 14px;
     * {
@@ -14,22 +10,17 @@ ng-select {
     // Container.
     > div {
         border: none;
-        border-bottom: 1px solid $gainsboro;
+        border-bottom: 1px solid var(--color-common-secondary-border);
         box-sizing: border-box;
         cursor: pointer;
         user-select: none;
         width: 100%;
-        background-color: $white;
-        &.open {
-        }
         &.focus {
             outline: none;
         }
-        &.below {
-        }
         &.disabled {
-            background-color: $whisper-light;
-            color: $dim-gray;
+            background-color: var(--color-dark-fog);
+            color: var(--color-gray);
             cursor: default;
             pointer-events: none;
         }
@@ -46,16 +37,16 @@ ng-select {
                 white-space: nowrap;
             }
             > div.placeholder {
-                color: rgba(0, 0, 0, 0.3);
+                color: var(--color-common-primary-input-placeholder);
             }
             > div.clear,
             > div.toggle {
-                color: $dim-gray;
+                color: var(--color-gray);
                 line-height: 30px;
                 text-align: center;
                 width: 30px;
                 &:hover {
-                    background-color: $whisper-color;
+                    background-color: var(--color-dark-fog);
                 }
             }
             > div.clear {
@@ -73,10 +64,10 @@ ng-select {
             padding: 0 10px;
             width: 100%;
             > div.option {
-                background-color: $whisper-light;
-                border: 1px solid $dim-gray;
+                background-color: var(--color-dark-fog);
+                border: 1px solid var(--color-gray);
                 border-radius: 4px;
-                color: $night-rider;
+                color: var(--color-nero);
                 cursor: default;
                 display: inline-block;
                 flex-shrink: 0;
@@ -85,13 +76,13 @@ ng-select {
                 margin: 3px 5px 3px 0;
                 padding: 0 4px;
                 span.deselect-option {
-                    color: $dim-gray;
+                    color: var(--color-gray);
                     cursor: pointer;
                     font-size: 14px;
                     height: 20px;
                     line-height: 20px;
                     &:hover {
-                        color: $dark-gray;
+                        color: var(--color-abbey);
                     }
                 }
             }
@@ -115,6 +106,15 @@ ng-select {
         font-size: 13px;
         padding: 4px 0;
     }
+    select-dropdown {
+        input {
+            border-radius: 5px;
+        }
+    }
+}
+
+.common-select-field {
+    border-radius: 5px;
 }
 
 .ng-select-wrap.select-list ng-select .below {
@@ -123,17 +123,8 @@ ng-select {
 
 ng-select.splSales {
     width: 190px;
-    // height: 42px;
     > div {
-        border-color: $light-gray;
-        // height: 41px;
-        > .single {
-            // height: 39px;
-            .placeholder,
-            .value {
-                // line-height: 39px;
-            }
-        }
+        border-color: var(--color-iron);
     }
     .glyphicon {
         top: 7px;

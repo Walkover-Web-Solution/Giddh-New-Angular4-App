@@ -12,7 +12,7 @@
     "over_dimensional_cargo": "Over Dimensional Cargo",
     "vehicle_type_required": "Vehicle Type*",
     "vehicle_type": "Vehicle Type",
-    "vehicle_no_label": "Vehicle No.*",
+    "vehicle_no_label": "Vehicle No.",
     "vehicle_no_placeholder": "Mention Number",
     "from_place_label": "From Place*",
     "from_place_placeholder": "Enter city",
@@ -96,5 +96,7 @@
     "search_eway": "Search E-way",
     "search_particular": "Search Particular",
     "download_eway_bill": "Download E-way Bill",
-    "mode_of_transportation": "Mode of Transportation"
+    "mode_of_transportation": "Mode of Transportation",
+    "pincode_required": "Please update pincode in voucher before creating eway bill.",
+    "select_gstin": "Select GSTIN"
 }

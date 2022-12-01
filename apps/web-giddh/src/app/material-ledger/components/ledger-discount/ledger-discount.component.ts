@@ -1,9 +1,7 @@
-import { takeUntil } from 'rxjs/operators';
 import { Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
 import { LedgerDiscountClass } from '../../../models/api-models/SettingsDiscount';
 import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
-import { SettingsDiscountService } from '../../../services/settings.discount.service';
 
 @Component({
     selector: 'ledger-discount',
@@ -37,11 +35,10 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** List of discounts */	
-    private discountsList: any[] = [];	
-    /** True if get discounts list api call in progress */	
-    private getDiscountsLoading: boolean = false;	
+    @Input() private discountsList: any[] = [];
+
     constructor(
-        private settingsDiscountService: SettingsDiscountService	
+        
     ) {	
         	
     }
@@ -99,18 +96,6 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
      public prepareDiscountList() {
         if (this.discountsList?.length > 0) {
             this.processDiscountList();
-        } else {
-            if (this.getDiscountsLoading) {
-                return;
-            }
-            this.getDiscountsLoading = true;
-            this.settingsDiscountService.GetDiscounts().pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                if (response?.status === "success" && response?.body?.length > 0) {
-                    this.discountsList = response?.body;
-                    this.processDiscountList();
-                }
-                this.getDiscountsLoading = false;
-            });
         }
     }
 
@@ -121,17 +106,17 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
      * @memberof LedgerDiscountComponent
      */
     private processDiscountList(): void {
-        this.discountsList.forEach(acc => {
+        this.discountsList?.forEach(acc => {
             if (this.discountAccountsDetails) {
-                let hasItem = this.discountAccountsDetails.some(s => s.discountUniqueName === acc.uniqueName);
+                let hasItem = this.discountAccountsDetails.some(s => s.discountUniqueName === acc?.uniqueName);
                 if (!hasItem) {
                     let obj: LedgerDiscountClass = new LedgerDiscountClass();
                     obj.amount = acc.discountValue;
                     obj.discountValue = acc.discountValue;
                     obj.discountType = acc.discountType;
                     obj.isActive = false;
-                    obj.particular = acc.linkAccount.uniqueName;
-                    obj.discountUniqueName = acc.uniqueName;
+                    obj.particular = acc.linkAccount?.uniqueName;
+                    obj.discountUniqueName = acc?.uniqueName;
                     obj.name = acc.name;
                     this.discountAccountsDetails.push(obj);
                 }
@@ -142,8 +127,8 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     public discountFromInput(type: 'FIX_AMOUNT' | 'PERCENTAGE', val: string) {
-        this.defaultDiscount.amount = parseFloat(String(val).replace(/,/g, ''));
-        this.defaultDiscount.discountValue = parseFloat(String(val).replace(/,/g, ''));
+        this.defaultDiscount.amount = parseFloat(String(val)?.replace(/,/g, ''));
+        this.defaultDiscount.discountValue = parseFloat(String(val)?.replace(/,/g, ''));
         this.defaultDiscount.discountType = type;
 
         this.change();
@@ -183,14 +168,14 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
             }
         }
 
-        let percentageListTotal = this.discountAccountsDetails.filter(f => f.isActive)
-            .filter(s => s.discountType === 'PERCENTAGE')
+        let percentageListTotal = this.discountAccountsDetails?.filter(f => f.isActive)
+            ?.filter(s => s.discountType === 'PERCENTAGE')
             .reduce((pv, cv) => {
                 return Number(cv.discountValue) ? Number(pv) + Number(cv.discountValue) : Number(pv);
             }, 0) || 0;
 
-        let fixedListTotal = this.discountAccountsDetails.filter(f => f.isActive)
-            .filter(s => s.discountType === 'FIX_AMOUNT')
+        let fixedListTotal = this.discountAccountsDetails?.filter(f => f.isActive)
+            ?.filter(s => s.discountType === 'FIX_AMOUNT')
             .reduce((pv, cv) => {
                 return Number(cv.discountValue) ? Number(pv) + Number(cv.discountValue) : Number(pv);
             }, 0) || 0;

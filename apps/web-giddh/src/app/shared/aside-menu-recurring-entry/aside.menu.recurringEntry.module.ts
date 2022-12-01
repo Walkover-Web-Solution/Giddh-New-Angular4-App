@@ -1,15 +1,29 @@
 import { NgModule } from '@angular/core';
 import { AsideMenuRecurringEntryComponent } from './aside.menu.recurringEntry.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { CommonModule } from '@angular/common';
 import { SelectModule } from '../../theme/ng-select/ng-select';
 import { LaddaModule } from 'angular2-ladda';
-import { SharedModule } from '../shared.module';
+import { TranslateDirectiveModule } from '../../theme/translate/translate.directive.module';
+
 
 @NgModule({
     declarations: [AsideMenuRecurringEntryComponent],
-    imports: [ReactiveFormsModule, BsDatepickerModule.forRoot(), CommonModule, SelectModule, LaddaModule, SharedModule],
+    imports: [
+        ReactiveFormsModule, 
+        BsDatepickerModule.forRoot(), 
+        CommonModule, 
+        SelectModule, 
+        LaddaModule.forRoot({
+            style: 'slide-left',
+            spinnerSize: 30
+        }),
+        TranslateDirectiveModule,
+        CommonModule,
+        ReactiveFormsModule,
+        FormsModule
+    ],
     exports: [AsideMenuRecurringEntryComponent]
 })
 export class AsideMenuRecurringEntryModule {

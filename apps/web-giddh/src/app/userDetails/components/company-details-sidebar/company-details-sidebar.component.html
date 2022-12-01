@@ -19,7 +19,7 @@
                         </li>
                         <li>
                             {{ localeData?.subscription?.created_on }}:
-                            {{ moment(selectedCompany?.subscription?.createdAt, giddhDateFormat).format("DD/MM/YYYY") }}
+                            {{ dayjs(selectedCompany?.subscription?.createdAt, giddhDateFormat).format("DD/MM/YYYY") }}
                         </li>
                         <li>
                             {{ localeData?.subscription?.total_transactions }}:

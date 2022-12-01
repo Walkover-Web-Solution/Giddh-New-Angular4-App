@@ -1,5 +1,3 @@
-@import "../../../../assets/css/color.scss";
-
 .file-upload-label {
     vertical-align: top;
 }
@@ -9,7 +7,7 @@
 }
 .file-upload-label sup {
     font-size: 14px;
-    color: $red;
+    color: var(--color-danger);
     top: 0px;
 }
 #import-statement-modal label.radio-inline.p-0 {
@@ -19,14 +17,14 @@
     display: flex;
     align-items: flex-start;
     .browse-file-label {
-        border: 1px solid $gainsboro;
+        border: 1px solid var(--color-secondary-input-bar-border);
         display: inline-block;
         padding: 1px 12px !important;
         cursor: pointer;
         width: 120px !important;
-        background-color: $gray-95;
         border-radius: 2px;
         text-align: center;
+        background-color: var(--color-denary-button-background);
     }
     input[type="file"] {
         display: none;

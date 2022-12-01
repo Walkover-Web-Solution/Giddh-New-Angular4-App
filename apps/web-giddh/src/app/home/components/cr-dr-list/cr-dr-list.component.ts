@@ -4,7 +4,7 @@ import { Store, select } from "@ngrx/store";
 import { AppState } from "../../../store";
 import { ContactService } from "../../../services/contact.service";
 import { takeUntil } from "rxjs/operators";
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { GeneralService } from '../../../services/general.service';
@@ -33,7 +33,7 @@ export class CrDrComponent implements OnInit, OnDestroy {
     public universalDate$: Observable<any>;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
-    public moment = moment;
+    public dayjs = dayjs;
     public toDate: string;
     public fromDate: string;
     public crAccounts: any[] = [];
@@ -63,12 +63,12 @@ export class CrDrComponent implements OnInit, OnDestroy {
         this.universalDate$.subscribe(dateObj => {
             if (dateObj) {
                 let universalDate = _.cloneDeep(dateObj);
-                this.selectedDateRange = { startDate: moment(dateObj[0]), endDate: moment(dateObj[1]) };
-                this.selectedDateRangeUi = moment(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-                this.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
-                this.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
+                this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
+                this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                this.fromDate = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);
+                this.toDate = dayjs(universalDate[1]).format(GIDDH_DATE_FORMAT);
 
-                this.dueDate = new Date(moment(universalDate[1]).format('YYYY-MM-DD'));
+                this.dueDate = new Date(dayjs(universalDate[1]).format('YYYY-MM-DD'));
                 this.isDatePickerInitialized = true;
                 this.getAccountsReport();
             }
@@ -89,12 +89,12 @@ export class CrDrComponent implements OnInit, OnDestroy {
         refresh = refresh ? refresh : 'false';
 
         this.contactService.GetContactsDashboard(fromDate, toDate, groupUniqueName, pageNumber, refresh, count, query, sortBy, order).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
-            if (res.status === 'success') {
+            if (res?.status === 'success') {
                 if (groupUniqueName === "sundrydebtors") {
-                    this.drAccounts = res.body.results;
+                    this.drAccounts = res.body?.results;
                 }
                 if (groupUniqueName === "sundrycreditors") {
-                    this.crAccounts = res.body.results;
+                    this.crAccounts = res.body?.results;
                 }
 
                 if (!(this.fromDate && this.toDate) && res.body && res.body.results && res.body.results.fromDate && res.body.results.toDate) {
@@ -104,10 +104,10 @@ export class CrDrComponent implements OnInit, OnDestroy {
                     this.apiFromDate = this.apiFromDate.split("-").reverse().join("-");
                     this.apiToDate = this.apiToDate.split("-").reverse().join("-");
 
-                    this.selectedDateRange = { startDate: moment(this.apiFromDate), endDate: moment(this.apiToDate) };
-                    this.selectedDateRangeUi = moment(this.apiFromDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(this.apiToDate).format(GIDDH_NEW_DATE_FORMAT_UI);
-                    this.fromDate = moment(this.apiFromDate).format(GIDDH_DATE_FORMAT);
-                    this.toDate = moment(this.apiToDate).format(GIDDH_DATE_FORMAT);
+                    this.selectedDateRange = { startDate: dayjs(this.apiFromDate), endDate: dayjs(this.apiToDate) };
+                    this.selectedDateRangeUi = dayjs(this.apiFromDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(this.apiToDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+                    this.fromDate = dayjs(this.apiFromDate).format(GIDDH_DATE_FORMAT);
+                    this.toDate = dayjs(this.apiToDate).format(GIDDH_DATE_FORMAT);
                 }
 
                 this.cdRef.detectChanges();
@@ -188,10 +188,10 @@ export class CrDrComponent implements OnInit, OnDestroy {
         }
         this.hideGiddhDatepicker();
         if (value && value.startDate && value.endDate) {
-            this.selectedDateRange = { startDate: moment(value.startDate), endDate: moment(value.endDate) };
-            this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
-            this.fromDate = moment(value.startDate).format(GIDDH_DATE_FORMAT);
-            this.toDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
+            this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
+            this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.fromDate = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
+            this.toDate = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
             this.dueDate = new Date(this.toDate.split("-").reverse().join("-"));
             this.getAccountsReport();
         }

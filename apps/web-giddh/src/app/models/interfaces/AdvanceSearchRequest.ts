@@ -1,11 +1,12 @@
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
+import { PAGINATION_LIMIT } from "../../app.constant";
 
 export class AdvanceSearchRequest {
     public dataToSend: AdvanceSearchModel = new AdvanceSearchModel();
     public q: string = '';
     public page: number = 0;
-    public count: number = 30;
+    public count: number = PAGINATION_LIMIT;
     public accountUniqueName: string = '';
     public sort: string = 'asc';
     public branchUniqueName: string = '';
@@ -17,16 +18,16 @@ export class AdvanceSearchRequest {
 
     get from(): string {
         if (this.dataToSend.bsRangeValue && this.dataToSend.bsRangeValue.length > 0) {
-            return moment(this.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT);
+            return dayjs(this.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT);
         }
-        return moment().subtract(30, 'days').format(GIDDH_DATE_FORMAT);
+        return dayjs().subtract(30, 'day').format(GIDDH_DATE_FORMAT);
     }
 
     get to(): string {
         if (this.dataToSend.bsRangeValue && this.dataToSend.bsRangeValue.length > 1) {
-            return moment(this.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT);
+            return dayjs(this.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT);
         }
-        return moment().format(GIDDH_DATE_FORMAT);
+        return dayjs().format(GIDDH_DATE_FORMAT);
     }
 
     set to(val) {

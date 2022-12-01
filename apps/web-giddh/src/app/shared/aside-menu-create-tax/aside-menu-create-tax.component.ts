@@ -5,13 +5,14 @@ import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { AppState } from '../../store';
 import { select, Store } from '@ngrx/store';
 import { takeUntil } from 'rxjs/operators';
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { SettingsTaxesActions } from '../../actions/settings/taxes/settings.taxes.action';
 import { uniqueNameInvalidStringReplace } from '../helpers/helperFunctions';
 import { IForceClear } from "../../models/api-models/Sales";
 import { GIDDH_DATE_FORMAT } from '../helpers/defaultDateFormat';
 import { SalesService } from '../../services/sales.service';
 import { cloneDeep } from '../../lodash-optimized';
+import { GeneralService } from '../../services/general.service';
 
 @Component({
     selector: 'aside-menu-create-tax-component',
@@ -48,14 +49,15 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
     constructor(
         private store: Store<AppState>,
         private _settingsTaxesActions: SettingsTaxesActions,
-        private salesService: SalesService
+        private salesService: SalesService,
+        private generalService: GeneralService
     ) {
-        this.newTaxObj.date = moment().toDate();
+        this.newTaxObj.date = dayjs().toDate();
     }
 
     ngOnInit() {
         for (let i = 1; i <= 31; i++) {
-            this.days.push({ label: i.toString(), value: i.toString() });
+            this.days.push({ label: i?.toString(), value: i?.toString() });
         }
         this.duration = [
             { label: this.commonLocaleData?.app_duration?.monthly, value: 'MONTHLY' },
@@ -116,10 +118,10 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
             this.newTaxObj = {
                 ...this.tax,
                 taxValue: this.tax.taxDetail[0].taxValue,
-                date: moment(this.tax.taxDetail[0].date).toDate(),
+                date: dayjs(this.tax.taxDetail[0].date).toDate(),
                 tdsTcsTaxSubTypes: subTyp ? subTyp : null,
-                taxType: subTyp ? this.tax.taxType.replace(subTyp, '') : this.tax.taxType,
-                taxFileDate: this.tax.taxFileDate.toString()
+                taxType: subTyp ? this.tax.taxType?.replace(subTyp, '') : this.tax.taxType,
+                taxFileDate: this.tax.taxFileDate?.toString()
             };
         }
     }
@@ -175,7 +177,7 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
             });
         }
 
-        dataToSave.date = moment(dataToSave.date).format(GIDDH_DATE_FORMAT);
+        dataToSave.date = dayjs(dataToSave.date).format(GIDDH_DATE_FORMAT);
         dataToSave.accounts = dataToSave.accounts ? dataToSave.accounts : [];
         dataToSave.taxDetail = [{ date: dataToSave.date, taxValue: dataToSave.taxValue }];
 
@@ -224,7 +226,7 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
     private loadLinkedAccounts(): void {
         const params = {
             group: encodeURIComponent('currentassets, currentliabilities'),
-            exceptGroups: encodeURIComponent('cash, bankaccounts, sundrydebtors, sundrycreditors, reversecharge, taxonadvance'),
+            exceptGroups: (this.generalService.voucherApiVersion === 2) ? encodeURIComponent('cash, bankaccounts, loanandoverdraft, sundrydebtors, sundrycreditors, reversecharge, taxonadvance') : encodeURIComponent('cash, bankaccounts, sundrydebtors, sundrycreditors, reversecharge, taxonadvance'),
             count: 0
         };
         let accounts = [];

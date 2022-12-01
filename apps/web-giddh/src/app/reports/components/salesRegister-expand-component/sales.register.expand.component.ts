@@ -60,6 +60,9 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
     /* This will hold if it's mobile screen or not */
     public isMobileScreen: boolean = false;
+    /** True, if custom date filter is selected or custom searching or sorting is performed */
+    public showClearFilter: boolean = false;
+
 
     constructor(private store: Store<AppState>, private invoiceReceiptActions: InvoiceReceiptActions, private activeRoute: ActivatedRoute, private router: Router, private _cd: ChangeDetectorRef, private breakPointObservar: BreakpointObserver) {
         this.salesRegisteDetailedResponse$ = this.store.pipe(select(appState => appState.receipt.SalesRegisteDetailedResponse), takeUntil(this.destroyed$));
@@ -73,7 +76,7 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.imgPath = (isElectron || isCordova) ? 'assets/icon/' : AppUrl + APP_FOLDER + 'assets/icon/';
+        this.imgPath = isElectron ? 'assets/icon/' : AppUrl + APP_FOLDER + 'assets/icon/';
         this.getDetailedsalesRequestFilter.page = 1;
         this.getDetailedsalesRequestFilter.count = this.paginationLimit;
         this.getDetailedsalesRequestFilter.q = '';
@@ -117,11 +120,12 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
             distinctUntilChanged(),
             takeUntil(this.destroyed$)
         ).subscribe(s => {
-            this.getDetailedsalesRequestFilter.sort = null;
-            this.getDetailedsalesRequestFilter.sortBy = null;
-            this.getDetailedsalesRequestFilter.q = s;
-            this.getDetailedSalesReport(this.getDetailedsalesRequestFilter);
-            if (s === '') {
+            if (s !== null && s !== undefined) {
+                this.showClearFilter = true;
+                this.getDetailedsalesRequestFilter.sort = null;
+                this.getDetailedsalesRequestFilter.sortBy = null;
+                this.getDetailedsalesRequestFilter.q = s;
+                this.getDetailedSalesReport(this.getDetailedsalesRequestFilter);
                 this.showSearchInvoiceNo = false;
             }
         });
@@ -140,10 +144,21 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
         this.getDetailedSalesReport(this.getDetailedsalesRequestFilter);
     }
     public sortbyApi(ord, key) {
+        this.showClearFilter = true;
         this.getDetailedsalesRequestFilter.sortBy = key;
         this.getDetailedsalesRequestFilter.sort = ord;
         this.getDetailedSalesReport(this.getDetailedsalesRequestFilter);
     }
+
+    /**
+     * Redirects to Sales Register Page
+     *
+     * @memberof SalesRegisterExpandComponent
+     */
+    public gotoSalesRegister(): void {
+        this.router.navigate(['/pages/reports/sales-register']);
+    }
+
     /**
     * emitExpand
     */
@@ -170,7 +185,8 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
 
     public getDateToDMY(selecteddate) {
         let date = selecteddate.split('-');
-        if (date.length === 3) {
+        if (date?.length === 3) {
+            this.translationComplete(true);
             let month = this.monthNames[parseInt(date[1]) - 1]?.substr(0, 3);
             let year = date[2]?.substr(2, 4);
             return date[0] + ' ' + month + ' ' + year;
@@ -218,7 +234,7 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
         let startDateSplit = startDate.split('-');
         let dt = new Date(startDateSplit[2], startDateSplit[1], startDateSplit[0]);
         // GET THE MONTH AND YEAR OF THE SELECTED DATE.
-        let month = (dt.getMonth() + 1).toString(),
+        let month = (dt.getMonth() + 1)?.toString(),
             year = dt.getFullYear();
 
         if (parseInt(month) < 10) {
@@ -265,6 +281,22 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
             this.monthNames = [this.commonLocaleData?.app_months_full.january, this.commonLocaleData?.app_months_full.february, this.commonLocaleData?.app_months_full.march, this.commonLocaleData?.app_months_full.april, this.commonLocaleData?.app_months_full.may, this.commonLocaleData?.app_months_full.june, this.commonLocaleData?.app_months_full.july, this.commonLocaleData?.app_months_full.august, this.commonLocaleData?.app_months_full.september, this.commonLocaleData?.app_months_full.october, this.commonLocaleData?.app_months_full.november, this.commonLocaleData?.app_months_full.december];
             this.getCurrentMonthYear();
         }
+    }
+    /**
+     * Resets the advance search when user clicks on Clear Filter
+     *
+     * @memberof SalesRegisterExpandComponent
+     */
+    public resetAdvanceSearch() {
+        this.showClearFilter = false;
+        this.voucherNumberInput?.reset();
+        this.showSearchInvoiceNo = false;
+        this.getDetailedsalesRequestFilter.page = 1;
+        this.getDetailedsalesRequestFilter.count = this.paginationLimit;
+        this.getDetailedsalesRequestFilter.q = '';
+        this.getDetailedsalesRequestFilter.sort = null;
+        this.getDetailedsalesRequestFilter.sortBy = null;
+        this.getDetailedSalesReport(this.getDetailedsalesRequestFilter);
     }
 
     /**

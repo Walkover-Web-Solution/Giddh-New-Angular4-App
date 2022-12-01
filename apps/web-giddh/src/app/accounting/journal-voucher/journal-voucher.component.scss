@@ -1,7 +1,5 @@
-@import "../../../assets/css/color.scss";
-
 .bg-wrap {
-    background: $gray-95;
+    background: var(--color-wild-sand);
 }
 
 .entry-table thead th {
@@ -24,15 +22,15 @@
 }
 
 .entry-table tbody tr td .form-control.focus:focus {
-    background: $very-light-gray !important;
+    background: var(--color-iron) !important;
 }
 
 .active-row {
-    background: $whisper;
+    background: var(--color-dark-fog);
 }
 
 .confirmation-box {
-    background: $white;
+    background: var(--color-white);
     display: inline-block;
     padding: 20px;
     width: 230px;
@@ -59,16 +57,16 @@
 }
 
 .appearance-none {
-    background: $whisper !important;
+    background: var(--color-dark-fog) !important;
     border: 0 !important;
     font-size: 16px;
-    color: $night-rider;
+    color: var(--color-nero);
 }
 
 .sidebar-menu {
     min-height: 100vh;
-    background: $nero;
-    color: $white;
+    background: var(--color-right-sidebar-primary-journal-voucher-background);
+    color: var(--color-white);
     float: right;
     position: relative;
 }
@@ -82,13 +80,13 @@
 }
 
 .menu-list li a {
-    color: $white;
+    color: var(--color-white);
     padding: 4px 12px;
     display: block;
 }
 
 .menu-list li a.isHidden {
-    color: $matterhorn;
+    color: var(--color-abbey);
 }
 
 .sidebar-list {
@@ -100,18 +98,18 @@
     padding: 0 !important;
     border: 0;
     z-index: 0;
-    border-left: 1px solid $gainsboro;
+    border-left: 1px solid var(--color-iron);
 }
 
 .sidebar-list h3 {
-    background: $white;
+    background: var(--color-white);
 }
 
 input[name="entryDate"] {
     background: transparent !important;
     border: 0;
     padding: 0 !important;
-    color: $night-rider;
+    color: var(--color-nero);
     height: auto;
     width: 100px;
     font-size: 16px;
@@ -124,7 +122,7 @@ textarea[name="narration"] {
 
 input[name="entryDate"]:focus,
 textarea[name="narration"]:focus {
-    background: $whisper !important;
+    background: var(--color-dark-fog) !important;
 }
 
 :host ::ng-deep .menu {

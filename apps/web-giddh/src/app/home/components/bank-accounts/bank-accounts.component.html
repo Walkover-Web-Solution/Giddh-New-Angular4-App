@@ -11,7 +11,7 @@
         </div>
         <div class="card-body position-relative">
             <div class="bank-details-block">
-                <perfect-scrollbar [scrollIndicators]="true" *ngIf="!isLoading && bankAccounts.length > 0">
+                <perfect-scrollbar [scrollIndicators]="true" *ngIf="!isLoading && bankAccounts?.length > 0">
                     <div class="wrap-single-bank-detail">
                         <div class="single-bank-detail" *ngFor="let bankaccount of bankAccounts">
                             <p class="bank-name">{{ bankaccount.name }}</p>
@@ -31,9 +31,9 @@
                         </div>
                     </div>
                 </perfect-scrollbar>
-                <div class="add-bank-details" *ngIf="!isLoading && bankAccounts.length === 0">
+                <div class="add-bank-details" *ngIf="!isLoading && bankAccounts?.length === 0">
                     <p>{{ localeData?.no_banks_found }}</p>
-                    <a class="connect-bank" [routerLink]="['/pages/settings/linked-accounts']">{{
+                    <a class="connect-bank" [routerLink]="['/pages/settings/integration/payment']">{{
                         localeData?.connect_bank
                     }}</a>
                 </div>
@@ -41,8 +41,8 @@
             </div>
             <a
                 class="connect-bank"
-                *ngIf="bankAccounts.length > 0"
-                [routerLink]="['/pages/settings/linked-accounts']"
+                *ngIf="bankAccounts?.length > 0"
+                [routerLink]="['/pages/settings/integration/payment']"
                 >{{ localeData?.connect_bank }}</a
             >
         </div>

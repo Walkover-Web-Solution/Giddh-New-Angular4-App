@@ -39,7 +39,6 @@
     "voucher_log": "[USER] द्वारे [TOTAL] साठी [ACTION]",
     "linked_po": "दुवा साधलेला खरेदी ऑर्डर:",
     "invoice_preview_unavailable": "बीजक पूर्वावलोकन आत्ता उपलब्ध नाही! कृपया पुन्हा प्रयत्न करा...",
-    "preview_formats": "पूर्वावलोकनासाठी समर्थित स्वरूप: प्रतिमा (.jpg, .jpeg, .png) आणि पीडीएफ (.pdf); इतर स्वरूप मुद्रित करण्यासाठी, ते डाउनलोड करा.",
     "upload_excel_csv": "एक EXCEL किंवा CSV फाईल अपलोड करा",
     "drop_file": "अपलोड करण्यासाठी फाइल ड्रॉप करा",
     "browse_file": "फाईल ब्राउझ करा",
@@ -100,20 +99,21 @@
         "custom_fields": "सानुकूल फील्ड"
     },
     "image": "प्रतिमा",
-    "slogan": "घोषणा",
-    "file_required_error": "कृपया फाइल अपलोड करा",
-    "associate_eway": "सहयोगी ई-वे",
-    "associate_eway_coming_soon": "येत आहे .. लवकरच",
-    "add_eway": "ई-वे बिल तपशील जोडा",
-    "eway_bill_number": "ई-वे बिल क्रमांक",
-    "eway_bill_number_placeholder": "ई-वे बिल क्रमांक प्रविष्ट करा",
-    "total_sale": "एकूण विक्रीः",
-    "total_purchases": "एकूण खरेदी:",
-    "invoice_copy_options": {
-        "original": "मूळ",
-        "customer": "ग्राहक",
-        "transport": "वाहतूक"
-    },
+	"slogan": "घोषणा",
+	"file_required_error": "कृपया फाइल अपलोड करा",
+	"associate_eway": "सहयोगी ई-वे",
+	"associate_eway_coming_soon": "येत आहे .. लवकरच",
+	"add_eway": "ई-वे बिल तपशील जोडा",
+	"eway_bill_number": "ई-वे बिल क्रमांक",
+	"eway_bill_number_placeholder": "ई-वे बिल क्रमांक प्रविष्ट करा",
+	"total_sale": "एकूण विक्रीः",
+	"total_purchases": "एकूण खरेदी:",
+	"invoice_copy_options": {
+		"original": "मूळ",
+		"customer": "ग्राहक",
+		"transport": "वाहतूक",
+        "attachment": "संलग्नक"
+	},
     "invalid_email": "[EMAIL] अवैध ईमेल आहे!",
 	"select_copy": "कॉपी निवडा",
 	"select_order": "ऑर्डर निवडा",
@@ -174,5 +174,7 @@
     "exchange_gain_loss_label": "[BASE_CURRENCY] मध्ये: [AMOUNT]<br />एक्सचेंज [PROFIT_TYPE]: ",
     "works_for_single_entry": "केवळ एकल प्रवेशासाठी कार्य करते.",
     "uploaded_purchase_bill": "बिल अपलोड केले",
-    "auto_generated_purchase_bill": "गिद्ध/ऑटो वयुत्पन्न बिल"
+    "auto_generated_purchase_bill": "गिद्ध ऑटो वयुत्पन्न बिल",
+    "amount_adjusted": "रक्कम यशस्वीरित्या समायोजित केली",
+    "pincode_required": "कृपया ई-वे बिल तयार करण्यापूर्वी व्हाउचरमध्ये पिनकोड अपडेट करा."
 }

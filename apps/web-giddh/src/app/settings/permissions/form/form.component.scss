@@ -1,4 +1,3 @@
-@import "../../../../assets/css/color.scss";
 .btn-group.btn-group-liq {
     width: 100%;
 }
@@ -10,9 +9,9 @@
     margin-top: 0px;
     box-shadow: none;
     transition: all 0.7s ease;
-    background: $white !important;
+    background: var(--color-dropdown-primary-background) !important;
     opacity: 1;
-    box-shadow: 0px 2px 6px $gainsboro-light;
+    box-shadow: 0px 2px 6px var(--color-dropdown-list-box-shadow);
     padding: 0;
     min-width: 180px;
 }
@@ -56,7 +55,7 @@
 
 .custom-dropdown > li > a:focus,
 .custom-dropdown > li > a:hover {
-    background: $gainsboro !important;
+    background: var(--color-iron) !important;
 }
 
 .custom-dropdown .caret {
@@ -64,8 +63,8 @@
 }
 .transactions-popup {
     width: 360px;
-    background: $white;
-    box-shadow: 0px 3px 6px $black-russian;
+    background: var(--color-white);
+    box-shadow: 0px 3px 6px var(--color-primary-common-box-shadow);
     padding: 15px;
     z-index: 9;
     position: absolute;
@@ -76,7 +75,7 @@
     opacity: 0;
     visibility: hidden;
     transition: 0.5s all ease-in;
-    border: 1px solid $light-gray;
+    border: 1px solid var(--color-iron);
 }
 .permission-main .transactions-popup {
     right: 20px;
@@ -88,11 +87,11 @@
     visibility: visible;
 }
 i.icon-add {
-    color: $gray;
+    color: var(--color-abbey);
     font-size: 18px;
 }
 i.icon-cross {
-    color: $gray;
+    color: var(--color-abbey);
 }
 .permission-row .col-xs-12,
 .permission-row .col-sm-6,
@@ -108,6 +107,7 @@ i.icon-cross {
     i {
         position: relative;
         right: 2px;
+        color: var(--color-dropdown-list-icon);
     }
 }
 @media (max-width: 1199px) {

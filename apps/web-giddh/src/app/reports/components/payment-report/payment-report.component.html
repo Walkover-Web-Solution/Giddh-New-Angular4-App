@@ -1,0 +1,583 @@
+<ng-container
+    appTranslate
+    [file]="'reports/payment'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+    (translationComplete)="translationComplete($event)"
+    *ngIf="!previewVoucherParams?.uniqueName"
+>
+    <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
+    <div class="reverse-table-report">
+        <div class="container-fluid">
+            <div
+                class="mr-t15 mr-b15 input-grp-date-range-picker d-flex justify-content-between"
+                [ngClass]="{ 'clear-filter-applicable': showClearFilter }"
+            >
+                <!-- Invoice filter section -->
+                <div class="mr-r1 d-flex flex-sm-row flex-column">
+                    <!-- <button
+                        type="button"
+                        class="btn btn-sky-blue dropdown-btn-new"
+                        [routerLink]="'/pages/voucher/payment/create'"
+                    >
+                        {{ localeData?.new_voucher }}
+                    </button> -->
+                    <div
+                        class="input-group linked-entities mr-r15"
+                        *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'"
+                    >
+                        <sh-select
+                            [options]="currentCompanyBranches"
+                            [(ngModel)]="currentBranch.uniqueName"
+                            [showClear]="false"
+                            [ItemHeight]="33"
+                            class="entity-dropdown"
+                            width="100%"
+                            (selected)="handleBranchChange($event)"
+                            [isFilterEnabled]="true"
+                            [placeholder]="commonLocaleData?.app_select_entity"
+                            [fixedValue]="currentBranch?.alias"
+                        >
+                            <ng-template #optionTemplate let-option="option">
+                                <ng-container>
+                                    <a href="javascript:void(0)" class="list-item d-flex">
+                                        <span class="entity-icon">
+                                            <i
+                                                class="icon-branch-icon pull-right"
+                                                *ngIf="!option.isCompany"
+                                                tooltip="{{ commonLocaleData?.app_branch }}"
+                                            ></i>
+                                            <i
+                                                class="icon-company-profile pull-right"
+                                                *ngIf="option.isCompany"
+                                                tooltip="{{ commonLocaleData?.app_company }}"
+                                            ></i>
+                                        </span>
+                                        <span class="entity-details">
+                                            <div class="item giddh-limit single-line-clamp">
+                                                {{ option.label || "-" }}
+                                            </div>
+                                            <div class="item-unique giddh-limit single-line-clamp">
+                                                {{ option.name || "-" }}
+                                            </div>
+                                        </span>
+                                    </a>
+                                </ng-container>
+                            </ng-template>
+                        </sh-select>
+                    </div>
+                    <div class="d-flex">
+                        <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
+                            <i class="icon-calender calendar-addon"></i>
+                            <input
+                                type="text"
+                                name="selectedDateRange"
+                                [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                                class="giddh-datepicker date-range-picker"
+                            />
+                        </div>
+                    </div>
+                </div>
+                <div
+                    class="
+                        clear-filter
+                        align-items-center
+                        d-flex
+                        justify-content-xl-center justify-content-lg-start
+                        w-50
+                    "
+                    *ngIf="showClearFilter"
+                >
+                    <button class="btn btn-filter mr-0" (click)="resetAdvanceSearch()">
+                        <span class="icon-cross"></span> {{ commonLocaleData?.app_clear_filter }}
+                    </button>
+                </div>
+                <div
+                    *ngIf="!isCompany && selectedPayments?.length > 0"
+                    class="btn-group ml-auto"
+                    dropdown
+                    #dp="bs-dropdown"
+                >
+                    <button
+                        dropdownToggle
+                        type="button"
+                        class="btn btn-primary more-btn-dropdown dropdown-toggle mr-0"
+                        aria-controls="dropdown-basic"
+                    >
+                        {{ commonLocaleData?.app_more }}
+                        <span class="caret"></span>
+                    </button>
+                    <ul
+                        *dropdownMenu
+                        class="dropdown-menu fixed-dropdown-plus"
+                        role="menu"
+                        aria-labelledby="button-basic"
+                    >
+                        <li role="menuitem">
+                            <a class="dropdown-item cp" href="javascript:void(0)" (click)="openConfirmationPopup()">{{
+                                commonLocaleData?.app_delete
+                            }}</a>
+                        </li>
+                    </ul>
+                </div>
+                <div
+                    class="advance-icon cursor-pointer btn btn-primary mr-0"
+                    [tooltip]="commonLocaleData?.app_advance_search"
+                    (click)="openModal()"
+                >
+                    <span class="pd-r05 d-sm-flex d-none">{{ commonLocaleData?.app_filter }}</span>
+                    <span class="icon-advance-filter"></span>
+                </div>
+                <!-- Invoice filter section ends -->
+            </div>
+
+            <div class="top-content" [hidden]="!allPayments?.length">
+                <div class="d-flex w-100 justify-content-between overflow-x-auto">
+                    <div class="total-details-box mr-r05 border-none payment-receipt">
+                        <h5>
+                            {{ localeData?.total_payments }}
+                            <div>
+                                <span class="d-inline-flex number-total">
+                                    <amount-field
+                                        [amount]="
+                                            voucherApiVersion === 2
+                                                ? paymentsSummaryData?.grandTotal
+                                                : paymentsSummaryData?.total?.amount
+                                        "
+                                        [currencySymbol]="
+                                            voucherApiVersion === 2
+                                                ? activeCompany?.baseCurrencySymbol
+                                                : paymentsSummaryData?.total?.symbol
+                                        "
+                                        [currencyCode]="activeCompany.baseCurrency"
+                                    >
+                                    </amount-field>
+                                </span>
+                            </div>
+                        </h5>
+                    </div>
+                    <div class="total-details-box mr-r05 border-none closing-box">
+                        <h5>
+                            {{ localeData?.unused_payments }}
+                            <div>
+                                <span class="d-inline-flex number-total">
+                                    <amount-field
+                                        [amount]="
+                                            voucherApiVersion === 2
+                                                ? paymentsSummaryData?.totalDue
+                                                : paymentsSummaryData?.unUsed?.amount
+                                        "
+                                        [currencySymbol]="
+                                            voucherApiVersion === 2
+                                                ? activeCompany?.baseCurrencySymbol
+                                                : paymentsSummaryData?.unUsed?.symbol
+                                        "
+                                        [currencyCode]="activeCompany.baseCurrency"
+                                    >
+                                    </amount-field>
+                                </span>
+                            </div>
+                        </h5>
+                    </div>
+                </div>
+            </div>
+
+            <div class="invoice-preview table-responsive">
+                <table
+                    class="table basic giddh-table on-mobile-view"
+                    (mouseover)="hoveredPaymentTable = true"
+                    (mouseleave)="hoveredPaymentTable = false"
+                >
+                    <thead
+                        class="thead-background1"
+                        [hidden]="
+                            !allPayments?.length &&
+                            !searchQueryParams?.receiptNumber &&
+                            !searchQueryParams?.baseAccountName &&
+                            !searchQueryParams?.receiptTypes?.length
+                        "
+                    >
+                        <tr>
+                            <th>
+                                <div *ngIf="!hoveredPaymentTable && !allPaymentsSelected && !selectedPayments?.length">
+                                    #
+                                </div>
+                                <div
+                                    *ngIf="hoveredPaymentTable || allPaymentsSelected || selectedPayments?.length > 0"
+                                    class="check-image d-flex justify-content-start"
+                                >
+                                    <img
+                                        src="assets/images/unchecked.png"
+                                        *ngIf="!allPaymentsSelected"
+                                        (click)="toggleAllPayments()"
+                                    />
+                                    <img
+                                        src="assets/images/checked.png"
+                                        *ngIf="allPaymentsSelected"
+                                        (click)="toggleAllPayments()"
+                                    />
+                                </div>
+                            </th>
+                            <th #paymentNumberParent width="13%" class="bd-rr bd-rb td-search-box">
+                                <div [hidden]="showPaymentSearchBar">
+                                    <i class="icon-search" (click)="searchBy(null, 'payment', true)"></i>
+                                    <span>{{ localeData?.payment_no_label }}</span>
+                                </div>
+                                <div class="input-container" [hidden]="!showPaymentSearchBar">
+                                    <input
+                                        #receiptNumber
+                                        (clickOutside)="showPaymentSearchBar ? searchBy($event, 'payment', false) : ''"
+                                        [(ngModel)]="searchQueryParams.receiptNumber"
+                                        (ngModelChange)="updateSearchQuery(searchQueryParams.receiptNumber)"
+                                        type="text"
+                                        [placeholder]="localeData?.payment_no_placeholder"
+                                        class="w100"
+                                    />
+                                </div>
+                            </th>
+
+                            <th class="td-search-box">
+                                <div class="d-flex align-items-center">
+                                    {{ commonLocaleData?.app_date }}
+                                    <div class="icon-pointer pl-1 pointer">
+                                        <ng-container
+                                            *ngTemplateOutlet="
+                                                sortTemplate;
+                                                context: {
+                                                    column: voucherApiVersion === 2 ? 'voucherDate' : 'RECEIPT_DATE'
+                                                }
+                                            "
+                                        >
+                                        </ng-container>
+                                    </div>
+                                </div>
+                            </th>
+
+                            <th #vendorNameParent width="13%" class="bd-rr bd-rb td-search-box">
+                                <div [hidden]="showVendorSearchBar">
+                                    <i class="icon-search" (click)="searchBy(null, 'vendorName', true)"></i>
+                                    <span>{{ localeData?.vendor_name_label }}</span>
+                                </div>
+                                <div class="input-container" [hidden]="!showVendorSearchBar">
+                                    <input
+                                        #vendorName
+                                        (clickOutside)="
+                                            showVendorSearchBar ? searchBy($event, 'vendorName', false) : ''
+                                        "
+                                        [(ngModel)]="searchQueryParams.baseAccountName"
+                                        (ngModelChange)="updateSearchQuery(searchQueryParams.baseAccountName)"
+                                        type="text"
+                                        [placeholder]="localeData?.vendor_name_placeholder"
+                                        class="w100"
+                                        #vendorNameField
+                                        name="vendorName"
+                                    />
+                                </div>
+                            </th>
+
+                            <th width="13%" class="bd-rr bd-rb td-search-box">
+                                <div>
+                                    <span>{{ localeData?.payment_mode_label }}</span>
+                                </div>
+                            </th>
+
+                            <th width="13%" class="bd-rr bd-rb td-search-box">
+                                <div>
+                                    <span>{{ localeData?.invoice_no_label }}</span>
+                                </div>
+                            </th>
+
+                            <th>
+                                <div class="d-flex align-items-center">
+                                    {{ commonLocaleData?.app_total_amount }}
+                                    <div class="icon-pointer pl-1 pointer">
+                                        <ng-container
+                                            *ngTemplateOutlet="
+                                                sortTemplate;
+                                                context: {
+                                                    column: voucherApiVersion === 2 ? 'grandTotal' : 'TOTAL_AMOUNT'
+                                                }
+                                            "
+                                        >
+                                        </ng-container>
+                                    </div>
+                                </div>
+                            </th>
+
+                            <th>
+                                <div class="d-flex align-items-center">
+                                    {{ localeData?.unused_amount }}
+                                    <div class="icon-pointer pl-1 pointer">
+                                        <ng-container
+                                            *ngTemplateOutlet="
+                                                sortTemplate;
+                                                context: {
+                                                    column: voucherApiVersion === 2 ? 'balanceDue' : 'UNUSED_AMOUNT'
+                                                }
+                                            "
+                                        >
+                                        </ng-container>
+                                    </div>
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody *ngIf="!isLoading" (mouseleave)="hoveredPaymentUniqueName = ''">
+                        <tr
+                            *ngFor="let payment of allPayments; let i = index"
+                            (mouseover)="hoveredPaymentUniqueName = payment?.uniqueName"
+                        >
+                            <td data-title="#">
+                                <div
+                                    *ngIf="
+                                        hoveredPaymentUniqueName !== payment?.uniqueName &&
+                                        !payment.isSelected &&
+                                        !selectedPayments?.length
+                                    "
+                                >
+                                    {{ i + 1 }}
+                                </div>
+                                <div
+                                    class="check-image d-flex justify-content-start"
+                                    *ngIf="
+                                        hoveredPaymentUniqueName === payment?.uniqueName ||
+                                        payment.isSelected ||
+                                        selectedPayments?.length > 0
+                                    "
+                                >
+                                    <img
+                                        *ngIf="!payment.isSelected"
+                                        src="assets/images/unchecked.png"
+                                        (click)="togglePayment(payment, true)"
+                                    />
+                                    <img
+                                        *ngIf="payment.isSelected"
+                                        src="assets/images/checked.png"
+                                        (click)="togglePayment(payment, false)"
+                                    />
+                                </div>
+                            </td>
+                            <td
+                                width="13%"
+                                class="text-break"
+                                [attr.data-title]="localeData?.payment_no_label"
+                                (click)="previewVoucher(payment)"
+                            >
+                                {{ voucherApiVersion === 2 ? payment?.voucherNumber : payment?.receiptNumber }}
+                            </td>
+                            <td class="entry-date" [attr.data-title]="localeData?.entry_date">
+                                {{ voucherApiVersion === 2 ? payment?.voucherDate : payment?.date }}
+                            </td>
+                            <td width="13%" class="text-break" [attr.data-title]="commonLocaleData?.app_voucher_type">
+                                {{ voucherApiVersion === 2 ? payment?.account?.name : payment?.baseAccountName }}
+                            </td>
+                            <td class="pl-0" [attr.data-title]="localeData?.payment_mode_label">
+                                <ng-container *ngIf="voucherApiVersion !== 2">
+                                    <div *ngFor="let paymentMode of payment?.particularNames?.split(',')">
+                                        {{ paymentMode }}
+                                    </div>
+                                </ng-container>
+                                <ng-container *ngIf="voucherApiVersion === 2">
+                                    {{ payment?.paymentMode?.name }}
+                                </ng-container>
+                            </td>
+                            <td
+                                width="13%"
+                                class="text-break pl-0"
+                                *ngIf="payment?.invoices || payment?.adjustments?.length"
+                                [attr.data-title]="localeData?.invoice_no_label"
+                            >
+                                <ng-container *ngIf="voucherApiVersion !== 2">
+                                    <div *ngFor="let invoice of payment?.invoices?.split(',')">{{ invoice }}</div>
+                                </ng-container>
+                                <ng-container *ngIf="voucherApiVersion === 2">
+                                    <ng-container *ngIf="payment.adjustments?.length > 0">
+                                        <ng-container *ngFor="let adjustment of payment.adjustments">
+                                            {{ adjustment?.voucherNumber || commonLocaleData?.app_not_available }}<br />
+                                        </ng-container>
+                                    </ng-container>
+                                    <ng-container *ngIf="!payment.adjustments?.length">{{
+                                        commonLocaleData?.app_not_available
+                                    }}</ng-container>
+                                </ng-container>
+                            </td>
+                            <td
+                                [attr.data-title]="localeData?.invoice_no_label"
+                                *ngIf="!payment?.invoices && !payment?.adjustments?.length"
+                            >
+                                {{ commonLocaleData?.app_not_available }}
+                            </td>
+                            <td
+                                [attr.data-title]="commonLocaleData?.app_total_amount"
+                                [tooltip]="grandTotalPopupTemplate"
+                                container="body"
+                            >
+                                <span class="d-inline-flex">
+                                    <amount-field
+                                        [amount]="
+                                            voucherApiVersion === 2
+                                                ? payment?.grandTotal?.amountForAccount
+                                                : payment?.totalAmount?.amount
+                                        "
+                                        [currencySymbol]="
+                                            voucherApiVersion === 2
+                                                ? payment?.accountCurrencySymbol
+                                                : payment?.totalAmount?.symbol
+                                        "
+                                        [currencyCode]="activeCompany.baseCurrency"
+                                    >
+                                    </amount-field>
+                                </span>
+                                <ng-template #grandTotalPopupTemplate
+                                    ><span [innerHTML]="payment.grandTotalTooltipText"></span>
+                                </ng-template>
+                            </td>
+                            <td
+                                [attr.data-title]="localeData?.unused_amount"
+                                [tooltip]="balanceDuePopupTemplate"
+                                container="body"
+                            >
+                                <span class="d-inline-flex">
+                                    <amount-field
+                                        [amount]="
+                                            voucherApiVersion === 2
+                                                ? payment?.balanceDue?.amountForAccount
+                                                : payment?.unusedAmount?.amount
+                                        "
+                                        [currencySymbol]="
+                                            voucherApiVersion === 2
+                                                ? payment?.accountCurrencySymbol
+                                                : payment?.unusedAmount?.symbol
+                                        "
+                                        [currencyCode]="activeCompany.baseCurrency"
+                                    >
+                                    </amount-field>
+                                </span>
+                                <ng-template #balanceDuePopupTemplate
+                                    ><span [innerHTML]="payment.balanceDueTooltipText"></span>
+                                </ng-template>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tbody *ngIf="isLoading">
+                        <tr>
+                            <td colspan="10">
+                                <giddh-page-loader></giddh-page-loader>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div [hidden]="isLoading" *ngIf="pageConfiguration.totalItems > paginationLimit" class="pagination-wrapper">
+                <pagination
+                    [totalItems]="pageConfiguration.totalItems"
+                    [(ngModel)]="pageConfiguration.currentPage"
+                    [maxSize]="5"
+                    class="pagination-sm"
+                    [boundaryLinks]="true"
+                    [itemsPerPage]="paginationLimit"
+                    [rotate]="false"
+                    (pageChanged)="onPageChanged($event)"
+                    [firstText]="commonLocaleData?.app_first"
+                    [previousText]="commonLocaleData?.app_previous"
+                    [nextText]="commonLocaleData?.app_next"
+                    [lastText]="commonLocaleData?.app_last"
+                >
+                </pagination>
+            </div>
+            <div class="no-data" *ngIf="!allPayments?.length && !isLoading">
+                <no-data [secondaryMessageClass]="'p-0'"></no-data>
+            </div>
+        </div>
+    </div>
+
+    <div
+        bsModal
+        #paymentSearchModalContainer="bs-modal"
+        [config]="{ ignoreBackdropClick: 'true', keyboard: 'true' }"
+        tabindex="-1"
+        class="modal fade open-popup"
+        role="dialog"
+    >
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <ng-template element-view-container-ref #paymentSearchFilterModal="elementviewcontainerref">
+                </ng-template>
+            </div>
+        </div>
+    </div>
+
+    <!-- region sort icon template -->
+    <ng-template #sortTemplate let-column="column">
+        <div
+            class="icon-sort-asc"
+            *ngIf="searchQueryParams.sortBy !== column"
+            (click)="handleSorting('asc', column)"
+            [ngClass]="{ 'active-text-color': searchQueryParams.sortBy === column && searchQueryParams.sort === 'asc' }"
+        ></div>
+        <div
+            class="icon-sort-asc"
+            *ngIf="searchQueryParams.sortBy === column && searchQueryParams.sort === 'asc'"
+            (click)="handleSorting('desc', column)"
+            [ngClass]="{ 'active-text-color': searchQueryParams.sortBy === column && searchQueryParams.sort === 'asc' }"
+        ></div>
+        <div
+            class="icon-sort-asc"
+            *ngIf="searchQueryParams.sortBy === column && searchQueryParams.sort === 'desc'"
+            (click)="handleSorting('asc', column)"
+            [ngClass]="{
+                'active-text-color': searchQueryParams.sortBy === column && searchQueryParams.sort === 'desc'
+            }"
+        ></div>
+    </ng-template>
+    <ng-template #datepickerTemplate>
+        <div class="datepicker-modal">
+            <div class="modal-body">
+                <app-datepicker-wrapper
+                    [inputStartDate]="selectedDateRange?.startDate"
+                    [inputEndDate]="selectedDateRange?.endDate"
+                    [alwaysShowCalendars]="true"
+                    [ranges]="datePickerOption"
+                    [selectedRangeLabel]="selectedRangeLabel"
+                    [showCustomRangeLabel]="true"
+                    [showClearButton]="false"
+                    [showCancel]="true"
+                    [linkedCalendars]="true"
+                    [showDropdowns]="true"
+                    (rangeClicked)="dateSelectedCallback($event)"
+                    (datesUpdated)="dateSelectedCallback($event)"
+                    [keepCalendarOpeningWithRange]="false"
+                    [showRangeLabelOnInput]="false"
+                    [dateFieldPosition]="dateFieldPosition"
+                ></app-datepicker-wrapper>
+            </div>
+        </div>
+    </ng-template>
+    <!-- Delete confirmation model -->
+    <div
+        bsModal
+        #paymentConfirmationModel="bs-modal"
+        class="modal fade"
+        role="dialog"
+        [config]="{ keyboard: true }"
+        tabindex="-1"
+    >
+        <div class="modal-dialog modal-md">
+            <div class="modal-content" *ngIf="paymentConfirmationModel?.isShown">
+                <confirm-modal
+                    [body]="localeData?.delete_vouchers"
+                    (successCallBack)="deletePayments()"
+                    (cancelCallBack)="closeConfirmationPopup()"
+                >
+                </confirm-modal>
+            </div>
+        </div>
+    </div>
+</ng-container>
+<preview
+    *ngIf="previewVoucherParams?.uniqueName"
+    [params]="previewVoucherParams"
+    [voucherType]="'payment'"
+    [allVouchers]="allPayments"
+></preview>

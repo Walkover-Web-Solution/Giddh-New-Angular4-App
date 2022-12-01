@@ -1,7 +1,7 @@
 import { Store, select, createSelector } from '@ngrx/store';
 import { AppState } from './../store/roots';
 import { Injectable } from '@angular/core';
-import { take } from 'rxjs/operators';
+import { CompanyResponse } from '../models/api-models/Company';
 
 export interface IScope {
     name: string;
@@ -23,13 +23,13 @@ export class PermissionDataService {
     private createdBy: CompanyData;
 
     constructor(private store: Store<AppState>) {
-        this.store.pipe(select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.session.companyUniqueName], (companies, uniqueName) => {
-            let currentCompany = companies.find((company) => company.uniqueName === uniqueName);
+        this.store.pipe(select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.session.companyUniqueName], (companies: CompanyResponse[], uniqueName) => {
+            let currentCompany = companies.find((company) => company?.uniqueName === uniqueName);
             this.getCompany = currentCompany;
             this.store.pipe(select(state => state.session.companyUser)).subscribe(response => {
                 if (response && response.userEntityRoles && response.userEntityRoles.length) {
                     let superAdminIndx = response.userEntityRoles.findIndex((role) => {
-                        return (role.entity.entity === 'COMPANY' && role.role.uniqueName === 'super_admin');
+                        return (role.entity.entity === 'COMPANY' && role.role?.uniqueName === 'super_admin');
                     });
                     let companyEntityIndx = superAdminIndx !== -1 ? superAdminIndx : null;
                     if (!companyEntityIndx) {

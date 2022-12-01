@@ -40,7 +40,7 @@ export class DbService {
         this.store.pipe(select(appStore => appStore.settings.branches), take(1)).subscribe(response => {
             branches = response || [];
         });
-        return GIDDH_DB.removeItem(key, entity, uniqueName, this.generalService.currentOrganizationType === OrganizationType.Company && branches.length > 1);
+        return GIDDH_DB.removeItem(key, entity, uniqueName, this.generalService.currentOrganizationType === OrganizationType.Company && branches?.length > 1);
     }
 
     public deleteAllData(): void {

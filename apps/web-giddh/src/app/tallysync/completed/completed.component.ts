@@ -1,6 +1,6 @@
 import { Observable, ReplaySubject } from 'rxjs';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { ToasterService } from '../../services/toaster.service';
 import { takeUntil } from "rxjs/operators";
@@ -31,7 +31,7 @@ export class CompletedComponent implements OnInit, OnDestroy {
         containerClass: 'theme-green myDpClass'
     };
     public CompanyList: IOption[] = [];
-    public moment = moment;
+    public dayjs = dayjs;
     public maxDate = new Date(new Date().setDate(new Date().getDate() - 1));
     public startDate: string;
     public endDate: string;
@@ -154,10 +154,10 @@ export class CompletedComponent implements OnInit, OnDestroy {
             }
         });
         // set initial Data
-        this.filterForm.get('filterDate')?.patchValue(moment(this.maxDate).format('D-MMM-YYYY'));
+        this.filterForm.get('filterDate')?.patchValue(dayjs(this.maxDate).format('D-MMM-YYYY'));
         this.filterForm.get('filterTimeInterval')?.patchValue(this.timeInterval[5].value);
         this.filter.timeRange = this.timeInterval[5].value;
-        this.filter.startDate = moment(this.maxDate).format(GIDDH_DATE_FORMAT);
+        this.filter.startDate = dayjs(this.maxDate).format(GIDDH_DATE_FORMAT);
         this.getReport();
     }
 
@@ -190,17 +190,21 @@ export class CompletedComponent implements OnInit, OnDestroy {
                     let tallyGroups = (element.totalSavedGroups * 100) / element.totalTallyGroups;
                     let tallyAccounts = (element.totalSavedAccounts * 100) / element.totalTallyAccounts;
                     let tallyEntries = (element.totalSavedEntries * 100) / element.totalTallyEntries;
+                    let tallyVouchers = (element.totalSavedVouchers * 100) / element.totalTallyVouchers;
                     element['groupsPercent'] = (isNaN(tallyGroups) ? 0 : tallyGroups).toFixed(2) + '%';
                     element['accountsPercent'] = (isNaN(tallyAccounts) ? 0 : tallyAccounts).toFixed(2) + '%';
                     element['entriesPercent'] = (isNaN(tallyEntries) ? 0 : tallyEntries).toFixed(2) + '%';
+                    element['vouchersPercent'] = (isNaN(tallyVouchers) ? 0 : tallyVouchers).toFixed(2) + '%';
 
                     //error
                     let tallyErrorGroups = (element.tallyErrorGroups * 100) / element.totalTallyGroups;
                     let tallyErrorAccounts = (element.tallyErrorAccounts * 100) / element.totalTallyAccounts;
                     let tallyErrorEntries = (element.tallyErrorEntries * 100) / element.totalTallyEntries;
+                    let tallyErrorVouchers = (element.tallyErrorVouchers * 100) / element.totalTallyVouchers;
                     element['groupsErrorPercent'] = (isNaN(tallyErrorGroups) ? 0 : tallyErrorGroups).toFixed(2) + '%';
                     element['accountsErrorPercent'] = (isNaN(tallyErrorAccounts) ? 0 : tallyErrorAccounts).toFixed(2) + '%';
                     element['entriesErrorPercent'] = (isNaN(tallyErrorEntries) ? 0 : tallyErrorEntries).toFixed(2) + '%';
+                    element['vouchersErrorPercent'] = (isNaN(tallyErrorVouchers) ? 0 : tallyErrorVouchers).toFixed(2) + '%';
                 })
             }
             this.isLoading = false;
@@ -217,12 +221,12 @@ export class CompletedComponent implements OnInit, OnDestroy {
         this.downloadTallyErrorLogRequest.date = row['dateDDMMYY'] ? row['dateDDMMYY'] : '';
         this.downloadTallyErrorLogRequest.hour = row['hour'] ? row['hour'] : null;
         this.downloadTallyErrorLogRequest.type = row['type'];
-        this.tallysyncService.getErrorLog(row.company.uniqueName, this.downloadTallyErrorLogRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
-            if (res.status === 'success') {
+        this.tallysyncService.getErrorLog(row.company?.uniqueName, this.downloadTallyErrorLogRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+            if (res?.status === 'success') {
                 let blobData = this.generalService.base64ToBlob(res.body, 'application/xlsx', 512);
                 return saveAs(blobData, `${row.company.name}-error-log.xlsx`);
             } else {
-                this.toaster.errorToast(res.message);
+                this.toaster.errorToast(res?.message);
             }
         })
     }
@@ -261,7 +265,7 @@ export class CompletedComponent implements OnInit, OnDestroy {
 
     public getHours(dateArray: any) {
         let hour;
-        if (dateArray.length > 2) {
+        if (dateArray?.length > 2) {
             hour = dateArray[3] + 1;
         }
         return hour;
@@ -272,7 +276,7 @@ export class CompletedComponent implements OnInit, OnDestroy {
     }
 
     public onValueChange(event: Date): void {
-        this.filter.startDate = moment(event).format(GIDDH_DATE_FORMAT);
+        this.filter.startDate = dayjs(event).format(GIDDH_DATE_FORMAT);
     }
 
     public onDDElementTimeRangeSelect(event: IOption): void {

@@ -334,7 +334,13 @@
                             <td [attr.data-title]="localeData?.suppliers_name">{{ reverseCharge.supplierName }}</td>
                             <td [attr.data-title]="localeData?.app_voucher_type">{{ reverseCharge.voucherType }}</td>
                             <td [attr.data-title]="commonLocaleData?.app_invoice_no">
-                                {{ reverseCharge.invoiceNumber ? reverseCharge.invoiceNumber : "-" }}
+                                {{
+                                    reverseCharge.invoiceNumber
+                                        ? reverseCharge.invoiceNumber
+                                        : reverseCharge.voucherType === "purchase"
+                                        ? commonLocaleData?.app_not_available
+                                        : "-"
+                                }}
                             </td>
                             <td [attr.data-title]="localeData?.suppliers_invoice_date">
                                 {{ reverseCharge.supplierInvoiceDate ? reverseCharge.supplierInvoiceDate : "-" }}
@@ -405,7 +411,7 @@
                     !isLoading &&
                     (!reverseChargeReportResults ||
                         !reverseChargeReportResults.items ||
-                        reverseChargeReportResults.items.length === 0)
+                        reverseChargeReportResults.items?.length === 0)
                 "
             >
                 <no-data [secondaryMessageClass]="'p-0'"></no-data>

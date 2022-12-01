@@ -6,6 +6,7 @@ import { DatepickerModule } from 'ngx-bootstrap/datepicker';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { SharedModule } from '../shared/shared.module';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
+import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
 import { AuditLogsComponent } from './audit-logs.component';
 import { AuditLogsRoutingModule } from './audit-logs.routing.module';
 import { AuditLogsFormComponent } from './components/audit-logs-form/audit-logs-form.component';
@@ -34,11 +35,15 @@ import { AuditLogsServiceModule } from './services/audit-logs.service.module';
         ReactiveFormsModule,
         AuditLogsRoutingModule,
         DatepickerModule,
-        LaddaModule,
+        LaddaModule.forRoot({
+            style: 'slide-left',
+            spinnerSize: 30
+        }),
         ShSelectModule,
         AuditLogsServiceModule,
         CurrencyModule,
-        SharedModule
+        SharedModule,
+        TranslateDirectiveModule
     ],
 })
 export class AuditLogsModule {

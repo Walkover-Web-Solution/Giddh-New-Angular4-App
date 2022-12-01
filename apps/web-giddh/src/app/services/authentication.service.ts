@@ -18,8 +18,6 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { LoginWithPassword, SignUpWithPassword } from '../models/api-models/login';
-import { isCordova } from "@giddh-workspaces/utils";
-import { UserAgent } from "@ionic-native/user-agent/ngx";
 
 @Injectable()
 export class AuthenticationService {
@@ -28,12 +26,7 @@ export class AuthenticationService {
         public httpClient: HttpClient,
         public http: HttpWrapperService,
         private generalService: GeneralService,
-        @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs, private userAgent: UserAgent) {
-        if (isCordova()) {
-            this.userAgent.set('Mozilla/5.0 (Linux; U; Android 2.2) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1')
-                .then((res: any) => console.log(res))
-                .catch((error: any) => console.error(error));
-        }
+        @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
     }
 
     public SignupWithEmail(datatoSend: any): Observable<BaseResponse<string, string>> {
@@ -101,7 +94,7 @@ export class AuthenticationService {
 
     public ClearSession(): Observable<BaseResponse<string, string>> {
         let userName = (this.generalService.user) ? this.generalService.user.uniqueName : "";
-        return this.http.delete(this.config.apiUrl + LOGIN_API.CLEAR_SESSION.replace(':userUniqueName', encodeURIComponent(userName))).pipe(map((res) => {
+        return this.http.delete(this.config.apiUrl + LOGIN_API.CLEAR_SESSION?.replace(':userUniqueName', encodeURIComponent(userName))).pipe(map((res) => {
             let data: BaseResponse<string, string> = res;
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e)));
@@ -128,7 +121,7 @@ export class AuthenticationService {
         let uniqueName = (this.generalService.user) ? this.generalService.user.uniqueName : "";
 
         return this.http.put(this.config.apiUrl + LOGIN_API.SET_SETTINGS
-            .replace(':userUniqueName', encodeURIComponent(uniqueName)), model).pipe(map((res) => {
+            ?.replace(':userUniqueName', encodeURIComponent(uniqueName)), model).pipe(map((res) => {
                 let data: BaseResponse<string, string> = res;
                 data.request = '';
                 data.queryString = {};
@@ -140,7 +133,7 @@ export class AuthenticationService {
         let sessionId = (this.generalService.user) ? this.generalService.user.uniqueName : "";
 
         return this.http.get(this.config.apiUrl + LOGIN_API.FETCH_DETAILS
-            .replace(':sessionId', sessionId)).pipe(map((res) => {
+            ?.replace(':sessionId', sessionId)).pipe(map((res) => {
                 let data: BaseResponse<UserDetails, string> = res;
                 data.request = '';
                 data.queryString = {};
@@ -152,7 +145,7 @@ export class AuthenticationService {
         let uniqueName = (this.generalService.user) ? this.generalService.user.uniqueName : "";
 
         return this.http.get(this.config.apiUrl + LOGIN_API.GET_AUTH_KEY
-            .replace(':uniqueName', uniqueName)).pipe(map((res) => {
+            ?.replace(':uniqueName', uniqueName)).pipe(map((res) => {
                 let data: BaseResponse<AuthKeyResponse, string> = res;
                 data.request = '';
                 data.queryString = {};
@@ -164,7 +157,7 @@ export class AuthenticationService {
         let userEmail = (this.generalService.user) ? this.generalService.user.email : "";
 
         return this.http.put(this.config.apiUrl + LOGIN_API.REGENERATE_AUTH_KEY
-            .replace(':userEmail', userEmail), {}).pipe(map((res) => {
+            ?.replace(':userEmail', userEmail), {}).pipe(map((res) => {
                 let data: BaseResponse<AuthKeyResponse, string> = res;
                 data.request = '';
                 data.queryString = {};
@@ -188,7 +181,7 @@ export class AuthenticationService {
     public GetUserSession() {
         let userEmail = (this.generalService.user) ? this.generalService.user.email : "";
         return this.http.get(this.config.apiUrl + LOGIN_API.GET_SESSION
-            .replace(':userEmail', userEmail)).pipe(map(res => {
+            ?.replace(':userEmail', userEmail)).pipe(map(res => {
                 let data = res;
                 return data;
             }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
@@ -206,7 +199,7 @@ export class AuthenticationService {
         let id = {
             sessionId: requestPayload.sessionId
         };
-        return this.http.post(this.config.apiUrl + LOGIN_API.DELETE_SESSION.replace(':userEmail', userEmail), id).pipe(map(res => {
+        return this.http.post(this.config.apiUrl + LOGIN_API.DELETE_SESSION?.replace(':userEmail', userEmail), id).pipe(map(res => {
             let data = res;
             data.queryString = requestPayload;
             return data;
@@ -216,7 +209,7 @@ export class AuthenticationService {
     // Delete All Sessions
     public DeleteAllSession() {
         let userEmail = (this.generalService.user) ? this.generalService.user.email : "";
-        return this.http.delete(this.config.apiUrl + LOGIN_API.DELETE_ALL_SESSION.replace(':userEmail', userEmail)).pipe(map(res => {
+        return this.http.delete(this.config.apiUrl + LOGIN_API.DELETE_ALL_SESSION?.replace(':userEmail', userEmail)).pipe(map(res => {
             let data = res;
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
@@ -238,7 +231,7 @@ export class AuthenticationService {
 
     public forgotPassword(userId): Observable<BaseResponse<string, any>> {
         let userName = userId;
-        return this.http.put(this.config.apiUrl + LOGIN_API.FORGOT_PASSWORD.replace(':userEmail', userName), {}).pipe(map((res) => {
+        return this.http.put(this.config.apiUrl + LOGIN_API.FORGOT_PASSWORD?.replace(':userEmail', userName), {}).pipe(map((res) => {
             let data: BaseResponse<string, any> = res;
             data.request = userId;
             return data;
@@ -256,7 +249,7 @@ export class AuthenticationService {
 
     public renewSession(): Observable<BaseResponse<any, any>> {
         let userName = (this.generalService.user) ? this.generalService.user.uniqueName : "";
-        return this.http.put(this.config.apiUrl + LOGIN_API.RENEW_SESSION.replace(':userUniqueName', encodeURIComponent(userName)), null).pipe(map((res) => {
+        return this.http.put(this.config.apiUrl + LOGIN_API.RENEW_SESSION?.replace(':userUniqueName', encodeURIComponent(userName)), null).pipe(map((res) => {
             let data: BaseResponse<string, any> = res;
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<string, any>(e)));
@@ -264,7 +257,7 @@ export class AuthenticationService {
 
     public saveGmailAuthCode(data) {
         const companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.post(this.config.apiUrl + GMAIL_API.GENERATE_GMAIL_TOKEN.replace(':companyUniqueName', encodeURIComponent(companyUniqueName)), data).pipe(map((res) => {
+        return this.http.post(this.config.apiUrl + GMAIL_API.GENERATE_GMAIL_TOKEN?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName)), data).pipe(map((res) => {
             let data: BaseResponse<string, any> = res;
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<string, any>(e)));
@@ -272,7 +265,7 @@ export class AuthenticationService {
 
     public saveGmailToken(data) {
         const companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.post(this.config.apiUrl + GMAIL_API.SAVE_GMAIL_TOKEN.replace(':companyUniqueName', encodeURIComponent(companyUniqueName)), data).pipe(map((res) => {
+        return this.http.post(this.config.apiUrl + GMAIL_API.SAVE_GMAIL_TOKEN?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName)), data).pipe(map((res) => {
             let data: BaseResponse<string, any> = res;
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<string, any>(e)));
@@ -280,7 +273,7 @@ export class AuthenticationService {
 
     public getAllUserSubsciptionPlans(countryCode): Observable<BaseResponse<any, any>> {
         let url = this.config.apiUrl + LOGIN_API.GET_USER_SUBSCRIPTION_PLAN_API;
-        url = url.replace(":countryCode", countryCode);
+        url = url?.replace(":countryCode", countryCode);
 
         return this.http.get(url).pipe(map(res => {
             let data = res;
@@ -318,5 +311,19 @@ export class AuthenticationService {
         }).pipe(map((res) => {
             return res;
         }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, args)));
+    }
+
+    /**
+     * This will call login with otp api
+     *
+     * @param {*} data
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof AuthenticationService
+     */
+    public loginWithOtp(data: any): Observable<BaseResponse<any, any>> {
+        return this.http.post(this.config.apiUrl + LOGIN_API.LOGIN_WITH_OTP, data).pipe(map((res) => {
+            let data: BaseResponse<string, any> = res;
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<string, any>(e)));
     }
 }

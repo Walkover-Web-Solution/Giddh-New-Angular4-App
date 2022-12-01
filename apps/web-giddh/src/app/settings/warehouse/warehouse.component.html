@@ -48,6 +48,19 @@
                         <div class="d-flex">
                             <h3>{{ warehouse.name }}</h3>
                             <div class="warehouse-options">
+                                <span
+                                    class="warehouse-status font-14"
+                                    [ngClass]="{
+                                        'warehouse-archived': warehouse.isArchived,
+                                        'warehouse-active': !warehouse.isArchived
+                                    }"
+                                    ><span>&nbsp;</span>
+                                    {{
+                                        warehouse.isArchived
+                                            ? commonLocaleData?.app_archived
+                                            : commonLocaleData?.app_unarchived
+                                    }}</span
+                                >
                                 <div class="btn-group" dropdown>
                                     <button
                                         id="button-basic"
@@ -70,11 +83,19 @@
                                                 commonLocaleData?.app_edit
                                             }}</a>
                                         </li>
+                                        <li role="menuitem">
+                                            <a
+                                                class="dropdown-item warehouse-options"
+                                                (click)="confirmStatusUpdate(warehouse)"
+                                                >{{
+                                                    warehouse?.isArchived
+                                                        ? commonLocaleData?.app_unarchive
+                                                        : commonLocaleData?.app_archive
+                                                }}</a
+                                            >
+                                        </li>
                                         <!--
                                             not in V1, Will use it V2, don't remove code
-                                        <li role="menuitem">
-                                            <a>Archive</a>
-                                        </li>
                                         <li role="menuitem">
                                             <a>Merge</a>
                                         </li>
@@ -234,4 +255,23 @@
         >
         </welcome-component>
     </ng-template>
+    <div bsModal #statusModal="bs-modal" class="modal fade aaa" role="dialog">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <confirm-modal
+                    *ngIf="statusModal?.isShown"
+                    [title]="commonLocaleData?.app_confirmation"
+                    [body]="
+                        warehouseStatusToUpdate?.isArchived
+                            ? localeData?.confirm_unarchive_title
+                            : localeData?.confirm_archive_title
+                    "
+                    [permanentlyDeleteMessage]="' '"
+                    (cancelCallBack)="warehouseStatusToUpdate = ''; statusModal?.hide()"
+                    (successCallBack)="updateWarehouseStatus()"
+                >
+                </confirm-modal>
+            </div>
+        </div>
+    </div>
 </ng-container>

@@ -47,6 +47,9 @@ import { MatTableModule } from '@angular/material/table';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDialogModule } from '@angular/material/dialog';
 
+import { ConfirmModalModule } from '../theme/confirm-modal/confirm-modal.module';
+import { NgxBootstrapSwitchModule } from 'ngx-bootstrap-switch';
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
@@ -102,7 +105,10 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         MatMenuModule,
         MatTableModule,
         MatSelectModule,
-        MatDialogModule
+        MatDialogModule,
+        ConfirmModalModule,
+        NgxBootstrapSwitchModule.forRoot(),
+        BsDropdownModule.forRoot()
     ],
     providers: [
         {

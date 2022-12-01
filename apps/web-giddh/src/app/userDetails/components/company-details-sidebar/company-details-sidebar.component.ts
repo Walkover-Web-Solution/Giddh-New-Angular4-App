@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
-import * as moment from 'moment';
+import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 import { SettingsProfileService } from '../../../services/settings.profile.service';
 import { takeUntil } from 'rxjs/operators';
@@ -18,7 +18,7 @@ export class CompanyDetailsSidebarComponent implements OnInit {
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
     @Output() public closeEvent: EventEmitter<boolean> = new EventEmitter();
-    public moment = moment;
+    public dayjs = dayjs;
     /** This holds giddh date format */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
 
@@ -41,7 +41,7 @@ export class CompanyDetailsSidebarComponent implements OnInit {
      * @memberof CompanyDetailsSidebarComponent
      */
     public getCompanyDetails(): void {
-        this.settingsProfileService.getCompanyDetails(this.selectedCompany.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
+        this.settingsProfileService.getCompanyDetails(this.selectedCompany?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
             if (response && response.status === "success" && response.body) {
                 this.selectedCompany = response.body;
             }

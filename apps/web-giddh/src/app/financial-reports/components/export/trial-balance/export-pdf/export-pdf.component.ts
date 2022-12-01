@@ -11,7 +11,6 @@ import { JsPDFAutoTable } from 'apps/web-giddh/src/customTypes/jsPDF';
 import * as jsPDF from 'jspdf';
 import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-
 import { DataFormatter, IFormatable } from '../../model/data-formatter';
 import { Total } from '../export-csv/export-csv.component';
 
@@ -60,11 +59,11 @@ class FormatPdf implements IFormatable {
 
     public setRowData(data: any[], padding: number) {
         this.pdf.setFontSize(9);
-        this.pdf.text(this.colX + padding, this.colY += 5, data[0].toString());
-        this.pdf.text(70, this.colY, data[1].toString());
-        this.pdf.text(105, this.colY, data[2].toString());
-        this.pdf.text(140, this.colY, data[3].toString());
-        this.pdf.text(170, this.colY, data[4].toString());
+        this.pdf.text(this.colX + padding, this.colY += 5, data[0]?.toString());
+        this.pdf.text(70, this.colY, data[1]?.toString());
+        this.pdf.text(105, this.colY, data[2]?.toString());
+        this.pdf.text(140, this.colY, data[3]?.toString());
+        this.pdf.text(170, this.colY, data[4]?.toString());
         if (this.colY > 247) {
             this.pdf.addPage();
             this.colY = 20;
@@ -75,10 +74,10 @@ class FormatPdf implements IFormatable {
         this.pdf.setFontSize(10);
         this.pdf.line(10, this.colY += 5, 200, this.colY);
         this.pdf.text(10, this.colY + 5, 'TOTAL');
-        this.pdf.text(70, this.colY + 5, data[0].toString());
-        this.pdf.text(105, this.colY + 5, data[1].toString());
-        this.pdf.text(140, this.colY + 5, data[2].toString());
-        this.pdf.text(170, this.colY + 5, data[3].toString());
+        this.pdf.text(70, this.colY + 5, data[0]?.toString());
+        this.pdf.text(105, this.colY + 5, data[1]?.toString());
+        this.pdf.text(140, this.colY + 5, data[2]?.toString());
+        this.pdf.text(170, this.colY + 5, data[3]?.toString());
     }
 
     public save(name) {
@@ -139,7 +138,7 @@ export class TrialBalanceExportPdfComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        this.imgPath = (isElectron || isCordova) ? 'assets/images/pdf-icon.svg' : AppUrl + APP_FOLDER + 'assets/images/pdf-icon.svg';
+        this.imgPath = isElectron ? 'assets/images/pdf-icon.svg' : AppUrl + APP_FOLDER + 'assets/images/pdf-icon.svg';
     }
 
     public ngOnDestroy() {
@@ -193,7 +192,7 @@ export class TrialBalanceExportPdfComponent implements OnInit, OnDestroy {
         pdf.autoTable(columns, rows, {
             theme: 'plain',
             margin: {
-                top: this.selectedCompany.address ? 110 + (this.selectedCompany.address.split('\n').length * 15) : 110 + 15
+                top: this.selectedCompany.address ? 110 + (this.selectedCompany.address?.split('\n')?.length * 15) : 110 + 15
             },
             drawCell: (cell, data) => {
 
@@ -221,8 +220,8 @@ export class TrialBalanceExportPdfComponent implements OnInit, OnDestroy {
         pdf.setFontSize(8);
         pdf.line(40, lastY, pageWidth, lastY);
         pdf.text(footerX, lastY + 20, 'Total');
-        pdf.text(footerX + 210, lastY + 20, total.ob.toString());
-        pdf.text(footerX + 280, lastY + 20, total.dr.toString());
+        pdf.text(footerX + 210, lastY + 20, total.ob?.toString());
+        pdf.text(footerX + 280, lastY + 20, total.dr?.toString());
         pdf.text(footerX + 360, lastY + 20, total.cr.toFixed(2));
         pdf.text(footerX + 450, lastY + 20, total.cb.toFixed(2));
         // Save the PDF

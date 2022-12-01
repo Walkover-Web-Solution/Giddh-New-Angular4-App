@@ -65,10 +65,29 @@
     </ng-template>
 
     <div class="clearfix">
-        <h3 class="font-16 mr-b05">{{ localeData?.invoice_copy }}</h3>
-        <hr />
+        <ng-container *ngIf="selectedItem.voucherType === 'sales'">
+            <h3 class="font-16 mr-b05">{{ localeData?.invoice_copy }}</h3>
+            <hr />
+        </ng-container>
 
-        <div class="checkbox">
+        <div class="checkbox" *ngIf="voucherApiVersion === 2">
+            <label>
+                <input
+                    name="originalCopy"
+                    type="checkbox"
+                    value="Original"
+                    checked
+                    [(ngModel)]="isOriginal"
+                    (change)="invoiceTypeChanged($event)"
+                />
+                {{
+                    selectedItem.voucherType === "purchase"
+                        ? commonLocaleData?.app_purchase_bill
+                        : localeData?.invoice_copy_options?.original
+                }}
+            </label>
+        </div>
+        <div class="checkbox" *ngIf="selectedItem.voucherType === 'sales'">
             <label>
                 <input
                     type="checkbox"
@@ -80,7 +99,7 @@
             </label>
         </div>
 
-        <div class="checkbox">
+        <div class="checkbox" *ngIf="selectedItem.voucherType === 'sales'">
             <label>
                 <input
                     type="checkbox"
@@ -91,13 +110,24 @@
                 {{ commonLocaleData?.app_customer }}
             </label>
         </div>
+        <div class="checkbox" *ngIf="voucherApiVersion === 2 && selectedItem?.hasAttachment">
+            <label>
+                <input name="attachment" type="checkbox" value="Attachment" [(ngModel)]="isAttachment" />
+                {{ localeData?.invoice_copy_options?.attachment }}
+            </label>
+        </div>
     </div>
 
     <!-- region buttons -->
     <div class="row mr-t2 mr-b1">
         <div class="col-sm-12">
             <div class="btn-group" role="group">
-                <button type="button" class="btn btn-success" (click)="onDownloadInvoiceEvent()">
+                <button
+                    [disabled]="voucherApiVersion === 2 && !isOriginal && !isTransport && !isCustomer && !isAttachment"
+                    type="button"
+                    class="btn btn-success"
+                    (click)="onDownloadInvoiceEvent()"
+                >
                     {{ commonLocaleData?.app_download }}
                 </button>
 

@@ -8,6 +8,7 @@ import { SubscriptionRequest } from '../../../models/api-models/Company';
 import { SettingsProfileService } from '../../../services/settings.profile.service';
 import { takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
+import { FormControl } from '@angular/forms';
 
 @Component({
     selector: 'move-company',
@@ -19,6 +20,10 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
     @Output() public moveCompany = new EventEmitter<boolean>();
     @Input() public subscriptions: SubscriptionsUser[] = [];
     @Input() public moveSelectedCompany: any;
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
     public availablePlans: any[] = [];
     public availablePlansOption: IOption[] = [];
     public selectedPlan: any;
@@ -30,10 +35,10 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
     };
     /** Subject to release subscription memory */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    /* This will hold local JSON data */
-    @Input() public localeData: any = {};
-    /* This will hold common JSON data */
-    @Input() public commonLocaleData: any = {};
+    /** Control for the MatSelect filter keyword */
+    public searchPlan: FormControl = new FormControl();
+    /** True if api call in progress */
+    public isLoading: boolean = true;
 
     constructor(private store: Store<AppState>, private settingsProfileActions: SettingsProfileActions, private settingsProfileService: SettingsProfileService) {
 
@@ -59,10 +64,10 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
         this.subscriptionRequestObj = {
             planUniqueName: '',
             subscriptionId: this.availablePlans[this.selectedPlan].subscriptionId,
-            userUniqueName: this.moveSelectedCompany.createdBy.uniqueName,
+            userUniqueName: this.moveSelectedCompany?.createdBy?.uniqueName,
             licenceKey: ''
         };
-        this.patchProfile({ subscriptionRequest: this.subscriptionRequestObj, callNewPlanApi: true, moveCompany: this.moveSelectedCompany.uniqueName });
+        this.patchProfile({ subscriptionRequest: this.subscriptionRequestObj, callNewPlanApi: true, moveCompany: this.moveSelectedCompany?.uniqueName });
     }
 
     /**
@@ -71,7 +76,7 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
      * @param {*} obj
      * @memberof MoveCompanyComponent
      */
-    public patchProfile(obj): void {
+    public patchProfile(obj: any): void {
         this.store.dispatch(this.settingsProfileActions.PatchProfile(obj));
         this.moveCompany.emit(true);
     }
@@ -91,24 +96,23 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
      * @memberof MoveCompanyComponent
      */
     public getCompanyDetails(): void {
-        this.settingsProfileService.getCompanyDetails(this.moveSelectedCompany.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
+        this.settingsProfileService.getCompanyDetails(this.moveSelectedCompany?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
             if (response && response.status === "success" && response.body) {
                 this.moveSelectedCompany = response.body;
 
                 if (this.subscriptions && this.subscriptions.length > 0) {
                     this.subscriptions.forEach(plan => {
-                        if (plan.subscriptionId && plan.planDetails && plan.planDetails.companiesLimit > plan.totalCompanies && this.moveSelectedCompany && this.moveSelectedCompany.subscription && this.moveSelectedCompany.subscription.planDetails && this.moveSelectedCompany.subscription.planDetails.uniqueName !== plan.planDetails.uniqueName && this.availablePlans[plan.planDetails.uniqueName] === undefined && plan.planDetails.countries.includes(this.moveSelectedCompany.country)) {
-                            this.availablePlansOption.push({ label: plan.planDetails.name, value: plan.planDetails.uniqueName });
-
-                            if (this.availablePlans[plan.planDetails.uniqueName] === undefined) {
-                                this.availablePlans[plan.planDetails.uniqueName] = [];
+                        if (plan.subscriptionId && plan.planDetails?.companiesLimit > plan.totalCompanies && this.moveSelectedCompany?.subscription?.subscriptionId !== plan.subscriptionId && this.availablePlans[plan.planDetails?.uniqueName] === undefined && plan.planDetails.countries.includes(this.moveSelectedCompany.country)) {
+                            this.availablePlansOption.push({ label: plan.planDetails?.name, value: plan.planDetails?.uniqueName });
+                            if (this.availablePlans[plan.planDetails?.uniqueName] === undefined) {
+                                this.availablePlans[plan.planDetails?.uniqueName] = [];
                             }
-
-                            this.availablePlans[plan.planDetails.uniqueName] = plan;
+                            this.availablePlans[plan.planDetails?.uniqueName] = plan;
                         }
                     });
                 }
             }
+            this.isLoading = false;
         });
     }
 

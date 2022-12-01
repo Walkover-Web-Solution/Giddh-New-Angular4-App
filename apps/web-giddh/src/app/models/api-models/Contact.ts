@@ -101,6 +101,7 @@ export class CustomerVendorFiledFilter {
     public gstin: boolean = false;
     public comment: boolean = false;
     public openingBalance: boolean = false;
+
 }
 
 /**

@@ -1,9 +1,8 @@
-@import "../../../../assets/css/color.scss";
 .td-search-box {
     div {
         i {
             margin-top: 1px;
-            color: $wild-blue-yonder;
+            color: var(--color-blue);
             padding-right: 8px;
             cursor: pointer;
             display: flex;
@@ -34,7 +33,7 @@
         cursor: default;
         width: 100%;
         &:focus {
-            border-color: $gainsboro;
+            border-color: var(--color-iron);
         }
     }
 }
@@ -46,8 +45,7 @@
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    border-right: 1px solid $gainsboro;
-    color: $nobel;
+    color: var(--color-datepicker-title-text);
 }
 .input-wrapper {
     display: block !important;
@@ -60,7 +58,7 @@
         display: block;
         height: 36px;
         width: 1px;
-        background-color: $gainsboro;
+        background-color: var(--color-iron);
         left: 37px !important;
         z-index: 100;
         top: 0;
@@ -72,15 +70,15 @@
     align-items: center;
     font-size: 14px;
     margin-left: 10px;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--color-iron);
     border-radius: 5px;
 }
 
 .btn-filter {
-    background: $whisper-color;
-    border: 1px solid $gainsboro;
+    background: var(--color-dark-fog);
+    border: 1px solid var(--color-iron);
     font-size: 14px;
-    color: $midnight-blue;
+    color: var(--color-giddh-blue);
     display: inline-flex;
     justify-content: space-between;
     -webkit-box-align: center;
@@ -109,6 +107,7 @@
 .voucher-type-dropdown .btn {
     padding: 0 8px;
     margin-right: 0px;
+    color: var(--color-abbey);
 }
 .basic > tbody > tr > td,
 .basic > thead > tr > th {
@@ -122,6 +121,13 @@
 }
 .entity-dropdown {
     width: 200px;
+}
+.check-image {
+    img {
+        max-height: 14px;
+        cursor: pointer;
+        filter: var(--color-primary-checkbox-background-filter);
+    }
 }
 @media screen and (max-width: 1199px) {
     .clear-filter {

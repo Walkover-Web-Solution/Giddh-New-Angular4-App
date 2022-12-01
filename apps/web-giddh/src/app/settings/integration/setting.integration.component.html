@@ -51,8 +51,8 @@
                 <!-- Page-1 to Page-3 -->
                 <div class="msg91-container" *ngIf="!showTriggerForm">
                     <div class="menu" *ngIf="communicationPlatforms?.MSG91?.isConnected">
-                        <button mat-icon-button disableRipple [matMenuTriggerFor]="beforeMenu">
-                            <mat-icon>more_vert</mat-icon>
+                        <button mat-icon-button disableRipple id="edit-model-basic" [matMenuTriggerFor]="beforeMenu">
+                            <span class="icon-dots-three-vertical"></span>
                         </button>
                         <mat-menu #beforeMenu="matMenu" xPosition="before">
                             <button mat-menu-item (click)="editCommunicationPlatform = 'MSG91'">
@@ -143,9 +143,9 @@
                                 <td mat-cell *matCellDef="let element">{{ element.title }}</td>
                             </ng-container>
 
-                            <ng-container matColumnDef="channel">
+                            <ng-container matColumnDef="type">
                                 <th class="channel-width" mat-header-cell *matHeaderCellDef>Type</th>
-                                <td mat-cell *matCellDef="let element">{{ element.channel }}</td>
+                                <td mat-cell *matCellDef="let element">{{ element.type }}</td>
                             </ng-container>
 
                             <ng-container matColumnDef="argsMapping">
@@ -194,140 +194,100 @@
                         </div>
                         <div class="trigger-input">
                             <p class="trigger-input-label">Condition<span>*</span></p>
-                            <mat-select placeholder="Select Conditions">
-                                <mat-option value="one">First option</mat-option>
-                                <mat-option value="two">Second option</mat-option>
+                            <mat-select placeholder="Select Condition">
+                                <mat-option value="CREATE">Create</mat-option>
+                                <mat-option value="UPDATE">Update</mat-option>
+                                <mat-option value="DELETE">Delete</mat-option>
                             </mat-select>
                         </div>
                         <div class="trigger-input">
-                            <p class="trigger-input-label">Communication Platform<span>*</span></p>
-                            <mat-select placeholder="Choose Platform">
-                                <mat-option value="one">First option</mat-option>
-                                <mat-option value="two">Second option</mat-option>
+                            <p class="trigger-input-label">Entity<span>*</span></p>
+                            <mat-select placeholder="Choose Entity">
+                                <mat-option value="VOUCHER">Voucher</mat-option>
                             </mat-select>
                         </div>
                         <div class="trigger-input">
-                            <p class="trigger-input-label">Communication Channel<span>*</span></p>
-                            <mat-select placeholder="Choose Channel">
-                                <mat-option value="one">First option</mat-option>
-                                <mat-option value="two">Second option</mat-option>
-                            </mat-select>
-                        </div>
-                        <div class="trigger-input">
-                            <p class="trigger-input-label">Template<span>*</span></p>
-                            <mat-select placeholder="Choose Template">
-                                <mat-option value="one">First option</mat-option>
-                                <mat-option value="two">Second option</mat-option>
+                            <p class="trigger-input-label">Sub Entity<span>*</span></p>
+                            <mat-select placeholder="Choose Sub Entity">
+                                <mat-option *ngFor="let action of action" [value]="action">{{ action }} </mat-option>
                             </mat-select>
                         </div>
                         <button mat-flat-button color="primary">Launch Trigger</button>
                     </div>
                     <div class="trigger-form-right-side">
                         <p class="compose">Compose Email</p>
-                        <div class="compose-subject">
-                            <p class="compose-subject-label">Subject<span>*</span></p>
-                            <div class="subject-box">Invoice Payment Due</div>
-                        </div>
-                        <div class="compose-subject">
-                            <p class="compose-subject-label">Body</p>
-                            <div class="subject-box text-box">
-                                <p>Hello <span>NAME</span> ,</p>
-                                <p>
-                                    Your Invoice Number <span>INVOICE NUMBER</span> Payment of Rs.
-                                    <span>AMOUNT</span> for account name <span>ACCOUNT NAME</span> is due for Date
-                                    <span>DATE</span>. Attention to <span>ATTENTION TO</span>. Make the full payment and
-                                    avoid late fees.
-                                </p>
-                                <p>Regards,</p>
-                            </div>
-                        </div>
                         <div class="dropdown-box">
                             <div class="dropdown-list">
                                 <span class="dropdown-list-label">Name</span>
-                                <mat-select placeholder="Name">
-                                    <mat-option value="one">First option</mat-option>
+                                <mat-select
+                                    name="suggestion"
+                                    placeholder="Select Suggestions"
+                                    (selectionChange)="onSelectFieldSuggestions($event)"
+                                    [(value)]="suggestions"
+                                >
+                                    <mat-option *ngFor="let suggestion of fieldsSuggestion" [value]="suggestion"
+                                        >{{ suggestion }}
+                                    </mat-option>
                                 </mat-select>
                             </div>
+                            <!-- <mat-grid-tile class="grid-box grid-box-content" *ngFor="let unit of unitsArray">
+                <div class="unit-value">{{ unit.giddhUnitName }} ({{ unit.giddhUnit }})</div>
+                <div class="map-unit-value">
+                    <select-field
+                        [cssClass]="'form-control mat-field-border'"
+                        [placeholder]="'Select Suggestions'"
+                        [options]="fieldsSuggestion"
+                        [defaultValue]="suggestion"
+                        (selectedOption)="suggestion = $event.value"
+                    ></select-field>
+                </div>
+            </mat-grid-tile> -->
 
-                            <div class="dropdown-list right-label">
-                                <span class="dropdown-list-label">Invoice Number</span>
-                                <mat-select placeholder="Invoice No.">
-                                    <mat-option value="one">First option</mat-option>
-                                </mat-select>
-                            </div>
-                            <br />
-
-                            <div class="dropdown-list bottom-label">
-                                <span class="dropdown-list-label">Amount</span>
-                                <mat-select placeholder="Amount Na">
-                                    <mat-option value="one">First option</mat-option>
-                                </mat-select>
-                            </div>
-
-                            <div class="dropdown-list right-label">
-                                <span class="dropdown-list-label">Account Name</span>
-                                <mat-select placeholder="Account Name">
-                                    <mat-option value="one">First option</mat-option>
-                                </mat-select>
-                            </div>
-                            <br />
-
-                            <div class="dropdown-list bottom-label">
-                                <span class="dropdown-list-label">Due Date</span>
-                                <mat-select placeholder="Due Date">
-                                    <mat-option value="one">First option</mat-option>
-                                </mat-select>
-                            </div>
-
-                            <div class="dropdown-list right-label">
-                                <span class="dropdown-list-label">Attention to</span>
-                                <mat-select placeholder="Attention To">
-                                    <mat-option value="one">First option</mat-option>
-                                </mat-select>
-                            </div>
                             <br />
 
                             <button mat-flat-button color="primary" class="preview-button">Send Me Preview Mail</button>
                         </div>
                     </div>
                 </div>
-                <!-- 
                 <div class="main-content">
                     <p>Giddh Suggested Trigger</p>
 
                     <table mat-table [dataSource]="table2" class="mat-elevation-z8">
-
                         <ng-container matColumnDef="triggers">
-                            <th mat-header-cell *matHeaderCellDef> Triggers </th>
-                            <td class="triggers-content" mat-cell *matCellDef="let element"> {{element.triggers}} </td>
+                            <th mat-header-cell *matHeaderCellDef>Triggers</th>
+                            <td class="triggers-content" mat-cell *matCellDef="let element">{{ element.triggers }}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="type">
-                            <th class="type-column" mat-header-cell *matHeaderCellDef> Type </th>
-                            <td mat-cell *matCellDef="let element"> {{element.type}} </td>
+                            <th class="type-column" mat-header-cell *matHeaderCellDef>Type</th>
+                            <td mat-cell *matCellDef="let element">{{ element.type }}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="content">
-                            <th mat-header-cell *matHeaderCellDef> content </th>
-                            <td class="content-text" mat-cell *matCellDef="let element"> {{element.content}} </td>
+                            <th mat-header-cell *matHeaderCellDef>content</th>
+                            <td class="content-text" mat-cell *matCellDef="let element">{{ element.content }}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="icon">
-                            <th mat-header-cell *matHeaderCellDef> </th>
-                            <td class="icon-container" mat-cell *matCellDef="let element"><img class="hideShow right-side" src="{{imgPath}}{{element.icon}}" alt=""> </td>
+                            <th mat-header-cell *matHeaderCellDef></th>
+                            <td class="icon-container" mat-cell *matCellDef="let element">
+                                <img class="hideShow right-side" src="{{ imgPath }}{{ element.icon }}" alt="" />
+                            </td>
                         </ng-container>
 
                         <ng-container matColumnDef="button">
-                            <th mat-header-cell *matHeaderCellDef> </th>
-                            <td mat-cell *matCellDef="let element"> <button class="hideShow small-button" mat-flat-button color="primary">{{element.button}}</button> </td>
+                            <th mat-header-cell *matHeaderCellDef></th>
+                            <td mat-cell *matCellDef="let element">
+                                <button class="hideShow small-button" mat-flat-button color="primary">
+                                    {{ element.button }}
+                                </button>
+                            </td>
                         </ng-container>
 
                         <tr mat-header-row *matHeaderRowDef="displayedtable2Columns"></tr>
-                        <tr mat-row *matRowDef="let row; columns: displayedtable2Columns;"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedtable2Columns"></tr>
                     </table>
-
-
-                </div> -->
+                </div>
 
                 <!-- Page 10 -->
                 <!-- <div class="msg91-container">
@@ -615,11 +575,16 @@
                                 <div class="form-group col-lg-4 col-md-6 col-xs-12 mr-t1 empty-label" id="inlnImg">
                                     <label>&nbsp;</label>
                                     <br />
-                                    <input
-                                        type="checkbox"
-                                        [(ngModel)]="razorPayObj.autoCapturePayment"
-                                        name="autoCapturePayment"
-                                    />
+                                    <ngx-switch
+                                        [(status)]="razorPayObj.autoCapturePayment"
+                                        [onText]="commonLocaleData?.app_on"
+                                        [offText]="commonLocaleData?.app_off"
+                                        [onColor]="bootstrapToggleSwitch?.On"
+                                        [offColor]="bootstrapToggleSwitch?.Off"
+                                        [size]="bootstrapToggleSwitch?.Size"
+                                    >
+                                    </ngx-switch>
+
                                     {{ localeData?.collection?.automatic_capture_on_payment }}
                                 </div>
                             </div>

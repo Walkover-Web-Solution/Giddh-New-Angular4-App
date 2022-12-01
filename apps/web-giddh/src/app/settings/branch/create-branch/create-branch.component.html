@@ -177,6 +177,7 @@
             *ngIf="addressAsideMenuState === 'in'"
             [localeData]="profileLocaleData"
             [commonLocaleData]="commonLocaleData"
+            [hideLinkEntity]="addresses?.length <= 0 && hideLinkEntity"
         ></create-address>
     </ng-container>
 </ng-container>

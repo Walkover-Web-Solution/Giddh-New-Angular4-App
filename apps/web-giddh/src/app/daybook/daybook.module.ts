@@ -37,12 +37,12 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
         ReactiveFormsModule, DecimalDigitsModule,
         FormsModule, ModalModule,
         BsDatepickerModule,
-        PaginationModule,
+        PaginationModule.forRoot(),
         DatepickerModule,
         Daterangepicker,
         DaybookRoutingModule,
         ShSelectModule,
-        TooltipModule,
+        TooltipModule.forRoot(),
         ElementViewChildModule,
         CurrencyModule,
         SharedModule,
@@ -60,9 +60,6 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
         MatRadioModule,
         MatExpansionModule,
         MatSlideToggleModule
-    ],
-    entryComponents: [
-        PaginationComponent
     ]
 })
 export class DaybookModule {

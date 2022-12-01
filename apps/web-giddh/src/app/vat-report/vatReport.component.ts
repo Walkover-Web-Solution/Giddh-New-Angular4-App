@@ -8,11 +8,9 @@ import { AppState } from '../store';
 import { GeneralService } from '../services/general.service';
 import { ToasterService } from '../services/toaster.service';
 import { VatService } from "../services/vat.service";
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT } from "../shared/helpers/defaultDateFormat";
 import { saveAs } from "file-saver";
-import { StateDetailsRequest } from "../models/api-models/Company";
-import { CompanyActions } from "../actions/company.actions";
 import { BsDropdownDirective } from "ngx-bootstrap/dropdown";
 import { IOption } from '../theme/ng-select/ng-select';
 import { GstReconcileService } from '../services/GstReconcile.service';
@@ -30,10 +28,10 @@ export class VatReportComponent implements OnInit, OnDestroy {
     public activeCompany: any;
     public datePickerOptions: any = {
         alwaysShowCalendars: true,
-        startDate: moment().subtract(30, 'days'),
-        endDate: moment()
+        startDate: dayjs().subtract(30, 'day'),
+        endDate: dayjs()
     };
-    public moment = moment;
+    public dayjs = dayjs;
     public fromDate: string = '';
     public toDate: string = '';
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -76,7 +74,6 @@ export class VatReportComponent implements OnInit, OnDestroy {
         private generalService: GeneralService,
         private toasty: ToasterService,
         private cdRef: ChangeDetectorRef,
-        private companyActions: CompanyActions,
         private route: Router,
         private settingsBranchAction: SettingsBranchActions,
         private breakpointObserver: BreakpointObserver
@@ -107,10 +104,9 @@ export class VatReportComponent implements OnInit, OnDestroy {
 
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.loadTaxDetails();
-        this.saveLastState(this.generalService.companyUniqueName);
         this.currentPeriod = {
-            from: moment().startOf('month').format(GIDDH_DATE_FORMAT),
-            to: moment().endOf('month').format(GIDDH_DATE_FORMAT)
+            from: dayjs().startOf('month').format(GIDDH_DATE_FORMAT),
+            to: dayjs().endOf('month').format(GIDDH_DATE_FORMAT)
         };
         this.taxNumber = window.history.state.taxNumber || '';
         if (window.history.state.from && window.history.state.to) {
@@ -119,7 +115,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
                 to: window.history.state.to
             };
         }
-        this.selectedMonth = moment(this.currentPeriod.from, GIDDH_DATE_FORMAT).toISOString();
+        this.selectedMonth = dayjs(this.currentPeriod.from, GIDDH_DATE_FORMAT).toISOString();
         this.fromDate = this.currentPeriod.from;
         this.toDate = this.currentPeriod.to;
 
@@ -144,7 +140,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
                     isCompany: true
                 });
                 let currentBranchUniqueName;
-                if (!this.currentBranch.uniqueName) {
+                if (!this.currentBranch?.uniqueName) {
                     // Assign the current branch only when it is not selected. This check is necessary as
                     // opening the branch switcher would reset the current selected branch as this subscription is run everytime
                     // branches are loaded
@@ -189,7 +185,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
             vatReportRequest.from = this.fromDate;
             vatReportRequest.to = this.toDate;
             vatReportRequest.taxNumber = this.taxNumber;
-            vatReportRequest.branchUniqueName = this.currentBranch.uniqueName;
+            vatReportRequest.branchUniqueName = this.currentBranch?.uniqueName;
             this.vatReport = [];
 
             this.vatService.getVatReport(vatReportRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
@@ -210,23 +206,16 @@ export class VatReportComponent implements OnInit, OnDestroy {
         vatReportRequest.from = this.fromDate;
         vatReportRequest.to = this.toDate;
         vatReportRequest.taxNumber = this.taxNumber;
-        vatReportRequest.branchUniqueName = this.currentBranch.uniqueName;
+        vatReportRequest.branchUniqueName = this.currentBranch?.uniqueName;
         this.vatService.downloadVatReport(vatReportRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
-            if (res.status === "success") {
+            if (res?.status === "success") {
                 let blob = this.generalService.base64ToBlob(res.body, 'application/xls', 512);
                 return saveAs(blob, `VatReport.xlsx`);
             } else {
                 this.toasty.clearAllToaster();
-                this.toasty.errorToast(res.message);
+                this.toasty.errorToast(res?.message);
             }
         });
-    }
-
-    public saveLastState(companyUniqueName) {
-        let stateDetailsRequest = new StateDetailsRequest();
-        stateDetailsRequest.companyUniqueName = companyUniqueName;
-        stateDetailsRequest.lastState = 'pages/vat-report';
-        this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
     }
 
     public onOpenChange(data: boolean) {
@@ -242,19 +231,19 @@ export class VatReportComponent implements OnInit, OnDestroy {
     public periodChanged(ev) {
         if (ev && ev.picker) {
             this.currentPeriod = {
-                from: moment(ev.picker.startDate.d).format(GIDDH_DATE_FORMAT),
-                to: moment(ev.picker.endDate.d).format(GIDDH_DATE_FORMAT)
+                from: dayjs(ev.picker.startDate.d).format(GIDDH_DATE_FORMAT),
+                to: dayjs(ev.picker.endDate.d).format(GIDDH_DATE_FORMAT)
             };
-            this.fromDate = moment(ev.picker.startDate.d).format(GIDDH_DATE_FORMAT);
-            this.toDate = moment(ev.picker.endDate.d).format(GIDDH_DATE_FORMAT);
+            this.fromDate = dayjs(ev.picker.startDate.d).format(GIDDH_DATE_FORMAT);
+            this.toDate = dayjs(ev.picker.endDate.d).format(GIDDH_DATE_FORMAT);
             this.isMonthSelected = false;
         } else {
             this.currentPeriod = {
-                from: moment(ev).startOf('month').format(GIDDH_DATE_FORMAT),
-                to: moment(ev).endOf('month').format(GIDDH_DATE_FORMAT)
+                from: dayjs(ev).startOf('month').format(GIDDH_DATE_FORMAT),
+                to: dayjs(ev).endOf('month').format(GIDDH_DATE_FORMAT)
             };
-            this.fromDate = moment(ev).startOf('month').format(GIDDH_DATE_FORMAT);
-            this.toDate = moment(ev).endOf('month').format(GIDDH_DATE_FORMAT);
+            this.fromDate = dayjs(ev).startOf('month').format(GIDDH_DATE_FORMAT);
+            this.toDate = dayjs(ev).endOf('month').format(GIDDH_DATE_FORMAT);
             this.selectedMonth = ev;
             this.isMonthSelected = true;
         }

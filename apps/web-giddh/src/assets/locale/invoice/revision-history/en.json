@@ -3,5 +3,6 @@
     "by_user": "by [USER]",
     "po_created": "Purchase Order created for [VALUE]",
     "pb_created": "Purchase Bill created for [VALUE]",
-    "value_changed": "[FIELD] updated to [VALUE]"
+    "value_changed": "[FIELD] updated to [VALUE]",
+    "voucher_created": "Voucher created for [VALUE]"
 }

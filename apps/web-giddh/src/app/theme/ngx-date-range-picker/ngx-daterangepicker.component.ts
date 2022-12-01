@@ -1,7 +1,17 @@
 import { ChangeDetectorRef, Component, TemplateRef, ElementRef, EventEmitter, forwardRef, HostListener, Input, OnInit, Output, ViewChild, ViewEncapsulation, OnDestroy, OnChanges, SimpleChanges, AfterViewInit } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
-import * as _moment from 'moment';
-import { Moment } from 'moment';
+import * as dayjs from 'dayjs';
+import * as localeData from 'dayjs/plugin/localeData' // load on demand
+import * as isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
+import * as isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
+import * as isoWeek from 'dayjs/plugin/isoWeek';
+import * as isBetween from 'dayjs/plugin/isBetween';
+dayjs.extend(localeData) // use plugin
+dayjs.extend(isSameOrBefore);
+dayjs.extend(isSameOrAfter);
+dayjs.extend(isoWeek);
+dayjs.extend(isBetween);
+import { Dayjs } from 'dayjs';
 import { LocaleConfig } from './ngx-daterangepicker.config';
 import { NgxDaterangepickerLocaleService } from './ngx-daterangepicker-locale.service';
 import { BreakpointObserver } from '@angular/cdk/layout';
@@ -16,8 +26,6 @@ import { AppState } from '../../store';
 import { DatePickerDefaultRangeEnum } from '../../app.constant';
 import { SettingsFinancialYearActions } from '../../actions/settings/financial-year/financial-year.action';
 
-const moment = _moment;
-
 export enum DateType {
     start = 'start',
     end = 'end'
@@ -30,8 +38,8 @@ export class CalendarData {
     minute?: number;
     second?: number;
     daysInMonth?: number;
-    firstDay?: Moment;
-    lastDay?: Moment;
+    firstDay?: Dayjs;
+    lastDay?: Dayjs;
     lastMonth?: number;
     lastYear?: number;
     daysInLastMonth?: number;
@@ -40,16 +48,16 @@ export class CalendarData {
     calRows?: number[];
     calCols?: number[];
     classes?: any;
-    minDate?: Moment;
-    maxDate?: Moment;
+    minDate?: Dayjs;
+    maxDate?: Dayjs;
     calendar?: Calender;
     dropdowns?: MonthVariable;
 }
 
 export class Calender {
-    [key: number]: Moment;
-    firstDay: Moment;
-    lastDay: Moment;
+    [key: number]: Dayjs;
+    firstDay: Dayjs;
+    lastDay: Dayjs;
 }
 
 export class MonthVariable {
@@ -83,8 +91,8 @@ export interface DateRangesInterface {
 
 export interface DateRangeClicked {
     name: string;
-    startDate: Moment;
-    endDate: Moment;
+    startDate: Dayjs;
+    endDate: Dayjs;
     event: string;
 }
 
@@ -109,12 +117,12 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     renderedCalendarMonths: any[] = [];
     timepickerVariables: { start: any, end: any } = { start: {}, end: {} };
     applyBtn: { disabled: boolean } = { disabled: false };
-    startDate = moment().startOf('day');
-    endDate = moment().endOf('day');
+    startDate = dayjs().startOf('day');
+    endDate = dayjs().endOf('day');
     @Input()
-    inputStartDate: _moment.Moment;
+    inputStartDate: dayjs.Dayjs;
     @Input()
-    inputEndDate: _moment.Moment;
+    inputEndDate: dayjs.Dayjs;
     ActiveDate: ActiveDateEnum = ActiveDateEnum.Start;
     @Input()
     ActiveSelectedDateClass = 'activeSelectedDate';
@@ -125,9 +133,9 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     @ViewChild('startDateElement', { static: true }) startDateElement: ElementRef;
     @ViewChild('endDateElement', { static: true }) endDateElement: ElementRef;
     @Input()
-    minDate: _moment.Moment = _moment().subtract(1, 'year').startOf('month').month(0); // default min date of previous year first month
+    minDate: dayjs.Dayjs = dayjs().subtract(1, 'year').startOf('month').month(0); // default min date of previous year first month
     @Input()
-    maxDate: _moment.Moment = _moment().add(1, 'year').endOf('month').month(11); // default max date of next year last month
+    maxDate: dayjs.Dayjs = dayjs().add(1, 'year').endOf('month').month(11); // default max date of next year last month
     @Input()
     autoApply: boolean = false;
     @Input()
@@ -256,12 +264,12 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
 
         this.store.pipe(select(state => state.settings.financialYearLimits), takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.startDate && response.endDate) {
-                if (moment(moment(response.startDate, GIDDH_DATE_FORMAT).toDate()) !== this.minDate || moment(moment(response.endDate, GIDDH_DATE_FORMAT).toDate()) !== this.maxDate) {
-                    this.minDate = moment(moment(response.startDate, GIDDH_DATE_FORMAT).toDate());
-                    this.maxDate = moment(moment(response.endDate, GIDDH_DATE_FORMAT).toDate());
+                if (dayjs(dayjs(response.startDate, GIDDH_DATE_FORMAT).toDate()) !== this.minDate || dayjs(dayjs(response.endDate, GIDDH_DATE_FORMAT).toDate()) !== this.maxDate) {
+                    this.minDate = dayjs(dayjs(response.startDate, GIDDH_DATE_FORMAT).toDate());
+                    this.maxDate = dayjs(dayjs(response.endDate, GIDDH_DATE_FORMAT).toDate());
                     this.financialYearUpdated = true;
 
-                    this.noOfDaysAllowed = moment().diff(this.minDate, 'days') + 1;
+                    this.noOfDaysAllowed = dayjs().diff(this.minDate, 'day') + 1;
                 }
             }
         });
@@ -303,8 +311,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
 
     public ngOnInit(): void {
         this.store.dispatch(this.settingsFinancialYearActions.getFinancialYearLimits());
-        
-        this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany && activeCompany.activeFinancialYear) {
@@ -329,9 +336,9 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         }
         if (!this.locale.format) {
             if (this.timePicker) {
-                this.locale.format = moment.localeData().longDateFormat('lll');
+                this.locale.format = dayjs.localeData().longDateFormat('lll');
             } else {
-                this.locale.format = moment.localeData().longDateFormat('L');
+                this.locale.format = dayjs.localeData().longDateFormat('L');
             }
         }
 
@@ -453,12 +460,10 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
             // for date range picker
 
             // check if start calender month start day is before or same as min date then don't allow to go to previous month
-            this.goToPreviousMonthDisabled = moment([this.startCalendar.month.year(), this.startCalendar.month.month(), 1]).startOf('M')
-                .isSameOrBefore(this.minDate);
+            this.goToPreviousMonthDisabled = dayjs().set("year", this.startCalendar.month.year()).set("month", this.startCalendar.month.month()).set("date", 1).startOf('M').isSameOrBefore(this.minDate, 'date');
 
             // check if end calender month end day is after or same as max date then don't allow to go to next month
-            this.goToNextMonthDisabled = moment([this.endCalendar.month.year(), this.endCalendar.month.month(), 1]).endOf('M')
-                .isSameOrAfter(this.maxDate);
+            this.goToNextMonthDisabled = dayjs().set("year", this.endCalendar.month.year()).set("month", this.endCalendar.month.month()).set("date", 1).endOf('M').isSameOrAfter(this.maxDate);
         }
     }
 
@@ -470,7 +475,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         this.ranges = this.parseRangesToVm(this.ranges);
 
         // if there's no ranges given, display calender in place of ranges list
-        this.showCalInRanges = (!this.ranges.length) || this.alwaysShowCalendars;
+        this.showCalInRanges = (!this.ranges?.length) || this.alwaysShowCalendars;
 
         // if no time picker is defined then,
         // set start date as start of start date
@@ -610,12 +615,12 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         const hour = mainCalendar.month.hour();
         const minute = mainCalendar.month.minute();
         const second = mainCalendar.month.second();
-        const daysInMonth = moment([year, month]).daysInMonth();
-        const firstDay = moment([year, month, 1]);
-        const lastDay = moment([year, month, daysInMonth]);
-        const lastMonth = moment(firstDay).subtract(1, 'month').month();
-        const lastYear = moment(firstDay).subtract(1, 'month').year();
-        const daysInLastMonth = moment([lastYear, lastMonth]).daysInMonth();
+        const daysInMonth = dayjs().set("year", year).set("month", month).daysInMonth();
+        const firstDay = dayjs().set("year", year).set("month", month).set("date", 1);
+        const lastDay = dayjs().set("year", year).set("month", month).set("date", daysInMonth);
+        const lastMonth = dayjs(firstDay).subtract(1, 'month').month();
+        const lastYear = dayjs(firstDay).subtract(1, 'month').year();
+        const daysInLastMonth = dayjs().set("year", lastYear).set("month", lastMonth).daysInMonth();
         const dayOfWeek = firstDay.day();
         // initialize a 6 rows x 7 columns array for the calendar
         const calendar: any = [];
@@ -635,9 +640,9 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
             startDay = daysInLastMonth - 6;
         }
 
-        let curDate = moment([lastYear, lastMonth, startDay, 12, minute, second]);
+        let curDate = dayjs().set("year", lastYear).set("month", lastMonth).set("date", startDay).set("hour", 12).set("minute", minute).set("second", second);
 
-        for (let i = 0, col = 0, row = 0; i < 42; i++, col++, curDate = moment(curDate).add(24, 'hour')) {
+        for (let i = 0, col = 0, row = 0; i < 42; i++, col++, curDate = dayjs(curDate).add(24, 'hour')) {
             if (i > 0 && col % 7 === 0) {
                 col = 0;
                 row++;
@@ -728,17 +733,17 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     public setStartDate(startDate): void {
         this.invalidStartDate = "";
 
-        if (!moment(startDate, this.locale.format, true).isValid()) {
+        if (!dayjs(startDate, this.locale.format, true).isValid()) {
             this.invalidStartDate = this.commonLocaleData?.app_datepicker?.enter_dmy;
             return;
         }
 
         if (typeof startDate === 'string') {
-            this.startDate = moment(startDate, this.locale.format);
+            this.startDate = dayjs(startDate, this.locale.format);
         }
 
         if (typeof startDate === 'object') {
-            this.startDate = moment(startDate);
+            this.startDate = dayjs(startDate);
         }
 
         if (!this.timePicker) {
@@ -764,21 +769,21 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     public setEndDate(endDate): void {
         this.invalidEndDate = "";
 
-        if (!moment(endDate, this.locale.format, true).isValid()) {
+        if (!dayjs(endDate, this.locale.format, true).isValid()) {
             this.invalidEndDate = this.commonLocaleData?.app_datepicker?.enter_dmy;
             return;
         }
 
         if (typeof endDate === 'string') {
-            this.endDate = moment(endDate, this.locale.format);
+            this.endDate = dayjs(endDate, this.locale.format);
         }
 
         if (typeof endDate === 'object') {
-            this.endDate = moment(endDate);
+            this.endDate = dayjs(endDate);
         }
 
         if (!this.timePicker) {
-            this.endDate = this.endDate.add(1, 'd').startOf('day').subtract(1, 'second');
+            this.endDate = this.endDate.add(1, 'day').startOf('day').subtract(1, 'second');
         }
 
         if (this.timePicker && this.timePickerIncrement) {
@@ -865,7 +870,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         if (!this.singleDatePicker && this.autoUpdateInput) {
             if (this.startDate && this.endDate) {
                 // if we use ranges and should show range label on inpu
-                if (this.ranges.length && this.showRangeLabelOnInput === true && this.chosenRange &&
+                if (this.ranges?.length && this.showRangeLabelOnInput === true && this.chosenRange &&
                     this.locale.customRangeLabel !== this.chosenRange) {
                     this.chosenLabel = this.chosenRange;
                 } else {
@@ -888,7 +893,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
      * this should calculate the label
      */
     public calculateChosenLabel(): void {
-        if (this.ranges.length > 0) {
+        if (this.ranges?.length > 0) {
             const flattenRanges = [];
             this.flattenRanges(this.ranges, flattenRanges);
 
@@ -896,7 +901,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
                 if (this.timePicker) {
                     const format = this.timePickerSeconds ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD HH:mm';
 
-                    if (range && range.ranges && !range.ranges.length) {
+                    if (range && range.ranges && !range.ranges?.length) {
                         // ignore times when comparing dates if time picker seconds is not enabled
                         if (this.startDate.format(format) === range.value[0].format(format)
                             && this.endDate.format(format) === range.value[1].format(format)) {
@@ -904,7 +909,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
                         }
                     }
                 } else {
-                    if (range && range.ranges && !range.ranges.length) {
+                    if (range && range.ranges && !range.ranges?.length) {
                         // ignore times when comparing dates if time picker is not enabled
                         if (this.startDate.format('YYYY-MM-DD') === range.value[0].format('YYYY-MM-DD')
                             && this.endDate.format('YYYY-MM-DD') === range.value[1].format('YYYY-MM-DD')) {
@@ -925,14 +930,14 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         }
         if (this.isInvalidDate && this.startDate && this.endDate) {
             // get if there are invalid date between range
-            const d = this.startDate.clone();
+            let d = this.startDate.clone();
             while (d.isBefore(this.endDate)) {
                 if (this.isInvalidDate(d)) {
-                    this.endDate = d.subtract(1, 'days');
+                    this.endDate = d.subtract(1, 'day');
                     this.calculateChosenLabel();
                     break;
                 }
-                d.add(1, 'days');
+                d = d.add(1, 'day');
             }
         }
 
@@ -1086,12 +1091,12 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     public goToPrevMonth(): void {
         this.isPreviousMonth = true;
         if (!this.singleDatePicker) {
-            this.startCalendar.month.subtract(1, 'month');
+            this.startCalendar.month = this.startCalendar.month.subtract(1, 'month');
             if (this.linkedCalendars) {
-                this.endCalendar.month.subtract(1, 'month');
+                this.endCalendar.month = this.endCalendar.month.subtract(1, 'month');
             }
         } else {
-            this.startCalendar.month.subtract(1, 'month');
+            this.startCalendar.month = this.startCalendar.month.subtract(1, 'month');
         }
         this.updateCalendars();
     }
@@ -1102,23 +1107,23 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     public goToNextMonth(): void {
         this.isPreviousMonth = false;
         if (!this.singleDatePicker) {
-            this.endCalendar.month.add(1, 'month');
+            this.endCalendar.month = this.endCalendar.month.add(1, 'month');
             if (this.linkedCalendars) {
-                this.startCalendar.month.add(1, 'month');
+                this.startCalendar.month = this.startCalendar.month.add(1, 'month');
             }
         } else {
-            this.startCalendar.month.add(1, 'month');
+            this.startCalendar.month = this.startCalendar.month.add(1, 'month');
         }
         this.updateCalendars();
     }
 
     public clickNextYear(side: DateType): void {
         if (side === DateType.start) {
-            this.startCalendar.month.add(1, 'year');
+            this.startCalendar.month = this.startCalendar.month.add(1, 'year');
         } else {
-            this.endCalendar.month.add(1, 'year');
+            this.endCalendar.month = this.endCalendar.month.add(1, 'year');
             if (this.linkedCalendars) {
-                this.startCalendar.month.add(1, 'year');
+                this.startCalendar.month = this.startCalendar.month.add(1, 'year');
             }
         }
         this.updateCalendars();
@@ -1130,26 +1135,26 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
      */
     public clickPrevYear(side: DateType): void {
         if (side === DateType.start) {
-            this.startCalendar.month.subtract(1, 'year');
+            this.startCalendar.month = this.startCalendar.month.subtract(1, 'year');
             if (this.linkedCalendars) {
-                this.endCalendar.month.subtract(1, 'year');
+                this.endCalendar.month = this.endCalendar.month.subtract(1, 'year');
             }
         } else {
-            this.endCalendar.month.subtract(1, 'year');
+            this.endCalendar.month = this.endCalendar.month.subtract(1, 'year');
         }
         this.updateCalendars();
     }
 
     public setMonth(year: number, month: number): void {
         this.initialCalendarMonths = true;
-        this.startCalendar.month = moment({ y: year, M: month, d: 1 });
+        this.startCalendar.month = dayjs().set("year", year).set("month", month).set("date", 1);
         if (this.linkedCalendars) {
-            this.endCalendar.month = moment({ y: year, M: month, d: 1 }).add(1, 'month');
+            this.endCalendar.month = dayjs().set("year", year).set("month", month).set("date", 1).add(1, 'month');
         }
         this.updateCalendars();
     }
 
-    public mouseUp(e: MouseWheelEvent): void {
+    public mouseUp(e: WheelEvent): void {
         if (this.allowMouseScroll) {
             if (e.deltaY < 0) {
                 if (!this.isOnScrollActive) {
@@ -1174,7 +1179,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         if (event.shiftKey || event.ctrlKey || (event.which >= 37 && event.which <= 40)) {
             return;
         }
-        event.target.value = (event && event.target && event.target.value) ? event.target.value.replace(/[^0-9]/g, '') : 0;
+        event.target.value = (event && event.target && event.target.value) ? event.target.value?.replace(/[^0-9]/g, '') : 0;
         if (event.target.value > this.noOfDaysAllowed) {
             event.target.value = this.noOfDaysAllowed;
         }
@@ -1185,7 +1190,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
             days = this.noOfDaysAllowed;
         }
 
-        const dates = [moment().subtract(days ? (days - 1) : days, 'days'), moment()];
+        const dates = [dayjs().subtract(days ? (days - 1) : days, 'day'), dayjs()];
         this.startDate = dates[0].clone();
         this.endDate = dates[1].clone();
 
@@ -1199,7 +1204,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     }
 
     public uptoYesterday(e: Event, days: number): void {
-        const dates = [moment().subtract(days, 'days'), moment().subtract(days ? 1 : 0, 'days')];
+        const dates = [dayjs().subtract(days, 'day'), dayjs().subtract(days ? 1 : 0, 'day')];
         this.startDate = dates[0].clone();
         this.endDate = dates[1].clone();
 
@@ -1219,11 +1224,11 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
      * @param row row position of the current date clicked
      * @param col col position of the current date clicked
      */
-    public clickDate(e, date: Moment): void {
+    public clickDate(e, date: Dayjs): void {
         this.invalidStartDate = "";
         this.invalidEndDate = "";
 
-        if (this.ranges.length) {
+        if (this.ranges?.length) {
             this.chosenRange = this.locale.customRangeLabel;
         }
 
@@ -1336,7 +1341,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
 
         this.chosenRange = range.name;
         const dates = this.findRange(this.ranges, range.name);
-        if (!dates.value || dates.value.length === 0) {
+        if (!dates.value || dates.value?.length === 0) {
             return false;
         }
 
@@ -1347,7 +1352,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         } else {
             this.calculateChosenLabel();
         }
-        this.showCalInRanges = (!this.ranges.length) || this.alwaysShowCalendars;
+        this.showCalInRanges = (!this.ranges?.length) || this.alwaysShowCalendars;
 
         if (!this.timePicker) {
             this.startDate.startOf('day');
@@ -1460,8 +1465,8 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
      *  clear the daterange picker
      */
     public clear(): void {
-        this.startDate = moment().startOf('day');
-        this.endDate = moment().endOf('day');
+        this.startDate = dayjs().startOf('day');
+        this.endDate = dayjs().endOf('day');
         this.choosedDate.emit({ name: '', startDate: null, endDate: null, event: 'cancel' });
         this.emitSelectedDates(true);
         this.hide();
@@ -1489,7 +1494,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
      * @param date the date to add time
      * @param side start or end
      */
-    private _getDateWithTime(date, side: DateType): _moment.Moment {
+    private _getDateWithTime(date, side: DateType): dayjs.Dayjs {
         let hour = parseInt(this.timepickerVariables[side].selectedHour, 10);
         if (!this.timePicker24Hour) {
             const ampm = this.timepickerVariables[side].ampmModel;
@@ -1512,9 +1517,9 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         this.locale = { ...this._localeService.config, ...this.locale };
         if (!this.locale.format) {
             if (this.timePicker) {
-                this.locale.format = moment.localeData().longDateFormat('lll');
+                this.locale.format = dayjs.localeData().longDateFormat('lll');
             } else {
-                this.locale.format = moment.localeData().longDateFormat('L');
+                this.locale.format = dayjs.localeData().longDateFormat('L');
             }
         }
     }
@@ -1603,7 +1608,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
                 }
                 // store classes var
                 let cname = '', disabled = false;
-                for (let i = 0; i < classes.length; i++) {
+                for (let i = 0; i < classes?.length; i++) {
                     cname += classes[i] + ' ';
                     if (classes[i] === 'disabled') {
                         disabled = true;
@@ -1612,7 +1617,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
                 if (!disabled) {
                     cname += 'available';
                 }
-                this.calendarVariables[side].classes[row][col] = cname.replace(/^\s+|\s+$/g, '');
+                this.calendarVariables[side].classes[row][col] = cname?.replace(/^\s+|\s+$/g, '');
             }
             this.calendarVariables[side].classes[row].classList = rowClasses.join(' ');
         }
@@ -1679,7 +1684,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
                     range = subRange;
                     return subRange;
                 } else {
-                    if (subRange.ranges && subRange.ranges.length) {
+                    if (subRange.ranges && subRange.ranges?.length) {
                         range = this.findRange(subRange.ranges, label);
                     }
                 }
@@ -1732,51 +1737,53 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
                 let allFinancialYears = [];
 
                 if (res.body.financialYears[0].financialYearStarts) {
-                    this.minDate = moment(moment(res.body.financialYears[0].financialYearStarts, GIDDH_DATE_FORMAT).toDate());
+                    this.minDate = dayjs(dayjs(res.body.financialYears[0].financialYearStarts, GIDDH_DATE_FORMAT).toDate());
                 }
 
                 if (res.body.financialYears[res.body.financialYears.length - 1].financialYearEnds) {
-                    this.maxDate = moment(moment(res.body.financialYears[res.body.financialYears.length - 1].financialYearEnds, GIDDH_DATE_FORMAT).toDate());
+                    this.maxDate = dayjs(dayjs(res.body.financialYears[res.body.financialYears.length - 1].financialYearEnds, GIDDH_DATE_FORMAT).toDate());
                 }
 
+                const currentDate = dayjs().format(GIDDH_DATE_FORMAT);
+                this.financialYears = [];
                 res.body.financialYears.forEach(key => {
-                    let financialYearStarts = moment(key.financialYearStarts, GIDDH_DATE_FORMAT).format("MMM-YYYY");
-                    let financialYearEnds = moment(key.financialYearEnds, GIDDH_DATE_FORMAT).format("MMM-YYYY");
+                    let financialYearStarts = dayjs(key.financialYearStarts, GIDDH_DATE_FORMAT).format("MMM-YYYY");
+                    let financialYearEnds = dayjs(key.financialYearEnds, GIDDH_DATE_FORMAT).format("MMM-YYYY");
                     this.financialYears.push({ label: financialYearStarts + " - " + financialYearEnds, value: key });
 
                     if (this.currentFinancialYearUniqueName && this.currentFinancialYearUniqueName === key.uniqueName) {
-                        currentFinancialYear = moment(moment(key.financialYearStarts.split("-").reverse().join("-")).toDate());
-
-                        lastFinancialYear = { start: moment(moment(key.financialYearStarts.split("-").reverse().join("-")).subtract(1, 'year').toDate()), end: moment(moment(key.financialYearEnds.split("-").reverse().join("-")).subtract(1, 'year').toDate()) };
+                        lastFinancialYear = { start: dayjs(dayjs(key.financialYearStarts.split("-").reverse().join("-")).subtract(1, 'year').toDate()), end: dayjs(dayjs(key.financialYearEnds.split("-").reverse().join("-")).subtract(1, 'year').toDate()) };
                     }
 
-                    if (allFinancialYears.indexOf(moment(key.financialYearStarts, GIDDH_DATE_FORMAT).format("YYYY")) === -1) {
-                        allFinancialYears.push(moment(key.financialYearStarts, GIDDH_DATE_FORMAT).format("YYYY"));
+                    if (dayjs(currentDate, GIDDH_DATE_FORMAT) >= dayjs(key.financialYearStarts, GIDDH_DATE_FORMAT) && dayjs(currentDate, GIDDH_DATE_FORMAT) <= dayjs(key.financialYearEnds, GIDDH_DATE_FORMAT)) {
+                        currentFinancialYear = dayjs(dayjs(key.financialYearStarts, GIDDH_DATE_FORMAT).toDate());
                     }
 
-                    if (allFinancialYears.indexOf(moment(key.financialYearEnds, GIDDH_DATE_FORMAT).format("YYYY")) === -1) {
-                        allFinancialYears.push(moment(key.financialYearEnds, GIDDH_DATE_FORMAT).format("YYYY"));
+                    if (allFinancialYears.indexOf(dayjs(key.financialYearStarts, GIDDH_DATE_FORMAT).format("YYYY")) === -1) {
+                        allFinancialYears.push(dayjs(key.financialYearStarts, GIDDH_DATE_FORMAT).format("YYYY"));
                     }
+
+                    if (allFinancialYears.indexOf(dayjs(key.financialYearEnds, GIDDH_DATE_FORMAT).format("YYYY")) === -1) {
+                        allFinancialYears.push(dayjs(key.financialYearEnds, GIDDH_DATE_FORMAT).format("YYYY"));
+                    }
+
                 });
-
                 if (this.ranges && this.ranges.length > 0) {
                     let loop = 0;
                     let ranges = [];
                     this.ranges.forEach(key => {
                         if (key.name === DatePickerDefaultRangeEnum.AllTime) {
                             ranges[loop] = key;
-
                             ranges[loop].value = [
-                                moment(moment(res.body.financialYears[0].financialYearStarts, GIDDH_DATE_FORMAT).toDate()),
-                                moment()
+                                dayjs(dayjs(res.body.financialYears[0].financialYearStarts, GIDDH_DATE_FORMAT).toDate()),
+                                dayjs()
                             ];
                             loop++;
                         } else if (key.name === DatePickerDefaultRangeEnum.ThisFinancialYearToDate && currentFinancialYear) {
                             ranges[loop] = key;
-
                             ranges[loop].value = [
                                 currentFinancialYear,
-                                moment()
+                                dayjs()
                             ];
                             loop++;
                         } else if (key.name === DatePickerDefaultRangeEnum.LastFinancialYear) {
@@ -1812,10 +1819,10 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
      * @memberof NgxDaterangepickerComponent
      */
     public clickFinancialYear(financialYear): void {
-        this.startDate = moment(new Date(financialYear.value.financialYearStarts.split("-").reverse().join("-")));
-        this.endDate = moment(new Date(financialYear.value.financialYearEnds.split("-").reverse().join("-")));
+        this.startDate = dayjs(new Date(financialYear.value.financialYearStarts.split("-").reverse().join("-")));
+        this.endDate = dayjs(new Date(financialYear.value.financialYearEnds.split("-").reverse().join("-")));
         this.chosenLabel = this.startDate.format(GIDDH_DATE_FORMAT) + " - " + this.endDate.format(GIDDH_DATE_FORMAT);
-        this.showCalInRanges = (!this.ranges.length) || this.alwaysShowCalendars;
+        this.showCalInRanges = (!this.ranges?.length) || this.alwaysShowCalendars;
 
         if (!this.timePicker) {
             this.startDate.startOf('day');
@@ -1843,9 +1850,9 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
      * @memberof NgxDaterangepickerComponent
      */
     public removeDuplicateDatepickers(): void {
-        if (document.getElementsByTagName("ngx-daterangepicker-material").length > 1) {
-            for (let loop = 0; loop < document.getElementsByTagName("ngx-daterangepicker-material").length; loop++) {
-                document.getElementsByTagName("ngx-daterangepicker-material")[loop].remove();
+        if (document.getElementsByTagName("ngx-daterangepicker-material")?.length > 1) {
+            for (let loop = 0; loop < document.getElementsByTagName("ngx-daterangepicker-material")?.length; loop++) {
+                document.getElementsByTagName("ngx-daterangepicker-material")[loop]?.remove();
             }
         }
     }
@@ -1944,7 +1951,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
      * @memberof NgxDaterangepickerComponent
      */
     public saveInlineDates(event): void {
-        let inlineDate = moment(new Date(event.target.value.split("-").reverse().join("-")));
+        let inlineDate = dayjs(new Date(event.target.value.split("-").reverse().join("-")));
 
         if (event.target.name === "inlineStartDate") {
             document.getElementsByTagName("ngx-daterangepicker-material")[0].classList.add("focus-start-date");
@@ -2059,7 +2066,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         }
 
         if (this.calendarMonths && this.calendarMonths[index]) {
-            let setMonth = moment();
+            let setMonth = dayjs();
             setMonth.set('date', 1);
 
             if (this.calendarMonths[index].start) {
@@ -2290,7 +2297,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     public checkMinMaxDate(date: any): boolean {
         let isValidDate = false;
 
-        if (moment([date.year, date.month, 1]).startOf('M').isSameOrAfter(this.minDate) && moment([date.year, date.month, 1]).startOf('M').isSameOrBefore(this.maxDate)) {
+        if (dayjs().set("year", date.year).set("month", date.month).set("date", 1).startOf('M').isSameOrAfter(this.minDate) && dayjs().set("year", date.year).set("month", date.month).set("date", 1).startOf('M').isSameOrBefore(this.maxDate)) {
             isValidDate = true;
         }
 
@@ -2308,7 +2315,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     public checkValidMonthYear(year: any, month: any): boolean {
         let isValidDate = false;
 
-        if (moment([year, month, 1]).startOf('M').isSameOrAfter(this.minDate) && moment([year, month, 1]).startOf('M').isSameOrBefore(this.maxDate)) {
+        if (dayjs().set("year", year).set("month", month).set("date", 1).startOf('M').isSameOrAfter(this.minDate) && dayjs().set("year", year).set("month", month).set("date", 1).startOf('M').isSameOrBefore(this.maxDate)) {
             isValidDate = true;
         }
 

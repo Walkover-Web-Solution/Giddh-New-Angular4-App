@@ -65,7 +65,10 @@
                     "label": "Sales Register",
                     "link": "/pages/reports/sales-register",
                     "icon": "icon-register-new",
-                    "description": "Net & cumulative sales"
+                    "description": "Net & cumulative sales",
+                    "additionalRoutes":[
+                        "/pages/reports/sales-detailed-expand"
+                    ]
                 },
                 {
                     "label": "Template",
@@ -108,13 +111,25 @@
                     "label": "Purchase Register",
                     "link": "/pages/reports/purchase-register",
                     "icon": "icon-register-new",
-                    "description": "Net & cumulative purchases"
+                    "description": "Net & cumulative purchases",
+                    "additionalRoutes":[
+                        "/pages/reports/purchase-detailed-expand"
+                    ]
                 },
                 {
                     "label": "Vendor",
                     "link": "/pages/contact/vendor",
                     "icon": "icon-vendor",
                     "description": "Send Bulk SMS/Emails, Set reminders"
+                },
+                {
+                    "label": "Payment",
+                    "link": "/pages/reports/payment",
+                    "icon": "icon-reciept-new",
+                    "description": "Total, & unused payments",
+                    "additional": {
+                        "voucherVersion": 2
+                    }
                 }
             ]
         },
@@ -192,6 +207,17 @@
                     "icon": "icon-settings-cog",
                     "description": "Tax setting",
                     "hide": "sidebar"
+                },
+                {
+                    "label": "Unit Mapping",
+                    "link": "/pages/gstfiling/unit-mapping",
+                    "icon": "unit-mapping-icon",
+                    "description": "Unit Mapping",
+                    "alwaysPresent": true,
+                    "hide": "sidebar",
+                    "additional": {
+                        "countrySpecific": ["IN"]
+                    }
                 }
             ],
             "link": "/pages/settings/taxes"
@@ -251,48 +277,6 @@
             ]
         },
         {
-            "label": "Import",
-            "icon": "icon-import",
-            "items": [
-                {
-                    "label": "Accounts",
-                    "link": "/pages/import/account",
-                    "icon": "icon-proft-loss-new",
-                    "description": "Import excel and CSV and update existing one"
-                },
-                {
-                    "label": "Company Import",
-                    "link": "/pages/company-import-export",
-                    "icon": "icon-company-impex",
-                    "description": "Company import & export"
-                },
-                {
-                    "label": "Entries",
-                    "link": "/pages/import/entries",
-                    "icon": "icon-invoice-new",
-                    "description": "Multicurrency, Recurring invoice, Cash invoice"
-                },
-                {
-                    "label": "Group",
-                    "link": "/pages/import/group",
-                    "icon": "icon-group-new",
-                    "description": "Import excel and CSV and update existing one"
-                },
-                {
-                    "label": "Inventory",
-                    "link": "/pages/import/stock",
-                    "icon": "icon-inventory",
-                    "description": "Import/create stock, group & unit"
-                },
-                {
-                    "label": "Trial Balance",
-                    "link": "/pages/import/trial-balance",
-                    "icon": "icon-trial-balance-new",
-                    "description": "Import all credit & debit balances"
-                }
-            ]
-        },
-        {
             "label": "Inventory",
             "icon": "icon-inventory",
             "items": [
@@ -330,7 +314,19 @@
                     "label": "Audit Logs New",
                     "link": "/pages/audit-logs/new",
                     "icon": "icon-audit-log",
-                    "description": "Chronological data of entries"
+                    "description": "Chronological data of entries",
+                    "additional": {
+                        "voucherVersion": 1
+                    }
+                },
+                  {
+                    "label": "Activity Logs",
+                    "link": "/pages/activity-logs",
+                    "icon": "icon-audit-log",
+                    "description": "Chronological data of entries",
+                    "additional": {
+                        "voucherVersion": 2
+                    }
                 },
                 {
                     "label": "Cash Flow",
@@ -371,6 +367,16 @@
                     "link": "/pages/search",
                     "icon": "icon-search",
                     "description": "Select group and search for a time span"
+                },
+                {
+                    "label": "Downloads",
+                    "link": "/pages/downloads",
+                    "icon": "icon-download-circle"
+                },
+                {
+                    "label": "Custom Fields",
+                    "link": "/pages/custom-fields/list",
+                    "icon": "icon-custom-field"
                 }
             ]
         }

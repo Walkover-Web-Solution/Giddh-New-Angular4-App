@@ -69,7 +69,6 @@
         class="row-2 account overflow-visible"
         *ngIf="account.isVisible"
         (dblclick)="accountInfo(account, $event)"
-        (clickOutside)="hideModal(); accountDetailPopup?.hide()"
         [exclude]="'.row-item'"
     >
         <div class="row row-item">
@@ -83,19 +82,22 @@
                     container="body"
                     containerClass="financial-report-account-detail-container"
                     placement="bottom"
-                    [isOpen]="modalUniqueName && modalUniqueName === account.uniqueName"
+                    [isOpen]="modalUniqueName && modalUniqueName === account?.uniqueName"
                 ></div>
                 <ng-template #accountDetailModalTemplate>
                     <span
                         account-detail-modal-component
-                        *ngIf="modalUniqueName && modalUniqueName === account.uniqueName"
+                        *ngIf="modalUniqueName && modalUniqueName === account?.uniqueName"
                         [shouldShowGenerateInvoice]="false"
-                        [accountUniqueName]="account.uniqueName"
-                        [isModalOpen]="account.uniqueName === modalUniqueName"
-                        [accInfo]="accountDetails"
+                        [accountUniqueName]="account?.uniqueName"
+                        [isModalOpen]="account?.uniqueName === modalUniqueName"
+                        [accInfo]="false"
                         [from]="from"
                         [to]="to"
+                        [closeOnEdit]="true"
                         (modalOpened)="handleModalOpened($event)"
+                        (modalClosed)="hideModal(); accountDetailPopup?.hide()"
+                        (modalClosedTemporary)="openAccountModal.emit($event); hideModal(); accountDetailPopup?.hide()"
                     >
                     </span>
                 </ng-template>

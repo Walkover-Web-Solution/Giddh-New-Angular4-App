@@ -1,0 +1,720 @@
+body.dark-theme {
+    // Body Color Variables
+    --color-body-background: #212528;
+
+    // Common variable (Mostly Used)
+    --color-common-primary-text: #f5f5f5;
+    --color-common-primary-text-hover: #36b283;
+    --color-common-secondary-text: #f5f5f5;
+    --color-common-tertiary-text: #212528;
+    --color-common-quaternary-text: #f5f5f5;
+    --color-common-quinary-text: #f5f5f5;
+    --color-common-senary-text: #668cff;
+    --color-common-septenary-text: #f5f5f5;
+    --color-common-octonary-text: #36b283;
+    --color-common-primary-background-for-all-components: #212528;
+    --color-common-secondary-background-for-all-components: #f5f5f5;
+    --color-common-tertiary-background-for-all-components: #f5f5f5;
+    --color-common-quaternary-background-for-all-components: #668cff26;
+    --color-common-quinary-background-for-all-components: #212528;
+    --color-common-senary-background-for-all-components: #668cff26;
+    --color-common-septenary-background-for-all-components: #668cff26;
+
+    // Signup Login Page Color Components
+    --color-primary-login-page-background: #212528;
+    --color-primary-login-box-header-background: #1a237e;
+    --color-primary-login-box-body-background: #212528;
+    --color-primary-login-box-body-text: #668cff;
+    --color-secondary-login-box-body-text: #9b9b9e;
+    --color-tertiary-login-box-body-text: #f5f5f5;
+    --color-primary-google-box-background: #668cff;
+    --color-primary-login-with-google-box-background: #668cff;
+    --color-primary-login-signup-linkedin-icon: #668cff;
+    --color-primary-login-slide-content-btn-white: #e58a0026;
+    --color-primary-signup-ico-google-background: #e58a0026;
+    --color-primary-login-hash-tag: #e54556;
+    --color-primary-login-signup-body-unresponsive-background: #f5f5f5;
+    --color-primary-login-signup-mobile-background: #f5f5f5;
+    --color-primary-login-signup-slide-content-background: #f5f5f5;
+    --color-primary-login-signup-download-app-ul-li-a-hover: #f5f5f5;
+    --color-primary-login-signup-twitter-background: #668cff;
+    --color-primary-login-signup-google-background: #e54556;
+    --color-primary-login-signup-linkedin-background: #668cff;
+    --color-primary-login-signup-login-box-h1: #f5f5f5;
+    --color-primary-login-signup-slide-content-btn-white-hover: #f5f5f5;
+    --color-primary-login-signup-input-box: #f5f5f5;
+    --color-primary-login-signup-body-border: #1a237e;
+
+    // Filter Color Variables
+    --color-filter-text-hover: #cbcfd2;
+    --color-filter-background-hover: #668cff26;
+    --color-primary-filter-background: #668cff26;
+
+    // Loader Color Variables
+    --color-loader-primary-load-bar-and-nth-3rd-child-background: #e58a00;
+
+    // Header Color Variables
+    --color-primary-icon-support-dropdown-toggle: #668cff;
+    --color-primary-header-universal-date: #668cff;
+    --color-primary-header-account-search-form-control-focus: #cbcfd2;
+    --color-primary-header-sub-menu-li-a: #cbcfd2;
+    --color-primary-header-icons: #f5f5f5;
+    --color-primary-header-notification-text: #f5f5f5;
+    --color-primary-header-notification-background: #212528;
+    --color-primary-header-border-bottom: #212528;
+
+    // Card Color Variables
+    --color-account-card-primary-text: #f5f5f5;
+    --color-account-card-background: #212528;
+    --color-account-card-background-hover: #212529;
+    --color-upgrade-plan-primary: #36b283;
+    --color-upgrade-plan-primary-background: #212528;
+    --color-upgrade-plan-secondary-background: #212528;
+    --color-upgrade-plan-tertiary-background: #668cff26;
+    --color-upgrade-plan-card-primary-background-hover: #668cff26;
+    --color-upgrade-plan-card-primary-border-hover: #36b283;
+    --color-csv-or-excel-file-card-text: #668cff;
+    --color-primary-card-text: #f5f5f5;
+    --color-primary-card-background: #212528;
+    --color-primary-card-box-shadow: #00000080;
+
+    // Button Color Variables
+    --color-primary-button-text: #1a237e;
+    --color-primary-button-background: #f5f5f5;
+    --color-secondary-button-text: #f5f5f5;
+    --color-secondary-button-background: #668cff;
+    --color-secondary-button-background-hover: #668cff26;
+    --color-tertiary-button-text: #f5f5f5;
+    --color-tertiary-button-background: transparent;
+    --color-tertiary-button-background-hover: #e7e9eb26;
+    --color-quaternary-button-text: #f5f5f5;
+    --color-quaternary-button-background: #36b283;
+    --color-quinary-button-background: #212528;
+    --color-senary-button-text: #f5f5f5;
+    --color-senary-button-background: #36b283;
+    --color-senary-button-background-hover: #36b28326;
+    --color-septenary-button-text: #f5f5f5;
+    --color-octonary-button-text: #f5f5f5;
+    --color-nonary-button-text: #f5f5f5;
+    --color-nonary-button-background: #36b283;
+    --color-nonary-button-background-hover: #36b28326;
+    --color-denary-button-text: #f5f5f5;
+    --color-denary-button-background: #212528;
+    --color-primary-basic-button-opacity: #668cff26;
+    --color-primary-filter-button-text: #9b9b9e;
+    --color-primary-basic-button-text: #9b9b9e;
+    --color-primary-cancel-button-background-hover: #668cff26;
+    --color-primary-button-border: #505159;
+    --color-secondary-button-border: #505159;
+    --color-primary-button-border-hover: #505159;
+
+    // Dropdown Color Variables
+    --color-dropdown-list: #f5f5f5;
+    --color-dropdown-list-secondary: #212528;
+    --color-dropdown-list-tertiary: #212528;
+    --color-dropdown-list-quaternary: #f5f5f5;
+    --color-dropdown-list-quinary: #212528;
+    --color-dropdown-list-senary: #36b283;
+    --color-dropdown-list-icon: #212528;
+    --color-dropdown-secondary-list-icon: #f5f5f5;
+    --color-dropdown-list-hover-text: #f5f5f5;
+    --color-dropdown-primary-background: #212528;
+    --color-dropdown-secondary-background: #212528;
+    --color-dropdown-terniary-background: #668cff;
+    --color-dropdown-list-hover-background: #668cff26;
+    --color-dropdown-secondary-list-hover-background: #668cff26;
+    --color-dropdown-tertiary-list-hover-background: #668cff26;
+    --color-dropdown-list-box-shadow: #212528;
+    --color-dropdown-primary-bar-border: #668cff;
+    --color-primary-dropdown-placeholder: #cbcfd2;
+
+    // Checkbox, Radio Button, Mat-Expansion Panel Down Arrow and Icon Color Variables
+    --color-primary-icon: #f5f5f5;
+    --color-secondary-icon: #f5f5f5;
+    --color-primary-chips-cross-icon: #ffffff;
+    --color-primary-checkbox-background-filter: invert(0.9);
+    --color-primary-checkbox-and-expansion-panel-arrow: #f5f5f5;
+
+    // Expansion Panel Color Variables
+    --color-primary-expansion-panel-background: #212528;
+
+    // Search Bar Color Variables
+    --color-sidebar-search-bar-text: #cbcfd2;
+    --color-sidebar-primary-search-bar-background: #668cff26;
+    --color-sidebar-secondary-search-bar-background: #212528;
+    --color-active-search-bar-border: #668cff;
+    --color-company-profile-input-label: #f5f5f5;
+    --color-discount-search-bar-background: #212528;
+    --color-input-primary-background: #668cff26;
+    --color-input-secondary-background: #668cff26;
+    --color-input-tertiary-background: #668cff26;
+    --color-search-bar-primary-border: #505159;
+    --color-primary-search-bar-placeholder: #668cff;
+    --color-secondary-search-bar-placeholder: #cbcfd2;
+
+    // Input Bar Variables
+    --color-primary-input-bar-text: #9b9b9e;
+    --color-secondary-input-bar-text: #cbcfd2;
+    --color-primary-input-bar-border: #505159;
+    --color-secondary-input-bar-border: #505159;
+    --color-tertiary-input-bar-border: #668cff26;
+    --color-primary-input-bar-background: #668cff26;
+    --color-secondary-input-bar-background: #212528;
+    --color-tertiary-input-bar-background: #668cff26;
+    --color-primary-input-bar-background-focus: #668cff26;
+    --color-secondary-input-bar-button: #cbcfd2;
+    --color-primary-input-placeholder: #cbcfd2;
+
+    // Datepicker Color Variables
+    --color-datepicker-title-text: #9b9b9e;
+    --color-datepicker-title-background: #f5f5f5;
+    --color-datepicker-header: #668cff;
+    --color-datepicker-month-name: #f5f5f5;
+    --color-datepicker-date: #f5f5f5;
+    --color-datepicker-secondary-date: #212528;
+    --color-datepicker-ternary-date: #f5f5f5;
+    --color-datepicker-quaternary-date: #f5f5f5;
+    --color-datepicker-date-icon: #9b9b9e;
+    --color-datepicker-rightside-list-text: #f5f5f5;
+    --color-datepicker-rightside-list-primary-text-hover: #212528;
+    --color-datepicker-right-side-list-secondary-text-hover: #212528;
+    --color-datepicker-input-label: #f5f5f5;
+    --color-primary-datepicker-input-bottom-border: #668cff;
+    --color-datepicker-unselected-month: #f5f5f5;
+    --color-datepicker-background: #212528;
+    --color-main-content-datepicker: #9b9b9e;
+    --color-primary-head-datepicker-text: #9b9b9e;
+    --color-datepicker-box-shadow: #00000080;
+    --color-datepicker-selected-date-background: #668cff;
+    --color-datepicker-selected-date-range-background: #668cff26;
+    --color-primary-datepicker-in-range-end-date-background: #668cff26;
+    --color-primary-datepicker-btn-success-hover-active-focus: #668cff26;
+    --color-datepicker-mat-select-arrow-active: #668cff;
+    --color-primary-datepicker-btn-angle-down: #9b9b9e;
+    --color-primary-datepicker-btn-btn-danger: #e54556;
+    --color-primary-datepicker-btn-btn-danger-hover-active-focus: #e54556;
+    --color-primary-datepicker-drop-down-box-shadow: #cbcfd2;
+    --color-primary-datepicker-in-range-background: #668cff26;
+    --color-primary-datepicker-activated-date: #668cff26;
+    --color-primary-datepicker-md-drppicker-th-div: #cbcfd2;
+    --color-primary-datepicker-unselected-date-hover: #668cff26;
+    --color-primary-datepicker-dropdown-color-active: #668cff;
+    --color-primary-datepicker-dropdown-input: #f5f5f5;
+
+    // SH-SELECT Color Variables
+    --color-primary-sh-select-disabled: #f5f5f5;
+
+    // Profit Loss Color Variables
+    --color-primary-profit-loss-total-expenses-text: #e58a00;
+    --color-primary-profit-loss-total-income-text: #668cff;
+
+    // Aside Form Color Variables
+    --color-primary-aside-pane-form-box-shadow: #00000080;
+    --color-primary-aside-pane-back-to-main-slider: #668cff;
+    --color-primary-aside-pane-unactive-background: #000000;
+
+    // Aside Setting and Aside Help Support Color Variables
+    --color-primary-aside-host-after-background: #212528;
+    --color-primary-aside-help-support-aside-header-pane-background: #f5f5f5;
+
+    // All In One Menu Color Variables
+    --color-primary-all-in-one-menu-text: #f5f5f5;
+
+    // Aside Menu Create Tax Color Variables
+    --color-aside-menu-create-tax-custom-tags-span-background: #9b9b9e;
+
+    // Subscription Plans Color Variables
+    --color-primary-subscription-plans-top-bar-background: #505159;
+    --color-primary-subscription-plans-selected-background: #668cff26;
+    --color-primary-subscription-active: #36b283;
+    --color-primary-subscription-green-red-orange-dot-background: #36b283;
+    --color-primary-tab-header-text: #212528;
+    --color-primary-subscription-search-placeholder-text: #cbcfd2;
+    --color-primary-subscription-dropdown-text: #cbcfd2;
+    --color-primary-subscription-dropdown-background: #212528;
+    --color-secondary-subscription-dropdown-background: #212528;
+    --color-secondary-subscription-dropdown-background-hover: #668cff26;
+    --color-primary-subscription-left-sidebar-box-background: #668cff26;
+    --color-primary-subscription-left-sidebar-border-right: #505159;
+
+    // Proforma Invoice Color Variables
+    --color-primary-performa-invoice-a-copy-invoice: #668cff;
+    --color-primary-performa-invoice-dissabled-background: #505159;
+
+    // Invoice Setting Color Variables
+    --color-primary-icon-estimate-path1-before: #e5455626;
+
+    // Invoice Generate Color Variables
+    --color-invoice-generate-td-search-box-i: #cbcfd2;
+    --color-generate-invoice-primary-background: #668cff26;
+    --color-generate-invoice-secondary-background: #668cff26;
+
+    // Long Code Details Variables
+    --color-primary-long-code-details-background: #668cff26;
+
+    // Upload File Color Variables
+    --color-primary-select-file: #36b283;
+
+    // Jobwork Color Variables
+    --color-primary-inward-note: #36b283;
+
+    // Update Ledger Entry Panel Color Variables
+    --color-primary-update-ledger-entry-panel-advanced-background: #f5f5f5;
+
+    // Primary Sidebar Color Variables
+    --color-primary-sidebar-company-branch-block-h3: #9b9b9e;
+    --color-primary-sidebar-branch-connection-outer-span-background: #cbcfd2;
+    --color-primary-sidebar-account-collapse-i: #cbcfd2;
+    --color-primary-sidebar-current-branch-name-anchor: #9b9b9e;
+    --color-primary-sidebar-menu-item-wrapper-list-anchor: #9b9b9e;
+    --color-primary-sidebar-account-dropdown-i: #9b9b9e;
+    --color-primary-sidebar-account-dropdown-collapse: #668cff;
+    --color-primary-sidebar-menu-item-anchor-active-hover-highlight: #668cff;
+    --color-primary-sidebar-menu-item-wrapper-sub-menu-border: #668cff;
+    --color-primary-sidebar-show-more: #668cff;
+
+    // Import Excel and Wizard Color Variables
+    --color-import-excel-and-wizard-steps-wizard-li-label: #cbcfd2;
+
+    // Purchase Order Preview Color Variables
+    --color-primary-purchase-order-preview-eastern-blue-text: #36b283;
+    --color-primary-purchase-order-preview-invoice-title-after-before-background: #36b283;
+
+    // Purchase Register Expand Color Variables
+    --color-primary-purchase-register-expand-account-detail-custom-header-background: #9b9b9e;
+
+    // Account Create Edit Color Variables
+    --color-account-create-edit-icici-account-create-edit: #9b9b9e;
+
+    // Edit Template Color Variables
+    --color-primary-edit-template-btn-warning: #e58a00;
+    --color-primary-edit-template-badge-btn-success-hover: #9b9b9e;
+
+    // Payor Create Edit Color Variables
+    --color-payor-create-edit-icici-payor-account-create-edit: #9b9b9e;
+
+    // Payment Aside Color Variables
+    --color-primary-payment-aside-creditors-detail: #f5f5f5;
+    --color-primary-payment-aside-contact-details: #f5f5f5;
+
+    // Setting Intergation Color Variables
+    --color-primary-setting-integration-account-wrapper-border: #668cff26;
+    --color-primary-setting-integration-account-approval-status-approved: #36b283;
+    --color-primary-setting-integration-icici-button: #e58a00;
+    --color-primary-setting-integration-account-approval-status-pending-approval: #e58a00;
+    --color-primary-setting-integration-field-label: #9b9b9e;
+    --color-primary-setting-integration-action-anchor: #cbcfd2;
+
+    // Company Import Export Color Variables
+    --color-primary-company-import-export-card-background: #668cff26;
+
+    // Expense Details Color Variables
+    --color-primary-expense-details-span-close-modal-cp-pull-right-background: #9b9b9e;
+
+    // Design Filters Color Variables
+    --color-design-filters-swatch-ul-li-nth-child5-background: #cbcfd2;
+    --color-design-filters-swatch-ul-li-nth-child7-background: #36b283;
+    --color-design-filters-swatch-ul-li-nth-child8-background: #36b283;
+    --color-design-filters-swatch-ul-li-nth-child9-background: #f5f5f5;
+    --color-design-filters-swatch-ul-li-nth-child10-background: #36b283;
+    --color-design-filters-swatch-ul-li-nth-child12-background: #9b9b9e;
+    --color-design-filters-swatch-ul-li-nth-child13-background: #e58a00;
+    --color-design-filters-swatch-ul-li-nth-child14-background: #e54556;
+    --color-design-filters-swatch-ul-li-nth-child15-background: #9b9b9e;
+    --color-design-filters-swatch-ul-li-nth-child16-background: #e54556;
+    --color-design-filters-swatch-ul-li-nth-child17-background: #e54556;
+    --color-design-filters-swatch-ul-li-nth-child18-background: #9b9b9e;
+
+    // Company Branch Color Variables
+    --color-primary-company-branch-dropdown-total-company-count: #9b9b9e;
+    --color-primary-company-branch-digit-orange: #e58a00;
+    --color-primary-company-branch-company-list-btn-group-active-hover: #e58a0026;
+    --color-primary-company-branch-branch-list-active-hover: #668cff26;
+    --color-primary-company-branch-company-list-btn-group-open-background: #668cff26;
+    --color-primary-company-branch-company-list-btn-group-open-span-active: #668cff26;
+    --color-primary-company-branch-wrap-company-refresh-small-background: #668cff26;
+    --color-primary-company-branch-company-list-li-hover-span-background: #668cff26;
+    --color-primary-company-branch-dropdown-menu-anchor-hover: #9b9b9e;
+    --color-primary-company-branch-company-branches-list: #9b9b9e;
+    --color-primary-company-branch-branch-list-anchor: #9b9b9e;
+    --color-primary-company-branch-icon-reload: #9b9b9e;
+    --color-primary-company-branch-btn-group-dropdown-toggle-span: #9b9b9e;
+    --color-primary-company-branch-wrap-company-refresh-small: #9b9b9e;
+    --color-primary-company-branch-input-group-append: #cbcfd2;
+    --color-primary-company-branch-dropdown-menu-head-branch: #668cff;
+    --color-primary-company-branch-digit-blue: #668cff;
+
+    // Popup Color Variables
+    --color-popup-list-head-text: #f5f5f5;
+    --color-popup-secondary-list-head-text: #f5f5f5;
+    --color-popup-body-text: #f5f5f5;
+    --color-popup-list-input-text: #cbcfd2;
+    --color-popup-list-input-text-hover: #f5f5f5;
+    --color-popup-list-hover: #668cff26;
+    --color-popup-background: #212528;
+    --color-popup-secondary-background: #212528;
+    --color-popup-footer-text: #f5f5f5;
+    --color-popup-footer-background: #212528;
+    --color-popup-list-all-features-text: #f5f5f5;
+    --color-primary-popup-list-header-bottom-border: #1a237e;
+    --color-primary-popup-background-hover: #668cff26;
+
+    // Common Chips Variables
+    --color-chips-primary: #f5f5f5;
+    --color-chips-primary-background: #668cff26;
+    --color-chips-secondary-background: #668cff26;
+
+    // Tabs Color Variables
+    --color-tab-primary-text: #f5f5f5;
+    --color-tab-secondary-text: #f5f5f5;
+    --color-tab-tertiary-text: #f5f5f5;
+    --color-tab-tertiary-text-hover: #668cff;
+    --color-tab-primary-selected-tab-bottom-border: #668cff;
+    --color-tab-primary-background: #212528;
+    --color-tab-secondary-background: #212528;
+    --color-tab-primary-active: #668cff;
+    --color-tab-primary-inactive: #9b9b9e;
+    --color-tab-primary-border-bottom: #505159;
+
+    // Rectangular Tabs Color Variables
+    --color-rectangular-tab-active-primary-text: #668cff;
+    --color-rectangular-tab-active-primary-border: #668cff;
+    --color-rectangular-tab-primary-background: #212528;
+    --color-rectangular-tab-inactive-primary-icon: #f5f5f5;
+    --color-rectangular-tab-inactive-primary-text: #668cff26;
+    --color-rectangular-tab-box-shadow: #212528;
+    --color-rectangular-tab-inactive-primary-border: #212528;
+    --color-rectangular-tab-inactive-secondary-border: #505159;
+
+    // Invoice Preview Color Variables
+    --color-primary-invoice-preview-text: #ffffff;
+    --color-primary-invoice-preview-background: #212528;
+
+    // Pagination Color Variables
+    --color-pagination-button: #f5f5f5;
+    --color-pagination-background: #668cff26;
+    --color-pagination-border: #668cff;
+    --color-pagination-active-button: #f5f5f5;
+    --color-pagination-button-hover-background: #668cff26;
+
+    // Header and Footer Color Variables
+    --color-primary-header-background: #1a237e;
+    --color-primary-header-icon-traingle-info: #e54556;
+    --color-primary-footer-background: #f5f5f5;
+    --color-secondary-footer-background: #668cff26;
+
+    // Ledger Heading Color Variable
+    --color-ledger-heading: #668cff;
+    --color-ledger-grid-border-color: #668cff26;
+    --color-primary-ledger-box-shadow: #00000080;
+    --color-primary-ledger-stat-block-border: #668cff26;
+
+    // Invoice Preview Details Color Variables
+    --color-invoice-preview-details-default-header: #e54556;
+    --color-invoice-preview-giddh-table-tbody-tr-background-hover: #668cff26;
+    --color-invoice-preview-giddh-table-border-right: #9b9b9e;
+    --color-invoice-preview-span-close-modal-background: #9b9b9e;
+    --color-invoice-preview-default-footer-border: #36b283;
+    --color-primary-invoice-preview-details-left-sidebar-list-background-active-hover: #668cff26;
+    --color-primary-invoice-preview-details-background: #668cff26;
+
+    // Contact Color Variables
+    --color-primary-contact-icon-dots-three-vertical: #9b9b9e;
+    --color-primary-contact-total-customer-vendor-count: #9b9b9e;
+    --color-primary-contact-aging-table-thead-tr-th-border: #9b9b9e;
+    --color-primary-contact-aging-table-text-lowercase-word-wrap: #cbcfd2;
+    --color-primary-contact-p-modal-tooltip-border: #cbcfd2;
+
+    // Master Page Color Variables
+    --color-master-page-input-clear-text: #668cff;
+    --color-master-page-input-no-result-text: #212528;
+    --color-master-page-tab-background: #212528;
+    --color-master-page-primary-tab: #f5f5f5;
+    --color-master-page-secondary-tab: #f5f5f5;
+    --color-master-page-primary-text-hover: #f5f5f5;
+    --color-master-page-text-secondary-hover: #668cff;
+    --color-master-page-sidebar-active-list: #668cff;
+    --color-master-page-input-label: #f5f5f5;
+    --color-master-page-left-sidebar-primary-background: #212528;
+    --color-master-page-left-sidebar-secondary-background: #212528;
+    --color-master-page-main-content-primary-background: #212528;
+    --color-master-page-main-content-secondary-background: #212528;
+    --color-master-page-sidebar-active-list-text: #f5f5f5;
+    --color-master-page-sidebar-active-list-background: #668cff26;
+    --color-master-page-sidebar-primary-group: #9b9b9e;
+
+    // Left Sidebar Color Variables
+    --color-sidebar-content-text: #f5f5f5;
+    --color-sidebar-primary-anchor-text: #9b9b9e;
+    --color-sidebar-secondary-anchor-text: #9b9b9e;
+    --color-sidebar-anchor-text-hover: #668cff;
+    --color-sidebar-menu-list-items: #212528;
+    --color-sidebar-list-head: #f5f5f5;
+    --color-sidebar-company-background: #668cff26;
+    --color-sidebar-secondary-company-background: #212528;
+    --color-sidebar-background: #212528;
+    --color-sidebar-footer-logout-section-background: #668cff26;
+    --color-sidebar-company-count-text: #cbcfd2;
+    --color-sidebar-company-count-background: #668cff26;
+    --color-sidebar-create-company-list-text: #9b9b9e;
+    --color-sidebar-create-company-list-background: #668cff26;
+    --color-sidebar-list-background-hover: #668cff26;
+    --color-sidebar-primary-box-shadow: #00000080;
+
+    // Giddh Logo Color Variable
+    --color-primary-giddh-logo: invert(100%) sepia(0%) saturate(7476%) hue-rotate(178deg) brightness(98%) contrast(108%);
+
+    // Tax Sidebar Color Variables
+    --color-primary-tax-sidebar-text: #f5f5f5;
+    --color-primary-tax-sidebar-list-active: #668cff;
+    --color-primary-tax-sidebar-list-hover: #668cff26;
+    --color-primary-tax-sidebar-gst-menu-items-ul: #9b9b9e;
+
+    // MF Report Color Variables
+    --color-primary-mf-report-row-gray-th-background: #668cff26;
+
+    // New Branch Transfer Color Variables
+    --color-new-branch-table-delivery-basic-thead-tbody-tr-th-last-child: #9b9b9e;
+
+    // Branch Color Variables
+    --color-primary-branch-active-status: #36b283;
+
+    // All Items Page Color Variables
+    --color-primary-all-items-page-heading: #668cff;
+    --color-primary-all-items-page-single-menu-items-hover-active: #668cff;
+    --color-primary-all-items-page-single-menu-items-heading: #f5f5f5;
+    --color-primary-all-items-page-single-menu-items-body: #cbcfd2;
+    --color-primary-all-items-page-wrapper-block-border: #668cff26;
+    --color-primary-all-items-input-group-input-background: #668cff26;
+
+    // Grid Row Color Variables
+    --color-grid-row-tb-pl-custom-header-background: #9b9b9e;
+
+    // GST Color Variables
+    --color-gst-primary-background-color: #212528;
+    --color-gst-primary-doc-actions: #e54556;
+    --color-gst-primary-return-body-notification-faq-list-li-a-hover: #668cff;
+    --color-gst-primary-return-content-return-filed: #36b283;
+    --color-gst-primary-c-tab-nav-tabs-active-hover-focus-border-bottom: #668cff;
+    --color-gst-primary-filing-due-date-return-details-table-tbody-tr-td-first-child-before: #668cff;
+    --color-gst-primary-table-text: #f5f5f5;
+    --color-gst-primary-table-background: #668cff26;
+    --color-gst-secondary-table-background: #212528;
+
+    // GSTR3 Color Variables
+    --color-primary-tax-engine-summary-gstr-3b-report-table-tbody-thead-td-border: #cbcfd2;
+    --color-primary-gstr3-page-main-button: #f5f5f5;
+
+    // Inventory Stock Report Color Variables
+    --color-primary-credit: #668cff;
+    --color-primary-inventory-stock-report-journal: #36b283;
+    --color-primary-inventory-stock-balance-list-background: #668cff26;
+    --color-primary-inventory-stock-balance-text: #cbcfd2;
+    --color-primary-inventory-stock-expanded-list-background: #668cff26;
+    --color-primary-inventory-stock-dropdown-button-background: #212528;
+
+    // All Features Color Variables
+    --color-all-features-money-back-guarantee: #cbcfd2;
+
+    // Revenue Chart Color Variables
+    --color-primary-revenue-chart-secondary-dark-bg: #36b283;
+
+    // Total Overdues Chat Color Variables
+    --color-primary-total-overdues-chart-vendor-due-text: #e54556;
+
+    // Tooltip Color Variables
+    --color-primary-tooltip-text: #f5f5f5;
+    --color-primary-tooltip-background: #9b9b9e;
+
+    // Right Sidebar Color Variables
+    --color-right-sidebar-back: #f5f5f5;
+    --color-right-sidebar-icon: #f5f5f5;
+    --color-right-sidebar-settings: #f5f5f5;
+    --color-right-sidebar-primary-background: #668cff26;
+    --color-primary-right-sidebar-list-text-hover: #f5f5f5;
+    --color-right-sidebar-primary-journal-voucher-list: #f5f5f5;
+    --color-right-sidebar-primary-journal-voucher-list-hover: #668cff26;
+    --color-right-sidebar-primary-journal-voucher-background: #668cff26;
+
+    // Table Color Variables
+    --color-table-primary-heading: #212528;
+    --color-table-secondary-heading: #668cff;
+    --color-table-tertiary-heading: #f5f5f5;
+    --color-table-quaternary-heading: #212528;
+    --color-table-primary-content: #cbcfd2;
+    --color-table-secondary-content: #212528;
+    --color-table-tertiary-content: #9b9b9e;
+    --color-table-quaternary-content: #9b9b9e;
+    --color-table-quinary-content: #f5f5f5;
+    --color-table-senary-content: #f5f5f5;
+    --color-table-septenary-content: #f5f5f5;
+    --color-table-row-hover-primary-background: #668cff26;
+    --color-table-row-hover-secondary-background: #668cff26;
+    --color-table-heading-primary-background: #212528;
+    --color-table-body-primary-background: #212528;
+    --color-table-body-secondary-background: #212528;
+    --color-table-datepicker-content: #212528;
+    --color-table-datepicker-header-background: #36b283;
+    --color-table-datepicker-body-background: #f5f5f5;
+    --color-table-input-background: #668cff26;
+    --color-table-searchbar-background: #668cff26;
+    --color-table-primary-header-bar-border: #668cff26;
+    --color-table-primary-content-bar-border: #668cff26;
+    --color-table-primary-giddh-table-thead-register-table-th-background: #e58a0026;
+    --color-table-icon-sort-asc: #9b9b9e;
+    --color-table-primary-footer: #668cff26;
+    --color-table-primary-border-bottom: #f5f5f5;
+
+    // Scrollbar Color Variables
+    --color-scrollbar-primary-track-background: #212528;
+    --color-scrollbar-primary-thumb-background: #505159;
+
+    // Mat Divider Color Variables
+    --color-primary-mat-divider: #668cff26;
+
+    // Total Details Box above table Color Variables
+    --color-total-details-heading: #9b9b9e;
+    --color-total-details-primary-content: #f5f5f5;
+    --color-total-details-primary-background: #212528;
+    --color-total-details-secondary-content: #e58a00;
+    --color-total-details-secondary-background: #e58a0026;
+    --color-total-details-tertiary-content: #668cff;
+    --color-total-details-tertiary-background: #668cff26;
+    --color-total-details-quaternary-background: #505159;
+    --color-total-details-primary-border: #505159;
+
+    // Right Side Popup Color Variables
+    --color-primary-right-side-popup-header-text: #f5f5f5;
+    --color-primary-right-side-popup-header-background: #1a237e;
+    --color-primary-right-side-popup-body-background: #212528;
+    --color-secondary-right-side-popup-body-background: #212528;
+    --color-right-side-popup-box-shadow: #212528;
+
+    // Onboarding Contact info color variable
+    --color-onboard-contact-info-text: #212528;
+    --color-primary-onboarding-label-required: #e54556;
+    --color-primary-onboarding-btn-sync: #9b9b9e;
+    --color-primary-onboarding-btn-sync-background: #36b28326;
+
+    // Onboarding Color Variable
+    --color-primary-onboarding-p: #cbcfd2;
+    --color-primary-on-boarding-modal-body-p: #cbcfd2;
+    --color-primary-onboarding-sfsection-jkvq-sfsubmit-btn-primary: #36b283;
+
+    // Common Color Variables
+    --color-danger: #e54556;
+    --color-warning: #e58a00;
+    --color-dot-warning: #e58a00;
+    --color-delete: #e54556;
+    --color-success-enable: #36b283;
+    --color-secondary-success: #36b283;
+    --color-success-disable: #36b28326;
+    --color-main-content-background: #212528;
+    --color-btn-success-dropdown-toggle: #36b283;
+    --color-common-primary-border: #668cff26;
+    --color-common-secondary-border: #505159;
+    --color-common-tertiary-border: #668cff26;
+    --color-primary-common-box-shadow: #00000080;
+    --color-common-primary-disabled: #9b9b9e;
+    --color-common-secondary-disabled: #9b9b9e;
+    --color-common-primary-input-placeholder: #505159;
+    --color-common-secondary-input-placeholder: #cbcfd2;
+    --color-common-primary-background-color: #668cff26;
+    --color-primary-common-with-opacity-list-hover: #668cff26;
+    --color-primary-common-without-opacity-list-hover: #2b3548;
+
+    // Toast Color Variables
+    --color-red-toast: #e54556;
+    --color-green-toast: #36b283;
+    --color-warning-toast: #e58a00;
+    --color-info-toast: #668cff;
+    --color-toast-primary-text: #ffffff;
+    --color-primary-toast-cross-background: #668cff26;
+
+    // Common Leftout Background Color Variables
+    --color-common-primary-blue-border: #f5f5f5;
+    --color-common--primary-light-background: #668cff26;
+
+    // Style 1 File Color Variables
+    --color-due-box-background: #e5455626;
+    --color-opening-box-background: #36b28326;
+    --color-mat-tbody-tr-td: #9b9b9e;
+    --color-mat-table-tbody-td-first-child: #f5f5f5;
+    --color-daybook-nested-table-tbody-tr-border: #9b9b9e;
+    --color-primary-circle-expenses-background: #e54556;
+    --color-primary-table-container-cdk-virtual-scroll-viewport-section-expenses-border: #e54556;
+    --color-primary-circle-income-background: #668cff;
+    --color-primary-table-container-cdk-virtual-scroll-viewport-section-income-border: #668cff;
+    --color-primary-dot-primary: #668cff;
+    --color-primary-circle-assets-background: #e58a00;
+    --color-primary-table-container-div-cdk-virtual-scroll-viewport-section-assets-border: #e58a00;
+    --color-primary-circle-liabilities-background: #36b283;
+    --color-primary-table-container-cdk-virtual-scroll-viewport-section-liabilities-border: #36b283;
+    --color-primary-eledgerwrap-alert-danger-border: #e5455626;
+
+    // Style 2 File Color Variables
+    --color-checkbox-after-border: #cbcfd2;
+    --color-nav-tabs-anchor: #cbcfd2;
+    --color-nav-item-icon-company-icon-branch1-before: #cbcfd2;
+    --color-checkbox-checked-after-background: #668cff;
+    --color-upload-btn-background: #e58a0026;
+    --color-pop-panel-form-control-background: #e58a0026;
+    --color-ledger-row-td-select2-container-select2-search__field-background: #e58a0026;
+    --color-ratio-chart-block-nth-child2-span-pie-text-center: #e58a00;
+    --color-ratio-chart-block-nth-child3-span-pie-text-center: #e54556;
+    --color-ratio-chart-block-nth-child4-span-pie-text-center: #36b283;
+    --color-scroll-auto-webkit-scrollbar-track-background: #9b9b9e;
+    --color-primary-virtual-scroll-scrollable-content-item-a-item-stock: #cbcfd2;
+    --color-manufacture-source-tbody-tr-td-nth-child1-before-background: #9b9b9e;
+    --color-primary-text-warning: #e58a00;
+    --color-primary-tax-engine-reconciliation-accepted: #36b283;
+    --color-primary-thumbnail-border: #e5455626;
+    --color-primary-daterangepicker-input-mini-active-border: #e5455626;
+    --color-primary-selection-none-header-selection: #9b9b9e;
+    --color-primary-sky-blue-bg-background: #668cff26;
+    --color-primary-zi-table-table-thead-tr-th: #f5f5f5;
+    --color-primary-square-switch-input-checked-label: #36b283;
+    --color-primary-add-company-detail-add-mailer-form-background: #212528;
+
+    // Virtual Scroll Color Variables
+    --color-primary-virtual-scroll-background: #212528;
+
+    // Common Leftout Text Color Variables
+    --color-common-primary-dark-blue: #668cff;
+
+    // Common Image Filter Variable
+    --color-image-filter: invert(1);
+    --color-image-filter-secondary: invert(0.8);
+    --color-image-filter-tertiary: invert(0.9);
+    --color-image-filter-quinary: invert(0.4);
+    --color-image-filter-quaternary: invert(100%) sepia(1%) saturate(2%) hue-rotate(1deg) brightness(135%)
+        contrast(100%);
+    --color-image-filter-senary: invert(0%) sepia(100%) saturate(0%) hue-rotate(35deg) brightness(102%) contrast(102%);
+    --color-caret-image: url("../../images/caret-dark.svg");
+
+    /************************ COMMON COLORS USED MORE THAN 12 TIMES ************************/
+    --color-blue: #668cff;
+    --color-black: #212528;
+    --color-giddh-blue: #668cff;
+    --color-wild-sand: #f5f5f5;
+    --color-skeleton-loading-gradient-inner: #212528;
+    --color-white: #212528;
+    --color-white-secondary: #212528;
+    --color-white-tertiary: #ffffff;
+    --color-dark-fog: #668cff26;
+    --color-lavender: #e7e9eb;
+    --color-iron: #9b9b9e;
+    --color-black-russian: #212528;
+    --color-gray: #cbcfd2;
+    --color-abbey: #9b9b9e;
+    --color-nero: #f5f5f5;
+    --color-teal: #36b283;
+    --color-foam: #36b28326;
+    --color-chardon: #e58a0026;
+    --color-red: #e54556;
+    --color-orange: #e58a00;
+    --color-solitude-light: #668cff26;
+    --color-dark-gray: #9b9b9e;
+    --color-tutu: #e5455626;
+    --color-slate: #9b9b9e;
+}

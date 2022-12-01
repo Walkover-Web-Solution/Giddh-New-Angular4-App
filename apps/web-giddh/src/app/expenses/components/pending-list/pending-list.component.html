@@ -144,6 +144,13 @@
                     >
                         {{ localeData?.approve }}
                     </button>
+                    <button
+                        mat-button
+                        class="btn btn-danger-outline"
+                        (click)="showRejectConfirmPopup(rejectConfirm, expenses); $event.stopPropagation()"
+                    >
+                        {{ localeData?.reject }}
+                    </button>
                 </td>
             </ng-container>
 
@@ -157,8 +164,10 @@
         </table>
     </div>
 </div>
-
-<div *ngIf="pettyCashPendingReportResponse?.totalItems > 20" class="pagination-wrapper">
+<div
+    *ngIf="pettyCashPendingReportResponse?.totalItems > pettyCashPendingReportResponse?.count"
+    class="pagination-wrapper"
+>
     <pagination
         [totalItems]="pettyCashPendingReportResponse?.totalItems"
         [maxSize]="5"
@@ -192,7 +201,19 @@
         [commonLocaleData]="commonLocaleData"
         [pettyCashEntry]="accountEntryPettyCash"
         [entryAgainstObject]="entryAgainstObject"
+        [showCategoryOption]="true"
         (approveEntry)="hideApproveConfirmPopup($event)"
     >
     </petty-cash-approve-confirm-dialog>
 </ng-template>
+
+<!-- modal start -->
+<ng-template #rejectConfirm>
+    <petty-cash-reject-confirm-dialog
+        [selectedItem]="selectedEntryForApprove"
+        [localeData]="localeData"
+        [commonLocaleData]="commonLocaleData"
+        (rejectEntry)="hideRejectConfirmPopup($event)"
+    ></petty-cash-reject-confirm-dialog>
+</ng-template>
+<!-- modal end -->

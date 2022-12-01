@@ -1,8 +1,7 @@
 import { takeUntil } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
-import { Component, OnDestroy, OnInit, TemplateRef, Output, EventEmitter, Input } from '@angular/core';
+import { Component, OnDestroy, OnInit, Output, EventEmitter, Input, ChangeDetectorRef, ElementRef, ViewChild } from '@angular/core';
 import { ReplaySubject, Observable } from 'rxjs';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { UserDetails } from '../../../models/api-models/loginModels';
 import { GeneralService } from '../../../services/general.service';
 import { CreateCompanyUsersPlan, SubscriptionRequest } from '../../../models/api-models/Company';
@@ -12,10 +11,25 @@ import { SettingsProfileActions } from '../../../actions/settings/profile/settin
 import { CompanyActions } from '../../../actions/company.actions';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormControl } from '@angular/forms';
-import { DEFAULT_SIGNUP_TRIAL_PLAN, DEFAULT_POPULAR_PLAN } from '../../../app.constant';
 import { SettingsProfileService } from '../../../services/settings.profile.service';
 import { ToasterService } from '../../../services/toaster.service';
+import { MatDialog } from '@angular/material/dialog';
+import { AllFeaturesComponent } from '../all-features/all-features.component';
+import { SubscriptionsUser } from '../../../models/api-models/Subscriptions';
+import { uniqBy } from '../../../lodash-optimized';
 
+
+/** This will use for static data for plan table  */
+const TABLE_DATA: any[] = [
+    { name: '', transactions: 0, amount: 0, companies: 0, consultant: '', unlimited_users: true, unlimited_customers: true, desktop_mobile_app: true, check_all_features: true },
+    { name: '', transactions: 0, amount: 0, companies: 0, consultant: '', unlimited_users: true, unlimited_customers: true, desktop_mobile_app: true, check_all_features: true },
+    { name: '', transactions: 0, amount: 0, companies: 0, consultant: '', unlimited_users: true, unlimited_customers: true, desktop_mobile_app: true, check_all_features: true },
+    { name: '', transactions: 0, amount: 0, companies: 0, consultant: '', unlimited_users: true, unlimited_customers: true, desktop_mobile_app: true, check_all_features: true },
+    { name: '', transactions: 0, amount: 0, companies: 0, consultant: '', unlimited_users: true, unlimited_customers: true, desktop_mobile_app: true, check_all_features: true },
+    { name: '', transactions: 0, amount: 0, companies: 0, consultant: '', unlimited_users: true, unlimited_customers: true, desktop_mobile_app: true, check_all_features: true },
+    { name: '', transactions: 0, amount: 0, companies: 0, consultant: '', unlimited_users: true, unlimited_customers: true, desktop_mobile_app: true, check_all_features: true },
+    { name: '', transactions: 0, amount: 0, companies: 0, consultant: '', unlimited_users: true, unlimited_customers: true, desktop_mobile_app: true, check_all_features: true }
+];
 @Component({
     selector: 'subscriptions-plans',
     styleUrls: ['./subscriptions-plans.component.scss'],
@@ -27,6 +41,13 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
     @Input() public localeData: any = {};
     /** This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
+    /** This will hold to show subscription plan */
+    @Output() public isSubscriptionPlanShow = new EventEmitter<boolean>();
+    /** This will use for table content scroll in mobile */
+    @ViewChild('tableContent', { read: ElementRef }) public tableContent: ElementRef<any>;
+    /** This will use for hold table data */
+    public inputData = TABLE_DATA;
+    /** This will hold the login user */
     public logedInUser: UserDetails;
     public subscriptionPlans: CreateCompanyUsersPlan[] = [];
     public currentCompany: any;
@@ -42,88 +63,39 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
     public isSwitchPlanInProcess: boolean = false;
     public selectNewPlan: boolean = false;
     public isShow = true;
-    @Output() public isSubscriptionPlanShow = new EventEmitter<boolean>();
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    modalRef: BsModalRef;
     /** This will contain the type of plans we have to show */
     public showPlans: any = '';
     /** This will contain the number of plans with multiple companies */
-    public totalMultipleCompanyPlans: number = 0;
-    /** This will contain the number of plans with single company */
-    public totalSingleCompanyPlans: number = 0;
-    /** This will contain the number of plans with free plan */
-    public totalFreePlans: number = 0;
-    /** This will contain the default plans of multiple companies */
-    public defaultMultipleCompanyPlan: any;
-    /** This will contain the default plans of single companies */
-    public defaultSingleCompanyPlan: any;
-    /** This will contain the default plans of free companies */
-    public defaultFreePlan: any;
-    /** This will contain the tooltip content of transaction limit */
     public transactionLimitTooltipContent: string = "";
     /** This will contain the tooltip content of unlimited users */
     public unlimitedUsersTooltipContent: string = "";
     /** This will contain the tooltip content of unlimited customers */
     public unlimitedCustomersVendorsTooltipContent: string = "";
-    /** This will contain the tooltip content of desktop and mobile app */
-    public desktopMobileAppTooltipContent: string = "";
-    /** This will contain the plan unique name of default trial plan */
-    public defaultTrialPlan: string = DEFAULT_SIGNUP_TRIAL_PLAN;
-    /** This will contain the plan name of popular plan */
-    public defaultPopularPlan: string = DEFAULT_POPULAR_PLAN;
     /** This will hold if plans are showing */
     public isShowPlans: boolean = false;
+    /** This will hold the object of active company */
+    public activeCompany;
+    /** This will stores the seleceted user plans */
+    public seletedUserPlans: SubscriptionsUser;
+    /** This will stores the subscription plans  */
+    public subscriptionPlan: CreateCompanyUsersPlan;
+    /** True if api call in progress */
+    public showLoader: boolean = true;
+    /**  This will be use for all subscription  */
+    private allSubscriptions: any[] = [];
 
-    constructor(private modalService: BsModalService, private generalService: GeneralService,
-        private authenticationService: AuthenticationService, private store: Store<AppState>,
-        private router: Router, private companyActions: CompanyActions,
+    constructor(private generalService: GeneralService,
+        private changeDetectionRef: ChangeDetectorRef, private authenticationService: AuthenticationService, private store: Store<AppState>,
+        private router: Router, private companyActions: CompanyActions, public dialog: MatDialog,
         private settingsProfileActions: SettingsProfileActions, private settingsProfileService: SettingsProfileService, private toasty: ToasterService, public route: ActivatedRoute) {
 
         this.store.pipe(select(profile => profile.settings.profile), takeUntil(this.destroyed$)).subscribe((response) => {
             if (response && !_.isEmpty(response)) {
                 let companyInfo = _.cloneDeep(response);
-
-                if(companyInfo?.countryV2?.alpha2CountryCode) {
-                    this.authenticationService.getAllUserSubsciptionPlans(companyInfo?.countryV2?.alpha2CountryCode).pipe(takeUntil(this.destroyed$)).subscribe(res => {
-                        this.subscriptionPlans = res.body;
-
-                        this.totalMultipleCompanyPlans = 0;
-                        this.totalSingleCompanyPlans = 0;
-                        this.totalFreePlans = 0;
-
-                        if (this.subscriptionPlans && this.subscriptionPlans.length > 0) {
-                            this.subscriptionPlans.forEach(item => {
-                                if (!item.subscriptionId && item.planDetails) {
-                                    if (item.planDetails.uniqueName !== this.defaultTrialPlan) {
-                                        if (item.planDetails.amount && item.planDetails.companiesLimit > 1) {
-
-                                            if (!this.defaultMultipleCompanyPlan) {
-                                                this.defaultMultipleCompanyPlan = item;
-                                            }
-
-                                            this.totalMultipleCompanyPlans++;
-                                        } else if (item.planDetails.amount && item.planDetails.companiesLimit === 1) {
-
-                                            if (!this.defaultSingleCompanyPlan && item.planDetails.name === this.defaultPopularPlan) {
-                                                this.defaultSingleCompanyPlan = item;
-                                            }
-
-                                            this.totalSingleCompanyPlans++;
-                                        } else if (!item.planDetails.amount) {
-
-                                            if (!this.defaultFreePlan) {
-                                                this.defaultFreePlan = item;
-                                            }
-
-                                            this.totalFreePlans++;
-                                        }
-                                    }
-                                }
-                            });
-                        }
-                    });
-                }
                 this.currentCompany = companyInfo?.name;
+            } else {
+                this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
             }
         });
         this.isUpdateCompanyInProgress$ = this.store.pipe(select(s => s.settings.updateProfileInProgress), takeUntil(this.destroyed$));
@@ -131,12 +103,19 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
-        
+        /** This will use for get the active company from store  */
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if (activeCompany) {
+                if (!this.activeCompany) {
+                    this.getPlans(activeCompany);
+                }
+                this.activeCompany = activeCompany;
+            }
+        });
+
         this.transactionLimitTooltipContent = this.localeData?.subscription?.transaction_limit_content;
         this.unlimitedUsersTooltipContent = this.localeData?.subscription?.unlimited_users_content;
         this.unlimitedCustomersVendorsTooltipContent = this.localeData?.subscription?.unlimited_customers_content;
-        this.desktopMobileAppTooltipContent = this.localeData?.subscription?.desktop_mobile_app_content;
 
         this.router.navigate(['/pages', 'user-details', 'subscription'], {
             queryParams: {
@@ -182,11 +161,14 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
     /**
      * This will open the all features popup
      *
-     * @param {TemplateRef<any>} AllFeatures
+     *
      * @memberof SubscriptionsPlansComponent
      */
-    public allFeaturesModal(AllFeatures: TemplateRef<any>) {
-        this.modalRef = this.modalService.show(AllFeatures, { class: 'modal-xl all-features-modal' });
+    public openDialog(): void {
+        this.dialog.open(AllFeaturesComponent, {
+            height: '40%',
+            width: '60%'
+        });
     }
 
     /**
@@ -199,6 +181,12 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
         this.router.navigate(['/pages', 'user-details', 'subscription']);
     }
 
+    /**
+     * This function will be use for buy plan
+     *
+     * @param {*} plan
+     * @memberof SubscriptionsPlansComponent
+     */
     public buyPlanClicked(plan: any) {
         let activationKey = this.licenceKey.value;
         if (activationKey) {
@@ -206,8 +194,14 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
         } else {
             this.SubscriptionRequestObj.licenceKey = "";
         }
-        this.router.navigate(['pages', 'billing-detail', 'buy-plan']);
-        this.store.dispatch(this.companyActions.selectedPlan(plan));
+        if (this.allSubscriptions[plan?.uniqueName].planDetails.amount <= 0) {
+            this.SubscriptionRequestObj.planUniqueName = plan?.uniqueName;
+            this.SubscriptionRequestObj.userUniqueName = this.logedInUser?.uniqueName;
+            this.patchProfile({ subscriptionRequest: this.SubscriptionRequestObj, callNewPlanApi: true });
+        } else {
+            this.router.navigate(['pages', 'billing-detail', 'buy-plan']);
+        }
+        this.store.dispatch(this.companyActions.selectedPlan(this.allSubscriptions[plan?.uniqueName]));
     }
 
     public patchProfile(obj) {
@@ -222,27 +216,9 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
         });
     }
 
-    public choosePlan(plan: CreateCompanyUsersPlan) {
-        this.selectNewPlan = true;
-        let activationKey = this.licenceKey.value;
-        if (activationKey) {
-            this.SubscriptionRequestObj.licenceKey = activationKey;
-        } else {
-            this.SubscriptionRequestObj.licenceKey = "";
-        }
-        this.SubscriptionRequestObj.userUniqueName = this.logedInUser.uniqueName;
-        if (plan.subscriptionId) { // bought plan
-            this.SubscriptionRequestObj.subscriptionId = plan.subscriptionId;
-            this.patchProfile({ subscriptionRequest: this.SubscriptionRequestObj, callNewPlanApi: true });
-        } else if (!plan.subscriptionId) { // free plan
-            this.SubscriptionRequestObj.planUniqueName = plan.planDetails.uniqueName;
-            this.patchProfile({ subscriptionRequest: this.SubscriptionRequestObj, callNewPlanApi: true });
-        }
-    }
-
     public createCompanyViaActivationKey() {
         let activationKey = this.licenceKey.value;
-        this.SubscriptionRequestObj.userUniqueName = this.logedInUser.uniqueName;
+        this.SubscriptionRequestObj.userUniqueName = this.logedInUser?.uniqueName;
         if (activationKey) {
             this.SubscriptionRequestObj.licenceKey = activationKey;
             this.patchProfile({ subscriptionRequest: this.SubscriptionRequestObj, callNewPlanApi: true });
@@ -265,24 +241,6 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
             this.showPlans = type;
         }
     }
-    
-    /**
-     * This function smooth scroller for all plans section
-     * @param {string} type
-     * @memberof SubscriptionsPlansComponent
-     */
-    public navigate(element: HTMLElement): void {
-        element.scrollIntoView({ behavior: 'smooth' });
-    }
-
-    /**
-     * This is callback for all features popup
-     *
-     * @memberof SubscriptionsPlansComponent
-     */
-    public closeFeaturesModal(): void {
-        this.modalRef.hide();
-    }
 
     /**
      * This will return welcome user text
@@ -295,4 +253,96 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
         text = text?.replace("[USER_NAME]", this.logedInUser?.name);
         return text;
     }
+
+    /**
+    * This function will use for renew plan
+    *
+    * @memberof SubscriptionsPlansComponent
+    */
+    public renewPlan(): void {
+        if (this.seletedUserPlans && this.seletedUserPlans.planDetails && this.seletedUserPlans.planDetails.amount > 0) {
+
+            this.subscriptionPlan = {
+                companies: this.seletedUserPlans.companies,
+                totalCompanies: this.seletedUserPlans.totalCompanies,
+                userDetails: {
+                    name: this.seletedUserPlans.userDetails?.name,
+                    uniqueName: this.seletedUserPlans.userDetails?.uniqueName,
+                    email: this.seletedUserPlans.userDetails?.email,
+                    signUpOn: this.seletedUserPlans.userDetails?.signUpOn,
+                    mobileno: this.seletedUserPlans.userDetails?.mobileno
+                },
+                additionalTransactions: this.seletedUserPlans.additionalTransactions,
+                createdAt: this.seletedUserPlans.createdAt,
+                planDetails: this.seletedUserPlans.planDetails,
+                additionalCharges: this.seletedUserPlans.additionalCharges,
+                status: this.seletedUserPlans.status,
+                subscriptionId: this.seletedUserPlans.subscriptionId,
+                balance: this.seletedUserPlans.balance,
+                expiry: this.seletedUserPlans.expiry,
+                startedAt: this.seletedUserPlans.startedAt,
+                companiesWithTransactions: this.seletedUserPlans.companiesWithTransactions,
+                companyTotalTransactions: this.seletedUserPlans.companyTotalTransactions,
+                totalTransactions: this.seletedUserPlans.totalTransactions
+            };
+
+            this.router.navigate(['pages', 'billing-detail', 'buy-plan']);
+            this.store.dispatch(this.companyActions.selectedPlan(this.subscriptionPlan));
+        } else {
+            this.SubscriptionRequestObj.userUniqueName = this.logedInUser?.uniqueName;
+            if (this.seletedUserPlans?.subscriptionId) {
+                this.SubscriptionRequestObj.subscriptionId = this.seletedUserPlans?.subscriptionId;
+                this.patchProfile({ subscriptionRequest: this.SubscriptionRequestObj, callNewPlanApi: true });
+            } else if (!this.seletedUserPlans?.subscriptionId) {
+                this.SubscriptionRequestObj.planUniqueName = this.seletedUserPlans?.planDetails?.uniqueName;
+                this.patchProfile({ subscriptionRequest: this.SubscriptionRequestObj, callNewPlanApi: true });
+            }
+        }
+    }
+
+
+    /**
+     * This function will use for get plans
+     *
+     * @private
+     * @param {*} activeCompany
+     * @memberof SubscriptionsPlansComponent
+     */
+    private getPlans(activeCompany: any): void {
+        this.authenticationService.getAllUserSubsciptionPlans(activeCompany?.countryV2?.alpha2CountryCode).pipe(takeUntil(this.destroyed$)).subscribe(res => {
+            let subscriptions = res.body;
+
+            subscriptions?.forEach(subscription => {
+                this.allSubscriptions[subscription.planDetails?.uniqueName] = [];
+                this.allSubscriptions[subscription.planDetails?.uniqueName] = subscription;
+            });
+            this.inputData = [];
+            let allPlans = uniqBy(subscriptions?.filter(subscription => subscription?.planDetails.name !== "Trial Plan" && subscription?.status !== "trial" && subscription?.planDetails?.isCommonPlan).map(subscription => { return subscription?.planDetails }), "name");
+            allPlans?.forEach(plan => {
+                this.inputData.push(plan);
+            });
+
+            this.showLoader = false;
+            this.changeDetectionRef.detectChanges();
+        });
+    }
+
+    /**
+    * This will scroll the right slide in mobile view for table
+    *
+    * @memberof SubscriptionsPlansComponent
+    */
+    public scrollRight(): void {
+        this.tableContent.nativeElement.scrollTo({ left: (this.tableContent.nativeElement?.scrollLeft + 150), behavior: 'smooth' });
+    }
+
+    /**
+     *This will scroll the left slide in mobile view for table
+     *
+     * @memberof SubscriptionsPlansComponent
+     */
+    public scrollLeft(): void {
+        this.tableContent.nativeElement.scrollTo({ left: (this.tableContent.nativeElement?.scrollLeft - 150), behavior: 'smooth' });
+    }
 }
+

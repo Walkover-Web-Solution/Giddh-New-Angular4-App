@@ -1,5 +1,3 @@
-@import "../../../../assets/css/color.scss";
-
 .square-switch input[type="checkbox"]:checked ~ label {
     background: initial;
     color: initial;
@@ -7,6 +5,7 @@
 .square-switch img {
     top: -1px;
     position: relative;
+    filter: var(--color-image-filter);
 }
 .division {
     display: flex;
@@ -18,7 +17,7 @@
     padding: 0 7px;
 }
 .hr {
-    border-bottom: 2px solid $gainsboro;
+    border-bottom: 2px solid var(--color-iron);
     margin: 3px 0;
 }
 #close {
@@ -27,19 +26,33 @@
     right: 10px;
     z-index: 9999999;
     background-color: transparent;
-    color: $white;
+    color: var(--color-primary-right-side-popup-header-text);
     font-size: 17px;
     top: 18px;
     margin-right: 0;
     border: 0;
 }
 .aside-pane-form {
-    background-color: $white;
-    box-shadow: 0 3px 6px $black-russian;
+    background-color: var(--color-white);
+    box-shadow: 0 3px 6px var(--color-primary-common-box-shadow);
     padding: 15px;
     height: calc(100vh - 90px);
     overflow: auto;
     scroll-behavior: smooth;
     position: relative;
     margin-top: 15px;
+    .giddh-table {
+        .action {
+            .delete-btn {
+                .fa-trash {
+                    color: var(--color-septenary-button-text);
+                }
+                &:hover {
+                    .fa-trash {
+                        color: var(--color-secondary-button-text);
+                    }
+                }
+            }
+        }
+    }
 }

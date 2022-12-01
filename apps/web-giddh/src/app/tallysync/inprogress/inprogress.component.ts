@@ -65,9 +65,7 @@ export class InprogressComponent implements OnInit, OnDestroy {
                 this.getCurrentData();
             }
         }, 30000);
-        this.imgPath = (isElectron || isCordova)
-            ? "assets/images/"
-            : AppUrl + APP_FOLDER + "assets/images/";
+        this.imgPath = isElectron ? "assets/images/" : AppUrl + APP_FOLDER + "assets/images/";
     }
 
     public ngOnDestroy() {
@@ -101,6 +99,10 @@ export class InprogressComponent implements OnInit, OnDestroy {
                     let tallyEntries =
                         (element.totalSavedEntries * 100) /
                         element.totalTallyEntries;
+                    let tallyVouchers =
+                        (element.totalSavedVouchers * 100) /
+                        element.totalTallyVouchers;
+
                     element["groupsPercent"] =
                         (isNaN(tallyGroups) ? 0 : tallyGroups).toFixed(2) + "%";
                     element["accountsPercent"] =
@@ -109,6 +111,9 @@ export class InprogressComponent implements OnInit, OnDestroy {
                     element["entriesPercent"] =
                         (isNaN(tallyEntries) ? 0 : tallyEntries).toFixed(2) +
                         "%";
+                    element["vouchersPercent"] =
+                        (isNaN(tallyVouchers) ? 0 : tallyVouchers).toFixed(2) +
+                        "%";    
 
                     //error
                     let tallyErrorGroups =
@@ -120,6 +125,10 @@ export class InprogressComponent implements OnInit, OnDestroy {
                     let tallyErrorEntries =
                         (element.tallyErrorEntries * 100) /
                         element.totalTallyEntries;
+                    let tallyErrorVouchers =
+                        (element.tallyErrorVouchers * 100) /
+                        element.totalTallyVouchers;
+
                     element["groupsErrorPercent"] =
                         (isNaN(tallyErrorGroups)
                             ? 0
@@ -135,6 +144,11 @@ export class InprogressComponent implements OnInit, OnDestroy {
                             ? 0
                             : tallyErrorEntries
                         ).toFixed(2) + "%";
+                    element["vouchersErrorPercent"] =
+                        (isNaN(tallyErrorVouchers)
+                            ? 0
+                            : tallyErrorVouchers
+                        ).toFixed(2) + "%";    
                 });
             }
             this.isLoading = false;
@@ -146,17 +160,17 @@ export class InprogressComponent implements OnInit, OnDestroy {
         this.downloadTallyErrorLogRequest.date = row['dateDDMMYY'] ? row['dateDDMMYY'] : '';
         this.downloadTallyErrorLogRequest.hour = row['hour'] ? row['hour'] : null;
         this.downloadTallyErrorLogRequest.type = row['type'];
-        this.tallysyncService.getErrorLog(row.company.uniqueName, this.downloadTallyErrorLogRequest)
+        this.tallysyncService.getErrorLog(row.company?.uniqueName, this.downloadTallyErrorLogRequest)
             .pipe(takeUntil(this.destroyed$))
             .subscribe(res => {
-                if (res.status === "success") {
+                if (res?.status === "success") {
                     let blobData = this.generalService.base64ToBlob(res.body, "application/xlsx", 512);
                     return saveAs(
                         blobData,
                         `${row.company.name}-error-log.xlsx`
                     );
                 } else {
-                    this.toaster.errorToast(res.message);
+                    this.toaster.errorToast(res?.message);
                 }
             });
     }
@@ -208,7 +222,7 @@ export class InprogressComponent implements OnInit, OnDestroy {
      */
     public getHours(dateArray: any) {
         let hour;
-        if (dateArray.length > 2) {
+        if (dateArray?.length > 2) {
             hour = dateArray[3] + 1;
         }
         return hour;

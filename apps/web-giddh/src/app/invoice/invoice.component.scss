@@ -1,12 +1,11 @@
-@import "../../assets/css/color.scss";
 .tabs-dropdown {
     width: 100%;
     button {
         width: 100%;
         text-align: left;
-        background-color: $white;
+        background-color: var(--color-white);
         border: none;
-        border-bottom: 1px solid $gainsboro;
+        border-bottom: 1px solid var(--color-iron);
         margin: 0;
         position: fixed;
         top: 92px;
@@ -20,5 +19,11 @@
     }
     ul.show {
         display: inline-block !important;
+    }
+}
+.navbar {
+    .header-hamburger-menu {
+        position: relative;
+        z-index: 999;
     }
 }

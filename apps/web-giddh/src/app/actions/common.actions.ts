@@ -29,6 +29,7 @@ export class CommonActions {
     public static GET_COMMON_LOCALE_DATA = 'GetCommonLocaleData';
     public static SET_ACTIVE_LOCALE = 'SetActiveLocale';
     public static SET_ACTIVE_FINANCIAL_YEAR = 'SetActiveFinancialYear';
+    public static SET_ACTIVE_THEME = 'SetActiveTheme';
 
     public getCountry$: Observable<Action> = createEffect(() => this.action$
         .pipe(
@@ -217,6 +218,20 @@ export class CommonActions {
     public setActiveFinancialYear(data: any): CustomActions {
         return  {
             type: CommonActions.SET_ACTIVE_FINANCIAL_YEAR,
+            payload: data
+        }
+    }
+
+    /**
+     * This will set active theme
+     *
+     * @param {*} data
+     * @returns {CustomActions}
+     * @memberof CommonActions
+     */
+     public setActiveTheme(data: any): CustomActions {
+        return {
+            type: CommonActions.SET_ACTIVE_THEME,
             payload: data
         }
     }

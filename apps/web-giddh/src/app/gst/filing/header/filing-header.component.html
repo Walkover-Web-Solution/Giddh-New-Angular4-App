@@ -12,16 +12,63 @@
             <img src="{{ imgPath }}cart.svg" class="icon gstr-icon text-middle" />
 
             <div class="text-middle nav-top">
-                <div class="text-middle head">
+                <div class="text-middle head head-font-weight">
                     {{ localeData?.gstr1_label }}
-
-                    <ng-container *ngIf="isMonthSelected">
-                        ({{ moment(currentPeriod.from, giddhDateFormat).format("MMMM YYYY") }})
-                    </ng-container>
-                    <ng-container *ngIf="!isMonthSelected">
-                        ({{ moment(currentPeriod.from, giddhDateFormat).format("DD MMM YYYY") }} -
-                        {{ moment(currentPeriod.to, giddhDateFormat).format("DD MMM YYYY") }})
-                    </ng-container>
+                    <div
+                        *ngIf="showDate"
+                        class="btn-group dropdown d-inline-block"
+                        dropdown
+                        [autoClose]="false"
+                        #monthWise="bs-dropdown"
+                        (clickOutside)="monthWise?.hide()"
+                        [attachOutsideOnClick]="true"
+                    >
+                        <button
+                            id="button-nested"
+                            dropdownToggle
+                            type="button"
+                            class="
+                                dropdown
+                                clearfix
+                                list-title
+                                filter-by
+                                return-sel
+                                font-large
+                                dropdown-toggle
+                                pull-left
+                            "
+                            aria-controls="dropdown-nested"
+                        >
+                            <ng-container>
+                                {{ visibleSelectMonth }}
+                            </ng-container>
+                            <span class="caret"></span>
+                        </button>
+                        <ul *dropdownMenu class="dropdown-menu month-picker" role="menu" id="monthPicker">
+                            <li role="menuitem">
+                                <a class="dropdown-item" href="javascript:void(0)">
+                                    <datepicker
+                                        [datepickerMode]="'month'"
+                                        name="fromDate"
+                                        (click)="$event.stopPropagation()"
+                                        [showWeeks]="false"
+                                        [minMode]="'month'"
+                                        (selectionDone)="periodChanged($event); monthWise?.hide()"
+                                        [(ngModel)]="selectedMonth"
+                                    ></datepicker>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="datepicker-header" *ngIf="!showDate">
+                        <ng-container *ngIf="isMonthSelected">
+                            ({{ dayjs(currentPeriod.from, giddhDateFormat).format("MMMM YYYY") }})
+                        </ng-container>
+                        <ng-container *ngIf="!isMonthSelected">
+                            ({{ dayjs(currentPeriod.from, giddhDateFormat).format("DD MMM YYYY") }} -
+                            {{ dayjs(currentPeriod.to, giddhDateFormat).format("DD MMM YYYY") }})</ng-container
+                        >
+                    </div>
                 </div>
                 <div class="font-xs text-muted text-middle normal">{{ localeData?.outward_supplies_details }}</div>
             </div>
@@ -30,35 +77,16 @@
         <div class="col-lg-6 col-sm-4 col-12">
             <ul class="list-inline list-middle download-drop-down">
                 <li>
-                    <div class="btn-group" dropdown #dropdown="bs-dropdown">
-                        <button dropdownToggle type="button" class="btn dropdown-toggle btn-sky-blue mr-0">
-                            <i class="icon-download"></i> {{ commonLocaleData?.app_download }}
-                        </button>
-                        <ul
-                            id="dropdown-menu_gstr1"
-                            *dropdownMenu
-                            class="dropdown-menu dropdown-menu-right mt-3"
-                            role="menu"
-                            aria-labelledby="button-triggers-manual"
-                        >
-                            <li role="menuitem">
-                                <a
-                                    class="dropdown-item"
-                                    href="javascript:void(0)"
-                                    (click)="onDownloadSheetGSTR('main')"
-                                    >{{ localeData?.filing?.download_sheet }}</a
-                                >
-                            </li>
-                            <li role="menuitem">
-                                <a
-                                    class="dropdown-item"
-                                    href="javascript:void(0)"
-                                    (click)="onDownloadSheetGSTR('error')"
-                                    >{{ localeData?.filing?.download_error_sheet }}</a
-                                >
-                            </li>
-                        </ul>
-                    </div>
+                    <button
+                        type="button"
+                        class="btn btn-sky-blue mr-0 error-button"
+                        (click)="onDownloadSheetGSTR('error')"
+                    >
+                        {{ localeData?.filing?.errors }}
+                    </button>
+                    <button type="button" class="btn btn-sky-blue mr-0" (click)="pushToPortalModal?.show()">
+                        {{ localeData?.filing?.push_to_portal }}
+                    </button>
                 </li>
 
                 <li>
@@ -87,16 +115,54 @@
         <img src="{{ imgPath }}bag.svg" class="icon gstr-icon text-middle" />
 
         <div class="text-middle nav-top">
-            <div class="text-middle">
+            <div class="text-middle head-font-weight">
                 {{ localeData?.gstr2_label }}
-
-                <ng-container *ngIf="isMonthSelected">
-                    ({{ moment(currentPeriod.from, giddhDateFormat).format("MMMM YYYY") }})
-                </ng-container>
-                <ng-container *ngIf="!isMonthSelected">
-                    ({{ moment(currentPeriod.from, giddhDateFormat).format("DD MMM YYYY") }} -
-                    {{ moment(currentPeriod.to, giddhDateFormat).format("DD MMM YYYY") }})
-                </ng-container>
+                <div
+                    *ngIf="showDate"
+                    class="btn-group dropdown d-inline-block"
+                    dropdown
+                    [autoClose]="false"
+                    #monthWise="bs-dropdown"
+                    (clickOutside)="monthWise?.hide()"
+                    [attachOutsideOnClick]="true"
+                >
+                    <button
+                        id="button-nested"
+                        dropdownToggle
+                        type="button"
+                        class="dropdown clearfix list-title filter-by return-sel font-large dropdown-toggle pull-left"
+                        aria-controls="dropdown-nested"
+                    >
+                        <ng-container>
+                            {{ visibleSelectMonth }}
+                        </ng-container>
+                        <span class="caret"></span>
+                    </button>
+                    <ul *dropdownMenu class="dropdown-menu month-picker" role="menu" id="monthPicker">
+                        <li role="menuitem">
+                            <a class="dropdown-item" href="javascript:void(0)">
+                                <datepicker
+                                    [datepickerMode]="'month'"
+                                    name="fromDate"
+                                    (click)="$event.stopPropagation()"
+                                    [showWeeks]="false"
+                                    [minMode]="'month'"
+                                    (selectionDone)="periodChanged($event); monthWise?.hide()"
+                                    [(ngModel)]="selectedMonth"
+                                ></datepicker>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="datepicker-header" *ngIf="!showDate">
+                    <ng-container *ngIf="isMonthSelected">
+                        ({{ dayjs(currentPeriod.from, giddhDateFormat).format("MMMM YYYY") }})
+                    </ng-container>
+                    <ng-container *ngIf="!isMonthSelected">
+                        ({{ dayjs(currentPeriod.from, giddhDateFormat).format("DD MMM YYYY") }} -
+                        {{ dayjs(currentPeriod.to, giddhDateFormat).format("DD MMM YYYY") }})</ng-container
+                    >
+                </div>
             </div>
             <div class="font-xs text-muted text-middle normal">{{ localeData?.inward_supplies_details }}</div>
         </div>
@@ -177,6 +243,25 @@
                 (successCallBack)="cancelConfirmationModel.hide(); toggleSettingAsidePane(null)"
                 (cancelCallBack)="cancelConfirmationModel.hide()"
             ></confirm-modal>
+        </div>
+    </div>
+</div>
+<!--push to portal modal -->
+<div
+    bsModal
+    #pushToPortalModal="bs-modal"
+    class="modal z-index-for-aside fade"
+    role="dialog"
+    [config]="{ ignoreBackdropClick: true }"
+>
+    <div class="modal-dialog modal-md second">
+        <div class="modal-content">
+            <push-to-portal
+                [localeData]="localeData"
+                (cancelCallBack)="pushToPortalModal?.hide()"
+                (downloadExcel)="onDownloadSheetGSTR('main')"
+                (downloadJson)="onDownloadJsonGSTR('main')"
+            ></push-to-portal>
         </div>
     </div>
 </div>

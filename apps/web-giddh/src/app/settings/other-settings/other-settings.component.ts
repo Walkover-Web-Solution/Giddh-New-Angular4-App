@@ -67,6 +67,10 @@ export class OtherSettingsComponent implements OnInit, OnChanges, OnDestroy {
     public commonLocaleData: any = {};
     /** True if need to show message */
     public showLanguageChangeMessage: boolean = false;
+    /** List of available themes */
+    public availableThemes: IOption[] = [];
+    /** This holds the active theme */
+    public activeTheme: string = "";
 
     constructor(private commonActions: CommonActions, private generalService: GeneralService, private store: Store<AppState>, private toasterService: ToasterService) { }
 
@@ -91,9 +95,14 @@ export class OtherSettingsComponent implements OnInit, OnChanges, OnDestroy {
         }
 
         this.translationLocales = this.generalService.getSupportedLocales();
+        this.availableThemes = this.generalService.getAvailableThemes();
 
         this.store.pipe(select(state => state.session.currentLocale), takeUntil(this.destroyed$)).subscribe(response => {
             this.activeLocale = response?.value;
+        });
+
+        this.store.pipe(select(state => state.session.activeTheme), takeUntil(this.destroyed$)).subscribe(response => {
+            this.activeTheme = response?.value;
         });
 
         this.store.pipe(select(state => state.session.commonLocaleData), takeUntil(this.destroyed$)).subscribe((response) => {
@@ -162,8 +171,13 @@ export class OtherSettingsComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof OtherSettingsComponent
      */
     public selectLocale(event?: any): void {
-        this.store.dispatch(this.commonActions.setActiveLocale({ label: event?.label, value: event?.value }));
-        this.showLanguageChangeMessage = true;
+        if (event?.value) {
+            this.store.dispatch(this.commonActions.setActiveLocale({ label: event?.label, value: event?.value }));
+            this.showLanguageChangeMessage = true;
+        } else {
+            event = this.translationLocales[0];
+            this.store.dispatch(this.commonActions.setActiveLocale({ label: event?.label, value: event?.value }));
+        }
     }
 
     /**
@@ -177,5 +191,15 @@ export class OtherSettingsComponent implements OnInit, OnChanges, OnDestroy {
         let text = this.localeData?.all_information_save;
         text = text?.replace("[COMPANY_NAME]", companyName);
         return text;
+    }
+
+    /**
+     * This will set active theme
+     *
+     * @param {*} [event]
+     * @memberof OtherSettingsComponent
+     */
+    public setActiveTheme(event?: any): void {
+        this.store.dispatch(this.commonActions.setActiveTheme({ label: event?.label, value: event?.value }));
     }
 }

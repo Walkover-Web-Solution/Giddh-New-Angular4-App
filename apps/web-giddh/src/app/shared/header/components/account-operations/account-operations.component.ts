@@ -18,17 +18,22 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ApplyTaxRequest } from '../../../../models/api-models/ApplyTax';
 import { AccountMergeRequest, AccountMoveRequest, AccountRequestV2, AccountResponseV2, AccountsTaxHierarchyResponse, AccountUnMergeRequest, ShareAccountRequest } from '../../../../models/api-models/Account';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { ColumnGroupsAccountVM, GroupAccountSidebarVM } from '../new-group-account-sidebar/VM';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 import { IAccountsInfo } from '../../../../models/interfaces/accountInfo.interface';
 import { ToasterService } from '../../../../services/toaster.service';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
 import { createSelector } from 'reselect';
-import { DaybookQueryRequest } from '../../../../models/api-models/DaybookRequest';
+import { DaybookQueryRequest, ExportBodyRequest } from '../../../../models/api-models/DaybookRequest';
 import { InvoiceActions } from '../../../../actions/invoice/invoice.actions';
 import { IDiscountList } from '../../../../models/api-models/SettingsDiscount';
 import { ShSelectComponent } from '../../../../theme/ng-virtual-select/sh-select.component';
 import { differenceBy, each, flatten, flattenDeep, map, omit, union } from 'apps/web-giddh/src/app/lodash-optimized';
+import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
+import { LedgerService } from 'apps/web-giddh/src/app/services/ledger.service';
+import { Router } from '@angular/router';
+import { SettingsDiscountService } from 'apps/web-giddh/src/app/services/settings.discount.service';
+import { PermissionActions } from 'apps/web-giddh/src/app/actions/permission/permission.action';
+import { GeneralActions } from 'apps/web-giddh/src/app/actions/general/general.actions';
 
 @Component({
     selector: 'account-operations',
@@ -41,6 +46,8 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     @Input() public localeData: any = {};
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
+    /** True if master is open */
+    @Input() public isMasterOpen: boolean = false;
     /** This will hold content for group shared with */
     public groupSharedWith: string = "";
     /** This will hold content for account shared with */
@@ -50,11 +57,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     public showEditAccount$: Observable<boolean>;
     public showEditGroup$: Observable<boolean>;
     @Output() public ShowForm: EventEmitter<boolean> = new EventEmitter(false);
-    /** Emits if we have to switch to custom fields tab */
-    @Output() public goToCustomFields: EventEmitter<boolean> = new EventEmitter();
-    /** True if custom fields api needs to be called again */
-    @Input() public reloadCustomFields: boolean = false;
-    @Input() public columnsRef: GroupAccountSidebarVM;
+    @Input() public topSharedGroups: any[];
     @Input() public height: number;
     public activeAccount$: Observable<AccountResponseV2>;
     public isTaxableAccount$: Observable<boolean>;
@@ -126,9 +129,13 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     public selectedItems = [];
     public dropdownSettings = {};
     public settings = {};
+    // This will use for group export body request
+    public groupExportLedgerBodyRequest: ExportBodyRequest = new ExportBodyRequest();
+    /** List of discounts */
+    public discounts: any[] = [];
 
     constructor(private _fb: FormBuilder, private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction,
-        private companyActions: CompanyActions, private _ledgerActions: LedgerActions, private accountsAction: AccountsAction, private _toaster: ToasterService, _permissionDataService: PermissionDataService, private invoiceActions: InvoiceActions) {
+        private companyActions: CompanyActions, private _ledgerActions: LedgerActions, private accountsAction: AccountsAction, private toaster: ToasterService, _permissionDataService: PermissionDataService, private invoiceActions: InvoiceActions, public generalService: GeneralService, public ledgerService: LedgerService, public router: Router, private settingsDiscountService: SettingsDiscountService, private permissionActions: PermissionActions, private generalAction: GeneralActions) {
         this.isUserSuperAdmin = _permissionDataService.isUserSuperAdmin;
     }
 
@@ -231,7 +238,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
             if (a && this.breadcrumbUniquePath[1]) {
                 this.isDiscountableAccount$ = observableOf(this.breadcrumbUniquePath[1] === 'sundrydebtors');
-                this.discountAccountForm?.patchValue({ discountUniqueName: a.discounts[0] ? a.discounts[0].uniqueName : undefined });
+                this.discountAccountForm?.patchValue({ discountUniqueName: a.discounts[0] ? a.discounts[0]?.uniqueName : undefined });
             }
         });
         this.groupDetailForm = this._fb.group({
@@ -324,15 +331,18 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
         this.activeGroupSharedWith$.subscribe(response => {
             if (response) {
-                this.groupSharedWith = this.localeData?.shared_with.replace("[ACCOUNT_GROUPS_COUNT]", String(response.length));
+                this.groupSharedWith = this.localeData?.shared_with?.replace("[ACCOUNT_GROUPS_COUNT]", String(response.length));
             }
         });
 
         this.activeAccountSharedWith$.subscribe(response => {
             if (response) {
-                this.accountSharedWith = this.localeData?.shared_with.replace("[ACCOUNT_GROUPS_COUNT]", String(response.length));
+                this.accountSharedWith = this.localeData?.shared_with?.replace("[ACCOUNT_GROUPS_COUNT]", String(response.length));
             }
         });
+
+        this.getDiscountList();
+        this.store.dispatch(this.permissionActions.GetAllPermissions());
     }
 
     public ngAfterViewInit() {
@@ -357,12 +367,12 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         let accObject = new ShareAccountRequest();
         accObject.role = 'view_only';
         accObject.user = this.shareAccountForm.controls['userEmail'].value;
-        this.store.dispatch(this._ledgerActions.shareAccount(accObject, activeAcc.uniqueName));
+        this.store.dispatch(this._ledgerActions.shareAccount(accObject, activeAcc?.uniqueName));
         this.shareAccountForm.reset();
     }
 
     public moveToAccountSelected(event: any) {
-        this.moveAccountForm?.patchValue({ moveto: event.item.uniqueName });
+        this.moveAccountForm?.patchValue({ moveto: event?.item?.uniqueName });
     }
 
     public moveAccount() {
@@ -374,7 +384,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
         let activeGrpName = this.breadcrumbUniquePath[this.breadcrumbUniquePath?.length - 2];
 
-        this.store.dispatch(this.accountsAction.moveAccount(grpObject, activeAcc.uniqueName, activeGrpName));
+        this.store.dispatch(this.accountsAction.moveAccount(grpObject, activeAcc?.uniqueName, activeGrpName));
         this.moveAccountForm.reset();
     }
 
@@ -382,13 +392,13 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         let activeGrp;
         this.activeGroup$.pipe(take(1)).subscribe(p => activeGrp = p);
 
-        this.store.dispatch(this.groupWithAccountsAction.unShareGroup(val, activeGrp.uniqueName));
+        this.store.dispatch(this.groupWithAccountsAction.unShareGroup(val, activeGrp?.uniqueName));
     }
 
     public unShareAccount(val) {
         let activeAcc;
         this.activeAccount$.pipe(take(1)).subscribe(p => activeAcc = p);
-        this.store.dispatch(this.accountsAction.unShareAccount(val, activeAcc.uniqueName));
+        this.store.dispatch(this.accountsAction.unShareAccount(val, activeAcc?.uniqueName));
     }
 
     public flattenGroup(rawList: any[], parents: any[] = []) {
@@ -415,9 +425,8 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     }
 
     public isRootLevelGroupFunc(uniqueName: string) {
-        const rootLevelGroups: ColumnGroupsAccountVM[] | any[] = this.columnsRef?.columns[0]?.groups || [];
-        for (let grp of rootLevelGroups) {
-            if (grp.uniqueName === uniqueName) {
+        for (let grp of this.topSharedGroups) {
+            if (grp?.uniqueName === uniqueName) {
                 this.isRootLevelGroup = true;
                 return;
             } else {
@@ -501,7 +510,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
                 if (t) {
                     t.inheritedTaxes.forEach(tt => {
                         tt.applicableTaxes.forEach(ttt => {
-                            data.taxes.push(ttt.uniqueName);
+                            data.taxes.push(ttt?.uniqueName);
                         });
                     });
                 }
@@ -542,7 +551,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
     public showDeleteMergedAccountModal(merge: string) {
         merge = merge?.trim();
-        this.deleteMergedAccountModalBody = this.localeData?.delete_merged_account_content.replace("[MERGE]", merge);
+        this.deleteMergedAccountModalBody = this.localeData?.delete_merged_account_content?.replace("[MERGE]", merge);
         this.selectedAccountForDelete = merge;
         this.deleteMergedAccountModal?.show();
     }
@@ -556,7 +565,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         this.activeAccount$.pipe(take(1)).subscribe(p => activeAccount = p);
         let obj = new AccountUnMergeRequest();
         obj.uniqueNames = [this.selectedAccountForDelete];
-        this.store.dispatch(this.accountsAction.unmergeAccount(activeAccount.uniqueName, obj));
+        this.store.dispatch(this.accountsAction.unmergeAccount(activeAccount?.uniqueName, obj));
         this.showDeleteMove = false;
         this.hideDeleteMergedAccountModal();
     }
@@ -591,15 +600,15 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
             this.store.dispatch(this.accountsAction.mergeAccount(activeAccount?.uniqueName, finalData));
             this.showDeleteMove = false;
         } else {
-            this._toaster.errorToast(this.localeData?.merge_account_error);
+            this.toaster.errorToast(this.localeData?.merge_account_error);
             return;
         }
     }
 
     public showMoveMergedAccountModal() {
         this.moveMergedAccountModalBody = this.localeData?.move_merged_account_content
-            .replace("[SOURCE_ACCOUNT]", this.setAccountForMove)
-            .replace("[DESTINATION_ACCOUNT]", this.selectedAccountForMove);
+            ?.replace("[SOURCE_ACCOUNT]", this.setAccountForMove)
+            ?.replace("[DESTINATION_ACCOUNT]", this.selectedAccountForMove);
         this.moveMergedAccountModal.show();
     }
 
@@ -613,7 +622,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         let obj = new AccountUnMergeRequest();
         obj.uniqueNames = [this.setAccountForMove];
         obj.moveTo = this.selectedAccountForMove;
-        this.store.dispatch(this.accountsAction.unmergeAccount(activeAccount.uniqueName, obj));
+        this.store.dispatch(this.accountsAction.unmergeAccount(activeAccount?.uniqueName, obj));
         this.showDeleteMove = false;
         this.hideDeleteMergedAccountModal();
         this.hideMoveMergedAccountModal();
@@ -623,7 +632,8 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         this.store.dispatch(this.accountsAction.createAccountV2(accRequestObject.activeGroupUniqueName, accRequestObject.accountRequest));
     }
 
-    public updateAccount(accRequestObject: { value: { groupUniqueName: string, accountUniqueName: string }, accountRequest: AccountRequestV2 }) {
+    public updateAccount(accRequestObject: { value: { groupUniqueName: string, accountUniqueName: string, isMasterOpen?: boolean }, accountRequest: AccountRequestV2 }) {
+        accRequestObject.value.isMasterOpen = this.isMasterOpen;
         this.store.dispatch(this.accountsAction.updateAccountV2(accRequestObject.value, accRequestObject.accountRequest));
     }
 
@@ -637,7 +647,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
     public deleteAccount() {
         let activeAccUniqueName = null;
-        this.activeAccount$.pipe(take(1)).subscribe(s => activeAccUniqueName = s.uniqueName);
+        this.activeAccount$.pipe(take(1)).subscribe(s => activeAccUniqueName = s?.uniqueName);
         let activeGrpName = this.breadcrumbUniquePath[this.breadcrumbUniquePath?.length - 2];
         this.store.dispatch(this.accountsAction.deleteAccount(activeAccUniqueName, activeGrpName));
 
@@ -652,16 +662,37 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         this.groupExportLedgerModal.show();
     }
 
+    /**
+     * This will use for hide group export model
+     *
+     * @param {*} response
+     * @memberof AccountOperationsComponent
+     */
     public hideGroupExportModal(response: any) {
         this.groupExportLedgerModal.hide();
         this.activeGroupUniqueName$.pipe(take(1)).subscribe((grpUniqueName: string) => {
             if (response !== 'close') {
-                this.groupExportLedgerQueryRequest.type = response.type;
-                this.groupExportLedgerQueryRequest.format = response.fileType;
-                this.groupExportLedgerQueryRequest.sort = response.order;
-                this.groupExportLedgerQueryRequest.from = response.from;
-                this.groupExportLedgerQueryRequest.to = response.to;
-                this.store.dispatch(this._ledgerActions.GroupExportLedger(grpUniqueName, this.groupExportLedgerQueryRequest));
+                this.groupExportLedgerBodyRequest.from = response.body.from;
+                this.groupExportLedgerBodyRequest.to = response.body.to;
+                this.groupExportLedgerBodyRequest.showVoucherNumber = response.body.showVoucherNumber;
+                this.groupExportLedgerBodyRequest.showVoucherTotal = response.body.showVoucherTotal;
+                this.groupExportLedgerBodyRequest.showEntryVoucher = response.body.showEntryVoucher;
+                this.groupExportLedgerBodyRequest.showDescription = response.body.showDescription;
+                this.groupExportLedgerBodyRequest.exportType = response.body.exportType;
+                this.groupExportLedgerBodyRequest.showEntryVoucherNo = response.body.showEntryVoucherNo;
+                this.groupExportLedgerBodyRequest.groupUniqueName = grpUniqueName;
+                this.groupExportLedgerBodyRequest.sort = response.body.sort ? 'ASC' : 'DESC';
+                this.groupExportLedgerBodyRequest.fileType = response.fileType;
+                this.ledgerService.exportData(this.groupExportLedgerBodyRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                    if (response?.status === 'success') {
+                        this.router.navigate(["/pages/downloads"]);
+                        this.toaster.showSnackBar("success", response?.body);
+                        this.store.dispatch(this.generalAction.addAndManageClosed());
+                        this.store.dispatch(this.groupWithAccountsAction.HideAddAndManageFromOutside());
+                    } else {
+                        this.toaster.showSnackBar("error", response?.message, response?.code);
+                    }
+                });
             }
         });
     }
@@ -674,8 +705,29 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
             }
         }
     }
+
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+    }
+
+    /**
+     * To get discount list
+     *
+     * @memberof AccountOperationsComponent
+     */
+    public getDiscountList(): void {
+        this.discounts = [];
+        this.settingsDiscountService.GetDiscounts().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === "success" && response?.body?.length > 0) {
+                Object.keys(response?.body).forEach(key => {
+                    this.discounts.push({
+                        label: response?.body[key]?.name,
+                        value: response?.body[key]?.uniqueName,
+                        isSelected: false
+                    });
+                });
+            }
+        });
     }
 }

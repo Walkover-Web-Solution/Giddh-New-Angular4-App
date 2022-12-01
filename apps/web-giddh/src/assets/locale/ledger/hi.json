@@ -16,6 +16,7 @@
     "to": "सेवा",
     "to_balance_bf": "शेष राशि बी / एफ के लिए",
     "download_file": "फ़ाइल डाउनलोड करें",
+    "download_files": "फ़ाइलें डाउनलोड करें",
     "to_select_accounts": "खातों का चयन करें",
     "by_select_accounts": "खातों का चयन करें",
     "new_account": "नया खाता",
@@ -199,5 +200,7 @@
     "remove_file": "सफलतापूर्वक मिटाया गया",
     "delete_bank_transactions": "बैंक लेनदेन हटाएं",
     "delete_bank_transactions_title": "क्या आप चयनित बैंक लेनदेन को हटाना चाहते हैं?",
-    "reload_bank_transactions": "बैंक लेनदेन पुनः लोड करें"
+    "reload_bank_transactions": "बैंक लेनदेन पुनः लोड करें",
+    "confirm_proceed": "क्या आप सुनिश्चित रूप से आगे बढ़ना चाहते हैं?",
+    "remove_advance_receipt": "यदि आप इस रसीद का प्रकार बदलते हैं, तो इनवॉइस में सभी संबंधित अग्रिम रसीद समायोजन हटा दिए जाएंगे।"
 }

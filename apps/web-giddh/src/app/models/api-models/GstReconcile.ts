@@ -154,6 +154,8 @@ export class GstTransactionSummary {
     public voucherType: string;
     public supplyType: string;
     public account: INameUniqueName;
+    public voucherUniqueName?: string;
+    public uniqueName?: string;
 }
 
 export class GstOverViewResult {
@@ -383,4 +385,7 @@ export class Gstr3bOverviewResult2 {
 export class Gstr3bOverviewResult {
     status: string;
     body: Gstr3bOverviewResult2;
+}
+export class GstrJsonDownloadRequest extends GstOverViewRequest {
+    public type: string;
 }

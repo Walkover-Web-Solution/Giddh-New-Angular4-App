@@ -20,13 +20,16 @@ export class SettingsProfileActions {
         .pipe(
             ofType(SETTINGS_PROFILE_ACTIONS.GET_PROFILE_INFO),
             switchMap((action: CustomActions) => this.settingsProfileService.GetProfileInfo()),
-            map(res => this.validateResponse<any, string>(res, {
-                type: SETTINGS_PROFILE_ACTIONS.GET_PROFILE_RESPONSE,
-                payload: res
-            }, true, {
-                type: SETTINGS_PROFILE_ACTIONS.GET_PROFILE_RESPONSE,
-                payload: res
-            }))));
+            map((res: any) => {
+                return this.validateResponse<any, string>(res, {
+                    type: SETTINGS_PROFILE_ACTIONS.GET_PROFILE_RESPONSE,
+                    payload: res
+                }, true, {
+                    type: SETTINGS_PROFILE_ACTIONS.GET_PROFILE_RESPONSE,
+                    payload: res
+                });
+            })
+        ));
 
     public UpdateProfile$: Observable<Action> = createEffect(() => this.action$
         .pipe(
@@ -177,7 +180,7 @@ export class SettingsProfileActions {
     public SetMultipleCurrency(response: CompanyResponse, isMultipleCurrency: boolean): CustomActions {
         return {
             type: CompanyActions.SET_MULTIPLE_CURRENCY_FIELD,
-            payload: { companyUniqueName: response.uniqueName, isMultipleCurrency }
+            payload: { companyUniqueName: response?.uniqueName, isMultipleCurrency }
         };
     }
 

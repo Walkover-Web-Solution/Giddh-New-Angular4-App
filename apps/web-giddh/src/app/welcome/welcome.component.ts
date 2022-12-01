@@ -19,7 +19,7 @@ import { parsePhoneNumberFromString, CountryCode } from 'libphonenumber-js/min';
 import { CommonActions } from '../actions/common.actions';
 import { CompanyActions } from '../actions/company.actions';
 import { GeneralActions } from '../actions/general/general.actions';
-import { OnBoardingType, DEFAULT_SIGNUP_TRIAL_PLAN } from '../app.constant';
+import { OnBoardingType } from '../app.constant';
 import { CountryRequest, OnboardingFormRequest } from '../models/api-models/Common';
 import { Addresses, CompanyCreateRequest, StatesRequest, CreateCompanyUsersPlan, SubscriptionRequest } from '../models/api-models/Company';
 import { IForceClear } from '../models/api-models/Sales';
@@ -120,7 +120,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
         planDetails: {
             countries: [],
             name: "",
-            uniqueName: DEFAULT_SIGNUP_TRIAL_PLAN,
+            uniqueName: "",
             createdAt: "",
             amount: 0,
             ratePerExtraTransaction: 0,
@@ -178,6 +178,8 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     @ViewChild('address', { static: true }) addressField: ElementRef<any>;
     /** Form instance */
     @ViewChild('welcomeForm', { static: true }) welcomeForm: NgForm;
+    /** Applicable taxes dropdown instance */
+    @ViewChild('dropdown') public dropdown: any;
 
     /**
      * Returns true, if onboarding of Warehouse is going on
@@ -277,22 +279,14 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
         this.subscriptionRequestObj.userUniqueName = (this.loggedInUser) ? this.loggedInUser.uniqueName : "";
 
         this.store.pipe(select(state => state.session.isCompanyCreated), takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                setTimeout(() => {
-                    if (this.router.url.includes("welcome")) {
-                        this.router.navigate(['/pages/onboarding']);
-                    }
-                }, 2000);
+            if (response && this.router.url.includes("welcome")) {
+                this.router.navigate(['/pages/onboarding']);
             }
         });
     }
 
     public ngAfterViewInit() {
         this.generalService.IAmLoaded.next(true);
-    }
-
-    public skip() {
-        this.router.navigate(['/onboarding']);
     }
 
     public reFillForm() {
@@ -367,7 +361,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
             this.createNewCompanyPreparedObj.address = this.companyProfileObj.address ? this.companyProfileObj.address : '';
             this.createNewCompanyPreparedObj.taxes = (this.selectedTaxes?.length > 0) ? this.selectedTaxes : [];
             if (this.createNewCompanyPreparedObj.phoneCode && this.createNewCompanyPreparedObj.contactNo) {
-                if (!this.createNewCompanyPreparedObj.contactNo.toString().includes('-')) {
+                if (!this.createNewCompanyPreparedObj.contactNo?.toString()?.includes('-')) {
                     this.createNewCompanyPreparedObj.contactNo = this.createNewCompanyPreparedObj.phoneCode + '-' + this.createNewCompanyPreparedObj.contactNo;
                 }
             }
@@ -649,12 +643,12 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
                     Object.keys(res.applicableTaxes).forEach(key => {
                         if (res.applicableTaxes[key]) {
                             this.taxesList.push({
-                                label: res.applicableTaxes[key].name,
-                                value: res.applicableTaxes[key].uniqueName,
+                                label: res.applicableTaxes[key]?.name,
+                                value: res.applicableTaxes[key]?.uniqueName,
                                 isSelected: false
                             });
-                            this.currentTaxList[res.applicableTaxes[key].uniqueName] = [];
-                            this.currentTaxList[res.applicableTaxes[key].uniqueName] = res.applicableTaxes[key];
+                            this.currentTaxList[res.applicableTaxes[key]?.uniqueName] = [];
+                            this.currentTaxList[res.applicableTaxes[key]?.uniqueName] = res.applicableTaxes[key];
                         }
                     });
                 }
@@ -852,7 +846,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
                     if (!itemName) {
                         this.welcomeForm.form.controls['name'].setErrors({ 'required': true });
                     }
-                    if (itemName.length > 100) {
+                    if (itemName?.length > 100) {
                         this.welcomeForm.form.controls['name'].setErrors({ 'maxlength': true });
                     }
                 }
@@ -915,7 +909,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof WelcomeComponent
      */
     private getFormattedContactNumber(contactNumber: string): string {
-        if (contactNumber.toString().includes('-')) {
+        if (contactNumber?.toString()?.includes('-')) {
             return contactNumber.split('-')[1];
         }
         return contactNumber;
@@ -931,8 +925,8 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof WelcomeComponent
      */
     private getCallingCode(contactNumber: string): string {
-        if (contactNumber.toString().includes('-')) {
-            return contactNumber.split('-')[0];
+        if (contactNumber?.toString()?.includes('-')) {
+            return contactNumber?.split('-')[0];
         }
         return '';
     }
@@ -1004,7 +998,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof WelcomeComponent
      */
     private isAddressValid(address: string = ''): boolean {
-        return address.trim()?.length > 0;
+        return address?.trim()?.length > 0;
     }
 
     /**
@@ -1021,7 +1015,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
             this.createNewCompanyPreObj.subscriptionRequest = this.subscriptionRequestObj;
             this.store.dispatch(this.companyActions.CreateNewCompany(this.createNewCompanyPreObj));
         } else {
-            this.subscriptionRequestObj.planUniqueName = this.subscriptionPlan.planDetails.uniqueName;
+            this.subscriptionRequestObj.planUniqueName = this.subscriptionPlan.planDetails?.uniqueName;
             this.createNewCompanyPreObj.subscriptionRequest = this.subscriptionRequestObj;
             this.store.dispatch(this.companyActions.CreateNewCompany(this.createNewCompanyPreObj));
         }
@@ -1033,7 +1027,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof WelcomeComponent
      */
     public createBranch(): void {
-        this.companyService.createNewBranch(this.activeCompany.uniqueName, this.createNewCompanyPreObj).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+        this.companyService.createNewBranch(this.activeCompany?.uniqueName, this.createNewCompanyPreObj).pipe(takeUntil(this.destroyed$)).subscribe(data => {
             this.store.dispatch(this.companyActions.userStoreCreateBranch(null));
             this.store.dispatch(this.companyActions.removeCompanyCreateSession());
             this.router.navigate(['pages/settings/branch']);
@@ -1050,11 +1044,11 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
         let text = this.localeData?.onboarding_name;
         let onboardingType = "";
 
-        if(this.itemOnBoardingDetails?.onBoardingType === OnBoardingType.Branch) {
+        if (this.itemOnBoardingDetails?.onBoardingType === OnBoardingType.Branch) {
             onboardingType = this.commonLocaleData?.app_branch;
-        } else if(this.itemOnBoardingDetails?.onBoardingType === OnBoardingType.Company) {
+        } else if (this.itemOnBoardingDetails?.onBoardingType === OnBoardingType.Company) {
             onboardingType = this.commonLocaleData?.app_company;
-        } else if(this.itemOnBoardingDetails?.onBoardingType === OnBoardingType.Warehouse) {
+        } else if (this.itemOnBoardingDetails?.onBoardingType === OnBoardingType.Warehouse) {
             onboardingType = this.commonLocaleData?.app_warehouse;
         }
 
@@ -1084,11 +1078,11 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
         let text = this.localeData?.onboarding_address;
         let onboardingType = "";
 
-        if(this.itemOnBoardingDetails?.onBoardingType === OnBoardingType.Branch) {
+        if (this.itemOnBoardingDetails?.onBoardingType === OnBoardingType.Branch) {
             onboardingType = this.commonLocaleData?.app_branch;
-        } else if(this.itemOnBoardingDetails?.onBoardingType === OnBoardingType.Company) {
+        } else if (this.itemOnBoardingDetails?.onBoardingType === OnBoardingType.Company) {
             onboardingType = this.commonLocaleData?.app_company;
-        } else if(this.itemOnBoardingDetails?.onBoardingType === OnBoardingType.Warehouse) {
+        } else if (this.itemOnBoardingDetails?.onBoardingType === OnBoardingType.Warehouse) {
             onboardingType = this.commonLocaleData?.app_warehouse;
         }
 
@@ -1106,11 +1100,11 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
         let text = this.localeData?.create_onboarding;
         let onboardingType = "";
 
-        if(this.itemOnBoardingDetails?.onBoardingType === OnBoardingType.Branch) {
+        if (this.itemOnBoardingDetails?.onBoardingType === OnBoardingType.Branch) {
             onboardingType = this.commonLocaleData?.app_branch;
-        } else if(this.itemOnBoardingDetails?.onBoardingType === OnBoardingType.Company) {
+        } else if (this.itemOnBoardingDetails?.onBoardingType === OnBoardingType.Company) {
             onboardingType = this.commonLocaleData?.app_company;
-        } else if(this.itemOnBoardingDetails?.onBoardingType === OnBoardingType.Warehouse) {
+        } else if (this.itemOnBoardingDetails?.onBoardingType === OnBoardingType.Warehouse) {
             onboardingType = this.commonLocaleData?.app_warehouse;
         }
 
@@ -1128,15 +1122,66 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
         let text = this.localeData?.update_onboarding;
         let onboardingType = "";
 
-        if(this.itemOnBoardingDetails?.onBoardingType === OnBoardingType.Branch) {
+        if (this.itemOnBoardingDetails?.onBoardingType === OnBoardingType.Branch) {
             onboardingType = this.commonLocaleData?.app_branch;
-        } else if(this.itemOnBoardingDetails?.onBoardingType === OnBoardingType.Company) {
+        } else if (this.itemOnBoardingDetails?.onBoardingType === OnBoardingType.Company) {
             onboardingType = this.commonLocaleData?.app_company;
-        } else if(this.itemOnBoardingDetails?.onBoardingType === OnBoardingType.Warehouse) {
+        } else if (this.itemOnBoardingDetails?.onBoardingType === OnBoardingType.Warehouse) {
             onboardingType = this.commonLocaleData?.app_warehouse;
         }
 
         text = text?.replace("[ONBOARDING_TYPE]", onboardingType);
         return text;
+    }
+
+    /**
+     * Adds styling on focused Dropdown List
+     *
+     * @param {HTMLElement} taxLabel
+     * @memberof WelcomeComponent
+     */
+    public selectApplicableTaxesFocus(taxLabel: HTMLElement): void {
+        this.generalService.dropdownFocusIn(taxLabel);
+    }
+
+    /**
+     * Removes styling from focused Dropdown List
+     *
+     * @param {HTMLElement} taxLabel
+     * @memberof WelcomeComponent
+     */
+    public selectApplicableTaxesBlur(taxLabel: HTMLElement): void {
+        this.generalService.dropdownFocusOut(taxLabel);
+    }
+
+    /**
+     * Selects applicable dropdown list taxes using click and enter
+     *
+     * @param {boolean} isChecked
+     * @param {*} tax
+     * @param {*} event
+     * @memberof WelcomeComponent
+     */
+    public selectingApplicableTaxes(isChecked: boolean, tax: any, event: any): void {
+        tax.isSelected = isChecked;
+        if (isChecked) {
+            this.selectedTaxes.push(tax.value);
+        } else {
+            let index = this.selectedTaxes.indexOf(tax.value);
+            this.selectedTaxes.splice(index, 1);
+        }
+        event.preventDefault();
+    }
+
+    /**
+     * Closes applicable taxes dropdown on focus out
+     *
+     * @param {number} last
+     * @memberof WelcomeComponent
+     */
+    public closeApplicableTaxesDropdown(last: boolean): void {
+        if (last) {
+            this.dropdown.hide();
+        }
     }
 }

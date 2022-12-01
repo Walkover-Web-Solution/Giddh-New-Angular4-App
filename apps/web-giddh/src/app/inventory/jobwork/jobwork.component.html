@@ -245,7 +245,7 @@
                                 </tr>
                             </thead>
 
-                            <tbody *ngIf="inventoryReport && inventoryReport.transactions.length > 0">
+                            <tbody *ngIf="inventoryReport && inventoryReport.transactions?.length > 0">
                                 <tr *ngFor="let txn of inventoryReport.transactions; let idx = index">
                                     <td class="bd-rr">{{ txn.date }}</td>
                                     <td class="bd-rr" *ngIf="type === 'person'">{{ txn.stock.name }}</td>
@@ -280,7 +280,7 @@
                             </tbody>
                             <tbody
                                 *ngIf="
-                                    (inventoryReport && inventoryReport.transactions.length <= 0) || !inventoryReport
+                                    (inventoryReport && inventoryReport.transactions?.length <= 0) || !inventoryReport
                                 "
                             >
                                 <tr>
@@ -331,9 +331,9 @@
         <div class="modal-content">
             <div class="modal-header theme-bg clearfix">
                 <h3 class="modal-title bg" id="modal-title">Advance Search</h3>
-                <span aria-hidden="true" class="close" data-dismiss="modal" (click)="advanceSearchAction('cancel')"
-                    >×</span
-                >
+                <button aria-hidden="true" class="close" data-dismiss="modal" (click)="advanceSearchAction('cancel')">
+                    ×
+                </button>
             </div>
             <div class="modal-body clearfix">
                 <form action="" [formGroup]="advanceSearchForm">

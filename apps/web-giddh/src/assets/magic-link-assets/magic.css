@@ -989,6 +989,7 @@ h4 {
 
 .magic-table .download-invoice-ledger {
     padding: 0 0 0 5px;
+    cursor: pointer;
 }
 
 /*footer style end*/

@@ -1,19 +1,18 @@
-@import "../../../../assets/css/color.scss";
 #close {
     position: absolute;
     left: auto;
     right: 10px;
     z-index: 9999999;
     background-color: transparent;
-    color: $white;
+    color: var(--color-primary-right-side-popup-header-text);
     font-size: 17px;
     top: 18px;
     margin-right: 0;
     border: 0;
 }
 .aside-pane-form {
-    background-color: $white;
-    box-shadow: 0 3px 6px $black-russian;
+    background-color: var(--color-white);
+    box-shadow: 0 3px 6px var(--color-primary-common-box-shadow);
     padding: 15px;
     height: calc(100vh - 90px);
     overflow: auto;

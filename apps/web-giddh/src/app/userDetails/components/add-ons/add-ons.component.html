@@ -1,0 +1,43 @@
+<mat-grid-list cols="3" rowHeight="330px" class="add-extra-wrapper" gutterSize="25px">
+    <mat-grid-tile class="add-extra">
+        <img src="{{ imgPath }}transaction.png" alt="Transaction" />
+        <p class="img-label">Transactions Balance</p>
+        <p class="balance-value">2000</p>
+        <div class="add-extra-value">Add Extra Transactions</div>
+        <mat-slider aria-label="unit(s)"></mat-slider>
+        <div class="slider-value">100,000</div>
+        <p class="total-value">₹10,000</p>
+        <p class="per-value">₹0.10 per Transaction</p>
+        <button mat-flat-button class="checkout-button small-text" color="primary">Add to Checkout</button>
+    </mat-grid-tile>
+
+    <mat-grid-tile class="add-extra">
+        <img class="branch" src="{{ imgPath }}branch.png" alt="Branch" />
+        <p class="img-label">Branches Balance</p>
+        <p class="balance-value tomato">-2</p>
+        <div class="add-extra-value">Add Extra Branches</div>
+        <mat-slider aria-label="unit(s)"></mat-slider>
+        <div class="slider-value">80</div>
+        <p class="total-value">₹1,60,000</p>
+        <p class="per-value">₹2,000 per Branch</p>
+        <button mat-flat-button class="checkout-button" color="primary" disabled>Remove</button>
+    </mat-grid-tile>
+    <mat-grid-tile class="add-extra">
+        <img class="warehouse" src="{{ imgPath }}warehouse.png" alt="Warehouse" />
+        <p class="img-label">Warehouses Balance</p>
+        <p class="balance-value tomato">-2</p>
+        <div class="add-extra-value">Add Extra Warehouses</div>
+        <mat-slider aria-label="unit(s)"></mat-slider>
+        <div class="slider-value">120</div>
+        <p class="total-value">₹1,20,000</p>
+        <p class="per-value">₹2,000 per Warehouse</p>
+        <button mat-flat-button class="checkout-button" color="primary" disabled>Remove</button>
+    </mat-grid-tile>
+</mat-grid-list>
+
+<mat-toolbar class="net-payable-amount">
+    <p class="label">Net payable amount</p>
+    <p class="amount">₹2,84,302 <span>Including Tax (18% GST)</span></p>
+    <button mat-flat-button color="primary">Proceed to Checkout</button>
+    <span class="cancel">Cancel</span>
+</mat-toolbar>

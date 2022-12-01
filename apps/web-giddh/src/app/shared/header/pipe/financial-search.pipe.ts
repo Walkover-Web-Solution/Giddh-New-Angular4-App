@@ -18,15 +18,15 @@ export class FinancialSearchPipe implements PipeTransform {
 
     public transform(input: any, search: string): any {
         if (!isUndefined(search)) {
-            this.srch = search.toLowerCase();
+            this.srch = search?.toLowerCase();
         }
-        if (!isUndefined(this.srch) && this.srch.length > 2) {
+        if (!isUndefined(this.srch) && this.srch?.length > 2) {
             this.zone.run(() => {
                 this.performSearch(input);
             });
         } else {
             if (!isUndefined(this.srch)) {
-                if (this.srch.length < 3) {
+                if (this.srch?.length < 3) {
                     this.zone.run(() => {
                         this.resetSearch(input);
                     });
@@ -59,7 +59,7 @@ export class FinancialSearchPipe implements PipeTransform {
                 grp.isIncludedInSearch = false;
                 grp = this.search(grp, s, allIncluded);
                 if (grp.accounts.findIndex(p => p.isIncludedInSearch) > -1 || grp.childGroups.findIndex(p => p.isIncludedInSearch) > -1 ||
-                    this.checkIndex(grp.groupName.toLowerCase(), s.toLowerCase()) || this.checkIndex(grp.uniqueName.toLowerCase(), s.toLowerCase())
+                    this.checkIndex(grp.groupName?.toLowerCase(), s.toLowerCase()) || this.checkIndex(grp.uniqueName?.toLowerCase(), s.toLowerCase())
                 ) {
                     grp.isVisible = true;
                     grp.isIncludedInSearch = true;
@@ -83,7 +83,7 @@ export class FinancialSearchPipe implements PipeTransform {
                 }
             } else {
                 for (const acc of input.accounts) {
-                    if ((this.checkIndex(acc.name.toLowerCase(), s.toLowerCase()) || this.checkIndex(acc.uniqueName.toLowerCase(), s.toLowerCase())) || input.isIncludedInSearch) {
+                    if ((this.checkIndex(acc.name?.toLowerCase(), s.toLowerCase()) || this.checkIndex(acc.uniqueName?.toLowerCase(), s.toLowerCase())) || input.isIncludedInSearch) {
                         acc.isIncludedInSearch = true;
                         acc.isVisible = true;
                         hasAnyVisible = true;
@@ -133,7 +133,7 @@ export class FinancialSearchPipe implements PipeTransform {
     }
 
     public checkIndex(src: string, str: string) {
-        if (src.replace(' ', '').toLowerCase().indexOf(str.replace(' ', '').toLowerCase()) !== -1) {
+        if (src?.replace(' ', '')?.toLowerCase()?.indexOf(str?.replace(' ', '')?.toLowerCase()) !== -1) {
             return true;
         } else {
             return false;

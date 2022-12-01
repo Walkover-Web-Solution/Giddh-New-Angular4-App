@@ -4,6 +4,11 @@ import { ToasterService } from '../../services/toaster.service';
 import { PurchaseRecordService } from '../../services/purchase-record.service';
 import { takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
+import { GeneralService } from '../../services/general.service';
+import { AppState } from '../../store';
+import { Store } from '@ngrx/store';
+import { InvoiceActions } from '../../actions/invoice/invoice.actions';
+import { VoucherTypeEnum } from '../../models/api-models/Sales';
 
 @Component({
     selector: 'purchase-send-email-modal',
@@ -26,7 +31,14 @@ export class PurchaseSendEmailModalComponent implements OnInit, OnDestroy {
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
 
-    constructor(public purchaseOrderService: PurchaseOrderService, private toaster: ToasterService, public purchaseRecordService: PurchaseRecordService) {
+    constructor(
+        public purchaseOrderService: PurchaseOrderService, 
+        private toaster: ToasterService, 
+        public purchaseRecordService: PurchaseRecordService, 
+        private generalService: GeneralService,
+        private store: Store<AppState>,
+        private invoiceActions: InvoiceActions
+    ) {
 
     }
 
@@ -62,16 +74,26 @@ export class PurchaseSendEmailModalComponent implements OnInit, OnDestroy {
                 }
             });
         } else if (this.module === "purchase-bill") {
-            this.purchaseRecordService.sendEmail(getRequest, postRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
-                if (res) {
-                    if (res.status === 'success') {
-                        this.toaster.successToast(res.body);
-                        this.hideModal();
-                    } else {
-                        this.toaster.errorToast(res.message);
+            if (this.generalService.voucherApiVersion === 2) {
+                this.store.dispatch(this.invoiceActions.SendInvoiceOnMail(this.sendEmailRequest?.accountUniqueName, {
+                    email: { to: [this.emailId] },
+                    uniqueName: this.sendEmailRequest?.uniqueName,
+                    voucherType: VoucherTypeEnum.purchase,
+                    copyTypes: []
+                }));
+                this.hideModal();
+            } else {
+                this.purchaseRecordService.sendEmail(getRequest, postRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+                    if (res) {
+                        if (res.status === 'success') {
+                            this.toaster.successToast(res.body);
+                            this.hideModal();
+                        } else {
+                            this.toaster.errorToast(res.message);
+                        }
                     }
-                }
-            });
+                });
+            }
         }
     }
 

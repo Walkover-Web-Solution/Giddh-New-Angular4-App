@@ -66,7 +66,6 @@ export class ConnectBankModalComponent implements OnChanges, OnInit, OnDestroy {
     public cancelRequest: boolean = false;
     public needReloadingLinkedAccounts$: Observable<boolean> = of(false);
     public isElectron = isElectron;
-    public isCordova = isCordova;
     public base64StringForModel: SafeResourceUrl = '';
     /** Force clear for drop down */
     public forceClearReactive$: Observable<IForceClear> = of({ status: false });
@@ -101,8 +100,8 @@ export class ConnectBankModalComponent implements OnChanges, OnInit, OnDestroy {
                     }));
                 }),
                 map((res) => {
-                    if (res.status === 'success') {
-                        let data = res.body.provider;
+                    if (res?.status === 'success') {
+                        let data = res?.body?.provider;
                         this.dataSourceBackup = res;
                         return data;
                     }
@@ -149,8 +148,8 @@ export class ConnectBankModalComponent implements OnChanges, OnInit, OnDestroy {
             this.searchResults = [];
             return [];
         }), takeUntil(this.destroyed$)).subscribe(response => {
-            if (response.status === 'success') {
-                this.searchResults = response.body.provider.map(result => ({
+            if (response?.status === 'success') {
+                this.searchResults = response?.body?.provider?.map(result => ({
                     ...result,
                     label: result.name,
                     value: result.id
@@ -293,9 +292,9 @@ export class ConnectBankModalComponent implements OnChanges, OnInit, OnDestroy {
         };
         objToSend.loginForm.push(this.loginForm.value);
         this._settingsLinkedAccountsService.AddProvider(_.cloneDeep(objToSend), this.selectedProvider.id).pipe(takeUntil(this.destroyed$)).subscribe(res => {
-            if (res.status === 'success') {
-                this._toaster.successToast(res.body);
-                let providerId = res.body?.replace(/[^0-9]+/ig, '');
+            if (res?.status === 'success') {
+                this._toaster.successToast(res?.body);
+                let providerId = res?.body?.replace(/[^0-9]+/ig, '');
                 if (providerId) {
                     this.cancelRequest = false;
                     this.getBankSyncStatus(providerId);
@@ -303,7 +302,7 @@ export class ConnectBankModalComponent implements OnChanges, OnInit, OnDestroy {
                     this.onCancel();
                 }
             } else {
-                this._toaster.errorToast(res.message);
+                this._toaster.errorToast(res?.message);
                 this.onCancel();
             }
         });
@@ -315,9 +314,9 @@ export class ConnectBankModalComponent implements OnChanges, OnInit, OnDestroy {
     public getBankSyncStatus(providerId) {
         let validateProvider;
         this._settingsLinkedAccountsService.GetBankSyncStatus(providerId).pipe(takeUntil(this.destroyed$)).subscribe(res => {
-            if (res.status === 'success' && res.body.providerAccount && res.body.providerAccount.length) {
+            if (res?.status === 'success' && res?.body?.providerAccount && res?.body?.providerAccount?.length) {
                 this.bankSyncInProgress = true;
-                validateProvider = this.validateProviderResponse(res.body.providerAccount[0]);
+                validateProvider = this.validateProviderResponse(res?.body?.providerAccount[0]);
                 if (!validateProvider && !this.cancelRequest) {
                     setTimeout(() => {
                         this.getBankSyncStatus(providerId);
@@ -332,7 +331,7 @@ export class ConnectBankModalComponent implements OnChanges, OnInit, OnDestroy {
      * validateProviderResponse
      */
     public validateProviderResponse(provider) {
-        let status = provider.status.toLowerCase();
+        let status = provider?.status?.toLowerCase();
         if (status === 'success' || status === 'failed') {
             if (status === 'failed') {
                 this._toaster.errorToast(this.localeData?.authentication_failed);

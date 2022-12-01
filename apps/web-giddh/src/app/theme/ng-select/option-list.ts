@@ -23,7 +23,7 @@ export class OptionList {
             return o;
         });
 
-        this._hasShown = this._options.length > 0;
+        this._hasShown = this._options?.length > 0;
         this.highlight();
     }
 
@@ -73,23 +73,23 @@ export class OptionList {
     /** Selection. **/
 
     get selection(): Option[] {
-        return this.options.filter(option => option.selected);
+        return this.options?.filter(option => option.selected);
     }
 
     /** Filter. **/
 
     get filtered(): Option[] {
-        return this.options.filter(option => option.shown);
+        return this.options?.filter(option => option.shown);
     }
 
     get filteredEnabled(): Option[] {
-        return this.options.filter(option => option.shown && !option.disabled);
+        return this.options?.filter(option => option.shown && !option.disabled);
     }
 
     // v0 and v1 are assumed not to be undefined or null.
     public static equalValues(v0: string[], v1: string[]): boolean {
 
-        if (v0.length !== v1.length) {
+        if (v0?.length !== v1?.length) {
             return false;
         }
 
@@ -102,7 +102,7 @@ export class OptionList {
     }
 
     public getOptionsByValue(value: string): Option[] {
-        return this.options.filter((option) => {
+        return this.options?.filter((option) => {
             return option.value === value;
         });
     }
@@ -132,7 +132,7 @@ export class OptionList {
 
         if (term.trim() === '') {
             this.resetFilter();
-            anyShown = this.options.length > 0;
+            anyShown = this.options?.length > 0;
         } else {
             this.options.forEach((option) => {
                 let l: string = Diacritics.strip(option.label).toUpperCase();
@@ -171,7 +171,7 @@ export class OptionList {
         let shownEnabledOptions = this.filteredEnabled;
         let index = this.getHighlightedIndexFromList(shownEnabledOptions);
 
-        if (index > -1 && index < shownEnabledOptions.length - 1) {
+        if (index > -1 && index < shownEnabledOptions?.length - 1) {
             this.highlightOption(shownEnabledOptions[index + 1]);
         }
     }
@@ -215,7 +215,7 @@ export class OptionList {
     }
 
     private getHighlightedIndexFromList(options: Option[]) {
-        for (let i = 0; i < options.length; i++) {
+        for (let i = 0; i < options?.length; i++) {
             if (options[i].highlighted) {
                 return i;
             }

@@ -12,7 +12,7 @@ import { IOption } from '../../theme/ng-select/option.interface';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { CompanyActions } from "../../actions/company.actions";
 import { ShSelectComponent } from '../../theme/ng-virtual-select/sh-select.component';
-import { Configuration, SELECT_ALL_RECORDS } from "../../app.constant";
+import { BootstrapToggleSwitch, Configuration, SELECT_ALL_RECORDS } from "../../app.constant";
 import { AuthenticationService } from "../../services/authentication.service";
 import { IForceClear } from '../../models/api-models/Sales';
 import { EcommerceService } from '../../services/ecommerce.service';
@@ -26,10 +26,11 @@ import { SalesService } from '../../services/sales.service';
 import { cloneDeep, find, isEmpty } from '../../lodash-optimized';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-modal.component';
+import { TabDirective } from 'ngx-bootstrap/tabs';
 
 export interface ActiveTriggers {
     title: string;
-    channel: string;
+    type: string;
     createdAt: string;
     uniqueName: string;
     argsMapping: string;
@@ -68,7 +69,7 @@ const TABLE3_ELEMENT_DATA: table2[] = [
 })
 export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     /** Active trigger columns */
-    public activeTriggersColumns: string[] = ['title', 'channel', 'argsMapping', 'createdAt', 'action'];
+    public activeTriggersColumns: string[] = ['title', 'type', 'argsMapping', 'createdAt', 'action'];
     /** Data source for active triggers list */
     public activeTriggersDataSource: ActiveTriggers[] = [];
     public isActiveTriggersLoading: boolean = false;
@@ -193,6 +194,12 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public editCommunicationPlatform: string = "";
     /** True if need to show trigger form */
     public showTriggerForm: boolean = false;
+    /** This will hold toggle buttons value and size */
+    public bootstrapToggleSwitch = BootstrapToggleSwitch;
+    /** List of field suggestions */
+    public fieldsSuggestion: any[] = [];
+    /** List of action */
+    public action: any[] = [];
 
     constructor(
         private router: Router,
@@ -224,27 +231,28 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     }
 
     public ngOnInit() {
-        this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.imgPath = (isElectron) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         this.getCommunicationPlatforms();
+        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         //logic to switch to payment tab if coming from vedor tabs add payment
         if (this.selectedTabParent !== undefined && this.selectedTabParent !== null) {
             this.selectTab(this.selectedTabParent);
         }
 
         // getting all page data of integration page
-        this.store.pipe(select(p => p.settings.integration), takeUntil(this.destroyed$)).subscribe((o) => {
+        this.store.pipe(select(p => p?.settings?.integration), takeUntil(this.destroyed$)).subscribe((o) => {
             // set sms form data
-            if (o.smsForm) {
+            if (o?.smsForm) {
                 this.smsFormObj = o.smsForm;
             }
             // set email form data
-            if (o.emailForm) {
+            if (o?.emailForm) {
                 this.emailFormObj = o.emailForm;
             }
             // set razor pay form data
-            if (o.razorPayForm) {
-                if (typeof o.razorPayForm !== "string") {
-                    this.razorPayObj = cloneDeep(o.razorPayForm);
+            if (o?.razorPayForm) {
+                if (typeof o?.razorPayForm !== "string") {
+                    this.razorPayObj = cloneDeep(o?.razorPayForm);
                     if (this.razorPayObj && this.razorPayObj.account === null) {
                         this.razorPayObj.account = { name: null, uniqueName: null };
                         this.forceClearLinkAccount$ = observableOf({ status: true });
@@ -338,10 +346,12 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     }
 
     public setDummyData() {
-        this.razorPayObj.userName = '';
-        this.razorPayObj.password = 'YOU_ARE_NOT_ALLOWED';
-        this.razorPayObj.account = { name: null, uniqueName: null };
-        this.razorPayObj.autoCapturePayment = true;
+        if (this.razorPayObj) {
+            this.razorPayObj.userName = '';
+            this.razorPayObj.password = 'YOU_ARE_NOT_ALLOWED';
+            this.razorPayObj.account = { name: null, uniqueName: null };
+            this.razorPayObj.autoCapturePayment = true;
+        }
         this.forceClearLinkAccount$ = observableOf({ status: true });
     }
 
@@ -355,10 +365,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         if (f.valid) {
             this.store.dispatch(this.settingsIntegrationActions.SaveEmailKey(f.value));
         }
-    }
-
-    public toggleCheckBox() {
-        return this.razorPayObj.autoCapturePayment = !this.razorPayObj.autoCapturePayment;
     }
 
     public selectAccount(event: IOption) {
@@ -385,8 +391,10 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public unlinkAccountFromRazorPay() {
         if (this.razorPayObj.account && this.razorPayObj.account.name && this.razorPayObj.account.uniqueName) {
             let data = cloneDeep(this.razorPayObj);
-            data.account.uniqueName = null;
-            data.account.name = null;
+            if (data) {
+                data.account.uniqueName = null;
+                data.account.name = null;
+            }
             this.store.dispatch(this.settingsIntegrationActions.UpdateRazorPayDetails(data));
         } else {
             this.toasty.warningToast(this.localeData?.collection?.unlink_razorpay_message);
@@ -509,7 +517,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             }
         } else {
             let arr = control.value;
-            if (!control.value[arr?.length - 1].sellerId) {
+            if (!control.value[arr?.length - 1]?.sellerId) {
                 return;
             }
             control.push(this.initAmazonReseller());
@@ -617,12 +625,12 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public prepareDataForUI(data: ShareRequestForm[]): any {
         return data.map((item) => {
             if (item.allowedCidrs && item.allowedCidrs.length > 0) {
-                item.cidrsStr = item.allowedCidrs.toString();
+                item.cidrsStr = item.allowedCidrs?.toString();
             } else {
                 item.cidrsStr = null;
             }
             if (item.allowedIps && item.allowedIps.length > 0) {
-                item.ipsStr = item.allowedIps.toString();
+                item.ipsStr = item.allowedIps?.toString();
             } else {
                 item.ipsStr = null;
             }
@@ -637,16 +645,15 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @memberof SettingIntegrationComponent
      */
     public loadPaymentData(event?: any): void {
-        //if (event && event instanceof TabDirective || !event) {
-        this.loadDefaultBankAccountsSuggestions();
-        this.getAllBankAccounts();
-        this.store.dispatch(this._companyActions.getAllRegistrations());
-        this.store.dispatch(this.settingsIntegrationActions.GetPaymentGateway());
-        this.store.pipe(take(1)).subscribe(s => {
-            this.selectedCompanyUniqueName = s.session.companyUniqueName;
-            this.store.dispatch(this.settingsPermissionActions.GetUsersWithPermissions(this.selectedCompanyUniqueName));
-        });
-        // }
+        if (event && event instanceof TabDirective || !event) {
+            this.loadDefaultBankAccountsSuggestions();
+            this.getAllBankAccounts();
+            this.store.dispatch(this._companyActions.getAllRegistrations());
+            this.store.pipe(take(1)).subscribe(s => {
+                this.selectedCompanyUniqueName = s.session.companyUniqueName;
+                this.store.dispatch(this.settingsPermissionActions.GetUsersWithPermissions(this.selectedCompanyUniqueName));
+            });
+        }
     }
 
     /**
@@ -719,9 +726,9 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             case SettingsIntegrationTab.Collection:
                 this.loadCollectionData();
                 break;
-            case SettingsIntegrationTab.ECommerce:
-                this.loadEcommerceData();
-                break;
+            // case SettingsIntegrationTab.ECommerce:
+            //     this.loadEcommerceData();
+            //     break;
             case SettingsIntegrationTab.Payment:
                 this.loadPaymentData();
                 break;
@@ -833,8 +840,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         this.onAccountSearchQueryChanged('', 1, (response) => {
             this.defaultAccountSuggestions = response.map(result => {
                 return {
-                    value: result.uniqueName,
-                    label: result.name
+                    value: result?.uniqueName,
+                    label: result?.name
                 }
             }) || [];
             this.defaultAccountPaginationData.page = this.accountsSearchResultsPaginationData.page;
@@ -850,11 +857,11 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @memberof SettingIntegrationComponent
      */
     private loadDefaultBankAccountsSuggestions(): void {
-        this.salesService.getAccountsWithCurrency('bankaccounts').pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.salesService.getAccountsWithCurrency('bankaccounts,loanandoverdraft').pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.body?.results) {
                 const bankAccounts = response.body.results.map(account => ({
-                    label: account.name,
-                    value: account.uniqueName
+                    label: account?.name,
+                    value: account?.uniqueName
                 }))
                 this.bankAccounts$ = observableOf(bankAccounts);
             }
@@ -1098,8 +1105,12 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                     });
                 }
 
+
+
                 if (this.communicationPlatforms['MSG91'].isConnected) {
                     this.getTriggers();
+                    this.getFieldsSuggestion(response?.body?.platforms[0]?.name,"VOUCHER");
+
                 } else {
                     this.editCommunicationPlatform = "MSG91";
                 }
@@ -1176,9 +1187,13 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         this.isActiveTriggersLoading = true;
         this.activeTriggersDataSource = [];
         this.settingsIntegrationService.getTriggersList().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            console.log(response);
+            
             if (response?.status === "success") {
-                if (response?.body?.length > 0) {
-                    response?.body?.forEach(trigger => {
+                if (response?.body?.items?.length > 0) {
+                    response?.body?.items?.forEach(trigger => {
+                        console.log(trigger);
+                        
                         const argsMapping = [];
                         if(trigger.argsMapping?.length > 0) {
                             trigger.argsMapping.forEach(arg => {
@@ -1186,7 +1201,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                             });
                         }
 
-                        this.activeTriggersDataSource.push({ title: trigger.title, channel: trigger.communicationChannel, createdAt: trigger.createdAt, uniqueName: trigger.uniqueName, argsMapping: argsMapping?.join(", "), isActive: trigger.isActive });
+                        this.activeTriggersDataSource.push({ title: trigger.title, type: trigger.communicationPlatform, createdAt: trigger.createdAt, uniqueName: trigger.uniqueName, argsMapping: argsMapping?.join(", "), isActive: trigger.isActive });
                     });
                 }
                 this.isActiveTriggersLoading = false;
@@ -1197,6 +1212,17 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         });
     }
 
+    public getFieldsSuggestion(platform:string, entity:any): void {
+        this.settingsIntegrationService.getFieldSuggestions(platform,entity).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if(response){
+            this.fieldsSuggestion = response.body?.suggestions;
+            this.action = response.body?.subCondition[0].action;
+            }
+        });
+    }
+    public onSelectFieldSuggestions():void {
+
+    }
     /**
      * Deletes the trigger
      *

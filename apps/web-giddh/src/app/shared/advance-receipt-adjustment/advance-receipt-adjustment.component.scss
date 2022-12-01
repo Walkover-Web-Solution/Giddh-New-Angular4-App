@@ -1,4 +1,3 @@
-@import "../../../assets/css/color.scss";
 .voucher-form {
     .form-group {
         margin-bottom: 5px;
@@ -6,12 +5,16 @@
 }
 p {
     a {
-        color: $deep-sky-blue;
+        color: var(--color-blue);
     }
 }
 .inclusive-tax {
     float: right;
 }
 .company-currency {
-    color: $nobel;
+    color: var(--color-gray);
+}
+.adjustments-list {
+    height: 300px;
+    overflow-y: auto;
 }

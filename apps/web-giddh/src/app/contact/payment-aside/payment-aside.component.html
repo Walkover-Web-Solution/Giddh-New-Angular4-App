@@ -1,15 +1,17 @@
-<div class="modal-header">
+<div class="modal-header d-flex align-items-center">
     <h4 class="modal-title pull-left">{{ commonLocaleData?.app_payment }}</h4>
     <button
+        mat-icon-button
         type="button"
-        class="close pull-right"
+        class="close"
         [attr.aria-label]="commonLocaleData?.app_close"
         (click)="closePaymentModel(false)"
+        mat-dialog-close
     >
         <span aria-hidden="true">&times;</span>
     </button>
 </div>
-<div class="modal-body">
+<mat-dialog-content class="all-payment-side">
     <div class="clearfix">
         <form #adjustAdvancePaymentForm="ngForm" autocomplete="off">
             <div class="row d-flex align-items-center payment-top-form">
@@ -53,7 +55,8 @@
                                             </div>
                                             <div class="item-unique">
                                                 <p class="font-12 text-gray mb-0">
-                                                    Clo Bal: {{ option?.additional?.effectiveBal | giddhCurrency }} dr.
+                                                    Clo Bal:
+                                                    {{ option?.additional?.effectiveBal | giddhCurrency }} dr.
                                                 </p>
                                             </div>
                                         </a>
@@ -96,15 +99,15 @@
                         </div>
                         <div class="form-group mr-r15">
                             <label>{{ commonLocaleData?.app_total_amount }}<span class="red-text">*</span></label>
-                            <input
+                            <text-field
                                 type="text"
-                                class="form-control"
+                                [cssClass]="'form-control mat-field-border'"
                                 decimalDigitsDirective
-                                disabled
+                                [readonly]="true"
                                 [mask]="inputMaskFormat"
                                 [(ngModel)]="totalSelectedAccountAmount"
                                 name="amount"
-                            />
+                            ></text-field>
                         </div>
                         <div class="form-group mr-r15" *ngIf="isPayClicked">
                             <label class="relative d-flex"
@@ -118,22 +121,23 @@
                                     <a href="javascript:void(0);" class="btn-link">{{ timerCountDown$ | async }}</a>
                                 </p>
                             </label>
-                            <input
+                            <text-field
                                 type="text"
-                                class="form-control"
+                                [cssClass]="'form-control mat-field-border'"
                                 [placeholder]="commonLocaleData?.app_enter_otp"
                                 required
                                 name="receivedOtp"
                                 (keypress)="allowOnlyNumbers($event)"
                                 [(ngModel)]="receivedOtp"
-                            />
+                            ></text-field>
                         </div>
                         <div class="form-group mr-r15">
                             <label class="d-flex"> &nbsp; </label>
                             <button
+                                mat-raised-button
                                 type="button"
                                 *ngIf="!isPayClicked"
-                                class="btn btn-success"
+                                class="btn-success"
                                 [disabled]="!isBankSelectedForBulkPayment || !selectedBankUrn || !isValidData"
                                 [ladda]="isRequestInProcess"
                                 (click)="payClicked()"
@@ -142,8 +146,9 @@
                             </button>
 
                             <button
+                                mat-raised-button
                                 *ngIf="isPayClicked"
-                                class="btn btn-success"
+                                class="btn-success"
                                 [disabled]="
                                     !isBankSelectedForBulkPayment || !selectedBankUrn || !isValidData || !receivedOtp
                                 "
@@ -153,9 +158,10 @@
                                 {{ commonLocaleData?.app_confirm }}
                             </button>
                             <button
+                                mat-raised-button
                                 type="button"
                                 *ngIf="isPayClicked"
-                                class="btn btn-primary"
+                                class="btn-primary"
                                 (click)="clickedCancelOtp()"
                             >
                                 {{ commonLocaleData?.app_cancel }}
@@ -225,29 +231,32 @@
                                         <label
                                             >{{ commonLocaleData?.app_amount }}<span class="text-danger">*</span></label
                                         >
-                                        <input
-                                            class="form-control"
-                                            name="closingBalanceAmount{{ entryIdx }}"
-                                            maxLength="12"
-                                            decimalDigitsDirective
-                                            (blur)="
-                                                getTotalAmount();
-                                                getBankAccountPayorsList();
-                                                preventZero(item.closingBalanceAmount, entryIdx)
-                                            "
-                                            [mask]="inputMaskFormat"
-                                            [(ngModel)]="item.closingBalanceAmount"
-                                            type="text"
-                                            [required]="!isPayClicked"
-                                            [disabled]="isPayClicked"
-                                            [ngClass]="{ 'error-box': !item.closingBalanceAmount }"
-                                        />
+                                        <div class="input-content">
+                                            <text-field
+                                                [cssClass]="'form-control amount-input mat-field-border'"
+                                                name="closingBalanceAmount{{ entryIdx }}"
+                                                maxLength="12"
+                                                decimalDigitsDirective
+                                                (change)="
+                                                    getTotalAmount();
+                                                    getBankAccountPayorsList();
+                                                    preventZero(item.closingBalanceAmount, entryIdx)
+                                                "
+                                                [mask]="inputMaskFormat"
+                                                [(ngModel)]="item.closingBalanceAmount"
+                                                type="text"
+                                                [required]="!isPayClicked"
+                                                [readonly]="isPayClicked"
+                                                [showError]="!item.closingBalanceAmount"
+                                            ></text-field>
+                                        </div>
                                     </div>
                                     <div class="form-group remark-block">
                                         <label
                                             >{{ commonLocaleData?.app_remark }}<span class="text-danger">*</span></label
                                         >
                                         <textarea
+                                            matInput
                                             rows="1"
                                             name="remark{{ entryIdx }}"
                                             id="{{ entryIdx }}"
@@ -256,7 +265,7 @@
                                             autocomplete="off"
                                             required
                                             type="text"
-                                            class="form-control"
+                                            class="form-control mat-field-border"
                                             [disabled]="isPayClicked"
                                             [placeholder]="commonLocaleData?.app_remark"
                                         ></textarea>
@@ -268,27 +277,30 @@
                 </ng-container>
             </div>
         </form>
-    </div>
 
-    <ng-template #successTemplate>
-        <div class="modal-header">
-            <h4 class="modal-title pull-left">{{ localeData?.payment_status }}</h4>
-            <button
-                type="button"
-                class="close pull-right"
-                [attr.aria-label]="commonLocaleData?.app_close"
-                (click)="successModalRef.hide()"
-            >
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-        <div class="modal-body">
-            <div class="payment-img">
-                <img src="{{ imgPath }}payment-succes.svg" />
+        <ng-template #successTemplate>
+            <div class="modal-header">
+                <h4 class="modal-title pull-left">{{ localeData?.payment_status }}</h4>
+                <button
+                    mat-raised-button
+                    type="button"
+                    class="close pull-right"
+                    [attr.aria-label]="commonLocaleData?.app_close"
+                    (click)="successModalRef.hide()"
+                >
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
-            <h4>{{ commonLocaleData?.app_payment_proceed }}</h4>
-            <p>{{ paymentSuccessfulMessage }}</p>
-            <button class="btn btn-success" (click)="successModalRef.hide()">{{ commonLocaleData?.app_done }}</button>
-        </div>
-    </ng-template>
-</div>
+            <div class="modal-body">
+                <div class="payment-img">
+                    <img src="{{ imgPath }}payment-succes.svg" />
+                </div>
+                <h4>{{ commonLocaleData?.app_payment_proceed }}</h4>
+                <p>{{ paymentSuccessfulMessage }}</p>
+                <button mat-raised-button class="btn-success" (click)="successModalRef.hide()">
+                    {{ commonLocaleData?.app_done }}
+                </button>
+            </div>
+        </ng-template>
+    </div>
+</mat-dialog-content>

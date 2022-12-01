@@ -11,7 +11,9 @@ import { ToasterService } from '../../../services/toaster.service';
 import { PermissionActions } from '../../../actions/permission/permission.action';
 import { AccountsAction } from '../../../actions/accounts.actions';
 import { SettingsPermissionService } from '../../../services/settings.permission.service';
-import * as moment from 'moment';
+import * as dayjs from 'dayjs';
+import * as customParseFormat from 'dayjs/plugin/customParseFormat';
+dayjs.extend(customParseFormat);
 import { GeneralService } from '../../../services/general.service';
 import { IForceClear } from '../../../models/api-models/Sales';
 import { cloneDeep, forEach, isEmpty, isNull } from '../../../lodash-optimized';
@@ -91,12 +93,12 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
 
         if (this.userdata) {
             if (this.userdata.from && this.userdata.to) {
-                let from: any = moment(this.userdata.from, GIDDH_DATE_FORMAT);
-                let to: any = moment(this.userdata.to, GIDDH_DATE_FORMAT);
+                let from: any = dayjs(this.userdata.from, GIDDH_DATE_FORMAT);
+                let to: any = dayjs(this.userdata.to, GIDDH_DATE_FORMAT);
                 setTimeout(() => {
                     // Set timeout is used because ngx datepicker doesn't take the
                     // format provided in bsConfig if bsValue is set in ngOnInit
-                    this.dateRangePickerValue = [from._d, to._d];
+                    this.dateRangePickerValue = [from.$d, to.$d];
                 }, 0);
             }
             this.initAcForm(this.userdata);
@@ -156,8 +158,8 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
 
     public onSelectDateRange(ev) {
         if (ev && ev.length) {
-            let from = moment(ev[0]).format(GIDDH_DATE_FORMAT);
-            let to = moment(ev[1]).format(GIDDH_DATE_FORMAT);
+            let from = dayjs(ev[0]).format(GIDDH_DATE_FORMAT);
+            let to = dayjs(ev[1]).format(GIDDH_DATE_FORMAT);
             this.permissionForm?.patchValue({ from, to });
         }
     }
@@ -360,10 +362,10 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
                 obj.data.periodOptions = null;
             }
             this._settingsPermissionService.UpdatePermission(form).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
-                if (res.status === 'success') {
+                if (res?.status === 'success') {
                     this._toasty.successToast(this.localeData?.permission_updated_success);
                 } else {
-                    this._toasty.warningToast(res.message, res.code);
+                    this._toasty.warningToast(res?.message, res?.code);
                 }
                 this.onSubmitForm.emit(obj);
             });

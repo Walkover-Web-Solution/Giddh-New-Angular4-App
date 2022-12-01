@@ -39,7 +39,6 @@
     "voucher_log": "[USER] द्वारा [TOTAL] के लिये [ACTION]",
     "linked_po": "लिंक्ड खरीद ऑर्डर:",
     "invoice_preview_unavailable": "अभी चालान पूर्वावलोकन उपलब्ध नहीं है! कृपया पुन: प्रयास करें...",
-    "preview_formats": "पूर्वावलोकन के लिए समर्थित प्रारूप: छवियाँ (.jpg, .jpeg, .png) और पीडीएफ (.pdf); अन्य प्रारूपों को प्रिंट करने के लिए, उन्हें डाउनलोड करें।",
     "upload_excel_csv": "कोई EXCEL या CSV फ़ाइल अपलोड करें",
     "drop_file": "अपलोड करने के लिए फ़ाइल ड्रॉप करें",
     "browse_file": "फाइल खोजो",
@@ -112,7 +111,8 @@
     "invoice_copy_options": {
         "original": "मूल",
         "customer": "ग्राहक",
-        "transport": "ट्रांसपोर्ट"
+        "transport": "ट्रांसपोर्ट",
+        "attachment": "संलग्नक"
     },
     "invalid_email": "[EMAIL] अमान्य ईमेल है!",
     "select_copy": "कॉपी का चयन करें",
@@ -174,5 +174,7 @@
     "exchange_gain_loss_label": "[BASE_CURRENCY] में: [AMOUNT] <br /> विनिमय [PROFIT_TYPE]: ",
     "works_for_single_entry": "केवल एकल प्रविष्टि के लिए काम करता है।",
     "uploaded_purchase_bill": "अपलोड किया गया बिल",
-    "auto_generated_purchase_bill": "गिद्ध/ऑटो जनरेटेड बिल"
+    "auto_generated_purchase_bill": "गिद्ध ऑटो जनरेटेड बिल",
+    "amount_adjusted": "राशि सफलतापूर्वक समायोजित की गई",
+    "pincode_required": "ईवे बिल बनाने से पहले कृपया वाउचर में पिनकोड अपडेट करें।"
 }

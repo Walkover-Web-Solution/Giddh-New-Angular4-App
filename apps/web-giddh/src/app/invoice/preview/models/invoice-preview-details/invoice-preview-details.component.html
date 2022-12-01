@@ -53,7 +53,7 @@
                     </div>
 
                     <ul class="invoice-sidebar">
-                        <perfect-scrollbar>
+                        <perfect-scrollbar #perfectScrollbar>
                             <li
                                 class="single-invoice-detail cp"
                                 *ngFor="let item of filteredData"
@@ -64,7 +64,11 @@
                                     <div class="col-7 col-sm-7">
                                         <div class="invoice-number-date">
                                             <span class="invoice-number">
-                                                {{ item.voucherNumber ? item.voucherNumber : "-" }}
+                                                {{
+                                                    item.voucherNumber
+                                                        ? item.voucherNumber
+                                                        : commonLocaleData?.app_not_available
+                                                }}
                                             </span>
                                             <span class="invoice-date"> | {{ item?.voucherDate }} </span>
                                         </div>
@@ -100,7 +104,11 @@
                                 <div class="col-md-4 col-12">
                                     <div class="invoice-num-holder">
                                         <h3 class="invoice-num">
-                                            {{ selectedItem?.voucherNumber ? selectedItem?.voucherNumber : "-" }}
+                                            {{
+                                                selectedItem?.voucherNumber
+                                                    ? selectedItem?.voucherNumber
+                                                    : commonLocaleData?.app_not_available
+                                            }}
                                         </h3>
                                         <p class="account-holder-name">{{ selectedItem?.account.name }}</p>
                                     </div>
@@ -351,7 +359,10 @@
                                                 </span>
 
                                                 <span
-                                                    *ngIf="shouldShowPrintDocument"
+                                                    *ngIf="
+                                                        shouldShowPrintDocument &&
+                                                        defaultTemplate?.templateType !== 'thermal_template'
+                                                    "
                                                     [ngClass]="{
                                                         'disabled':
                                                             isVoucherDownloading ||
@@ -367,6 +378,16 @@
                                                         ><i class="fa fa-print"></i
                                                     ></a>
                                                 </span>
+                                                <!-- Hide Thermal Feature -->
+                                                <!-- <span *ngIf="defaultTemplate?.templateType === 'thermal_template'">
+                                                    <a
+                                                        href="javascript:;"
+                                                        [tooltip]="commonLocaleData?.app_print"
+                                                        placement="top"
+                                                        (click)="printThermal()"
+                                                        ><i class="fa fa-print"></i
+                                                    ></a>
+                                                </span> -->
 
                                                 <span
                                                     *ngIf="selectedItem?.voucherType === 'purchase' && pdfPreviewLoaded"
@@ -402,7 +423,8 @@
                                                 <span
                                                     *ngIf="
                                                         selectedItem?.voucherType === 'purchase' &&
-                                                        attachedDocumentType?.type
+                                                        attachedDocumentType?.type &&
+                                                        voucherApiVersion !== 2
                                                     "
                                                     [ngClass]="{
                                                         'disabled':
@@ -417,7 +439,7 @@
                                                         [tooltip]="localeData?.download_attachment"
                                                         placement="top"
                                                         (click)="downloadFile()"
-                                                        ><i class="icon-download"></i
+                                                        ><i class="icon-download-circle"></i
                                                     ></a>
                                                 </span>
 
@@ -431,9 +453,18 @@
                                                     ></a>
                                                 </span>
                                             </div>
-                                            <div class="history-btn" *ngIf="selectedItem?.voucherType === 'purchase'">
+                                            <div
+                                                class="history-btn"
+                                                *ngIf="
+                                                    (voucherApiVersion !== 2 &&
+                                                        selectedItem?.voucherType === 'purchase') ||
+                                                    (voucherApiVersion === 2 &&
+                                                        selectedItem?.voucherType !== 'proformas' &&
+                                                        selectedItem?.voucherType !== 'estimates')
+                                                "
+                                            >
                                                 <button
-                                                    class="btn btn-primary"
+                                                    class="btn btn-primary history-button"
                                                     (click)="toggleActivityHistoryAsidePane()"
                                                 >
                                                     <i class="icon-history-icon font-12 pr-1"></i>
@@ -476,7 +507,7 @@
                                     <div class="single-payment-detail clearfix">
                                         <div class="payment-icon"><img src="assets/images/send-icon.svg" /></div>
                                         <p class="payment-content">{{ localeData?.email_invoice }}</p>
-                                        <a href="javascript:;" (click)="showEmailSendModal.show()">
+                                        <a href="javascript:;" (click)="showEmailSendModal?.show()">
                                             {{
                                                 selectedItem?.voucherType === "credit note" ||
                                                 selectedItem?.voucherType === "debit note"
@@ -498,7 +529,7 @@
                                 </div>
                                 <div
                                     class="less-more-details"
-                                    *ngIf="filteredVoucherVersions.length && !moreLogsDisplayed"
+                                    *ngIf="filteredVoucherVersions?.length && !moreLogsDisplayed"
                                 >
                                     <a href="javascript:;" (click)="filterVoucherVersions(true)">{{
                                         localeData?.more_details
@@ -568,7 +599,8 @@
                                 class="preview-not-supported-attachment"
                                 *ngIf="attachedDocumentType?.type === 'unsupported'"
                             >
-                                <span class="text-warning">{{ localeData?.preview_formats }} </span>
+                                <p>{{ attachedDocumentType?.name }}</p>
+                                <p>{{ commonLocaleData?.app_preview_formats }}</p>
                             </div>
 
                             <div
@@ -578,7 +610,6 @@
                                     attachedDocumentType?.type === 'image'
                                 "
                                 class="img-expand-collapse"
-                                [ngClass]="{ 'image-collapsed': !isAttachmentExpanded }"
                             >
                                 <img class="image-preview img-expand w-100" [src]="imagePreviewSource" />
                             </div>
@@ -619,6 +650,23 @@
                                     </div>
                                 </div>
                             </div>
+                            <ng-container
+                                *ngIf="
+                                    voucherApiVersion === 2 &&
+                                    shouldShowUploadAttachment &&
+                                    isCompany &&
+                                    !isPdfAvailable &&
+                                    !attachedPdfFileUrl &&
+                                    !imagePreviewSource
+                                "
+                            >
+                                <no-data
+                                    class="mr-t15 d-block"
+                                    [primaryMessage]="commonLocaleData?.app_attachment_not_allowed"
+                                    [primaryMessageClass]="'bold'"
+                                    [secondaryMessage]="' '"
+                                ></no-data>
+                            </ng-container>
                             <div
                                 *ngIf="
                                     selectedItem?.voucherType === 'purchase' &&
@@ -627,56 +675,32 @@
                                 "
                                 #attachedDocumentPreview
                                 class="pdf-expand-collapse pdf-preview mt-0"
-                                [ngClass]="{ 'image-collapsed': !isAttachmentExpanded }"
                             >
                                 <iframe #pdfContainer width="100%" height="100%" [src]="attachedPdfFileUrl"></iframe>
                             </div>
-                            <div #attachedDocumentPreview class="pdf-preview">
+                            <div
+                                #attachedDocumentPreview
+                                class="pdf-preview"
+                                *ngIf="
+                                    sanitizedPdfFileUrl &&
+                                    !(isVoucherDownloading || isVoucherDownloadError || isFileUploading)
+                                "
+                            >
                                 <h5
-                                    *ngIf="selectedItem?.voucherType === 'purchase'"
+                                    *ngIf="selectedItem?.voucherType === 'purchase' && isPdfAvailable"
                                     class="text-left pd-l15 font-16 pd-t1 pd-b1"
                                 >
                                     <strong>{{ localeData?.auto_generated_purchase_bill }}</strong>
                                 </h5>
-                                <iframe
-                                    #pdfContainer
-                                    *ngIf="
-                                        sanitizedPdfFileUrl &&
-                                        !(isVoucherDownloading || isVoucherDownloadError || isFileUploading)
-                                    "
-                                    width="100%"
-                                    height="100%"
-                                    [src]="sanitizedPdfFileUrl"
-                                ></iframe>
+                                <iframe #pdfContainer width="100%" height="100%" [src]="sanitizedPdfFileUrl"></iframe>
                                 <giddh-page-loader
-                                    *ngIf="!sanitizedPdfFileUrl && selectedItem?.voucherType === 'purchase'"
+                                    *ngIf="
+                                        isPdfAvailable &&
+                                        !sanitizedPdfFileUrl &&
+                                        selectedItem?.voucherType === 'purchase'
+                                    "
                                     [cssClass]="'mb-0 mt-0'"
                                 ></giddh-page-loader>
-                            </div>
-
-                            <div
-                                class="expand-file"
-                                *ngIf="
-                                    selectedItem?.voucherType === 'purchase' &&
-                                    (imagePreviewSource || attachedPdfFileUrl)
-                                "
-                            >
-                                <a
-                                    href="javascript:;"
-                                    *ngIf="!isAttachmentExpanded"
-                                    class="cp"
-                                    (click)="isAttachmentExpanded = true"
-                                    ><span><img src="assets/images/expand.svg" /></span
-                                    >{{ commonLocaleData?.app_expand }}</a
-                                >
-                                <a
-                                    href="javascript:;"
-                                    *ngIf="isAttachmentExpanded"
-                                    class="cp"
-                                    (click)="isAttachmentExpanded = false"
-                                    ><span><img src="assets/images/expand.svg" class="collapse-icon" /></span
-                                    >{{ commonLocaleData?.app_collapse }}</a
-                                >
                             </div>
                         </div>
                     </div>
@@ -691,7 +715,18 @@
         <div class="invoice-edit-wrapper">
             <div class="invoice-edit-header">
                 <span>
-                    <p>{{ getEditVoucherText(selectedItem?.voucherType | voucherTypeToNamePipe | titlecase) }}</p>
+                    <p>
+                        {{
+                            getEditVoucherText(
+                                (selectedItemVoucher?.voucherType
+                                    ? selectedItemVoucher?.voucherType
+                                    : selectedItem?.voucherType
+                                )
+                                    | voucherTypeToNamePipe
+                                    | titlecase
+                            )
+                        }}
+                    </p>
                 </span>
 
                 <span class="close-modal cp p-0" (click)="toggleEditMode()">
@@ -707,6 +742,7 @@
                     [invoiceType]="voucherType"
                     [callFromOutside]="false"
                     (cancelVoucherUpdate)="toggleEditMode()"
+                    (reloadFiles)="downloadVoucher('base64')"
                 >
                 </proforma-invoice-component>
             </div>
@@ -719,7 +755,7 @@
     <aside-revision-history
         (closeAsideEvent)="toggleActivityHistoryAsidePane()"
         [companyUniqueName]="companyUniqueName"
-        [purchaseBill]="selectedItem"
+        [selectedVoucher]="selectedItem"
     ></aside-revision-history>
 </div>
 
@@ -761,13 +797,13 @@
     [config]="{ keyboard: true, ignoreBackdropClick: true }"
     tabindex="-1"
 >
-    <div class="modal-dialog send-mail-modal">
+    <div *ngIf="showEmailSendModal?.isShown" class="modal-dialog send-mail-modal">
         <div class="modal-content">
             <app-send-email-invoice-component
                 [voucherType]="voucherType"
-                (successEvent)="sendEmail.emit($event); showEmailSendModal.hide()"
+                (successEvent)="sendEmail.emit($event); showEmailSendModal?.hide()"
                 [selectedItem]="selectedItem"
-                (cancelEvent)="showEmailSendModal.hide()"
+                (cancelEvent)="showEmailSendModal?.hide()"
             >
             </app-send-email-invoice-component>
         </div>
@@ -784,13 +820,13 @@
     [config]="{ keyboard: true, ignoreBackdropClick: true }"
     tabindex="-1"
 >
-    <div class="modal-dialog send-mail-modal">
+    <div *ngIf="downloadVoucherModal?.isShown" class="modal-dialog send-mail-modal">
         <div class="modal-content">
             <download-voucher
                 [selectedItem]="selectedItem"
                 [localeData]="localeData"
                 [commonLocaleData]="commonLocaleData"
-                (cancelEvent)="downloadVoucherModal.hide()"
+                (cancelEvent)="downloadVoucherModal?.hide()"
             >
             </download-voucher>
         </div>

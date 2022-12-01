@@ -8,7 +8,7 @@ import { ActionPettycashRequest, ExpenseResults, PettyCashReportResponse } from 
 import { CommonPaginatedRequest } from '../../../models/api-models/Invoice';
 import { ExpenseService } from '../../../services/expences.service';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { MatDialog } from '@angular/material/dialog';
 import { Lightbox } from 'ngx-lightbox';
 
@@ -70,8 +70,8 @@ export class RejectedListComponent implements OnInit, OnChanges {
             this.todaySelected = resp[1];
             if (dateObj && !this.todaySelected) {
                 let universalDate = _.cloneDeep(dateObj);
-                let from = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
-                let to = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
+                let from = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);
+                let to = dayjs(universalDate[1]).format(GIDDH_DATE_FORMAT);
                 if (from && to) {
                     this.pettycashRequest.from = from;
                     this.pettycashRequest.to = to;
@@ -145,13 +145,13 @@ export class RejectedListComponent implements OnInit, OnChanges {
      */
     public revertActionClicked(item: ExpenseResults): void {
         this.actionPettycashRequest.actionType = 'revert';
-        this.actionPettycashRequest.uniqueName = item.uniqueName;
+        this.actionPettycashRequest.uniqueName = item?.uniqueName;
         this.expenseService.actionPettycashReports(this.actionPettycashRequest, {}).pipe(takeUntil(this.destroyed$)).subscribe(res => {
-            if (res.status === 'success') {
-                this.toaster.showSnackBar("success", res.body);
+            if (res?.status === 'success') {
+                this.toaster.showSnackBar("success", res?.body);
                 this.getPettyCashRejectedReports(this.pettycashRequest);
                 this.getPettyCashPendingReports(this.pettycashRequest);
-            } else {
+            } else if(res?.message) {
                 this.toaster.showSnackBar("error", res.message);
             }
         });
@@ -177,7 +177,7 @@ export class RejectedListComponent implements OnInit, OnChanges {
      */
     public deleteActionClicked(item: ExpenseResults, ref: TemplateRef<any>): void {
         this.actionPettycashRequest.actionType = 'delete';
-        this.actionPettycashRequest.uniqueName = item.uniqueName;
+        this.actionPettycashRequest.uniqueName = item?.uniqueName;
         this.deleteEntryModalRef = this.dialog.open(ref, { disableClose: true });
     }
 
@@ -193,7 +193,7 @@ export class RejectedListComponent implements OnInit, OnChanges {
             return;
         }
         this.pettycashRequest.page = event.page;
-        this.getPettyCashPendingReports(this.pettycashRequest);
+        this.getPettyCashRejectedReports(this.pettycashRequest);
     }
 
     /**
@@ -243,10 +243,10 @@ export class RejectedListComponent implements OnInit, OnChanges {
      */
     public deleteEntry(): void {
         this.expenseService.actionPettycashReports(this.actionPettycashRequest, {}).pipe(takeUntil(this.destroyed$)).subscribe(res => {
-            if (res.status === 'success') {
-                this.toaster.showSnackBar("success", res.body);
+            if (res?.status === 'success') {
+                this.toaster.showSnackBar("success", res?.body);
                 this.getPettyCashRejectedReports(this.pettycashRequest);
-            } else {
+            } else if(res?.message) {
                 this.toaster.showSnackBar("error", res.message);
             }
         });

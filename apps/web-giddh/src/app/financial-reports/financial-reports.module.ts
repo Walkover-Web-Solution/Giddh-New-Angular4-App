@@ -11,6 +11,7 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 
 import { AmountFieldComponentModule } from '../shared/amount-field/amount-field.module';
+import { AsideMenuAccountModule } from '../shared/aside-menu-account/aside.menu.account.module';
 import { DatepickerWrapperModule } from '../shared/datepicker-wrapper/datepicker.wrapper.module';
 import { GiddhPageLoaderModule } from '../shared/giddh-page-loader/giddh-page-loader.module';
 import { HamburgerMenuModule } from '../shared/header/components/hamburger-menu/hamburger-menu.module';
@@ -83,15 +84,18 @@ import { AccountsFilterPipe } from './pipes/accounts-filter.pipe';
         ReactiveFormsModule,
         Daterangepicker,
         FinancialReportsRoutingModule,
-        TabsModule,
-        LaddaModule,
+        TabsModule.forRoot(),
+        LaddaModule.forRoot({
+            style: 'slide-left',
+            spinnerSize: 30
+        }),
         HighlightModule,
         RecTypeModule,
         ShSelectModule,
         ClickOutsideModule,
-        BsDropdownModule,
+        BsDropdownModule.forRoot(),
         CurrencyModule,
-        TooltipModule,
+        TooltipModule.forRoot(),
         AccountDetailModalModule,
         ScrollingModule,
         TranslateDirectiveModule,
@@ -99,7 +103,8 @@ import { AccountsFilterPipe } from './pipes/accounts-filter.pipe';
         GiddhPageLoaderModule,
         AmountFieldComponentModule,
         DatepickerWrapperModule,
-        PopoverModule
+        PopoverModule.forRoot(),
+        AsideMenuAccountModule
     ],
 })
 export class FinancialReportsModule {

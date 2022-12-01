@@ -1,7 +1,7 @@
 import { distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 import { ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { IOption } from '../../../theme/ng-select/option.interface';
-import * as moment from 'moment';
+import * as dayjs from 'dayjs';
 import { CompanyImportExportFileTypes } from '../../../models/interfaces/companyImportExport.interface';
 import { AppState } from '../../../store';
 import { Store, select } from '@ngrx/store';
@@ -30,8 +30,8 @@ export class CompanyImportExportFormComponent implements OnInit, OnDestroy {
     @Output('backPressed') public backPressed: EventEmitter<boolean> = new EventEmitter();
     public fileTypes: IOption[] = [];
     public fileType: string = '';
-    public from: string = moment().subtract(30, 'days').format(GIDDH_DATE_FORMAT);
-    public to: string = moment().format(GIDDH_DATE_FORMAT);
+    public from: string = dayjs().subtract(30, 'day').format(GIDDH_DATE_FORMAT);
+    public to: string = dayjs().format(GIDDH_DATE_FORMAT);
     public selectedFile: File = null;
     public isExportInProcess$: Observable<boolean>;
     public isImportInProcess$: Observable<boolean>;
@@ -48,8 +48,8 @@ export class CompanyImportExportFormComponent implements OnInit, OnDestroy {
     public selectedDateRangeUi: any;
     /* This will store available date ranges */
     public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
-    /* Moment object */
-    public moment = moment;
+    /* dayjs object */
+    public dayjs = dayjs;
     /* Selected from date */
     public fromDate: string;
     /* Selected to date */
@@ -87,8 +87,8 @@ export class CompanyImportExportFormComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         this.fileTypes = [
-            { label: this.localeData?.file_types.accounting_entries, value: CompanyImportExportFileTypes.ACCOUNTING_ENTRIES.toString() },
-            { label: this.localeData?.file_types.master, value: CompanyImportExportFileTypes.MASTER_EXCEPT_ACCOUNTS.toString() }
+            { label: this.localeData?.file_types.accounting_entries, value: CompanyImportExportFileTypes.ACCOUNTING_ENTRIES?.toString() },
+            { label: this.localeData?.file_types.master, value: CompanyImportExportFileTypes.MASTER_EXCEPT_ACCOUNTS?.toString() }
         ];
 
         this.currentOrganizationType = this.generalService.currentOrganizationType;
@@ -96,12 +96,12 @@ export class CompanyImportExportFormComponent implements OnInit, OnDestroy {
         this.universalDate$.subscribe((dateObj) => {
             if (dateObj) {
                 let universalDate = _.cloneDeep(dateObj);
-                this.selectedDateRange = { startDate: moment(universalDate[0]), endDate: moment(universalDate[1]) };
-                this.selectedDateRangeUi = moment(universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-                this.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
-                this.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
-                this.from = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
-                this.to = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
+                this.selectedDateRange = { startDate: dayjs(universalDate[0]), endDate: dayjs(universalDate[1]) };
+                this.selectedDateRangeUi = dayjs(universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                this.fromDate = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);
+                this.toDate = dayjs(universalDate[1]).format(GIDDH_DATE_FORMAT);
+                this.from = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);
+                this.to = dayjs(universalDate[1]).format(GIDDH_DATE_FORMAT);
             }
             this.changeDetectorRef.detectChanges();
         });
@@ -112,20 +112,20 @@ export class CompanyImportExportFormComponent implements OnInit, OnDestroy {
 
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
         this.currentCompanyBranches$.subscribe(response => {
-            if (response && response.length) {
+            if (response?.length) {
                 this.currentCompanyBranches = response.map(branch => ({
                     label: branch.alias,
-                    value: branch.uniqueName,
+                    value: branch?.uniqueName,
                     name: branch.name,
                     parentBranch: branch.parentBranch
                 }));
                 const hoBranch = response.find(branch => !branch.parentBranch);
-                const currentBranchUniqueName = this.currentOrganizationType === OrganizationType.Branch ? this.generalService.currentBranchUniqueName : hoBranch ? hoBranch.uniqueName : '';
-                if (!this.currentBranch.uniqueName) {
+                const currentBranchUniqueName = this.currentOrganizationType === OrganizationType.Branch ? this.generalService.currentBranchUniqueName : hoBranch ? hoBranch?.uniqueName : '';
+                if (!this.currentBranch?.uniqueName) {
                     // Assign the current branch only when it is not selected. This check is necessary as
                     // opening the branch switcher would reset the current selected branch as this subscription is run everytime
                     // branches are loaded
-                    this.currentBranch = _.cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName));
+                    this.currentBranch = _.cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName));
                     this.currentBranch.name = this.currentBranch.name + (this.currentBranch.alias ? ` (${this.currentBranch.alias})` : '');
                 }
             } else {
@@ -138,8 +138,8 @@ export class CompanyImportExportFormComponent implements OnInit, OnDestroy {
     }
 
     public selectedDate(value: any) {
-        this.from = moment(value.picker.startDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
-        this.to = moment(value.picker.endDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+        this.from = dayjs(value.picker.startDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+        this.to = dayjs(value.picker.endDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
     }
 
     public fileSelected(file: File) {
@@ -155,7 +155,7 @@ export class CompanyImportExportFormComponent implements OnInit, OnDestroy {
             this.isExportInProcess$ = of(true);
 
             if(parseInt(this.fileType) === CompanyImportExportFileTypes.MASTER_EXCEPT_ACCOUNTS) {
-                this.companyImportExportService.ExportRequest(this.currentBranch.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                this.companyImportExportService.ExportRequest(this.currentBranch?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     if (response?.status === 'success') {
                         let res = { body: response?.body };
                         let blob = new Blob([JSON.stringify(res)], { type: 'application/json' });
@@ -168,14 +168,14 @@ export class CompanyImportExportFormComponent implements OnInit, OnDestroy {
                     this.isExportInProcess$ = of(false);
                 });
             } else {
-                this.companyImportExportService.ExportLedgersRequest(this.from, this.to, this.currentBranch.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                this.companyImportExportService.ExportLedgersRequest(this.from, this.to, this.currentBranch?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     if (response?.status === 'success' && response?.body) {
                         if (response?.body?.type === "message") {
                             this.toaster.successToast(response?.body?.file);
                         } else {
                             let res = { body: response?.body?.file };
                             let blob = new Blob([JSON.stringify(res)], { type: 'application/json' });
-                            saveAs(blob, `${this.currentBranch.name}_Accounting_Entries_${this.from}_${this.to}_${this.activeCompany?.uniqueName}` + '.json');
+                            saveAs(blob, `${this.currentBranch?.name}_Accounting_Entries_${this.from}_${this.to}_${this.activeCompany?.uniqueName}` + '.json');
                             this.toaster.successToast(this.commonLocaleData?.app_messages?.data_exported);
                             this.backButtonPressed();
                         }
@@ -189,7 +189,7 @@ export class CompanyImportExportFormComponent implements OnInit, OnDestroy {
             this.isImportInProcess$ = of(true);
 
             if(parseInt(this.fileType) === CompanyImportExportFileTypes.MASTER_EXCEPT_ACCOUNTS) {
-                this.companyImportExportService.ImportRequest(this.selectedFile, this.currentBranch.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                this.companyImportExportService.ImportRequest(this.selectedFile, this.currentBranch?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     this.handleImportEntriesResponse(response);
                 });
             } else {
@@ -252,10 +252,10 @@ export class CompanyImportExportFormComponent implements OnInit, OnDestroy {
         }
         this.hideGiddhDatepicker();
         if (value && value.startDate && value.endDate) {
-            this.selectedDateRange = { startDate: moment(value.startDate), endDate: moment(value.endDate) };
-            this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
-            this.from = moment(value.startDate).format(GIDDH_DATE_FORMAT);
-            this.to = moment(value.endDate).format(GIDDH_DATE_FORMAT);
+            this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
+            this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.from = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
+            this.to = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
         }
     }
 

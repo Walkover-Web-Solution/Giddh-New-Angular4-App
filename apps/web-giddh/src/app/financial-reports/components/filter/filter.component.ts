@@ -1,10 +1,10 @@
-import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { TrialBalanceRequest } from '../../../models/api-models/tb-pl-bs';
 import { CompanyResponse } from '../../../models/api-models/Company';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
 import { Observable, ReplaySubject, of as observableOf } from 'rxjs';
@@ -83,8 +83,8 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
     public selectedDateRangeUi: any;
     /** This will store available date ranges */
     public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
-    /** Moment object */
-    public moment = moment;
+    /** dayjs object */
+    public dayjs = dayjs;
     /** Selected from date */
     public fromDate: string;
     /** Selected to date */
@@ -149,14 +149,14 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
         }
         this._selectedCompany = value;
         this.financialOptions = value.financialYears.map(q => {
-            return { label: q.uniqueName, value: q.uniqueName };
+            return { label: q?.uniqueName, value: q?.uniqueName };
         });
 
         if (this.filterForm.get('selectedDateOption').value === '0' && value.activeFinancialYear) {
             this.filterForm?.patchValue({
                 to: value.activeFinancialYear.financialYearEnds,
                 from: value.activeFinancialYear.financialYearStarts,
-                selectedFinancialYearOption: value.activeFinancialYear.uniqueName
+                selectedFinancialYearOption: value.activeFinancialYear?.uniqueName
             });
         }
     }
@@ -171,7 +171,7 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
         });
 
         this.currentOrganizationType = this.generalService.currentOrganizationType;
-        this.imgPath = (isElectron || isCordova) ? 'assets/icon/' : AppUrl + APP_FOLDER + 'assets/icon/';
+        this.imgPath = isElectron ? 'assets/icon/' : AppUrl + APP_FOLDER + 'assets/icon/';
         if (!this.showLabels) {
             this.filterForm?.patchValue({ selectedDateOption: '0' });
         }
@@ -185,19 +185,13 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
 
         this.universalDate$.subscribe((a) => {
             if (a) {
-                let date = cloneDeep(a);
-                if (date[0].getDate() === (new Date().getDate() + 1) && date[1].getDate() === new Date().getDate()) {
-                    this.universalDateICurrent = true;
-                    this.setCurrentFY();
-                } else {
-                    this.universalDateICurrent = false;
-                    // assign dates
+                this.universalDateICurrent = false;
+                // assign dates
 
-                    this.filterForm?.patchValue({
-                        from: moment(a[0]).format(GIDDH_DATE_FORMAT),
-                        to: moment(a[1]).format(GIDDH_DATE_FORMAT)
-                    });
-                }
+                this.filterForm?.patchValue({
+                    from: dayjs(a[0]).format(GIDDH_DATE_FORMAT),
+                    to: dayjs(a[1]).format(GIDDH_DATE_FORMAT)
+                });
 
                 // if filter type is not date picker then set filter as datepicker
                 if (this.filterForm.get('selectedDateOption').value === '0') {
@@ -211,51 +205,50 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
                 }
                 /** To set local datepicker */
                 let universalDate = cloneDeep(a);
-                this.selectedDateRange = { startDate: moment(a[0]), endDate: moment(a[1]) };
-                this.selectedDateRangeUi = moment(a[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(a[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-                this.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
-                this.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
+                this.selectedDateRange = { startDate: dayjs(a[0]), endDate: dayjs(a[1]) };
+                this.selectedDateRangeUi = dayjs(a[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(a[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                this.fromDate = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);
+                this.toDate = dayjs(universalDate[1]).format(GIDDH_DATE_FORMAT);
                 this.filterData();
             }
         });
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if(activeCompany?.uniqueName !== this.activeCompany?.uniqueName) {
                 this.activeCompany = activeCompany;
-                this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '' }));
             }
         });
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
         this.currentCompanyBranches$.subscribe(response => {           
-            if (response && response.length) {
+            if (response?.length) {
                 this.filterForm.get('branchUniqueName').setValue("");
                 this.forceClear$ = observableOf({ status: true });
                 this.currentCompanyBranches = [];
                 this.currentCompanyBranches = response.map(branch => ({
                     label: branch.alias,
-                    value: branch.uniqueName,
+                    value: branch?.uniqueName,
                     name: branch.name,
                     parentBranch: branch.parentBranch
                 }));
                 this.currentCompanyBranches.unshift({
                     label: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
                     name: this.activeCompany ? this.activeCompany.name : '',
-                    value: this.activeCompany ? this.activeCompany.uniqueName : '',
+                    value: this.activeCompany ? this.activeCompany?.uniqueName : '',
                     isCompany: true
                 });
                 let currentBranchUniqueName;
-                if (!this.currentBranch.uniqueName) {
+                if (!this.currentBranch?.uniqueName) {
                     // Assign the current branch only when it is not selected. This check is necessary as
                     // opening the branch switcher would reset the current selected branch as this subscription is run everytime
                     // branches are loaded
                     if (this.currentOrganizationType === OrganizationType.Branch) {
                         currentBranchUniqueName = this.generalService.currentBranchUniqueName;
-                        this.currentBranch = cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName)) || this.currentBranch;
+                        this.currentBranch = cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName)) || this.currentBranch;
                     } else {
-                        currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : '';
+                        currentBranchUniqueName = this.activeCompany ? this.activeCompany?.uniqueName : '';
                         this.currentBranch = {
                             name: this.activeCompany ? this.activeCompany.name : '',
                             alias: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
-                            uniqueName: this.activeCompany ? this.activeCompany.uniqueName : '',
+                            uniqueName: this.activeCompany ? this.activeCompany?.uniqueName : '',
                         };
                     }
                 }
@@ -279,8 +272,8 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
                 if (activeFinancialYear) {
                     // assign dates
                     this.filterForm?.patchValue({
-                        from: moment(activeFinancialYear.financialYearStarts, GIDDH_DATE_FORMAT).startOf('day').format(GIDDH_DATE_FORMAT),
-                        to: moment().format(GIDDH_DATE_FORMAT)
+                        from: dayjs(activeFinancialYear.financialYearStarts, GIDDH_DATE_FORMAT).startOf('day').format(GIDDH_DATE_FORMAT),
+                        to: dayjs().format(GIDDH_DATE_FORMAT)
                     });
                 }
             }
@@ -293,15 +286,15 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
     }
 
     public selectedDate(value: any) {
-        this.filterForm.controls['from'].setValue(moment(value.picker.startDate).format(GIDDH_DATE_FORMAT));
-        this.filterForm.controls['to'].setValue(moment(value.picker.endDate).format(GIDDH_DATE_FORMAT));
+        this.filterForm.controls['from'].setValue(dayjs(value.picker.startDate).format(GIDDH_DATE_FORMAT));
+        this.filterForm.controls['to'].setValue(dayjs(value.picker.endDate).format(GIDDH_DATE_FORMAT));
         this.filterData();
     }
 
     public selectFinancialYearOption(v: IOption) {
         if (v.value) {
-            let financialYear = this._selectedCompany.financialYears.find(p => p.uniqueName === v.value);
-            let index = this._selectedCompany.financialYears.findIndex(p => p.uniqueName === v.value);
+            let financialYear = this._selectedCompany.financialYears.find(p => p?.uniqueName === v.value);
+            let index = this._selectedCompany.financialYears.findIndex(p => p?.uniqueName === v.value);
             if (financialYear) {
                 this.filterForm?.patchValue({
                     to: financialYear.financialYearEnds,
@@ -337,7 +330,7 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
 
     public setFYFirstTime(selectedFY: string) {
         if (selectedFY) {
-            let inx = this._selectedCompany.financialYears.findIndex(p => p.uniqueName === selectedFY);
+            let inx = this._selectedCompany.financialYears.findIndex(p => p?.uniqueName === selectedFY);
             if (inx !== -1) {
                 this.filterForm?.patchValue({
                     fy: inx === 0 ? 0 : inx * -1
@@ -388,8 +381,8 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
                 this.selectFinancialYearOption(this.financialOptions[0]);
             } else {
                 this.filterForm?.patchValue({
-                    from: moment(this.datePickerOption.startDate).format(GIDDH_DATE_FORMAT),
-                    to: moment(this.datePickerOption.endDate).format(GIDDH_DATE_FORMAT)
+                    from: dayjs(this.datePickerOption.startDate).format(GIDDH_DATE_FORMAT),
+                    to: dayjs(this.datePickerOption.endDate).format(GIDDH_DATE_FORMAT)
                 });
             }
         }
@@ -451,10 +444,10 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
         }
         this.hideGiddhDatepicker();
         if (value && value.startDate && value.endDate) {
-            this.selectedDateRange = { startDate: moment(value.startDate), endDate: moment(value.endDate) };
-            this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
-            this.fromDate = moment(value.startDate).format(GIDDH_DATE_FORMAT);
-            this.toDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
+            this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
+            this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.fromDate = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
+            this.toDate = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
             this.filterForm.controls['from'].setValue(this.fromDate);
             this.filterForm.controls['to'].setValue(this.toDate);
             this.filterData();

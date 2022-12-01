@@ -64,7 +64,7 @@
                             [attr.data-title]="commonLocaleData?.app_voucher_number"
                             class="text-center"
                         >
-                            {{ item.voucherNumber }}
+                            {{ item.voucherNumber || commonLocaleData?.app_not_available }}
                         </td>
                     </ng-container>
                     <ng-container matColumnDef="voucher_refno">
@@ -75,7 +75,7 @@
                             [attr.data-title]="localeData?.voucher_refno"
                             class="text-center"
                         >
-                            {{ item.voucherRefNo }}
+                            {{ item.voucherRefNo || commonLocaleData?.app_not_available }}
                         </td>
                     </ng-container>
                     <ng-container matColumnDef="voucher_refdate">
@@ -102,12 +102,7 @@
                     </ng-container>
                     <ng-container matColumnDef="narration">
                         <th mat-header-cell *matHeaderCellDef>{{ localeData?.narration }}</th>
-                        <td
-                            mat-cell
-                            *matCellDef="let item"
-                            [attr.data-title]="localeData?.narration"
-                            class="text-center"
-                        >
+                        <td mat-cell *matCellDef="let item" [attr.data-title]="localeData?.narration">
                             {{ item.narration }}
                         </td>
                     </ng-container>
@@ -134,13 +129,8 @@
                         </td>
                     </ng-container>
                     <ng-container matColumnDef="unit">
-                        <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_unit }}</th>
-                        <td
-                            mat-cell
-                            *matCellDef="let item"
-                            [attr.data-title]="commonLocaleData?.app_unit"
-                            class="text-center"
-                        >
+                        <th mat-header-cell *matHeaderCellDef>{{ localeData?.unit }}</th>
+                        <td mat-cell *matCellDef="let item" [attr.data-title]="localeData?.unit" class="text-center">
                             {{ item.stockUnitCode }}
                         </td>
                     </ng-container>
@@ -183,6 +173,7 @@
                             <span class="d-inline-flex">
                                 <amount-field
                                     [amount]="item.grossTotal"
+                                    [useGiddhCurrencyPipe]="false"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
                                 ></amount-field>

@@ -22,7 +22,7 @@ export class LogsService {
      */
     public GetAuditLogs(model: LogsRequest, page: number = 1): Observable<BaseResponse<LogsResponse, LogsRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.post(this.config.apiUrl + LOGS_API.AUDIT_LOGS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':page', page.toString()), model).pipe(
+        return this.http.post(this.config.apiUrl + LOGS_API.AUDIT_LOGS?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':page', page?.toString()), model).pipe(
             map((res) => {
                 let data: BaseResponse<LogsResponse, LogsRequest> = res;
                 data.request = model;
@@ -52,7 +52,7 @@ export class LogsService {
      */
     public getAuditLogs(model: GetAuditLogsRequest): Observable<BaseResponse<AuditLogsResponse, GetAuditLogsRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.post(this.config.apiUrl + LOGS_API.GET_AUDIT_LOGS_V2.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(
+        return this.http.post(this.config.apiUrl + LOGS_API.GET_AUDIT_LOGS_V2?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(
             map((res) => {
                 let data: BaseResponse<AuditLogsResponse, GetAuditLogsRequest> = res;
                 data.request = model;

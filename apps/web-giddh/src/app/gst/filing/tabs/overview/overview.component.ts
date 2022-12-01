@@ -8,7 +8,7 @@ import { takeUntil } from 'rxjs/operators';
     // tslint:disable-next-line:component-selector
     selector: 'filing-overview',
     templateUrl: './overview.component.html',
-    styleUrls: ['overview.component.css'],
+    styleUrls: ['overview.component.scss'],
 })
 export class FilingOverviewComponent implements OnInit, OnDestroy {
     @Input() public currentPeriod: GstDatePeriod = new GstDatePeriod();
@@ -22,6 +22,8 @@ export class FilingOverviewComponent implements OnInit, OnDestroy {
     /** Emits when HSN/SAC is selected */
     @Output() public hsnSacSelected: EventEmitter<void> = new EventEmitter();
     public showTransaction: boolean = false;
+    /** Show/hides hsn summary */
+    public showHsnSummary: boolean = false;
     public filters: any = {};
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -31,6 +33,7 @@ export class FilingOverviewComponent implements OnInit, OnDestroy {
     public ngOnInit() {
         this.activatedRoute.url.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             this.showTransaction = this.route.routerState.snapshot.url.includes('transaction');
+            this.showHsnSummary = this.route.routerState.snapshot.url.includes('hsn-summary');
         });
     }
 

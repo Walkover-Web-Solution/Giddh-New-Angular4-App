@@ -12,11 +12,11 @@ import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { AppState } from '../../store/roots';
 import { LEDGER } from './ledger.const';
 import { LedgerService } from '../../services/ledger.service';
-import { BlankLedgerVM } from '../../ledger/ledger.vm';
+import { BlankLedgerVM } from '../../material-ledger/ledger.vm';
 import { GenerateBulkInvoiceRequest, IBulkInvoiceGenerationFalingError } from '../../models/api-models/Invoice';
 import { InvoiceService } from '../../services/invoice.service';
-import { DaybookQueryRequest } from '../../models/api-models/DaybookRequest';
 import { LocaleService } from '../../services/locale.service';
+import { GeneralService } from '../../services/general.service';
 
 @Injectable()
 export class LedgerActions {
@@ -26,7 +26,7 @@ export class LedgerActions {
             ofType(LEDGER.GET_TRANSACTION),
             switchMap((action: CustomActions) => {
                 let req: TransactionsRequest = action.payload as TransactionsRequest;
-                return this.ledgerService.GetLedgerTranscations(req);
+                return this.ledgerService.GetLedgerTransactions(req);
             }), map(res => this.validateResponse<TransactionsResponse, TransactionsRequest>(res, {
                 type: LEDGER.GET_TRANSACTION_RESPONSE,
                 payload: res
@@ -69,7 +69,7 @@ export class LedgerActions {
             }, true, {
                 type: LEDGER.CREATE_BLANK_LEDGER_RESPONSE,
                 payload: res
-            }))));
+            }, true))));
 
     public DeleteTrxEntry$: Observable<Action> = createEffect(() => this.action$
         .pipe(
@@ -161,13 +161,18 @@ export class LedgerActions {
                 } else if (response.status === 'no-network') {
                     this.ResetUpdateLedger();
                     return { type: 'EmptyAction' };
+                } else if (response.status === 'confirm') {
+                    return {
+                        type: LEDGER.SHOW_DUPLICATE_VOUCHER_CONFIRMATION,
+                        payload: response
+                    }
                 } else {
                     this.toaster.showSnackBar("success", this.localeService.translate("app_messages.entry_updated"));
                     if (action && action.payload && action.payload.request && action.payload.request.refreshLedger) {
                         this.store.dispatch(this.refreshLedger(true));
                     }
 
-                    if (response.request.generateInvoice && !response.body.voucherGenerated) {
+                    if (this.generalService.voucherApiVersion !== 2 && response.request.generateInvoice && !response.body.voucherGenerated) {
                         let invoiceGenModel: GenerateBulkInvoiceRequest[] = [];
                         let entryUniqueName = response.queryString.entryUniqueName.split('?')[0];
                         invoiceGenModel.push({
@@ -273,21 +278,6 @@ export class LedgerActions {
                 };
             })));
 
-    public ExportGroupLedger$: Observable<Action> = createEffect(() => this.action$
-        .pipe(
-            ofType(LEDGER.GROUP_EXPORT_LEDGER),
-            switchMap((action: CustomActions) => {
-                return this.ledgerService.GroupExportLedger(action.payload?.groupUniqueName, action.payload.queryRequest).pipe(
-                    map((res) => {
-                        if (res.status === 'success') {
-                            this.toaster.showSnackBar("success", res.body, res.status);
-                        } else {
-                            this.toaster.showSnackBar("error", res.message, res.code);
-                        }
-                        return { type: 'EmptyAction' };
-                    }));
-            })));
-
     public DeleteMultipleLedgerEntries$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(LEDGER.DELETE_MULTIPLE_LEDGER_ENTRIES),
@@ -338,7 +328,7 @@ export class LedgerActions {
                 } else {
                     if (typeof data.body === 'string') {
                         this.toaster.showSnackBar("success", data.body);
-                    } else if (_.isArray(data.body) && data.body.length > 0) {
+                    } else if (_.isArray(data.body) && data.body?.length > 0) {
                         // Block will execute if multiple invoice generate
                         if (data && data.queryString && data.queryString.reqObj && !data.queryString.reqObj.combined) {
                             _.forEach(data.body, (item: IBulkInvoiceGenerationFalingError) => {
@@ -381,7 +371,8 @@ export class LedgerActions {
         private ledgerService: LedgerService,
         private accountService: AccountService,
         private invoiceServices: InvoiceService,
-        private localeService: LocaleService) {
+        private localeService: LocaleService,
+        private generalService: GeneralService) {
     }
 
     public GetTransactions(request: TransactionsRequest): CustomActions {
@@ -571,13 +562,6 @@ export class LedgerActions {
         };
     }
 
-    public GroupExportLedger(groupUniqueName: string, queryRequest: DaybookQueryRequest): CustomActions {
-        return {
-            type: LEDGER.GROUP_EXPORT_LEDGER,
-            payload: { groupUniqueName, queryRequest }
-        };
-    }
-
     public DeleteMultipleLedgerEntries(accountUniqueName: string, entryUniqueNames: string[]): CustomActions {
         return {
             type: LEDGER.DELETE_MULTIPLE_LEDGER_ENTRIES,
@@ -592,7 +576,7 @@ export class LedgerActions {
         };
     }
 
-    public GenerateBulkLedgerInvoice(reqObj: { combined: boolean }, model: GenerateBulkInvoiceRequest[], requestedFrom?: string): CustomActions {
+    public GenerateBulkLedgerInvoice(reqObj: { combined: boolean }, model: any, requestedFrom?: string): CustomActions {
         return {
             type: LEDGER.GENERATE_BULK_LEDGER_INVOICE,
             payload: { reqObj, body: model, requestedFrom }
@@ -662,12 +646,19 @@ export class LedgerActions {
         };
     }
 
-    private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false, errorAction: CustomActions = { type: 'EmptyAction' }): CustomActions {
+    private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false, errorAction: CustomActions = { type: 'EmptyAction' }, isCreateLedger?: boolean): CustomActions {
         if (response.status === 'error') {
             if (showToast) {
                 this.toaster.showSnackBar("error", response.message);
             }
             return errorAction;
+        } else if (response.status === "confirm") {
+            if (isCreateLedger) {
+                return {
+                    type: LEDGER.SHOW_DUPLICATE_VOUCHER_CONFIRMATION,
+                    payload: response
+                }
+            }
         } else {
             if (showToast && typeof response.body === 'string') {
                 this.toaster.showSnackBar("success", response.body);

@@ -1,10 +1,10 @@
 /************ login page start *****************/
-@import "../../assets/css/color.scss";
+
 /*typography styles*/
 
 body.unresponsive {
     padding: 0;
-    background: $valhalla;
+    background: var(--color-primary-login-signup-body-unresponsive-background);
 }
 
 .intro.login {
@@ -30,7 +30,7 @@ body.unresponsive {
 }
 
 .modal-header h3 {
-    color: $white;
+    color: var(--color-white);
     font-size: 1.3rem;
 }
 
@@ -39,13 +39,13 @@ body.unresponsive {
 }
 
 .login .brand-heading {
-    color: $white;
+    color: var(--color-white);
     font-size: 40px;
     margin-bottom: 80px;
 }
 
 #box {
-    background-color: $white;
+    background-color: var(--color-white);
     padding: 20px 30px;
     margin: 0 auto;
     width: 360px;
@@ -76,7 +76,7 @@ body.unresponsive {
 
 #box .btn:hover,
 #box .btn:hover {
-    color: $white;
+    color: var(--color-white);
 }
 
 .mr-b1 {
@@ -84,30 +84,30 @@ body.unresponsive {
 }
 
 .twitter {
-    background: $medium-spring-blue;
+    background: var(--color-primary-login-signup-twitter-background);
 }
 
 .google {
-    background: $light-maroon;
+    background: var(--color-primary-login-signup-google-background);
 }
 
 .linkedin {
-    background: $medium-black-cyan;
+    background: var(--color-primary-login-signup-linkedin-background);
 }
 
 .mobile {
-    background: $valhalla;
+    background: var(--color-primary-login-signup-mobile-background);
 }
 
 .btn-login {
     text-transform: uppercase;
-    color: $white;
+    color: var(--color-white);
     margin-bottom: 10px;
     display: inline-block;
     vertical-align: middle;
     -webkit-transform: translateZ(0);
     transform: translateZ(0);
-    box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+    box-shadow: 0 0 1px var(--color-primary-common-box-shadow);
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
     -moz-osx-font-smoothing: grayscale;
@@ -125,24 +125,24 @@ body.unresponsive {
     transform: scale(1.1);
 }
 .btn-blue {
-    background: $midnight-blue;
-    color: $white;
-    border-color: $midnight-blue;
+    color: var(--color-senary-button-text) !important;
+    border-color: var(--color-senary-button-background);
+    background: var(--color-senary-button-background);
 }
 
 .btn-blue:hover {
-    background: $midnight-blue-hover;
-    border-color: $midnight-blue-hover;
-    color: $white;
+    color: var(--color-senary-button-text) !important;
+    border-color: var(--color-senary-button-background-hover);
+    background: var(--color-senary-button-background-hover);
 }
 /*giddh loader*/
 
 .giddh-spinner {
     animation: rotate 1.5s infinite linear;
-    background: #221f1f none repeat scroll 0 0;
-    border: 7px solid $red;
+    background: var(--color-black) none repeat scroll 0 0;
+    border: 7px solid var(--color-danger);
     border-radius: 50%;
-    box-shadow: 0 -10px 0 14px $white inset;
+    box-shadow: 0 -10px 0 14px var(--color-primary-common-box-shadow) inset;
     box-sizing: border-box;
     height: 60px;
     width: 60px;
@@ -172,15 +172,15 @@ body.unresponsive {
 }
 
 .btn-login.btn-default {
-    color: $night-rider;
-    background-color: $white;
-    border-color: $gainsboro;
+    color: var(--color-nero);
+    background-color: var(--color-white);
+    border-color: var(--color-iron);
 }
 
 .btn-login.btn-default:hover {
-    color: $black !important;
-    background-color: $white;
-    border-color: $gainsboro;
+    color: var(--color-nero) !important;
+    background-color: var(--color-white);
+    border-color: var(--color-iron);
     box-shadow: none;
 }
 
@@ -201,13 +201,13 @@ button.close {
     font-size: 21px;
     font-weight: 700;
     line-height: 1;
-    color: $light-maroon;
+    color: var(--color-white);
     text-shadow: none;
     opacity: 1;
 }
 
 .email {
-    background: $deep-sky-blue-hover;
+    background: var(--color-blue);
 }
 
 /************* end login page *************/
@@ -218,6 +218,7 @@ button.close {
 :host ::ng-deep .form-control {
     height: 41px;
     font-size: 16px;
+    color: var(--color-primary-login-signup-input-box) !important;
 }
 
 :host ::ng-deep .clear {
@@ -227,7 +228,7 @@ button.close {
 }
 
 :host ::ng-deep .btn-success {
-    color: $white;
+    color: var(--color-white);
 }
 
 strong {
@@ -244,8 +245,8 @@ h1 {
 
 .slide-content {
     padding: 0 100px;
-    color: $white;
-    background: $valhalla;
+    color: var(--color-white);
+    background: var(--color-primary-login-signup-slide-content-background);
     justify-content: space-evenly;
     text-align: left;
     flex-direction: column;
@@ -253,7 +254,7 @@ h1 {
 }
 
 .login-box h1 {
-    color: $russian-black;
+    color: var(--color-primary-login-signup-login-box-h1);
     font-weight: 500;
 }
 
@@ -264,7 +265,7 @@ h1 {
 }
 
 small {
-    color: $night-rider;
+    color: var(--color-nero);
 }
 
 /* social-login */
@@ -299,14 +300,14 @@ small {
 /* social icon */
 
 .linkedin-ico a {
-    color: $cerulean;
-    border-color: $cerulean;
+    color: var(--color-primary-login-signup-linkedin-icon);
+    border-color: var(--color-primary-login-signup-linkedin-icon);
 }
 
 .google-ico a {
-    background: $deep-sky-blue;
-    border-color: $deep-sky-blue !important;
-    color: $white;
+    background: var(--color-primary-login-with-google-box-background);
+    border-color: var(--color-primary-login-with-google-box-background) !important;
+    color: var(--color-tertiary-login-box-body-text);
     padding-left: 40px !important;
 }
 
@@ -315,9 +316,9 @@ small {
     position: absolute;
     width: 40px;
     left: 0;
-    background: $floral-white;
     line-height: 38px;
     vertical-align: middle;
+    background-color: var(--color-white-secondary);
 }
 
 .ico-google img {
@@ -327,13 +328,13 @@ small {
 
 .login-option,
 .login-option a {
-    color: $primary;
+    color: var(--color-blue);
     margin-top: 55px;
     font-weight: 500;
 }
 
 .login-option a {
-    border-bottom: 2px dotted $primary;
+    border-bottom: 2px dotted var(--color-blue);
 }
 
 .slide-content h1 {
@@ -377,7 +378,7 @@ small {
     align-self: flex-start;
     position: relative;
     width: 100%;
-    background: rgba(106, 106, 168, 15%);
+    background: var(--color-solitude-light);
     margin: 0 -15px;
 }
 
@@ -401,7 +402,7 @@ small {
 }
 
 .hash-tag {
-    color: $red;
+    color: var(--color-danger);
 }
 
 .blockquote-ico {
@@ -424,11 +425,11 @@ small {
     position: absolute;
     left: 0;
     z-index: 1;
-    background: $white;
+    background: var(--color-white);
     bottom: -38px;
     border-radius: 0;
     padding: 4px;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--color-iron);
 }
 
 .hint:before {
@@ -439,7 +440,7 @@ small {
     position: absolute;
     border-top: 8px solid transparent;
     border-bottom: 8px solid transparent;
-    border-left: 8px solid $gainsboro;
+    border-left: 8px solid var(--color-iron);
     left: 6px;
     top: -12px;
     transform: rotate(-90deg);
@@ -451,7 +452,7 @@ small {
     position: relative;
 }
 .login-left {
-    background-color: $midnight-blue;
+    background-color: var(--color-primary-login-page-background);
     position: absolute;
     left: 0;
     height: 100vh;
@@ -482,7 +483,7 @@ small {
     overflow: hidden;
 }
 .logo-login {
-    background-color: $dark-midnight-blue;
+    background-color: var(--color-primary-login-box-header-background);
     height: 98px;
     display: flex;
     align-items: center;
@@ -492,51 +493,61 @@ small {
 .accounting-space {
     padding: 30px;
     border-radius: 0;
-    background-color: $white;
+    background-color: var(--color-primary-login-box-body-background) !important;
+    border: 2px solid var(--color-primary-login-signup-body-border);
+    border-bottom-right-radius: 7px;
+    border-bottom-left-radius: 7px;
 }
 .accounting-space h4 {
-    color: $midnight-blue;
+    color: var(--color-primary-login-box-body-text);
     font-size: 20px;
 }
 .btn-outline-primary {
-    background-color: $deep-sky-blue;
+    background-color: var(--color-blue);
     border-radius: 3px;
     min-width: 160px;
     border-radius: 5px;
-    color: $white;
+    color: var(--color-white);
     margin-bottom: 10px;
     font-size: 14px;
 }
 .btn-outline-primary:hover,
 .btn-outline-primary:focus {
-    background-color: $deep-sky-blue-hover;
+    background-color: var(--color-blue);
     box-shadow: none;
     outline: none;
 }
 .login-with {
-    color: $midnight-blue;
+    color: var(--color-primary-login-box-body-text);
     font-size: 14px;
     margin-top: 10px;
     a {
-        color: $midnight-blue;
+        color: var(--color-primary-login-box-body-text);
         text-decoration: none;
     }
 }
 .btn-secondary {
-    background-color: $white;
-    color: $navy;
-    border: 1px solid $chetwode-blue;
     border-radius: 5px;
+    color: var(--color-senary-button-text);
+    background-color: var(--color-secondary-button-background);
+    border: 1px solid var(--color-secondary-button-background);
 }
 .btn-secondary:hover {
-    color: $white !important;
-    background-color: $chetwode-blue;
-    border-color: $chetwode-blue;
+    color: var(--color-senary-button-text) !important;
+    background-color: var(--color-secondary-button-background-hover);
+    border-color: var(--color-secondary-button-background-hover);
 }
 .forgotStep {
     display: none;
 }
-
+.msg91-ico {
+    a {
+        width: 199px;
+        span {
+            padding-left: 0;
+        }
+    }
+}
 @media only screen and (max-width: 1200px) {
     .slide-content {
         padding: 0 55px;

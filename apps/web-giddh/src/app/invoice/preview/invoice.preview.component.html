@@ -135,7 +135,7 @@
                                     selectedInvoicesList?.length === 1 &&
                                     selectedInvoicesList[0].irnNumber
                                 "
-                                (click)="openModal(cancelEInvoiceTemplate)"
+                                (click)="selectedEInvoice = selectedInvoicesList[0]; openModal(cancelEInvoiceTemplate)"
                             >
                                 {{ localeData?.cancel_e_invoice }}
                             </button>
@@ -166,7 +166,7 @@
                                             >{{ localeData?.bulk_update }}</a
                                         >
                                     </li>
-                                    <li role="menuitem" *ngIf="selectedItems.length === 1">
+                                    <li role="menuitem" *ngIf="selectedItems?.length === 1">
                                         <a
                                             class="dropdown-item cp"
                                             href="javascript:void(0)"
@@ -196,7 +196,7 @@
                                         role="menuitem"
                                         *ngIf="
                                             selectedVoucher !== 'purchase' ||
-                                            (selectedItems.length === 1 && selectedVoucher === 'purchase')
+                                            (selectedItems?.length === 1 && selectedVoucher === 'purchase')
                                         "
                                     >
                                         <a
@@ -224,8 +224,11 @@
                             <div
                                 class="desktop-view-btn"
                                 *ngIf="
-                                    (selectedVoucher !== 'purchase' && selectedItems.length > 0) ||
-                                    (selectedItems.length === 1 && selectedVoucher === 'purchase')
+                                    (voucherApiVersion !== 2 &&
+                                        selectedItems?.length === 1 &&
+                                        selectedVoucher === 'purchase') ||
+                                    (selectedItems?.length > 0 && selectedVoucher !== 'purchase') ||
+                                    (voucherApiVersion === 2 && selectedItems?.length > 0)
                                 "
                             >
                                 <div *ngIf="!isCompany" class="btn-group" dropdown #dp="bs-dropdown">
@@ -255,7 +258,7 @@
                                                 >{{ localeData?.bulk_update }}</a
                                             >
                                         </li>
-                                        <li role="menuitem" *ngIf="selectedItems.length === 1">
+                                        <li role="menuitem" *ngIf="selectedItems?.length === 1">
                                             <a
                                                 class="dropdown-item cp"
                                                 href="javascript:void(0)"
@@ -281,13 +284,7 @@
                                                 {{ localeData?.create_e_invoice }}
                                             </a>
                                         </li>
-                                        <li
-                                            role="menuitem"
-                                            *ngIf="
-                                                selectedVoucher !== 'purchase' ||
-                                                (selectedItems.length === 1 && selectedVoucher === 'purchase')
-                                            "
-                                        >
+                                        <li role="menuitem">
                                             <a
                                                 class="dropdown-item cp"
                                                 href="javascript:void(0)"
@@ -437,11 +434,14 @@
                                             selectedInvoicesList?.length === 1 &&
                                             selectedInvoicesList[0]?.irnNumber
                                         "
-                                        (click)="openModal(cancelEInvoiceTemplate)"
+                                        (click)="
+                                            selectedEInvoice = selectedInvoicesList[0];
+                                            openModal(cancelEInvoiceTemplate)
+                                        "
                                     >
                                         {{ localeData?.cancel_e_invoice }}
                                     </button>
-                                    <div *ngIf="selectedItems.length === 1">
+                                    <div *ngIf="selectedItems?.length === 1">
                                         <div
                                             *ngIf="!isCompany"
                                             class="btn-group"
@@ -513,11 +513,13 @@
                                         selectedInvoicesList?.length === 1 &&
                                         selectedInvoicesList[0]?.irnNumber
                                     "
-                                    (click)="openModal(cancelEInvoiceTemplate)"
+                                    (click)="
+                                        selectedEInvoice = selectedInvoicesList[0]; openModal(cancelEInvoiceTemplate)
+                                    "
                                 >
                                     {{ localeData?.cancel_e_invoice }}
                                 </button>
-                                <div *ngIf="selectedItems.length === 1">
+                                <div *ngIf="selectedItems?.length === 1">
                                     <div
                                         *ngIf="!isCompany"
                                         class="btn-group"
@@ -675,7 +677,7 @@
                             "
                         >
                             <tr>
-                                <th width="4%" *ngIf="selectedItems.length > 0" class="min-wid-check">
+                                <th width="4%" *ngIf="selectedItems?.length > 0" class="min-wid-check">
                                     <div class="check-image d-flex justify-content-start">
                                         <img
                                             src="assets/images/unchecked.png"
@@ -689,7 +691,7 @@
                                         />
                                     </div>
                                 </th>
-                                <th *ngIf="selectedItems.length === 0" width="4%" class="min-wid-check">
+                                <th *ngIf="selectedItems?.length === 0" width="4%" class="min-wid-check">
                                     <div class="check-image d-flex justify-content-start">#</div>
                                 </th>
                                 <th
@@ -760,7 +762,7 @@
                                 <th
                                     [attr.data-title]="localeData?.po_number"
                                     width="12%"
-                                    *ngIf="selectedVoucher === 'purchase'"
+                                    *ngIf="voucherApiVersion !== 2 && selectedVoucher === 'purchase'"
                                     class="td-search-box"
                                     #searchPurchaseOrderContainer
                                     (clickOutside)="
@@ -841,7 +843,7 @@
                             "
                         >
                             <tr>
-                                <th width="4%" *ngIf="selectedItems.length > 0" class="min-wid-check">
+                                <th width="4%" *ngIf="selectedItems?.length > 0" class="min-wid-check">
                                     <div class="check-image d-flex justify-content-start">
                                         <img
                                             src="assets/images/unchecked.png"
@@ -856,7 +858,7 @@
                                     </div>
                                 </th>
 
-                                <th *ngIf="selectedItems.length === 0" width="4%" class="min-wid-check">
+                                <th *ngIf="selectedItems?.length === 0" width="4%" class="min-wid-check">
                                     <div class="check-image d-flex justify-content-start">#</div>
                                 </th>
 
@@ -967,7 +969,7 @@
                             (mouseleave)="hoveredItemForAction = ''; clickedHoveredItemForAction = ''"
                             *ngIf="
                                 voucherData &&
-                                voucherData.items.length > 0 &&
+                                voucherData.items?.length > 0 &&
                                 !(isGetAllRequestInProcess$ | async) &&
                                 (selectedVoucher === 'sales' || selectedVoucher === 'purchase')
                             "
@@ -982,7 +984,7 @@
                                     *ngIf="
                                         hoveredItemForAction === item?.uniqueName ||
                                         item.isSelected ||
-                                        selectedItems.length > 0
+                                        selectedItems?.length > 0
                                     "
                                 >
                                     <div class="check-image d-flex justify-content-start">
@@ -1005,7 +1007,7 @@
                                     *ngIf="
                                         !item.isSelected &&
                                         hoveredItemForAction !== item?.uniqueName &&
-                                        selectedItems.length === 0
+                                        selectedItems?.length === 0
                                     "
                                 >
                                     <div class="d-flex justify-content-start">{{ i + 1 }}</div>
@@ -1016,13 +1018,14 @@
                                     <div
                                         (click)="onSelectInvoice(item)"
                                         [ngClass]="{
-                                            'remove-capitalize': selectedVoucher === 'purchase',
                                             'cp': selectedVoucher === 'purchase' && !item.voucherNumber
                                         }"
-                                        class="d-flex position-relative"
+                                        class="d-flex position-relative remove-capitalize"
                                     >
                                         <a href="javascript:void(0);" class="btn-link-2">{{
-                                            item.voucherNumber ? item.voucherNumber : "-"
+                                            item.voucherNumber
+                                                ? item.voucherNumber
+                                                : commonLocaleData?.app_not_available
                                         }}</a>
                                     </div>
 
@@ -1045,7 +1048,6 @@
                                         selectedVoucher !== 'purchase' ? (modalUniqueName = item?.uniqueName) : ''
                                     "
                                     class="no-dbl-click-select"
-                                    (clickOutside)="modalUniqueName = ''"
                                 >
                                     <div dropdown container="body">
                                         {{ item?.account?.customerName || item?.account?.name }}
@@ -1057,6 +1059,7 @@
                                             [from]="invoiceSearchRequest.from"
                                             [to]="invoiceSearchRequest.to"
                                             [isModalOpen]="modalUniqueName === item?.uniqueName"
+                                            (modalClosed)="modalUniqueName = ''"
                                         ></div>
                                     </div>
                                 </td>
@@ -1065,7 +1068,7 @@
 
                                 <td
                                     [attr.data-title]="localeData?.linked_voucher"
-                                    *ngIf="selectedVoucher === 'purchase'"
+                                    *ngIf="voucherApiVersion !== 2 && selectedVoucher === 'purchase'"
                                 >
                                     {{ item.purchaseOrderNumbers }}
                                 </td>
@@ -1149,7 +1152,7 @@
 
                                         <div>
                                             <div
-                                                *ngIf="!isCompany"
+                                                *ngIf="!isCompany && item.balanceStatus !== 'cancel'"
                                                 dropdown
                                                 container="body"
                                                 class="icon-ellipse select-action"
@@ -1159,6 +1162,7 @@
                                                     dropdownToggle
                                                     class="dropdown-toggle icon-dots-three-vertical pull-right"
                                                     aria-controls="dropdown-basic"
+                                                    (click)="showActionsMenu($event)"
                                                 ></a>
                                                 <div
                                                     id="dropdown-basic"
@@ -1166,6 +1170,7 @@
                                                     class="dropdown-menu dropdown-menu-right width-150"
                                                     role="menu"
                                                     aria-labelledby="edit-model-basic"
+                                                    [ngClass]="{ 'dropup-menu': isDropUp }"
                                                 >
                                                     <ul class="select-action-dropdown">
                                                         <li (click)="onPerformAction(item, 'paid')">
@@ -1261,7 +1266,7 @@
                         <tbody
                             *ngIf="
                                 voucherData &&
-                                voucherData.items.length > 0 &&
+                                voucherData.items?.length > 0 &&
                                 !(isGetAllRequestInProcess$ | async) &&
                                 selectedVoucher !== 'sales' &&
                                 selectedVoucher !== 'purchase'
@@ -1278,7 +1283,7 @@
                                     *ngIf="
                                         hoveredItemForAction === item?.uniqueName ||
                                         item.isSelected ||
-                                        selectedItems.length > 0
+                                        selectedItems?.length > 0
                                     "
                                 >
                                     <div class="check-image d-flex justify-content-start">
@@ -1301,7 +1306,7 @@
                                     *ngIf="
                                         !item.isSelected &&
                                         hoveredItemForAction !== item?.uniqueName &&
-                                        selectedItems.length === 0
+                                        selectedItems?.length === 0
                                     "
                                 >
                                     <div class="d-flex justify-content-start">{{ i + 1 }}</div>
@@ -1314,9 +1319,10 @@
                                             ? localeData?.dr_note_no
                                             : localeData?.cr_note_no
                                     "
+                                    class="remove-capitalize"
                                 >
                                     <a class="cursor-pointer" (click)="onSelectInvoice(item)">
-                                        {{ item.voucherNumber }}</a
+                                        {{ item.voucherNumber || commonLocaleData?.app_not_available }}</a
                                     >
                                 </td>
 
@@ -1326,7 +1332,6 @@
                                     [attr.data-title]="commonLocaleData?.app_customer"
                                     (dblclick)="modalUniqueName = item?.uniqueName"
                                     class="cp no-dbl-click-select"
-                                    (clickOutside)="modalUniqueName = ''"
                                 >
                                     <!-- Customer -->
                                     {{ item?.account?.customerName || item?.account?.name }}
@@ -1338,6 +1343,7 @@
                                         [from]="invoiceSearchRequest.from"
                                         [to]="invoiceSearchRequest.to"
                                         [isModalOpen]="modalUniqueName === item?.uniqueName"
+                                        (modalClosed)="modalUniqueName = ''"
                                     ></div>
                                 </td>
                                 <!-- Date -->
@@ -1349,9 +1355,14 @@
                                     *ngIf="selectedVoucher === 'credit note' || selectedVoucher === 'debit note'"
                                 >
                                     {{
-                                        item.invoiceLinkingRequest?.linkedInvoices?.length
-                                            ? item.invoiceLinkingRequest?.linkedInvoices[0].invoiceNumber
-                                            : "-"
+                                        voucherApiVersion === 2
+                                            ? item.referenceVoucher
+                                                ? item.referenceVoucher?.number || commonLocaleData?.app_not_available
+                                                : ""
+                                            : item.invoiceLinkingRequest?.linkedInvoices?.length
+                                            ? item.invoiceLinkingRequest?.linkedInvoices[0].invoiceNumber ||
+                                              commonLocaleData?.app_not_available
+                                            : ""
                                     }}
                                 </td>
 
@@ -1425,7 +1436,7 @@
 
                                         <div>
                                             <div
-                                                *ngIf="!isCompany"
+                                                *ngIf="!isCompany && item.balanceStatus !== 'cancel'"
                                                 dropdown
                                                 container="body"
                                                 class="icon-ellipse select-action"
@@ -1435,6 +1446,7 @@
                                                     dropdownToggle
                                                     class="dropdown-toggle icon-dots-three-vertical pull-right"
                                                     aria-controls="dropdown-basic"
+                                                    (click)="showActionsMenu($event)"
                                                 ></a>
                                                 <div
                                                     id="dropdown-basic"
@@ -1442,6 +1454,7 @@
                                                     class="dropdown-menu dropdown-menu-right width-150"
                                                     role="menu"
                                                     aria-labelledby="edit-model-basic"
+                                                    [ngClass]="{ 'dropup-menu': isDropUp }"
                                                 >
                                                     <ul class="select-action-dropdown">
                                                         <li (click)="onPerformAction(item, 'cancel')">
@@ -1488,7 +1501,7 @@
                 <ng-container
                     *ngIf="
                         voucherData &&
-                        voucherData.items.length > 0 &&
+                        voucherData.items?.length > 0 &&
                         !(isGetAllRequestInProcess$ | async) &&
                         (selectedVoucher === 'sales' || selectedVoucher === 'purchase') &&
                         isMobileView
@@ -1535,7 +1548,11 @@
                                         <div class="col-6 p-0">
                                             <div class="invoice-name-download">
                                                 <a class="invoice-number-a" (click)="onSelectInvoice(item)">
-                                                    {{ item.voucherNumber ? item.voucherNumber : "-" }}</a
+                                                    {{
+                                                        item.voucherNumber
+                                                            ? item.voucherNumber
+                                                            : commonLocaleData?.app_not_available
+                                                    }}</a
                                                 >
                                                 <span class="icon-download"></span>
                                             </div>
@@ -1566,7 +1583,6 @@
                                         <div
                                             (dblclick)="modalUniqueName = item?.uniqueName"
                                             class="cp no-dbl-click-select"
-                                            (clickOutside)="modalUniqueName = ''"
                                         >
                                             {{ item?.account?.customerName || item?.account?.name }}
                                             <div
@@ -1577,6 +1593,7 @@
                                                 [from]="invoiceSearchRequest.from"
                                                 [to]="invoiceSearchRequest.to"
                                                 [isModalOpen]="modalUniqueName === item?.uniqueName"
+                                                (modalClosed)="modalUniqueName = ''"
                                             ></div>
                                         </div>
                                     </td>
@@ -1727,13 +1744,13 @@
                 >
                     <div class="modal-dialog modal-md">
                         <div class="modal-content">
-                            <delete-role-confirmation-model
+                            <delete-voucher-confirmation-modal
                                 [module]="selectedVoucher !== 'purchase' ? selectedVoucher : 'purchaselist'"
                                 [selectedInvoiceForDelete]="selectedInvoice"
                                 (confirmDeleteEvent)="deleteConfirmedInvoice()"
                                 (closeModelEvent)="closeConfirmationPopup()"
                             >
-                            </delete-role-confirmation-model>
+                            </delete-voucher-confirmation-modal>
                         </div>
                     </div>
                 </div>
@@ -1841,6 +1858,7 @@
                                 [localeData]="localeData"
                                 [commonLocaleData]="commonLocaleData"
                                 (closeModelEvent)="toggleEwayBillPopup()"
+                                (createEWayBillEvent)="createEWayBill()"
                             >
                             </app-generate-ewaybill-modal>
                         </div>
@@ -1929,6 +1947,7 @@
             [config]="{ animated: true, ignoreBackdropClick: true }"
             bsModal
             role="dialog"
+            (onHidden)="closeAdvanceReceiptModal()"
         >
             <div class="modal-dialog modal-xl">
                 <div class="modal-content">
@@ -1941,7 +1960,7 @@
                         [advanceReceiptAdjustmentUpdatedData]="advanceReceiptAdjustmentData"
                         (closeModelEvent)="closeAdvanceReceiptModal()"
                         (submitClicked)="getAdvanceReceiptAdjustData($event)"
-                        [isVoucherModule]="true"
+                        [isVoucherModule]="true && voucherApiVersion !== 2"
                         [voucherForAdjustment]="voucherForAdjustment"
                         [adjustedVoucherType]="selectedVoucher"
                     >
@@ -2019,11 +2038,11 @@
         <form>
             <div class="mr-b15">
                 <label>{{ commonLocaleData?.app_invoice_number }}</label>
-                <input type="text" class="form-control" [value]="selectedInvoicesList[0].voucherNumber" readonly />
+                <input type="text" class="form-control" [value]="selectedEInvoice?.voucherNumber" readonly />
             </div>
             <div class="mr-b15">
                 <label>{{ commonLocaleData?.app_irn }}</label>
-                <input type="text" class="form-control" [value]="selectedInvoicesList[0].irnNumber" readonly />
+                <input type="text" class="form-control" [value]="selectedEInvoice?.irnNumber" readonly />
             </div>
             <div class="mr-b15">
                 <label>{{ localeData?.cancel_reason }} <span class="red-text">*</span></label>

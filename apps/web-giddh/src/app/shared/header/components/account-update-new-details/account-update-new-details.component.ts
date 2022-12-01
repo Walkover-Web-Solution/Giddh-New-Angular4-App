@@ -19,8 +19,8 @@ import { GroupResponse } from 'apps/web-giddh/src/app/models/api-models/Group';
 import { IDiscountList } from 'apps/web-giddh/src/app/models/api-models/SettingsDiscount';
 import { AccountService } from 'apps/web-giddh/src/app/services/account.service';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
-import { take, takeUntil } from 'rxjs/operators';
+import { combineLatest, Observable, of as observableOf, ReplaySubject, timer } from 'rxjs';
+import { take, takeUntil, debounceTime } from 'rxjs/operators';
 import { AccountsAction } from '../../../../actions/accounts.actions';
 import { CommonActions } from '../../../../actions/common.actions';
 import { CompanyActions } from '../../../../actions/company.actions';
@@ -36,17 +36,16 @@ import {
     IAccountAddress,
 } from '../../../../models/api-models/Account';
 import { CountryRequest, OnboardingFormRequest } from '../../../../models/api-models/Common';
-import { CompanyResponse, StateList, StatesRequest } from '../../../../models/api-models/Company';
+import { CompanyResponse, StateList, StatesRequest, TaxResponse } from '../../../../models/api-models/Company';
 import { IForceClear } from '../../../../models/api-models/Sales';
 import { ToasterService } from '../../../../services/toaster.service';
 import { AppState } from '../../../../store';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
 import { ShSelectComponent } from '../../../../theme/ng-virtual-select/sh-select.component';
 import { digitsOnly } from '../../../helpers';
-import { parsePhoneNumberFromString, CountryCode } from 'libphonenumber-js/min';
 import { ApplyDiscountRequestV2 } from 'apps/web-giddh/src/app/models/api-models/ApplyDiscount';
 import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
-import { API_COUNT_LIMIT, EMAIL_VALIDATION_REGEX, TCS_TDS_TAXES_TYPES } from 'apps/web-giddh/src/app/app.constant';
+import { API_COUNT_LIMIT, BootstrapToggleSwitch, EMAIL_VALIDATION_REGEX, MOBILE_NUMBER_ADDRESS_JSON_URL, MOBILE_NUMBER_IP_ADDRESS_URL, MOBILE_NUMBER_SELF_URL, MOBILE_NUMBER_UTIL_URL, TCS_TDS_TAXES_TYPES } from 'apps/web-giddh/src/app/app.constant';
 import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service';
 import { SearchService } from 'apps/web-giddh/src/app/services/search.service';
 import { INameUniqueName } from 'apps/web-giddh/src/app/models/api-models/Inventory';
@@ -54,6 +53,9 @@ import { GeneralService } from 'apps/web-giddh/src/app/services/general.service'
 import { clone, cloneDeep, differenceBy, flattenDeep, uniq } from 'apps/web-giddh/src/app/lodash-optimized';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { SettingsDiscountService } from 'apps/web-giddh/src/app/services/settings.discount.service';
+import { CustomFieldsService } from 'apps/web-giddh/src/app/services/custom-fields.service';
+import { FieldTypes } from 'apps/web-giddh/src/app/custom-fields/custom-fields.constant';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
     selector: 'account-update-new-details',
@@ -80,13 +82,11 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     @Input() public isBankAccount: boolean = false;
     @Input() public showDeleteButton: boolean = true;
     @Input() public accountDetails: any;
-    /** True if custom fields api needs to be called again */
-    @Input() public reloadCustomFields: boolean = false;
     @ViewChild('autoFocusUpdate', { static: true }) public autoFocusUpdate: ElementRef;
     public moveAccountForm: FormGroup;
     public taxGroupForm: FormGroup;
-    @ViewChild('deleteMergedAccountModal', { static: true }) public deleteMergedAccountModal: ModalDirective;
-    @ViewChild('moveMergedAccountModal', { static: true }) public moveMergedAccountModal: ModalDirective;
+    @ViewChild('deleteMergedAccountModal', { static: false }) public deleteMergedAccountModal: ModalDirective;
+    @ViewChild('moveMergedAccountModal', { static: false }) public moveMergedAccountModal: ModalDirective;
     /** Tabs instance */
     @ViewChild('staticTabs', { static: true }) public staticTabs: TabsetComponent;
 
@@ -95,8 +95,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         = new EventEmitter();
     @Output() public deleteClicked: EventEmitter<any> = new EventEmitter();
     @Output() public isGroupSelected: EventEmitter<IOption> = new EventEmitter();
-    /** Emits if we have to switch to custom fields tab */
-    @Output() public goToCustomFields: EventEmitter<boolean> = new EventEmitter();
+    /** Emiting true if account modal needs to be closed */
+    @Output() public closeAccountModal: EventEmitter<boolean> = new EventEmitter();
     public showOtherDetails: boolean = false;
     public partyTypeSource: IOption[] = [];
     public stateList: StateList[] = [];
@@ -123,7 +123,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public callingCodesSource$: Observable<IOption[]> = observableOf([]);
     public accounts: IOption[];
     public stateGstCode: any[] = [];
-    public isMobileNumberValid: boolean = true;
     public formFields: any[] = [];
     public isGstValid$: Observable<boolean> = observableOf(true);
     public selectedTab: string = 'address';
@@ -205,6 +204,20 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public accountCountryName: string = "";
     /** True if custom fields api call in progress */
     public isCustomFieldLoading: boolean = false;
+    /** Custom fields request */
+    public customFieldsRequest: any = {
+        page: 0,
+        count: 0,
+        moduleUniqueName: 'account'
+    };
+    /** Available field types list */
+    public availableFieldTypes: any = FieldTypes;
+    /** This will hold toggle buttons value and size */
+    public bootstrapToggleSwitch = BootstrapToggleSwitch;
+    /** This will hold isMobileNumberInvalid */
+    public isMobileNumberInvalid: boolean = false;
+    /** This will hold mobile number field input  */
+    public intl: any;
 
     constructor(
         private _fb: FormBuilder,
@@ -221,7 +234,9 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         private groupService: GroupService,
         private invoiceService: InvoiceService,
         private changeDetectorRef: ChangeDetectorRef,
-        private settingsDiscountService: SettingsDiscountService
+        private settingsDiscountService: SettingsDiscountService,
+        private customFieldsService: CustomFieldsService,
+        private http: HttpClient
     ) {
 
     }
@@ -229,6 +244,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public ngOnInit() {
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
+                this.activeCompany = activeCompany;
+
                 if (activeCompany.countryV2) {
                     this.selectedCompanyCountryName = activeCompany.countryV2.alpha2CountryCode + ' - ' + activeCompany.country;
                     this.companyCountry = activeCompany.countryV2.alpha2CountryCode;
@@ -236,10 +253,10 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 this.companyCurrency = clone(activeCompany.baseCurrency);
             }
         });
+
         this.activeAccount$ = this.store.pipe(select(state => state.groupwithaccounts.activeAccount), takeUntil(this.destroyed$));
         this.moveAccountSuccess$ = this.store.pipe(select(state => state.groupwithaccounts.moveAccountSuccess), takeUntil(this.destroyed$));
         this.activeAccountTaxHierarchy$ = this.store.pipe(select(state => state.groupwithaccounts.activeAccountTaxHierarchy), takeUntil(this.destroyed$));
-        this.getCompanyCustomField();
         this.getCountry();
         this.getCurrency();
         this.getCallingCodes();
@@ -262,136 +279,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             taxes: ['']
         });
 
-        // fill form with active account
-        this.activeAccount$.pipe(takeUntil(this.destroyed$)).subscribe(acc => {
-            if (acc) {
-                this.resetBankDetailsForm();
-                if (acc && acc.parentGroups[0]?.uniqueName) {
-                    let col = acc.parentGroups[0]?.uniqueName;
-                    this.isHsnSacEnabledAcc = col === 'revenuefromoperations' || col === 'otherincome' || col === 'operatingcost' || col === 'indirectexpenses';
-                    this.isGstEnabledAcc = !this.isHsnSacEnabledAcc;
-                    this.activeAccountGroup = acc.parentGroups?.length > 0 ? [{
-                        label: acc.parentGroups[acc.parentGroups?.length - 1]?.name,
-                        value: acc.parentGroups[acc.parentGroups?.length - 1]?.uniqueName,
-                        additional: acc.parentGroups[acc.parentGroups?.length - 1],
-                    }] : this.flatGroupsOptions;
-                    this.activeGroupUniqueName = acc.parentGroups?.length > 0 ? acc.parentGroups[acc.parentGroups?.length - 1]?.uniqueName : '';
-                    this.store.dispatch(this.groupWithAccountsAction.SetActiveGroup(this.activeGroupUniqueName));
+        this.initAccountCustomFields();
 
-                    this.store.pipe(select(appStore => appStore.groupwithaccounts.activeGroupUniqueName), take(1)).subscribe(response => {
-                        if (response !== this.activeGroupUniqueName) {
-                            this.store.dispatch(this.groupWithAccountsAction.getGroupDetails(this.activeGroupUniqueName));
-                        }
-                    });
-
-                    this.showHideAddressTab();
-                }
-
-                let accountDetails: AccountRequestV2 = acc as AccountRequestV2;
-                if (accountDetails?.uniqueName) {
-                    this.accountInheritedDiscounts = [];
-                    if (accountDetails && accountDetails.inheritedDiscounts) {
-                        accountDetails.inheritedDiscounts.forEach(item => {
-                            this.accountInheritedDiscounts.push(...item.applicableDiscounts);
-                        });
-                    }
-                    this._accountService.GetApplyDiscount(accountDetails?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                        this.selectedDiscounts = [];
-                        this.forceClearDiscount$ = observableOf({ status: true });
-                        if (response.status === 'success') {
-                            if (response.body) {
-                                if (response.body[accountDetails?.uniqueName]) {
-                                    let list = response.body[accountDetails?.uniqueName];
-                                    Object.keys(list).forEach(key => {
-                                        let UniqueName = list[key]['discount']['uniqueName'];
-                                        this.selectedDiscounts.push(UniqueName);
-                                    });
-                                }
-                            }
-                        }
-                        uniq(this.selectedDiscounts);
-                    });
-                }
-
-                accountDetails.addresses.forEach(address => {
-                    address.state = address.state ? address.state : { code: '', stateGstCode: '', name: '' };
-                    address.stateCodeName = address.state.code + " - " + address.state.name;
-                });
-
-                for (let i = 0; i <= 10; i++) {
-                    this.removeGstDetailsForm(0);
-                }
-                if (!accountDetails.customFields) {
-                    accountDetails.customFields = [];
-                }
-
-                this.addAccountForm?.patchValue(accountDetails);
-                if (accountDetails.currency) {
-                    this.selectedCurrency = accountDetails.currency;
-                    this.addAccountForm.get('currency')?.patchValue(this.selectedCurrency);
-                } else {
-                    this.selectedCurrency = this.companyCurrency;
-                    this.addAccountForm.get('currency')?.patchValue(this.selectedCurrency);
-                }
-                if (accountDetails.country) {
-                    this.accountCountryName = acc?.country?.countryCode + " - " + acc?.country?.countryName;
-                    if (accountDetails.country.countryCode) {
-                        this.getStates(accountDetails.country.countryCode, accountDetails.currency);
-                        this.getOnboardingForm(accountDetails.country.countryCode);
-                    }
-                }
-                // render gst details if there's no details add one automatically
-                if (accountDetails?.addresses?.length > 0) {
-                    accountDetails.addresses.map(a => {
-                        this.renderGstDetails(a, accountDetails.addresses.length);
-                    });
-                } else {
-                    if (accountDetails?.addresses?.length === 0) {
-                        this.addBlankGstForm();
-                    }
-                }
-                // render custom field data
-                if (accountDetails.customFields && accountDetails.customFields.length > 0) {
-                    accountDetails.customFields.map(item => {
-                        this.renderCustomFieldDetails(item, accountDetails.customFields.length);
-                    });
-                }
-
-                // render custom field data
-                if (accountDetails.customFields && accountDetails.customFields.length > 0) {
-                    accountDetails.customFields.map(item => {
-                        this.renderCustomFieldDetails(item, accountDetails.customFields.length);
-                    });
-                }
-                // hsn/sac enable disable
-                if (acc.hsnNumber) {
-                    this.addAccountForm.get('hsnOrSac')?.patchValue('hsn');
-                } else if (acc.sacNumber) {
-                    this.addAccountForm.get('hsnOrSac')?.patchValue('sac');
-                }
-                this.openingBalanceTypeChnaged(accountDetails.openingBalanceType);
-                this.addAccountForm?.patchValue(accountDetails);
-                if (accountDetails.mobileNo) {
-                    if (accountDetails.mobileNo.indexOf('-') > -1) {
-                        let mobileArray = accountDetails.mobileNo.split('-');
-                        this.addAccountForm.get('mobileCode')?.patchValue(mobileArray[0]);
-                        this.addAccountForm.get('mobileNo')?.patchValue(mobileArray[1]);
-                    } else {
-                        this.addAccountForm.get('mobileNo')?.patchValue(accountDetails.mobileNo);
-                        this.addAccountForm.get('mobileCode')?.patchValue(accountDetails.mobileCode);
-                    }
-                } else {
-                    this.addAccountForm.get('mobileNo')?.patchValue('');
-                    this.addAccountForm.get('mobileCode')?.patchValue(this.selectedAccountCallingCode);  // if mobile no null then country calling cade will assign
-                }
-
-                this.toggleStateRequired();
-                setTimeout(() => {
-                    this.generalService.invokeEvent.next(["accountEditing", acc]);
-                }, 500);
-            }
-
-        });
         this.addAccountForm.get('hsnOrSac').valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(a => {
             const hsn: AbstractControl = this.addAccountForm.get('hsnNumber');
             const sac: AbstractControl = this.addAccountForm.get('sacNumber');
@@ -411,19 +300,13 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             }
         });
 
-        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-            if (activeCompany) {
-                this.activeCompany = activeCompany;
-            }
-        });
-
         if (this.autoFocusUpdate !== undefined) {
             setTimeout(() => {
                 this.autoFocusUpdate?.nativeElement?.focus();
             }, 50);
         }
 
-        this.addAccountForm.get('activeGroupUniqueName').setValue(this.activeGroupUniqueName);
+        this.addAccountForm.get('activeGroupUniqueName')?.setValue(this.activeGroupUniqueName);
         this.accountsAction.mergeAccountResponse$.pipe(takeUntil(this.destroyed$)).subscribe(res => {
             this.selectedaccountForMerge = '';
         });
@@ -441,6 +324,9 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     }
 
     public ngAfterViewInit() {
+        setTimeout(() => {
+            this.onlyPhoneNumber();
+        }, 1000);
         if (this.flatGroupsOptions === undefined) {
             this.getAccount();
         }
@@ -474,7 +360,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             (state: AppState) => state.groupwithaccounts.activeAccount,
             (state: AppState) => state.groupwithaccounts.activeAccountTaxHierarchy,
             (state: AppState) => state.company && state.company.taxes],
-            (activeAccount, activeAccountTaxHierarchy, taxes) => {
+            (activeAccount: AccountResponseV2, activeAccountTaxHierarchy: AccountsTaxHierarchyResponse, taxes: TaxResponse[]) => {
                 let arr: IOption[] = [];
                 if (taxes) {
                     if (activeAccount) {
@@ -493,9 +379,9 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                                 let inheritedTaxes = flattenDeep(activeAccountTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((j: any) => j?.uniqueName);
                                 let allTaxes = applicableTaxes?.filter(f => inheritedTaxes.indexOf(f) === -1);
                                 // set value in tax group form
-                                this.taxGroupForm.setValue({ taxes: allTaxes });
+                                this.taxGroupForm?.setValue({ taxes: allTaxes });
                             } else {
-                                this.taxGroupForm.setValue({ taxes: applicableTaxes });
+                                this.taxGroupForm?.setValue({ taxes: applicableTaxes });
                             }
                             const notInheritedTax = differenceBy(taxes.map(p => {
                                 return { label: p.name, value: p?.uniqueName, additional: p };
@@ -505,7 +391,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                             return this.filterTaxesForDebtorCreditor(notInheritedTax);
                         } else {
                             // set value in tax group form
-                            this.taxGroupForm.setValue({ taxes: applicableTaxes });
+                            this.taxGroupForm?.setValue({ taxes: applicableTaxes });
 
                             const formattedTax = taxes.map(p => {
                                 return { label: p.name, value: p?.uniqueName, additional: p };
@@ -524,8 +410,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 this.discountList = [];
                 Object.keys(response?.body).forEach(key => {
                     this.discountList.push({
-                        label: response?.body[key].name,
-                        value: response?.body[key].uniqueName,
+                        label: response?.body[key]?.name,
+                        value: response?.body[key]?.uniqueName,
                         isSelected: false
                     });
                 });
@@ -638,7 +524,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         for (let control of addresses.controls) {
             control.get('stateCode')?.patchValue(null);
             control.get('state').get('code')?.patchValue(null);
-            control.get('gstNumber').setValue("");
+            control.get('gstNumber')?.setValue("");
         }
     }
 
@@ -694,7 +580,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
     public getStateCode(gstForm: FormGroup, statesEle: ShSelectComponent) {
         let gstVal: string = gstForm.get('gstNumber').value;
-        gstForm.get('gstNumber').setValue(gstVal?.trim());
+        gstForm.get('gstNumber')?.setValue(gstVal?.trim());
         if (gstVal?.length) {
             if (gstVal?.length !== 15) {
                 gstForm.get('partyType').reset('NOT APPLICABLE');
@@ -718,7 +604,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                             }
 
                             let invalidTaxName = this.commonLocaleData?.app_invalid_tax_name;
-                            invalidTaxName = invalidTaxName.replace("[TAX_NAME]", this.formFields['taxName'].label);
+                            invalidTaxName = invalidTaxName?.replace("[TAX_NAME]", this.formFields['taxName'].label);
                             this._toaster.errorToast(invalidTaxName);
                         }
                     }
@@ -753,33 +639,9 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         this.addBlankGstForm();
     }
 
-    public isValidMobileNumber(ele: HTMLInputElement) {
-        if (ele.value) {
-            this.checkMobileNo(ele);
-        }
-    }
-
-    public checkMobileNo(ele) {
-        try {
-            let parsedNumber = parsePhoneNumberFromString('+' + this.addAccountForm.get('mobileCode').value + ele.value, this.addAccountForm.get('country').get('countryCode').value as CountryCode);
-            if (parsedNumber.isValid()) {
-                ele.classList.remove('error-box');
-                this.isMobileNumberValid = true;
-            } else {
-                this.isMobileNumberValid = false;
-                this._toaster.errorToast(this.localeData?.invalid_contact_number);
-                ele.classList.add('error-box');
-            }
-        } catch (error) {
-            this.isMobileNumberValid = false;
-            this._toaster.errorToast(this.localeData?.invalid_contact_number);
-            ele.classList.add('error-box');
-        }
-    }
-
     public submit() {
         if (!this.addAccountForm.get('openingBalance').value) {
-            this.addAccountForm.get('openingBalance').setValue('0');
+            this.addAccountForm.get('openingBalance')?.setValue('0');
         }
         if (!this.addAccountForm.get('foreignOpeningBalance').value) {
             this.addAccountForm.get('foreignOpeningBalance')?.patchValue('0');
@@ -804,14 +666,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         } else {
             this.activeAccount$.pipe(take(1)).subscribe(activeAccountState => this.activeAccountName = activeAccountState?.uniqueName);
         }
-        if (!accountRequest.mobileNo) {
-            accountRequest.mobileCode = '';
-        } else {
-            if (!this.isMobileNumberValid) {
-                this._toaster.errorToast(this.localeData?.invalid_contact_number);
-                return false;
-            }
-        }
         if (this.isHsnSacEnabledAcc) {
             delete accountRequest['addresses'];
         } else {
@@ -825,7 +679,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 }
                 return f;
             });
-
             if (accountRequest.mobileCode && accountRequest.mobileNo) {
                 accountRequest.mobileNo = accountRequest.mobileNo;
             }
@@ -852,6 +705,9 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             accountRequest.currency = this.selectedCurrency;
         }
 
+        let mobileNo = this.intl?.getNumber();
+        accountRequest['mobileNo'] = mobileNo;
+
         accountRequest['hsnNumber'] = (accountRequest["hsnOrSac"] === "hsn") ? accountRequest['hsnNumber'] : "";
         accountRequest['sacNumber'] = (accountRequest["hsnOrSac"] === "sac") ? accountRequest['sacNumber'] : "";
 
@@ -874,9 +730,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         if (s && s['showVirtualAccount'] && s['showVirtualAccount'].currentValue) {
             this.showOtherDetails = true;
         }
-        if(s && s['reloadCustomFields']?.currentValue && s['reloadCustomFields']?.currentValue !== s['reloadCustomFields']?.previousValue) {
-            this.getCompanyCustomField();
-        }
     }
 
     public ngOnDestroy() {
@@ -892,9 +745,9 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             this.store.dispatch(this._generalActions.resetStatesList());
             this.store.dispatch(this.commonActions.resetOnboardingForm());
             let phoneCode = event.additional;
-            this.addAccountForm.get('mobileCode').setValue(phoneCode);
+            this.addAccountForm.get('mobileCode')?.setValue(phoneCode);
             let currencyCode = this.countryCurrency[event.value];
-            this.addAccountForm.get('currency').setValue(currencyCode);
+            this.addAccountForm.get('currency')?.setValue(currencyCode);
             this.getStates(event.value);
             this.getOnboardingForm(event.value);
             this.toggleStateRequired();
@@ -916,7 +769,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         if (event) {
             this.activeGroupUniqueName = event.value;
             let parent = event.additional;
-            if (parent[1]) {
+            if (parent && parent[1]) {
                 this.isParentDebtorCreditor(parent[1].uniqueName);
             }
             this.isGroupSelected.emit(event);
@@ -1105,16 +958,21 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         this.store.dispatch(this.accountsAction.moveAccount(grpObject, activeAcc?.uniqueName, this.activeGroupUniqueName));
         this.moveAccountForm.reset();
     }
+
+    /**
+     * This will use for merger accounts
+     *
+     * @return {*}
+     * @memberof AccountUpdateNewDetailsComponent
+     */
     public mergeAccounts() {
         let activeAccount: AccountResponseV2 = null;
         this.activeAccount$.pipe(take(1)).subscribe(p => activeAccount = p);
         let finalData: AccountMergeRequest[] = [];
-        if (this.selectedaccountForMerge?.length) {
-            this.selectedaccountForMerge.map((acc) => {
-                let obj = new AccountMergeRequest();
-                obj.uniqueName = acc;
-                finalData.push(obj);
-            });
+        if (this.selectedaccountForMerge) {
+            let obj = new AccountMergeRequest();
+            obj.uniqueName = this.selectedaccountForMerge;
+            finalData.push(obj);
             this.store.dispatch(this.accountsAction.mergeAccount(activeAccount?.uniqueName, finalData));
             this.showDeleteMove = false;
         } else {
@@ -1133,13 +991,13 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public showDeleteMergedAccountModal(merge: string) {
         merge = merge?.trim();
         this.deleteMergedAccountModalBody = this.localeData?.delete_merged_account_content;
-        this.deleteMergedAccountModalBody = this.deleteMergedAccountModalBody.replace("[MERGE]", merge);
+        this.deleteMergedAccountModalBody = this.deleteMergedAccountModalBody?.replace("[MERGE]", merge);
         this.selectedAccountForDelete = merge;
-        this.deleteMergedAccountModal.show();
+        this.deleteMergedAccountModal?.show();
     }
 
     public hideDeleteMergedAccountModal() {
-        this.deleteMergedAccountModal.hide();
+        this.deleteMergedAccountModal?.hide();
     }
 
     public deleteMergedAccount() {
@@ -1203,7 +1061,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 if (t) {
                     t.inheritedTaxes.forEach(tt => {
                         tt.applicableTaxes.forEach(ttt => {
-                            data.taxes.push(ttt.uniqueName);
+                            data.taxes.push(ttt?.uniqueName);
                         });
                     });
                 }
@@ -1217,8 +1075,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
     public showMoveMergedAccountModal() {
         this.moveMergedAccountModalBody = this.localeData?.move_merged_account_content;
-        this.moveMergedAccountModalBody = this.moveMergedAccountModalBody.replace("[SOURCE_ACCOUNT]", this.setAccountForMove);
-        this.moveMergedAccountModalBody = this.moveMergedAccountModalBody.replace("[DESTINATION_ACCOUNT]", this.selectedAccountForMove);
+        this.moveMergedAccountModalBody = this.moveMergedAccountModalBody?.replace("[SOURCE_ACCOUNT]", this.setAccountForMove);
+        this.moveMergedAccountModalBody = this.moveMergedAccountModalBody?.replace("[DESTINATION_ACCOUNT]", this.selectedAccountForMove);
         this.moveMergedAccountModal.show();
     }
 
@@ -1292,7 +1150,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         if (element.value && type) {
             let trim: string = '';
             // changes account number validation for country india as well ref card : GIDK-1119
-            trim = element.value.replace(/[^a-zA-Z0-9]/g, '');
+            trim = element.value?.replace(/[^a-zA-Z0-9]/g, '');
             let accountBankDetail = this.addAccountForm.get('accountBankDetails') as FormArray;
             for (let control of accountBankDetail.controls) {
                 if (type === 'bankAccountNo') {
@@ -1365,14 +1223,14 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     * @memberof AccountUpdateNewDetailsComponent
     */
     public getCompanyCustomField(): void {
-        if(this.isCustomFieldLoading) {
+        if (this.isCustomFieldLoading) {
             return;
         }
         this.isCustomFieldLoading = true;
         this.companyCustomFields = [];
-        this.groupService.getCompanyCustomField().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.customFieldsService.list(this.customFieldsRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.status === 'success') {
-                this.companyCustomFields = response.body;
+                this.companyCustomFields = response.body?.results;
                 this.createDynamicCustomFieldForm(this.companyCustomFields);
             } else {
                 this._toaster.errorToast(response.message);
@@ -1418,7 +1276,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public initialCustomFieldDetailsForm(value: CustomFieldsData = null): FormGroup {
         let customFields = this._fb.group({
             uniqueName: [''],
-            value: [''],
+            value: ['', (value?.isMandatory) ? Validators.required : undefined],
         });
         if (value) {
             customFields?.patchValue(value);
@@ -1447,7 +1305,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      */
     public selectedBooleanCustomField(isChecked: string, index: number): void {
         const customField = this.addAccountForm.get('customFields') as FormArray;
-        customField.controls[index].get('value').setValue(isChecked);
+        customField.controls[index].get('value')?.setValue(isChecked);
     }
 
     /**
@@ -1517,8 +1375,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     } else {
                         this.GSTIN_OR_TRN = '';
                     }
-                    this.taxNamePlaceholder = this.commonLocaleData.app_enter_tax_name;
-                    this.taxNamePlaceholder = this.taxNamePlaceholder.replace("[TAX_NAME]", this.formFields['taxName']?.label);
+                    this.taxNamePlaceholder = this.commonLocaleData?.app_enter_tax_name;
+                    this.taxNamePlaceholder = this.taxNamePlaceholder?.replace("[TAX_NAME]", this.formFields['taxName']?.label || '');
                 }
             });
         }
@@ -1767,7 +1625,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             }, 50);
 
             const accountAddress = this.addAccountForm.get('addresses') as FormArray;
-            if (accountAddress.controls.length === 0 || !accountAddress.length) {
+            if (accountAddress.controls?.length === 0 || !accountAddress?.length) {
                 this.addBlankGstForm();
             }
         } else {
@@ -1779,6 +1637,262 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     this.changeDetectorRef.detectChanges();
                 }
             }, 50);
+        }
+    }
+
+    /**
+     * This will initialize the account details and custom fields
+     *
+     * @private
+     * @memberof AccountUpdateNewDetailsComponent
+     */
+    private initAccountCustomFields(): void {
+        // fill form with active account
+        combineLatest([this.activeAccount$, this.customFieldsService.list(this.customFieldsRequest)]).pipe(takeUntil(this.destroyed$)).subscribe(results => {
+            if (results && results[0] && results[1]) {
+                this.companyCustomFields = [];
+                this.addAccountForm.setControl('customFields', this._fb.array([]));
+                let acc = results[0];
+                this.resetBankDetailsForm();
+                if (acc && acc.parentGroups[0]?.uniqueName) {
+                    let col = acc.parentGroups[0]?.uniqueName;
+                    this.isHsnSacEnabledAcc = col === 'revenuefromoperations' || col === 'otherincome' || col === 'operatingcost' || col === 'indirectexpenses';
+                    this.isGstEnabledAcc = !this.isHsnSacEnabledAcc;
+                    this.activeAccountGroup = acc.parentGroups?.length > 0 ? [{
+                        label: acc.parentGroups[acc.parentGroups?.length - 1]?.name,
+                        value: acc.parentGroups[acc.parentGroups?.length - 1]?.uniqueName,
+                        additional: acc.parentGroups[acc.parentGroups?.length - 1],
+                    }] : this.flatGroupsOptions;
+                    this.activeGroupUniqueName = acc.parentGroups?.length > 0 ? acc.parentGroups[acc.parentGroups?.length - 1]?.uniqueName : '';
+                    this.store.dispatch(this.groupWithAccountsAction.SetActiveGroup(this.activeGroupUniqueName));
+                    timer(1)
+                        .pipe(debounceTime(50))
+                        .subscribe(_ => {
+                            if (results[0]?.mobileNo) {
+                                let updatedNumber = '+' + results[0]?.mobileNo;
+                                this.intl?.setNumber(updatedNumber);
+                            }
+                        });
+                    this.store.pipe(select(appStore => appStore.groupwithaccounts.activeGroupUniqueName), take(1)).subscribe(response => {
+                        if (response !== this.activeGroupUniqueName) {
+                            this.store.dispatch(this.groupWithAccountsAction.getGroupDetails(this.activeGroupUniqueName));
+                        }
+                    });
+
+                    this.showHideAddressTab();
+                }
+
+                let accountDetails: AccountRequestV2 = acc as AccountRequestV2;
+                if (accountDetails?.uniqueName) {
+                    this.accountInheritedDiscounts = [];
+                    if (accountDetails && accountDetails.inheritedDiscounts) {
+                        accountDetails.inheritedDiscounts.forEach(item => {
+                            this.accountInheritedDiscounts.push(...item.applicableDiscounts);
+                        });
+                    }
+                    this._accountService.GetApplyDiscount(accountDetails?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                        this.selectedDiscounts = [];
+                        this.forceClearDiscount$ = observableOf({ status: true });
+                        if (response?.status === 'success') {
+                            if (response.body) {
+                                if (response.body[accountDetails?.uniqueName]) {
+                                    let list = response.body[accountDetails?.uniqueName];
+                                    Object.keys(list)?.forEach(key => {
+                                        let UniqueName = list[key]['discount']['uniqueName'];
+                                        this.selectedDiscounts.push(UniqueName);
+                                    });
+                                }
+                            }
+                        }
+                        uniq(this.selectedDiscounts);
+                    });
+                }
+
+                accountDetails.addresses.forEach(address => {
+                    address.state = address.state ? address.state : { code: '', stateGstCode: '', name: '' };
+                    address.stateCodeName = address.state.code + " - " + address.state.name;
+                });
+
+                for (let i = 0; i <= 10; i++) {
+                    this.removeGstDetailsForm(0);
+                }
+                if (!accountDetails.customFields) {
+                    accountDetails.customFields = [];
+                }
+
+                this.addAccountForm?.patchValue(accountDetails);
+                if (accountDetails.currency) {
+                    this.selectedCurrency = accountDetails.currency;
+                    this.addAccountForm.get('currency')?.patchValue(this.selectedCurrency);
+                } else {
+                    this.selectedCurrency = this.companyCurrency;
+                    this.addAccountForm.get('currency')?.patchValue(this.selectedCurrency);
+                }
+                if (accountDetails.country) {
+                    this.accountCountryName = acc?.country?.countryCode + " - " + acc?.country?.countryName;
+                    if (accountDetails.country.countryCode) {
+                        this.getStates(accountDetails.country.countryCode, accountDetails.currency);
+                        this.getOnboardingForm(accountDetails.country.countryCode);
+                    }
+                }
+                // render gst details if there's no details add one automatically
+                if (accountDetails?.addresses?.length > 0) {
+                    accountDetails.addresses.map(a => {
+                        this.renderGstDetails(a, accountDetails.addresses.length);
+                    });
+                } else {
+                    if (accountDetails?.addresses?.length === 0) {
+                        this.addBlankGstForm();
+                    }
+                }
+                // render custom field data
+                if (results[1] && results[1].status === 'success') {
+                    this.companyCustomFields = results[1].body?.results;
+                    this.createDynamicCustomFieldForm(this.companyCustomFields);
+                } else {
+                    this._toaster.errorToast(results[1].message);
+                }
+                if (accountDetails.customFields?.length) {
+                    const customField = this.addAccountForm.get('customFields') as FormArray;
+                    if (customField.controls?.length) {
+                        accountDetails.customFields.forEach(item => {
+                            const fieldIndex = customField.controls?.findIndex(control => control?.value?.uniqueName === item?.uniqueName);
+                            customField?.at(fieldIndex).get('value').patchValue(item.value);
+                        });
+                    }
+                }
+                // hsn/sac enable disable
+                if (acc.hsnNumber) {
+                    this.addAccountForm.get('hsnOrSac')?.patchValue('hsn');
+                } else if (acc.sacNumber) {
+                    this.addAccountForm.get('hsnOrSac')?.patchValue('sac');
+                }
+                this.openingBalanceTypeChnaged(accountDetails.openingBalanceType);
+                if (accountDetails.mobileNo) {
+
+                    if (accountDetails.mobileNo.indexOf('-') > -1) {
+                        let mobileArray = accountDetails.mobileNo.split('-');
+                        this.addAccountForm.get('mobileCode')?.patchValue(mobileArray[0]);
+                        this.addAccountForm.get('mobileNo')?.patchValue(mobileArray[1]);
+                    } else {
+                        this.addAccountForm.get('mobileNo')?.patchValue('+' + accountDetails.mobileNo);
+                        this.addAccountForm.get('mobileCode')?.patchValue('+' + accountDetails.mobileCode);
+                    }
+                } else {
+                    this.addAccountForm.get('mobileNo')?.patchValue('');
+                    this.addAccountForm.get('mobileCode')?.patchValue(this.selectedAccountCallingCode);  // if mobile no null then country calling cade will assign
+                }
+                this.toggleStateRequired();
+                setTimeout(() => {
+                    this.generalService.invokeEvent.next(["accountEditing", acc]);
+                }, 500);
+            }
+
+        });
+    }
+
+    /**
+     * Closes Master
+     *
+     * @memberof AccountUpdateNewDetailsComponent
+     */
+    public closeMaster(): void {
+        this.closeAccountModal.emit(true);
+        this.store.dispatch(this.groupWithAccountsAction.HideAddAndManageFromOutside());
+        document.querySelector('body')?.classList?.remove('master-page');
+    }
+
+    /**
+   *This will use for  fetch mobile number
+  *
+  * @memberof AccountUpdateNewDetailsComponent
+  */
+    public onlyPhoneNumber(): void {
+        let input = document.getElementById('init-contact-update');
+        const errorMsg = document.querySelector("#init-contact-update-error-msg");
+        const validMsg = document.querySelector("#init-contact-update-valid-msg");
+        let errorMap = [this.localeData?.invalid_contact_number, this.commonLocaleData?.app_invalid_country_code, this.commonLocaleData?.app_invalid_contact_too_short, this.commonLocaleData?.app_invalid_contact_too_long, this.localeData?.invalid_contact_number];
+        let intlTelInput = window['intlTelInput'];
+        if (intlTelInput && input) {
+            this.intl = intlTelInput(input, {
+                nationalMode: true,
+                utilsScript: MOBILE_NUMBER_UTIL_URL,
+                autoHideDialCode: false,
+                separateDialCode: false,
+                initialCountry: 'auto',
+                geoIpLookup: (success, failure) => {
+                    let countryCode = 'in';
+                    const fetchIPApi = this.http.get<any>(MOBILE_NUMBER_SELF_URL);
+                    fetchIPApi.subscribe(
+                        (res) => {
+                            if (res?.response?.ipAddress) {
+                                const fetchCountryByIpApi = this.http.get<any>(MOBILE_NUMBER_IP_ADDRESS_URL + `${res.response.ipAddress}`);
+                                fetchCountryByIpApi.subscribe(
+                                    (fetchCountryByIpApiRes) => {
+                                        if (fetchCountryByIpApiRes?.response?.countryCode) {
+                                            return success(fetchCountryByIpApiRes.response.countryCode);
+                                        } else {
+                                            return success(countryCode);
+                                        }
+                                    },
+                                    (fetchCountryByIpApiErr) => {
+                                        const fetchCountryByIpInfoApi = this.http.get<any>(MOBILE_NUMBER_ADDRESS_JSON_URL + `${res.response.ipAddress}`);
+
+                                        fetchCountryByIpInfoApi.subscribe(
+                                            (fetchCountryByIpInfoApiRes) => {
+                                                if (fetchCountryByIpInfoApiRes?.response?.country) {
+                                                    return success(fetchCountryByIpInfoApiRes.response.country);
+                                                } else {
+                                                    return success(countryCode);
+                                                }
+                                            },
+                                            (fetchCountryByIpInfoApiErr) => {
+                                                return success(countryCode);
+                                            }
+                                        );
+                                    }
+                                );
+                            } else {
+                                return success(countryCode);
+                            }
+                        },
+                        (err) => {
+                            return success(countryCode);
+                        }
+                    );
+                },
+            });
+            let reset = () => {
+                input?.classList?.remove("error");
+                if (errorMsg && validMsg) {
+                    errorMsg.innerHTML = "";
+                    errorMsg.classList.add("d-none");
+                    validMsg.classList.add("d-none");
+                }
+            };
+            input.addEventListener('blur', () => {
+                let phoneNumber = this.intl?.getNumber();
+                reset();
+                if (input) {
+                    if (phoneNumber?.length) {
+                        if (this.intl?.isValidNumber()) {
+                            validMsg?.classList?.remove("d-none");
+                            this.isMobileNumberInvalid = false;
+                        } else {
+                            input?.classList?.add("error");
+                            this.isMobileNumberInvalid = true;
+                            let errorCode = this.intl?.getValidationError();
+                            if (errorMsg && errorMap[errorCode]) {
+                                this._toaster.errorToast(this.localeData?.invalid_contact_number);
+                                errorMsg.innerHTML = errorMap[errorCode];
+                                errorMsg.classList.remove("d-none");
+                            }
+                        }
+                    } else {
+                        this.isMobileNumberInvalid = false;
+                    }
+                }
+            });
         }
     }
 }

@@ -13,7 +13,7 @@ import { CompanyActions } from '../../actions/company.actions';
 import { LoginActions } from '../../actions/login.action';
 import { VerifyMobileActions } from '../../actions/verifyMobile.actions';
 import { CountryRequest } from '../../models/api-models/Common';
-import { CompanyCreateRequest, CompanyResponse, StateDetailsRequest } from '../../models/api-models/Company';
+import { CompanyCreateRequest, CompanyResponse } from '../../models/api-models/Company';
 import { userLoginStateEnum } from '../../models/user-login-state';
 import { GeneralService } from '../../services/general.service';
 import { ToasterService } from '../../services/toaster.service';
@@ -110,11 +110,11 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
         this.getCallingCodes();
 
         this.isLoggedInWithSocialAccount$ = this.store.pipe(select(p => p.login.isLoggedInWithSocialAccount), takeUntil(this.destroyed$));
-        this.imgPath = (isElectron || isCordova) ? '' : AppUrl + APP_FOLDER + '';
+        this.imgPath = isElectron ? '' : AppUrl + APP_FOLDER + '';
         this.logedInuser = this._generalService.user;
         if (this._generalService.createNewCompany) {
             this.company = this._generalService.createNewCompany;
-            if (this.company.contactNo.toString().includes('-')) {
+            if (this.company.contactNo?.toString()?.includes('-')) {
                 let contact = this.company.contactNo.split('-');
                 this.company.contactNo = contact[1];
             }
@@ -133,16 +133,10 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
                 this.store.pipe(select(ss => ss.session.lastState), take(1)).subscribe(se => {
                     prevTab = se;
                 });
-                let stateDetailsRequest = new StateDetailsRequest();
-                stateDetailsRequest.companyUniqueName = this.company.uniqueName;
-                stateDetailsRequest.lastState = this.isNewUser ? 'welcome' : 'onboarding';
-                this._generalService.companyUniqueName = this.company.uniqueName;
-                if (prevTab !== 'user-details') {
-                    this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
-                }
+                this._generalService.companyUniqueName = this.company?.uniqueName;
                 setTimeout(() => {
                     if (prevTab !== 'user-details') {
-                        this.store.dispatch(this._loginAction.ChangeCompany(this.company.uniqueName));
+                        this.store.dispatch(this._loginAction.ChangeCompany(this.company?.uniqueName));
                         this._route.navigate([this.isNewUser ? 'welcome' : 'onboarding']);
                     }
                     this.closeModal();
@@ -150,8 +144,8 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
             }
         });
         this.store.pipe(select(p => p.session.companyUniqueName), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(a => {
-            if (a && a !== '' && this.company.uniqueName) {
-                if (a.includes(this.company.uniqueName.substring(0, 8))) {
+            if (a && a !== '' && this.company?.uniqueName) {
+                if (a.includes(this.company?.uniqueName?.substring(0, 8))) {
                     this.company.name = '';
                     this.company.country = '';
                     this.company.baseCurrency = '';
@@ -210,13 +204,6 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
         this.closeCompanyModal.emit();
         if (isElectron) {
             this.store.dispatch(this._loginAction.ClearSession());
-        } else if (isCordova) {
-            // todo: Logout user in Cordova.
-            (window as any).plugins.googleplus.logout(
-                (msg) => {
-                    this.store.dispatch(this._loginAction.ClearSession());
-                }
-            );
         } else {
             this.isLoggedInWithSocialAccount$.subscribe((val) => {
                 if (val) {
@@ -280,7 +267,7 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
         comnanyName = this.removeSpecialCharacters(comnanyName);
         city = this.removeSpecialCharacters(city);
         d = new Date();
-        dateString = d.getTime().toString();
+        dateString = d.getTime()?.toString();
         randomGenerate = this.getSixCharRandom();
         strings = [comnanyName, city, dateString, randomGenerate];
         return strings.join('');
@@ -288,12 +275,12 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
 
     private removeSpecialCharacters(str) {
         let finalString;
-        finalString = str.replace(/[^a-zA-Z0-9]/g, '');
+        finalString = str?.replace(/[^a-zA-Z0-9]/g, '');
         return finalString.substr(0, 6).toLowerCase();
     }
 
     private getSixCharRandom() {
-        return Math.random().toString(36).replace(/[^a-zA-Z0-9]+/g, '').substr(0, 6);
+        return Math.random()?.toString(36)?.replace(/[^a-zA-Z0-9]+/g, '').substr(0, 6);
     }
 
     public getCountry() {

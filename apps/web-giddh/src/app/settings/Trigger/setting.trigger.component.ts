@@ -4,7 +4,7 @@ import { GIDDH_DATE_FORMAT } from './../../shared/helpers/defaultDateFormat';
 import { Store, select } from '@ngrx/store';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AppState } from '../../store';
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { IOption } from '../../theme/ng-select/ng-select';
 import { ToasterService } from '../../services/toaster.service';
@@ -39,7 +39,7 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
         url: null,
         description: null
     };
-    public moment = moment;
+    public dayjs = dayjs;
     public days: IOption[] = [];
     public records = []; // This array is just for generating dynamic ngModel
     public taxToEdit = []; // It is for edit toogle
@@ -114,7 +114,7 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         for (let i = 1; i <= 31; i++) {
-            let day = i.toString();
+            let day = i?.toString();
             this.days.push({ label: day, value: day });
         }
 
@@ -206,7 +206,7 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
 
     public deleteTax(taxToDelete) {
         this.newTriggerObj = taxToDelete;
-        this.selectedTax = this.availableTriggers.find((tax) => tax.uniqueName === taxToDelete.uniqueName).name;
+        this.selectedTax = this.availableTriggers.find((tax) => tax.uniqueName === taxToDelete?.uniqueName).name;
         let message = this.localeData?.delete_tax;
         message = message?.replace("[SELECTED_TAX]", this.selectedTax);
         this.confirmationMessage = message;
@@ -232,15 +232,15 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
         this.triggerConfirmationModel.hide();
         if (userResponse) {
             if (this.confirmationFor === 'delete') {
-                this.settingsTriggersService.DeleteTrigger(this.newTriggerObj.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                this.settingsTriggersService.DeleteTrigger(this.newTriggerObj?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     this.showToaster(this.commonLocaleData?.app_messages?.trigger_deleted, response);
                 });
             } else if (this.confirmationFor === 'edit') {
                 each(this.newTriggerObj.taxDetail, (tax) => {
-                    tax.date = moment(tax.date).format(GIDDH_DATE_FORMAT);
+                    tax.date = dayjs(tax.date).format(GIDDH_DATE_FORMAT);
                 });
 
-                this.settingsTriggersService.UpdateTrigger(this.newTriggerObj, this.newTriggerObj.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                this.settingsTriggersService.UpdateTrigger(this.newTriggerObj, this.newTriggerObj?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     this.resetNewFormModel();
                     this.showToaster(this.commonLocaleData?.app_messages?.trigger_updated, response);
                 });
