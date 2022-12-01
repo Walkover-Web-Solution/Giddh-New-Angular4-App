@@ -1546,7 +1546,12 @@
                                                                 <div class="option-label">{{ option?.label }}</div>
                                                                 <div class="option-value">
                                                                     ({{ commonLocaleData?.app_dated }}:
-                                                                    {{ option.additional?.voucherDate }})
+                                                                    {{
+                                                                        voucherApiVersion === 2
+                                                                            ? option.additional?.voucherDate
+                                                                            : option?.additional?.additional
+                                                                                  ?.voucherDate
+                                                                    }})
                                                                 </div>
                                                                 <div class="option-value-stock">
                                                                     ({{ commonLocaleData?.app_amount }}:
@@ -1554,7 +1559,7 @@
                                                                         voucherApiVersion === 2
                                                                             ? (option.additional?.unadjustedAmount
                                                                                   ?.amountForAccount | giddhCurrency)
-                                                                            : (option.additional?.balanceDue
+                                                                            : (option.additional?.additional?.balanceDue
                                                                                   ?.amountForAccount | giddhCurrency)
                                                                     }})
                                                                 </div>
