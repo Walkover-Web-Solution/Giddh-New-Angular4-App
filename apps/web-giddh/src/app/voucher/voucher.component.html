@@ -1433,6 +1433,7 @@
                                                 </mat-select-trigger>
                                                 <mat-option class="po-options-line">
                                                     <ngx-mat-select-search
+                                                        [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
                                                         [formControl]="linkPoDropdown"
                                                         [placeholderLabel]="localeData?.select_order_placeholder"
                                                     >
