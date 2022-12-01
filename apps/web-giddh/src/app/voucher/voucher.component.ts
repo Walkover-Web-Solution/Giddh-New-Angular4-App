@@ -2098,14 +2098,14 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             if (this.voucherApiVersion === 2) {
                 this.invFormData.voucherDetails.referenceVoucher = {
                     uniqueName: event.value,
-                    voucherType: event.additional.voucherType
+                    voucherType: event.additional.additional.voucherType
                 }
             } else {
                 this.invFormData.voucherDetails.invoiceLinkingRequest = {
                     linkedInvoices: [
                         {
                             invoiceUniqueName: event.value,
-                            voucherType: event.additional.voucherType
+                            voucherType: event.additional.additional.voucherType
                         }
                     ]
                 }
@@ -7128,16 +7128,23 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             if (selectedState) {
                 this.purchaseBillCompany[type].stateCode = selectedState.value;
                 this.purchaseBillCompany[type].state.code = selectedState.value;
+                this.purchaseBillCompany.billingDetails.state.name = selectedState.label;
+                this.purchaseBillCompany.shippingDetails.state.name = selectedState.label;
             } else {
                 this.purchaseBillCompany[type].stateCode = null;
                 this.purchaseBillCompany[type].state.code = null;
+                this.purchaseBillCompany.billingDetails.state.name = null;
+                this.purchaseBillCompany.shippingDetails.state.name = null;
                 this._toasty.clearAllToaster();
             }
         } else {
             this.purchaseBillCompany[type].stateCode = null;
             this.purchaseBillCompany[type].state.code = null;
+            this.purchaseBillCompany.billingDetails.state.name = null;
+            this.purchaseBillCompany.shippingDetails.state.name = null;
         }
         this.checkGstNumValidation(gstVal);
+        this._cdr.detectChanges();
     }
 
     /**
