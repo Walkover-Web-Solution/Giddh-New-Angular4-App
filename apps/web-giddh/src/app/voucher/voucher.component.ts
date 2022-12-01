@@ -2349,7 +2349,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
 
         if (this.asideMenuStateForRecurringEntry === 'out' && !this.dialog.openDialogs) {
+            setTimeout(() => {
             this.openAccountSelectionDropdown?.openDropdownPanel();
+            }, 500);
         }
     }
 
