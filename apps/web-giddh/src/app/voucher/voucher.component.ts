@@ -4372,6 +4372,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     });
             } else if (this.isPurchaseInvoice) {
                 if (this.isRcmEntry && !this.validateTaxes(cloneDeep(data))) {
+                    this.openAccountSelectionDropdown?.closeDropdownPanel();
+                    this.openCustomerDropdown = false;
                     this.startLoader(false);
                     return;
                 }
