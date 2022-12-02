@@ -161,13 +161,13 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
                 this.selectedEntryDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                 this.activityObj.entryFromDate = dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
                 this.activityObj.entryToDate = dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
-         
+
             }
         });
     }
 
     /**
-     * This function will use for get log details 
+     * This function will use for get log details
      *
      * @param {*} element
      * @memberof ActivityLogsComponent
@@ -248,7 +248,7 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
      * @memberof ActivityLogsComponent
      */
     public selecteEntityType(event: IOption): void {
-        if (event && event.value) {
+        if (event && event.value ==='ENTRY') {
             this.isShowEntryDatepicker = true;
         }
     }
