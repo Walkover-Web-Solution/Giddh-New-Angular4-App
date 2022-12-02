@@ -41,6 +41,8 @@ import { SettingIntegrationPaymentModule } from './integration/payment/setting.i
 import { ConfirmModalModule } from '../theme/confirm-modal/confirm-modal.module';
 import { NgxBootstrapSwitchModule } from 'ngx-bootstrap-switch';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { MatInputModule } from '@angular/material/input';
+import { ClipboardModule } from 'ngx-clipboard';
 
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
@@ -91,7 +93,10 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         SettingIntegrationPaymentModule,
         ConfirmModalModule,
         NgxBootstrapSwitchModule.forRoot(),
-        BsDropdownModule.forRoot()
+        BsDropdownModule.forRoot(),
+        MatInputModule,
+        ClipboardModule
+
     ],
     providers: [
         {
