@@ -2096,11 +2096,13 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public creditNoteInvoiceSelected(event: any): void {
         if (event && event.additional && event.value) {
             if (this.voucherApiVersion === 2) {
+                this.selectedInvoiceLabel = event.label;
                 this.invFormData.voucherDetails.referenceVoucher = {
                     uniqueName: event.value,
                     voucherType: event.additional.additional.voucherType
                 }
             } else {
+                this.invoiceSelectedLabel = event?.label;
                 this.invFormData.voucherDetails.invoiceLinkingRequest = {
                     linkedInvoices: [
                         {
@@ -2297,6 +2299,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         if (this.statesShipping?.readonly) {
             this.statesShipping.readonly = false;
         }
+        this.invoiceSelectedLabel = '';
+        this.selectedInvoiceLabel = '';
         this.invoiceSelected = '';
         this.isCustomerSelected = false;
         this.selectedFileName = '';

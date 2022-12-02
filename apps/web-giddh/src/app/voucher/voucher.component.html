@@ -1554,7 +1554,6 @@
                                                 >
                                                 </text-field>
                                                 <ng-container *ngIf="isCreditNote || isDebitNote">
-                                                    {{ selectedInvoiceLabel }}
                                                     <select-field
                                                         #linkingDropdown
                                                         *ngIf="voucherApiVersion === 2"
@@ -1596,8 +1595,6 @@
                                                             </a>
                                                         </ng-template>
                                                     </select-field>
-                                                    {{ invoiceSelectedLabel }}
-
                                                     <select-field
                                                         #invoiceListDropdown
                                                         *ngIf="voucherApiVersion !== 2"
