@@ -50,6 +50,8 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { ConfirmModalModule } from '../theme/confirm-modal/confirm-modal.module';
 import { NgxBootstrapSwitchModule } from 'ngx-bootstrap-switch';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
@@ -108,7 +110,9 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         MatDialogModule,
         ConfirmModalModule,
         NgxBootstrapSwitchModule.forRoot(),
-        BsDropdownModule.forRoot()
+        BsDropdownModule.forRoot(),
+        MatGridListModule,
+        FormFieldsModule
     ],
     providers: [
         {

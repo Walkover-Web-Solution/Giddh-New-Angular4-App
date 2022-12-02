@@ -30,5 +30,7 @@ export const SETTINGS_INTEGRATION_COMMUNICATION_API = {
     GET_TRIGGERS: COMMON + 'communication/trigger',
     DELETE_TRIGGER: COMMON + 'communication/trigger/:triggerUniqueName',
     GET_TRIGGER_FORM: COMMON + 'communication/platform/:platform/trigger/form',
-    GET_FIELD_SUGGESTIONS: COMMON + 'communication/suggestions/:platform/:entity'
+    GET_FIELD_SUGGESTIONS: COMMON + 'communication/suggestions/:platform/:entity',
+    GET_CAMPAIGN_FIELDS: COMMON + 'communication/campaign/:slug/fields',
+    GET_CAMPAIGN_LIST: COMMON + 'communication/campaign/list'
 }

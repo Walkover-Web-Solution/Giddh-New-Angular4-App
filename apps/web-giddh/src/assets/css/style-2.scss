@@ -127,6 +127,11 @@ $custom-typography: mat-typography-config(
         float: left;
     }
 }
+.campaign-grid-tile {
+    .mat-grid-tile-content {
+        justify-content: flex-start !important;
+    }
+}
 @media screen and (max-width: 1366px) and (orientation: portrait) {
     .subscription-form-select {
         float: left !important;

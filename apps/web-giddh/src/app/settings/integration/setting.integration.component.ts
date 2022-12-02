@@ -200,6 +200,10 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public fieldsSuggestion: any[] = [];
     /** List of action */
     public action: any[] = [];
+    /** List of field suggestions */
+    public compaignVariables: any[] = [
+        'Var1', 'Var2', 'Var3', 'Var4', 'Var5'
+    ];
 
     constructor(
         private router: Router,
@@ -1104,12 +1108,10 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                         this.communicationPlatforms[platform.name].isConnected = (this.communicationPlatforms[platform.name]['fields']?.auth_key?.value);
                     });
                 }
-
-
-
                 if (this.communicationPlatforms['MSG91'].isConnected) {
                     this.getTriggers();
-                    this.getFieldsSuggestion(response?.body?.platforms[0]?.name,"VOUCHER");
+                    this.getFieldsSuggestion(response?.body?.platforms[0]?.name, "VOUCHER");
+                    this.getCampaignList();
 
                 } else {
                     this.editCommunicationPlatform = "MSG91";
@@ -1187,15 +1189,13 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         this.isActiveTriggersLoading = true;
         this.activeTriggersDataSource = [];
         this.settingsIntegrationService.getTriggersList().pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            console.log(response);
-            
             if (response?.status === "success") {
                 if (response?.body?.items?.length > 0) {
                     response?.body?.items?.forEach(trigger => {
                         console.log(trigger);
-                        
+
                         const argsMapping = [];
-                        if(trigger.argsMapping?.length > 0) {
+                        if (trigger.argsMapping?.length > 0) {
                             trigger.argsMapping.forEach(arg => {
                                 argsMapping.push(arg.name + " -> " + arg.value);
                             });
@@ -1212,15 +1212,45 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         });
     }
 
-    public getFieldsSuggestion(platform:string, entity:any): void {
-        this.settingsIntegrationService.getFieldSuggestions(platform,entity).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if(response){
-            this.fieldsSuggestion = response.body?.suggestions;
-            this.action = response.body?.subCondition[0].action;
+    public getFieldsSuggestion(platform: string, entity: any): void {
+        this.settingsIntegrationService.getFieldSuggestions(platform, entity).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === "success") {
+                if (response) {
+                    this.fieldsSuggestion = response.body?.suggestions?.map((result: any) => {
+                        return {
+                            value: result,
+                            label: result
+                        }
+                    });
+                    this.action = response.body?.subCondition[0].action;
+                }
             }
         });
     }
-    public onSelectFieldSuggestions():void {
+
+    public getCampaignFields(slug: string): void {
+        this.settingsIntegrationService.getCampaignFields(slug).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === "success") {
+                console.log('cmp fields',response);
+
+                }
+            });
+        }
+
+    public getCampaignList(): void {
+        this.settingsIntegrationService.getCampaignList().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === "success") {
+                // console.log('cmp list',response);
+                let slug ;
+                response?.body?.data[0].slug
+                console.log(slug);
+
+                this.getCampaignFields(slug);
+            }
+        });
+    }
+
+    public onSelectFieldSuggestions(): void {
 
     }
     /**
@@ -1255,7 +1285,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     }
 
     public toggleTriggerForm(triggerUniqueName?: string): void {
-        if(this.showTriggerForm) {
+        if (this.showTriggerForm) {
             this.showTriggerForm = false;
             return;
         }

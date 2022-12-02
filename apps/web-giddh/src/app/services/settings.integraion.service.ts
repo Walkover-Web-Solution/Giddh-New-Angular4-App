@@ -550,8 +550,24 @@ export class SettingsIntegrationService {
 
     public getFieldSuggestions(platform: string, entity:string): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-
         return this.http.get(this.config.apiUrl + SETTINGS_INTEGRATION_COMMUNICATION_API.GET_FIELD_SUGGESTIONS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':platform', platform).replace(':entity', entity)).pipe(map((res) => {
+            let data: BaseResponse<any, any> = res;
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e)));
+    }
+
+    public getCampaignFields(slug: string): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.get(this.config.apiUrl + SETTINGS_INTEGRATION_COMMUNICATION_API.GET_CAMPAIGN_FIELDS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':slug', slug)).pipe(map((res) => {
+            let data: BaseResponse<any, any> = res;
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e)));
+    }
+
+    public getCampaignList(): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+
+        return this.http.get(this.config.apiUrl + SETTINGS_INTEGRATION_COMMUNICATION_API.GET_CAMPAIGN_LIST.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
             let data: BaseResponse<any, any> = res;
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e)));

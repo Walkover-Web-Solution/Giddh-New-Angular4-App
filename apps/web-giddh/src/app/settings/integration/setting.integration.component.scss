@@ -421,7 +421,27 @@
         visibility: visible !important;
     }
 }
-
+.unit-mapping-grid-list {
+    .grid-box {
+        font-size: 14px;
+    }
+    .grid-box-head,
+    .grid-box-content {
+        .unit-value {
+            width: 110px;
+        }
+    }
+    .grid-box-head {
+        .unit-box {
+            width: 82px;
+        }
+        .unit-box,
+        .map-unit-box {
+            font-family: "opensans-semibold";
+            color: var(--color-table-secondary-heading);
+        }
+    }
+}
 /*responsive*/
 @media (max-width: 1359px) {
     .xs-pd-l15 {
