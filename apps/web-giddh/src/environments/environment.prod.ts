@@ -8,7 +8,7 @@ enableProdMode();
 export const environment: Environment = {
     production: true,
     showDevModule: false,
-    AppUrl: 'https://beta.giddh.com',
+    AppUrl: 'https://app.giddh.com',
     ApiUrl: 'https://api.giddh.com/',
     isElectron: false,
     APP_FOLDER: '/',
