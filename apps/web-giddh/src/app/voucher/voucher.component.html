@@ -1499,7 +1499,11 @@
                                                     <ngx-mat-select-search
                                                         [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
                                                         [formControl]="linkPoDropdown"
-                                                        [placeholderLabel]="localeData?.select_order_placeholder"
+                                                        [placeholderLabel]="
+                                                            linkedPo?.length === 0
+                                                                ? commonLocaleData?.app_no_result_found
+                                                                : localeData?.select_order_placeholder
+                                                        "
                                                     >
                                                     </ngx-mat-select-search>
                                                 </mat-option>
@@ -1550,6 +1554,7 @@
                                                 >
                                                 </text-field>
                                                 <ng-container *ngIf="isCreditNote || isDebitNote">
+                                                    {{ selectedInvoiceLabel }}
                                                     <select-field
                                                         #linkingDropdown
                                                         *ngIf="voucherApiVersion === 2"
@@ -1591,6 +1596,8 @@
                                                             </a>
                                                         </ng-template>
                                                     </select-field>
+                                                    {{ invoiceSelectedLabel }}
+
                                                     <select-field
                                                         #invoiceListDropdown
                                                         *ngIf="voucherApiVersion !== 2"
@@ -3591,7 +3598,7 @@
                                                                         text-right
                                                                         pull-right
                                                                         max-width-100
-                                                                        mat-field-border 
+                                                                        mat-field-border
                                                                         multicurrency-grandtotal'
                                                                     "
                                                                     [name]="'dueAmount'"
