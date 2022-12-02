@@ -1433,8 +1433,13 @@
                                                 </mat-select-trigger>
                                                 <mat-option class="po-options-line">
                                                     <ngx-mat-select-search
+                                                        [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
                                                         [formControl]="linkPoDropdown"
-                                                        [placeholderLabel]="localeData?.select_order_placeholder"
+                                                        [placeholderLabel]="
+                                                            linkedPo?.length === 0
+                                                                ? commonLocaleData?.app_no_result_found
+                                                                : localeData?.select_order_placeholder
+                                                        "
                                                     >
                                                     </ngx-mat-select-search>
                                                 </mat-option>
@@ -1546,7 +1551,12 @@
                                                                 <div class="option-label">{{ option?.label }}</div>
                                                                 <div class="option-value">
                                                                     ({{ commonLocaleData?.app_dated }}:
-                                                                    {{ option.additional?.voucherDate }})
+                                                                    {{
+                                                                        voucherApiVersion === 2
+                                                                            ? option.additional?.voucherDate
+                                                                            : option?.additional?.additional
+                                                                                  ?.voucherDate
+                                                                    }})
                                                                 </div>
                                                                 <div class="option-value-stock">
                                                                     ({{ commonLocaleData?.app_amount }}:
@@ -1554,7 +1564,7 @@
                                                                         voucherApiVersion === 2
                                                                             ? (option.additional?.unadjustedAmount
                                                                                   ?.amountForAccount | giddhCurrency)
-                                                                            : (option.additional?.balanceDue
+                                                                            : (option.additional?.additional?.balanceDue
                                                                                   ?.amountForAccount | giddhCurrency)
                                                                     }})
                                                                 </div>
@@ -1626,6 +1636,17 @@
                                                                 );
                                                                 onBlurInvoiceDate(0)
                                                             "
+                                                            (focusOut)="
+                                                                !(
+                                                                    currentVoucherFormDetails?.dueDate ||
+                                                                    isSalesInvoice ||
+                                                                    isPurchaseInvoice ||
+                                                                    isProformaInvoice ||
+                                                                    isEstimateInvoice
+                                                                )
+                                                                    ? openFirstEntry()
+                                                                    : ''
+                                                            "
                                                         >
                                                         </giddh-datepicker>
                                                         <p
@@ -1675,6 +1696,7 @@
                                                                 dueDate.errors && (dueDate.dirty || dueDate.touched)
                                                             "
                                                             (blur)="onBlurDueDate(0)"
+                                                            (focusOut)="openFirstEntry()"
                                                         >
                                                         </giddh-datepicker>
                                                         <p
@@ -3508,7 +3530,7 @@
                                                                         text-right
                                                                         pull-right
                                                                         max-width-100
-                                                                        mat-field-border 
+                                                                        mat-field-border
                                                                         multicurrency-grandtotal'
                                                                     "
                                                                     [name]="'dueAmount'"
