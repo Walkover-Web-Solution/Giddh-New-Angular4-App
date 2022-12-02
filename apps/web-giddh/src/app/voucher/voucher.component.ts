@@ -1295,8 +1295,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                                     if (!obj.companyDetails?.shippingDetails) {
                                         obj.companyDetails.shippingDetails = {};
                                     }
-                                    obj.companyDetails.billingDetails.state = { code: obj.companyDetails.billingDetails?.stateCode };
-                                    obj.companyDetails.shippingDetails.state = { code: obj.companyDetails.shippingDetails?.stateCode };
+                                    obj.companyDetails.billingDetails.state = { code: obj.companyDetails.billingDetails?.stateCode, name: obj.companyDetails.billingDetails?.state?.name };
+                                    obj.companyDetails.shippingDetails.state = { code: obj.companyDetails.shippingDetails?.stateCode, name: obj.companyDetails.shippingDetails?.state?.name };
                                 }
                                 this.assignCompanyBillingShipping(obj.companyDetails);
 
@@ -8393,5 +8393,19 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             this.depositDropdown?.closeDropdownPanel();
             this.salesDepositDropdown?.closeDropdownPanel();
         }
+    }
+
+    /**
+     * This will open the first entry dropdown on tab change of due date
+     *
+     * @memberof VoucherComponent
+     */
+    public openFirstEntry(): void {
+        this.setActiveIndx(0);
+
+        setTimeout(() => {
+            const firstEntry: any = this.selectAccount?.first;
+            firstEntry?.openDropdownPanel();
+        });
     }
 }
