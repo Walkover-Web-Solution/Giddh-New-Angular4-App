@@ -2098,14 +2098,14 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             if (this.voucherApiVersion === 2) {
                 this.invFormData.voucherDetails.referenceVoucher = {
                     uniqueName: event.value,
-                    voucherType: event.additional.voucherType
+                    voucherType: event.additional.additional.voucherType
                 }
             } else {
                 this.invFormData.voucherDetails.invoiceLinkingRequest = {
                     linkedInvoices: [
                         {
                             invoiceUniqueName: event.value,
-                            voucherType: event.additional.voucherType
+                            voucherType: event.additional.additional.voucherType
                         }
                     ]
                 }
@@ -4373,6 +4373,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     });
             } else if (this.isPurchaseInvoice) {
                 if (this.isRcmEntry && !this.validateTaxes(cloneDeep(data))) {
+                    this.openAccountSelectionDropdown?.closeDropdownPanel();
+                    this.openCustomerDropdown = false;
                     this.startLoader(false);
                     return;
                 }
@@ -7138,6 +7140,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             this.purchaseBillCompany[type].state.code = null;
         }
         this.checkGstNumValidation(gstVal);
+        this._cdr.detectChanges();
     }
 
     /**
