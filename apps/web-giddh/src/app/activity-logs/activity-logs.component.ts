@@ -161,7 +161,6 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
                 this.selectedEntryDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                 this.activityObj.entryFromDate = dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
                 this.activityObj.entryToDate = dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
-
             }
         });
     }
@@ -204,6 +203,15 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
             this.activityObj.page = 1;
         }
         this.isLoading = true;
+
+        if(this.activityObj.entity == ""){
+            this.activityObj.entryFromDate = undefined;
+            this.activityObj.entryToDate = undefined;
+        }
+         if(this.activityObj.entity ==='ENTRY'){
+             this.activityObj.entryFromDate = dayjs(this.selectedEntryDateRange?.startDate).format(GIDDH_DATE_FORMAT);
+             this.activityObj.entryToDate = dayjs(this.selectedEntryDateRange?.endDate).format(GIDDH_DATE_FORMAT);
+        }
         this.activityService.getActivityLogs(this.activityObj).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             this.isLoading = false;
             if (response && response.status === 'success') {
@@ -250,6 +258,8 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
     public selecteEntityType(event: IOption): void {
         if (event && event.value ==='ENTRY') {
             this.isShowEntryDatepicker = true;
+        }else {
+            this.isShowEntryDatepicker = false;
         }
     }
 
@@ -302,10 +312,10 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         };
         this.selectedDateRange = { startDate: dayjs(this.universalDate[0]), endDate: dayjs(this.universalDate[1]) };
         this.selectedDateRangeUi = dayjs(this.universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(this.universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-        this.activityObj.fromDate = dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
-        this.activityObj.toDate = dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
         this.selectedEntryDateRange = { startDate: dayjs(this.universalDate[0]), endDate: dayjs(this.universalDate[1]) };
         this.selectedEntryDateRangeUi = dayjs(this.universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(this.universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+        this.activityObj.fromDate = dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
+        this.activityObj.toDate = dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
         this.activityObj.entryFromDate = dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
         this.activityObj.entryToDate = dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
         this.getActivityLogs(true);
@@ -370,7 +380,7 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
     * @memberof ActivityLogsComponent
     */
     public hideGiddhDatepicker(): void {
-        this.modalRef.hide();
+        this.modalRef?.hide();
     }
 
     /**
