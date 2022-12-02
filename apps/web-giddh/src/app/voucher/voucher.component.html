@@ -1696,6 +1696,17 @@
                                                                 );
                                                                 onBlurInvoiceDate(0)
                                                             "
+                                                            (focusOut)="
+                                                                !(
+                                                                    currentVoucherFormDetails?.dueDate ||
+                                                                    isSalesInvoice ||
+                                                                    isPurchaseInvoice ||
+                                                                    isProformaInvoice ||
+                                                                    isEstimateInvoice
+                                                                )
+                                                                    ? openFirstEntry()
+                                                                    : ''
+                                                            "
                                                         >
                                                         </giddh-datepicker>
                                                         <p
@@ -1745,6 +1756,7 @@
                                                                 dueDate.errors && (dueDate.dirty || dueDate.touched)
                                                             "
                                                             (blur)="onBlurDueDate(0)"
+                                                            (focusOut)="openFirstEntry()"
                                                         >
                                                         </giddh-datepicker>
                                                         <p
