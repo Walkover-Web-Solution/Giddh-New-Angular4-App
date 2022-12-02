@@ -3,13 +3,13 @@ import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import * as jsonTreeViewer from 'json-tree-viewer';
 
 @Component({
-    selector: 'downloads-json',
-    templateUrl: './downloads-json.component.html',
-    styleUrls: ['./downloads-json.component.scss'],
+    selector: 'exports-json',
+    templateUrl: './exports-json.component.html',
+    styleUrls: ['./exports-json.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 
-export class DownloadsJsonComponent implements OnInit {
+export class ExportsJsonComponent implements OnInit {
 
     /** Instance of activity logs json */
     @ViewChild('jsonData', { static: false }) public jsonData: ElementRef;
@@ -24,7 +24,7 @@ export class DownloadsJsonComponent implements OnInit {
     /**
      * Initializes the Component
      *
-     * @memberof DownloadsJsonComponent
+     * @memberof ExportsJsonComponent
      */
     public ngOnInit(): void {
         setTimeout(() => {
