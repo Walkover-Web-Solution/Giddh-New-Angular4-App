@@ -186,23 +186,4 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
-    /**
-     * Adds styling on focused Dropdown List
-     *
-     * @param {HTMLElement} discountDropdownListItem
-     * @memberof DiscountControlComponent
-     */
-    public discountDropdownFocus(discountDropdownListItem: HTMLElement): void {
-        this.generalService.dropdownFocusIn(discountDropdownListItem);
-    }
-
-    /**
-     * Removes styling from focused Dropdown List
-     *
-     * @param {HTMLElement} discountDropdownListItem
-     * @memberof DiscountControlComponent
-     */
-    public discountDropdownBlur(discountDropdownListItem: HTMLElement): void {
-        this.generalService.dropdownFocusOut(discountDropdownListItem);
-    }
 }

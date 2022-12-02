@@ -331,7 +331,7 @@ export const GIDDH_VOUCHER_FORM = [
         type: "cash",
         advanceReceiptAllowed: false,
         rcmAllowed: false,
-        depositAllowed: false,
+        depositAllowed: true,
         taxesAllowed: true,
         quantityAllowed: true,
         rateAllowed: true,

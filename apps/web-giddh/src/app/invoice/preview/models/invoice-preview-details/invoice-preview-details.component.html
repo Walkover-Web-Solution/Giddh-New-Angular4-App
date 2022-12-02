@@ -735,7 +735,7 @@
             </div>
 
             <div class="invoice-edit-body">
-                <proforma-invoice-component
+                <voucher-component
                     [accountUniqueName]="selectedItem?.account?.uniqueName"
                     [selectedItem]="selectedItem"
                     [invoiceNo]="voucherType !== 'purchase' ? selectedItem?.voucherNumber : selectedItem?.uniqueName"
@@ -744,7 +744,7 @@
                     (cancelVoucherUpdate)="toggleEditMode()"
                     (reloadFiles)="downloadVoucher('base64')"
                 >
-                </proforma-invoice-component>
+                </voucher-component>
             </div>
         </div>
     </div>
