@@ -33,6 +33,7 @@ import { LedgerService } from 'apps/web-giddh/src/app/services/ledger.service';
 import { Router } from '@angular/router';
 import { SettingsDiscountService } from 'apps/web-giddh/src/app/services/settings.discount.service';
 import { PermissionActions } from 'apps/web-giddh/src/app/actions/permission/permission.action';
+import { GeneralActions } from 'apps/web-giddh/src/app/actions/general/general.actions';
 
 @Component({
     selector: 'account-operations',
@@ -134,7 +135,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     public discounts: any[] = [];
 
     constructor(private _fb: FormBuilder, private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction,
-        private companyActions: CompanyActions, private _ledgerActions: LedgerActions, private accountsAction: AccountsAction, private toaster: ToasterService, _permissionDataService: PermissionDataService, private invoiceActions: InvoiceActions, public generalService: GeneralService, public ledgerService: LedgerService, public router: Router, private settingsDiscountService: SettingsDiscountService, private permissionActions: PermissionActions) {
+        private companyActions: CompanyActions, private _ledgerActions: LedgerActions, private accountsAction: AccountsAction, private toaster: ToasterService, _permissionDataService: PermissionDataService, private invoiceActions: InvoiceActions, public generalService: GeneralService, public ledgerService: LedgerService, public router: Router, private settingsDiscountService: SettingsDiscountService, private permissionActions: PermissionActions, private generalAction: GeneralActions) {
         this.isUserSuperAdmin = _permissionDataService.isUserSuperAdmin;
     }
 
@@ -681,10 +682,13 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
                 this.groupExportLedgerBodyRequest.showEntryVoucherNo = response.body.showEntryVoucherNo;
                 this.groupExportLedgerBodyRequest.groupUniqueName = grpUniqueName;
                 this.groupExportLedgerBodyRequest.sort = response.body.sort ? 'ASC' : 'DESC';
-                this.ledgerService.groupLedgerExport(this.groupExportLedgerBodyRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                this.groupExportLedgerBodyRequest.fileType = response.fileType;
+                this.ledgerService.exportData(this.groupExportLedgerBodyRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     if (response?.status === 'success') {
-                        this.router.navigate(["/pages/downloads/exports"]);
-                        this.toaster.showSnackBar("success", response.body);
+                        this.router.navigate(["/pages/downloads"]);
+                        this.toaster.showSnackBar("success", response?.body);
+                        this.store.dispatch(this.generalAction.addAndManageClosed());
+                        this.store.dispatch(this.groupWithAccountsAction.HideAddAndManageFromOutside());
                     } else {
                         this.toaster.showSnackBar("error", response?.message, response?.code);
                     }

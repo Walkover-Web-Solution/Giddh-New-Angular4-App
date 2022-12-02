@@ -151,6 +151,7 @@
             [showLoader]="isAddressChangeInProgress"
             (closeAsideEvent)="toggleAddressAsidePane($event)"
             *ngIf="addressAsideMenuState === 'in'"
+            [hideLinkEntity]="addresses?.length <= 0 && hideLinkEntity"
         ></create-address>
         <!-- aside pane for create address end -->
     </ng-container>

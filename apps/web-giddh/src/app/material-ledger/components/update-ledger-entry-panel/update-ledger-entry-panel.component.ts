@@ -15,7 +15,7 @@ import {
 } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { ResizedEvent } from 'angular-resize-event';
-import { Configuration, SubVoucher, RATE_FIELD_PRECISION, SearchResultText } from 'apps/web-giddh/src/app/app.constant';
+import { Configuration, SubVoucher, RATE_FIELD_PRECISION, SearchResultText, RESTRICTED_VOUCHERS_FOR_DOWNLOAD, AdjustedVoucherType } from 'apps/web-giddh/src/app/app.constant';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { saveAs } from 'file-saver';
 import * as dayjs from 'dayjs';
@@ -62,6 +62,7 @@ import { MatAccordion } from '@angular/material/expansion';
 import { CommonService } from '../../../services/common.service';
 import { AdjustmentUtilityService } from '../../../shared/advance-receipt-adjustment/services/adjustment-utility.service';
 import { LedgerUtilityService } from '../../services/ledger-utility.service';
+import { InvoiceActions } from '../../../actions/invoice/invoice.actions';
 
 /** Info message to be displayed during adjustment if the voucher is not generated */
 const ADJUSTMENT_INFO_MESSAGE = 'Voucher should be generated in order to make adjustments';
@@ -106,6 +107,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     @Input() public activeCompany: any;
     @Input() public searchResultsPaginationPage: any;
     @Input() public searchResultsPaginationTotalPages: any;
+    /** Holds side of entry (dr/cr) */
+    @Input() public entrySide: string;
     /** fileinput element ref for clear value after remove attachment **/
     @ViewChild('fileInputUpdate', { static: false }) public fileInputElement: ElementRef;
     @ViewChild('discount', { static: false }) public discountComponent: UpdateLedgerDiscountComponent;
@@ -275,6 +278,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     private searchReferenceVoucher: any = "";
     /** Invoice list observable */
     public invoiceList$: Observable<any[]>;
+    /** Holds restricted voucher types for download */
+    public restrictedVouchersForDownload: any[] = RESTRICTED_VOUCHERS_FOR_DOWNLOAD;
 
     constructor(
         private accountService: AccountService,
@@ -293,7 +298,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         public dialog: MatDialog,
         private commonService: CommonService,
         private adjustmentUtilityService: AdjustmentUtilityService,
-        private ledgerUtilityService: LedgerUtilityService
+        private ledgerUtilityService: LedgerUtilityService,
+        private invoiceAction: InvoiceActions
     ) {
 
         this.vm = new UpdateLedgerVm(this.generalService, this.ledgerUtilityService);
@@ -322,6 +328,13 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         if (this.searchResultsPaginationTotalPages) {
             this.searchResultsPaginationData.totalPages = this.searchResultsPaginationTotalPages;
         }
+
+        if (this.generalService.voucherApiVersion === 2) {
+            this.allowParentGroup.push("loanandoverdraft");
+        }
+
+        this.store.dispatch(this.invoiceAction.getInvoiceSetting());
+        this.getPurchaseSettings();
 
         this.settingsTagService.GetAllTags().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success" && response?.body?.length > 0) {
@@ -421,7 +434,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 this.resetPreviousSearchResults();
                 this.baseAccountChanged = false;
                 setTimeout(() => {
-                    this.vm.inventoryTotalChanged();
+                    this.store.dispatch(this.ledgerAction.getLedgerTrxDetails(this.accountUniqueName, this.entryUniqueName));
                 }, 50);
             }
         });
@@ -879,10 +892,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             requestObj.subVoucher = (this.isRcmEntry) ? SubVoucher.ReverseCharge : (this.isAdvanceReceipt) ? SubVoucher.AdvanceReceipt : '';
             requestObj.transactions = requestObj.transactions?.filter(f => !f.isDiscount);
         }
-        if (!this.taxOnlyTransactions) {
+        if (!this.taxOnlyTransactions && (requestObj.voucherType !== "jr" || (requestObj.voucherType === "jr" && requestObj.transactions?.length > 1))) {
             requestObj.transactions = requestObj.transactions?.filter(tx => !tx.isTax);
         }
-        if (this.voucherApiVersion === 2 && (requestObj.voucherGenerated || requestObj.generateInvoice)) {
+        if (this.voucherApiVersion === 2 && (requestObj.voucherGenerated || requestObj.generateInvoice) && requestObj.voucherType !== "jr") {
             requestObj.transactions = requestObj.transactions?.filter(tx => tx.particular?.uniqueName !== "roundoff");
         }
         requestObj.transactions.map((transaction: any) => {
@@ -1901,7 +1914,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      */
     private prepareAdjustVoucherConfiguration(): void {
         let customerUniqueName = [];
-        this.vm.selectedLedger.transactions.forEach(transaction => {
+        this.vm.selectedLedger.transactions?.forEach(transaction => {
             if (transaction.particular && transaction.particular?.uniqueName) {
                 const uniqueName = transaction.particular?.uniqueName.split('#')[0];
                 customerUniqueName.push(uniqueName);
@@ -1940,13 +1953,15 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 totalTaxableValue: this.vm.selectedLedger.actualAmount,
                 subTotal: this.vm.selectedLedger.total.amount,
                 exchangeRate: this.vm.selectedLedger?.exchangeRate ?? 1,
-                gainLoss: this.vm.selectedLedger.gainLoss
+                gainLoss: this.vm.selectedLedger.gainLoss,
+                voucherUniqueName: this.vm.selectedLedger.voucherUniqueName
             },
             accountDetails: {
                 currencySymbol: enableVoucherAdjustmentMultiCurrency ? this.vm.selectedLedger?.particular?.currency?.symbol ?? this.profileObj?.baseCurrencySymbol ?? '' : this.profileObj?.baseCurrencySymbol ?? '',
                 currencyCode: enableVoucherAdjustmentMultiCurrency ? this.vm.selectedLedger?.particular?.currency?.code ?? this.profileObj?.baseCurrency ?? '' : this.profileObj?.baseCurrency ?? ''
             },
-            activeAccountUniqueName: this.activeAccount?.uniqueName
+            activeAccountUniqueName: this.activeAccount?.uniqueName,
+            type: this.entrySide
         };
     }
 
@@ -2470,5 +2485,20 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      */
     public calculateTax(): void {
         this.vm.generateGrandTotal();
+    }
+
+    /**
+     * This function is used to get purchase settings from store
+     *
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+    public getPurchaseSettings(): void {
+        this.store.pipe(select(state => state.invoice.settings), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.purchaseBillSettings && !response?.purchaseBillSettings?.enableVoucherDownload) {
+                this.restrictedVouchersForDownload.push(AdjustedVoucherType.PurchaseInvoice);
+            } else {
+                this.restrictedVouchersForDownload = this.restrictedVouchersForDownload?.filter(voucherType => voucherType !== AdjustedVoucherType.PurchaseInvoice);
+            }
+        });
     }
 }

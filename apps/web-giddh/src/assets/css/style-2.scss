@@ -1,5 +1,5 @@
 @charset "utf-8";
-@import "~@angular/material/theming";
+@import "@angular/material/theming";
 @import "../css/giddh-common.scss";
 @import "@angular/material/prebuilt-themes/indigo-pink.css";
 @import "./json-tree.scss";
@@ -6340,7 +6340,7 @@ button.ladda-button .ladda-label {
     display: block;
     position: absolute;
     right: 10px;
-    top: 8px;
+    top: 17px;
     z-index: 5;
     border: 0;
     border-radius: 0;
@@ -7537,7 +7537,6 @@ giddh-datepicker {
         align-items: center;
     }
 }
-
 .ledger-body {
     .cdk-overlay-container,
     .cdk-global-overlay-wrapper {
@@ -7666,7 +7665,6 @@ giddh-datepicker {
         }
     }
 }
-
 .cdk-overlay-container,
 .cdk-global-overlay-wrapper {
     z-index: 9999;
@@ -8130,9 +8128,6 @@ giddh-datepicker {
                 }
             }
         }
-    }
-    .cdk-overlay-container {
-        z-index: 99;
     }
 }
 

@@ -164,8 +164,10 @@
         </table>
     </div>
 </div>
-
-<div *ngIf="pettyCashPendingReportResponse?.totalItems > 20" class="pagination-wrapper">
+<div
+    *ngIf="pettyCashPendingReportResponse?.totalItems > pettyCashPendingReportResponse?.count"
+    class="pagination-wrapper"
+>
     <pagination
         [totalItems]="pettyCashPendingReportResponse?.totalItems"
         [maxSize]="5"

@@ -131,7 +131,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     @Input() public isTouristSchemeApplicable: boolean = false;
     /** True, if new form should be opened in READ only mode */
     @Input() public isReadOnly: boolean = false;
-
+    /** Holds side of entry (dr/cr) */
+    @Input() public entrySide: string;
     public isAmountFirst: boolean = false;
     public isTotalFirts: boolean = false;
     public selectedInvoices: string[] = [];
@@ -383,6 +384,14 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 this.discountsList = response?.body;
             }
         });
+
+        if (this.voucherApiVersion === 2) {
+            this.manualGenerateVoucherChecked = true;
+        } else {
+            this.manualGenerateVoucherChecked = false;
+        }
+
+        this.blankLedger.generateInvoice = cloneDeep(this.manualGenerateVoucherChecked);
     }
 
     @HostListener('click', ['$event'])
@@ -490,7 +499,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             warehouse: this.selectedWarehouse
         });
         this.blankLedger.voucherType = '';
-        this.blankLedger.generateInvoice = false;
     }
 
     /**
@@ -1398,8 +1406,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      * @memberof NewLedgerEntryPanelComponent
      */
     public handleVoucherAdjustment(): void {
-        if (this.isAdjustReceiptSelected || this.isAdjustAdvanceReceiptSelected ||
-            this.isAdjustVoucherSelected) {
+        if (this.isAdjustReceiptSelected || this.isAdjustAdvanceReceiptSelected || this.isAdjustVoucherSelected) {
             this.prepareAdjustVoucherConfiguration();
             this.openAdjustPaymentModal();
             this.blankLedger.generateInvoice = true;
@@ -1581,7 +1588,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 currencySymbol: enableVoucherAdjustmentMultiCurrency ? this.baseCurrencyDetails?.symbol ?? this.blankLedger.baseCurrencyToDisplay?.symbol ?? '' : this.blankLedger.baseCurrencyToDisplay?.symbol,
                 currencyCode: enableVoucherAdjustmentMultiCurrency ? this.baseCurrencyDetails?.code ?? this.blankLedger.baseCurrencyToDisplay?.code ?? '' : this.blankLedger.baseCurrencyToDisplay?.code
             },
-            activeAccountUniqueName: this.activeAccount?.uniqueName
+            activeAccountUniqueName: this.activeAccount?.uniqueName,
+            type: this.entrySide
         };
     }
 

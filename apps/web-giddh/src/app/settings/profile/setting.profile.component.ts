@@ -2,7 +2,7 @@ import { Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, map, switchMap, take, takeUntil } from 'rxjs/operators';
 import { IOption } from '../../theme/ng-select/option.interface';
 import { select, Store } from '@ngrx/store';
-import { ChangeDetectorRef, Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { AppState } from '../../store';
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
 import { ToasterService } from '../../services/toaster.service';
@@ -25,6 +25,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { LocaleService } from '../../services/locale.service';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { cloneDeep, uniqBy, without } from '../../lodash-optimized';
+import { VAT_SUPPORTED_COUNTRIES } from '../../app.constant';
 export interface IGstObj {
     newGstNumber: string;
     newstateCode: number;
@@ -58,6 +59,8 @@ export interface IGstObj {
     ]
 })
 export class SettingProfileComponent implements OnInit, OnDestroy {
+    /** True if we need to hide tab and show manage address section only */
+    @Input() public addressOnly: boolean = false;
     /** This will emit pageHeading */
     @Output() public pageHeading: EventEmitter<string> = new EventEmitter();
 
@@ -168,6 +171,12 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     public isMobileScreen: boolean = false;
     /** True if initial data is fetched */
     private initialDataFetched: boolean = false;
+    /* This will hold the value out/in to open/close setting sidebar popup */
+    public asideGstSidebarMenuState: string = 'in';
+    /* This will hold list of vat supported countries */
+    public vatSupportedCountries = VAT_SUPPORTED_COUNTRIES;
+    /** Tax type (gst/trn) */
+    public taxType: string = '';
 
     constructor(
         private commonService: CommonService,
@@ -192,6 +201,9 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             '(max-width: 767px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.isMobileScreen = result.matches;
+            if (!this.isMobileScreen) {
+                this.asideGstSidebarMenuState = 'in';
+            }
         });
 
         this.getCompanyProfileInProgress$ = this.store.pipe(select(settingsStore => settingsStore.settings.getProfileInProgress), takeUntil(this.destroyed$));
@@ -530,6 +542,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+        this.asideGstSidebarMenuState === 'out';
     }
 
     public isValidPAN(ele: HTMLInputElement) {
@@ -1208,6 +1221,54 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 } else {
                     this.personalInformationTabHeading = this.localeData?.company_information;
                 }
+
+                this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+                    if (activeCompany) {
+                        if (this.vatSupportedCountries.includes(activeCompany.countryV2?.alpha2CountryCode)) {
+                            this.taxType = this.commonLocaleData?.app_trn;
+                        } else {
+                            this.taxType = this.commonLocaleData?.app_gstin;
+                        }
+                    }
+                });
+
+                if (this.addressOnly) {
+                    this.loadLinkedEntities();
+                    if (this.currentCompanyDetails && this.currentCompanyDetails.countryV2) {
+                        this.loadTaxDetails(this.currentCompanyDetails.countryV2.alpha2CountryCode);
+                        this.loadStates(this.currentCompanyDetails.countryV2.alpha2CountryCode);
+                    }
+        
+                    this.store.pipe(select(appState => appState.general.openGstSideMenu), takeUntil(this.destroyed$)).subscribe(shouldOpen => {
+                        if (this.isMobileScreen) {
+                            if (shouldOpen) {
+                                this.asideGstSidebarMenuState = 'in';
+                            } else {
+                                this.asideGstSidebarMenuState = 'out';
+                            }
+                        }
+                    });
+        
+                    this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+                        if (activeCompany) {
+                            if (this.vatSupportedCountries.includes(activeCompany.countryV2?.alpha2CountryCode)) {
+                                this.taxType = this.commonLocaleData?.app_trn;
+                                this.localeData.company_address_list = this.localeData.company_trn_list;
+                                this.localeData.add_address = this.localeData.add_trn;
+                                this.localeData.address_list = this.localeData.trn_list;
+                                this.localeData.create_address = this.localeData.create_trn;
+                                this.localeData.update_address = this.localeData.update_trn;
+                            } else {
+                                this.taxType = this.commonLocaleData?.app_gstin;
+                                this.localeData.company_address_list = this.localeData.company_gst_list;
+                                this.localeData.add_address = this.localeData.add_gst;
+                                this.localeData.address_list = this.localeData.gst_list;
+                                this.localeData.create_address = this.localeData.create_gst;
+                                this.localeData.update_address = this.localeData.update_gst;
+                            }
+                        }
+                    });
+                }
             });
 
             this.getPageHeading();
@@ -1237,5 +1298,14 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             }
         }
         this.pageHeading.emit(pageHeading);
+    }
+
+    /**
+     * Handles GST Sidebar Navigation
+     *
+     * @memberof SettingProfileComponent
+     */
+    public handleNavigation(): void {
+        this.router.navigate(['pages', 'gstfiling']);
     }
 }

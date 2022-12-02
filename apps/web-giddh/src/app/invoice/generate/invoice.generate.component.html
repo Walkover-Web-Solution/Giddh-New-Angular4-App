@@ -325,7 +325,6 @@
                                 <td
                                     (dblclick)="modalUniqueName = item?.uniqueName"
                                     class="cp no-dbl-click-select"
-                                    (clickOutside)="modalUniqueName = ''"
                                     [attr.data-title]="commonLocaleData?.app_account"
                                 >
                                     {{ item?.account?.name }}
@@ -337,6 +336,7 @@
                                         [to]="ledgerSearchRequest.to"
                                         [isModalOpen]="modalUniqueName === item?.uniqueName"
                                         [voucherType]="selectedVoucher"
+                                        (modalClosed)="modalUniqueName = ''"
                                     ></div>
                                 </td>
 

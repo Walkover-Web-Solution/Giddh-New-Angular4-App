@@ -871,6 +871,7 @@
                                                                     (saveOtherTax)="saveOtherTax(item, $event)"
                                                                     [localeData]="localeData"
                                                                     [commonLocaleData]="commonLocaleData"
+                                                                    [entrySide]="'dr'"
                                                                 >
                                                                 </new-ledger-entry-panel>
                                                             </div>
@@ -1152,6 +1153,7 @@
                                                                     (saveOtherTax)="saveOtherTax(item, $event)"
                                                                     [localeData]="localeData"
                                                                     [commonLocaleData]="commonLocaleData"
+                                                                    [entrySide]="'cr'"
                                                                 >
                                                                 </new-ledger-entry-panel>
                                                             </div>
@@ -1170,6 +1172,7 @@
                                         >{{ bankTransactionsResponse?.totalPages }} {{ localeData?.pages }}</span
                                     >
                                     <pagination
+                                        *ngIf="bankTransactionsResponse?.totalPages > 1"
                                         [totalItems]="
                                             bankTransactionsResponse?.countPerPage *
                                             bankTransactionsResponse?.totalPages
@@ -1352,7 +1355,10 @@
                                                             *ngIf="
                                                                 voucherApiVersion === 2 &&
                                                                 (transactions.attachedFileUniqueName ||
-                                                                    transactions.voucherGenerated)
+                                                                    (transactions.voucherGenerated &&
+                                                                        !restrictedVouchersForDownload.includes(
+                                                                            transactions.voucherGeneratedType
+                                                                        )))
                                                             "
                                                             (click)="openAttachmentsDialog(attachments, transactions)"
                                                         >
@@ -1536,9 +1542,9 @@
                                     let i = index;
                                     trackBy: trackByTransactionUniqueName
                                 "
-                                (touchend)="showUpdateLedgerModalIpad(txn)"
-                                (dblclick)="showUpdateLedgerModal(txn)"
-                                (keydown.enter)="showUpdateLedgerModal(txn)"
+                                (touchend)="showUpdateLedgerModalIpad(txn, 'dr')"
+                                (dblclick)="showUpdateLedgerModal(txn, 'dr')"
+                                (keydown.enter)="showUpdateLedgerModal(txn, 'dr')"
                                 [ngClass]="{
                                     'compound-entry': txn.entryUniqueName === lc.selectedTxnUniqueName || txn.isChecked
                                 }"
@@ -1612,11 +1618,17 @@
                                             class="download-invoice-ledger d-flex cursor-pointer"
                                             *ngIf="
                                                 voucherApiVersion === 2 &&
-                                                (txn.attachedFileUniqueName || txn.voucherGenerated)
+                                                (txn.attachedFileUniqueName ||
+                                                    (txn.voucherGenerated &&
+                                                        !restrictedVouchersForDownload.includes(
+                                                            txn.voucherGeneratedType
+                                                        )))
                                             "
                                             (click)="openAttachmentsDialog(attachments, txn)"
                                             [matTooltip]="
-                                                txn.attachedFileUniqueName && txn.voucherGenerated
+                                                txn.attachedFileUniqueName &&
+                                                txn.voucherGenerated &&
+                                                !restrictedVouchersForDownload.includes(txn.voucherGeneratedType)
                                                     ? (txn.voucherNumber || commonLocaleData?.app_not_available) +
                                                       ', ' +
                                                       txn.attachedFileName
@@ -1838,6 +1850,7 @@
                                                 (saveOtherTax)="saveOtherTax(lc.blankLedger, $event)"
                                                 [localeData]="localeData"
                                                 [commonLocaleData]="commonLocaleData"
+                                                [entrySide]="'dr'"
                                             >
                                             </new-ledger-entry-panel>
                                         </div>
@@ -1964,10 +1977,10 @@
                                     let i = index;
                                     trackBy: trackByTransactionUniqueName
                                 "
-                                (touchend)="showUpdateLedgerModalIpad(txn)"
-                                (dblclick)="showUpdateLedgerModal(txn)"
+                                (touchend)="showUpdateLedgerModalIpad(txn, 'cr')"
+                                (dblclick)="showUpdateLedgerModal(txn, 'cr')"
                                 tabindex="-1"
-                                (keydown.enter)="showUpdateLedgerModal(txn)"
+                                (keydown.enter)="showUpdateLedgerModal(txn, 'cr')"
                                 [ngClass]="{
                                     'compound-entry': txn.entryUniqueName === lc.selectedTxnUniqueName || txn.isChecked
                                 }"
@@ -2040,11 +2053,17 @@
                                             class="download-invoice-ledger d-flex cursor-pointer"
                                             *ngIf="
                                                 voucherApiVersion === 2 &&
-                                                (txn.attachedFileUniqueName || txn.voucherGenerated)
+                                                (txn.attachedFileUniqueName ||
+                                                    (txn.voucherGenerated &&
+                                                        !restrictedVouchersForDownload.includes(
+                                                            txn.voucherGeneratedType
+                                                        )))
                                             "
                                             (click)="openAttachmentsDialog(attachments, txn)"
                                             [matTooltip]="
-                                                txn.attachedFileUniqueName && txn.voucherGenerated
+                                                txn.attachedFileUniqueName &&
+                                                txn.voucherGenerated &&
+                                                !restrictedVouchersForDownload.includes(txn.voucherGeneratedType)
                                                     ? (txn.voucherNumber || commonLocaleData?.app_not_available) +
                                                       ', ' +
                                                       txn.attachedFileName
@@ -2256,6 +2275,7 @@
                                                 (saveOtherTax)="saveOtherTax(lc.blankLedger, $event)"
                                                 [localeData]="localeData"
                                                 [commonLocaleData]="commonLocaleData"
+                                                [entrySide]="'cr'"
                                             >
                                             </new-ledger-entry-panel>
                                         </div>
@@ -2816,6 +2836,7 @@
                     [searchResultsPaginationPage]="defaultResultsPaginationData.page"
                     [searchResultsPaginationTotalPages]="defaultResultsPaginationData.totalPages"
                     [activeCompany]="activeCompany"
+                    [entrySide]="entrySide"
                     (toggleOtherTaxesAsideMenu)="toggleOtherTaxesAsidePane($event)"
                     (closeUpdateLedgerModal)="hideUpdateLedgerModal()"
                     (showQuickAccountModalFromUpdateLedger)="toggleAsidePane()"

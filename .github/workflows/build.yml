@@ -8,7 +8,7 @@ on:
     branches: [ giddh-2.0, beta-stage, beta-branch, production ]
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
-concurrency: stage-build
+concurrency: prod-build
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
@@ -20,7 +20,7 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Check out Git repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Extract branch name
         shell: bash
         run: echo "branch_name=${GITHUB_REF##*/}" >> $GITHUB_ENV
@@ -36,9 +36,9 @@ jobs:
       - run: echo ${{ env.BUILD_ENV }}
       # Runs a single command to install Node
       - name: Install Node.js & NPM
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
-          node-version: "14"
+          node-version: "16"
 
 #       Runs npm i
       - uses: bahmutov/npm-install@v1
@@ -48,6 +48,7 @@ jobs:
           useLockFile: false
           useRollingCache: true
           working-directory: .
+          install-command: npm i --force
       - name: Creating Test bundle
         if: ${{ env.BUILD_ENV == 'Test' }}
         run: npm run build-test
@@ -62,6 +63,8 @@ jobs:
           LINKEDIN_CLIENT_ID_PROD: ${{ secrets.LINKEDIN_CLIENT_ID_PROD }}
           LINKEDIN_SECRET_KEY_PROD: ${{ secrets.LINKEDIN_SECRET_KEY_PROD }}
           RAZORPAY_KEY_PROD: ${{ secrets.RAZORPAY_KEY_PROD }}
+          OTP_WIDGET_ID: ${{ secrets.OTP_WIDGET_ID }}
+          OTP_TOKEN_AUTH: ${{ secrets.OTP_TOKEN_AUTH }}
       - name: Copy Test folder
         if: ${{ env.BUILD_ENV == 'Test' }}
         run: |
@@ -81,6 +84,8 @@ jobs:
           LINKEDIN_CLIENT_ID_PROD: ${{ secrets.LINKEDIN_CLIENT_ID_PROD }}
           LINKEDIN_SECRET_KEY_PROD: ${{ secrets.LINKEDIN_SECRET_KEY_PROD }}
           RAZORPAY_KEY_PROD: ${{ secrets.RAZORPAY_KEY_PROD }}
+          OTP_WIDGET_ID: ${{ secrets.OTP_WIDGET_ID }}
+          OTP_TOKEN_AUTH: ${{ secrets.OTP_TOKEN_AUTH }}
       - name: Copy Stage folder
         if: ${{ env.BUILD_ENV == 'Stage' }}
         run: |
@@ -100,6 +105,8 @@ jobs:
           LINKEDIN_CLIENT_ID_PROD: ${{ secrets.LINKEDIN_CLIENT_ID_PROD }}
           LINKEDIN_SECRET_KEY_PROD: ${{ secrets.LINKEDIN_SECRET_KEY_PROD }}
           RAZORPAY_KEY_PROD: ${{ secrets.RAZORPAY_KEY_PROD }}
+          OTP_WIDGET_ID: ${{ secrets.OTP_WIDGET_ID }}
+          OTP_TOKEN_AUTH: ${{ secrets.OTP_TOKEN_AUTH }}
       - name: Copy Beta folder
         if: ${{ env.BUILD_ENV == 'Beta' }}
         run: |
@@ -119,14 +126,15 @@ jobs:
           LINKEDIN_CLIENT_ID_PROD: ${{ secrets.LINKEDIN_CLIENT_ID_PROD }}
           LINKEDIN_SECRET_KEY_PROD: ${{ secrets.LINKEDIN_SECRET_KEY_PROD }}
           RAZORPAY_KEY_PROD: ${{ secrets.RAZORPAY_KEY_PROD }}
+          OTP_WIDGET_ID: ${{ secrets.OTP_WIDGET_ID }}
+          OTP_TOKEN_AUTH: ${{ secrets.OTP_TOKEN_AUTH }}
       - name: Copy Prod folder
         if: ${{ env.BUILD_ENV == 'Prod' }}
         run: |
           mkdir public
           cp -r /home/runner/work/Giddh-New-Angular4-App/Giddh-New-Angular4-App/dist/apps/web-giddh /home/runner/work/Giddh-New-Angular4-App/Giddh-New-Angular4-App/public/website/
       - name: Create ZIP folder
-        run:
-          zip -r public.zip public
+        run: zip -r public.zip public
       - name: Deploy to TEST env.
         if: ${{ env.BUILD_ENV == 'Test' }}
         env:
