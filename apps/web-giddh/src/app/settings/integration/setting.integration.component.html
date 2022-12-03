@@ -190,58 +190,78 @@
 
                         <div class="trigger-input">
                             <p class="trigger-input-label">Title</p>
-                            <input matInput type="text" placeholder="Name Trigger" />
+                            <text-field
+                                [type]="'text'"
+                                [cssClass]="'form-control'"
+                                [placeholder]="'Name Trigger'"
+                                [name]="'trigger'"
+                            >
+                            </text-field>
                         </div>
                         <div class="trigger-input">
                             <p class="trigger-input-label">Condition<span>*</span></p>
-                            <mat-select placeholder="Select Condition">
-                                <mat-option value="CREATE">Create</mat-option>
-                                <mat-option value="UPDATE">Update</mat-option>
-                                <mat-option value="DELETE">Delete</mat-option>
-                            </mat-select>
+                            <select-field
+                                [cssClass]="'form-control mat-field-border'"
+                                [placeholder]="'Select Condition'"
+                                [options]="triggerCondition"
+                                (selectedOption)="selectConditions($event.value)"
+                            ></select-field>
                         </div>
                         <div class="trigger-input">
                             <p class="trigger-input-label">Entity<span>*</span></p>
-                            <mat-select placeholder="Choose Entity">
-                                <mat-option value="VOUCHER">Voucher</mat-option>
-                            </mat-select>
+                            <select-field
+                                [cssClass]="'form-control mat-field-border'"
+                                [placeholder]="'Select Entity'"
+                                [options]="triggerEntity"
+                                (selectedOption)="selectEntity($event.value)"
+                            ></select-field>
                         </div>
                         <div class="trigger-input">
                             <p class="trigger-input-label">Sub Entity<span>*</span></p>
-                            <mat-select placeholder="Choose Sub Entity">
-                                <mat-option *ngFor="let action of action" [value]="action">{{ action }} </mat-option>
-                            </mat-select>
+                            <select-field
+                                [cssClass]="'form-control mat-field-border'"
+                                [placeholder]="'Select Sub Entity'"
+                                [options]="campaignList"
+                                (selectedOption)="selectSubEntity($event.value)"
+                            ></select-field>
+                        </div>
+                        <div class="trigger-input">
+                            <p class="trigger-input-label">Campaign<span>*</span></p>
+                            <select-field
+                                [cssClass]="'form-control mat-field-border'"
+                                [placeholder]="'Select Campaign'"
+                                [options]="campaignList"
+                                (selectedOption)="selectCampaign($event.value)"
+                            ></select-field>
                         </div>
                         <button mat-flat-button color="primary">Launch Trigger</button>
                     </div>
-                    <div class="trigger-form-right-side">
+                    <div class="trigger-form-right-side" *ngIf="showVariableMapping">
                         <p class="compose">Compose Email</p>
                         <div class="dropdown-box">
                             <mat-grid-list class="unit-mapping-grid-list" cols="2" gutterSize="0px" rowHeight="70px">
                                 <form class="map-unit-value-form">
                                     <mat-grid-tile
                                         class="grid-box grid-box-content campaign-grid-tile"
-                                        *ngFor="let variables of compaignVariables"
+                                        *ngFor="let variables of campaignVariables"
                                     >
-                                        <div class="unit-value">{{ variables }}</div>
+                                        <div class="unit-value">{{ variables.label }}</div>
                                         <div class="map-unit-value">
                                             <select-field
                                                 [cssClass]="'form-control mat-field-border'"
                                                 [placeholder]="'Select Suggestion'"
                                                 [options]="fieldsSuggestion"
-                                                (selectedOption)="onSelectFieldSuggestions($event)"
+                                                (selectedOption)="selectFieldSuggestions($event.value)"
                                             ></select-field>
                                         </div>
                                     </mat-grid-tile>
                                 </form>
                             </mat-grid-list>
                             <br />
-
-                            <button mat-flat-button color="primary" class="preview-button">Send Me Preview Mail</button>
                         </div>
                     </div>
                 </div>
-                <div class="main-content">
+                <!-- <div class="main-content">
                     <p>Giddh Suggested Trigger</p>
 
                     <table mat-table [dataSource]="table2" class="mat-elevation-z8">
@@ -279,7 +299,7 @@
                         <tr mat-header-row *matHeaderRowDef="displayedtable2Columns"></tr>
                         <tr mat-row *matRowDef="let row; columns: displayedtable2Columns"></tr>
                     </table>
-                </div>
+                </div> -->
 
                 <!-- Page 10 -->
                 <!-- <div class="msg91-container">

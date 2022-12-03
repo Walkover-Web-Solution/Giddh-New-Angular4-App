@@ -200,10 +200,31 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public fieldsSuggestion: any[] = [];
     /** List of action */
     public action: any[] = [];
-    /** List of field suggestions */
-    public compaignVariables: any[] = [
-        'Var1', 'Var2', 'Var3', 'Var4', 'Var5'
+    /** List ofcampaign list variables */
+    public campaignVariables: any[] = [];
+    /** List of campaign list */
+    public campaignList: any[] = [];
+    public triggerCondition: any[] = [
+        {
+            label: 'Create',
+            value: 'CREATE',
+        },
+        {
+            label: 'Update',
+            value: 'UPDATE',
+        },
+          {
+            label: 'Delete',
+            value: 'DELETE',
+        }
     ];
+    public triggerEntity : any[]=[
+        {
+            label:'Voucher',
+            value:'VOUCHER'
+        }
+    ];
+    public showVariableMapping : boolean = false;
 
     constructor(
         private router: Router,
@@ -1192,8 +1213,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             if (response?.status === "success") {
                 if (response?.body?.items?.length > 0) {
                     response?.body?.items?.forEach(trigger => {
-                        console.log(trigger);
-
                         const argsMapping = [];
                         if (trigger.argsMapping?.length > 0) {
                             trigger.argsMapping.forEach(arg => {
@@ -1222,7 +1241,10 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                             label: result
                         }
                     });
+                    console.log(response);
+
                     this.action = response.body?.subCondition[0].action;
+
                 }
             }
         });
@@ -1231,28 +1253,53 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public getCampaignFields(slug: string): void {
         this.settingsIntegrationService.getCampaignFields(slug).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
-                console.log('cmp fields',response);
+                this.campaignVariables = response.body?.variables?.map((result: any) => {
+                    return {
+                        value: result,
+                        label: result
+                    }
+                });
 
-                }
-            });
-        }
-
-    public getCampaignList(): void {
-        this.settingsIntegrationService.getCampaignList().pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response?.status === "success") {
-                // console.log('cmp list',response);
-                let slug ;
-                response?.body?.data[0].slug
-                console.log(slug);
-
-                this.getCampaignFields(slug);
             }
         });
     }
 
-    public onSelectFieldSuggestions(): void {
+    public getCampaignList(): void {
+        this.settingsIntegrationService.getCampaignList().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === "success") {
+                this.campaignList = response.body?.data?.map((result: any) => {
+                    return {
+                        value: result.slug,
+                        label: result.name
+                    }
+                });
+            }
+        });
+    }
+
+    public selectFieldSuggestions(event:any): void {
+        console.log(event);
 
     }
+    public selectCampaign(slug: any): void {
+        this.showVariableMapping = true;
+        this.getCampaignFields(slug);
+    }
+
+    public selectEntity(event:any): void {
+        console.log(event);
+
+    }
+    public selectSubEntity(event:any):void{
+        console.log(event);
+
+    }
+        public selectConditions(event:any):void{
+            console.log(event);
+
+    }
+
+
     /**
      * Deletes the trigger
      *
