@@ -285,7 +285,8 @@ export const SETTING_INTEGRATION_TABS = {
     EMAIL: { LABEL: 'email', VALUE: 0 },
     COLLECTION: { LABEL: 'collection', VALUE: 1 },
     E_COMMERCE: { LABEL: 'ecommerce', VALUE: 2 },
-    PAYMENT: { LABEL: 'payment', VALUE: 3 }
+    PAYMENT: { LABEL: 'payment', VALUE: 3 },
+    TALLY: { LABEL: 'tally', VALUE: 4 }
 };
 /** Email Validation Regex */
 export const EMAIL_VALIDATION_REGEX = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -330,7 +331,7 @@ export const GIDDH_VOUCHER_FORM = [
         type: "cash",
         advanceReceiptAllowed: false,
         rcmAllowed: false,
-        depositAllowed: false,
+        depositAllowed: true,
         taxesAllowed: true,
         quantityAllowed: true,
         rateAllowed: true,

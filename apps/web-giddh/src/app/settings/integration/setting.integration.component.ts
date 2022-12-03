@@ -213,18 +213,22 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             label: 'Update',
             value: 'UPDATE',
         },
-          {
+        {
             label: 'Delete',
             value: 'DELETE',
         }
     ];
-    public triggerEntity : any[]=[
+    public triggerEntity: any[] = [
         {
-            label:'Voucher',
-            value:'VOUCHER'
+            label: 'Voucher',
+            value: 'VOUCHER'
         }
     ];
-    public showVariableMapping : boolean = false;
+    public showVariableMapping: boolean = false;
+    /** This will hold isCopied */
+    public isCopied: boolean = false;
+    /** This will hold apiUrl */
+    public apiUrl: string = '';
 
     constructor(
         private router: Router,
@@ -258,7 +262,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public ngOnInit() {
         this.imgPath = (isElectron) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         this.getCommunicationPlatforms();
-        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        let companyUniqueName = this.generalService.companyUniqueName;
+        this.apiUrl = `${ApiUrl}company/${companyUniqueName}/imports/tally-import`;
         //logic to switch to payment tab if coming from vedor tabs add payment
         if (this.selectedTabParent !== undefined && this.selectedTabParent !== null) {
             this.selectTab(this.selectedTabParent);
@@ -1277,7 +1282,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         });
     }
 
-    public selectFieldSuggestions(event:any): void {
+    public selectFieldSuggestions(event: any): void {
         console.log(event);
 
     }
@@ -1286,16 +1291,16 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         this.getCampaignFields(slug);
     }
 
-    public selectEntity(event:any): void {
+    public selectEntity(event: any): void {
         console.log(event);
 
     }
-    public selectSubEntity(event:any):void{
+    public selectSubEntity(event: any): void {
         console.log(event);
 
     }
-        public selectConditions(event:any):void{
-            console.log(event);
+    public selectConditions(event: any): void {
+        console.log(event);
 
     }
 
@@ -1339,4 +1344,17 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
 
         this.showTriggerForm = true;
     }
+
+    /**
+     *This will use for copy api url link and display copied
+     *
+     * @memberof SettingIntegrationComponent
+     */
+    public copyUrl(): void {
+        this.isCopied = true;
+        setTimeout(() => {
+            this.isCopied = false;
+        }, 3000);
+    }
 }
+

@@ -451,4 +451,43 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
     public removeZindexCdkOverlay(): void {
         document.querySelector('.cdk-overlay-container')?.classList?.remove('cdk-overlay-container-z-index');
     }
+
+    /**
+     * This will use for on clear value of operations
+     *
+     * @param {*} event
+     * @memberof ActivityLogsComponent
+     */
+    public resetEntity(event: any): void {
+        if (!event?.value) {
+            this.activityObjLabels.entity = '';
+            this.activityObj.entity = '';
+        }
+    }
+
+    /**
+     * This will use for on clear value of operations
+     *
+     * @param {*} event
+     * @memberof ActivityLogsComponent
+     */
+    public resetUser(event: any): void {
+        if (!event?.value) {
+            this.activityObjLabels.user = '';
+            this.activityObj.userUniqueNames = [];
+        }
+    }
+
+    /**
+    * This will use for on clear value of operations
+    *
+    * @param {*} event
+    * @memberof ActivityLogsComponent
+    */
+    public resetOperation(event: any): void {
+        if (!event?.value) {
+            this.activityObjLabels.operation = '';
+            this.activityObj.operation = '';
+        }
+    }
 }

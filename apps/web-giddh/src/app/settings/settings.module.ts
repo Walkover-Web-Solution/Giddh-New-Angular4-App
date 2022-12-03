@@ -52,6 +52,8 @@ import { NgxBootstrapSwitchModule } from 'ngx-bootstrap-switch';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
+import { MatInputModule } from '@angular/material/input';
+import { ClipboardModule } from 'ngx-clipboard';
 
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
@@ -112,7 +114,10 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         NgxBootstrapSwitchModule.forRoot(),
         BsDropdownModule.forRoot(),
         MatGridListModule,
-        FormFieldsModule
+        FormFieldsModule,
+        MatInputModule,
+        ClipboardModule
+
     ],
     providers: [
         {

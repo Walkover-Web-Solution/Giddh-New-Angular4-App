@@ -1,7 +1,4 @@
 {
-    "requested_date": "अनुरोधित दिनांक",
-    "user":"उपयोगकर्ता",
-    "expiry": "समाप्ति",
-    "expired": "खत्म हो चुका"
+    "exports": "Exports",
+    "imports": "Imports"
 }
-

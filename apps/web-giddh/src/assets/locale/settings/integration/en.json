@@ -128,5 +128,11 @@
         "create_new_trigger": "+ Create New Trigger",
         "delete_trigger": "Do you want to delete the trigger?",
         "active_triggers": "Active Triggers"
+    },
+    "tally":{
+        "help_documentation":"Help Documentation",
+        "copied":"Copied...",
+        "api_url":"API URL : ",
+        "heading":"Tally"
     }
 }

@@ -2,6 +2,18 @@
     max-height: 18px;
 }
 
+.input-group-btn {
+    font-size: 21px;
+    color: var(--color-rectangular-tab-active-primary-text) !important;
+    cursor: pointer;
+    margin-right: 5px;
+    padding-top: 5px;
+}
+
+.tally-url {
+    padding-top: 7px;
+}
+
 .font-18 {
     font-weight: bold;
 }
@@ -360,6 +372,35 @@
         }
     }
 }
+.mat-form-field {
+    width: 58% !important;
+}
+.copied-url {
+    padding-top: 3px;
+    padding-left: 6px;
+}
+
+.mat-form-field-wrapper {
+    padding-bottom: 0 !important;
+}
+
+.magic-link-container {
+    margin-bottom: 0 !important;
+    padding-left: 0 !important;
+}
+
+.doc-link {
+    a {
+        text-decoration: none;
+        padding-left: 0;
+    }
+    :focus {
+        box-shadow: none;
+    }
+    :hover {
+        text-decoration: underline;
+    }
+}
 
 ::ng-deep {
     .mat-tab-header {
@@ -450,6 +491,11 @@
         display: none;
     }
 }
+@media (max-width: 1440px) {
+    .mat-form-field {
+        width: 78% !important;
+    }
+}
 .plus-cross-btn {
     i {
         padding: 5px 0;
@@ -515,6 +561,9 @@
 @media (max-width: 767px) {
     #inlnImg {
         margin-top: 0;
+    }
+    .mat-form-field {
+        width: 72% !important;
     }
     .empty-label label,
     .empty-label br {
