@@ -382,6 +382,10 @@ $custom-typography: mat-typography-config(
     position: relative !important;
     padding-top: 5px !important;
 }
+.trigger-dropdown {
+    width: 30% !important;
+    margin-top: 20px !important;
+}
 @media screen and (max-width: 1366px) and (orientation: portrait) {
     .subscription-form-select {
         float: left !important;

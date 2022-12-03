@@ -572,4 +572,21 @@ export class SettingsIntegrationService {
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e)));
     }
+
+    public getTriggerByUniqueName(triggerUniqueName: string): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.get(this.config.apiUrl + SETTINGS_INTEGRATION_COMMUNICATION_API.GET_TRIGGERS_BY_UNIQUENAME.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':triggerUniqueName', triggerUniqueName)).pipe(map((res) => {
+            let data: BaseResponse<string, string> = res;
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e)));
+    }
+
+    public createTrigger(model: SmsKeyClass): Observable<BaseResponse<string, SmsKeyClass>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.post(this.config.apiUrl + SETTINGS_INTEGRATION_API.SMS?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(map((res) => {
+            let data: BaseResponse<string, SmsKeyClass> = res;
+            data.request = model;
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<string, SmsKeyClass>(e, model)));
+    }
 }

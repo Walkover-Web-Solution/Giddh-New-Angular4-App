@@ -1,4 +1,4 @@
-import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
+import { combineLatest, Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { takeUntil, take } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 import { Component, Input, OnInit, ViewChild, AfterViewInit } from '@angular/core';
@@ -199,7 +199,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     /** List of field suggestions */
     public fieldsSuggestion: any[] = [];
     /** List of action */
-    public action: any[] = [];
+    public subConditionAction: any[] = [];
     /** List ofcampaign list variables */
     public campaignVariables: any[] = [];
     /** List of campaign list */
@@ -229,6 +229,14 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public isCopied: boolean = false;
     /** This will hold apiUrl */
     public apiUrl: string = '';
+    public createTrigger;
+    public platform: string = '';
+    public triggerTo: any[] = [];
+    public triggerBcc: any[] = [];
+    public triggerCc: any[] = [];
+    public attachmentType: any[] = [];
+    public triggerUniquename: string = '';
+
 
     constructor(
         private router: Router,
@@ -257,6 +265,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 this.generalService.user = result.user;
             }
         });
+        this.initFormFields();
     }
 
     public ngOnInit() {
@@ -1136,11 +1145,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 }
                 if (this.communicationPlatforms['MSG91'].isConnected) {
                     this.getTriggers();
-                    this.getFieldsSuggestion(response?.body?.platforms[0]?.name, "VOUCHER");
-                    this.getCampaignList();
-
-                } else {
-                    this.editCommunicationPlatform = "MSG91";
+                    this.platform = response?.body?.platforms[0]?.name;
+                    this.createTrigger.communicationPlatform = this.platform;
                 }
                 this.isCommunicationPlatformsLoading = false;
             } else {
@@ -1219,6 +1225,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 if (response?.body?.items?.length > 0) {
                     response?.body?.items?.forEach(trigger => {
                         const argsMapping = [];
+                        this.triggerUniquename = trigger?.uniqueName;
                         if (trigger.argsMapping?.length > 0) {
                             trigger.argsMapping.forEach(arg => {
                                 argsMapping.push(arg.name + " -> " + arg.value);
@@ -1246,11 +1253,39 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                             label: result
                         }
                     });
-                    console.log(response);
-
-                    this.action = response.body?.subCondition[0].action;
-
+                    this.subConditionAction = response.body?.subCondition[0].action;
                 }
+            }
+        });
+    }
+
+    public getTriggerByUniqueName(uniqueName: any): void {
+        this.settingsIntegrationService.getTriggerByUniqueName(uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === "success") {
+                this.triggerBcc = response.body?.campaignDetails.bcc?.map((result: any) => {
+                    return {
+                        value: result,
+                        label: result
+                    }
+                });
+                this.triggerCc = response.body?.campaignDetails.cc?.map((result: any) => {
+                    return {
+                        value: result,
+                        label: result
+                    }
+                });
+                this.triggerTo = response.body?.campaignDetails.to?.map((result: any) => {
+                    return {
+                        value: result,
+                        label: result
+                    }
+                });
+                this.attachmentType = response.body?.campaignDetails.sendAttachments?.map((result: any) => {
+                    return {
+                        value: result,
+                        label: result
+                    }
+                });
             }
         });
     }
@@ -1258,11 +1293,12 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public getCampaignFields(slug: string): void {
         this.settingsIntegrationService.getCampaignFields(slug).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
-                this.campaignVariables = response.body?.variables?.map((result: any) => {
-                    return {
-                        value: result,
-                        label: result
-                    }
+
+                response.body?.variables?.forEach((result: any) => {
+                    this.createTrigger.campaignDetails.argsMapping.push({
+                        name: result,
+                        value: ''
+                    })
                 });
 
             }
@@ -1282,26 +1318,74 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         });
     }
 
+    public createNewTrigger(): void {
+        console.log(this.createTrigger);
+
+    }
+
+    public initFormFields(): void {
+        this.createTrigger =
+        {
+            title: null,
+            condition: {
+                entity: "VOUCHER",
+                action: [
+                    null
+                ],
+                subConditions: [
+                    {
+                        entity: "voucherType",
+                        action: []
+                    }
+                ]
+            },
+            communicationPlatform: null,
+            campaignDetails: {
+                campaignSlug: null,
+                argsMapping: [],
+                to: [],
+                cc: [],
+                bcc: [],
+                attachmentType: []
+            }
+        }
+    }
     public selectFieldSuggestions(event: any): void {
-        console.log(event);
 
     }
     public selectCampaign(slug: any): void {
+        this.createTrigger.campaignDetails.campaignSlug = slug;
         this.showVariableMapping = true;
         this.getCampaignFields(slug);
+        this.getTriggerByUniqueName(this.triggerUniquename);
     }
 
-    public selectEntity(event: any): void {
-        console.log(event);
+    public selectEntity(entity: any): void {
+        this.createTrigger.condition.entity = entity;
+    }
+
+    public selectSubEntity(subconditions: any): void {
+        this.createTrigger.condition.subConditions[0]?.action?.push(subconditions);
 
     }
-    public selectSubEntity(event: any): void {
-        console.log(event);
-
+    public selectConditions(action: any): void {
+        this.createTrigger.condition.action = action;
     }
-    public selectConditions(event: any): void {
-        console.log(event);
 
+    public selectTriggerBcc(bcc: any): void {
+        this.createTrigger.campaignDetails.bcc.push(bcc);
+    }
+
+    public selectTriggerCc(cc: any): void {
+        this.createTrigger.campaignDetails.cc.push(cc);
+    }
+
+    public selectTriggerTo(to: any): void {
+        this.createTrigger.campaignDetails.to.push(to);
+    }
+
+        public selectAttachmentType(type: any): void {
+        this.createTrigger.campaignDetails.attachmentType.push(type);
     }
 
 
@@ -1341,8 +1425,9 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             this.showTriggerForm = false;
             return;
         }
-
         this.showTriggerForm = true;
+        this.getCampaignList();
+        this.getFieldsSuggestion(this.platform, "VOUCHER");
     }
 
     /**

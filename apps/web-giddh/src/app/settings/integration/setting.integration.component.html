@@ -192,9 +192,10 @@
                             <p class="trigger-input-label">Title</p>
                             <text-field
                                 [type]="'text'"
-                                [cssClass]="'form-control'"
+                                [cssClass]="'form-control mat-field-border'"
                                 [placeholder]="'Name Trigger'"
                                 [name]="'trigger'"
+                                [(ngModel)]="createTrigger.title"
                             >
                             </text-field>
                         </div>
@@ -218,12 +219,19 @@
                         </div>
                         <div class="trigger-input">
                             <p class="trigger-input-label">Sub Entity<span>*</span></p>
-                            <select-field
-                                [cssClass]="'form-control mat-field-border'"
-                                [placeholder]="'Select Sub Entity'"
-                                [options]="campaignList"
-                                (selectedOption)="selectSubEntity($event.value)"
-                            ></select-field>
+                            <mat-select
+                                name="subentity"
+                                class="form-control mat-field-border"
+                                placeholder="Select  Sub Entity"
+                                multiple
+                            >
+                                <mat-option
+                                    *ngFor="let action of subConditionAction"
+                                    [selected]="action.isChecked"
+                                    (onSelectionChange)="selectSubEntity(action)"
+                                    >{{ action }}</mat-option
+                                >
+                            </mat-select>
                         </div>
                         <div class="trigger-input">
                             <p class="trigger-input-label">Campaign<span>*</span></p>
@@ -234,24 +242,62 @@
                                 (selectedOption)="selectCampaign($event.value)"
                             ></select-field>
                         </div>
-                        <button mat-flat-button color="primary">Launch Trigger</button>
+                        <button mat-flat-button color="primary" (click)="createNewTrigger()">Launch Trigger</button>
                     </div>
                     <div class="trigger-form-right-side" *ngIf="showVariableMapping">
                         <p class="compose">Compose Email</p>
                         <div class="dropdown-box">
-                            <mat-grid-list class="unit-mapping-grid-list" cols="2" gutterSize="0px" rowHeight="70px">
+                            <div class="compose-trigger-dropdowns">
+                                <select-field
+                                    [isMultipleTagValue]="'true'"
+                                    [showCreateNew]="'true'"
+                                    [cssClass]="'form-control mat-field-border trigger-dropdown trigger-dropdown-to'"
+                                    [placeholder]="'Select To'"
+                                    [options]="triggerTo"
+                                    (selectedOption)="selectTriggerTo($event.value)"
+                                ></select-field>
+                                <select-field
+                                    [isMultipleTagValue]="'true'"
+                                    [showCreateNew]="'true'"
+                                    [cssClass]="'form-control mat-field-border trigger-dropdown trigger-dropdown-bcc'"
+                                    [placeholder]="'Select Bcc'"
+                                    [options]="triggerBcc"
+                                    (selectedOption)="selectTriggerBcc($event.value)"
+                                ></select-field>
+                                <select-field
+                                    [isMultipleTagValue]="'true'"
+                                    [showCreateNew]="'true'"
+                                    [cssClass]="'form-control mat-field-border trigger-dropdown trigger-dropdown-cc'"
+                                    [placeholder]="'Select CC'"
+                                    [options]="triggerCc"
+                                    (selectedOption)="selectTriggerCc($event.value)"
+                                ></select-field>
+                                <select-field
+                                    [cssClass]="
+                                        'form-control mat-field-border trigger-dropdown trigger-dropdown-attachment'
+                                    "
+                                    [placeholder]="'Attachment Type'"
+                                    [options]="attachmentType"
+                                    (selectedOption)="selectAttachmentType($event.value)"
+                                ></select-field>
+                            </div>
+                            <br />
+                            <p class="compose">Variables</p>
+                            <mat-grid-list class="unit-mapping-grid-list" cols="3" gutterSize="0px" rowHeight="70px">
                                 <form class="map-unit-value-form">
                                     <mat-grid-tile
                                         class="grid-box grid-box-content campaign-grid-tile"
-                                        *ngFor="let variables of campaignVariables"
+                                        *ngFor="let variables of createTrigger.campaignDetails.argsMapping"
                                     >
-                                        <div class="unit-value">{{ variables.label }}</div>
+                                        <div class="unit-value">{{ variables.name }}</div>
                                         <div class="map-unit-value">
                                             <select-field
                                                 [cssClass]="'form-control mat-field-border'"
                                                 [placeholder]="'Select Suggestion'"
                                                 [options]="fieldsSuggestion"
-                                                (selectedOption)="selectFieldSuggestions($event.value)"
+                                                (selectedOption)="
+                                                    selectFieldSuggestions((variables.value = $event.value))
+                                                "
                                             ></select-field>
                                         </div>
                                     </mat-grid-tile>
