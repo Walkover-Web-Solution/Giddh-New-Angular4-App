@@ -581,6 +581,14 @@ textarea:focus {
     cursor: pointer;
 }
 
+.delete-image {
+    width: 3%;
+    position: absolute;
+    right: 25%;
+    top: 55px;
+    cursor: pointer;
+}
+
 .custom-file-label {
     height: 60px;
     max-width: 330px;

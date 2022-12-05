@@ -119,6 +119,7 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
                 }
             });
         }
+
     }
 
     /**

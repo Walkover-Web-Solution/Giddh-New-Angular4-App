@@ -497,7 +497,9 @@
                                                                                 autocomplete="None"
                                                                                 [type]="'text'"
                                                                                 [name]="'billingDetails.gstNumber'"
-                                                                                [cssClass]="'form-control input-custom'"
+                                                                                [cssClass]="
+                                                                                    'form-control input-custom billing'
+                                                                                "
                                                                                 *ngIf="showGSTINNo"
                                                                                 [(ngModel)]="
                                                                                     invFormData.accountDetails
@@ -516,7 +518,7 @@
                                                                             >
                                                                             </text-field>
                                                                             <text-field
-                                                                                [maxlength]="'15'"
+                                                                                [maxlength]="15"
                                                                                 autocomplete="none"
                                                                                 [type]="'text'"
                                                                                 [name]="'billingDetails.gstNumber'"
@@ -3653,7 +3655,6 @@
                                             </div>
                                         </div>
                                     </div>
-
                                     <!--endregion-->
                                     <!-- region balance due for purchase -->
                                     <div class="table-row" *ngIf="isPurchaseInvoice && voucherApiVersion !== 2">
