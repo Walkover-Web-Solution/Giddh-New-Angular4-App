@@ -704,14 +704,13 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     }
 
     /**
-     * This will use for print thermal pdf document
+     * This will use for print thermal print
      *
      * @memberof InvoicePreviewDetailsComponent
      */
     public printThermal(): void {
         this.voucherDetails$.subscribe((res) => {
             if (res) {
-                res = this._generalService.convertV1ResponseInV2(res);
                 this.thermalService.print(this.defaultTemplate, res);
             } else {
                 this.store.dispatch(this._invoiceReceiptActions.getVoucherDetailsV4(this.selectedItem?.account?.uniqueName, {
@@ -999,7 +998,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         this.invoiceSearch = term;
         this.invoiceSearchEvent.emit(this.invoiceSearch);
         this.filteredData = this.items?.filter(item => {
-            return item.voucherNumber.toLowerCase().includes(term.toLowerCase()) ||
+            return item.voucherNumber?.toLowerCase()?.includes(term?.toLowerCase()) ||
                 item.account.name.toLowerCase().includes(term.toLowerCase()) ||
                 item.voucherDate.includes(term) ||
                 item.grandTotal?.toString().includes(term);

@@ -31,6 +31,7 @@ import { SettingsIntegrationService } from '../../services/settings.integraion.s
 import { ACCOUNT_REGISTERED_STATUS, SettingsIntegrationTab, UNLIMITED_LIMIT } from '../constants/settings.constant';
 import { SearchService } from '../../services/search.service';
 import { SalesService } from '../../services/sales.service';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 import { cloneDeep, find, isEmpty } from '../../lodash-optimized';
 
 export declare const gapi: any;
@@ -38,7 +39,19 @@ export declare const gapi: any;
 @Component({
     selector: 'setting-integration',
     templateUrl: './setting.integration.component.html',
-    styleUrls: ['./setting.integration.component.scss']
+    styleUrls: ['./setting.integration.component.scss'],
+    animations: [
+        trigger('slideInOut', [
+            state('in', style({
+                transform: 'translate3d(0, 0, 0)'
+            })),
+            state('out', style({
+                transform: 'translate3d(100%, 0, 0)'
+            })),
+            transition('in => out', animate('400ms ease-in-out')),
+            transition('out => in', animate('400ms ease-in-out'))
+        ]),
+    ]
 })
 export class SettingIntegrationComponent implements OnInit, AfterViewInit {
 
@@ -65,8 +78,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     private gmailAuthCodeStaticUrl: string = 'https://accounts.google.com/o/oauth2/auth?redirect_uri=:redirect_url&response_type=code&client_id=:client_id&scope=https://www.googleapis.com/auth/gmail.send&approval_prompt=force&access_type=offline';
     private isSellerAdded: Observable<boolean> = observableOf(false);
     private isSellerUpdate: Observable<boolean> = observableOf(false);
-    /** user who is logged in currently */
-    private loggedInUserEmail: string;
     /** Input mast for number format */
     public inputMaskFormat: string = '';
     /** To check company country */
@@ -174,7 +185,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         this.store.pipe(select(s => s.session.user), take(1)).subscribe(result => {
             if (result && result.user) {
                 this.generalService.user = result.user;
-                this.loggedInUserEmail = result.user.email;
             }
         });
     }

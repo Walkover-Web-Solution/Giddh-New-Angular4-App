@@ -1,7 +1,7 @@
 import { takeUntil } from 'rxjs/operators';
 import { Component, Input, OnDestroy, OnInit, ChangeDetectorRef, ElementRef, ViewChild } from '@angular/core';
 import * as Highcharts from 'highcharts';
-import { Observable, ReplaySubject } from 'rxjs';
+import { combineLatest, Observable, ReplaySubject } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
 import * as dayjs from 'dayjs';
@@ -12,6 +12,8 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { GeneralService } from '../../../services/general.service';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 import { cloneDeep } from '../../../lodash-optimized';
+import { ReceiptService } from '../../../services/receipt.service';
+import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
 
 @Component({
     selector: 'total-overdues-chart',
@@ -43,13 +45,19 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
     public requestInFlight: boolean = true;
     public totaloverDueChart: typeof Highcharts = Highcharts;
     public chartOptions: Highcharts.Options;
-    public sundryDebtorResponse: any = {};
-    public sundryCreditorResponse: any = {};
-    public totalRecievable: number = 0;
-    public totalPayable: number = 0;
+    /** Holds due invoices */
+    public invoiceDue: number = 0;
+    /** Holds pending invoices */
+    public pendingInvoices: number = 0;
+    /** Holds hold invoices */
+    public holdInvoices: number = 0;
+    /** Holds due bills */
+    public billDue: number = 0;
+    /** Holds pending bills */
+    public pendingBills: number = 0;
+    /** Holds hold bills */
+    public holdBills: number = 0;
     public overDueObj: any = {};
-    public ReceivableDurationAmt: number = 0;
-    public PaybaleDurationAmt: number = 0;
     public dayjs = dayjs;
     public amountSettings: any = { baseCurrencySymbol: '', balanceDecimalPlaces: '' };
     public universalDate$: Observable<any>;
@@ -63,7 +71,7 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
     /** this will store active company data */
     public activeCompany: any = {};
 
-    constructor(private store: Store<AppState>, private dashboardService: DashboardService, public currencyPipe: GiddhCurrencyPipe, private cdRef: ChangeDetectorRef, private modalService: BsModalService, private generalService: GeneralService) {
+    constructor(private store: Store<AppState>, private dashboardService: DashboardService, public currencyPipe: GiddhCurrencyPipe, private cdRef: ChangeDetectorRef, private modalService: BsModalService, private generalService: GeneralService, private receiptService: ReceiptService) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
     }
 
@@ -102,10 +110,10 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
     public resetChartData() {
         this.dataFound = false;
         this.overDueObj = {};
-        this.totalRecievable = 0;
-        this.ReceivableDurationAmt = 0;
-        this.totalPayable = 0;
-        this.PaybaleDurationAmt = 0;
+        this.invoiceDue = 0;
+        this.pendingInvoices = 0;
+        this.billDue = 0;
+        this.pendingBills = 0;
         this.requestInFlight = false;
         this.cdRef.detectChanges();
     }
@@ -169,7 +177,7 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
             series: [{
                 name: 'Total Overdues',
                 type: 'pie',
-                data: [['Customer Due', this.totalRecievable], ['Vendor Due', this.totalPayable]],
+                data: [['Customer Due', this.invoiceDue], ['Vendor Due', this.billDue]],
             }],
         };
 
@@ -205,14 +213,11 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
      */
     public getTotalOverdues(): void {
         this.dataFound = false;
-        this.totalRecievable = 0;
-        this.totalPayable = 0;
-        this.PaybaleDurationAmt = 0
-        this.sundryDebtorResponse = [];
-        this.sundryCreditorResponse = [];
-
-        this.getTotalOverduesData('sundrydebtors');
-        this.getTotalOverduesData('sundrycreditors');
+        this.invoiceDue = 0;
+        this.billDue = 0;
+        this.pendingInvoices = 0
+        this.pendingBills = 0;
+        this.getTotalOverduesData();
     }
 
     /**
@@ -221,7 +226,7 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
      * @memberof TotalOverduesChartComponent
      */
     public checkPayableAndReceivable(): void {
-        if (this.totalRecievable === 0 && this.totalPayable === 0) {
+        if (this.invoiceDue === 0 && this.billDue === 0) {
             this.resetChartData();
         } else {
             this.generateCharts();
@@ -231,26 +236,33 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
     /**
      * This will call the api to get the data
      *
-     * @param {string} group uniqueName (sundrydebtors or sundrycreditors)
      * @memberof TotalOverduesChartComponent
      */
-    public getTotalOverduesData(group: string): void {
-        this.dashboardService.getClosingBalance(group, this.toRequest.from, this.toRequest.to, this.toRequest.refresh).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response && response.status === 'success' && response.body && response.body[0]) {
-                this.dataFound = true;
-
-                if (group === "sundrycreditors") {
-                    this.sundryCreditorResponse = response.body[0];
-                    this.totalPayable = this.sundryCreditorResponse.closingBalance.amount;
-                    this.PaybaleDurationAmt = this.sundryCreditorResponse.creditTotal - this.sundryCreditorResponse.debitTotal;
-                } else {
-                    this.sundryDebtorResponse = response.body[0];
-                    this.totalRecievable = this.sundryDebtorResponse.closingBalance.amount;
-                    this.ReceivableDurationAmt = this.sundryDebtorResponse.debitTotal - this.sundryDebtorResponse.creditTotal;
+    public getTotalOverduesData(): void {
+        this.dataFound = false;
+        combineLatest([this.receiptService.getAllReceiptBalanceDue({from: this.toRequest.from, to: this.toRequest.to}, "sales"), this.receiptService.getAllReceiptBalanceDue({from: this.toRequest.from, to: this.toRequest.to}, "purchase"), this.dashboardService.getPendingVouchersCount(this.toRequest.from, this.toRequest.to, "sales"), this.dashboardService.getPendingVouchersCount(this.toRequest.from, this.toRequest.to, "purchase")]).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
+            if(response[0] && response[1] && response[2] && response[3]) {
+                if (response[0] && response[0].status === 'success' && response[0].body) {
+                    this.invoiceDue = giddhRoundOff(response[0].body.totalDue, 2);
+                    this.dataFound = true;
                 }
-            }
+                if (response[1] && response[1].status === 'success' && response[1].body) {
+                    this.billDue = giddhRoundOff(response[1].body.totalDue, 2);
+                    this.dataFound = true;
+                }
+                if (response[2] && response[2].status === 'success' && response[2].body) {
+                    this.pendingInvoices = Number(response[2].body.unpaidCount) + Number(response[2].body.partialPaidCount);
+                    this.holdInvoices = response[2].body.holdCount;
+                    this.dataFound = true;
+                }
+                if (response[3] && response[3].status === 'success' && response[3].body) {
+                    this.pendingBills = Number(response[3].body.unpaidCount) + Number(response[3].body.partialPaidCount);
+                    this.holdBills = response[3].body.holdCount;
+                    this.dataFound = true;
+                }
 
-            this.checkPayableAndReceivable();
+                this.checkPayableAndReceivable();
+            }
         });
     }
 

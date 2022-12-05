@@ -112,6 +112,7 @@
                 <div class="clearfix">
                     <button
                         [hidden]="!emailTabActive"
+                        [disabled]="!emailList?.value || (currentVoucherFilter === 'invoices' && !invoiceType?.length)"
                         type="button"
                         class="btn btn-sm btn-success"
                         (click)="onSendInvoiceOnMail(emailList.value)"

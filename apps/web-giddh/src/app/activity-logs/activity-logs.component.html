@@ -25,6 +25,7 @@
                     [placeholder]="commonLocaleData?.app_entity"
                     [options]="entities"
                     (selectedOption)="
+                        selecteEntityType($event);
                         activityObj.entity = $event.value;
                         activityObjLabels.entity = $event.label;
                         activityObj.operation = '';
@@ -35,6 +36,17 @@
                     [allowValueReset]="true"
                 >
                 </select-field>
+            </div>
+            <div class="mr-t15 mr-b15 entry-datepicker custom-datepicker-wrapper" *ngIf="isShowEntryDatepicker">
+                <div class="custom-datepicker" (click)="showEntryGiddhDatepicker($event)">
+                    <i class="icon-calender calendar-addon"></i>
+                    <input
+                        type="text"
+                        name="selectedEntryDateRange"
+                        [value]="selectedEntryDateRangeUi ? selectedEntryDateRangeUi : ''"
+                        class="giddh-datepicker date-range-picker"
+                    />
+                </div>
             </div>
             <div class="operation-wrapper mr-l1 filter-button">
                 <select-field
@@ -66,6 +78,7 @@
             <div
                 class="clear-filter form-group mb-0"
                 *ngIf="
+                    entryShowDateReport ||
                     showDateReport ||
                     activityObj.entity ||
                     activityObj.operation ||
@@ -333,6 +346,30 @@
                 [locale]="{ applyLabel: commonLocaleData?.app_done }"
                 (rangeClicked)="dateSelectedCallback($event)"
                 (datesUpdated)="dateSelectedCallback($event)"
+                [keepCalendarOpeningWithRange]="false"
+                [showRangeLabelOnInput]="false"
+                [dateFieldPosition]="dateFieldPosition"
+            ></app-datepicker-wrapper>
+        </div>
+    </div>
+</ng-template>
+<ng-template #datepickerEntryTemplate>
+    <div class="datepicker-modal">
+        <div class="modal-body">
+            <app-datepicker-wrapper
+                [inputStartDate]="selectedEntryDateRange?.startDate"
+                [inputEndDate]="selectedEntryDateRange?.endDate"
+                [alwaysShowCalendars]="true"
+                [ranges]="entryDatePickerOptions"
+                [selectedRangeLabel]="selectedEntryRangeLabel"
+                [showCustomRangeLabel]="true"
+                [showClearButton]="false"
+                [showCancel]="true"
+                [linkedCalendars]="true"
+                [showDropdowns]="true"
+                [locale]="{ applyLabel: commonLocaleData?.app_done }"
+                (rangeClicked)="entryDateSelectedCallback($event)"
+                (datesUpdated)="entryDateSelectedCallback($event)"
                 [keepCalendarOpeningWithRange]="false"
                 [showRangeLabelOnInput]="false"
                 [dateFieldPosition]="dateFieldPosition"
