@@ -521,7 +521,7 @@
                                                                                 [maxlength]="15"
                                                                                 autocomplete="none"
                                                                                 [type]="'text'"
-                                                                                [name]="billingDetails.gstNumber"
+                                                                                [name]="'billingDetails.gstNumber'"
                                                                                 [cssClass]="'form-control input-custom'"
                                                                                 *ngIf="showTRNNo"
                                                                                 [(ngModel)]="
@@ -748,7 +748,7 @@
                                                                                         invFormData.accountDetails
                                                                                             .shippingDetails.gstNumber
                                                                                     "
-                                                                                    (ngModelChange)="
+                                                                                    (change)="
                                                                                         getStateCode(
                                                                                             'shippingDetails',
                                                                                             statesShipping
@@ -772,7 +772,7 @@
                                                                                         invFormData.accountDetails
                                                                                             .shippingDetails.gstNumber
                                                                                     "
-                                                                                    (ngModelChange)="
+                                                                                    (change)="
                                                                                         getStateCode(
                                                                                             'shippingDetails',
                                                                                             statesShipping
