@@ -581,12 +581,12 @@ export class SettingsIntegrationService {
         }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e)));
     }
 
-    public createTrigger(model: SmsKeyClass): Observable<BaseResponse<string, SmsKeyClass>> {
+    public createTrigger(requestObj: any): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.post(this.config.apiUrl + SETTINGS_INTEGRATION_API.SMS?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(map((res) => {
+        return this.http.post(this.config.apiUrl + SETTINGS_INTEGRATION_COMMUNICATION_API.CREATE_TRIGGERS?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), requestObj).pipe(map((res) => {
             let data: BaseResponse<string, SmsKeyClass> = res;
-            data.request = model;
+            data.request = requestObj;
             return data;
-        }), catchError((e) => this.errorHandler.HandleCatch<string, SmsKeyClass>(e, model)));
+        }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, requestObj)));
     }
 }

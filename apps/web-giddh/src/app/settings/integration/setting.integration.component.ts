@@ -234,8 +234,14 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public triggerTo: any[] = [];
     public triggerBcc: any[] = [];
     public triggerCc: any[] = [];
-    public attachmentType: any[] = [];
     public triggerUniquename: string = '';
+    public triggerAction: string = '';
+    public isCommunicationUpdateMode: boolean = false;
+    public triggerEntityValue: string = '';
+    public triggerCampaignSlug: string = '';
+    public fieldsVariable: string = '';
+    public sendVoucherType : boolean = false;
+
 
 
     constructor(
@@ -1262,38 +1268,45 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public getTriggerByUniqueName(uniqueName: any): void {
         this.settingsIntegrationService.getTriggerByUniqueName(uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
-                this.triggerBcc = response.body?.campaignDetails.bcc?.map((result: any) => {
-                    return {
-                        value: result,
-                        label: result
-                    }
-                });
-                this.triggerCc = response.body?.campaignDetails.cc?.map((result: any) => {
-                    return {
-                        value: result,
-                        label: result
-                    }
-                });
-                this.triggerTo = response.body?.campaignDetails.to?.map((result: any) => {
-                    return {
-                        value: result,
-                        label: result
-                    }
-                });
-                this.attachmentType = response.body?.campaignDetails.sendAttachments?.map((result: any) => {
-                    return {
-                        value: result,
-                        label: result
-                    }
-                });
+                if (this.isCommunicationUpdateMode) {
+                    this.getCampaignList();
+                    this.getFieldsSuggestion(response?.body?.communicationPlatform, response?.body?.condition?.entity);
+                    this.createTrigger.title = response?.body?.title;
+                    this.triggerAction = response?.body?.condition?.action[0];
+                    this.triggerEntityValue = response?.body?.condition?.entity;
+                    this.triggerCampaignSlug = response?.body?.campaignDetails?.campaignSlug;
+                    this.selectCampaign(this.triggerCampaignSlug);
+                } else {
+                    this.triggerBcc = response.body?.campaignDetails?.bcc?.map((result: any) => {
+                        return {
+                            value: result,
+                            label: result
+                        }
+                    });
+                    this.triggerCc = response.body?.campaignDetails?.cc?.map((result: any) => {
+                        return {
+                            value: result,
+                            label: result
+                        }
+                    });
+                    this.triggerTo = response.body?.campaignDetails?.to?.map((result: any) => {
+                        return {
+                            value: result,
+                            label: result
+                        }
+                    });
+                }
             }
         });
     }
 
     public getCampaignFields(slug: string): void {
+        if(!this.isCommunicationUpdateMode){
+            this.getTriggerByUniqueName(this.triggerUniquename);
+        }
         this.settingsIntegrationService.getCampaignFields(slug).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            this.createTrigger.campaignDetails.argsMapping = [];
             if (response?.status === "success") {
-
                 response.body?.variables?.forEach((result: any) => {
                     this.createTrigger.campaignDetails.argsMapping.push({
                         name: result,
@@ -1319,8 +1332,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     }
 
     public createNewTrigger(): void {
-        console.log(this.createTrigger);
-
+        this.createTriggerForm(this.createTrigger);
     }
 
     public initFormFields(): void {
@@ -1329,9 +1341,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             title: null,
             condition: {
                 entity: "VOUCHER",
-                action: [
-                    null
-                ],
+                action: [],
                 subConditions: [
                     {
                         entity: "voucherType",
@@ -1346,46 +1356,87 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 to: [],
                 cc: [],
                 bcc: [],
-                attachmentType: []
+                sendVoucherType : false
             }
         }
     }
     public selectFieldSuggestions(event: any): void {
 
     }
+    public backToListPage(event: any): void {
+        if (event) {
+            this.showTriggerForm = false;
+            this.initFormFields();
+        }
+    }
     public selectCampaign(slug: any): void {
         this.createTrigger.campaignDetails.campaignSlug = slug;
         this.showVariableMapping = true;
         this.getCampaignFields(slug);
-        this.getTriggerByUniqueName(this.triggerUniquename);
+        if (!this.isCommunicationUpdateMode) {
+            this.getTriggerByUniqueName(this.triggerUniquename);
+        }
     }
 
     public selectEntity(entity: any): void {
-        this.createTrigger.condition.entity = entity;
-    }
+        if(entity){
+                    this.createTrigger.condition.entity = entity;
+        }
+                }
 
     public selectSubEntity(subconditions: any): void {
+        if (subconditions) {
         this.createTrigger.condition.subConditions[0]?.action?.push(subconditions);
+        }
 
     }
     public selectConditions(action: any): void {
-        this.createTrigger.condition.action = action;
+        if (action) {
+        this.createTrigger.condition.action?.push(action);
+        }
     }
 
     public selectTriggerBcc(bcc: any): void {
-        this.createTrigger.campaignDetails.bcc.push(bcc);
+        if (bcc) {
+        this.createTrigger.campaignDetails.bcc?.push(bcc);
+        }
     }
 
     public selectTriggerCc(cc: any): void {
-        this.createTrigger.campaignDetails.cc.push(cc);
+        if (cc) {
+        this.createTrigger.campaignDetails.cc?.push(cc);
+        }
     }
 
     public selectTriggerTo(to: any): void {
-        this.createTrigger.campaignDetails.to.push(to);
+        if (to) {
+        this.createTrigger.campaignDetails.to?.push(to);
+        }
     }
 
-        public selectAttachmentType(type: any): void {
-        this.createTrigger.campaignDetails.attachmentType.push(type);
+    public selectVoucherType(type: any): void {
+        if (type) {
+        this.createTrigger.campaignDetails.sendVoucherType = type;
+        }
+    }
+
+    public createTriggerForm(requestObj: any): void {
+        this.settingsIntegrationService.createTrigger(requestObj).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === "success") {
+                this.toasty.showSnackBar("success", response?.body + " create trigger successfully.");
+                this.resetCommunicationForm();
+                this.showTriggerForm = false;
+                this.getTriggers();
+            } else {
+                this.toasty.showSnackBar("error", response?.message);
+            }
+        });
+    }
+
+    public editTrigger(trigger: any): void {
+        this.isCommunicationUpdateMode = true;
+        this.getTriggerByUniqueName(trigger?.uniqueName);
+        this.showTriggerForm = true;
     }
 
 
@@ -1430,6 +1481,9 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         this.getFieldsSuggestion(this.platform, "VOUCHER");
     }
 
+    public resetCommunicationForm(): void {
+        this.initFormFields();
+    }
     /**
      *This will use for copy api url link and display copied
      *

@@ -54,6 +54,7 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { MatInputModule } from '@angular/material/input';
 import { ClipboardModule } from 'ngx-clipboard';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
@@ -116,7 +117,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         MatGridListModule,
         FormFieldsModule,
         MatInputModule,
-        ClipboardModule
+        ClipboardModule,
+        MatCheckboxModule
 
     ],
     providers: [

@@ -168,6 +168,7 @@
                                         class="mr-l2 icon-visibility cursor-pointer"
                                         src="{{ imgPath }}edit.svg"
                                         alt=""
+                                        (click)="editTrigger(element)"
                                     />
                                     <a href="javascript:;" (click)="deleteTrigger(element.uniqueName)"
                                         ><img class="mr-l2 icon-visibility" src="{{ imgPath }}delete.svg"
@@ -184,7 +185,7 @@
                 <div class="trigger-form" *ngIf="!editCommunicationPlatform && showTriggerForm">
                     <div class="trigger-form-left-side">
                         <div class="create-trigger-head">
-                            <img class="return" src="{{ imgPath }}return.svg" alt="" />
+                            <img class="return" src="{{ imgPath }}return.svg" alt="" (click)="backToListPage($event)" />
                             <p class="trigger-heading">Create Trigger</p>
                         </div>
 
@@ -205,7 +206,8 @@
                                 [cssClass]="'form-control mat-field-border'"
                                 [placeholder]="'Select Condition'"
                                 [options]="triggerCondition"
-                                (selectedOption)="selectConditions($event.value)"
+                                (selectedOption)="selectConditions($event?.value)"
+                                [defaultValue]="triggerAction"
                             ></select-field>
                         </div>
                         <div class="trigger-input">
@@ -214,7 +216,8 @@
                                 [cssClass]="'form-control mat-field-border'"
                                 [placeholder]="'Select Entity'"
                                 [options]="triggerEntity"
-                                (selectedOption)="selectEntity($event.value)"
+                                (selectedOption)="selectEntity($event?.value)"
+                                [defaultValue]="triggerEntityValue"
                             ></select-field>
                         </div>
                         <div class="trigger-input">
@@ -227,7 +230,7 @@
                             >
                                 <mat-option
                                     *ngFor="let action of subConditionAction"
-                                    [selected]="action.isChecked"
+                                    [selected]="action?.isChecked"
                                     (onSelectionChange)="selectSubEntity(action)"
                                     >{{ action }}</mat-option
                                 >
@@ -239,47 +242,44 @@
                                 [cssClass]="'form-control mat-field-border'"
                                 [placeholder]="'Select Campaign'"
                                 [options]="campaignList"
-                                (selectedOption)="selectCampaign($event.value)"
+                                (selectedOption)="selectCampaign($event?.value)"
+                                [defaultValue]="triggerCampaignSlug"
                             ></select-field>
                         </div>
                         <button mat-flat-button color="primary" (click)="createNewTrigger()">Launch Trigger</button>
                     </div>
                     <div class="trigger-form-right-side" *ngIf="showVariableMapping">
-                        <p class="compose">Compose Email</p>
                         <div class="dropdown-box">
                             <div class="compose-trigger-dropdowns">
                                 <select-field
-                                    [isMultipleTagValue]="'true'"
-                                    [showCreateNew]="'true'"
                                     [cssClass]="'form-control mat-field-border trigger-dropdown trigger-dropdown-to'"
                                     [placeholder]="'Select To'"
                                     [options]="triggerTo"
-                                    (selectedOption)="selectTriggerTo($event.value)"
+                                    (selectedOption)="selectTriggerTo($event?.value)"
                                 ></select-field>
                                 <select-field
-                                    [isMultipleTagValue]="'true'"
-                                    [showCreateNew]="'true'"
                                     [cssClass]="'form-control mat-field-border trigger-dropdown trigger-dropdown-bcc'"
                                     [placeholder]="'Select Bcc'"
                                     [options]="triggerBcc"
-                                    (selectedOption)="selectTriggerBcc($event.value)"
+                                    (selectedOption)="selectTriggerBcc($event?.value)"
                                 ></select-field>
                                 <select-field
-                                    [isMultipleTagValue]="'true'"
+                                    [tagMultipleSelect]="'true'"
                                     [showCreateNew]="'true'"
                                     [cssClass]="'form-control mat-field-border trigger-dropdown trigger-dropdown-cc'"
                                     [placeholder]="'Select CC'"
                                     [options]="triggerCc"
-                                    (selectedOption)="selectTriggerCc($event.value)"
+                                    (selectedOption)="selectTriggerCc($event?.value)"
                                 ></select-field>
-                                <select-field
-                                    [cssClass]="
-                                        'form-control mat-field-border trigger-dropdown trigger-dropdown-attachment'
-                                    "
-                                    [placeholder]="'Attachment Type'"
-                                    [options]="attachmentType"
-                                    (selectedOption)="selectAttachmentType($event.value)"
-                                ></select-field>
+                                <mat-checkbox
+                                    class="trigger-dropdown"
+                                    #sendVoucherPdf
+                                    color="primary"
+                                    name="voucherpdf"
+                                    [(ngModel)]="sendVoucherType"
+                                    (change)="selectVoucherType($event.checked)"
+                                    ><span class="compose">Send Voucher Type</span>
+                                </mat-checkbox>
                             </div>
                             <br />
                             <p class="compose">Variables</p>
@@ -298,6 +298,7 @@
                                                 (selectedOption)="
                                                     selectFieldSuggestions((variables.value = $event.value))
                                                 "
+                                                [defaultValue]="fieldsVariable"
                                             ></select-field>
                                         </div>
                                     </mat-grid-tile>
