@@ -3714,6 +3714,10 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         if (this.isCustomerSelected) {
             this.toggleAccountSelectionDropdown(false);
         }
+        if(this.isPurchaseInvoice){
+            this.fieldFilteredOptions = [];
+            this.linkedPo = [];
+        }
     }
 
     public onSelectBankCash(item: IOption) {

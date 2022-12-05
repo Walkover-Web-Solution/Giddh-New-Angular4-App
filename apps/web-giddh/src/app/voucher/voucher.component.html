@@ -521,7 +521,7 @@
                                                                                 [maxlength]="15"
                                                                                 autocomplete="none"
                                                                                 [type]="'text'"
-                                                                                [name]="billingDetails.gstNumber"
+                                                                                [name]="'billingDetails.gstNumber'"
                                                                                 [cssClass]="'form-control input-custom'"
                                                                                 *ngIf="showTRNNo"
                                                                                 [(ngModel)]="
@@ -748,7 +748,7 @@
                                                                                         invFormData.accountDetails
                                                                                             .shippingDetails.gstNumber
                                                                                     "
-                                                                                    (ngModelChange)="
+                                                                                    (change)="
                                                                                         getStateCode(
                                                                                             'shippingDetails',
                                                                                             statesShipping
@@ -772,7 +772,7 @@
                                                                                         invFormData.accountDetails
                                                                                             .shippingDetails.gstNumber
                                                                                     "
-                                                                                    (ngModelChange)="
+                                                                                    (change)="
                                                                                         getStateCode(
                                                                                             'shippingDetails',
                                                                                             statesShipping
@@ -1349,7 +1349,7 @@
                                                                                         .gstNumber
                                                                                 "
                                                                                 [cssClass]="'form-control input-custom'"
-                                                                                (ngModelChange)="
+                                                                                (change)="
                                                                                     getStateCodeCompany(
                                                                                         'shippingDetails'
                                                                                     )
@@ -1424,6 +1424,8 @@
                                                 [multiple]="true"
                                                 (selectionChange)="getPurchaseOrder($event?.value, true)"
                                                 class="po-mat-salect"
+                                                [placeholder]="localeData?.select_order_placeholder"
+                                                [disabled]="linkedPo?.length === 0 && fieldFilteredOptions.length === 0"
                                             >
                                                 <mat-select-trigger *ngIf="linkedPo?.length">
                                                     <ng-container *ngFor="let poNumber of linkedPo; let i = index"
@@ -1433,16 +1435,18 @@
                                                 </mat-select-trigger>
                                                 <mat-option class="po-options-line">
                                                     <ngx-mat-select-search
-                                                        [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
-                                                        [formControl]="linkPoDropdown"
-                                                        [placeholderLabel]="
-                                                            linkedPo?.length === 0
+                                                        [noEntriesFoundLabel]="
+                                                            linkedPo?.length === 0 && fieldFilteredOptions.length === 0
                                                                 ? commonLocaleData?.app_no_result_found
-                                                                : localeData?.select_order_placeholder
+                                                                : commonLocaleData?.app_no_result_found
                                                         "
+                                                        [formControl]="linkPoDropdown"
+                                                        [placeholderLabel]="localeData?.select_order_placeholder"
                                                     >
+                                                        <i class="icon-cross" ngxMatSelectSearchClear></i>
                                                     </ngx-mat-select-search>
                                                 </mat-option>
+
                                                 <mat-option
                                                     *ngFor="let option of fieldFilteredOptions"
                                                     [value]="option.value"
