@@ -208,7 +208,7 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
             this.activityObj.entryFromDate = undefined;
             this.activityObj.entryToDate = undefined;
         }
-         if(this.activityObj.entity ==='ENTRY'){
+        if (this.activityObj.entity === 'ENTRY' || this.activityObj.entity === 'VOUCHER'){
              this.activityObj.entryFromDate = dayjs(this.selectedEntryDateRange?.startDate).format(GIDDH_DATE_FORMAT);
              this.activityObj.entryToDate = dayjs(this.selectedEntryDateRange?.endDate).format(GIDDH_DATE_FORMAT);
         }
@@ -256,7 +256,7 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
      * @memberof ActivityLogsComponent
      */
     public selecteEntityType(event: IOption): void {
-        if (event && event.value ==='ENTRY') {
+        if (event && (event.value === 'ENTRY' || event.value === 'VOUCHER')) {
             this.isShowEntryDatepicker = true;
         }else {
             this.isShowEntryDatepicker = false;
