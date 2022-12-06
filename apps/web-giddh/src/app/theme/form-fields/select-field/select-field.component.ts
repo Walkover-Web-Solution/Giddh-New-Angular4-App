@@ -1,6 +1,8 @@
+import { COMMA, ENTER } from "@angular/cdk/keycodes";
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, TemplateRef, ViewChild } from "@angular/core";
 import { FormControl } from "@angular/forms";
 import { MatAutocompleteTrigger } from "@angular/material/autocomplete";
+import { MatChipInputEvent } from "@angular/material/chips";
 import { ReplaySubject } from "rxjs";
 import { debounceTime, distinctUntilChanged, takeUntil } from "rxjs/operators";
 import { cloneDeep } from "../../../lodash-optimized";
@@ -52,7 +54,7 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
     /** True if we need to show create new label */
     @Input() public showCreateNew: boolean = false;
     /** True if we need to show create new label */
-    @Input() public  tagMultipleSelect: boolean = false;
+    @Input() public tagMultipleSelect: boolean = false;
     /** Holds text to show to create new data */
     @Input() public createNewOptionsText: any = "";
     /** True if we need to show more value also with label */
@@ -77,6 +79,8 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    public separatorKeysCodes: number[] = [ENTER, COMMA];
+    public chipSelectedRecords: IOption[] = [];
 
     constructor(private cdr: ChangeDetectorRef
     ) {
@@ -198,6 +202,12 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
      * @memberof SelectFieldComponent
      */
     public optionSelected(event: any): void {
+        console.log(event);
+
+        if (this.tagMultipleSelect) {
+            this.fieldFilteredOptions.push(event?.option?.value);
+            this.searchFormControl.setValue(null);
+        }
         this.selectedValue = event?.option?.value?.label;
         this.selectedOption.emit(event?.option?.value);
     }
@@ -210,15 +220,32 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
     public createNewRecord(): void {
         this.trigger?.closePanel();
         this.createOption.emit(true);
-        if(this.tagMultipleSelect){
-            console.log(this.fieldFilteredOptions, this.selectedOption, this.searchFormControl?.value, this.selectedValue);
-            this.fieldFilteredOptions.push(this.searchFormControl?.value);
-            console.log(this.fieldFilteredOptions);
-
-
-        }
     }
 
+    public addNewRecord(event: MatChipInputEvent): void {
+        const value = (event.value || '').trim();
+
+        if (value) {
+            // this.fieldFilteredOptions = [...this.fieldFilteredOptions, { label: value, value: value, additional: event }]
+            this.fieldFilteredOptions.push({ label: value, value: value, additional: event });
+            this.cdr.detectChanges();
+        }
+
+        // this.fieldFilteredOptions = this.chipSelectedRecords;
+        console.log(value, this.chipSelectedRecords, this.fieldFilteredOptions);
+        event.chipInput!.clear();
+        this.searchFormControl.setValue(null);
+    }
+
+    public removeRecord(option: string): void {
+        console.log(option);
+
+        //   const index = this.chipSelectedRecords.indexOf(option);
+
+        // if (index >= 0) {
+        //     this.chipSelectedRecords.splice(index, 1);
+        // }
+    }
     /**
      * This will use for open dropdown panel
      *

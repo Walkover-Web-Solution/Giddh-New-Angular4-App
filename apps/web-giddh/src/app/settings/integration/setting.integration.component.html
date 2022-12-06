@@ -252,21 +252,22 @@
                         <div class="dropdown-box">
                             <div class="compose-trigger-dropdowns">
                                 <select-field
-                                    [cssClass]="'form-control mat-field-border trigger-dropdown trigger-dropdown-to'"
+                                    [tagMultipleSelect]="true"
+                                    [cssClass]="'form-control  trigger-dropdown trigger-dropdown-to'"
                                     [placeholder]="'Select To'"
                                     [options]="triggerTo"
                                     (selectedOption)="selectTriggerTo($event?.value)"
                                 ></select-field>
                                 <select-field
-                                    [cssClass]="'form-control mat-field-border trigger-dropdown trigger-dropdown-bcc'"
+                                    [tagMultipleSelect]="true"
+                                    [cssClass]="'form-control  trigger-dropdown trigger-dropdown-bcc'"
                                     [placeholder]="'Select Bcc'"
                                     [options]="triggerBcc"
                                     (selectedOption)="selectTriggerBcc($event?.value)"
                                 ></select-field>
                                 <select-field
-                                    [tagMultipleSelect]="'true'"
-                                    [showCreateNew]="'true'"
-                                    [cssClass]="'form-control mat-field-border trigger-dropdown trigger-dropdown-cc'"
+                                    [tagMultipleSelect]="true"
+                                    [cssClass]="'form-control  trigger-dropdown trigger-dropdown-cc'"
                                     [placeholder]="'Select CC'"
                                     [options]="triggerCc"
                                     (selectedOption)="selectTriggerCc($event?.value)"

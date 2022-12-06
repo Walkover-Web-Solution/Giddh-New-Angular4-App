@@ -386,6 +386,15 @@ $custom-typography: mat-typography-config(
     width: 30% !important;
     margin-top: 20px !important;
 }
+.compose-trigger-dropdowns {
+    .mat-chip-list-wrapper {
+        border-bottom: 1px solid;
+    }
+    .example-chip-list {
+        width: 100%;
+    }
+}
+
 @media screen and (max-width: 1366px) and (orientation: portrait) {
     .subscription-form-select {
         float: left !important;

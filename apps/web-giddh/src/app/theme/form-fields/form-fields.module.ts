@@ -15,6 +15,7 @@ import { DigitsOnlyModule } from "../../shared/helpers/directives/digitsOnly/dig
 import { TranslateDirectiveModule } from "../translate/translate.directive.module";
 import { NgxMaskModule } from "../../shared/helpers/directives/ngx-mask";
 import { ClickOutsideModule } from "ng-click-outside";
+import { MatChipsModule } from "@angular/material/chips";
 
 @NgModule({
     declarations: [
@@ -36,7 +37,8 @@ import { ClickOutsideModule } from "ng-click-outside";
         TranslateDirectiveModule,
         DigitsOnlyModule,
         NgxMaskModule,
-        ClickOutsideModule
+        ClickOutsideModule,
+        MatChipsModule
 
     ],
     exports: [
