@@ -8045,8 +8045,8 @@ highcharts-chart {
         padding: 10px;
         font-size: 12px;
     }
-
     .po-options-line {
+        height: auto !important;
         .mat-select-search-input {
             padding: 16px 36px 16px 16px !important;
             box-sizing: border-box !important;
@@ -8061,11 +8061,6 @@ highcharts-chart {
             box-shadow: none !important;
             border-radius: 0 !important;
         }
-
-        .mat-select-search-no-entries-found {
-            padding: 16px !important;
-        }
-
         .mat-select-search-clear {
             margin-right: 0 !important;
         }
@@ -8083,7 +8078,7 @@ highcharts-chart {
         }
 
         .mat-option-text {
-            line-height: 1 !important;
+            line-height: 1.8 !important;
         }
     }
 
