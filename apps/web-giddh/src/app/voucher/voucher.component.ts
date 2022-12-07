@@ -1042,7 +1042,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     // for edit mode direct from @Input
                     if (params['voucherType'] && params['voucherType'] === 'pending' && params['selectedType']) {
                         this.isPendingVoucherType = true;
-                        // this.isUpdateMode = true;
                     } else {
                         this.store.dispatch(this.invoiceReceiptActions.ResetVoucherDetails());
                         if (this.accountUniqueName && this.invoiceType && this.invoiceNo) {
@@ -2350,7 +2349,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.createEmbeddedViewAtIndex(0);
         this.onSearchQueryChanged('', 1, 'customer');
 
-        if (this.actionAfterGenerateORUpdate !== ActionTypeAfterVoucherGenerateOrUpdate.generateAndPrint && this.actionAfterGenerateORUpdate !== ActionTypeAfterVoucherGenerateOrUpdate.generateAndRecurring && this.actionAfterGenerateORUpdate !== ActionTypeAfterVoucherGenerateOrUpdate.generateAndSend) {
+        if (this.actionAfterGenerateORUpdate !== ActionTypeAfterVoucherGenerateOrUpdate.generateAndPrint && this.actionAfterGenerateORUpdate !== ActionTypeAfterVoucherGenerateOrUpdate.generateAndRecurring && this.actionAfterGenerateORUpdate !== ActionTypeAfterVoucherGenerateOrUpdate.generateAndSend && !this.isUpdateMode) {
             setTimeout(() => {
                 this.openAccountSelectionDropdown?.openDropdownPanel();
             }, 500);
@@ -3712,7 +3711,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         if (this.isCustomerSelected) {
             this.toggleAccountSelectionDropdown(false);
         }
-        if(this.isPurchaseInvoice){
+        if (this.isPurchaseInvoice) {
             this.fieldFilteredOptions = [];
             this.linkedPo = [];
         }
