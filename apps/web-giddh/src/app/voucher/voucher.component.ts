@@ -2351,10 +2351,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.createEmbeddedViewAtIndex(0);
         this.onSearchQueryChanged('', 1, 'customer');
 
-
-        if (this.asideMenuStateForRecurringEntry === 'out' && !this.dialog.openDialogs) {
+        if (this.actionAfterGenerateORUpdate !== ActionTypeAfterVoucherGenerateOrUpdate.generateAndPrint && this.actionAfterGenerateORUpdate !== ActionTypeAfterVoucherGenerateOrUpdate.generateAndRecurring && this.actionAfterGenerateORUpdate !== ActionTypeAfterVoucherGenerateOrUpdate.generateAndSend) {
             setTimeout(() => {
-            this.openAccountSelectionDropdown?.openDropdownPanel();
+                this.openAccountSelectionDropdown?.openDropdownPanel();
             }, 500);
         }
     }
@@ -3740,9 +3739,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         }
         this.accountAsideMenuState = this.accountAsideMenuState === 'out' ? 'in' : 'out';
         this.toggleBodyClass();
-        if (!this.invFormData.voucherDetails.customerUniquename && this.accountAsideMenuState === 'out') {
-            this.toggleAccountSelectionDropdown(true);
-        }
     }
 
     public toggleRecurringAsidePane(toggle?: string): void {
@@ -6109,12 +6105,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             return;
         }
         this.updateAccount = false;
-        setTimeout(() => {
-            if (this.asideMenuStateForRecurringEntry === 'out' && !this.dialog.openDialogs ) {
-                this.openAccountSelectionDropdown?.openDropdownPanel();
-            }
-        }, 500);
-
 
         if (!this.isPendingVoucherType || (this.isPendingVoucherType && this.actionAfterGenerateORUpdate === 0)) {
             this.store.dispatch(this.invoiceReceiptActions.ResetVoucherDetails());
