@@ -353,7 +353,8 @@
         "accounts": "खाती",
         "inventory": "यादी",
         "entries": "नोंदी",
-        "trial_balance": "चाचणी शिल्लक"
+        "trial_balance": "चाचणी शिल्लक",
+        "master": "मास्टर"
     },
     "app_please_select": "कृपया निवडा",
     "app_company": "कंपनी",
