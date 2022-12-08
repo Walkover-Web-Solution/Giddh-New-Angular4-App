@@ -1,8 +1,6 @@
-import { COMMA, ENTER } from "@angular/cdk/keycodes";
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, TemplateRef, ViewChild } from "@angular/core";
 import { FormControl } from "@angular/forms";
 import { MatAutocompleteTrigger } from "@angular/material/autocomplete";
-import { MatChipInputEvent } from "@angular/material/chips";
 import { ReplaySubject } from "rxjs";
 import { debounceTime, distinctUntilChanged, takeUntil } from "rxjs/operators";
 import { cloneDeep } from "../../../lodash-optimized";
@@ -53,8 +51,6 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
     @Input() public showValueInLabel: boolean = false;
     /** True if we need to show create new label */
     @Input() public showCreateNew: boolean = false;
-    /** True if we need to show create new label */
-    @Input() public tagMultipleSelect: boolean = false;
     /** Holds text to show to create new data */
     @Input() public createNewOptionsText: any = "";
     /** True if we need to show more value also with label */
@@ -79,8 +75,6 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
-    public separatorKeysCodes: number[] = [ENTER, COMMA];
-    public chipSelectedRecords: IOption[] = [];
 
     constructor(private cdr: ChangeDetectorRef
     ) {
@@ -174,15 +168,13 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
      */
     private filterOptions(search: string): void {
         let filteredOptions: IOption[] = [];
-        const options = [
-            ...this.options,
-            ...this.chipSelectedRecords
-        ]
-        options?.forEach(option => {
-            if (typeof search !== 'string' || option?.label?.toLowerCase()?.indexOf(search?.toLowerCase()) > -1) {
+        this.options?.forEach(option => {
+            if (typeof search !== "string" || option?.label?.toLowerCase()?.indexOf(search?.toLowerCase()) > -1) {
                 filteredOptions.push({ label: option.label, value: option.value, additional: option });
             }
         });
+
+        this.fieldFilteredOptions = filteredOptions;
     }
 
     /**
@@ -204,12 +196,6 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
      * @memberof SelectFieldComponent
      */
     public optionSelected(event: any): void {
-        console.log(event);
-
-        if (this.tagMultipleSelect) {
-            this.fieldFilteredOptions.push(event?.option?.value);
-            this.searchFormControl.setValue(null);
-        }
         this.selectedValue = event?.option?.value?.label;
         this.selectedOption.emit(event?.option?.value);
     }
@@ -224,30 +210,6 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
         this.createOption.emit(true);
     }
 
-    public addNewRecord(event: MatChipInputEvent, index: any): void {
-        const value = (event.value || '').trim();
-
-        if (value) {
-            this.chipSelectedRecords.push({ label: value, value: value, additional: event });
-            console.log(index);
-            if (!isNaN) {
-                this.fieldFilteredOptions.splice(index, 1);
-            }
-            this.cdr.detectChanges();
-        }
-
-        event.chipInput!?.clear();
-        this.searchFormControl.setValue(null);
-    }
-
-    public removeRecord(option: any, index: any): void {
-
-        if (index >=0) {
-            this.chipSelectedRecords.splice(index, 1);
-            this.fieldFilteredOptions.push({ label: option.label, value: option.value });
-        }
-
-    }
     /**
      * This will use for open dropdown panel
      *

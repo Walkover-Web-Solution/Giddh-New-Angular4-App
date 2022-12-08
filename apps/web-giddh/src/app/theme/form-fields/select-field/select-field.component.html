@@ -1,118 +1,57 @@
 <ng-container appTranslate (commonLocaleData)="commonLocaleData = $event">
-    <ng-container *ngIf="!tagMultipleSelect">
-        <input
-            type="text"
-            [ngClass]="cssClass"
-            class="select-field-input"
-            [placeholder]="placeholder"
-            matInput
-            [matAutocomplete]="auto"
-            (blur)="onBlur()"
-            [name]="name"
-            [formControl]="searchFormControl"
-            [readonly]="readonly"
-            (click)="!readonly ? trigger?.openPanel() : trigger?.closePanel()"
-            [autocomplete]="autocomplete"
-            #trigger="matAutocompleteTrigger"
-            #selectField
-            (keydown.enter)="$event.preventDefault()"
-            (clickOutside)="closeDropdownPanel()"
-            matAutocompletePosition="below"
-        />
-        <mat-autocomplete
-            autoActiveFirstOption
-            [displayWith]="displayLabel"
-            (optionSelected)="optionSelected($event)"
-            #auto="matAutocomplete"
-            [ngClass]="customPanelClass"
-        >
-            <a href="javascript:;" *ngIf="createNewText" (click)="createNewRecord()" class="custom-class-create">
-                <div class="item create-new">{{ createNewText }}</div>
-                <div class="item create-new-command">
-                    {{ commonLocaleData?.app_alt_c }}
-                </div>
-            </a>
-            <ng-container>
-                <mat-option
-                    *ngFor="let option of fieldFilteredOptions"
-                    [value]="option"
-                    [ngClass]="hasMoreValue ? 'options-line-value' : 'options-line'"
-                >
-                    <ng-template
-                        [ngTemplateOutletContext]="{ option: option }"
-                        [ngTemplateOutlet]="optionTemplate"
-                    ></ng-template>
-                    <ng-container *ngIf="!optionTemplate">
-                        <span class="option-label"> {{ option?.label }}</span>
-                        <span class="option-value" *ngIf="showValueInLabel">{{ option.additional?.uniqueName }}</span>
-                    </ng-container>
-                </mat-option>
-                <mat-option disabled *ngIf="fieldFilteredOptions?.length === 0">No results found</mat-option>
-                <mat-option *ngIf="fieldFilteredOptions?.length === 0 && showCreateNew">
-                    <a href="javascript:;" (click)="createNewRecord()" class="options-class-create">
-                        Create New
-                    </a></mat-option
-                >
-            </ng-container>
-        </mat-autocomplete>
-    </ng-container>
-    <ng-container *ngIf="tagMultipleSelect">
-        <mat-form-field class="example-chip-list" appearance="fill">
-            <mat-chip-list #chipList aria-label="Fruit selection">
-                <mat-chip *ngFor="let option of chipSelectedRecords" (removed)="removeRecord(option)">
-                    {{ option?.label }}
-                    <i class="icon-cross" matChipRemove></i>
-                </mat-chip>
-                <input
-                    type="text"
-                    [ngClass]="cssClass"
-                    class="select-field-input"
-                    [placeholder]="placeholder"
-                    matInput
-                    [matAutocomplete]="auto"
-                    (blur)="onBlur()"
-                    [name]="name"
-                    [formControl]="searchFormControl"
-                    [readonly]="readonly"
-                    (click)="!readonly ? trigger?.openPanel() : trigger?.closePanel()"
-                    [autocomplete]="autocomplete"
-                    #trigger="matAutocompleteTrigger"
-                    #selectField
-                    (keydown.enter)="$event.preventDefault()"
-                    (clickOutside)="closeDropdownPanel()"
-                    matAutocompletePosition="below"
-                    [matChipInputFor]="chipList"
-                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                    (matChipInputTokenEnd)="addNewRecord($event)"
-                />
-            </mat-chip-list>
-            <mat-autocomplete
-                autoActiveFirstOption
-                [displayWith]="displayLabel"
-                (optionSelected)="optionSelected($event)"
-                #auto="matAutocomplete"
-                [ngClass]="customPanelClass"
+    <input
+        type="text"
+        [ngClass]="cssClass"
+        class="select-field-input"
+        [placeholder]="placeholder"
+        matInput
+        [matAutocomplete]="auto"
+        (blur)="onBlur()"
+        [name]="name"
+        [formControl]="searchFormControl"
+        [readonly]="readonly"
+        (click)="!readonly ? trigger?.openPanel() : trigger?.closePanel()"
+        [autocomplete]="autocomplete"
+        #trigger="matAutocompleteTrigger"
+        #selectField
+        (keydown.enter)="$event.preventDefault()"
+        (clickOutside)="closeDropdownPanel()"
+        matAutocompletePosition="below"
+    />
+    <mat-autocomplete
+        autoActiveFirstOption
+        [displayWith]="displayLabel"
+        (optionSelected)="optionSelected($event)"
+        #auto="matAutocomplete"
+        [ngClass]="customPanelClass"
+    >
+        <a href="javascript:;" *ngIf="createNewText" (click)="createNewRecord()" class="custom-class-create">
+            <div class="item create-new">{{ createNewText }}</div>
+            <div class="item create-new-command">
+                {{ commonLocaleData?.app_alt_c }}
+            </div>
+        </a>
+        <ng-container>
+            <mat-option
+                *ngFor="let option of fieldFilteredOptions"
+                [value]="option"
+                [ngClass]="hasMoreValue ? 'options-line-value' : 'options-line'"
             >
-                <ng-container>
-                    <mat-option
-                        *ngFor="let option of fieldFilteredOptions; let i = index"
-                        [value]="option"
-                        [ngClass]="hasMoreValue ? 'options-line-value' : 'options-line'"
-                    >
-                        <ng-template
-                            [ngTemplateOutletContext]="{ option: option }"
-                            [ngTemplateOutlet]="optionTemplate"
-                        ></ng-template>
-                        <ng-container *ngIf="!optionTemplate">
-                            <span class="option-label"> {{ option?.label }}</span>
-                            <span class="option-value" *ngIf="showValueInLabel">{{
-                                option.additional?.uniqueName
-                            }}</span>
-                        </ng-container>
-                    </mat-option>
-                    <mat-option disabled *ngIf="fieldFilteredOptions?.length === 0">No results found</mat-option>
+                <ng-template
+                    [ngTemplateOutletContext]="{ option: option }"
+                    [ngTemplateOutlet]="optionTemplate"
+                ></ng-template>
+                <ng-container *ngIf="!optionTemplate">
+                    <span class="option-label"> {{ option?.label }}</span>
+                    <span class="option-value" *ngIf="showValueInLabel">{{ option.additional?.uniqueName }}</span>
                 </ng-container>
-            </mat-autocomplete>
-        </mat-form-field>
-    </ng-container>
+            </mat-option>
+            <mat-option disabled *ngIf="fieldFilteredOptions?.length === 0">No results found</mat-option>
+            <mat-option *ngIf="fieldFilteredOptions?.length === 0 && showCreateNew">
+                <a href="javascript:;" (click)="createNewRecord()" class="options-class-create">
+                    Create New
+                </a></mat-option
+            >
+        </ng-container>
+    </mat-autocomplete>
 </ng-container>

@@ -251,27 +251,52 @@
                     <div class="trigger-form-right-side" *ngIf="showVariableMapping">
                         <div class="dropdown-box">
                             <div class="compose-trigger-dropdowns">
-                                <select-field
-                                    [tagMultipleSelect]="true"
+                                <mat-form-field class="example-chip-list" appearance="fill">
+                                    <mat-label>Favorite Fruits</mat-label>
+                                    <mat-chip-list #chipList aria-label="Fruit selection">
+                                        <mat-chip *ngFor="let fruit of fruits" (removed)="remove(fruit)">
+                                            {{ fruit }}
+                                            <button matChipRemove>
+                                                <mat-icon>cancel</mat-icon>
+                                            </button>
+                                        </mat-chip>
+                                        <input
+                                            placeholder="New fruit..."
+                                            #fruitInput
+                                            [formControl]="fruitCtrl"
+                                            [matAutocomplete]="auto"
+                                            [matChipInputFor]="chipList"
+                                            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                            (matChipInputTokenEnd)="add($event)"
+                                        />
+                                    </mat-chip-list>
+                                    <mat-autocomplete
+                                        #auto="matAutocomplete"
+                                        (optionSelected)="selectTriggerTo($event)"
+                                    >
+                                        <mat-option *ngFor="let trigger of triggerTo | async" [value]="trigger">
+                                            {{ trigger }}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                </mat-form-field>
+                                <!-- <select-field
                                     [cssClass]="'form-control  trigger-dropdown trigger-dropdown-to'"
                                     [placeholder]="'Select To'"
                                     [options]="triggerTo"
                                     (selectedOption)="selectTriggerTo($event?.value)"
                                 ></select-field>
                                 <select-field
-                                    [tagMultipleSelect]="true"
                                     [cssClass]="'form-control  trigger-dropdown trigger-dropdown-bcc'"
                                     [placeholder]="'Select Bcc'"
                                     [options]="triggerBcc"
                                     (selectedOption)="selectTriggerBcc($event?.value)"
                                 ></select-field>
                                 <select-field
-                                    [tagMultipleSelect]="true"
                                     [cssClass]="'form-control  trigger-dropdown trigger-dropdown-cc'"
                                     [placeholder]="'Select CC'"
                                     [options]="triggerCc"
                                     (selectedOption)="selectTriggerCc($event?.value)"
-                                ></select-field>
+                                ></select-field> -->
                                 <mat-checkbox
                                     class="trigger-dropdown"
                                     #sendVoucherPdf
