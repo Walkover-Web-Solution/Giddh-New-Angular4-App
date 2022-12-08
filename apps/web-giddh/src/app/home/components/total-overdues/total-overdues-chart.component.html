@@ -49,7 +49,7 @@
                             </span>
                         </span>
                     </div>
-                    <div class="clearfix">
+                    <div class="clearfix" *ngIf="voucherApiVersion === 2">
                         <small>{{ localeData?.pending_invoices }}</small>
                         <small class="d-inline-flex pull-right">
                             {{ pendingInvoices }}
@@ -72,7 +72,7 @@
                             </span>
                         </span>
                     </div>
-                    <div class="clearfix">
+                    <div class="clearfix" *ngIf="voucherApiVersion === 2">
                         <small>{{ localeData?.pending_bills }}</small>
                         <small class="d-inline-flex pull-right">
                             {{ pendingBills }}
