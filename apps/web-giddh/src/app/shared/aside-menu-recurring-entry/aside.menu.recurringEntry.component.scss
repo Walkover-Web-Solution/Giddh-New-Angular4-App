@@ -6,7 +6,7 @@
     bottom: 0;
     max-width: 760px;
     width: 100%;
-    z-index: 99999;
+    z-index: 9999;
 }
 
 :host.in #close {
@@ -56,6 +56,9 @@
     scroll-behavior: smooth;
     position: relative;
     margin-top: 15px;
+}
+.cancel-button {
+    color: var(--color-master-page-input-label);
 }
 @media (max-width: 768px) {
     :host {

@@ -14,7 +14,13 @@
         [ngClass]="{ 'error-box': showError }"
     />
     <ng-container *ngIf="showToggleIcon">
-        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker-toggle
+            matSuffix
+            [for]="picker"
+            (focusout)="!isDatepickerOpen ? focusOut.emit(true) : ''"
+            (click)="emitDatepickerState(true); picker.open()"
+        >
+        </mat-datepicker-toggle>
     </ng-container>
-    <mat-datepicker (closed)="emitDatepickerState(false)" #picker></mat-datepicker>
+    <mat-datepicker (closed)="isDatepickerOpen = false; emitDatepickerState(false)" #picker></mat-datepicker>
 </mat-form-field>
