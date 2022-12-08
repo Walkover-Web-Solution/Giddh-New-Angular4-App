@@ -274,8 +274,8 @@
                                         #auto="matAutocomplete"
                                         (optionSelected)="selectTriggerTo($event)"
                                     >
-                                        <mat-option *ngFor="let trigger of triggerTo | async" [value]="trigger">
-                                            {{ trigger }}
+                                        <mat-option *ngFor="let trigger of triggerTo" [value]="trigger">
+                                            {{ trigger.label }}
                                         </mat-option>
                                     </mat-autocomplete>
                                 </mat-form-field>

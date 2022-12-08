@@ -2,7 +2,7 @@ import { combineLatest, Observable, of as observableOf, ReplaySubject } from 'rx
 import { takeUntil, take } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 import { Component, Input, OnInit, ViewChild, AfterViewInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, NgForm } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AppState } from '../../store';
 import { SettingsIntegrationActions } from '../../actions/settings/settings.integration.action';
@@ -27,6 +27,7 @@ import { cloneDeep, find, isEmpty } from '../../lodash-optimized';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-modal.component';
 import { TabDirective } from 'ngx-bootstrap/tabs';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
 
 export interface ActiveTriggers {
     title: string;
@@ -242,6 +243,12 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public fieldsVariable: string = '';
     public sendVoucherType : boolean = false;
 
+    separatorKeysCodes: number[] = [ENTER, COMMA];
+    fruitCtrl = new FormControl();
+    filteredFruits: Observable<string[]>;
+    fruits: string[] = ['Lemon'];
+    allFruits: string[] = ['Apple', 'Lemon', 'Lime', 'Orange', 'Strawberry'];
+
 
 
     constructor(
@@ -382,7 +389,9 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             }
         });
     }
+    public add(event: any){
 
+    }
     public ngAfterViewInit() {
         if (this.selectedTabParent !== undefined && this.selectedTabParent !== null) {
             this.selectTab(this.selectedTabParent);
