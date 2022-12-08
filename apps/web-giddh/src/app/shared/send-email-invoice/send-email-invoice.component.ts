@@ -35,7 +35,7 @@ export class SendEmailInvoiceComponent implements OnInit {
     ngOnInit() {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
 
-        if(this.voucherApiVersion === 2) {
+        if (this.voucherApiVersion === 2) {
             this.invoiceType.push('Original');
         }
 
@@ -44,12 +44,18 @@ export class SendEmailInvoiceComponent implements OnInit {
         }
     }
 
-    invoiceTypeChanged(event) {
-        let val = event.target.value;
-        if (event.target.checked) {
-            this.invoiceType.push(val);
+    /**
+     * This will use for invoice type changes
+     *
+     * @param {*} event
+     * @memberof SendEmailInvoiceComponent
+     */
+    public invoiceTypeChanged(event): void {
+        let value = event?.source?.value;
+        if (event?.checked) {
+            this.invoiceType.push(value);
         } else {
-            this.invoiceType = this.invoiceType?.filter(f => f !== val);
+            this.invoiceType = this.invoiceType?.filter(response => response !== value);
         }
     }
 
@@ -57,7 +63,7 @@ export class SendEmailInvoiceComponent implements OnInit {
         if ([VoucherTypeEnum.estimate, VoucherTypeEnum.generateEstimate, VoucherTypeEnum.proforma, VoucherTypeEnum.generateProforma].includes(this.voucherType)) {
             this.successEvent.emit(this.emailAddresses);
         } else {
-            if(this.voucherApiVersion === 2) {
+            if (this.voucherApiVersion === 2) {
                 this.successEvent.emit({ email: this.emailAddresses, invoiceType: this.invoiceType, uniqueName: this.selectedItem?.uniqueName });
             } else {
                 this.successEvent.emit({ email: this.emailAddresses, invoiceType: this.invoiceType, invoiceNumber: this.selectedItem.voucherNumber });

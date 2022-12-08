@@ -6,6 +6,9 @@ form {
         justify-content: flex-start !important;
     }
 }
+.wrap-td-data {
+    min-height: 50px;
+}
 .customer-purchase-order::before {
     position: absolute;
     content: "";

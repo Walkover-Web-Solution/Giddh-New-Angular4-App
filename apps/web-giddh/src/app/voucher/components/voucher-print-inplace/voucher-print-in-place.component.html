@@ -1,0 +1,24 @@
+<div class="modal-header theme-bg pd-2 pd-l2 pd-r2 clearfix">
+    <h3 class="modal-title bg" id="modal-title">{{ localeData?.print_voucher }}</h3>
+    <i aria-hidden="true" class="icon-cross text-right close-modal" (click)="cancelEvent.emit()"></i>
+</div>
+
+<div class="modal-body">
+    <div class="invoice-image-section">
+        <giddh-page-loader *ngIf="isVoucherDownloading"></giddh-page-loader>
+
+        <div *ngIf="isVoucherDownloadError && !isVoucherDownloading" class="error">
+            <span>
+                {{ localeData?.invoice_preview_unavailable }}
+            </span>
+        </div>
+
+        <iframe
+            #pdfContainer
+            *ngIf="sanitizedPdfFileUrl && !isVoucherDownloading"
+            width="100%"
+            height="100%"
+            [src]="sanitizedPdfFileUrl"
+        ></iframe>
+    </div>
+</div>
