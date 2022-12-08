@@ -90,7 +90,10 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
         this.isUploadInProgress = true;
         this.currentBranch = data.branchUniqueName;
         this.excelState.requestState = ImportExcelRequestStates.UploadFileInProgress;
-        this.importExcelService.uploadFile(this.entity, data).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+
+        const importType = this.getImportType();
+
+        this.importExcelService.uploadFile(importType, data).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.isUploadInProgress = false;
 
             if (response?.status === "success" && response.body) {
@@ -127,7 +130,7 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
     }
 
     public showReport() {
-        this.router.navigate(['/pages', 'import', 'report', 'import-report']);
+        this.router.navigate(['/pages', 'downloads', 'imports']);
     }
 
     public onSubmit(data: ImportExcelRequestData) {
@@ -135,7 +138,8 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
             data.branchUniqueName = this.currentBranch;
         }
         this.excelState.requestState = ImportExcelRequestStates.ProcessImportInProgress;
-        this.importExcelService.processImport(this.entity, data).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        const importType = this.getImportType();
+        this.importExcelService.processImport(importType, data).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === 'error') {
                 this.toaster.errorToast(response.message);
                 this.excelState.importResponse = null;
@@ -149,5 +153,24 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
             }
             this.dataChanged(this.excelState);
         });
+    }
+
+    /**
+     * Returns import type based on entity
+     *
+     * @private
+     * @returns {string}
+     * @memberof ImportWizardComponent
+     */
+    private getImportType(): string {
+        let importType = "";
+
+        switch(this.entity) {
+            case "master":
+                importType = "MASTER_IMPORT";
+                break;
+        }
+
+        return importType;
     }
 }

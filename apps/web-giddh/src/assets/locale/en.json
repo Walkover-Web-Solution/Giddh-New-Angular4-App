@@ -353,7 +353,8 @@
         "accounts": "Accounts",
         "inventory": "Inventory",
         "entries": "Entries",
-        "trial_balance": "Trial Balance"
+        "trial_balance": "Trial Balance",
+        "master": "Master"
     },
     "app_please_select": "Please Select",
     "app_company": "Company",
