@@ -1551,8 +1551,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
                         setTimeout(() => this.invFormData.voucherDetails.customerUniquename = tempSelectedAcc.uniqueName, 500);
                         this.store.dispatch(this.accountActions.resetActiveAccount());
-                        // reset customer details so we don't have conflicts when we create voucher second time
-                        this.store.dispatch(this.salesAction.resetAccountDetailsForSales());
                     } else {
                         this.isCustomerSelected = false;
                     }
