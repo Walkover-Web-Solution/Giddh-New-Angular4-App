@@ -59,7 +59,7 @@
     <ng-container *ngIf="tagMultipleSelect">
         <mat-form-field class="example-chip-list" appearance="fill">
             <mat-chip-list #chipList aria-label="Fruit selection">
-                <mat-chip *ngFor="let option of fieldFilteredOptions" (removed)="removeRecord(option)">
+                <mat-chip *ngFor="let option of chipSelectedRecords" (removed)="removeRecord(option)">
                     {{ option?.label }}
                     <i class="icon-cross" matChipRemove></i>
                 </mat-chip>
@@ -95,7 +95,7 @@
             >
                 <ng-container>
                     <mat-option
-                        *ngFor="let option of fieldFilteredOptions"
+                        *ngFor="let option of fieldFilteredOptions; let i = index"
                         [value]="option"
                         [ngClass]="hasMoreValue ? 'options-line-value' : 'options-line'"
                     >

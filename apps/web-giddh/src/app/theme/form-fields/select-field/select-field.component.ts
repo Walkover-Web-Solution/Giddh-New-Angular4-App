@@ -174,13 +174,15 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
      */
     private filterOptions(search: string): void {
         let filteredOptions: IOption[] = [];
-        this.options?.forEach(option => {
-            if (typeof search !== "string" || option?.label?.toLowerCase()?.indexOf(search?.toLowerCase()) > -1) {
+        const options = [
+            ...this.options,
+            ...this.chipSelectedRecords
+        ]
+        options?.forEach(option => {
+            if (typeof search !== 'string' || option?.label?.toLowerCase()?.indexOf(search?.toLowerCase()) > -1) {
                 filteredOptions.push({ label: option.label, value: option.value, additional: option });
             }
         });
-
-        this.fieldFilteredOptions = filteredOptions;
     }
 
     /**
@@ -222,29 +224,29 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
         this.createOption.emit(true);
     }
 
-    public addNewRecord(event: MatChipInputEvent): void {
+    public addNewRecord(event: MatChipInputEvent, index: any): void {
         const value = (event.value || '').trim();
 
         if (value) {
-            // this.fieldFilteredOptions = [...this.fieldFilteredOptions, { label: value, value: value, additional: event }]
-            this.fieldFilteredOptions.push({ label: value, value: value, additional: event });
+            this.chipSelectedRecords.push({ label: value, value: value, additional: event });
+            console.log(index);
+            if (!isNaN) {
+                this.fieldFilteredOptions.splice(index, 1);
+            }
             this.cdr.detectChanges();
         }
 
-        // this.fieldFilteredOptions = this.chipSelectedRecords;
-        console.log(value, this.chipSelectedRecords, this.fieldFilteredOptions);
-        event.chipInput!.clear();
+        event.chipInput!?.clear();
         this.searchFormControl.setValue(null);
     }
 
-    public removeRecord(option: string): void {
-        console.log(option);
+    public removeRecord(option: any, index: any): void {
 
-        //   const index = this.chipSelectedRecords.indexOf(option);
+        if (index >=0) {
+            this.chipSelectedRecords.splice(index, 1);
+            this.fieldFilteredOptions.push({ label: option.label, value: option.value });
+        }
 
-        // if (index >= 0) {
-        //     this.chipSelectedRecords.splice(index, 1);
-        // }
     }
     /**
      * This will use for open dropdown panel
