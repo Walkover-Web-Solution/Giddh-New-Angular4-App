@@ -251,14 +251,16 @@
                     <div class="trigger-form-right-side" *ngIf="showVariableMapping">
                         <div class="dropdown-box">
                             <div class="compose-trigger-dropdowns">
-                                <mat-form-field class="example-chip-list" appearance="fill">
-                                    <mat-label>Favorite Fruits</mat-label>
-                                    <mat-chip-list #chipList aria-label="Fruit selection">
-                                        <mat-chip *ngFor="let fruit of fruits" (removed)="remove(fruit)">
-                                            {{ fruit }}
-                                            <button matChipRemove>
-                                                <mat-icon>cancel</mat-icon>
-                                            </button>
+                                <mat-form-field class="example-chip-list">
+                                    <mat-chip-list #chipList>
+                                        <mat-chip
+                                            *ngFor="let trigger of triggerToChiplist; let indx = index"
+                                            [selectable]="selectable"
+                                            [removable]="removable"
+                                            (removed)="remove(trigger, indx)"
+                                        >
+                                            {{ trigger }}
+                                            <i class="icon-cross" matChipRemove></i>
                                         </mat-chip>
                                         <input
                                             placeholder="New fruit..."
@@ -267,6 +269,7 @@
                                             [matAutocomplete]="auto"
                                             [matChipInputFor]="chipList"
                                             [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                            [matChipInputAddOnBlur]="addOnBlur"
                                             (matChipInputTokenEnd)="add($event)"
                                         />
                                     </mat-chip-list>
@@ -279,6 +282,7 @@
                                         </mat-option>
                                     </mat-autocomplete>
                                 </mat-form-field>
+                                <br />
                                 <!-- <select-field
                                     [cssClass]="'form-control  trigger-dropdown trigger-dropdown-to'"
                                     [placeholder]="'Select To'"

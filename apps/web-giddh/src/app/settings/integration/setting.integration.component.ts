@@ -241,13 +241,10 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public triggerEntityValue: string = '';
     public triggerCampaignSlug: string = '';
     public fieldsVariable: string = '';
-    public sendVoucherType : boolean = false;
-
-    separatorKeysCodes: number[] = [ENTER, COMMA];
-    fruitCtrl = new FormControl();
-    filteredFruits: Observable<string[]>;
-    fruits: string[] = ['Lemon'];
-    allFruits: string[] = ['Apple', 'Lemon', 'Lime', 'Orange', 'Strawberry'];
+    public sendVoucherType: boolean = false;
+    public separatorKeysCodes: number[] = [ENTER, COMMA];
+    public fruitCtrl = new FormControl();
+    public triggerToChiplist: any[] = [];
 
 
 
@@ -389,7 +386,27 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             }
         });
     }
-    public add(event: any){
+    public add(event: any) {
+        console.log(event)
+        const input = event.input;
+        const value = event.value;
+        // Add our fruit
+        if ((value || '').trim()) {
+            // this.typesOptionsArray[index].push(value.trim());
+
+        }
+        // Reset the input value
+        if (input) {
+            input.value = '';
+        }
+        // this.triggerToChiplist.push(event?.value);
+        // this.triggerTo.push({
+        //     label: event.value,
+        //     value: event.value
+        // });
+    }
+    public remove(event: any) {
+        console.log(event)
 
     }
     public ngAfterViewInit() {
@@ -1286,12 +1303,15 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                     this.triggerCampaignSlug = response?.body?.campaignDetails?.campaignSlug;
                     this.selectCampaign(this.triggerCampaignSlug);
                 } else {
+                    console.log(response);
+                    this.triggerToChiplist = response?.body?.campaignDetails?.to;
                     this.triggerBcc = response.body?.campaignDetails?.bcc?.map((result: any) => {
                         return {
                             value: result,
                             label: result
                         }
                     });
+
                     this.triggerCc = response.body?.campaignDetails?.cc?.map((result: any) => {
                         return {
                             value: result,
@@ -1310,7 +1330,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     }
 
     public getCampaignFields(slug: string): void {
-        if(!this.isCommunicationUpdateMode){
+        if (!this.isCommunicationUpdateMode) {
             this.getTriggerByUniqueName(this.triggerUniquename);
         }
         this.settingsIntegrationService.getCampaignFields(slug).pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -1365,7 +1385,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 to: [],
                 cc: [],
                 bcc: [],
-                sendVoucherType : false
+                sendVoucherType: false
             }
         }
     }
@@ -1388,44 +1408,44 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     }
 
     public selectEntity(entity: any): void {
-        if(entity){
-                    this.createTrigger.condition.entity = entity;
+        if (entity) {
+            this.createTrigger.condition.entity = entity;
         }
-                }
+    }
 
     public selectSubEntity(subconditions: any): void {
         if (subconditions) {
-        this.createTrigger.condition.subConditions[0]?.action?.push(subconditions);
+            this.createTrigger.condition.subConditions[0]?.action?.push(subconditions);
         }
 
     }
     public selectConditions(action: any): void {
         if (action) {
-        this.createTrigger.condition.action?.push(action);
+            this.createTrigger.condition.action?.push(action);
         }
     }
 
     public selectTriggerBcc(bcc: any): void {
         if (bcc) {
-        this.createTrigger.campaignDetails.bcc?.push(bcc);
+            this.createTrigger.campaignDetails.bcc?.push(bcc);
         }
     }
 
     public selectTriggerCc(cc: any): void {
         if (cc) {
-        this.createTrigger.campaignDetails.cc?.push(cc);
+            this.createTrigger.campaignDetails.cc?.push(cc);
         }
     }
 
     public selectTriggerTo(to: any): void {
         if (to) {
-        this.createTrigger.campaignDetails.to?.push(to);
+            this.createTrigger.campaignDetails.to?.push(to);
         }
     }
 
     public selectVoucherType(type: any): void {
         if (type) {
-        this.createTrigger.campaignDetails.sendVoucherType = type;
+            this.createTrigger.campaignDetails.sendVoucherType = type;
         }
     }
 
