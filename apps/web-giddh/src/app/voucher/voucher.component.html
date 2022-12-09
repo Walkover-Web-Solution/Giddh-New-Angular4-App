@@ -1620,19 +1620,20 @@
                                                                 <div class="option-value">
                                                                     ({{ commonLocaleData?.app_dated }}:
                                                                     {{
-                                                                        voucherApiVersion === 2
-                                                                            ? option.additional?.voucherDate
-                                                                            : option?.additional?.additional
+                                                                        option?.additional?.additional?.voucherDate
+                                                                            ? option?.additional?.additional
                                                                                   ?.voucherDate
+                                                                            : option?.additional?.voucherDate
                                                                     }})
                                                                 </div>
                                                                 <div class="option-value-stock">
                                                                     ({{ commonLocaleData?.app_amount }}:
                                                                     {{
-                                                                        voucherApiVersion === 2
-                                                                            ? (option.additional?.unadjustedAmount
+                                                                        (option.additional?.additional?.balanceDue
+                                                                            ?.amountForAccount | giddhCurrency)
+                                                                            ? (option.additional?.additional?.balanceDue
                                                                                   ?.amountForAccount | giddhCurrency)
-                                                                            : (option.additional?.additional?.balanceDue
+                                                                            : (option.additional?.balanceDue
                                                                                   ?.amountForAccount | giddhCurrency)
                                                                     }})
                                                                 </div>
