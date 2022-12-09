@@ -1433,8 +1433,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                         if (!this.isLastInvoiceCopied && !obj.voucherDetails.customerUniquename) {
                             obj.voucherDetails.customerUniquename = obj.accountDetails?.uniqueName;
                         }
-
-                        this.isCustomerSelected = true;
+                        if (!this.isCashInvoice) {
+                            this.isCustomerSelected = true;
+                        }
                         this.invoiceDataFound = true;
                         if (!obj.accountDetails.currencySymbol) {
                             obj.accountDetails.currencySymbol = '';
@@ -1941,6 +1942,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             }
 
             this._ledgerService.getInvoiceListsForCreditNote(request, date).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
+                if (this.voucherApiVersion !== 2) {
+                    this.invoiceList = [];
+                }
                 if (response && response.body) {
                     if (response.body.results || response.body.items) {
                         let items = [];
@@ -1950,7 +1954,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                             items = response.body.items;
                         }
 
-                        items?.forEach(invoice => this.invoiceList.push({ label: invoice.voucherNumber ? invoice.voucherNumber : this.commonLocaleData?.app_not_available, value: invoice.uniqueName, additional: invoice }));
+                        items?.forEach(invoice => this.invoiceList?.push({ label: invoice.voucherNumber ? invoice.voucherNumber : this.commonLocaleData?.app_not_available, value: invoice.uniqueName, additional: invoice }));
                     } else {
                         this.invoiceSelected = '';
                         this.invoiceSelectedLabel = '';
