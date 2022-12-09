@@ -2103,11 +2103,11 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     linkedInvoices: [
                         {
                             invoiceUniqueName: event.value,
-<<<<<<< HEAD
-                            voucherType: event.additional.additional?.voucherType
-=======
                             voucherType: event.additional?.additional?.voucherType ? event.additional?.additional?.voucherType : event.additional?.voucherType
+                        }
+                    ]
                 }
+            }
         }
     }
 
