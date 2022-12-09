@@ -212,7 +212,9 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
     }
 
     public scrollEndEvent(): void {
+        if(this.isPaginationEnabled){
         this.scrollEnd.emit();
+        }
     }
 
     /**

@@ -207,6 +207,8 @@
                                                             "
                                                             [allowValueReset]="true"
                                                             (onClear)="resetCustomerName($event)"
+                                                            [isPaginationEnabled]="true"
+                                                            (scrollEnd)="handleScrollEnd('customer')"
                                                         >
                                                             <ng-template #optionTemplate let-option="option">
                                                                 <a href="javascript:void(0)">

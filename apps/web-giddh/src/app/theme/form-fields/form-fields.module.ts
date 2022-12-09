@@ -15,7 +15,6 @@ import { DigitsOnlyModule } from "../../shared/helpers/directives/digitsOnly/dig
 import { TranslateDirectiveModule } from "../translate/translate.directive.module";
 import { NgxMaskModule } from "../../shared/helpers/directives/ngx-mask";
 import { ClickOutsideModule } from "ng-click-outside";
-import { CDKScrollModule } from "../cdk-scroll/cdk-scroll.module";
 
 @NgModule({
     declarations: [
@@ -37,14 +36,14 @@ import { CDKScrollModule } from "../cdk-scroll/cdk-scroll.module";
         TranslateDirectiveModule,
         DigitsOnlyModule,
         NgxMaskModule,
-        ClickOutsideModule,
-        CDKScrollModule
+        ClickOutsideModule
 
     ],
     exports: [
         TextFieldComponent,
         SelectFieldComponent,
-        MatFormFieldModule
+        MatFormFieldModule,
+
     ]
 })
 
