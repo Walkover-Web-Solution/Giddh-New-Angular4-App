@@ -207,6 +207,8 @@
                                                             "
                                                             [allowValueReset]="true"
                                                             (onClear)="resetCustomerName($event)"
+                                                            [isPaginationEnabled]="true"
+                                                            (scrollEnd)="handleScrollEnd('customer')"
                                                         >
                                                             <ng-template #optionTemplate let-option="option">
                                                                 <a href="javascript:void(0)">
@@ -1508,6 +1510,12 @@
                                                             resetInvoiceList();
                                                             getInvoiceListsForCreditNote()
                                                         "
+                                                        [isPaginationEnabled]="true"
+                                                        (scrollEnd)="
+                                                            !searchReferenceVoucher
+                                                                ? getInvoiceListsForCreditNote()
+                                                                : ''
+                                                        "
                                                     >
                                                         <ng-template #optionTemplate let-option="option">
                                                             <a
@@ -2403,6 +2411,8 @@
                                             <div class="ng-select-wrap">
                                                 <select-field
                                                     #selectAccount
+                                                    [isPaginationEnabled]="true"
+                                                    (scrollEnd)="handleScrollEnd('item')"
                                                     [cssClass]="'form-control mat-field-border'"
                                                     [name]="'transaction.fakeAccForSelect2_' + entryIdx"
                                                     [placeholder]="localeData?.select_acc"
@@ -3925,6 +3935,8 @@
                                                                 "
                                                                 (onClear)="onClearSalesAccount(transaction)"
                                                                 [hasMoreValue]="true"
+                                                                [isPaginationEnabled]="true"
+                                                                (scrollEnd)="handleScrollEnd('item')"
                                                             >
                                                                 <ng-template #optionTemplate let-option="option">
                                                                     <ng-container *ngIf="!option.additional?.stock">

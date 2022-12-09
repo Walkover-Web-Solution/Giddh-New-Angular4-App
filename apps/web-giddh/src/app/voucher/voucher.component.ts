@@ -6394,6 +6394,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @memberof VoucherComponent
      */
     public handleScrollEnd(searchType: string): void {
+        console.log(searchType);
+
         const query = searchType === SEARCH_TYPE.CUSTOMER ? this.searchCustomerResultsPaginationData.query :
             searchType === SEARCH_TYPE.ITEM ? this.searchItemResultsPaginationData.query :
                 searchType === SEARCH_TYPE.BANK ? this.searchBankResultsPaginationData.query : '';
