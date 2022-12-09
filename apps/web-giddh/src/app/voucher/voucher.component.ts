@@ -2095,7 +2095,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 this.selectedInvoiceLabel = event.label;
                 this.invFormData.voucherDetails.referenceVoucher = {
                     uniqueName: event.value,
-                    voucherType: event.additional.additional?.voucherType
+                    voucherType: event.additional.additional?.voucherType ? event.additional.additional?.voucherType : event.additional?.voucherType
                 }
             } else {
                 this.invoiceSelectedLabel = event?.label;
@@ -2103,7 +2103,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     linkedInvoices: [
                         {
                             invoiceUniqueName: event.value,
-                            voucherType: event.additional.additional?.voucherType
+                            voucherType: event.additional.additional?.voucherType ? event.additional.additional?.voucherType : event.additional?.voucherType
                         }
                     ]
                 }
@@ -6394,6 +6394,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @memberof VoucherComponent
      */
     public handleScrollEnd(searchType: string): void {
+        console.log(searchType);
         const query = searchType === SEARCH_TYPE.CUSTOMER ? this.searchCustomerResultsPaginationData.query :
             searchType === SEARCH_TYPE.ITEM ? this.searchItemResultsPaginationData.query :
                 searchType === SEARCH_TYPE.BANK ? this.searchBankResultsPaginationData.query : '';
