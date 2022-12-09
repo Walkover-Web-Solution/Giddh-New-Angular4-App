@@ -51,6 +51,7 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
     @Input() public showValueInLabel: boolean = false;
     /** True if we need to show create new label */
     @Input() public showCreateNew: boolean = false;
+
     /** Holds text to show to create new data */
     @Input() public createNewOptionsText: any = "";
     /** True if we need to show more value also with label */
@@ -208,6 +209,10 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
     public createNewRecord(): void {
         this.trigger?.closePanel();
         this.createOption.emit(true);
+    }
+
+    public scrollEndEvent(): void {
+        this.scrollEnd.emit();
     }
 
     /**
