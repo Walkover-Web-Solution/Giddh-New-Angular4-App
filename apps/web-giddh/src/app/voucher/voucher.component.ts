@@ -848,6 +848,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     }
 
     public ngOnInit() {
+
         /** This will use for filter link purchase orders  */
         this.linkPoDropdown.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(search => {
             this.filterPurchaseOrder(search);
@@ -6394,8 +6395,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @memberof VoucherComponent
      */
     public handleScrollEnd(searchType: string): void {
-        console.log(searchType);
-
         const query = searchType === SEARCH_TYPE.CUSTOMER ? this.searchCustomerResultsPaginationData.query :
             searchType === SEARCH_TYPE.ITEM ? this.searchItemResultsPaginationData.query :
                 searchType === SEARCH_TYPE.BANK ? this.searchBankResultsPaginationData.query : '';

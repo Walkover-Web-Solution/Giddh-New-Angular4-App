@@ -182,7 +182,7 @@
                                                             [cssClass]="
                                                                 'form-control mat-field-border customer-dropdown'
                                                             "
-                                                            [customPanelClass]="'panel-cl'"
+                                                            [customPanelClass]="'panel-cl customer-dropdown-panel'"
                                                             [name]="'voucherDetails.customerName'"
                                                             [openDropdown]="openCustomerDropdown"
                                                             [placeholder]="customerPlaceHolder"
@@ -209,6 +209,7 @@
                                                             (onClear)="resetCustomerName($event)"
                                                             [isPaginationEnabled]="true"
                                                             (scrollEnd)="handleScrollEnd('customer')"
+                                                            [scrollableElementId]="'customerId'"
                                                         >
                                                             <ng-template #optionTemplate let-option="option">
                                                                 <a href="javascript:void(0)">
@@ -1516,6 +1517,7 @@
                                                                 ? getInvoiceListsForCreditNote()
                                                                 : ''
                                                         "
+                                                        [scrollableElementId]="'referenceVoucher'"
                                                     >
                                                         <ng-template #optionTemplate let-option="option">
                                                             <a
@@ -2413,6 +2415,7 @@
                                                     #selectAccount
                                                     [isPaginationEnabled]="true"
                                                     (scrollEnd)="handleScrollEnd('item')"
+                                                    [scrollableElementId]="'selectAccount'"
                                                     [cssClass]="'form-control mat-field-border'"
                                                     [name]="'transaction.fakeAccForSelect2_' + entryIdx"
                                                     [placeholder]="localeData?.select_acc"
@@ -3937,6 +3940,7 @@
                                                                 [hasMoreValue]="true"
                                                                 [isPaginationEnabled]="true"
                                                                 (scrollEnd)="handleScrollEnd('item')"
+                                                                [scrollableElementId]="'selectAccountInvoice'"
                                                             >
                                                                 <ng-template #optionTemplate let-option="option">
                                                                     <ng-container *ngIf="!option.additional?.stock">

@@ -31,8 +31,18 @@
                 {{ commonLocaleData?.app_alt_c }}
             </div>
         </a>
-        <ng-container *ngIf="isPaginationEnabled">
-            <app-cdk-scroll (fetchNextPage)="scrollEndEvent()">
+        <app-cdk-scroll
+            (fetchNextPage)="isPaginationEnabled ? scrollEndEvent($event) : ''"
+            [scrollableElementId]="scrollableElementId"
+            *ngIf="fieldFilteredOptions?.length >= 4"
+        >
+            <cdk-virtual-scroll-viewport
+                class="virtual-group-list overflow-x-hidden"
+                [itemSize]="37"
+                [minBufferPx]="300"
+                [maxBufferPx]="300"
+                [id]="scrollableElementId"
+            >
                 <mat-option
                     *ngFor="let option of fieldFilteredOptions"
                     [value]="option"
@@ -53,9 +63,9 @@
                         {{ commonLocaleData?.app_create_new }}
                     </a></mat-option
                 >
-            </app-cdk-scroll>
-        </ng-container>
-        <ng-container *ngIf="!isPaginationEnabled">
+            </cdk-virtual-scroll-viewport>
+        </app-cdk-scroll>
+        <ng-container *ngIf="fieldFilteredOptions?.length <= 4">
             <mat-option
                 *ngFor="let option of fieldFilteredOptions"
                 [value]="option"

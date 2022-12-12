@@ -17,6 +17,7 @@ import { NgxMaskModule } from "../../shared/helpers/directives/ngx-mask";
 import { ClickOutsideModule } from "ng-click-outside";
 import { CdkScrollComponent } from "./cdk-scroll/cdk-scroll.component";
 import { CdkScrollModule } from "./cdk-scroll/cdk-scroll.module";
+import { ScrollingModule } from "@angular/cdk/scrolling";
 
 @NgModule({
     declarations: [
@@ -40,7 +41,8 @@ import { CdkScrollModule } from "./cdk-scroll/cdk-scroll.module";
         DigitsOnlyModule,
         NgxMaskModule,
         ClickOutsideModule,
-        CdkScrollModule
+        CdkScrollModule,
+        ScrollingModule
 
     ],
     exports: [
