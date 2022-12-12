@@ -4,6 +4,5 @@
     "bill_due": "बिल देय",
     "pending_invoices": "अवैतनिक चालान",
     "pending_bills": "अवैतनिक बिल",
-    "hold_invoices": "रुके हुए चालान",
-    "hold_bills": "रुके हुए बिल"
+    "hold_invoices": "रुके हुए चालान"
 }
