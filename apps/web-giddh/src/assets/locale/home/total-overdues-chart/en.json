@@ -4,6 +4,5 @@
     "bill_due": "Bill Due",
     "pending_invoices": "Unpaid Invoices",
     "pending_bills": "Unpaid Bills",
-    "hold_invoices": "Hold Invoices",
-    "hold_bills": "Hold Bills"
+    "hold_invoices": "Hold Invoices"
 }
