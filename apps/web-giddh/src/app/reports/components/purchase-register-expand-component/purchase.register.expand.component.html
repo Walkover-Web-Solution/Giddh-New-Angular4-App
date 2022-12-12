@@ -547,14 +547,11 @@
                                     showFieldFilter.qtyRate && (purchaseRegisteDetailedResponse$ | async)?.quantityTotal
                                 "
                             >
-                                -
-                                <ng-container *ngIf="expand">
-                                    <ng-container *ngFor="let stock of item.stocks">
-                                        <p>
-                                            {{ stock.quantity | giddhCurrency }}
-                                            {{ stock.unit.code }}
-                                        </p>
-                                    </ng-container>
+                                <ng-container *ngFor="let stock of item.stocks">
+                                    <p>
+                                        {{ stock.quantity | giddhCurrency }}
+                                        {{ stock.unit.code }}
+                                    </p>
                                 </ng-container>
                             </td>
                             <td
@@ -562,11 +559,8 @@
                                 [attr.data-title]="commonLocaleData?.app_rate"
                                 *ngIf="showFieldFilter.qtyRate && (purchaseRegisteDetailedResponse$ | async)?.rateTotal"
                             >
-                                -
-                                <ng-container *ngIf="expand">
-                                    <ng-container *ngFor="let stock of item.stocks">
-                                        <p>{{ stock.rate | giddhCurrency }}</p>
-                                    </ng-container>
+                                <ng-container *ngFor="let stock of item.stocks">
+                                    <p>{{ stock.rate | giddhCurrency }}</p>
                                 </ng-container>
                             </td>
                             <td
