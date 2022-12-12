@@ -538,14 +538,11 @@
                                     showFieldFilter.qtyRate && (salesRegisteDetailedResponse$ | async)?.quantityTotal
                                 "
                             >
-                                -
-                                <ng-container *ngIf="expand">
-                                    <ng-container *ngFor="let stock of item.stocks">
-                                        <p>
-                                            {{ stock.quantity | giddhCurrency }}
-                                            {{ stock.unit.code }}
-                                        </p>
-                                    </ng-container>
+                                <ng-container *ngFor="let stock of item.stocks">
+                                    <p>
+                                        {{ stock.quantity | giddhCurrency }}
+                                        {{ stock.unit.code }}
+                                    </p>
                                 </ng-container>
                             </td>
                             <td
@@ -553,20 +550,17 @@
                                 class="text-right"
                                 *ngIf="showFieldFilter.qtyRate && (salesRegisteDetailedResponse$ | async)?.rateTotal"
                             >
-                                -
-                                <ng-container *ngIf="expand">
-                                    <ng-container *ngFor="let stock of item.stocks">
-                                        <p>
-                                            <span class="d-inline-flex">
-                                                <amount-field
-                                                    [amount]="stock.rate"
-                                                    [currencySymbol]="false"
-                                                    [currencyCode]="false"
-                                                >
-                                                </amount-field>
-                                            </span>
-                                        </p>
-                                    </ng-container>
+                                <ng-container *ngFor="let stock of item.stocks">
+                                    <p>
+                                        <span class="d-inline-flex">
+                                            <amount-field
+                                                [amount]="stock.rate"
+                                                [currencySymbol]="false"
+                                                [currencyCode]="false"
+                                            >
+                                            </amount-field>
+                                        </span>
+                                    </p>
                                 </ng-container>
                             </td>
                             <td
