@@ -2,6 +2,10 @@
     "page_heading_single": "रिपोर्ट्स",
     "page_heading":"खरीद रजिस्टर",
     "quantity_rate": "मात्रा-दर",
-    "search_voucher_no": "वाउचर नंबर खोजें",
-    "transaction_count": "लेन-देन की गणना"
+    "search_entry_no": "प्रविष्टि संख्या खोजें",
+    "transaction_count": "लेन-देन की गणना",
+    "net_tax": "शुद्ध कर",
+    "net_discount": "शुद्ध छूट",
+    "net_tds": "नेट टीडीएस",
+    "net_tcs": "नेट टीसीएस"
 }
