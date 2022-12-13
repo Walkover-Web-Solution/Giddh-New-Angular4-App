@@ -1,4 +1,5 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, TemplateRef, ViewChild } from "@angular/core";
+import { CdkVirtualScrollViewport } from "@angular/cdk/scrolling";
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, QueryList, SimpleChanges, TemplateRef, ViewChild, ViewChildren } from "@angular/core";
 import { FormControl } from "@angular/forms";
 import { MatAutocompleteTrigger } from "@angular/material/autocomplete";
 import { ReplaySubject } from "rxjs";
@@ -19,6 +20,8 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
     @ViewChild('trigger', { static: false, read: MatAutocompleteTrigger }) trigger: MatAutocompleteTrigger;
     /** Select Field instance for auto focus */
     @ViewChild('selectField', { static: true }) public selectField: ElementRef;
+    /** Instance of cdk virtual scroller */
+    @ViewChildren(CdkVirtualScrollViewport) virtualScroll: QueryList<CdkVirtualScrollViewport>;
     /** CSS class name to add on the field */
     @Input() public cssClass: string = "";
     /** CSS class name to add on the mat autocomplete panel class */
@@ -55,6 +58,8 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
     @Input() public createNewOptionsText: any = "";
     /** True if we need to show more value also with label */
     @Input() public hasMoreValue: boolean = false;
+    /** True if we need to scroll element by id */
+    @Input() public scrollableElementId = '';
     /** Emits the scroll to bottom event when pagination is required  */
     @Output() public scrollEnd: EventEmitter<void> = new EventEmitter();
     /** Emits dynamic searched query */
@@ -208,6 +213,17 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
     public createNewRecord(): void {
         this.trigger?.closePanel();
         this.createOption.emit(true);
+    }
+
+    /**
+     * Emits true if scrolling end event
+     *
+     * @memberof SelectFieldComponent
+     */
+    public scrollEndEvent(event: any): void {
+        if (this.isPaginationEnabled && this.scrollableElementId === event) {
+            this.scrollEnd.emit();
+        }
     }
 
     /**
