@@ -111,7 +111,7 @@
                                     (ngModelChange)="columnFilter($event, 'voucherNo')"
                                     [(ngModel)]="showFieldFilter.voucherNo"
                                 />
-                                {{ commonLocaleData?.app_voucher_no }}</a
+                                {{ commonLocaleData?.app_entry_no }}</a
                             >
                         </li>
                         <li role="menuitem">
@@ -341,13 +341,13 @@
                             >
                                 <div [hidden]="showSearchInvoiceNo">
                                     <i class="icon-search" (click)="toggleSearch('invoiceNumber')"></i>
-                                    <span>{{ commonLocaleData?.app_voucher_no }}</span>
+                                    <span>{{ commonLocaleData?.app_entry_no }}</span>
                                 </div>
 
                                 <div class="input-container" [hidden]="!showSearchInvoiceNo">
                                     <input
                                         type="text"
-                                        [placeholder]="localeData?.search_voucher_no"
+                                        [placeholder]="localeData?.search_entry_no"
                                         class="w100"
                                         #invoiceSearch
                                         [formControl]="voucherNumberInput"
@@ -492,7 +492,7 @@
                                 {{ item.voucherType }}
                             </td>
                             <td
-                                [attr.data-title]="commonLocaleData?.app_voucher_no"
+                                [attr.data-title]="commonLocaleData?.app_entry_no"
                                 *ngIf="showFieldFilter.voucherNo"
                                 class="verticle-align-top"
                             >
