@@ -587,6 +587,6 @@ export class SettingsIntegrationService {
             let data: BaseResponse<string, SmsKeyClass> = res;
             data.request = requestObj;
             return data;
-        }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, requestObj)));
+        }), catchError((e) => this.errorHandler?.HandleCatch<any, any>(e, requestObj)));
     }
 }

@@ -392,6 +392,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         const value = event.value;
         // Add our fruit
         if ((value || '').trim()) {
+
             // this.typesOptionsArray[index].push(value.trim());
 
         }
@@ -399,11 +400,11 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         if (input) {
             input.value = '';
         }
-        // this.triggerToChiplist.push(event?.value);
-        // this.triggerTo.push({
-        //     label: event.value,
-        //     value: event.value
-        // });
+        this.triggerToChiplist.push(event?.value);
+        this.triggerTo.push({
+            label: event.value,
+            value: event.value
+        });
     }
     public remove(event: any) {
         console.log(event)
@@ -1438,6 +1439,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     }
 
     public selectTriggerTo(to: any): void {
+        console.log(to);
+
         if (to) {
             this.createTrigger.campaignDetails.to?.push(to);
         }

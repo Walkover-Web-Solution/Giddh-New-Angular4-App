@@ -36,7 +36,6 @@ import { ToasterService } from '../services/toaster.service';
 import { GeneralActions } from '../actions/general/general.actions';
 import { InvoiceActions } from '../actions/invoice/invoice.actions';
 import { InvoiceReceiptActions } from '../actions/invoice/receipt/receipt.actions';
-import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
 import {
     AccountDetailsClass,
     ActionTypeAfterVoucherGenerateOrUpdate,
@@ -788,7 +787,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         public route: ActivatedRoute,
         private invoiceReceiptActions: InvoiceReceiptActions,
         private invoiceActions: InvoiceActions,
-        private settingsProfileActions: SettingsProfileActions,
         private _breakpointObserver: BreakpointObserver,
         private _cdr: ChangeDetectorRef,
         private proformaActions: ProformaActions,
@@ -1042,7 +1040,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     // for edit mode direct from @Input
                     if (params['voucherType'] && params['voucherType'] === 'pending' && params['selectedType']) {
                         this.isPendingVoucherType = true;
-                        // this.isUpdateMode = true;
                     } else {
                         this.store.dispatch(this.invoiceReceiptActions.ResetVoucherDetails());
                         if (this.accountUniqueName && this.invoiceType && this.invoiceNo) {
@@ -1436,8 +1433,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                         if (!this.isLastInvoiceCopied && !obj.voucherDetails.customerUniquename) {
                             obj.voucherDetails.customerUniquename = obj.accountDetails?.uniqueName;
                         }
-
-                        this.isCustomerSelected = true;
+                        if (!this.isCashInvoice) {
+                            this.isCustomerSelected = true;
+                        }
                         this.invoiceDataFound = true;
                         if (!obj.accountDetails.currencySymbol) {
                             obj.accountDetails.currencySymbol = '';
@@ -1519,8 +1517,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                         } else {
                             this.statesBilling.readonly = false;
                         }
-                        // reset customer details so we don't have conflicts when we create voucher second time
-                        this.store.dispatch(this.salesAction.resetAccountDetailsForSales());
                     } else {
                         this.isCustomerSelected = false;
                     }
@@ -1556,8 +1552,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
                         setTimeout(() => this.invFormData.voucherDetails.customerUniquename = tempSelectedAcc.uniqueName, 500);
                         this.store.dispatch(this.accountActions.resetActiveAccount());
-                        // reset customer details so we don't have conflicts when we create voucher second time
-                        this.store.dispatch(this.salesAction.resetAccountDetailsForSales());
                     } else {
                         this.isCustomerSelected = false;
                     }
@@ -1948,6 +1942,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             }
 
             this._ledgerService.getInvoiceListsForCreditNote(request, date).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
+                if (this.voucherApiVersion !== 2) {
+                    this.invoiceList = [];
+                }
                 if (response && response.body) {
                     if (response.body.results || response.body.items) {
                         let items = [];
@@ -1957,7 +1954,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                             items = response.body.items;
                         }
 
-                        items?.forEach(invoice => this.invoiceList.push({ label: invoice.voucherNumber ? invoice.voucherNumber : this.commonLocaleData?.app_not_available, value: invoice.uniqueName, additional: invoice }));
+                        items?.forEach(invoice => this.invoiceList?.push({ label: invoice.voucherNumber ? invoice.voucherNumber : this.commonLocaleData?.app_not_available, value: invoice.uniqueName, additional: invoice }));
                     } else {
                         this.invoiceSelected = '';
                         this.invoiceSelectedLabel = '';
@@ -2098,7 +2095,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 this.selectedInvoiceLabel = event.label;
                 this.invFormData.voucherDetails.referenceVoucher = {
                     uniqueName: event.value,
-                    voucherType: event.additional.additional.voucherType
+                    voucherType: event.additional?.additional?.voucherType ? event.additional?.additional?.voucherType : event.additional?.voucherType
                 }
             } else {
                 this.invoiceSelectedLabel = event?.label;
@@ -2106,7 +2103,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     linkedInvoices: [
                         {
                             invoiceUniqueName: event.value,
-                            voucherType: event.additional.additional.voucherType
+                            voucherType: event.additional?.additional?.voucherType ? event.additional?.additional?.voucherType : event.additional?.voucherType
                         }
                     ]
                 }
@@ -2351,10 +2348,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.createEmbeddedViewAtIndex(0);
         this.onSearchQueryChanged('', 1, 'customer');
 
-
-        if (this.asideMenuStateForRecurringEntry === 'out' && !this.dialog.openDialogs) {
+        if (this.actionAfterGenerateORUpdate !== ActionTypeAfterVoucherGenerateOrUpdate.generateAndPrint && this.actionAfterGenerateORUpdate !== ActionTypeAfterVoucherGenerateOrUpdate.generateAndRecurring && this.actionAfterGenerateORUpdate !== ActionTypeAfterVoucherGenerateOrUpdate.generateAndSend && !this.isUpdateMode) {
             setTimeout(() => {
-            this.openAccountSelectionDropdown?.openDropdownPanel();
+                this.openAccountSelectionDropdown?.openDropdownPanel();
             }, 500);
         }
     }
@@ -3714,6 +3710,10 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         if (this.isCustomerSelected) {
             this.toggleAccountSelectionDropdown(false);
         }
+        if (this.isPurchaseInvoice) {
+            this.fieldFilteredOptions = [];
+            this.linkedPo = [];
+        }
     }
 
     public onSelectBankCash(item: IOption) {
@@ -3736,9 +3736,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         }
         this.accountAsideMenuState = this.accountAsideMenuState === 'out' ? 'in' : 'out';
         this.toggleBodyClass();
-        if (!this.invFormData.voucherDetails.customerUniquename && this.accountAsideMenuState === 'out') {
-            this.toggleAccountSelectionDropdown(true);
-        }
     }
 
     public toggleRecurringAsidePane(toggle?: string): void {
@@ -6105,12 +6102,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             return;
         }
         this.updateAccount = false;
-        setTimeout(() => {
-            if (this.asideMenuStateForRecurringEntry === 'out' && !this.dialog.openDialogs ) {
-                this.openAccountSelectionDropdown?.openDropdownPanel();
-            }
-        }, 500);
-
 
         if (!this.isPendingVoucherType || (this.isPendingVoucherType && this.actionAfterGenerateORUpdate === 0)) {
             this.store.dispatch(this.invoiceReceiptActions.ResetVoucherDetails());
