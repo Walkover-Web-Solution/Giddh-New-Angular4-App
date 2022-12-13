@@ -75,6 +75,8 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** True if we need to allow search in case of dynamic search */
+    private allowSearch: boolean = true;
 
     constructor(private cdr: ChangeDetectorRef
     ) {
@@ -88,19 +90,21 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
     public ngOnInit(): void {
         if (this.enableDynamicSearch) {
             this.searchFormControl.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(search => {
-                if (search) {
-                    if (typeof search === "string") {
-                        this.dynamicSearchedQuery.emit(search);
+                if (this.allowSearch) {
+                    if (search) {
+                        if (typeof search === "string") {
+                            this.dynamicSearchedQuery.emit(search);
+                        } else {
+                            this.dynamicSearchedQuery.emit(search?.label || "");
+                        }
                     } else {
-                        this.dynamicSearchedQuery.emit(search?.label || "");
-                    }
-                } else {
-                    if (this.allowValueReset) {
-                        this.selectedValue = "";
-                        this.searchFormControl.setValue({ label: "" });
-                        this.onClear.emit({ label: "", value: "" });
-                    } else {
-                        this.dynamicSearchedQuery.emit(search);
+                        if (this.allowValueReset) {
+                            this.selectedValue = "";
+                            this.searchFormControl.setValue({ label: "" });
+                            this.onClear.emit({ label: "", value: "" });
+                        } else {
+                            this.dynamicSearchedQuery.emit(search);
+                        }
                     }
                 }
             });
@@ -137,7 +141,12 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
             }
         }
         if (changes?.defaultValue) {
+            this.allowSearch = false;
             this.searchFormControl.setValue({ label: changes?.defaultValue.currentValue });
+
+            setTimeout(() => {
+                this.allowSearch = true;
+            }, 800);
         }
     }
 

@@ -748,6 +748,65 @@
                                                             />
                                                             {{ localeData?.shipping_billing_same }}
                                                         </span>
+                                                        <span>
+                                                            <div
+                                                                class="btn-group btn-block"
+                                                                dropdown
+                                                                #companyShippingAddressDropDownWeb="bs-dropdown"
+                                                                [attachOutsideOnClick]="true"
+                                                                (clickOutside)="
+                                                                    companyShippingAddressDropDownWeb.hide()
+                                                                "
+                                                                *ngIf="
+                                                                    accountAddressList?.length > 1 &&
+                                                                    !autoFillCompanyShipping
+                                                                "
+                                                            >
+                                                                <a
+                                                                    dropdownToggle
+                                                                    type="button"
+                                                                    class="dropdown-toggle"
+                                                                    >{{ localeData?.change }}</a
+                                                                >
+                                                                <ul
+                                                                    *dropdownMenu
+                                                                    class="
+                                                                        dropdown-menu
+                                                                        change-address-dropdown
+                                                                        dropdown-menu-right
+                                                                    "
+                                                                    role="menu"
+                                                                >
+                                                                    <li
+                                                                        role="menuitem"
+                                                                        *ngFor="let address of accountAddressList"
+                                                                    >
+                                                                        <a
+                                                                            class="dropdown-item"
+                                                                            (click)="
+                                                                                selectAddress(
+                                                                                    purchaseOrder.company
+                                                                                        .shippingDetails,
+                                                                                    address
+                                                                                )
+                                                                            "
+                                                                        >
+                                                                            {{ address.address }}
+                                                                            {{ address.state?.name }}
+                                                                            {{
+                                                                                address.gstNumber
+                                                                                    ? (showGSTINNo
+                                                                                          ? commonLocaleData?.app_gstin +
+                                                                                            ": "
+                                                                                          : commonLocaleData?.app_trn +
+                                                                                            ": ") + address.gstNumber
+                                                                                    : ""
+                                                                            }}
+                                                                        </a>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </span>
                                                     </div>
                                                     <div
                                                         [ngClass]="{
