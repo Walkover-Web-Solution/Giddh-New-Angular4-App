@@ -180,6 +180,8 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
         });
 
         this.fieldFilteredOptions = filteredOptions;
+        this.cdr.detectChanges();
+
     }
 
     /**
@@ -222,6 +224,7 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
      */
     public scrollEndEvent(event: any): void {
         if (this.isPaginationEnabled && this.scrollableElementId === event) {
+            this.fieldFilteredOptions = this.options;
             this.scrollEnd.emit();
         }
     }

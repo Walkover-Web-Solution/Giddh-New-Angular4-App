@@ -1,12 +1,14 @@
 import { CdkScrollable, ScrollDispatcher } from '@angular/cdk/scrolling';
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
 
 @Component({
     selector: 'app-cdk-scroll',
     templateUrl: './cdk-scroll.component.html',
-    styleUrls: ['./cdk-scroll.component.css']
+    styleUrls: ['./cdk-scroll.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush
+
 })
 export class CdkScrollComponent implements OnInit, OnDestroy {
 
