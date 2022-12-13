@@ -2096,12 +2096,14 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         if (event && event.additional && event.value) {
             if (this.voucherApiVersion === 2) {
                 this.selectedInvoiceLabel = event.label;
+                this.selectedInvoice = event.value;
                 this.invFormData.voucherDetails.referenceVoucher = {
                     uniqueName: event.value,
                     voucherType: event.additional?.additional?.voucherType ? event.additional?.additional?.voucherType : event.additional?.voucherType
                 }
             } else {
                 this.invoiceSelectedLabel = event?.label;
+                this.selectedInvoice = event.value;
                 this.invFormData.voucherDetails.invoiceLinkingRequest = {
                     linkedInvoices: [
                         {
@@ -7263,8 +7265,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @memberof VoucherComponent
      */
     public onSelectWarehouse(warehouse: any): void {
-        this.selectedWarehouse = warehouse?.uniqueName;
-        this.selectedWarehouseName = warehouse?.name;
+        this.selectedWarehouse = warehouse?.value;
+        this.selectedWarehouseName = warehouse?.label;
         if (this.isPurchaseInvoice) {
             this.autoFillDeliverToWarehouseAddress(warehouse);
         }
