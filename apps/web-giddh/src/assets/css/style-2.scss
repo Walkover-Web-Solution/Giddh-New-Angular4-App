@@ -371,11 +371,6 @@ $custom-typography: mat-typography-config(
         }
     }
 }
-.customer-dropdown-panel {
-    .mat-autocomplete-panel {
-        overflow: hidden !important;
-    }
-}
 @media screen and (max-width: 1366px) and (orientation: portrait) {
     .subscription-form-select {
         float: left !important;

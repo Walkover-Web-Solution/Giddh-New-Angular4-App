@@ -34,14 +34,17 @@
         <app-cdk-scroll
             (fetchNextPage)="isPaginationEnabled ? scrollEndEvent($event) : ''"
             [scrollableElementId]="scrollableElementId"
-            *ngIf="fieldFilteredOptions?.length >= 4"
         >
             <cdk-virtual-scroll-viewport
                 class="virtual-group-list overflow-x-hidden"
-                [itemSize]="37"
+                [itemSize]="33"
                 [minBufferPx]="300"
                 [maxBufferPx]="300"
                 [id]="scrollableElementId"
+                [ngStyle]="{
+                    'min-height':
+                        (fieldFilteredOptions?.length * 51 > 193 ? 193 : fieldFilteredOptions?.length * 51) + 'px'
+                }"
             >
                 <mat-option
                     *ngFor="let option of fieldFilteredOptions"
@@ -65,27 +68,5 @@
                 >
             </cdk-virtual-scroll-viewport>
         </app-cdk-scroll>
-        <ng-container *ngIf="fieldFilteredOptions?.length <= 4">
-            <mat-option
-                *ngFor="let option of fieldFilteredOptions"
-                [value]="option"
-                [ngClass]="hasMoreValue ? 'options-line-value' : 'options-line'"
-            >
-                <ng-template
-                    [ngTemplateOutletContext]="{ option: option }"
-                    [ngTemplateOutlet]="optionTemplate"
-                ></ng-template>
-                <ng-container *ngIf="!optionTemplate">
-                    <span class="option-label"> {{ option?.label }}</span>
-                    <span class="option-value" *ngIf="showValueInLabel">{{ option.additional?.uniqueName }}</span>
-                </ng-container>
-            </mat-option>
-            <mat-option disabled *ngIf="fieldFilteredOptions?.length === 0">No results found</mat-option>
-            <mat-option *ngIf="fieldFilteredOptions?.length === 0 && showCreateNew">
-                <a href="javascript:;" (click)="createNewRecord()" class="options-class-create">
-                    {{ commonLocaleData?.app_create_new }}
-                </a></mat-option
-            >
-        </ng-container>
     </mat-autocomplete>
 </ng-container>
