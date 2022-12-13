@@ -263,14 +263,12 @@
                                             <i class="icon-cross" matChipRemove></i>
                                         </mat-chip>
                                         <input
-                                            placeholder="New fruit..."
-                                            #fruitInput
-                                            [formControl]="fruitCtrl"
+                                            placeholder="Cutomer name"
                                             [matAutocomplete]="auto"
                                             [matChipInputFor]="chipList"
                                             [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
                                             [matChipInputAddOnBlur]="addOnBlur"
-                                            (matChipInputTokenEnd)="add($event)"
+                                            (matChipInputTokenEnd)="addTriggerTo($event)"
                                         />
                                     </mat-chip-list>
                                     <mat-autocomplete
@@ -283,24 +281,66 @@
                                     </mat-autocomplete>
                                 </mat-form-field>
                                 <br />
-                                <!-- <select-field
-                                    [cssClass]="'form-control  trigger-dropdown trigger-dropdown-to'"
-                                    [placeholder]="'Select To'"
-                                    [options]="triggerTo"
-                                    (selectedOption)="selectTriggerTo($event?.value)"
-                                ></select-field>
-                                <select-field
-                                    [cssClass]="'form-control  trigger-dropdown trigger-dropdown-bcc'"
-                                    [placeholder]="'Select Bcc'"
-                                    [options]="triggerBcc"
-                                    (selectedOption)="selectTriggerBcc($event?.value)"
-                                ></select-field>
-                                <select-field
-                                    [cssClass]="'form-control  trigger-dropdown trigger-dropdown-cc'"
-                                    [placeholder]="'Select CC'"
-                                    [options]="triggerCc"
-                                    (selectedOption)="selectTriggerCc($event?.value)"
-                                ></select-field> -->
+                                <mat-form-field class="example-chip-list">
+                                    <mat-chip-list #chipListBcc>
+                                        <mat-chip
+                                            *ngFor="let trigger of triggerBccChiplist; let indx = index"
+                                            [selectable]="selectable"
+                                            [removable]="removable"
+                                            (removed)="remove(trigger, indx)"
+                                        >
+                                            {{ trigger }}
+                                            <i class="icon-cross" matChipRemove></i>
+                                        </mat-chip>
+                                        <input
+                                            placeholder="Select Bcc"
+                                            [matAutocomplete]="auto"
+                                            [matChipInputFor]="chipListBcc"
+                                            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                            [matChipInputAddOnBlur]="addOnBlur"
+                                            (matChipInputTokenEnd)="addTriggerBcc($event)"
+                                        />
+                                    </mat-chip-list>
+                                    <mat-autocomplete
+                                        #auto="matAutocomplete"
+                                        (optionSelected)="selectTriggerTo($event)"
+                                    >
+                                        <mat-option *ngFor="let trigger of triggerBcc" [value]="trigger">
+                                            {{ trigger.label }}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                </mat-form-field>
+                                <br />
+                                <mat-form-field class="example-chip-list">
+                                    <mat-chip-list #chipListCc>
+                                        <mat-chip
+                                            *ngFor="let trigger of triggerCcChiplist; let indx = index"
+                                            [selectable]="selectable"
+                                            [removable]="removable"
+                                            (removed)="remove(trigger, indx)"
+                                        >
+                                            {{ trigger }}
+                                            <i class="icon-cross" matChipRemove></i>
+                                        </mat-chip>
+                                        <input
+                                            placeholder="Select CC"
+                                            [matAutocomplete]="auto"
+                                            [matChipInputFor]="chipListCc"
+                                            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                            [matChipInputAddOnBlur]="addOnBlur"
+                                            (matChipInputTokenEnd)="addTriggerCc($event)"
+                                        />
+                                    </mat-chip-list>
+                                    <mat-autocomplete
+                                        #auto="matAutocomplete"
+                                        (optionSelected)="selectTriggerCc($event?.value)"
+                                    >
+                                        <mat-option *ngFor="let trigger of triggerCc" [value]="trigger">
+                                            {{ trigger.label }}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                </mat-form-field>
+                                <br />
                                 <mat-checkbox
                                     class="trigger-dropdown"
                                     #sendVoucherPdf

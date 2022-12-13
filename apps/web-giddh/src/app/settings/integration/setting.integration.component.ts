@@ -243,8 +243,9 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public fieldsVariable: string = '';
     public sendVoucherType: boolean = false;
     public separatorKeysCodes: number[] = [ENTER, COMMA];
-    public fruitCtrl = new FormControl();
     public triggerToChiplist: any[] = [];
+    public triggerBccChiplist: any[] = [];
+    public triggerCcChiplist: any[] = [];
 
 
 
@@ -276,6 +277,9 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             }
         });
         this.initFormFields();
+        this.triggerBccChiplist = [];
+        this.triggerToChiplist = [];
+        this.triggerCcChiplist = [];
     }
 
     public ngOnInit() {
@@ -386,30 +390,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             }
         });
     }
-    public add(event: any) {
-        console.log(event)
-        const input = event.input;
-        const value = event.value;
-        // Add our fruit
-        if ((value || '').trim()) {
 
-            // this.typesOptionsArray[index].push(value.trim());
-
-        }
-        // Reset the input value
-        if (input) {
-            input.value = '';
-        }
-        this.triggerToChiplist.push(event?.value);
-        this.triggerTo.push({
-            label: event.value,
-            value: event.value
-        });
-    }
-    public remove(event: any) {
-        console.log(event)
-
-    }
     public ngAfterViewInit() {
         if (this.selectedTabParent !== undefined && this.selectedTabParent !== null) {
             this.selectTab(this.selectedTabParent);
@@ -1304,8 +1285,15 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                     this.triggerCampaignSlug = response?.body?.campaignDetails?.campaignSlug;
                     this.selectCampaign(this.triggerCampaignSlug);
                 } else {
-                    console.log(response);
-                    this.triggerToChiplist = response?.body?.campaignDetails?.to;
+                    if (response?.body?.campaignDetails?.to || response?.body?.campaignDetails?.bcc || response?.body?.campaignDetails?.cc){
+                        this.triggerToChiplist = response?.body?.campaignDetails?.to;
+                        this.triggerBccChiplist = response?.body?.campaignDetails?.bcc;
+                        this.triggerCcChiplist = response?.body?.campaignDetails?.cc;
+                    }else {
+                        this.triggerToChiplist = [];
+                        this.triggerBccChiplist = [];
+                        this.triggerCcChiplist = [];
+                    }
                     this.triggerBcc = response.body?.campaignDetails?.bcc?.map((result: any) => {
                         return {
                             value: result,
@@ -1379,7 +1367,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                     }
                 ]
             },
-            communicationPlatform: null,
+            communicationPlatform: this.platform,
             campaignDetails: {
                 campaignSlug: null,
                 argsMapping: [],
@@ -1397,6 +1385,9 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         if (event) {
             this.showTriggerForm = false;
             this.initFormFields();
+            this.triggerBccChiplist = [];
+            this.triggerToChiplist = [];
+            this.triggerCcChiplist = [];
         }
     }
     public selectCampaign(slug: any): void {
@@ -1515,6 +1506,47 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
 
     public resetCommunicationForm(): void {
         this.initFormFields();
+        this.triggerBccChiplist = [];
+        this.triggerToChiplist = [];
+        this.triggerCcChiplist = [];
+    }
+
+    public addTriggerTo(event: any) {
+        const input = event.input;
+        const value = event.value;
+        if ((value || '').trim()) {
+            this.triggerToChiplist?.push(value);
+            this.createTrigger.campaignDetails.to?.push(value);
+        }
+        if (input) {
+            input.value = '';
+        }
+    }
+    public addTriggerBcc(event: any) {
+        const input = event.input;
+        const value = event.value;
+        if ((value || '').trim()) {
+            this.triggerBccChiplist?.push(value);
+            this.createTrigger.campaignDetails.bcc?.push(value);
+        }
+        if (input) {
+            input.value = '';
+        }
+    }
+    public addTriggerCc(event: any) {
+        const input = event.input;
+        const value = event.value;
+        if ((value || '').trim()) {
+            this.triggerCcChiplist?.push(value);
+            this.createTrigger.campaignDetails.cc?.push(value);
+        }
+        if (input) {
+            input.value = '';
+        }
+    }
+    public remove(event: any) {
+        console.log(event)
+
     }
     /**
      *This will use for copy api url link and display copied
