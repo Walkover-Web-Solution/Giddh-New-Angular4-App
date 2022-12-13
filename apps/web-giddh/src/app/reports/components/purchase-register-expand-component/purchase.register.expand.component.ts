@@ -150,7 +150,9 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
      * @memberof PurchaseRegisterExpandComponent
      */
     public gotoPurchaseRegister(): void {
-        this.router.navigate(['/pages/reports/purchase-register']);
+        this.activeRoute.queryParams.pipe(take(1)).subscribe(params => {
+            this.router.navigate(['pages', 'reports', 'purchase-register'], { queryParams: { from: params.from, to: params.to, branchUniqueName: params.branchUniqueName, interval: params.interval, selectedMonth: params.selectedMonth } });
+        });
     }
 
     /**
