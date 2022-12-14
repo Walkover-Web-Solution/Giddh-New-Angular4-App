@@ -3709,6 +3709,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             }
 
             if (this.selectedVoucherType === VoucherTypeEnum.creditNote || this.selectedVoucherType === VoucherTypeEnum.debitNote) {
+                this.removeSelectedInvoice();
                 this.getInvoiceListsForCreditNote();
             }
         }
