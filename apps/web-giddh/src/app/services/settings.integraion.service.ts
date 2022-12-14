@@ -548,7 +548,7 @@ export class SettingsIntegrationService {
         }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e)));
     }
 
-    public getFieldSuggestions(platform: string, entity:string): Observable<BaseResponse<any, any>> {
+    public getFieldSuggestions(platform: string, entity: string): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.get(this.config.apiUrl + SETTINGS_INTEGRATION_COMMUNICATION_API.GET_FIELD_SUGGESTIONS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':platform', platform).replace(':entity', entity)).pipe(map((res) => {
             let data: BaseResponse<any, any> = res;
@@ -588,5 +588,17 @@ export class SettingsIntegrationService {
             data.request = requestObj;
             return data;
         }), catchError((e) => this.errorHandler?.HandleCatch<any, any>(e, requestObj)));
+    }
+
+    /**
+     * Update Payment Key
+     */
+    public updateTrigger(requestObj: any, triggerUniqueName: string): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.put(this.config.apiUrl + SETTINGS_INTEGRATION_COMMUNICATION_API.UPDATE_TRIGGERS?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':triggerUniqueName', triggerUniqueName), requestObj).pipe(map((res) => {
+            let data: BaseResponse<string, any> = res;
+            data.request = requestObj;
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<string, any>(e, requestObj)));
     }
 }

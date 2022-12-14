@@ -28,6 +28,7 @@ export const SETTINGS_INTEGRATION_COMMUNICATION_API = {
     VERIFY_PLATFORM: COMMON + 'communication/platform/verify',
     DELETE_PLATFORM: COMMON + 'communication/platform/:platformUniqueName',
     CREATE_TRIGGERS: COMMON + 'communication/trigger',
+    UPDATE_TRIGGERS: COMMON + 'communication/trigger/:triggerUniqueName',
     GET_TRIGGERS: COMMON + 'communication/trigger',
     GET_TRIGGERS_BY_UNIQUENAME: COMMON + 'communication/trigger/:triggerUniqueName',
     DELETE_TRIGGER: COMMON + 'communication/trigger/:triggerUniqueName',

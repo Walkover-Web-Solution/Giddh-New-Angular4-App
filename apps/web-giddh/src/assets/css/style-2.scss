@@ -390,6 +390,11 @@ $custom-typography: mat-typography-config(
     .example-chip-list {
         width: 100%;
     }
+    .mat-form-field-appearance-legacy {
+        .mat-form-field-wrapper {
+            padding-bottom: 1em !important;
+        }
+    }
 }
 
 @media screen and (max-width: 1366px) and (orientation: portrait) {

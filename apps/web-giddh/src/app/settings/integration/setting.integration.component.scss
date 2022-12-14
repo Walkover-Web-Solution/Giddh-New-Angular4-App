@@ -28,6 +28,7 @@
     top: 18px;
     width: 13px;
 }
+
 .disabled:after {
     background: transparent;
     content: "";
@@ -44,26 +45,32 @@
     z-index: 999;
     cursor: not-allowed;
 }
+
 .disabled .list-item {
     position: relative;
 }
+
 .disabled {
     position: relative;
 }
+
 .disabled-list-item {
     padding: 6px;
     height: 100%;
     background: var(--color-white);
     font-size: 14px;
 }
+
 .tooltip-box {
     position: absolute;
     right: 0;
     top: 0;
+
     .icon-info {
         color: var(--color-abbey);
     }
 }
+
 .form-control,
 .linked-account {
     width: 100% !important;
@@ -72,6 +79,7 @@
 .payment-text {
     color: var(--color-abbey);
 }
+
 .bank-logo {
     img {
         max-width: 140px;
@@ -86,6 +94,7 @@
     .msg91-container:hover {
         background-color: rgb(240, 244, 255);
     }
+
     .msg91-container {
         position: relative;
         border: 1px solid rgb(231, 233, 235);
@@ -102,9 +111,11 @@
 
         .image {
             position: relative;
+
             .logo {
                 width: 86px;
             }
+
             .msg {
                 position: absolute;
                 width: 33px;
@@ -120,6 +131,7 @@
                 margin-top: 12px;
             }
         }
+
         .mini-icons {
             width: 100%;
             height: 24%;
@@ -127,10 +139,12 @@
             display: flex;
             justify-content: space-around;
         }
+
         .menu {
             position: absolute;
             top: -9px;
             right: 0px;
+
             button {
                 mat-icon {
                     font-size: 18px;
@@ -149,27 +163,35 @@
             margin: 0px 15px;
             width: 97.5%;
             box-shadow: none;
+
             .smaller-font {
                 font-size: 12px;
             }
+
             .active-trigger-title-width {
                 width: 4%;
             }
+
             .channel-width {
                 width: 3%;
             }
+
             .args-mapping-width {
                 width: 5.5%;
             }
+
             .created-at-width {
                 width: 3%;
             }
+
             .icons-left {
                 width: 1.5%;
             }
+
             .icon-visibility {
                 visibility: hidden;
             }
+
             .active-trigger-search {
                 position: relative;
                 bottom: 2px;
@@ -193,23 +215,29 @@
             margin: 0px 15px;
             background: rgb(245, 245, 245);
             box-shadow: none;
+
             .mat-header-cell {
                 background: rgb(245, 245, 245);
             }
+
             .mat-cell {
                 .visibility {
                     display: none;
                 }
+
                 .hide {
                     display: none;
                 }
+
                 .right-side {
                     padding-left: 82%;
                 }
             }
+
             .mat-row {
                 font-size: 20px !important;
             }
+
             .table3-button {
                 padding-left: 15% !important;
             }
@@ -219,14 +247,17 @@
     .form {
         margin-top: 30px;
         margin-left: 15px;
+
         .input-field {
             .label {
                 font-size: 12px;
                 color: rgb(106, 108, 133);
+
                 span {
                     color: rgb(229, 69, 86);
                 }
             }
+
             input {
                 background-color: rgb(245, 245, 245);
                 border: none;
@@ -237,21 +268,26 @@
                 border-radius: 5px;
                 margin-bottom: 10px;
             }
+
             button {
                 margin-left: 10px;
             }
         }
     }
+
     .trigger-form {
         display: flex;
         margin: 10px 0px 0px 15px;
+
         .trigger-form-left-side {
             width: 312px;
             height: 100%;
+
             .create-trigger-head {
                 display: flex;
                 align-items: center;
                 margin-bottom: 20px;
+
                 .trigger-heading {
                     margin-left: 10px;
                     display: inline-block;
@@ -259,21 +295,26 @@
                     font-size: 14px;
                     color: rgb(26, 35, 126);
                 }
+
                 .return {
                     width: 36px;
                     height: auto;
                     cursor: pointer;
                 }
             }
+
             .trigger-input {
                 margin-bottom: 10px;
+
                 .trigger-input-label {
                     font-size: 12px;
                     color: rgb(106, 108, 133);
+
                     span {
                         color: rgb(229, 69, 86);
                     }
                 }
+
                 input,
                 mat-select {
                     width: 256px;
@@ -284,34 +325,41 @@
                     font-size: 14px;
                     border-radius: 5px;
                 }
+
                 mat-select {
                     padding-top: 6px;
                     padding-right: 13px;
                 }
             }
+
             button {
                 margin-top: 15px;
             }
         }
+
         .trigger-form-right-side {
             width: 60%;
             height: 100%;
             padding-left: 20px;
+
             .compose {
                 color: rgb(106, 108, 133);
                 font-size: 14px;
                 font-weight: 700;
-                margin: 13.5px 0px 22px 0px;
             }
+
             .compose-subject {
                 margin-top: 9.5px;
+
                 .compose-subject-label {
                     color: rgb(106, 108, 133);
                     font-size: 12px;
+
                     span {
                         color: rgb(229, 69, 86);
                     }
                 }
+
                 .subject-box {
                     width: 79%;
                     height: 36px;
@@ -325,14 +373,17 @@
                     padding-left: 10px;
                     border-radius: 5px;
                 }
+
                 .text-box {
                     height: auto;
                     display: block;
                     padding: 15px 20px 15px 10px;
+
                     :nth-child(2) {
                         margin: 22px 0px;
                         line-height: 24px;
                     }
+
                     span {
                         background-color: rgb(231, 233, 235);
                         border-radius: 5px;
@@ -340,11 +391,14 @@
                     }
                 }
             }
+
             .dropdown-box {
                 margin-top: 22px;
                 height: 200px;
+
                 .dropdown-list {
                     display: inline-block;
+
                     mat-select {
                         width: 138px;
                         height: 26px;
@@ -354,18 +408,22 @@
                         padding: 2px 6px 2px 6px;
                         font-size: 14px;
                     }
+
                     .dropdown-list-label {
                         color: rgb(106, 108, 133);
                         font-weight: 600;
                         font-size: 15px;
                     }
                 }
+
                 .right-label {
                     margin-left: 25px;
                 }
+
                 .bottom-label {
                     margin-top: 12px;
                 }
+
                 .preview-button {
                     margin-top: 25px;
                 }
@@ -373,9 +431,11 @@
         }
     }
 }
+
 .mat-form-field {
-    width: 58% !important;
+    width: 38% !important;
 }
+
 .copied-url {
     padding-top: 3px;
     padding-left: 6px;
@@ -395,9 +455,11 @@
         text-decoration: none;
         padding-left: 0;
     }
+
     :focus {
         box-shadow: none;
     }
+
     :hover {
         text-decoration: underline;
     }
@@ -407,75 +469,93 @@
     .mat-tab-header {
         margin: 0px 15px;
     }
+
     .mat-tab-label {
         height: 36px;
         min-width: 142px;
         padding: 0px 3px;
     }
+
     .mat-tab-labels {
         height: 42px;
         background-color: none;
     }
+
     .mat-tab-label-active {
         background-color: rgb(240, 244, 255);
         border-top-left-radius: 5px;
         border-top-right-radius: 5px;
     }
+
     // .mat-tab-body-active {
     //     height: 100%;
     // }
     .setting-container {
         padding: 0px 0px 15px !important;
     }
+
     th.mat-header-cell:first-of-type {
         width: 18%;
     }
+
     table .type-column {
         width: 10% !important;
     }
+
     .mat-table tbody > tr > td:first-child {
         color: rgb(33, 37, 40) !important;
     }
+
     th.mat-header-cell,
     td.mat-cell {
         white-space: normal !important;
         // padding: 0px 10px !important;
     }
+
     .content-text {
         font-size: 12px !important;
         width: 26%;
         text-transform: none;
     }
+
     .number-container {
         width: 16%;
     }
+
     .icon-container {
         width: 25%;
     }
+
     .mat-table tbody .mat-row:hover td {
         background-color: rgb(231, 235, 246) !important;
     }
+
     .mat-table tbody .mat-row:hover .mat-cell .visibility {
         display: block !important;
     }
+
     .mat-table tbody .mat-row:hover .mat-cell .icon-visibility {
         visibility: visible !important;
     }
 }
+
 .unit-mapping-grid-list {
     .grid-box {
         font-size: 14px;
     }
+
     .grid-box-head,
     .grid-box-content {
         .unit-value {
             width: 110px;
         }
     }
+
     .grid-box-head {
         .unit-box {
             width: 82px;
         }
+
         .unit-box,
         .map-unit-box {
             font-family: "opensans-semibold";
@@ -483,20 +563,24 @@
         }
     }
 }
+
 /*responsive*/
 @media (max-width: 1359px) {
     .xs-pd-l15 {
         padding-left: 15px !important;
     }
+
     .hidden-1359 {
         display: none;
     }
 }
+
 @media (max-width: 1440px) {
     .mat-form-field {
         width: 78% !important;
     }
 }
+
 .plus-cross-btn {
     i {
         padding: 5px 0;
@@ -504,12 +588,14 @@
         font-size: 20px;
     }
 }
+
 .edit-save-button {
     .btn {
         width: 36px;
         height: 36px;
     }
 }
+
 @media (max-width: 1199px) {
     .clearfix {
         .form {
@@ -519,9 +605,11 @@
                 }
             }
         }
+
         .trigger-form {
             .trigger-form-left-side {
                 width: 200px;
+
                 .trigger-input {
                     input,
                     mat-select {
@@ -529,18 +617,22 @@
                     }
                 }
             }
+
             .trigger-form-right-side {
                 width: 71%;
+
                 .dropdown-box {
                     .dropdown-list {
                         mat-select {
                             width: 126px;
                             margin-left: 7px;
                         }
+
                         .dropdown-list-label {
                             font-size: 12px;
                         }
                     }
+
                     .right-label {
                         margin-left: 15px;
                     }
@@ -548,59 +640,72 @@
             }
         }
     }
+
     .edit-save-button {
         display: flex;
         width: 100%;
         justify-content: flex-end;
         margin-right: 7px;
     }
+
     .button-wrapper {
         margin-top: 0;
         margin-bottom: 30px;
     }
 }
+
 @media (max-width: 767px) {
     #inlnImg {
         margin-top: 0;
     }
+
     .mat-form-field {
         width: 72% !important;
     }
+
     .empty-label label,
     .empty-label br {
         display: none;
     }
+
     #inlnImg label,
     .inlnImg label {
         margin: 0;
         display: none;
     }
+
     .gmail-integration-message {
         display: flex;
         flex-direction: column;
         align-items: flex-start;
+
         h4 {
             align-self: self-start !important;
             padding-bottom: 10px;
             font-size: 14px;
         }
+
         .btn-danger {
             margin-left: 0 !important;
         }
     }
+
     .plus-cross-btn {
         label {
             display: none;
         }
+
         i {
             float: right;
             margin-right: 15px;
         }
     }
+
     .update-btn-wrapper {
         label {
             display: none;
         }
+
         .btn {
             margin-right: 0;
             margin-left: 15px;
@@ -613,6 +718,7 @@
         flex: 0 0 33.333333% !important;
         max-width: 33.333333% !important;
     }
+
     .payment-col1 {
         flex: 0 0 25% !important;
         max-width: 25% !important;
@@ -625,22 +731,27 @@
         max-width: 20.666667% !important;
     }
 }
+
 .icici-button {
     border: 1px solid var(--color-primary-setting-integration-icici-button);
     color: var(--color-primary-setting-integration-icici-button);
 }
+
 .button-separator {
     color: var(--color-iron);
 }
+
 .account-wrapper {
     width: 65%;
     border-bottom: 1px solid var(--color-primary-setting-integration-account-wrapper-border);
     padding-bottom: 8px;
     margin-bottom: 20px;
 }
+
 .account-wrapper:last-child {
     border: none !important;
 }
+
 .account-info-background {
     padding-top: 9px;
     padding-bottom: 9px;
@@ -648,12 +759,14 @@
     margin-left: 1px;
     background-color: var(--color-common-quaternary-background-for-all-components);
 }
+
 .view-only-field {
     background-color: var(--color-input-secondary-background);
     padding: 8px;
     border-radius: 5px;
     color: var(--color-common-senary-text);
 }
+
 .disabled-field {
     padding: 8px;
     border-radius: 5px;
@@ -662,67 +775,84 @@
     background-color: var(--color-input-tertiary-background);
     border: 1px solid var(--color-primary-input-bar-border);
 }
+
 .payment-updates {
     width: 90%;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
 }
+
 .account-number {
     color: var(--color-common-senary-text);
 }
+
 .limit-upto {
     margin-left: 7px;
 }
+
 .action-div {
     position: relative;
     margin-top: 9px;
     vertical-align: top;
     display: inline-block;
+
     a {
         color: var(--color-primary-setting-integration-action-anchor);
     }
 }
+
 .user-action-div {
     a {
         color: var(--color-primary-setting-integration-action-anchor);
     }
 }
+
 .account-approval-status {
     margin-left: 13px;
 }
+
 .field-label {
     color: var(--color-primary-setting-integration-field-label);
 }
+
 .account-approval-status.approved {
     color: var(--color-primary-setting-integration-account-approval-status-approved);
+
     i::before {
         color: var(--color-primary-setting-integration-account-approval-status-approved);
     }
 }
+
 .account-approval-status.pending-approval {
     color: var(--color-primary-setting-integration-account-approval-status-pending-approval);
+
     i::before {
         color: var(--color-primary-setting-integration-account-approval-status-pending-approval);
     }
 }
+
 .connected-accounts {
     margin-left: 10px;
 }
+
 .btn-light-blue {
     color: var(--color-common-senary-text);
     background-color: var(--color-primary-basic-button-opacity);
 }
+
 .modal {
     .account-modal {
         width: 500px !important;
     }
 }
+
 .modal {
     .user-modal {
         width: 400px !important;
     }
 }
+
 .payor-duration {
     margin-top: 2px;
 }
@@ -748,6 +878,7 @@
                 }
             }
         }
+
         .main-content {
             table {
                 .mat-cell {
@@ -757,36 +888,44 @@
                         padding: 0px;
                         min-width: 100%;
                     }
+
                     .right-side {
                         width: 95%;
                     }
                 }
             }
         }
+
         .table-one {
             table {
                 .activeTriggers-width {
                     width: 0%;
                 }
+
                 .type-width {
                     width: 4%;
                 }
             }
         }
+
         .trigger-form {
             .trigger-form-right-side {
                 .dropdown-box {
                     margin-top: 13px;
+
                     .dropdown-list {
                         display: block;
                     }
+
                     .right-label {
                         margin-top: 10px;
                         margin-left: 0px;
                     }
+
                     br {
                         display: none;
                     }
+
                     .preview-button {
                         margin-top: 18px;
                     }
@@ -794,6 +933,7 @@
             }
         }
     }
+
     ::ng-deep {
         table .type-column {
             width: 14% !important;
