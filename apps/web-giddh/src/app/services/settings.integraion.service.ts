@@ -601,4 +601,15 @@ export class SettingsIntegrationService {
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<string, any>(e, requestObj)));
     }
+
+    public isTriggerActive(request: any, triggerUniqueName: any): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.patch(this.config.apiUrl + SETTINGS_INTEGRATION_COMMUNICATION_API.IS_ACTIVE_TRIGGER
+            .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':triggerUniqueName', triggerUniqueName), request).pipe(
+                map((res) => {
+                    let data: BaseResponse<any, any> = res;
+                    data.queryString = {};
+                    return data;
+                }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
+    }
 }

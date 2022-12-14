@@ -163,7 +163,20 @@
                             <ng-container matColumnDef="action">
                                 <th class="icons-left" mat-header-cell *matHeaderCellDef>&nbsp;</th>
                                 <td mat-cell *matCellDef="let element">
-                                    <img class="icon-visibility cursor-pointer" src="{{ imgPath }}copy.svg" alt="" />
+                                    <button
+                                        class="small-button"
+                                        mat-flat-button
+                                        color="primary"
+                                        (click)="isActive(element.uniqueName)"
+                                    >
+                                        {{ element?.isActive > 0 ? "Activated" : "Deactivated" }}
+                                    </button>
+                                    <img
+                                        class="icon-visibility cursor-pointer"
+                                        (click)="editTrigger(element)"
+                                        src="{{ imgPath }}copy.svg"
+                                        alt=""
+                                    />
                                     <img
                                         class="mr-l2 icon-visibility cursor-pointer"
                                         src="{{ imgPath }}edit.svg"

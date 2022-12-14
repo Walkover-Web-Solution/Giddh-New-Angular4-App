@@ -1,8 +1,8 @@
-import { combineLatest, Observable, of as observableOf, ReplaySubject } from 'rxjs';
+import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { takeUntil, take } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 import { Component, Input, OnInit, ViewChild, AfterViewInit } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, NgForm } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AppState } from '../../store';
 import { SettingsIntegrationActions } from '../../actions/settings/settings.integration.action';
@@ -28,7 +28,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-modal.component';
 import { TabDirective } from 'ngx-bootstrap/tabs';
 import { COMMA, ENTER, I } from '@angular/cdk/keycodes';
-import { MatChipInputEvent } from '@angular/material/chips';
 
 export interface ActiveTriggers {
     title: string;
@@ -48,22 +47,6 @@ export interface table2 {
     button: string;
 }
 
-const TABLE2_ELEMENT_DATA: table2[] = [
-    { triggers: 'On-Board', type: 'Email', content: 'Hello user, Welcome to Giddh. Please setup your account by providing your company details', text: '', icon: 'copy.svg', button: 'Activate' },
-    { triggers: 'Invoice Generation', type: 'SMS', content: 'Hello user, Welcome to Giddh. Please setup your account by providing your company details', text: '', icon: 'copy.svg', button: 'Activate' },
-    { triggers: 'Dues', type: 'Voice', content: 'Hello user, Welcome to Giddh. Please setup your account by providing your company details', text: '', icon: 'copy.svg', button: 'Activate' },
-    { triggers: 'Dues', type: 'Voice', content: 'Hello user, Welcome to Giddh. Please setup your account by providing your company details', text: '', icon: 'copy.svg', button: 'Activate' },
-    { triggers: 'Dues', type: 'Voice', content: 'Hello user, Welcome to Giddh. Please setup your account by providing your company details', text: '', icon: 'copy.svg', button: 'Activate' },
-];
-
-const TABLE3_ELEMENT_DATA: table2[] = [
-    { triggers: 'On-Board', type: 'Email', content: 'Hello user, Welcome to Giddh. Please setup your account by providing your company details', text: '', icon: 'copy.svg', button: 'Activate' },
-    { triggers: 'Invoice Generation', type: 'SMS', content: 'Hello user, Welcome to Giddh. Please setup your account by providing your company details', text: '', icon: 'copy.svg', button: 'Activate' },
-    { triggers: 'Dues', type: 'Voice', content: 'Hello user, Welcome to Giddh. Please setup your account by providing your company details', text: '', icon: 'copy.svg', button: 'Activate' },
-    { triggers: 'Dues', type: 'Voice', content: 'Hello user, Welcome to Giddh. Please setup your account by providing your company details', text: '', icon: 'copy.svg', button: 'Activate' },
-    { triggers: 'Dues', type: 'Voice', content: 'Hello user, Welcome to Giddh. Please setup your account by providing your company details', text: '', icon: 'copy.svg', button: 'Activate' },
-];
-
 @Component({
     selector: 'setting-integration',
     templateUrl: './setting.integration.component.html',
@@ -75,13 +58,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     /** Data source for active triggers list */
     public activeTriggersDataSource: ActiveTriggers[] = [];
     public isActiveTriggersLoading: boolean = false;
-
-    displayedtable2Columns: string[] = ['triggers', 'type', 'content', 'icon', 'button'];
-    table2 = TABLE2_ELEMENT_DATA;
-
-    displayedtable3Columns: string[] = ['triggers', 'type', 'content', 'button'];
-    table3 = TABLE3_ELEMENT_DATA;
-
     public auth2: any;
     public smsFormObj: SmsKeyClass = new SmsKeyClass();
     public emailFormObj: EmailKeyClass = new EmailKeyClass();
@@ -248,8 +224,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public triggerBccChiplist: any[] = [];
     public triggerCcChiplist: any[] = [];
     public EMAIL_REGEX = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-
-
 
     constructor(
         private router: Router,
@@ -1244,7 +1218,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                                 argsMapping.push(arg.name + " -> " + arg.value);
                             });
                         }
-
                         this.activeTriggersDataSource.push({ title: trigger.title, type: trigger.communicationPlatform, createdAt: trigger.createdAt, uniqueName: trigger.uniqueName, argsMapping: argsMapping?.join(", "), isActive: trigger.isActive });
                     });
                 }
@@ -1260,22 +1233,22 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         this.settingsIntegrationService.getFieldSuggestions(platform, entity).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
                 if (response) {
-                        this.triggerBcc.push({
-                            value: response.body?.sendToSuggestions[0],
-                            label: response.body?.sendToSuggestions[0]
-                        })
+                    this.triggerBcc.push({
+                        value: response.body?.sendToSuggestions[0],
+                        label: response.body?.sendToSuggestions[0]
+                    })
 
-                        this.triggerCc.push({
-                            value: response.body?.sendToSuggestions[0],
-                            label: response.body?.sendToSuggestions[0]
-                        })
+                    this.triggerCc.push({
+                        value: response.body?.sendToSuggestions[0],
+                        label: response.body?.sendToSuggestions[0]
+                    })
 
-                        this.triggerTo = response.body?.sendToSuggestions?.map((result: any) => {
-                            return {
-                                value: result,
-                                label: result
-                            }
-                        });
+                    this.triggerTo = response.body?.sendToSuggestions?.map((result: any) => {
+                        return {
+                            value: result,
+                            label: result
+                        }
+                    });
                     this.fieldsSuggestion = response.body?.suggestions?.map((result: any) => {
                         return {
                             value: result,
@@ -1340,6 +1313,17 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                         this.triggerCc = [];
                     }
                 }
+            }
+        });
+    }
+
+    public isActive(uniqueName: any): void {
+        this.settingsIntegrationService.isTriggerActive(this.createTrigger, uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === "success") {
+                this.toasty.showSnackBar("success", response?.body);
+                this.getTriggers();
+            } else {
+                this.toasty.showSnackBar("error", response?.message);
             }
         });
     }

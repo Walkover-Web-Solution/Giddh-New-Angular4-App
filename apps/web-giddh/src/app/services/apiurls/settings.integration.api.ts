@@ -31,6 +31,7 @@ export const SETTINGS_INTEGRATION_COMMUNICATION_API = {
     UPDATE_TRIGGERS: COMMON + 'communication/trigger/:triggerUniqueName',
     GET_TRIGGERS: COMMON + 'communication/trigger',
     GET_TRIGGERS_BY_UNIQUENAME: COMMON + 'communication/trigger/:triggerUniqueName',
+    IS_ACTIVE_TRIGGER: COMMON + 'communication/trigger/:triggerUniqueName',
     DELETE_TRIGGER: COMMON + 'communication/trigger/:triggerUniqueName',
     GET_TRIGGER_FORM: COMMON + 'communication/platform/:platform/trigger/form',
     GET_FIELD_SUGGESTIONS: COMMON + 'communication/suggestions/:platform/:entity',
