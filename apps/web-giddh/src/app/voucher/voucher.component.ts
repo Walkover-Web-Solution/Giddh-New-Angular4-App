@@ -1967,7 +1967,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                         if (this.voucherApiVersion === 2) {
                             const selectedInvoice = this.invFormData.voucherDetails.referenceVoucher;
                             if (selectedInvoice) {
-                                selectedInvoice['voucherDate'] = selectedInvoice['invoiceDate'];
+                                selectedInvoice['voucherDate'] = selectedInvoice['invoiceDate'] || selectedInvoice['date'] ;
                                 invoiceSelected = {
                                     label: selectedInvoice.number ? selectedInvoice.number : this.commonLocaleData?.app_not_available,
                                     value: selectedInvoice.uniqueName,
@@ -1994,13 +1994,15 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                                 }
                             }
                         }
+                        if (invoiceSelected) {
+                            this.invoiceSelected = invoiceSelected;
+                            this.invoiceSelectedLabel = invoiceSelected?.label;
+                            this.selectedInvoice = (invoiceSelected) ? invoiceSelected.value : '';
+                            this.selectedInvoiceLabel = (invoiceSelected) ? invoiceSelected.label : '';
+                        }
                     }
                     uniqBy(this.invoiceList, 'value');
                     this.invoiceList$ = observableOf(this.invoiceList);
-                    this.invoiceSelected = invoiceSelected;
-                    this.invoiceSelectedLabel = invoiceSelected?.label
-                    this.selectedInvoice = (invoiceSelected) ? invoiceSelected.value : '';
-                    this.selectedInvoiceLabel = (invoiceSelected) ? invoiceSelected.label : '';
                     this._cdr.detectChanges();
                 }
             });
@@ -2099,7 +2101,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 this.selectedInvoice = event.value;
                 this.invFormData.voucherDetails.referenceVoucher = {
                     uniqueName: event.value,
-                    voucherType: event.additional?.additional?.voucherType ? event.additional?.additional?.voucherType : event.additional?.voucherType
+                    voucherType: event.additional?.additional?.voucherType ? event.additional?.additional?.voucherType : event.additional?.voucherType,
+                    number: event.additional?.additional?.voucherNumber ? event.additional?.additional?.voucherNumber : event.additional?.voucherNumber,
+                    date: event.additional?.additional?.voucherDate ? event.additional?.additional?.voucherDate : event.additional?.voucherDate
                 }
             } else {
                 this.invoiceSelectedLabel = event?.label;
