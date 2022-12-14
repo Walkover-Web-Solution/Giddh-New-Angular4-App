@@ -758,7 +758,7 @@
                                                                     companyShippingAddressDropDownWeb.hide()
                                                                 "
                                                                 *ngIf="
-                                                                    accountAddressList?.length > 1 &&
+                                                                    companyAddressList?.length > 1 &&
                                                                     !autoFillCompanyShipping
                                                                 "
                                                             >
@@ -779,7 +779,7 @@
                                                                 >
                                                                     <li
                                                                         role="menuitem"
-                                                                        *ngFor="let address of accountAddressList"
+                                                                        *ngFor="let address of companyAddressList"
                                                                     >
                                                                         <a
                                                                             class="dropdown-item"
@@ -794,12 +794,12 @@
                                                                             {{ address.address }}
                                                                             {{ address.state?.name }}
                                                                             {{
-                                                                                address.gstNumber
+                                                                                address.taxNumber
                                                                                     ? (showGSTINNo
                                                                                           ? commonLocaleData?.app_gstin +
                                                                                             ": "
                                                                                           : commonLocaleData?.app_trn +
-                                                                                            ": ") + address.gstNumber
+                                                                                            ": ") + address.taxNumber
                                                                                     : ""
                                                                             }}
                                                                         </a>
