@@ -204,7 +204,7 @@
                     *ngIf="showFieldFilter.discount && (purchaseRegisteDetailedResponse$ | async)?.discountTotal"
                 >
                     <h5>
-                        {{ commonLocaleData?.app_discount }}
+                        {{ localeData?.net_discount }}
                         <div>
                             <span class="d-inline-flex number-total">
                                 <amount-field
@@ -222,7 +222,7 @@
                     *ngIf="isTcsTdsApplicable && (purchaseRegisteDetailedResponse$ | async)?.tcsTotal"
                 >
                     <h5>
-                        {{ commonLocaleData?.app_tcs }}
+                        {{ localeData?.net_tcs }}
                         <div>
                             <span class="d-inline-flex number-total">
                                 <amount-field
@@ -240,7 +240,7 @@
                     *ngIf="isTcsTdsApplicable && (purchaseRegisteDetailedResponse$ | async)?.tdsTotal"
                 >
                     <h5>
-                        {{ commonLocaleData?.app_tds }}
+                        {{ localeData?.net_tds }}
                         <div>
                             <span class="d-inline-flex number-total">
                                 <amount-field
@@ -258,7 +258,7 @@
                     *ngIf="showFieldFilter.tax && (purchaseRegisteDetailedResponse$ | async).taxTotal"
                 >
                     <h5>
-                        {{ commonLocaleData?.app_tax }}
+                        {{ localeData?.net_tax }}
                         <div>
                             <span class="d-inline-flex number-total">
                                 <amount-field
