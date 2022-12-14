@@ -747,6 +747,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public purchaseOrderNumberValueMapping: any[] = [];
     /** This will hold show loader */
     public isShowLoader: boolean = false;
+    /** This will hold true if creating new account */
+    private isCreatingNewAccount: boolean = false;
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -1341,7 +1343,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     }
                     //  If last invoice copied then no need to add voucherAdjustments as pre-fill ref:- G0-5554
                     if (this.isSalesInvoice || (results[0] && results[0].voucherAdjustments)) {
-                        if (results[0] && results[0].voucherAdjustments && results[0].voucherAdjustments.adjustments && results[0].voucherAdjustments.adjustments.length && !this.isLastInvoiceCopied) {
+                        if (results[0] && results[0].voucherAdjustments && results[0].voucherAdjustments.adjustments && results[0].voucherAdjustments.adjustments.length && !this.isLastInvoiceCopied && !this.copyPurchaseBill) {
                             this.isInvoiceAdjustedWithAdvanceReceipts = true;
                             this.calculateAdjustedVoucherTotal(results[0].voucherAdjustments.adjustments);
                             this.advanceReceiptAdjustmentData = results[0].voucherAdjustments;
@@ -1479,7 +1481,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     this.statesBilling.readonly = false;
                 }
                 // create account success then close sidebar, and add customer details
-                if (results[1]) {
+                if (results[1] && this.isCreatingNewAccount) {
                     // toggle sidebar if it's open
                     if (this.accountAsideMenuState === 'in') {
                         this.toggleAccountAsidePane();
@@ -1965,7 +1967,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                         if (this.voucherApiVersion === 2) {
                             const selectedInvoice = this.invFormData.voucherDetails.referenceVoucher;
                             if (selectedInvoice) {
-                                selectedInvoice['voucherDate'] = selectedInvoice['invoiceDate'];
+                                selectedInvoice['voucherDate'] = selectedInvoice['invoiceDate'] || selectedInvoice['date'] ;
                                 invoiceSelected = {
                                     label: selectedInvoice.number ? selectedInvoice.number : this.commonLocaleData?.app_not_available,
                                     value: selectedInvoice.uniqueName,
@@ -1992,13 +1994,15 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                                 }
                             }
                         }
+                        if (invoiceSelected) {
+                            this.invoiceSelected = invoiceSelected;
+                            this.invoiceSelectedLabel = invoiceSelected?.label;
+                            this.selectedInvoice = (invoiceSelected) ? invoiceSelected.value : '';
+                            this.selectedInvoiceLabel = (invoiceSelected) ? invoiceSelected.label : '';
+                        }
                     }
                     uniqBy(this.invoiceList, 'value');
                     this.invoiceList$ = observableOf(this.invoiceList);
-                    this.invoiceSelected = invoiceSelected;
-                    this.invoiceSelectedLabel = invoiceSelected?.label
-                    this.selectedInvoice = (invoiceSelected) ? invoiceSelected.value : '';
-                    this.selectedInvoiceLabel = (invoiceSelected) ? invoiceSelected.label : '';
                     this._cdr.detectChanges();
                 }
             });
@@ -2094,12 +2098,16 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         if (event && event.additional && event.value) {
             if (this.voucherApiVersion === 2) {
                 this.selectedInvoiceLabel = event.label;
+                this.selectedInvoice = event.value;
                 this.invFormData.voucherDetails.referenceVoucher = {
                     uniqueName: event.value,
-                    voucherType: event.additional?.additional?.voucherType ? event.additional?.additional?.voucherType : event.additional?.voucherType
+                    voucherType: event.additional?.additional?.voucherType ? event.additional?.additional?.voucherType : event.additional?.voucherType,
+                    number: event.additional?.additional?.voucherNumber ? event.additional?.additional?.voucherNumber : event.additional?.voucherNumber,
+                    date: event.additional?.additional?.voucherDate ? event.additional?.additional?.voucherDate : event.additional?.voucherDate
                 }
             } else {
                 this.invoiceSelectedLabel = event?.label;
+                this.selectedInvoice = event.value;
                 this.invFormData.voucherDetails.invoiceLinkingRequest = {
                     linkedInvoices: [
                         {
@@ -3702,6 +3710,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             }
 
             if (this.selectedVoucherType === VoucherTypeEnum.creditNote || this.selectedVoucherType === VoucherTypeEnum.debitNote) {
+                this.removeSelectedInvoice();
                 this.getInvoiceListsForCreditNote();
             }
         }
@@ -4160,6 +4169,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     }
 
     public addNewAccount() {
+        this.isCreatingNewAccount = true;
         this.selectedCustomerForDetails = null;
         this.toggleAccountAsidePane();
     }
@@ -4170,6 +4180,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     }
 
     public addAccountFromShortcut() {
+        this.isCreatingNewAccount = true;
         this.toggleAccountSelectionDropdown(false);
         if (!this.isCustomerSelected) {
             this.selectedCustomerForDetails = null;
@@ -7260,8 +7271,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @memberof VoucherComponent
      */
     public onSelectWarehouse(warehouse: any): void {
-        this.selectedWarehouse = warehouse?.uniqueName;
-        this.selectedWarehouseName = warehouse?.name;
+        this.selectedWarehouse = warehouse?.value;
+        this.selectedWarehouseName = warehouse?.label;
         if (this.isPurchaseInvoice) {
             this.autoFillDeliverToWarehouseAddress(warehouse);
         }
@@ -8403,5 +8414,13 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             const firstEntry: any = this.selectAccount?.first;
             firstEntry?.openDropdownPanel();
         });
+    }
+
+    // CMD + G functionality
+    @HostListener('document:keydown', ['$event'])
+    public handleKeyboardUpEvent(event: KeyboardEvent) {
+        if ((event.metaKey || event.ctrlKey) && (event.which === 75 || event.which === 71)) {
+            this.isCreatingNewAccount = false;
+        }
     }
 }
