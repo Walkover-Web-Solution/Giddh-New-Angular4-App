@@ -111,16 +111,23 @@
                 <ng-container matColumnDef="count">
                     <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_count }}</th>
                     <td mat-cell *matCellDef="let element">
-                        <span>{{ localeData?.success }} : {{ element.count.success }}</span
-                        ><br /><span>{{ localeData?.failed }} : {{ element.count.failed }}</span
-                        ><br /><span>{{ localeData?.total }} : {{ element.count.total }}</span>
+                        <ng-container *ngIf="element.status !== 'SUBMITTED'">
+                            <span>{{ localeData?.success }} : {{ element.count.success }}</span
+                            ><br /><span>{{ localeData?.failed }} : {{ element.count.failed }}</span
+                            ><br /><span>{{ localeData?.total }} : {{ element.count.total }}</span>
+                        </ng-container>
+                        <ng-container *ngIf="element.status === 'SUBMITTED'"> - </ng-container>
                     </td>
                 </ng-container>
                 <!-- Error Sheet Column -->
                 <ng-container matColumnDef="errorSheet">
                     <th mat-header-cell *matHeaderCellDef>{{ localeData?.error_sheet }}</th>
                     <td mat-cell *matCellDef="let element">
-                        <div class="import-text" *ngIf="element.status !== 'COMPLETED'">
+                        <div
+                            class="import-text"
+                            *ngIf="element.status !== 'COMPLETED'"
+                            [matTooltip]="element.status === 'SUBMITTED' ? localeData?.mapping_pending : ''"
+                        >
                             {{ element.status }}
                         </div>
                         <a
@@ -138,7 +145,11 @@
                 <ng-container matColumnDef="succesSheet">
                     <th mat-header-cell *matHeaderCellDef>{{ localeData?.succes_sheet }}</th>
                     <td mat-cell *matCellDef="let element">
-                        <div class="import-text" *ngIf="element.status !== 'COMPLETED'">
+                        <div
+                            class="import-text"
+                            *ngIf="element.status !== 'COMPLETED'"
+                            [matTooltip]="element.status === 'SUBMITTED' ? localeData?.mapping_pending : ''"
+                        >
                             {{ element.status }}
                         </div>
                         <a

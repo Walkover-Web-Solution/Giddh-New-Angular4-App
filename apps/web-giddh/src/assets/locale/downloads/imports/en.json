@@ -4,9 +4,10 @@
     "import_file": "Import File",
     "error_sheet": "Error Sheet",
     "succes_sheet": "Success Sheet",
-     "expiry": "Expiry",
+    "expiry": "Expiry",
     "expired": "Expired",
     "success":"success",
     "failed":"failed",
-    "total":"total"
+    "total":"total",
+    "mapping_pending": "File uploaded, mapping not done"
 }
