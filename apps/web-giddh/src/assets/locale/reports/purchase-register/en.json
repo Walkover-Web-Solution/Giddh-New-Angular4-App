@@ -3,6 +3,7 @@
     "page_heading":"Purchase Register",
     "quantity_rate": "Qty-Rate",
     "search_entry_no": "Search entry number",
+    "search_voucher_no": "Search voucher number",
     "transaction_count": "Transaction count",
     "net_tax": "Net Tax",
     "net_discount": "Net Discount",
