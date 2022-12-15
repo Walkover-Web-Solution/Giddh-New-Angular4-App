@@ -149,6 +149,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public isCopied: boolean = false;
     /** This will hold apiUrl */
     public apiUrl: string = '';
+    /** Stores the voucher API version of current company */
+    public voucherApiVersion: 1 | 2;
 
     constructor(
         private router: Router,
@@ -181,6 +183,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
 
     public ngOnInit() {
         let companyUniqueName = this.generalService.companyUniqueName;
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.apiUrl = `${ApiUrl}company/${companyUniqueName}/imports/tally-import`;
         this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         //logic to switch to payment tab if coming from vedor tabs add payment
