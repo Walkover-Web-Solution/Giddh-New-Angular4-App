@@ -138,7 +138,7 @@
                                         src="{{ imgPath }}active-trigger-search.svg"
                                         alt=""
                                     /> -->
-                                    Active Triggers
+                                    {{ localeData?.communication?.active_triggers }}
                                 </th>
                                 <td mat-cell *matCellDef="let element">{{ element.title }}</td>
                             </ng-container>
@@ -173,7 +173,7 @@
                                     </button>
                                     <img
                                         class="icon-visibility cursor-pointer"
-                                        (click)="editTrigger(element)"
+                                        (click)="editTrigger(element, 'copy')"
                                         src="{{ imgPath }}copy.svg"
                                         alt=""
                                     />
@@ -181,7 +181,7 @@
                                         class="mr-l2 icon-visibility cursor-pointer"
                                         src="{{ imgPath }}edit.svg"
                                         alt=""
-                                        (click)="editTrigger(element)"
+                                        (click)="editTrigger(element, 'update')"
                                     />
                                     <a href="javascript:;" (click)="deleteTrigger(element.uniqueName)"
                                         ><img class="mr-l2 icon-visibility" src="{{ imgPath }}delete.svg"
@@ -200,7 +200,7 @@
                         <div class="create-trigger-head">
                             <img class="return" src="{{ imgPath }}return.svg" alt="" (click)="backToListPage($event)" />
                             <p class="trigger-heading">
-                                {{ isCommunicationUpdateMode ? "Edit Trigger" : "Create Trigger" }}
+                                {{ triggerMode === "create" ? "Create Trigger" : "Edit Trigger" }}
                             </p>
                         </div>
 
@@ -222,7 +222,7 @@
                                 [placeholder]="'Select Condition'"
                                 [options]="triggerCondition"
                                 (selectedOption)="selectConditions($event?.value)"
-                                [defaultValue]="triggerAction"
+                                [defaultValue]="tiggerConditionAction"
                             ></select-field>
                         </div>
                         <div class="trigger-input">
@@ -232,7 +232,7 @@
                                 [placeholder]="'Select Entity'"
                                 [options]="triggerEntity"
                                 (selectedOption)="selectEntity($event?.value)"
-                                [defaultValue]="triggerEntityValue"
+                                [defaultValue]="createTrigger.condition.entity"
                             ></select-field>
                         </div>
                         <div class="trigger-input">
@@ -259,20 +259,20 @@
                                 [cssClass]="'form-control mat-field-border'"
                                 [placeholder]="'Select Campaign'"
                                 [options]="campaignList"
-                                (selectedOption)="selectCampaign($event?.value)"
-                                [defaultValue]="triggerCampaignSlug"
+                                (selectedOption)="selectCampaign($event?.value, true)"
+                                [defaultValue]="createTrigger.campaignDetails.campaignSlug"
                             ></select-field>
                         </div>
                         <button
-                            *ngIf="!isCommunicationUpdateMode"
+                            *ngIf="triggerMode === 'create' || triggerMode === 'copy'"
                             mat-flat-button
                             color="primary"
                             (click)="createNewTrigger()"
                         >
-                            Create Trigger
+                            {{ triggerMode === "create" ? "Create Trigger" : "Save Trigger" }}
                         </button>
                         <button
-                            *ngIf="isCommunicationUpdateMode"
+                            *ngIf="triggerMode === 'update'"
                             mat-flat-button
                             color="primary"
                             (click)="updateTrigger()"
@@ -307,7 +307,7 @@
                                         #auto1="matAutocomplete"
                                         (optionSelected)="selectTriggerTo($event)"
                                     >
-                                        <mat-option *ngFor="let to of triggerTo" [value]="to">
+                                        <mat-option *ngFor="let to of triggerToDropdown" [value]="to">
                                             {{ to.label }}
                                         </mat-option>
                                     </mat-autocomplete>
@@ -338,7 +338,7 @@
                                         #auto2="matAutocomplete"
                                         (optionSelected)="selectTriggerBcc($event)"
                                     >
-                                        <mat-option *ngFor="let bcc of triggerBcc" [value]="bcc">
+                                        <mat-option *ngFor="let bcc of triggerBccDropdown" [value]="bcc">
                                             {{ bcc.label }}
                                         </mat-option>
                                     </mat-autocomplete>
@@ -369,7 +369,7 @@
                                         #auto3="matAutocomplete"
                                         (optionSelected)="selectTriggerCc($event)"
                                     >
-                                        <mat-option *ngFor="let cc of triggerCc" [value]="cc">
+                                        <mat-option *ngFor="let cc of triggerCcDropdown" [value]="cc">
                                             {{ cc.label }}
                                         </mat-option>
                                     </mat-autocomplete>
@@ -399,9 +399,7 @@
                                                 [cssClass]="'form-control mat-field-border'"
                                                 [placeholder]="'Select Suggestion'"
                                                 [options]="fieldsSuggestion"
-                                                (selectedOption)="
-                                                    selectFieldSuggestions((variables.value = $event.value))
-                                                "
+                                                (selectedOption)="variables.value = $event.value"
                                                 [defaultValue]="variables?.value"
                                             ></select-field>
                                         </div>

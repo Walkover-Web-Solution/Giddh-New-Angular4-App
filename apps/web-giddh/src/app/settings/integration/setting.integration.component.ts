@@ -1,4 +1,4 @@
-import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
+import { combineLatest, Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { takeUntil, take } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 import { Component, Input, OnInit, ViewChild, AfterViewInit } from '@angular/core';
@@ -23,7 +23,7 @@ import { SettingsIntegrationService } from '../../services/settings.integraion.s
 import { ACCOUNT_REGISTERED_STATUS, SettingsIntegrationTab, UNLIMITED_LIMIT } from '../constants/settings.constant';
 import { SearchService } from '../../services/search.service';
 import { SalesService } from '../../services/sales.service';
-import { cloneDeep, find, isEmpty } from '../../lodash-optimized';
+import { cloneDeep, find, isEmpty, uniqBy } from '../../lodash-optimized';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-modal.component';
 import { TabDirective } from 'ngx-bootstrap/tabs';
@@ -178,8 +178,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public fieldsSuggestion: any[] = [];
     /** List of action */
     public subConditionAction: any[] = [];
-    /** List ofcampaign list variables */
-    public campaignVariables: any[] = [];
     /** List of campaign list */
     public campaignList: any[] = [];
     public triggerCondition: any[] = [
@@ -209,21 +207,17 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public apiUrl: string = '';
     public createTrigger;
     public platform: string = '';
-    public triggerTo: any[] = [];
-    public triggerBcc: any[] = [];
-    public triggerCc: any[] = [];
     public triggerUniquename: string = '';
-    public triggerAction: string = '';
-    public isCommunicationUpdateMode: boolean = false;
-    public triggerEntityValue: string = '';
-    public triggerCampaignSlug: string = '';
-    public fieldsVariable: string = '';
-    public sendVoucherType: boolean = false;
     public separatorKeysCodes: number[] = [ENTER, COMMA];
     public triggerToChiplist: any[] = [];
     public triggerBccChiplist: any[] = [];
     public triggerCcChiplist: any[] = [];
+    public triggerToDropdown: any[] = [];
+    public triggerBccDropdown: any[] = [];
+    public triggerCcDropdown: any[] = [];
+    public tiggerConditionAction: any[] = [];
     public EMAIL_REGEX = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    public triggerMode: 'create' | 'copy'|'update' = 'create';
 
     constructor(
         private router: Router,
@@ -1229,21 +1223,21 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         });
     }
 
-    public getFieldsSuggestion(platform: string, entity: any): void {
+    public getFieldsSuggestion(platform: string, entity: any, callback?: Function): void {
         this.settingsIntegrationService.getFieldSuggestions(platform, entity).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
                 if (response) {
-                    this.triggerBcc.push({
+                    this.triggerBccDropdown.push({
                         value: response.body?.sendToSuggestions[0],
                         label: response.body?.sendToSuggestions[0]
                     })
 
-                    this.triggerCc.push({
+                    this.triggerCcDropdown.push({
                         value: response.body?.sendToSuggestions[0],
                         label: response.body?.sendToSuggestions[0]
                     })
 
-                    this.triggerTo = response.body?.sendToSuggestions?.map((result: any) => {
+                    this.triggerToDropdown = response.body?.sendToSuggestions?.map((result: any) => {
                         return {
                             value: result,
                             label: result
@@ -1258,80 +1252,98 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                     this.subConditionAction = response.body?.subCondition[0].action;
                 }
             }
+            if (callback) {
+                callback();
+            }
         });
     }
 
     public getTriggerByUniqueName(uniqueName: any): void {
         this.settingsIntegrationService.getTriggerByUniqueName(uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            console.log('main',response);
+
             if (response?.status === "success") {
-                if (this.isCommunicationUpdateMode) {
-                    this.triggerBcc = [];
-                    this.triggerCc = [];
-                    this.triggerTo = [];
+                if (this.triggerMode ==='update' || this.triggerMode ==='copy') {
+                    this.triggerBccDropdown = [];
+                    this.triggerCcDropdown = [];
+                    this.triggerToDropdown = [];
                     this.createTrigger.campaignDetails.argsMapping = [];
-                    this.triggerCampaignSlug = response?.body?.campaignDetails?.campaignSlug;
-                    this.selectCampaign(this.triggerCampaignSlug);
-                    this.getFieldsSuggestion(response?.body?.communicationPlatform, response?.body?.condition?.entity);
+                    this.createTrigger.campaignDetails.campaignSlug= response?.body?.campaignDetails?.campaignSlug;
+                    this.selectCampaign(this.createTrigger.campaignDetails.campaignSlug);
+                    this.getFieldsSuggestion(response?.body?.communicationPlatform, response?.body?.condition?.entity,() =>{
+                        if (response?.body?.campaignDetails?.to || response?.body?.campaignDetails?.bcc || response?.body?.campaignDetails?.cc) {
+                            this.triggerToChiplist = response?.body?.campaignDetails?.to;
+                            this.triggerBccChiplist = response?.body?.campaignDetails?.bcc;
+                            this.triggerCcChiplist = response?.body?.campaignDetails?.cc;
+                            console.log(this.triggerToDropdown);
+
+                            let newTo = [...this.triggerToDropdown];
+                            newTo.forEach(res =>{
+                            let mapped = response.body?.campaignDetails?.to?.find(toVal => toVal !== res.value);
+                            if(mapped){
+                                this.triggerToDropdown.push({
+                                    label: mapped,
+                                    value: mapped
+                                });
+                            }
+                              this.triggerToDropdown=  uniqBy(this.triggerToDropdown,"value")
+                            });
+
+
+                            let newBcc= [...this.triggerBccDropdown];
+                            newBcc.forEach(res => {
+                                let mapped = response.body?.campaignDetails?.bcc?.find(toVal => toVal !== res.value);
+                                if (mapped) {
+                                this.triggerBccDropdown.push({
+                                    label: mapped,
+                                    value: mapped
+                                });
+                            }
+                                this.triggerBccDropdown = uniqBy(this.triggerBccDropdown, "value")
+                            });
+
+                            let newCc = [...this.triggerCcDropdown];
+                            newCc.forEach(res => {
+                                let mapped = response.body?.campaignDetails?.cc?.find(toVal => toVal !== res.value);
+                                if (mapped) {
+                                this.triggerCcDropdown.push({
+                                    label: mapped,
+                                    value: mapped
+                                });
+                            }
+                                this.triggerCcDropdown = uniqBy(this.triggerCcDropdown, "value")
+                            });
+                        } else {
+                            this.triggerToChiplist = [];
+                            this.triggerBccChiplist = [];
+                            this.triggerCcChiplist = [];
+                            this.triggerToDropdown = [];
+                            this.triggerBccDropdown = [];
+                            this.triggerCcDropdown = [];
+                        }
+                    });
 
                     this.createTrigger.title = response?.body?.title;
                     this.createTrigger.campaignDetails.sendVoucherPdf = response?.body?.campaignDetails?.sendVoucherPdf;
-                    this.triggerAction = response?.body?.condition?.action[0];
-                    this.triggerEntityValue = response?.body?.condition?.entity;
-                    response?.body.campaignDetails?.argsMapping?.forEach(res => {
-                        this.createTrigger.campaignDetails.argsMapping.push({ name: res?.name, value: res?.value });
-                    });
-                    this.createTrigger.condition.subConditions.action = response?.body?.condition?.subConditions[0]?.action;
-                    if (response?.body?.campaignDetails?.to || response?.body?.campaignDetails?.bcc || response?.body?.campaignDetails?.cc) {
-                        this.triggerToChiplist = response?.body?.campaignDetails?.to;
-                        this.triggerBccChiplist = response?.body?.campaignDetails?.bcc;
-                        this.triggerCcChiplist = response?.body?.campaignDetails?.cc;
+                    this.tiggerConditionAction = response?.body?.condition?.action[0];
 
-                        this.triggerBcc = response.body?.campaignDetails?.bcc?.map((result: any) => {
-                            return {
-                                value: result,
-                                label: result
+                    this.getCampaignFields(this.createTrigger.campaignDetails.campaignSlug, () => {
+                        this.createTrigger.campaignDetails.argsMapping?.forEach(arg => {
+                            const mappedValue = response?.body?.campaignDetails.argsMapping?.find(argRes => argRes.name === arg.name);
+                            if (mappedValue) {
+                                arg.value = mappedValue.value;
                             }
                         });
-                        this.triggerCc = response.body?.campaignDetails?.cc?.map((result: any) => {
-                            return {
-                                value: result,
-                                label: result
-                            }
-                        });
-                        this.triggerTo = response.body?.campaignDetails?.to?.map((result: any) => {
-                            return {
-                                value: result,
-                                label: result
-                            }
-                        });
-                    } else {
-                        this.triggerToChiplist = [];
-                        this.triggerBccChiplist = [];
-                        this.triggerCcChiplist = [];
-                        this.triggerTo = [];
-                        this.triggerBcc = [];
-                        this.triggerCc = [];
-                    }
+                    });
+
+                    this.createTrigger.condition.subConditions.action = response?.body?.condition?.subConditions[0]?.action;
+                    this.createTrigger.condition.entity = response?.body?.condition?.entity;
                 }
             }
         });
     }
 
-    public isActive(uniqueName: any): void {
-        this.settingsIntegrationService.isTriggerActive(this.createTrigger, uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response?.status === "success") {
-                this.toasty.showSnackBar("success", response?.body);
-                this.getTriggers();
-            } else {
-                this.toasty.showSnackBar("error", response?.message);
-            }
-        });
-    }
-
-    public getCampaignFields(slug: string): void {
-        if (!this.isCommunicationUpdateMode) {
-            this.getTriggerByUniqueName(this.triggerUniquename);
-        }
+    public getCampaignFields(slug: string, callback?: Function): void {
         this.settingsIntegrationService.getCampaignFields(slug).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.createTrigger.campaignDetails.argsMapping = [];
             if (response?.status === "success") {
@@ -1339,9 +1351,12 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                     this.createTrigger.campaignDetails.argsMapping.push({
                         name: result,
                         value: ''
-                    })
+                    });
                 });
 
+                if (callback) {
+                    callback();
+                }
             }
         });
     }
@@ -1373,11 +1388,11 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         {
             title: null,
             condition: {
-                entity: "VOUCHER",
+                entity: null,
                 action: [],
                 subConditions: [
                     {
-                        entity: "voucherType",
+                        entity: 'voucherType',
                         action: []
                     }
                 ]
@@ -1393,9 +1408,14 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             }
         }
     }
-    public selectFieldSuggestions(event: any): void {
 
+    public resetCommunicationForm(): void {
+        this.initFormFields();
+        this.triggerBccChiplist = [];
+        this.triggerToChiplist = [];
+        this.triggerCcChiplist = [];
     }
+
     public backToListPage(event: any): void {
         if (event) {
             this.showTriggerForm = false;
@@ -1403,10 +1423,11 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             this.resetCommunicationForm();
         }
     }
-    public selectCampaign(slug: any): void {
+
+    public selectCampaign(slug: any, getCampaignFields: boolean = false): void {
         this.createTrigger.campaignDetails.campaignSlug = slug;
         this.showVariableMapping = true;
-        if (!this.isCommunicationUpdateMode) {
+        if (getCampaignFields) {
             this.getCampaignFields(slug);
         }
     }
@@ -1436,9 +1457,18 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     }
 
     public createTriggerForm(requestObj: any): void {
+        if (this.triggerMode ==='copy') {
+            requestObj.condition.action.push(this.tiggerConditionAction);
+            requestObj.campaignDetails.to = this.triggerToChiplist;
+            requestObj.campaignDetails.bcc = this.triggerBccChiplist;
+            requestObj.campaignDetails.cc = this.triggerCcChiplist;
+        }
+        requestObj.campaignDetails.argsMapping = requestObj.campaignDetails.argsMapping.filter(val => {
+            return val?.value !== "";
+        });
         this.settingsIntegrationService.createTrigger(requestObj).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
-                this.toasty.showSnackBar("success", response?.body + " create trigger successfully.");
+                this.toasty.showSnackBar("success", response?.body + " Create trigger successfully.");
                 this.resetCommunicationForm();
                 this.showTriggerForm = false;
                 this.getTriggers();
@@ -1449,14 +1479,16 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     }
 
     public updateTriggerForm(requestObj: any): void {
-        console.log(requestObj);
-        requestObj.condition.action.push(this.triggerAction);
+        requestObj.condition.action.push(this.tiggerConditionAction);
         requestObj.campaignDetails.to = this.triggerToChiplist;
         requestObj.campaignDetails.bcc = this.triggerBccChiplist;
         requestObj.campaignDetails.cc = this.triggerCcChiplist;
+        requestObj.campaignDetails.argsMapping = requestObj.campaignDetails.argsMapping.filter(val => {
+            return val?.value !== "";
+        });
         this.settingsIntegrationService.updateTrigger(requestObj, this.triggerUniquename).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
-                this.toasty.showSnackBar("success", response?.body + " update trigger successfully.");
+                this.toasty.showSnackBar("success", response?.body + " Update trigger successfully.");
                 this.resetCommunicationForm();
                 this.showTriggerForm = false;
                 this.getTriggers();
@@ -1466,8 +1498,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         });
     }
 
-    public editTrigger(trigger: any): void {
-        this.isCommunicationUpdateMode = true;
+    public editTrigger(trigger: any, mode: any): void {
+        this.triggerMode = mode;
         this.getCampaignList();
         this.getTriggerByUniqueName(trigger?.uniqueName);
         this.showTriggerForm = true;
@@ -1505,6 +1537,17 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         });
     }
 
+    public isActive(uniqueName: any): void {
+        this.settingsIntegrationService.isTriggerActive(this.createTrigger, uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === "success") {
+                this.toasty.showSnackBar("success", response?.body);
+                this.getTriggers();
+            } else {
+                this.toasty.showSnackBar("error", response?.message);
+            }
+        });
+    }
+
     public toggleTriggerForm(triggerUniqueName?: string): void {
         if (this.showTriggerForm) {
             this.showTriggerForm = false;
@@ -1515,12 +1558,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         this.getFieldsSuggestion(this.platform, "VOUCHER");
     }
 
-    public resetCommunicationForm(): void {
-        this.initFormFields();
-        this.triggerBccChiplist = [];
-        this.triggerToChiplist = [];
-        this.triggerCcChiplist = [];
-    }
 
     public validateEmail(email: string): boolean {
         return this.EMAIL_REGEX.test(String(email).toLowerCase());
