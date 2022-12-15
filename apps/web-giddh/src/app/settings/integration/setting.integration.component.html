@@ -471,7 +471,7 @@
                     </div>
                 </div>
             </tab>
-            <!-- <tab (selectTab)="tabChanged('tally')">
+            <tab (selectTab)="tabChanged('tally')" *ngIf="voucherApiVersion === 2">
                 <ng-template tabHeading> <span class="icon-card"></span>{{ localeData?.tally?.heading }}</ng-template>
                 <div class="box clearfix mb-2">
                     <div class="form-group magic-link-container col-md-9 col-lg-7 d-flex align-items-center">
@@ -508,7 +508,7 @@
                         >
                     </div>
                 </div>
-            </tab> -->
+            </tab>
         </tabset>
     </div>
     <div bsModal #createNewAccountModal="bs-modal" [config]="{ backdrop: 'static' }" class="modal" role="dialog">
