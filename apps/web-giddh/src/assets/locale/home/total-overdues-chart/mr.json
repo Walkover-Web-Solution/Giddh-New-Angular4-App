@@ -1,6 +1,8 @@
 {
     "chart_title": "एकूण ओव्हरड्यूज",
-    "customer_due": "ग्राहक देय",
-    "vendor_due": "विक्रेता देय",
-    "pending_invoices": "प्रलंबित पावत्या"
+    "invoice_due": "चलन देय",
+    "bill_due": "बिल देय",
+    "pending_invoices": "न भरलेल्या पावत्यांची",
+    "pending_bills": "न भरलेले बिल",
+    "hold_invoices": "पावत्या होल्डवर"
 }

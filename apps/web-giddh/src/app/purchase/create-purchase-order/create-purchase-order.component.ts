@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, ViewChildren, QueryList, OnDestroy, TemplateRef, ViewContainerRef, NgZone, AfterViewInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, ViewChildren, QueryList, OnDestroy, TemplateRef, ViewContainerRef, NgZone, AfterViewInit, ChangeDetectorRef, HostListener } from '@angular/core';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { Observable, ReplaySubject, of as observableOf, combineLatest } from 'rxjs';
@@ -373,6 +373,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     public discountsList: any[] = [];
     /** Stores the current active entry */
     public activeEntry: any;
+    /** This will hold true if creating new account */
+    private isCreatingNewAccount: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -565,7 +567,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         });
 
         this.createdAccountDetails$.pipe(takeUntil(this.destroyed$)).subscribe(async accountDetails => {
-            if (accountDetails) {
+            if (accountDetails && this.isCreatingNewAccount) {
                 if (accountDetails.country) {
                     await this.getUpdatedStateCodes(accountDetails.country.countryCode, false);
                 }
@@ -1094,6 +1096,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
      * @memberof CreatePurchaseOrderComponent
      */
     public addNewAccount(): void {
+        this.isCreatingNewAccount = true;
         this.selectedVendorForDetails = null;
         this.isVendorSelected = false;
         this.toggleAccountAsidePane();
@@ -2021,6 +2024,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
      */
     public addAccountFromShortcut(): void {
         if (this.purchaseOrder && this.purchaseOrder.voucherDetails && !this.purchaseOrder.voucherDetails.customerName) {
+            this.isCreatingNewAccount = true;
             this.selectedVendorForDetails = null;
             this.toggleAccountAsidePane();
         }
@@ -3815,5 +3819,13 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
      */
     public cancelBulkItemsModal(): void {
         this.dialog.closeAll();
+    }
+
+    // CMD + G functionality
+    @HostListener('document:keydown', ['$event'])
+    public handleKeyboardUpEvent(event: KeyboardEvent) {
+        if ((event.metaKey || event.ctrlKey) && (event.which === 75 || event.which === 71)) {
+            this.isCreatingNewAccount = false;
+        }
     }
 }
