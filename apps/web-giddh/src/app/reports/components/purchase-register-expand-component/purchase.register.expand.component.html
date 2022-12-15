@@ -165,8 +165,11 @@
                     </div>
                 </h5>
             </div>
-            <ng-container *ngIf="PurchaseRegisteDetailedItems && (purchaseRegisteDetailedResponse$ | async).debitTotal">
-                <div class="total-details-box mr-r05 border-none opening-box">
+            <ng-container>
+                <div
+                    class="total-details-box mr-r05 border-none opening-box"
+                    *ngIf="(purchaseRegisteDetailedResponse$ | async).debitTotal"
+                >
                     <h5>
                         {{ commonLocaleData?.app_purchase }}
                         <div>

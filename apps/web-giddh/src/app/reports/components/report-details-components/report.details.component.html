@@ -72,6 +72,7 @@
                     [showClear]="false"
                     (selected)="selectFinancialYearOption($event)"
                     [ItemHeight]="33"
+                    [defaultValue]="activeFinacialYr?.uniqueName"
                 ></sh-select>
             </div>
             <div class="inner-button xs-mb-1 pr-5 xs-pr-0" dropdown placement="bottom left">
