@@ -1,4 +1,12 @@
-Date*,Debit Account Name*,Debit Account Unique Name,Credit Account Name*,Credit Account Unique Name,Voucher Type*,Amount*,Converted Amount,Description,Tax Rate/TaxUniqueName,Other Tax/Other Tax UniqueName,Discount,Item Name,Quantity,Unit,Invoice Number,Tax Inclusive
-09/01/2019,Cash,cash,Bank,,Journal,50000,,,,,,,,,,True
-31-01-2019,ROLL AND SWIRL LLP,ROLL AND SWIRL LLP,Sales,,Sales,2000,,,5,,100,Product 1,12,nos,INV-205,False
-31-01-2019,Salary,,,Bank,Payment,13000,,Salary For Employee,,,,,,,,True
+Date*,Debit Account Name*,Debit Account Unique Name,Credit Account Name*,Credit Account Unique Name,Voucher Type*,Amount*,Converted Amount,Description,Tax Rate/TaxUniqueName,Other Tax/Other Tax UniqueName,Discount,Item Name,Quantity,Unit,Voucher Number,Create Voucher,Tax Inclusive
+15/12/22,Purchases,,Rishi,,Purchase,100000,,Goods purchased from Rishi,gst18,,10000,,,,PB 01,TRUE,FALSE
+15/12/22,Rishi,,Sales,,Sales,250000,,Goods sold to Rishi,gst18,,10000,,,,,TRUE,FALSE
+15/12/22,Cash,,Rishi,,Receipt,500000,,Receipt received,,,,,,,,TRUE,FALSE
+15/12/22,Rishi,,Cash,,Payment,45000,,Amount Paid,,,,,,,,TRUE,FALSE
+15/12/22,Sales,,Rishi,,Credit Note,40000,,Sales Credit note issued,gst18,,,,,,,TRUE,FALSE
+15/12/22,Rishi,,Sales,,Debit Note,8000,,Sales Debit note issued,gst18,,,,,,,TRUE,FALSE
+15/12/22,Purchases,,Kriti,,Credit Note,65000,,Purchase credit note issued,gst18,,,,,,,TRUE,FALSE
+15/12/22,Kriti,,Purchases,,Debit Note,15000,,Purchase Debit note issued,gst18,,,,,,,TRUE,FALSE
+15/12/22,Cash,,SBI Bank,,Contra,80000,,Contra Entry,,,,,,,,TRUE,FALSE
+15/12/22,SBI Bank,,Cash,,Contra,80000,,Contra Entry,,,,,,,,TRUE,FALSE
+15/12/22,Rishi,,Purchases,,Journal,999999,,Journal Entry,,,,,,,,TRUE,FALSE
