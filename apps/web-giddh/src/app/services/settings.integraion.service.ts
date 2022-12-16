@@ -508,10 +508,10 @@ export class SettingsIntegrationService {
      * @returns {Observable<BaseResponse<any, any>>}
      * @memberof SettingsIntegrationService
      */
-    public getTriggersList(): Observable<BaseResponse<any, any>> {
+    public getTriggersList(requestObj:any): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
 
-        return this.http.get(this.config.apiUrl + SETTINGS_INTEGRATION_COMMUNICATION_API.GET_TRIGGERS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
+        return this.http.get(this.config.apiUrl + SETTINGS_INTEGRATION_COMMUNICATION_API.GET_TRIGGERS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), requestObj).pipe(map((res) => {
             let data: BaseResponse<any, any> = res;
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e)));
@@ -548,6 +548,14 @@ export class SettingsIntegrationService {
         }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e)));
     }
 
+    /**
+     *Get Field Suggestion
+     *
+     * @param {string} platform
+     * @param {string} entity
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof SettingsIntegrationService
+     */
     public getFieldSuggestions(platform: string, entity: string): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.get(this.config.apiUrl + SETTINGS_INTEGRATION_COMMUNICATION_API.GET_FIELD_SUGGESTIONS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':platform', platform).replace(':entity', entity)).pipe(map((res) => {
@@ -556,6 +564,13 @@ export class SettingsIntegrationService {
         }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e)));
     }
 
+    /**
+     *Get Campaign Field data
+     *
+     * @param {string} slug
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof SettingsIntegrationService
+     */
     public getCampaignFields(slug: string): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.get(this.config.apiUrl + SETTINGS_INTEGRATION_COMMUNICATION_API.GET_CAMPAIGN_FIELDS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':slug', slug)).pipe(map((res) => {
@@ -564,6 +579,12 @@ export class SettingsIntegrationService {
         }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e)));
     }
 
+    /**
+     * Get Campaign List
+     *
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof SettingsIntegrationService
+     */
     public getCampaignList(): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
 
@@ -573,6 +594,13 @@ export class SettingsIntegrationService {
         }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e)));
     }
 
+    /**
+     *Get Trigger by  uniqueName
+     *
+     * @param {string} triggerUniqueName
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof SettingsIntegrationService
+     */
     public getTriggerByUniqueName(triggerUniqueName: string): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.get(this.config.apiUrl + SETTINGS_INTEGRATION_COMMUNICATION_API.GET_TRIGGERS_BY_UNIQUENAME.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':triggerUniqueName', triggerUniqueName)).pipe(map((res) => {
@@ -581,6 +609,13 @@ export class SettingsIntegrationService {
         }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e)));
     }
 
+    /**
+     *Create Trigger
+     *
+     * @param {*} requestObj
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof SettingsIntegrationService
+     */
     public createTrigger(requestObj: any): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.post(this.config.apiUrl + SETTINGS_INTEGRATION_COMMUNICATION_API.CREATE_TRIGGERS?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), requestObj).pipe(map((res) => {
@@ -602,6 +637,14 @@ export class SettingsIntegrationService {
         }), catchError((e) => this.errorHandler.HandleCatch<string, any>(e, requestObj)));
     }
 
+    /**
+     * This will use for trigger activate and deactivate
+     *
+     * @param {*} request
+     * @param {*} triggerUniqueName
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof SettingsIntegrationService
+     */
     public isTriggerActive(request: any, triggerUniqueName: any): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.patch(this.config.apiUrl + SETTINGS_INTEGRATION_COMMUNICATION_API.IS_ACTIVE_TRIGGER

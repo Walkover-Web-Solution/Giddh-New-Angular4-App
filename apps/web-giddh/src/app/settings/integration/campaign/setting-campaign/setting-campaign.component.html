@@ -88,17 +88,12 @@
 
         <!-- Page-3 to Page-5 -->
         <div
-            class="table-one"
+            class="table-one table-content"
             *ngIf="!isActiveTriggersLoading && !showTriggerForm && communicationPlatforms?.MSG91?.isConnected"
         >
-            <table mat-table [dataSource]="activeTriggersDataSource" class="mat-elevation-z8">
+            <table mat-table [dataSource]="activeTriggersDataSource" class="mat-elevation-z8 giddh-table table">
                 <ng-container matColumnDef="title">
                     <th class="active-trigger-title-width" mat-header-cell *matHeaderCellDef>
-                        <!-- <img
-                                        class="active-trigger-search"
-                                        src="{{ imgPath }}active-trigger-search.svg"
-                                        alt=""
-                                    /> -->
                         {{ localeData?.communication?.active_triggers }}
                     </th>
                     <td mat-cell *matCellDef="let element">{{ element.title }}</td>
@@ -162,15 +157,30 @@
                     </td>
                 </ng-container>
 
-                <tr mat-header-row *matHeaderRowDef="activeTriggersColumns"></tr>
+                <tr mat-header-row *matHeaderRowDef="activeTriggersColumns; sticky: true"></tr>
                 <tr mat-row *matRowDef="let row; columns: activeTriggersColumns"></tr>
             </table>
-            <div class="no-data" *ngIf="!activeTriggersDataSource?.length && !isActiveTriggersLoading">
-                <no-data
-                    [primaryMessage]="localeData?.communication?.no_triggers_found"
-                    [secondaryMessageClass]="'p-0'"
-                ></no-data>
-            </div>
+            <section class="no-logs" *ngIf="!activeTriggersDataSource?.length && !isActiveTriggersLoading">
+                <div class="no-data">
+                    <h1>{{ localeData?.communication?.no_triggers_found }}</h1>
+                </div>
+            </section>
+        </div>
+        <div class="pagination-wrapper" *ngIf="createTrigger.totalPages > 1 && !isActiveTriggersLoading">
+            <pagination
+                [totalItems]="createTrigger?.totalItems"
+                [(ngModel)]="createTrigger.page"
+                [maxSize]="5"
+                class="pagination-sm"
+                [boundaryLinks]="true"
+                [itemsPerPage]="createTrigger.count"
+                [rotate]="false"
+                (pageChanged)="pageChanged($event)"
+                [firstText]="commonLocaleData?.app_first"
+                [previousText]="commonLocaleData?.app_previous"
+                [nextText]="commonLocaleData?.app_next"
+                [lastText]="commonLocaleData?.app_last"
+            ></pagination>
         </div>
     </ng-container>
     <!-- Page-6 to Page-9 -->
@@ -188,7 +198,7 @@
             </div>
 
             <div class="trigger-input">
-                <p class="trigger-input-label">{{ localeData?.communication?.title }}</p>
+                <p class="trigger-input-label">{{ localeData?.communication?.title }}<span>*</span></p>
                 <text-field
                     [type]="'text'"
                     [cssClass]="'form-control mat-field-border'"

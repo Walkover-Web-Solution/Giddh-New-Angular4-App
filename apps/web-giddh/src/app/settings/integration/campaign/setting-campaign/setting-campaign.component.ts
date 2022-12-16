@@ -7,6 +7,7 @@ import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service'
 import { MatDialog } from '@angular/material/dialog';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { ConfirmModalComponent } from 'apps/web-giddh/src/app/theme/new-confirm-modal/confirm-modal.component';
+import { API_COUNT_LIMIT, PAGINATION_LIMIT } from 'apps/web-giddh/src/app/app.constant';
 
 export interface ActiveTriggers {
     title: string;
@@ -91,7 +92,9 @@ export class SettingCampaignComponent implements OnInit {
     /** True if  the trigger loading  */
     public isActiveTriggersLoading: boolean = false;
     /** Validate the email regex for add emails */
-    public EMAIL_REGEX = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    public EMAIL_REGEX_PATTERN = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    /** Validate the mobileregex for add mobile */
+    public MOBILE_REGEX_PATTERN = /^([0|\+[0-9]{1,5})?([7-9][0-9]{9})$/;
     /** Holds the trigger mode */
     public triggerMode: 'create' | 'copy' | 'update' = 'create';
     /** Holds the trigger condtiion   */
@@ -232,10 +235,13 @@ export class SettingCampaignComponent implements OnInit {
      *
      * @memberof SettingCampaignComponent
      */
-    public getTriggers(): void {
+    public getTriggers(requestObj?: any): void {
         this.isActiveTriggersLoading = true;
         this.activeTriggersDataSource = [];
-        this.settingsIntegrationService.getTriggersList().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        requestObj = {
+            count: PAGINATION_LIMIT
+        }
+        this.settingsIntegrationService.getTriggersList(requestObj).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
                 if (response?.body?.items?.length > 0) {
                     response?.body?.items?.forEach(trigger => {
@@ -247,12 +253,16 @@ export class SettingCampaignComponent implements OnInit {
                             });
                         }
                         this.activeTriggersDataSource.push({ title: trigger?.title, type: trigger?.communicationPlatform, createdAt: trigger?.createdAt, uniqueName: trigger?.uniqueName, argsMapping: argsMapping?.join(", "), isActive: trigger?.isActive });
+                        this.createTrigger.totalItems = response.body.totalItems;
+                        this.createTrigger.totalPages = response.body.totalPages;
                     });
                 }
                 this.isActiveTriggersLoading = false;
             } else {
                 this.toasty.showSnackBar("error", response?.body);
                 this.isActiveTriggersLoading = false;
+                this.createTrigger.totalItems = 0;
+                this.createTrigger.totalPages = 0;
             }
         });
     }
@@ -393,7 +403,6 @@ export class SettingCampaignComponent implements OnInit {
      */
     public createNewTrigger(): void {
         this.createTriggerForm(this.createTrigger);
-        this.showVariableMapping = false;
     }
 
     /**
@@ -432,7 +441,24 @@ export class SettingCampaignComponent implements OnInit {
                 cc: [],
                 bcc: [],
                 sendVoucherPdf: false
-            }
+            },
+            count: API_COUNT_LIMIT,
+            page: 1,
+            totalItems: 0,
+            totalPages: 0,
+        }
+    }
+
+    /**
+    * This function will change the page of activity logs
+    *
+    * @param {*} event
+    * @memberof SettingCampaignComponent
+    */
+    public pageChanged(event: any): void {
+        if (this.createTrigger.page !== event?.page) {
+            this.createTrigger.page = event?.page;
+            this.getTriggers();
         }
     }
 
@@ -447,6 +473,9 @@ export class SettingCampaignComponent implements OnInit {
         this.triggerToChiplist = [];
         this.triggerCcChiplist = [];
         this.tiggerConditionAction = [];
+        this.triggerBccDropdown = [];
+        this.triggerToDropdown = [];
+        this.triggerCcDropdown = [];
     }
     /**
      * This will use for back to list page
@@ -570,7 +599,7 @@ export class SettingCampaignComponent implements OnInit {
         });
         this.settingsIntegrationService.updateTrigger(requestObj, this.triggerUniquename).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
-                this.toasty.showSnackBar("success", response?.body + this.localeData?.communication?.update_trigger_succes);
+                this.toasty.showSnackBar("success", response?.body);
                 this.resetCommunicationForm();
                 this.showTriggerForm = false;
                 this.getTriggers();
@@ -656,6 +685,7 @@ export class SettingCampaignComponent implements OnInit {
             return;
         }
         this.showTriggerForm = true;
+        this.showVariableMapping = false;
         this.getCampaignList();
         this.getFieldsSuggestion(this.platform, "VOUCHER");
     }
@@ -668,7 +698,18 @@ export class SettingCampaignComponent implements OnInit {
      * @memberof SettingCampaignComponent
      */
     public validateEmail(email: string): boolean {
-        return this.EMAIL_REGEX.test(String(email)?.toLowerCase());
+        return this.EMAIL_REGEX_PATTERN.test(String(email)?.toLowerCase());
+    }
+
+    /**
+     *This wiill use for validation of email
+     *
+     * @param {string} mobile
+     * @return {*}  {boolean}
+     * @memberof SettingCampaignComponent
+     */
+    public validateMobile(mobile: any): boolean {
+        return this.MOBILE_REGEX_PATTERN.test(mobile);
     }
 
     /**
@@ -688,7 +729,7 @@ export class SettingCampaignComponent implements OnInit {
         if (type === "cc") {
             this.createTrigger.campaignDetails.cc?.push(value);
         }
-        if (type === 'addTo' && this.validateEmail(value)) {
+        if (type === 'addTo' && (this.validateEmail(value) || this.validateMobile(value))) {
             this.createTrigger.campaignDetails.to?.push(value);
         }
         if (type === 'addBcc' && this.validateEmail(value)) {
@@ -708,8 +749,7 @@ export class SettingCampaignComponent implements OnInit {
     public addTriggerTo(event: any) {
         const input = event?.input;
         const value = event?.value;
-
-        if ((value || '')?.trim() && this.validateEmail(value)) {
+        if ((value || '')?.trim() && (this.validateEmail(value) || this.validateMobile(value))) {
             this.triggerToChiplist?.push(value);
         }
         if (input) {

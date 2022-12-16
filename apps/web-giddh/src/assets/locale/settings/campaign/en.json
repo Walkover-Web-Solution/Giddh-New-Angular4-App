@@ -15,7 +15,7 @@
         "no_triggers_found" :"No Triggers Found",
         "create_trigger": "Create Trigger",
         "update_trigger": "Update Trigger",
-        "save_tigger": "Save Trigger",
+        "save_trigger": "Save Trigger",
         "edit_trigger": "Edit Trigger",
         "title": "Title",
         "condition": "Condtion",
@@ -35,8 +35,7 @@
         "select_suggestions":"Select Suggestion",
         "name_trigger":"Name Trigger",
         "platform_success":" Platform has been verified successfully.",
-        "create_trigger_succes":"Create trigger successfully.",
-         "update_trigger_succes":"Update trigger successfully.",
+        "create_trigger_succes":" : Create trigger successfully.",
          "activated":"Activated",
          "deactivated":"Deactivated"
     }

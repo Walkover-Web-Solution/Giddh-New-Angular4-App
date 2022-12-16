@@ -8,6 +8,12 @@
     margin-right: 29px;
 }
 
+.table-content {
+    max-height: calc(100vh - 200px);
+    overflow-y: auto;
+    height: calc(100vh - 200px);
+}
+
 .msg91-container {
     position: relative;
     border: 1px solid rgb(231, 233, 235);

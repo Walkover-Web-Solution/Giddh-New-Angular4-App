@@ -23,7 +23,7 @@ import { SettingsIntegrationService } from '../../services/settings.integraion.s
 import { ACCOUNT_REGISTERED_STATUS, SettingsIntegrationTab, UNLIMITED_LIMIT } from '../constants/settings.constant';
 import { SearchService } from '../../services/search.service';
 import { SalesService } from '../../services/sales.service';
-import { cloneDeep, find, isEmpty, uniqBy } from '../../lodash-optimized';
+import { cloneDeep, find, isEmpty } from '../../lodash-optimized';
 import { TabDirective } from 'ngx-bootstrap/tabs';
 
 @Component({
