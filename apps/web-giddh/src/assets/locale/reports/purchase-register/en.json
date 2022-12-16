@@ -2,6 +2,11 @@
     "page_heading_single": "Reports",
     "page_heading":"Purchase Register",
     "quantity_rate": "Qty-Rate",
+    "search_entry_no": "Search entry number",
     "search_voucher_no": "Search voucher number",
-    "transaction_count": "Transaction count"
+    "transaction_count": "Transaction count",
+    "net_tax": "Net Tax",
+    "net_discount": "Net Discount",
+    "net_tds": "Net TDS",
+    "net_tcs": "Net TCS"
 }

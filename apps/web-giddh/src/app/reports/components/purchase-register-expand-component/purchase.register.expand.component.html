@@ -111,7 +111,11 @@
                                     (ngModelChange)="columnFilter($event, 'voucherNo')"
                                     [(ngModel)]="showFieldFilter.voucherNo"
                                 />
-                                {{ commonLocaleData?.app_voucher_no }}</a
+                                {{
+                                    voucherApiVersion === 2
+                                        ? commonLocaleData?.app_voucher_no
+                                        : commonLocaleData?.app_entry_no
+                                }}</a
                             >
                         </li>
                         <li role="menuitem">
@@ -165,8 +169,11 @@
                     </div>
                 </h5>
             </div>
-            <ng-container *ngIf="PurchaseRegisteDetailedItems && (purchaseRegisteDetailedResponse$ | async).debitTotal">
-                <div class="total-details-box mr-r05 border-none opening-box">
+            <ng-container>
+                <div
+                    class="total-details-box mr-r05 border-none opening-box"
+                    *ngIf="(purchaseRegisteDetailedResponse$ | async).debitTotal"
+                >
                     <h5>
                         {{ commonLocaleData?.app_purchase }}
                         <div>
@@ -204,7 +211,7 @@
                     *ngIf="showFieldFilter.discount && (purchaseRegisteDetailedResponse$ | async)?.discountTotal"
                 >
                     <h5>
-                        {{ commonLocaleData?.app_discount }}
+                        {{ localeData?.net_discount }}
                         <div>
                             <span class="d-inline-flex number-total">
                                 <amount-field
@@ -222,7 +229,7 @@
                     *ngIf="isTcsTdsApplicable && (purchaseRegisteDetailedResponse$ | async)?.tcsTotal"
                 >
                     <h5>
-                        {{ commonLocaleData?.app_tcs }}
+                        {{ localeData?.net_tcs }}
                         <div>
                             <span class="d-inline-flex number-total">
                                 <amount-field
@@ -240,7 +247,7 @@
                     *ngIf="isTcsTdsApplicable && (purchaseRegisteDetailedResponse$ | async)?.tdsTotal"
                 >
                     <h5>
-                        {{ commonLocaleData?.app_tds }}
+                        {{ localeData?.net_tds }}
                         <div>
                             <span class="d-inline-flex number-total">
                                 <amount-field
@@ -258,7 +265,7 @@
                     *ngIf="showFieldFilter.tax && (purchaseRegisteDetailedResponse$ | async).taxTotal"
                 >
                     <h5>
-                        {{ commonLocaleData?.app_tax }}
+                        {{ localeData?.net_tax }}
                         <div>
                             <span class="d-inline-flex number-total">
                                 <amount-field
@@ -341,13 +348,21 @@
                             >
                                 <div [hidden]="showSearchInvoiceNo">
                                     <i class="icon-search" (click)="toggleSearch('invoiceNumber')"></i>
-                                    <span>{{ commonLocaleData?.app_voucher_no }}</span>
+                                    <span>{{
+                                        voucherApiVersion === 2
+                                            ? commonLocaleData?.app_voucher_no
+                                            : commonLocaleData?.app_entry_no
+                                    }}</span>
                                 </div>
 
                                 <div class="input-container" [hidden]="!showSearchInvoiceNo">
                                     <input
                                         type="text"
-                                        [placeholder]="localeData?.search_voucher_no"
+                                        [placeholder]="
+                                            voucherApiVersion === 2
+                                                ? localeData?.search_voucher_no
+                                                : localeData?.search_entry_no
+                                        "
                                         class="w100"
                                         #invoiceSearch
                                         [formControl]="voucherNumberInput"
@@ -492,7 +507,11 @@
                                 {{ item.voucherType }}
                             </td>
                             <td
-                                [attr.data-title]="commonLocaleData?.app_voucher_no"
+                                [attr.data-title]="
+                                    voucherApiVersion === 2
+                                        ? commonLocaleData?.app_voucher_no
+                                        : commonLocaleData?.app_entry_no
+                                "
                                 *ngIf="showFieldFilter.voucherNo"
                                 class="verticle-align-top"
                             >
@@ -547,14 +566,11 @@
                                     showFieldFilter.qtyRate && (purchaseRegisteDetailedResponse$ | async)?.quantityTotal
                                 "
                             >
-                                -
-                                <ng-container *ngIf="expand">
-                                    <ng-container *ngFor="let stock of item.stocks">
-                                        <p>
-                                            {{ stock.quantity | giddhCurrency }}
-                                            {{ stock.unit.code }}
-                                        </p>
-                                    </ng-container>
+                                <ng-container *ngFor="let stock of item.stocks">
+                                    <p>
+                                        {{ stock.quantity | giddhCurrency }}
+                                        {{ stock.unit.code }}
+                                    </p>
                                 </ng-container>
                             </td>
                             <td
@@ -562,11 +578,8 @@
                                 [attr.data-title]="commonLocaleData?.app_rate"
                                 *ngIf="showFieldFilter.qtyRate && (purchaseRegisteDetailedResponse$ | async)?.rateTotal"
                             >
-                                -
-                                <ng-container *ngIf="expand">
-                                    <ng-container *ngFor="let stock of item.stocks">
-                                        <p>{{ stock.rate | giddhCurrency }}</p>
-                                    </ng-container>
+                                <ng-container *ngFor="let stock of item.stocks">
+                                    <p>{{ stock.rate | giddhCurrency }}</p>
                                 </ng-container>
                             </td>
                             <td

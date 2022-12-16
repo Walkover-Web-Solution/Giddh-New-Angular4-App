@@ -139,6 +139,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     /** This will hold toggle buttons value and size */
     public bootstrapToggleSwitch = BootstrapToggleSwitch;
 
+    /** Stores the voucher API version of current company */
+    public voucherApiVersion: 1 | 2;
 
     constructor(
         private router: Router,
@@ -173,6 +175,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         this.imgPath = (isElectron) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
 
         let companyUniqueName = this.generalService.companyUniqueName;
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.apiUrl = `${ApiUrl}company/${companyUniqueName}/imports/tally-import`;
         //logic to switch to payment tab if coming from vedor tabs add payment
         if (this.selectedTabParent !== undefined && this.selectedTabParent !== null) {

@@ -479,7 +479,7 @@
                     </div>
                 </div>
             </mat-tab>
-            <mat-tab label="Tally" (selectTab)="tabChanged('tally')">
+            <mat-tab label="Tally" (selectTab)="tabChanged('tally')" *ngIf="voucherApiVersion === 2">
                 <ng-template> <span class="icon-card"></span>{{ localeData?.tally?.heading }}</ng-template>
                 <div class="box clearfix mb-2">
                     <div class="form-group magic-link-container col-md-9 col-lg-7 d-flex align-items-center">

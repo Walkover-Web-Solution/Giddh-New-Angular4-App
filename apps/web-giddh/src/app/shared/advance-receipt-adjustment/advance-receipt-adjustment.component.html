@@ -171,6 +171,9 @@
                                             (click)="clickSelectVoucher(entryIdx, adjustAdvancePaymentForm)"
                                             [hasMoreValue]="true"
                                             [required]="true"
+                                            [isPaginationEnabled]="true"
+                                            (scrollEnd)="!searchReferenceVoucher ? loadVouchers() : ''"
+                                            [scrollableElementId]="'adjustVoucherOptions'"
                                         >
                                             <ng-template #optionTemplate let-option="option">
                                                 <a href="javascript:void(0)">
