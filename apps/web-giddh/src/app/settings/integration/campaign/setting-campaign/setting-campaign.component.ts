@@ -1,13 +1,12 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { COMMA, ENTER, I } from '@angular/cdk/keycodes';
-import { SettingsIntegrationService } from 'apps/web-giddh/src/app/services/settings.integraion.service';
 import { take, takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
 import { MatDialog } from '@angular/material/dialog';
-import { ModalDirective } from 'ngx-bootstrap/modal';
 import { ConfirmModalComponent } from 'apps/web-giddh/src/app/theme/new-confirm-modal/confirm-modal.component';
-import { API_COUNT_LIMIT, PAGINATION_LIMIT } from 'apps/web-giddh/src/app/app.constant';
+import { API_COUNT_LIMIT, EMAIL_VALIDATION_REGEX, PAGINATION_LIMIT } from 'apps/web-giddh/src/app/app.constant';
+import { CampaignIntegrationService } from 'apps/web-giddh/src/app/services/campaign.integraion.service';
 
 export interface ActiveTriggers {
     title: string;
@@ -17,16 +16,6 @@ export interface ActiveTriggers {
     argsMapping: string;
     isActive: boolean;
 }
-
-export interface table2 {
-    triggers: string;
-    type: string;
-    content: string;
-    text: string;
-    icon: string;
-    button: string;
-}
-
 @Component({
     selector: 'app-setting-campaign',
     templateUrl: './setting-campaign.component.html',
@@ -34,8 +23,6 @@ export interface table2 {
 })
 export class SettingCampaignComponent implements OnInit {
 
-    /** Instance of delete account user modal */
-    @ViewChild('confirmationModal', { static: false }) public confirmationModal: ModalDirective;
     /** Holds image path */
     public imgPath: string = '';
     /* This will hold local JSON data */
@@ -88,11 +75,11 @@ export class SettingCampaignComponent implements OnInit {
     /** Holds the trigger cc dropdown data */
     public triggerCcDropdown: any[] = [];
     /** Holds the trigger condtiion action  */
-    public tiggerConditionAction: any[] = [];
+    public triggerConditionAction: any[] = [];
     /** True if  the trigger loading  */
     public isActiveTriggersLoading: boolean = false;
     /** Validate the email regex for add emails */
-    public EMAIL_REGEX_PATTERN = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    public EMAIL_REGEX_PATTERN = EMAIL_VALIDATION_REGEX;
     /** Validate the mobileregex for add mobile */
     public MOBILE_REGEX_PATTERN = /^([0|\+[0-9]{1,5})?([7-9][0-9]{9})$/;
     /** Holds the trigger mode */
@@ -119,12 +106,18 @@ export class SettingCampaignComponent implements OnInit {
             value: 'VOUCHER'
         }
     ];
+    public triggerObj ={
+        count: API_COUNT_LIMIT,
+        page: 1,
+        totalItems: 0,
+        totalPages: 0,
+    }
     /** True if  the variables showing   */
     public showVariableMapping: boolean = false;
     /** Hold instance of destroyed   */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private settingsIntegrationService: SettingsIntegrationService,
+    constructor(private campaignIntegrationService: CampaignIntegrationService,
         private toasty: ToasterService,
         private dialog: MatDialog
     ) {
@@ -132,10 +125,16 @@ export class SettingCampaignComponent implements OnInit {
 
     }
 
-    ngOnInit() {
+    /**
+     * This hook will use for init
+     *
+     * @memberof SettingCampaignComponent
+     */
+    public ngOnInit(): void {
         this.imgPath = (isElectron) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         this.getCommunicationPlatforms();
     }
+
     /**
     * Get platforms and fields for integration
     *
@@ -146,7 +145,7 @@ export class SettingCampaignComponent implements OnInit {
         this.communicationPlatforms = [];
         this.isCommunicationPlatformsLoading = true;
         this.editCommunicationPlatform = "";
-        this.settingsIntegrationService.getCommunicationPlatforms().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.campaignIntegrationService.getCommunicationPlatforms().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
                 if (response?.body?.platforms?.length > 0) {
                     response.body.platforms.forEach(platform => {
@@ -188,7 +187,7 @@ export class SettingCampaignComponent implements OnInit {
             value: this.communicationPlatforms?.MSG91?.fields?.auth_key?.value
         });
 
-        this.settingsIntegrationService.verifyCommunicationPlatform(this.communicationPlatformAuthModel).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.campaignIntegrationService.verifyCommunicationPlatform(this.communicationPlatformAuthModel).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
                 this.toasty.showSnackBar("success", platform + this.localeData?.communication?.platform_success);
                 this.getCommunicationPlatforms();
@@ -218,7 +217,7 @@ export class SettingCampaignComponent implements OnInit {
 
         dialogRef?.afterClosed().pipe(take(1)).subscribe(response => {
             if (response) {
-                this.settingsIntegrationService.deleteCommunicationPlatform(platformUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                this.campaignIntegrationService.deleteCommunicationPlatform(platformUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     if (response?.status === "success") {
                         this.toasty.showSnackBar("success", response?.body);
                         this.getCommunicationPlatforms();
@@ -235,13 +234,13 @@ export class SettingCampaignComponent implements OnInit {
      *
      * @memberof SettingCampaignComponent
      */
-    public getTriggers(requestObj?: any): void {
+    public getTriggers(): void {
         this.isActiveTriggersLoading = true;
         this.activeTriggersDataSource = [];
-        requestObj = {
+        let requestObj = {
             count: PAGINATION_LIMIT
         }
-        this.settingsIntegrationService.getTriggersList(requestObj).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.campaignIntegrationService.getTriggersList(requestObj).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
                 if (response?.body?.items?.length > 0) {
                     response?.body?.items?.forEach(trigger => {
@@ -253,16 +252,16 @@ export class SettingCampaignComponent implements OnInit {
                             });
                         }
                         this.activeTriggersDataSource.push({ title: trigger?.title, type: trigger?.communicationPlatform, createdAt: trigger?.createdAt, uniqueName: trigger?.uniqueName, argsMapping: argsMapping?.join(", "), isActive: trigger?.isActive });
-                        this.createTrigger.totalItems = response.body.totalItems;
-                        this.createTrigger.totalPages = response.body.totalPages;
+                        this.triggerObj.totalItems = response.body.totalItems;
+                        this.triggerObj.totalPages = response.body.totalPages;
                     });
                 }
                 this.isActiveTriggersLoading = false;
             } else {
                 this.toasty.showSnackBar("error", response?.body);
                 this.isActiveTriggersLoading = false;
-                this.createTrigger.totalItems = 0;
-                this.createTrigger.totalPages = 0;
+                this.triggerObj.totalItems = 0;
+                this.triggerObj.totalPages = 0;
             }
         });
     }
@@ -275,7 +274,7 @@ export class SettingCampaignComponent implements OnInit {
      * @memberof SettingCampaignComponent
      */
     public getFieldsSuggestion(platform: string, entity: any): void {
-        this.settingsIntegrationService.getFieldSuggestions(platform, entity).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.campaignIntegrationService.getFieldSuggestions(platform, entity).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
                 if (response) {
                     this.triggerBccDropdown.push({
@@ -302,6 +301,8 @@ export class SettingCampaignComponent implements OnInit {
                     });
                     this.subConditionAction = response.body?.subCondition[0].action;
                 }
+            } else {
+                this.toasty.showSnackBar("error", response?.message);
             }
         });
     }
@@ -313,7 +314,7 @@ export class SettingCampaignComponent implements OnInit {
      * @memberof SettingCampaignComponent
      */
     public getTriggerByUniqueName(uniqueName: any): void {
-        this.settingsIntegrationService.getTriggerByUniqueName(uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.campaignIntegrationService.getTriggerByUniqueName(uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
                 if (this.triggerMode === 'update' || this.triggerMode === 'copy') {
                     this.triggerBccDropdown = [];
@@ -335,7 +336,7 @@ export class SettingCampaignComponent implements OnInit {
 
                     this.createTrigger.title = response?.body?.title;
                     this.createTrigger.campaignDetails.sendVoucherPdf = response?.body?.campaignDetails?.sendVoucherPdf;
-                    this.tiggerConditionAction = response?.body?.condition?.action[0];
+                    this.triggerConditionAction = response?.body?.condition?.action[0];
 
                     this.getCampaignFields(this.createTrigger.campaignDetails.campaignSlug, () => {
                         this.createTrigger.campaignDetails.argsMapping?.forEach(arg => {
@@ -361,7 +362,7 @@ export class SettingCampaignComponent implements OnInit {
      * @memberof SettingCampaignComponent
      */
     public getCampaignFields(slug: string, callback?: Function): void {
-        this.settingsIntegrationService.getCampaignFields(slug).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.campaignIntegrationService.getCampaignFields(slug).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.createTrigger.campaignDetails.argsMapping = [];
             if (response?.status === "success") {
                 response?.body?.variables?.forEach((result: any) => {
@@ -374,6 +375,8 @@ export class SettingCampaignComponent implements OnInit {
                 if (callback) {
                     callback();
                 }
+            } else {
+                this.toasty.showSnackBar("error", response?.message);
             }
         });
     }
@@ -384,7 +387,7 @@ export class SettingCampaignComponent implements OnInit {
      * @memberof SettingCampaignComponent
      */
     public getCampaignList(): void {
-        this.settingsIntegrationService.getCampaignList().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.campaignIntegrationService.getCampaignList().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
                 this.campaignList = response?.body?.data?.map((result: any) => {
                     return {
@@ -441,11 +444,7 @@ export class SettingCampaignComponent implements OnInit {
                 cc: [],
                 bcc: [],
                 sendVoucherPdf: false
-            },
-            count: API_COUNT_LIMIT,
-            page: 1,
-            totalItems: 0,
-            totalPages: 0,
+            }
         }
     }
 
@@ -472,7 +471,7 @@ export class SettingCampaignComponent implements OnInit {
         this.triggerBccChiplist = [];
         this.triggerToChiplist = [];
         this.triggerCcChiplist = [];
-        this.tiggerConditionAction = [];
+        this.triggerConditionAction = [];
         this.triggerBccDropdown = [];
         this.triggerToDropdown = [];
         this.triggerCcDropdown = [];
@@ -520,14 +519,14 @@ export class SettingCampaignComponent implements OnInit {
     }
 
     /**
- * This will use for select sub  entity
- *
- * @param {*} entity
- * @memberof SettingCampaignComponent
- */
+     * This will use for select sub  entity
+     *
+     * @param {*} entity
+     * @memberof SettingCampaignComponent
+     */
     public selectSubEntity(subconditions: any): void {
         if (subconditions) {
-            this.createTrigger.condition.subConditions[0]?.action?.push(subconditions);
+            this.createTrigger.condition?.subConditions[0]?.action?.push(subconditions);
         }
     }
 
@@ -539,7 +538,7 @@ export class SettingCampaignComponent implements OnInit {
  */
     public selectConditions(action: any): void {
         if (action) {
-            this.createTrigger.condition.action?.push(action);
+            this.createTrigger.condition?.action?.push(action);
         }
     }
 
@@ -549,10 +548,8 @@ export class SettingCampaignComponent implements OnInit {
  * @param {*} entity
  * @memberof SettingCampaignComponent
  */
-    public selectVoucherPdf(type: any): void {
-        if (type) {
-            this.createTrigger.campaignDetails.sendVoucherPdf = type;
-        }
+    public selectVoucherPdf(type: boolean): void {
+        this.createTrigger.campaignDetails.sendVoucherPdf = type;
     }
 
     /**
@@ -563,7 +560,7 @@ export class SettingCampaignComponent implements OnInit {
      */
     public createTriggerForm(requestObj: any): void {
         if (this.triggerMode === 'copy') {
-            requestObj?.condition.action?.push(this.tiggerConditionAction);
+            requestObj.condition.action?.push(this.triggerConditionAction);
             requestObj.campaignDetails.to = this.triggerToChiplist;
             requestObj.campaignDetails.bcc = this.triggerBccChiplist;
             requestObj.campaignDetails.cc = this.triggerCcChiplist;
@@ -571,7 +568,7 @@ export class SettingCampaignComponent implements OnInit {
         requestObj.campaignDetails.argsMapping = requestObj?.campaignDetails?.argsMapping?.filter(val => {
             return val?.value !== "";
         });
-        this.settingsIntegrationService.createTrigger(requestObj).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.campaignIntegrationService.createTrigger(requestObj).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
                 this.toasty.showSnackBar("success", response?.body + this.localeData?.communication?.create_trigger_succes);
                 this.resetCommunicationForm();
@@ -590,14 +587,14 @@ export class SettingCampaignComponent implements OnInit {
      * @memberof SettingCampaignComponent
      */
     public updateTriggerForm(requestObj: any): void {
-        requestObj?.condition?.action?.push(this.tiggerConditionAction);
+        requestObj.condition?.action?.push(this.triggerConditionAction);
         requestObj.campaignDetails.to = this.triggerToChiplist;
         requestObj.campaignDetails.bcc = this.triggerBccChiplist;
         requestObj.campaignDetails.cc = this.triggerCcChiplist;
         requestObj.campaignDetails.argsMapping = requestObj?.campaignDetails?.argsMapping?.filter(val => {
             return val?.value !== "";
         });
-        this.settingsIntegrationService.updateTrigger(requestObj, this.triggerUniquename).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.campaignIntegrationService.updateTrigger(requestObj, this.triggerUniquename).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
                 this.toasty.showSnackBar("success", response?.body);
                 this.resetCommunicationForm();
@@ -643,7 +640,7 @@ export class SettingCampaignComponent implements OnInit {
 
         dialogRef?.afterClosed().pipe(take(1)).subscribe(response => {
             if (response) {
-                this.settingsIntegrationService.deleteTrigger(triggerUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                this.campaignIntegrationService.deleteTrigger(triggerUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     if (response?.status === "success") {
                         this.toasty.showSnackBar("success", response?.body);
                         this.getTriggers();
@@ -661,8 +658,8 @@ export class SettingCampaignComponent implements OnInit {
      * @param {*} uniqueName
      * @memberof SettingCampaignComponent
      */
-    public isActive(uniqueName: any): void {
-        this.settingsIntegrationService.isTriggerActive(this.createTrigger, uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+    public updateTriggerStatus(uniqueName: any): void {
+        this.campaignIntegrationService.updateTriggerStatus(this.createTrigger, uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
                 this.toasty.showSnackBar("success", response?.body);
                 this.getTriggers();
@@ -746,7 +743,7 @@ export class SettingCampaignComponent implements OnInit {
      * @param {*} event
      * @memberof SettingCampaignComponent
      */
-    public addTriggerTo(event: any) {
+    public addTriggerTo(event: any): void {
         const input = event?.input;
         const value = event?.value;
         if ((value || '')?.trim() && (this.validateEmail(value) || this.validateMobile(value))) {
@@ -849,7 +846,7 @@ export class SettingCampaignComponent implements OnInit {
    * @param {*} event
    * @memberof SettingCampaignComponent
    */
-    public removeTo(event: any, index: any): void {
+    public removeTo(event: any, index: number): void {
         if (index >= 0) {
             this.triggerToChiplist?.splice(index, 1);
         }
@@ -861,7 +858,7 @@ export class SettingCampaignComponent implements OnInit {
     * @param {*} event
     * @memberof SettingCampaignComponent
     */
-    public removeBcc(event: any, index: any): void {
+    public removeBcc(event: any, index: number): void {
         if (index >= 0) {
             this.triggerBccChiplist?.splice(index, 1);
         }
@@ -873,7 +870,7 @@ export class SettingCampaignComponent implements OnInit {
     * @param {*} event
     * @memberof SettingCampaignComponent
     */
-    public removeCc(event: any, index: any): void {
+    public removeCc(event: any, index: number): void {
         if (index >= 0) {
             this.triggerCcChiplist?.splice(index, 1);
         }

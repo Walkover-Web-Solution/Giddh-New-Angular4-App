@@ -47,11 +47,11 @@
                 </div>
             </tab> -->
 
-            <mat-tab label="Communication">
+            <mat-tab [label]="localeData?.communication?.tab_heading">
                 <app-setting-campaign></app-setting-campaign>
             </mat-tab>
 
-            <mat-tab label="Email" (selectTab)="loadEmailData($event); tabChanged('email')">
+            <mat-tab [label]="localeData?.email?.tab_heading" (selectTab)="loadEmailData($event); tabChanged('email')">
                 <ng-template> <span class="icon-mail"></span> {{ localeData?.email?.tab_heading }} </ng-template>
 
                 <div class="box clearfix mb-2">
@@ -139,7 +139,10 @@
                 </div>
             </mat-tab>
 
-            <mat-tab label="Collection" (selectTab)="loadCollectionData($event); tabChanged('collection')">
+            <mat-tab
+                [label]="localeData?.collection?.tab_heading"
+                (selectTab)="loadCollectionData($event); tabChanged('collection')"
+            >
                 <ng-template> <span class="icon-card"></span> {{ localeData?.collection?.tab_heading }} </ng-template>
 
                 <div class="box clearfix mb-2">
@@ -253,7 +256,10 @@
                 </div>
             </mat-tab>
 
-            <mat-tab label="E-Commerce" (selectTab)="loadEcommerceData($event); tabChanged('ecommerce')">
+            <mat-tab
+                [label]="localeData?.ecommerce?.tab_heading"
+                (selectTab)="loadEcommerceData($event); tabChanged('ecommerce')"
+            >
                 <ng-template> <span class="icon-ecomm"></span> {{ localeData?.ecommerce?.tab_heading }} </ng-template>
                 <div class="mr-t2 box clearfix">
                     <h3 class="section-head mb-2">{{ localeData?.ecommerce?.shopify_form_heading }}</h3>
@@ -271,7 +277,7 @@
             </mat-tab>
 
             <mat-tab
-                label="Payment"
+                [label]="localeData?.payment?.tab_heading"
                 (selectTab)="loadPaymentData($event); tabChanged('payment')"
                 [hidden]="!isIndianCompany"
             >
@@ -479,7 +485,11 @@
                     </div>
                 </div>
             </mat-tab>
-            <mat-tab label="Tally" (selectTab)="tabChanged('tally')" *ngIf="voucherApiVersion === 2">
+            <mat-tab
+                [label]="localeData?.tally?.heading"
+                (selectTab)="tabChanged('tally')"
+                *ngIf="voucherApiVersion === 2"
+            >
                 <ng-template> <span class="icon-card"></span>{{ localeData?.tally?.heading }}</ng-template>
                 <div class="box clearfix mb-2">
                     <div class="form-group magic-link-container col-md-9 col-lg-7 d-flex align-items-center">
