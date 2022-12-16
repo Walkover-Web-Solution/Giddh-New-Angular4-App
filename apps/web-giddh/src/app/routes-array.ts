@@ -34,7 +34,7 @@ export const ROUTES: Routes = [
     { path: 'journal-voucher', redirectTo: 'pages/journal-voucher', pathMatch: 'full' },
     { path: 'contact', redirectTo: 'pages/contact' },
     { path: 'aging-report', redirectTo: 'pages/aging-report', pathMatch: 'full' },
-    // { path: 'import', redirectTo: 'pages/import', pathMatch: 'full' },
+    { path: 'import', redirectTo: 'pages/import', pathMatch: 'full' },
     // { path: 'tallysync', redirectTo: 'pages/tallysync', pathMatch: 'full' },
     { path: 'gstfiling', redirectTo: 'pages/gstfiling', pathMatch: 'full' },
     { path: 'company-import-export', redirectTo: 'pages/company-import-export', pathMatch: 'full' },
@@ -89,7 +89,7 @@ export const ROUTES: Routes = [
                 loadChildren: () => import('./new-vs-old-Invoices/new-vs-old-Invoices.module').then(module => module.NewVsOldInvoicesModule)
             },
             { path: 'import', loadChildren: () => import('./import-excel/import-excel.module').then(module => module.ImportExcelModule) },
-            // { path: 'tallysync', loadChildren: () => import('./tallysync/tallysync.module').then(module => module.TallysyncModule) },
+            { path: 'tallysync', loadChildren: () => import('./tallysync/tallysync.module').then(module => module.TallysyncModule) },
             { path: 'gstfiling', loadChildren: () => import('./gst/gst.module').then(module => module.GstModule) },
             {
                 path: 'company-import-export',
@@ -97,6 +97,7 @@ export const ROUTES: Routes = [
             },
             { path: 'reports', loadChildren: () => import('./reports/reports.module').then(module => module.ReportsModule) },
             { path: 'purchase-management', loadChildren: () => import('./purchase/purchase.module').then(module => module.PurchaseModule) },
+            { path: 'voucher', loadChildren: () => import('./payment-receipt/payment-receipt.module').then(module => module.PaymentReceiptModule) },
             { path: 'verify-email', loadChildren: () => import('./verify-email/verify-email.module').then(module => module.VerifyEmailModule) },
             { path: 'billing-detail' },
             { path: 'billing-detail/buy-plan' },

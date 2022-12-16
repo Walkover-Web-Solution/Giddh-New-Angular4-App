@@ -23,13 +23,26 @@ import { SettingsIntegrationService } from '../../services/settings.integraion.s
 import { ACCOUNT_REGISTERED_STATUS, SettingsIntegrationTab, UNLIMITED_LIMIT } from '../constants/settings.constant';
 import { SearchService } from '../../services/search.service';
 import { SalesService } from '../../services/sales.service';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 import { cloneDeep, find, isEmpty } from '../../lodash-optimized';
 import { TabDirective } from 'ngx-bootstrap/tabs';
 
 @Component({
     selector: 'setting-integration',
     templateUrl: './setting.integration.component.html',
-    styleUrls: ['./setting.integration.component.scss']
+    styleUrls: ['./setting.integration.component.scss'],
+    animations: [
+        trigger('slideInOut', [
+            state('in', style({
+                transform: 'translate3d(0, 0, 0)'
+            })),
+            state('out', style({
+                transform: 'translate3d(100%, 0, 0)'
+            })),
+            transition('in => out', animate('400ms ease-in-out')),
+            transition('out => in', animate('400ms ease-in-out'))
+        ]),
+    ]
 })
 export class SettingIntegrationComponent implements OnInit, AfterViewInit {
 
