@@ -57,6 +57,7 @@ import { ClipboardModule } from 'ngx-clipboard';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { SettingCampaignComponent } from './integration/campaign/setting-campaign/setting-campaign.component';
 
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
@@ -86,7 +87,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         PersonalInformationComponent,
         AddressSettingsComponent,
         OtherSettingsComponent,
-        CreateBranchComponent
+        CreateBranchComponent,
+        SettingCampaignComponent
     ],
     imports: [
         SharedModule,

@@ -7923,7 +7923,17 @@ highcharts-chart {
 #top0 app-aside-menu-other-taxes {
     top: 0 !important;
 }
-
+.on-setting-page {
+    .mat-pseudo-checkbox-checked {
+        background: #3f51b5 !important;
+    }
+    .sub-entity-trigger {
+        min-width: 100% !important;
+    }
+    .bottom-select-suggestion {
+        min-width: 127px;
+    }
+}
 .voucher-preview-edit,
 .update-ledger-entry-panel-popup,
 .page-has-tabs,

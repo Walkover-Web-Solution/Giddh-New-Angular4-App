@@ -1,0 +1,370 @@
+// Communication Page Styling
+.msg91-container:hover {
+    background-color: rgb(240, 244, 255);
+}
+
+.small-button {
+    min-width: 111px;
+    margin-right: 29px;
+}
+
+.msg91-container {
+    position: relative;
+    border: 1px solid rgb(231, 233, 235);
+    border-radius: 7px;
+    cursor: pointer;
+    width: 241px;
+    height: 96px;
+    margin-top: 10px;
+    margin-left: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    .image {
+        position: relative;
+
+        .logo {
+            width: 86px;
+        }
+
+        .msg {
+            position: absolute;
+            width: 33px;
+            right: 17px;
+            top: 13.5px;
+        }
+    }
+
+    .integrate {
+        p {
+            color: rgb(102, 140, 255);
+            font-size: 14px;
+            margin-top: 12px;
+        }
+    }
+
+    .mini-icons {
+        width: 100%;
+        height: 24%;
+        margin-top: 16px;
+        display: flex;
+        justify-content: space-around;
+    }
+
+    .menu {
+        position: absolute;
+        top: -9px;
+        right: 0px;
+
+        button {
+            mat-icon {
+                font-size: 18px;
+                color: rgb(106, 108, 133);
+            }
+        }
+    }
+}
+
+.new-trigger {
+    margin: 22px 0px 22px 15px;
+}
+
+.table-one {
+    table {
+        margin: 0px 15px;
+        width: 97.5%;
+        box-shadow: none;
+
+        .smaller-font {
+            font-size: 12px;
+        }
+
+        .active-trigger-title-width {
+            width: 4%;
+        }
+
+        .channel-width {
+            width: 3%;
+        }
+
+        .args-mapping-width {
+            width: 5.5%;
+        }
+
+        .created-at-width {
+            width: 3%;
+        }
+
+        .icons-left {
+            width: 1.5%;
+        }
+
+        .icon-visibility {
+            visibility: hidden;
+        }
+
+        .active-trigger-search {
+            position: relative;
+            bottom: 2px;
+        }
+    }
+}
+
+.main-content {
+    width: 100%;
+    height: 58.4vh;
+    background-color: rgb(245, 245, 245);
+    position: relative;
+
+    p {
+        padding: 20px 0px 0px 15px;
+        font-size: 14px;
+    }
+
+    table {
+        width: 97.5%;
+        margin: 0px 15px;
+        background: rgb(245, 245, 245);
+        box-shadow: none;
+
+        .mat-header-cell {
+            background: rgb(245, 245, 245);
+        }
+
+        .mat-cell {
+            .visibility {
+                display: none;
+            }
+
+            .hide {
+                display: none;
+            }
+
+            .right-side {
+                padding-left: 82%;
+            }
+        }
+
+        .mat-row {
+            font-size: 20px !important;
+        }
+
+        .table3-button {
+            padding-left: 15% !important;
+        }
+    }
+}
+
+.form {
+    margin-top: 30px;
+    margin-left: 15px;
+
+    .input-field {
+        .label {
+            font-size: 12px;
+            color: rgb(106, 108, 133);
+
+            span {
+                color: rgb(229, 69, 86);
+            }
+        }
+
+        input {
+            background-color: rgb(245, 245, 245);
+            border: none;
+            color: rgb(33, 37, 40);
+            height: 36px;
+            width: 348px;
+            padding-left: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        button {
+            margin-left: 10px;
+        }
+    }
+}
+
+.trigger-form {
+    display: flex;
+    margin: 10px 0px 0px 15px;
+
+    .trigger-form-left-side {
+        width: 312px;
+        height: 100%;
+
+        .create-trigger-head {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+
+            .trigger-heading {
+                margin-left: 10px;
+                display: inline-block;
+                font-weight: 600;
+                font-size: 14px;
+                color: rgb(26, 35, 126);
+            }
+
+            .return {
+                width: 36px;
+                height: auto;
+                cursor: pointer;
+            }
+        }
+
+        .trigger-input {
+            margin-bottom: 10px;
+
+            .trigger-input-label {
+                font-size: 12px;
+                color: rgb(106, 108, 133);
+
+                span {
+                    color: rgb(229, 69, 86);
+                }
+            }
+
+            input,
+            mat-select {
+                width: 256px;
+                height: 36px;
+                border: none;
+                background-color: rgb(245, 245, 245);
+                padding-left: 10px;
+                font-size: 14px;
+                border-radius: 5px;
+            }
+
+            mat-select {
+                padding-top: 6px;
+                padding-right: 13px;
+            }
+        }
+
+        button {
+            margin-top: 15px;
+        }
+    }
+
+    .trigger-form-right-side {
+        width: 60%;
+        height: 100%;
+        padding-left: 20px;
+
+        .compose {
+            color: rgb(106, 108, 133);
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .compose-subject {
+            margin-top: 9.5px;
+
+            .compose-subject-label {
+                color: rgb(106, 108, 133);
+                font-size: 12px;
+
+                span {
+                    color: rgb(229, 69, 86);
+                }
+            }
+
+            .subject-box {
+                width: 79%;
+                height: 36px;
+                background-color: rgb(245, 245, 245);
+                color: rgb(33, 37, 40);
+                border: none;
+                padding-left: 10px;
+                font-size: 14px;
+                display: flex;
+                align-items: center;
+                padding-left: 10px;
+                border-radius: 5px;
+            }
+
+            .text-box {
+                height: auto;
+                display: block;
+                padding: 15px 20px 15px 10px;
+
+                :nth-child(2) {
+                    margin: 22px 0px;
+                    line-height: 24px;
+                }
+
+                span {
+                    background-color: rgb(231, 233, 235);
+                    border-radius: 5px;
+                    padding: 1px 5px;
+                }
+            }
+        }
+
+        .dropdown-box {
+            margin-top: 60px;
+
+            .dropdown-list {
+                display: inline-block;
+
+                mat-select {
+                    width: 138px;
+                    height: 26px;
+                    background-color: rgb(245, 245, 245);
+                    margin-left: 10px;
+                    border-radius: 5px;
+                    padding: 2px 6px 2px 6px;
+                    font-size: 14px;
+                }
+
+                .dropdown-list-label {
+                    color: rgb(106, 108, 133);
+                    font-weight: 600;
+                    font-size: 15px;
+                }
+            }
+
+            .right-label {
+                margin-left: 25px;
+            }
+
+            .bottom-label {
+                margin-top: 12px;
+            }
+
+            .preview-button {
+                margin-top: 25px;
+            }
+        }
+    }
+}
+
+.unit-mapping-grid-list {
+    .grid-box {
+        font-size: 14px;
+    }
+
+    .grid-box-head,
+    .grid-box-content {
+        .unit-value {
+            width: 110px;
+            margin-right: 15px;
+        }
+    }
+
+    .grid-box-head {
+        .unit-box {
+            width: 82px;
+        }
+
+        .unit-box,
+        .map-unit-box {
+            font-family: "opensans-semibold";
+            color: var(--color-table-secondary-heading);
+        }
+    }
+}

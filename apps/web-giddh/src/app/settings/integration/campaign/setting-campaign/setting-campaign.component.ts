@@ -1,0 +1,842 @@
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { COMMA, ENTER, I } from '@angular/cdk/keycodes';
+import { SettingsIntegrationService } from 'apps/web-giddh/src/app/services/settings.integraion.service';
+import { take, takeUntil } from 'rxjs/operators';
+import { ReplaySubject } from 'rxjs';
+import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
+import { MatDialog } from '@angular/material/dialog';
+import { ModalDirective } from 'ngx-bootstrap/modal';
+import { ConfirmModalComponent } from 'apps/web-giddh/src/app/theme/new-confirm-modal/confirm-modal.component';
+
+export interface ActiveTriggers {
+    title: string;
+    type: string;
+    createdAt: string;
+    uniqueName: string;
+    argsMapping: string;
+    isActive: boolean;
+}
+
+export interface table2 {
+    triggers: string;
+    type: string;
+    content: string;
+    text: string;
+    icon: string;
+    button: string;
+}
+
+@Component({
+    selector: 'app-setting-campaign',
+    templateUrl: './setting-campaign.component.html',
+    styleUrls: ['./setting-campaign.component.scss']
+})
+export class SettingCampaignComponent implements OnInit {
+
+    /** Instance of delete account user modal */
+    @ViewChild('confirmationModal', { static: false }) public confirmationModal: ModalDirective;
+    /** Holds image path */
+    public imgPath: string = '';
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
+    /** Active trigger columns */
+    public activeTriggersColumns: string[] = ['title', 'type', 'argsMapping', 'createdAt', 'action'];
+    /** Data source for active triggers list */
+    public activeTriggersDataSource: ActiveTriggers[] = [];
+    /** Holds communication platforms */
+    public communicationPlatforms: any = {};
+    /** Communication platform auth model  */
+    public communicationPlatformAuthModel: any = {
+        platform: "",
+        authFields: []
+    };
+    /** True if communication platform get api in progress */
+    public isCommunicationPlatformsLoading: boolean = true;
+    /** True if communication platform verification api in progress */
+    public isCommunicationPlatformVerificationInProcess: boolean = false;
+    /** Holds the communication platform which is in edit mode */
+    public editCommunicationPlatform: string = "";
+    /** True if need to show trigger form */
+    public showTriggerForm: boolean = false;
+    /** List of field suggestions */
+    public fieldsSuggestion: any[] = [];
+    /** List of action */
+    public subConditionAction: any[] = [];
+    /** List of campaign list */
+    public campaignList: any[] = [];
+    /** Instance of create trigger form*/
+    public createTrigger;
+    /** Holds the communication platform */
+    public platform: string = '';
+    /** Holds the communication trigger uniquename */
+    public triggerUniquename: string = '';
+    /** Emit with seperate code for chiplist */
+    public separatorKeysCodes: number[] = [ENTER, COMMA];
+    /** Holds the trigger to chiplist data */
+    public triggerToChiplist: any[] = [];
+    /** Holds the trigger bcc chiplist data */
+    public triggerBccChiplist: any[] = [];
+    /** Holds the trigger cc chiplist data */
+    public triggerCcChiplist: any[] = [];
+    /** Holds the trigger to dropdown data */
+    public triggerToDropdown: any[] = [];
+    /** Holds the trigger bcc dropdown data */
+    public triggerBccDropdown: any[] = [];
+    /** Holds the trigger cc dropdown data */
+    public triggerCcDropdown: any[] = [];
+    /** Holds the trigger condtiion action  */
+    public tiggerConditionAction: any[] = [];
+    /** True if  the trigger loading  */
+    public isActiveTriggersLoading: boolean = false;
+    /** Validate the email regex for add emails */
+    public EMAIL_REGEX = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    /** Holds the trigger mode */
+    public triggerMode: 'create' | 'copy' | 'update' = 'create';
+    /** Holds the trigger condtiion   */
+    public triggerCondition: any[] = [
+        {
+            label: 'Create',
+            value: 'CREATE',
+        },
+        {
+            label: 'Update',
+            value: 'UPDATE',
+        },
+        {
+            label: 'Delete',
+            value: 'DELETE',
+        }
+    ];
+    /** Holds the trigger entity   */
+    public triggerEntity: any[] = [
+        {
+            label: 'Voucher',
+            value: 'VOUCHER'
+        }
+    ];
+    /** True if  the variables showing   */
+    public showVariableMapping: boolean = false;
+    /** Hold instance of destroyed   */
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+
+    constructor(private settingsIntegrationService: SettingsIntegrationService,
+        private toasty: ToasterService,
+        private dialog: MatDialog
+    ) {
+        this.resetCommunicationForm();
+
+    }
+
+    ngOnInit() {
+        this.imgPath = (isElectron) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.getCommunicationPlatforms();
+    }
+    /**
+    * Get platforms and fields for integration
+    *
+    * @private
+    * @memberof SettingCampaignComponent
+    */
+    private getCommunicationPlatforms(): void {
+        this.communicationPlatforms = [];
+        this.isCommunicationPlatformsLoading = true;
+        this.editCommunicationPlatform = "";
+        this.settingsIntegrationService.getCommunicationPlatforms().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === "success") {
+                if (response?.body?.platforms?.length > 0) {
+                    response.body.platforms.forEach(platform => {
+                        this.communicationPlatforms[platform?.name] = [];
+                        this.communicationPlatforms[platform?.name].name = platform?.name;
+                        this.communicationPlatforms[platform?.name].uniqueName = platform?.uniqueName;
+                        let fields = [];
+                        platform?.fields?.forEach(pt => {
+                            fields[pt?.field] = pt;
+                        });
+                        this.communicationPlatforms[platform?.name].fields = fields;
+                        this.communicationPlatforms[platform?.name].isConnected = (this.communicationPlatforms[platform?.name]['fields']?.auth_key?.value);
+                    });
+                }
+                if (this.communicationPlatforms['MSG91'].isConnected) {
+                    this.getTriggers();
+                    this.platform = response?.body?.platforms[0]?.name;
+                    this.createTrigger.communicationPlatform = this.platform;
+                }
+                this.isCommunicationPlatformsLoading = false;
+            } else {
+                this.toasty.showSnackBar("error", response?.message);
+                this.isCommunicationPlatformsLoading = false;
+            }
+        });
+    }
+
+    /**
+     * Verifies the integration with communication platform
+     *
+     * @param {string} platform
+     * @memberof SettingCampaignComponent
+     */
+    public verifyCommunicationPlatform(platform: string): void {
+        this.isCommunicationPlatformVerificationInProcess = true;
+        this.communicationPlatformAuthModel.platform = platform;
+        this.communicationPlatformAuthModel.authFields?.push({
+            name: "authKey",
+            value: this.communicationPlatforms?.MSG91?.fields?.auth_key?.value
+        });
+
+        this.settingsIntegrationService.verifyCommunicationPlatform(this.communicationPlatformAuthModel).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === "success") {
+                this.toasty.showSnackBar("success", platform + this.localeData?.communication?.platform_success);
+                this.getCommunicationPlatforms();
+            } else {
+                this.toasty.showSnackBar("error", response?.message);
+            }
+            this.isCommunicationPlatformVerificationInProcess = false;
+        });
+    }
+
+    /**
+     * Deletes the integration with communication platform
+     *
+     * @param {string} platformUniqueName
+     * @memberof SettingCampaignComponent
+     */
+    public deleteCommunicationPlatform(platformUniqueName: string): void {
+        let dialogRef = this.dialog?.open(ConfirmModalComponent, {
+            width: '40%',
+            data: {
+                title: this.commonLocaleData?.app_delete,
+                body: this.localeData?.communication?.delete_platform,
+                ok: this.commonLocaleData?.app_yes,
+                cancel: this.commonLocaleData?.app_no
+            }
+        });
+
+        dialogRef?.afterClosed().pipe(take(1)).subscribe(response => {
+            if (response) {
+                this.settingsIntegrationService.deleteCommunicationPlatform(platformUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                    if (response?.status === "success") {
+                        this.toasty.showSnackBar("success", response?.body);
+                        this.getCommunicationPlatforms();
+                    } else {
+                        this.toasty.showSnackBar("error", response?.message);
+                    }
+                });
+            }
+        });
+    }
+
+    /**
+     * Gets the list of triggers
+     *
+     * @memberof SettingCampaignComponent
+     */
+    public getTriggers(): void {
+        this.isActiveTriggersLoading = true;
+        this.activeTriggersDataSource = [];
+        this.settingsIntegrationService.getTriggersList().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === "success") {
+                if (response?.body?.items?.length > 0) {
+                    response?.body?.items?.forEach(trigger => {
+                        const argsMapping = [];
+                        this.triggerUniquename = trigger?.uniqueName;
+                        if (trigger?.argsMapping?.length > 0) {
+                            trigger?.argsMapping?.forEach(arg => {
+                                argsMapping?.push(arg?.name + " -> " + arg?.value);
+                            });
+                        }
+                        this.activeTriggersDataSource.push({ title: trigger?.title, type: trigger?.communicationPlatform, createdAt: trigger?.createdAt, uniqueName: trigger?.uniqueName, argsMapping: argsMapping?.join(", "), isActive: trigger?.isActive });
+                    });
+                }
+                this.isActiveTriggersLoading = false;
+            } else {
+                this.toasty.showSnackBar("error", response?.body);
+                this.isActiveTriggersLoading = false;
+            }
+        });
+    }
+
+    /**
+     * Gets the field suggestions
+     *
+     * @param {string} platform
+     * @param {*} entity
+     * @memberof SettingCampaignComponent
+     */
+    public getFieldsSuggestion(platform: string, entity: any): void {
+        this.settingsIntegrationService.getFieldSuggestions(platform, entity).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === "success") {
+                if (response) {
+                    this.triggerBccDropdown.push({
+                        value: response.body?.sendToSuggestions[0],
+                        label: response.body?.sendToSuggestions[0]
+                    })
+
+                    this.triggerCcDropdown.push({
+                        value: response.body?.sendToSuggestions[0],
+                        label: response.body?.sendToSuggestions[0]
+                    })
+
+                    this.triggerToDropdown = response.body?.sendToSuggestions?.map((result: any) => {
+                        return {
+                            value: result,
+                            label: result
+                        }
+                    });
+                    this.fieldsSuggestion = response.body?.suggestions?.map((result: any) => {
+                        return {
+                            value: result,
+                            label: result
+                        }
+                    });
+                    this.subConditionAction = response.body?.subCondition[0].action;
+                }
+            }
+        });
+    }
+
+    /**
+     * Get trriger by uniqueName
+     *
+     * @param {*} uniqueName
+     * @memberof SettingCampaignComponent
+     */
+    public getTriggerByUniqueName(uniqueName: any): void {
+        this.settingsIntegrationService.getTriggerByUniqueName(uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === "success") {
+                if (this.triggerMode === 'update' || this.triggerMode === 'copy') {
+                    this.triggerBccDropdown = [];
+                    this.triggerCcDropdown = [];
+                    this.triggerToDropdown = [];
+                    this.createTrigger.campaignDetails.argsMapping = [];
+                    this.createTrigger.campaignDetails.campaignSlug = response?.body?.campaignDetails?.campaignSlug;
+                    this.selectCampaign(this.createTrigger.campaignDetails.campaignSlug);
+                    this.getFieldsSuggestion(response?.body?.communicationPlatform, response?.body?.condition?.entity);
+                    if (response?.body?.campaignDetails?.to || response?.body?.campaignDetails?.bcc || response?.body?.campaignDetails?.cc) {
+                        this.triggerToChiplist = response?.body?.campaignDetails?.to;
+                        this.triggerBccChiplist = response?.body?.campaignDetails?.bcc;
+                        this.triggerCcChiplist = response?.body?.campaignDetails?.cc;
+                    } else {
+                        this.triggerToChiplist = [];
+                        this.triggerBccChiplist = [];
+                        this.triggerCcChiplist = [];
+                    }
+
+                    this.createTrigger.title = response?.body?.title;
+                    this.createTrigger.campaignDetails.sendVoucherPdf = response?.body?.campaignDetails?.sendVoucherPdf;
+                    this.tiggerConditionAction = response?.body?.condition?.action[0];
+
+                    this.getCampaignFields(this.createTrigger.campaignDetails.campaignSlug, () => {
+                        this.createTrigger.campaignDetails.argsMapping?.forEach(arg => {
+                            const mappedValue = response?.body?.campaignDetails?.argsMapping?.find(argRes => argRes?.name === arg?.name);
+                            if (mappedValue) {
+                                arg.value = mappedValue?.value;
+                            }
+                        });
+                    });
+
+                    this.createTrigger.condition.subConditions.action = response?.body?.condition?.subConditions[0]?.action;
+                    this.createTrigger.condition.entity = response?.body?.condition?.entity;
+                }
+            }
+        });
+    }
+
+    /**
+     * Get campaign fields
+     *
+     * @param {string} slug
+     * @param {Function} [callback]
+     * @memberof SettingCampaignComponent
+     */
+    public getCampaignFields(slug: string, callback?: Function): void {
+        this.settingsIntegrationService.getCampaignFields(slug).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            this.createTrigger.campaignDetails.argsMapping = [];
+            if (response?.status === "success") {
+                response?.body?.variables?.forEach((result: any) => {
+                    this.createTrigger.campaignDetails.argsMapping?.push({
+                        name: result,
+                        value: ''
+                    });
+                });
+
+                if (callback) {
+                    callback();
+                }
+            }
+        });
+    }
+
+    /**
+     * Gets campaign list
+     *
+     * @memberof SettingCampaignComponent
+     */
+    public getCampaignList(): void {
+        this.settingsIntegrationService.getCampaignList().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === "success") {
+                this.campaignList = response?.body?.data?.map((result: any) => {
+                    return {
+                        value: result?.slug,
+                        label: result?.name
+                    }
+                });
+            }
+        });
+    }
+
+    /**
+     * Create New trigger
+     *
+     * @memberof SettingCampaignComponent
+     */
+    public createNewTrigger(): void {
+        this.createTriggerForm(this.createTrigger);
+        this.showVariableMapping = false;
+    }
+
+    /**
+     * Update  trigger
+     *
+     * @memberof SettingCampaignComponent
+     */
+    public updateTrigger(): void {
+        this.updateTriggerForm(this.createTrigger);
+    }
+
+    /**
+     * Initialize the field
+     *
+     * @memberof SettingCampaignComponent
+     */
+    public initFormFields(): void {
+        this.createTrigger =
+        {
+            title: null,
+            condition: {
+                entity: null,
+                action: [],
+                subConditions: [
+                    {
+                        entity: 'voucherType',
+                        action: []
+                    }
+                ]
+            },
+            communicationPlatform: this.platform,
+            campaignDetails: {
+                campaignSlug: null,
+                argsMapping: [],
+                to: [],
+                cc: [],
+                bcc: [],
+                sendVoucherPdf: false
+            }
+        }
+    }
+
+    /**
+     * This will use for reset communication form
+     *
+     * @memberof SettingCampaignComponent
+     */
+    public resetCommunicationForm(): void {
+        this.initFormFields();
+        this.triggerBccChiplist = [];
+        this.triggerToChiplist = [];
+        this.triggerCcChiplist = [];
+        this.tiggerConditionAction = [];
+    }
+    /**
+     * This will use for back to list page
+     *
+     * @param {*} event
+     * @memberof SettingCampaignComponent
+     */
+    public backToListPage(event: any): void {
+        if (event) {
+            this.showTriggerForm = false;
+            this.showVariableMapping = false;
+            this.resetCommunicationForm();
+            this.triggerMode = 'create';
+        }
+    }
+
+    /**
+     *This will use for select campaign
+     *
+     * @param {*} slug
+     * @param {boolean} [getCampaignFields=false]
+     * @memberof SettingCampaignComponent
+     */
+    public selectCampaign(slug: any, getCampaignFields: boolean = false): void {
+        this.createTrigger.campaignDetails.campaignSlug = slug;
+        this.showVariableMapping = true;
+        if (getCampaignFields) {
+            this.getCampaignFields(slug);
+        }
+    }
+
+    /**
+     * This will use for select entity
+     *
+     * @param {*} entity
+     * @memberof SettingCampaignComponent
+     */
+    public selectEntity(entity: any): void {
+        if (entity) {
+            this.createTrigger.condition.entity = entity;
+        }
+    }
+
+    /**
+ * This will use for select sub  entity
+ *
+ * @param {*} entity
+ * @memberof SettingCampaignComponent
+ */
+    public selectSubEntity(subconditions: any): void {
+        if (subconditions) {
+            this.createTrigger.condition.subConditions[0]?.action?.push(subconditions);
+        }
+    }
+
+    /**
+ * This will use for select consditions
+ *
+ * @param {*} entity
+ * @memberof SettingCampaignComponent
+ */
+    public selectConditions(action: any): void {
+        if (action) {
+            this.createTrigger.condition.action?.push(action);
+        }
+    }
+
+    /**
+ * This will use for select voucher pdf
+ *
+ * @param {*} entity
+ * @memberof SettingCampaignComponent
+ */
+    public selectVoucherPdf(type: any): void {
+        if (type) {
+            this.createTrigger.campaignDetails.sendVoucherPdf = type;
+        }
+    }
+
+    /**
+     * Create Trigger form
+     *
+     * @param {*} requestObj
+     * @memberof SettingCampaignComponent
+     */
+    public createTriggerForm(requestObj: any): void {
+        if (this.triggerMode === 'copy') {
+            requestObj?.condition.action?.push(this.tiggerConditionAction);
+            requestObj.campaignDetails.to = this.triggerToChiplist;
+            requestObj.campaignDetails.bcc = this.triggerBccChiplist;
+            requestObj.campaignDetails.cc = this.triggerCcChiplist;
+        }
+        requestObj.campaignDetails.argsMapping = requestObj?.campaignDetails?.argsMapping?.filter(val => {
+            return val?.value !== "";
+        });
+        this.settingsIntegrationService.createTrigger(requestObj).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === "success") {
+                this.toasty.showSnackBar("success", response?.body + this.localeData?.communication?.create_trigger_succes);
+                this.resetCommunicationForm();
+                this.showTriggerForm = false;
+                this.getTriggers();
+            } else {
+                this.toasty.showSnackBar("error", response?.message);
+            }
+        });
+    }
+
+    /**
+     * This will use for update trigger form
+     *
+     * @param {*} requestObj
+     * @memberof SettingCampaignComponent
+     */
+    public updateTriggerForm(requestObj: any): void {
+        requestObj?.condition?.action?.push(this.tiggerConditionAction);
+        requestObj.campaignDetails.to = this.triggerToChiplist;
+        requestObj.campaignDetails.bcc = this.triggerBccChiplist;
+        requestObj.campaignDetails.cc = this.triggerCcChiplist;
+        requestObj.campaignDetails.argsMapping = requestObj?.campaignDetails?.argsMapping?.filter(val => {
+            return val?.value !== "";
+        });
+        this.settingsIntegrationService.updateTrigger(requestObj, this.triggerUniquename).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === "success") {
+                this.toasty.showSnackBar("success", response?.body + this.localeData?.communication?.update_trigger_succes);
+                this.resetCommunicationForm();
+                this.showTriggerForm = false;
+                this.getTriggers();
+            } else {
+                this.toasty.showSnackBar("error", response?.message);
+            }
+        });
+    }
+
+    /**
+     * This will use for edit  trigger
+     *
+     * @param {*} trigger
+     * @param {*} mode
+     * @memberof SettingCampaignComponent
+     */
+    public editTrigger(trigger: any, mode: any): void {
+        this.triggerMode = mode;
+        this.getCampaignList();
+        this.getTriggerByUniqueName(trigger?.uniqueName);
+        this.showTriggerForm = true;
+    }
+
+
+    /**
+     * Deletes the trigger
+     *
+     * @param {string} triggerUniqueName
+     * @memberof SettingCampaignComponent
+     */
+    public deleteTrigger(triggerUniqueName: string): void {
+        let dialogRef = this.dialog?.open(ConfirmModalComponent, {
+            width: '40%',
+            data: {
+                title: this.commonLocaleData?.app_delete,
+                body: this.localeData?.communication?.delete_trigger,
+                ok: this.commonLocaleData?.app_yes,
+                cancel: this.commonLocaleData?.app_no
+            }
+        });
+
+        dialogRef?.afterClosed().pipe(take(1)).subscribe(response => {
+            if (response) {
+                this.settingsIntegrationService.deleteTrigger(triggerUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                    if (response?.status === "success") {
+                        this.toasty.showSnackBar("success", response?.body);
+                        this.getTriggers();
+                    } else {
+                        this.toasty.showSnackBar("error", response?.message);
+                    }
+                });
+            }
+        });
+    }
+
+    /**
+     * This will use for trigger activate /deacrtivated events
+     *
+     * @param {*} uniqueName
+     * @memberof SettingCampaignComponent
+     */
+    public isActive(uniqueName: any): void {
+        this.settingsIntegrationService.isTriggerActive(this.createTrigger, uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === "success") {
+                this.toasty.showSnackBar("success", response?.body);
+                this.getTriggers();
+            } else {
+                this.toasty.showSnackBar("error", response?.message);
+            }
+        });
+    }
+
+    /**
+     * This will use for toggle trigger form
+     *
+     * @param {string} [triggerUniqueName]
+     * @return {*}  {void}
+     * @memberof SettingCampaignComponent
+     */
+    public toggleTriggerForm(triggerUniqueName?: string): void {
+        if (this.showTriggerForm) {
+            this.showTriggerForm = false;
+            return;
+        }
+        this.showTriggerForm = true;
+        this.getCampaignList();
+        this.getFieldsSuggestion(this.platform, "VOUCHER");
+    }
+
+    /**
+     *This wiill use for validation of email
+     *
+     * @param {string} email
+     * @return {*}  {boolean}
+     * @memberof SettingCampaignComponent
+     */
+    public validateEmail(email: string): boolean {
+        return this.EMAIL_REGEX.test(String(email)?.toLowerCase());
+    }
+
+    /**
+     * This will use for campaign email form
+     *
+     * @param {string} type
+     * @param {*} value
+     * @memberof SettingCampaignComponent
+     */
+    public campaignEmailForm(type: string, value: any): void {
+        if (type === "to") {
+            this.createTrigger.campaignDetails.to?.push(value);
+        }
+        if (type === "bcc") {
+            this.createTrigger.campaignDetails.bcc?.push(value);
+        }
+        if (type === "cc") {
+            this.createTrigger.campaignDetails.cc?.push(value);
+        }
+        if (type === 'addTo' && this.validateEmail(value)) {
+            this.createTrigger.campaignDetails.to?.push(value);
+        }
+        if (type === 'addBcc' && this.validateEmail(value)) {
+            this.createTrigger.campaignDetails.bcc?.push(value);
+        }
+        if (type === 'addCc' && this.validateEmail(value)) {
+            this.createTrigger.campaignDetails.cc?.push(value);
+        }
+    }
+
+    /**
+     * Add trigger to in chiplist
+     *
+     * @param {*} event
+     * @memberof SettingCampaignComponent
+     */
+    public addTriggerTo(event: any) {
+        const input = event?.input;
+        const value = event?.value;
+
+        if ((value || '')?.trim() && this.validateEmail(value)) {
+            this.triggerToChiplist?.push(value);
+        }
+        if (input) {
+            input.value = '';
+        }
+        this.campaignEmailForm('addTo', value);
+    }
+
+    /**
+     * Add trigger bcc in chiplist
+     *
+     * @param {*} event
+     * @memberof SettingCampaignComponent
+     */
+    public addTriggerBcc(event: any) {
+        const input = event?.input;
+        const value = event?.value;
+        if ((value || '')?.trim() && this.validateEmail(value)) {
+            this.triggerBccChiplist?.push(value);
+        }
+        if (input) {
+            input.value = '';
+        }
+        this.campaignEmailForm('addBcc', value);
+    }
+
+    /**
+     * Add trigger cc in chiplist
+     *
+     * @param {*} event
+     * @memberof SettingCampaignComponent
+     */
+    public addTriggerCc(event: any) {
+        const input = event?.input;
+        const value = event?.value;
+        if ((value || '')?.trim() && this.validateEmail(value)) {
+            this.triggerCcChiplist?.push(value);
+        }
+        if (input) {
+            input.value = '';
+        }
+        this.campaignEmailForm('addCc', value);
+    }
+
+    /**
+     * Select trigger Bcc
+     *
+     * @param {*} event
+     * @memberof SettingCampaignComponent
+     */
+    public selectTriggerBcc(bcc: any): void {
+        const selectOptionValue = bcc?.option?.value?.value;
+        if (bcc) {
+            if (!this.triggerBccChiplist?.includes(selectOptionValue)) {
+                this.triggerBccChiplist?.push(selectOptionValue);
+            }
+        }
+        this.campaignEmailForm('bcc', selectOptionValue);
+    }
+
+    /**
+    * Select trigger Cc
+    *
+    * @param {*} event
+    * @memberof SettingCampaignComponent
+    */
+    public selectTriggerCc(cc: any): void {
+        const selectOptionValue = cc?.option?.value?.value;
+        if (cc) {
+            if (!this.triggerCcChiplist?.includes(selectOptionValue)) {
+                this.triggerCcChiplist?.push(selectOptionValue);
+            }
+        }
+        this.campaignEmailForm('cc', selectOptionValue);
+    }
+
+    /**
+    * Select trigger To
+    *
+    * @param {*} event
+    * @memberof SettingCampaignComponent
+    */
+    public selectTriggerTo(to: any): void {
+        const selectOptionValue = to?.option?.value?.value;
+        if (to) {
+            if (!this.triggerToChiplist?.includes(selectOptionValue)) {
+                this.triggerToChiplist?.push(selectOptionValue);
+            }
+        }
+        this.campaignEmailForm('to', selectOptionValue);
+
+    }
+
+    /**
+   * Remove trigger To
+   *
+   * @param {*} event
+   * @memberof SettingCampaignComponent
+   */
+    public removeTo(event: any, index: any): void {
+        if (index >= 0) {
+            this.triggerToChiplist?.splice(index, 1);
+        }
+    }
+
+    /**
+    * Remove trigger Bcc
+    *
+    * @param {*} event
+    * @memberof SettingCampaignComponent
+    */
+    public removeBcc(event: any, index: any): void {
+        if (index >= 0) {
+            this.triggerBccChiplist?.splice(index, 1);
+        }
+    }
+
+    /**
+    * Remove trigger Cc
+    *
+    * @param {*} event
+    * @memberof SettingCampaignComponent
+    */
+    public removeCc(event: any, index: any): void {
+        if (index >= 0) {
+            this.triggerCcChiplist?.splice(index, 1);
+        }
+    }
+
+}
