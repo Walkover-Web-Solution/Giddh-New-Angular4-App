@@ -119,6 +119,9 @@
         "duration_error": "कृपया दिलेल्या रकमेचा कालावधी निवडा",
         "required_field_error": "कृपया सर्व आवश्यक फील्ड भरा"
 	},
+    "communication": {
+        "tab_heading": "संवाद"
+    },
     "tally":{
         "help_documentation":"मदत दस्तऐवजीकरण",
         "copied":"कॉपी केले...",

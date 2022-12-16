@@ -38,5 +38,6 @@
         "create_trigger_succes":" : Create trigger successfully.",
          "activated":"Activated",
          "deactivated":"Deactivated"
+
     }
 }

@@ -131,7 +131,7 @@
                             class="small-button"
                             mat-flat-button
                             color="primary"
-                            (click)="isActive(element.uniqueName)"
+                            (click)="updateTriggerStatus(element.uniqueName)"
                         >
                             {{
                                 element?.isActive > 0
@@ -166,14 +166,14 @@
                 </div>
             </section>
         </div>
-        <div class="pagination-wrapper" *ngIf="createTrigger.totalPages > 1 && !isActiveTriggersLoading">
+        <div class="pagination-wrapper" *ngIf="triggerObj?.totalPages > 1 && !isActiveTriggersLoading">
             <pagination
-                [totalItems]="createTrigger?.totalItems"
-                [(ngModel)]="createTrigger.page"
+                [totalItems]="triggerObj?.totalItems"
+                [(ngModel)]="triggerObj.page"
                 [maxSize]="5"
                 class="pagination-sm"
                 [boundaryLinks]="true"
-                [itemsPerPage]="createTrigger.count"
+                [itemsPerPage]="triggerObj?.count"
                 [rotate]="false"
                 (pageChanged)="pageChanged($event)"
                 [firstText]="commonLocaleData?.app_first"
