@@ -38,11 +38,26 @@ import { TaxSidebarModule } from '../shared/tax-sidebar/tax-sidebar.module';
 import { ReplacePipeModule } from '../shared/helpers/pipes/replace/replace.module';
 import { NoDataModule } from '../shared/no-data/no-data.module';
 import { SettingIntegrationPaymentModule } from './integration/payment/setting.integration.payment.module';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatTableModule } from '@angular/material/table';
+import { MatSelectModule } from '@angular/material/select';
+import { MatDialogModule } from '@angular/material/dialog';
+
 import { ConfirmModalModule } from '../theme/confirm-modal/confirm-modal.module';
 import { NgxBootstrapSwitchModule } from 'ngx-bootstrap-switch';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { MatInputModule } from '@angular/material/input';
 import { ClipboardModule } from 'ngx-clipboard';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { SettingCampaignComponent } from './integration/campaign/setting-campaign/setting-campaign.component';
 
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
@@ -72,7 +87,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         PersonalInformationComponent,
         AddressSettingsComponent,
         OtherSettingsComponent,
-        CreateBranchComponent
+        CreateBranchComponent,
+        SettingCampaignComponent
     ],
     imports: [
         SharedModule,
@@ -91,11 +107,24 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         ReplacePipeModule,
         NoDataModule,
         SettingIntegrationPaymentModule,
+        MatTabsModule,
+        MatFormFieldModule,
+        MatButtonModule,
+        MatIconModule,
+        MatMenuModule,
+        MatTableModule,
+        MatSelectModule,
+        MatDialogModule,
         ConfirmModalModule,
         NgxBootstrapSwitchModule.forRoot(),
         BsDropdownModule.forRoot(),
+        MatGridListModule,
+        FormFieldsModule,
         MatInputModule,
-        ClipboardModule
+        ClipboardModule,
+        MatCheckboxModule,
+        MatChipsModule,
+        MatAutocompleteModule
 
     ],
     providers: [

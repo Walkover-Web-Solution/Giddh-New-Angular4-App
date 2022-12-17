@@ -1,22 +1,14 @@
-import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
+import { combineLatest, Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { takeUntil, take } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 import { Component, Input, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, NgForm } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AppState } from '../../store';
 import { SettingsIntegrationActions } from '../../actions/settings/settings.integration.action';
-import {
-    AmazonSellerClass,
-    CashfreeClass,
-    EmailKeyClass,
-    PaymentClass,
-    RazorPayClass,
-    SmsKeyClass
-} from '../../models/api-models/SettingsIntegraion';
+import { AmazonSellerClass, CashfreeClass, EmailKeyClass, PaymentClass, RazorPayClass, SmsKeyClass } from '../../models/api-models/SettingsIntegraion';
 import { ToasterService } from '../../services/toaster.service';
 import { IOption } from '../../theme/ng-select/option.interface';
-import { TabsetComponent, TabDirective } from "ngx-bootstrap/tabs";
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { CompanyActions } from "../../actions/company.actions";
 import { ShSelectComponent } from '../../theme/ng-virtual-select/sh-select.component';
@@ -33,8 +25,8 @@ import { SearchService } from '../../services/search.service';
 import { SalesService } from '../../services/sales.service';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { cloneDeep, find, isEmpty } from '../../lodash-optimized';
-
-export declare const gapi: any;
+import { TabDirective } from 'ngx-bootstrap/tabs';
+import { MatTabGroup } from '@angular/material/tabs';
 
 @Component({
     selector: 'setting-integration',
@@ -82,9 +74,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public inputMaskFormat: string = '';
     /** To check company country */
     public isIndianCompany: boolean = true;
-
-    @Input() private selectedTabParent: number;
-    @ViewChild('integrationTab', { static: true }) public integrationTab: TabsetComponent;
+    /**This will use for select tab index */
+    @Input() public selectedTabParent: number;
     @ViewChild('removegmailintegration', { static: true }) public removegmailintegration: ModalDirective;
     @ViewChild('paymentForm', { static: true }) paymentForm: NgForm;
     @ViewChild('paymentFormAccountName', { static: true }) paymentFormAccountName: ShSelectComponent;
@@ -154,14 +145,16 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public activeCompany: any;
     /** Holds image path */
     public imgPath: string = '';
-    /** This will hold toggle buttons value and size */
-    public bootstrapToggleSwitch = BootstrapToggleSwitch;
-    /** This will hold isCopied */
-    public isCopied: boolean = false;
     /** This will hold apiUrl */
     public apiUrl: string = '';
+    /** This will hold isCopied */
+    public isCopied: boolean = false;
+    /** This will hold toggle buttons value and size */
+    public bootstrapToggleSwitch = BootstrapToggleSwitch;
     /** Stores the voucher API version of current company */
     public voucherApiVersion: 1 | 2;
+    /** Active tab name */
+    public activeTab: string;
 
     constructor(
         private router: Router,
@@ -176,7 +169,9 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         private generalService: GeneralService,
         private settingsIntegrationService: SettingsIntegrationService,
         private searchService: SearchService,
-        private salesService: SalesService
+        private salesService: SalesService,
+        private route: ActivatedRoute
+
     ) {
         this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl?.replace(':redirect_url', this.getRedirectUrl(AppUrl))?.replace(':client_id', GOOGLE_CLIENT_ID);
         this.gmailAuthCodeUrl$ = observableOf(this.gmailAuthCodeStaticUrl);
@@ -192,14 +187,11 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     }
 
     public ngOnInit() {
+        this.imgPath = (isElectron) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+
         let companyUniqueName = this.generalService.companyUniqueName;
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.apiUrl = `${ApiUrl}company/${companyUniqueName}/imports/tally-import`;
-        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
-        //logic to switch to payment tab if coming from vedor tabs add payment
-        if (this.selectedTabParent !== undefined && this.selectedTabParent !== null) {
-            this.selectTab(this.selectedTabParent);
-        }
 
         // getting all page data of integration page
         this.store.pipe(select(p => p?.settings?.integration), takeUntil(this.destroyed$)).subscribe((o) => {
@@ -284,7 +276,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 this.isIndianCompany = profile.countryV2.alpha2CountryCode === 'IN' ? true : false;
                 if (!this.isIndianCompany && this.selectedTabParent === 3) {
                     this.selectedTabParent = 0;
-                    this.selectTab(this.selectedTabParent);
                 }
             }
         });
@@ -301,10 +292,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     }
 
     public ngAfterViewInit() {
-        if (this.selectedTabParent !== undefined && this.selectedTabParent !== null) {
-            this.selectTab(this.selectedTabParent);
-        }
-        this.loadTabData();
+        this.loadTabData(0);
     }
 
     public setDummyData() {
@@ -521,12 +509,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         return `${baseHref}pages/settings?tab=integration`;
     }
 
-    public selectTab(id: number) {
-        if (this.integrationTab.tabs[id] && this.integrationTab.tabs[id] !== undefined) {
-            this.integrationTab.tabs[id].active = true;
-        }
-    }
-
     /**
      * API call to get know about ecommerce platform shopify connected or not
      *
@@ -625,8 +607,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @memberof SettingIntegrationComponent
      */
     public loadEcommerceData(event?: any): void {
-        if (event && event instanceof TabDirective || !event) {
-            this.store.dispatch(this.settingsIntegrationActions.GetAmazonSellers());
+        if (event && event instanceof MatTabGroup || !event) {
+        this.store.dispatch(this.settingsIntegrationActions.GetAmazonSellers());
         }
     }
 
@@ -636,8 +618,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @param {any} event Tab select event
      * @memberof SettingIntegrationComponent
      */
-    public loadCollectionData(event?): void {
-        if (event && event instanceof TabDirective || !event) {
+    public loadCollectionData(event?: any): void {
+        if (event && event instanceof MatTabGroup || !event) {
             this.loadDefaultAccountsSuggestions();
             this.loadDefaultBankAccountsSuggestions();
             this.store.dispatch(this.settingsIntegrationActions.GetRazorPayDetails());
@@ -651,7 +633,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @memberof SettingIntegrationComponent
      */
     public loadEmailData(event?: any): void {
-        if (event && event instanceof TabDirective || !event) {
+        if (event && event instanceof MatTabGroup || !event) {
             this.store.dispatch(this.settingsIntegrationActions.GetGmailIntegrationStatus());
             this.store.dispatch(this.settingsIntegrationActions.GetEmailKey());
         }
@@ -664,10 +646,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @memberof SettingIntegrationComponent
      */
     public loadSmsData(event?: any): void {
-        if (event && event instanceof TabDirective || !event) {
-            if (event && event instanceof TabDirective || !event) {
-                this.store.dispatch(this.settingsIntegrationActions.GetSMSKey());
-            }
+        if (event && event instanceof MatTabGroup || !event) {
+            this.store.dispatch(this.settingsIntegrationActions.GetSMSKey());
         }
     }
 
@@ -677,25 +657,15 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @private
      * @memberof SettingIntegrationComponent
      */
-    private loadTabData(): void {
-        switch (this.selectedTabParent) {
-            // case SettingsIntegrationTab.Sms:
-            //     this.loadSmsData();
-            //     break;
-            case SettingsIntegrationTab.Email:
-                this.loadEmailData();
-                break;
-            case SettingsIntegrationTab.Collection:
-                this.loadCollectionData();
-                break;
-            // case SettingsIntegrationTab.ECommerce:
-            //     this.loadEcommerceData();
-            //     break;
-            case SettingsIntegrationTab.Payment:
-                this.loadPaymentData();
-                break;
-            default:
-                break;
+    private loadTabData(index:number): void {
+        if (SettingsIntegrationTab.Email === index) {
+            this.loadEmailData();
+        }
+        if (SettingsIntegrationTab.Collection === index) {
+            this.loadCollectionData();
+        }
+        if (SettingsIntegrationTab.Payment === index) {
+            this.loadPaymentData();
         }
     }
 
@@ -705,8 +675,10 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @param {string} tab
      * @memberof SettingIntegrationComponent
      */
-    public tabChanged(tab: string): void {
+    public tabChanged(event: any): void {
+        let tab = event?.tab?.textLabel?.toLocaleLowerCase();
         this.router.navigateByUrl('/pages/settings/integration/' + tab);
+        this.loadTabData(event?.index);
     }
 
     /**
@@ -1039,8 +1011,9 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         });
     }
 
+
     /**
-     * This will use for copy api url link and display copied
+     *This will use for copy api url link and display copied
      *
      * @memberof SettingIntegrationComponent
      */
@@ -1051,3 +1024,4 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         }, 3000);
     }
 }
+

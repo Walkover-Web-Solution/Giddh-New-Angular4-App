@@ -1,10 +1,10 @@
 /** Settings integration tabs */
 export enum SettingsIntegrationTab {
-    //Sms = 0,
-    Email = 0,
-    Collection,
-    ECommerce,
-    Payment
+    Communication = 0,
+    Email = 1,
+    Collection = 2,
+    ECommerce = 3,
+    Payment=4
 }
 
 /** Country interface for Organization profile */

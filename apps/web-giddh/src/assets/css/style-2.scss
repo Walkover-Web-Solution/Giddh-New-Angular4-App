@@ -147,6 +147,11 @@ $custom-typography: mat-typography-config(
         float: left;
     }
 }
+.campaign-grid-tile {
+    .mat-grid-tile-content {
+        justify-content: flex-start !important;
+    }
+}
 
 .voucher-preview-edit,
 .update-ledger-entry-panel-popup,
@@ -368,6 +373,27 @@ $custom-typography: mat-typography-config(
         }
     }
 }
+.mat-select-search-no-entries-found {
+    padding: 16px !important;
+    z-index: 99999 !important;
+    position: relative !important;
+    padding-top: 5px !important;
+}
+.trigger-dropdown {
+    width: 30% !important;
+    margin-top: 20px !important;
+}
+.compose-trigger-dropdowns {
+    .example-chip-list {
+        width: 100%;
+    }
+    .mat-form-field-appearance-legacy {
+        .mat-form-field-wrapper {
+            padding-bottom: 1em !important;
+        }
+    }
+}
+
 @media screen and (max-width: 1366px) and (orientation: portrait) {
     .subscription-form-select {
         float: left !important;
@@ -7926,7 +7952,17 @@ highcharts-chart {
 #top0 app-aside-menu-other-taxes {
     top: 0 !important;
 }
-
+.on-setting-page {
+    .mat-pseudo-checkbox-checked {
+        background: #3f51b5 !important;
+    }
+    .sub-entity-trigger {
+        min-width: 100% !important;
+    }
+    .bottom-select-suggestion {
+        min-width: 127px;
+    }
+}
 .voucher-preview-edit,
 .update-ledger-entry-panel-popup,
 .page-has-tabs,
