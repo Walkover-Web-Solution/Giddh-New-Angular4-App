@@ -5,9 +5,11 @@ import { ReplaySubject } from 'rxjs';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmModalComponent } from 'apps/web-giddh/src/app/theme/new-confirm-modal/confirm-modal.component';
-import { API_COUNT_LIMIT, EMAIL_VALIDATION_REGEX, PAGINATION_LIMIT } from 'apps/web-giddh/src/app/app.constant';
+import { API_COUNT_LIMIT, EMAIL_VALIDATION_REGEX, MOBILE_REGEX_PATTERN, PAGINATION_LIMIT } from 'apps/web-giddh/src/app/app.constant';
 import { CampaignIntegrationService } from 'apps/web-giddh/src/app/services/campaign.integraion.service';
 import { IOption } from 'apps/web-giddh/src/app/theme/ng-select/option.interface';
+import { GIDDH_NEW_DATE_FORMAT_UI } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
+import * as dayjs from 'dayjs';
 
 export interface ActiveTriggers {
     title: string;
@@ -82,7 +84,7 @@ export class SettingCampaignComponent implements OnInit {
     /** Validate the email regex for add emails */
     public EMAIL_REGEX_PATTERN = EMAIL_VALIDATION_REGEX;
     /** Validate the mobileregex for add mobile */
-    public MOBILE_REGEX_PATTERN = /^([0|\+[0-9]{1,5})?([7-9][0-9]{9})$/;
+    public MOBILE_REGEX_PATTERN = MOBILE_REGEX_PATTERN;
     /** Holds the trigger mode */
     public triggerMode: 'create' | 'copy' | 'update' = 'create';
     /** Holds the trigger condtiion   */
@@ -230,6 +232,7 @@ export class SettingCampaignComponent implements OnInit {
             if (response?.status === "success") {
                 if (response?.body?.items?.length > 0) {
                     response?.body?.items?.forEach(trigger => {
+                        trigger.createdAt = dayjs(trigger.createdAt).format(GIDDH_NEW_DATE_FORMAT_UI);
                         const argsMapping = [];
                         this.triggerUniquename = trigger?.uniqueName;
                         if (trigger?.argsMapping?.length > 0) {
