@@ -3,6 +3,7 @@
     [file]="'settings/campaign'"
     (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
+    (translationComplete)="translationComplete($event)"
 >
     <div class="msg91-container" *ngIf="!showTriggerForm">
         <div class="menu" *ngIf="communicationPlatforms?.MSG91?.isConnected">
@@ -50,20 +51,26 @@
                 {{ communicationPlatforms?.MSG91?.fields?.auth_key?.label
                 }}<span *ngIf="communicationPlatforms?.MSG91?.fields?.auth_key?.mandatory">*</span>
             </p>
-            <input
-                matInput
+            <text-field
+                [type]="'text'"
+                [cssClass]="'form-control mat-field-border'"
                 [attr.placeholder]="communicationPlatforms?.MSG91?.fields?.auth_key?.placeHolder"
+                [name]="'title'"
                 [(ngModel)]="communicationPlatforms.MSG91.fields.auth_key.value"
-            />
+            >
+            </text-field>
         </div>
         <div class="input-field">
             <p class="label">{{ communicationPlatforms?.MSG91?.fields?.whitelist_ips?.label }}</p>
-            <input
-                matInput
+            <text-field
+                [type]="'text'"
+                [cssClass]="'form-control mat-field-border'"
                 [attr.placeholder]="communicationPlatforms?.MSG91?.fields?.whitelist_ips?.placeHolder"
+                [name]="'auth'"
                 [(ngModel)]="communicationPlatforms.MSG91.fields.whitelist_ips.value"
-                readonly
-            />
+                [readonly]="true"
+            >
+            </text-field>
         </div>
         <button
             mat-flat-button
@@ -373,7 +380,9 @@
                     </mat-checkbox>
                 </div>
                 <br />
-                <p class="compose">{{ localeData?.communication?.variables }}</p>
+                <p class="compose" *ngIf="createTrigger.campaignDetails.argsMapping?.length">
+                    {{ localeData?.communication?.variables }}
+                </p>
                 <mat-grid-list class="unit-mapping-grid-list" cols="3" gutterSize="0px" rowHeight="70px">
                     <form class="map-unit-value-form">
                         <mat-grid-tile

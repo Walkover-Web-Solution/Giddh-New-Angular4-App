@@ -1,6 +1,6 @@
 // Communication Page Styling
 .msg91-container:hover {
-    background-color: rgb(240, 244, 255);
+    background-color: #f0f4ff;
 }
 
 .small-button {
@@ -16,7 +16,7 @@
 
 .msg91-container {
     position: relative;
-    border: 1px solid rgb(231, 233, 235);
+    border: 1px solid #e7e9eb;
     border-radius: 7px;
     cursor: pointer;
     width: 241px;
@@ -45,7 +45,7 @@
 
     .integrate {
         p {
-            color: rgb(102, 140, 255);
+            color: #668cff;
             font-size: 14px;
             margin-top: 12px;
         }
@@ -67,7 +67,7 @@
         button {
             mat-icon {
                 font-size: 18px;
-                color: rgb(106, 108, 133);
+                color: #6a6c85;
             }
         }
     }
@@ -121,7 +121,7 @@
 .main-content {
     width: 100%;
     height: 58.4vh;
-    background-color: rgb(245, 245, 245);
+    background-color: #f5f5f5;
     position: relative;
 
     p {
@@ -132,11 +132,11 @@
     table {
         width: 97.5%;
         margin: 0px 15px;
-        background: rgb(245, 245, 245);
+        background: #f5f5f5;
         box-shadow: none;
 
         .mat-header-cell {
-            background: rgb(245, 245, 245);
+            background: #f5f5f5;
         }
 
         .mat-cell {
@@ -168,19 +168,23 @@
     margin-left: 15px;
 
     .input-field {
+        width: 20%;
+        margin-top: 15px;
+        margin-bottom: 15px;
+
         .label {
             font-size: 12px;
-            color: rgb(106, 108, 133);
+            color: #6a6c85;
 
             span {
-                color: rgb(229, 69, 86);
+                color: #e54556;
             }
         }
 
         input {
-            background-color: rgb(245, 245, 245);
+            background-color: #f5f5f5;
             border: none;
-            color: rgb(33, 37, 40);
+            color: #212528;
             height: 36px;
             width: 348px;
             padding-left: 10px;
@@ -212,7 +216,7 @@
                 display: inline-block;
                 font-weight: 600;
                 font-size: 14px;
-                color: rgb(26, 35, 126);
+                color: #1a237e;
             }
 
             .return {
@@ -227,10 +231,10 @@
 
             .trigger-input-label {
                 font-size: 12px;
-                color: rgb(106, 108, 133);
+                color: #6a6c85;
 
                 span {
-                    color: rgb(229, 69, 86);
+                    color: #e54556;
                 }
             }
 
@@ -239,7 +243,7 @@
                 width: 256px;
                 height: 36px;
                 border: none;
-                background-color: rgb(245, 245, 245);
+                background-color: #f5f5f5;
                 padding-left: 10px;
                 font-size: 14px;
                 border-radius: 5px;
@@ -262,7 +266,7 @@
         padding-left: 20px;
 
         .compose {
-            color: rgb(106, 108, 133);
+            color: #6a6c85;
             font-size: 14px;
             font-weight: 700;
         }
@@ -271,19 +275,19 @@
             margin-top: 9.5px;
 
             .compose-subject-label {
-                color: rgb(106, 108, 133);
+                color: #6a6c85;
                 font-size: 12px;
 
                 span {
-                    color: rgb(229, 69, 86);
+                    color: #e54556;
                 }
             }
 
             .subject-box {
                 width: 79%;
                 height: 36px;
-                background-color: rgb(245, 245, 245);
-                color: rgb(33, 37, 40);
+                background-color: #f5f5f5;
+                color: #212528;
                 border: none;
                 padding-left: 10px;
                 font-size: 14px;
@@ -304,7 +308,7 @@
                 }
 
                 span {
-                    background-color: rgb(231, 233, 235);
+                    background-color: #e7e9eb;
                     border-radius: 5px;
                     padding: 1px 5px;
                 }
@@ -320,7 +324,7 @@
                 mat-select {
                     width: 138px;
                     height: 26px;
-                    background-color: rgb(245, 245, 245);
+                    background-color: #f5f5f5;
                     margin-left: 10px;
                     border-radius: 5px;
                     padding: 2px 6px 2px 6px;
@@ -328,7 +332,7 @@
                 }
 
                 .dropdown-list-label {
-                    color: rgb(106, 108, 133);
+                    color: #6a6c85;
                     font-weight: 600;
                     font-size: 15px;
                 }

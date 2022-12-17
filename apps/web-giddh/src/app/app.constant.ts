@@ -281,12 +281,12 @@ export const RESTRICTED_BRANCH_ROUTES = [
 
 /** Settings integration tabs */
 export const SETTING_INTEGRATION_TABS = {
-    // SMS: { LABEL: 'sms', VALUE: 0 },
-    EMAIL: { LABEL: 'email', VALUE: 0 },
-    COLLECTION: { LABEL: 'collection', VALUE: 1 },
-    E_COMMERCE: { LABEL: 'ecommerce', VALUE: 2 },
-    PAYMENT: { LABEL: 'payment', VALUE: 3 },
-    TALLY: { LABEL: 'tally', VALUE: 4 }
+    COMMUNICATION: { LABEL: 'communication', VALUE: 0 },
+    EMAIL: { LABEL: 'email', VALUE: 1 },
+    COLLECTION: { LABEL: 'collection', VALUE: 2 },
+    E_COMMERCE: { LABEL: 'e-comm', VALUE: 3 },
+    PAYMENT: { LABEL: 'payment', VALUE: 4 },
+    TALLY: { LABEL: 'tally', VALUE: 5 }
 };
 /** Email Validation Regex */
 export const EMAIL_VALIDATION_REGEX = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;

@@ -7,6 +7,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ConfirmModalComponent } from 'apps/web-giddh/src/app/theme/new-confirm-modal/confirm-modal.component';
 import { API_COUNT_LIMIT, EMAIL_VALIDATION_REGEX, PAGINATION_LIMIT } from 'apps/web-giddh/src/app/app.constant';
 import { CampaignIntegrationService } from 'apps/web-giddh/src/app/services/campaign.integraion.service';
+import { IOption } from 'apps/web-giddh/src/app/theme/ng-select/option.interface';
 
 export interface ActiveTriggers {
     title: string;
@@ -85,28 +86,11 @@ export class SettingCampaignComponent implements OnInit {
     /** Holds the trigger mode */
     public triggerMode: 'create' | 'copy' | 'update' = 'create';
     /** Holds the trigger condtiion   */
-    public triggerCondition: any[] = [
-        {
-            label: 'Create',
-            value: 'CREATE',
-        },
-        {
-            label: 'Update',
-            value: 'UPDATE',
-        },
-        {
-            label: 'Delete',
-            value: 'DELETE',
-        }
-    ];
+    public triggerCondition: IOption[] = [];
     /** Holds the trigger entity   */
-    public triggerEntity: any[] = [
-        {
-            label: 'Voucher',
-            value: 'VOUCHER'
-        }
-    ];
-    public triggerObj ={
+    public triggerEntity: IOption[] = [];
+    /** Holds the trigger object   */
+    public triggerObj = {
         count: API_COUNT_LIMIT,
         page: 1,
         totalItems: 0,
@@ -116,6 +100,8 @@ export class SettingCampaignComponent implements OnInit {
     public showVariableMapping: boolean = false;
     /** Hold instance of destroyed   */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** True if translations loaded */
+    public translationLoaded: boolean = false;
 
     constructor(private campaignIntegrationService: CampaignIntegrationService,
         private toasty: ToasterService,
@@ -873,6 +859,30 @@ export class SettingCampaignComponent implements OnInit {
     public removeCc(event: any, index: number): void {
         if (index >= 0) {
             this.triggerCcChiplist?.splice(index, 1);
+        }
+    }
+
+    /**
+     * Callback for translation response complete
+     *
+     * @param {*} event
+     * @memberof SettingCampaignComponent
+     */
+    public translationComplete(event: any): void {
+        if (event) {
+            this.translationLoaded = true;
+            let createUppercase = this.localeData?.communication?.create.toUpperCase();
+            let updateUppercase = this.localeData?.communication?.create.toUpperCase();
+            let deleteUppercase = this.localeData?.communication?.create.toUpperCase();
+            let voucherUppercase = this.localeData?.communication?.voucher.toUpperCase();
+            this.triggerCondition = [
+                { label: this.localeData?.communication?.create, value: createUppercase },
+                { label: this.localeData?.communication?.update, value: updateUppercase },
+                { label: this.localeData?.communication?.delete, value: deleteUppercase }
+            ];
+            this.triggerEntity = [
+                { label: this.localeData?.communication?.voucher, value: voucherUppercase },
+            ];
         }
     }
 
