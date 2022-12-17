@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { COMMA, ENTER, I } from '@angular/cdk/keycodes';
 import { take, takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
@@ -41,7 +41,10 @@ export class SettingCampaignComponent implements OnInit {
     /** Communication platform auth model  */
     public communicationPlatformAuthModel: any = {
         platform: "",
-        authFields: []
+        authFields: [{
+            name: "authKey",
+            value:''
+        }]
     };
     /** True if communication platform get api in progress */
     public isCommunicationPlatformsLoading: boolean = true;
@@ -104,6 +107,8 @@ export class SettingCampaignComponent implements OnInit {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** True if translations loaded */
     public translationLoaded: boolean = false;
+    /** Holds the trigger condtiion action  */
+    public tiggerConditionAction: any[] = [];
 
     constructor(private campaignIntegrationService: CampaignIntegrationService,
         private toasty: ToasterService,
@@ -130,16 +135,20 @@ export class SettingCampaignComponent implements OnInit {
     * @memberof SettingCampaignComponent
     */
     private getCommunicationPlatforms(): void {
-        this.communicationPlatforms = [];
         this.isCommunicationPlatformsLoading = true;
-        this.editCommunicationPlatform = "";
         this.campaignIntegrationService.getCommunicationPlatforms().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
+                if (this.editCommunicationPlatform = '') {
+                    this.communicationPlatformAuthModel.authFields[0].value = [];
+                } else {
+                    this.communicationPlatformAuthModel.authFields[0].value = response?.body?.platforms[0]?.fields[0]?.value;
+                }
                 if (response?.body?.platforms?.length > 0) {
-                    response.body.platforms.forEach(platform => {
+                    response.body.platforms?.forEach(platform => {
                         this.communicationPlatforms[platform?.name] = [];
                         this.communicationPlatforms[platform?.name].name = platform?.name;
                         this.communicationPlatforms[platform?.name].uniqueName = platform?.uniqueName;
+
                         let fields = [];
                         platform?.fields?.forEach(pt => {
                             fields[pt?.field] = pt;
@@ -170,11 +179,6 @@ export class SettingCampaignComponent implements OnInit {
     public verifyCommunicationPlatform(platform: string): void {
         this.isCommunicationPlatformVerificationInProcess = true;
         this.communicationPlatformAuthModel.platform = platform;
-        this.communicationPlatformAuthModel.authFields?.push({
-            name: "authKey",
-            value: this.communicationPlatforms?.MSG91?.fields?.auth_key?.value
-        });
-
         this.campaignIntegrationService.verifyCommunicationPlatform(this.communicationPlatformAuthModel).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
                 this.toasty.showSnackBar("success", platform + this.localeData?.communication?.platform_success);
@@ -304,6 +308,9 @@ export class SettingCampaignComponent implements OnInit {
      */
     public getTriggerByUniqueName(uniqueName: any): void {
         this.campaignIntegrationService.getTriggerByUniqueName(uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            console.log(response);
+
+            this.triggerConditionAction =[];
             if (response?.status === "success") {
                 if (this.triggerMode === 'update' || this.triggerMode === 'copy') {
                     this.triggerBccDropdown = [];
@@ -325,7 +332,7 @@ export class SettingCampaignComponent implements OnInit {
 
                     this.createTrigger.title = response?.body?.title;
                     this.createTrigger.campaignDetails.sendVoucherPdf = response?.body?.campaignDetails?.sendVoucherPdf;
-                    this.triggerConditionAction = response?.body?.condition?.action[0];
+
 
                     this.getCampaignFields(this.createTrigger.campaignDetails.campaignSlug, () => {
                         this.createTrigger.campaignDetails.argsMapping?.forEach(arg => {
@@ -335,7 +342,7 @@ export class SettingCampaignComponent implements OnInit {
                             }
                         });
                     });
-
+                    this.tiggerConditionAction = response?.body?.condition?.action[0];
                     this.createTrigger.condition.subConditions.action = response?.body?.condition?.subConditions[0]?.action;
                     this.createTrigger.condition.entity = response?.body?.condition?.entity;
                 }
@@ -526,6 +533,8 @@ export class SettingCampaignComponent implements OnInit {
  * @memberof SettingCampaignComponent
  */
     public selectConditions(action: any): void {
+        console.log(action);
+
         if (action) {
             this.createTrigger.condition?.action?.push(action);
         }
@@ -576,6 +585,8 @@ export class SettingCampaignComponent implements OnInit {
      * @memberof SettingCampaignComponent
      */
     public updateTriggerForm(requestObj: any): void {
+        console.log(requestObj, this.triggerConditionAction);
+
         requestObj.condition?.action?.push(this.triggerConditionAction);
         requestObj.campaignDetails.to = this.triggerToChiplist;
         requestObj.campaignDetails.bcc = this.triggerBccChiplist;
@@ -875,8 +886,8 @@ export class SettingCampaignComponent implements OnInit {
         if (event) {
             this.translationLoaded = true;
             let createUppercase = this.localeData?.communication?.create.toUpperCase();
-            let updateUppercase = this.localeData?.communication?.create.toUpperCase();
-            let deleteUppercase = this.localeData?.communication?.create.toUpperCase();
+            let updateUppercase = this.localeData?.communication?.update.toUpperCase();
+            let deleteUppercase = this.localeData?.communication?.delete.toUpperCase();
             let voucherUppercase = this.localeData?.communication?.voucher.toUpperCase();
             this.triggerCondition = [
                 { label: this.localeData?.communication?.create, value: createUppercase },
