@@ -8,6 +8,10 @@
         <mat-tab-group
             [ngClass]="{ 'tab-integration': true, 'hide-payment-tab': !isIndianCompany }"
             id="tab-integration"
+            animationDuration="0ms"
+            [selectedIndex]="selectedTabParent"
+            (selectedTabChange)="tabChanged($event)"
+            [disableRipple]="true"
         >
             <!-- <tab (selectTab)="loadSmsData($event); tabChanged('sms');">
                 <ng-template tabHeading>
@@ -51,9 +55,8 @@
                 <app-setting-campaign></app-setting-campaign>
             </mat-tab>
 
-            <mat-tab [label]="localeData?.email?.tab_heading" (selectTab)="loadEmailData($event); tabChanged('email')">
+            <mat-tab [label]="localeData?.email?.tab_heading">
                 <ng-template> <span class="icon-mail"></span> {{ localeData?.email?.tab_heading }} </ng-template>
-
                 <div class="box clearfix mb-2">
                     <h3 class="section-head">{{ localeData?.email?.gmail_integration }}</h3>
                     <div class="d-flex gmail-integration-message">
@@ -139,10 +142,7 @@
                 </div>
             </mat-tab>
 
-            <mat-tab
-                [label]="localeData?.collection?.tab_heading"
-                (selectTab)="loadCollectionData($event); tabChanged('collection')"
-            >
+            <mat-tab [label]="localeData?.collection?.tab_heading">
                 <ng-template> <span class="icon-card"></span> {{ localeData?.collection?.tab_heading }} </ng-template>
 
                 <div class="box clearfix mb-2">
@@ -256,10 +256,7 @@
                 </div>
             </mat-tab>
 
-            <mat-tab
-                [label]="localeData?.ecommerce?.tab_heading"
-                (selectTab)="loadEcommerceData($event); tabChanged('ecommerce')"
-            >
+            <mat-tab [label]="localeData?.ecommerce?.tab_heading">
                 <ng-template> <span class="icon-ecomm"></span> {{ localeData?.ecommerce?.tab_heading }} </ng-template>
                 <div class="mr-t2 box clearfix">
                     <h3 class="section-head mb-2">{{ localeData?.ecommerce?.shopify_form_heading }}</h3>
@@ -276,11 +273,7 @@
                 </div>
             </mat-tab>
 
-            <mat-tab
-                [label]="localeData?.payment?.tab_heading"
-                (selectTab)="loadPaymentData($event); tabChanged('payment')"
-                [hidden]="!isIndianCompany"
-            >
+            <mat-tab [label]="localeData?.payment?.tab_heading" [hidden]="!isIndianCompany">
                 <div *ngIf="isIndianCompany" class="clearfix box">
                     <ng-template>
                         <span class="icon-payment"></span> {{ localeData?.payment?.tab_heading }}
@@ -485,11 +478,8 @@
                     </div>
                 </div>
             </mat-tab>
-            <mat-tab
-                [label]="localeData?.tally?.heading"
-                (selectTab)="tabChanged('tally')"
-                *ngIf="voucherApiVersion === 2"
-            >
+
+            <mat-tab [label]="localeData?.tally?.heading" *ngIf="voucherApiVersion === 2">
                 <ng-template> <span class="icon-card"></span>{{ localeData?.tally?.heading }}</ng-template>
                 <div class="box clearfix mb-2">
                     <div class="form-group magic-link-container col-md-9 col-lg-7 d-flex align-items-center">

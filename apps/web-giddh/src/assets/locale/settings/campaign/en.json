@@ -37,7 +37,10 @@
         "platform_success":" Platform has been verified successfully.",
         "create_trigger_succes":" : Create trigger successfully.",
          "activated":"Activated",
-         "deactivated":"Deactivated"
-
+         "deactivated":"Deactivated",
+         "create":"Create",
+         "update":"Update",
+         "delete":"Delete",
+         "voucher":"Voucher"
     }
 }
