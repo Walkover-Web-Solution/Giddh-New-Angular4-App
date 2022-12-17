@@ -74,9 +74,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public inputMaskFormat: string = '';
     /** To check company country */
     public isIndianCompany: boolean = true;
-
+    /**This will use for select tab index */
     @Input() public selectedTabParent: number;
-    //@ViewChild('integrationTab', { static: true }) public integrationTab: TabsetComponent;
     @ViewChild('removegmailintegration', { static: true }) public removegmailintegration: ModalDirective;
     @ViewChild('paymentForm', { static: true }) paymentForm: NgForm;
     @ViewChild('paymentFormAccountName', { static: true }) paymentFormAccountName: ShSelectComponent;
