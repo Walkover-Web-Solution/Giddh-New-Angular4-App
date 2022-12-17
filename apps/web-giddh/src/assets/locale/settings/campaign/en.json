@@ -35,11 +35,13 @@
         "name_trigger":"Name Trigger",
         "platform_success":" Platform has been verified successfully.",
         "create_trigger_succes":" : Create trigger successfully.",
-         "activated":"Activated",
-         "deactivated":"Deactivated",
+         "activated":"Activate",
+         "deactivated":"Deactivate",
          "create":"Create",
          "update":"Update",
          "delete":"Delete",
-         "voucher":"Voucher"
+         "voucher":"Voucher",
+        "auth_key":"Enter Auth Key",
+        "whitelist_ips":"Enter whitelist Ips"
     }
 }
