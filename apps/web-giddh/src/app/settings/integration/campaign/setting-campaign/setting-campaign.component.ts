@@ -43,7 +43,7 @@ export class SettingCampaignComponent implements OnInit {
         platform: "",
         authFields: [{
             name: "authKey",
-            value:''
+            value: ''
         }]
     };
     /** True if communication platform get api in progress */
@@ -80,8 +80,7 @@ export class SettingCampaignComponent implements OnInit {
     public triggerBccDropdown: any[] = [];
     /** Holds the trigger cc dropdown data */
     public triggerCcDropdown: any[] = [];
-    /** Holds the trigger condtiion action  */
-    public triggerConditionAction: any[] = [];
+
     /** True if  the trigger loading  */
     public isActiveTriggersLoading: boolean = false;
     /** Validate the email regex for add emails */
@@ -107,8 +106,7 @@ export class SettingCampaignComponent implements OnInit {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** True if translations loaded */
     public translationLoaded: boolean = false;
-    /** Holds the trigger condtiion action  */
-    public tiggerConditionAction: any[] = [];
+
 
     constructor(private campaignIntegrationService: CampaignIntegrationService,
         private toasty: ToasterService,
@@ -177,6 +175,10 @@ export class SettingCampaignComponent implements OnInit {
      * @memberof SettingCampaignComponent
      */
     public verifyCommunicationPlatform(platform: string): void {
+        if (!this.communicationPlatformAuthModel.authFields[0].value) {
+            this.toasty.showSnackBar("error", this.localeData?.communication?.invalid_key);
+            return;
+        }
         this.isCommunicationPlatformVerificationInProcess = true;
         this.communicationPlatformAuthModel.platform = platform;
         this.campaignIntegrationService.verifyCommunicationPlatform(this.communicationPlatformAuthModel).pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -308,9 +310,6 @@ export class SettingCampaignComponent implements OnInit {
      */
     public getTriggerByUniqueName(uniqueName: any): void {
         this.campaignIntegrationService.getTriggerByUniqueName(uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            console.log(response);
-
-            this.triggerConditionAction =[];
             if (response?.status === "success") {
                 if (this.triggerMode === 'update' || this.triggerMode === 'copy') {
                     this.triggerBccDropdown = [];
@@ -342,8 +341,8 @@ export class SettingCampaignComponent implements OnInit {
                             }
                         });
                     });
-                    this.tiggerConditionAction = response?.body?.condition?.action[0];
-                    this.createTrigger.condition.subConditions.action = response?.body?.condition?.subConditions[0]?.action;
+                    this.createTrigger.condition.action = response?.body?.condition?.action;
+                    this.createTrigger.condition.subConditions[0].action = response?.body?.condition?.subConditions[0]?.action;
                     this.createTrigger.condition.entity = response?.body?.condition?.entity;
                 }
             }
@@ -413,36 +412,6 @@ export class SettingCampaignComponent implements OnInit {
         this.updateTriggerForm(this.createTrigger);
     }
 
-    /**
-     * Initialize the field
-     *
-     * @memberof SettingCampaignComponent
-     */
-    public initFormFields(): void {
-        this.createTrigger =
-        {
-            title: null,
-            condition: {
-                entity: null,
-                action: [],
-                subConditions: [
-                    {
-                        entity: 'voucherType',
-                        action: []
-                    }
-                ]
-            },
-            communicationPlatform: this.platform,
-            campaignDetails: {
-                campaignSlug: null,
-                argsMapping: [],
-                to: [],
-                cc: [],
-                bcc: [],
-                sendVoucherPdf: false
-            }
-        }
-    }
 
     /**
     * This function will change the page of activity logs
@@ -467,7 +436,6 @@ export class SettingCampaignComponent implements OnInit {
         this.triggerBccChiplist = [];
         this.triggerToChiplist = [];
         this.triggerCcChiplist = [];
-        this.triggerConditionAction = [];
         this.triggerBccDropdown = [];
         this.triggerToDropdown = [];
         this.triggerCcDropdown = [];
@@ -520,10 +488,9 @@ export class SettingCampaignComponent implements OnInit {
      * @param {*} entity
      * @memberof SettingCampaignComponent
      */
-    public selectSubEntity(subconditions: any): void {
-        if (subconditions) {
-            this.createTrigger.condition?.subConditions[0]?.action?.push(subconditions);
-        }
+    public selectSubEntity(event: any): void {
+        this.createTrigger.condition.subConditions[0]. action = event;
+
     }
 
     /**
@@ -533,10 +500,8 @@ export class SettingCampaignComponent implements OnInit {
  * @memberof SettingCampaignComponent
  */
     public selectConditions(action: any): void {
-        console.log(action);
-
         if (action) {
-            this.createTrigger.condition?.action?.push(action);
+            this.createTrigger.condition.action[0] = action;
         }
     }
 
@@ -551,6 +516,37 @@ export class SettingCampaignComponent implements OnInit {
     }
 
     /**
+     * Initialize the field
+     *
+     * @memberof SettingCampaignComponent
+     */
+    public initFormFields(): void {
+        this.createTrigger =
+        {
+            title: null,
+            condition: {
+                entity: null,
+                action: [],
+                subConditions: [
+                    {
+                        entity: 'voucherType',
+                        action: []
+                    }
+                ]
+            },
+            communicationPlatform: this.platform,
+            campaignDetails: {
+                campaignSlug: null,
+                argsMapping: [],
+                to: [],
+                cc: [],
+                bcc: [],
+                sendVoucherPdf: false
+            }
+        }
+    }
+
+    /**
      * Create Trigger form
      *
      * @param {*} requestObj
@@ -558,7 +554,6 @@ export class SettingCampaignComponent implements OnInit {
      */
     public createTriggerForm(requestObj: any): void {
         if (this.triggerMode === 'copy') {
-            requestObj.condition.action?.push(this.triggerConditionAction);
             requestObj.campaignDetails.to = this.triggerToChiplist;
             requestObj.campaignDetails.bcc = this.triggerBccChiplist;
             requestObj.campaignDetails.cc = this.triggerCcChiplist;
@@ -566,6 +561,33 @@ export class SettingCampaignComponent implements OnInit {
         requestObj.campaignDetails.argsMapping = requestObj?.campaignDetails?.argsMapping?.filter(val => {
             return val?.value !== "";
         });
+
+        if (!this.createTrigger.title) {
+            this.toasty.showSnackBar("error", this.localeData?.communication?.invalid_title);
+            return;
+        }
+        if (!this.createTrigger.campaignDetails.campaignSlug) {
+            this.toasty.showSnackBar("error", this.localeData?.communication?.invalid_slug);
+            return;
+        }
+        if (!this.triggerToChiplist.length) {
+            this.toasty.showSnackBar("error", this.localeData?.communication?.invalid_to);
+            return;
+        }
+        if (!this.createTrigger.condition.action.length) {
+            this.toasty.showSnackBar("error", this.localeData?.communication?.invalid_action);
+            return;
+        }
+        if (!this.createTrigger.condition.entity) {
+            this.toasty.showSnackBar("error", this.localeData?.communication?.invalid_entity);
+
+            return;
+        }
+        if (!this.createTrigger.condition.subConditions[0].action.length) {
+            this.toasty.showSnackBar("error", this.localeData?.communication?.invalid_sub_entity);
+            return;
+        }
+
         this.campaignIntegrationService.createTrigger(requestObj).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
                 this.toasty.showSnackBar("success", response?.body + this.localeData?.communication?.create_trigger_succes);
@@ -585,15 +607,38 @@ export class SettingCampaignComponent implements OnInit {
      * @memberof SettingCampaignComponent
      */
     public updateTriggerForm(requestObj: any): void {
-        console.log(requestObj, this.triggerConditionAction);
-
-        requestObj.condition?.action?.push(this.triggerConditionAction);
         requestObj.campaignDetails.to = this.triggerToChiplist;
         requestObj.campaignDetails.bcc = this.triggerBccChiplist;
         requestObj.campaignDetails.cc = this.triggerCcChiplist;
         requestObj.campaignDetails.argsMapping = requestObj?.campaignDetails?.argsMapping?.filter(val => {
             return val?.value !== "";
         });
+
+        if (!this.createTrigger.title) {
+            this.toasty.showSnackBar("error", this.localeData?.communication?.invalid_title);
+            return;
+        }
+        if (!this.createTrigger.campaignDetails.campaignSlug) {
+            this.toasty.showSnackBar("error", this.localeData?.communication?.invalid_slug);
+            return;
+        }
+        if (!this.triggerToChiplist.length) {
+            this.toasty.showSnackBar("error", this.localeData?.communication?.invalid_to);
+            return;
+        }
+        if (!this.createTrigger.condition.action.length) {
+            this.toasty.showSnackBar("error", this.localeData?.communication?.invalid_action);
+            return;
+        }
+        if (!this.createTrigger.condition.entity) {
+            this.toasty.showSnackBar("error", this.localeData?.communication?.invalid_entity);
+
+            return;
+        }
+        if (!this.createTrigger.condition.subConditions[0].action.length) {
+            this.toasty.showSnackBar("error", this.localeData?.communication?.invalid_sub_entity);
+            return;
+        }
         this.campaignIntegrationService.updateTrigger(requestObj, this.triggerUniquename).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
                 this.toasty.showSnackBar("success", response?.body);

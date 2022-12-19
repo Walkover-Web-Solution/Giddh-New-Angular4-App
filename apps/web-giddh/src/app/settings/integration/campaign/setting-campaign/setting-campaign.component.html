@@ -223,7 +223,7 @@
                     [placeholder]="localeData?.communication?.select_condition"
                     [options]="triggerCondition"
                     (selectedOption)="selectConditions($event?.value)"
-                    [defaultValue]="tiggerConditionAction"
+                    [defaultValue]="createTrigger.condition.action.length ? createTrigger.condition.action[0] : ''"
                 ></select-field>
             </div>
             <div class="trigger-input">
@@ -243,13 +243,13 @@
                     class="form-control mat-field-border sub-entity-trigger"
                     [placeholder]="localeData?.communication?.select_sub_entity"
                     multiple
-                    [(ngModel)]="createTrigger.condition.subConditions.action"
+                    [(ngModel)]="createTrigger.condition.subConditions[0].action"
+                    (selectionChange)="selectSubEntity($event?.value)"
                 >
                     <mat-option
                         *ngFor="let action of subConditionAction"
                         [selected]="action?.isChecked"
                         [value]="action"
-                        (onSelectionChange)="selectSubEntity(action)"
                         >{{ action }}</mat-option
                     >
                 </mat-select>
@@ -303,7 +303,7 @@
                                 [matAutocomplete]="auto1"
                                 [matChipInputFor]="chipListTo"
                                 [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                                [matChipInputAddOnBlur]="addOnBlur"
+                                [matChipInputAddOnBlur]="true"
                                 (matChipInputTokenEnd)="addTriggerTo($event)"
                             />
                         </mat-chip-list>
@@ -331,7 +331,7 @@
                                 [matAutocomplete]="auto2"
                                 [matChipInputFor]="chipListBcc"
                                 [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                                [matChipInputAddOnBlur]="addOnBlur"
+                                [matChipInputAddOnBlur]="true"
                                 (matChipInputTokenEnd)="addTriggerBcc($event)"
                             />
                         </mat-chip-list>
@@ -359,7 +359,7 @@
                                 [matAutocomplete]="auto3"
                                 [matChipInputFor]="chipListCc"
                                 [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                                [matChipInputAddOnBlur]="addOnBlur"
+                                [matChipInputAddOnBlur]="true"
                                 (matChipInputTokenEnd)="addTriggerCc($event)"
                             />
                         </mat-chip-list>

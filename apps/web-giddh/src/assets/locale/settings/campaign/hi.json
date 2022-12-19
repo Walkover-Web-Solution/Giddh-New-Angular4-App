@@ -42,6 +42,14 @@
          "delete":"मिटाना",
          "voucher":"वाउचर",
         "auth_key":"प्रामाणिक कुंजी दर्ज करें",
-        "whitelist_ips":"श्वेतसूची आईपीएस दर्ज करें"
+        "whitelist_ips":"श्वेतसूची आईपीएस दर्ज करें",
+        "invalid_key":"अमान्य प्रमाणीकरण कुंजी",
+        "invalid_slug":"अमान्य अभियान स्लग",
+        "invalid_action":"अमान्य स्थिति",
+        "invalid_sub_entity":"अमान्य उप निकाय",
+        "invalid_entity":"अमान्य इकाई",
+        "invalid_arguments":"अमान्य अभियान विवरण तर्क मैपिंग",
+        "invalid_to":"करने के लिए अमान्य",
+        "invalid_title":"अमान्य शीर्षक"
     }
 }
