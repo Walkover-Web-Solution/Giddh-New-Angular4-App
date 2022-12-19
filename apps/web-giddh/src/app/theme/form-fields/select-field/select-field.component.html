@@ -42,7 +42,7 @@
                 [maxBufferPx]="300"
                 [id]="scrollableElementId"
                 [ngStyle]="{
-                    'min-height': (fieldFilteredOptions?.length * 51 > 193 ? 193 : 104) + 'px'
+                    'min-height': (fieldFilteredOptions?.length * 51 > 193 ? 193 : showCreateNew ? 104 : 51) + 'px'
                 }"
             >
                 <mat-option
