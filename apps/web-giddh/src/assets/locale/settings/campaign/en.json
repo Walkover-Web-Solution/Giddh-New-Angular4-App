@@ -42,6 +42,14 @@
          "delete":"Delete",
          "voucher":"Voucher",
         "auth_key":"Enter Auth Key",
-        "whitelist_ips":"Enter whitelist Ips"
+        "whitelist_ips":"Enter whitelist Ips",
+        "invalid_key":"Invalid Auth Key",
+        "invalid_slug":"Invalid Campaign Slug",
+        "invalid_action":"Invalid Condition",
+        "invalid_sub_entity":"Invalid Sub Entity",
+        "invalid_entity":"Invalid Entity",
+        "invalid_arguments":"Invalid Campaign Details Arguments Mapping",
+        "invalid_to":"Invalid  To ",
+        "invalid_title":"Invalid  Title"
     }
 }
