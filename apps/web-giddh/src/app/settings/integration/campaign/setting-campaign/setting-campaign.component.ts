@@ -485,7 +485,7 @@ export class SettingCampaignComponent implements OnInit {
      * @memberof SettingCampaignComponent
      */
     public selectSubEntity(event: any): void {
-        this.createTrigger.condition.subConditions[0]. action = event;
+        this.createTrigger.condition.subConditions[0].action = event;
 
     }
 
