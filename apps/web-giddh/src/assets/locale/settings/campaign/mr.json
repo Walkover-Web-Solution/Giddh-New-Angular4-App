@@ -40,6 +40,16 @@
         "create":"तयार करा",
         "update":"अपडेट करा",
         "delete":"हटवा",
-        "voucher":"व्हाउचर"
+        "voucher":"व्हाउचर",
+        "auth_key":"ऑथ की एंटर करा",
+        "whitelist_ips":"श्वेतसूची Ips प्रविष्ट करा",
+        "invalid_key":"अवैध प्रमाणीकरण की",
+        "invalid_slug":"अवैध मोहीम स्लग",
+        "invalid_action":"अवैध अट",
+        "invalid_sub_entity":"अवैध उप घटक",
+        "invalid_entity":"अवैध अस्तित्व",
+        "invalid_arguments":"अवैध मोहिम तपशील वितर्क मॅपिंग",
+        "invalid_to":"साठी अवैध",
+        "invalid_title":"अवैध शीर्षक"
     }
 }

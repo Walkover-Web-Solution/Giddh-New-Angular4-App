@@ -43,7 +43,7 @@
         class="form"
         *ngIf="
             (!isCommunicationPlatformsLoading && !communicationPlatforms?.MSG91?.isConnected) ||
-            editCommunicationPlatform === localeData?.communication?.msg91
+            editCommunicationPlatform === 'MSG91'
         "
     >
         <div class="input-field">
@@ -51,20 +51,27 @@
                 {{ communicationPlatforms?.MSG91?.fields?.auth_key?.label
                 }}<span *ngIf="communicationPlatforms?.MSG91?.fields?.auth_key?.mandatory">*</span>
             </p>
-            <input
-                matInput
-                [attr.placeholder]="communicationPlatforms?.MSG91?.fields?.auth_key?.placeHolder"
-                [(ngModel)]="communicationPlatforms.MSG91.fields.auth_key.value"
-            />
+            <text-field
+                [type]="'text'"
+                [cssClass]="'form-control mat-field-border'"
+                [name]="'title'"
+                [placeholder]="localeData?.communication?.auth_key"
+                [(ngModel)]="communicationPlatformAuthModel.authFields[0].value"
+                [required]="true"
+            >
+            </text-field>
         </div>
         <div class="input-field">
-            <p class="label">{{ communicationPlatforms?.MSG91?.fields?.whitelist_ips?.label }}</p>
-            <input
-                matInput
-                [attr.placeholder]="communicationPlatforms?.MSG91?.fields?.whitelist_ips?.placeHolder"
+            <p class="label">{{ communicationPlatforms.MSG91?.fields?.whitelist_ips?.label }}</p>
+            <text-field
+                [type]="'text'"
+                [cssClass]="'form-control mat-field-border'"
+                [name]="'auth'"
+                [readonly]="true"
+                [placeholder]="localeData?.communication?.whitelist_ips"
                 [(ngModel)]="communicationPlatforms.MSG91.fields.whitelist_ips.value"
-                readonly
-            />
+            >
+            </text-field>
         </div>
         <button
             mat-flat-button
@@ -216,7 +223,7 @@
                     [placeholder]="localeData?.communication?.select_condition"
                     [options]="triggerCondition"
                     (selectedOption)="selectConditions($event?.value)"
-                    [defaultValue]="tiggerConditionAction"
+                    [defaultValue]="createTrigger.condition.action.length ? createTrigger.condition.action[0] : ''"
                 ></select-field>
             </div>
             <div class="trigger-input">
@@ -236,13 +243,13 @@
                     class="form-control mat-field-border sub-entity-trigger"
                     [placeholder]="localeData?.communication?.select_sub_entity"
                     multiple
-                    [(ngModel)]="createTrigger.condition.subConditions.action"
+                    [(ngModel)]="createTrigger.condition.subConditions[0].action"
+                    (selectionChange)="selectSubEntity($event?.value)"
                 >
                     <mat-option
                         *ngFor="let action of subConditionAction"
                         [selected]="action?.isChecked"
                         [value]="action"
-                        (onSelectionChange)="selectSubEntity(action)"
                         >{{ action }}</mat-option
                     >
                 </mat-select>
@@ -296,7 +303,7 @@
                                 [matAutocomplete]="auto1"
                                 [matChipInputFor]="chipListTo"
                                 [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                                [matChipInputAddOnBlur]="addOnBlur"
+                                [matChipInputAddOnBlur]="true"
                                 (matChipInputTokenEnd)="addTriggerTo($event)"
                             />
                         </mat-chip-list>
@@ -324,7 +331,7 @@
                                 [matAutocomplete]="auto2"
                                 [matChipInputFor]="chipListBcc"
                                 [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                                [matChipInputAddOnBlur]="addOnBlur"
+                                [matChipInputAddOnBlur]="true"
                                 (matChipInputTokenEnd)="addTriggerBcc($event)"
                             />
                         </mat-chip-list>
@@ -352,7 +359,7 @@
                                 [matAutocomplete]="auto3"
                                 [matChipInputFor]="chipListCc"
                                 [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                                [matChipInputAddOnBlur]="addOnBlur"
+                                [matChipInputAddOnBlur]="true"
                                 (matChipInputTokenEnd)="addTriggerCc($event)"
                             />
                         </mat-chip-list>
@@ -374,7 +381,9 @@
                     </mat-checkbox>
                 </div>
                 <br />
-                <p class="compose">{{ localeData?.communication?.variables }}</p>
+                <p class="compose" *ngIf="createTrigger.campaignDetails.argsMapping?.length">
+                    {{ localeData?.communication?.variables }}
+                </p>
                 <mat-grid-list class="unit-mapping-grid-list" cols="3" gutterSize="0px" rowHeight="70px">
                     <form class="map-unit-value-form">
                         <mat-grid-tile

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { COMMA, ENTER, I } from '@angular/cdk/keycodes';
 import { take, takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
@@ -41,7 +41,10 @@ export class SettingCampaignComponent implements OnInit {
     /** Communication platform auth model  */
     public communicationPlatformAuthModel: any = {
         platform: "",
-        authFields: []
+        authFields: [{
+            name: "authKey",
+            value: ''
+        }]
     };
     /** True if communication platform get api in progress */
     public isCommunicationPlatformsLoading: boolean = true;
@@ -77,8 +80,7 @@ export class SettingCampaignComponent implements OnInit {
     public triggerBccDropdown: any[] = [];
     /** Holds the trigger cc dropdown data */
     public triggerCcDropdown: any[] = [];
-    /** Holds the trigger condtiion action  */
-    public triggerConditionAction: any[] = [];
+
     /** True if  the trigger loading  */
     public isActiveTriggersLoading: boolean = false;
     /** Validate the email regex for add emails */
@@ -105,6 +107,7 @@ export class SettingCampaignComponent implements OnInit {
     /** True if translations loaded */
     public translationLoaded: boolean = false;
 
+
     constructor(private campaignIntegrationService: CampaignIntegrationService,
         private toasty: ToasterService,
         private dialog: MatDialog
@@ -130,16 +133,17 @@ export class SettingCampaignComponent implements OnInit {
     * @memberof SettingCampaignComponent
     */
     private getCommunicationPlatforms(): void {
-        this.communicationPlatforms = [];
         this.isCommunicationPlatformsLoading = true;
         this.editCommunicationPlatform = "";
         this.campaignIntegrationService.getCommunicationPlatforms().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
+                this.communicationPlatformAuthModel.authFields[0].value = response?.body?.platforms[0]?.fields[0]?.value;
                 if (response?.body?.platforms?.length > 0) {
-                    response.body.platforms.forEach(platform => {
+                    response.body.platforms?.forEach(platform => {
                         this.communicationPlatforms[platform?.name] = [];
                         this.communicationPlatforms[platform?.name].name = platform?.name;
                         this.communicationPlatforms[platform?.name].uniqueName = platform?.uniqueName;
+
                         let fields = [];
                         platform?.fields?.forEach(pt => {
                             fields[pt?.field] = pt;
@@ -168,13 +172,12 @@ export class SettingCampaignComponent implements OnInit {
      * @memberof SettingCampaignComponent
      */
     public verifyCommunicationPlatform(platform: string): void {
+        if (!this.communicationPlatformAuthModel.authFields[0].value) {
+            this.toasty.showSnackBar("error", this.localeData?.communication?.invalid_key);
+            return;
+        }
         this.isCommunicationPlatformVerificationInProcess = true;
         this.communicationPlatformAuthModel.platform = platform;
-        this.communicationPlatformAuthModel.authFields?.push({
-            name: "authKey",
-            value: this.communicationPlatforms?.MSG91?.fields?.auth_key?.value
-        });
-
         this.campaignIntegrationService.verifyCommunicationPlatform(this.communicationPlatformAuthModel).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
                 this.toasty.showSnackBar("success", platform + this.localeData?.communication?.platform_success);
@@ -234,7 +237,6 @@ export class SettingCampaignComponent implements OnInit {
                     response?.body?.items?.forEach(trigger => {
                         trigger.createdAt = dayjs(trigger.createdAt).format(GIDDH_NEW_DATE_FORMAT_UI);
                         const argsMapping = [];
-                        this.triggerUniquename = trigger?.uniqueName;
                         if (trigger?.argsMapping?.length > 0) {
                             trigger?.argsMapping?.forEach(arg => {
                                 argsMapping?.push(arg?.name + " -> " + arg?.value);
@@ -325,7 +327,7 @@ export class SettingCampaignComponent implements OnInit {
 
                     this.createTrigger.title = response?.body?.title;
                     this.createTrigger.campaignDetails.sendVoucherPdf = response?.body?.campaignDetails?.sendVoucherPdf;
-                    this.triggerConditionAction = response?.body?.condition?.action[0];
+
 
                     this.getCampaignFields(this.createTrigger.campaignDetails.campaignSlug, () => {
                         this.createTrigger.campaignDetails.argsMapping?.forEach(arg => {
@@ -335,8 +337,8 @@ export class SettingCampaignComponent implements OnInit {
                             }
                         });
                     });
-
-                    this.createTrigger.condition.subConditions.action = response?.body?.condition?.subConditions[0]?.action;
+                    this.createTrigger.condition.action = response?.body?.condition?.action;
+                    this.createTrigger.condition.subConditions[0].action = response?.body?.condition?.subConditions[0]?.action;
                     this.createTrigger.condition.entity = response?.body?.condition?.entity;
                 }
             }
@@ -406,36 +408,6 @@ export class SettingCampaignComponent implements OnInit {
         this.updateTriggerForm(this.createTrigger);
     }
 
-    /**
-     * Initialize the field
-     *
-     * @memberof SettingCampaignComponent
-     */
-    public initFormFields(): void {
-        this.createTrigger =
-        {
-            title: null,
-            condition: {
-                entity: null,
-                action: [],
-                subConditions: [
-                    {
-                        entity: 'voucherType',
-                        action: []
-                    }
-                ]
-            },
-            communicationPlatform: this.platform,
-            campaignDetails: {
-                campaignSlug: null,
-                argsMapping: [],
-                to: [],
-                cc: [],
-                bcc: [],
-                sendVoucherPdf: false
-            }
-        }
-    }
 
     /**
     * This function will change the page of activity logs
@@ -460,7 +432,6 @@ export class SettingCampaignComponent implements OnInit {
         this.triggerBccChiplist = [];
         this.triggerToChiplist = [];
         this.triggerCcChiplist = [];
-        this.triggerConditionAction = [];
         this.triggerBccDropdown = [];
         this.triggerToDropdown = [];
         this.triggerCcDropdown = [];
@@ -513,10 +484,9 @@ export class SettingCampaignComponent implements OnInit {
      * @param {*} entity
      * @memberof SettingCampaignComponent
      */
-    public selectSubEntity(subconditions: any): void {
-        if (subconditions) {
-            this.createTrigger.condition?.subConditions[0]?.action?.push(subconditions);
-        }
+    public selectSubEntity(event: any): void {
+        this.createTrigger.condition.subConditions[0].action = event;
+
     }
 
     /**
@@ -527,7 +497,7 @@ export class SettingCampaignComponent implements OnInit {
  */
     public selectConditions(action: any): void {
         if (action) {
-            this.createTrigger.condition?.action?.push(action);
+            this.createTrigger.condition.action[0] = action;
         }
     }
 
@@ -542,6 +512,37 @@ export class SettingCampaignComponent implements OnInit {
     }
 
     /**
+     * Initialize the field
+     *
+     * @memberof SettingCampaignComponent
+     */
+    public initFormFields(): void {
+        this.createTrigger =
+        {
+            title: null,
+            condition: {
+                entity: null,
+                action: [],
+                subConditions: [
+                    {
+                        entity: 'voucherType',
+                        action: []
+                    }
+                ]
+            },
+            communicationPlatform: this.platform,
+            campaignDetails: {
+                campaignSlug: null,
+                argsMapping: [],
+                to: [],
+                cc: [],
+                bcc: [],
+                sendVoucherPdf: false
+            }
+        }
+    }
+
+    /**
      * Create Trigger form
      *
      * @param {*} requestObj
@@ -549,7 +550,6 @@ export class SettingCampaignComponent implements OnInit {
      */
     public createTriggerForm(requestObj: any): void {
         if (this.triggerMode === 'copy') {
-            requestObj.condition.action?.push(this.triggerConditionAction);
             requestObj.campaignDetails.to = this.triggerToChiplist;
             requestObj.campaignDetails.bcc = this.triggerBccChiplist;
             requestObj.campaignDetails.cc = this.triggerCcChiplist;
@@ -557,6 +557,33 @@ export class SettingCampaignComponent implements OnInit {
         requestObj.campaignDetails.argsMapping = requestObj?.campaignDetails?.argsMapping?.filter(val => {
             return val?.value !== "";
         });
+
+        if (!this.createTrigger.title) {
+            this.toasty.showSnackBar("error", this.localeData?.communication?.invalid_title);
+            return;
+        }
+        if (!this.createTrigger.campaignDetails.campaignSlug) {
+            this.toasty.showSnackBar("error", this.localeData?.communication?.invalid_slug);
+            return;
+        }
+        if (!this.triggerToChiplist.length) {
+            this.toasty.showSnackBar("error", this.localeData?.communication?.invalid_to);
+            return;
+        }
+        if (!this.createTrigger.condition.action.length) {
+            this.toasty.showSnackBar("error", this.localeData?.communication?.invalid_action);
+            return;
+        }
+        if (!this.createTrigger.condition.entity) {
+            this.toasty.showSnackBar("error", this.localeData?.communication?.invalid_entity);
+
+            return;
+        }
+        if (!this.createTrigger.condition.subConditions[0].action.length) {
+            this.toasty.showSnackBar("error", this.localeData?.communication?.invalid_sub_entity);
+            return;
+        }
+
         this.campaignIntegrationService.createTrigger(requestObj).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
                 this.toasty.showSnackBar("success", response?.body + this.localeData?.communication?.create_trigger_succes);
@@ -576,13 +603,38 @@ export class SettingCampaignComponent implements OnInit {
      * @memberof SettingCampaignComponent
      */
     public updateTriggerForm(requestObj: any): void {
-        requestObj.condition?.action?.push(this.triggerConditionAction);
         requestObj.campaignDetails.to = this.triggerToChiplist;
         requestObj.campaignDetails.bcc = this.triggerBccChiplist;
         requestObj.campaignDetails.cc = this.triggerCcChiplist;
         requestObj.campaignDetails.argsMapping = requestObj?.campaignDetails?.argsMapping?.filter(val => {
             return val?.value !== "";
         });
+
+        if (!this.createTrigger.title) {
+            this.toasty.showSnackBar("error", this.localeData?.communication?.invalid_title);
+            return;
+        }
+        if (!this.createTrigger.campaignDetails.campaignSlug) {
+            this.toasty.showSnackBar("error", this.localeData?.communication?.invalid_slug);
+            return;
+        }
+        if (!this.triggerToChiplist.length) {
+            this.toasty.showSnackBar("error", this.localeData?.communication?.invalid_to);
+            return;
+        }
+        if (!this.createTrigger.condition.action.length) {
+            this.toasty.showSnackBar("error", this.localeData?.communication?.invalid_action);
+            return;
+        }
+        if (!this.createTrigger.condition.entity) {
+            this.toasty.showSnackBar("error", this.localeData?.communication?.invalid_entity);
+
+            return;
+        }
+        if (!this.createTrigger.condition.subConditions[0].action.length) {
+            this.toasty.showSnackBar("error", this.localeData?.communication?.invalid_sub_entity);
+            return;
+        }
         this.campaignIntegrationService.updateTrigger(requestObj, this.triggerUniquename).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
                 this.toasty.showSnackBar("success", response?.body);
@@ -605,6 +657,7 @@ export class SettingCampaignComponent implements OnInit {
     public editTrigger(trigger: any, mode: any): void {
         this.triggerMode = mode;
         this.getCampaignList();
+        this.triggerUniquename = trigger?.uniqueName;
         this.getTriggerByUniqueName(trigger?.uniqueName);
         this.showTriggerForm = true;
     }
@@ -875,8 +928,8 @@ export class SettingCampaignComponent implements OnInit {
         if (event) {
             this.translationLoaded = true;
             let createUppercase = this.localeData?.communication?.create.toUpperCase();
-            let updateUppercase = this.localeData?.communication?.create.toUpperCase();
-            let deleteUppercase = this.localeData?.communication?.create.toUpperCase();
+            let updateUppercase = this.localeData?.communication?.update.toUpperCase();
+            let deleteUppercase = this.localeData?.communication?.delete.toUpperCase();
             let voucherUppercase = this.localeData?.communication?.voucher.toUpperCase();
             this.triggerCondition = [
                 { label: this.localeData?.communication?.create, value: createUppercase },
