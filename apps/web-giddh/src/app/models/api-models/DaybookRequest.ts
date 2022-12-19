@@ -27,6 +27,10 @@ export class ExportBodyRequest {
     branchUniqueName?: string;
     tagName?: string;
     fileType?: string;
+    interval?: string;
+    isExpanded?: boolean;
+    columnsToExport?: any[];
+    q?: any;
 }
 
 export interface DayBookRequestModel {
