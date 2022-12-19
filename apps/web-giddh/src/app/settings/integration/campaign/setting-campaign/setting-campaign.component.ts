@@ -134,13 +134,10 @@ export class SettingCampaignComponent implements OnInit {
     */
     private getCommunicationPlatforms(): void {
         this.isCommunicationPlatformsLoading = true;
+        this.editCommunicationPlatform = "";
         this.campaignIntegrationService.getCommunicationPlatforms().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
-                if (this.editCommunicationPlatform = '') {
-                    this.communicationPlatformAuthModel.authFields[0].value = [];
-                } else {
-                    this.communicationPlatformAuthModel.authFields[0].value = response?.body?.platforms[0]?.fields[0]?.value;
-                }
+                this.communicationPlatformAuthModel.authFields[0].value = response?.body?.platforms[0]?.fields[0]?.value;
                 if (response?.body?.platforms?.length > 0) {
                     response.body.platforms?.forEach(platform => {
                         this.communicationPlatforms[platform?.name] = [];
@@ -240,7 +237,6 @@ export class SettingCampaignComponent implements OnInit {
                     response?.body?.items?.forEach(trigger => {
                         trigger.createdAt = dayjs(trigger.createdAt).format(GIDDH_NEW_DATE_FORMAT_UI);
                         const argsMapping = [];
-                        this.triggerUniquename = trigger?.uniqueName;
                         if (trigger?.argsMapping?.length > 0) {
                             trigger?.argsMapping?.forEach(arg => {
                                 argsMapping?.push(arg?.name + " -> " + arg?.value);
@@ -661,6 +657,7 @@ export class SettingCampaignComponent implements OnInit {
     public editTrigger(trigger: any, mode: any): void {
         this.triggerMode = mode;
         this.getCampaignList();
+        this.triggerUniquename = trigger?.uniqueName;
         this.getTriggerByUniqueName(trigger?.uniqueName);
         this.showTriggerForm = true;
     }
