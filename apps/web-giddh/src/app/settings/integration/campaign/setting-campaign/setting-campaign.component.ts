@@ -229,7 +229,8 @@ export class SettingCampaignComponent implements OnInit {
         this.isActiveTriggersLoading = true;
         this.activeTriggersDataSource = [];
         let requestObj = {
-            count: PAGINATION_LIMIT
+            count: PAGINATION_LIMIT,
+            page: this.triggerObj.page
         }
         this.campaignIntegrationService.getTriggersList(requestObj).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
@@ -416,8 +417,8 @@ export class SettingCampaignComponent implements OnInit {
     * @memberof SettingCampaignComponent
     */
     public pageChanged(event: any): void {
-        if (this.createTrigger.page !== event?.page) {
-            this.createTrigger.page = event?.page;
+        if (this.triggerObj.page !== event?.page) {
+            this.triggerObj.page = event?.page;
             this.getTriggers();
         }
     }
