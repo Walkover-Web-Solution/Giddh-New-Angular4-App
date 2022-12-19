@@ -1,11 +1,11 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { COMMA, ENTER, I } from '@angular/cdk/keycodes';
 import { take, takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmModalComponent } from 'apps/web-giddh/src/app/theme/new-confirm-modal/confirm-modal.component';
-import { API_COUNT_LIMIT, EMAIL_VALIDATION_REGEX, MOBILE_REGEX_PATTERN, PAGINATION_LIMIT } from 'apps/web-giddh/src/app/app.constant';
+import { EMAIL_VALIDATION_REGEX, MOBILE_REGEX_PATTERN, PAGINATION_LIMIT } from 'apps/web-giddh/src/app/app.constant';
 import { CampaignIntegrationService } from 'apps/web-giddh/src/app/services/campaign.integraion.service';
 import { IOption } from 'apps/web-giddh/src/app/theme/ng-select/option.interface';
 import { GIDDH_NEW_DATE_FORMAT_UI } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
@@ -95,10 +95,10 @@ export class SettingCampaignComponent implements OnInit {
     public triggerEntity: IOption[] = [];
     /** Holds the trigger object   */
     public triggerObj = {
-        count: API_COUNT_LIMIT,
+        count: PAGINATION_LIMIT,
         page: 1,
         totalItems: 0,
-        totalPages: 0,
+        totalPages:0
     }
     /** True if  the variables showing   */
     public showVariableMapping: boolean = false;
@@ -246,6 +246,7 @@ export class SettingCampaignComponent implements OnInit {
                         this.activeTriggersDataSource.push({ title: trigger?.title, type: trigger?.communicationPlatform, createdAt: trigger?.createdAt, uniqueName: trigger?.uniqueName, argsMapping: argsMapping?.join(", "), isActive: trigger?.isActive });
                         this.triggerObj.totalItems = response.body.totalItems;
                         this.triggerObj.totalPages = response.body.totalPages;
+                        this.triggerObj.count = response.body.count;
                     });
                 }
                 this.isActiveTriggersLoading = false;
@@ -253,7 +254,6 @@ export class SettingCampaignComponent implements OnInit {
                 this.toasty.showSnackBar("error", response?.body);
                 this.isActiveTriggersLoading = false;
                 this.triggerObj.totalItems = 0;
-                this.triggerObj.totalPages = 0;
             }
         });
     }
@@ -550,6 +550,9 @@ export class SettingCampaignComponent implements OnInit {
      * @memberof SettingCampaignComponent
      */
     public createTriggerForm(requestObj: any): void {
+        this.createTrigger.campaignDetails.to = this.triggerToChiplist;
+        this.createTrigger.campaignDetails.bcc = this.triggerBccChiplist;
+        this.createTrigger.campaignDetails.cc = this.triggerCcChiplist;
         if (this.triggerMode === 'copy') {
             requestObj.campaignDetails.to = this.triggerToChiplist;
             requestObj.campaignDetails.bcc = this.triggerBccChiplist;
@@ -604,6 +607,9 @@ export class SettingCampaignComponent implements OnInit {
      * @memberof SettingCampaignComponent
      */
     public updateTriggerForm(requestObj: any): void {
+        this.createTrigger.campaignDetails.to = this.triggerToChiplist;
+        this.createTrigger.campaignDetails.bcc = this.triggerBccChiplist;
+        this.createTrigger.campaignDetails.cc = this.triggerCcChiplist;
         requestObj.campaignDetails.to = this.triggerToChiplist;
         requestObj.campaignDetails.bcc = this.triggerBccChiplist;
         requestObj.campaignDetails.cc = this.triggerCcChiplist;

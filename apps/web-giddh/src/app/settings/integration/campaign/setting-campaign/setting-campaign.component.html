@@ -173,22 +173,22 @@
                     <h1>{{ localeData?.communication?.no_triggers_found }}</h1>
                 </div>
             </section>
-        </div>
-        <div class="pagination-wrapper" *ngIf="triggerObj?.totalPages > 1 && !isActiveTriggersLoading">
-            <pagination
-                [totalItems]="triggerObj?.totalItems"
-                [(ngModel)]="triggerObj.page"
-                [maxSize]="5"
-                class="pagination-sm"
-                [boundaryLinks]="true"
-                [itemsPerPage]="triggerObj?.count"
-                [rotate]="false"
-                (pageChanged)="pageChanged($event)"
-                [firstText]="commonLocaleData?.app_first"
-                [previousText]="commonLocaleData?.app_previous"
-                [nextText]="commonLocaleData?.app_next"
-                [lastText]="commonLocaleData?.app_last"
-            ></pagination>
+            <div class="pagination-wrapper" *ngIf="triggerObj.totalPages > 1 && !isActiveTriggersLoading">
+                <pagination
+                    [totalItems]="triggerObj?.totalItems"
+                    [(ngModel)]="triggerObj.page"
+                    [maxSize]="5"
+                    class="pagination-sm"
+                    [boundaryLinks]="true"
+                    [itemsPerPage]="triggerObj?.count"
+                    [rotate]="false"
+                    (pageChanged)="pageChanged($event)"
+                    [firstText]="commonLocaleData?.app_first"
+                    [previousText]="commonLocaleData?.app_previous"
+                    [nextText]="commonLocaleData?.app_next"
+                    [lastText]="commonLocaleData?.app_last"
+                ></pagination>
+            </div>
         </div>
     </ng-container>
     <!-- Page-6 to Page-9 -->
