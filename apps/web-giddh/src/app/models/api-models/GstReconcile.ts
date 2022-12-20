@@ -97,13 +97,13 @@ export class GstrSheetDownloadRequest extends GstOverViewRequest {
 }
 
 export class FileGstr1Request extends GstOverViewRequest {
-    public gsp: 'VAYANA' | 'TAXPRO' | 'RECONCILE' | 'JIO_GST';
+    public gsp: 'TAXPRO' | 'RECONCILE' | 'JIO_GST' | 'VAYANA';
 }
 
 export class GstSaveGspSessionRequest {
     public gstin: string;
     public userName: string;
-    public gsp: 'VAYANA' | 'TAXPRO' | 'RECONCILE' | 'JIO_GST';
+    public gsp: 'TAXPRO' | 'RECONCILE' | 'JIO_GST' | 'VAYANA';
     public otp?: string;
 }
 
