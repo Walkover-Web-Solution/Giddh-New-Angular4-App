@@ -330,6 +330,7 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
         exportBodyRequest.fileType = "CSV";
         exportBodyRequest.isExpanded = this.expand;
         exportBodyRequest.q = this.voucherNumberInput?.value;
+        exportBodyRequest.branchUniqueName = this.getDetailedsalesRequestFilter?.branchUniqueName;
         exportBodyRequest.columnsToExport = [];
 
         if(this.showFieldFilter.voucherType) {

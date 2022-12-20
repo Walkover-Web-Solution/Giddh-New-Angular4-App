@@ -328,6 +328,7 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
         exportBodyRequest.fileType = "CSV";
         exportBodyRequest.isExpanded = this.expand;
         exportBodyRequest.q = this.voucherNumberInput?.value;
+        exportBodyRequest.branchUniqueName = this.getDetailedPurchaseRequestFilter?.branchUniqueName;
         exportBodyRequest.columnsToExport = [];
 
         if(this.showFieldFilter.voucherType) {
