@@ -44,7 +44,7 @@
         "auth_key":"प्रामाणिक कुंजी दर्ज करें",
         "whitelist_ips":"श्वेतसूची आईपीएस दर्ज करें",
         "invalid_key":"अमान्य प्रमाणीकरण कुंजी",
-        "invalid_slug":"अमान्य अभियान स्लग",
+        "invalid_slug":"अमान्य अभियान",
         "invalid_action":"अमान्य स्थिति",
         "invalid_sub_entity":"अमान्य उप निकाय",
         "invalid_entity":"अमान्य इकाई",

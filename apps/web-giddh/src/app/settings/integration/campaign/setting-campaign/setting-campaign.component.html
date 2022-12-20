@@ -259,12 +259,13 @@
             </div>
             <div class="trigger-input">
                 <p class="trigger-input-label">{{ localeData?.communication?.campaign }}<span>*</span></p>
+                {{ createTrigger | json }}
                 <select-field
                     [cssClass]="'form-control mat-field-border'"
                     [placeholder]="localeData?.communication?.select_campaign"
                     [options]="campaignList"
-                    (selectedOption)="selectCampaign($event?.value, true)"
-                    [defaultValue]="createTrigger.campaignDetails.campaignSlug"
+                    (selectedOption)="selectCampaign($event, true)"
+                    [defaultValue]="createTrigger.campaignDetails.campaignName"
                     [ngClass]="{ 'fields-error': isValidFields.campaignSlug }"
                 ></select-field>
             </div>
