@@ -160,7 +160,7 @@
                                         *ngIf="isCompany && showGstFiling"
                                         class="btn-2 pull-right btn authenticate-btn"
                                         [ngClass]="{ 'btn-success': gstAuthenticated }"
-                                        (click)="returnGstr3B = { via: 'VAYANA' }"
+                                        (click)="returnGstr3B = { via: 'TAXPRO' }"
                                     >
                                         {{
                                             gstAuthenticated
@@ -1376,7 +1376,7 @@
                         <div class="gst-return-date">
                             <img src="assets/images/return-date.svg" />
                             <p>{{ localeData?.gstr3b?.click_proceed }}</p>
-                            <button class="btn-2 btn-lg file-your-return" (click)="returnGstr3B = { via: 'VAYANA' }">
+                            <button class="btn-2 btn-lg file-your-return" (click)="returnGstr3B = { via: 'TAXPRO' }">
                                 {{ localeData?.gstr3b?.file_return }}
                             </button>
                         </div>
