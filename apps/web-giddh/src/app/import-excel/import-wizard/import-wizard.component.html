@@ -34,7 +34,7 @@
                             [entity]="entity"
                             [localeData]="localeData"
                             [commonLocaleData]="commonLocaleData"
-                            (onNext)="mappingDone(excelState?.importExcelData)"
+                            (onNext)="mappingDone($event)"
                             (onBack)="onBack()"
                         ></map-excel-data>
                     </ng-container>
