@@ -57,7 +57,7 @@
                 [name]="'title'"
                 [placeholder]="localeData?.communication?.auth_key"
                 [(ngModel)]="communicationPlatformAuthModel.authFields[0].value"
-                [ngClass]="{ 'fields-error': isValidFields.authKey }"
+                [ngClass]="{ 'fields-error': mandatoryFields.authKey }"
             >
             </text-field>
         </div>
@@ -173,7 +173,10 @@
                 </div>
             </section>
         </div>
-        <div class="pagination-wrapper" *ngIf="triggerObj.totalPages > 1 && !isActiveTriggersLoading">
+        <div
+            class="pagination-wrapper"
+            *ngIf="triggerObj?.totalPages > 1 && !isActiveTriggersLoading && !showTriggerForm"
+        >
             <pagination
                 [totalItems]="triggerObj?.totalItems"
                 [(ngModel)]="triggerObj.page"
@@ -212,7 +215,7 @@
                     [placeholder]="localeData?.communication?.name_trigger"
                     [name]="'trigger'"
                     [(ngModel)]="createTrigger.title"
-                    [ngClass]="{ 'fields-error': isValidFields.title }"
+                    [ngClass]="{ 'fields-error': mandatoryFields.title }"
                 >
                 </text-field>
             </div>
@@ -224,7 +227,7 @@
                     [options]="triggerCondition"
                     (selectedOption)="selectConditions($event?.value)"
                     [defaultValue]="createTrigger.condition.action.length ? createTrigger.condition.action[0] : ''"
-                    [ngClass]="{ 'fields-error': isValidFields.condition }"
+                    [ngClass]="{ 'fields-error': mandatoryFields.condition }"
                 ></select-field>
             </div>
             <div class="trigger-input">
@@ -235,7 +238,7 @@
                     [options]="triggerEntity"
                     (selectedOption)="selectEntity($event?.value)"
                     [defaultValue]="createTrigger.condition.entity"
-                    [ngClass]="{ 'fields-error': isValidFields.entity }"
+                    [ngClass]="{ 'fields-error': mandatoryFields.entity }"
                 ></select-field>
             </div>
             <div class="trigger-input">
@@ -247,7 +250,7 @@
                     multiple
                     [(ngModel)]="createTrigger.condition.subConditions[0].action"
                     (selectionChange)="selectSubEntity($event?.value)"
-                    [ngClass]="{ 'fields-error': isValidFields.subConditions }"
+                    [ngClass]="{ 'fields-error': mandatoryFields.subConditions }"
                 >
                     <mat-option
                         *ngFor="let action of subConditionAction"
@@ -259,14 +262,13 @@
             </div>
             <div class="trigger-input">
                 <p class="trigger-input-label">{{ localeData?.communication?.campaign }}<span>*</span></p>
-                {{ createTrigger | json }}
                 <select-field
                     [cssClass]="'form-control mat-field-border'"
                     [placeholder]="localeData?.communication?.select_campaign"
                     [options]="campaignList"
                     (selectedOption)="selectCampaign($event, true)"
                     [defaultValue]="createTrigger.campaignDetails.campaignName"
-                    [ngClass]="{ 'fields-error': isValidFields.campaignSlug }"
+                    [ngClass]="{ 'fields-error': mandatoryFields.campaignSlug }"
                 ></select-field>
             </div>
             <button
@@ -274,7 +276,7 @@
                 mat-flat-button
                 color="primary"
                 (click)="createNewTrigger()"
-                [disabled]="isValidTrigger"
+                [disabled]="isInvalidTrigger"
             >
                 {{
                     triggerMode === "create"
@@ -287,7 +289,7 @@
                 mat-flat-button
                 color="primary"
                 (click)="updateTrigger()"
-                [disabled]="isValidTrigger"
+                [disabled]="isInvalidTrigger"
             >
                 {{
                     triggerMode === "create"
@@ -317,7 +319,7 @@
                                 [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
                                 [matChipInputAddOnBlur]="true"
                                 (matChipInputTokenEnd)="addTriggerTo($event)"
-                                [ngClass]="{ 'chiplist-error': isValidFields.triggerToChiplist }"
+                                [ngClass]="{ 'chiplist-error': mandatoryFields.triggerToChiplist }"
                             />
                         </mat-chip-list>
                         <mat-autocomplete #auto1="matAutocomplete" (optionSelected)="selectTriggerTo($event)">
