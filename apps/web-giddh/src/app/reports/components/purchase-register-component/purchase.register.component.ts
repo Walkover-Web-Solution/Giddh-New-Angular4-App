@@ -449,6 +449,7 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
         exportBodyRequest.exportType = "PURCHASE_REGISTER_OVERVIEW_EXPORT";
         exportBodyRequest.fileType = "CSV";
         exportBodyRequest.interval = this.interval;
+        exportBodyRequest.branchUniqueName = this.currentBranch?.uniqueName;
         this.ledgerService.exportData(exportBodyRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === 'success') {
                 this._toaster.successToast(response?.body);
