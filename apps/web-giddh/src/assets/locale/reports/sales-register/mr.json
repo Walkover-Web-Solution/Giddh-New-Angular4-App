@@ -2,6 +2,11 @@
     "page_heading_single": "अहवाल",
     "page_heading": "विक्री नोंदणी",
     "quantity_rate": "प्रमाण-दर",
+    "search_entry_no": "प्रवेश क्रमांक शोधा",
     "search_voucher_no": "व्हाउचर नंबर शोधा",
-    "transaction_count": "व्यवहार संख्या"
+    "transaction_count": "व्यवहार संख्या",
+    "net_tax": "निव्वळ कर",
+    "net_discount": "निव्वळ सवलत",
+    "net_tds": "निव्वळ टीडीएस",
+    "net_tcs": "निव्वळ टीसीएस"
 }

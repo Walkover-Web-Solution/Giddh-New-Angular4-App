@@ -2491,10 +2491,11 @@
                                                             false,
                                                             false,
                                                             entryIdx
-                                                        )
+                                                        );
+                                                        noResultsFoundLabel = localeData?.search_acc
                                                     "
                                                     (createOption)="onNoResultsClicked(entryIdx)"
-                                                    [showCreateNew]="'true'"
+                                                    [showCreateNew]="true"
                                                     [defaultValue]="
                                                         transaction.stockDetails && transaction.stockDetails.name
                                                             ? transaction.accountName +
@@ -3985,6 +3986,8 @@
                                                                     );
                                                                     noResultsFoundLabel = localeData?.search_acc
                                                                 "
+                                                                [showCreateNew]="true"
+                                                                (createOption)="onNoResultsClicked(entryIdx)"
                                                                 [defaultValue]="
                                                                     transaction.stockDetails &&
                                                                     transaction.stockDetails.name
