@@ -47,13 +47,13 @@
         "
     >
         <div class="input-field">
-            <p class="label">
+            <p class="label auth-label">
                 {{ communicationPlatforms?.MSG91?.fields?.auth_key?.label
                 }}<span *ngIf="communicationPlatforms?.MSG91?.fields?.auth_key?.mandatory">*</span>
             </p>
             <text-field
                 [type]="'text'"
-                [cssClass]="'form-control mat-field-border'"
+                [cssClass]="'form-control mat-field-border auth_key_input '"
                 [name]="'title'"
                 [placeholder]="localeData?.communication?.auth_key"
                 [(ngModel)]="communicationPlatformAuthModel.authFields[0].value"
@@ -62,10 +62,10 @@
             </text-field>
         </div>
         <div class="input-field">
-            <p class="label">{{ communicationPlatforms.MSG91?.fields?.whitelist_ips?.label }}</p>
+            <p class="label auth-label">{{ communicationPlatforms.MSG91?.fields?.whitelist_ips?.label }}</p>
             <text-field
                 [type]="'text'"
-                [cssClass]="'form-control mat-field-border'"
+                [cssClass]="'form-control mat-field-border auth_key_ips'"
                 [name]="'auth'"
                 [readonly]="true"
                 [placeholder]="localeData?.communication?.whitelist_ips"
@@ -76,6 +76,7 @@
         <button
             mat-flat-button
             color="primary"
+            class="verify-button"
             [disabled]="isCommunicationPlatformVerificationInProcess"
             (click)="verifyCommunicationPlatform('MSG91')"
         >
@@ -96,7 +97,12 @@
 
         <div
             class="table-one table-content"
-            *ngIf="!isActiveTriggersLoading && !showTriggerForm && communicationPlatforms?.MSG91?.isConnected"
+            *ngIf="
+                !isActiveTriggersLoading &&
+                !showTriggerForm &&
+                communicationPlatforms?.MSG91?.isConnected &&
+                activeTriggersDataSource?.length
+            "
         >
             <table mat-table [dataSource]="activeTriggersDataSource" class="mat-elevation-z8 giddh-table table">
                 <ng-container matColumnDef="title">
@@ -175,7 +181,12 @@
         </div>
         <div
             class="pagination-wrapper"
-            *ngIf="triggerObj?.totalPages > 1 && !isActiveTriggersLoading && !showTriggerForm"
+            *ngIf="
+                triggerObj?.totalPages > 1 &&
+                !isActiveTriggersLoading &&
+                !showTriggerForm &&
+                activeTriggersDataSource?.length
+            "
         >
             <pagination
                 [totalItems]="triggerObj?.totalItems"
