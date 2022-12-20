@@ -28,12 +28,12 @@
             <img src="{{ imgPath }}msgTwo-color.png" class="msg" alt="" />
         </div>
         <div class="integrate mini-icons" *ngIf="communicationPlatforms?.MSG91?.isConnected">
-            <img src="{{ imgPath }}Bmsg.PNG" alt="" />
-            <img src="{{ imgPath }}p.PNG" alt="" />
-            <img src="{{ imgPath }}wApp.PNG" alt="" />
-            <img src="{{ imgPath }}msg.PNG" alt="" />
-            <img src="{{ imgPath }}9109.PNG" alt="" />
-            <img src="{{ imgPath }}say.PNG" alt="" />
+            <img src="{{ imgPath }}msg91.png" alt="" />
+            <img src="{{ imgPath }}p.png" alt="" />
+            <img src="{{ imgPath }}whatsapp.png" alt="" />
+            <img src="{{ imgPath }}msg.png" alt="" />
+            <img src="{{ imgPath }}9109.png" alt="" />
+            <img src="{{ imgPath }}say.png" alt="" />
         </div>
         <div class="integrate" *ngIf="!communicationPlatforms?.MSG91?.isConnected">
             <p>{{ localeData?.communication?.integrate_now }}</p>
@@ -57,7 +57,7 @@
                 [name]="'title'"
                 [placeholder]="localeData?.communication?.auth_key"
                 [(ngModel)]="communicationPlatformAuthModel.authFields[0].value"
-                [required]="true"
+                [ngClass]="{ 'fields-error': isValidFields.authKey }"
             >
             </text-field>
         </div>
@@ -94,7 +94,6 @@
             {{ localeData?.communication?.create_new_trigger }}
         </button>
 
-        <!-- Page-3 to Page-5 -->
         <div
             class="table-one table-content"
             *ngIf="!isActiveTriggersLoading && !showTriggerForm && communicationPlatforms?.MSG91?.isConnected"
@@ -173,22 +172,22 @@
                     <h1>{{ localeData?.communication?.no_triggers_found }}</h1>
                 </div>
             </section>
-            <div class="pagination-wrapper" *ngIf="triggerObj.totalPages > 1 && !isActiveTriggersLoading">
-                <pagination
-                    [totalItems]="triggerObj?.totalItems"
-                    [(ngModel)]="triggerObj.page"
-                    [maxSize]="5"
-                    class="pagination-sm"
-                    [boundaryLinks]="true"
-                    [itemsPerPage]="triggerObj?.count"
-                    [rotate]="false"
-                    (pageChanged)="pageChanged($event)"
-                    [firstText]="commonLocaleData?.app_first"
-                    [previousText]="commonLocaleData?.app_previous"
-                    [nextText]="commonLocaleData?.app_next"
-                    [lastText]="commonLocaleData?.app_last"
-                ></pagination>
-            </div>
+        </div>
+        <div class="pagination-wrapper" *ngIf="triggerObj.totalPages > 1 && !isActiveTriggersLoading">
+            <pagination
+                [totalItems]="triggerObj?.totalItems"
+                [(ngModel)]="triggerObj.page"
+                [maxSize]="5"
+                class="pagination-sm"
+                [boundaryLinks]="true"
+                [itemsPerPage]="triggerObj?.count"
+                [rotate]="false"
+                (pageChanged)="pageChanged($event)"
+                [firstText]="commonLocaleData?.app_first"
+                [previousText]="commonLocaleData?.app_previous"
+                [nextText]="commonLocaleData?.app_next"
+                [lastText]="commonLocaleData?.app_last"
+            ></pagination>
         </div>
     </ng-container>
     <!-- Page-6 to Page-9 -->
@@ -213,6 +212,7 @@
                     [placeholder]="localeData?.communication?.name_trigger"
                     [name]="'trigger'"
                     [(ngModel)]="createTrigger.title"
+                    [ngClass]="{ 'fields-error': isValidFields.title }"
                 >
                 </text-field>
             </div>
@@ -224,6 +224,7 @@
                     [options]="triggerCondition"
                     (selectedOption)="selectConditions($event?.value)"
                     [defaultValue]="createTrigger.condition.action.length ? createTrigger.condition.action[0] : ''"
+                    [ngClass]="{ 'fields-error': isValidFields.condition }"
                 ></select-field>
             </div>
             <div class="trigger-input">
@@ -234,6 +235,7 @@
                     [options]="triggerEntity"
                     (selectedOption)="selectEntity($event?.value)"
                     [defaultValue]="createTrigger.condition.entity"
+                    [ngClass]="{ 'fields-error': isValidFields.entity }"
                 ></select-field>
             </div>
             <div class="trigger-input">
@@ -245,6 +247,7 @@
                     multiple
                     [(ngModel)]="createTrigger.condition.subConditions[0].action"
                     (selectionChange)="selectSubEntity($event?.value)"
+                    [ngClass]="{ 'fields-error': isValidFields.subConditions }"
                 >
                     <mat-option
                         *ngFor="let action of subConditionAction"
@@ -262,6 +265,7 @@
                     [options]="campaignList"
                     (selectedOption)="selectCampaign($event?.value, true)"
                     [defaultValue]="createTrigger.campaignDetails.campaignSlug"
+                    [ngClass]="{ 'fields-error': isValidFields.campaignSlug }"
                 ></select-field>
             </div>
             <button
@@ -269,6 +273,7 @@
                 mat-flat-button
                 color="primary"
                 (click)="createNewTrigger()"
+                [disabled]="isValidTrigger"
             >
                 {{
                     triggerMode === "create"
@@ -276,7 +281,13 @@
                         : localeData?.communication?.save_trigger
                 }}
             </button>
-            <button *ngIf="triggerMode === 'update'" mat-flat-button color="primary" (click)="updateTrigger()">
+            <button
+                *ngIf="triggerMode === 'update'"
+                mat-flat-button
+                color="primary"
+                (click)="updateTrigger()"
+                [disabled]="isValidTrigger"
+            >
                 {{
                     triggerMode === "create"
                         ? localeData?.communication?.create_trigger
@@ -305,6 +316,7 @@
                                 [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
                                 [matChipInputAddOnBlur]="true"
                                 (matChipInputTokenEnd)="addTriggerTo($event)"
+                                [ngClass]="{ 'chiplist-error': isValidFields.triggerToChiplist }"
                             />
                         </mat-chip-list>
                         <mat-autocomplete #auto1="matAutocomplete" (optionSelected)="selectTriggerTo($event)">
