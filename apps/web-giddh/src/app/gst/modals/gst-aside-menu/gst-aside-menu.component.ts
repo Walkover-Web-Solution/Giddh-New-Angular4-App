@@ -8,6 +8,7 @@ import { AppState } from '../../../store';
 import { GstReconcileActions } from '../../../actions/gst-reconcile/GstReconcile.actions';
 import { ToasterService } from '../../../services/toaster.service';
 import { GstReport } from '../../constants/gst.constant';
+import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 
 @Component({
     // tslint:disable-next-line:component-selector
@@ -16,7 +17,7 @@ import { GstReport } from '../../constants/gst.constant';
     templateUrl: './gst-aside-menu.component.html'
 })
 export class GstAsideMenuComponent implements OnInit, OnDestroy {
-    @Input() public selectedService: 'VAYANA' | 'TAXPRO' | 'RECONCILE' | 'JIO_GST';
+    @Input() public selectedService: 'TAXPRO' | 'RECONCILE' | 'JIO_GST' | 'VAYANA';
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
     @Output() public fireReconcileRequest: EventEmitter<boolean> = new EventEmitter(true);
     @Output() public fileGst: EventEmitter<boolean> = new EventEmitter();
@@ -54,6 +55,7 @@ export class GstAsideMenuComponent implements OnInit, OnDestroy {
         return GstReport;
     }
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    public providerOptions: IOption[] = [];
 
     constructor(
         private store: Store<AppState>,
@@ -123,6 +125,8 @@ export class GstAsideMenuComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        this.providerOptions = [{label: this.localeData?.aside_menu?.giddh_provider1, value: 'TAXPRO'}];
+
         this.reconcileOtpVerifySuccess$.subscribe(s => {
             if (s) {
                 this.fireReconcileRequest.emit(true);
@@ -143,7 +147,7 @@ export class GstAsideMenuComponent implements OnInit, OnDestroy {
     }
 
     public resetTaxPro() {
-        this.selectedService = 'VAYANA';
+        this.selectedService = 'TAXPRO';
         this.taxProForm.otp = '';
         this.taxProForm.userName = '';
         this.otpSentSuccessFully = false;

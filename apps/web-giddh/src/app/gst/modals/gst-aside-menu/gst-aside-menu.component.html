@@ -23,19 +23,13 @@
                                     <div class="form-group">
                                         <label for="tax_pro_otp">{{ localeData?.aside_menu?.select_platform }}</label>
 
-                                        <select
-                                            class="form-control"
-                                            (click)="changeProvider()"
+                                        <sh-select
+                                            (selected)="changeProvider()"
                                             [(ngModel)]="selectedService"
                                             [disabled]="otpSentSuccessFully"
-                                        >
-                                            <!-- <option value="VAYANA">
-                                                {{ localeData?.aside_menu?.giddh_provider1 }}
-                                            </option> -->
-                                            <option value="TAXPRO">
-                                                {{ localeData?.aside_menu?.giddh_provider1 }}
-                                            </option>
-                                        </select>
+                                            [options]="providerOptions"
+                                            [placeholder]="commonLocaleData?.app_select"
+                                        ></sh-select>
                                     </div>
                                 </div>
                             </div>
@@ -56,6 +50,7 @@
                                             [(ngModel)]="taxProForm.userName"
                                             required
                                             [disabled]="otpSentSuccessFully"
+                                            [placeholder]="localeData?.aside_menu?.username"
                                         />
                                     </div>
                                 </div>
@@ -72,6 +67,7 @@
                                             [(ngModel)]="taxProForm.gstin"
                                             required
                                             [disabled]="otpSentSuccessFully"
+                                            [placeholder]="commonLocaleData?.app_gstin"
                                         />
                                     </div>
                                 </div>
@@ -87,6 +83,7 @@
                                                 class="form-control"
                                                 id="tax_pro_otp"
                                                 [(ngModel)]="taxProForm.otp"
+                                                [placeholder]="localeData?.aside_menu?.resend_otp"
                                             />
                                         </div>
 

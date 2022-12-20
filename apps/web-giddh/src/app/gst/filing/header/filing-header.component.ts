@@ -62,7 +62,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     @ViewChild('pushToPortalModel', { static: true }) public pushToPortalModel: ModalDirective;
     public gstAuthenticated$: Observable<boolean>;
     public GstAsidePaneState: string = 'out';
-    public selectedService: 'VAYANA' | 'TAXPRO' | 'RECONCILE' | 'JIO_GST';
+    public selectedService: 'TAXPRO' | 'RECONCILE' | 'JIO_GST' | 'VAYANA';
     public companyGst$: Observable<string> = of('');
     public activeCompanyGstNumber: string = '';
     public imgPath: string = '';
@@ -171,7 +171,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
             if (this.gstAuthenticated) {
                 this.fileGstReturnV2();
             } else {
-                this.toggleSettingAsidePane(null, 'VAYANA');
+                this.toggleSettingAsidePane(null, 'TAXPRO');
             }
         }
 
