@@ -44,7 +44,7 @@
         "auth_key":"Enter Auth Key",
         "whitelist_ips":"Enter whitelist Ips",
         "invalid_key":"Invalid Auth Key",
-        "invalid_slug":"Invalid Campaign Slug",
+        "invalid_slug":"Invalid Campaign",
         "invalid_action":"Invalid Condition",
         "invalid_sub_entity":"Invalid Sub Entity",
         "invalid_entity":"Invalid Entity",

@@ -44,7 +44,7 @@
         "auth_key":"ऑथ की एंटर करा",
         "whitelist_ips":"श्वेतसूची Ips प्रविष्ट करा",
         "invalid_key":"अवैध प्रमाणीकरण की",
-        "invalid_slug":"अवैध मोहीम स्लग",
+        "invalid_slug":"अवैध मोहीम",
         "invalid_action":"अवैध अट",
         "invalid_sub_entity":"अवैध उप घटक",
         "invalid_entity":"अवैध अस्तित्व",
