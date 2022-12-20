@@ -44,8 +44,6 @@ export interface ImportExcelResponseData {
     mappings: Mappings[];
     data: ResponseData;
     giddhHeaders?: string[];
-    mandatoryHeaders?: string[];
-    groupMandatoryHeaders: string[][];
     isHeaderProvided?: boolean;
 }
 
@@ -54,8 +52,6 @@ export interface ImportExcelRequestData {
     mappings: Mappings[];
     data: RequestData;
     giddhHeaders?: string[];
-    mandatoryHeaders?: string[];
-    groupMandatoryHeaders: string[][];
     isHeaderProvided?: boolean;
     branchUniqueName?: string;
 }
