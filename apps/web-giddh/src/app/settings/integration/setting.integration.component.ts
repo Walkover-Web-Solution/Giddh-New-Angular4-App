@@ -20,7 +20,7 @@ import { GeneralService } from '../../services/general.service';
 import { ShareRequestForm } from '../../models/api-models/Permission';
 import { SettingsPermissionActions } from '../../actions/settings/permissions/settings.permissions.action';
 import { SettingsIntegrationService } from '../../services/settings.integraion.service';
-import { ACCOUNT_REGISTERED_STATUS, SettingsIntegrationTab, UNLIMITED_LIMIT } from '../constants/settings.constant';
+import { ACCOUNT_REGISTERED_STATUS, SettingsIntegrationTab, SettingsIntegrationTabV1, UNLIMITED_LIMIT } from '../constants/settings.constant';
 import { SearchService } from '../../services/search.service';
 import { SalesService } from '../../services/sales.service';
 import { cloneDeep, find, isEmpty } from '../../lodash-optimized';
@@ -140,8 +140,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public bootstrapToggleSwitch = BootstrapToggleSwitch;
     /** Stores the voucher API version of current company */
     public voucherApiVersion: 1 | 2;
-    /** Active tab name */
-    public activeTab: string;
 
     constructor(
         private router: Router,
@@ -645,14 +643,26 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @memberof SettingIntegrationComponent
      */
     private loadTabData(index:number): void {
-        if (SettingsIntegrationTab.Email === index) {
-            this.loadEmailData();
-        }
-        if (SettingsIntegrationTab.Collection === index) {
-            this.loadCollectionData();
-        }
-        if (SettingsIntegrationTab.Payment === index) {
-            this.loadPaymentData();
+        if (this.voucherApiVersion === 2) {
+            if (SettingsIntegrationTab.Email === index) {
+                this.loadEmailData();
+            }
+            if (SettingsIntegrationTab.Collection === index) {
+                this.loadCollectionData();
+            }
+            if (SettingsIntegrationTab.Payment === index) {
+                this.loadPaymentData();
+            }
+        } else {
+            if (SettingsIntegrationTabV1.Email === index) {
+                this.loadEmailData();
+            }
+            if (SettingsIntegrationTabV1.Collection === index) {
+                this.loadCollectionData();
+            }
+            if (SettingsIntegrationTabV1.Payment === index) {
+                this.loadPaymentData();
+            }
         }
     }
 
