@@ -223,7 +223,7 @@ export class GstAsideMenuComponent implements OnInit, OnDestroy {
      */
     public getGstAuthenticatedText(): string {
         let text = this.localeData?.aside_menu?.gst_authenticated;
-        text = text?.replace("[IS_VAYANA_AUTHENTICATED]", (this.isVayanaAuthenticated ? this.commonLocaleData?.app_numbers?.one : this.commonLocaleData?.app_numbers?.two));
+        text = text?.replace("[IS_VAYANA_AUTHENTICATED]", (this.isVayanaAuthenticated ? this.commonLocaleData?.app_numbers?.one : this.commonLocaleData?.app_numbers?.one));
         return text;
     }
 }
