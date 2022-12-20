@@ -22,14 +22,22 @@ export class ImportProcessComponent {
         this.rawImportData = value;
 
         let clonedValues: ImportExcelResponseData = cloneDeep(value);
-        clonedValues.data.items = clonedValues.data.items?.filter(item => {
-            item.row = item.row?.filter(ro => clonedValues.mappings.some(s => s.columnNumber === parseInt(ro.columnNumber)));
-            return item;
-        });
-        this._importData = clonedValues;
 
         // prepare table header from mappings.mappedColumn and first sortBy columnNumber
         sortBy(clonedValues.mappings, ['columnNumber']).forEach(f => this.userHeader.push(f.mappedColumn));
+
+        clonedValues.data.items = clonedValues.data.items?.filter(item => {
+            item.row = item.row?.filter(ro => clonedValues.mappings.some(s => s.columnNumber === parseInt(ro.columnNumber)));
+
+            if(item.row?.length < this.userHeader?.length) {
+                for(let i = item.row.length; i < this.userHeader.length; i++) {
+                    item.row.push({columnValue: '', columnNumber: String(i), valid: true});
+                }
+            }
+
+            return item;
+        });
+        this._importData = clonedValues;
     }
 
     @Output() public onSubmit = new EventEmitter<ImportExcelResponseData>();
