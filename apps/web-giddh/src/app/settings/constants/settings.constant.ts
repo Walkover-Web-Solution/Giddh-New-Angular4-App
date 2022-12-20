@@ -7,6 +7,14 @@ export enum SettingsIntegrationTab {
     Payment=4
 }
 
+/** Settings integration tabs V1 */
+export enum SettingsIntegrationTabV1 {
+    Email = 0,
+    Collection = 1,
+    ECommerce = 2,
+    Payment = 3
+}
+
 /** Country interface for Organization profile */
 export interface Country {
     countryName: string;

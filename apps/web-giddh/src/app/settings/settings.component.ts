@@ -16,10 +16,11 @@ import { AuthenticationService } from '../services/authentication.service';
 import { GeneralActions } from '../actions/general/general.actions';
 import { SettingsIntegrationActions } from '../actions/settings/settings.integration.action';
 import { WarehouseActions } from './warehouse/action/warehouse.action';
-import { PAGINATION_LIMIT, SETTING_INTEGRATION_TABS } from '../app.constant';
+import { PAGINATION_LIMIT, SETTING_INTEGRATION_TABS, SETTING_INTEGRATION_TABS_V1 } from '../app.constant';
 import { HttpClient } from "@angular/common/http";
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { LocaleService } from '../services/locale.service';
+import { GeneralService } from '../services/general.service';
 
 @Component({
     templateUrl: './settings.component.html',
@@ -58,6 +59,8 @@ export class SettingsComponent implements OnInit, OnDestroy {
     public profileTabHeading: string = "";
     /* This will hold the value out/in to open/close setting sidebar popup */
     public asideGstSidebarMenuState: string = 'in';
+    /** Stores the voucher API version of current company */
+    public voucherApiVersion: 1 | 2;
 
     constructor(
         private store: Store<AppState>,
@@ -71,7 +74,8 @@ export class SettingsComponent implements OnInit, OnDestroy {
         private warehouseActions: WarehouseActions,
         private http: HttpClient,
         private breakPointObservar: BreakpointObserver,
-        private localeService: LocaleService
+        private localeService: LocaleService,
+        private generalService: GeneralService
     ) {
         this.isUserSuperAdmin = this._permissionDataService.isUserSuperAdmin;
         this.isUpdateCompanyInProgress$ = this.store.pipe(select(state => state.settings.updateProfileInProgress), takeUntil(this.destroyed$));
@@ -79,6 +83,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.breakPointObservar.observe([
             '(max-width:767px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
@@ -166,23 +171,38 @@ export class SettingsComponent implements OnInit, OnDestroy {
     }
 
     public assignChildtabForIntegration(childTab: string): number {
-        switch (childTab) {
-            case SETTING_INTEGRATION_TABS.PAYMENT.LABEL:
-                return SETTING_INTEGRATION_TABS.PAYMENT.VALUE;
-            case SETTING_INTEGRATION_TABS.E_COMMERCE.LABEL:
-                return SETTING_INTEGRATION_TABS.E_COMMERCE.VALUE;
-            case SETTING_INTEGRATION_TABS.COLLECTION.LABEL:
-                return SETTING_INTEGRATION_TABS.COLLECTION.VALUE;
-            case SETTING_INTEGRATION_TABS.EMAIL.LABEL:
-                return SETTING_INTEGRATION_TABS.EMAIL.VALUE;
-            case SETTING_INTEGRATION_TABS.TALLY.LABEL:
-                return SETTING_INTEGRATION_TABS.TALLY.VALUE;
-            case SETTING_INTEGRATION_TABS.COMMUNICATION.LABEL:
-                return SETTING_INTEGRATION_TABS.COMMUNICATION.VALUE;
-            // case SETTING_INTEGRATION_TABS.SMS.LABEL:
-            //     return SETTING_INTEGRATION_TABS.SMS.VALUE;
-            default:
-                return SETTING_INTEGRATION_TABS.COMMUNICATION.VALUE;
+        if(this.voucherApiVersion === 2) {
+            switch (childTab) {
+                case SETTING_INTEGRATION_TABS.PAYMENT.LABEL:
+                    return SETTING_INTEGRATION_TABS.PAYMENT.VALUE;
+                case SETTING_INTEGRATION_TABS.E_COMMERCE.LABEL:
+                    return SETTING_INTEGRATION_TABS.E_COMMERCE.VALUE;
+                case SETTING_INTEGRATION_TABS.COLLECTION.LABEL:
+                    return SETTING_INTEGRATION_TABS.COLLECTION.VALUE;
+                case SETTING_INTEGRATION_TABS.EMAIL.LABEL:
+                    return SETTING_INTEGRATION_TABS.EMAIL.VALUE;
+                case SETTING_INTEGRATION_TABS.TALLY.LABEL:
+                    return SETTING_INTEGRATION_TABS.TALLY.VALUE;
+                case SETTING_INTEGRATION_TABS.COMMUNICATION.LABEL:
+                    return SETTING_INTEGRATION_TABS.COMMUNICATION.VALUE;
+                default:
+                    return SETTING_INTEGRATION_TABS.COMMUNICATION.VALUE;
+            }
+        } else {
+            switch (childTab) {
+                case SETTING_INTEGRATION_TABS_V1.PAYMENT.LABEL:
+                    return SETTING_INTEGRATION_TABS_V1.PAYMENT.VALUE;
+                case SETTING_INTEGRATION_TABS_V1.E_COMMERCE.LABEL:
+                    return SETTING_INTEGRATION_TABS_V1.E_COMMERCE.VALUE;
+                case SETTING_INTEGRATION_TABS_V1.COLLECTION.LABEL:
+                    return SETTING_INTEGRATION_TABS_V1.COLLECTION.VALUE;
+                case SETTING_INTEGRATION_TABS_V1.EMAIL.LABEL:
+                    return SETTING_INTEGRATION_TABS_V1.EMAIL.VALUE;
+                case SETTING_INTEGRATION_TABS_V1.TALLY.LABEL:
+                    return SETTING_INTEGRATION_TABS_V1.TALLY.VALUE;
+                default:
+                    return SETTING_INTEGRATION_TABS_V1.EMAIL.VALUE;
+            }
         }
     }
 

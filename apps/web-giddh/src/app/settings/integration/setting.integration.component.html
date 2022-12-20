@@ -51,7 +51,7 @@
                 </div>
             </tab> -->
 
-            <mat-tab [label]="localeData?.communication?.tab_heading">
+            <mat-tab [label]="localeData?.communication?.tab_heading" *ngIf="voucherApiVersion === 2">
                 <app-setting-campaign></app-setting-campaign>
             </mat-tab>
 
