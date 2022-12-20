@@ -2720,6 +2720,8 @@
                                                     calculateWhenTrxAltered(entry, transaction)
                                                 "
                                                 [value]="transaction.stockUnit"
+                                                [(ngModel)]="transaction.stockUnit"
+                                                [name]="'transaction.stockUnit_' + entryIdx"
                                             >
                                                 <div class="select-quantity-option">
                                                     <mat-option
@@ -4279,6 +4281,8 @@
                                                                     calculateWhenTrxAltered(entry, transaction)
                                                                 "
                                                                 [value]="transaction.stockUnit"
+                                                                [(ngModel)]="transaction.stockUnit"
+                                                                [name]="'transaction.stockUnit_' + entryIdx"
                                                             >
                                                                 <mat-option
                                                                     *ngFor="let stock of transaction.stockList"
