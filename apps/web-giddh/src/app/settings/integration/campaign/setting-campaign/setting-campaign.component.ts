@@ -120,8 +120,6 @@ export class SettingCampaignComponent implements OnInit {
         entity: false,
         authKey: false
     }
-    public campaignValue: string = '';
-
 
     constructor(private campaignIntegrationService: CampaignIntegrationService,
         private toasty: ToasterService,
@@ -482,7 +480,6 @@ export class SettingCampaignComponent implements OnInit {
      * @memberof SettingCampaignComponent
      */
     public selectCampaign(campaign: any, getCampaignFields: boolean = false): void {
-        this.campaignValue = campaign?.value;
         this.createTrigger.campaignDetails.campaignSlug = campaign?.value;
         this.createTrigger.campaignDetails.campaignName = campaign?.label;
         this.showVariableMapping = true;
