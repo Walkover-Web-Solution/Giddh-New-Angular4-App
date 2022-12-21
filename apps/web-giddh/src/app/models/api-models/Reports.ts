@@ -14,6 +14,8 @@ export class ReportsModel {
     public reportType: string;
     public from?: string;
     public to?: string;
+    public interval?: string;
+    public selectedMonth?: string;
 }
 /*
 * Report Response Model to be bind with get sales report API
@@ -138,6 +140,8 @@ export class PurchaseReportsModel {
     public reportType: string;
     public from?: string;
     public to?: string;
+    public interval?: string;
+    public selectedMonth?: string;
 }
 
 export interface PurchaseRegisteDetailedResponse {

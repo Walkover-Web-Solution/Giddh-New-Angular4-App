@@ -72,6 +72,7 @@
                     [showClear]="false"
                     (selected)="selectFinancialYearOption($event)"
                     [ItemHeight]="33"
+                    [defaultValue]="activeFinacialYr?.uniqueName"
                 ></sh-select>
             </div>
             <div class="inner-button xs-mb-1 pr-5 xs-pr-0" dropdown placement="bottom left">
@@ -122,6 +123,11 @@
                         </li>
                     </ul>
                 </div>
+            </div>
+            <div class="xs-mb-1 position-absolute dropdown-left">
+                <button type="button" class="btn btn-sky-blue" (click)="export()">
+                    {{ commonLocaleData?.app_export }}
+                </button>
             </div>
         </div>
         <reports-table-component
