@@ -17,32 +17,26 @@
                     <!-- region not gst authenticated and before otp verified -->
                     <div *ngIf="!gstAuthenticated && !gspSessionOtpAuthorized">
                         <!-- Choose Provider -->
-                        <div class="form-group" *ngIf="selectedService === 'TAXPRO' || selectedService === 'VAYANA'">
+                        <div class="form-group">
                             <div class="row">
                                 <div class="col-6">
                                     <div class="form-group">
                                         <label for="tax_pro_otp">{{ localeData?.aside_menu?.select_platform }}</label>
 
-                                        <select
-                                            class="form-control"
-                                            (click)="changeProvider()"
+                                        <sh-select
+                                            (selected)="changeProvider()"
                                             [(ngModel)]="selectedService"
                                             [disabled]="otpSentSuccessFully"
-                                        >
-                                            <option value="VAYANA">
-                                                {{ localeData?.aside_menu?.giddh_provider1 }}
-                                            </option>
-                                            <option value="TAXPRO">
-                                                {{ localeData?.aside_menu?.giddh_provider2 }}
-                                            </option>
-                                        </select>
+                                            [options]="providerOptions"
+                                            [placeholder]="commonLocaleData?.app_select"
+                                        ></sh-select>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
                         <!-- TAX PRO || VYANA-->
-                        <form class="form-group" *ngIf="selectedService === 'TAXPRO' || selectedService === 'VAYANA'">
+                        <form class="form-group">
                             <div class="row">
                                 <div class="col-6">
                                     <div class="form-group">
@@ -56,6 +50,7 @@
                                             [(ngModel)]="taxProForm.userName"
                                             required
                                             [disabled]="otpSentSuccessFully"
+                                            [placeholder]="localeData?.aside_menu?.username"
                                         />
                                     </div>
                                 </div>
@@ -72,6 +67,7 @@
                                             [(ngModel)]="taxProForm.gstin"
                                             required
                                             [disabled]="otpSentSuccessFully"
+                                            [placeholder]="commonLocaleData?.app_gstin"
                                         />
                                     </div>
                                 </div>
@@ -87,6 +83,7 @@
                                                 class="form-control"
                                                 id="tax_pro_otp"
                                                 [(ngModel)]="taxProForm.otp"
+                                                [placeholder]="localeData?.aside_menu?.resend_otp"
                                             />
                                         </div>
 
@@ -105,7 +102,7 @@
                                         class="btn btn-success"
                                         [ladda]="saveGspSessionInProcess || authorizeGspSessionOtpInProcess"
                                         (click)="save()"
-                                        [disabled]="!taxProForm.gstin || !taxProForm.userName"
+                                        [disabled]="!selectedService || !taxProForm.gstin || !taxProForm.userName"
                                     >
                                         {{
                                             !otpSentSuccessFully
@@ -270,7 +267,7 @@
                         <!-- region submit gst -->
                         <div *ngIf="pointsAcceptedSubmitted">
                             <div class="gst-body padd15">
-                                <div class="row">
+                                <!-- <div class="row">
                                     <div class="col-lg-6 col-md-6 col-sm-6">
                                         <label class="text-muted">
                                             {{ localeData?.aside_menu?.gstn_username }}
@@ -280,7 +277,7 @@
                                     <div class="col-lg-6 col-md-6 col-sm-6">
                                         <span>{{ taxProForm.userName }}</span>
                                     </div>
-                                </div>
+                                </div> -->
 
                                 <div class="row mt-1">
                                     <div class="col-xs-6 col-lg-6 col-md-6 col-sm-6">
@@ -331,7 +328,7 @@
                             <div class="padd15 white-bg">
                                 <div class="row mt-1">
                                     <div class="col-lg-6 col-md-6 col-xs-6 col-sm-6">
-                                        <label [innerHTML]="localeData?.type_submit"></label>
+                                        <label [innerHTML]="localeData?.aside_menu?.type_submit"></label>
                                     </div>
 
                                     <div class="col-lg-6 col-md-6 col-xs-6 col-sm-6">

@@ -309,7 +309,7 @@ export const EMAIL_REGEX_PATTERN = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a
 /** This will hold error status code for permission error from API */
 export const UNAUTHORISED = 401;
 /** This will hide the filing feature of GST module  */
-export const SHOW_GST_FILING = false;
+export const SHOW_GST_FILING = true;
 export const SELECT_ALL_RECORDS = "selectallrecords";
 /** Stores the voucher wise form values to toggle fields in voucher module */
 export const GIDDH_VOUCHER_FORM = [
