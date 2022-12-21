@@ -112,6 +112,8 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         operation: "",
         user: ""
     };
+    /** To show entry date filter */
+    public isShowEntryDatepicker: boolean = false;
     public fields: any[] = [
         {
             label: "Entry Date",
@@ -226,14 +228,14 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         }
         this.isLoading = true;
 
-        if(this.activityObj.entity == ""){
-            this.activityObj.entryFromDate = undefined;
-            this.activityObj.entryToDate = undefined;
-        }
-        if (this.activityObj.entity === 'ENTRY' || this.activityObj.entity === 'VOUCHER'){
-             this.activityObj.entryFromDate = dayjs(this.selectedEntryDateRange?.startDate).format(GIDDH_DATE_FORMAT);
-             this.activityObj.entryToDate = dayjs(this.selectedEntryDateRange?.endDate).format(GIDDH_DATE_FORMAT);
-        }
+        // if(this.activityObj.entity == ""){
+        //     this.activityObj.entryFromDate = undefined;
+        //     this.activityObj.entryToDate = undefined;
+        // }
+        // if (this.activityObj.entity === 'ENTRY' || this.activityObj.entity === 'VOUCHER'){
+        //      this.activityObj.entryFromDate = dayjs(this.selectedEntryDateRange?.startDate).format(GIDDH_DATE_FORMAT);
+        //      this.activityObj.entryToDate = dayjs(this.selectedEntryDateRange?.endDate).format(GIDDH_DATE_FORMAT);
+        // }
         this.activityService.getActivityLogs(this.activityObj).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             this.isLoading = false;
             if (response && response.status === 'success') {
@@ -607,7 +609,13 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
     }
 
     public addDefaultFilter(): void {
-        this.selectedFields.push("ENTRY_DATE");
+        this.selectedFields.push("LOG_DATE");
+    }
+
+    public removeDefaultFilter(event: any, index: number): void {
+        if (index >= 0) {
+            this.selectedFields?.splice(index, 1);
+        }
     }
 
     public selectField(index, selectedValue): void {

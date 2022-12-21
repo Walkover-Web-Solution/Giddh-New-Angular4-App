@@ -7,8 +7,8 @@
     <hamburger-menu class="hamburger-menu"></hamburger-menu>
     <div class="activity-container">
         <div class="activity-filter-wrap">
-            <div *ngFor="let selectedField of selectedFields; let i = index">
-                <div class="entity-wrapper mr-l1 filter-button">
+            <div *ngFor="let selectedField of selectedFields; let i = index" class="filter-wrapper">
+                <div class="mr-l1">
                     <select-field
                         [cssClass]="'form-control mat-field-border'"
                         [name]="'fields'"
@@ -19,8 +19,19 @@
                     >
                     </select-field>
                 </div>
-                <span>and</span>
-                <div class="mr-t15 mr-b15 custom-datepicker-wrapper" *ngIf="selectedField === 'ENTRY_DATE'">
+                <span class="and-text">and</span>
+                <div class="custom-datepicker-wrapper" *ngIf="selectedField === 'ENTRY_DATE'">
+                    <div class="custom-datepicker" (click)="showEntryGiddhDatepicker($event)">
+                        <i class="icon-calender calendar-addon"></i>
+                        <input
+                            type="text"
+                            name="selectedEntryDateRange"
+                            [value]="selectedEntryDateRangeUi ? selectedEntryDateRangeUi : ''"
+                            class="giddh-datepicker date-range-picker"
+                        />
+                    </div>
+                </div>
+                <div class="custom-datepicker-wrapper" *ngIf="selectedField === 'LOG_DATE'">
                     <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
                         <i class="icon-calender calendar-addon"></i>
                         <input
@@ -31,7 +42,7 @@
                         />
                     </div>
                 </div>
-                <div class="entity-wrapper mr-l1 filter-button" *ngIf="selectedField === 'ENTITY'">
+                <div class="entity-wrapper mr-l1" *ngIf="selectedField === 'ENTITY'">
                     <select-field
                         [cssClass]="'form-control mat-field-border'"
                         [name]="'entity'"
@@ -49,7 +60,7 @@
                     >
                     </select-field>
                 </div>
-                <div class="operation-wrapper mr-l1 filter-button" *ngIf="selectedField === 'OPERATION'">
+                <div class="operation-wrapper mr-l1" *ngIf="selectedField === 'OPERATION'">
                     <select-field
                         [cssClass]="'form-control mat-field-border'"
                         [name]="'operation'"
@@ -64,7 +75,7 @@
                     >
                     </select-field>
                 </div>
-                <div class="user-wrapper mr-l1 filter-button" *ngIf="selectedField === 'USER'">
+                <div class="user-wrapper mr-l1" *ngIf="selectedField === 'USERS'">
                     <select-field
                         [cssClass]="'form-control mat-field-border'"
                         [name]="'user'"
@@ -77,7 +88,16 @@
                     >
                     </select-field>
                 </div>
-                <button mat-button (click)="addDefaultFilter()">+</button>
+                <span class="delete-row">
+                    <a
+                        href="javascript:;"
+                        (click)="removeDefaultFilter(selectedField, i)"
+                        *ngIf="selectedFields?.length > 1"
+                        ><i class="icon-cross"></i
+                    ></a>
+                </span>
+
+                <button mat-button (click)="addDefaultFilter()" class="add-button">+</button>
             </div>
 
             <div
