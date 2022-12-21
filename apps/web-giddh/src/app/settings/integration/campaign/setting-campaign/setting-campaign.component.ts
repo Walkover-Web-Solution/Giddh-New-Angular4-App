@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { COMMA, ENTER, I } from '@angular/cdk/keycodes';
 import { take, takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
@@ -25,7 +25,8 @@ export interface ActiveTriggers {
     styleUrls: ['./setting-campaign.component.scss']
 })
 export class SettingCampaignComponent implements OnInit {
-
+    /** Hold instance of chiplist to trigger */
+    @ViewChild("chipListTo") public chipListTo;
     /** Holds image path */
     public imgPath: string = '';
     /* This will hold local JSON data */
@@ -118,6 +119,7 @@ export class SettingCampaignComponent implements OnInit {
         entity: false,
         authKey: false
     }
+    public campaignValue : string ='';
 
 
     constructor(private campaignIntegrationService: CampaignIntegrationService,
@@ -479,6 +481,7 @@ export class SettingCampaignComponent implements OnInit {
      * @memberof SettingCampaignComponent
      */
     public selectCampaign(campaign: any, getCampaignFields: boolean = false): void {
+        this.campaignValue = campaign?.value;
         this.createTrigger.campaignDetails.campaignSlug = campaign?.value;
         this.createTrigger.campaignDetails.campaignName = campaign?.label;
         this.showVariableMapping = true;
@@ -648,6 +651,7 @@ export class SettingCampaignComponent implements OnInit {
         this.mandatoryFields.campaignSlug = false;
         this.mandatoryFields.triggerToChiplist = false;
 
+
         if (!this.createTrigger.title) {
             this.mandatoryFields.title = true;
             this.toasty.showSnackBar("error", this.localeData?.communication?.invalid_title);
@@ -674,12 +678,11 @@ export class SettingCampaignComponent implements OnInit {
             return false;
         }
         if (!this.triggerToChiplist.length) {
-            this.mandatoryFields.triggerToChiplist = true;
+            this.chipListTo.errorState = true;
             this.toasty.showSnackBar("error", this.localeData?.communication?.invalid_to);
             this.triggerToChiplist = [];
             return false;
         }
-
         return true;
     }
 
@@ -825,7 +828,7 @@ export class SettingCampaignComponent implements OnInit {
     public addTriggerTo(event: any): void {
         const input = event?.input;
         const value = event?.value;
-        if ((value || '')?.trim() && (this.validateEmail(value) || this.validateMobile(value))) {
+        if ((value || '')?.trim() && (this.validateEmail(value) || this.validateMobile(value))&& !this.triggerToChiplist?.includes(value)) {
             this.triggerToChiplist?.push(value);
         }
         if (input) {
@@ -909,14 +912,12 @@ export class SettingCampaignComponent implements OnInit {
     * @memberof SettingCampaignComponent
     */
     public selectTriggerTo(to: any): void {
-        const selectOptionValue = to?.option?.value?.value;
-        if (to) {
-            if (!this.triggerToChiplist?.includes(selectOptionValue)) {
-                this.triggerToChiplist?.push(selectOptionValue);
-            }
-        }
-        this.campaignEmailForm('to', selectOptionValue);
 
+        const selectOptionValue = to?.option?.value?.value;
+        if (selectOptionValue && !this.triggerToChiplist?.includes(selectOptionValue)) {
+            this.triggerToChiplist?.push(selectOptionValue);
+            this.campaignEmailForm('to', selectOptionValue);
+        }
     }
 
     /**
