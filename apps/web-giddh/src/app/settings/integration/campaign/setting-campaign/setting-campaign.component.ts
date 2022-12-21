@@ -120,7 +120,7 @@ export class SettingCampaignComponent implements OnInit {
         entity: false,
         authKey: false
     }
-    public campaignValue : string ='';
+    public campaignValue: string = '';
 
 
     constructor(private campaignIntegrationService: CampaignIntegrationService,
@@ -266,7 +266,7 @@ export class SettingCampaignComponent implements OnInit {
                         this.triggerObj.totalPages = response.body.totalPages;
                         this.triggerObj.count = response.body.count;
                     });
-                }else {
+                } else {
                     if (response.body.page > 1) {
                         this.triggerObj.page = response.body.page - 1;
                         this.getTriggers();
@@ -682,6 +682,8 @@ export class SettingCampaignComponent implements OnInit {
             this.chipListTo.errorState = true;
             this.toasty.showSnackBar("error", this.localeData?.communication?.invalid_to);
             this.triggerToChiplist = [];
+            this.triggerBccChiplist = [];
+            this.triggerCcChiplist = [];
             return false;
         }
         return true;
@@ -696,11 +698,17 @@ export class SettingCampaignComponent implements OnInit {
      */
     public editTrigger(trigger: any, mode: any): void {
         this.triggerMode = mode;
+        this.showTriggerForm = true;
         this.getCampaignList();
         this.isInvalidTrigger = false;
+        this.mandatoryFields.title = false;
+        this.mandatoryFields.condition = false;
+        this.mandatoryFields.subConditions = false;
+        this.mandatoryFields.entity = false;
+        this.mandatoryFields.campaignSlug = false;
+        this.mandatoryFields.triggerToChiplist = false;
         this.triggerUniquename = trigger?.uniqueName;
         this.getTriggerByUniqueName(trigger?.uniqueName);
-        this.showTriggerForm = true;
     }
 
 
@@ -829,7 +837,7 @@ export class SettingCampaignComponent implements OnInit {
     public addTriggerTo(event: any): void {
         const input = event?.input;
         const value = event?.value;
-        if ((value || '')?.trim() && (this.validateEmail(value) || this.validateMobile(value))&& !this.triggerToChiplist?.includes(value)) {
+        if ((value || '')?.trim() && (this.validateEmail(value) || this.validateMobile(value)) && !this.triggerToChiplist?.includes(value)) {
             this.triggerToChiplist?.push(value);
         }
         if (input) {
