@@ -16,7 +16,7 @@ import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { InvoicePurchaseActions } from '../../actions/purchase-invoice/purchase-invoice.action';
 import { GstReport } from '../constants/gst.constant';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
-import { SHOW_GST_FILING } from '../../app.constant';
+import { GeneralService } from '../../services/general.service';
 
 @Component({
     selector: 'file-gstr3',
@@ -59,7 +59,7 @@ export class FileGstR3Component implements OnInit, OnDestroy {
     /** True, if month filter is selected */
     public isMonthSelected: boolean = true;
     /** True, if GST filing needs to be shown */
-    public showGstFiling: boolean = SHOW_GST_FILING;
+    public showGstFiling: boolean = false;
     /** This will use for string date show */
     public visibleSelectMonth: string = '';
 
@@ -70,7 +70,8 @@ export class FileGstR3Component implements OnInit, OnDestroy {
         private gstAction: GstReconcileActions,
         private activatedRoute: ActivatedRoute,
         private invoicePurchaseActions: InvoicePurchaseActions,
-        private breakpointObserver: BreakpointObserver
+        private breakpointObserver: BreakpointObserver,
+        private generalService: GeneralService
     ) {
         this.gstAuthenticated$ = this.store.pipe(select(p => p.gstR.gstAuthenticated), takeUntil(this.destroyed$));
         this.gstr3BOverviewDataFetchedSuccessfully$ = this.store.pipe(select(p => p.gstR.gstr3BOverViewDataFetchedSuccessfully), takeUntil(this.destroyed$));
@@ -84,6 +85,9 @@ export class FileGstR3Component implements OnInit, OnDestroy {
     }
 
     public ngOnInit(): void {
+        if (this.generalService.voucherApiVersion === 2) {
+            this.showGstFiling = true;
+        }
         document.querySelector('body').classList.add('gst-sidebar-open');
         this.breakpointObserver
             .observe(['(max-width: 767px)'])
