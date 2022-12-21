@@ -257,11 +257,17 @@ export class SettingCampaignComponent implements OnInit {
                                 argsMapping?.push(arg?.name + " -> " + arg?.value);
                             });
                         }
+
                         this.activeTriggersDataSource.push({ title: trigger?.title, type: trigger?.communicationPlatform, createdAt: trigger?.createdAt, uniqueName: trigger?.uniqueName, argsMapping: argsMapping?.join(", "), isActive: trigger?.isActive });
                         this.triggerObj.totalItems = response.body.totalItems;
                         this.triggerObj.totalPages = response.body.totalPages;
                         this.triggerObj.count = response.body.count;
                     });
+                }else {
+                    if (response.body.page > 1) {
+                        this.triggerObj.page = response.body.page - 1;
+                        this.getTriggers();
+                    }
                 }
                 this.isActiveTriggersLoading = false;
             } else {
@@ -322,40 +328,40 @@ export class SettingCampaignComponent implements OnInit {
     public getTriggerByUniqueName(uniqueName: any): void {
         this.campaignIntegrationService.getTriggerByUniqueName(uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
-                    this.triggerBccDropdown = [];
-                    this.triggerCcDropdown = [];
-                    this.triggerToDropdown = [];
-                    this.createTrigger.campaignDetails.argsMapping = [];
-                    this.selectCampaign(this.createTrigger.campaignDetails.campaignSlug);
-                    this.getFieldsSuggestion(response?.body?.communicationPlatform, response?.body?.condition?.entity);
-                    if (response?.body?.campaignDetails?.to || response?.body?.campaignDetails?.bcc || response?.body?.campaignDetails?.cc) {
-                        this.triggerToChiplist = response?.body?.campaignDetails?.to;
-                        this.triggerBccChiplist = response?.body?.campaignDetails?.bcc;
-                        this.triggerCcChiplist = response?.body?.campaignDetails?.cc;
-                    } else {
-                        this.triggerToChiplist = [];
-                        this.triggerBccChiplist = [];
-                        this.triggerCcChiplist = [];
-                    }
-                    this.createTrigger.title = response?.body?.title;
-                    this.createTrigger.campaignDetails.sendVoucherPdf = response?.body?.campaignDetails?.sendVoucherPdf;
-                    this.createTrigger.campaignDetails.campaignSlug = response?.body?.campaignDetails?.campaignSlug;
-                    this.createTrigger.campaignDetails.campaignName = response?.body?.campaignDetails?.campaignName;
-
-                    this.getCampaignFields(this.createTrigger.campaignDetails.campaignSlug, () => {
-                        this.createTrigger.campaignDetails.argsMapping?.forEach(arg => {
-                            const mappedValue = response?.body?.campaignDetails?.argsMapping?.find(argRes => argRes?.name === arg?.name);
-                            if (mappedValue) {
-                                arg.value = mappedValue?.value;
-                            }
-                        });
-                    });
-                    this.createTrigger.condition.action = response?.body?.condition?.action;
-                    this.createTrigger.condition.subConditions[0].action = response?.body?.condition?.subConditions[0]?.action;
-                    this.createTrigger.condition.entity = response?.body?.condition?.entity;
+                this.triggerBccDropdown = [];
+                this.triggerCcDropdown = [];
+                this.triggerToDropdown = [];
+                this.createTrigger.campaignDetails.argsMapping = [];
+                this.selectCampaign(this.createTrigger.campaignDetails.campaignSlug);
+                this.getFieldsSuggestion(response?.body?.communicationPlatform, response?.body?.condition?.entity);
+                if (response?.body?.campaignDetails?.to || response?.body?.campaignDetails?.bcc || response?.body?.campaignDetails?.cc) {
+                    this.triggerToChiplist = response?.body?.campaignDetails?.to;
+                    this.triggerBccChiplist = response?.body?.campaignDetails?.bcc;
+                    this.triggerCcChiplist = response?.body?.campaignDetails?.cc;
                 } else {
-                    this.toasty.showSnackBar("error", response?.message);
+                    this.triggerToChiplist = [];
+                    this.triggerBccChiplist = [];
+                    this.triggerCcChiplist = [];
                 }
+                this.createTrigger.title = response?.body?.title;
+                this.createTrigger.campaignDetails.sendVoucherPdf = response?.body?.campaignDetails?.sendVoucherPdf;
+                this.createTrigger.campaignDetails.campaignSlug = response?.body?.campaignDetails?.campaignSlug;
+                this.createTrigger.campaignDetails.campaignName = response?.body?.campaignDetails?.campaignName;
+
+                this.getCampaignFields(this.createTrigger.campaignDetails.campaignSlug, () => {
+                    this.createTrigger.campaignDetails.argsMapping?.forEach(arg => {
+                        const mappedValue = response?.body?.campaignDetails?.argsMapping?.find(argRes => argRes?.name === arg?.name);
+                        if (mappedValue) {
+                            arg.value = mappedValue?.value;
+                        }
+                    });
+                });
+                this.createTrigger.condition.action = response?.body?.condition?.action;
+                this.createTrigger.condition.subConditions[0].action = response?.body?.condition?.subConditions[0]?.action;
+                this.createTrigger.condition.entity = response?.body?.condition?.entity;
+            } else {
+                this.toasty.showSnackBar("error", response?.message);
+            }
         });
     }
 
@@ -636,25 +642,15 @@ export class SettingCampaignComponent implements OnInit {
      */
     public validateTriggerForm(): boolean {
         this.mandatoryFields.title = false;
-        this.mandatoryFields.campaignSlug = false;
-        this.mandatoryFields.triggerToChiplist = false;
         this.mandatoryFields.condition = false;
         this.mandatoryFields.subConditions = false;
         this.mandatoryFields.entity = false;
+        this.mandatoryFields.campaignSlug = false;
+        this.mandatoryFields.triggerToChiplist = false;
 
         if (!this.createTrigger.title) {
             this.mandatoryFields.title = true;
             this.toasty.showSnackBar("error", this.localeData?.communication?.invalid_title);
-            return false;
-        }
-        if (!this.createTrigger.campaignDetails.campaignSlug) {
-            this.mandatoryFields.campaignSlug = true;
-            this.toasty.showSnackBar("error", this.localeData?.communication?.invalid_slug);
-            return false;
-        }
-        if (!this.triggerToChiplist.length) {
-            this.mandatoryFields.triggerToChiplist = true;
-            this.toasty.showSnackBar("error", this.localeData?.communication?.invalid_to);
             return false;
         }
         if (!this.createTrigger.condition.action.length) {
@@ -670,6 +666,17 @@ export class SettingCampaignComponent implements OnInit {
         if (!this.createTrigger.condition.subConditions[0].action.length) {
             this.mandatoryFields.subConditions = true;
             this.toasty.showSnackBar("error", this.localeData?.communication?.invalid_sub_entity);
+            return false;
+        }
+        if (!this.createTrigger.campaignDetails.campaignSlug) {
+            this.mandatoryFields.campaignSlug = true;
+            this.toasty.showSnackBar("error", this.localeData?.communication?.invalid_slug);
+            return false;
+        }
+        if (!this.triggerToChiplist.length) {
+            this.mandatoryFields.triggerToChiplist = true;
+            this.toasty.showSnackBar("error", this.localeData?.communication?.invalid_to);
+            this.triggerToChiplist = [];
             return false;
         }
 

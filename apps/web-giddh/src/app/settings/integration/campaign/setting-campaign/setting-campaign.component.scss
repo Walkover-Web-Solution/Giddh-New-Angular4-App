@@ -7,6 +7,12 @@
     min-width: 111px;
     margin-right: 29px;
 }
+.auth-label {
+    float: left;
+    width: 100%;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
 
 .table-content {
     max-height: calc(100vh - 410px);
@@ -163,9 +169,6 @@
 
     .input-field {
         width: 20%;
-        margin-top: 15px;
-        margin-bottom: 15px;
-
         .label {
             font-size: 12px;
 

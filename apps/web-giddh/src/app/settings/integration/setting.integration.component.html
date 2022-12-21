@@ -87,21 +87,6 @@
                     </div>
                 </div>
 
-                <!--remove account integration confirmation modal-->
-                <div bsModal #removegmailintegration="bs-modal" class="modal fade" role="dialog">
-                    <div class="modal-dialog modal-xl">
-                        <div class="modal-content">
-                            <confirm-modal
-                                [title]="localeData?.email?.remove_account_title"
-                                [body]="localeData?.email?.remove_account_message"
-                                (cancelCallBack)="removegmailintegration.toggle()"
-                                (successCallBack)="removeGmailAccount(); removegmailintegration.toggle()"
-                            >
-                            </confirm-modal>
-                        </div>
-                    </div>
-                </div>
-
                 <div class="box clearfix">
                     <h3 class="font-20 bold mb-2">{{ localeData?.email?.form_heading }}</h3>
                     <form #emailform="ngForm" (ngSubmit)="onSubmitEmailform(emailform)">
@@ -518,6 +503,20 @@
                 </div>
             </mat-tab>
         </mat-tab-group>
+    </div>
+    <!--remove account integration confirmation modal-->
+    <div bsModal #removegmailintegration="bs-modal" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <confirm-modal
+                    [title]="localeData?.email?.remove_account_title"
+                    [body]="localeData?.email?.remove_account_message"
+                    (cancelCallBack)="removegmailintegration.toggle()"
+                    (successCallBack)="removeGmailAccount(); removegmailintegration.toggle()"
+                >
+                </confirm-modal>
+            </div>
+        </div>
     </div>
     <div bsModal #createNewAccountModal="bs-modal" [config]="{ backdrop: 'static' }" class="modal" role="dialog">
         <div class="modal-dialog account-modal" *ngIf="createNewAccountModal?.isShown">
