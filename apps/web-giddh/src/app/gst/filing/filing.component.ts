@@ -13,7 +13,6 @@ import { GstReport } from '../constants/gst.constant';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
-import { SHOW_GST_FILING } from '../../app.constant';
 
 @Component({
     // tslint:disable-next-line:component-selector
@@ -64,7 +63,7 @@ export class FilingComponent implements OnInit, OnDestroy {
     /** True, if month filter is selected */
     public isMonthSelected: boolean = true;
     /** True, if GST filing needs to be shown */
-    public showGstFiling: boolean = SHOW_GST_FILING;
+    public showGstFiling: boolean = false;
 
     constructor(
         private route: Router,
@@ -89,6 +88,9 @@ export class FilingComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        if (this.generalService.voucherApiVersion === 2) {
+            this.showGstFiling = true;
+        }
         document.querySelector('body').classList.add('gst-sidebar-open');
         this.breakpointObserver
             .observe(['(max-width: 767px)'])
