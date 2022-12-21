@@ -97,6 +97,29 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         operation: "",
         user: ""
     };
+    public fields: any[] = [
+        {
+            label: "Entry Date",
+            value: "ENTRY_DATE"
+        },
+        {
+            label: "Log Date",
+            value: "LOG_DATE"
+        },
+        {
+            label: "Entity",
+            value: "ENTITY"
+        },
+        {
+            label: "Operation",
+            value: "OPERATION"
+        },
+        {
+            label: "Users",
+            value: "USERS"
+        }
+    ];
+    public selectedFields: any[] = [];
 
     constructor(
         public activityService: ActivityLogsService,
@@ -118,6 +141,7 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
      * @memberof ActivityLogsComponent
      */
     public ngOnInit(): void {
+        this.addDefaultFilter();
         document.body?.classList?.add("activity-log-page");
         if (this.generalService.voucherApiVersion === 1) {
             this.router.navigate(['/pages/home']);
@@ -489,5 +513,14 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
             this.activityObjLabels.operation = '';
             this.activityObj.operation = '';
         }
+    }
+
+    public addDefaultFilter(): void {
+        this.selectedFields.push("ENTRY_DATE");
+    }
+
+    public selectField(index, selectedValue): void {
+        this.selectedFields[index] = selectedValue;
+        this.changeDetection.detectChanges();
     }
 }
