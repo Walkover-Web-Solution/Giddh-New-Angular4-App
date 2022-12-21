@@ -10,6 +10,7 @@ import { CampaignIntegrationService } from 'apps/web-giddh/src/app/services/camp
 import { IOption } from 'apps/web-giddh/src/app/theme/ng-select/option.interface';
 import { GIDDH_NEW_DATE_FORMAT_UI } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import * as dayjs from 'dayjs';
+import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 
 export interface ActiveTriggers {
     title: string;
@@ -574,20 +575,21 @@ export class SettingCampaignComponent implements OnInit {
      * @memberof SettingCampaignComponent
      */
     public createTriggerForm(requestObj: any): void {
+        let model = cloneDeep(requestObj);
         this.createTrigger.campaignDetails.to = this.triggerToChiplist;
         this.createTrigger.campaignDetails.bcc = this.triggerBccChiplist;
         this.createTrigger.campaignDetails.cc = this.triggerCcChiplist;
         if (this.triggerMode === 'copy') {
-            requestObj.campaignDetails.to = this.triggerToChiplist;
-            requestObj.campaignDetails.bcc = this.triggerBccChiplist;
-            requestObj.campaignDetails.cc = this.triggerCcChiplist;
+            model.campaignDetails.to = this.triggerToChiplist;
+            model.campaignDetails.bcc = this.triggerBccChiplist;
+            model.campaignDetails.cc = this.triggerCcChiplist;
         }
-        requestObj.campaignDetails.argsMapping = requestObj?.campaignDetails?.argsMapping?.filter(val => {
-            return val?.value !== "";
-        });
         if (this.validateTriggerForm()) {
+            model.campaignDetails.argsMapping = requestObj?.campaignDetails?.argsMapping?.filter(val => {
+                return val?.value !== "";
+            });
             this.isInvalidTrigger = true;
-            this.campaignIntegrationService.createTrigger(requestObj).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            this.campaignIntegrationService.createTrigger(model).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response?.status === "success") {
                     this.isInvalidTrigger = false;
                     this.toasty.showSnackBar("success", response?.body + this.localeData?.communication?.create_trigger_succes);
@@ -651,7 +653,6 @@ export class SettingCampaignComponent implements OnInit {
         this.mandatoryFields.campaignSlug = false;
         this.mandatoryFields.triggerToChiplist = false;
 
-
         if (!this.createTrigger.title) {
             this.mandatoryFields.title = true;
             this.toasty.showSnackBar("error", this.localeData?.communication?.invalid_title);
@@ -667,7 +668,7 @@ export class SettingCampaignComponent implements OnInit {
             this.toasty.showSnackBar("error", this.localeData?.communication?.invalid_entity);
             return false;
         }
-        if (!this.createTrigger.condition.subConditions[0].action.length) {
+        if (!this.createTrigger.condition.subConditions[0]?.action?.length) {
             this.mandatoryFields.subConditions = true;
             this.toasty.showSnackBar("error", this.localeData?.communication?.invalid_sub_entity);
             return false;

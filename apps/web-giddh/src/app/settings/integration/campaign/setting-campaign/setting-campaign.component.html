@@ -411,7 +411,7 @@
                     {{ localeData?.communication?.variables }}
                 </p>
                 <mat-grid-list class="unit-mapping-grid-list" cols="3" gutterSize="0px" rowHeight="70px">
-                    <form class="map-unit-value-form">
+                    <div class="map-unit-value-form">
                         <mat-grid-tile
                             class="grid-box grid-box-content campaign-grid-tile"
                             *ngFor="let variables of createTrigger.campaignDetails.argsMapping"
@@ -427,7 +427,7 @@
                                 ></select-field>
                             </div>
                         </mat-grid-tile>
-                    </form>
+                    </div>
                 </mat-grid-list>
                 <br />
             </div>
