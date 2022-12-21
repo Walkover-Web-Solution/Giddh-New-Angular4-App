@@ -154,8 +154,9 @@ export class ImportsComponent implements OnInit, OnDestroy {
                             let universalDate = cloneDeep(dateObj);
                             this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
                             this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-                            this.importRequest.from = "";
-                            this.importRequest.to = "";
+                            this.importRequest.from = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);
+                            this.importRequest.to = dayjs(universalDate[1]).format(GIDDH_DATE_FORMAT);
+                            this.getImports();
                         }
                     });
                 }
