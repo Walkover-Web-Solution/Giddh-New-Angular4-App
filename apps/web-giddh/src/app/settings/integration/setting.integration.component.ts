@@ -24,7 +24,6 @@ import { BootstrapToggleSwitch, Configuration, SELECT_ALL_RECORDS } from "../../
 import { AuthenticationService } from "../../services/authentication.service";
 import { IForceClear } from '../../models/api-models/Sales';
 import { EcommerceService } from '../../services/ecommerce.service';
-import { forIn } from '../../lodash-optimized';
 import { GeneralService } from '../../services/general.service';
 import { ShareRequestForm } from '../../models/api-models/Permission';
 import { SettingsPermissionActions } from '../../actions/settings/permissions/settings.permissions.action';
@@ -146,6 +145,12 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public imgPath: string = '';
     /** This will hold toggle buttons value and size */
     public bootstrapToggleSwitch = BootstrapToggleSwitch;
+    /** This will hold isCopied */
+    public isCopied: boolean = false;
+    /** This will hold apiUrl */
+    public apiUrl: string = '';
+    /** Stores the voucher API version of current company */
+    public voucherApiVersion: 1 | 2;
 
     constructor(
         private router: Router,
@@ -177,6 +182,9 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     }
 
     public ngOnInit() {
+        let companyUniqueName = this.generalService.companyUniqueName;
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
+        this.apiUrl = `${ApiUrl}company/${companyUniqueName}/imports/tally-import`;
         this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         //logic to switch to payment tab if coming from vedor tabs add payment
         if (this.selectedTabParent !== undefined && this.selectedTabParent !== null) {
@@ -1019,5 +1027,17 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 this.toasty.errorToast(response?.body?.message);
             }
         });
+    }
+
+    /**
+     * This will use for copy api url link and display copied
+     *
+     * @memberof SettingIntegrationComponent
+     */
+    public copyUrl(): void {
+        this.isCopied = true;
+        setTimeout(() => {
+            this.isCopied = false;
+        }, 3000);
     }
 }

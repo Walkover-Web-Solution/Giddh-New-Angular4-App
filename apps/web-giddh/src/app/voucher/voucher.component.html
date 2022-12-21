@@ -182,7 +182,7 @@
                                                             [cssClass]="
                                                                 'form-control mat-field-border customer-dropdown'
                                                             "
-                                                            [customPanelClass]="'panel-cl'"
+                                                            [customPanelClass]="'panel-cl customer-dropdown-panel'"
                                                             [name]="'voucherDetails.customerName'"
                                                             [openDropdown]="openCustomerDropdown"
                                                             [placeholder]="customerPlaceHolder"
@@ -207,6 +207,9 @@
                                                             "
                                                             [allowValueReset]="true"
                                                             (onClear)="resetCustomerName($event)"
+                                                            [isPaginationEnabled]="true"
+                                                            (scrollEnd)="handleScrollEnd('customer')"
+                                                            [scrollableElementId]="'customerId'"
                                                         >
                                                             <ng-template #optionTemplate let-option="option">
                                                                 <a href="javascript:void(0)">
@@ -521,7 +524,7 @@
                                                                                 [maxlength]="15"
                                                                                 autocomplete="none"
                                                                                 [type]="'text'"
-                                                                                [name]="billingDetails.gstNumber"
+                                                                                [name]="'billingDetails.gstNumber'"
                                                                                 [cssClass]="'form-control input-custom'"
                                                                                 *ngIf="showTRNNo"
                                                                                 [(ngModel)]="
@@ -748,7 +751,7 @@
                                                                                         invFormData.accountDetails
                                                                                             .shippingDetails.gstNumber
                                                                                     "
-                                                                                    (ngModelChange)="
+                                                                                    (change)="
                                                                                         getStateCode(
                                                                                             'shippingDetails',
                                                                                             statesShipping
@@ -772,7 +775,7 @@
                                                                                         invFormData.accountDetails
                                                                                             .shippingDetails.gstNumber
                                                                                     "
-                                                                                    (ngModelChange)="
+                                                                                    (change)="
                                                                                         getStateCode(
                                                                                             'shippingDetails',
                                                                                             statesShipping
@@ -1253,6 +1256,68 @@
                                                                         {{ localeData?.shipping_billing_same }}
                                                                     </mat-checkbox>
                                                                 </span>
+                                                                <div
+                                                                    [attachOutsideOnClick]="true"
+                                                                    class="change-address-dropdown"
+                                                                    *ngIf="
+                                                                        companyAddressList?.length > 1 &&
+                                                                        !autoFillCompanyShipping
+                                                                    "
+                                                                >
+                                                                    <a
+                                                                        mat-menu-item
+                                                                        class="dropdown-toggle cp mat-menu-btn"
+                                                                        [matMenuTriggerFor]="
+                                                                            companyShippingAddressDropDownWeb
+                                                                        "
+                                                                    >
+                                                                        {{ localeData?.change }}</a
+                                                                    >
+                                                                    <mat-menu
+                                                                        class="billing-company"
+                                                                        #companyShippingAddressDropDownWeb="matMenu"
+                                                                    >
+                                                                        <a
+                                                                            mat-menu-item
+                                                                            class="
+                                                                                d-flex
+                                                                                flex-column
+                                                                                justify-content-center
+                                                                                line-height-initial
+                                                                            "
+                                                                            *ngFor="let address of companyAddressList"
+                                                                            (click)="
+                                                                                selectAddress(
+                                                                                    purchaseBillCompany.shippingDetails,
+                                                                                    address,
+                                                                                    true
+                                                                                )
+                                                                            "
+                                                                        >
+                                                                            <p class="font-12 pl-0 text-indent">
+                                                                                {{ address.address }}
+                                                                            </p>
+                                                                            <p class="font-12 text-indent">
+                                                                                {{ address.stateName }}
+                                                                            </p>
+                                                                            <p
+                                                                                class="font-12 text-indent"
+                                                                                *ngIf="address.gstNumber"
+                                                                            >
+                                                                                {{
+                                                                                    address.taxNumber
+                                                                                        ? (showGSTINNo
+                                                                                              ? commonLocaleData?.app_gstin +
+                                                                                                ": "
+                                                                                              : commonLocaleData?.app_trn +
+                                                                                                ": ") +
+                                                                                          address.taxNumber
+                                                                                        : ""
+                                                                                }}
+                                                                            </p>
+                                                                        </a>
+                                                                    </mat-menu>
+                                                                </div>
                                                             </div>
                                                             <div
                                                                 [ngClass]="{
@@ -1349,7 +1414,7 @@
                                                                                         .gstNumber
                                                                                 "
                                                                                 [cssClass]="'form-control input-custom'"
-                                                                                (ngModelChange)="
+                                                                                (change)="
                                                                                     getStateCodeCompany(
                                                                                         'shippingDetails'
                                                                                     )
@@ -1424,6 +1489,10 @@
                                                 [multiple]="true"
                                                 (selectionChange)="getPurchaseOrder($event?.value, true)"
                                                 class="po-mat-salect"
+                                                [placeholder]="localeData?.select_order_placeholder"
+                                                [disabled]="
+                                                    linkedPo?.length === 0 && fieldFilteredOptions?.length === 0
+                                                "
                                             >
                                                 <mat-select-trigger *ngIf="linkedPo?.length">
                                                     <ng-container *ngFor="let poNumber of linkedPo; let i = index"
@@ -1433,11 +1502,14 @@
                                                 </mat-select-trigger>
                                                 <mat-option class="po-options-line">
                                                     <ngx-mat-select-search
+                                                        [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
                                                         [formControl]="linkPoDropdown"
                                                         [placeholderLabel]="localeData?.select_order_placeholder"
                                                     >
+                                                        <i class="icon-cross" ngxMatSelectSearchClear></i>
                                                     </ngx-mat-select-search>
                                                 </mat-option>
+
                                                 <mat-option
                                                     *ngFor="let option of fieldFilteredOptions"
                                                     [value]="option.value"
@@ -1501,6 +1573,13 @@
                                                             resetInvoiceList();
                                                             getInvoiceListsForCreditNote()
                                                         "
+                                                        [isPaginationEnabled]="true"
+                                                        (scrollEnd)="
+                                                            !searchReferenceVoucher
+                                                                ? getInvoiceListsForCreditNote()
+                                                                : ''
+                                                        "
+                                                        [scrollableElementId]="'referenceVoucher'"
                                                     >
                                                         <ng-template #optionTemplate let-option="option">
                                                             <a
@@ -1546,13 +1625,19 @@
                                                                 <div class="option-label">{{ option?.label }}</div>
                                                                 <div class="option-value">
                                                                     ({{ commonLocaleData?.app_dated }}:
-                                                                    {{ option.additional?.voucherDate }})
+                                                                    {{
+                                                                        option?.additional?.additional?.voucherDate
+                                                                            ? option?.additional?.additional
+                                                                                  ?.voucherDate
+                                                                            : option?.additional?.voucherDate
+                                                                    }})
                                                                 </div>
                                                                 <div class="option-value-stock">
                                                                     ({{ commonLocaleData?.app_amount }}:
                                                                     {{
-                                                                        voucherApiVersion === 2
-                                                                            ? (option.additional?.unadjustedAmount
+                                                                        (option.additional?.additional?.balanceDue
+                                                                            ?.amountForAccount | giddhCurrency)
+                                                                            ? (option.additional?.additional?.balanceDue
                                                                                   ?.amountForAccount | giddhCurrency)
                                                                             : (option.additional?.balanceDue
                                                                                   ?.amountForAccount | giddhCurrency)
@@ -1626,6 +1711,17 @@
                                                                 );
                                                                 onBlurInvoiceDate(0)
                                                             "
+                                                            (focusOut)="
+                                                                !(
+                                                                    currentVoucherFormDetails?.dueDate ||
+                                                                    isSalesInvoice ||
+                                                                    isPurchaseInvoice ||
+                                                                    isProformaInvoice ||
+                                                                    isEstimateInvoice
+                                                                )
+                                                                    ? openFirstEntry()
+                                                                    : ''
+                                                            "
                                                         >
                                                         </giddh-datepicker>
                                                         <p
@@ -1675,6 +1771,7 @@
                                                                 dueDate.errors && (dueDate.dirty || dueDate.touched)
                                                             "
                                                             (blur)="onBlurDueDate(0)"
+                                                            (focusOut)="openFirstEntry()"
                                                         >
                                                         </giddh-datepicker>
                                                         <p
@@ -2378,6 +2475,9 @@
                                             <div class="ng-select-wrap">
                                                 <select-field
                                                     #selectAccount
+                                                    [isPaginationEnabled]="true"
+                                                    (scrollEnd)="handleScrollEnd('item')"
+                                                    [scrollableElementId]="'selectAccount'"
                                                     [cssClass]="'form-control mat-field-border'"
                                                     [name]="'transaction.fakeAccForSelect2_' + entryIdx"
                                                     [placeholder]="localeData?.select_acc"
@@ -2391,10 +2491,11 @@
                                                             false,
                                                             false,
                                                             entryIdx
-                                                        )
+                                                        );
+                                                        noResultsFoundLabel = localeData?.search_acc
                                                     "
                                                     (createOption)="onNoResultsClicked(entryIdx)"
-                                                    [showCreateNew]="'true'"
+                                                    [showCreateNew]="true"
                                                     [defaultValue]="
                                                         transaction.stockDetails && transaction.stockDetails.name
                                                             ? transaction.accountName +
@@ -2618,6 +2719,8 @@
                                                     calculateWhenTrxAltered(entry, transaction)
                                                 "
                                                 [value]="transaction.stockUnit"
+                                                [(ngModel)]="transaction.stockUnit"
+                                                [name]="'transaction.stockUnit_' + entryIdx"
                                             >
                                                 <div class="select-quantity-option">
                                                     <mat-option
@@ -3508,7 +3611,7 @@
                                                                         text-right
                                                                         pull-right
                                                                         max-width-100
-                                                                        mat-field-border 
+                                                                        mat-field-border
                                                                         multicurrency-grandtotal'
                                                                     "
                                                                     [name]="'dueAmount'"
@@ -3885,6 +3988,8 @@
                                                                     );
                                                                     noResultsFoundLabel = localeData?.search_acc
                                                                 "
+                                                                [showCreateNew]="true"
+                                                                (createOption)="onNoResultsClicked(entryIdx)"
                                                                 [defaultValue]="
                                                                     transaction.stockDetails &&
                                                                     transaction.stockDetails.name
@@ -3900,6 +4005,9 @@
                                                                 "
                                                                 (onClear)="onClearSalesAccount(transaction)"
                                                                 [hasMoreValue]="true"
+                                                                [isPaginationEnabled]="true"
+                                                                (scrollEnd)="handleScrollEnd('item')"
+                                                                [scrollableElementId]="'selectAccountInvoice'"
                                                             >
                                                                 <ng-template #optionTemplate let-option="option">
                                                                     <ng-container *ngIf="!option.additional?.stock">
@@ -4172,6 +4280,8 @@
                                                                     calculateWhenTrxAltered(entry, transaction)
                                                                 "
                                                                 [value]="transaction.stockUnit"
+                                                                [(ngModel)]="transaction.stockUnit"
+                                                                [name]="'transaction.stockUnit_' + entryIdx"
                                                             >
                                                                 <mat-option
                                                                     *ngFor="let stock of transaction.stockList"

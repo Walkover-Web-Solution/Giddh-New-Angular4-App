@@ -681,5 +681,6 @@
     "app_invalid_country_code": "Invalid country code",
     "app_invalid_contact_too_short": "Too short",
     "app_invalid_contact_too_long": "Too long",
-    "app_attachment_not_allowed": "To upload attachment, go to branch"
+    "app_attachment_not_allowed": "To upload attachment, go to branch",
+    "app_entry_no": "Entry No."
 }

@@ -8033,23 +8033,41 @@ highcharts-chart {
             line-height: 1.5 !important;
         }
     }
-
+    .purchase-link {
+        .mat-select-disabled {
+            background-color: var(--color-primary-input-bar-background) !important;
+        }
+    }
     .po-mat-salect {
         border: 1px solid var(--color-secondary-input-bar-border);
         border-radius: 5px !important;
         padding: 10px;
         font-size: 12px;
     }
-
     .po-options-line {
+        height: auto !important;
+        padding-bottom: 5px !important;
         .mat-select-search-input {
-            height: 4em !important;
+            padding: 16px 36px 16px 16px !important;
+            box-sizing: border-box !important;
         }
+        .mat-select-search-inner {
+            position: absolute !important;
+            top: 0 !important;
+            border-bottom-width: 1px !important;
+            border-bottom-style: solid !important;
+            z-index: 100 !important;
+            font-size: inherit !important;
+            box-shadow: none !important;
+            border-radius: 0 !important;
+        }
+        .mat-select-search-clear {
+            margin-right: 0 !important;
+        }
+
         .mat-pseudo-checkbox-checked {
             background: #3f51b5 !important;
         }
-
-        height: 4em !important;
 
         .po-option-value {
             float: left !important;
@@ -8069,7 +8087,6 @@ highcharts-chart {
             font-size: 14px !important;
         }
     }
-
     .common-uniquename {
         color: var(--color-gray) !important;
         font-size: 12px;
@@ -9280,7 +9297,6 @@ giddh-datepicker {
         align-items: center;
     }
 }
-
 .ledger-body {
     .cdk-overlay-container,
     .cdk-global-overlay-wrapper {
@@ -9424,7 +9440,6 @@ giddh-datepicker {
         }
     }
 }
-
 .cdk-overlay-container,
 .cdk-global-overlay-wrapper {
     z-index: 9999;

@@ -1,0 +1,12 @@
+{
+    "import_date": "आयात तारीख",
+    "module": "मॉड्यूल",
+    "import_file": "फाइल आयात करा",
+    "error_sheet": "त्रुटी पत्रक",
+    "success_sheet": "यश पत्रक",
+    "expiry": "कालबाह्य",
+    "expired": "कालबाह्य",
+    "success":"यश",
+    "failed":"अयशस्वी",
+    "total":"एकूण"
+}

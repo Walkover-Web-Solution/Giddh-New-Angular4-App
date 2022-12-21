@@ -1,6 +1,8 @@
 {
     "chart_title": "कुल ओवरड्यूस",
-    "customer_due": "ग्राहक देय",
-    "vendor_due": "वेंडर कारण",
-    "pending_invoices": "लबिंत चालान"
+    "invoice_due": "चालान बकाया",
+    "bill_due": "बिल देय",
+    "pending_invoices": "अवैतनिक चालान",
+    "pending_bills": "अवैतनिक बिल",
+    "hold_invoices": "रुके हुए चालान"
 }

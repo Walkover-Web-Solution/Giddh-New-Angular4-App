@@ -471,6 +471,44 @@
                     </div>
                 </div>
             </tab>
+            <tab (selectTab)="tabChanged('tally')" *ngIf="voucherApiVersion === 2">
+                <ng-template tabHeading> <span class="icon-card"></span>{{ localeData?.tally?.heading }}</ng-template>
+                <div class="box clearfix mb-2">
+                    <div class="form-group magic-link-container col-md-9 col-lg-7 d-flex align-items-center">
+                        <label class="bold">{{ localeData?.tally?.api_url }}</label>
+                        <mat-form-field appearance="fill">
+                            <input
+                                #apiUrlInput
+                                matInput
+                                class="dashed tally-url"
+                                [readonly]="true"
+                                type="text"
+                                [(ngModel)]="apiUrl"
+                            />
+                        </mat-form-field>
+                        <span class="input-group-btn">
+                            <i
+                                class="icon-copy-file"
+                                (click)="copyUrl()"
+                                [ngxClipboard]="apiUrlInput"
+                                [tooltip]="commonLocaleData?.app_copy"
+                            ></i>
+                        </span>
+                        <span class="success copied-url" *ngIf="isCopied">{{ localeData?.tally?.copied }}</span>
+                    </div>
+                    <div class="form-group clearfix mb-0 doc-link">
+                        <a target="_blank" class="btn btn-link" [routerLink]="['/pages/user-details/auth-key']">{{
+                            localeData?.email?.auth_key_label
+                        }}</a>
+                        <a
+                            target="_blank"
+                            class="btn btn-link"
+                            href="https://giddh.com/help/sync-with-tally-1591360375828781"
+                            >{{ localeData?.tally?.help_documentation }}</a
+                        >
+                    </div>
+                </div>
+            </tab>
         </tabset>
     </div>
     <div bsModal #createNewAccountModal="bs-modal" [config]="{ backdrop: 'static' }" class="modal" role="dialog">
