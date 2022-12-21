@@ -114,6 +114,29 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
     };
     /** To show entry date filter */
     public isShowEntryDatepicker: boolean = false;
+    public fields: any[] = [
+        {
+            label: "Entry Date",
+            value: "ENTRY_DATE"
+        },
+        {
+            label: "Log Date",
+            value: "LOG_DATE"
+        },
+        {
+            label: "Entity",
+            value: "ENTITY"
+        },
+        {
+            label: "Operation",
+            value: "OPERATION"
+        },
+        {
+            label: "Users",
+            value: "USERS"
+        }
+    ];
+    public selectedFields: any[] = [];
 
     constructor(
         public activityService: ActivityLogsService,
@@ -204,14 +227,14 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         }
         this.isLoading = true;
 
-        if(this.activityObj.entity == ""){
-            this.activityObj.entryFromDate = undefined;
-            this.activityObj.entryToDate = undefined;
-        }
-        if (this.activityObj.entity === 'ENTRY' || this.activityObj.entity === 'VOUCHER'){
-             this.activityObj.entryFromDate = dayjs(this.selectedEntryDateRange?.startDate).format(GIDDH_DATE_FORMAT);
-             this.activityObj.entryToDate = dayjs(this.selectedEntryDateRange?.endDate).format(GIDDH_DATE_FORMAT);
-        }
+        // if(this.activityObj.entity == ""){
+        //     this.activityObj.entryFromDate = undefined;
+        //     this.activityObj.entryToDate = undefined;
+        // }
+        // if (this.activityObj.entity === 'ENTRY' || this.activityObj.entity === 'VOUCHER'){
+        //      this.activityObj.entryFromDate = dayjs(this.selectedEntryDateRange?.startDate).format(GIDDH_DATE_FORMAT);
+        //      this.activityObj.entryToDate = dayjs(this.selectedEntryDateRange?.endDate).format(GIDDH_DATE_FORMAT);
+        // }
         this.activityService.getActivityLogs(this.activityObj).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             this.isLoading = false;
             if (response && response.status === 'success') {
@@ -578,4 +601,22 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
             this.activityObj.operation = '';
         }
     }
+<<<<<<< HEAD
+=======
+
+    public addDefaultFilter(): void {
+        this.selectedFields.push("LOG_DATE");
+    }
+
+    public removeDefaultFilter(event: any, index: number): void {
+        if (index >= 0) {
+            this.selectedFields?.splice(index, 1);
+        }
+    }
+
+    public selectField(index, selectedValue): void {
+        this.selectedFields[index] = selectedValue;
+        this.changeDetection.detectChanges();
+    }
+>>>>>>> f6ff0ddfd6 (working on activity logs)
 }
