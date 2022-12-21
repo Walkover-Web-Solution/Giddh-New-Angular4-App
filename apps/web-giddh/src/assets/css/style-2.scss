@@ -404,6 +404,11 @@ $custom-typography: mat-typography-config(
         }
     }
 }
+.campaign-table {
+    .args-mapping-variables {
+        white-space: initial !important;
+    }
+}
 @media screen and (max-width: 1366px) and (orientation: portrait) {
     .subscription-form-select {
         float: left !important;
