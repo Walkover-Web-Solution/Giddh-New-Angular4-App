@@ -247,12 +247,6 @@ export class SettingCampaignComponent implements OnInit {
             page: this.triggerObj.page
         }
         this.campaignIntegrationService.getTriggersList(requestObj).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response?.body?.items?.length === 0) {
-                if (response.body.page > 1) {
-                    this.triggerObj.page = response.body.page - 1;
-                    this.getTriggers();
-                }
-            }
             if (response?.status === "success") {
                 if (response?.body?.items?.length > 0) {
                     response?.body?.items?.forEach(trigger => {
@@ -269,6 +263,11 @@ export class SettingCampaignComponent implements OnInit {
                         this.triggerObj.totalPages = response.body.totalPages;
                         this.triggerObj.count = response.body.count;
                     });
+                }else {
+                    if (response.body.page > 1) {
+                        this.triggerObj.page = response.body.page - 1;
+                        this.getTriggers();
+                    }
                 }
                 this.isActiveTriggersLoading = false;
             } else {
