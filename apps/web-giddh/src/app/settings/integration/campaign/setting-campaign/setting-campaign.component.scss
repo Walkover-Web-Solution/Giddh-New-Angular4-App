@@ -8,6 +8,10 @@
     margin-right: 29px;
 }
 
+.auth_key_input {
+    color: var(--color-nero) !important;
+}
+
 .auth-label {
     float: left;
     width: 100%;
@@ -51,7 +55,7 @@
 
     .integrate {
         p {
-            color: var(--color-common-senary-text);
+            color: var(--color-master-page-input-label);
             font-size: 14px;
             margin-top: 12px;
         }
@@ -163,7 +167,6 @@
 
 .form {
     margin-top: 30px;
-    margin-left: 15px;
 
     .input-field {
         width: 20%;
@@ -209,7 +212,7 @@
 
 .trigger-form {
     display: flex;
-    margin: 10px 0px 0px 15px;
+    margin: 10px 0px 0px 0px;
 
     .trigger-form-left-side {
         width: 312px;

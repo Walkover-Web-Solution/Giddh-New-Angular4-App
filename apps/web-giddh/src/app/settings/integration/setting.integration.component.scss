@@ -134,7 +134,7 @@
     }
 
     .mat-tab-label-active {
-        background-color: rgb(240, 244, 255);
+        background-color: #f0f4ff;
         border-top-left-radius: 5px;
         border-top-right-radius: 5px;
     }
@@ -152,7 +152,7 @@
     }
 
     .mat-table tbody > tr > td:first-child {
-        color: rgb(33, 37, 40) !important;
+        color: #212529 !important;
     }
 
     th.mat-header-cell,
@@ -175,7 +175,7 @@
     }
 
     .mat-table tbody .mat-row:hover td {
-        background-color: rgb(231, 235, 246) !important;
+        background-color: #e7ebf6 !important;
     }
 
     .mat-table tbody .mat-row:hover .mat-cell .visibility {

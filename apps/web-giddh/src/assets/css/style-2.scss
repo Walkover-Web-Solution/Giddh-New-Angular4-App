@@ -409,6 +409,9 @@ $custom-typography: mat-typography-config(
         white-space: initial !important;
     }
 }
+.chiplist-label {
+    font-size: 14px !important;
+}
 @media screen and (max-width: 1366px) and (orientation: portrait) {
     .subscription-form-select {
         float: left !important;
@@ -7937,7 +7940,7 @@ highcharts-chart {
 }
 .on-setting-page {
     .mat-pseudo-checkbox-checked {
-        background: #3f51b5 !important;
+        background: var(--color-giddh-blue) !important;
     }
     .sub-entity-trigger {
         min-width: 100% !important;
@@ -8114,7 +8117,7 @@ highcharts-chart {
         }
 
         .mat-pseudo-checkbox-checked {
-            background: #3f51b5 !important;
+            background: var(--color-giddh-blue) !important;
         }
 
         .po-option-value {
