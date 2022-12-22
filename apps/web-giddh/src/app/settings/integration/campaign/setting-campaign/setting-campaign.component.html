@@ -164,9 +164,11 @@
                             alt=""
                             (click)="editTrigger(element, 'update')"
                         />
-                        <a href="javascript:;" (click)="deleteTrigger(element.uniqueName)"
-                            ><img class="mr-l2 icon-visibility" src="{{ imgPath }}delete.svg"
-                        /></a>
+                        <img
+                            class="mr-l2 icon-visibility cursor-pointer"
+                            src="{{ imgPath }}delete.svg"
+                            (click)="deleteTrigger(element.uniqueName)"
+                        />
                     </td>
                 </ng-container>
 
@@ -308,11 +310,7 @@
                 (click)="updateTrigger()"
                 [disabled]="disableSubmitButton"
             >
-                {{
-                    triggerMode === "create"
-                        ? localeData?.communication?.create_trigger
-                        : localeData?.communication?.update_trigger
-                }}
+                {{ localeData?.communication?.update_trigger }}
             </button>
         </div>
         <div class="trigger-form-right-side" *ngIf="showVariableMapping">
@@ -341,7 +339,7 @@
                         </mat-chip-list>
                         <mat-autocomplete #auto1="matAutocomplete" (optionSelected)="selectTriggerTo($event)">
                             <mat-option *ngFor="let to of triggerToDropdown" [value]="to">
-                                {{ to.label }}
+                                <span class="chiplist-label"> {{ to.label }} </span>
                             </mat-option>
                         </mat-autocomplete>
                     </mat-form-field>
@@ -369,7 +367,7 @@
                         </mat-chip-list>
                         <mat-autocomplete #auto2="matAutocomplete" (optionSelected)="selectTriggerBcc($event)">
                             <mat-option *ngFor="let bcc of triggerBccDropdown" [value]="bcc">
-                                {{ bcc.label }}
+                                <span class="chiplist-label"> {{ bcc.label }} </span>
                             </mat-option>
                         </mat-autocomplete>
                     </mat-form-field>
@@ -397,7 +395,7 @@
                         </mat-chip-list>
                         <mat-autocomplete #auto3="matAutocomplete" (optionSelected)="selectTriggerCc($event)">
                             <mat-option *ngFor="let cc of triggerCcDropdown" [value]="cc">
-                                {{ cc.label }}
+                                <span class="chiplist-label"> {{ cc.label }}</span>
                             </mat-option>
                         </mat-autocomplete>
                     </mat-form-field>

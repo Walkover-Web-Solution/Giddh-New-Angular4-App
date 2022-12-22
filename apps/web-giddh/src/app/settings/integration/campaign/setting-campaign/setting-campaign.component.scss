@@ -8,6 +8,10 @@
     margin-right: 29px;
 }
 
+.auth_key_input {
+    color: var(--color-nero) !important;
+}
+
 .auth-label {
     float: left;
     width: 100%;
@@ -29,7 +33,6 @@
     width: 241px;
     height: 96px;
     margin-top: 10px;
-    margin-left: 15px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -52,7 +55,7 @@
 
     .integrate {
         p {
-            color: var(--color-common-senary-text);
+            color: var(--color-master-page-input-label);
             font-size: 14px;
             margin-top: 12px;
         }
@@ -74,13 +77,12 @@
 }
 
 .new-trigger {
-    margin: 22px 0px 22px 15px;
+    margin: 22px 0px 22px 0px;
 }
 
 .table-one {
     table {
-        margin: 0px 15px;
-        width: 97.5%;
+        margin: 0px 0px;
         box-shadow: none;
 
         .smaller-font {
@@ -109,8 +111,6 @@
 
         .icon-visibility {
             visibility: hidden;
-            padding-right: 15px !important;
-            padding-left: 15px !important;
         }
 
         .active-trigger-search {
@@ -167,7 +167,6 @@
 
 .form {
     margin-top: 30px;
-    margin-left: 15px;
 
     .input-field {
         width: 20%;
@@ -213,7 +212,7 @@
 
 .trigger-form {
     display: flex;
-    margin: 10px 0px 0px 15px;
+    margin: 10px 0px 0px 0px;
 
     .trigger-form-left-side {
         width: 312px;

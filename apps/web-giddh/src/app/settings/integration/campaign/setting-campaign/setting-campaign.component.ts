@@ -63,7 +63,7 @@ export class SettingCampaignComponent implements OnInit {
     /** List of campaign list */
     public campaignList: any[] = [];
     /** Instance of create trigger form*/
-    public createTrigger;
+    public createTrigger: any = {};
     /** Holds the communication platform */
     public platform: string = '';
     /** Holds the communication trigger uniquename */
@@ -264,7 +264,7 @@ export class SettingCampaignComponent implements OnInit {
                         this.triggerObj.count = response.body.count;
                     });
                 } else {
-                    if (response.body.page > 1) {
+                    if (response.body?.page > 1) {
                         this.triggerObj.page = response.body.page - 1;
                         this.getTriggers();
                     }
