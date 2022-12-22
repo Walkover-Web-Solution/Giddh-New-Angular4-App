@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { COMMA, ENTER, I } from '@angular/cdk/keycodes';
 import { take, takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
@@ -10,6 +10,7 @@ import { CampaignIntegrationService } from 'apps/web-giddh/src/app/services/camp
 import { IOption } from 'apps/web-giddh/src/app/theme/ng-select/option.interface';
 import { GIDDH_NEW_DATE_FORMAT_UI } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import * as dayjs from 'dayjs';
+import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 
 export interface ActiveTriggers {
     title: string;
@@ -25,7 +26,8 @@ export interface ActiveTriggers {
     styleUrls: ['./setting-campaign.component.scss']
 })
 export class SettingCampaignComponent implements OnInit {
-
+    /** Hold instance of chiplist to trigger */
+    @ViewChild("chipListTo") public chipListTo;
     /** Holds image path */
     public imgPath: string = '';
     /* This will hold local JSON data */
@@ -118,7 +120,6 @@ export class SettingCampaignComponent implements OnInit {
         entity: false,
         authKey: false
     }
-
 
     constructor(private campaignIntegrationService: CampaignIntegrationService,
         private toasty: ToasterService,
@@ -263,7 +264,7 @@ export class SettingCampaignComponent implements OnInit {
                         this.triggerObj.totalPages = response.body.totalPages;
                         this.triggerObj.count = response.body.count;
                     });
-                }else {
+                } else {
                     if (response.body.page > 1) {
                         this.triggerObj.page = response.body.page - 1;
                         this.getTriggers();
@@ -571,20 +572,21 @@ export class SettingCampaignComponent implements OnInit {
      * @memberof SettingCampaignComponent
      */
     public createTriggerForm(requestObj: any): void {
+        let model = cloneDeep(requestObj);
         this.createTrigger.campaignDetails.to = this.triggerToChiplist;
         this.createTrigger.campaignDetails.bcc = this.triggerBccChiplist;
         this.createTrigger.campaignDetails.cc = this.triggerCcChiplist;
         if (this.triggerMode === 'copy') {
-            requestObj.campaignDetails.to = this.triggerToChiplist;
-            requestObj.campaignDetails.bcc = this.triggerBccChiplist;
-            requestObj.campaignDetails.cc = this.triggerCcChiplist;
+            model.campaignDetails.to = this.triggerToChiplist;
+            model.campaignDetails.bcc = this.triggerBccChiplist;
+            model.campaignDetails.cc = this.triggerCcChiplist;
         }
-        requestObj.campaignDetails.argsMapping = requestObj?.campaignDetails?.argsMapping?.filter(val => {
-            return val?.value !== "";
-        });
         if (this.validateTriggerForm()) {
+            model.campaignDetails.argsMapping = requestObj?.campaignDetails?.argsMapping?.filter(val => {
+                return val?.value !== "";
+            });
             this.isInvalidTrigger = true;
-            this.campaignIntegrationService.createTrigger(requestObj).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            this.campaignIntegrationService.createTrigger(model).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response?.status === "success") {
                     this.isInvalidTrigger = false;
                     this.toasty.showSnackBar("success", response?.body + this.localeData?.communication?.create_trigger_succes);
@@ -663,7 +665,7 @@ export class SettingCampaignComponent implements OnInit {
             this.toasty.showSnackBar("error", this.localeData?.communication?.invalid_entity);
             return false;
         }
-        if (!this.createTrigger.condition.subConditions[0].action.length) {
+        if (!this.createTrigger.condition.subConditions[0]?.action?.length) {
             this.mandatoryFields.subConditions = true;
             this.toasty.showSnackBar("error", this.localeData?.communication?.invalid_sub_entity);
             return false;
@@ -674,12 +676,13 @@ export class SettingCampaignComponent implements OnInit {
             return false;
         }
         if (!this.triggerToChiplist.length) {
-            this.mandatoryFields.triggerToChiplist = true;
+            this.chipListTo.errorState = true;
             this.toasty.showSnackBar("error", this.localeData?.communication?.invalid_to);
             this.triggerToChiplist = [];
+            this.triggerBccChiplist = [];
+            this.triggerCcChiplist = [];
             return false;
         }
-
         return true;
     }
 
@@ -692,11 +695,17 @@ export class SettingCampaignComponent implements OnInit {
      */
     public editTrigger(trigger: any, mode: any): void {
         this.triggerMode = mode;
+        this.showTriggerForm = true;
         this.getCampaignList();
         this.isInvalidTrigger = false;
+        this.mandatoryFields.title = false;
+        this.mandatoryFields.condition = false;
+        this.mandatoryFields.subConditions = false;
+        this.mandatoryFields.entity = false;
+        this.mandatoryFields.campaignSlug = false;
+        this.mandatoryFields.triggerToChiplist = false;
         this.triggerUniquename = trigger?.uniqueName;
         this.getTriggerByUniqueName(trigger?.uniqueName);
-        this.showTriggerForm = true;
     }
 
 
@@ -825,7 +834,7 @@ export class SettingCampaignComponent implements OnInit {
     public addTriggerTo(event: any): void {
         const input = event?.input;
         const value = event?.value;
-        if ((value || '')?.trim() && (this.validateEmail(value) || this.validateMobile(value))) {
+        if ((value || '')?.trim() && (this.validateEmail(value) || this.validateMobile(value)) && !this.triggerToChiplist?.includes(value)) {
             this.triggerToChiplist?.push(value);
         }
         if (input) {
@@ -909,14 +918,12 @@ export class SettingCampaignComponent implements OnInit {
     * @memberof SettingCampaignComponent
     */
     public selectTriggerTo(to: any): void {
-        const selectOptionValue = to?.option?.value?.value;
-        if (to) {
-            if (!this.triggerToChiplist?.includes(selectOptionValue)) {
-                this.triggerToChiplist?.push(selectOptionValue);
-            }
-        }
-        this.campaignEmailForm('to', selectOptionValue);
 
+        const selectOptionValue = to?.option?.value?.value;
+        if (selectOptionValue && !this.triggerToChiplist?.includes(selectOptionValue)) {
+            this.triggerToChiplist?.push(selectOptionValue);
+            this.campaignEmailForm('to', selectOptionValue);
+        }
     }
 
     /**
