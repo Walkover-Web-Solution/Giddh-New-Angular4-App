@@ -339,7 +339,7 @@
                         </mat-chip-list>
                         <mat-autocomplete #auto1="matAutocomplete" (optionSelected)="selectTriggerTo($event)">
                             <mat-option *ngFor="let to of triggerToDropdown" [value]="to">
-                                <span class="chiplist-label"> {{ to.label }} </span>
+                                {{ to.label }}
                             </mat-option>
                         </mat-autocomplete>
                     </mat-form-field>
@@ -367,7 +367,7 @@
                         </mat-chip-list>
                         <mat-autocomplete #auto2="matAutocomplete" (optionSelected)="selectTriggerBcc($event)">
                             <mat-option *ngFor="let bcc of triggerBccDropdown" [value]="bcc">
-                                <span class="chiplist-label"> {{ bcc.label }} </span>
+                                {{ bcc.label }}
                             </mat-option>
                         </mat-autocomplete>
                     </mat-form-field>
@@ -395,7 +395,7 @@
                         </mat-chip-list>
                         <mat-autocomplete #auto3="matAutocomplete" (optionSelected)="selectTriggerCc($event)">
                             <mat-option *ngFor="let cc of triggerCcDropdown" [value]="cc">
-                                <span class="chiplist-label"> {{ cc.label }}</span>
+                                {{ cc.label }}
                             </mat-option>
                         </mat-autocomplete>
                     </mat-form-field>
