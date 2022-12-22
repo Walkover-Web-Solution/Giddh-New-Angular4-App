@@ -7,6 +7,7 @@
     min-width: 111px;
     margin-right: 29px;
 }
+
 .auth-label {
     float: left;
     width: 100%;
@@ -108,7 +109,8 @@
 
         .icon-visibility {
             visibility: hidden;
-            margin-right: 10px !important;
+            padding-right: 15px !important;
+            padding-left: 15px !important;
         }
 
         .active-trigger-search {
@@ -169,6 +171,7 @@
 
     .input-field {
         width: 20%;
+
         .label {
             font-size: 12px;
 
@@ -200,6 +203,7 @@
     width: 100%;
     border-radius: 5px;
 }
+
 .chiplist-error {
     border-bottom: 2px solid var(--color-red) !important;
     float: left;

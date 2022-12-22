@@ -107,7 +107,7 @@
             <table mat-table [dataSource]="activeTriggersDataSource" class="mat-elevation-z8 giddh-table table">
                 <ng-container matColumnDef="title">
                     <th class="active-trigger-title-width" mat-header-cell *matHeaderCellDef>
-                        {{ localeData?.communication?.active_triggers }}
+                        {{ localeData?.communication?.title }}
                     </th>
                     <td mat-cell *matCellDef="let element">{{ element.title }}</td>
                 </ng-container>
@@ -211,7 +211,7 @@
                 <img class="return" src="{{ imgPath }}return.svg" alt="" (click)="backToListPage($event)" />
                 <p class="trigger-heading">
                     {{
-                        triggerMode === "create"
+                        triggerMode === "create" || triggerMode === "copy"
                             ? localeData?.communication?.create_trigger
                             : localeData?.communication?.edit_trigger
                     }}
@@ -227,6 +227,8 @@
                     [name]="'trigger'"
                     [(ngModel)]="createTrigger.title"
                     [ngClass]="{ 'fields-error': mandatoryFields.title }"
+                    [allowValueReset]="true"
+                    (onClear)="createTrigger.title = ''"
                 >
                 </text-field>
             </div>
@@ -239,6 +241,8 @@
                     (selectedOption)="selectConditions($event?.value)"
                     [defaultValue]="createTrigger.condition.action.length ? createTrigger.condition.action[0] : ''"
                     [ngClass]="{ 'fields-error': mandatoryFields.condition }"
+                    [allowValueReset]="true"
+                    (onClear)="createTrigger.condition.action[0] = ''"
                 ></select-field>
             </div>
             <div class="trigger-input">
@@ -250,6 +254,8 @@
                     (selectedOption)="selectEntity($event?.value)"
                     [defaultValue]="createTrigger.condition.entity"
                     [ngClass]="{ 'fields-error': mandatoryFields.entity }"
+                    [allowValueReset]="true"
+                    (onClear)="createTrigger.condition.entity = ''"
                 ></select-field>
             </div>
             <div class="trigger-input">
@@ -262,12 +268,14 @@
                     [(ngModel)]="createTrigger.condition.subConditions[0].action"
                     (selectionChange)="selectSubEntity($event?.value)"
                     [ngClass]="{ 'fields-error': mandatoryFields.subConditions }"
+                    [allowValueReset]="true"
+                    (onClear)="createTrigger.condition.subConditions[0].action = ''"
                 >
                     <mat-option
                         *ngFor="let action of subConditionAction"
                         [selected]="action?.isChecked"
                         [value]="action"
-                        >{{ action }}</mat-option
+                        >{{ action | titlecase }}</mat-option
                     >
                 </mat-select>
             </div>
@@ -280,6 +288,8 @@
                     (selectedOption)="selectCampaign($event, true)"
                     [defaultValue]="createTrigger.campaignDetails.campaignName"
                     [ngClass]="{ 'fields-error': mandatoryFields.campaignSlug }"
+                    [allowValueReset]="true"
+                    (onClear)="createTrigger.campaignDetails.campaignName = ''"
                 ></select-field>
             </div>
             <button
@@ -287,20 +297,16 @@
                 mat-flat-button
                 color="primary"
                 (click)="createNewTrigger()"
-                [disabled]="isInvalidTrigger"
+                [disabled]="disableSubmitButton"
             >
-                {{
-                    triggerMode === "create"
-                        ? localeData?.communication?.create_trigger
-                        : localeData?.communication?.save_trigger
-                }}
+                {{ localeData?.communication?.create_trigger }}
             </button>
             <button
                 *ngIf="triggerMode === 'update'"
                 mat-flat-button
                 color="primary"
                 (click)="updateTrigger()"
-                [disabled]="isInvalidTrigger"
+                [disabled]="disableSubmitButton"
             >
                 {{
                     triggerMode === "create"
@@ -424,6 +430,8 @@
                                     [options]="fieldsSuggestion"
                                     (selectedOption)="variables.value = $event.value"
                                     [defaultValue]="variables?.value"
+                                    [allowValueReset]="true"
+                                    (onClear)="variables.value = ''"
                                 ></select-field>
                             </div>
                         </mat-grid-tile>

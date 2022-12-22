@@ -109,7 +109,7 @@ export class SettingCampaignComponent implements OnInit {
     /** True if translations loaded */
     public translationLoaded: boolean = false;
     /** True if valid form */
-    public isInvalidTrigger: boolean = false;
+    public disableSubmitButton: boolean = false;
     /** True if valid fields*/
     public mandatoryFields: any = {
         title: false,
@@ -126,7 +126,6 @@ export class SettingCampaignComponent implements OnInit {
         private dialog: MatDialog
     ) {
         this.resetCommunicationForm();
-
     }
 
     /**
@@ -335,15 +334,10 @@ export class SettingCampaignComponent implements OnInit {
                 this.createTrigger.campaignDetails.argsMapping = [];
                 this.selectCampaign(this.createTrigger.campaignDetails.campaignSlug);
                 this.getFieldsSuggestion(response?.body?.communicationPlatform, response?.body?.condition?.entity);
-                if (response?.body?.campaignDetails?.to || response?.body?.campaignDetails?.bcc || response?.body?.campaignDetails?.cc) {
-                    this.triggerToChiplist = response?.body?.campaignDetails?.to;
-                    this.triggerBccChiplist = response?.body?.campaignDetails?.bcc;
-                    this.triggerCcChiplist = response?.body?.campaignDetails?.cc;
-                } else {
-                    this.triggerToChiplist = [];
-                    this.triggerBccChiplist = [];
-                    this.triggerCcChiplist = [];
-                }
+
+                this.triggerToChiplist = response?.body?.campaignDetails?.to || [];
+                this.triggerBccChiplist = response?.body?.campaignDetails?.bcc || [];
+                this.triggerCcChiplist = response?.body?.campaignDetails?.cc || [];
                 this.createTrigger.title = response?.body?.title;
                 this.createTrigger.campaignDetails.sendVoucherPdf = response?.body?.campaignDetails?.sendVoucherPdf;
                 this.createTrigger.campaignDetails.campaignSlug = response?.body?.campaignDetails?.campaignSlug;
@@ -497,6 +491,7 @@ export class SettingCampaignComponent implements OnInit {
     public selectEntity(entity: any): void {
         if (entity) {
             this.createTrigger.condition.entity = entity;
+            this.getFieldsSuggestion(this.platform, entity);
         }
     }
 
@@ -512,11 +507,11 @@ export class SettingCampaignComponent implements OnInit {
     }
 
     /**
- * This will use for select consditions
- *
- * @param {*} entity
- * @memberof SettingCampaignComponent
- */
+     * This will use for select consditions
+     *
+     * @param {*} entity
+     * @memberof SettingCampaignComponent
+     */
     public selectConditions(action: any): void {
         if (action) {
             this.createTrigger.condition.action[0] = action;
@@ -524,11 +519,11 @@ export class SettingCampaignComponent implements OnInit {
     }
 
     /**
- * This will use for select voucher pdf
- *
- * @param {*} entity
- * @memberof SettingCampaignComponent
- */
+     * This will use for select voucher pdf
+     *
+     * @param {*} entity
+     * @memberof SettingCampaignComponent
+     */
     public selectVoucherPdf(type: boolean): void {
         this.createTrigger.campaignDetails.sendVoucherPdf = type;
     }
@@ -573,23 +568,19 @@ export class SettingCampaignComponent implements OnInit {
      */
     public createTriggerForm(requestObj: any): void {
         let model = cloneDeep(requestObj);
-        this.createTrigger.campaignDetails.to = this.triggerToChiplist;
-        this.createTrigger.campaignDetails.bcc = this.triggerBccChiplist;
-        this.createTrigger.campaignDetails.cc = this.triggerCcChiplist;
-        if (this.triggerMode === 'copy') {
-            model.campaignDetails.to = this.triggerToChiplist;
-            model.campaignDetails.bcc = this.triggerBccChiplist;
-            model.campaignDetails.cc = this.triggerCcChiplist;
-        }
+        model.campaignDetails.to = this.triggerToChiplist;
+        model.campaignDetails.bcc = this.triggerBccChiplist;
+        model.campaignDetails.cc = this.triggerCcChiplist;
+
         if (this.validateTriggerForm()) {
             model.campaignDetails.argsMapping = requestObj?.campaignDetails?.argsMapping?.filter(val => {
                 return val?.value !== "";
             });
-            this.isInvalidTrigger = true;
+            this.disableSubmitButton = true;
             this.campaignIntegrationService.createTrigger(model).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response?.status === "success") {
-                    this.isInvalidTrigger = false;
-                    this.toasty.showSnackBar("success", response?.body + this.localeData?.communication?.create_trigger_succes);
+                    this.disableSubmitButton = false;
+                    this.toasty.showSnackBar("success", this.localeData?.communication?.create_trigger_succes);
                     this.resetCommunicationForm();
                     this.showTriggerForm = false;
                     this.triggerMode = 'create';
@@ -609,21 +600,19 @@ export class SettingCampaignComponent implements OnInit {
      * @memberof SettingCampaignComponent
      */
     public updateTriggerForm(requestObj: any): void {
-        this.createTrigger.campaignDetails.to = this.triggerToChiplist;
-        this.createTrigger.campaignDetails.bcc = this.triggerBccChiplist;
-        this.createTrigger.campaignDetails.cc = this.triggerCcChiplist;
-        requestObj.campaignDetails.to = this.triggerToChiplist;
-        requestObj.campaignDetails.bcc = this.triggerBccChiplist;
-        requestObj.campaignDetails.cc = this.triggerCcChiplist;
-        requestObj.campaignDetails.argsMapping = requestObj?.campaignDetails?.argsMapping?.filter(val => {
-            return val?.value !== "";
-        });
+        let model = cloneDeep(requestObj);
+        model.campaignDetails.to = this.triggerToChiplist;
+        model.campaignDetails.bcc = this.triggerBccChiplist;
+        model.campaignDetails.cc = this.triggerCcChiplist;
 
         if (this.validateTriggerForm()) {
-            this.isInvalidTrigger = true;
-            this.campaignIntegrationService.updateTrigger(requestObj, this.triggerUniquename).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            model.campaignDetails.argsMapping = requestObj?.campaignDetails?.argsMapping?.filter(val => {
+                return val?.value !== "";
+            });
+            this.disableSubmitButton = true;
+            this.campaignIntegrationService.updateTrigger(model, this.triggerUniquename).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response?.status === "success") {
-                    this.isInvalidTrigger = false;
+                    this.disableSubmitButton = false;
                     this.toasty.showSnackBar("success", response?.body);
                     this.resetCommunicationForm();
                     this.showTriggerForm = false;
@@ -637,25 +626,34 @@ export class SettingCampaignComponent implements OnInit {
     }
 
     /**
-     * Validate's trigger form
+     * This will use for reset validation for intialization
      *
-     * @return {*}  {void}
      * @memberof SettingCampaignComponent
      */
-    public validateTriggerForm(): boolean {
+    public resetValidationErrors(): void {
         this.mandatoryFields.title = false;
         this.mandatoryFields.condition = false;
         this.mandatoryFields.subConditions = false;
         this.mandatoryFields.entity = false;
         this.mandatoryFields.campaignSlug = false;
         this.mandatoryFields.triggerToChiplist = false;
+    }
+
+    /**
+     * Validate's trigger form
+     *
+     * @return {*}  {void}
+     * @memberof SettingCampaignComponent
+     */
+    public validateTriggerForm(): boolean {
+        this.resetValidationErrors();
 
         if (!this.createTrigger.title) {
             this.mandatoryFields.title = true;
             this.toasty.showSnackBar("error", this.localeData?.communication?.invalid_title);
             return false;
         }
-        if (!this.createTrigger.condition.action.length) {
+        if (!this.createTrigger.condition.action[0]) {
             this.mandatoryFields.condition = true;
             this.toasty.showSnackBar("error", this.localeData?.communication?.invalid_action);
             return false;
@@ -665,12 +663,12 @@ export class SettingCampaignComponent implements OnInit {
             this.toasty.showSnackBar("error", this.localeData?.communication?.invalid_entity);
             return false;
         }
-        if (!this.createTrigger.condition.subConditions[0]?.action?.length) {
+        if (!this.createTrigger.condition.subConditions[0]?.action[0]) {
             this.mandatoryFields.subConditions = true;
             this.toasty.showSnackBar("error", this.localeData?.communication?.invalid_sub_entity);
             return false;
         }
-        if (!this.createTrigger.campaignDetails.campaignSlug) {
+        if (!this.createTrigger.campaignDetails.campaignName) {
             this.mandatoryFields.campaignSlug = true;
             this.toasty.showSnackBar("error", this.localeData?.communication?.invalid_slug);
             return false;
@@ -678,9 +676,6 @@ export class SettingCampaignComponent implements OnInit {
         if (!this.triggerToChiplist.length) {
             this.chipListTo.errorState = true;
             this.toasty.showSnackBar("error", this.localeData?.communication?.invalid_to);
-            this.triggerToChiplist = [];
-            this.triggerBccChiplist = [];
-            this.triggerCcChiplist = [];
             return false;
         }
         return true;
@@ -697,13 +692,8 @@ export class SettingCampaignComponent implements OnInit {
         this.triggerMode = mode;
         this.showTriggerForm = true;
         this.getCampaignList();
-        this.isInvalidTrigger = false;
-        this.mandatoryFields.title = false;
-        this.mandatoryFields.condition = false;
-        this.mandatoryFields.subConditions = false;
-        this.mandatoryFields.entity = false;
-        this.mandatoryFields.campaignSlug = false;
-        this.mandatoryFields.triggerToChiplist = false;
+        this.disableSubmitButton = false;
+        this.resetValidationErrors();
         this.triggerUniquename = trigger?.uniqueName;
         this.getTriggerByUniqueName(trigger?.uniqueName);
     }
@@ -760,19 +750,18 @@ export class SettingCampaignComponent implements OnInit {
     /**
      * This will use for toggle trigger form
      *
-     * @param {string} [triggerUniqueName]
      * @return {*}  {void}
      * @memberof SettingCampaignComponent
      */
-    public toggleTriggerForm(triggerUniqueName?: string): void {
+    public toggleTriggerForm(): void {
         if (this.showTriggerForm) {
             this.showTriggerForm = false;
             return;
         }
+        this.resetValidationErrors();
         this.showTriggerForm = true;
         this.showVariableMapping = false;
         this.getCampaignList();
-        this.getFieldsSuggestion(this.platform, "VOUCHER");
     }
 
     /**
@@ -971,17 +960,13 @@ export class SettingCampaignComponent implements OnInit {
     public translationComplete(event: any): void {
         if (event) {
             this.translationLoaded = true;
-            let createUppercase = this.localeData?.communication?.create.toUpperCase();
-            let updateUppercase = this.localeData?.communication?.update.toUpperCase();
-            let deleteUppercase = this.localeData?.communication?.delete.toUpperCase();
-            let voucherUppercase = this.localeData?.communication?.voucher.toUpperCase();
             this.triggerCondition = [
-                { label: this.localeData?.communication?.create, value: createUppercase },
-                { label: this.localeData?.communication?.update, value: updateUppercase },
-                { label: this.localeData?.communication?.delete, value: deleteUppercase }
+                { label: this.localeData?.communication?.create, value: this.localeData?.communication?.create },
+                { label: this.localeData?.communication?.update, value: this.localeData?.communication?.update },
+                { label: this.localeData?.communication?.delete, value: this.localeData?.communication?.delete }
             ];
             this.triggerEntity = [
-                { label: this.localeData?.communication?.voucher, value: voucherUppercase },
+                { label: this.localeData?.communication?.voucher, value: this.localeData?.communication?.voucher },
             ];
         }
     }
