@@ -29,7 +29,6 @@
     width: 241px;
     height: 96px;
     margin-top: 10px;
-    margin-left: 15px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -74,13 +73,12 @@
 }
 
 .new-trigger {
-    margin: 22px 0px 22px 15px;
+    margin: 22px 0px 22px 0px;
 }
 
 .table-one {
     table {
-        margin: 0px 15px;
-        width: 97.5%;
+        margin: 0px 0px;
         box-shadow: none;
 
         .smaller-font {
@@ -109,8 +107,6 @@
 
         .icon-visibility {
             visibility: hidden;
-            padding-right: 15px !important;
-            padding-left: 15px !important;
         }
 
         .active-trigger-search {

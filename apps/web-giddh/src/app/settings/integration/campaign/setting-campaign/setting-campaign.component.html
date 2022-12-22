@@ -164,9 +164,11 @@
                             alt=""
                             (click)="editTrigger(element, 'update')"
                         />
-                        <a href="javascript:;" (click)="deleteTrigger(element.uniqueName)"
-                            ><img class="mr-l2 icon-visibility" src="{{ imgPath }}delete.svg"
-                        /></a>
+                        <img
+                            class="mr-l2 icon-visibility cursor-pointer"
+                            src="{{ imgPath }}delete.svg"
+                            (click)="deleteTrigger(element.uniqueName)"
+                        />
                     </td>
                 </ng-container>
 
