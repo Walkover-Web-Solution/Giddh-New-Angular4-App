@@ -126,7 +126,6 @@ export class SettingCampaignComponent implements OnInit {
         private dialog: MatDialog
     ) {
         this.resetCommunicationForm();
-
     }
 
     /**
@@ -626,6 +625,11 @@ export class SettingCampaignComponent implements OnInit {
         }
     }
 
+    /**
+     * This will use for reset validation for intialization
+     *
+     * @memberof SettingCampaignComponent
+     */
     public resetValidationErrors(): void {
         this.mandatoryFields.title = false;
         this.mandatoryFields.condition = false;
@@ -649,7 +653,7 @@ export class SettingCampaignComponent implements OnInit {
             this.toasty.showSnackBar("error", this.localeData?.communication?.invalid_title);
             return false;
         }
-        if (!this.createTrigger.condition.action.length) {
+        if (!this.createTrigger.condition.action[0]) {
             this.mandatoryFields.condition = true;
             this.toasty.showSnackBar("error", this.localeData?.communication?.invalid_action);
             return false;
@@ -659,12 +663,12 @@ export class SettingCampaignComponent implements OnInit {
             this.toasty.showSnackBar("error", this.localeData?.communication?.invalid_entity);
             return false;
         }
-        if (!this.createTrigger.condition.subConditions[0]?.action?.length) {
+        if (!this.createTrigger.condition.subConditions[0]?.action[0]) {
             this.mandatoryFields.subConditions = true;
             this.toasty.showSnackBar("error", this.localeData?.communication?.invalid_sub_entity);
             return false;
         }
-        if (!this.createTrigger.campaignDetails.campaignSlug) {
+        if (!this.createTrigger.campaignDetails.campaignName) {
             this.mandatoryFields.campaignSlug = true;
             this.toasty.showSnackBar("error", this.localeData?.communication?.invalid_slug);
             return false;
