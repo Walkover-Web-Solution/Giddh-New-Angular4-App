@@ -16,7 +16,6 @@ import { TranslateDirectiveModule } from "../translate/translate.directive.modul
 import { NgxMaskModule } from "../../shared/helpers/directives/ngx-mask";
 import { ClickOutsideModule } from "ng-click-outside";
 import { MatChipsModule } from "@angular/material/chips";
-import { CdkScrollComponent } from "./cdk-scroll/cdk-scroll.component";
 import { CdkScrollModule } from "./cdk-scroll/cdk-scroll.module";
 import { ScrollingModule } from "@angular/cdk/scrolling";
 
@@ -24,7 +23,6 @@ import { ScrollingModule } from "@angular/cdk/scrolling";
     declarations: [
         TextFieldComponent,
         SelectFieldComponent,
-        CdkScrollComponent
     ],
     imports: [
         CommonModule,
@@ -45,12 +43,10 @@ import { ScrollingModule } from "@angular/cdk/scrolling";
         MatChipsModule,
         CdkScrollModule,
         ScrollingModule
-
     ],
     exports: [
         TextFieldComponent,
         SelectFieldComponent,
-        MatFormFieldModule
     ]
 })
 
