@@ -589,7 +589,7 @@ export class SettingCampaignComponent implements OnInit {
             this.campaignIntegrationService.createTrigger(model).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response?.status === "success") {
                     this.isInvalidTrigger = false;
-                    this.toasty.showSnackBar("success", response?.body + this.localeData?.communication?.create_trigger_succes);
+                    this.toasty.showSnackBar("success",  this.localeData?.communication?.create_trigger_succes);
                     this.resetCommunicationForm();
                     this.showTriggerForm = false;
                     this.triggerMode = 'create';
@@ -971,17 +971,13 @@ export class SettingCampaignComponent implements OnInit {
     public translationComplete(event: any): void {
         if (event) {
             this.translationLoaded = true;
-            let createUppercase = this.localeData?.communication?.create.toUpperCase();
-            let updateUppercase = this.localeData?.communication?.update.toUpperCase();
-            let deleteUppercase = this.localeData?.communication?.delete.toUpperCase();
-            let voucherUppercase = this.localeData?.communication?.voucher.toUpperCase();
             this.triggerCondition = [
-                { label: this.localeData?.communication?.create, value: createUppercase },
-                { label: this.localeData?.communication?.update, value: updateUppercase },
-                { label: this.localeData?.communication?.delete, value: deleteUppercase }
+                { label: this.localeData?.communication?.create, value: this.localeData?.communication?.create },
+                { label: this.localeData?.communication?.update, value: this.localeData?.communication?.update },
+                { label: this.localeData?.communication?.delete, value: this.localeData?.communication?.delete }
             ];
             this.triggerEntity = [
-                { label: this.localeData?.communication?.voucher, value: voucherUppercase },
+                { label: this.localeData?.communication?.voucher, value: this.localeData?.communication?.voucher },
             ];
         }
     }

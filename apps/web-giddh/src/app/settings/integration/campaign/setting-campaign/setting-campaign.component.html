@@ -107,7 +107,7 @@
             <table mat-table [dataSource]="activeTriggersDataSource" class="mat-elevation-z8 giddh-table table">
                 <ng-container matColumnDef="title">
                     <th class="active-trigger-title-width" mat-header-cell *matHeaderCellDef>
-                        {{ localeData?.communication?.active_triggers }}
+                        {{ localeData?.communication?.title }}
                     </th>
                     <td mat-cell *matCellDef="let element">{{ element.title }}</td>
                 </ng-container>
@@ -211,7 +211,7 @@
                 <img class="return" src="{{ imgPath }}return.svg" alt="" (click)="backToListPage($event)" />
                 <p class="trigger-heading">
                     {{
-                        triggerMode === "create"
+                        triggerMode === "create" || triggerMode === "copy"
                             ? localeData?.communication?.create_trigger
                             : localeData?.communication?.edit_trigger
                     }}
@@ -267,7 +267,7 @@
                         *ngFor="let action of subConditionAction"
                         [selected]="action?.isChecked"
                         [value]="action"
-                        >{{ action }}</mat-option
+                        >{{ action | titlecase }}</mat-option
                     >
                 </mat-select>
             </div>
@@ -289,11 +289,7 @@
                 (click)="createNewTrigger()"
                 [disabled]="isInvalidTrigger"
             >
-                {{
-                    triggerMode === "create"
-                        ? localeData?.communication?.create_trigger
-                        : localeData?.communication?.save_trigger
-                }}
+                {{ localeData?.communication?.create_trigger }}
             </button>
             <button
                 *ngIf="triggerMode === 'update'"
