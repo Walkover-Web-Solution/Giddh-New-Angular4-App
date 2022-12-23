@@ -10,6 +10,7 @@
 
 .auth_key_input {
     color: var(--color-nero) !important;
+    background-color: var(--color-discount-search-bar-background) !important;
 }
 
 .auth-label {
@@ -17,6 +18,7 @@
     width: 100%;
     margin-top: 5px;
     margin-bottom: 5px;
+    color: var(--color-company-profile-input-label);
 }
 
 .table-content {
@@ -28,6 +30,7 @@
 .msg91-container {
     position: relative;
     border: 1px solid var(--color-lavender);
+    background-color: var(--color-common-quaternary-background-for-all-components) !important;
     border-radius: 7px;
     cursor: pointer;
     width: 241px;
@@ -228,7 +231,7 @@
                 display: inline-block;
                 font-weight: 600;
                 font-size: 14px;
-                color: #1a237e;
+                color: var(--color-nero) !important;
             }
 
             .return {
