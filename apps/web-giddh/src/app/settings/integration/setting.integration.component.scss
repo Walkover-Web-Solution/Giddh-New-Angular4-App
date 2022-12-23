@@ -154,7 +154,7 @@
     }
 
     .mat-table tbody > tr > td:first-child {
-        color: #212529 !important;
+        color: var(--color-table-tertiary-content) !important;
     }
 
     th.mat-header-cell,
