@@ -391,6 +391,10 @@ $custom-typography: mat-typography-config(
         .mat-form-field-wrapper {
             padding-bottom: 1em !important;
         }
+        .mat-form-field-label {
+            font-size: 16px !important;
+            color: var(--color-nero) !important;
+        }
     }
 }
 .fields-error {
@@ -406,8 +410,18 @@ $custom-typography: mat-typography-config(
         white-space: initial !important;
     }
 }
-.chiplist-label {
-    font-size: 14px !important;
+#tab-integration {
+    .mat-tab-label-content {
+        color: var(--color-nero) !important;
+    }
+    .mat-tab-label-active {
+        background-color: var(--color-discount-search-bar-background) !important;
+    }
+}
+.sub-entity-trigger {
+    .mat-select-placeholder {
+        color: var(--color-nero) !important;
+    }
 }
 @media screen and (max-width: 1366px) and (orientation: portrait) {
     .subscription-form-select {
