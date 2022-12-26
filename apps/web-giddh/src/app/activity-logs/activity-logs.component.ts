@@ -60,8 +60,8 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         toDate: "",
         entityId: "",
         isChecked: false,
-        entryFromDate:"",
-        entryToDate:""
+        entryFromDate: "",
+        entryToDate: ""
 
     }
     /** Activity log form's company entity type list */
@@ -114,11 +114,8 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
     };
     /** To show entry date filter */
     public isShowEntryDatepicker: boolean = false;
+    /** Activity log  fields  list */
     public fields: any[] = [
-        {
-            label: "Entry Date",
-            value: "ENTRY_DATE"
-        },
         {
             label: "Log Date",
             value: "LOG_DATE"
@@ -136,7 +133,10 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
             value: "USERS"
         }
     ];
+    /** Activity log  select Fields  list */
     public selectedFields: any[] = [];
+    /** Activity log  selected values */
+    public selectedFieldValue: string = "";
 
     constructor(
         public activityService: ActivityLogsService,
@@ -227,14 +227,14 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         }
         this.isLoading = true;
 
-        // if(this.activityObj.entity == ""){
-        //     this.activityObj.entryFromDate = undefined;
-        //     this.activityObj.entryToDate = undefined;
-        // }
-        // if (this.activityObj.entity === 'ENTRY' || this.activityObj.entity === 'VOUCHER'){
-        //      this.activityObj.entryFromDate = dayjs(this.selectedEntryDateRange?.startDate).format(GIDDH_DATE_FORMAT);
-        //      this.activityObj.entryToDate = dayjs(this.selectedEntryDateRange?.endDate).format(GIDDH_DATE_FORMAT);
-        // }
+        if (this.activityObj.entity == "") {
+            this.activityObj.entryFromDate = undefined;
+            this.activityObj.entryToDate = undefined;
+        }
+        if (this.activityObj.entity === 'ENTRY' || this.activityObj.entity === 'VOUCHER') {
+            this.activityObj.entryFromDate = dayjs(this.selectedEntryDateRange?.startDate).format(GIDDH_DATE_FORMAT);
+            this.activityObj.entryToDate = dayjs(this.selectedEntryDateRange?.endDate).format(GIDDH_DATE_FORMAT);
+        }
         this.activityService.getActivityLogs(this.activityObj).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             this.isLoading = false;
             if (response && response.status === 'success') {
@@ -281,7 +281,7 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
     public selecteEntityType(event: IOption): void {
         if (event && (event.value === 'ENTRY' || event.value === 'VOUCHER')) {
             this.isShowEntryDatepicker = true;
-        }else {
+        } else {
             this.isShowEntryDatepicker = false;
         }
     }
@@ -366,12 +366,12 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         }
     }
 
-/**
- * Call back function for date/range selection in entry datepicker
- *
- * @param {*} value
- * @memberof ActivityLogsComponent
- */
+    /**
+     * Call back function for date/range selection in entry datepicker
+     *
+     * @param {*} value
+     * @memberof ActivityLogsComponent
+     */
     public entryDateSelectedCallback(value?: any): void {
         if (value && value.event === "cancel") {
             this.hideGiddhDatepicker();
@@ -604,17 +604,42 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
 <<<<<<< HEAD
 =======
 
+    /**
+     * This will use for add default feature
+     *
+     * @return {*}  {void}
+     * @memberof ActivityLogsComponent
+     */
     public addDefaultFilter(): void {
-        this.selectedFields.push("LOG_DATE");
+        if (this.selectedFields.includes(this.selectedFieldValue)) {
+            return this.toaster.showSnackBar('warning', 'Duplicated value are not allowed');
+        } else {
+            this.selectedFields.push("LOG_DATE");
+        }
     }
 
+    /**
+     *This will use for  remove default feature
+     *
+     * @param {*} event
+     * @param {number} index
+     * @memberof ActivityLogsComponent
+     */
     public removeDefaultFilter(event: any, index: number): void {
         if (index >= 0) {
             this.selectedFields?.splice(index, 1);
         }
     }
 
+    /**
+     * This will use for select field
+     *
+     * @param {*} index
+     * @param {*} selectedValue
+     * @memberof ActivityLogsComponent
+     */
     public selectField(index, selectedValue): void {
+        this.selectedFieldValue = selectedValue;
         this.selectedFields[index] = selectedValue;
         this.changeDetection.detectChanges();
     }

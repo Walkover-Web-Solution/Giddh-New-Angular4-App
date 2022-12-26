@@ -13105,22 +13105,6 @@ hamburger-menu {
             }
         }
     }
-    .activity-container {
-        .table-content {
-            .giddh-table {
-                tr.cursor-pointer {
-                    &:hover {
-                        td {
-                            background-color: var(--color-primary-common-without-opacity-list-hover) !important;
-                        }
-                    }
-                }
-            }
-        }
-    }
-    .cdk-overlay-container {
-        z-index: 9;
-    }
 
     .cdk-overlay-container-z-index {
         z-index: 1000 !important;
