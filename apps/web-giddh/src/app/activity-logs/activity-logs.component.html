@@ -14,13 +14,13 @@
                         [name]="'fields'"
                         [placeholder]="'Select Field'"
                         [options]="fields"
-                        (selectedOption)="selectField(i, $event?.value)"
-                        [defaultValue]="selectedField"
+                        (selectedOption)="selectField(i, $event)"
+                        [defaultValue]="selectedField?.label"
                     >
                     </select-field>
                 </div>
                 <span class="and-text">and</span>
-                <div class="custom-datepicker-wrapper" *ngIf="selectedField === 'LOG_DATE'">
+                <div class="custom-datepicker-wrapper" *ngIf="selectedField?.value === 'LOG_DATE'">
                     <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
                         <i class="icon-calender calendar-addon"></i>
                         <input
@@ -31,14 +31,13 @@
                         />
                     </div>
                 </div>
-                <div class="entity-wrapper mr-l1" *ngIf="selectedField === 'ENTITY'">
+                <div class="entity-wrapper mr-l1" *ngIf="selectedField?.value === 'ENTITY'">
                     <select-field
                         [cssClass]="'form-control mat-field-border'"
                         [name]="'entity'"
                         [placeholder]="commonLocaleData?.app_entity"
                         [options]="entities"
                         (selectedOption)="
-                            selecteEntityType($event);
                             activityObj.entity = $event.value;
                             activityObjLabels.entity = $event.label;
                             activityObj.operation = '';
@@ -49,19 +48,19 @@
                         [allowValueReset]="true"
                     >
                     </select-field>
-                    <div class="custom-datepicker-wrapper" *ngIf="isShowEntryDatepicker">
-                        <div class="custom-datepicker" (click)="showEntryGiddhDatepicker($event)">
-                            <i class="icon-calender calendar-addon"></i>
-                            <input
-                                type="text"
-                                name="selectedEntryDateRange"
-                                [value]="selectedEntryDateRangeUi ? selectedEntryDateRangeUi : ''"
-                                class="giddh-datepicker date-range-picker"
-                            />
-                        </div>
+                </div>
+                <div class="custom-datepicker-wrapper" *ngIf="selectedField?.value === 'ENTITY_DATE'">
+                    <div class="custom-datepicker" (click)="showEntryGiddhDatepicker($event)">
+                        <i class="icon-calender calendar-addon"></i>
+                        <input
+                            type="text"
+                            name="selectedEntryDateRange"
+                            [value]="selectedEntryDateRangeUi ? selectedEntryDateRangeUi : ''"
+                            class="giddh-datepicker date-range-picker"
+                        />
                     </div>
                 </div>
-                <div class="operation-wrapper mr-l1" *ngIf="selectedField === 'OPERATION'">
+                <div class="operation-wrapper mr-l1" *ngIf="selectedField?.value === 'OPERATION'">
                     <select-field
                         [cssClass]="'form-control mat-field-border'"
                         [name]="'operation'"
@@ -76,7 +75,7 @@
                     >
                     </select-field>
                 </div>
-                <div class="user-wrapper mr-l1" *ngIf="selectedField === 'USERS'">
+                <div class="user-wrapper mr-l1" *ngIf="selectedField?.value === 'USERS'">
                     <select-field
                         [cssClass]="'form-control mat-field-border'"
                         [name]="'user'"
@@ -89,6 +88,7 @@
                     >
                     </select-field>
                 </div>
+                <button mat-button (click)="addDefaultFilter()" class="add-button">+</button>
                 <span class="delete-row">
                     <a
                         href="javascript:;"
@@ -97,8 +97,6 @@
                         ><i class="icon-cross"></i
                     ></a>
                 </span>
-
-                <button mat-button (click)="addDefaultFilter()" class="add-button">+</button>
             </div>
 
             <div
