@@ -150,6 +150,11 @@ $custom-typography: mat-typography-config(
         float: left;
     }
 }
+.campaign-grid-tile {
+    .mat-grid-tile-content {
+        justify-content: flex-start !important;
+    }
+}
 
 .voucher-preview-edit,
 .update-ledger-entry-panel-popup,
@@ -369,6 +374,56 @@ $custom-typography: mat-typography-config(
         .due-invoice-formgroup {
             padding-left: 10px !important;
         }
+    }
+}
+.mat-select-search-no-entries-found {
+    padding: 16px !important;
+    z-index: 99999 !important;
+    position: relative !important;
+    padding-top: 5px !important;
+}
+.trigger-dropdown {
+    width: 30% !important;
+    margin-top: 20px !important;
+}
+.compose-trigger-dropdowns {
+    .example-chip-list {
+        width: 100%;
+    }
+    .mat-form-field-appearance-legacy {
+        .mat-form-field-wrapper {
+            padding-bottom: 1em !important;
+        }
+        .mat-form-field-label {
+            font-size: 16px !important;
+            color: var(--color-nero) !important;
+        }
+    }
+}
+.fields-error {
+    .mat-input-element {
+        margin-top: 0 !important;
+        &:focus {
+            border: 1px solid var(--color-red) !important;
+        }
+    }
+}
+.campaign-table {
+    .args-mapping-variables {
+        white-space: initial !important;
+    }
+}
+#tab-integration {
+    .mat-tab-label-content {
+        color: var(--color-nero) !important;
+    }
+    .mat-tab-label-active {
+        background-color: var(--color-discount-search-bar-background) !important;
+    }
+}
+.sub-entity-trigger {
+    .mat-select-placeholder {
+        color: var(--color-nero) !important;
     }
 }
 @media screen and (max-width: 1366px) and (orientation: portrait) {
@@ -7897,7 +7952,17 @@ highcharts-chart {
 #top0 app-aside-menu-other-taxes {
     top: 0 !important;
 }
-
+.on-setting-page {
+    .mat-pseudo-checkbox-checked {
+        background: var(--color-giddh-blue) !important;
+    }
+    .sub-entity-trigger {
+        min-width: 100% !important;
+    }
+    .bottom-select-suggestion {
+        min-width: 127px;
+    }
+}
 .voucher-preview-edit,
 .update-ledger-entry-panel-popup,
 .page-has-tabs,
@@ -8066,7 +8131,7 @@ highcharts-chart {
         }
 
         .mat-pseudo-checkbox-checked {
-            background: #3f51b5 !important;
+            background: var(--color-giddh-blue) !important;
         }
 
         .po-option-value {
