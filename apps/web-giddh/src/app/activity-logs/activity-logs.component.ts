@@ -131,7 +131,11 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         {
             label: "Users",
             value: "USERS"
-        }
+        },
+        {
+            label: "Entity Date",
+            value: "ENTITY_DATE"
+        },
     ];
     /** Activity log  select Fields  list */
     public selectedFields: any[] = [];
@@ -328,6 +332,8 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
             operation: "",
             user: ""
         };
+        this.selectedFields = [];
+        this.addDefaultFilter();
         this.selectedDateRange = { startDate: dayjs(this.universalDate[0]), endDate: dayjs(this.universalDate[1]) };
         this.selectedDateRangeUi = dayjs(this.universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(this.universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
         this.selectedEntryDateRange = { startDate: dayjs(this.universalDate[0]), endDate: dayjs(this.universalDate[1]) };
@@ -611,10 +617,10 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
      * @memberof ActivityLogsComponent
      */
     public addDefaultFilter(): void {
-        if (this.selectedFields.includes(this.selectedFieldValue)) {
-            return this.toaster.showSnackBar('warning', 'Duplicated value are not allowed');
-        } else {
-            this.selectedFields.push("LOG_DATE");
+        if(this.selectedFields.length > 0){
+            this.selectedFields.push("");
+        }else {
+            this.selectedFields.push(this.fields[0]);
         }
     }
 
@@ -626,6 +632,8 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
      * @memberof ActivityLogsComponent
      */
     public removeDefaultFilter(event: any, index: number): void {
+        console.log(event, index);
+
         if (index >= 0) {
             this.selectedFields?.splice(index, 1);
         }
@@ -639,8 +647,25 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
      * @memberof ActivityLogsComponent
      */
     public selectField(index, selectedValue): void {
-        this.selectedFieldValue = selectedValue;
-        this.selectedFields[index] = selectedValue;
+        console.log(index,selectedValue);
+        if(selectedValue.value === 'ENTITY_DATE'){
+            this.toaster.showSnackBar('info', 'Please select entity  Voucher/Entry');
+            return;
+        }
+        let newValue = this.selectedFields.filter(val => val?.value === selectedValue.value);
+        console.log(newValue);
+
+        if (newValue?.length > 0) {
+            this.toaster.showSnackBar('warning', 'Duplicated value are not allowed');
+            return;
+        } else  if(this.selectedFields.includes(selectedValue.value)){
+            this.toaster.showSnackBar('info', 'Please select entity  Voucher/Entry');
+            return;
+        }else{
+            console.log(this.selectedFields[index]);
+
+            this.selectedFields[index] = selectedValue;
+        }
         this.changeDetection.detectChanges();
     }
 >>>>>>> f6ff0ddfd6 (working on activity logs)
