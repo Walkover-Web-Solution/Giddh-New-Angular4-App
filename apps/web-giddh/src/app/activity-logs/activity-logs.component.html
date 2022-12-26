@@ -20,17 +20,6 @@
                     </select-field>
                 </div>
                 <span class="and-text">and</span>
-                <div class="custom-datepicker-wrapper" *ngIf="selectedField === 'ENTRY_DATE'">
-                    <div class="custom-datepicker" (click)="showEntryGiddhDatepicker($event)">
-                        <i class="icon-calender calendar-addon"></i>
-                        <input
-                            type="text"
-                            name="selectedEntryDateRange"
-                            [value]="selectedEntryDateRangeUi ? selectedEntryDateRangeUi : ''"
-                            class="giddh-datepicker date-range-picker"
-                        />
-                    </div>
-                </div>
                 <div class="custom-datepicker-wrapper" *ngIf="selectedField === 'LOG_DATE'">
                     <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
                         <i class="icon-calender calendar-addon"></i>
@@ -49,6 +38,7 @@
                         [placeholder]="commonLocaleData?.app_entity"
                         [options]="entities"
                         (selectedOption)="
+                            selecteEntityType($event);
                             activityObj.entity = $event.value;
                             activityObjLabels.entity = $event.label;
                             activityObj.operation = '';
@@ -59,6 +49,17 @@
                         [allowValueReset]="true"
                     >
                     </select-field>
+                    <div class="custom-datepicker-wrapper" *ngIf="isShowEntryDatepicker">
+                        <div class="custom-datepicker" (click)="showEntryGiddhDatepicker($event)">
+                            <i class="icon-calender calendar-addon"></i>
+                            <input
+                                type="text"
+                                name="selectedEntryDateRange"
+                                [value]="selectedEntryDateRangeUi ? selectedEntryDateRangeUi : ''"
+                                class="giddh-datepicker date-range-picker"
+                            />
+                        </div>
+                    </div>
                 </div>
                 <div class="operation-wrapper mr-l1" *ngIf="selectedField === 'OPERATION'">
                     <select-field
