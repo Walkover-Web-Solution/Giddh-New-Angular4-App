@@ -15,7 +15,6 @@ import { GstReconcileActions } from '../../../actions/gst-reconcile/GstReconcile
 import { ActivatedRoute, Router } from '@angular/router';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 import { GstReport } from '../../constants/gst.constant';
-import { SHOW_GST_FILING } from '../../../app.constant';
 import { GstReconcileService } from '../../../services/GstReconcile.service';
 import { GeneralService } from '../../../services/general.service';
 
@@ -62,7 +61,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     @ViewChild('pushToPortalModel', { static: true }) public pushToPortalModel: ModalDirective;
     public gstAuthenticated$: Observable<boolean>;
     public GstAsidePaneState: string = 'out';
-    public selectedService: 'VAYANA' | 'TAXPRO' | 'RECONCILE' | 'JIO_GST';
+    public selectedService: 'TAXPRO' | 'RECONCILE' | 'JIO_GST' | 'VAYANA';
     public companyGst$: Observable<string> = of('');
     public activeCompanyGstNumber: string = '';
     public imgPath: string = '';
@@ -78,7 +77,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     /** This holds giddh date format */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     /** True, if GST filing needs to be shown */
-    public showGstFiling: boolean = SHOW_GST_FILING;
+    public showGstFiling: boolean = false;
     /** This will use for selected month on datepicker*/
     public selectedMonth: any = null;
     /** This will use for date selected */
@@ -109,6 +108,9 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public ngOnInit() {
+        if (this.generalService.voucherApiVersion === 2) {
+            this.showGstFiling = true;
+        }
         this.activatedRoute.url.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             this.holdActiveRoute = this.router.routerState.snapshot.url.includes('entityType');
             if (this.holdActiveRoute) {
@@ -171,7 +173,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
             if (this.gstAuthenticated) {
                 this.fileGstReturnV2();
             } else {
-                this.toggleSettingAsidePane(null, 'VAYANA');
+                this.toggleSettingAsidePane(null, 'TAXPRO');
             }
         }
 
