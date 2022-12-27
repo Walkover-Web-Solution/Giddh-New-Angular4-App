@@ -602,13 +602,13 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
     }
 
     /**
-     *This will use for  remove default feature
-     *
-     * @param {*} event
-     * @param {number} index
-     * @memberof ActivityLogsComponent
-     */
-    public removeDefaultFilter(event: any, index: number): void {
+    *This will use for  remove default filter
+    *
+    * @param {*} event
+    * @param {number} index
+    * @memberof ActivityLogsComponent
+    */
+    public removeFilter(event: any, index: number): void {
         if (index >= 0) {
             this.selectedFields?.splice(index, 1);
         }
@@ -641,7 +641,7 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
      * @param {*} selectedValue
      * @memberof ActivityLogsComponent
      */
-    public selectField(index, selectedValue): void {
+    public selectField(index: number, selectedValue: any): void {
         let newValue = this.selectedFields.filter(val => val?.value === selectedValue.value);
         if (newValue?.length > 0) {
             this.toaster.showSnackBar('warning', selectedValue.label + ' ' + this.localeData?.duplicate_values);
@@ -649,7 +649,6 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
                 label: '',
                 value: ''
             };
-            return;
         } else {
             this.selectedFields[index] = selectedValue;
         }

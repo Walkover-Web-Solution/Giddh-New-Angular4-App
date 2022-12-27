@@ -13,9 +13,10 @@
     "history": "History",
     "no_history_found":"No History Found",
     "and":"and",
-    "entity": "Entity",
-    "users": "Users",
+    "entity":"Entity",
+    "users":"Users",
     "entity_date":"Entity Date",
     "log_date":"Log Date",
-    "duplicate_values":" is already selected "
+    "duplicate_values":"is already selected",
+    "select_field":"Select Field"
 }
