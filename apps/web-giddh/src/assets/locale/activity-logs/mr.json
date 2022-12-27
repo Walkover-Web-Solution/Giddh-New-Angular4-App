@@ -17,5 +17,6 @@
     "users": "वापरकर्ते",
     "entity_date":"अस्तित्व तारीख",
     "log_date":"लॉग तारीख",
-    "duplicate_values":"आधीच निवडले आहे"
+    "duplicate_values":"आधीच निवडले आहे",
+    "select_field":"फील्ड निवडा"
 }
