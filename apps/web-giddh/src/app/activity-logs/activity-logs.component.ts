@@ -115,32 +115,12 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
     /** To show entry date filter */
     public isShowEntryDatepicker: boolean = false;
     /** Activity log  fields  list */
-    public fields: any[] = [
-        {
-            label: "Log Date",
-            value: "LOG_DATE"
-        },
-        {
-            label: "Entity",
-            value: "ENTITY"
-        },
-        {
-            label: "Operation",
-            value: "OPERATION"
-        },
-        {
-            label: "Users",
-            value: "USERS"
-        },
-        {
-            label: "Entity Date",
-            value: "ENTITY_DATE"
-        },
-    ];
+    public fields: IOption[] = [];
     /** Activity log  select Fields  list */
     public selectedFields: any[] = [];
-    /** Activity log  selected values */
-    public selectedFieldValue: string = "";
+    /** True if translations loaded */
+    public translationLoaded: boolean = false;
+
 
     constructor(
         public activityService: ActivityLogsService,
@@ -230,15 +210,6 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
             this.activityObj.page = 1;
         }
         this.isLoading = true;
-
-        if (this.activityObj.entity == "") {
-            this.activityObj.entryFromDate = undefined;
-            this.activityObj.entryToDate = undefined;
-        }
-        if (this.activityObj.entity === 'ENTRY' || this.activityObj.entity === 'VOUCHER') {
-            this.activityObj.entryFromDate = dayjs(this.selectedEntryDateRange?.startDate).format(GIDDH_DATE_FORMAT);
-            this.activityObj.entryToDate = dayjs(this.selectedEntryDateRange?.endDate).format(GIDDH_DATE_FORMAT);
-        }
         this.activityService.getActivityLogs(this.activityObj).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             this.isLoading = false;
             if (response && response.status === 'success') {
@@ -607,8 +578,6 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
             this.activityObj.operation = '';
         }
     }
-<<<<<<< HEAD
-=======
 
     /**
      * This will use for add default feature
@@ -617,9 +586,12 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
      * @memberof ActivityLogsComponent
      */
     public addDefaultFilter(): void {
-        if(this.selectedFields.length > 0){
-            this.selectedFields.push("");
-        }else {
+        if (this.selectedFields.length > 0) {
+            this.selectedFields.push({
+                label: '',
+                value: ''
+            });
+        } else {
             this.selectedFields.push(this.fields[0]);
         }
     }
@@ -632,10 +604,28 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
      * @memberof ActivityLogsComponent
      */
     public removeDefaultFilter(event: any, index: number): void {
-        console.log(event, index);
-
         if (index >= 0) {
             this.selectedFields?.splice(index, 1);
+        }
+        if (event.value === "ENTITY") {
+            this.activityObjLabels.entity = '';
+            this.activityObj.entity = '';
+        }
+        if (event.value === "OPERATION") {
+            this.activityObjLabels.operation = '';
+            this.activityObj.operation = '';
+        }
+        if (event.value === "USERS") {
+            this.activityObjLabels.user = '';
+            this.activityObj.userUniqueNames = [];
+        }
+        if (event.value === "ENTITY_DATE") {
+            this.activityObj.entryFromDate = undefined;
+            this.activityObj.entryToDate = undefined;
+        }
+        if (event.value === "LOG_DATE") {
+            this.activityObj.fromDate = undefined;
+            this.activityObj.toDate = undefined;
         }
     }
 
@@ -647,26 +637,53 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
      * @memberof ActivityLogsComponent
      */
     public selectField(index, selectedValue): void {
-        console.log(index,selectedValue);
-        if(selectedValue.value === 'ENTITY_DATE'){
-            this.toaster.showSnackBar('info', 'Please select entity  Voucher/Entry');
-            return;
-        }
         let newValue = this.selectedFields.filter(val => val?.value === selectedValue.value);
-        console.log(newValue);
-
         if (newValue?.length > 0) {
-            this.toaster.showSnackBar('warning', 'Duplicated value are not allowed');
+            this.toaster.showSnackBar('warning', selectedValue.label + ' ' + this.localeData?.duplicate_values);
+            this.selectedFields[index] = {
+                label: '',
+                value: ''
+            };
             return;
-        } else  if(this.selectedFields.includes(selectedValue.value)){
-            this.toaster.showSnackBar('info', 'Please select entity  Voucher/Entry');
-            return;
-        }else{
-            console.log(this.selectedFields[index]);
-
+        } else {
             this.selectedFields[index] = selectedValue;
         }
         this.changeDetection.detectChanges();
     }
->>>>>>> f6ff0ddfd6 (working on activity logs)
+
+    /**
+     * Callback for translation response complete
+     *
+     * @param {*} event
+     * @memberof ActivityLogsComponent
+     */
+    public translationComplete(event: any): void {
+        if (event) {
+            this.translationLoaded = true;
+            this.fields = [
+                {
+                    label: this.localeData?.log_date,
+                    value: "LOG_DATE",
+                },
+                {
+                    label: this.localeData?.entity,
+                    value: "ENTITY"
+                },
+                {
+                    label: this.localeData?.operation,
+                    value: "OPERATION"
+                },
+                {
+                    label: this.localeData?.users,
+                    value: "USERS"
+                },
+                {
+                    label: this.localeData?.entity_date,
+                    value: "ENTITY_DATE"
+                },
+            ];
+            this.addDefaultFilter();
+            this.changeDetection.detectChanges();
+        }
+    }
 }

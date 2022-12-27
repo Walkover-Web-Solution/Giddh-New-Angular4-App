@@ -13079,6 +13079,10 @@ hamburger-menu {
         z-index: 99999;
     }
 
+    .mat-table tbody > tr > td:first-child {
+        color: var(--color-table-tertiary-content) !important;
+    }
+
     .giddh-table.mat-table {
         tbody {
             > tr.history-child-row {
