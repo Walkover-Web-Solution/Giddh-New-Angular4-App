@@ -18,5 +18,11 @@
     "entity_date":"अस्तित्व तारीख",
     "log_date":"लॉग तारीख",
     "duplicate_values":"आधीच निवडले आहे",
-    "select_field":"फील्ड निवडा"
+    "select_field":"फील्ड निवडा",
+    "create":"तयार करा",
+    "update":"अपडेट करा",
+    "delete":"हटवा",
+    "move":"हलवा",
+    "merge":"विलीन",
+    "unmerge":"विलिनीकरण"
 }

@@ -37,12 +37,7 @@
                         [name]="'entity'"
                         [placeholder]="commonLocaleData?.app_entity"
                         [options]="entities"
-                        (selectedOption)="
-                            activityObj.entity = $event.value;
-                            activityObjLabels.entity = $event.label;
-                            activityObj.operation = '';
-                            activityObjLabels.operation = ''
-                        "
+                        (selectedOption)="activityObj.entity = $event.value; activityObjLabels.entity = $event.label"
                         [defaultValue]="activityObjLabels?.entity"
                         (onClear)="resetEntity($event)"
                         [allowValueReset]="true"
@@ -65,7 +60,7 @@
                         [cssClass]="'form-control mat-field-border'"
                         [name]="'operation'"
                         [placeholder]="localeData?.operation"
-                        [options]="filters[activityObj.entity ? activityObj.entity : '']"
+                        [options]="activityOperations"
                         (selectedOption)="
                             activityObj.operation = $event.value; activityObjLabels.operation = $event.label
                         "
@@ -88,14 +83,12 @@
                     >
                     </select-field>
                 </div>
-                <button mat-button (click)="addDefaultFilter()" class="add-button">+</button>
-                <span class="delete-row">
-                    <a href="javascript:;" (click)="removeFilter(selectedField, i)" *ngIf="selectedFields?.length > 1"
-                        ><i class="icon-cross"></i
-                    ></a>
+                <span class="delete-row" *ngIf="selectedFields?.length > 1">
+                    <a href="javascript:;" (click)="removeFilter(selectedField, i)"><i class="icon-cross"></i></a>
                 </span>
                 <span class="and-text" *ngIf="selectedFields?.length > 1">{{ this.localeData?.and }}</span>
             </div>
+            <button mat-button (click)="addDefaultFilter()" class="add-button">+</button>
             <div
                 class="clear-filter form-group mb-0"
                 *ngIf="
@@ -329,12 +322,9 @@
                 </div>
             </section>
         </div>
-        <div
-            class="pagination-wrapper"
-            *ngIf="activityObj?.totalItems > activityObj.count && activityObj.totalPages > 1 && !isLoading"
-        >
+        <div class="pagination-wrapper" *ngIf="activityObj.totalPages > 1 && !isLoading">
             <pagination
-                [totalItems]="activityObj?.totalItems"
+                [totalItems]="activityObj?.totalPages"
                 [(ngModel)]="activityObj.page"
                 [maxSize]="5"
                 class="pagination-sm"
