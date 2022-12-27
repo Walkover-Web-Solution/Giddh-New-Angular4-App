@@ -88,13 +88,13 @@
                     >
                     </select-field>
                 </div>
-                <span class="and-text">{{ this.localeData?.and }}</span>
                 <button mat-button (click)="addDefaultFilter()" class="add-button">+</button>
                 <span class="delete-row">
                     <a href="javascript:;" (click)="removeFilter(selectedField, i)" *ngIf="selectedFields?.length > 1"
                         ><i class="icon-cross"></i
                     ></a>
                 </span>
+                <span class="and-text" *ngIf="selectedFields?.length > 1">{{ this.localeData?.and }}</span>
             </div>
             <div
                 class="clear-filter form-group mb-0"
