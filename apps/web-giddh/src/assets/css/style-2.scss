@@ -13079,6 +13079,10 @@ hamburger-menu {
         z-index: 99999;
     }
 
+    .mat-table tbody > tr > td:first-child {
+        color: var(--color-table-tertiary-content) !important;
+    }
+
     .giddh-table.mat-table {
         tbody {
             > tr.history-child-row {
@@ -13104,22 +13108,6 @@ hamburger-menu {
                 }
             }
         }
-    }
-    .activity-container {
-        .table-content {
-            .giddh-table {
-                tr.cursor-pointer {
-                    &:hover {
-                        td {
-                            background-color: var(--color-primary-common-without-opacity-list-hover) !important;
-                        }
-                    }
-                }
-            }
-        }
-    }
-    .cdk-overlay-container {
-        z-index: 9;
     }
 
     .cdk-overlay-container-z-index {

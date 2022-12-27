@@ -3,78 +3,99 @@
     [file]="'activity-logs'"
     (commonLocaleData)="commonLocaleData = $event"
     (localeData)="localeData = $event"
+    (translationComplete)="translationComplete($event)"
 >
     <hamburger-menu class="hamburger-menu"></hamburger-menu>
     <div class="activity-container">
         <div class="activity-filter-wrap">
-            <div class="mr-t15 mr-b15 custom-datepicker-wrapper">
-                <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
-                    <i class="icon-calender calendar-addon"></i>
-                    <input
-                        type="text"
-                        name="selectedDateRange"
-                        [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
-                        class="giddh-datepicker date-range-picker"
-                    />
+            <div *ngFor="let selectedField of selectedFields; let i = index" class="filter-wrapper">
+                <div class="mr-l1">
+                    <select-field
+                        [cssClass]="'form-control mat-field-border'"
+                        [name]="'fields'"
+                        [placeholder]="localeData?.select_field"
+                        [options]="fields"
+                        (selectedOption)="selectField(i, $event)"
+                        [defaultValue]="selectedField?.label"
+                    >
+                    </select-field>
                 </div>
-            </div>
-            <div class="entity-wrapper mr-l1 filter-button">
-                <select-field
-                    [cssClass]="'form-control mat-field-border'"
-                    [name]="'entity'"
-                    [placeholder]="commonLocaleData?.app_entity"
-                    [options]="entities"
-                    (selectedOption)="
-                        selecteEntityType($event);
-                        activityObj.entity = $event.value;
-                        activityObjLabels.entity = $event.label;
-                        activityObj.operation = '';
-                        activityObjLabels.operation = ''
-                    "
-                    [defaultValue]="activityObjLabels?.entity"
-                    (onClear)="resetEntity($event)"
-                    [allowValueReset]="true"
-                >
-                </select-field>
-            </div>
-            <div class="mr-t15 mr-b15 entry-datepicker custom-datepicker-wrapper" *ngIf="isShowEntryDatepicker">
-                <div class="custom-datepicker" (click)="showEntryGiddhDatepicker($event)">
-                    <i class="icon-calender calendar-addon"></i>
-                    <input
-                        type="text"
-                        name="selectedEntryDateRange"
-                        [value]="selectedEntryDateRangeUi ? selectedEntryDateRangeUi : ''"
-                        class="giddh-datepicker date-range-picker"
-                    />
+                <div class="custom-datepicker-wrapper" *ngIf="selectedField?.value === 'LOG_DATE'">
+                    <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
+                        <i class="icon-calender calendar-addon"></i>
+                        <input
+                            type="text"
+                            name="selectedDateRange"
+                            [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                            class="giddh-datepicker date-range-picker"
+                        />
+                    </div>
                 </div>
+                <div class="entity-wrapper mr-l1" *ngIf="selectedField?.value === 'ENTITY'">
+                    <select-field
+                        [cssClass]="'form-control mat-field-border'"
+                        [name]="'entity'"
+                        [placeholder]="commonLocaleData?.app_entity"
+                        [options]="entities"
+                        (selectedOption)="
+                            activityObj.entity = $event.value;
+                            activityObjLabels.entity = $event.label;
+                            activityObj.operation = '';
+                            activityObjLabels.operation = ''
+                        "
+                        [defaultValue]="activityObjLabels?.entity"
+                        (onClear)="resetEntity($event)"
+                        [allowValueReset]="true"
+                    >
+                    </select-field>
+                </div>
+                <div class="custom-datepicker-wrapper" *ngIf="selectedField?.value === 'ENTITY_DATE'">
+                    <div class="custom-datepicker" (click)="showEntryGiddhDatepicker($event)">
+                        <i class="icon-calender calendar-addon"></i>
+                        <input
+                            type="text"
+                            name="selectedEntryDateRange"
+                            [value]="selectedEntryDateRangeUi ? selectedEntryDateRangeUi : ''"
+                            class="giddh-datepicker date-range-picker"
+                        />
+                    </div>
+                </div>
+                <div class="operation-wrapper mr-l1" *ngIf="selectedField?.value === 'OPERATION'">
+                    <select-field
+                        [cssClass]="'form-control mat-field-border'"
+                        [name]="'operation'"
+                        [placeholder]="localeData?.operation"
+                        [options]="filters[activityObj.entity ? activityObj.entity : '']"
+                        (selectedOption)="
+                            activityObj.operation = $event.value; activityObjLabels.operation = $event.label
+                        "
+                        [defaultValue]="activityObjLabels?.operation"
+                        (onClear)="resetOperation($event)"
+                        [allowValueReset]="true"
+                    >
+                    </select-field>
+                </div>
+                <div class="user-wrapper mr-l1" *ngIf="selectedField?.value === 'USERS'">
+                    <select-field
+                        [cssClass]="'form-control mat-field-border'"
+                        [name]="'user'"
+                        [placeholder]="localeData?.user"
+                        [options]="users"
+                        (selectedOption)="selecteUserType($event); activityObjLabels.user = $event.label"
+                        [defaultValue]="activityObjLabels?.user"
+                        (onClear)="resetUser($event)"
+                        [allowValueReset]="true"
+                    >
+                    </select-field>
+                </div>
+                <span class="and-text">{{ this.localeData?.and }}</span>
+                <button mat-button (click)="addDefaultFilter()" class="add-button">+</button>
+                <span class="delete-row">
+                    <a href="javascript:;" (click)="removeFilter(selectedField, i)" *ngIf="selectedFields?.length > 1"
+                        ><i class="icon-cross"></i
+                    ></a>
+                </span>
             </div>
-            <div class="operation-wrapper mr-l1 filter-button">
-                <select-field
-                    [cssClass]="'form-control mat-field-border'"
-                    [name]="'operation'"
-                    [placeholder]="localeData?.operation"
-                    [options]="filters[activityObj.entity ? activityObj.entity : '']"
-                    (selectedOption)="activityObj.operation = $event.value; activityObjLabels.operation = $event.label"
-                    [defaultValue]="activityObjLabels?.operation"
-                    (onClear)="resetOperation($event)"
-                    [allowValueReset]="true"
-                >
-                </select-field>
-            </div>
-            <div class="user-wrapper mr-l1 filter-button">
-                <select-field
-                    [cssClass]="'form-control mat-field-border'"
-                    [name]="'user'"
-                    [placeholder]="localeData?.user"
-                    [options]="users"
-                    (selectedOption)="selecteUserType($event); activityObjLabels.user = $event.label"
-                    [defaultValue]="activityObjLabels?.user"
-                    (onClear)="resetUser($event)"
-                    [allowValueReset]="true"
-                >
-                </select-field>
-            </div>
-
             <div
                 class="clear-filter form-group mb-0"
                 *ngIf="
