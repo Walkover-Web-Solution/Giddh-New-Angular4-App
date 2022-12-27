@@ -13,7 +13,7 @@
                     <select-field
                         [cssClass]="'form-control mat-field-border'"
                         [name]="'fields'"
-                        [placeholder]="'Select Field'"
+                        [placeholder]="localeData?.select_field"
                         [options]="fields"
                         (selectedOption)="selectField(i, $event)"
                         [defaultValue]="selectedField?.label"
@@ -91,10 +91,7 @@
                 <span class="and-text">{{ this.localeData?.and }}</span>
                 <button mat-button (click)="addDefaultFilter()" class="add-button">+</button>
                 <span class="delete-row">
-                    <a
-                        href="javascript:;"
-                        (click)="removeDefaultFilter(selectedField, i)"
-                        *ngIf="selectedFields?.length > 1"
+                    <a href="javascript:;" (click)="removeFilter(selectedField, i)" *ngIf="selectedFields?.length > 1"
                         ><i class="icon-cross"></i
                     ></a>
                 </span>
