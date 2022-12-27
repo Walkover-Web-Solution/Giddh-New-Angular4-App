@@ -479,7 +479,6 @@ export class SettingCampaignComponent implements OnInit {
     public selectEntity(entity: any): void {
         if (entity) {
             this.createTrigger.condition.entity = entity;
-            this.getFieldsSuggestion(this.platform, entity);
         }
     }
 
@@ -526,7 +525,7 @@ export class SettingCampaignComponent implements OnInit {
         {
             title: null,
             condition: {
-                entity: null,
+                entity: "Voucher",
                 action: [],
                 subConditions: [
                     {
@@ -743,6 +742,7 @@ export class SettingCampaignComponent implements OnInit {
         this.showTriggerForm = true;
         this.showVariableMapping = false;
         this.getCampaignList();
+        this.getFieldsSuggestion(this.platform, "VOUCHER");
     }
 
     /**
