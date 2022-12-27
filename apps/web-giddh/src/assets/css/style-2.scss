@@ -147,11 +147,6 @@ $custom-typography: mat-typography-config(
         float: left;
     }
 }
-.campaign-grid-tile {
-    .mat-grid-tile-content {
-        justify-content: flex-start !important;
-    }
-}
 
 .voucher-preview-edit,
 .update-ledger-entry-panel-popup,
@@ -381,8 +376,8 @@ $custom-typography: mat-typography-config(
 }
 .trigger-dropdown {
     width: 30% !important;
-    margin-top: 20px !important;
 }
+
 .compose-trigger-dropdowns {
     .example-chip-list {
         width: 100%;
@@ -420,7 +415,28 @@ $custom-typography: mat-typography-config(
 }
 .sub-entity-trigger {
     .mat-select-placeholder {
-        color: var(--color-nero) !important;
+        color: var(--color-common-senary-background-for-all-components) !important;
+    }
+}
+.chiplist-wrapper {
+    .mat-form-field {
+        width: 100% !important;
+    }
+    .select-multiple-chiplist {
+        width: 30%;
+        margin-right: 3%;
+    }
+}
+.campaign-grid-tile {
+    display: flex;
+    .mat-form-field-appearance-legacy {
+        .mat-form-field-wrapper {
+            padding-bottom: 1em !important;
+        }
+        .mat-form-field-label {
+            font-size: 16px !important;
+            color: var(--color-nero) !important;
+        }
     }
 }
 @media screen and (max-width: 1366px) and (orientation: portrait) {

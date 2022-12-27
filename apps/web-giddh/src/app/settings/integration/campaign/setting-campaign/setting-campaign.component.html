@@ -316,34 +316,38 @@
         <div class="trigger-form-right-side" *ngIf="showVariableMapping">
             <div class="dropdown-box">
                 <div class="compose-trigger-dropdowns">
-                    <select-multiple-fields
-                        [showError]="mandatoryFields.triggerToChiplist"
-                        [placeholder]="localeData?.communication?.select_to"
-                        [options]="triggerToDropdown"
-                        (selectedOption)="createTrigger.campaignDetails.to = $event"
-                        [selectedValues]="createTrigger.campaignDetails.to"
-                        [validations]="['email', 'mobile']"
-                        [name]="'to'"
-                    ></select-multiple-fields>
-                    <br />
-                    <select-multiple-fields
-                        [placeholder]="localeData?.communication?.select_bcc"
-                        [options]="triggerBccDropdown"
-                        (selectedOption)="createTrigger.campaignDetails.bcc = $event"
-                        [selectedValues]="createTrigger.campaignDetails.bcc"
-                        [validations]="['email']"
-                        [name]="'cc'"
-                    ></select-multiple-fields>
-                    <br />
-                    <select-multiple-fields
-                        [placeholder]="localeData?.communication?.select_cc"
-                        [options]="triggerCcDropdown"
-                        (selectedOption)="createTrigger.campaignDetails.cc = $event"
-                        [selectedValues]="createTrigger.campaignDetails.cc"
-                        [validations]="['email']"
-                        [name]="'bcc'"
-                    ></select-multiple-fields>
-                    <br />
+                    <div class="chiplist-wrapper">
+                        <select-multiple-fields
+                            [showError]="mandatoryFields.triggerToChiplist"
+                            [placeholder]="localeData?.communication?.select_to"
+                            [options]="triggerToDropdown"
+                            (selectedOption)="createTrigger.campaignDetails.to = $event"
+                            [selectedValues]="createTrigger.campaignDetails.to"
+                            [validations]="['email', 'mobile']"
+                            [name]="'to'"
+                            class="select-multiple-chiplist"
+                        ></select-multiple-fields>
+                        <br />
+                        <select-multiple-fields
+                            [placeholder]="localeData?.communication?.select_bcc"
+                            [options]="triggerBccDropdown"
+                            (selectedOption)="createTrigger.campaignDetails.bcc = $event"
+                            [selectedValues]="createTrigger.campaignDetails.bcc"
+                            [validations]="['email']"
+                            [name]="'cc'"
+                            class="select-multiple-chiplist"
+                        ></select-multiple-fields>
+                        <br />
+                        <select-multiple-fields
+                            [placeholder]="localeData?.communication?.select_cc"
+                            [options]="triggerCcDropdown"
+                            (selectedOption)="createTrigger.campaignDetails.cc = $event"
+                            [selectedValues]="createTrigger.campaignDetails.cc"
+                            [validations]="['email']"
+                            [name]="'bcc'"
+                            class="select-multiple-chiplist"
+                        ></select-multiple-fields>
+                    </div>
                     <mat-checkbox
                         class="trigger-dropdown"
                         #sendVoucherPdf
@@ -355,25 +359,24 @@
                     </mat-checkbox>
                 </div>
                 <br />
-                <p class="compose" *ngIf="createTrigger.campaignDetails.argsMapping?.length">
+                <p class="compose variables-bottom-border" *ngIf="createTrigger.campaignDetails.argsMapping?.length">
                     {{ localeData?.communication?.variables }}
                 </p>
-                <div class="unit-mapping-grid-list">
-                    <div class="map-unit-value-form">
-                        <div
-                            class="grid-box grid-box-content campaign-grid-tile"
-                            *ngFor="let variable of createTrigger.campaignDetails.argsMapping; let i = index"
-                        >
-                            <div class="unit-value">{{ variable.name }}</div>
-                            <div class="map-unit-value">
-                                <select-multiple-fields
-                                    [placeholder]="localeData?.communication?.select_suggestions"
-                                    [options]="fieldsSuggestion"
-                                    (selectedOption)="selectVariable($event, i)"
-                                    [selectedValues]="variable?.value"
-                                    [name]="'variable_' + i"
-                                ></select-multiple-fields>
-                            </div>
+                <div class="variables-wrapper">
+                    <div
+                        class="grid-box grid-box-content campaign-grid-tile"
+                        *ngFor="let variable of createTrigger.campaignDetails.argsMapping; let i = index"
+                    >
+                        <div class="unit-value">{{ variable.name }}</div>
+                        <div class="map-unit-value">
+                            <select-multiple-fields
+                                [placeholder]="localeData?.communication?.select_suggestions"
+                                [options]="fieldsSuggestion"
+                                (selectedOption)="selectVariable($event, i)"
+                                [selectedValues]="variable?.value"
+                                [name]="'variable_' + i"
+                                class="select-multiple-chiplist"
+                            ></select-multiple-fields>
                         </div>
                     </div>
                 </div>
