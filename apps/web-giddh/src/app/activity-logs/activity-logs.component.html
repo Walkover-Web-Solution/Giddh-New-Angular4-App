@@ -3,6 +3,7 @@
     [file]="'activity-logs'"
     (commonLocaleData)="commonLocaleData = $event"
     (localeData)="localeData = $event"
+    (translationComplete)="translationComplete($event)"
 >
     <hamburger-menu class="hamburger-menu"></hamburger-menu>
     <div class="activity-container">
@@ -19,7 +20,6 @@
                     >
                     </select-field>
                 </div>
-                <span class="and-text">and</span>
                 <div class="custom-datepicker-wrapper" *ngIf="selectedField?.value === 'LOG_DATE'">
                     <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
                         <i class="icon-calender calendar-addon"></i>
@@ -88,6 +88,7 @@
                     >
                     </select-field>
                 </div>
+                <span class="and-text">{{ this.localeData?.and }}</span>
                 <button mat-button (click)="addDefaultFilter()" class="add-button">+</button>
                 <span class="delete-row">
                     <a
@@ -98,7 +99,6 @@
                     ></a>
                 </span>
             </div>
-
             <div
                 class="clear-filter form-group mb-0"
                 *ngIf="

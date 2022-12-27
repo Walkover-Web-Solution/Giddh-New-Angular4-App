@@ -11,5 +11,11 @@
     "no_difference":"कोई फर्क नहीं",
     "no_history":"इस लॉग के लिए कोई इतिहास उपलब्ध नहीं है",
     "history": "इतिहास",
-    "no_history_found":"कोई इतिहास नहीं मिला"
+    "no_history_found":"कोई इतिहास नहीं मिला",
+    "and":"और",
+    "entity": "इकाई",
+    "users": "उपयोगकर्ताओं",
+    "log_date":"लॉग तिथि",
+    "entity_date":"इकाई तिथि",
+    "duplicate_values":"पहले से ही चुना हुआ है"
 }
