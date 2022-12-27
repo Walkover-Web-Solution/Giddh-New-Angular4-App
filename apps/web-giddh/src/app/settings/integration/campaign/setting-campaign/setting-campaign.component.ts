@@ -26,8 +26,6 @@ export interface ActiveTriggers {
     styleUrls: ['./setting-campaign.component.scss']
 })
 export class SettingCampaignComponent implements OnInit {
-    /** Hold instance of chiplist to trigger */
-    @ViewChild("chipListTo") public chipListTo;
     /** Holds image path */
     public imgPath: string = '';
     /* This will hold local JSON data */
@@ -70,19 +68,12 @@ export class SettingCampaignComponent implements OnInit {
     public triggerUniquename: string = '';
     /** Emit with seperate code for chiplist */
     public separatorKeysCodes: number[] = [ENTER, COMMA];
-    /** Holds the trigger to chiplist data */
-    public triggerToChiplist: any[] = [];
-    /** Holds the trigger bcc chiplist data */
-    public triggerBccChiplist: any[] = [];
-    /** Holds the trigger cc chiplist data */
-    public triggerCcChiplist: any[] = [];
     /** Holds the trigger to dropdown data */
     public triggerToDropdown: any[] = [];
     /** Holds the trigger bcc dropdown data */
     public triggerBccDropdown: any[] = [];
     /** Holds the trigger cc dropdown data */
     public triggerCcDropdown: any[] = [];
-
     /** True if  the trigger loading  */
     public isActiveTriggersLoading: boolean = false;
     /** Validate the email regex for add emails */
@@ -335,9 +326,9 @@ export class SettingCampaignComponent implements OnInit {
                 this.selectCampaign(this.createTrigger.campaignDetails.campaignSlug);
                 this.getFieldsSuggestion(response?.body?.communicationPlatform, response?.body?.condition?.entity);
 
-                this.triggerToChiplist = response?.body?.campaignDetails?.to || [];
-                this.triggerBccChiplist = response?.body?.campaignDetails?.bcc || [];
-                this.triggerCcChiplist = response?.body?.campaignDetails?.cc || [];
+                this.createTrigger.campaignDetails.to = response?.body?.campaignDetails?.to || [];
+                this.createTrigger.campaignDetails.bcc = response?.body?.campaignDetails?.bcc || [];
+                this.createTrigger.campaignDetails.cc = response?.body?.campaignDetails?.cc || [];
                 this.createTrigger.title = response?.body?.title;
                 this.createTrigger.campaignDetails.sendVoucherPdf = response?.body?.campaignDetails?.sendVoucherPdf;
                 this.createTrigger.campaignDetails.campaignSlug = response?.body?.campaignDetails?.campaignSlug;
@@ -444,9 +435,6 @@ export class SettingCampaignComponent implements OnInit {
      */
     public resetCommunicationForm(): void {
         this.initFormFields();
-        this.triggerBccChiplist = [];
-        this.triggerToChiplist = [];
-        this.triggerCcChiplist = [];
         this.triggerBccDropdown = [];
         this.triggerToDropdown = [];
         this.triggerCcDropdown = [];
@@ -568,9 +556,6 @@ export class SettingCampaignComponent implements OnInit {
      */
     public createTriggerForm(requestObj: any): void {
         let model = cloneDeep(requestObj);
-        model.campaignDetails.to = this.triggerToChiplist;
-        model.campaignDetails.bcc = this.triggerBccChiplist;
-        model.campaignDetails.cc = this.triggerCcChiplist;
 
         if (this.validateTriggerForm()) {
             model.campaignDetails.argsMapping = requestObj?.campaignDetails?.argsMapping?.filter(val => {
@@ -601,9 +586,6 @@ export class SettingCampaignComponent implements OnInit {
      */
     public updateTriggerForm(requestObj: any): void {
         let model = cloneDeep(requestObj);
-        model.campaignDetails.to = this.triggerToChiplist;
-        model.campaignDetails.bcc = this.triggerBccChiplist;
-        model.campaignDetails.cc = this.triggerCcChiplist;
 
         if (this.validateTriggerForm()) {
             model.campaignDetails.argsMapping = requestObj?.campaignDetails?.argsMapping?.filter(val => {
@@ -673,8 +655,8 @@ export class SettingCampaignComponent implements OnInit {
             this.toasty.showSnackBar("error", this.localeData?.communication?.invalid_slug);
             return false;
         }
-        if (!this.triggerToChiplist.length) {
-            this.chipListTo.errorState = true;
+        if (!this.createTrigger.campaignDetails.to?.length) {
+            this.mandatoryFields.triggerToChiplist = true;
             this.toasty.showSnackBar("error", this.localeData?.communication?.invalid_to);
             return false;
         }
@@ -697,7 +679,6 @@ export class SettingCampaignComponent implements OnInit {
         this.triggerUniquename = trigger?.uniqueName;
         this.getTriggerByUniqueName(trigger?.uniqueName);
     }
-
 
     /**
      * Deletes the trigger
@@ -765,193 +746,6 @@ export class SettingCampaignComponent implements OnInit {
     }
 
     /**
-     *This wiill use for validation of email
-     *
-     * @param {string} email
-     * @return {*}  {boolean}
-     * @memberof SettingCampaignComponent
-     */
-    public validateEmail(email: string): boolean {
-        return this.EMAIL_REGEX_PATTERN.test(String(email)?.toLowerCase());
-    }
-
-    /**
-     *This wiill use for validation of email
-     *
-     * @param {string} mobile
-     * @return {*}  {boolean}
-     * @memberof SettingCampaignComponent
-     */
-    public validateMobile(mobile: any): boolean {
-        return this.MOBILE_REGEX_PATTERN.test(mobile);
-    }
-
-    /**
-     * This will use for campaign email form
-     *
-     * @param {string} type
-     * @param {*} value
-     * @memberof SettingCampaignComponent
-     */
-    public campaignEmailForm(type: string, value: any): void {
-        if (type === "to") {
-            this.createTrigger.campaignDetails.to?.push(value);
-        }
-        if (type === "bcc") {
-            this.createTrigger.campaignDetails.bcc?.push(value);
-        }
-        if (type === "cc") {
-            this.createTrigger.campaignDetails.cc?.push(value);
-        }
-        if (type === 'addTo' && (this.validateEmail(value) || this.validateMobile(value))) {
-            this.createTrigger.campaignDetails.to?.push(value);
-        }
-        if (type === 'addBcc' && this.validateEmail(value)) {
-            this.createTrigger.campaignDetails.bcc?.push(value);
-        }
-        if (type === 'addCc' && this.validateEmail(value)) {
-            this.createTrigger.campaignDetails.cc?.push(value);
-        }
-    }
-
-    /**
-     * Add trigger to in chiplist
-     *
-     * @param {*} event
-     * @memberof SettingCampaignComponent
-     */
-    public addTriggerTo(event: any): void {
-        const input = event?.input;
-        const value = event?.value;
-        if ((value || '')?.trim() && (this.validateEmail(value) || this.validateMobile(value)) && !this.triggerToChiplist?.includes(value)) {
-            this.triggerToChiplist?.push(value);
-        }
-        if (input) {
-            input.value = '';
-        }
-        this.campaignEmailForm('addTo', value);
-    }
-
-    /**
-     * Add trigger bcc in chiplist
-     *
-     * @param {*} event
-     * @memberof SettingCampaignComponent
-     */
-    public addTriggerBcc(event: any) {
-        const input = event?.input;
-        const value = event?.value;
-        if ((value || '')?.trim() && this.validateEmail(value)) {
-            this.triggerBccChiplist?.push(value);
-        }
-        if (input) {
-            input.value = '';
-        }
-        this.campaignEmailForm('addBcc', value);
-    }
-
-    /**
-     * Add trigger cc in chiplist
-     *
-     * @param {*} event
-     * @memberof SettingCampaignComponent
-     */
-    public addTriggerCc(event: any) {
-        const input = event?.input;
-        const value = event?.value;
-        if ((value || '')?.trim() && this.validateEmail(value)) {
-            this.triggerCcChiplist?.push(value);
-        }
-        if (input) {
-            input.value = '';
-        }
-        this.campaignEmailForm('addCc', value);
-    }
-
-    /**
-     * Select trigger Bcc
-     *
-     * @param {*} event
-     * @memberof SettingCampaignComponent
-     */
-    public selectTriggerBcc(bcc: any): void {
-        const selectOptionValue = bcc?.option?.value?.value;
-        if (bcc) {
-            if (!this.triggerBccChiplist?.includes(selectOptionValue)) {
-                this.triggerBccChiplist?.push(selectOptionValue);
-            }
-        }
-        this.campaignEmailForm('bcc', selectOptionValue);
-    }
-
-    /**
-    * Select trigger Cc
-    *
-    * @param {*} event
-    * @memberof SettingCampaignComponent
-    */
-    public selectTriggerCc(cc: any): void {
-        const selectOptionValue = cc?.option?.value?.value;
-        if (cc) {
-            if (!this.triggerCcChiplist?.includes(selectOptionValue)) {
-                this.triggerCcChiplist?.push(selectOptionValue);
-            }
-        }
-        this.campaignEmailForm('cc', selectOptionValue);
-    }
-
-    /**
-    * Select trigger To
-    *
-    * @param {*} event
-    * @memberof SettingCampaignComponent
-    */
-    public selectTriggerTo(to: any): void {
-
-        const selectOptionValue = to?.option?.value?.value;
-        if (selectOptionValue && !this.triggerToChiplist?.includes(selectOptionValue)) {
-            this.triggerToChiplist?.push(selectOptionValue);
-            this.campaignEmailForm('to', selectOptionValue);
-        }
-    }
-
-    /**
-   * Remove trigger To
-   *
-   * @param {*} event
-   * @memberof SettingCampaignComponent
-   */
-    public removeTo(event: any, index: number): void {
-        if (index >= 0) {
-            this.triggerToChiplist?.splice(index, 1);
-        }
-    }
-
-    /**
-    * Remove trigger Bcc
-    *
-    * @param {*} event
-    * @memberof SettingCampaignComponent
-    */
-    public removeBcc(event: any, index: number): void {
-        if (index >= 0) {
-            this.triggerBccChiplist?.splice(index, 1);
-        }
-    }
-
-    /**
-    * Remove trigger Cc
-    *
-    * @param {*} event
-    * @memberof SettingCampaignComponent
-    */
-    public removeCc(event: any, index: number): void {
-        if (index >= 0) {
-            this.triggerCcChiplist?.splice(index, 1);
-        }
-    }
-
-    /**
      * Callback for translation response complete
      *
      * @param {*} event
@@ -971,4 +765,7 @@ export class SettingCampaignComponent implements OnInit {
         }
     }
 
+    public selectVariable(selectedValues: any[], index: number): void {
+        this.createTrigger.campaignDetails.argsMapping[index].value = selectedValues?.join(",");
+    }
 }
