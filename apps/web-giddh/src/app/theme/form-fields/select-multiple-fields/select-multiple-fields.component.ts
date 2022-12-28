@@ -196,17 +196,4 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
         this.selectedOption.emit(this.chipList);
         this.changeDetection.detectChanges();
     }
-
-    public openPanel(): void {
-        console.log("open", this.trigger);
-        this.trigger?.openPanel();
-        this.selectField?.nativeElement?.focus();
-        this.changeDetection.detectChanges();
-    }
-
-    public closePanel(): void {
-        console.log("close", this.trigger);
-        this.trigger?.closePanel();
-        this.changeDetection.detectChanges();
-    }
 }
