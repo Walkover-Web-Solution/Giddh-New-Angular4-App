@@ -17,12 +17,10 @@
             [matAutocomplete]="auto"
             [matChipInputFor]="matChipList"
             [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-            [matChipInputAddOnBlur]="true"
+            [matChipInputAddOnBlur]="!auto.isOpen"
             (matChipInputTokenEnd)="addChip($event)"
             [ngClass]="{ 'chiplist-error': showError }"
             #trigger="matAutocompleteTrigger"
-            (click)="openPanel()"
-            (clickOutside)="closePanel()"
             [name]="name"
             #selectField
             [autocomplete]="'off'"
@@ -30,7 +28,7 @@
             class="select-multiple-field-input"
         />
     </mat-chip-list>
-    <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" (optionSelected)="selectOption($event)">
+    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectOption($event); selectField.value = ''">
         <mat-option *ngFor="let option of fieldFilteredOptions" [value]="option">
             {{ option.label }}
         </mat-option>
