@@ -51,8 +51,8 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
     public activityObj = {
         count: PAGINATION_LIMIT,
         page: 1,
-        totalItems: 0,
         totalPages: 0,
+        totalItems: 0,
         entity: "",
         operation: "",
         userUniqueNames: [],
@@ -62,7 +62,20 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         isChecked: false,
         entryFromDate: "",
         entryToDate: ""
-
+    }
+    /** This will use for activity fields object */
+    public activityFieldsObj = {
+        count: PAGINATION_LIMIT,
+        page: 1,
+        entity: undefined,
+        operation: undefined,
+        userUniqueNames: [],
+        fromDate: undefined,
+        toDate: undefined,
+        entityId: undefined,
+        isChecked: false,
+        entryFromDate: undefined,
+        entryToDate: undefined
     }
     /** Activity log form's company entity type list */
     public entities: IOption[] = [];
@@ -116,6 +129,8 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
     public isShowEntryDatepicker: boolean = false;
     /** Activity log  fields  list */
     public fields: IOption[] = [];
+    /** Activity log  operations  list */
+    public activityOperations: IOption[] = [];
     /** Activity log  select Fields  list */
     public selectedFields: any[] = [];
     /** True if translations loaded */
@@ -209,8 +224,36 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         if (resetPage) {
             this.activityObj.page = 1;
         }
+
+        this.activityFieldsObj.entity = undefined;
+        this.activityFieldsObj.operation = undefined;
+        this.activityFieldsObj.userUniqueNames = undefined;
+        this.activityFieldsObj.fromDate = undefined;
+        this.activityFieldsObj.toDate = undefined;
+        this.activityFieldsObj.entityId = undefined;
+        this.activityFieldsObj.isChecked = undefined;
+        this.activityFieldsObj.entryFromDate = undefined;
+        this.activityFieldsObj.entryToDate = undefined;
+
+        this.selectedFields.forEach(field => {
+            if (field.value === "LOG_DATE") {
+                this.activityFieldsObj.fromDate = this.activityObj.fromDate;
+                this.activityFieldsObj.toDate = this.activityObj.toDate;
+            } else if (field.value === "ENTITY") {
+                this.activityFieldsObj.entity = this.activityObj.entity;
+            } else if (field.value === "OPERATION") {
+                this.activityFieldsObj.operation = this.activityObj.operation;
+            } else if (field.value === "USERS") {
+                this.activityFieldsObj.userUniqueNames = this.activityObj.userUniqueNames;
+            } else if (field.value === "ENTITY_DATE") {
+                this.activityFieldsObj.entryFromDate = this.activityObj.entryFromDate;
+                this.activityFieldsObj.entryToDate = this.activityObj.entryToDate;
+            }
+        });
+        this.activityFieldsObj.page = this.activityObj.page;
+        this.activityFieldsObj.count = this.activityObj.count;
         this.isLoading = true;
-        this.activityService.getActivityLogs(this.activityObj).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+        this.activityService.getActivityLogs(this.activityFieldsObj).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             this.isLoading = false;
             if (response && response.status === 'success') {
                 response.body?.results?.forEach((result, index) => {
@@ -220,13 +263,14 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
                         result.time = dayjs(result.time, GIDDH_DATE_FORMAT + " HH:mm:ss").format(GIDDH_DATE_FORMAT);
                     }
                 });
-                this.dataSource = response.body.results;
+                this.activityObj.page = response.body.page;
                 this.activityObj.totalItems = response.body.totalItems;
                 this.activityObj.totalPages = response.body.totalPages;
+                this.activityObj.count = response.body.count;
+                this.dataSource = response.body.results;
             } else {
                 this.dataSource = [];
                 this.activityObj.totalItems = 0;
-                this.activityObj.totalPages = 0;
             }
             this.changeDetection.detectChanges();
         });
@@ -270,16 +314,8 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         this.ActivityLogsService.getAuditLogFormFilters().pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response && response.status === 'success') {
                 this.entities = [];
-                this.filters = [];
-                this.filters[''] = [
-                    { label: this.commonLocaleData?.app_create, value: "CREATE" },
-                    { label: this.commonLocaleData?.app_update, value: "UPDATE" },
-                    { label: this.commonLocaleData?.app_delete, value: "DELETE" }
-                ];
                 response.body.forEach(res => {
                     this.entities.push(res.entity);
-                    this.filters[res.entity?.value] = [];
-                    this.filters[res.entity?.value] = res.operations;
                 });
             }
         });
@@ -607,26 +643,6 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         if (index >= 0) {
             this.selectedFields?.splice(index, 1);
         }
-        if (event.value === "ENTITY") {
-            this.activityObjLabels.entity = '';
-            this.activityObj.entity = '';
-        }
-        if (event.value === "OPERATION") {
-            this.activityObjLabels.operation = '';
-            this.activityObj.operation = '';
-        }
-        if (event.value === "USERS") {
-            this.activityObjLabels.user = '';
-            this.activityObj.userUniqueNames = [];
-        }
-        if (event.value === "ENTITY_DATE") {
-            this.activityObj.entryFromDate = undefined;
-            this.activityObj.entryToDate = undefined;
-        }
-        if (event.value === "LOG_DATE") {
-            this.activityObj.fromDate = undefined;
-            this.activityObj.toDate = undefined;
-        }
     }
 
     /**
@@ -680,6 +696,32 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
                     label: this.localeData?.entity_date,
                     value: "ENTITY_DATE"
                 },
+            ];
+            this.activityOperations = [
+                {
+                    label: this.localeData?.create,
+                    value: "CREATE",
+                },
+                {
+                    label: this.localeData?.update,
+                    value: "UPDATE"
+                },
+                {
+                    label: this.localeData?.delete,
+                    value: "DELETE"
+                },
+                {
+                    label: this.localeData?.merge,
+                    value: "MERGE"
+                },
+                {
+                    label: this.localeData?.unmerge,
+                    value: "UNMERGE",
+                },
+                {
+                    label: this.localeData?.move,
+                    value: "MOVE"
+                }
             ];
             this.addDefaultFilter();
             this.changeDetection.detectChanges();

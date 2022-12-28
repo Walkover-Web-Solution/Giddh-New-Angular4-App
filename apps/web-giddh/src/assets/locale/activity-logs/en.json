@@ -18,5 +18,11 @@
     "entity_date":"Entity Date",
     "log_date":"Log Date",
     "duplicate_values":"is already selected",
-    "select_field":"Select Field"
+    "select_field":"Select Field",
+    "create":"Create",
+    "update":"Update",
+    "delete":"Delete",
+    "move":"Move",
+    "merge":"Merge",
+    "unmerge":"Unmerge"
 }
