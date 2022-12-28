@@ -643,6 +643,18 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         if (index >= 0) {
             this.selectedFields?.splice(index, 1);
         }
+        if (event.value === "ENTITY") {
+            this.activityObjLabels.entity = '';
+            this.activityObj.entity = '';
+        }
+        if (event.value === "OPERATION") {
+            this.activityObjLabels.operation = '';
+            this.activityObj.operation = '';
+        }
+        if (event.value === "USERS") {
+            this.activityObjLabels.user = '';
+            this.activityObj.userUniqueNames = [];
+        }
     }
 
     /**
@@ -654,16 +666,18 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
      */
     public selectField(index: number, selectedValue: any): void {
         let newValue = this.selectedFields.filter(val => val?.value === selectedValue.value);
-        if (newValue?.length > 0) {
-            this.toaster.showSnackBar('warning', selectedValue.label + ' ' + this.localeData?.duplicate_values);
-            this.selectedFields[index] = {
-                label: '',
-                value: ''
-            };
-        } else {
-            this.selectedFields[index] = selectedValue;
+        if (this.selectedFields[index].value !== selectedValue.value) {
+            if (newValue?.length > 0) {
+                this.toaster.showSnackBar('warning', selectedValue.label + ' ' + this.localeData?.duplicate_values);
+                this.selectedFields[index] = {
+                    label: '',
+                    value: ''
+                };
+            } else {
+                this.selectedFields[index] = selectedValue;
+                this.changeDetection.detectChanges();
+            }
         }
-        this.changeDetection.detectChanges();
     }
 
     /**
