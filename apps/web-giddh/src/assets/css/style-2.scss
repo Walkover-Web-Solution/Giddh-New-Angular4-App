@@ -427,15 +427,25 @@ $custom-typography: mat-typography-config(
         margin-right: 3%;
     }
 }
-.campaign-grid-tile {
+.variables-wrapper {
     display: flex;
-    .mat-form-field-appearance-legacy {
-        .mat-form-field-wrapper {
-            padding-bottom: 1em !important;
-        }
-        .mat-form-field-label {
-            font-size: 16px !important;
-            color: var(--color-nero) !important;
+    flex-wrap: wrap;
+    .mat-form-field {
+        width: 100% !important;
+    }
+    .campaign-grid-tile {
+        float: left;
+        width: 30%;
+        margin-right: 3%;
+        .mat-form-field-appearance-legacy {
+            .mat-form-field-wrapper {
+                padding-bottom: 1em !important;
+            }
+
+            .mat-form-field-label {
+                font-size: 16px !important;
+                color: var(--color-nero) !important;
+            }
         }
     }
 }
