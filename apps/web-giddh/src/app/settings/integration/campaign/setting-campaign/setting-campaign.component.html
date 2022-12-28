@@ -316,90 +316,38 @@
         <div class="trigger-form-right-side" *ngIf="showVariableMapping">
             <div class="dropdown-box">
                 <div class="compose-trigger-dropdowns">
-                    <mat-form-field class="example-chip-list">
-                        <mat-chip-list #chipListTo>
-                            <mat-chip
-                                *ngFor="let trigger of triggerToChiplist; let indx = index"
-                                [selectable]="true"
-                                [removable]="true"
-                                (removed)="removeTo(trigger, indx)"
-                            >
-                                {{ trigger }}
-                                <i class="icon-cross" matChipRemove></i>
-                            </mat-chip>
-                            <input
-                                [placeholder]="localeData?.communication?.select_to"
-                                [matAutocomplete]="auto1"
-                                [matChipInputFor]="chipListTo"
-                                [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                                [matChipInputAddOnBlur]="true"
-                                (matChipInputTokenEnd)="addTriggerTo($event)"
-                                [ngClass]="{ 'chiplist-error': chipListTo.errorState }"
-                            />
-                        </mat-chip-list>
-                        <mat-autocomplete #auto1="matAutocomplete" (optionSelected)="selectTriggerTo($event)">
-                            <mat-option *ngFor="let to of triggerToDropdown" [value]="to">
-                                <span class="chiplist-label"> {{ to.label }} </span>
-                            </mat-option>
-                        </mat-autocomplete>
-                    </mat-form-field>
-                    <br />
-                    <mat-form-field class="example-chip-list">
-                        <mat-chip-list #chipListBcc>
-                            <mat-chip
-                                *ngFor="let trigger of triggerBccChiplist; let indx = index"
-                                [selectable]="true"
-                                [removable]="true"
-                                (removed)="removeBcc(trigger, indx)"
-                            >
-                                {{ trigger }}
-
-                                <i class="icon-cross" matChipRemove></i>
-                            </mat-chip>
-                            <input
-                                [placeholder]="localeData?.communication?.select_bcc"
-                                [matAutocomplete]="auto2"
-                                [matChipInputFor]="chipListBcc"
-                                [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                                [matChipInputAddOnBlur]="true"
-                                (matChipInputTokenEnd)="addTriggerBcc($event)"
-                            />
-                        </mat-chip-list>
-                        <mat-autocomplete #auto2="matAutocomplete" (optionSelected)="selectTriggerBcc($event)">
-                            <mat-option *ngFor="let bcc of triggerBccDropdown" [value]="bcc">
-                                <span class="chiplist-label"> {{ bcc.label }} </span>
-                            </mat-option>
-                        </mat-autocomplete>
-                    </mat-form-field>
-                    <br />
-                    <mat-form-field class="example-chip-list">
-                        <mat-chip-list #chipListCc>
-                            <mat-chip
-                                *ngFor="let trigger of triggerCcChiplist; let indx = index"
-                                [selectable]="true"
-                                [removable]="true"
-                                (removed)="removeCc(trigger, indx)"
-                            >
-                                {{ trigger }}
-
-                                <i class="icon-cross" matChipRemove></i>
-                            </mat-chip>
-                            <input
-                                [placeholder]="localeData?.communication?.select_cc"
-                                [matAutocomplete]="auto3"
-                                [matChipInputFor]="chipListCc"
-                                [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                                [matChipInputAddOnBlur]="true"
-                                (matChipInputTokenEnd)="addTriggerCc($event)"
-                            />
-                        </mat-chip-list>
-                        <mat-autocomplete #auto3="matAutocomplete" (optionSelected)="selectTriggerCc($event)">
-                            <mat-option *ngFor="let cc of triggerCcDropdown" [value]="cc">
-                                <span class="chiplist-label"> {{ cc.label }}</span>
-                            </mat-option>
-                        </mat-autocomplete>
-                    </mat-form-field>
-                    <br />
+                    <div class="chiplist-wrapper">
+                        <select-multiple-fields
+                            [showError]="mandatoryFields.triggerToChiplist"
+                            [placeholder]="localeData?.communication?.select_to"
+                            [options]="triggerToDropdown"
+                            (selectedOption)="createTrigger.campaignDetails.to = $event"
+                            [selectedValues]="createTrigger.campaignDetails.to"
+                            [validations]="['email', 'mobile']"
+                            [name]="'to'"
+                            class="select-multiple-chiplist"
+                        ></select-multiple-fields>
+                        <br />
+                        <select-multiple-fields
+                            [placeholder]="localeData?.communication?.select_bcc"
+                            [options]="triggerBccDropdown"
+                            (selectedOption)="createTrigger.campaignDetails.bcc = $event"
+                            [selectedValues]="createTrigger.campaignDetails.bcc"
+                            [validations]="['email']"
+                            [name]="'cc'"
+                            class="select-multiple-chiplist"
+                        ></select-multiple-fields>
+                        <br />
+                        <select-multiple-fields
+                            [placeholder]="localeData?.communication?.select_cc"
+                            [options]="triggerCcDropdown"
+                            (selectedOption)="createTrigger.campaignDetails.cc = $event"
+                            [selectedValues]="createTrigger.campaignDetails.cc"
+                            [validations]="['email']"
+                            [name]="'bcc'"
+                            class="select-multiple-chiplist"
+                        ></select-multiple-fields>
+                    </div>
                     <mat-checkbox
                         class="trigger-dropdown"
                         #sendVoucherPdf
@@ -411,30 +359,27 @@
                     </mat-checkbox>
                 </div>
                 <br />
-                <p class="compose" *ngIf="createTrigger.campaignDetails.argsMapping?.length">
+                <p class="compose variables-bottom-border" *ngIf="createTrigger.campaignDetails.argsMapping?.length">
                     {{ localeData?.communication?.variables }}
                 </p>
-                <mat-grid-list class="unit-mapping-grid-list" cols="3" gutterSize="0px" rowHeight="70px">
-                    <div class="map-unit-value-form">
-                        <mat-grid-tile
-                            class="grid-box grid-box-content campaign-grid-tile"
-                            *ngFor="let variables of createTrigger.campaignDetails.argsMapping"
-                        >
-                            <div class="unit-value">{{ variables.name }}</div>
-                            <div class="map-unit-value">
-                                <select-field
-                                    [cssClass]="'form-control mat-field-border bottom-select-suggestion'"
-                                    [placeholder]="localeData?.communication?.select_suggestions"
-                                    [options]="fieldsSuggestion"
-                                    (selectedOption)="variables.value = $event.value"
-                                    [defaultValue]="variables?.value"
-                                    [allowValueReset]="true"
-                                    (onClear)="variables.value = ''"
-                                ></select-field>
-                            </div>
-                        </mat-grid-tile>
+                <div class="variables-wrapper">
+                    <div
+                        class="grid-box grid-box-content campaign-grid-tile"
+                        *ngFor="let variable of createTrigger.campaignDetails.argsMapping; let i = index"
+                    >
+                        <div class="unit-value">{{ variable.name }}</div>
+                        <div class="map-unit-value">
+                            <select-multiple-fields
+                                [placeholder]="localeData?.communication?.select_suggestions"
+                                [options]="fieldsSuggestion"
+                                (selectedOption)="selectVariable($event, i)"
+                                [selectedValues]="variable?.value"
+                                [name]="'variable_' + i"
+                                class="select-multiple-chiplist"
+                            ></select-multiple-fields>
+                        </div>
                     </div>
-                </mat-grid-list>
+                </div>
                 <br />
             </div>
         </div>
