@@ -52,6 +52,7 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         count: PAGINATION_LIMIT,
         page: 1,
         totalPages: 0,
+        totalItems: 0,
         entity: "",
         operation: "",
         userUniqueNames: [],
@@ -66,9 +67,8 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
     public activityFieldsObj = {
         count: PAGINATION_LIMIT,
         page: 1,
-        totalPages: 0,
         entity: undefined,
-        operation:undefined,
+        operation: undefined,
         userUniqueNames: [],
         fromDate: undefined,
         toDate: undefined,
@@ -236,27 +236,22 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         this.activityFieldsObj.entryToDate = undefined;
 
         this.selectedFields.forEach(field => {
-            if(field.value === "LOG_DATE"){
+            if (field.value === "LOG_DATE") {
                 this.activityFieldsObj.fromDate = this.activityObj.fromDate;
                 this.activityFieldsObj.toDate = this.activityObj.toDate;
-            }
-            if(field.value === "ENTITY"){
+            } else if (field.value === "ENTITY") {
                 this.activityFieldsObj.entity = this.activityObj.entity;
-            }
-            if(field.value === "OPERATION"){
+            } else if (field.value === "OPERATION") {
                 this.activityFieldsObj.operation = this.activityObj.operation;
-            }
-            if(field.value === "USERS"){
+            } else if (field.value === "USERS") {
                 this.activityFieldsObj.userUniqueNames = this.activityObj.userUniqueNames;
-            }
-            if(field.value === "ENTITY_DATE"){
+            } else if (field.value === "ENTITY_DATE") {
                 this.activityFieldsObj.entryFromDate = this.activityObj.entryFromDate;
                 this.activityFieldsObj.entryToDate = this.activityObj.entryToDate;
             }
         });
-       this.activityFieldsObj.page = this.activityObj.page;
-       this.activityFieldsObj.count = this.activityObj.count;
-       this.activityFieldsObj.totalPages = this.activityObj.totalPages;
+        this.activityFieldsObj.page = this.activityObj.page;
+        this.activityFieldsObj.count = this.activityObj.count;
         this.isLoading = true;
         this.activityService.getActivityLogs(this.activityFieldsObj).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             this.isLoading = false;
@@ -268,11 +263,14 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
                         result.time = dayjs(result.time, GIDDH_DATE_FORMAT + " HH:mm:ss").format(GIDDH_DATE_FORMAT);
                     }
                 });
-                this.dataSource = response.body.results;
+                this.activityObj.page = response.body.page;
+                this.activityObj.totalItems = response.body.totalItems;
                 this.activityObj.totalPages = response.body.totalPages;
+                this.activityObj.count = response.body.count;
+                this.dataSource = response.body.results;
             } else {
                 this.dataSource = [];
-                this.activityObj.totalPages = 0;
+                this.activityObj.totalItems = 0;
             }
             this.changeDetection.detectChanges();
         });
