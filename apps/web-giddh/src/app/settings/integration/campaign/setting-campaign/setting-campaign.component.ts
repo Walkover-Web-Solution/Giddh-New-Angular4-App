@@ -765,6 +765,13 @@ export class SettingCampaignComponent implements OnInit {
         }
     }
 
+    /**
+     * This will use for select variables
+     *
+     * @param {any[]} selectedValues
+     * @param {number} index
+     * @memberof SettingCampaignComponent
+     */
     public selectVariable(selectedValues: any[], index: number): void {
         this.createTrigger.campaignDetails.argsMapping[index].value = selectedValues?.join(",");
     }
