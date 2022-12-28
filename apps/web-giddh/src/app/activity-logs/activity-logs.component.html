@@ -86,7 +86,7 @@
                 <span class="delete-row" *ngIf="selectedFields?.length > 1">
                     <a href="javascript:;" (click)="removeFilter(selectedField, i)"><i class="icon-cross"></i></a>
                 </span>
-                <span class="and-text" *ngIf="selectedFields?.length > 1">{{ this.localeData?.and }}</span>
+                <span class="and-text" *ngIf="i < selectedFields?.length - 1">{{ this.localeData?.and }}</span>
             </div>
             <button mat-button (click)="addDefaultFilter()" class="add-button">+</button>
             <div
@@ -322,9 +322,9 @@
                 </div>
             </section>
         </div>
-        <div class="pagination-wrapper" *ngIf="activityObj.totalPages > 1 && !isLoading">
+        <div class="pagination-wrapper" *ngIf="activityObj?.totalItems > activityObj.count && !isLoading">
             <pagination
-                [totalItems]="activityObj?.totalPages"
+                [totalItems]="activityObj?.totalItems"
                 [(ngModel)]="activityObj.page"
                 [maxSize]="5"
                 class="pagination-sm"
