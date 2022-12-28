@@ -8,8 +8,8 @@
     }
 
     .delete-row {
-        margin-left: 13px;
-        margin-right: 11px;
+        margin-left: 10px;
+        margin-right: 10px;
         font-size: 12px;
         margin-top: 10px;
     }
@@ -21,9 +21,10 @@
         border-top-left-radius: 4px;
         padding-bottom: 4px;
         padding-top: 4px;
-        margin-right: 4px;
-        margin-bottom: 4px;
+        margin-right: 3px;
+        margin-bottom: 0px;
         padding-right: 10px;
+        margin-top: 5px;
     }
 
     .entry-datepicker {
@@ -31,27 +32,39 @@
     }
 
     .and-text {
-        line-height: 34px;
+        line-height: 32px;
         margin-left: 5px;
         margin-right: 5px;
         font-size: 16px;
         color: var(--color-table-tertiary-content) !important;
+        border: 1px solid var(--color-secondary-input-bar-border);
+        border-radius: 7px;
+        padding-left: 7px;
+        padding-right: 6px;
+    }
+
+    .button-wrapper {
+        display: flex;
+        margin-top: 10px;
     }
 
     .add-button {
         border: none;
-        height: 34px;
+        height: 44px;
         cursor: pointer;
         background-color: var(--color-tab-secondary-background);
-        border-top-right-radius: 5px;
-        border-bottom-right-radius: 5px;
-        margin-left: 5px !important;
         margin-right: 5px !important;
         font-size: 24px;
-        padding-left: 0px;
-        padding-right: 0px;
+        padding-left: 0px !important;
+        padding-right: 0px !important;
         min-width: 41px !important;
         color: var(--color-table-tertiary-content) !important;
+        padding-top: 0 !important;
+        margin-top: 0 !important;
+        padding-bottom: 4px !important;
+        border-radius: 0 !important;
+        padding-top: 4px !important;
+        margin-top: 5px !important;
     }
 
     .entity-wrapper {
@@ -61,6 +74,10 @@
     .clear-filter {
         color: var(--color-giddh-blue);
         cursor: pointer;
+    }
+
+    .log-clear-button {
+        margin-bottom: 15px;
     }
 
     .activity-filter-wrap {

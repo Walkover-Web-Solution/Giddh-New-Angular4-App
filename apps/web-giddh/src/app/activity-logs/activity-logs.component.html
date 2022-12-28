@@ -89,6 +89,8 @@
                 <span class="and-text" *ngIf="i < selectedFields?.length - 1">{{ this.localeData?.and }}</span>
             </div>
             <button mat-button (click)="addDefaultFilter()" class="add-button">+</button>
+        </div>
+        <div class="button-wrapper">
             <div
                 class="clear-filter form-group mb-0"
                 *ngIf="
@@ -99,14 +101,18 @@
                     activityObj.userUniqueNames?.length > 0
                 "
             >
-                <button mat-raised-button class="btn-success min-width-100 mr-l1" (click)="resetFilter()">
+                <button
+                    mat-raised-button
+                    class="btn-success min-width-100 mr-l1 log-clear-button"
+                    (click)="resetFilter()"
+                >
                     <span class="icon-cross"></span> {{ commonLocaleData?.app_clear_filter }}
                 </button>
             </div>
+            <button mat-raised-button class="btn-success min160 mr-l1" (click)="getActivityLogs(true)">
+                {{ localeData?.get_logs }}
+            </button>
         </div>
-        <button mat-raised-button class="btn-success min160 mr-l1" (click)="getActivityLogs(true)">
-            {{ localeData?.get_logs }}
-        </button>
         <div *ngIf="isLoading">
             <giddh-page-loader></giddh-page-loader>
         </div>
