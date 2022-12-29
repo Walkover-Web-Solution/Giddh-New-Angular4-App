@@ -104,6 +104,9 @@ export class GstAsideMenuComponent implements OnInit, OnDestroy {
         });
 
         this.store.pipe(select(p => p.gstR.gstAuthenticated), takeUntil(this.destroyed$)).subscribe((bool) => {
+            if (this.returnType === "gstr2" && !this.gstAuthenticated && bool) {
+                this.closeAsidePane(null);
+            }
             this.gstAuthenticated = bool;
         });
 

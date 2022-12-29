@@ -6665,6 +6665,9 @@ perfect-scrollbar > .ps > .ps-overlay {
 .tax-engine .sub-filter-nav-band > ul > li .count {
     color: var(--color-danger);
 }
+.tax-engine .sub-filter-nav-band > ul > li .count.matched {
+    color: var(--color-black);
+}
 
 .tax-engine .sub-filter-nav-band > ul > li.active > a {
     color: var(--color-nero);
