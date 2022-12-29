@@ -9,7 +9,7 @@
     <div class="activity-container">
         <div class="activity-filter-wrap">
             <div *ngFor="let selectedField of selectedFields; let i = index" class="filter-wrapper">
-                <div class="mr-l1">
+                <div class="mr-l05">
                     <select-field
                         [cssClass]="'form-control mat-field-border'"
                         [name]="'fields'"
@@ -84,32 +84,16 @@
                     </select-field>
                 </div>
                 <span class="delete-row" *ngIf="selectedFields?.length > 1">
-                    <a href="javascript:;" (click)="removeFilter(selectedField, i)"><i class="icon-cross"></i></a>
+                    <a href="javascript:;" (click)="removeFilter(selectedField, i)" class="remove-filter"
+                        ><i class="icon-trash"></i
+                    ></a>
                 </span>
-                <span class="and-text" *ngIf="i < selectedFields?.length - 1">{{ this.localeData?.and }}</span>
+                <span class="and-text" *ngIf="i < selectedFields?.length - 1">&</span>
             </div>
             <button mat-button (click)="addDefaultFilter()" class="add-button">+</button>
         </div>
         <div class="button-wrapper">
-            <div
-                class="clear-filter form-group mb-0"
-                *ngIf="
-                    entryShowDateReport ||
-                    showDateReport ||
-                    activityObj.entity ||
-                    activityObj.operation ||
-                    activityObj.userUniqueNames?.length > 0
-                "
-            >
-                <button
-                    mat-raised-button
-                    class="btn-success min-width-100 mr-l1 log-clear-button"
-                    (click)="resetFilter()"
-                >
-                    <span class="icon-cross"></span> {{ commonLocaleData?.app_clear_filter }}
-                </button>
-            </div>
-            <button mat-raised-button class="btn-success min160 mr-l1" (click)="getActivityLogs(true)">
+            <button mat-raised-button class="min160 mr-l1" (click)="getActivityLogs(true)">
                 {{ localeData?.get_logs }}
             </button>
         </div>
