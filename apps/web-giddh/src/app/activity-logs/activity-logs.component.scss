@@ -8,22 +8,21 @@
     }
 
     .delete-row {
-        margin-left: 10px;
-        margin-right: 10px;
-        font-size: 12px;
-        margin-top: 10px;
+        margin: auto;
+        margin-left: 5px;
+        margin-right: 5px;
+    }
+
+    .remove-filter {
+        font-size: 16px;
     }
 
     .filter-wrapper {
         display: flex;
-        background-color: var(--color-tab-secondary-background);
-        border-bottom-left-radius: 4px;
-        border-top-left-radius: 4px;
+        background-color: var(--color-sidebar-company-background);
         padding-bottom: 4px;
         padding-top: 4px;
-        margin-right: 3px;
         margin-bottom: 0px;
-        padding-right: 10px;
         margin-top: 5px;
     }
 
@@ -32,39 +31,34 @@
     }
 
     .and-text {
-        line-height: 32px;
-        margin-left: 5px;
-        margin-right: 5px;
+        margin-left: 10px !important;
+        margin-right: 10px !important;
         font-size: 16px;
         color: var(--color-table-tertiary-content) !important;
-        border: 1px solid var(--color-secondary-input-bar-border);
-        border-radius: 7px;
-        padding-left: 7px;
-        padding-right: 6px;
+        margin: auto;
     }
 
     .button-wrapper {
-        display: flex;
-        margin-top: 10px;
+        margin-bottom: 5px !important;
     }
 
     .add-button {
         border: none;
         height: 44px;
         cursor: pointer;
-        background-color: var(--color-tab-secondary-background);
-        margin-right: 5px !important;
+        background-color: var(--color-sidebar-company-background);
         font-size: 24px;
         padding-left: 0px !important;
         padding-right: 0px !important;
-        min-width: 41px !important;
+        min-width: 44px !important;
         color: var(--color-table-tertiary-content) !important;
         padding-top: 0 !important;
-        margin-top: 0 !important;
-        padding-bottom: 4px !important;
         border-radius: 0 !important;
         padding-top: 4px !important;
-        margin-top: 5px !important;
+        margin: auto;
+        margin-left: 3px;
+        margin-top: 5px;
+        margin-right: 0 !important;
     }
 
     .entity-wrapper {
@@ -178,6 +172,7 @@
                 width: 16.9%;
             }
         }
+
         .add-button {
             padding-left: 0px !important;
             padding-right: 0px !important;
@@ -193,6 +188,7 @@
                 width: 16%;
             }
         }
+
         .add-button {
             padding-left: 0px !important;
             padding-right: 0px !important;
