@@ -461,8 +461,6 @@ export class SettingCampaignComponent implements OnInit {
      * @memberof SettingCampaignComponent
      */
     public backToListPage(event: any): void {
-        console.log(event);
-
         if (event) {
             this.showTriggerForm = false;
             this.showVariableMapping = false;
