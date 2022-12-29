@@ -282,23 +282,26 @@ export class SettingCampaignComponent implements OnInit {
         this.campaignIntegrationService.getFieldSuggestions(platform, entity).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
                 if (response) {
-                    this.triggerBccDropdown.push({
-                        value: response.body?.sendToSuggestions[0],
-                        label: response.body?.sendToSuggestions[0]
-                    })
 
-                    this.triggerCcDropdown.push({
-                        value: response.body?.sendToSuggestions[0],
-                        label: response.body?.sendToSuggestions[0]
-                    })
-
-                    this.triggerToDropdown = response.body?.sendToSuggestions?.map((result: any) => {
+                    this.triggerBccDropdown = response.body?.sendToEmailSuggestions?.map((result: any) => {
                         return {
                             value: result,
                             label: result
                         }
                     });
-                    this.triggerMobileDropdown = response.body?.sendToSuggestions?.map((result: any) => {
+                    this.triggerCcDropdown = response.body?.sendToEmailSuggestions?.map((result: any) => {
+                        return {
+                            value: result,
+                            label: result
+                        }
+                    });
+                    this.triggerToDropdown = response.body?.sendToEmailSuggestions?.map((result: any) => {
+                        return {
+                            value: result,
+                            label: result
+                        }
+                    });
+                    this.triggerMobileDropdown = response.body?.sendToMobileSuggestions?.map((result: any) => {
                         return {
                             value: result,
                             label: result
