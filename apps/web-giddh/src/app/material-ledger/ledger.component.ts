@@ -901,11 +901,41 @@ export class LedgerComponent implements OnInit, OnDestroy {
                         this.bankTransactionsResponse.page = res.body.page;
                         this.zone.runOutsideAngular(() => {
                             this.lc.getReadyBankTransactionsForUI(res.body.transactionsList, (this.currentOrganizationType === OrganizationType.Company && (this.currentCompanyBranches && this.currentCompanyBranches.length > 2)));
+                            this.getAccountSearchPrediction(res.body.transactionsList);
                         });
                         this.cdRf.detectChanges();
                     }
                 }
             });
+        }
+    }
+
+    public getAccountSearchPrediction(bankTransactions: any): void {
+        if(bankTransactions?.length > 0) {
+            let requestModel = [];
+
+            bankTransactions.forEach(transaction => {
+                if(transaction.transactions?.length > 0 && transaction.transactions[0]?.remarks?.description) {
+                    requestModel.push({
+                        uniqueName: transaction.transactionId,
+                        description: transaction.transactions[0]?.remarks?.description
+                    });
+                }
+
+                if(requestModel?.length === 10) {
+                    this.ledgerService.getAccountSearchPrediction(this.trxRequest.accountUniqueName, requestModel).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                        console.log(response);
+                    });
+
+                    requestModel = [];
+                }
+            });
+
+            if(requestModel?.length > 0) {
+                this.ledgerService.getAccountSearchPrediction(this.trxRequest.accountUniqueName, requestModel).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                    console.log(response);
+                });
+            }
         }
     }
 

@@ -676,4 +676,23 @@ export class LedgerService {
         const url = `${this.config.apiUrl}${LEDGER_API.DELETE_BANK_TRANSACTIONS?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName))}`;
         return this.http.deleteWithBody(url, params).pipe(catchError((error) => this.errorHandler.HandleCatch<any, string>(error)));
     }
+
+    /**
+     * Get the list of account 
+     *
+     * @param {*} accountUniqueName
+     * @param {*} model
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof LedgerService
+     */
+    public getAccountSearchPrediction(accountUniqueName: any, model: any): Observable<BaseResponse<any, any>> {
+        let url = this.config.apiUrl + LEDGER_API.ACCOUNT_SEARCH_PREDICTION
+            ?.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName))
+            ?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName));
+
+        return this.http.post(url, model).pipe(map((res) => {
+            let data: BaseResponse<any, string> = res;
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
+    }
 }

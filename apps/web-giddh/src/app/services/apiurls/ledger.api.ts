@@ -46,5 +46,6 @@ export const LEDGER_API = {
     EXPORT: 'company/:companyUniqueName/exports',
 
     //Export Bill to Bill Report 
-    EXPORT_BILL_TO_BILL: 'v4/company/:companyUniqueName/accounts/:accountUniqueName/vouchers/bill-to-bill/export?from=:from&to=:to'
+    EXPORT_BILL_TO_BILL: 'v4/company/:companyUniqueName/accounts/:accountUniqueName/vouchers/bill-to-bill/export?from=:from&to=:to',
+    ACCOUNT_SEARCH_PREDICTION: 'company/:companyUniqueName/account-search-predicted?accountUniqueName=:accountUniqueName'
 };
