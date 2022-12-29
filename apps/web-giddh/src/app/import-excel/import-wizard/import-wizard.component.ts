@@ -171,6 +171,10 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
 
             case "entries":
                 importType = "ENTRIES_IMPORT";
+                break;
+                
+            case "stock":
+                importType = "INVENTORY_IMPORT";
                 break;    
         }
 
