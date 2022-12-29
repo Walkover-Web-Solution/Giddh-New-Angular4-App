@@ -135,6 +135,8 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
     public selectedFields: any[] = [];
     /** True if translations loaded */
     public translationLoaded: boolean = false;
+    /** True if initial api got called */
+    public initialApiCalled: boolean = false;
 
 
     constructor(
@@ -171,6 +173,7 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
                 this.users = users;
             }
         });
+
         /** Universal date observer */
         this.universalDate$.subscribe(dateObj => {
             if (dateObj) {
@@ -183,6 +186,7 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
                 this.selectedEntryDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                 this.activityObj.entryFromDate = dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
                 this.activityObj.entryToDate = dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
+                this.getActivityLogs();
             }
         });
     }
@@ -224,7 +228,6 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         if (resetPage) {
             this.activityObj.page = 1;
         }
-
         this.activityFieldsObj.entity = undefined;
         this.activityFieldsObj.operation = undefined;
         this.activityFieldsObj.userUniqueNames = undefined;
@@ -250,6 +253,14 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
                 this.activityFieldsObj.entryToDate = this.activityObj.entryToDate;
             }
         });
+
+
+        if (!this.initialApiCalled) {
+            this.initialApiCalled = true;
+            this.activityFieldsObj.fromDate = this.activityObj.fromDate;
+            this.activityFieldsObj.toDate = this.activityObj.toDate;
+        }
+
         this.activityFieldsObj.page = this.activityObj.page;
         this.activityFieldsObj.count = this.activityObj.count;
         this.isLoading = true;
@@ -319,37 +330,6 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
                 });
             }
         });
-        this.changeDetection.detectChanges();
-    }
-
-    /**
-     * To reset applied filter
-     *
-     * @memberof ActivityLogsComponent
-     */
-    public resetFilter(): void {
-        this.isShowEntryDatepicker = false;
-        this.activityObj.entity = '';
-        this.activityObj.operation = '';
-        this.activityObj.userUniqueNames = [];
-        this.showDateReport = false;
-        this.entryShowDateReport = false;
-        this.activityObjLabels = {
-            entity: "",
-            operation: "",
-            user: ""
-        };
-        this.selectedFields = [];
-        this.addDefaultFilter();
-        this.selectedDateRange = { startDate: dayjs(this.universalDate[0]), endDate: dayjs(this.universalDate[1]) };
-        this.selectedDateRangeUi = dayjs(this.universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(this.universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-        this.selectedEntryDateRange = { startDate: dayjs(this.universalDate[0]), endDate: dayjs(this.universalDate[1]) };
-        this.selectedEntryDateRangeUi = dayjs(this.universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(this.universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-        this.activityObj.fromDate = dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
-        this.activityObj.toDate = dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
-        this.activityObj.entryFromDate = dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
-        this.activityObj.entryToDate = dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
-        this.getActivityLogs(true);
         this.changeDetection.detectChanges();
     }
 
@@ -553,7 +533,6 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
      * @memberof ActivityLogsComponent
      */
     public ngOnDestroy(): void {
-        this.resetFilter();
         this.destroyed$.next(true);
         this.destroyed$.complete();
         document.body?.classList?.remove("activity-log-page");
