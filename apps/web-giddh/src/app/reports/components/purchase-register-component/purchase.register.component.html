@@ -73,6 +73,7 @@
                     (selected)="selectFinancialYearOption($event)"
                     [ItemHeight]="33"
                     [defaultValue]="activeFinacialYr?.uniqueName"
+                    [isRequired]="true"
                 ></sh-select>
             </div>
             <div class="inner-button xs-mb-1 pr-5 xs-pr-0">
@@ -123,6 +124,11 @@
                         </li>
                     </ul>
                 </div>
+            </div>
+            <div class="xs-mb-1 position-absolute dropdown-left">
+                <button type="button" class="btn btn-sky-blue" (click)="export()">
+                    {{ commonLocaleData?.app_export }}
+                </button>
             </div>
         </div>
         <purchase-register-table-component

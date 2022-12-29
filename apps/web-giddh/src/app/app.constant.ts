@@ -281,15 +281,25 @@ export const RESTRICTED_BRANCH_ROUTES = [
 
 /** Settings integration tabs */
 export const SETTING_INTEGRATION_TABS = {
-    // SMS: { LABEL: 'sms', VALUE: 0 },
+    COMMUNICATION: { LABEL: 'communication', VALUE: 0 },
+    EMAIL: { LABEL: 'email', VALUE: 1 },
+    COLLECTION: { LABEL: 'collection', VALUE: 2 },
+    E_COMMERCE: { LABEL: 'e-comm', VALUE: 3 },
+    PAYMENT: { LABEL: 'payment', VALUE: 4 },
+    TALLY: { LABEL: 'tally', VALUE: 5 }
+};
+export const SETTING_INTEGRATION_TABS_V1 = {
     EMAIL: { LABEL: 'email', VALUE: 0 },
     COLLECTION: { LABEL: 'collection', VALUE: 1 },
-    E_COMMERCE: { LABEL: 'ecommerce', VALUE: 2 },
+    E_COMMERCE: { LABEL: 'e-comm', VALUE: 2 },
     PAYMENT: { LABEL: 'payment', VALUE: 3 },
     TALLY: { LABEL: 'tally', VALUE: 4 }
 };
 /** Email Validation Regex */
 export const EMAIL_VALIDATION_REGEX = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+/** Mobile  Validation Regex */
+export const MOBILE_REGEX_PATTERN = /^([0|\+[0-9]{1,5})?([7-9][0-9]{9})$/;
 
 /** E-invoice statuses */
 export enum EInvoiceStatus {
@@ -308,8 +318,6 @@ export const ENTRY_DESCRIPTION_LENGTH = 300;
 export const EMAIL_REGEX_PATTERN = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
 /** This will hold error status code for permission error from API */
 export const UNAUTHORISED = 401;
-/** This will hide the filing feature of GST module  */
-export const SHOW_GST_FILING = false;
 export const SELECT_ALL_RECORDS = "selectallrecords";
 /** Stores the voucher wise form values to toggle fields in voucher module */
 export const GIDDH_VOUCHER_FORM = [
