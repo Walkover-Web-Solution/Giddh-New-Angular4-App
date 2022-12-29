@@ -58,6 +58,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { SettingCampaignComponent } from './integration/campaign/setting-campaign/setting-campaign.component';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
@@ -124,8 +125,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         ClipboardModule,
         MatCheckboxModule,
         MatChipsModule,
-        MatAutocompleteModule
-
+        MatAutocompleteModule,
+        MatSlideToggleModule
     ],
     providers: [
         {

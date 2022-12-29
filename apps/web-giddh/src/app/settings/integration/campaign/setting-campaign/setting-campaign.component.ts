@@ -74,6 +74,8 @@ export class SettingCampaignComponent implements OnInit {
     public triggerBccDropdown: any[] = [];
     /** Holds the trigger cc dropdown data */
     public triggerCcDropdown: any[] = [];
+    /** Holds the trigger mobile number dropdown data */
+    public triggerMobileDropdown: any[] = [];
     /** True if  the trigger loading  */
     public isActiveTriggersLoading: boolean = false;
     /** Validate the email regex for add emails */
@@ -296,6 +298,12 @@ export class SettingCampaignComponent implements OnInit {
                             label: result
                         }
                     });
+                    this.triggerMobileDropdown = response.body?.sendToSuggestions?.map((result: any) => {
+                        return {
+                            value: result,
+                            label: result
+                        }
+                    });
                     this.fieldsSuggestion = response.body?.suggestions?.map((result: any) => {
                         return {
                             value: result,
@@ -322,6 +330,7 @@ export class SettingCampaignComponent implements OnInit {
                 this.triggerBccDropdown = [];
                 this.triggerCcDropdown = [];
                 this.triggerToDropdown = [];
+                this.triggerMobileDropdown = [];
                 this.createTrigger.campaignDetails.argsMapping = [];
                 this.selectCampaign(this.createTrigger.campaignDetails.campaignSlug);
                 this.getFieldsSuggestion(response?.body?.communicationPlatform, response?.body?.condition?.entity);
@@ -329,6 +338,7 @@ export class SettingCampaignComponent implements OnInit {
                 this.createTrigger.campaignDetails.to = response?.body?.campaignDetails?.to || [];
                 this.createTrigger.campaignDetails.bcc = response?.body?.campaignDetails?.bcc || [];
                 this.createTrigger.campaignDetails.cc = response?.body?.campaignDetails?.cc || [];
+                this.createTrigger.campaignDetails.mobile = response?.body?.campaignDetails?.mobile || [];
                 this.createTrigger.title = response?.body?.title;
                 this.createTrigger.campaignDetails.sendVoucherPdf = response?.body?.campaignDetails?.sendVoucherPdf;
                 this.createTrigger.campaignDetails.campaignSlug = response?.body?.campaignDetails?.campaignSlug;
@@ -438,7 +448,9 @@ export class SettingCampaignComponent implements OnInit {
         this.triggerBccDropdown = [];
         this.triggerToDropdown = [];
         this.triggerCcDropdown = [];
+        this.triggerMobileDropdown = [];
     }
+
     /**
      * This will use for back to list page
      *
@@ -446,10 +458,26 @@ export class SettingCampaignComponent implements OnInit {
      * @memberof SettingCampaignComponent
      */
     public backToListPage(event: any): void {
+        console.log(event);
+
         if (event) {
             this.showTriggerForm = false;
             this.showVariableMapping = false;
+            this.editCommunicationPlatform = "";
             this.resetCommunicationForm();
+            this.triggerMode = 'create';
+        }
+    }
+
+    /**
+ * This will use for back to list page
+ *
+ * @param {*} event
+ * @memberof SettingCampaignComponent
+ */
+    public backToHomePage(event: any): void {
+        if (event) {
+            this.editCommunicationPlatform = "";
             this.triggerMode = 'create';
         }
     }
@@ -542,6 +570,7 @@ export class SettingCampaignComponent implements OnInit {
                 to: [],
                 cc: [],
                 bcc: [],
+                mobile: [],
                 sendVoucherPdf: false
             }
         }
