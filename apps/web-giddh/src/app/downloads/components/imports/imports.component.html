@@ -55,27 +55,31 @@
                                     </ng-template>
                                 </sh-select>
                             </div>
+                            <div class="activity-filter-wrap">
+                                <div class="custom-datepicker-wrapper">
+                                    <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
+                                        <i class="icon-calender calendar-addon"></i>
+                                        <input
+                                            type="text"
+                                            name="selectedDateRange"
+                                            [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                                            class="giddh-datepicker date-range-picker"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="clear-filter form-group mb-0" *ngIf="showClearFilter">
+                                    <button
+                                        mat-raised-button
+                                        class="btn btn-filter min-width-100 mr-l1"
+                                        (click)="resetFilter()"
+                                    >
+                                        <span class="icon-cross"></span> {{ commonLocaleData?.app_clear_filter }}
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-        <div class="activity-filter-wrap">
-            <div class="mr-t15 mr-b15 custom-datepicker-wrapper">
-                <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
-                    <i class="icon-calender calendar-addon"></i>
-                    <input
-                        type="text"
-                        name="selectedDateRange"
-                        [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
-                        class="giddh-datepicker date-range-picker"
-                    />
-                </div>
-            </div>
-            <div class="clear-filter form-group mb-0" *ngIf="showClearFilter">
-                <button mat-raised-button class="btn btn-filter min-width-100 mr-l1" (click)="resetFilter()">
-                    <span class="icon-cross"></span> {{ commonLocaleData?.app_clear_filter }}
-                </button>
             </div>
         </div>
         <div *ngIf="isLoading">
