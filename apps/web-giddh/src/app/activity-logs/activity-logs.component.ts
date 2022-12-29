@@ -60,8 +60,8 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         toDate: "",
         entityId: "",
         isChecked: false,
-        entryFromDate: "",
-        entryToDate: ""
+        entityFromDate: "",
+        entityToDate: ""
     }
     /** This will use for activity fields object */
     public activityFieldsObj = {
@@ -74,8 +74,8 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         toDate: undefined,
         entityId: undefined,
         isChecked: false,
-        entryFromDate: undefined,
-        entryToDate: undefined
+        entityFromDate: undefined,
+        entityToDate: undefined
     }
     /** Activity log form's company entity type list */
     public entities: IOption[] = [];
@@ -184,8 +184,8 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
                 this.activityObj.toDate = dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
                 this.selectedEntryDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
                 this.selectedEntryDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-                this.activityObj.entryFromDate = dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
-                this.activityObj.entryToDate = dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
+                this.activityObj.entityFromDate = dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
+                this.activityObj.entityToDate = dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
                 this.getActivityLogs();
             }
         });
@@ -235,8 +235,8 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         this.activityFieldsObj.toDate = undefined;
         this.activityFieldsObj.entityId = undefined;
         this.activityFieldsObj.isChecked = undefined;
-        this.activityFieldsObj.entryFromDate = undefined;
-        this.activityFieldsObj.entryToDate = undefined;
+        this.activityFieldsObj.entityFromDate = undefined;
+        this.activityFieldsObj.entityToDate = undefined;
 
         this.selectedFields.forEach(field => {
             if (field.value === "LOG_DATE") {
@@ -249,8 +249,8 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
             } else if (field.value === "USERS") {
                 this.activityFieldsObj.userUniqueNames = this.activityObj.userUniqueNames;
             } else if (field.value === "ENTITY_DATE") {
-                this.activityFieldsObj.entryFromDate = this.activityObj.entryFromDate;
-                this.activityFieldsObj.entryToDate = this.activityObj.entryToDate;
+                this.activityFieldsObj.entityFromDate = this.activityObj.entityFromDate;
+                this.activityFieldsObj.entityToDate = this.activityObj.entityToDate;
             }
         });
 
@@ -380,8 +380,8 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
             this.entryShowDateReport = true;
             this.selectedEntryDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
             this.selectedEntryDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
-            this.activityObj.entryFromDate = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
-            this.activityObj.entryToDate = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
+            this.activityObj.entityFromDate = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
+            this.activityObj.entityToDate = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
         }
     }
 
