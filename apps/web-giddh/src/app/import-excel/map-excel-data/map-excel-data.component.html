@@ -39,6 +39,7 @@
                             (onClear)="clearSelected($event, data)"
                             (previousChange)="clearSelected($event, data)"
                             [showClear]="true"
+                            [defaultValue]="data.selected"
                         ></sh-select>
                     </div>
                 </div>
@@ -46,69 +47,6 @@
             <div class="mt-5">
                 <button class="btn btn-default" (click)="onBack.emit()">{{ commonLocaleData?.app_back }}</button>
                 <button class="btn btn-success" (click)="mapExcelData()">{{ commonLocaleData?.app_next }}</button>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="right-bar">
-    <!-- filed mapping -->
-    <div>
-        <div>
-            <p class="right-head">
-                {{ localeData?.mandatory_fields }} <span class="text-or">{{ entity | titlecase }}</span>
-                {{ localeData?.in_giddh_are }}
-                <span>
-                    <span
-                        [ngStyle]="{
-                            'color': mandatoryHeadersCount === mandatoryHeadersModel?.length ? '#00b503' : '#adadad'
-                        }"
-                    >
-                        {{ mandatoryHeadersCount }}</span
-                    >/{{ mandatoryHeadersModel?.length }} {{ localeData?.done }}</span
-                >
-                &nbsp;<span *ngIf="mandatoryHeadersCount === mandatoryHeadersModel?.length" class="success-label">{{
-                    localeData?.successful
-                }}</span>
-            </p>
-        </div>
-        <div class="row mt-2 d-flex" *ngFor="let manField of mandatoryHeadersModel">
-            <div class="col-xs-8 col-sm-8">
-                <label class="font-12">{{ manField.field | titlecase }}</label>
-            </div>
-            <div class="col-xs-4 col-sm-4">
-                <img src="{{ imgPath }}checked.png" *ngIf="manField.selected" width="14" height="14" />
-                <img src="{{ imgPath }}unchecked.png" *ngIf="!manField.selected" width="14" height="14" />
-            </div>
-        </div>
-    </div>
-    <!-- group mapping -->
-    <div *ngIf="mandatoryGroupModel?.length" class="group-model">
-        <div>
-            <p>
-                {{ localeData?.minimum_fields_message }} <span class="text-or">{{ entity | titlecase }}</span>
-                {{ localeData?.in_giddh }}
-                <span>
-                    <span
-                        [ngStyle]="{
-                            'color': mandatoryGroupHeadersCount === mandatoryGroupModel?.length ? '#00b503' : '#adadad'
-                        }"
-                        >{{ mandatoryGroupHeadersCount }}</span
-                    >/{{ mandatoryGroupModel?.length }} {{ localeData?.done }}</span
-                >
-                &nbsp;<span *ngIf="mandatoryGroupHeadersCount === mandatoryGroupModel?.length" class="success-label">{{
-                    localeData?.successful
-                }}</span>
-            </p>
-        </div>
-        <div *ngFor="let grp of mandatoryGroupModel" class="group-card">
-            <div class="row d-flex inner-row" *ngFor="let g of grp">
-                <div class="col-xs-8 col-sm-8">
-                    <label class="font-12">{{ g.field | titlecase }}</label>
-                </div>
-                <div class="col-xs-4 col-sm-4">
-                    <img src="{{ imgPath }}checked.png" *ngIf="g.selected" width="14" height="14" />
-                    <img src="{{ imgPath }}unchecked.png" *ngIf="!g.selected" width="14" height="14" />
-                </div>
             </div>
         </div>
     </div>
