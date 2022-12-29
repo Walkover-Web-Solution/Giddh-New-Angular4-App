@@ -11,5 +11,17 @@
     "no_difference":"फरक नाही",
     "no_history":"या लॉगसाठी कोणताही इतिहास उपलब्ध नाही",
     "history": "इतिहास",
-    "no_history_found":"कोणताही इतिहास सापडला नाही"
+    "no_history_found":"कोणताही इतिहास सापडला नाही",
+    "entity": "अस्तित्व",
+    "users": "वापरकर्ते",
+    "entity_date":"अस्तित्व तारीख",
+    "log_date":"लॉग तारीख",
+    "duplicate_values":"आधीच निवडले आहे",
+    "select_field":"फील्ड निवडा",
+    "create":"तयार करा",
+    "update":"अपडेट करा",
+    "delete":"हटवा",
+    "move":"हलवा",
+    "merge":"विलीन",
+    "unmerge":"विलिनीकरण"
 }

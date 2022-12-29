@@ -51,8 +51,8 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
     public activityObj = {
         count: PAGINATION_LIMIT,
         page: 1,
-        totalItems: 0,
         totalPages: 0,
+        totalItems: 0,
         entity: "",
         operation: "",
         userUniqueNames: [],
@@ -60,6 +60,22 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         toDate: "",
         entityId: "",
         isChecked: false,
+        entityFromDate: "",
+        entityToDate: ""
+    }
+    /** This will use for activity fields object */
+    public activityFieldsObj = {
+        count: PAGINATION_LIMIT,
+        page: 1,
+        entity: undefined,
+        operation: undefined,
+        userUniqueNames: [],
+        fromDate: undefined,
+        toDate: undefined,
+        entityId: undefined,
+        isChecked: false,
+        entityFromDate: undefined,
+        entityToDate: undefined
     }
     /** Activity log form's company entity type list */
     public entities: IOption[] = [];
@@ -73,16 +89,26 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
     public selectedToDate: Date;
     /** Directive to get reference of element */
     @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+    /** Directive to get reference of element */
+    @ViewChild('datepickerEntryTemplate') public datepickerEntryTemplate: ElementRef;
     /** Universal date observer */
     public universalDate$: Observable<any>;
     /** This will store selected date range to use in api */
     public selectedDateRange: any;
     /** This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
+    /** This will store selected date range to use in api */
+    public selectedEntryDateRange: any;
+    /** This will store selected entry date range to show on UI */
+    public selectedEntryDateRangeUi: any;
     /** This will store available date ranges */
     public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
+    /** This will store available date ranges */
+    public entryDatePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /** Selected range label */
     public selectedRangeLabel: any = "";
+    /** Selected entry range label */
+    public selectedEntryRangeLabel: any = "";
     /** This will store modal reference */
     public modalRef: BsModalRef;
     /** This will store the x/y position of the field to show datepicker under it */
@@ -91,12 +117,27 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
     public universalDate: any;
     /** To show clear filter */
     public showDateReport: boolean = false;
+    /** To show entry datepicker clear filter */
+    public entryShowDateReport: boolean = false;
     /** Holds label of selected values */
     public activityObjLabels: any = {
         entity: "",
         operation: "",
         user: ""
     };
+    /** To show entry date filter */
+    public isShowEntryDatepicker: boolean = false;
+    /** Activity log  fields  list */
+    public fields: IOption[] = [];
+    /** Activity log  operations  list */
+    public activityOperations: IOption[] = [];
+    /** Activity log  select Fields  list */
+    public selectedFields: any[] = [];
+    /** True if translations loaded */
+    public translationLoaded: boolean = false;
+    /** True if initial api got called */
+    public initialApiCalled: boolean = false;
+
 
     constructor(
         public activityService: ActivityLogsService,
@@ -132,6 +173,7 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
                 this.users = users;
             }
         });
+
         /** Universal date observer */
         this.universalDate$.subscribe(dateObj => {
             if (dateObj) {
@@ -140,12 +182,17 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
                 this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                 this.activityObj.fromDate = dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
                 this.activityObj.toDate = dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
+                this.selectedEntryDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
+                this.selectedEntryDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                this.activityObj.entityFromDate = dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
+                this.activityObj.entityToDate = dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
+                this.getActivityLogs();
             }
         });
     }
 
     /**
-     * This function will use for get log details 
+     * This function will use for get log details
      *
      * @param {*} element
      * @memberof ActivityLogsComponent
@@ -181,8 +228,43 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         if (resetPage) {
             this.activityObj.page = 1;
         }
+        this.activityFieldsObj.entity = undefined;
+        this.activityFieldsObj.operation = undefined;
+        this.activityFieldsObj.userUniqueNames = undefined;
+        this.activityFieldsObj.fromDate = undefined;
+        this.activityFieldsObj.toDate = undefined;
+        this.activityFieldsObj.entityId = undefined;
+        this.activityFieldsObj.isChecked = undefined;
+        this.activityFieldsObj.entityFromDate = undefined;
+        this.activityFieldsObj.entityToDate = undefined;
+
+        this.selectedFields.forEach(field => {
+            if (field.value === "LOG_DATE") {
+                this.activityFieldsObj.fromDate = this.activityObj.fromDate;
+                this.activityFieldsObj.toDate = this.activityObj.toDate;
+            } else if (field.value === "ENTITY") {
+                this.activityFieldsObj.entity = this.activityObj.entity;
+            } else if (field.value === "OPERATION") {
+                this.activityFieldsObj.operation = this.activityObj.operation;
+            } else if (field.value === "USERS") {
+                this.activityFieldsObj.userUniqueNames = this.activityObj.userUniqueNames;
+            } else if (field.value === "ENTITY_DATE") {
+                this.activityFieldsObj.entityFromDate = this.activityObj.entityFromDate;
+                this.activityFieldsObj.entityToDate = this.activityObj.entityToDate;
+            }
+        });
+
+
+        if (!this.initialApiCalled) {
+            this.initialApiCalled = true;
+            this.activityFieldsObj.fromDate = this.activityObj.fromDate;
+            this.activityFieldsObj.toDate = this.activityObj.toDate;
+        }
+
+        this.activityFieldsObj.page = this.activityObj.page;
+        this.activityFieldsObj.count = this.activityObj.count;
         this.isLoading = true;
-        this.activityService.getActivityLogs(this.activityObj).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+        this.activityService.getActivityLogs(this.activityFieldsObj).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             this.isLoading = false;
             if (response && response.status === 'success') {
                 response.body?.results?.forEach((result, index) => {
@@ -192,20 +274,21 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
                         result.time = dayjs(result.time, GIDDH_DATE_FORMAT + " HH:mm:ss").format(GIDDH_DATE_FORMAT);
                     }
                 });
-                this.dataSource = response.body.results;
+                this.activityObj.page = response.body.page;
                 this.activityObj.totalItems = response.body.totalItems;
                 this.activityObj.totalPages = response.body.totalPages;
+                this.activityObj.count = response.body.count;
+                this.dataSource = response.body.results;
             } else {
                 this.dataSource = [];
                 this.activityObj.totalItems = 0;
-                this.activityObj.totalPages = 0;
             }
             this.changeDetection.detectChanges();
         });
     }
 
     /**
-     * To select entity type
+     * To select user type
      *
      * @param {IOption} event Selected item object
      * @memberof ActivityLogsComponent
@@ -220,6 +303,20 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * To select entity type
+     *
+     * @param {IOption} event Selected item object
+     * @memberof ActivityLogsComponent
+     */
+    public selecteEntityType(event: IOption): void {
+        if (event && (event.value === 'ENTRY' || event.value === 'VOUCHER')) {
+            this.isShowEntryDatepicker = true;
+        } else {
+            this.isShowEntryDatepicker = false;
+        }
+    }
+
+    /**
      * To get activity log form filter
      *
      * @memberof ActivityLogsComponent
@@ -228,47 +325,11 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         this.ActivityLogsService.getAuditLogFormFilters().pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response && response.status === 'success') {
                 this.entities = [];
-                this.filters = [];
-                this.filters[''] = [
-                    { label: this.commonLocaleData?.app_create, value: "CREATE" },
-                    { label: this.commonLocaleData?.app_update, value: "UPDATE" },
-                    { label: this.commonLocaleData?.app_delete, value: "DELETE" }
-                ];
                 response.body.forEach(res => {
                     this.entities.push(res.entity);
-                    this.filters[res.entity?.value] = [];
-                    this.filters[res.entity?.value] = res.operations;
                 });
             }
         });
-        this.changeDetection.detectChanges();
-    }
-
-    /**
-     * To reset applied filter
-     *
-     * @memberof ActivityLogsComponent
-     */
-    public resetFilter(): void {
-        this.activityObj.entity = '';
-        this.activityObj.operation = '';
-        this.activityObj.userUniqueNames = [];
-        this.activityObjLabels = {
-            entity: "",
-            operation: "",
-            user: ""
-        };
-        this.showDateReport = false;
-        this.activityObjLabels = {
-            entity: "",
-            operation: "",
-            user: ""
-        };
-        this.selectedDateRange = { startDate: dayjs(this.universalDate[0]), endDate: dayjs(this.universalDate[1]) };
-        this.selectedDateRangeUi = dayjs(this.universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(this.universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-        this.activityObj.fromDate = dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
-        this.activityObj.toDate = dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
-        this.getActivityLogs(true);
         this.changeDetection.detectChanges();
     }
 
@@ -299,12 +360,38 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * Call back function for date/range selection in entry datepicker
+     *
+     * @param {*} value
+     * @memberof ActivityLogsComponent
+     */
+    public entryDateSelectedCallback(value?: any): void {
+        if (value && value.event === "cancel") {
+            this.hideGiddhDatepicker();
+            return;
+        }
+        this.selectedEntryRangeLabel = "";
+
+        if (value && value.name) {
+            this.selectedEntryRangeLabel = value.name;
+        }
+        this.hideGiddhDatepicker();
+        if (value && value.startDate && value.endDate) {
+            this.entryShowDateReport = true;
+            this.selectedEntryDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
+            this.selectedEntryDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.activityObj.entityFromDate = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
+            this.activityObj.entityToDate = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
+        }
+    }
+
+    /**
     * This will hide the datepicker
     *
     * @memberof ActivityLogsComponent
     */
     public hideGiddhDatepicker(): void {
-        this.modalRef.hide();
+        this.modalRef?.hide();
     }
 
     /**
@@ -322,6 +409,23 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
             Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
         );
     }
+
+    /**
+     *To show the entry datepicker
+     *
+     * @param {*} element
+     * @memberof ActivityLogsComponent
+     */
+    public showEntryGiddhDatepicker(element: any): void {
+        if (element) {
+            this.dateFieldPosition = this.generalService.getPosition(element.target);
+        }
+        this.modalRef = this.modalService.show(
+            this.datepickerEntryTemplate,
+            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
+        );
+    }
+
 
     /**
      * To check is entry expanded
@@ -429,7 +533,6 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
      * @memberof ActivityLogsComponent
      */
     public ngOnDestroy(): void {
-        this.resetFilter();
         this.destroyed$.next(true);
         this.destroyed$.complete();
         document.body?.classList?.remove("activity-log-page");
@@ -488,6 +591,133 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         if (!event?.value) {
             this.activityObjLabels.operation = '';
             this.activityObj.operation = '';
+        }
+    }
+
+    /**
+     * This will use for add default feature
+     *
+     * @return {*}  {void}
+     * @memberof ActivityLogsComponent
+     */
+    public addDefaultFilter(): void {
+        if (this.selectedFields.length > 0) {
+            this.selectedFields.push({
+                label: '',
+                value: ''
+            });
+        } else {
+            this.selectedFields.push(this.fields[0]);
+        }
+    }
+
+    /**
+    *This will use for  remove default filter
+    *
+    * @param {*} event
+    * @param {number} index
+    * @memberof ActivityLogsComponent
+    */
+    public removeFilter(event: any, index: number): void {
+        if (index >= 0) {
+            this.selectedFields?.splice(index, 1);
+        }
+        if (event.value === "ENTITY") {
+            this.activityObjLabels.entity = '';
+            this.activityObj.entity = '';
+        }
+        if (event.value === "OPERATION") {
+            this.activityObjLabels.operation = '';
+            this.activityObj.operation = '';
+        }
+        if (event.value === "USERS") {
+            this.activityObjLabels.user = '';
+            this.activityObj.userUniqueNames = [];
+        }
+    }
+
+    /**
+     * This will use for select field
+     *
+     * @param {*} index
+     * @param {*} selectedValue
+     * @memberof ActivityLogsComponent
+     */
+    public selectField(index: number, selectedValue: any): void {
+        let newValue = this.selectedFields.filter(val => val?.value === selectedValue.value);
+        if (this.selectedFields[index].value !== selectedValue.value) {
+            if (newValue?.length > 0) {
+                this.toaster.showSnackBar('warning', selectedValue.label + ' ' + this.localeData?.duplicate_values);
+                this.selectedFields[index] = {
+                    label: '',
+                    value: ''
+                };
+            } else {
+                this.selectedFields[index] = selectedValue;
+                this.changeDetection.detectChanges();
+            }
+        }
+    }
+
+    /**
+     * Callback for translation response complete
+     *
+     * @param {*} event
+     * @memberof ActivityLogsComponent
+     */
+    public translationComplete(event: any): void {
+        if (event) {
+            this.translationLoaded = true;
+            this.fields = [
+                {
+                    label: this.localeData?.log_date,
+                    value: "LOG_DATE",
+                },
+                {
+                    label: this.localeData?.entity,
+                    value: "ENTITY"
+                },
+                {
+                    label: this.localeData?.operation,
+                    value: "OPERATION"
+                },
+                {
+                    label: this.localeData?.users,
+                    value: "USERS"
+                },
+                {
+                    label: this.localeData?.entity_date,
+                    value: "ENTITY_DATE"
+                },
+            ];
+            this.activityOperations = [
+                {
+                    label: this.localeData?.create,
+                    value: "CREATE",
+                },
+                {
+                    label: this.localeData?.update,
+                    value: "UPDATE"
+                },
+                {
+                    label: this.localeData?.delete,
+                    value: "DELETE"
+                },
+                {
+                    label: this.localeData?.merge,
+                    value: "MERGE"
+                },
+                {
+                    label: this.localeData?.unmerge,
+                    value: "UNMERGE",
+                },
+                {
+                    label: this.localeData?.move,
+                    value: "MOVE"
+                }
+            ];
+            this.addDefaultFilter();
+            this.changeDetection.detectChanges();
         }
     }
 }

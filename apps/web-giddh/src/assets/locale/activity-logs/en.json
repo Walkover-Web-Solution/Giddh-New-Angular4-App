@@ -11,5 +11,17 @@
     "no_difference":"No difference",
     "no_history":"No history available for this log",
     "history": "History",
-    "no_history_found":"No History Found"
+    "no_history_found":"No History Found",
+    "entity":"Entity",
+    "users":"Users",
+    "entity_date":"Entity Date",
+    "log_date":"Log Date",
+    "duplicate_values":"is already selected",
+    "select_field":"Select Field",
+    "create":"Create",
+    "update":"Update",
+    "delete":"Delete",
+    "move":"Move",
+    "merge":"Merge",
+    "unmerge":"Unmerge"
 }
