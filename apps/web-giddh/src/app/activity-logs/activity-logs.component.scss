@@ -3,38 +3,112 @@
         display: flex;
         text-align: center;
         justify-content: center;
+        margin-left: 10px;
+        margin-right: 10px;
     }
+
+    .delete-row {
+        margin: auto;
+        margin-left: 5px;
+        margin-right: 5px;
+    }
+
+    .remove-filter {
+        font-size: 16px;
+    }
+
+    .filter-wrapper {
+        display: flex;
+        background-color: var(--color-sidebar-company-background);
+        padding-bottom: 4px;
+        padding-top: 4px;
+        margin-bottom: 0px;
+        margin-top: 5px;
+    }
+
+    .entry-datepicker {
+        padding-left: 10px;
+    }
+
+    .and-text {
+        margin-left: 10px !important;
+        margin-right: 10px !important;
+        font-size: 16px;
+        color: var(--color-table-tertiary-content) !important;
+        margin: auto;
+    }
+
+    .button-wrapper {
+        margin-bottom: 5px !important;
+    }
+
+    .add-button {
+        border: none;
+        height: 44px;
+        cursor: pointer;
+        background-color: var(--color-sidebar-company-background);
+        font-size: 24px;
+        padding-left: 0px !important;
+        padding-right: 0px !important;
+        min-width: 44px !important;
+        color: var(--color-table-tertiary-content) !important;
+        padding-top: 0 !important;
+        border-radius: 0 !important;
+        padding-top: 4px !important;
+        margin: auto;
+        margin-left: 3px;
+        margin-top: 5px;
+        margin-right: 0 !important;
+    }
+
+    .entity-wrapper {
+        display: flex;
+    }
+
     .clear-filter {
         color: var(--color-giddh-blue);
         cursor: pointer;
     }
-    .activity-filter-wrap {
-        display: flex;
-        align-items: center;
-        padding-left: 9px;
-        padding-top: 9px;
+
+    .log-clear-button {
+        margin-bottom: 15px;
     }
+
+    .activity-filter-wrap {
+        align-items: center;
+        padding-bottom: 9px;
+        padding-top: 9px;
+        display: flex;
+        flex-wrap: wrap;
+        padding-left: 9px;
+    }
+
     .filter-button {
         float: left;
         width: 15%;
     }
+
     .table-content {
         max-height: calc(100vh - 200px);
         overflow-y: auto;
         height: calc(100vh - 200px);
     }
+
     .activity-table {
         .activity-td {
             width: 18%;
             position: relative;
         }
+
         .history-icon {
             display: none;
         }
+
         .mat-column-history {
             margin: 0 !important;
             padding: 0 !important;
         }
+
         tr {
             &:hover {
                 .history-icon {
@@ -43,6 +117,7 @@
                 }
             }
         }
+
         td {
             .history-icon {
                 padding: 13px 20px;
@@ -51,43 +126,57 @@
             }
         }
     }
+
     .activity-child-table {
         .activity-history {
             min-height: 0;
         }
+
         .mat-column-operation {
             padding-right: 0;
             margin-right: 0;
         }
+
         .history-child-row {
             position: relative;
+
             .history-checkbox {
                 padding: 13px 0px;
                 z-index: 99;
                 position: relative;
             }
         }
+
         .compare-json {
             text-decoration: underline;
             text-decoration: underline;
             color: var(--color-blue);
             z-index: 99;
             padding: 13px 20px;
+
             &:hover {
                 color: var(--color-blue);
             }
         }
+
         .child-td-name {
             padding-left: 30px !important;
         }
     }
 }
+
 @media (max-width: 1180px) {
     .activity-container {
         .activity-table {
             .activity-td {
                 width: 16.9%;
             }
+        }
+
+        .add-button {
+            padding-left: 0px !important;
+            padding-right: 0px !important;
+            padding-top: 0 !important;
         }
     }
 }
@@ -98,6 +187,12 @@
             .activity-td {
                 width: 16%;
             }
+        }
+
+        .add-button {
+            padding-left: 0px !important;
+            padding-right: 0px !important;
+            padding-top: 0 !important;
         }
     }
 }
