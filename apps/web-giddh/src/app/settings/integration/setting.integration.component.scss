@@ -28,6 +28,7 @@
     top: 18px;
     width: 13px;
 }
+
 .disabled:after {
     background: transparent;
     content: "";
@@ -44,26 +45,32 @@
     z-index: 999;
     cursor: not-allowed;
 }
+
 .disabled .list-item {
     position: relative;
 }
+
 .disabled {
     position: relative;
 }
+
 .disabled-list-item {
     padding: 6px;
     height: 100%;
     background: var(--color-white);
     font-size: 14px;
 }
+
 .tooltip-box {
     position: absolute;
     right: 0;
     top: 0;
+
     .icon-info {
         color: var(--color-abbey);
     }
 }
+
 .form-control,
 .linked-account {
     width: 100% !important;
@@ -72,6 +79,7 @@
 .payment-text {
     color: var(--color-abbey);
 }
+
 .bank-logo {
     img {
         max-width: 140px;
@@ -81,8 +89,9 @@
 }
 
 .mat-form-field {
-    width: 58% !important;
+    width: 38% !important;
 }
+
 .copied-url {
     padding-top: 3px;
     padding-left: 6px;
@@ -102,27 +111,99 @@
         text-decoration: none;
         padding-left: 0;
     }
+
     :focus {
         box-shadow: none;
     }
+
     :hover {
         text-decoration: underline;
     }
 }
+
+::ng-deep {
+    .mat-tab-label {
+        height: 36px;
+        min-width: 142px;
+        padding: 0px 3px;
+    }
+
+    .mat-tab-labels {
+        height: 42px;
+        background-color: none;
+    }
+
+    .mat-tab-label-active {
+        background-color: #f0f4ff;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+    }
+
+    .setting-container {
+        padding: 0px 0px 15px !important;
+    }
+
+    th.mat-header-cell:first-of-type {
+        width: 18%;
+    }
+
+    table .type-column {
+        width: 10% !important;
+    }
+
+    .mat-table tbody > tr > td:first-child {
+        color: var(--color-table-tertiary-content) !important;
+    }
+
+    th.mat-header-cell,
+    td.mat-cell {
+        white-space: normal !important;
+    }
+
+    .content-text {
+        font-size: 12px !important;
+        width: 26%;
+        text-transform: none;
+    }
+
+    .number-container {
+        width: 16%;
+    }
+
+    .icon-container {
+        width: 25%;
+    }
+
+    .mat-table tbody .mat-row:hover td {
+        background-color: #e7ebf6 !important;
+    }
+
+    .mat-table tbody .mat-row:hover .mat-cell .visibility {
+        display: block !important;
+    }
+
+    .mat-table tbody .mat-row:hover .mat-cell .icon-visibility {
+        visibility: visible !important;
+    }
+}
+
 /*responsive*/
 @media (max-width: 1359px) {
     .xs-pd-l15 {
         padding-left: 15px !important;
     }
+
     .hidden-1359 {
         display: none;
     }
 }
+
 @media (max-width: 1440px) {
     .mat-form-field {
         width: 78% !important;
     }
 }
+
 .plus-cross-btn {
     i {
         padding: 5px 0;
@@ -130,66 +211,124 @@
         font-size: 20px;
     }
 }
+
 .edit-save-button {
     .btn {
         width: 36px;
         height: 36px;
     }
 }
+
 @media (max-width: 1199px) {
+    .clearfix {
+        .form {
+            .input-field {
+                input {
+                    width: 277px;
+                }
+            }
+        }
+
+        .trigger-form {
+            .trigger-form-left-side {
+                width: 200px;
+
+                .trigger-input {
+                    input,
+                    mat-select {
+                        width: 185px;
+                    }
+                }
+            }
+
+            .trigger-form-right-side {
+                width: 71%;
+
+                .dropdown-box {
+                    .dropdown-list {
+                        mat-select {
+                            width: 126px;
+                            margin-left: 7px;
+                        }
+
+                        .dropdown-list-label {
+                            font-size: 12px;
+                        }
+                    }
+
+                    .right-label {
+                        margin-left: 15px;
+                    }
+                }
+            }
+        }
+    }
+
     .edit-save-button {
         display: flex;
         width: 100%;
         justify-content: flex-end;
         margin-right: 7px;
     }
+
     .button-wrapper {
         margin-top: 0;
         margin-bottom: 30px;
     }
 }
+
 @media (max-width: 767px) {
     #inlnImg {
         margin-top: 0;
     }
+
     .mat-form-field {
         width: 72% !important;
     }
+
     .empty-label label,
     .empty-label br {
         display: none;
     }
+
     #inlnImg label,
     .inlnImg label {
         margin: 0;
         display: none;
     }
+
     .gmail-integration-message {
         display: flex;
         flex-direction: column;
         align-items: flex-start;
+
         h4 {
             align-self: self-start !important;
             padding-bottom: 10px;
             font-size: 14px;
         }
+
         .btn-danger {
             margin-left: 0 !important;
         }
     }
+
     .plus-cross-btn {
         label {
             display: none;
         }
+
         i {
             float: right;
             margin-right: 15px;
         }
     }
+
     .update-btn-wrapper {
         label {
             display: none;
         }
+
         .btn {
             margin-right: 0;
             margin-left: 15px;
@@ -202,6 +341,7 @@
         flex: 0 0 33.333333% !important;
         max-width: 33.333333% !important;
     }
+
     .payment-col1 {
         flex: 0 0 25% !important;
         max-width: 25% !important;
@@ -214,22 +354,27 @@
         max-width: 20.666667% !important;
     }
 }
+
 .icici-button {
     border: 1px solid var(--color-primary-setting-integration-icici-button);
     color: var(--color-primary-setting-integration-icici-button);
 }
+
 .button-separator {
     color: var(--color-iron);
 }
+
 .account-wrapper {
     width: 65%;
     border-bottom: 1px solid var(--color-primary-setting-integration-account-wrapper-border);
     padding-bottom: 8px;
     margin-bottom: 20px;
 }
+
 .account-wrapper:last-child {
     border: none !important;
 }
+
 .account-info-background {
     padding-top: 9px;
     padding-bottom: 9px;
@@ -237,12 +382,14 @@
     margin-left: 1px;
     background-color: var(--color-common-quaternary-background-for-all-components);
 }
+
 .view-only-field {
     background-color: var(--color-input-secondary-background);
     padding: 8px;
     border-radius: 5px;
     color: var(--color-common-senary-text);
 }
+
 .disabled-field {
     padding: 8px;
     border-radius: 5px;
@@ -251,67 +398,84 @@
     background-color: var(--color-input-tertiary-background);
     border: 1px solid var(--color-primary-input-bar-border);
 }
+
 .payment-updates {
     width: 90%;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
 }
+
 .account-number {
     color: var(--color-common-senary-text);
 }
+
 .limit-upto {
     margin-left: 7px;
 }
+
 .action-div {
     position: relative;
     margin-top: 9px;
     vertical-align: top;
     display: inline-block;
+
     a {
         color: var(--color-primary-setting-integration-action-anchor);
     }
 }
+
 .user-action-div {
     a {
         color: var(--color-primary-setting-integration-action-anchor);
     }
 }
+
 .account-approval-status {
     margin-left: 13px;
 }
+
 .field-label {
     color: var(--color-primary-setting-integration-field-label);
 }
+
 .account-approval-status.approved {
     color: var(--color-primary-setting-integration-account-approval-status-approved);
+
     i::before {
         color: var(--color-primary-setting-integration-account-approval-status-approved);
     }
 }
+
 .account-approval-status.pending-approval {
     color: var(--color-primary-setting-integration-account-approval-status-pending-approval);
+
     i::before {
         color: var(--color-primary-setting-integration-account-approval-status-pending-approval);
     }
 }
+
 .connected-accounts {
     margin-left: 10px;
 }
+
 .btn-light-blue {
     color: var(--color-common-senary-text);
     background-color: var(--color-primary-basic-button-opacity);
 }
+
 .modal {
     .account-modal {
         width: 500px !important;
     }
 }
+
 .modal {
     .user-modal {
         width: 400px !important;
     }
 }
+
 .payor-duration {
     margin-top: 2px;
 }
@@ -325,5 +489,77 @@
 @media (max-width: 1199px) {
     .account-wrapper {
         width: 100% !important;
+    }
+}
+
+@media (min-width: 768px) and (orientation: portrait) {
+    .clearfix {
+        .form {
+            .input-field {
+                input {
+                    width: 250px;
+                }
+            }
+        }
+
+        .main-content {
+            table {
+                .mat-cell {
+                    .small-button {
+                        height: 35px;
+                        font-size: 0.6rem;
+                        padding: 0px;
+                        min-width: 100%;
+                    }
+
+                    .right-side {
+                        width: 95%;
+                    }
+                }
+            }
+        }
+
+        .table-one {
+            table {
+                .activeTriggers-width {
+                    width: 0%;
+                }
+
+                .type-width {
+                    width: 4%;
+                }
+            }
+        }
+
+        .trigger-form {
+            .trigger-form-right-side {
+                .dropdown-box {
+                    margin-top: 13px;
+
+                    .dropdown-list {
+                        display: block;
+                    }
+
+                    .right-label {
+                        margin-top: 10px;
+                        margin-left: 0px;
+                    }
+
+                    br {
+                        display: none;
+                    }
+
+                    .preview-button {
+                        margin-top: 18px;
+                    }
+                }
+            }
+        }
+    }
+
+    ::ng-deep {
+        table .type-column {
+            width: 14% !important;
+        }
     }
 }

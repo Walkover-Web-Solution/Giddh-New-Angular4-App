@@ -370,7 +370,7 @@
                 },
                 {
                     "label": "Downloads",
-                    "link": "/pages/downloads/exports",
+                    "link": "/pages/downloads",
                     "icon": "icon-download-circle"
                 },
                 {

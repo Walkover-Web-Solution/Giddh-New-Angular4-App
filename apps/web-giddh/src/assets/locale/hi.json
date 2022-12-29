@@ -679,5 +679,6 @@
     "app_invalid_country_code": "अमान्य देश कोड",
     "app_invalid_contact_too_short": "बहुत छोटा",
     "app_invalid_contact_too_long": "बहुत लंबा",
-    "app_attachment_not_allowed": "अटैचमेंट अपलोड करने के लिए ब्रांच में जाएं"
+    "app_attachment_not_allowed": "अटैचमेंट अपलोड करने के लिए ब्रांच में जाएं",
+    "app_entry_no": "प्रवेश संख्या"
 }

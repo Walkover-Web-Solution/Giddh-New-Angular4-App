@@ -11,6 +11,10 @@ import { FormControl } from '@angular/forms';
 import { PAGINATION_LIMIT } from '../../../app.constant';
 import { CurrentCompanyState } from '../../../store/Company/company.reducer';
 import { BreakpointObserver } from '@angular/cdk/layout';
+import { GeneralService } from '../../../services/general.service';
+import { ExportBodyRequest } from '../../../models/api-models/DaybookRequest';
+import { LedgerService } from '../../../services/ledger.service';
+import { ToasterService } from '../../../services/toaster.service';
 
 @Component({
     selector: 'sales-register-expand',
@@ -62,9 +66,10 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
     public isMobileScreen: boolean = false;
     /** True, if custom date filter is selected or custom searching or sorting is performed */
     public showClearFilter: boolean = false;
+    /** Stores the voucher API version of current company */
+    public voucherApiVersion: 1 | 2;
 
-
-    constructor(private store: Store<AppState>, private invoiceReceiptActions: InvoiceReceiptActions, private activeRoute: ActivatedRoute, private router: Router, private _cd: ChangeDetectorRef, private breakPointObservar: BreakpointObserver) {
+    constructor(private store: Store<AppState>, private invoiceReceiptActions: InvoiceReceiptActions, private activeRoute: ActivatedRoute, private router: Router, private _cd: ChangeDetectorRef, private breakPointObservar: BreakpointObserver, private generalService: GeneralService, private ledgerService: LedgerService, private toaster: ToasterService) {
         this.salesRegisteDetailedResponse$ = this.store.pipe(select(appState => appState.receipt.SalesRegisteDetailedResponse), takeUntil(this.destroyed$));
         this.isGetSalesDetailsInProcess$ = this.store.pipe(select(p => p.receipt.isGetSalesDetailsInProcess), takeUntil(this.destroyed$));
         this.isGetSalesDetailsSuccess$ = this.store.pipe(select(p => p.receipt.isGetSalesDetailsSuccess), takeUntil(this.destroyed$));
@@ -75,7 +80,8 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
         });
     }
 
-    ngOnInit() {
+    public ngOnInit(): void {
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.imgPath = isElectron ? 'assets/icon/' : AppUrl + APP_FOLDER + 'assets/icon/';
         this.getDetailedsalesRequestFilter.page = 1;
         this.getDetailedsalesRequestFilter.count = this.paginationLimit;
@@ -156,7 +162,9 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
      * @memberof SalesRegisterExpandComponent
      */
     public gotoSalesRegister(): void {
-        this.router.navigate(['/pages/reports/sales-register']);
+        this.activeRoute.queryParams.pipe(take(1)).subscribe(params => {
+            this.router.navigate(['pages', 'reports', 'sales-register'], { queryParams: { from: params.from, to: params.to, branchUniqueName: params.branchUniqueName, interval: params.interval, selectedMonth: params.selectedMonth } });
+        });
     }
 
     /**
@@ -307,5 +315,47 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+    }
+
+    /**
+     * Exports sales register detailed report
+     *
+     * @memberof SalesRegisterExpandComponent
+     */
+    public export(): void {
+        let exportBodyRequest: ExportBodyRequest = new ExportBodyRequest();
+        exportBodyRequest.from = this.from;
+        exportBodyRequest.to = this.to;
+        exportBodyRequest.exportType = "SALES_REGISTER_DETAILED_EXPORT";
+        exportBodyRequest.fileType = "CSV";
+        exportBodyRequest.isExpanded = this.expand;
+        exportBodyRequest.q = this.voucherNumberInput?.value;
+        exportBodyRequest.branchUniqueName = this.getDetailedsalesRequestFilter?.branchUniqueName;
+        exportBodyRequest.columnsToExport = [];
+
+        if(this.showFieldFilter.voucherType) {
+            exportBodyRequest.columnsToExport.push("Voucher Type");
+        }
+        if(this.showFieldFilter.voucherNo) {
+            exportBodyRequest.columnsToExport.push("Voucher No");
+        }
+        if(this.showFieldFilter.qtyRate) {
+            exportBodyRequest.columnsToExport.push("Qty/Unit");
+        }
+        if(this.showFieldFilter.discount) {
+            exportBodyRequest.columnsToExport.push("Discount");
+        }
+        if(this.showFieldFilter.tax) {
+            exportBodyRequest.columnsToExport.push("Tax");
+        }
+
+        this.ledgerService.exportData(exportBodyRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === 'success') {
+                this.toaster.successToast(response?.body);
+                this.router.navigate(["/pages/downloads"]);
+            } else {
+                this.toaster.errorToast(response?.message);
+            }
+        });
     }
 }

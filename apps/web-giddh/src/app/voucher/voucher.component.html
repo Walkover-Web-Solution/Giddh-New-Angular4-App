@@ -2491,10 +2491,11 @@
                                                             false,
                                                             false,
                                                             entryIdx
-                                                        )
+                                                        );
+                                                        noResultsFoundLabel = localeData?.search_acc
                                                     "
                                                     (createOption)="onNoResultsClicked(entryIdx)"
-                                                    [showCreateNew]="'true'"
+                                                    [showCreateNew]="true"
                                                     [defaultValue]="
                                                         transaction.stockDetails && transaction.stockDetails.name
                                                             ? transaction.accountName +
@@ -2718,6 +2719,8 @@
                                                     calculateWhenTrxAltered(entry, transaction)
                                                 "
                                                 [value]="transaction.stockUnit"
+                                                [(ngModel)]="transaction.stockUnit"
+                                                [name]="'transaction.stockUnit_' + entryIdx"
                                             >
                                                 <div class="select-quantity-option">
                                                     <mat-option
@@ -3985,6 +3988,8 @@
                                                                     );
                                                                     noResultsFoundLabel = localeData?.search_acc
                                                                 "
+                                                                [showCreateNew]="true"
+                                                                (createOption)="onNoResultsClicked(entryIdx)"
                                                                 [defaultValue]="
                                                                     transaction.stockDetails &&
                                                                     transaction.stockDetails.name
@@ -4275,6 +4280,8 @@
                                                                     calculateWhenTrxAltered(entry, transaction)
                                                                 "
                                                                 [value]="transaction.stockUnit"
+                                                                [(ngModel)]="transaction.stockUnit"
+                                                                [name]="'transaction.stockUnit_' + entryIdx"
                                                             >
                                                                 <mat-option
                                                                     *ngFor="let stock of transaction.stockList"

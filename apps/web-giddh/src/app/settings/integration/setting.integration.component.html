@@ -5,10 +5,13 @@
     (commonLocaleData)="commonLocaleData = $event"
 >
     <div class="clearfix">
-        <tabset
+        <mat-tab-group
             [ngClass]="{ 'tab-integration': true, 'hide-payment-tab': !isIndianCompany }"
-            #integrationTab
             id="tab-integration"
+            animationDuration="0ms"
+            [selectedIndex]="selectedTabParent"
+            (selectedTabChange)="tabChanged($event)"
+            [disableRipple]="true"
         >
             <!-- <tab (selectTab)="loadSmsData($event); tabChanged('sms');">
                 <ng-template tabHeading>
@@ -48,11 +51,12 @@
                 </div>
             </tab> -->
 
-            <tab (selectTab)="loadEmailData($event); tabChanged('email')">
-                <ng-template tabHeading>
-                    <span class="icon-mail"></span> {{ localeData?.email?.tab_heading }}
-                </ng-template>
+            <mat-tab [label]="localeData?.communication?.tab_heading" *ngIf="voucherApiVersion === 2">
+                <app-setting-campaign></app-setting-campaign>
+            </mat-tab>
 
+            <mat-tab [label]="localeData?.email?.tab_heading">
+                <ng-template> <span class="icon-mail"></span> {{ localeData?.email?.tab_heading }} </ng-template>
                 <div class="box clearfix mb-2">
                     <h3 class="section-head">{{ localeData?.email?.gmail_integration }}</h3>
                     <div class="d-flex gmail-integration-message">
@@ -80,21 +84,6 @@
                         >
                             {{ localeData?.email?.remove_account }}
                         </button>
-                    </div>
-                </div>
-
-                <!--remove account integration confirmation modal-->
-                <div bsModal #removegmailintegration="bs-modal" class="modal fade" role="dialog">
-                    <div class="modal-dialog modal-xl">
-                        <div class="modal-content">
-                            <confirm-modal
-                                [title]="localeData?.email?.remove_account_title"
-                                [body]="localeData?.email?.remove_account_message"
-                                (cancelCallBack)="removegmailintegration.toggle()"
-                                (successCallBack)="removeGmailAccount(); removegmailintegration.toggle()"
-                            >
-                            </confirm-modal>
-                        </div>
                     </div>
                 </div>
 
@@ -136,12 +125,10 @@
                         </div>
                     </form>
                 </div>
-            </tab>
+            </mat-tab>
 
-            <tab (selectTab)="loadCollectionData($event); tabChanged('collection')">
-                <ng-template tabHeading>
-                    <span class="icon-card"></span> {{ localeData?.collection?.tab_heading }}
-                </ng-template>
+            <mat-tab [label]="localeData?.collection?.tab_heading">
+                <ng-template> <span class="icon-card"></span> {{ localeData?.collection?.tab_heading }} </ng-template>
 
                 <div class="box clearfix mb-2">
                     <h3 class="font-20 bold mb-2">{{ localeData?.collection?.razorpay_form_heading }}</h3>
@@ -252,12 +239,10 @@
                         </div>
                     </form>
                 </div>
-            </tab>
+            </mat-tab>
 
-            <tab (selectTab)="tabChanged('ecommerce')">
-                <ng-template tabHeading>
-                    <span class="icon-ecomm"></span> {{ localeData?.ecommerce?.tab_heading }}
-                </ng-template>
+            <mat-tab [label]="localeData?.ecommerce?.tab_heading">
+                <ng-template> <span class="icon-ecomm"></span> {{ localeData?.ecommerce?.tab_heading }} </ng-template>
                 <div class="mr-t2 box clearfix">
                     <h3 class="section-head mb-2">{{ localeData?.ecommerce?.shopify_form_heading }}</h3>
                     <span *ngIf="isEcommerceShopifyUserVerified">{{
@@ -271,10 +256,11 @@
                         <span>{{ localeData?.ecommerce?.connect_shopify }}</span></a
                     >
                 </div>
-            </tab>
-            <tab (selectTab)="loadPaymentData($event); tabChanged('payment')" [hidden]="!isIndianCompany">
-                <div *ngIf="isIndianCompany">
-                    <ng-template tabHeading>
+            </mat-tab>
+
+            <mat-tab [label]="localeData?.payment?.tab_heading" [hidden]="!isIndianCompany">
+                <div *ngIf="isIndianCompany" class="clearfix box">
+                    <ng-template>
                         <span class="icon-payment"></span> {{ localeData?.payment?.tab_heading }}
                     </ng-template>
                     <div class="mb-2 bank-logo">
@@ -464,15 +450,22 @@
                                     >
                                         {{ localeData?.payment?.add_more_users }}
                                     </button>
-                                    <!-- <a class="btn icici-button font-12 mt-2 pull-right mr-0" href="javascript:;"><span class="icon-icici-logo"><span class="path1"></span><span class="path2"></span><span class="path3"></span></span> {{localeData?.payment?.get_instant_overdraft}}</a> -->
+                                    <a class="btn icici-button font-12 mt-2 pull-right mr-0" href="javascript:;"
+                                        ><span class="icon-icici-logo"
+                                            ><span class="path1"></span><span class="path2"></span
+                                            ><span class="path3"></span
+                                        ></span>
+                                        {{ localeData?.payment?.get_instant_overdraft }}</a
+                                    >
                                 </div>
                             </div>
                         </ng-container>
                     </div>
                 </div>
-            </tab>
-            <tab (selectTab)="tabChanged('tally')">
-                <ng-template tabHeading> <span class="icon-card"></span>{{ localeData?.tally?.heading }}</ng-template>
+            </mat-tab>
+
+            <mat-tab [label]="localeData?.tally?.heading" *ngIf="voucherApiVersion === 2">
+                <ng-template> <span class="icon-card"></span>{{ localeData?.tally?.heading }}</ng-template>
                 <div class="box clearfix mb-2">
                     <div class="form-group magic-link-container col-md-9 col-lg-7 d-flex align-items-center">
                         <label class="bold">{{ localeData?.tally?.api_url }}</label>
@@ -508,8 +501,22 @@
                         >
                     </div>
                 </div>
-            </tab>
-        </tabset>
+            </mat-tab>
+        </mat-tab-group>
+    </div>
+    <!--remove account integration confirmation modal-->
+    <div bsModal #removegmailintegration="bs-modal" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <confirm-modal
+                    [title]="localeData?.email?.remove_account_title"
+                    [body]="localeData?.email?.remove_account_message"
+                    (cancelCallBack)="removegmailintegration.toggle()"
+                    (successCallBack)="removeGmailAccount(); removegmailintegration.toggle()"
+                >
+                </confirm-modal>
+            </div>
+        </div>
     </div>
     <div bsModal #createNewAccountModal="bs-modal" [config]="{ backdrop: 'static' }" class="modal" role="dialog">
         <div class="modal-dialog account-modal" *ngIf="createNewAccountModal?.isShown">
@@ -518,7 +525,8 @@
                     [commonLocaleData]="commonLocaleData"
                     (getAllBankAccounts)="getAllBankAccounts()"
                     (closeModalEvent)="closeCreateNewAccountModal()"
-                ></icici-account-create-edit>
+                >
+                </icici-account-create-edit>
             </div>
         </div>
     </div>
@@ -530,7 +538,8 @@
                     [activeBankAccount]="activeBankAccount"
                     (getAllBankAccounts)="getAllBankAccounts()"
                     (closeModalEvent)="closeEditAccountModal()"
-                ></icici-account-create-edit>
+                >
+                </icici-account-create-edit>
             </div>
         </div>
     </div>
@@ -555,7 +564,8 @@
                     [activePayorAccount]="activePayorAccount"
                     (getAllBankAccounts)="getAllBankAccounts()"
                     (closeModalEvent)="closeEditAccountUserModal()"
-                ></icici-payor-account-create-edit>
+                >
+                </icici-payor-account-create-edit>
             </div>
         </div>
     </div>
@@ -572,7 +582,8 @@
                     [body]="localeData?.payment?.delete_login | replace: '[LOGIN_ID]':activeBankAccount?.loginId"
                     (cancelCallBack)="confirmationModal?.hide()"
                     (successCallBack)="deleteBankAccountLogin(true)"
-                ></confirm-modal>
+                >
+                </confirm-modal>
             </div>
         </div>
     </div>
