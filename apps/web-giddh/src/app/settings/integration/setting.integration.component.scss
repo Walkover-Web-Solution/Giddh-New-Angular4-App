@@ -10,10 +10,6 @@
     padding-top: 5px;
 }
 
-.tally-url {
-    padding-top: 7px;
-}
-
 .font-18 {
     font-weight: bold;
 }
@@ -89,7 +85,7 @@
 }
 
 .mat-form-field {
-    width: 38% !important;
+    width: 38%;
 }
 
 .copied-url {
@@ -237,27 +233,6 @@
                     input,
                     mat-select {
                         width: 185px;
-                    }
-                }
-            }
-
-            .trigger-form-right-side {
-                width: 71%;
-
-                .dropdown-box {
-                    .dropdown-list {
-                        mat-select {
-                            width: 126px;
-                            margin-left: 7px;
-                        }
-
-                        .dropdown-list-label {
-                            font-size: 12px;
-                        }
-                    }
-
-                    .right-label {
-                        margin-left: 15px;
                     }
                 }
             }
@@ -527,31 +502,6 @@
 
                 .type-width {
                     width: 4%;
-                }
-            }
-        }
-
-        .trigger-form {
-            .trigger-form-right-side {
-                .dropdown-box {
-                    margin-top: 13px;
-
-                    .dropdown-list {
-                        display: block;
-                    }
-
-                    .right-label {
-                        margin-top: 10px;
-                        margin-left: 0px;
-                    }
-
-                    br {
-                        display: none;
-                    }
-
-                    .preview-button {
-                        margin-top: 18px;
-                    }
                 }
             }
         }

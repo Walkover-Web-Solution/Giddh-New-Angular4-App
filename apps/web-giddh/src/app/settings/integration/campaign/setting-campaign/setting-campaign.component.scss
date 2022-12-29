@@ -13,12 +13,34 @@
     background-color: var(--color-discount-search-bar-background) !important;
 }
 
+.back-text {
+    padding-left: 5px;
+}
+
+.verify-form {
+    align-items: baseline;
+
+    .verify-button {
+        height: 36px;
+    }
+
+    .input-field {
+        margin-right: 5px;
+        width: 15% !important;
+    }
+
+    .back-button {
+        width: 64px;
+    }
+}
+
 .auth-label {
     float: left;
     width: 100%;
     margin-top: 5px;
     margin-bottom: 5px;
     color: var(--color-company-profile-input-label);
+    font-size: 12px !important;
 }
 
 .table-content {
@@ -206,12 +228,16 @@
     border-radius: 5px;
 }
 
+.mandatory-label {
+    color: var(--color-primary-login-hash-tag);
+}
+
 .trigger-form {
     display: flex;
     margin: 10px 0px 0px 0px;
 
     .trigger-form-left-side {
-        width: 312px;
+        width: 14%;
         height: 100%;
 
         .create-trigger-head {
@@ -281,19 +307,16 @@
             font-weight: 700;
         }
 
-        .chiplist-wrapper {
-            display: flex;
-        }
-
         .unit-value {
             font-size: 14px;
+            margin-bottom: -18px;
         }
 
         .variables-bottom-border {
-            margin-bottom: 30px;
-            padding-bottom: 9px;
-            border-bottom: 1px solid var(--color-secondary-input-bar-border);
-            margin-top: 7px;
+            margin-bottom: 18px;
+            padding-bottom: 5px;
+            color: var(--color-nero) !important;
+            font-weight: none !important;
         }
 
         .compose-subject {
@@ -332,8 +355,9 @@
             }
         }
 
-        .dropdown-box {
-            margin-top: 60px;
+        .dropdown-box-1 {
+            margin-top: 69px;
+            width: 33%;
 
             .dropdown-list {
                 display: inline-block;
@@ -365,6 +389,51 @@
             .preview-button {
                 margin-top: 25px;
             }
+        }
+
+        .dropdown-box-2 {
+            margin-top: 90px;
+            width: 33%;
+            padding-left: 20px;
+            padding-right: 20px;
+
+            .dropdown-list {
+                display: inline-block;
+
+                mat-select {
+                    width: 138px;
+                    height: 26px;
+                    background-color: var(--color-common-primary-text);
+                    margin-left: 10px;
+                    border-radius: 5px;
+                    padding: 2px 6px 2px 6px;
+                    font-size: 14px;
+                }
+
+                .dropdown-list-label {
+                    font-weight: 600;
+                    font-size: 15px;
+                }
+            }
+
+            .right-label {
+                margin-left: 25px;
+            }
+
+            .bottom-label {
+                margin-top: 12px;
+            }
+
+            .preview-button {
+                margin-top: 25px;
+            }
+        }
+
+        .dropdown-box-3 {
+            margin-top: 60px;
+            width: 33%;
+            padding-left: 20px;
+            padding-right: 20px;
         }
     }
 }
