@@ -592,8 +592,8 @@ export class SettingCampaignComponent implements OnInit {
             });
             this.disableSubmitButton = true;
             this.campaignIntegrationService.createTrigger(model).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                this.disableSubmitButton = false;
                 if (response?.status === "success") {
-                    this.disableSubmitButton = false;
                     this.toasty.showSnackBar("success", this.localeData?.communication?.create_trigger_succes);
                     this.resetCommunicationForm();
                     this.showTriggerForm = false;
@@ -622,8 +622,8 @@ export class SettingCampaignComponent implements OnInit {
             });
             this.disableSubmitButton = true;
             this.campaignIntegrationService.updateTrigger(model, this.triggerUniquename).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                this.disableSubmitButton = false;
                 if (response?.status === "success") {
-                    this.disableSubmitButton = false;
                     this.toasty.showSnackBar("success", response?.body);
                     this.resetCommunicationForm();
                     this.showTriggerForm = false;
