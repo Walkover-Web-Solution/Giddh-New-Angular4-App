@@ -471,11 +471,11 @@ export class SettingCampaignComponent implements OnInit {
     }
 
     /**
- * This will use for back to list page
- *
- * @param {*} event
- * @memberof SettingCampaignComponent
- */
+     * This will use for back to home page
+     *
+     * @param {*} event
+     * @memberof SettingCampaignComponent
+     */
     public backToHomePage(event: any): void {
         if (event) {
             this.editCommunicationPlatform = "";

@@ -561,6 +561,48 @@ $custom-typography: mat-typography-config(
 }
 
 @media (max-width: 768px) {
+    .trigger-form-left-side {
+        width: 38% !important;
+    }
+
+    .trigger-input {
+        mat-select {
+            float: left;
+            width: 100%;
+        }
+    }
+
+    .trigger-form-right-side {
+        width: 60% !important;
+    }
+
+    .verify-form {
+        float: left;
+        width: 100%;
+
+        .input-field {
+            width: 50% !important;
+        }
+    }
+
+    .select-multiple-chiplist {
+        mat-chip.mat-standard-chip {
+            font-size: 10px !important;
+        }
+    }
+
+    .dropdown-box-1 {
+        width: 60% !important;
+    }
+
+    .dropdown-box-2 {
+        width: 40% !important;
+    }
+
+    .dropdown-box-3 {
+        display: none !important;
+    }
+
     .text-left-sm {
         text-align: left !important;
     }
@@ -10404,6 +10446,50 @@ body.update-scroll-hidden {
 }
 
 @media (max-width: 1024px) {
+    .trigger-form-left-side {
+        width: 30% !important;
+    }
+
+    .trigger-input {
+        mat-select {
+            float: left;
+            width: 100%;
+        }
+    }
+
+    .trigger-form-right-side {
+        width: 70% !important;
+    }
+
+    .verify-form {
+        float: left;
+        width: 100%;
+
+        .input-field {
+            width: 50% !important;
+        }
+    }
+
+    .select-multiple-chiplist {
+        mat-chip.mat-standard-chip {
+            font-size: 10px !important;
+        }
+    }
+
+    .dropdown-box-1 {
+        width: 50% !important;
+    }
+
+    .dropdown-box-2 {
+        width: 50% !important;
+    }
+
+    .dropdown-box-3 {
+        display: none !important;
+    }
+    .text-left-sm {
+        text-align: left !important;
+    }
     .move-select {
         .menu {
             width: 36% !important;
