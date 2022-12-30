@@ -32,6 +32,8 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
     @Input() public showError: boolean = false;
     /** Name of search field */
     @Input() public name: any = "";
+    /** Split on comma  */
+    @Input() public splitOnComma = true;
     /** Callback for option selected */
     @Output() public selectedOption: EventEmitter<any> = new EventEmitter<any>();
     /** List of chips based on selected values */
@@ -74,7 +76,7 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
         if (changes?.options) {
             this.fieldFilteredOptions = cloneDeep(changes.options.currentValue);
         }
-        if (changes?.selectedValues && changes.selectedValues.currentValue) {
+        if (this.splitOnComma && changes?.selectedValues && changes.selectedValues.currentValue) {
             if (typeof changes.selectedValues.currentValue === "string") {
                 this.chipList = cloneDeep(changes.selectedValues.currentValue?.split(","));
             } else {
@@ -119,8 +121,6 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
      * @memberof SelectMultipleFieldsComponent
      */
     public selectOption(option: any): void {
-        console.log(option);
-
         this.allowAddChip = false;
         const selectOptionValue = option?.option?.value?.value;
         if (selectOptionValue && !this.chipList.includes(selectOptionValue)) {
@@ -152,15 +152,11 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
      * @param {*} event
      * @memberof SelectMultipleFieldsComponent
      */
-    public addChip(event: MatChipInputEvent): void {
-        console.log(event);
-
+    public addChip(event: any): void {
         const input = event?.input;
         if (this.allowAddChip) {
-            const value = (event?.value || '')?.trim();
+            const value = event?.value?.trim();
             if (value && (!this.validations?.length || (this.validations?.includes("email") && this.validateEmail(value)) || (this.validations?.includes("mobile") && this.validateMobile(value))) && !this.chipList.includes(value)) {
-                console.log(value);
-
                 this.chipList?.push(value);
             }
             this.emitList();
@@ -200,8 +196,6 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
      * @memberof SelectMultipleFieldsComponent
      */
     private emitList(): void {
-        console.log(this.chipList);
-
         this.selectedOption.emit(this.chipList);
         this.changeDetection.detectChanges();
     }

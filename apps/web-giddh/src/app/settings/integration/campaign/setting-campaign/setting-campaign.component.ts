@@ -800,8 +800,6 @@ export class SettingCampaignComponent implements OnInit {
      * @memberof SettingCampaignComponent
      */
     public selectVariable(selectedValues: any[], index: number): void {
-        console.log(selectedValues, index);
-
         this.createTrigger.campaignDetails.argsMapping[index].value = selectedValues?.join(",");
     }
 }
