@@ -50,6 +50,7 @@
         "invalid_entity":"अवैध अस्तित्व",
         "invalid_arguments":"अवैध मोहिम तपशील वितर्क मॅपिंग",
         "invalid_to":"साठी अवैध",
-        "invalid_title":"अवैध शीर्षक"
+        "invalid_title":"अवैध शीर्षक",
+        "msg91":"MSG91"
     }
 }

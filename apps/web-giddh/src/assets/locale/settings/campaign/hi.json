@@ -50,6 +50,7 @@
         "invalid_entity":"अमान्य इकाई",
         "invalid_arguments":"अमान्य अभियान विवरण तर्क मैपिंग",
         "invalid_to":"करने के लिए अमान्य",
-        "invalid_title":"अमान्य शीर्षक"
+        "invalid_title":"अमान्य शीर्षक",
+        "msg91":"MSG91"
     }
 }
