@@ -1164,6 +1164,13 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             if (o && this.accountAsideMenuState === 'in') {
                 this.toggleAccountAsidePane();
             }
+            if (o) {
+                if (this.invFormData?.accountDetails?.currency?.code) {
+                    this.loadBankCashAccounts(this.invFormData?.accountDetails?.currency?.code);
+                } else {
+                    this.loadBankCashAccounts("");
+                }
+            }
         });
 
         // listen for universal date
@@ -1502,7 +1509,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                         this.customerCountryName = tempSelectedAcc.country.countryName;
                         this.customerCountryCode = tempSelectedAcc?.country?.countryCode || 'IN';
                         this.checkIfNeedToExcludeTax(tempSelectedAcc);
-
                         this.getUpdatedStateCodes(tempSelectedAcc.country.countryCode).then(() => {
                             this.invFormData.accountDetails = new AccountDetailsClass(tempSelectedAcc);
                         });
