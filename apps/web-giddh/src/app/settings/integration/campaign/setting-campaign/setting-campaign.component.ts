@@ -1,5 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { COMMA, ENTER, I } from '@angular/cdk/keycodes';
+import { Component, OnInit } from '@angular/core';
 import { take, takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
@@ -66,8 +65,6 @@ export class SettingCampaignComponent implements OnInit {
     public platform: string = '';
     /** Holds the communication trigger uniquename */
     public triggerUniquename: string = '';
-    /** Emit with seperate code for chiplist */
-    public separatorKeysCodes: number[] = [ENTER, COMMA];
     /** Holds the trigger to dropdown data */
     public triggerToDropdown: any[] = [];
     /** Holds the trigger bcc dropdown data */
@@ -803,6 +800,8 @@ export class SettingCampaignComponent implements OnInit {
      * @memberof SettingCampaignComponent
      */
     public selectVariable(selectedValues: any[], index: number): void {
+        console.log(selectedValues, index);
+
         this.createTrigger.campaignDetails.argsMapping[index].value = selectedValues?.join(",");
     }
 }

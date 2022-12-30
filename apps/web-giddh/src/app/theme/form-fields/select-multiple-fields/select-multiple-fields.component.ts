@@ -2,6 +2,7 @@ import { COMMA, ENTER } from "@angular/cdk/keycodes";
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from "@angular/core";
 import { FormControl } from "@angular/forms";
 import { MatAutocompleteTrigger } from "@angular/material/autocomplete";
+import { MatChipInputEvent } from "@angular/material/chips";
 import { ReplaySubject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { EMAIL_VALIDATION_REGEX, MOBILE_REGEX_PATTERN } from "../../../app.constant";
@@ -118,6 +119,8 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
      * @memberof SelectMultipleFieldsComponent
      */
     public selectOption(option: any): void {
+        console.log(option);
+
         this.allowAddChip = false;
         const selectOptionValue = option?.option?.value?.value;
         if (selectOptionValue && !this.chipList.includes(selectOptionValue)) {
@@ -149,11 +152,15 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
      * @param {*} event
      * @memberof SelectMultipleFieldsComponent
      */
-    public addChip(event: any): void {
+    public addChip(event: MatChipInputEvent): void {
+        console.log(event);
+
         const input = event?.input;
         if (this.allowAddChip) {
-            const value = event?.value?.trim();
+            const value = (event?.value || '')?.trim();
             if (value && (!this.validations?.length || (this.validations?.includes("email") && this.validateEmail(value)) || (this.validations?.includes("mobile") && this.validateMobile(value))) && !this.chipList.includes(value)) {
+                console.log(value);
+
                 this.chipList?.push(value);
             }
             this.emitList();
@@ -193,6 +200,8 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
      * @memberof SelectMultipleFieldsComponent
      */
     private emitList(): void {
+        console.log(this.chipList);
+
         this.selectedOption.emit(this.chipList);
         this.changeDetection.detectChanges();
     }
