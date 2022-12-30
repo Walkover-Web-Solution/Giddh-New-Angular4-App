@@ -407,6 +407,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 txn.selectedAccount = {
                     ...e.additional,
                     label: e.label,
+                    name: e.label,
                     category: data.body.category,
                     value: e.value,
                     isHilighted: true,
@@ -900,7 +901,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
                         this.bankTransactionsResponse.page = res.body.page;
                         this.zone.runOutsideAngular(() => {
                             this.lc.getReadyBankTransactionsForUI(res.body.transactionsList, (this.currentOrganizationType === OrganizationType.Company && (this.currentCompanyBranches && this.currentCompanyBranches.length > 2)));
-                            this.getAccountSearchPrediction(res.body.transactionsList);
+                            this.getAccountSearchPrediction(this.lc.bankTransactionsCreditData);
+                            this.getAccountSearchPrediction(this.lc.bankTransactionsDebitData);
                         });
                         this.cdRf.detectChanges();
                     }
@@ -909,33 +911,61 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Loop through bank transactions and prepare model to send data to api
+     *
+     * @param {*} bankTransactions
+     * @memberof LedgerComponent
+     */
     public getAccountSearchPrediction(bankTransactions: any): void {
         if(bankTransactions?.length > 0) {
             let requestModel = [];
 
             bankTransactions.forEach(transaction => {
-                if(transaction.transactions?.length > 0 && transaction.transactions[0]?.remarks?.description) {
+                if(transaction?.transactionId && transaction?.description) {
                     requestModel.push({
                         uniqueName: transaction.transactionId,
-                        description: transaction.transactions[0]?.remarks?.description
+                        description: transaction.description
                     });
                 }
 
                 if(requestModel?.length === 10) {
-                    this.ledgerService.getAccountSearchPrediction(this.trxRequest.accountUniqueName, requestModel).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                        console.log(response);
-                    });
-
+                    this.getAccountSearchPredictionData(requestModel, bankTransactions);
                     requestModel = [];
                 }
             });
 
             if(requestModel?.length > 0) {
-                this.ledgerService.getAccountSearchPrediction(this.trxRequest.accountUniqueName, requestModel).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                    console.log(response);
-                });
+                this.getAccountSearchPredictionData(requestModel, bankTransactions);
+                requestModel = [];
             }
         }
+    }
+
+    /**
+     * This will send data to api and will map with transactions
+     *
+     * @private
+     * @param {any[]} requestModel
+     * @param {*} bankTransactions
+     * @memberof LedgerComponent
+     */
+    private getAccountSearchPredictionData(requestModel: any[], bankTransactions: any): void {
+        this.ledgerService.getAccountSearchPrediction(this.trxRequest.accountUniqueName, requestModel).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if(response?.status === "success" && response?.body?.length > 0) {
+                let mappedTransactions = response?.body?.filter(transaction => transaction.account !== null);
+                if(mappedTransactions?.length > 0) {
+                    mappedTransactions?.forEach(transaction => {
+                        let matchedTransaction = bankTransactions?.filter(bankTransaction => bankTransaction.transactionId === transaction.uniqueName);
+                        if(matchedTransaction?.length > 0) {
+                            const account: IOption = { label: transaction.account.name, value: transaction.account.uniqueName, additional: { uniqueName: transaction.account.uniqueName } };
+                            matchedTransaction[0].transactions[0].particular = transaction.account.name;
+                            this.selectAccount(account, matchedTransaction[0]?.transactions[0]);
+                        }
+                    });
+                }
+            }
+        });
     }
 
     public selectBankTxn(txn: TransactionVM) {
@@ -2319,6 +2349,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
      */
     public translationComplete(event: boolean): void {
         if (event) {
+            let bankTransactionLoaded = false;
             observableCombineLatest([this.lc.activeAccount$, this.lc.companyProfile$]).pipe(takeUntil(this.destroyed$)).subscribe(data => {
 
                 if (data[0] && data[1]) {
@@ -2337,7 +2368,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     this.lc.getUnderstandingText(accountDetails?.accountType, accountDetails?.name, accountDetails?.parentGroups, this.localeData);
                     this.accountUniquename = accountDetails?.uniqueName;
 
-                    this.getBankTransactions();
+                    if (!bankTransactionLoaded) {
+                        this.getBankTransactions();
+                        bankTransactionLoaded = true;
+                    }
 
                     this.isBankOrCashAccount = accountDetails.parentGroups.some((grp) => grp?.uniqueName === 'bankaccounts' || grp?.uniqueName === 'loanandoverdraft');
                     if (accountDetails.currency && profile.baseCurrency) {
