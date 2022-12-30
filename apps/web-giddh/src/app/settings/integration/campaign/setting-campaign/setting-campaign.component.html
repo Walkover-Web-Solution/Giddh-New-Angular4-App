@@ -51,7 +51,9 @@
             (click)="backToHomePage($event)"
             *ngIf="communicationPlatforms?.MSG91?.isConnected"
         >
-            <span class="mat-button-wrapper"><i class="icon-left"></i><span class="back-text">MSG91</span> </span>
+            <span class="mat-button-wrapper"
+                ><i class="icon-left"></i><span class="back-text">{{ localeData?.communication?.msg91 }}</span>
+            </span>
         </button>
         <div class="d-flex verify-form mr-t1">
             <div class="input-field">
