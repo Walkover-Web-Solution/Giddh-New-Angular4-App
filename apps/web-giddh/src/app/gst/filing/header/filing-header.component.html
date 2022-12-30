@@ -196,7 +196,7 @@
             <button
                 class="btn btn-primary pull-right"
                 [ngClass]="{ 'btn-success': gstAuthenticated }"
-                (click)="toggleSettingAsidePane($event, 'TAXPRO')"
+                (click)="!gstAuthenticated ? toggleSettingAsidePane($event, 'TAXPRO') : ''"
                 *ngIf="showTaxPro && isCompany && showGstFiling"
             >
                 {{ gstAuthenticated ? localeData?.filing?.authenticated : localeData?.filing?.authenticate }}
@@ -216,6 +216,7 @@
 
 <div class="aside-overlay" *ngIf="GstAsidePaneState === 'in'" (click)="toggleSettingAsidePane($event)"></div>
 <gst-aside-menu
+    *ngIf="GstAsidePaneState === 'in'"
     [selectedService]="selectedService"
     [returnType]="selectedGst"
     [class]="GstAsidePaneState"

@@ -161,7 +161,7 @@
                         <tab (selectTab)="reconcileTabChanged('matched')">
                             <ng-template tabHeading>
                                 {{ localeData?.filing?.matched }}
-                                <span class="count">{{ "(" + (gstMatchedData$ | async)?.count + ")" }}</span>
+                                <span class="count matched">{{ "(" + (gstMatchedData$ | async)?.count + ")" }}</span>
                             </ng-template>
 
                             <ng-container
