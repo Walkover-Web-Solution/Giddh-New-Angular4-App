@@ -16,7 +16,6 @@
             [placeholder]="placeholder"
             [matAutocomplete]="auto"
             [matChipInputFor]="matChipList"
-            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
             [matChipInputAddOnBlur]="!auto.isOpen"
             (matChipInputTokenEnd)="addChip($event)"
             [ngClass]="{ 'chiplist-error': showError }"
