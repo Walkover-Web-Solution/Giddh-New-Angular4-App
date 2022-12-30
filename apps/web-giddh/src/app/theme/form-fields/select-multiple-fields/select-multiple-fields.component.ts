@@ -40,7 +40,7 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
     /** Filtered options to show in autocomplete list */
     public fieldFilteredOptions: IOption[] = [];
     /** Emit with seperate code for chiplist */
-    public separatorKeysCodes: number[] = [ENTER, COMMA];
+    public separatorKeysCodes: number[] = [ENTER];
     /** Subject to release subscriptions */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** True if we need to allow adding of new chips */

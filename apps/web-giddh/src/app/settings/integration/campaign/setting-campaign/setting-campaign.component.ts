@@ -74,6 +74,8 @@ export class SettingCampaignComponent implements OnInit {
     public triggerBccDropdown: any[] = [];
     /** Holds the trigger cc dropdown data */
     public triggerCcDropdown: any[] = [];
+    /** Holds the trigger mobile number dropdown data */
+    public triggerMobileDropdown: any[] = [];
     /** True if  the trigger loading  */
     public isActiveTriggersLoading: boolean = false;
     /** Validate the email regex for add emails */
@@ -280,17 +282,26 @@ export class SettingCampaignComponent implements OnInit {
         this.campaignIntegrationService.getFieldSuggestions(platform, entity).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
                 if (response) {
-                    this.triggerBccDropdown.push({
-                        value: response.body?.sendToSuggestions[0],
-                        label: response.body?.sendToSuggestions[0]
-                    })
 
-                    this.triggerCcDropdown.push({
-                        value: response.body?.sendToSuggestions[0],
-                        label: response.body?.sendToSuggestions[0]
-                    })
-
-                    this.triggerToDropdown = response.body?.sendToSuggestions?.map((result: any) => {
+                    this.triggerBccDropdown = response.body?.sendToEmailSuggestions?.map((result: any) => {
+                        return {
+                            value: result,
+                            label: result
+                        }
+                    });
+                    this.triggerCcDropdown = response.body?.sendToEmailSuggestions?.map((result: any) => {
+                        return {
+                            value: result,
+                            label: result
+                        }
+                    });
+                    this.triggerToDropdown = response.body?.sendToEmailSuggestions?.map((result: any) => {
+                        return {
+                            value: result,
+                            label: result
+                        }
+                    });
+                    this.triggerMobileDropdown = response.body?.sendToMobileSuggestions?.map((result: any) => {
                         return {
                             value: result,
                             label: result
@@ -322,6 +333,7 @@ export class SettingCampaignComponent implements OnInit {
                 this.triggerBccDropdown = [];
                 this.triggerCcDropdown = [];
                 this.triggerToDropdown = [];
+                this.triggerMobileDropdown = [];
                 this.createTrigger.campaignDetails.argsMapping = [];
                 this.selectCampaign(this.createTrigger.campaignDetails.campaignSlug);
                 this.getFieldsSuggestion(response?.body?.communicationPlatform, response?.body?.condition?.entity);
@@ -329,6 +341,7 @@ export class SettingCampaignComponent implements OnInit {
                 this.createTrigger.campaignDetails.to = response?.body?.campaignDetails?.to || [];
                 this.createTrigger.campaignDetails.bcc = response?.body?.campaignDetails?.bcc || [];
                 this.createTrigger.campaignDetails.cc = response?.body?.campaignDetails?.cc || [];
+                this.createTrigger.campaignDetails.mobile = response?.body?.campaignDetails?.mobile || [];
                 this.createTrigger.title = response?.body?.title;
                 this.createTrigger.campaignDetails.sendVoucherPdf = response?.body?.campaignDetails?.sendVoucherPdf;
                 this.createTrigger.campaignDetails.campaignSlug = response?.body?.campaignDetails?.campaignSlug;
@@ -438,7 +451,9 @@ export class SettingCampaignComponent implements OnInit {
         this.triggerBccDropdown = [];
         this.triggerToDropdown = [];
         this.triggerCcDropdown = [];
+        this.triggerMobileDropdown = [];
     }
+
     /**
      * This will use for back to list page
      *
@@ -449,7 +464,21 @@ export class SettingCampaignComponent implements OnInit {
         if (event) {
             this.showTriggerForm = false;
             this.showVariableMapping = false;
+            this.editCommunicationPlatform = "";
             this.resetCommunicationForm();
+            this.triggerMode = 'create';
+        }
+    }
+
+    /**
+ * This will use for back to list page
+ *
+ * @param {*} event
+ * @memberof SettingCampaignComponent
+ */
+    public backToHomePage(event: any): void {
+        if (event) {
+            this.editCommunicationPlatform = "";
             this.triggerMode = 'create';
         }
     }
@@ -542,6 +571,7 @@ export class SettingCampaignComponent implements OnInit {
                 to: [],
                 cc: [],
                 bcc: [],
+                mobile: [],
                 sendVoucherPdf: false
             }
         }
@@ -562,8 +592,8 @@ export class SettingCampaignComponent implements OnInit {
             });
             this.disableSubmitButton = true;
             this.campaignIntegrationService.createTrigger(model).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                this.disableSubmitButton = false;
                 if (response?.status === "success") {
-                    this.disableSubmitButton = false;
                     this.toasty.showSnackBar("success", this.localeData?.communication?.create_trigger_succes);
                     this.resetCommunicationForm();
                     this.showTriggerForm = false;
@@ -592,8 +622,8 @@ export class SettingCampaignComponent implements OnInit {
             });
             this.disableSubmitButton = true;
             this.campaignIntegrationService.updateTrigger(model, this.triggerUniquename).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                this.disableSubmitButton = false;
                 if (response?.status === "success") {
-                    this.disableSubmitButton = false;
                     this.toasty.showSnackBar("success", response?.body);
                     this.resetCommunicationForm();
                     this.showTriggerForm = false;

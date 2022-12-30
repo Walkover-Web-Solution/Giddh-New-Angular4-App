@@ -5,7 +5,7 @@
     (commonLocaleData)="commonLocaleData = $event"
     (translationComplete)="translationComplete($event)"
 >
-    <div class="msg91-container" *ngIf="!showTriggerForm">
+    <div class="msg91-container" *ngIf="!showTriggerForm && !(editCommunicationPlatform === 'MSG91')">
         <div class="menu" *ngIf="communicationPlatforms?.MSG91?.isConnected">
             <button mat-icon-button disableRipple id="edit-model-basic" [matMenuTriggerFor]="beforeMenu">
                 <span class="icon-dots-three-vertical"></span>
@@ -40,50 +40,48 @@
         </div>
     </div>
     <div
-        class="form"
+        class="verify-page mr-t15"
         *ngIf="
             (!isCommunicationPlatformsLoading && !communicationPlatforms?.MSG91?.isConnected) ||
             editCommunicationPlatform === 'MSG91'
         "
     >
-        <div class="input-field">
-            <p class="label auth-label">
-                {{ communicationPlatforms?.MSG91?.fields?.auth_key?.label
-                }}<span *ngIf="communicationPlatforms?.MSG91?.fields?.auth_key?.mandatory">*</span>
-            </p>
-            <text-field
-                [type]="'text'"
-                [cssClass]="'form-control mat-field-border auth_key_input '"
-                [name]="'title'"
-                [placeholder]="localeData?.communication?.auth_key"
-                [(ngModel)]="communicationPlatformAuthModel.authFields[0].value"
-                [ngClass]="{ 'fields-error': mandatoryFields.authKey }"
-            >
-            </text-field>
-        </div>
-        <div class="input-field">
-            <p class="label auth-label">{{ communicationPlatforms.MSG91?.fields?.whitelist_ips?.label }}</p>
-            <text-field
-                [type]="'text'"
-                [cssClass]="'form-control mat-field-border auth_key_ips'"
-                [name]="'auth'"
-                [readonly]="true"
-                [placeholder]="localeData?.communication?.whitelist_ips"
-                [(ngModel)]="communicationPlatforms.MSG91.fields.whitelist_ips.value"
-            >
-            </text-field>
-        </div>
         <button
-            mat-flat-button
-            color="primary"
-            class="mt-1"
-            [disabled]="isCommunicationPlatformVerificationInProcess"
-            (click)="verifyCommunicationPlatform('MSG91')"
+            class="cursor-pointer font-16 d-flex p-0 back-button mat-button"
+            (click)="backToHomePage($event)"
+            *ngIf="communicationPlatforms?.MSG91?.isConnected"
         >
-            {{ localeData?.communication?.verify_integration }}
+            <span class="mat-button-wrapper"><i class="icon-left"></i><span class="back-text">MSG91</span> </span>
         </button>
+        <div class="d-flex verify-form mr-t1">
+            <div class="input-field">
+                <p class="label auth-label">
+                    {{ communicationPlatforms?.MSG91?.fields?.auth_key?.label
+                    }}<span class="mandatory-label" *ngIf="communicationPlatforms?.MSG91?.fields?.auth_key?.mandatory"
+                        >*</span
+                    >
+                </p>
+                <text-field
+                    [type]="'text'"
+                    [cssClass]="'form-control mat-field-border auth_key_input '"
+                    [name]="'title'"
+                    [placeholder]="localeData?.communication?.auth_key"
+                    [(ngModel)]="communicationPlatformAuthModel.authFields[0].value"
+                    [ngClass]="{ 'fields-error': mandatoryFields.authKey }"
+                >
+                </text-field>
+            </div>
+            <button
+                mat-flat-button
+                color="primary"
+                class="mt-1 verify-button"
+                [disabled]="isCommunicationPlatformVerificationInProcess"
+                (click)="verifyCommunicationPlatform('MSG91')"
+            >
+                {{ localeData?.communication?.verify_integration }}
+            </button>
+        </div>
     </div>
-
     <ng-container *ngIf="!editCommunicationPlatform">
         <button
             class="new-trigger"
@@ -187,7 +185,8 @@
                 triggerObj?.totalPages > 1 &&
                 !isActiveTriggersLoading &&
                 !showTriggerForm &&
-                activeTriggersDataSource?.length
+                activeTriggersDataSource?.length &&
+                communicationPlatforms?.MSG91?.isConnected
             "
         >
             <pagination
@@ -301,7 +300,7 @@
                 (click)="createNewTrigger()"
                 [disabled]="disableSubmitButton"
             >
-                {{ localeData?.communication?.create_trigger }}
+                {{ commonLocaleData?.app_create }}
             </button>
             <button
                 *ngIf="triggerMode === 'update'"
@@ -310,55 +309,69 @@
                 (click)="updateTrigger()"
                 [disabled]="disableSubmitButton"
             >
-                {{ localeData?.communication?.update_trigger }}
+                {{ commonLocaleData?.app_update }}
             </button>
         </div>
-        <div class="trigger-form-right-side" *ngIf="showVariableMapping">
-            <div class="dropdown-box">
+        <div class="trigger-form-right-side d-flex" *ngIf="showVariableMapping">
+            <div class="dropdown-box-1">
                 <div class="compose-trigger-dropdowns">
                     <div class="chiplist-wrapper">
-                        <select-multiple-fields
-                            [showError]="mandatoryFields.triggerToChiplist"
-                            [placeholder]="localeData?.communication?.select_to"
-                            [options]="triggerToDropdown"
-                            (selectedOption)="createTrigger.campaignDetails.to = $event"
-                            [selectedValues]="createTrigger.campaignDetails.to"
-                            [validations]="['email', 'mobile']"
-                            [name]="'to'"
-                            class="select-multiple-chiplist"
-                        ></select-multiple-fields>
-                        <br />
-                        <select-multiple-fields
-                            [placeholder]="localeData?.communication?.select_bcc"
-                            [options]="triggerBccDropdown"
-                            (selectedOption)="createTrigger.campaignDetails.bcc = $event"
-                            [selectedValues]="createTrigger.campaignDetails.bcc"
-                            [validations]="['email']"
-                            [name]="'cc'"
-                            class="select-multiple-chiplist"
-                        ></select-multiple-fields>
-                        <br />
-                        <select-multiple-fields
-                            [placeholder]="localeData?.communication?.select_cc"
-                            [options]="triggerCcDropdown"
-                            (selectedOption)="createTrigger.campaignDetails.cc = $event"
-                            [selectedValues]="createTrigger.campaignDetails.cc"
-                            [validations]="['email']"
-                            [name]="'bcc'"
-                            class="select-multiple-chiplist"
-                        ></select-multiple-fields>
+                        <div class="pd-l2 pd-r2">
+                            <select-multiple-fields
+                                [showError]="mandatoryFields.triggerToChiplist"
+                                [placeholder]="localeData?.communication?.select_to"
+                                [options]="triggerToDropdown"
+                                (selectedOption)="createTrigger.campaignDetails.to = $event"
+                                [selectedValues]="createTrigger.campaignDetails.to"
+                                [validations]="['email']"
+                                [name]="'to'"
+                                class="select-multiple-chiplist"
+                            ></select-multiple-fields>
+                        </div>
+                        <div class="border-left border-right pd-l2 pd-r2">
+                            <select-multiple-fields
+                                [placeholder]="localeData?.communication?.select_bcc"
+                                [options]="triggerBccDropdown"
+                                (selectedOption)="createTrigger.campaignDetails.bcc = $event"
+                                [selectedValues]="createTrigger.campaignDetails.bcc"
+                                [validations]="['email']"
+                                [name]="'cc'"
+                                class="select-multiple-chiplist"
+                            ></select-multiple-fields>
+                            <br />
+                            <select-multiple-fields
+                                [placeholder]="localeData?.communication?.select_cc"
+                                [options]="triggerCcDropdown"
+                                (selectedOption)="createTrigger.campaignDetails.cc = $event"
+                                [selectedValues]="createTrigger.campaignDetails.cc"
+                                [validations]="['email']"
+                                [name]="'bcc'"
+                                class="select-multiple-chiplist"
+                            ></select-multiple-fields>
+                            <br />
+                            <select-multiple-fields
+                                [placeholder]="localeData?.communication?.select_mobile"
+                                [options]="triggerMobileDropdown"
+                                (selectedOption)="createTrigger.campaignDetails.mobile = $event"
+                                [selectedValues]="createTrigger.campaignDetails.mobile"
+                                [validations]="['mobile']"
+                                [name]="'mobile'"
+                                class="select-multiple-chiplist"
+                            ></select-multiple-fields>
+                        </div>
+                        <mat-checkbox
+                            class="trigger-dropdown pd-l2 pd-r2"
+                            #sendVoucherPdf
+                            color="primary"
+                            name="voucherpdf"
+                            [(ngModel)]="createTrigger.campaignDetails.sendVoucherPdf"
+                            (change)="selectVoucherPdf($event.checked)"
+                            ><span class="compose">{{ localeData?.communication?.send_voucher }}</span>
+                        </mat-checkbox>
                     </div>
-                    <mat-checkbox
-                        class="trigger-dropdown"
-                        #sendVoucherPdf
-                        color="primary"
-                        name="voucherpdf"
-                        [(ngModel)]="createTrigger.campaignDetails.sendVoucherPdf"
-                        (change)="selectVoucherPdf($event.checked)"
-                        ><span class="compose">{{ localeData?.communication?.send_voucher }}</span>
-                    </mat-checkbox>
                 </div>
-                <br />
+            </div>
+            <div class="dropdown-box-2">
                 <p class="compose variables-bottom-border" *ngIf="createTrigger.campaignDetails.argsMapping?.length">
                     {{ localeData?.communication?.variables }}
                 </p>
@@ -380,8 +393,8 @@
                         </div>
                     </div>
                 </div>
-                <br />
             </div>
+            <div class="dropdown-box-3"></div>
         </div>
     </div>
 </ng-container>
