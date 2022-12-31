@@ -387,8 +387,8 @@ $custom-typography: mat-typography-config(
             padding-bottom: 1em !important;
         }
         .mat-form-field-label {
-            font-size: 14px !important;
-            color: var(--color-nero) !important;
+            font-size: 13px !important;
+            color: var(--color-common-senary-background-for-all-components) !important;
             padding-top: 10px;
         }
     }
@@ -419,9 +419,22 @@ $custom-typography: mat-typography-config(
         color: var(--color-common-senary-background-for-all-components) !important;
     }
 }
+.trigger-form {
+    .form-control {
+        font-size: 13px !important;
+    }
+}
+.button-trigger-form {
+    font-size: 13px !important;
+}
 .trigger-form-right-side {
     .border-left {
         border-left: 2px solid var(--color-secondary-input-bar-border) !important;
+    }
+    .mobile-margin {
+        .mat-form-field {
+            margin-top: 8px !important;
+        }
     }
 
     .mat-form-field {
@@ -437,7 +450,7 @@ $custom-typography: mat-typography-config(
             color: var(--color-chips-primary) !important;
             background-color: var(--color-body-background) !important;
             border: 1px solid var(--color-primary-login-box-body-text) !important;
-            font-size: 14px !important;
+            font-size: 13px !important;
 
             &:hover {
                 background-color: var(--color-sidebar-company-background) !important;
@@ -467,9 +480,10 @@ $custom-typography: mat-typography-config(
             }
 
             .mat-form-field-label {
-                font-size: 14px !important;
-                color: var(--color-nero) !important;
+                font-size: 13px !important;
+                color: var(--color-common-senary-background-for-all-components) !important;
                 padding-top: 10px;
+                font-weight: normal !important;
             }
         }
     }
@@ -565,6 +579,13 @@ $custom-typography: mat-typography-config(
         width: 38% !important;
     }
 
+    .small-button {
+        width: 100% !important;
+        margin-right: 0 !important;
+        float: left !important;
+        margin-bottom: 12px !important;
+        min-width: auto !important;
+    }
     .trigger-input {
         mat-select {
             float: left;
@@ -10448,6 +10469,20 @@ body.update-scroll-hidden {
 @media (max-width: 1024px) {
     .trigger-form-left-side {
         width: 30% !important;
+    }
+
+    .small-button {
+        width: 100% !important;
+        margin-right: 0 !important;
+        float: left !important;
+        margin-bottom: 12px !important;
+        min-width: auto !important;
+    }
+
+    .campaign-table {
+        .icon-visibility {
+            float: left !important;
+        }
     }
 
     .trigger-input {

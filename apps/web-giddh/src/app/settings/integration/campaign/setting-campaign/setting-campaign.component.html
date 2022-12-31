@@ -12,10 +12,10 @@
             </button>
             <mat-menu #beforeMenu="matMenu" xPosition="before">
                 <button mat-menu-item (click)="editCommunicationPlatform = 'MSG91'">
-                    <span>{{ localeData?.communication?.edit_platform }}</span>
+                    <span class="font-13">{{ localeData?.communication?.edit_platform }}</span>
                 </button>
                 <button mat-menu-item (click)="deleteCommunicationPlatform(communicationPlatforms?.MSG91?.uniqueName)">
-                    <span>{{ localeData?.communication?.remove_platform }}</span>
+                    <span class="font-13">{{ localeData?.communication?.remove_platform }}</span>
                 </button>
             </mat-menu>
         </div>
@@ -76,7 +76,7 @@
             <button
                 mat-flat-button
                 color="primary"
-                class="mt-1 verify-button"
+                class="mt-1 verify-button font-13"
                 [disabled]="isCommunicationPlatformVerificationInProcess"
                 (click)="verifyCommunicationPlatform('MSG91')"
             >
@@ -86,7 +86,7 @@
     </div>
     <ng-container *ngIf="!editCommunicationPlatform">
         <button
-            class="new-trigger"
+            class="new-trigger font-13"
             mat-flat-button
             color="primary"
             *ngIf="!showTriggerForm && communicationPlatforms?.MSG91?.isConnected"
@@ -212,7 +212,7 @@
         <div class="trigger-form-left-side">
             <div class="create-trigger-head">
                 <img class="return" src="{{ imgPath }}return.svg" alt="" (click)="backToListPage($event)" />
-                <p class="trigger-heading">
+                <p class="trigger-heading font-13">
                     {{
                         triggerMode === "create" || triggerMode === "copy"
                             ? localeData?.communication?.create_trigger
@@ -275,6 +275,7 @@
                     (onClear)="createTrigger.condition.subConditions[0].action = ''"
                 >
                     <mat-option
+                        class="font-13"
                         *ngFor="let action of subConditionAction"
                         [selected]="action?.isChecked"
                         [value]="action"
@@ -301,6 +302,7 @@
                 color="primary"
                 (click)="createNewTrigger()"
                 [disabled]="disableSubmitButton"
+                class="button-trigger-form"
             >
                 {{ commonLocaleData?.app_create }}
             </button>
@@ -310,6 +312,7 @@
                 color="primary"
                 (click)="updateTrigger()"
                 [disabled]="disableSubmitButton"
+                class="button-trigger-form"
             >
                 {{ commonLocaleData?.app_update }}
             </button>
@@ -319,6 +322,18 @@
                 <div class="compose-trigger-dropdowns">
                     <div class="chiplist-wrapper">
                         <div class="pd-l2 pd-r2">
+                            <span class="dropdown-heading">{{ localeData?.communication?.receiver }}</span>
+                            <select-multiple-fields
+                                [placeholder]="localeData?.communication?.select_mobile"
+                                [options]="triggerMobileDropdown"
+                                (selectedOption)="createTrigger.campaignDetails.mobile = $event"
+                                [selectedValues]="createTrigger.campaignDetails.mobile"
+                                [validations]="['mobile']"
+                                [name]="'mobile'"
+                                class="select-multiple-chiplist mobile-margin"
+                            ></select-multiple-fields>
+                        </div>
+                        <div class="border-left border-right pd-l2 pd-r2">
                             <select-multiple-fields
                                 [showError]="mandatoryFields.triggerToChiplist"
                                 [placeholder]="localeData?.communication?.select_to"
@@ -329,8 +344,6 @@
                                 [name]="'to'"
                                 class="select-multiple-chiplist"
                             ></select-multiple-fields>
-                        </div>
-                        <div class="border-left border-right pd-l2 pd-r2">
                             <select-multiple-fields
                                 [placeholder]="localeData?.communication?.select_bcc"
                                 [options]="triggerBccDropdown"
@@ -348,16 +361,6 @@
                                 [selectedValues]="createTrigger.campaignDetails.cc"
                                 [validations]="['email']"
                                 [name]="'bcc'"
-                                class="select-multiple-chiplist"
-                            ></select-multiple-fields>
-                            <br />
-                            <select-multiple-fields
-                                [placeholder]="localeData?.communication?.select_mobile"
-                                [options]="triggerMobileDropdown"
-                                (selectedOption)="createTrigger.campaignDetails.mobile = $event"
-                                [selectedValues]="createTrigger.campaignDetails.mobile"
-                                [validations]="['mobile']"
-                                [name]="'mobile'"
                                 class="select-multiple-chiplist"
                             ></select-multiple-fields>
                         </div>

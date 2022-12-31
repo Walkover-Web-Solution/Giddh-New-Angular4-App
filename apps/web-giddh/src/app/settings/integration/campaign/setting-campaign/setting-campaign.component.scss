@@ -18,15 +18,14 @@
 }
 
 .verify-form {
-    align-items: baseline;
-
     .verify-button {
         height: 36px;
+        margin-top: 28px !important;
     }
 
     .input-field {
         margin-right: 5px;
-        width: 15%;
+        width: 300px;
     }
 
     .back-button {
@@ -40,7 +39,7 @@
     margin-top: 5px;
     margin-bottom: 5px;
     color: var(--color-company-profile-input-label);
-    font-size: 12px !important;
+    font-size: 13px !important;
 }
 
 .table-content {
@@ -81,7 +80,7 @@
     .integrate {
         p {
             color: var(--color-master-page-input-label);
-            font-size: 14px;
+            font-size: 13px;
             margin-top: 12px;
         }
     }
@@ -111,7 +110,7 @@
         box-shadow: none;
 
         .smaller-font {
-            font-size: 12px;
+            font-size: 13px;
         }
 
         .active-trigger-title-width {
@@ -153,7 +152,7 @@
 
     p {
         padding: 20px 0px 0px 15px;
-        font-size: 14px;
+        font-size: 13px;
     }
 
     table {
@@ -181,7 +180,7 @@
         }
 
         .mat-row {
-            font-size: 20px !important;
+            font-size: 13px !important;
         }
 
         .table3-button {
@@ -197,7 +196,7 @@
         width: 20%;
 
         .label {
-            font-size: 12px;
+            font-size: 13px;
 
             span {
                 color: var(--color-primary-login-hash-tag);
@@ -232,12 +231,18 @@
     color: var(--color-primary-login-hash-tag);
 }
 
+.dropdown-heading {
+    font-size: 13px !important;
+    font-weight: bold;
+    color: var(--color-nero) !important;
+}
+
 .trigger-form {
     display: flex;
     margin: 10px 0px 0px 0px;
 
     .trigger-form-left-side {
-        width: 14%;
+        width: 20%;
         height: 100%;
 
         .create-trigger-head {
@@ -248,8 +253,6 @@
             .trigger-heading {
                 margin-left: 10px;
                 display: inline-block;
-                font-weight: 600;
-                font-size: 14px;
                 color: var(--color-nero) !important;
             }
 
@@ -264,7 +267,7 @@
             margin-bottom: 10px;
 
             .trigger-input-label {
-                font-size: 12px;
+                font-size: 13px;
                 float: left;
                 width: 100%;
                 margin-top: 5px;
@@ -277,12 +280,12 @@
 
             input,
             mat-select {
-                width: 256px;
+                width: 100%;
                 height: 36px;
                 border: none;
                 background-color: var(--color-common-primary-text);
                 padding-left: 10px;
-                font-size: 14px;
+                font-size: 13px;
                 border-radius: 5px;
             }
 
@@ -298,22 +301,22 @@
     }
 
     .trigger-form-right-side {
-        width: 100%;
+        width: 80%;
         height: 100%;
         padding-left: 20px;
 
         .compose {
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 700;
         }
 
         .unit-value {
-            font-size: 14px;
+            font-size: 13px;
             margin-bottom: -18px;
         }
 
         .variables-bottom-border {
-            margin-bottom: 18px;
+            margin-bottom: 5px;
             padding-bottom: 5px;
             color: var(--color-nero) !important;
             font-weight: none !important;
@@ -329,7 +332,7 @@
                 color: #212528;
                 border: none;
                 padding-left: 10px;
-                font-size: 14px;
+                font-size: 13px;
                 display: flex;
                 align-items: center;
                 padding-left: 10px;
@@ -356,8 +359,8 @@
         }
 
         .dropdown-box-1 {
-            margin-top: 69px;
-            width: 33%;
+            margin-top: 53px;
+            width: 35%;
 
             .dropdown-list {
                 display: inline-block;
@@ -369,12 +372,12 @@
                     margin-left: 10px;
                     border-radius: 5px;
                     padding: 2px 6px 2px 6px;
-                    font-size: 14px;
+                    font-size: 13px;
                 }
 
                 .dropdown-list-label {
                     font-weight: 600;
-                    font-size: 15px;
+                    font-size: 13px;
                 }
             }
 
@@ -392,8 +395,8 @@
         }
 
         .dropdown-box-2 {
-            margin-top: 90px;
-            width: 33%;
+            margin-top: 60px;
+            width: 35%;
             padding-left: 20px;
             padding-right: 20px;
 
@@ -407,12 +410,12 @@
                     margin-left: 10px;
                     border-radius: 5px;
                     padding: 2px 6px 2px 6px;
-                    font-size: 14px;
+                    font-size: 13px;
                 }
 
                 .dropdown-list-label {
                     font-weight: 600;
-                    font-size: 15px;
+                    font-size: 13px;
                 }
             }
 
@@ -431,7 +434,7 @@
 
         .dropdown-box-3 {
             margin-top: 60px;
-            width: 33%;
+            width: 10%;
             padding-left: 20px;
             padding-right: 20px;
         }
@@ -440,7 +443,7 @@
 
 .unit-mapping-grid-list {
     .grid-box {
-        font-size: 14px;
+        font-size: 13px;
     }
 
     .grid-box-head,

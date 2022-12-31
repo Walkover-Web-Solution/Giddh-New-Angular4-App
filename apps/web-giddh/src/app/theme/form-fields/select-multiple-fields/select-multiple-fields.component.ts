@@ -2,6 +2,7 @@ import { COMMA, ENTER } from "@angular/cdk/keycodes";
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from "@angular/core";
 import { FormControl } from "@angular/forms";
 import { MatAutocompleteTrigger } from "@angular/material/autocomplete";
+import { MatChipInputEvent } from "@angular/material/chips";
 import { ReplaySubject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { EMAIL_VALIDATION_REGEX, MOBILE_REGEX_PATTERN } from "../../../app.constant";
@@ -40,7 +41,7 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
     /** Filtered options to show in autocomplete list */
     public fieldFilteredOptions: IOption[] = [];
     /** Emit with seperate code for chiplist */
-    public separatorKeysCodes: number[] = [ENTER];
+    public separatorKeysCodes: number[] = [ENTER, COMMA];
     /** Subject to release subscriptions */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** True if we need to allow adding of new chips */

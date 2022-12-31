@@ -16,7 +16,6 @@
             [placeholder]="placeholder"
             [matAutocomplete]="auto"
             [matChipInputFor]="matChipList"
-            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
             [matChipInputAddOnBlur]="!auto.isOpen"
             (matChipInputTokenEnd)="addChip($event)"
             [ngClass]="{ 'chiplist-error': showError }"
@@ -26,6 +25,7 @@
             [autocomplete]="'off'"
             matAutocompletePosition="auto"
             class="select-multiple-field-input"
+            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
         />
     </mat-chip-list>
     <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectOption($event); selectField.value = ''">
