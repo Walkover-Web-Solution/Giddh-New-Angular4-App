@@ -579,6 +579,13 @@ $custom-typography: mat-typography-config(
         width: 38% !important;
     }
 
+    .small-button {
+        width: 100% !important;
+        margin-right: 0 !important;
+        float: left !important;
+        margin-bottom: 12px !important;
+        min-width: auto !important;
+    }
     .trigger-input {
         mat-select {
             float: left;
@@ -10462,6 +10469,20 @@ body.update-scroll-hidden {
 @media (max-width: 1024px) {
     .trigger-form-left-side {
         width: 30% !important;
+    }
+
+    .small-button {
+        width: 100% !important;
+        margin-right: 0 !important;
+        float: left !important;
+        margin-bottom: 12px !important;
+        min-width: auto !important;
+    }
+
+    .campaign-table {
+        .icon-visibility {
+            float: left !important;
+        }
     }
 
     .trigger-input {
