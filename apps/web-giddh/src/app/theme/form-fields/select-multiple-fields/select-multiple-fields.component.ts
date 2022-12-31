@@ -32,8 +32,6 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
     @Input() public showError: boolean = false;
     /** Name of search field */
     @Input() public name: any = "";
-    /** Split on comma  */
-    @Input() public splitOnComma = true;
     /** Callback for option selected */
     @Output() public selectedOption: EventEmitter<any> = new EventEmitter<any>();
     /** List of chips based on selected values */
@@ -43,7 +41,7 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
     /** Filtered options to show in autocomplete list */
     public fieldFilteredOptions: IOption[] = [];
     /** Emit with seperate code for chiplist */
-    public separatorKeysCodes: number[] = [ENTER];
+    public separatorKeysCodes: number[] = [ENTER, COMMA];
     /** Subject to release subscriptions */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** True if we need to allow adding of new chips */
@@ -76,7 +74,7 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
         if (changes?.options) {
             this.fieldFilteredOptions = cloneDeep(changes.options.currentValue);
         }
-        if (this.splitOnComma && changes?.selectedValues && changes.selectedValues.currentValue) {
+        if (changes?.selectedValues && changes.selectedValues.currentValue) {
             if (typeof changes.selectedValues.currentValue === "string") {
                 this.chipList = cloneDeep(changes.selectedValues.currentValue?.split(","));
             } else {
