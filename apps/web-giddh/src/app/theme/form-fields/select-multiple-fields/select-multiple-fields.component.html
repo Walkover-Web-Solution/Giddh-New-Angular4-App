@@ -25,6 +25,7 @@
             [autocomplete]="'off'"
             matAutocompletePosition="auto"
             class="select-multiple-field-input"
+            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
         />
     </mat-chip-list>
     <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectOption($event); selectField.value = ''">

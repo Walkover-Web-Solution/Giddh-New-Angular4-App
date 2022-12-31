@@ -322,7 +322,9 @@
                 <div class="compose-trigger-dropdowns">
                     <div class="chiplist-wrapper">
                         <div class="pd-l2 pd-r2">
-                            <span class="dropdown-heading">Receiver</span>
+                            <span class="dropdown-heading">{{
+                                localeData?.communication?.select_mobile?.receiver
+                            }}</span>
                             <select-multiple-fields
                                 [placeholder]="localeData?.communication?.select_mobile"
                                 [options]="triggerMobileDropdown"
@@ -392,7 +394,6 @@
                                 [options]="fieldsSuggestion"
                                 (selectedOption)="selectVariable($event, i)"
                                 [selectedValues]="variable?.value"
-                                [splitOnComma]="false"
                                 [name]="'variable_' + i"
                                 class="select-multiple-chiplist"
                             ></select-multiple-fields>

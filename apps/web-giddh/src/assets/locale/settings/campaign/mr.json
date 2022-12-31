@@ -51,6 +51,7 @@
         "invalid_arguments":"अवैध मोहिम तपशील वितर्क मॅपिंग",
         "invalid_to":"साठी अवैध",
         "invalid_title":"अवैध शीर्षक",
-        "msg91":"MSG91"
+        "msg91":"MSG91",
+        "receiver":"स्वीकारणारा"
     }
 }
