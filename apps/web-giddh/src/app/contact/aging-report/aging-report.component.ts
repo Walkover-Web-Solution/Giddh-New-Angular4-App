@@ -106,7 +106,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     /** Holds images folder path */
     public imgPath: string = "";
     /** False for on init call */
-    public defaultLoad : boolean = true;
+    public defaultLoad: boolean = true;
 
     constructor(
         public dialog: MatDialog,
@@ -304,7 +304,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
         this.dueAmountReportRequest.q = '';
         this.sort("name", "asc");
         this.showClearFilter = false;
-        this.defaultLoad =true;
+        this.defaultLoad = true;
     }
 
     public applyAdvanceSearch(request: ContactAdvanceSearchCommonModal) {
@@ -368,7 +368,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
         this.order = ord;
 
         this.dueAmountReportRequest.sort = ord;
-            this.getDueReport();
+        this.getDueReport();
     }
 
     /**
