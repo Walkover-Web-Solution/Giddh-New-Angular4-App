@@ -13477,10 +13477,12 @@ hamburger-menu {
 .stock-balance-wrapper {
     .search-warehouse-bar {
         .mat-form-field-infix {
-            height: 58px;
+            height: 60px;
             width: 200px;
             margin-top: -16px;
             padding: 16px 0px;
+            padding-top: 17px;
+            font-size: 16px;
 
             .mat-select-placeholder,
             mat-select-trigger {
@@ -13550,6 +13552,13 @@ hamburger-menu {
                 width: 230px;
                 color: var(--color-sidebar-primary-search-bar-background);
             }
+            .mat-form-field-infix {
+                width: 112px;
+                height: 34px;
+                color: var(--color-white);
+                padding-top: 22px;
+                font-size: 13px;
+            }
         }
 
         .group-searchbar {
@@ -13562,9 +13571,11 @@ hamburger-menu {
             input {
                 &.mat-form-field-autofill-control {
                     width: 167px;
-                    padding-left: 28px !important;
+                    padding-left: 32px !important;
                     background-color: var(--color-sidebar-primary-search-bar-background) !important;
-
+                    font-size: 13px !important;
+                    padding-top: 7px !important;
+                    border-radius: 5px;
                     &::placeholder {
                         color: var(--color-primary-search-bar-placeholder) !important;
                     }
