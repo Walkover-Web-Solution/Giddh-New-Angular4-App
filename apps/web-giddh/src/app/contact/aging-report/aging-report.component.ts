@@ -350,7 +350,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
         }
 
         this.isAdvanceSearchApplied = true;
-        this.showClearFilter = true;
+        this.showClearFilter = false;
         this.getDueReport();
     }
 
@@ -411,7 +411,6 @@ export class AgingReportComponent implements OnInit, OnDestroy {
      * @memberof AgingReportComponent
      */
     public handleClickOutside(event: any, element: any, searchedFieldName: string): void {
-        this.showClearFilter = true;
         if (searchedFieldName === "name") {
             if (this.searchedName.value) {
                 return;
