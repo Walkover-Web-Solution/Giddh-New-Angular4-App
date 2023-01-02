@@ -6,6 +6,9 @@
     }
     .import-table {
         width: 100%;
+        th {
+            z-index: 0 !important;
+        }
         .import-table-btn {
             color: var(--color-tertiary-button-text);
             background-color: var(--color-tertiary-button-background);
