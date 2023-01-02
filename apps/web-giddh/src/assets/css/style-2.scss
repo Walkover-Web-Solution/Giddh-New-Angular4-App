@@ -371,6 +371,12 @@ $custom-typography: mat-typography-config(
         }
     }
 }
+.import-page {
+    .linked-entities {
+        width: 200px;
+        margin-right: 0 !important;
+    }
+}
 @media screen and (max-width: 1366px) and (orientation: portrait) {
     .subscription-form-select {
         float: left !important;
