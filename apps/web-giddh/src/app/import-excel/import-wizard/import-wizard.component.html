@@ -28,7 +28,7 @@
                         </upload-file>
                     </ng-container>
 
-                    <ng-container *ngSwitchCase="2">
+                    <!-- <ng-container *ngSwitchCase="2">
                         <map-excel-data
                             [importData]="excelState?.importExcelData"
                             [entity]="entity"
@@ -37,13 +37,14 @@
                             (onNext)="mappingDone($event)"
                             (onBack)="onBack()"
                         ></map-excel-data>
-                    </ng-container>
+                    </ng-container> -->
 
-                    <ng-container *ngSwitchCase="3">
+                    <ng-container *ngSwitchCase="2">
                         <import-process
                             [entity]="entity"
                             [isLoading]="excelState?.requestState === 4"
                             [importData]="mappedData"
+                            [localeData]="localeData"
                             [commonLocaleData]="commonLocaleData"
                             (onSubmit)="onSubmit($event)"
                             (onBack)="onBack()"
