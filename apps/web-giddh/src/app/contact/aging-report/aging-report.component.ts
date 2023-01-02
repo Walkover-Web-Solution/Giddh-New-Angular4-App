@@ -105,6 +105,8 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     public showClearFilter: boolean = false;
     /** Holds images folder path */
     public imgPath: string = "";
+    /** False for on init call */
+    public defaultLoad: boolean = true;
 
     constructor(
         public dialog: MatDialog,
@@ -155,10 +157,10 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        this.getDueReport();
         this.imgPath = isElectron ? "assets/images/" : AppUrl + APP_FOLDER + "assets/images/";
         this.getDueAmountreportData();
         this.currentOrganizationType = this.generalService.currentOrganizationType;
-        this.getDueReport();
         this.store.dispatch(this.agingReportActions.GetDueRange());
         this.agingDropDownoptions$.subscribe(p => {
             this.agingDropDownoptions = cloneDeep(p);
@@ -169,11 +171,12 @@ export class AgingReportComponent implements OnInit, OnDestroy {
             distinctUntilChanged(),
             takeUntil(this.destroyed$),
         ).subscribe(term => {
-            if (term) {
-                this.showClearFilter = true;
+            if (!this.defaultLoad) {
+                this.showClearFilter = (term) ? true : false;
                 this.dueAmountReportRequest.q = term;
                 this.getDueReport();
             }
+            this.defaultLoad = false;
         });
 
         this.breakpointObserver
@@ -288,18 +291,20 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     }
 
     public resetAdvanceSearch() {
-        this.searchedName?.reset();
-        this.searchStr = "";
-        this.showNameSearch = false;
-        this.isAdvanceSearchApplied = false;
-        this.dueAmountReportRequest.q = '';
         this.commonRequest = new ContactAdvanceSearchCommonModal();
         this.agingAdvanceSearchModal = new AgingAdvanceSearchModal();
         if (this.agingReportAdvanceSearch) {
             this.agingReportAdvanceSearch.reset();
         }
+        this.searchStr$.next('');
+        this.searchedName?.reset();
+        this.searchStr = "";
+        this.showNameSearch = false;
+        this.isAdvanceSearchApplied = false;
+        this.dueAmountReportRequest.q = '';
         this.sort("name", "asc");
         this.showClearFilter = false;
+        this.defaultLoad = true;
     }
 
     public applyAdvanceSearch(request: ContactAdvanceSearchCommonModal) {
@@ -345,6 +350,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
         }
 
         this.isAdvanceSearchApplied = true;
+        this.showClearFilter = true;
         this.getDueReport();
     }
 
