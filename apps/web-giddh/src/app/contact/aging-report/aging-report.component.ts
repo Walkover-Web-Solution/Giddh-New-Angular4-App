@@ -105,6 +105,8 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     public showClearFilter: boolean = false;
     /** Holds images folder path */
     public imgPath: string = "";
+    /** False for on init call */
+    public defaultLoad : boolean = true;
 
     constructor(
         public dialog: MatDialog,
@@ -169,9 +171,12 @@ export class AgingReportComponent implements OnInit, OnDestroy {
             distinctUntilChanged(),
             takeUntil(this.destroyed$),
         ).subscribe(term => {
-                this.showClearFilter = (term) ? true  : false;
+            if (!this.defaultLoad) {
+                this.showClearFilter = (term) ? true : false;
                 this.dueAmountReportRequest.q = term;
                 this.getDueReport();
+            }
+            this.defaultLoad = false;
         });
 
         this.breakpointObserver
@@ -286,20 +291,20 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     }
 
     public resetAdvanceSearch() {
-        this.sort("name", "asc", false);
-        this.agingAdvanceSearchModal.totalDueAmount =0;
+        this.commonRequest = new ContactAdvanceSearchCommonModal();
+        this.agingAdvanceSearchModal = new AgingAdvanceSearchModal();
+        if (this.agingReportAdvanceSearch) {
+            this.agingReportAdvanceSearch.reset();
+        }
         this.searchStr$.next('');
         this.searchedName?.reset();
         this.searchStr = "";
         this.showNameSearch = false;
         this.isAdvanceSearchApplied = false;
         this.dueAmountReportRequest.q = '';
-        this.commonRequest = new ContactAdvanceSearchCommonModal();
-        this.agingAdvanceSearchModal = new AgingAdvanceSearchModal();
-        if (this.agingReportAdvanceSearch) {
-            this.agingReportAdvanceSearch.reset();
-        }
+        this.sort("name", "asc");
         this.showClearFilter = false;
+        this.defaultLoad =true;
     }
 
     public applyAdvanceSearch(request: ContactAdvanceSearchCommonModal) {
@@ -349,7 +354,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
         this.getDueReport();
     }
 
-    public sort(key: string, ord: "asc" | "desc" = "asc", callApi :boolean = true) {
+    public sort(key: string, ord: "asc" | "desc" = "asc") {
         this.showClearFilter = true;
         if (key.includes("range")) {
             this.dueAmountReportRequest.rangeCol = parseInt(key?.replace("range", ""));
@@ -363,9 +368,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
         this.order = ord;
 
         this.dueAmountReportRequest.sort = ord;
-        if(callApi){
             this.getDueReport();
-        }
     }
 
     /**
