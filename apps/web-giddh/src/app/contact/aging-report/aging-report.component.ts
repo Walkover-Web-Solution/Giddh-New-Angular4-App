@@ -155,10 +155,10 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        this.getDueReport();
         this.imgPath = isElectron ? "assets/images/" : AppUrl + APP_FOLDER + "assets/images/";
         this.getDueAmountreportData();
         this.currentOrganizationType = this.generalService.currentOrganizationType;
-        this.getDueReport();
         this.store.dispatch(this.agingReportActions.GetDueRange());
         this.agingDropDownoptions$.subscribe(p => {
             this.agingDropDownoptions = cloneDeep(p);
@@ -169,11 +169,9 @@ export class AgingReportComponent implements OnInit, OnDestroy {
             distinctUntilChanged(),
             takeUntil(this.destroyed$),
         ).subscribe(term => {
-            if (term) {
-                this.showClearFilter = true;
+                this.showClearFilter = (term) ? true  : false;
                 this.dueAmountReportRequest.q = term;
                 this.getDueReport();
-            }
         });
 
         this.breakpointObserver
@@ -288,6 +286,9 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     }
 
     public resetAdvanceSearch() {
+        this.sort("name", "asc", false);
+        this.agingAdvanceSearchModal.totalDueAmount =0;
+        this.searchStr$.next('');
         this.searchedName?.reset();
         this.searchStr = "";
         this.showNameSearch = false;
@@ -298,7 +299,6 @@ export class AgingReportComponent implements OnInit, OnDestroy {
         if (this.agingReportAdvanceSearch) {
             this.agingReportAdvanceSearch.reset();
         }
-        this.sort("name", "asc");
         this.showClearFilter = false;
     }
 
@@ -345,10 +345,11 @@ export class AgingReportComponent implements OnInit, OnDestroy {
         }
 
         this.isAdvanceSearchApplied = true;
+        this.showClearFilter = true;
         this.getDueReport();
     }
 
-    public sort(key: string, ord: "asc" | "desc" = "asc") {
+    public sort(key: string, ord: "asc" | "desc" = "asc", callApi :boolean = true) {
         this.showClearFilter = true;
         if (key.includes("range")) {
             this.dueAmountReportRequest.rangeCol = parseInt(key?.replace("range", ""));
@@ -362,7 +363,9 @@ export class AgingReportComponent implements OnInit, OnDestroy {
         this.order = ord;
 
         this.dueAmountReportRequest.sort = ord;
-        this.getDueReport();
+        if(callApi){
+            this.getDueReport();
+        }
     }
 
     /**
