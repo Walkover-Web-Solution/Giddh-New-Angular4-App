@@ -8,6 +8,10 @@
     margin-right: 29px;
 }
 
+.edit-buttons {
+    color: var(--color-nero) !important;
+}
+
 .auth_key_input {
     color: var(--color-nero) !important;
     background-color: var(--color-discount-search-bar-background) !important;
@@ -20,7 +24,7 @@
 .verify-form {
     .verify-button {
         height: 36px;
-        margin-top: 28px !important;
+        margin-top: 30px !important;
     }
 
     .input-field {
