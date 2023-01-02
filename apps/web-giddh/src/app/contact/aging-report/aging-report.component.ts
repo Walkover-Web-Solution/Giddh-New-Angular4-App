@@ -411,7 +411,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
      * @memberof AgingReportComponent
      */
     public handleClickOutside(event: any, element: any, searchedFieldName: string): void {
-        this.showClearFilter = false;
+        this.showClearFilter = true;
         if (searchedFieldName === "name") {
             if (this.searchedName.value) {
                 return;
