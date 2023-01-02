@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, Renderer2,
 import { FormControl } from "@angular/forms";
 import { select, Store } from "@ngrx/store";
 import { combineLatest, ReplaySubject } from "rxjs";
-import { debounceTime, distinctUntilChanged, takeUntil } from "rxjs/operators";
+import { debounceTime, distinctUntilChanged, findIndex, takeUntil } from "rxjs/operators";
 import { InventoryService } from "../../../services/inventory.service";
 import { AppState } from "../../../store";
 import { IOption } from "../../../theme/ng-virtual-select/sh-options.interface";
@@ -13,7 +13,6 @@ import { GroupStockReportRequest, StockReportRequest } from "../../../models/api
 import { SettingsFinancialYearActions } from "../../../actions/settings/financial-year/financial-year.action";
 import { GeneralService } from "../../../services/general.service";
 import { ToasterService } from "../../../services/toaster.service";
-import { MatAutocompleteTrigger } from "@angular/material/autocomplete";
 @Component({
 	selector: 'stock-balance',
 	templateUrl: './stock-balance.component.html',
@@ -123,7 +122,7 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
 	}
 
 	/**
-	* Get stock varients from stock unqiue name 
+	* Get stock varients from stock unqiue name
 	*
 	* @param {string} uniquename
 	* @memberof StockBalanceComponent
@@ -165,6 +164,8 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
 			}
 			let groupStockReportRequest = cloneDeep(this.GroupStockReportRequest);
 			delete groupStockReportRequest.warehouseUniqueName;
+            // console.log(this.GroupStockReportRequest.warehouseUniqueName, groupStockReportRequest, this.selectedWarehouse, this.allSelectedWarehouse);
+
 			this.inventoryService.GetGroupStocksReport_V3(groupStockReportRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
 				if (response) {
 					this.stocksList = response?.body?.stockReport;
@@ -172,6 +173,7 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
 					this.stocksList?.forEach(stock => {
 						stock.warehouses = [];
 						this.warehouses?.forEach(warehouse => {
+
 							stock.warehouses.push({ name: warehouse.name, uniqueName: warehouse?.uniqueName });
 						});
 					});
@@ -212,9 +214,24 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
 					if (warehouseStocksList?.length > 0) {
 						warehouseStocksList.forEach(warehouseStock => {
 							const stockFound = this.stocksList?.filter(stock => stock.stockUniqueName === warehouseStock?.stockUniqueName);
+                            // console.log(stockFound);
+
 							if (stockFound?.length > 0) {
 								if (stockFound[0]?.warehouses?.length > 0) {
 									const warehouseFound = stockFound[0]?.warehouses?.filter(warehouse => warehouse?.uniqueName === uniqueName);
+                                    console.log(warehouseFound);
+                                    // let isSelected = warehouseFound?.filter(selectedTax => selectedTax === uniqueName);
+                                    // console.log(isSelected);
+
+                                    if (!warehouseFound?.length) {
+                                        warehouseFound.isChecked = true;
+                                    } else {
+                                        let idx = findIndex(warehouseFound, (taxTemp) => taxTemp.uniqueName === uniqueName);
+                                        console.log(idx);
+
+                                        warehouseFound.splice(idx, 1);
+                                        warehouseFound.isChecked = false;
+                                    }
 									if (warehouseFound?.length > 0) {
 										warehouseFound[0].openingBalance = warehouseStock.openingBalance;
 									}
