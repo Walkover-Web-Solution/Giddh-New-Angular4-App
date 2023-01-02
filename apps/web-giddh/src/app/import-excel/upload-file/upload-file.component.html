@@ -80,6 +80,10 @@
         </div>
     </div>
     <div class="max-width-500 center-block mr-t05 clearfix">
+        <div class="checkbox mt-1">
+            <input type="checkbox" name="isHeaderProvided" id="is-header-provided" [(ngModel)]="isHeaderProvided" />
+            {{ localeData?.header_provided }}
+        </div>
         <button class="btn btn-sm btn-link" type="button" (click)="downloadSampleFile(entity)">
             {{ localeData?.download_sample_xls }}
         </button>

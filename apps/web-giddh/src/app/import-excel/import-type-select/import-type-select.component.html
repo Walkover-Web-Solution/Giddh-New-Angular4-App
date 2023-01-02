@@ -5,7 +5,7 @@
     (commonLocaleData)="commonLocaleData = $event"
 >
     <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
-    <div class="row">
+    <div class="row width-100">
         <div class="col-12">
             <div class="pd-t2 mt-2">
                 <div class="text-center mr-t2 mr-b2">
@@ -14,7 +14,7 @@
                     <a
                         href="javascript:void 0"
                         class="text-link-2 mt-1 d-block text-center"
-                        [routerLink]="['/pages', 'import', 'report', 'import-report']"
+                        [routerLink]="['/pages', 'downloads', 'imports']"
                         >{{ localeData?.previous_imports }}</a
                     >
                 </div>

@@ -45,6 +45,7 @@ export interface ImportExcelResponseData {
     data: ResponseData;
     giddhHeaders?: string[];
     isHeaderProvided?: boolean;
+    requestId?: any;
 }
 
 export interface ImportExcelRequestData {

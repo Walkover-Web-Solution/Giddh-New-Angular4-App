@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ImportExcelRequestData, ImportExcelRequestStates, ImportExcelResponseData, ImportExcelState, ImportExcelStatusPaginatedResponse, UploadExceltableResponse } from '../../models/api-models/import-excel';
+import { ImportExcelRequestStates, ImportExcelResponseData, ImportExcelState, ImportExcelStatusPaginatedResponse, UploadExceltableResponse } from '../../models/api-models/import-excel';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
 import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -97,7 +97,23 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
             this.isUploadInProgress = false;
             if (response?.status === "success" && response.body) {
                 this.excelState.requestState = ImportExcelRequestStates.UploadFileSuccess;
-                this.excelState.importExcelData = { ...response.body, isHeaderProvided: true };
+                this.excelState.importExcelData = { ...response.body, isHeaderProvided: data.isHeaderProvided };
+
+                this.mappedData = {
+                    ...this.excelState.importExcelData,
+                    data: {
+                        items: this.excelState.importExcelData?.data?.items.map(p => {
+                            p.row = p.row.map((pr, index) => {
+                                pr.columnNumber = index?.toString();
+                                return pr;
+                            });
+                            return p;
+                        }),
+                        numRows: 0, 
+                        totalRows: 0
+                    }
+                };
+
                 this.dataChanged(this.excelState);
             } else {
                 this.excelState.requestState = ImportExcelRequestStates.UploadFileError;
@@ -132,7 +148,7 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
         this.router.navigate(['/pages', 'downloads', 'imports']);
     }
 
-    public onSubmit(data: ImportExcelRequestData) {
+    public onSubmit(data: any) {
         if (this.currentBranch) {
             data.branchUniqueName = this.currentBranch;
         }
