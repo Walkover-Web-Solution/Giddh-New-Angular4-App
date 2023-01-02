@@ -3,7 +3,8 @@
         *ngIf="
             (dueAmountReportData$ | async)?.results?.length ||
             (getAgingReportRequestInProcess$ | async) ||
-            showClearFilter
+            showClearFilter ||
+            isAdvanceSearchApplied
         "
         class="top-bar aging-top-bar d-flex justify-content-between"
     >
@@ -174,7 +175,8 @@
                     *ngIf="
                         !(dueAmountReportData$ | async)?.results?.length &&
                         !(getAgingReportRequestInProcess$ | async) &&
-                        !showClearFilter
+                        !showClearFilter &&
+                        !isAdvanceSearchApplied
                     "
                 >
                     <img class="customer-img" src="{{ imgPath }}customer-vendor/stock-photo.png" alt="" />
@@ -188,7 +190,7 @@
                 *ngIf="
                     !(dueAmountReportData$ | async)?.results?.length &&
                     !(getAgingReportRequestInProcess$ | async) &&
-                    showClearFilter
+                    (showClearFilter || isAdvanceSearchApplied)
                 "
             >
                 <no-data [secondaryMessageClass]="'p-0'"></no-data>
