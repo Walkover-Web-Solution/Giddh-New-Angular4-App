@@ -2352,6 +2352,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             observableCombineLatest([this.lc.activeAccount$, this.lc.companyProfile$]).pipe(takeUntil(this.destroyed$)).subscribe(data => {
 
                 if (data[0] && data[1]) {
+
                     let profile = cloneDeep(data[1]);
                     this.lc.activeAccount = data[0];
                     this.loadDefaultSearchSuggestions();
@@ -2360,7 +2361,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     this.entryUniqueNamesForBulkAction = [];
                     this.needToShowLoader = true;
                     this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
-
+                    this.getBankTransactions();
                     let accountDetails: AccountResponse | AccountResponseV2 = data[0];
                     let parentOfAccount = accountDetails.parentGroups[0];
 
@@ -2368,9 +2369,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     this.accountUniquename = accountDetails?.uniqueName;
 
                     this.isBankOrCashAccount = accountDetails.parentGroups.some((grp) => grp?.uniqueName === 'bankaccounts' || grp?.uniqueName === 'loanandoverdraft');
-                    if (this.isBankOrCashAccount) {
-                        this.getBankTransactions();
-                    }
                     if (accountDetails.currency && profile.baseCurrency) {
                         this.isLedgerAccountAllowsMultiCurrency = accountDetails.currency && accountDetails.currency !== profile.baseCurrency;
                     } else {
