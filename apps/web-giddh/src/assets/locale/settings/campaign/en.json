@@ -21,6 +21,7 @@
         "sub_entity": "Sub Entity",
         "campaign": "Campaign",
         "action": "Action",
+        "select_mobile": "Select Mobile Number",
         "select_to": "Select To",
         "select_bcc": "Select Bcc",
         "select_cc": "Select Cc",
@@ -28,7 +29,7 @@
         "select_entity": "Choose Entity",
         "select_sub_entity": "Choose Sub Entity",
         "select_campaign": "Choose Campaign",
-        "send_voucher":"Send Voucher Pdf"  ,
+        "send_voucher":"Voucher pdf as attachment"  ,
         "variables":"Variables",
         "select_suggestions":"Select Suggestion",
         "name_trigger":"Name Trigger",
@@ -48,7 +49,9 @@
         "invalid_sub_entity":"Invalid Sub Entity",
         "invalid_entity":"Invalid Entity",
         "invalid_arguments":"Invalid Campaign Details Arguments Mapping",
-        "invalid_to":"Invalid  To ",
-        "invalid_title":"Invalid  Title"
+        "invalid_to":"Invalid To",
+        "invalid_title":"Invalid Title",
+        "msg91":"MSG91",
+        "receiver":"Receiver"
     }
 }

@@ -21,6 +21,7 @@
         "sub_entity": "उप संस्था",
         "campaign": "मोहीम",
         "action": "कृती",
+        "select_mobile": "मोबाईल नंबर निवडा",
         "select_to": "प्रति निवडा",
         "select_bcc": "Bcc निवडा",
         "select_cc": "Cc निवडा",
@@ -28,7 +29,7 @@
         "select_entity": "एंटिटी निवडा",
         "select_sub_entity": "सब एंटिटी निवडा",
         "select_campaign": "मोहीम निवडा",
-        "send_voucher":"व्हाउचर पीडीएफ पाठवा"  ,
+        "send_voucher":"संलग्नक म्हणून व्हाउचर pdf"  ,
         "variables":"चल",
         "select_suggestions":"सूचना निवडा",
         "name_trigger":"नाव ट्रिगर",
@@ -49,6 +50,8 @@
         "invalid_entity":"अवैध अस्तित्व",
         "invalid_arguments":"अवैध मोहिम तपशील वितर्क मॅपिंग",
         "invalid_to":"साठी अवैध",
-        "invalid_title":"अवैध शीर्षक"
+        "invalid_title":"अवैध शीर्षक",
+        "msg91":"MSG91",
+        "receiver":"स्वीकारणारा"
     }
 }

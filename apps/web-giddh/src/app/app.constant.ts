@@ -299,7 +299,7 @@ export const SETTING_INTEGRATION_TABS_V1 = {
 export const EMAIL_VALIDATION_REGEX = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 /** Mobile  Validation Regex */
-export const MOBILE_REGEX_PATTERN = /^([0|\+[0-9]{1,5})?([7-9][0-9]{9})$/;
+export const MOBILE_REGEX_PATTERN = /^([0|\+[0-9]{1,5})?([6-9][0-9]{9})$/;
 
 /** E-invoice statuses */
 export enum EInvoiceStatus {

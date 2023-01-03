@@ -489,16 +489,25 @@
                         </span>
                         <span class="success copied-url" *ngIf="isCopied">{{ localeData?.tally?.copied }}</span>
                     </div>
-                    <div class="form-group clearfix mb-0 doc-link">
-                        <a target="_blank" class="btn btn-link" [routerLink]="['/pages/user-details/auth-key']">{{
-                            localeData?.email?.auth_key_label
-                        }}</a>
-                        <a
-                            target="_blank"
-                            class="btn btn-link"
-                            href="https://giddh.com/help/sync-with-tally-1591360375828781"
-                            >{{ localeData?.tally?.help_documentation }}</a
-                        >
+                    <div class="form-group clearfix mb-0 doc-link mr-l15">
+                        <ul>
+                            <li>
+                                <a
+                                    target="_blank"
+                                    class="btn btn-link"
+                                    [routerLink]="['/pages/user-details/auth-key']"
+                                    >{{ localeData?.email?.auth_key_label }}</a
+                                >
+                            </li>
+                            <li>
+                                <a
+                                    target="_blank"
+                                    class="btn btn-link"
+                                    href="https://giddh.com/help/sync-with-tally-1591360375828781"
+                                    >{{ localeData?.tally?.help_documentation }}</a
+                                >
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </mat-tab>
