@@ -10037,6 +10037,7 @@ giddh-datepicker {
                     height: 40px;
                     display: flex;
                     align-items: center;
+                    float: left;
                 }
             }
         }
@@ -10053,6 +10054,7 @@ giddh-datepicker {
             .mat-menu-content {
                 padding-top: 0;
                 padding-bottom: 0;
+                width: 164px;
             }
         }
     }

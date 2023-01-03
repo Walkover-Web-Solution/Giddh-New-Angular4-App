@@ -24,7 +24,6 @@
                             "
                             *ngFor="let warehouse of warehouses"
                             [value]="warehouse?.uniqueName"
-                            [selected]="warehouse.isChecked"
                         >
                             {{ warehouse.name ?? "-" }}
                         </mat-option>
@@ -38,12 +37,24 @@
             </button> -->
             <button mat-flat-button [matMenuTriggerFor]="menu" class="filter-btn">
                 <img src="{{ imgPath }}filter.svg" alt="filter-button" />
-                <mat-menu #menu="matMenu">
-                    <button mat-menu-item (click)="showUniqueName = !showUniqueName; $event.stopPropagation()">
-                        <mat-checkbox color="primary" [(ngModel)]="showUniqueName">Unique Name </mat-checkbox>
+                <mat-menu #menu="matMenu" class="stock-menu">
+                    <button
+                        mat-menu-item
+                        (click)="$event.stopPropagation()"
+                        (keydown.enter)="showUniqueName = !showUniqueName"
+                    >
+                        <mat-checkbox class="pull-left w-100" color="primary" [(ngModel)]="showUniqueName"
+                            >Unique Name
+                        </mat-checkbox>
                     </button>
-                    <button mat-menu-item (click)="showGroupName = !showGroupName; $event.stopPropagation()">
-                        <mat-checkbox color="primary" [(ngModel)]="showGroupName">Stock Group</mat-checkbox>
+                    <button
+                        mat-menu-item
+                        (click)="$event.stopPropagation()"
+                        (keydown.enter)="showGroupName = !showGroupName"
+                    >
+                        <mat-checkbox class="pull-left w-100" color="primary" [(ngModel)]="showGroupName"
+                            >Stock Group</mat-checkbox
+                        >
                     </button>
                 </mat-menu>
             </button>
@@ -277,5 +288,24 @@
                 No Data Found
             </div>
         </div>
+    </div>
+    <div
+        class="pagination-wrapper"
+        *ngIf="GroupStockReportRequest?.totalItems > GroupStockReportRequest.count && !isLoading"
+    >
+        <pagination
+            [totalItems]="GroupStockReportRequest?.totalItems"
+            [(ngModel)]="GroupStockReportRequest.page"
+            [maxSize]="5"
+            class="pagination-sm"
+            [boundaryLinks]="true"
+            [itemsPerPage]="GroupStockReportRequest.count"
+            [rotate]="false"
+            (pageChanged)="pageChanged($event)"
+            [firstText]="commonLocaleData?.app_first"
+            [previousText]="commonLocaleData?.app_previous"
+            [nextText]="commonLocaleData?.app_next"
+            [lastText]="commonLocaleData?.app_last"
+        ></pagination>
     </div>
 </div>
