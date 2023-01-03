@@ -119,6 +119,9 @@
         "duration_error": "Please select duration for given amount",
         "required_field_error": "Please fill all required fields"
     },
+    "communication": {
+        "tab_heading": "Communication"
+    },
     "tally":{
         "help_documentation":"Help Documentation",
         "copied":"Copied...",

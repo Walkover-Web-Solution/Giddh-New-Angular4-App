@@ -15,14 +15,17 @@ import { DigitsOnlyModule } from "../../shared/helpers/directives/digitsOnly/dig
 import { TranslateDirectiveModule } from "../translate/translate.directive.module";
 import { NgxMaskModule } from "../../shared/helpers/directives/ngx-mask";
 import { ClickOutsideModule } from "ng-click-outside";
+import { MatChipsModule } from "@angular/material/chips";
 import { CdkScrollComponent } from "./cdk-scroll/cdk-scroll.component";
 import { CdkScrollModule } from "./cdk-scroll/cdk-scroll.module";
 import { ScrollingModule } from "@angular/cdk/scrolling";
+import { SelectMultipleFieldsComponent } from "./select-multiple-fields/select-multiple-fields.component";
 
 @NgModule({
     declarations: [
         TextFieldComponent,
         SelectFieldComponent,
+        SelectMultipleFieldsComponent,
         CdkScrollComponent
     ],
     imports: [
@@ -41,13 +44,14 @@ import { ScrollingModule } from "@angular/cdk/scrolling";
         DigitsOnlyModule,
         NgxMaskModule,
         ClickOutsideModule,
+        MatChipsModule,
         CdkScrollModule,
         ScrollingModule
-
     ],
     exports: [
         TextFieldComponent,
         SelectFieldComponent,
+        SelectMultipleFieldsComponent,
         MatFormFieldModule
     ]
 })

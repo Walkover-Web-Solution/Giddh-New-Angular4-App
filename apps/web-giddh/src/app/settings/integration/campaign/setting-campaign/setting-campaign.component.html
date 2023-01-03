@@ -1,0 +1,405 @@
+<ng-container
+    appTranslate
+    [file]="'settings/campaign'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+    (translationComplete)="translationComplete($event)"
+>
+    <div class="msg91-container" *ngIf="!showTriggerForm && !(editCommunicationPlatform === 'MSG91')">
+        <div class="menu" *ngIf="communicationPlatforms?.MSG91?.isConnected">
+            <button mat-icon-button disableRipple id="edit-model-basic" [matMenuTriggerFor]="beforeMenu">
+                <span class="icon-dots-three-vertical"></span>
+            </button>
+            <mat-menu #beforeMenu="matMenu" xPosition="before">
+                <button mat-menu-item (click)="editCommunicationPlatform = 'MSG91'">
+                    <span class="font-13 edit-buttons">{{ localeData?.communication?.edit_platform }}</span>
+                </button>
+                <button mat-menu-item (click)="deleteCommunicationPlatform(communicationPlatforms?.MSG91?.uniqueName)">
+                    <span class="font-13 edit-buttons">{{ localeData?.communication?.remove_platform }}</span>
+                </button>
+            </mat-menu>
+        </div>
+        <div class="image" *ngIf="!communicationPlatforms?.MSG91?.isConnected">
+            <img src="{{ imgPath }}msgOne.png" class="logo" alt="" />
+            <img src="{{ imgPath }}msgTwo.png" class="msg" alt="" />
+        </div>
+        <div class="image" *ngIf="communicationPlatforms?.MSG91?.isConnected">
+            <img src="{{ imgPath }}msgOne-color.png" class="logo" alt="" />
+            <img src="{{ imgPath }}msgTwo-color.png" class="msg" alt="" />
+        </div>
+        <div class="integrate mini-icons" *ngIf="communicationPlatforms?.MSG91?.isConnected">
+            <img src="{{ imgPath }}msg91.png" alt="" />
+            <img src="{{ imgPath }}p1.png" alt="" />
+            <img src="{{ imgPath }}whatsapp.png" alt="" />
+            <img src="{{ imgPath }}msg1.png" alt="" />
+            <img src="{{ imgPath }}91091.png" alt="" />
+            <img src="{{ imgPath }}say1.png" alt="" />
+        </div>
+        <div class="integrate" *ngIf="!communicationPlatforms?.MSG91?.isConnected">
+            <p>{{ localeData?.communication?.integrate_now }}</p>
+        </div>
+    </div>
+    <div
+        class="verify-page mr-t15"
+        *ngIf="
+            (!isCommunicationPlatformsLoading && !communicationPlatforms?.MSG91?.isConnected) ||
+            editCommunicationPlatform === 'MSG91'
+        "
+    >
+        <button
+            class="cursor-pointer font-16 d-flex p-0 back-button mat-button"
+            (click)="backToHomePage($event)"
+            *ngIf="communicationPlatforms?.MSG91?.isConnected"
+        >
+            <span class="mat-button-wrapper"
+                ><i class="icon-left"></i><span class="back-text">{{ localeData?.communication?.msg91 }}</span>
+            </span>
+        </button>
+        <div class="d-flex verify-form mr-t1">
+            <div class="input-field">
+                <p class="label auth-label">
+                    {{ communicationPlatforms?.MSG91?.fields?.auth_key?.label
+                    }}<span class="mandatory-label" *ngIf="communicationPlatforms?.MSG91?.fields?.auth_key?.mandatory"
+                        >*</span
+                    >
+                </p>
+                <text-field
+                    [type]="'text'"
+                    [cssClass]="'form-control mat-field-border auth_key_input '"
+                    [name]="'title'"
+                    [placeholder]="localeData?.communication?.auth_key"
+                    [(ngModel)]="communicationPlatformAuthModel.authFields[0].value"
+                    [ngClass]="{ 'fields-error': mandatoryFields.authKey }"
+                >
+                </text-field>
+            </div>
+            <button
+                mat-flat-button
+                color="primary"
+                class="mt-1 verify-button font-13"
+                [disabled]="isCommunicationPlatformVerificationInProcess"
+                (click)="verifyCommunicationPlatform('MSG91')"
+            >
+                {{ localeData?.communication?.verify_integration }}
+            </button>
+        </div>
+    </div>
+    <ng-container *ngIf="!editCommunicationPlatform">
+        <button
+            class="new-trigger font-13"
+            mat-flat-button
+            color="primary"
+            *ngIf="!showTriggerForm && communicationPlatforms?.MSG91?.isConnected"
+            (click)="toggleTriggerForm()"
+        >
+            {{ localeData?.communication?.create_new_trigger }}
+        </button>
+
+        <div
+            class="table-one table-content campaign-table"
+            *ngIf="
+                !isActiveTriggersLoading &&
+                !showTriggerForm &&
+                communicationPlatforms?.MSG91?.isConnected &&
+                activeTriggersDataSource?.length
+            "
+        >
+            <table mat-table [dataSource]="activeTriggersDataSource" class="mat-elevation-z8 giddh-table table">
+                <ng-container matColumnDef="title">
+                    <th class="active-trigger-title-width" mat-header-cell *matHeaderCellDef>
+                        {{ localeData?.communication?.title }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">{{ element.title }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="type">
+                    <th class="channel-width" mat-header-cell *matHeaderCellDef>
+                        {{ localeData?.communication?.type }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">{{ element.type }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="argsMapping">
+                    <th class="args-mapping-width" mat-header-cell *matHeaderCellDef>
+                        {{ localeData?.communication?.fields_mapping }}
+                    </th>
+                    <td class="args-mapping-variables" mat-cell *matCellDef="let element">{{ element.argsMapping }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="createdAt">
+                    <th class="created-at-width" mat-header-cell *matHeaderCellDef>
+                        {{ localeData?.communication?.created_at }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        {{ element.createdAt }}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="action">
+                    <th class="icons-left" mat-header-cell *matHeaderCellDef>
+                        {{ localeData?.communication?.action }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        <button
+                            class="small-button"
+                            mat-flat-button
+                            color="primary"
+                            (click)="updateTriggerStatus(element.uniqueName)"
+                        >
+                            {{
+                                element?.isActive > 0
+                                    ? localeData?.communication?.activated
+                                    : localeData?.communication?.deactivated
+                            }}
+                        </button>
+                        <img
+                            class="icon-visibility cursor-pointer"
+                            (click)="editTrigger(element, 'copy')"
+                            src="{{ imgPath }}copy.svg"
+                            alt=""
+                        />
+                        <img
+                            class="mr-l2 icon-visibility cursor-pointer"
+                            src="{{ imgPath }}edit.svg"
+                            alt=""
+                            (click)="editTrigger(element, 'update')"
+                        />
+                        <img
+                            class="mr-l2 icon-visibility cursor-pointer"
+                            src="{{ imgPath }}delete.svg"
+                            (click)="deleteTrigger(element.uniqueName)"
+                        />
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="activeTriggersColumns; sticky: true"></tr>
+                <tr mat-row *matRowDef="let row; columns: activeTriggersColumns"></tr>
+            </table>
+            <section class="no-logs" *ngIf="!activeTriggersDataSource?.length && !isActiveTriggersLoading">
+                <div class="no-data">
+                    <h1>{{ localeData?.communication?.no_triggers_found }}</h1>
+                </div>
+            </section>
+        </div>
+        <div
+            class="pagination-wrapper"
+            *ngIf="
+                triggerObj?.totalPages > 1 &&
+                !isActiveTriggersLoading &&
+                !showTriggerForm &&
+                activeTriggersDataSource?.length &&
+                communicationPlatforms?.MSG91?.isConnected
+            "
+        >
+            <pagination
+                [totalItems]="triggerObj?.totalItems"
+                [(ngModel)]="triggerObj.page"
+                [maxSize]="5"
+                class="pagination-sm"
+                [boundaryLinks]="true"
+                [itemsPerPage]="triggerObj?.count"
+                [rotate]="false"
+                (pageChanged)="pageChanged($event)"
+                [firstText]="commonLocaleData?.app_first"
+                [previousText]="commonLocaleData?.app_previous"
+                [nextText]="commonLocaleData?.app_next"
+                [lastText]="commonLocaleData?.app_last"
+            ></pagination>
+        </div>
+    </ng-container>
+    <!-- Page-6 to Page-9 -->
+    <div class="trigger-form" *ngIf="!editCommunicationPlatform && showTriggerForm">
+        <div class="trigger-form-left-side">
+            <div class="create-trigger-head">
+                <img class="return" src="{{ imgPath }}return.svg" alt="" (click)="backToListPage($event)" />
+                <p class="trigger-heading font-13">
+                    {{
+                        triggerMode === "create" || triggerMode === "copy"
+                            ? localeData?.communication?.create_trigger
+                            : localeData?.communication?.edit_trigger
+                    }}
+                </p>
+            </div>
+
+            <div class="trigger-input">
+                <p class="trigger-input-label">{{ localeData?.communication?.title }}<span>*</span></p>
+                <text-field
+                    [type]="'text'"
+                    [cssClass]="'form-control mat-field-border'"
+                    [placeholder]="localeData?.communication?.name_trigger"
+                    [name]="'trigger'"
+                    [(ngModel)]="createTrigger.title"
+                    [ngClass]="{ 'fields-error': mandatoryFields.title }"
+                    [allowValueReset]="true"
+                    (onClear)="createTrigger.title = ''"
+                >
+                </text-field>
+            </div>
+            <div class="trigger-input">
+                <p class="trigger-input-label">{{ localeData?.communication?.condition }}<span>*</span></p>
+                <select-field
+                    [cssClass]="'form-control mat-field-border'"
+                    [placeholder]="localeData?.communication?.select_condition"
+                    [options]="triggerCondition"
+                    (selectedOption)="selectConditions($event?.value)"
+                    [defaultValue]="createTrigger.condition.action.length ? createTrigger.condition.action[0] : ''"
+                    [ngClass]="{ 'fields-error': mandatoryFields.condition }"
+                    [allowValueReset]="true"
+                    (onClear)="createTrigger.condition.action[0] = ''"
+                ></select-field>
+            </div>
+            <div class="trigger-input">
+                <p class="trigger-input-label">{{ localeData?.communication?.entity }}<span>*</span></p>
+                <select-field
+                    [cssClass]="'form-control mat-field-border'"
+                    [placeholder]="localeData?.communication?.select_entity"
+                    [options]="triggerEntity"
+                    (selectedOption)="selectEntity($event?.value)"
+                    [defaultValue]="createTrigger.condition.entity"
+                    [ngClass]="{ 'fields-error': mandatoryFields.entity }"
+                    [allowValueReset]="true"
+                    (onClear)="createTrigger.condition.entity = ''"
+                ></select-field>
+            </div>
+            <div class="trigger-input">
+                <p class="trigger-input-label">{{ localeData?.communication?.sub_entity }}<span>*</span></p>
+                <mat-select
+                    name="subentity"
+                    class="form-control mat-field-border sub-entity-trigger"
+                    [placeholder]="localeData?.communication?.select_sub_entity"
+                    multiple
+                    [(ngModel)]="createTrigger.condition.subConditions[0].action"
+                    (selectionChange)="selectSubEntity($event?.value)"
+                    [ngClass]="{ 'fields-error': mandatoryFields.subConditions }"
+                    [allowValueReset]="true"
+                    (onClear)="createTrigger.condition.subConditions[0].action = ''"
+                >
+                    <mat-option
+                        class="font-13"
+                        *ngFor="let action of subConditionAction"
+                        [selected]="action?.isChecked"
+                        [value]="action"
+                        >{{ action | titlecase }}</mat-option
+                    >
+                </mat-select>
+            </div>
+            <div class="trigger-input">
+                <p class="trigger-input-label">{{ localeData?.communication?.campaign }}<span>*</span></p>
+                <select-field
+                    [cssClass]="'form-control mat-field-border'"
+                    [placeholder]="localeData?.communication?.select_campaign"
+                    [options]="campaignList"
+                    (selectedOption)="selectCampaign($event, true)"
+                    [defaultValue]="createTrigger.campaignDetails.campaignName"
+                    [ngClass]="{ 'fields-error': mandatoryFields.campaignSlug }"
+                    [allowValueReset]="true"
+                    (onClear)="createTrigger.campaignDetails.campaignName = ''"
+                ></select-field>
+            </div>
+            <button
+                *ngIf="triggerMode === 'create' || triggerMode === 'copy'"
+                mat-flat-button
+                color="primary"
+                (click)="createNewTrigger()"
+                [disabled]="disableSubmitButton"
+                class="button-trigger-form"
+            >
+                {{ commonLocaleData?.app_create }}
+            </button>
+            <button
+                *ngIf="triggerMode === 'update'"
+                mat-flat-button
+                color="primary"
+                (click)="updateTrigger()"
+                [disabled]="disableSubmitButton"
+                class="button-trigger-form"
+            >
+                {{ commonLocaleData?.app_update }}
+            </button>
+        </div>
+        <div class="trigger-form-right-side d-flex" *ngIf="showVariableMapping">
+            <div class="dropdown-box-1">
+                <div class="compose-trigger-dropdowns">
+                    <div class="chiplist-wrapper">
+                        <div class="pd-l2 pd-r2">
+                            <span class="dropdown-heading">{{ localeData?.communication?.receiver }}</span>
+                            <select-multiple-fields
+                                [placeholder]="localeData?.communication?.select_mobile"
+                                [options]="triggerMobileDropdown"
+                                (selectedOption)="createTrigger.campaignDetails.mobile = $event"
+                                [selectedValues]="createTrigger.campaignDetails.mobile"
+                                [validations]="['mobile']"
+                                [name]="'mobile'"
+                                class="select-multiple-chiplist mobile-margin"
+                            ></select-multiple-fields>
+                        </div>
+                        <div class="border-left border-right pd-l2 pd-r2">
+                            <select-multiple-fields
+                                [showError]="mandatoryFields.triggerToChiplist"
+                                [placeholder]="localeData?.communication?.select_to"
+                                [options]="triggerToDropdown"
+                                (selectedOption)="createTrigger.campaignDetails.to = $event"
+                                [selectedValues]="createTrigger.campaignDetails.to"
+                                [validations]="['email']"
+                                [name]="'to'"
+                                class="select-multiple-chiplist"
+                            ></select-multiple-fields>
+                            <select-multiple-fields
+                                [placeholder]="localeData?.communication?.select_bcc"
+                                [options]="triggerBccDropdown"
+                                (selectedOption)="createTrigger.campaignDetails.bcc = $event"
+                                [selectedValues]="createTrigger.campaignDetails.bcc"
+                                [validations]="['email']"
+                                [name]="'cc'"
+                                class="select-multiple-chiplist"
+                            ></select-multiple-fields>
+                            <br />
+                            <select-multiple-fields
+                                [placeholder]="localeData?.communication?.select_cc"
+                                [options]="triggerCcDropdown"
+                                (selectedOption)="createTrigger.campaignDetails.cc = $event"
+                                [selectedValues]="createTrigger.campaignDetails.cc"
+                                [validations]="['email']"
+                                [name]="'bcc'"
+                                class="select-multiple-chiplist"
+                            ></select-multiple-fields>
+                        </div>
+                        <mat-checkbox
+                            class="trigger-dropdown pd-l2 pd-r2"
+                            #sendVoucherPdf
+                            color="primary"
+                            name="voucherpdf"
+                            [(ngModel)]="createTrigger.campaignDetails.sendVoucherPdf"
+                            (change)="selectVoucherPdf($event.checked)"
+                            ><span class="compose">{{ localeData?.communication?.send_voucher }}</span>
+                        </mat-checkbox>
+                    </div>
+                </div>
+            </div>
+            <div class="dropdown-box-2">
+                <p class="compose variables-bottom-border" *ngIf="createTrigger.campaignDetails.argsMapping?.length">
+                    {{ localeData?.communication?.variables }}
+                </p>
+                <div class="variables-wrapper">
+                    <div
+                        class="grid-box grid-box-content campaign-grid-tile"
+                        *ngFor="let variable of createTrigger.campaignDetails.argsMapping; let i = index"
+                    >
+                        <div class="unit-value">{{ variable.name }}</div>
+                        <div class="map-unit-value">
+                            <select-multiple-fields
+                                [placeholder]="localeData?.communication?.select_suggestions"
+                                [options]="fieldsSuggestion"
+                                (selectedOption)="selectVariable($event, i)"
+                                [selectedValues]="variable?.value"
+                                [name]="'variable_' + i"
+                                class="select-multiple-chiplist"
+                            ></select-multiple-fields>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="dropdown-box-3"></div>
+        </div>
+    </div>
+</ng-container>
