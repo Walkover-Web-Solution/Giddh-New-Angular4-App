@@ -1,3 +1,4 @@
+import { PAGINATION_LIMIT } from '../../app.constant';
 import { IPaginatedResponse } from '../interfaces/paginatedResponse.interface';
 import { IAccountDetails, IManufacturingDetails, IStockDetail, IStockItem, IStockReport, IStockReportItem, IStocksItem, IStockTransaction, IStockUnit, IStockUnitItem, IStockUnitResponse } from '../interfaces/stocksItem.interface';
 
@@ -138,8 +139,10 @@ export class GroupStockReportRequest {
     public stockUniqueName: string;
     public from: string = '';
     public to: string = '';
-    public count: number = 20;
-    public page: number = 1;
+    public count: number = PAGINATION_LIMIT;
+    public page: number ;
+    public totalItems: number;
+    public totalPages: number;
     public entity: string;
     public value: string;
     public condition: string;
