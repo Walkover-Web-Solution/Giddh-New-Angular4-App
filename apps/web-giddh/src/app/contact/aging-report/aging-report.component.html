@@ -1,7 +1,12 @@
 <div class="container-fluid">
     <div
+        *ngIf="
+            (dueAmountReportData$ | async)?.results?.length ||
+            (getAgingReportRequestInProcess$ | async) ||
+            showClearFilter ||
+            isAdvanceSearchApplied
+        "
         class="top-bar aging-top-bar d-flex justify-content-between"
-        *ngIf="(dueAmountReportData$ | async)?.results?.length || (getAgingReportRequestInProcess$ | async)"
     >
         <div class="aging-form-inline">
             <div class="btn-group pull-left on-desktop-view">
@@ -164,16 +169,31 @@
                 </div>
                 <ng-container *ngTemplateOutlet="mainTable"></ng-container>
             </div>
-            <div
-                class="no-data"
-                *ngIf="!(dueAmountReportData$ | async)?.results?.length && !(getAgingReportRequestInProcess$ | async)"
-            >
-                <div class="align-item-center">
+            <div class="no-data">
+                <div
+                    class="align-item-center"
+                    *ngIf="
+                        !(dueAmountReportData$ | async)?.results?.length &&
+                        !(getAgingReportRequestInProcess$ | async) &&
+                        !showClearFilter &&
+                        !isAdvanceSearchApplied
+                    "
+                >
                     <img class="customer-img" src="{{ imgPath }}customer-vendor/stock-photo.png" alt="" />
                     <button mat-flat-button class="btn-sky-blue" (click)="createNewCustomerEvent.emit(true)">
                         {{ localeData?.new_customer }}
                     </button>
                 </div>
+            </div>
+            <div
+                class="no-data"
+                *ngIf="
+                    !(dueAmountReportData$ | async)?.results?.length &&
+                    !(getAgingReportRequestInProcess$ | async) &&
+                    (showClearFilter || isAdvanceSearchApplied)
+                "
+            >
+                <no-data [secondaryMessageClass]="'p-0'"></no-data>
             </div>
         </div>
     </div>
@@ -234,7 +254,6 @@
                 </ng-template>
             </mat-menu>
         </div>
-
         <table
             *ngIf="!(getAgingReportRequestInProcess$ | async)"
             mat-table
