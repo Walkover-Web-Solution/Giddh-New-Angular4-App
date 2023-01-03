@@ -65,6 +65,7 @@ import { ActivityLogsService } from "./activity-logs.service";
 import { DownloadsService } from "./downloads.service";
 import { CustomFieldsService } from "./custom-fields.service";
 import { ImportsService } from "./imports.service";
+import { CampaignIntegrationService } from "./campaign.integraion.service";
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -103,6 +104,7 @@ export class ServiceModule {
                 ActivityLogsService,
                 TlPlService,
                 SettingsIntegrationService,
+                CampaignIntegrationService,
                 SettingsProfileService,
                 SettingsTaxesService,
                 SettingsLinkedAccountsService,

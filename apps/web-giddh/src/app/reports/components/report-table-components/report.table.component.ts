@@ -63,7 +63,7 @@ export class ReportsTableComponent implements OnInit, OnDestroy {
         let to = item.to;
 
         if (from != null && to != null) {
-            this.router.navigate(['pages', 'reports', 'sales-detailed-expand'], { queryParams: { from: from, to: to, branchUniqueName: this.currentBranchUniqueName } });
+            this.router.navigate(['pages', 'reports', 'sales-detailed-expand'], { queryParams: { from: from, to: to, branchUniqueName: this.currentBranchUniqueName, interval: item.interval, selectedMonth: item.selectedMonth } });
         }
     }
 }
