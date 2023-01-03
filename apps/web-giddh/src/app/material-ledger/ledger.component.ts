@@ -673,7 +673,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
             }
 
             this.currencyTogglerModel = false;
-
             if (params['accountUniqueName']) {
                 this.isShowLedgerColumnarReportTable = false;
                 this.lc.accountUnq = params['accountUniqueName'];
@@ -719,7 +718,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     dateRange = this.generalService.dateConversionToSetComponentDatePicker(lt.from, lt.to);
                     this.selectedDateRange = { startDate: dayjs(dateRange.fromDate, GIDDH_DATE_FORMAT_MM_DD_YYYY), endDate: dayjs(dateRange.toDate, GIDDH_DATE_FORMAT_MM_DD_YYYY) };
                     this.selectedDateRangeUi = dayjs(dateRange.fromDate, GIDDH_DATE_FORMAT_MM_DD_YYYY).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateRange.toDate, GIDDH_DATE_FORMAT_MM_DD_YYYY).format(GIDDH_NEW_DATE_FORMAT_UI);
-                }
+          }
 
                 this.ledgerTransactions = lt;
 
@@ -2349,7 +2348,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
      */
     public translationComplete(event: boolean): void {
         if (event) {
-            let bankTransactionLoaded = false;
             observableCombineLatest([this.lc.activeAccount$, this.lc.companyProfile$]).pipe(takeUntil(this.destroyed$)).subscribe(data => {
 
                 if (data[0] && data[1]) {
@@ -2368,12 +2366,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     this.lc.getUnderstandingText(accountDetails?.accountType, accountDetails?.name, accountDetails?.parentGroups, this.localeData);
                     this.accountUniquename = accountDetails?.uniqueName;
 
-                    if (!bankTransactionLoaded) {
-                        this.getBankTransactions();
-                        bankTransactionLoaded = true;
-                    }
-
                     this.isBankOrCashAccount = accountDetails.parentGroups.some((grp) => grp?.uniqueName === 'bankaccounts' || grp?.uniqueName === 'loanandoverdraft');
+                    if (this.isBankOrCashAccount) {
+                        this.getBankTransactions();
+                    }
                     if (accountDetails.currency && profile.baseCurrency) {
                         this.isLedgerAccountAllowsMultiCurrency = accountDetails.currency && accountDetails.currency !== profile.baseCurrency;
                     } else {
