@@ -89,9 +89,9 @@ export class ImportProcessComponent {
         let mappings = [];
         let mappedColumns = [];
         this.sheetHeaders?.forEach((header, index) => {
-            const headerMatched = this.giddhHeaders?.filter(giddhHeader => giddhHeader?.label?.toLowerCase() === header?.toLowerCase());
+            const headerMatched = this.giddhHeaders?.filter(giddhHeader => !mappedColumns.includes(header?.toLowerCase()) && giddhHeader?.label?.toLowerCase() === header?.toLowerCase());
             if (headerMatched?.length) {
-                mappedColumns.push(headerMatched[0]);
+                mappedColumns.push(headerMatched[0]?.label?.toLowerCase());
                 mappings.push({
                     columnHeader: header,
                     columnNumber: index,
