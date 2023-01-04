@@ -25,6 +25,7 @@
                             "
                             *ngFor="let warehouse of warehouses"
                             [value]="warehouse?.uniqueName"
+                            [selected]="warehouse.isChecked"
                         >
                             {{ warehouse.name ?? "-" }}
                         </mat-option>
