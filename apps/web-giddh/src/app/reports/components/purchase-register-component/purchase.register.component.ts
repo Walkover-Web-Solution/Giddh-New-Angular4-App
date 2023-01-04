@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router, NavigationStart } from "@angular/router";
+import { Router, NavigationStart, ActivatedRoute } from "@angular/router";
 import { select, Store } from "@ngrx/store";
 import { AppState } from "../../../store";
 import { CompanyActions } from "../../../actions/company.actions";
@@ -7,7 +7,7 @@ import { CompanyService } from "../../../services/companyService.service";
 import { PurchaseReportsModel, ReportsRequestModel } from "../../../models/api-models/Reports";
 import { ToasterService } from "../../../services/toaster.service";
 import { createSelector } from "reselect";
-import { takeUntil, filter } from "rxjs/operators";
+import { takeUntil, filter, take } from "rxjs/operators";
 import * as dayjs from 'dayjs';
 import { Observable, ReplaySubject } from "rxjs";
 import { GIDDH_DATE_FORMAT } from "../../../shared/helpers/defaultDateFormat";
@@ -17,6 +17,8 @@ import { SettingsBranchActions } from '../../../actions/settings/branch/settings
 import { GeneralService } from '../../../services/general.service';
 import { OrganizationType } from '../../../models/user-login-state';
 import { BreakpointObserver } from '@angular/cdk/layout';
+import { ExportBodyRequest } from '../../../models/api-models/DaybookRequest';
+import { LedgerService } from '../../../services/ledger.service';
 
 @Component({
     selector: 'purchase-register-component',
@@ -58,13 +60,15 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
     public isMobileScreen: boolean = false;
     constructor(
         private router: Router,
+        private activeRoute: ActivatedRoute,
         private store: Store<AppState>,
         private companyActions: CompanyActions,
         private companyService: CompanyService,
         private _toaster: ToasterService,
         private settingsBranchAction: SettingsBranchActions,
         private generalService: GeneralService,
-        private breakPointObservar: BreakpointObserver) {
+        private breakPointObservar: BreakpointObserver,
+        private ledgerService: LedgerService) {
             this.breakPointObservar.observe([
                 '(max-width: 767px)'
             ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
@@ -151,10 +155,13 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
             reportsModel.discountTotal = item.discountTotal;
             reportsModel.tcsTotal = item.tcsTotal;
             reportsModel.tdsTotal = item.tdsTotal;
-            reportsModel.netPurchase = item.balance.amount;
-            reportsModel.cumulative = item.closingBalance.amount;
+            reportsModel.netPurchase = (item.balance.type === "CREDIT") ? Number("-" + item.balance.amount) : item.balance.amount;
+            reportsModel.cumulative = (item.closingBalance.type === "CREDIT") ? Number("-" + item.closingBalance.amount) : item.closingBalance.amount;
             reportsModel.from = item.from;
             reportsModel.to = item.to;
+            reportsModel.interval = this.interval;
+            reportsModel.selectedMonth = this.selectedMonth;
+
             let mdyFrom = item.from.split('-');
             let mdyTo = item.to.split('-');
             let dateDiff = this.datediff(this.parseDate(mdyFrom), this.parseDate(mdyTo));
@@ -173,8 +180,10 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
                 reportsModelCombined.discountTotal += item.discountTotal;
                 reportsModelCombined.tcsTotal += item.tcsTotal;
                 reportsModelCombined.tdsTotal += item.tdsTotal;
-                reportsModelCombined.netPurchase += item.balance.amount;
-                reportsModelCombined.cumulative = item.closingBalance.amount;
+                reportsModelCombined.netPurchase += (item.balance.type === "CREDIT") ? Number("-" + item.balance.amount) : item.balance.amount;
+                reportsModelCombined.cumulative = (item.closingBalance.type === "CREDIT") ? Number("-" + item.closingBalance.amount) : item.closingBalance.amount;
+                reportsModelCombined.interval = this.interval;
+                reportsModelCombined.selectedMonth = this.selectedMonth;
                 reportModelArray.push(reportsModel);
                 if (indexMonths % 3 === 0) {
                     reportsModelCombined.particular = this.commonLocaleData?.app_quarter + ' ' + indexMonths / 3;
@@ -210,6 +219,16 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
         let currentBranchUniqueName = '';
         let currentTimeFilter = '';
 
+        this.activeRoute.queryParams.pipe(take(1)).subscribe(params => {
+            if (params?.interval || params?.selectedMonth) {
+                this.selectedType = params.interval;
+                this.interval = params.interval;
+                this.selectedMonth = params.selectedMonth;
+
+                this.router.navigate(['pages' ,'reports', 'purchase-register']);
+            }
+        });
+
         // set financial years based on company financial year
         this.store.pipe(select(createSelector([(state: AppState) => state.session.activeCompany, (state: AppState) => state.session.registerReportFilters], (activeCompany, registerReportFilters) => {
             financialYearChosenInReportUniqueName = registerReportFilters ? registerReportFilters.financialYearChosenInReport : '';
@@ -239,7 +258,7 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
                 }
                 this.currentBranch.uniqueName = currentBranchUniqueName ? currentBranchUniqueName : this.currentBranch?.uniqueName;
                 this.selectedType = currentTimeFilter ? currentTimeFilter.toLowerCase() : this.selectedType;
-                this.populateRecords(this.selectedType);
+                this.populateRecords(this.selectedType, this.selectedMonth);
                 this.purchaseRegisterTotal.particular = this.activeFinacialYr?.uniqueName;
             }
         });
@@ -266,7 +285,7 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
             } else {
                 this.selectedMonth = null;
             }
-            this.selectedType = interval.charAt(0).toUpperCase() + interval.slice(1);
+            this.selectedType = interval?.charAt(0)?.toUpperCase() + interval?.slice(1);
             let request: ReportsRequestModel = {
                 to: endDate,
                 from: startDate,
@@ -379,8 +398,10 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
             this.purchaseRegisterTotal.discountTotal += item.discountTotal;
             this.purchaseRegisterTotal.tcsTotal += item.tcsTotal;
             this.purchaseRegisterTotal.tdsTotal += item.tdsTotal;
-            this.purchaseRegisterTotal.netPurchase += item.balance.amount;
-            this.purchaseRegisterTotal.cumulative = item.closingBalance.amount;
+            this.purchaseRegisterTotal.netPurchase += (item.balance.type === "CREDIT") ? Number("-" + item.balance.amount) : item.balance.amount;
+            this.purchaseRegisterTotal.cumulative = (item.closingBalance.type === "CREDIT") ? Number("-" + item.closingBalance.amount) : item.closingBalance.amount;
+            this.purchaseRegisterTotal.interval = this.interval;
+            this.purchaseRegisterTotal.selectedMonth = this.selectedMonth;
         }
     }
 
@@ -406,5 +427,36 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
 
             this.setCurrentFY();
         }
+    }
+
+    /**
+     * Exports purchase register overview report
+     *
+     * @memberof PurchaseRegisterComponent
+     */
+    public export(): void {
+        let startDate = this.activeFinacialYr.financialYearStarts?.toString();
+        let endDate = this.activeFinacialYr.financialYearEnds?.toString();
+        if (this.selectedMonth) {
+            let startEndDate = this.getDateFromMonth(this.monthNames.indexOf(this.selectedMonth) + 1);
+            startDate = startEndDate.firstDay;
+            endDate = startEndDate.lastDay;
+        }
+
+        let exportBodyRequest: ExportBodyRequest = new ExportBodyRequest();
+        exportBodyRequest.from = startDate;
+        exportBodyRequest.to = endDate;
+        exportBodyRequest.exportType = "PURCHASE_REGISTER_OVERVIEW_EXPORT";
+        exportBodyRequest.fileType = "CSV";
+        exportBodyRequest.interval = this.interval;
+        exportBodyRequest.branchUniqueName = this.currentBranch?.uniqueName;
+        this.ledgerService.exportData(exportBodyRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === 'success') {
+                this._toaster.successToast(response?.body);
+                this.router.navigate(["/pages/downloads"]);
+            } else {
+                this._toaster.errorToast(response?.message);
+            }
+        });
     }
 }
