@@ -12,7 +12,6 @@ import { NgForm } from '@angular/forms';
 import { ToasterService } from '../../services/toaster.service';
 import { cloneDeep } from '../../lodash-optimized';
 import { AdjustedVoucherType, PAGINATION_LIMIT, SubVoucher } from '../../app.constant';
-import { giddhRoundOff } from '../helpers/helperFunctions';
 import { GeneralService } from '../../services/general.service';
 import { AdjustmentUtilityService } from './services/adjustment-utility.service';
 import { VoucherTypeEnum } from '../../models/api-models/Sales';
@@ -678,10 +677,12 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
      * @memberof AdvanceReceiptAdjustmentComponent
      */
     public calculateTax(entryData: Adjustment, index: number): void {
-        if (this.isMultiCurrencyAccount) {
-            entryData.adjustmentAmount.amountForCompany = this.getConvertedCompanyAmount(entryData?.adjustmentAmount?.amountForAccount, entryData?.exchangeRate);
-        } else {
-            entryData.adjustmentAmount.amountForCompany = entryData?.adjustmentAmount?.amountForAccount;
+        if (this.voucherApiVersion === 2) {
+            if (this.isMultiCurrencyAccount) {
+                entryData.adjustmentAmount.amountForCompany = this.getConvertedCompanyAmount(entryData?.adjustmentAmount?.amountForAccount, entryData?.exchangeRate);
+            } else {
+                entryData.adjustmentAmount.amountForCompany = entryData?.adjustmentAmount?.amountForAccount;
+            }
         }
         let entry: Adjustment = cloneDeep(entryData);
         // Object of selected voucher
