@@ -20,12 +20,11 @@
                     >
                         <mat-option
                             (click)="
-                                calculationWarehous(warehouse?.uniqueName);
+                                calculationWarehouse(warehouse?.uniqueName);
                                 updateCalculationWarehouse(warehouse?.uniqueName)
                             "
                             *ngFor="let warehouse of warehouses"
                             [value]="warehouse?.uniqueName"
-                            [selected]="warehouse.isChecked"
                         >
                             {{ warehouse.name ?? "-" }}
                         </mat-option>
