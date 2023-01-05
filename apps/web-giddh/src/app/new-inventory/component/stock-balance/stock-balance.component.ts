@@ -1,8 +1,8 @@
-import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, Renderer2, ViewChild } from "@angular/core";
+import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { FormControl } from "@angular/forms";
 import { select, Store } from "@ngrx/store";
 import { combineLatest, ReplaySubject } from "rxjs";
-import { debounceTime, distinctUntilChanged, findIndex, takeUntil } from "rxjs/operators";
+import { debounceTime, distinctUntilChanged, takeUntil } from "rxjs/operators";
 import { InventoryService } from "../../../services/inventory.service";
 import { AppState } from "../../../store";
 import { IOption } from "../../../theme/ng-virtual-select/sh-options.interface";
@@ -17,7 +17,7 @@ import { SelectFieldComponent } from "../../../theme/form-fields/select-field/se
 @Component({
     selector: 'stock-balance',
     templateUrl: './stock-balance.component.html',
-    styleUrls: ['./stock-balance.component.scss'],
+    styleUrls: ['./stock-balance.component.scss']
 })
 
 
@@ -70,7 +70,7 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
     public selectedQuantity: string;
 
     constructor(
-        private render: Renderer2,
+
         private cdr: ChangeDetectorRef,
         private inventoryService: InventoryService,
         private store: Store<AppState>,
@@ -200,7 +200,7 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
                     this.GroupStockReportRequest.totalItems = response.body.totalItems;
                     this.GroupStockReportRequest.totalPages = response.body.totalPages;
                     this.GroupStockReportRequest.count = response.body.count;
-                }else {
+                } else {
                     groupStockReportRequest.totalItems = 0;
                     this.toaster.showSnackBar("error", response?.message);
                 }
@@ -222,7 +222,7 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
     }
 
     /**
-    * Get warehouse selected unique name
+    * Get warehouse calculations by warehouse unique name
     *
     * @param {*} uniqueName
     * @memberof StockBalanceComponent
@@ -254,7 +254,7 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
     }
 
     /**
-    * This function will use for update selected warehouse
+    * This function will use for update calculation by warehouse uniquename
     *
     * @memberof StockBalanceComponent
     */
@@ -284,7 +284,7 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
     *
     * @memberof StockBalanceComponent
     */
-    public stockUpdate(stock: any): void {
+    public stockUpdate(stock: any, warehouse: any): void {
         setTimeout(() => {
             this.inventoryService.updateStock(stock?.stock, stock?.stock?.stockGroup?.uniqueName, stock?.stockUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response && response?.status === "success") {
@@ -392,4 +392,3 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
         document.querySelector('body').classList.remove('stock-balance');
     }
 }
-

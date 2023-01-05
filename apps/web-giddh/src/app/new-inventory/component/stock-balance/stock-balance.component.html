@@ -118,7 +118,7 @@
         <div class="stock-table-wrapper">
             <div
                 class="stock-table"
-                *ngFor="let stock of stocksList"
+                *ngFor="let stock of stocksList; let stockIndex = index"
                 (click)="stock.display = !stock.display"
                 [ngClass]="{ 'white-color': stock.display }"
             >
@@ -159,6 +159,7 @@
                             <span class="stock-group-name">{{ stockGroupName }}</span>
                         </div>
                     </div>
+
                     <div class="warehouse-list-wrapper">
                         <ng-container *ngFor="let stockWarehouse of stock?.warehouses">
                             <div
@@ -205,7 +206,9 @@
                             <span>{{ stockGroupName ?? "-" }}</span>
                         </div>
                         <div class="warehouse-expanded-box-wrapper">
-                            <ng-container *ngFor="let warehouseVariant of variant?.warehouseBalance; let i = index">
+                            <ng-container
+                                *ngFor="let warehouseVariant of variant?.warehouseBalance; let warehouseIndex = index"
+                            >
                                 <div
                                     (clickOutside)="warehouseVariant.display = false"
                                     class="grid-title-list list-grid-title warehouse-expanded-box"
@@ -247,7 +250,7 @@
                                                 class="opening-bal-input"
                                                 placeholder="Opening Bal"
                                                 type="text"
-                                                (change)="stockUpdate(stock)"
+                                                (change)="stockUpdate(stock, warehouseVariant)"
                                                 [(ngModel)]="warehouseVariant.openingAmount"
                                             />
                                             <input
@@ -256,7 +259,7 @@
                                                 class="quantity-input"
                                                 placeholder="Qty"
                                                 type="text"
-                                                (change)="stockUpdate(stock)"
+                                                (change)="stockUpdate(stock, warehouseVariant)"
                                                 [(ngModel)]="warehouseVariant.openingQuantity"
                                             />
 
