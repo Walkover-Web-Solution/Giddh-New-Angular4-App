@@ -10,26 +10,36 @@
                 <button mat-menu-item [routerLink]="'/pages/new-inventory/stock/product/create'">Product</button>
                 <button mat-menu-item [routerLink]="'/pages/new-inventory/stock/service/create'">Service</button>
             </mat-menu>
-            <div class="warehouse-select-bar">
-                <mat-form-field class="search-warehouse-bar" appearance="outline">
-                    <mat-select
-                        placeholder="Warehouses"
-                        multiple
-                        class="select-warehouse-bar"
-                        [(value)]="selectedWarehouse"
-                    >
-                        <mat-option
-                            (click)="
-                                calculationWarehouse(warehouse?.uniqueName);
-                                updateCalculationWarehouse(warehouse?.uniqueName)
-                            "
-                            *ngFor="let warehouse of warehouses"
-                            [value]="warehouse?.uniqueName"
+            <div class="col-xl-6 col-lg-10 col-md-10 pl-0">
+                <mat-select
+                    name="selectedWarehouse"
+                    [multiple]="true"
+                    [(ngModel)]="selectedWarehouse"
+                    class="stock-mat-salect"
+                    [placeholder]="'Select Warehouse'"
+                >
+                    <mat-option class="balance-options">
+                        <ngx-mat-select-search
+                            [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
+                            [formControl]="warehousesDropdown"
+                            [placeholderLabel]="'Select Warehouse'"
                         >
-                            {{ warehouse.name ?? "-" }}
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field>
+                            <i class="icon-cross" ngxMatSelectSearchClear></i>
+                        </ngx-mat-select-search>
+                    </mat-option>
+
+                    <mat-option
+                        class="balance-options"
+                        (click)="
+                            calculationWarehouse(warehouse?.uniqueName);
+                            updateCalculationWarehouse(warehouse?.uniqueName)
+                        "
+                        *ngFor="let warehouse of warehouses"
+                        [value]="warehouse?.uniqueName"
+                    >
+                        {{ warehouse.name ?? "-" }}
+                    </mat-option>
+                </mat-select>
             </div>
         </div>
         <div class="stock-balance-top-bar-right-side">

@@ -66,8 +66,10 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
     /** True if click on particular unit dropdown */
     public isOpen: boolean = false;
-    /** Stores the name of selected warehouse */
-    public selectedQuantity: string;
+    /** This will use for instance of lwarehouses Dropdown */
+    public warehousesDropdown: FormControl = new FormControl();
+    /** Hold all warehouses */
+    public allWarehouses: any[] = [];
 
     constructor(
 
@@ -88,6 +90,15 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
     * @memberof StockBalanceComponent
     */
     public ngOnInit(): void {
+        /** This will use for filter link purchase orders  */
+        this.warehousesDropdown.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(search => {
+            let warehousesClone = cloneDeep(this.allWarehouses);
+            if (search) {
+                warehousesClone = this.allWarehouses?.filter(branch => (branch.name?.toLowerCase()?.indexOf(search?.toLowerCase()) > -1));
+            }
+            this.warehouses = warehousesClone;
+        });
+
         this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: 0 }));
         this.isLoading = true;
         this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
@@ -101,6 +112,7 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
             if (resp[0] && resp[1] && resp[2]) {
                 this.isLoading = false;
                 this.warehouses = resp[1]?.results;
+                this.allWarehouses = resp[1]?.results;
                 let stockGroupUniqueName = resp[0]?.body?.results[0]?.uniqueName;
                 let warehouseUniqueName = resp[1]?.results[0]?.uniqueName;
                 let financialYearLimits = resp[2]?.startDate;
