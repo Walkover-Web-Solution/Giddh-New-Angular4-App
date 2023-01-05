@@ -20,6 +20,7 @@ import { PAGINATION_LIMIT } from "../../../app.constant";
     styleUrls: ['./stock-balance.component.scss'],
 })
 
+
 export class StockBalanceComponent implements OnInit, OnDestroy {
     /**  Selector for warehouseInput1 input field */
     @ViewChild('warehouseInput1', { static: false }) warehouseInput1: ElementRef;
@@ -104,6 +105,12 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
                     this.GroupStockReportRequest.stockGroupUniqueName = stockGroupUniqueName;
                     this.GroupStockReportRequest.from = financialYearLimits;
                     this.GroupStockReportRequest.to = financialYearLimits;
+                    if (!this.selectedWarehouse.includes(this.GroupStockReportRequest.warehouseUniqueName)) {
+                        this.selectedWarehouse.push(this.GroupStockReportRequest.warehouseUniqueName);
+                    }
+                    if ( !this.allSelectedWarehouse.includes(this.GroupStockReportRequest.warehouseUniqueName)) {
+                        this.allSelectedWarehouse.push(this.GroupStockReportRequest.warehouseUniqueName);
+                    }
                     this.getStocks();
                 }
             }
@@ -167,12 +174,6 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
     */
     public getStocks(): void {
         if (this.GroupStockReportRequest.stockGroupUniqueName && this.GroupStockReportRequest.warehouseUniqueName) {
-            if (!this.selectedWarehouse.includes(this.GroupStockReportRequest.warehouseUniqueName)) {
-                this.selectedWarehouse.push(this.GroupStockReportRequest.warehouseUniqueName);
-            }
-            if (!this.allSelectedWarehouse.includes(this.GroupStockReportRequest.warehouseUniqueName)) {
-                this.allSelectedWarehouse.push(this.GroupStockReportRequest.warehouseUniqueName);
-            }
             let groupStockReportRequest = cloneDeep(this.GroupStockReportRequest);
             delete groupStockReportRequest.warehouseUniqueName;
             this.inventoryService.GetGroupStocksReport_V3(groupStockReportRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -188,7 +189,7 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
                     });
 
                     this.allSelectedWarehouse.forEach(warehouse => {
-                        this.selectWarehouse(warehouse);
+                        this.calculationWarehouse(warehouse);
                     });
                     this.GroupStockReportRequest.page = response.body.page;
                     this.GroupStockReportRequest.totalItems = response.body.totalItems;
@@ -220,7 +221,7 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
     * @param {*} uniqueName
     * @memberof StockBalanceComponent
     */
-    public selectWarehouse(uniqueName: any): void {
+    public calculationWarehouse(uniqueName: any): void {
         if (uniqueName) {
             this.GroupStockReportRequest.warehouseUniqueName = uniqueName;
             this.inventoryService.GetGroupStocksReport_V3(this.GroupStockReportRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -278,6 +279,7 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
             this.inventoryService.updateStock(stock?.stock, stock?.stock?.stockGroup?.uniqueName, stock?.stockUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response?.status === "success") {
                     this.toaster.showSnackBar("success", "Stock updated successfully");
+                    this.calculationWarehouse(warehouse.warehouse.uniqueName);
                 } else {
                     this.toaster.showSnackBar("error", response?.message);
                 }
