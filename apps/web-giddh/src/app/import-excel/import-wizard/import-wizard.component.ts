@@ -95,7 +95,6 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
 
         this.importExcelService.uploadFile(importType, data).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.isUploadInProgress = false;
-
             if (response?.status === "success" && response.body) {
                 this.excelState.requestState = ImportExcelRequestStates.UploadFileSuccess;
                 this.excelState.importExcelData = { ...response.body, isHeaderProvided: data.isHeaderProvided };
@@ -185,6 +184,10 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
             case "master":
                 importType = "MASTER_IMPORT";
                 break;
+
+            case "entries":
+                importType = "ENTRIES_IMPORT";
+                break;    
         }
 
         return importType;
