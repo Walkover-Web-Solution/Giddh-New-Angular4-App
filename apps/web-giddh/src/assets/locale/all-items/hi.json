@@ -373,6 +373,11 @@
                     "label": "तटकर क्षेत्र",
                     "link": "/pages/custom-fields/list",
                     "icon": "icon-custom-field"
+                },
+                {
+                    "label": "आयात",
+                    "link": "/pages/import/select-type",
+                    "icon": "icon-tally-import1"
                 }
             ]
         }
