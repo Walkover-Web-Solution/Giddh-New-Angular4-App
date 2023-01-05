@@ -68,7 +68,7 @@ export class ImportProcessComponent {
 
     public save() {
         let mappings = this.mappings.map(mapping => {
-            if (mapping.mappedColumn === this.unmapHeader) {
+            if (!mapping.mappedColumn || mapping.mappedColumn === this.unmapHeader) {
                 mapping.mappedColumn = "";
             }
             return mapping;
@@ -89,7 +89,7 @@ export class ImportProcessComponent {
         let mappings = [];
         let mappedColumns = [];
         this.sheetHeaders?.forEach((header, index) => {
-            const headerMatched = this.giddhHeaders?.filter(giddhHeader => !mappedColumns.includes(header?.toLowerCase()) && giddhHeader?.label?.toLowerCase() === header?.toLowerCase());
+            const headerMatched = this.giddhHeaders?.filter(giddhHeader => !mappedColumns.includes(header?.trim()?.toLowerCase()) && giddhHeader?.label?.trim()?.toLowerCase() === header?.trim()?.toLowerCase());
             if (headerMatched?.length) {
                 mappedColumns.push(headerMatched[0]?.label?.toLowerCase());
                 mappings.push({
