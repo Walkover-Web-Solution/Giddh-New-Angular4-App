@@ -330,11 +330,6 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
         });
     }
 
-    public selectWarehouse(event: any): void {
-        console.log(event);
-
-    }
-
     /**
     * Get stock groups
     *
