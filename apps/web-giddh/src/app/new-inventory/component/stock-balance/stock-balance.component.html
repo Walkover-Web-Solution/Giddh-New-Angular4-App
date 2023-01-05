@@ -261,17 +261,18 @@
                                             />
 
                                             <select-field
+                                                #warehouseDropdown
                                                 [cssClass]="'form-control'"
                                                 class="unit-dropdown"
                                                 [name]="'stockUnitCode'"
                                                 [placeholder]="Unit"
                                                 [options]="stockUnits"
                                                 (selectedOption)="
-                                                    stock.stock.stockUnitCode = $event.value;
-                                                    stock.stock.stockUnitName = $event.label;
-                                                    stockUpdate(stock)
+                                                    warehouseVariant.stockUnit.code = $event.value;
+                                                    warehouseVariant.stockUnit.name = $event.label;
+                                                    stockUpdate(stock, warehouseVariant)
                                                 "
-                                                [defaultValue]="stock.stock?.stockUnitCode"
+                                                [defaultValue]="warehouseVariant?.stockUnit?.code"
                                                 [openDropdown]="isOpen"
                                             >
                                             </select-field>
