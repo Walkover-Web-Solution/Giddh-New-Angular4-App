@@ -1708,7 +1708,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      */
     public touristSchemeApplicableToggle(event): void {
         this.vm.selectedLedger.passportNumber = '';
-        this.vm.selectedLedger.touristSchemeApplicable = event;
+        this.vm.selectedLedger.touristSchemeApplicable = event?.value;
     }
 
     /**

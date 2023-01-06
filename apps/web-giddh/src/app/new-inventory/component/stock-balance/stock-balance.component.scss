@@ -51,7 +51,7 @@
                 margin-left: 10px;
 
                 .search-warehouse-bar {
-                    top: 10px;
+                    top: 14px;
                 }
             }
         }
@@ -487,7 +487,11 @@
         }
     }
 }
-
+::ng-deep {
+    .mat-pseudo-checkbox-checked {
+        background: var(--color-giddh-blue) !important;
+    }
+}
 .create-warehouse-btn {
     background-color: var(--color-primary-inventory-stock-dropdown-button-background);
 }
