@@ -153,6 +153,7 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
             this.inventoryService.getStock(stock?.stockUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response && response?.status === "success") {
                     stock.stock = response?.body;
+                    stock.stockOriginal = response?.body;
                     stock?.stock?.variants.forEach(variant => {
                         this.warehouses.forEach(warehouse => {
                             const warehouseFound = variant?.warehouseBalance?.filter(balance => balance?.warehouse?.uniqueName === warehouse?.uniqueName);
@@ -302,7 +303,9 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
                 if (response && response?.status === "success") {
                     this.toaster.showSnackBar("success", "Stock updated successfully");
                     this.calculationWarehouse(warehouse?.warehouse?.uniqueName);
+                    stock.stockOriginal = cloneDeep(stock?.stock);
                 } else {
+                    stock.stock = cloneDeep(stock?.stockOriginal);
                     this.toaster.showSnackBar("error", response?.message);
                 }
             });
