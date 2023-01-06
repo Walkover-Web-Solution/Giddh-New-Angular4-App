@@ -10,25 +10,36 @@
                 <button mat-menu-item [routerLink]="'/pages/new-inventory/stock/product/create'">Product</button>
                 <button mat-menu-item [routerLink]="'/pages/new-inventory/stock/service/create'">Service</button>
             </mat-menu>
-            <div class="warehouse-select-bar">
-                <mat-form-field class="search-warehouse-bar" appearance="outline">
-                    <mat-select
-                        placeholder="Warehouses"
-                        multiple
-                        class="select-warehouse-bar"
-                        [(value)]="selectedWarehouse"
-                    >
-                        <mat-option
-                            (click)="
-                                selectWarehouse(warehouse?.uniqueName); updateSelectedWarehouse(warehouse?.uniqueName)
-                            "
-                            *ngFor="let warehouse of warehouses"
-                            [value]="warehouse?.uniqueName"
+            <div class="col-xl-6 col-lg-10 col-md-10 pl-0">
+                <mat-select
+                    name="selectedWarehouse"
+                    [multiple]="true"
+                    [(ngModel)]="selectedWarehouse"
+                    class="stock-mat-salect"
+                    [placeholder]="'Select Warehouse'"
+                >
+                    <mat-option class="balance-options">
+                        <ngx-mat-select-search
+                            [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
+                            [formControl]="warehousesDropdown"
+                            [placeholderLabel]="'Select Warehouse'"
                         >
-                            {{ warehouse.name ?? "-" }}
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field>
+                            <i class="icon-cross" ngxMatSelectSearchClear></i>
+                        </ngx-mat-select-search>
+                    </mat-option>
+
+                    <mat-option
+                        class="balance-options"
+                        (click)="
+                            calculationWarehouse(warehouse?.uniqueName);
+                            updateCalculationWarehouse(warehouse?.uniqueName)
+                        "
+                        *ngFor="let warehouse of warehouses"
+                        [value]="warehouse?.uniqueName"
+                    >
+                        {{ warehouse.name ?? "-" }}
+                    </mat-option>
+                </mat-select>
             </div>
         </div>
         <div class="stock-balance-top-bar-right-side">
@@ -37,12 +48,24 @@
             </button> -->
             <button mat-flat-button [matMenuTriggerFor]="menu" class="filter-btn">
                 <img src="{{ imgPath }}filter.svg" alt="filter-button" />
-                <mat-menu #menu="matMenu">
-                    <button mat-menu-item (click)="showUniqueName = !showUniqueName; $event.stopPropagation()">
-                        <mat-checkbox color="primary" [(ngModel)]="showUniqueName">Unique Name </mat-checkbox>
+                <mat-menu #menu="matMenu" class="stock-menu">
+                    <button
+                        mat-menu-item
+                        (click)="$event.stopPropagation()"
+                        (keydown.enter)="showUniqueName = !showUniqueName"
+                    >
+                        <mat-checkbox class="pull-left w-100" color="primary" [(ngModel)]="showUniqueName"
+                            >Unique Name
+                        </mat-checkbox>
                     </button>
-                    <button mat-menu-item (click)="showGroupName = !showGroupName; $event.stopPropagation()">
-                        <mat-checkbox color="primary" [(ngModel)]="showGroupName">Stock Group</mat-checkbox>
+                    <button
+                        mat-menu-item
+                        (click)="$event.stopPropagation()"
+                        (keydown.enter)="showGroupName = !showGroupName"
+                    >
+                        <mat-checkbox class="pull-left w-100" color="primary" [(ngModel)]="showGroupName"
+                            >Stock Group</mat-checkbox
+                        >
                     </button>
                 </mat-menu>
             </button>
@@ -63,7 +86,7 @@
                 </mat-form-field>
             </div>
             <div class="unique-name-wrapper" *ngIf="showUniqueName">
-                <h2 class="unique-name">Unique Name</h2>
+                <h2 class="unique-name font-13">Unique Name</h2>
             </div>
             <div class="group-list-head group-searchbar" *ngIf="showGroupName">
                 <img src="{{ imgPath }}search-new.svg" class="search-icon" />
@@ -105,7 +128,7 @@
         <div class="stock-table-wrapper">
             <div
                 class="stock-table"
-                *ngFor="let stock of stocksList"
+                *ngFor="let stock of stocksList; let stockIndex = index"
                 (click)="stock.display = !stock.display"
                 [ngClass]="{ 'white-color': stock.display }"
             >
@@ -146,6 +169,7 @@
                             <span class="stock-group-name">{{ stockGroupName }}</span>
                         </div>
                     </div>
+
                     <div class="warehouse-list-wrapper">
                         <ng-container *ngFor="let stockWarehouse of stock?.warehouses">
                             <div
@@ -192,7 +216,9 @@
                             <span>{{ stockGroupName ?? "-" }}</span>
                         </div>
                         <div class="warehouse-expanded-box-wrapper">
-                            <ng-container *ngFor="let warehouseVariant of variant?.warehouseBalance; let i = index">
+                            <ng-container
+                                *ngFor="let warehouseVariant of variant?.warehouseBalance; let warehouseIndex = index"
+                            >
                                 <div
                                     (clickOutside)="warehouseVariant.display = false"
                                     class="grid-title-list list-grid-title warehouse-expanded-box"
@@ -234,7 +260,7 @@
                                                 class="opening-bal-input"
                                                 placeholder="Opening Bal"
                                                 type="text"
-                                                (change)="stockUpdate(stock)"
+                                                (change)="stockUpdate(stock, warehouseVariant)"
                                                 [(ngModel)]="warehouseVariant.openingAmount"
                                             />
                                             <input
@@ -243,22 +269,23 @@
                                                 class="quantity-input"
                                                 placeholder="Qty"
                                                 type="text"
-                                                (change)="stockUpdate(stock)"
+                                                (change)="stockUpdate(stock, warehouseVariant)"
                                                 [(ngModel)]="warehouseVariant.openingQuantity"
                                             />
 
                                             <select-field
+                                                #warehouseDropdown
                                                 [cssClass]="'form-control'"
                                                 class="unit-dropdown"
                                                 [name]="'stockUnitCode'"
                                                 [placeholder]="Unit"
                                                 [options]="stockUnits"
                                                 (selectedOption)="
-                                                    stock.stock.stockUnitCode = $event.value;
-                                                    stock.stock.stockUnitName = $event.label;
-                                                    stockUpdate(stock)
+                                                    warehouseVariant.stockUnit.code = $event.value;
+                                                    warehouseVariant.stockUnit.name = $event.label;
+                                                    stockUpdate(stock, warehouseVariant)
                                                 "
-                                                [defaultValue]="stock.stock?.stockUnitCode"
+                                                [defaultValue]="warehouseVariant?.stockUnit?.code"
                                                 [openDropdown]="isOpen"
                                             >
                                             </select-field>
@@ -276,5 +303,24 @@
                 No Data Found
             </div>
         </div>
+    </div>
+    <div
+        class="pagination-wrapper"
+        *ngIf="GroupStockReportRequest?.totalItems > GroupStockReportRequest.count && !isLoading"
+    >
+        <pagination
+            [totalItems]="GroupStockReportRequest?.totalItems"
+            [(ngModel)]="GroupStockReportRequest.page"
+            [maxSize]="5"
+            class="pagination-sm"
+            [boundaryLinks]="true"
+            [itemsPerPage]="GroupStockReportRequest.count"
+            [rotate]="false"
+            (pageChanged)="pageChanged($event)"
+            [firstText]="commonLocaleData?.app_first"
+            [previousText]="commonLocaleData?.app_previous"
+            [nextText]="commonLocaleData?.app_next"
+            [lastText]="commonLocaleData?.app_last"
+        ></pagination>
     </div>
 </div>

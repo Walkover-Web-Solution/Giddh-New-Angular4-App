@@ -60,6 +60,7 @@ import { StockBalanceComponent } from "./component/stock-balance/stock-balance.c
 import { GroupwiseComponent } from "./component/stock-group/group-wise/group-wise.component";
 import { ItemWiseComponent } from "./component/stock-group/item-wise/item-wise.component";
 import { VariantWiseComponent } from "./component/variant-wise/variant-wise.component";
+import { NgxMatSelectSearchModule } from "ngx-mat-select-search";
 
 @NgModule({
     declarations: [
@@ -126,6 +127,7 @@ import { VariantWiseComponent } from "./component/variant-wise/variant-wise.comp
         MatSelectModule,
         InventorySidebarModule,
         StockCreateEditModule,
+        NgxMatSelectSearchModule
     ],
     exports: [
         NewInventoryComponent,
