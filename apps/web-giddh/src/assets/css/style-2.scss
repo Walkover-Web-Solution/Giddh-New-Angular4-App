@@ -9917,10 +9917,8 @@ giddh-datepicker {
         }
 
         .mat-autocomplete-panel {
-            min-width: fit-content;
-
-            .mat-option {
-                height: 40px;
+            .cdk-virtual-scroll-viewport {
+                min-width: 112px !important;
             }
         }
 
