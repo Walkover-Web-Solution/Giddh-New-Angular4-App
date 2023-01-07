@@ -803,12 +803,14 @@ export class SettingCampaignComponent implements OnInit {
      * @memberof SettingCampaignComponent
      */
     public selectVariable(selectedValues: any[], index: number): void {
-        let uniqueAttachment = selectedValues.filter(val => val === 'Attachment');
-        if (selectedValues.includes(uniqueAttachment[0])) {
-            this.createTrigger.campaignDetails.argsMapping[index].value = uniqueAttachment[0];
-            this.variableComponent.toArray()[index].chipList = uniqueAttachment;
-        } else {
-            this.createTrigger.campaignDetails.argsMapping[index].value = selectedValues?.join(",");
+        if (selectedValues) {
+            let attachmentExists = selectedValues.filter(val => val === 'Attachment');
+            if (selectedValues.includes(attachmentExists[0])) {
+                this.createTrigger.campaignDetails.argsMapping[index].value = attachmentExists[0];
+                this.variableComponent.toArray()[index].chipList = attachmentExists;
+            } else {
+                this.createTrigger.campaignDetails.argsMapping[index].value = selectedValues?.join(",");
+            }
         }
     }
 }
