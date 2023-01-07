@@ -72,6 +72,8 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
     public allWarehouses: any[] = [];
 
     constructor(
+
+        private cdr: ChangeDetectorRef,
         private inventoryService: InventoryService,
         private store: Store<AppState>,
         private warehouseActions: WarehouseActions,
@@ -147,12 +149,11 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
     * @memberof StockBalanceComponent
     */
     public getStockVariants(stock: any): void {
-        console.log("stockVariants", stock);
         if (!stock?.stock) {
             this.inventoryService.getStock(stock?.stockUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response && response?.status === "success") {
                     stock.stock = response?.body;
-                    stock.stockOriginal =cloneDeep(response?.body);
+                    stock.stockOriginal = cloneDeep(response?.body);
                     stock?.stock?.variants.forEach(variant => {
                         this.warehouses.forEach(warehouse => {
                             const warehouseFound = variant?.warehouseBalance?.filter(balance => balance?.warehouse?.uniqueName === warehouse?.uniqueName);
@@ -387,10 +388,11 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
                 this.warehouseInput2.nativeElement.focus();
                 this.isOpen = false;
                 this.warehouseDropdown?.closeDropdownPanel();
-            } else {
+            } else if (event === 3) {
                 this.isOpen = true;
                 this.warehouseDropdown?.openDropdownPanel();
             }
+            this.cdr.detectChanges();
         }, 20);
     }
 
@@ -405,4 +407,3 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
         document.querySelector('body').classList.remove('stock-balance');
     }
 }
-
