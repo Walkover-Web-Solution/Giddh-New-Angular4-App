@@ -113,7 +113,7 @@ export class DataFormatter {
                 }
                 if (group.closingBalance.amount !== 0) {
                     let data1: any[] = [];
-                    data1.push(this.truncate(group.groupName.toUpperCase(), true, 25));
+                    data1.push(this.truncate(group.groupName?.toUpperCase(), true, 25));
                     data1.push(`${group.forwardedBalance.amount} ${this.recType.transform(group.forwardedBalance)}`);
                     data1.push(group.debitTotal);
                     data1.push(group.creditTotal);
@@ -195,7 +195,7 @@ export class DataFormatter {
         return total;
     }
 
-    private firstCapital = (s: string) => s[0].toUpperCase() + s.slice(1);
+    private firstCapital = (s: string) => s[0]?.toUpperCase() + s.slice(1);
     private suffixRecordType = (balance: number): string => {
         if (balance < 0) {
             balance = balance * -1;

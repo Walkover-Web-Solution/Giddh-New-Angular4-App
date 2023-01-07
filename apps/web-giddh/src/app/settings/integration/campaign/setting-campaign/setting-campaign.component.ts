@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { take, takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
@@ -10,6 +10,7 @@ import { IOption } from 'apps/web-giddh/src/app/theme/ng-select/option.interface
 import { GIDDH_NEW_DATE_FORMAT_UI } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import * as dayjs from 'dayjs';
 import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
+import { SelectMultipleFieldsComponent } from 'apps/web-giddh/src/app/theme/form-fields/select-multiple-fields/select-multiple-fields.component';
 
 export interface ActiveTriggers {
     title: string;
@@ -25,6 +26,8 @@ export interface ActiveTriggers {
     styleUrls: ['./setting-campaign.component.scss']
 })
 export class SettingCampaignComponent implements OnInit {
+    /* Selector for variableComponent type field */
+    @ViewChildren('variableComponent') public variableComponent: QueryList<SelectMultipleFieldsComponent>;
     /** Holds image path */
     public imgPath: string = '';
     /* This will hold local JSON data */
@@ -800,6 +803,12 @@ export class SettingCampaignComponent implements OnInit {
      * @memberof SettingCampaignComponent
      */
     public selectVariable(selectedValues: any[], index: number): void {
-        this.createTrigger.campaignDetails.argsMapping[index].value = selectedValues?.join(",");
+        let uniqueAttachment = selectedValues.filter(val => val === 'Attachment');
+        if (selectedValues.includes(uniqueAttachment[0])) {
+            this.createTrigger.campaignDetails.argsMapping[index].value = uniqueAttachment[0];
+            this.variableComponent.toArray()[index].chipList = uniqueAttachment;
+        } else {
+            this.createTrigger.campaignDetails.argsMapping[index].value = selectedValues?.join(",");
+        }
     }
 }
