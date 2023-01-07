@@ -202,12 +202,8 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
             } else if (!setting) {
                 this.store.dispatch(this.invoiceActions.getInvoiceSetting());
             }
-            
         });
-        
     }
-    
-
     // public onChangeSendInvoiceViaSms(isChecked) {
     //     if (!isChecked) {
     //         this.invoiceSetting.smsContent = '';
@@ -444,7 +440,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
                     this.invoiceSetting = invoiceSetting;
                 });
             }
-            if (defaultDueDate.indexOf('-') !== -1 && (defaultDueDate.indexOf('-') !== defaultDueDate.lastIndexOf('-')) || defaultDueDate.indexOf('-') > 0) {
+            if (defaultDueDate?.indexOf('-') !== -1 && (defaultDueDate.indexOf('-') !== defaultDueDate.lastIndexOf('-')) || defaultDueDate.indexOf('-') > 0) {
                 invoiceSetting.duePeriod = Number(defaultDueDate?.replace(/\D/g, ''));
                 setTimeout(() => {
                     this.invoiceSetting = invoiceSetting;

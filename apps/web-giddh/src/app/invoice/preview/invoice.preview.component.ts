@@ -1777,7 +1777,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof InvoicePreviewComponent
      */
     private getEInvoiceTooltipText(item: ReceiptItem): string {
-        switch (item.status?.toLowerCase()) {
+        switch (item?.status?.toLowerCase()) {
             case EInvoiceStatus.YetToBePushed:
                 return this.localeData?.e_invoice_statuses.yet_to_be_pushed;
             case EInvoiceStatus.Pushed:
@@ -1854,7 +1854,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                             } else {
                                 item.dueDays = null;
                             }
-                            if (MULTI_CURRENCY_MODULES.indexOf(this.selectedVoucher) > -1) {
+                            if (MULTI_CURRENCY_MODULES?.indexOf(this.selectedVoucher) > -1) {
                                 // For CR/DR note and Cash/Sales invoice
                                 item = this.generalService.addToolTipText(this.selectedVoucher, this.baseCurrency, item, this.localeData, this.commonLocaleData);
 
