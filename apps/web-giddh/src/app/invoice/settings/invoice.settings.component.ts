@@ -434,20 +434,20 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     public validateDefaultDueDate(defaultDueDate: string) {
         if (defaultDueDate) {
             let invoiceSetting = cloneDeep(this.invoiceSetting);
-            if (isNaN(Number(defaultDueDate)) && defaultDueDate?.indexOf('-') === -1) {
+            if (isNaN(Number(defaultDueDate)) && defaultDueDate.indexOf('-') === -1) {
                 invoiceSetting.duePeriod = Number(defaultDueDate?.replace(/\D/g, '')) !== 0 && !isNaN(Number(defaultDueDate?.replace(/\D/g, ''))) ? Number(defaultDueDate?.replace(/\D/g, '')) : null;
                 setTimeout(() => {
                     this.invoiceSetting = invoiceSetting;
                 });
             }
-            if (defaultDueDate?.indexOf('-') !== -1 && (defaultDueDate?.indexOf('-') !== defaultDueDate.lastIndexOf('-')) || defaultDueDate?.indexOf('-') > 0) {
+            if (defaultDueDate?.indexOf('-') !== -1 && (defaultDueDate.indexOf('-') !== defaultDueDate.lastIndexOf('-')) || defaultDueDate.indexOf('-') > 0) {
                 invoiceSetting.duePeriod = Number(defaultDueDate?.replace(/\D/g, ''));
                 setTimeout(() => {
                     this.invoiceSetting = invoiceSetting;
                 });
             }
             if (String(defaultDueDate)?.length > 3) {
-                if (defaultDueDate?.indexOf('-') !== -1) {
+                if (defaultDueDate.indexOf('-') !== -1) {
                     invoiceSetting.duePeriod = Number(String(defaultDueDate).substring(0, 4));
                 } else {
                     invoiceSetting.duePeriod = Number(String(defaultDueDate).substring(0, 3));
