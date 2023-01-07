@@ -811,6 +811,8 @@ export class SettingCampaignComponent implements OnInit {
             } else {
                 this.createTrigger.campaignDetails.argsMapping[index].value = selectedValues?.join(",");
             }
+        } else {
+            this.createTrigger.campaignDetails.argsMapping[index].value = '';
         }
     }
 }
