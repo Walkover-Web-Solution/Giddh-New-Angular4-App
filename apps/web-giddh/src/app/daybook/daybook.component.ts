@@ -131,6 +131,8 @@ export class DaybookComponent implements OnInit, OnDestroy {
     public touchedTransaction: any;
     /** true if mobile device */
     public isMobile: boolean;
+    /** Holds side of entry (dr/cr) */
+    public entrySide: string = "";
 
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
@@ -548,6 +550,11 @@ export class DaybookComponent implements OnInit, OnDestroy {
      * @memberof DaybookComponent
      */
     public showUpdateLedgerModal(txn: any): void {
+        if (txn.creditAmount === null) {
+            this.entrySide = "DEBIT";
+        } else {
+            this.entrySide = "CREDIT";
+        }
         this.store.dispatch(this.ledgerActions.setAccountForEdit(txn?.otherTransactions[0]?.particular?.uniqueName));
         this.store.dispatch(this.ledgerActions.setTxnForEdit(txn?.uniqueName));
         this.lc.selectedTxnUniqueName = txn?.uniqueName;
