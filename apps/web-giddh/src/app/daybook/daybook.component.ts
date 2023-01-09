@@ -551,9 +551,9 @@ export class DaybookComponent implements OnInit, OnDestroy {
      */
     public showUpdateLedgerModal(txn: any): void {
         if (txn.creditAmount === null) {
-            this.entrySide = "DEBIT";
+            this.entrySide = "dr";
         } else {
-            this.entrySide = "CREDIT";
+            this.entrySide = "cr";
         }
         this.store.dispatch(this.ledgerActions.setAccountForEdit(txn?.otherTransactions[0]?.particular?.uniqueName));
         this.store.dispatch(this.ledgerActions.setTxnForEdit(txn?.uniqueName));
