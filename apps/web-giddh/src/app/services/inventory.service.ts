@@ -191,6 +191,8 @@ export class InventoryService {
      * Create StockUnit
      */
     public CreateStockUnit(model: StockUnitRequest): Observable<BaseResponse<StockUnitResponse, StockUnitRequest>> {
+        console.log('model',model);
+
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.post(this.config.apiUrl + INVENTORY_API.CREATE_STOCK_UNIT?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(map((res) => {
             let data: BaseResponse<StockUnitResponse, StockUnitRequest> = res;

@@ -48,6 +48,8 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
     public giddhDecimalPlaces: number = 2;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
+
+
     constructor(
         private store: Store<AppState>,
         private customStockActions: CustomStockUnitAction,
@@ -122,34 +124,22 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
                 this.selectedUnitName = null;
             }
         });
+        this.addDefaultMapping();
     }
 
     public saveUnit(): any {
-        let customUnitObj = clone(this.customUnitObj);
+        let customMapping = cloneDeep(this.customUnitObj)
+        customMapping.mappings = customMapping.mappings.filter(mapping => mapping.quantity || mapping.stockUnitY.code);
         if (!this.editMode) {
             if (this.isIndia && this.selectedUnitName) {
-                customUnitObj.name = cloneDeep(this.selectedUnitName);
+                customMapping.name = cloneDeep(this.selectedUnitName);
             }
-            if (this.isDivide) {
-                customUnitObj.quantityPerUnit = 1 * cloneDeep(customUnitObj.quantityPerUnit);
-                customUnitObj.quantityPerUnit = Number(customUnitObj.quantityPerUnit.toFixed(4));
-            } else {
-                customUnitObj.quantityPerUnit = 1 / cloneDeep(customUnitObj.quantityPerUnit);
-                customUnitObj.quantityPerUnit = Number(customUnitObj.quantityPerUnit.toFixed(16));
-            }
-            this.store.dispatch(this.customStockActions.CreateStockUnit(cloneDeep(customUnitObj)));
+            this.store.dispatch(this.customStockActions.CreateStockUnit(cloneDeep(customMapping)));
         } else {
-            if (this.isDivide) {
-                customUnitObj.quantityPerUnit = 1 * cloneDeep(customUnitObj.quantityPerUnit);
-                customUnitObj.quantityPerUnit = Number(customUnitObj.quantityPerUnit.toFixed(4));
-            } else {
-                customUnitObj.quantityPerUnit = 1 / cloneDeep(customUnitObj.quantityPerUnit);
-                customUnitObj.quantityPerUnit = Number(customUnitObj.quantityPerUnit.toFixed(16));
-            }
-
-            this.store.dispatch(this.customStockActions.UpdateStockUnit(cloneDeep(customUnitObj), this.editCode));
-            this.customUnitObj.name = null;
+            this.store.dispatch(this.customStockActions.UpdateStockUnit(cloneDeep(customMapping), this.editCode));
+            customMapping.name = null;
         }
+
     }
 
     public deleteUnit(code): any {
@@ -157,14 +147,12 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
     }
 
     public editUnit(item: StockUnitRequest) {
+        console.log(item);
+
         this.customUnitObj = Object.assign({}, item);
+        console.log(this.customUnitObj);
+
         this.selectedUnitName = item?.name;
-        if (item?.displayQuantityPerUnit) {
-            this.customUnitObj.quantityPerUnit = giddhRoundOff(item.displayQuantityPerUnit, this.giddhDecimalPlaces);
-        }
-        if (this.customUnitObj.parentStockUnit) {
-            this.customUnitObj.parentStockUnitCode = item?.parentStockUnit?.code;
-        }
         this.editCode = item?.code;
         this.editMode = true;
     }
@@ -172,18 +160,16 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
     public clearFields() {
         this.customUnitObj = new StockUnitRequest();
         this.forceClear$ = observableOf({ status: true });
-        this.customUnitObj.parentStockUnitCode = null;
         this.editMode = false;
         this.editCode = '';
         this.isDivide = false;
-
     }
 
     public change(v) {
         this.stockUnit$.pipe(find(p => {
             let unit = p.find(q => q.code === v);
-            if (unit !== undefined) {
-                this.customUnitObj.parentStockUnit = unit;
+            if (unit?.code !== undefined) {
+                this.customUnitObj.mappings.filter(val => val.stockUnitY.code === unit?.code);
                 return true;
             }
         })).subscribe();
@@ -195,12 +181,15 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
     }
 
     public setUnitName(name) {
+        this.stockUnitsDropDown$.subscribe(res =>{
+            console.log(res);
+            return res.filter(val => val.value === name)
+        })
         let unit = this.stockUnitsList?.filter((obj) => obj.value === name || obj.label === name);
         if (unit !== undefined && unit?.length > 0) {
             this.customUnitObj.code = unit[0].value;
             this.customUnitObj.name = unit[0].value;
             this.selectedUnitName = unit[0].label;
-            this.checkIfUnitIsExist();
         }
     }
 
@@ -247,6 +236,7 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
         } else {
             this.customUnitObj.code = '';
         }
+
     }
 
     /**
@@ -284,6 +274,51 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
     public handleUnitCodeValidation(isInvalid: boolean): void {
         if (isInvalid) {
             this.toasterService.errorToast('Only numbers and lower case alphabets without spaces are allowed!', 'Invalid Unit Code');
+        }
+    }
+
+    /**
+ * This will use for add default feature
+ *
+ * @return {*}  {void}
+ * @memberof InventoryCustomStockComponent
+ */
+    public addDefaultMapping(mappings?: any): void {
+        if (!this.customUnitObj.mappings.length) {
+            this.customUnitObj.mappings.push(
+                {
+                    quantity: "",
+                    stockUnitY: {
+                        code: ""
+                    }
+                }
+            );
+        } else {
+            if (mappings?.quantity && mappings?.stockUnitY.code) {
+                this.customUnitObj.mappings.push(
+                    {
+                        quantity: "",
+                        stockUnitY: {
+                            code: ""
+                        }
+                    }
+                );
+            } else {
+                return;
+            }
+        }
+    }
+
+    /**
+*This will use for  remove default filter
+*
+* @param {*} event
+* @param {number} index
+* @memberof InventoryCustomStockComponent
+*/
+    public removeMappedUnit(event: any, index: number): void {
+        if (index >= 0) {
+            this.customUnitObj.mappings?.splice(index, 1);
         }
     }
 }

@@ -11,6 +11,25 @@
     display: flex;
     align-items: center;
 }
+.select-unit {
+    min-width: 185px !important;
+}
+.unit-add {
+    position: absolute;
+    right: 0px !important;
+}
+.equal-sign {
+    font-size: 22px;
+    color: var(--color-giddh-blue);
+}
+.custom-css {
+    margin: auto;
+}
+.inventory-section,
+.inventory-wrapper {
+    float: left;
+    width: 100%;
+}
 .division > div {
     display: inline-block;
     width: auto;
