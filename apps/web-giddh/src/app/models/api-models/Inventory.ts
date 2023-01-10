@@ -233,13 +233,10 @@ export class CreateStockRequest {
  * used to create custom stock units
  * its response will be hash as StockUnitResponse
  */
-export class StockUnitRequest implements IStockUnit {
-    public parentStockUnit: IStockItem;
-    public quantityPerUnit: number;
+export class StockUnitRequest  {
     public name: string;
     public code: string;
-    public parentStockUnitCode?: string;
-    public displayQuantityPerUnit?: number;
+    public mappings:any[] = [];
 }
 
 /*
