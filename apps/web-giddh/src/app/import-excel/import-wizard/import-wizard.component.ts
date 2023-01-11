@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ImportExcelRequestData, ImportExcelRequestStates, ImportExcelResponseData, ImportExcelState, ImportExcelStatusPaginatedResponse, UploadExceltableResponse } from '../../models/api-models/import-excel';
+import { ImportExcelRequestStates, ImportExcelResponseData, ImportExcelState, ImportExcelStatusPaginatedResponse, UploadExceltableResponse } from '../../models/api-models/import-excel';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
 import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -90,12 +90,30 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
         this.isUploadInProgress = true;
         this.currentBranch = data.branchUniqueName;
         this.excelState.requestState = ImportExcelRequestStates.UploadFileInProgress;
-        this.importExcelService.uploadFile(this.entity, data).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            this.isUploadInProgress = false;
 
+        const importType = this.getImportType();
+
+        this.importExcelService.uploadFile(importType, data).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            this.isUploadInProgress = false;
             if (response?.status === "success" && response.body) {
                 this.excelState.requestState = ImportExcelRequestStates.UploadFileSuccess;
-                this.excelState.importExcelData = { ...response.body, isHeaderProvided: true };
+                this.excelState.importExcelData = { ...response.body, isHeaderProvided: data.isHeaderProvided };
+
+                this.mappedData = {
+                    ...this.excelState.importExcelData,
+                    data: {
+                        items: this.excelState.importExcelData?.data?.items.map(p => {
+                            p.row = p.row.map((pr, index) => {
+                                pr.columnNumber = index?.toString();
+                                return pr;
+                            });
+                            return p;
+                        }),
+                        numRows: 0, 
+                        totalRows: 0
+                    }
+                };
+
                 this.dataChanged(this.excelState);
             } else {
                 this.excelState.requestState = ImportExcelRequestStates.UploadFileError;
@@ -127,15 +145,16 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
     }
 
     public showReport() {
-        this.router.navigate(['/pages', 'import', 'report', 'import-report']);
+        this.router.navigate(['/pages', 'downloads', 'imports']);
     }
 
-    public onSubmit(data: ImportExcelRequestData) {
+    public onSubmit(data: any) {
         if (this.currentBranch) {
             data.branchUniqueName = this.currentBranch;
         }
         this.excelState.requestState = ImportExcelRequestStates.ProcessImportInProgress;
-        this.importExcelService.processImport(this.entity, data).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        const importType = this.getImportType();
+        this.importExcelService.processImport(importType, data).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === 'error') {
                 this.toaster.errorToast(response.message);
                 this.excelState.importResponse = null;
@@ -149,5 +168,32 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
             }
             this.dataChanged(this.excelState);
         });
+    }
+
+    /**
+     * Returns import type based on entity
+     *
+     * @private
+     * @returns {string}
+     * @memberof ImportWizardComponent
+     */
+    private getImportType(): string {
+        let importType = "";
+
+        switch(this.entity) {
+            case "master":
+                importType = "MASTER_IMPORT";
+                break;
+
+            case "entries":
+                importType = "ENTRIES_IMPORT";
+                break;
+                
+            case "stock":
+                importType = "INVENTORY_IMPORT";
+                break;    
+        }
+
+        return importType;
     }
 }

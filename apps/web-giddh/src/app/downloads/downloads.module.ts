@@ -15,6 +15,7 @@ import { ExportsComponent } from "./components/exports/exports.component";
 import { ExportsJsonComponent } from "./components/exports-json/exports-json.component";
 import { DownloadsComponent } from "./downloads.component";
 import { MatTabsModule } from "@angular/material/tabs";
+import { MatTooltipModule } from "@angular/material/tooltip";
 
 @NgModule({
     declarations: [
@@ -36,7 +37,8 @@ import { MatTabsModule } from "@angular/material/tabs";
         NoDataModule,
         GiddhPageLoaderModule,
         SharedModule,
-        MatTabsModule
+        MatTabsModule,
+        MatTooltipModule
     ]
 })
 

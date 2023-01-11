@@ -30,13 +30,14 @@ export class ImportExcelService {
         }
         const formData: FormData = new FormData();
         formData.append('file', model.file, model.file.name);
+        formData.append('isHeaderProvided', model.isHeaderProvided);
         return this.http.post(url, formData, { headers: { 'Content-Type': 'multipart/form-data' } }).pipe(map((res) => {
             let data: BaseResponse<ImportExcelResponseData, string> = res;
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<ImportExcelResponseData, string>(e)));
     }
 
-    public processImport(entity: string, model: ImportExcelRequestData) {
+    public processImport(entity: string, model: any) {
         const companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + IMPORT_EXCEL_API.PROCESS_IMPORT
             ?.replace(':companyUniqueName', companyUniqueName)

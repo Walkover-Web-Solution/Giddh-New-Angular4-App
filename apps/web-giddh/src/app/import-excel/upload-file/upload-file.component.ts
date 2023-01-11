@@ -45,6 +45,7 @@ export class UploadFileComponent implements OnInit, OnDestroy {
 
     /** Subject to unsubscribe all the listeners */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    public isHeaderProvided: boolean = true;
 
     constructor(
         private toasterService: ToasterService,
@@ -77,7 +78,7 @@ export class UploadFileComponent implements OnInit, OnDestroy {
     }
 
     public async downloadSampleFile(entity: string, isCsv: boolean = false) {
-        const fileUrl = `assets/sample-files/${entity}-sample.${isCsv ? 'csv' : 'xlsx'}`;
+        const fileUrl = `https://giddh-app-builds.s3.ap-south-1.amazonaws.com/sample-file-${entity}.${isCsv ? 'csv' : 'xlsx'}`;
         const fileName = `${entity}-sample.${isCsv ? 'csv' : 'xlsx'}`;
         try {
             let blob = await fetch(fileUrl).then(r => r.blob());
@@ -187,7 +188,8 @@ export class UploadFileComponent implements OnInit, OnDestroy {
     public handleFileUpload(file: File): void {
         this.onFileUpload.emit({
             file,
-            branchUniqueName: this.entity === 'entries' && this.currentBranch ? this.currentBranch?.uniqueName : ''
+            branchUniqueName: this.entity === 'entries' && this.currentBranch ? this.currentBranch?.uniqueName : '',
+            isHeaderProvided: this.isHeaderProvided
         });
     }
 }
