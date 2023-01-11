@@ -353,7 +353,8 @@
         "accounts": "खाता",
         "inventory": "इन्वेंटरी",
         "entries": "प्रविष्टियां",
-        "trial_balance": "संतुलन परीक्षण"
+        "trial_balance": "संतुलन परीक्षण",
+        "master": "मास्टर"
     },
     "app_please_select": "कृपया चयन कीजिए",
     "app_company": "कंपनी",

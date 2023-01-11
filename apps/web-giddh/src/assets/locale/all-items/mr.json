@@ -373,6 +373,11 @@
                     "label": "सानुकूल फील्ड",
                     "link": "/pages/custom-fields/list",
                     "icon": "icon-custom-field"
+                },
+                {
+                    "label": "आयात करतो",
+                    "link": "/pages/import/select-type",
+                    "icon": "icon-tally-import1"
                 }
             ]
         }

@@ -8,6 +8,7 @@
     "expired": "खत्म हो चुका",
     "success":"सफलता",
     "failed":"असफल",
-    "total":"कुल"
+    "total":"कुल",
+    "mapping_pending": "File uploaded, mapping not done"
 }
 

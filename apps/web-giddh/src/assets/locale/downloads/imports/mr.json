@@ -8,5 +8,6 @@
     "expired": "कालबाह्य",
     "success":"यश",
     "failed":"अयशस्वी",
-    "total":"एकूण"
+    "total":"एकूण",
+    "mapping_pending": "File uploaded, mapping not done"
 }
