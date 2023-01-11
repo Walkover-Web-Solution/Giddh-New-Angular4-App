@@ -19,7 +19,7 @@
                                     [(ngModel)]="customUnitObj.name"
                                     *ngIf="country == 'india'"
                                     [placeholder]="'Select unit'"
-                                    (selected)="setUnitName($event?.label)"
+                                    (selected)="setUnitName($event?.value)"
                                     [ItemHeight]="33"
                                     (onClear)="clearUnit()"
                                     [forceClearReactive]="forceClear$ | async"
@@ -71,7 +71,7 @@
                                     </div>
 
                                     <div class="form-group col-xs-4 col-sm-4">
-                                        <label>Qty. per Unit</label>
+                                        <label>Qty. per Unit <sup>*</sup></label>
                                         <input
                                             placeholder="Quantity"
                                             type="text"
@@ -80,10 +80,12 @@
                                             [(ngModel)]="mappingField.quantity"
                                             [name]="'quantityPerUnit' + i"
                                             class="form-control"
+                                            #quantityPerUnit="ngModel"
+                                            [ngClass]="{ 'error-box': quantityPerUnit?.errors?.valid }"
                                         />
                                     </div>
                                     <div class="form-group col-xs-5 col-sm-5">
-                                        <label>Mapped Unit</label>
+                                        <label>Mapped Unit <sup>*</sup></label>
                                         <div class="d-flex">
                                             <sh-select
                                                 [options]="stockUnitsDropDown$ | async"
@@ -114,25 +116,6 @@
                                     </div>
                                 </div>
                             </ng-container>
-                            <!-- <div
-                                class="grey-color col-xs-12 col-sm-12 mr-b2 multiply"
-                                *ngIf="customUnitObj.name && customUnitObj.quantityPerUnit && !isDivide"
-                            >
-                                1 {{ customUnitObj?.name }} = {{ customUnitObj?.quantityPerUnit }}
-                                {{ customUnitObj?.parentStockUnit?.name }}
-                            </div>
-                            <div
-                                class="grey-color col-xs-12 mr-b2 division"
-                                *ngIf="customUnitObj.name && customUnitObj.quantityPerUnit && isDivide"
-                            >
-                                <span class="mr-r05">1 {{ customUnitObj?.name }}</span>
-                                <span class="mr-r05 font-18">=</span>
-                                <div class="text-center">
-                                    1 {{ customUnitObj.parentStockUnit?.name }}
-                                    <div class="hr"></div>
-                                    {{ customUnitObj?.quantityPerUnit }}
-                                </div>
-                            </div> -->
                         </div>
                         <div class="row mt-2">
                             <div class="col-xs-12 col-sm-12" *ngIf="!editMode">
@@ -177,14 +160,14 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let item of stockUnit$ | async">
-                                <td>{{ item?.name }} ({{ item?.code }})</td>
+                            <tr *ngFor="let item of stockMappedUnits$ | async">
+                                <td>{{ item?.stockUnitX?.name }} ({{ item?.stockUnitX?.code }})</td>
                                 <td>
-                                    {{ item?.parentStockUnit?.name }}
-                                    <span *ngIf="!item?.parentStockUnit?.name">-</span>
+                                    {{ item?.stockUnitY?.name }} ({{ item?.stockUnitY?.code }})
+                                    <span *ngIf="!item?.stockUnitY?.name">-</span>
                                 </td>
                                 <td class="text-right">
-                                    {{ item?.displayQuantityPerUnit | giddhRoundOff: giddhDecimalPlaces }}
+                                    {{ item?.quantity | giddhRoundOff: giddhDecimalPlaces }}
                                 </td>
                                 <td class="action ico-btn">
                                     <button class="btn-default btn-xs" [disabled]="editMode" (click)="editUnit(item)">
@@ -193,8 +176,11 @@
                                     <button
                                         class="btn-default btn-xs delete-btn"
                                         [disabled]="editMode"
-                                        [ladda]="(deleteCustomStockInProcessCode$ | async)?.indexOf(item.code) > -1"
-                                        (click)="deleteUnit(item.code)"
+                                        [ladda]="
+                                            (deleteCustomStockInProcessCode$ | async)?.indexOf(item?.stockUnitX?.code) >
+                                            -1
+                                        "
+                                        (click)="deleteUnit(item?.stockUnitX?.code)"
                                     >
                                         <i class="fa fa-trash"></i>
                                     </button>

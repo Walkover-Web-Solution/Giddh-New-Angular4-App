@@ -40,6 +40,17 @@ export class CustomStockUnitAction {
                     })));
             })));
 
+    public GetStockMappedUnit$: Observable<Action> = createEffect(() => this.action$
+        .pipe(
+            ofType(CUSTOM_STOCK_UNIT_ACTIONS.GET_STOCK_MAPPED_UNITS),
+            switchMap((action: CustomActions) => {
+                return this._inventoryService.GetStockMappedUnit().pipe(
+                    map((r) => this.validateResponse(r, {
+                        type: CUSTOM_STOCK_UNIT_ACTIONS.GET_STOCK_MAPPED_UNITS_RESPONSE,
+                        payload: r.body
+                    })));
+            })));
+
     public UpdateStockUnit$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(CUSTOM_STOCK_UNIT_ACTIONS.UPDATE_STOCK_UNIT),
@@ -111,6 +122,12 @@ export class CustomStockUnitAction {
     public GetStockUnit(): CustomActions {
         return {
             type: CUSTOM_STOCK_UNIT_ACTIONS.GET_STOCK_UNIT,
+        };
+    }
+
+    public GetStockMappedUnits(): CustomActions {
+        return {
+            type: CUSTOM_STOCK_UNIT_ACTIONS.GET_STOCK_MAPPED_UNITS,
         };
     }
 
