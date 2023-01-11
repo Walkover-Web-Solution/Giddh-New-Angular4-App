@@ -1,5 +1,5 @@
 import { GroupsWithStocksHierarchyMin } from '../../models/api-models/GroupsWithStocks';
-import { CreateStockRequest, GroupStockReportResponse, INameUniqueName, StockDetailResponse, StockGroupRequest, StockGroupResponse, StockReportResponse, StocksResponse, StockUnitRequest } from '../../models/api-models/Inventory';
+import { CreateStockRequest, GroupStockReportResponse, INameUniqueName, StockDetailResponse, StockGroupRequest, StockGroupResponse, StockMappedUnitResponse, StockReportResponse, StocksResponse, StockUnitRequest } from '../../models/api-models/Inventory';
 import { IGroupsWithStocksHierarchyMinItem } from '../../models/interfaces/groupsWithStocks.interface';
 import { CUSTOM_STOCK_UNIT_ACTIONS, InventoryActionsConst, STOCKS_REPORT_ACTIONS } from '../../actions/inventory/inventory.const';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
@@ -15,6 +15,7 @@ export interface InventoryState {
     manufacturingStockList: StocksResponse;
     manufacturingStockListForCreateMF: StocksResponse;
     stockUnits?: StockUnitRequest[];
+    stockMappedUnits?: StockMappedUnitResponse[];
     activeGroup?: StockGroupResponse;
     activeGroupUniqueName?: string;
     activeStock?: StockDetailResponse;
@@ -81,6 +82,7 @@ const initialState: InventoryState = {
     manufacturingStockList: null,
     manufacturingStockListForCreateMF: null,
     stockUnits: [],
+    stockMappedUnits: [],
     activeGroup: null,
     fetchingGrpUniqueName: false,
     isGroupNameAvailable: false,
@@ -617,6 +619,8 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
                 }
                 return state;
             }
+            case CUSTOM_STOCK_UNIT_ACTIONS.GET_STOCK_MAPPED_UNITS_RESPONSE:
+                return Object.assign({}, state, { stockMappedUnits: action.payload });
         /*
          * Inventory Stock Report
          * */

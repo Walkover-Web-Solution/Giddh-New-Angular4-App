@@ -83,6 +83,11 @@ export class StockUnitResponse implements IStockUnitResponse {
     public displayQuantityPerUnit?: number;
 }
 
+export class StockMappedUnitResponse {
+    public quantity?: number;
+    public stockUnitX?: IStockItem;
+    public stockUnitY?: IStockItem;
+}
 /**
  * Model for stock-report api response
  * GET call

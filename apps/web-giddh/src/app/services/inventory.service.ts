@@ -11,7 +11,8 @@ import {
     StocksResponse,
     StockUnitRequest,
     StockUnitResponse,
-    InventoryDownloadRequest
+    InventoryDownloadRequest,
+    StockMappedUnitResponse
 } from '../models/api-models/Inventory';
 import { Inject, Injectable, Optional } from '@angular/core';
 import { HttpWrapperService } from './httpWrapper.service';
@@ -188,11 +189,22 @@ export class InventoryService {
     }
 
     /**
+     * This will use for get stock mapped unit
+     */
+    public GetStockMappedUnit(): Observable<BaseResponse<StockMappedUnitResponse[], string>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.get(this.config.apiUrl + INVENTORY_API.GET_STOCK_MAPPED_UNIT?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
+            let data: BaseResponse<StockMappedUnitResponse[], string> = res;
+            data.request = '';
+            data.queryString = {};
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<StockMappedUnitResponse[], string>(e, '', {})));
+    }
+
+    /**
      * Create StockUnit
      */
     public CreateStockUnit(model: StockUnitRequest): Observable<BaseResponse<StockUnitResponse, StockUnitRequest>> {
-        console.log('model',model);
-
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.post(this.config.apiUrl + INVENTORY_API.CREATE_STOCK_UNIT?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(map((res) => {
             let data: BaseResponse<StockUnitResponse, StockUnitRequest> = res;
