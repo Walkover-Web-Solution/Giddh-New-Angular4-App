@@ -377,6 +377,11 @@
                     "label": "Custom Fields",
                     "link": "/pages/custom-fields/list",
                     "icon": "icon-custom-field"
+                },
+                {
+                    "label": "Import",
+                    "link": "/pages/import/select-type",
+                    "icon": "icon-tally-import1"
                 }
             ]
         }

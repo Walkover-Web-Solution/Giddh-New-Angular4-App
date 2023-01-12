@@ -5,7 +5,7 @@
     (commonLocaleData)="commonLocaleData = $event"
 >
     <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
-    <div class="row">
+    <div class="row width-100">
         <div class="col-12">
             <div class="pd-t2 mt-2">
                 <div class="text-center mr-t2 mr-b2">
@@ -14,27 +14,15 @@
                     <a
                         href="javascript:void 0"
                         class="text-link-2 mt-1 d-block text-center"
-                        [routerLink]="['/pages', 'import', 'report', 'import-report']"
+                        [routerLink]="['/pages', 'downloads', 'imports']"
                         >{{ localeData?.previous_imports }}</a
                     >
                 </div>
                 <ul class="import-type mr-b2 mr-t4 pd-t3">
                     <li *ngIf="!isBranch">
-                        <a class="text-link-2" [routerLink]="['/pages', 'import', 'group']">
+                        <a class="text-link-2" [routerLink]="['/pages', 'import', 'master']">
                             <img src="assets/images/new/group-import.svg" />
-                            <h2>{{ commonLocaleData?.app_import_type?.groups }}</h2>
-                        </a>
-                    </li>
-                    <li *ngIf="!isBranch">
-                        <a class="text-link-2" [routerLink]="['/pages', 'import', 'account']">
-                            <img src="assets/images/new/acc-import.svg" />
-                            <h2>{{ commonLocaleData?.app_import_type?.accounts }}</h2>
-                        </a>
-                    </li>
-                    <li *ngIf="!isBranch">
-                        <a class="text-link-2" [routerLink]="['/pages', 'import', 'stock']">
-                            <img src="assets/images/new/Inventory-13.svg" />
-                            <h2>{{ commonLocaleData?.app_import_type?.inventory }}</h2>
+                            <h2>{{ commonLocaleData?.app_import_type?.master }}</h2>
                         </a>
                     </li>
                     <li *ngIf="isBranch || branches?.length === 1">
@@ -44,11 +32,17 @@
                         </a>
                     </li>
                     <li *ngIf="!isBranch">
+                        <a class="text-link-2" [routerLink]="['/pages', 'import', 'stock']">
+                            <img src="assets/images/new/Inventory-13.svg" />
+                            <h2>{{ commonLocaleData?.app_import_type?.inventory }}</h2>
+                        </a>
+                    </li>
+                    <!-- <li *ngIf="!isBranch">
                         <a class="text-link-2" [routerLink]="['/pages', 'import', 'trial-balance']">
                             <img src="assets/images/new/tb-import.svg" />
                             <h2>{{ commonLocaleData?.app_import_type?.trial_balance }}</h2>
                         </a>
-                    </li>
+                    </li> -->
                 </ul>
             </div>
         </div>
