@@ -545,6 +545,14 @@ $custom-typography: mat-typography-config(
         }
     }
 }
+.inventory-units-mapped {
+    .icon-visibility {
+        visibility: hidden;
+    }
+}
+.inventory-units-mapped:hover .icon-visibility {
+    visibility: visible !important;
+}
 @media screen and (max-width: 1366px) and (orientation: portrait) {
     .subscription-form-select {
         float: left !important;
