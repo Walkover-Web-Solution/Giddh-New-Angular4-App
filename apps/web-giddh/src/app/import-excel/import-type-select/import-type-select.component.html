@@ -19,24 +19,24 @@
                     >
                 </div>
                 <ul class="import-type mr-b2 mr-t4 pd-t3">
-                    <li *ngIf="!isBranch">
+                    <!-- <li *ngIf="!isBranch">
                         <a class="text-link-2" [routerLink]="['/pages', 'import', 'master']">
                             <img src="assets/images/new/group-import.svg" />
                             <h2>{{ commonLocaleData?.app_import_type?.master }}</h2>
                         </a>
-                    </li>
+                    </li> -->
                     <li *ngIf="isBranch || branches?.length === 1">
                         <a class="text-link-2" [routerLink]="['/pages', 'import', 'entries']">
                             <img src="assets/images/new/entries-import.svg" />
                             <h2>{{ commonLocaleData?.app_import_type?.entries }}</h2>
                         </a>
                     </li>
-                    <li *ngIf="!isBranch">
+                    <!-- <li *ngIf="!isBranch">
                         <a class="text-link-2" [routerLink]="['/pages', 'import', 'stock']">
                             <img src="assets/images/new/Inventory-13.svg" />
                             <h2>{{ commonLocaleData?.app_import_type?.inventory }}</h2>
                         </a>
-                    </li>
+                    </li> -->
                     <!-- <li *ngIf="!isBranch">
                         <a class="text-link-2" [routerLink]="['/pages', 'import', 'trial-balance']">
                             <img src="assets/images/new/tb-import.svg" />
