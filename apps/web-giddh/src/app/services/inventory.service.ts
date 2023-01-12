@@ -189,9 +189,9 @@ export class InventoryService {
     }
 
     /**
-     * This will use for get stock mapped unit
-     */
-    public GetStockMappedUnit(): Observable<BaseResponse<StockMappedUnitResponse[], string>> {
+   * This will use for get stock mapped unit
+   */
+    public getStockMappedUnit(): Observable<BaseResponse<StockMappedUnitResponse[], string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.get(this.config.apiUrl + INVENTORY_API.GET_STOCK_MAPPED_UNIT?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
             let data: BaseResponse<StockMappedUnitResponse[], string> = res;
@@ -202,7 +202,19 @@ export class InventoryService {
     }
 
     /**
-     * Create StockUnit
+   * This will use for get stock mapped units by unique name
+   */
+    public getStockMappedUnitByUniqueName(uName: string): Observable<BaseResponse<StockMappedUnitResponse, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.get(this.config.apiUrl + INVENTORY_API.UPDATE_STOCK_UNIT?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':uName', uName)).pipe(map((res) => {
+            let data: BaseResponse<StockMappedUnitResponse, string> = res;
+            data.queryString = { uName };
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<StockMappedUnitResponse, string>(e,{ uName })));
+    }
+
+    /**
+     * Create Stock Multiple Unit
      */
     public CreateStockUnit(model: StockUnitRequest): Observable<BaseResponse<StockUnitResponse, StockUnitRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;

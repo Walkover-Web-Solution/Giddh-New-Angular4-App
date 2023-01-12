@@ -40,11 +40,11 @@ export class CustomStockUnitAction {
                     })));
             })));
 
-    public GetStockMappedUnit$: Observable<Action> = createEffect(() => this.action$
+    public getStockMappedUnit$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(CUSTOM_STOCK_UNIT_ACTIONS.GET_STOCK_MAPPED_UNITS),
             switchMap((action: CustomActions) => {
-                return this._inventoryService.GetStockMappedUnit().pipe(
+                return this._inventoryService.getStockMappedUnit().pipe(
                     map((r) => this.validateResponse(r, {
                         type: CUSTOM_STOCK_UNIT_ACTIONS.GET_STOCK_MAPPED_UNITS_RESPONSE,
                         payload: r.body
@@ -61,6 +61,20 @@ export class CustomStockUnitAction {
                         payload: data.body
                     }, true, 'Unit Updated Successfully')));
             })));
+
+
+            public getStockMappedUnitByUniqueName$: Observable<Action> = createEffect(() => this.action$
+            .pipe(
+                ofType(CUSTOM_STOCK_UNIT_ACTIONS.GET_STOCK_MAPPED_UNIT_UNIQUENAME),
+                switchMap((action: CustomActions) => {
+                    return this._inventoryService.getStockMappedUnitByUniqueName(action.payload.code).pipe(
+                        map((r) => this.validateResponse(r, {
+                            type: CUSTOM_STOCK_UNIT_ACTIONS.GET_STOCK_MAPPED_UNIT_UNIQUENAME_RESPONSE,
+                            payload: r.body
+                        })));
+
+                })));
+
 
     public DeleteStockUnit$: Observable<Action> = createEffect(() => this.action$
         .pipe(
@@ -109,6 +123,13 @@ export class CustomStockUnitAction {
         return {
             type: CUSTOM_STOCK_UNIT_ACTIONS.UPDATE_STOCK_UNIT,
             payload: { unit, code }
+        };
+    }
+
+    public getStockMappedUnitByUniqueName(code: string): CustomActions {
+        return {
+            type: CUSTOM_STOCK_UNIT_ACTIONS.GET_STOCK_MAPPED_UNIT_UNIQUENAME,
+            payload: {  code }
         };
     }
 

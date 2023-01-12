@@ -16,6 +16,7 @@ export interface InventoryState {
     manufacturingStockListForCreateMF: StocksResponse;
     stockUnits?: StockUnitRequest[];
     stockMappedUnits?: StockMappedUnitResponse[];
+    stockMappedUnitsWithUniqueName?: StockMappedUnitResponse[];
     activeGroup?: StockGroupResponse;
     activeGroupUniqueName?: string;
     activeStock?: StockDetailResponse;
@@ -83,6 +84,7 @@ const initialState: InventoryState = {
     manufacturingStockListForCreateMF: null,
     stockUnits: [],
     stockMappedUnits: [],
+    stockMappedUnitsWithUniqueName:[],
     activeGroup: null,
     fetchingGrpUniqueName: false,
     isGroupNameAvailable: false,
@@ -565,10 +567,14 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
         /*
          *Custom Stock Units...
          * */
+        case CUSTOM_STOCK_UNIT_ACTIONS.GET_STOCK_MAPPED_UNITS_RESPONSE:
+            return Object.assign({}, state, { stockMappedUnits: action.payload });
+    case CUSTOM_STOCK_UNIT_ACTIONS.GET_STOCK_MAPPED_UNIT_UNIQUENAME_RESPONSE:
+        return Object.assign({}, state, { stockMappedUnitsWithUniqueName: action.payload });
         case CUSTOM_STOCK_UNIT_ACTIONS.GET_STOCK_UNIT_RESPONSE:
             return Object.assign({}, state, { stockUnits: action.payload });
         case CUSTOM_STOCK_UNIT_ACTIONS.CREATE_STOCK_UNIT:
-            return Object.assign({}, state, { createCustomStockInProcess: true });
+            return Object.assign({}, state, { createCustomStockInProcess: true, createCustomStockSuccess: false, });
         case CUSTOM_STOCK_UNIT_ACTIONS.CREATE_STOCK_UNIT_RESPONSE:
             if (action.payload.status === 'success') {
                 return Object.assign({}, state, {
@@ -619,8 +625,6 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
                 }
                 return state;
             }
-            case CUSTOM_STOCK_UNIT_ACTIONS.GET_STOCK_MAPPED_UNITS_RESPONSE:
-                return Object.assign({}, state, { stockMappedUnits: action.payload });
         /*
          * Inventory Stock Report
          * */
