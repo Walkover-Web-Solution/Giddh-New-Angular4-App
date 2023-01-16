@@ -210,7 +210,7 @@ export class InventoryService {
             let data: BaseResponse<StockMappedUnitResponse, string> = res;
             data.queryString = { uName };
             return data;
-        }), catchError((e) => this.errorHandler.HandleCatch<StockMappedUnitResponse, string>(e,{ uName })));
+        }), catchError((e) => this.errorHandler.HandleCatch<StockMappedUnitResponse, string>(e, { uName })));
     }
 
     /**

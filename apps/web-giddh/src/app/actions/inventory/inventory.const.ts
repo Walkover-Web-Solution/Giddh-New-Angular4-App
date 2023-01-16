@@ -72,6 +72,7 @@ export class InventoryActionsConst {
     public static MoveStockResponse = 'MoveStockResponse';
 }
 
+// Custom Stock Unit Actions
 export const CUSTOM_STOCK_UNIT_ACTIONS = {
     CREATE_STOCK_UNIT: 'CREATE_STOCK_UNIT',
     UPDATE_STOCK_UNIT: 'UPDATE_STOCK_UNIT',

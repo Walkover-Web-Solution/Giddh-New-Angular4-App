@@ -42,9 +42,9 @@ export class AsideMenuComponent implements OnInit, OnDestroy {
     public ngOnInit() {
         this._store.dispatch(this._inventoryAction.GetStock());
         // dispatch stockunit request
-        this._store.dispatch(this._customStockActions.GetStockUnit());
+        this._store.dispatch(this._customStockActions.getStockUnit());
         this._store.dispatch(this._inventoryUserAction.getAllUsers());
-        
+
         this.stockList$ = this._store.pipe(select(p => p.inventory.stocksList && p.inventory.stocksList.results), takeUntil(this.destroyed$));
         this.stockUnits$ = this._store.pipe(select(p => p.inventory.stockUnits), takeUntil(this.destroyed$));
         this.userList$ = this._store.pipe(select(p => p.inventoryInOutState.inventoryUsers?.filter(o => o?.uniqueName !== this._generalService.companyUniqueName)), takeUntil(this.destroyed$));
