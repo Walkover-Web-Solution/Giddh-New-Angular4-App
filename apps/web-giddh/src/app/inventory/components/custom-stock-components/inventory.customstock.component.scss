@@ -13,10 +13,11 @@
 }
 .select-unit {
     min-width: 185px !important;
+    border-radius: 5px;
 }
 .unit-add {
     position: absolute;
-    right: 0px !important;
+    right: -55px !important;
 }
 .equal-sign {
     font-size: 22px;
@@ -60,7 +61,7 @@
     scroll-behavior: smooth;
     position: relative;
     margin-top: 15px;
-    .giddh-table {
+    .basic {
         .action {
             .delete-btn {
                 .fa-trash {

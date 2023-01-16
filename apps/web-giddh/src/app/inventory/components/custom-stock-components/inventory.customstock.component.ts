@@ -22,14 +22,13 @@ import { NgForm } from '@angular/forms';
     styleUrls: ['./inventory.customstock.component.scss']
 })
 export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChanges {
+    /** Instance of custom Unit Form */
     @ViewChild('customUnitForm', { static: true }) customUnitForm: NgForm;
     @Input() public isAsideClose: boolean;
     @Output() public closeAsideEvent: EventEmitter<any> = new EventEmitter();
     public stockUnitsDropDown$: Observable<IOption[]>;
     public activeGroupUniqueName$: Observable<string>;
     public stockUnit$: Observable<StockUnitRequest[]>;
-    public stockMappedUnits$: Observable<StockMappedUnitResponse[]>;
-    public stockMappedUnitsWithUniqueName$: Observable<StockMappedUnitResponse[]>;
     public editMode: boolean;
     public editCode: string;
     public customUnitObj: StockUnitRequest;
@@ -38,7 +37,6 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
     public deleteCustomStockInProcessCode$: Observable<any[]>;
     public createCustomStockSuccess$: Observable<boolean>;
     public stockUnitsList = StockUnits;
-
     public companyProfile: any;
     public country: string;
     public selectedUnitName: string;
@@ -50,8 +48,16 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
     /** User selected decimal places */
     public giddhDecimalPlaces: number = 2;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /* False if  custom unit form invalid */
     public isValidForm: boolean = true;
-
+    /* Observable for stock unit mapped list  */
+    public stockMappedUnits$: Observable<StockMappedUnitResponse[]>;
+    /* Observable to get stock unit by uniquename */
+    public stockMappedUnitsWithUniqueName$: Observable<StockMappedUnitResponse[]>;
+    /* Hold all stock mapped units */
+    public allStockMappedUnits = StockUnits;
+    /* Observable to delete stock unit by uniquename */
+    public deleteCustomStockSuccess$: Observable<boolean>;
 
 
     constructor(
@@ -67,6 +73,7 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
         this.stockMappedUnits$ = this.store.pipe(select(p => p.inventory.stockMappedUnits), takeUntil(this.destroyed$));
         this.stockMappedUnitsWithUniqueName$ = this.store.pipe(select(p => p.inventory.stockMappedUnitsWithUniqueName), takeUntil(this.destroyed$));
         this.isStockUnitCodeAvailable$ = this.store.pipe(select(state => state.inventory.isStockUnitCodeAvailable), takeUntil(this.destroyed$));
+        this.createCustomStockSuccess$ = this.store.pipe(select(s => s.inventory.createCustomStockSuccess), takeUntil(this.destroyed$));
 
         this.store.pipe(select(state => state.inventory.stockUnits), takeUntil(this.destroyed$)).subscribe(p => {
             if (p && p.length) {
@@ -82,7 +89,7 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
         this.createCustomStockInProcess$ = this.store.pipe(select(s => s.inventory.createCustomStockInProcess), takeUntil(this.destroyed$));
         this.updateCustomStockInProcess$ = this.store.pipe(select(s => s.inventory.updateCustomStockInProcess), takeUntil(this.destroyed$));
         this.deleteCustomStockInProcessCode$ = this.store.pipe(select(s => s.inventory.deleteCustomStockInProcessCode), takeUntil(this.destroyed$));
-        this.createCustomStockSuccess$ = this.store.pipe(select(s => s.inventory.createCustomStockSuccess), takeUntil(this.destroyed$));
+        this.deleteCustomStockSuccess$ = this.store.pipe(select(s => s.inventory.deleteCustomStockSuccess), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
@@ -114,18 +121,36 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
         }
 
         this.store.dispatch(this.inventoryAction.resetActiveStock());
-        this.store.dispatch(this.customStockActions.GetStockUnit());
+        this.store.dispatch(this.customStockActions.getStockUnit());
 
-        this.createCustomStockSuccess$.subscribe((a) => {
-            if (a) {
+        this.stockMappedUnits$.subscribe(res => {
+            res?.forEach((mapped: any) => {
+                let value = this.allStockMappedUnits?.filter(unit => unit?.value === mapped?.stockUnitX?.code);
+                if (!value?.length) {
+                    this.allStockMappedUnits?.push({
+                        label: mapped?.stockUnitX?.name,
+                        value: mapped?.stockUnitX?.code
+                    });
+                }
+            });
+        });
+
+        this.deleteCustomStockSuccess$.subscribe((res) => {
+            if (res) {
+                this.store.dispatch(this.customStockActions.GetStockMappedUnits());
+            }
+        });
+
+        this.createCustomStockSuccess$.subscribe((res) => {
+            if (res) {
                 this.clearFields();
                 this.selectedUnitName = null;
                 this.store.dispatch(this.customStockActions.GetStockMappedUnits());
             }
         });
 
-        this.updateCustomStockInProcess$.subscribe((a) => {
-            if (!a) {
+        this.updateCustomStockInProcess$.subscribe((res) => {
+            if (!res) {
                 this.clearFields();
                 this.selectedUnitName = null;
                 this.store.dispatch(this.customStockActions.GetStockMappedUnits());
@@ -134,11 +159,36 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
         this.addDefaultMapping();
     }
 
+    /**
+     * This will use for showing mapping relation fields
+     *
+     * @param {*} value
+     * @memberof InventoryCustomStockComponent
+     */
+    public handleUnitName(value: any): void {
+        if (value) {
+            this.customUnitObj.code = value.toLowerCase();
+            this.addDefaultMapping();
+        } else {
+            this.customUnitObj.mappings = [];
+        }
+    }
+
+    /**
+     * This will use for save custom units
+     *
+     * @return {*}  {*}
+     * @memberof InventoryCustomStockComponent
+     */
     public saveUnit(): any {
         this.isValidForm = true;
         let customMapping = cloneDeep(this.customUnitObj)
         customMapping.mappings.forEach((mapping) => {
-            if ((mapping?.stockUnitY?.code && !mapping?.quantity) || (mapping?.quantity && !mapping?.stockUnitY?.code)) {
+            let checkValidation: boolean = false;
+            if(mapping?.stockUnitY?.code || mapping?.quantity || mapping?.stockUnitX?.code) {
+                checkValidation = true;
+            }
+            if (checkValidation && (!mapping?.stockUnitY?.code || !mapping?.quantity || !mapping?.stockUnitX?.code)) {
                 this.isValidForm = false;
             }
         });
@@ -155,35 +205,53 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
             this.store.dispatch(this.customStockActions.UpdateStockUnit(cloneDeep(customMapping), this.editCode));
             customMapping.name = null;
         }
-
     }
 
     public deleteUnit(code): any {
         this.store.dispatch(this.customStockActions.DeleteStockUnit(code));
     }
 
+    /**
+     * This will use for edit stock mapped units
+     *
+     * @param {*} item
+     * @memberof InventoryCustomStockComponent
+     */
     public editUnit(item: any) {
         this.store.dispatch(this.customStockActions.getStockMappedUnitByUniqueName(item.stockUnitX.code));
         this.stockMappedUnitsWithUniqueName$.subscribe((res: any) => {
+
             if (res?.code) {
-                this.customUnitObj.name = res?.name;
-                this.customUnitObj.code = res?.code;
-                this.customUnitObj.mappings = [];
-                res.mappings.forEach(mapping => {
-                    this.customUnitObj.mappings.push({
-                        quantity: mapping?.quantity,
-                        stockUnitY: {
-                            code: mapping?.stockUnitY?.code
-                        },
-                    });
-                });
                 this.selectedUnitName = res?.name;
                 this.editCode = res?.code;
                 this.editMode = true;
+                this.customUnitObj.name = res?.name;
+                this.customUnitObj.code = res?.code;
+                if (!res?.mappings?.length) {
+                    this.addDefaultMapping();
+                } else {
+                    this.customUnitObj.mappings = [];
+                    res.mappings.forEach(mapping => {
+                        this.customUnitObj.mappings.push({
+                            quantity: mapping?.quantity,
+                            stockUnitX: {
+                                code: mapping?.stockUnitX?.code
+                            },
+                            stockUnitY: {
+                                code: mapping?.stockUnitY?.code
+                            }
+                        });
+                    });
+                }
             }
         });
     }
 
+    /**
+     * This will use for clear fields
+     *
+     * @memberof InventoryCustomStockComponent
+     */
     public clearFields() {
         this.customUnitObj = new StockUnitRequest();
         this.forceClear$ = observableOf({ status: true });
@@ -191,27 +259,6 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
         this.editCode = '';
     }
 
-    /**
-     * This will use for change mapped units
-     *
-     * @param {*} v
-     * @memberof InventoryCustomStockComponent
-     */
-    public change(v) {
-        if (!this.editMode) {
-            this.stockUnitsDropDown$.subscribe(res => {
-                let value = res.filter(val => val.value !== v);
-                this.stockUnitsDropDown$ = observableOf(value);
-            });
-        }
-        this.stockUnit$.pipe(find(p => {
-            let unit = p.find(q => q.code === v);
-            if (unit?.code !== undefined) {
-                this.customUnitObj.mappings.filter(val => val.stockUnitY.code === unit?.code);
-                return true;
-            }
-        })).subscribe();
-    }
 
     /**
      * This will use for set unit name
@@ -220,11 +267,6 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
      * @memberof InventoryCustomStockComponent
      */
     public setUnitName(name) {
-        this.stockUnitsDropDown$.subscribe(res => {
-            let value = res.filter(val => val.value !== name);
-            this.stockUnitsDropDown$ = observableOf(value);
-        });
-
         let unit = this.stockUnitsList?.filter((obj) => obj.value === name || obj.label === name);
         if (unit !== undefined && unit?.length > 0) {
             this.customUnitObj.code = unit[0].value;
@@ -250,37 +292,6 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
     }
 
     /**
-     * checkIfUnitIsExist
-     */
-    // public checkIfUnitIsExist() {
-    //     if (this.editMode) {
-    //         return true;
-    //     }
-    //     let val: string = this.customUnitObj?.code;
-    //     if (val && this.stockUnitsList.includes({ label: val, value: val })) {
-    //         val = uniqueNameInvalidStringReplace(val);
-    //     }
-
-    //     if (val) {
-    //         this.store.dispatch(this.customStockActions.GetStockUnitByName(val));
-
-    //         this.isStockUnitCodeAvailable$.pipe(takeUntil(this.destroyed$)).subscribe(a => {
-    //             if (a !== null && a !== undefined) {
-    //                 if (a) {
-    //                     this.customUnitObj.code = val;
-    //                 } else {
-    //                     let num = 1;
-    //                     this.customUnitObj.code = val + num;
-    //                 }
-    //             }
-    //         });
-    //     } else {
-    //         this.customUnitObj.code = '';
-    //     }
-
-    // }
-
-    /**
      * noUnitFound
      */
     public noUnitFound(selectElem) {
@@ -296,12 +307,10 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
     }
 
     /**
-     * changeType
+     * This will use for close aside pane
+     *
+     * @memberof InventoryCustomStockComponent
      */
-    public changeType(ev) {
-        this.isDivide = ev;
-    }
-    // close pane
     public closeAsidePane() {
         this.closeAsideEvent.emit();
     }
@@ -330,6 +339,9 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
             this.customUnitObj.mappings.push(
                 {
                     quantity: "",
+                    stockUnitX: {
+                        code: ""
+                    },
                     stockUnitY: {
                         code: ""
                     }
@@ -340,6 +352,9 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
                 this.customUnitObj.mappings.push(
                     {
                         quantity: "",
+                        stockUnitX: {
+                            code: ""
+                        },
                         stockUnitY: {
                             code: ""
                         }
@@ -365,6 +380,11 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
         }
     }
 
+    /**
+     * This hook will call after component destroyed
+     *
+     * @memberof InventoryCustomStockComponent
+     */
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();

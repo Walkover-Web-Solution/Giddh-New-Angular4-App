@@ -150,7 +150,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         // dispatch stocklist request
         this.store.dispatch(this.inventoryAction.GetStock());
         // dispatch stockunit request
-        this.store.dispatch(this.customStockActions.GetStockUnit());
+        this.store.dispatch(this.customStockActions.getStockUnit());
 
         // subscribe getActiveView parameters
         this.invViewService.getActiveView().pipe(takeUntil(this.destroyed$)).subscribe(v => {

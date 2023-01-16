@@ -23,12 +23,22 @@
                                     [ItemHeight]="33"
                                     (onClear)="clearUnit()"
                                     [forceClearReactive]="forceClear$ | async"
-                                    [doNotReset]="true"
                                     (noOptionsFound)="noUnitFound(unitName)"
                                     [notFoundMsg]="'Type to create custom unit'"
                                     [isRequired]="true"
-                                    [disabled]="this.editMode"
+                                    [doNotReset]="true"
                                 >
+                                    <ng-template #optionTemplate let-option="option">
+                                        <ng-container>
+                                            <a href="javascript:void(0)" class="list-item d-flex">
+                                                <span class="entity-details">
+                                                    <div class="item giddh-limit single-line-clamp">
+                                                        {{ option?.label || "-" }} ({{ option?.value || "-" }})
+                                                    </div>
+                                                </span>
+                                            </a>
+                                        </ng-container>
+                                    </ng-template>
                                 </sh-select>
                                 <input
                                     placeholder="Unit name"
@@ -36,9 +46,9 @@
                                     class="form-control"
                                     name="name"
                                     [(ngModel)]="customUnitObj.name"
+                                    (change)="handleUnitName(customUnitObj.name)"
                                     required
                                     *ngIf="country != 'india'"
-                                    [disabled]="this.editMode"
                                 />
                             </div>
 
@@ -55,22 +65,44 @@
                                     (change)="handleUnitCodeValidation(unitCode?.errors)"
                                     class="form-control"
                                     required
-                                    [disabled]="this.editMode"
                                 />
                             </div>
                             <ng-container *ngFor="let mappingField of customUnitObj.mappings; let i = index">
                                 <div class="inventory-section d-flex" *ngIf="customUnitObj.name && customUnitObj.code">
-                                    <div class="form-group col-xs-3 col-sm-3">
-                                        <label>Unit Name</label>
+                                    <div class="form-group col-xs-4 col-sm-4">
+                                        <label>Mapped Unit<sup>*</sup></label>
                                         <div class="d-flex">
-                                            <select class="form-control" [disabled]="true">
-                                                <option value="stock">{{ customUnitObj.name }}</option>
-                                            </select>
-                                            <span class="mr-l2 equal-sign custom-css">=</span>
+                                            <sh-select
+                                                [options]="allStockMappedUnits"
+                                                [name]="'stockUnitX' + i"
+                                                [placeholder]="'Choose unit'"
+                                                [(ngModel)]="mappingField.stockUnitX.code"
+                                                (selected)="mappingField.stockUnitX.code = $event?.value"
+                                                [ItemHeight]="33"
+                                                [forceClearReactive]="forceClear$ | async"
+                                                class="select-unit"
+                                                [ngClass]="{
+                                                    'error-box': !mappingField.stockUnitX.code && !isValidForm
+                                                }"
+                                            >
+                                                <ng-template #optionTemplate let-option="option">
+                                                    <ng-container>
+                                                        <a href="javascript:void(0)" class="list-item d-flex">
+                                                            <span class="entity-details">
+                                                                <div class="item giddh-limit single-line-clamp">
+                                                                    {{ option?.label || "-" }} ({{
+                                                                        option?.value || "-"
+                                                                    }})
+                                                                </div>
+                                                            </span>
+                                                        </a>
+                                                    </ng-container>
+                                                </ng-template>
+                                            </sh-select>
                                         </div>
                                     </div>
 
-                                    <div class="form-group col-xs-4 col-sm-4">
+                                    <div class="form-group col-xs-3 col-sm-3">
                                         <label>Qty. per Unit <sup>*</sup></label>
                                         <input
                                             placeholder="Quantity"
@@ -84,22 +116,36 @@
                                             [ngClass]="{ 'error-box': !mappingField.quantity && !isValidForm }"
                                         />
                                     </div>
-                                    <div class="form-group col-xs-5 col-sm-5">
+                                    <div class="form-group col-xs-4 col-sm-4">
                                         <label>Mapped Unit <sup>*</sup></label>
                                         <div class="d-flex">
                                             <sh-select
-                                                [options]="stockUnitsDropDown$ | async"
-                                                [name]="'parentStockUnit' + i"
+                                                [options]="allStockMappedUnits"
+                                                [name]="'stockUnitY' + i"
                                                 [placeholder]="'Choose unit'"
                                                 [(ngModel)]="mappingField.stockUnitY.code"
-                                                (selected)="change($event?.value)"
+                                                (selected)="mappingField.stockUnitY.code = $event?.value"
                                                 [ItemHeight]="33"
                                                 [forceClearReactive]="forceClear$ | async"
                                                 class="select-unit"
                                                 [ngClass]="{
                                                     'error-box': !mappingField.stockUnitY.code && !isValidForm
                                                 }"
-                                            ></sh-select>
+                                            >
+                                                <ng-template #optionTemplate let-option="option">
+                                                    <ng-container>
+                                                        <a href="javascript:void(0)" class="list-item d-flex">
+                                                            <span class="entity-details">
+                                                                <div class="item giddh-limit single-line-clamp">
+                                                                    {{ option?.label || "-" }} ({{
+                                                                        option?.value || "-"
+                                                                    }})
+                                                                </div>
+                                                            </span>
+                                                        </a>
+                                                    </ng-container>
+                                                </ng-template>
+                                            </sh-select>
                                             <div class="pull-right unit-add">
                                                 <button
                                                     class="btn-link btn mr-0"
@@ -149,7 +195,7 @@
                     </div>
                 </form>
                 <div class="mr-t2 clearfix">
-                    <table class="table basic giddh-table mb-0">
+                    <table class="table basic mb-0">
                         <thead>
                             <tr>
                                 <th>Custom Unit</th>
@@ -166,8 +212,10 @@
                             <tr *ngFor="let item of stockMappedUnits$ | async" class="inventory-units-mapped">
                                 <td>{{ item?.stockUnitX?.name }} ({{ item?.stockUnitX?.code }})</td>
                                 <td>
-                                    {{ item?.quantity | giddhRoundOff: giddhDecimalPlaces }}
-                                    {{ item?.stockUnitY?.name }} ({{ item?.stockUnitY?.code }})
+                                    {{ item?.quantity ? (item?.quantity | giddhRoundOff: giddhDecimalPlaces) : "-" }}
+                                    <span *ngIf="item?.stockUnitY?.name">
+                                        {{ item?.stockUnitY?.name }} ({{ item?.stockUnitY?.code }})</span
+                                    >
                                     <span *ngIf="!item?.stockUnitY?.name">-</span>
                                 </td>
                                 <td class="action ico-btn">
