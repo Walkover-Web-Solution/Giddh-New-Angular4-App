@@ -25,6 +25,8 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
     /** Instance of custom Unit Form */
     @ViewChild('customUnitForm', { static: true }) customUnitForm: NgForm;
     @Input() public isAsideClose: boolean;
+    /** Stores the aside open or not */
+    @Input() public isAsideOpen :boolean;
     @Output() public closeAsideEvent: EventEmitter<any> = new EventEmitter();
     public stockUnitsDropDown$: Observable<IOption[]>;
     public activeGroupUniqueName$: Observable<string>;
@@ -138,28 +140,6 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
             });
         });
 
-        this.deleteCustomStockSuccess$.subscribe((res) => {
-            if (res) {
-                this.store.dispatch(this.customStockActions.getStockMappedUnits());
-            }
-        });
-
-        this.createCustomStockSuccess$.subscribe((res) => {
-            if (res) {
-                this.clearFields();
-                this.selectedUnitName = null;
-                this.store.dispatch(this.customStockActions.getStockMappedUnits());
-            }
-        });
-
-        this.updateCustomStockSuccess$.subscribe((res) => {
-            if (res) {
-                this.clearFields();
-                this.selectedUnitName = null;
-                this.store.dispatch(this.customStockActions.getStockMappedUnits());
-            }
-        });
-
         this.addDefaultMapping();
     }
 
@@ -189,7 +169,7 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
         let customMapping = cloneDeep(this.customUnitObj)
         customMapping.mappings.forEach((mapping) => {
             let checkValidation: boolean = false;
-            if(mapping?.stockUnitY?.code || mapping?.quantity || mapping?.stockUnitX?.code) {
+            if (mapping?.stockUnitY?.code || mapping?.quantity || mapping?.stockUnitX?.code) {
                 checkValidation = true;
             }
             if (checkValidation && (!mapping?.stockUnitY?.code || !mapping?.quantity || !mapping?.stockUnitX?.code)) {
@@ -284,6 +264,29 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
         if (this.isAsideClose) {
             this.clearFields();
         }
+        if(this.isAsideOpen){
+            this.deleteCustomStockSuccess$.subscribe((res) => {
+                if (res) {
+                    this.store.dispatch(this.customStockActions.getStockMappedUnits());
+                }
+            });
+
+            this.createCustomStockSuccess$.subscribe((res) => {
+                if (res) {
+                    this.clearFields();
+                    this.selectedUnitName = null;
+                    this.store.dispatch(this.customStockActions.getStockMappedUnits());
+                }
+            });
+
+            this.updateCustomStockSuccess$.subscribe((res) => {
+                if (res) {
+                    this.clearFields();
+                    this.selectedUnitName = null;
+                    this.store.dispatch(this.customStockActions.getStockMappedUnits());
+                }
+            });
+        }
     }
 
     /**
@@ -351,10 +354,10 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
                     }
                 }
             );
-        }  else {
-                return;
-            }
+        } else {
+            return;
         }
+    }
 
     /**
     *This will use for  remove default filter
