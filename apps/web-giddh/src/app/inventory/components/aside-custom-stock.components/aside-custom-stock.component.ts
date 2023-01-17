@@ -1,5 +1,5 @@
 import { takeUntil } from 'rxjs/operators';
-import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { Observable, ReplaySubject } from 'rxjs';
@@ -48,6 +48,8 @@ import { Observable, ReplaySubject } from 'rxjs';
 export class AsideCustomStockComponent implements OnInit, OnDestroy {
 
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
+    /** Stores the menu state */
+    @Input() public menuState;
 
     public asideClose: boolean;
     public createCustomStockSuccess$: Observable<boolean>;

@@ -34,7 +34,11 @@
         <inventory-add-group [addGroup]="true" (closeAsideEvent)="closeAsidePane($event)"></inventory-add-group>
     </div>
     <div class="aside-body flexy-child-1" *ngIf="isAddUnitOpen">
-        <inventory-custom-stock [isAsideClose]="asideClose" (closeAsideEvent)="closeAsidePane($event)">
+        <inventory-custom-stock
+            [isAsideClose]="asideClose"
+            [isAsideOpen]="isAddUnitOpen"
+            (closeAsideEvent)="closeAsidePane($event)"
+        >
         </inventory-custom-stock>
     </div>
 </div>
