@@ -58,6 +58,8 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
     public allStockMappedUnits = StockUnits;
     /* Observable to delete stock unit by uniquename */
     public deleteCustomStockSuccess$: Observable<boolean>;
+    /* Observable to update stock unit success */
+    public updateCustomStockSuccess$: Observable<boolean>;
 
 
     constructor(
@@ -88,6 +90,7 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
         this.activeGroupUniqueName$ = this.store.pipe(select(s => s.inventory.activeGroupUniqueName), takeUntil(this.destroyed$));
         this.createCustomStockInProcess$ = this.store.pipe(select(s => s.inventory.createCustomStockInProcess), takeUntil(this.destroyed$));
         this.updateCustomStockInProcess$ = this.store.pipe(select(s => s.inventory.updateCustomStockInProcess), takeUntil(this.destroyed$));
+        this.updateCustomStockSuccess$ = this.store.pipe(select(s => s.inventory.updateCustomStockSuccess), takeUntil(this.destroyed$));
         this.deleteCustomStockInProcessCode$ = this.store.pipe(select(s => s.inventory.deleteCustomStockInProcessCode), takeUntil(this.destroyed$));
         this.deleteCustomStockSuccess$ = this.store.pipe(select(s => s.inventory.deleteCustomStockSuccess), takeUntil(this.destroyed$));
     }
@@ -122,6 +125,7 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
 
         this.store.dispatch(this.inventoryAction.resetActiveStock());
         this.store.dispatch(this.customStockActions.getStockUnit());
+        this.store.dispatch(this.customStockActions.getStockMappedUnits());
 
         this.stockMappedUnits$.subscribe(res => {
             res?.forEach((mapped: any) => {
@@ -135,27 +139,6 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
             });
         });
 
-        this.deleteCustomStockSuccess$.subscribe((res) => {
-            if (res) {
-                this.store.dispatch(this.customStockActions.GetStockMappedUnits());
-            }
-        });
-
-        this.createCustomStockSuccess$.subscribe((res) => {
-            if (res) {
-                this.clearFields();
-                this.selectedUnitName = null;
-                this.store.dispatch(this.customStockActions.GetStockMappedUnits());
-            }
-        });
-
-        this.updateCustomStockInProcess$.subscribe((res) => {
-            if (!res) {
-                this.clearFields();
-                this.selectedUnitName = null;
-                this.store.dispatch(this.customStockActions.GetStockMappedUnits());
-            }
-        });
         this.addDefaultMapping();
     }
 
@@ -201,14 +184,33 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
                 customMapping.name = cloneDeep(this.selectedUnitName);
             }
             this.store.dispatch(this.customStockActions.CreateStockUnit(cloneDeep(customMapping)));
+            this.createCustomStockSuccess$.subscribe((res) => {
+                if (res) {
+                    this.clearFields();
+                    this.selectedUnitName = null;
+                    this.store.dispatch(this.customStockActions.getStockMappedUnits());
+                }
+            });
         } else {
             this.store.dispatch(this.customStockActions.UpdateStockUnit(cloneDeep(customMapping), this.editCode));
+            this.updateCustomStockSuccess$.subscribe((res) => {
+                if (res) {
+                    this.clearFields();
+                    this.selectedUnitName = null;
+                    this.store.dispatch(this.customStockActions.getStockMappedUnits());
+                }
+            });
             customMapping.name = null;
         }
     }
 
     public deleteUnit(code): any {
         this.store.dispatch(this.customStockActions.DeleteStockUnit(code));
+        this.deleteCustomStockSuccess$.subscribe((res) => {
+            if (res) {
+                this.store.dispatch(this.customStockActions.getStockMappedUnits());
+            }
+        });
     }
 
     /**

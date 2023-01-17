@@ -40,6 +40,7 @@ export interface InventoryState {
     isDeleteGroupInProcess: boolean;
     createCustomStockInProcess: boolean;
     updateCustomStockInProcess: boolean;
+    updateCustomStockSuccess: boolean;
     deleteCustomStockInProcessCode: any[];
     deleteCustomStockSuccess: boolean;
     createCustomStockSuccess: boolean;
@@ -102,6 +103,7 @@ const initialState: InventoryState = {
     isDeleteGroupInProcess: false,
     createCustomStockInProcess: false,
     updateCustomStockInProcess: false,
+    updateCustomStockSuccess:false,
     deleteCustomStockInProcessCode: [],
     activeGroupUniqueName: '',
     activeStock: null,
@@ -592,7 +594,7 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
                 createCustomStockSuccess: false
             };
         case CUSTOM_STOCK_UNIT_ACTIONS.UPDATE_STOCK_UNIT:
-            return Object.assign({}, state, { updateCustomStockInProcess: true });
+            return Object.assign({}, state, { updateCustomStockInProcess: true ,updateCustomStockSuccess: false });
         case CUSTOM_STOCK_UNIT_ACTIONS.UPDATE_STOCK_UNIT_RESPONSE:
             return Object.assign({}, state, {
                 stockUnits: state.stockUnits.map(unit => {
@@ -601,7 +603,8 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
                     }
                     return unit;
                 }),
-                updateCustomStockInProcess: false
+                updateCustomStockInProcess: false,
+                updateCustomStockSuccess: true
             });
         case CUSTOM_STOCK_UNIT_ACTIONS.DELETE_STOCK_UNIT:
             return Object.assign({}, state, { deleteCustomStockInProcessCode: [...state.deleteCustomStockInProcessCode, action.payload],  deleteCustomStockSuccess: false });
