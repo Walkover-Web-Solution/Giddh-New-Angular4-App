@@ -14,6 +14,7 @@
 	"select_tax": "कर चुनें",
 	"tax_percent": "कर प्रतिशत",
 	"unique_no": "अद्वितीय संख्या",
+    "unique_name": "अनूठा नाम",
 	"unique_number": "एकमात्र संख्या",
 	"link_tax": "लिंक कर",
 	"is_other_tax_linked": "क्या इससे कोई अन्य कर जुड़ा है",
