@@ -339,7 +339,7 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
      */
     public addDefaultMapping(mappings?: any): void {
         this.isValidForm = true;
-        if (!this.customUnitObj.mappings.length || mappings?.quantity && mappings?.stockUnitY.code && mappings?.stockUnitX.code) {
+        if ((!this.customUnitObj.mappings.length) || (mappings?.quantity && mappings?.stockUnitY.code && mappings?.stockUnitX.code)) {
             this.customUnitObj.mappings.push(
                 {
                     quantity: "",
