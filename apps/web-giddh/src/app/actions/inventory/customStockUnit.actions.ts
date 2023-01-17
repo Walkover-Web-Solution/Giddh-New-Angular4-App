@@ -83,7 +83,6 @@ export class CustomStockUnitAction {
                         type: CUSTOM_STOCK_UNIT_ACTIONS.GET_STOCK_MAPPED_UNIT_UNIQUENAME_RESPONSE,
                         payload: r.body
                     })));
-
             })));
 
 
@@ -156,7 +155,7 @@ export class CustomStockUnitAction {
      * @return {*}  {CustomActions}
      * @memberof CustomStockUnitAction
      */
-    public GetStockMappedUnits(): CustomActions {
+    public getStockMappedUnits(): CustomActions {
         return {
             type: CUSTOM_STOCK_UNIT_ACTIONS.GET_STOCK_MAPPED_UNITS,
         };
