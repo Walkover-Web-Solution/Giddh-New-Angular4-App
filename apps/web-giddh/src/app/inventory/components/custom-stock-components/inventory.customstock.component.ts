@@ -53,7 +53,7 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
     /* Observable for stock unit mapped list  */
     public stockMappedUnits$: Observable<StockMappedUnitResponse[]>;
     /* Observable to get stock unit by uniquename */
-    public stockMappedUnitsWithUniqueName$: Observable<StockMappedUnitResponse[]>;
+    public stockMappedUnitsWithCode$: Observable<StockMappedUnitResponse[]>;
     /* Hold all stock mapped units */
     public allStockMappedUnits = StockUnits;
     /* Observable to delete stock unit by uniquename */
@@ -73,9 +73,15 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
         this.customUnitObj = new StockUnitRequest();
         this.stockUnit$ = this.store.pipe(select(p => p.inventory.stockUnits), takeUntil(this.destroyed$));
         this.stockMappedUnits$ = this.store.pipe(select(p => p.inventory.stockMappedUnits), takeUntil(this.destroyed$));
-        this.stockMappedUnitsWithUniqueName$ = this.store.pipe(select(p => p.inventory.stockMappedUnitsWithUniqueName), takeUntil(this.destroyed$));
+        this.stockMappedUnitsWithCode$ = this.store.pipe(select(p => p.inventory.stockMappedUnitsWithUniqueName), takeUntil(this.destroyed$));
         this.isStockUnitCodeAvailable$ = this.store.pipe(select(state => state.inventory.isStockUnitCodeAvailable), takeUntil(this.destroyed$));
+        this.activeGroupUniqueName$ = this.store.pipe(select(s => s.inventory.activeGroupUniqueName), takeUntil(this.destroyed$));
         this.createCustomStockSuccess$ = this.store.pipe(select(s => s.inventory.createCustomStockSuccess), takeUntil(this.destroyed$));
+        this.createCustomStockInProcess$ = this.store.pipe(select(s => s.inventory.createCustomStockInProcess), takeUntil(this.destroyed$));
+        this.updateCustomStockInProcess$ = this.store.pipe(select(s => s.inventory.updateCustomStockInProcess), takeUntil(this.destroyed$));
+        this.updateCustomStockSuccess$ = this.store.pipe(select(s => s.inventory.updateCustomStockSuccess), takeUntil(this.destroyed$));
+        this.deleteCustomStockInProcessCode$ = this.store.pipe(select(s => s.inventory.deleteCustomStockInProcessCode), takeUntil(this.destroyed$));
+        this.deleteCustomStockSuccess$ = this.store.pipe(select(s => s.inventory.deleteCustomStockSuccess), takeUntil(this.destroyed$));
 
         this.store.pipe(select(state => state.inventory.stockUnits), takeUntil(this.destroyed$)).subscribe(p => {
             if (p && p.length) {
@@ -86,13 +92,6 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
                 this.stockUnitsDropDown$ = observableOf(unitArr);
             }
         });
-
-        this.activeGroupUniqueName$ = this.store.pipe(select(s => s.inventory.activeGroupUniqueName), takeUntil(this.destroyed$));
-        this.createCustomStockInProcess$ = this.store.pipe(select(s => s.inventory.createCustomStockInProcess), takeUntil(this.destroyed$));
-        this.updateCustomStockInProcess$ = this.store.pipe(select(s => s.inventory.updateCustomStockInProcess), takeUntil(this.destroyed$));
-        this.updateCustomStockSuccess$ = this.store.pipe(select(s => s.inventory.updateCustomStockSuccess), takeUntil(this.destroyed$));
-        this.deleteCustomStockInProcessCode$ = this.store.pipe(select(s => s.inventory.deleteCustomStockInProcessCode), takeUntil(this.destroyed$));
-        this.deleteCustomStockSuccess$ = this.store.pipe(select(s => s.inventory.deleteCustomStockSuccess), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
@@ -137,6 +136,28 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
                     });
                 }
             });
+        });
+
+        this.deleteCustomStockSuccess$.subscribe((res) => {
+            if (res) {
+                this.store.dispatch(this.customStockActions.getStockMappedUnits());
+            }
+        });
+
+        this.createCustomStockSuccess$.subscribe((res) => {
+            if (res) {
+                this.clearFields();
+                this.selectedUnitName = null;
+                this.store.dispatch(this.customStockActions.getStockMappedUnits());
+            }
+        });
+
+        this.updateCustomStockSuccess$.subscribe((res) => {
+            if (res) {
+                this.clearFields();
+                this.selectedUnitName = null;
+                this.store.dispatch(this.customStockActions.getStockMappedUnits());
+            }
         });
 
         this.addDefaultMapping();
@@ -184,33 +205,14 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
                 customMapping.name = cloneDeep(this.selectedUnitName);
             }
             this.store.dispatch(this.customStockActions.CreateStockUnit(cloneDeep(customMapping)));
-            this.createCustomStockSuccess$.subscribe((res) => {
-                if (res) {
-                    this.clearFields();
-                    this.selectedUnitName = null;
-                    this.store.dispatch(this.customStockActions.getStockMappedUnits());
-                }
-            });
         } else {
             this.store.dispatch(this.customStockActions.UpdateStockUnit(cloneDeep(customMapping), this.editCode));
-            this.updateCustomStockSuccess$.subscribe((res) => {
-                if (res) {
-                    this.clearFields();
-                    this.selectedUnitName = null;
-                    this.store.dispatch(this.customStockActions.getStockMappedUnits());
-                }
-            });
             customMapping.name = null;
         }
     }
 
     public deleteUnit(code): any {
         this.store.dispatch(this.customStockActions.DeleteStockUnit(code));
-        this.deleteCustomStockSuccess$.subscribe((res) => {
-            if (res) {
-                this.store.dispatch(this.customStockActions.getStockMappedUnits());
-            }
-        });
     }
 
     /**
@@ -220,8 +222,8 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
      * @memberof InventoryCustomStockComponent
      */
     public editUnit(item: any) {
-        this.store.dispatch(this.customStockActions.getStockMappedUnitByUniqueName(item.stockUnitX.code));
-        this.stockMappedUnitsWithUniqueName$.subscribe((res: any) => {
+        this.store.dispatch(this.customStockActions.getStockMappedUnitByCode(item.stockUnitX.code));
+        this.stockMappedUnitsWithCode$.subscribe((res: any) => {
 
             if (res?.code) {
                 this.selectedUnitName = res?.name;

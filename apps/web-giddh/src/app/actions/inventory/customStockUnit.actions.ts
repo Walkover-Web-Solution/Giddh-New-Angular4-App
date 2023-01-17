@@ -74,13 +74,13 @@ export class CustomStockUnitAction {
      * @type {Observable<Action>}
      * @memberof CustomStockUnitAction
      */
-    public getStockMappedUnitByUniqueName$: Observable<Action> = createEffect(() => this.action$
+    public getStockMappedUnitByCode$: Observable<Action> = createEffect(() => this.action$
         .pipe(
-            ofType(CUSTOM_STOCK_UNIT_ACTIONS.GET_STOCK_MAPPED_UNIT_UNIQUENAME),
+            ofType(CUSTOM_STOCK_UNIT_ACTIONS.GET_STOCK_MAPPED_UNIT_CODE),
             switchMap((action: CustomActions) => {
-                return this._inventoryService.getStockMappedUnitByUniqueName(action.payload.code).pipe(
+                return this._inventoryService.getStockMappedUnitByCode(action.payload.code).pipe(
                     map((r) => this.validateResponse(r, {
-                        type: CUSTOM_STOCK_UNIT_ACTIONS.GET_STOCK_MAPPED_UNIT_UNIQUENAME_RESPONSE,
+                        type: CUSTOM_STOCK_UNIT_ACTIONS.GET_STOCK_MAPPED_UNIT_CODE_RESPONSE,
                         payload: r.body
                     })));
             })));
@@ -168,9 +168,9 @@ export class CustomStockUnitAction {
      * @return {*}  {CustomActions}
      * @memberof CustomStockUnitAction
      */
-    public getStockMappedUnitByUniqueName(code: string): CustomActions {
+    public getStockMappedUnitByCode(code: string): CustomActions {
         return {
-            type: CUSTOM_STOCK_UNIT_ACTIONS.GET_STOCK_MAPPED_UNIT_UNIQUENAME,
+            type: CUSTOM_STOCK_UNIT_ACTIONS.GET_STOCK_MAPPED_UNIT_CODE,
             payload: { code }
         };
     }

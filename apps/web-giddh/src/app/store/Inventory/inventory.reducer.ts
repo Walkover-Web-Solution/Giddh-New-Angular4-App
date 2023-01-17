@@ -573,7 +573,7 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
          * */
         case CUSTOM_STOCK_UNIT_ACTIONS.GET_STOCK_MAPPED_UNITS_RESPONSE:
             return Object.assign({}, state, { stockMappedUnits: action.payload });
-        case CUSTOM_STOCK_UNIT_ACTIONS.GET_STOCK_MAPPED_UNIT_UNIQUENAME_RESPONSE:
+        case CUSTOM_STOCK_UNIT_ACTIONS.GET_STOCK_MAPPED_UNIT_CODE_RESPONSE:
             return Object.assign({}, state, { stockMappedUnitsWithUniqueName: action.payload });
         case CUSTOM_STOCK_UNIT_ACTIONS.GET_STOCK_UNIT_RESPONSE:
             return Object.assign({}, state, { stockUnits: action.payload });
