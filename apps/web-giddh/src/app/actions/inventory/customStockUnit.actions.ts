@@ -189,6 +189,12 @@ export class CustomStockUnitAction {
         };
     }
 
+    public resetStockUnitResponse(): CustomActions {
+        return {
+            type: CUSTOM_STOCK_UNIT_ACTIONS.RESET_STOCK_UNIT_RESPONSE,
+        };
+    }
+
     private validateResponse(response: BaseResponse<any, any>, successAction: CustomActions, showToast: boolean = false, ShowMessage: string = '', errorAction: CustomActions = { type: 'EmptyAction' }): CustomActions {
         if (response.status === 'error') {
             if (showToast) {

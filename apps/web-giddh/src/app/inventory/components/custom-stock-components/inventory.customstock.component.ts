@@ -339,7 +339,7 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
      */
     public addDefaultMapping(mappings?: any): void {
         this.isValidForm = true;
-        if (!this.customUnitObj.mappings.length) {
+        if ((!this.customUnitObj.mappings.length) || (mappings?.quantity && mappings?.stockUnitY.code && mappings?.stockUnitX.code)) {
             this.customUnitObj.mappings.push(
                 {
                     quantity: "",
@@ -351,24 +351,10 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
                     }
                 }
             );
-        } else {
-            if (mappings?.quantity && mappings?.stockUnitY.code) {
-                this.customUnitObj.mappings.push(
-                    {
-                        quantity: "",
-                        stockUnitX: {
-                            code: ""
-                        },
-                        stockUnitY: {
-                            code: ""
-                        }
-                    }
-                );
-            } else {
+        }  else {
                 return;
             }
         }
-    }
 
     /**
     *This will use for  remove default filter
@@ -392,5 +378,6 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+        this.store.dispatch(this.customStockActions.resetStockUnitResponse());
     }
 }

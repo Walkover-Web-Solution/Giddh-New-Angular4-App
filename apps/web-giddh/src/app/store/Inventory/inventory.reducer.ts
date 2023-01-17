@@ -579,6 +579,8 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
             return Object.assign({}, state, { stockUnits: action.payload });
         case CUSTOM_STOCK_UNIT_ACTIONS.CREATE_STOCK_UNIT:
             return Object.assign({}, state, { createCustomStockInProcess: true, createCustomStockSuccess: false, });
+        case CUSTOM_STOCK_UNIT_ACTIONS.RESET_STOCK_UNIT_RESPONSE:
+            return Object.assign({}, state, {createCustomStockSuccess: false});
         case CUSTOM_STOCK_UNIT_ACTIONS.CREATE_STOCK_UNIT_RESPONSE:
             if (action.payload.status === 'success') {
                 return Object.assign({}, state, {
