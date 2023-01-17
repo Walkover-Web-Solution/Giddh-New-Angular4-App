@@ -51,6 +51,41 @@ export class CustomStockUnitAction {
                     }, true, 'Unit Updated Successfully')));
             })));
 
+    /**
+     * This with use for all get stock mapped units
+     *
+     * @type {Observable<Action>}
+     * @memberof CustomStockUnitAction
+     */
+    public getStockMappedUnit$: Observable<Action> = createEffect(() => this.action$
+        .pipe(
+            ofType(CUSTOM_STOCK_UNIT_ACTIONS.GET_STOCK_MAPPED_UNITS),
+            switchMap((action: CustomActions) => {
+                return this._inventoryService.getStockMappedUnit().pipe(
+                    map((r) => this.validateResponse(r, {
+                        type: CUSTOM_STOCK_UNIT_ACTIONS.GET_STOCK_MAPPED_UNITS_RESPONSE,
+                        payload: r.body
+                    })));
+            })));
+
+    /**
+     * This  will use for get stock mapped unit by name
+     *
+     * @type {Observable<Action>}
+     * @memberof CustomStockUnitAction
+     */
+    public getStockMappedUnitByCode$: Observable<Action> = createEffect(() => this.action$
+        .pipe(
+            ofType(CUSTOM_STOCK_UNIT_ACTIONS.GET_STOCK_MAPPED_UNIT_CODE),
+            switchMap((action: CustomActions) => {
+                return this._inventoryService.getStockMappedUnitByCode(action.payload.code).pipe(
+                    map((r) => this.validateResponse(r, {
+                        type: CUSTOM_STOCK_UNIT_ACTIONS.GET_STOCK_MAPPED_UNIT_CODE_RESPONSE,
+                        payload: r.body
+                    })));
+            })));
+
+
     public DeleteStockUnit$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(CUSTOM_STOCK_UNIT_ACTIONS.DELETE_STOCK_UNIT),
@@ -108,9 +143,35 @@ export class CustomStockUnitAction {
         };
     }
 
-    public GetStockUnit(): CustomActions {
+    public getStockUnit(): CustomActions {
         return {
             type: CUSTOM_STOCK_UNIT_ACTIONS.GET_STOCK_UNIT,
+        };
+    }
+
+    /**
+      *This will use for get stock mapped units
+     *
+     * @return {*}  {CustomActions}
+     * @memberof CustomStockUnitAction
+     */
+    public getStockMappedUnits(): CustomActions {
+        return {
+            type: CUSTOM_STOCK_UNIT_ACTIONS.GET_STOCK_MAPPED_UNITS,
+        };
+    }
+
+    /**
+     * This will use for get stock mapped units by unique name
+     *
+     * @param {string} code
+     * @return {*}  {CustomActions}
+     * @memberof CustomStockUnitAction
+     */
+    public getStockMappedUnitByCode(code: string): CustomActions {
+        return {
+            type: CUSTOM_STOCK_UNIT_ACTIONS.GET_STOCK_MAPPED_UNIT_CODE,
+            payload: { code }
         };
     }
 

@@ -76,8 +76,12 @@ export const StockUnits = [
         value: 'gyd'
     },
     {
-        label: 'Kilograms',
-        value: 'kgs'
+        label: 'Hour',
+        value: 'hr'
+    },
+    {
+        label: 'Kilogram',
+        value: 'kg'
     },
     {
         label: 'Kilolitre',
@@ -88,19 +92,23 @@ export const StockUnits = [
         value: 'kme'
     },
     {
+        label: "Litre",
+        value: "l"
+    },
+    {
         label: 'Mililitre',
         value: 'mlt'
     },
     {
-        label: 'Meters',
-        value: 'mtr'
+        label: 'Meter',
+        value: 'm'
     },
     {
         label: 'Metric Ton',
         value: 'mts'
     },
     {
-        label: 'Numbers',
+        label: 'Number',
         value: 'nos'
     },
     {
@@ -108,7 +116,7 @@ export const StockUnits = [
         value: 'pac'
     },
     {
-        label: 'Pieces',
+        label: 'pcs',
         value: 'pcs'
     },
     {

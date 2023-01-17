@@ -84,6 +84,14 @@ export class StockUnitResponse implements IStockUnitResponse {
 }
 
 /**
+ * Response will be a array of StockMappedUnitResponse
+ */
+export class StockMappedUnitResponse {
+    public quantity?: number;
+    public stockUnitX?: IStockItem;
+    public stockUnitY?: IStockItem;
+}
+/**
  * Model for stock-report api response
  * GET call
  * API:: (stock-report) company/:companyUniqueName/stock-group/:stockGroupUniqueName/stock/:stockUniqueName/report-v2?from=:from&to=:to&count=:count&page=:page
@@ -140,7 +148,7 @@ export class GroupStockReportRequest {
     public from: string = '';
     public to: string = '';
     public count: number = PAGINATION_LIMIT;
-    public page: number ;
+    public page: number;
     public totalItems: number;
     public totalPages: number;
     public entity: string;
@@ -233,13 +241,10 @@ export class CreateStockRequest {
  * used to create custom stock units
  * its response will be hash as StockUnitResponse
  */
-export class StockUnitRequest implements IStockUnit {
-    public parentStockUnit: IStockItem;
-    public quantityPerUnit: number;
+export class StockUnitRequest {
     public name: string;
     public code: string;
-    public parentStockUnitCode?: string;
-    public displayQuantityPerUnit?: number;
+    public mappings: any[] = [];
 }
 
 /*

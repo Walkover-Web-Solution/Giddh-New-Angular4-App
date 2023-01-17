@@ -46,12 +46,12 @@ export class UnitMappingComponent implements OnInit, OnDestroy {
 
     /**
      * Lifecycle hook runs when component is initialized
-     * 
+     *
      * @memberof UnitMappingComponent
      */
     public ngOnInit(): void {
         this.getStockUnits();
-        this.store.dispatch(this.customStockAction.GetStockUnit());
+        this.store.dispatch(this.customStockAction.getStockUnit());
         document.querySelector('body').classList.add('gst-sidebar-open');
         document.querySelector('body').classList.add('unit-mapping-page');
         this.breakpointObserver
@@ -81,7 +81,7 @@ export class UnitMappingComponent implements OnInit, OnDestroy {
 
     /**
      * Lifecycle hook runs when component is destroyed
-     * 
+     *
      * @memberof UnitMappingComponent
      */
     public ngOnDestroy(): void {
@@ -102,7 +102,7 @@ export class UnitMappingComponent implements OnInit, OnDestroy {
 
     /**
      * This will use for get stock units
-     * 
+     *
      * @memberof UnitMappingComponent
      */
     public getStockUnits(): void {
