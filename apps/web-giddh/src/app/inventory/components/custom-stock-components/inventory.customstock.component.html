@@ -9,7 +9,7 @@
             <div class="aside-pane-form">
                 <form #customUnitForm="ngForm" name="customUnitForm" class="form-body" novalidate>
                     <div class="clearfix">
-                        <div class="row col-md-12 col-sm-12 col-lg-12">
+                        <div class="row">
                             <div class="form-group col-xs-6 col-sm-6">
                                 <label>Unit Name<sup>*</sup></label>
                                 <sh-select
@@ -70,7 +70,7 @@
                             <ng-container *ngFor="let mappingField of customUnitObj.mappings; let i = index">
                                 <div class="inventory-section d-flex" *ngIf="customUnitObj.name && customUnitObj.code">
                                     <div class="form-group col-xs-4 col-sm-4">
-                                        <label>Mapped Unit<sup>*</sup></label>
+                                        <label>Unit Name<sup>*</sup></label>
                                         <div class="d-flex">
                                             <sh-select
                                                 [options]="allStockMappedUnits"
@@ -80,7 +80,7 @@
                                                 (selected)="mappingField.stockUnitX.code = $event?.value"
                                                 [ItemHeight]="33"
                                                 [forceClearReactive]="forceClear$ | async"
-                                                class="select-unit"
+                                                class="select-unit-x"
                                                 [ngClass]="{
                                                     'error-box': !mappingField.stockUnitX.code && !isValidForm
                                                 }"
