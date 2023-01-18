@@ -27,6 +27,7 @@
                                     [notFoundMsg]="'Type to create custom unit'"
                                     [isRequired]="true"
                                     [doNotReset]="true"
+                                    [disabled]="editMode"
                                 >
                                     <ng-template #optionTemplate let-option="option">
                                         <ng-container>
@@ -49,7 +50,7 @@
                                     (change)="handleUnitName(customUnitObj.name)"
                                     required
                                     *ngIf="country != 'india'"
-                                    [disabled]="this.editMode"
+                                    [disabled]="editMode"
                                 />
                             </div>
 
@@ -66,6 +67,7 @@
                                     (change)="handleUnitCodeValidation(unitCode?.errors)"
                                     class="form-control"
                                     required
+                                    [disabled]="editMode"
                                 />
                             </div>
                             <ng-container *ngFor="let mappingField of customUnitObj.mappings; let i = index">
