@@ -52,17 +52,18 @@
                         </div>
 
                         <div class="form-group col-sm-6 col-xs-12">
-                            <label>{{ localeData?.unique_name }} </label><br />
-                            <input
-                                type="text"
-                                [(ngModel)]="newTaxObj.uniqueName"
-                                name="taxNumber"
-                                [placeholder]="localeData?.unique_name"
-                                class="form-control"
-                                [disabled]="true"
-                            />
+                            <ng-container *ngIf="tax && tax.uniqueName">
+                                <label>{{ localeData?.unique_name }} </label><br />
+                                <input
+                                    type="text"
+                                    [(ngModel)]="newTaxObj.uniqueName"
+                                    name="taxNumber"
+                                    [placeholder]="localeData?.unique_name"
+                                    class="form-control"
+                                    [disabled]="true"
+                                />
+                            </ng-container>
                         </div>
-
                         <div
                             class="form-group col-sm-6 col-xs-12"
                             *ngIf="newTaxObj.taxType === 'tds' || newTaxObj.taxType === 'tcs'"
