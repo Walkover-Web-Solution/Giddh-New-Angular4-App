@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, OnChanges, ViewChild } from '@angular/core';
 import { select, Store } from '@ngrx/store';
-import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
-import { find, take, takeUntil } from 'rxjs/operators';
+import { Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
+import { take, takeUntil } from 'rxjs/operators';
 import { CustomStockUnitAction } from '../../../actions/inventory/customStockUnit.actions';
 import { InventoryAction } from '../../../actions/inventory/inventory.actions';
 import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
@@ -26,7 +26,7 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
     @ViewChild('customUnitForm', { static: true }) customUnitForm: NgForm;
     @Input() public isAsideClose: boolean;
     /** Stores the aside open or not */
-    @Input() public isAsideOpen :boolean;
+    @Input() public isAsideOpen: boolean;
     @Output() public closeAsideEvent: EventEmitter<any> = new EventEmitter();
     public stockUnitsDropDown$: Observable<IOption[]>;
     public activeGroupUniqueName$: Observable<string>;
@@ -75,7 +75,7 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
         this.customUnitObj = new StockUnitRequest();
         this.stockUnit$ = this.store.pipe(select(p => p.inventory.stockUnits), takeUntil(this.destroyed$));
         this.stockMappedUnits$ = this.store.pipe(select(p => p.inventory.stockMappedUnits), takeUntil(this.destroyed$));
-        this.stockMappedUnitsWithCode$ = this.store.pipe(select(p => p.inventory.stockMappedUnitsWithUniqueName), takeUntil(this.destroyed$));
+        this.stockMappedUnitsWithCode$ = this.store.pipe(select(p => p.inventory.stockMappedUnitsWithCode), takeUntil(this.destroyed$));
         this.isStockUnitCodeAvailable$ = this.store.pipe(select(state => state.inventory.isStockUnitCodeAvailable), takeUntil(this.destroyed$));
         this.activeGroupUniqueName$ = this.store.pipe(select(s => s.inventory.activeGroupUniqueName), takeUntil(this.destroyed$));
         this.createCustomStockSuccess$ = this.store.pipe(select(s => s.inventory.createCustomStockSuccess), takeUntil(this.destroyed$));
@@ -140,6 +140,24 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
             });
         });
 
+            this.stockMappedUnitsWithCode$.subscribe((res: any) => {
+                if (res?.code) {
+                    this.selectedUnitName = res?.name;
+                    this.editCode = res?.code;
+                    this.editMode = true;
+                    this.customUnitObj.name = res?.name;
+                    this.customUnitObj.code = res?.code;
+                    if (!res?.mappings?.length) {
+                        this.addDefaultMapping();
+                    } else {
+                        this.customUnitObj.mappings = [];
+                        res.mappings.forEach(mapping => {
+                            this.customUnitObj.mappings.push(mapping);
+                        });
+                    }
+                }
+            });
+
         this.addDefaultMapping();
     }
 
@@ -203,32 +221,6 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
      */
     public editUnit(item: any) {
         this.store.dispatch(this.customStockActions.getStockMappedUnitByCode(item.stockUnitX.code));
-        this.stockMappedUnitsWithCode$.subscribe((res: any) => {
-
-            if (res?.code) {
-                this.selectedUnitName = res?.name;
-                this.editCode = res?.code;
-                this.editMode = true;
-                this.customUnitObj.name = res?.name;
-                this.customUnitObj.code = res?.code;
-                if (!res?.mappings?.length) {
-                    this.addDefaultMapping();
-                } else {
-                    this.customUnitObj.mappings = [];
-                    res.mappings.forEach(mapping => {
-                        this.customUnitObj.mappings.push({
-                            quantity: mapping?.quantity,
-                            stockUnitX: {
-                                code: mapping?.stockUnitX?.code
-                            },
-                            stockUnitY: {
-                                code: mapping?.stockUnitY?.code
-                            }
-                        });
-                    });
-                }
-            }
-        });
     }
 
     /**
@@ -256,7 +248,7 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
             this.customUnitObj.code = unit[0].value;
             this.customUnitObj.name = unit[0].value;
             this.selectedUnitName = unit[0].label;
-        }
+    }
         this.addDefaultMapping();
     }
 
@@ -264,7 +256,7 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
         if (this.isAsideClose) {
             this.clearFields();
         }
-        if(this.isAsideOpen){
+        if (this.isAsideOpen) {
             this.deleteCustomStockSuccess$.subscribe((res) => {
                 if (res) {
                     this.store.dispatch(this.customStockActions.getStockMappedUnits());
