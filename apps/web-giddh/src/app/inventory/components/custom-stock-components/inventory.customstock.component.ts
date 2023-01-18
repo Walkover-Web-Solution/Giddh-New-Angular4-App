@@ -152,15 +152,7 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
                     } else {
                         this.customUnitObj.mappings = [];
                         res.mappings.forEach(mapping => {
-                            this.customUnitObj.mappings.push({
-                                quantity: mapping?.quantity,
-                                stockUnitX: {
-                                    code: mapping?.stockUnitX?.code
-                                },
-                                stockUnitY: {
-                                    code: mapping?.stockUnitY?.code
-                                }
-                            });
+                            this.customUnitObj.mappings.push(mapping);
                         });
                     }
                 }
