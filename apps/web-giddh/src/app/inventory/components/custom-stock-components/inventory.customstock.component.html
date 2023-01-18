@@ -49,6 +49,7 @@
                                     (change)="handleUnitName(customUnitObj.name)"
                                     required
                                     *ngIf="country != 'india'"
+                                    [disabled]="this.editMode"
                                 />
                             </div>
 
@@ -101,7 +102,7 @@
                                             </sh-select>
                                         </div>
                                     </div>
-
+                                    <span class="equal-sign">=</span>
                                     <div class="form-group col-xs-3 col-sm-3">
                                         <label>Qty. per Unit <sup>*</sup></label>
                                         <input
