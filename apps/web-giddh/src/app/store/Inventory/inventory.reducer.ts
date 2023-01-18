@@ -16,7 +16,7 @@ export interface InventoryState {
     manufacturingStockListForCreateMF: StocksResponse;
     stockUnits?: StockUnitRequest[];
     stockMappedUnits?: StockMappedUnitResponse[];
-    stockMappedUnitsWithUniqueName?: StockMappedUnitResponse[];
+    stockMappedUnitsWithCode?: StockMappedUnitResponse[];
     activeGroup?: StockGroupResponse;
     activeGroupUniqueName?: string;
     activeStock?: StockDetailResponse;
@@ -86,7 +86,7 @@ const initialState: InventoryState = {
     manufacturingStockListForCreateMF: null,
     stockUnits: [],
     stockMappedUnits: [],
-    stockMappedUnitsWithUniqueName: [],
+    stockMappedUnitsWithCode: [],
     activeGroup: null,
     fetchingGrpUniqueName: false,
     isGroupNameAvailable: false,
@@ -574,7 +574,8 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
         case CUSTOM_STOCK_UNIT_ACTIONS.GET_STOCK_MAPPED_UNITS_RESPONSE:
             return Object.assign({}, state, { stockMappedUnits: action.payload });
         case CUSTOM_STOCK_UNIT_ACTIONS.GET_STOCK_MAPPED_UNIT_CODE_RESPONSE:
-            return Object.assign({}, state, { stockMappedUnitsWithUniqueName: action.payload });
+            return Object.assign({}, state, { stockMappedUnitsWithCode: action.payload });
+
         case CUSTOM_STOCK_UNIT_ACTIONS.GET_STOCK_UNIT_RESPONSE:
             return Object.assign({}, state, { stockUnits: action.payload });
         case CUSTOM_STOCK_UNIT_ACTIONS.CREATE_STOCK_UNIT:
