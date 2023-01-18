@@ -56,8 +56,6 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
     }
 
     ngOnInit() {
-        console.log(this.newTaxObj);
-
         for (let i = 1; i <= 31; i++) {
             this.days.push({ label: i?.toString(), value: i?.toString() });
         }
@@ -140,7 +138,6 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
         let val: string = this.newTaxObj.name;
         val = uniqueNameInvalidStringReplace(val);
         if (val) {
-            this.newTaxObj.uniqueName = val.toLowerCase();
             let isDuplicate = this.allTaxes.some(s => s.value.toLowerCase().includes(val));
             if (isDuplicate) {
                 this.newTaxObj.taxNumber = val + 1;
@@ -148,7 +145,6 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
                 this.newTaxObj.taxNumber = val;
             }
         } else {
-            this.newTaxObj.uniqueName = '';
             this.newTaxObj.taxNumber = '';
         }
     }
