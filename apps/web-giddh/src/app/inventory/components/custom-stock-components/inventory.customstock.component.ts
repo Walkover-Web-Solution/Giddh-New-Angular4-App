@@ -48,7 +48,7 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
     public stockUnitCodeRegex: string = '';
     public isDivide: boolean = false;
     /** User selected decimal places */
-    public giddhDecimalPlaces: number = 2;
+    public giddhDecimalPlaces: number = 4;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* False if  custom unit form invalid */
     public isValidForm: boolean = true;
@@ -100,7 +100,6 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
         this.store.pipe(select(p => p.settings.profile), takeUntil(this.destroyed$)).subscribe((profileData) => {
             if (!isEmpty(profileData)) {
                 this.companyProfile = cloneDeep(profileData);
-                this.giddhDecimalPlaces = this.companyProfile.balanceDecimalPlaces || 2;
                 this.inventoryService.getUnitCodeRegex('stockUnit', this.companyProfile.country || '').pipe(takeUntil(this.destroyed$)).subscribe((data: any) => {
                     if (data && data.body) {
                         this.stockUnitCodeRegex = data.body.regex;
