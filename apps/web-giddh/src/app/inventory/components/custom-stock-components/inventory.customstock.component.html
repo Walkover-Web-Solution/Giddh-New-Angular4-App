@@ -29,6 +29,7 @@
                                     [doNotReset]="true"
                                     [disabled]="editMode"
                                     (ngModelChange)="unitChange(customUnitObj.code)"
+                                    [fixedValue]="editMode ? customUnitObj.name : ''"
                                 >
                                     <ng-template #optionTemplate let-option="option">
                                         <ng-container>
