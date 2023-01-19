@@ -1,5 +1,5 @@
 import { GroupsWithStocksHierarchyMin } from '../../models/api-models/GroupsWithStocks';
-import { CreateStockRequest, GroupStockReportResponse, INameUniqueName, StockDetailResponse, StockGroupRequest, StockGroupResponse, StockReportResponse, StocksResponse, StockUnitRequest } from '../../models/api-models/Inventory';
+import { CreateStockRequest, GroupStockReportResponse, INameUniqueName, StockDetailResponse, StockGroupRequest, StockGroupResponse, StockMappedUnitResponse, StockReportResponse, StocksResponse, StockUnitRequest } from '../../models/api-models/Inventory';
 import { IGroupsWithStocksHierarchyMinItem } from '../../models/interfaces/groupsWithStocks.interface';
 import { CUSTOM_STOCK_UNIT_ACTIONS, InventoryActionsConst, STOCKS_REPORT_ACTIONS } from '../../actions/inventory/inventory.const';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
@@ -15,6 +15,8 @@ export interface InventoryState {
     manufacturingStockList: StocksResponse;
     manufacturingStockListForCreateMF: StocksResponse;
     stockUnits?: StockUnitRequest[];
+    stockMappedUnits?: StockMappedUnitResponse[];
+    stockMappedUnitsWithCode?: StockMappedUnitResponse[];
     activeGroup?: StockGroupResponse;
     activeGroupUniqueName?: string;
     activeStock?: StockDetailResponse;
@@ -38,7 +40,9 @@ export interface InventoryState {
     isDeleteGroupInProcess: boolean;
     createCustomStockInProcess: boolean;
     updateCustomStockInProcess: boolean;
+    updateCustomStockSuccess: boolean;
     deleteCustomStockInProcessCode: any[];
+    deleteCustomStockSuccess: boolean;
     createCustomStockSuccess: boolean;
     showNewGroupAsidePane: boolean;
     showNewCustomUnitAsidePane: boolean;
@@ -81,6 +85,8 @@ const initialState: InventoryState = {
     manufacturingStockList: null,
     manufacturingStockListForCreateMF: null,
     stockUnits: [],
+    stockMappedUnits: [],
+    stockMappedUnitsWithCode: [],
     activeGroup: null,
     fetchingGrpUniqueName: false,
     isGroupNameAvailable: false,
@@ -97,6 +103,7 @@ const initialState: InventoryState = {
     isDeleteGroupInProcess: false,
     createCustomStockInProcess: false,
     updateCustomStockInProcess: false,
+    updateCustomStockSuccess:false,
     deleteCustomStockInProcessCode: [],
     activeGroupUniqueName: '',
     activeStock: null,
@@ -106,6 +113,7 @@ const initialState: InventoryState = {
     stockReportInProcess: false,
     groupStockReport: null,
     createCustomStockSuccess: false,
+    deleteCustomStockSuccess: false,
     showNewGroupAsidePane: false,
     showNewCustomUnitAsidePane: false,
     inventoryAsideState: {
@@ -563,10 +571,17 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
         /*
          *Custom Stock Units...
          * */
+        case CUSTOM_STOCK_UNIT_ACTIONS.GET_STOCK_MAPPED_UNITS_RESPONSE:
+            return Object.assign({}, state, { stockMappedUnits: action.payload });
+        case CUSTOM_STOCK_UNIT_ACTIONS.GET_STOCK_MAPPED_UNIT_CODE_RESPONSE:
+            return Object.assign({}, state, { stockMappedUnitsWithCode: action.payload });
+
         case CUSTOM_STOCK_UNIT_ACTIONS.GET_STOCK_UNIT_RESPONSE:
             return Object.assign({}, state, { stockUnits: action.payload });
         case CUSTOM_STOCK_UNIT_ACTIONS.CREATE_STOCK_UNIT:
-            return Object.assign({}, state, { createCustomStockInProcess: true });
+            return Object.assign({}, state, { createCustomStockInProcess: true, createCustomStockSuccess: false, });
+        case CUSTOM_STOCK_UNIT_ACTIONS.RESET_STOCK_UNIT_RESPONSE:
+            return Object.assign({}, state, {createCustomStockSuccess: false});
         case CUSTOM_STOCK_UNIT_ACTIONS.CREATE_STOCK_UNIT_RESPONSE:
             if (action.payload.status === 'success') {
                 return Object.assign({}, state, {
@@ -582,7 +597,7 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
                 createCustomStockSuccess: false
             };
         case CUSTOM_STOCK_UNIT_ACTIONS.UPDATE_STOCK_UNIT:
-            return Object.assign({}, state, { updateCustomStockInProcess: true });
+            return Object.assign({}, state, { updateCustomStockInProcess: true ,updateCustomStockSuccess: false });
         case CUSTOM_STOCK_UNIT_ACTIONS.UPDATE_STOCK_UNIT_RESPONSE:
             return Object.assign({}, state, {
                 stockUnits: state.stockUnits.map(unit => {
@@ -591,19 +606,22 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
                     }
                     return unit;
                 }),
-                updateCustomStockInProcess: false
+                updateCustomStockInProcess: false,
+                updateCustomStockSuccess: true
             });
         case CUSTOM_STOCK_UNIT_ACTIONS.DELETE_STOCK_UNIT:
-            return Object.assign({}, state, { deleteCustomStockInProcessCode: [...state.deleteCustomStockInProcessCode, action.payload] });
+            return Object.assign({}, state, { deleteCustomStockInProcessCode: [...state.deleteCustomStockInProcessCode, action.payload],  deleteCustomStockSuccess: false });
         case CUSTOM_STOCK_UNIT_ACTIONS.DELETE_STOCK_UNIT_RESPONSE:
             if ((action.payload as BaseResponse<string, string>).status === 'success') {
                 return Object.assign({}, state, {
                     stockUnits: state.stockUnits?.filter(p => p.code !== (action.payload as BaseResponse<string, string>).request),
-                    deleteCustomStockInProcessCode: state.deleteCustomStockInProcessCode?.filter(p => p !== (action.payload as BaseResponse<string, string>).request)
+                    deleteCustomStockInProcessCode: state.deleteCustomStockInProcessCode?.filter(p => p !== (action.payload as BaseResponse<string, string>).request),
+                    deleteCustomStockSuccess: true,
                 });
             }
             return Object.assign({}, state, {
-                deleteCustomStockInProcessCode: state.deleteCustomStockInProcessCode?.filter(p => p !== (action.payload as BaseResponse<string, string>).request)
+                deleteCustomStockInProcessCode: state.deleteCustomStockInProcessCode?.filter(p => p !== (action.payload as BaseResponse<string, string>).request),
+                deleteCustomStockSuccess: false
             });
         case CUSTOM_STOCK_UNIT_ACTIONS.GET_STOCK_UNIT_NAME:
             return Object.assign({}, state, { isStockUnitCodeAvailable: null });
