@@ -157,7 +157,7 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
                 }
             }
         });
-
+        this.clearFields();
         this.addDefaultMapping();
     }
 
