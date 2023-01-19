@@ -372,10 +372,11 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
      * @memberof InventoryCustomStockComponent
      */
     public unitChange(unit: string): void {
-        if (unit) {
+        let uniqueUnit = this.allStockMappedUnits?.filter(val => val.value === unit?.toLowerCase());
+        if (!uniqueUnit.length) {
             this.allStockMappedUnits.push({
                 label: unit,
-                value: unit.toLowerCase()
+                value: unit?.toLowerCase()
             });
         }
     }
