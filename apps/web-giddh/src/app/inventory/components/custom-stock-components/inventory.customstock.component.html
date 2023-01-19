@@ -28,7 +28,7 @@
                                     [isRequired]="true"
                                     [doNotReset]="true"
                                     [disabled]="editMode"
-                                    (ngModelChange)="unitChange($event)"
+                                    (ngModelChange)="unitChange(customUnitObj.code)"
                                 >
                                     <ng-template #optionTemplate let-option="option">
                                         <ng-container>
