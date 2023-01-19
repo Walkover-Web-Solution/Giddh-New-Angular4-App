@@ -366,17 +366,17 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
     }
 
     /**
-     * This will use for add custom unit in mapping
+     *This will use for add custom unit in mapping
      *
-     * @param {string} unitChange
+     * @param {string} code
      * @memberof InventoryCustomStockComponent
      */
-    public unitChange(unit: string): void {
-        let uniqueUnit = this.allStockMappedUnits?.filter(val => val.value === unit?.toLowerCase());
+    public unitChange(code: string): void {
+        let uniqueUnit = this.allStockMappedUnits?.filter(val => val.value === code?.toLowerCase());
         if (!uniqueUnit?.length) {
             this.allStockMappedUnits.push({
-                label: unit,
-                value: unit?.toLowerCase()
+                label: code,
+                value: code?.toLowerCase()
             });
         }
     }
