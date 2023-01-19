@@ -140,23 +140,23 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
             });
         });
 
-            this.stockMappedUnitsWithCode$.subscribe((res: any) => {
-                if (res?.code) {
-                    this.selectedUnitName = res?.name;
-                    this.editCode = res?.code;
-                    this.editMode = true;
-                    this.customUnitObj.name = res?.name;
-                    this.customUnitObj.code = res?.code;
-                    if (!res?.mappings?.length) {
-                        this.addDefaultMapping();
-                    } else {
-                        this.customUnitObj.mappings = [];
-                        res.mappings.forEach(mapping => {
-                            this.customUnitObj.mappings.push(mapping);
-                        });
-                    }
+        this.stockMappedUnitsWithCode$.subscribe((res: any) => {
+            if (res?.code) {
+                this.selectedUnitName = res?.name;
+                this.editCode = res?.code;
+                this.editMode = true;
+                this.customUnitObj.name = res?.name;
+                this.customUnitObj.code = res?.code;
+                if (!res?.mappings?.length) {
+                    this.addDefaultMapping();
+                } else {
+                    this.customUnitObj.mappings = [];
+                    res.mappings.forEach(mapping => {
+                        this.customUnitObj.mappings.push(mapping);
+                    });
                 }
-            });
+            }
+        });
 
         this.addDefaultMapping();
     }
@@ -248,7 +248,7 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
             this.customUnitObj.code = unit[0].value;
             this.customUnitObj.name = unit[0].value;
             this.selectedUnitName = unit[0].label;
-    }
+        }
         this.addDefaultMapping();
     }
 
@@ -362,6 +362,21 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
         this.customUnitObj.mappings?.splice(index, 1);
         if (this.customUnitObj.mappings.length === 0) {
             this.addDefaultMapping();
+        }
+    }
+
+    /**
+     * This will use for add custom unit in mapping
+     *
+     * @param {string} unitChange
+     * @memberof InventoryCustomStockComponent
+     */
+    public unitChange(unit: string): void {
+        if (unit) {
+            this.allStockMappedUnits.push({
+                label: unit,
+                value: unit.toLowerCase()
+            });
         }
     }
 
