@@ -25,7 +25,7 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
     ],
     template: `
     <div class="aside-overlay" *ngIf="accountAsideMenuState === 'in' || asideMenuStateForProductService === 'in'"></div>
-    <aside-custom-stock [class]="accountAsideMenuState" [@slideInOut]="accountAsideMenuState" (closeAsideEvent)="toggleCustomUnitAsidePane($event)"
+    <aside-custom-stock [class]="accountAsideMenuState" [@slideInOut]="accountAsideMenuState" [menuState]="accountAsideMenuState" (closeAsideEvent)="toggleCustomUnitAsidePane($event)"
                         (onShortcutPress)="toggleCustomUnitAsidePane()"></aside-custom-stock>
     <aside-inventory-stock-group [autoFocus]="false" [class]="asideMenuStateForProductService" [@slideInOut]="asideMenuStateForProductService" (closeAsideEvent)="toggleGroupStockAsidePane($event)"
                                  (onShortcutPress)="toggleGroupStockAsidePane()"></aside-inventory-stock-group>
