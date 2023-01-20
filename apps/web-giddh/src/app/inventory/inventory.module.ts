@@ -46,6 +46,7 @@ import { NgxBootstrapSwitchModule } from 'ngx-bootstrap-switch';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { AsideMenuProductServiceModule } from '../shared/aside-menu-product-service/aside-menu-product-service.module';
 import { VoucherModule } from '../voucher/voucher.module';
+import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 
 @NgModule({
     declarations: [
@@ -126,7 +127,8 @@ import { VoucherModule } from '../voucher/voucher.module';
         NgxBootstrapSwitchModule.forRoot(),
         PerfectScrollbarModule,
         AsideMenuProductServiceModule,
-        VoucherModule
+        VoucherModule,
+        FormFieldsModule
     ]
 })
 export class InventoryModule { }

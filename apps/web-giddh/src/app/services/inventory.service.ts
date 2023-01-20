@@ -11,7 +11,8 @@ import {
     StocksResponse,
     StockUnitRequest,
     StockUnitResponse,
-    InventoryDownloadRequest
+    InventoryDownloadRequest,
+    StockMappedUnitResponse
 } from '../models/api-models/Inventory';
 import { Inject, Injectable, Optional } from '@angular/core';
 import { HttpWrapperService } from './httpWrapper.service';
@@ -188,7 +189,32 @@ export class InventoryService {
     }
 
     /**
-     * Create StockUnit
+   * This will use for get stock mapped unit
+   */
+    public getStockMappedUnit(): Observable<BaseResponse<StockMappedUnitResponse[], string>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.get(this.config.apiUrl + INVENTORY_API.GET_STOCK_MAPPED_UNIT?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
+            let data: BaseResponse<StockMappedUnitResponse[], string> = res;
+            data.request = '';
+            data.queryString = {};
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<StockMappedUnitResponse[], string>(e, '', {})));
+    }
+
+    /**
+   * This will use for get stock mapped units by unique name
+   */
+    public getStockMappedUnitByCode(code: string): Observable<BaseResponse<StockMappedUnitResponse, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.get(this.config.apiUrl + INVENTORY_API.UPDATE_STOCK_UNIT?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':uName', code)).pipe(map((res) => {
+            let data: BaseResponse<StockMappedUnitResponse, string> = res;
+            data.queryString = { code };
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<StockMappedUnitResponse, string>(e, { code })));
+    }
+
+    /**
+     * Create Stock Multiple Unit
      */
     public CreateStockUnit(model: StockUnitRequest): Observable<BaseResponse<StockUnitResponse, StockUnitRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
