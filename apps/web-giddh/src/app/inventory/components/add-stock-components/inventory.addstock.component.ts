@@ -945,8 +945,8 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
                         name: this.variants[0]?.warehouseBalance[0]?.warehouse?.name,
                         uniqueName: this.variants[0]?.warehouseBalance[0]?.warehouse?.uniqueName
                     },
-                    openingQuantity: formObj.openingAmount || 0,
-                    openingAmount: formObj.openingAmount || 0
+                    openingQuantity:this.addStockForm.get("openingQuantity")?.value,
+                    openingAmount: this.addStockForm.get("openingAmount")?.value
                 }
             ]
         }
