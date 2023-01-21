@@ -951,8 +951,6 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
             ]
         }
 
-        console.log(stockObj);
-
         if (formObj.enablePurchase) {
             if (this.validateStock(formObj.purchaseUnitRates)) {
                 formObj.purchaseUnitRates = formObj.purchaseUnitRates?.filter((pr) => {
