@@ -856,6 +856,17 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
     }
 
     /**
+    * To open edit stock aside panel
+    *
+    * @memberof InventoryStockReportComponent
+    */
+    public editStock(): void {
+        this.store.dispatch(this.sideBarAction.GetInventoryStock(this.stockUniqueName, this.groupUniqueName));
+        this.store.dispatch(this.inventoryAction.OpenInventoryAsidePane(true));
+        this.store.dispatch(this.inventoryAction.ManageInventoryAside({ isOpen: true, isGroup: false, isUpdate: true }));
+    }
+
+    /**
      * Toggle's the branch transfer side pan
      *
      * @param {*} [event]
