@@ -97,6 +97,29 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     public inventorySettings: any;
     /** This will hold modal reference */
     public modalRef: BsModalRef;
+    /** This will hold variants data from edit stock */
+    public variants: any[] = [
+        {
+            archive: false,
+            skuCode: null,
+            uniqueName: null,
+            warehouseBalance: [
+                {
+                    stockUnit: {
+                        name: null,
+                        code: null
+                    },
+                    openingQuantity: null,
+                    openingAmount: null,
+                    warehouse: {
+                        name: null,
+                        uniqueName: null
+                    }
+                }
+            ],
+            name: null
+        }
+    ];
 
     constructor(
         private store: Store<AppState>,
@@ -277,7 +300,28 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         });
 
         // subscribe active stock if available fill form
-        this.activeStock$.pipe(takeUntil(this.destroyed$)).subscribe(a => {
+        this.activeStock$.pipe(takeUntil(this.destroyed$)).subscribe((a: any) => {
+            this.variants[0] =
+            {
+                archive: a?.variants[0]?.archive,
+                skuCode: a?.variants[0]?.skuCode,
+                uniqueName: a?.variants[0]?.uniqueName,
+                warehouseBalance: [
+                    {
+                        stockUnit: {
+                            name: a?.variants[0]?.warehouseBalance[0]?.stockUnit?.name,
+                            code: a?.variants[0]?.warehouseBalance[0]?.stockUnit?.code
+                        },
+                        openingQuantity: a?.variants[0]?.warehouseBalance[0]?.openingQuantity,
+                        openingAmount: a?.variants[0]?.warehouseBalance[0]?.openingAmount,
+                        warehouse: {
+                            name: a?.variants[0]?.warehouseBalance[0]?.warehouse?.name,
+                            uniqueName: a?.variants[0]?.warehouseBalance[0]?.warehouse?.uniqueName
+                        }
+                    }
+                ],
+                name: a?.variants[0].name
+            }
             this.allowReset = false;
             if (a && !this.addStock) {
                 this.addStockForm.reset();
@@ -871,7 +915,6 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         this.addStockForm.get('uniqueName').enable();
 
         let formObj = this.addStockForm.value;
-
         stockObj.name = formObj.name;
         stockObj.uniqueName = formObj.uniqueName.toLowerCase();
         stockObj.stockUnitCode = formObj.stockUnitCode;
@@ -887,6 +930,28 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         stockObj.customField1Value = formObj.customField1Value;
         stockObj.customField2Heading = formObj.customField2Heading;
         stockObj.customField2Value = formObj.customField2Value;
+        stockObj.variants[0] = {
+            archive: this.variants[0]?.archive,
+            name: this.variants[0]?.name,
+            uniqueName: this.variants[0]?.uniqueName,
+            skuCode: formObj.skuCode,
+            warehouseBalance: [
+                {
+                    stockUnit: {
+                        name: this.variants[0]?.warehouseBalance[0]?.stockUnit?.name,
+                        code: this.variants[0]?.warehouseBalance[0]?.stockUnit?.code
+                    },
+                    warehouse: {
+                        name: this.variants[0]?.warehouseBalance[0]?.warehouse?.name,
+                        uniqueName: this.variants[0]?.warehouseBalance[0]?.warehouse?.uniqueName
+                    },
+                    openingQuantity: formObj.openingAmount || 0,
+                    openingAmount: formObj.openingAmount || 0
+                }
+            ]
+        }
+
+        console.log(stockObj);
 
         if (formObj.enablePurchase) {
             if (this.validateStock(formObj.purchaseUnitRates)) {
