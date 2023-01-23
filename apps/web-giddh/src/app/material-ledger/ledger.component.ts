@@ -901,8 +901,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
                         this.bankTransactionsResponse.page = res.body.page;
                         this.zone.runOutsideAngular(() => {
                             this.lc.getReadyBankTransactionsForUI(res.body.transactionsList, (this.currentOrganizationType === OrganizationType.Company && (this.currentCompanyBranches && this.currentCompanyBranches.length > 2)));
-                            this.getAccountSearchPrediction(this.lc.bankTransactionsCreditData);
-                            this.getAccountSearchPrediction(this.lc.bankTransactionsDebitData);
+                            //this.getAccountSearchPrediction(this.lc.bankTransactionsCreditData);
+                            //this.getAccountSearchPrediction(this.lc.bankTransactionsDebitData);
                         });
                         this.cdRf.detectChanges();
                     }
