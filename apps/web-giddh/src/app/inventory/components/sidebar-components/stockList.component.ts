@@ -23,9 +23,9 @@ import { BreakpointObserver } from '@angular/cdk/layout';
             <span class="d-block mr-r1" *ngIf="item.count" [hidden]="(activeStockUniqueName$ | async) === item?.uniqueName">
          {{item.count}}</span>
           </a>
-          <a class="btn btn-link btn-xs pull-right" [routerLink]="'/pages/new-inventory/stock/edit/' + item?.uniqueName" *ngIf="!isMobileScreen && (activeStockUniqueName$ | async) === item?.uniqueName">
+          <button class="btn btn-link btn-xs pull-right" (click)="goToManageStock(item)" *ngIf="!isMobileScreen && (activeStockUniqueName$ | async) === item?.uniqueName">
             <i class="icon-edit-pencil"> </i>
-          </a>
+            </button>
         </div>
       </li>
     </ul>
@@ -59,7 +59,7 @@ export class StockListComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         this.sub = this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
-            if(params) {
+            if (params) {
                 this.groupUniqueName = params['groupUniqueName'];
             }
         });
