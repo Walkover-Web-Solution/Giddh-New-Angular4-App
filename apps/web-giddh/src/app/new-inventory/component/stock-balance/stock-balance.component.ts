@@ -243,26 +243,28 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
     public calculationWarehouse(uniqueName: any): void {
         if (uniqueName) {
             this.GroupStockReportRequest.warehouseUniqueName = uniqueName;
-            this.inventoryService.GetGroupStocksReport_V3(this.GroupStockReportRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                if (response && response?.status === "success") {
-                    let warehouseStocksList = response?.body?.stockReport;
-                    if (warehouseStocksList?.length > 0) {
-                        warehouseStocksList.forEach(warehouseStock => {
-                            const stockFound = this.stocksList?.filter(stock => stock?.stockUniqueName === warehouseStock?.stockUniqueName);
-                            if (stockFound?.length > 0) {
-                                if (stockFound[0]?.warehouses?.length > 0) {
-                                    const warehouseFound = stockFound[0]?.warehouses?.filter(warehouse => warehouse?.uniqueName === uniqueName);
-                                    if (warehouseFound?.length > 0) {
-                                        warehouseFound[0].openingBalance = warehouseStock?.openingBalance;
+            if (this.GroupStockReportRequest.stockGroupUniqueName) {
+                this.inventoryService.GetGroupStocksReport_V3(this.GroupStockReportRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                    if (response && response?.status === "success") {
+                        let warehouseStocksList = response?.body?.stockReport;
+                        if (warehouseStocksList?.length > 0) {
+                            warehouseStocksList.forEach(warehouseStock => {
+                                const stockFound = this.stocksList?.filter(stock => stock?.stockUniqueName === warehouseStock?.stockUniqueName);
+                                if (stockFound?.length > 0) {
+                                    if (stockFound[0]?.warehouses?.length > 0) {
+                                        const warehouseFound = stockFound[0]?.warehouses?.filter(warehouse => warehouse?.uniqueName === uniqueName);
+                                        if (warehouseFound?.length > 0) {
+                                            warehouseFound[0].openingBalance = warehouseStock?.openingBalance;
+                                        }
                                     }
                                 }
-                            }
-                        });
+                            });
+                        }
+                    } else {
+                        this.toaster.showSnackBar("error", response?.message);
                     }
-                } else {
-                    this.toaster.showSnackBar("error", response?.message);
-                }
-            });
+                });
+            }
         }
     }
 
@@ -298,6 +300,8 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
     * @memberof StockBalanceComponent
     */
     public stockUpdate(stock: any, warehouse: any): void {
+        stock.stock.stockUnitCode = stock?.stock?.stockUnit?.code;
+        stock.stock.stockUnitName = stock?.stock?.stockUnit?.name;
         setTimeout(() => {
             this.inventoryService.updateStock(stock?.stock, stock?.stock?.stockGroup?.uniqueName, stock?.stockUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response && response?.status === "success") {
