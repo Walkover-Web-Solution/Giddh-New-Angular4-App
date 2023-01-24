@@ -21,7 +21,7 @@ const TREE_DATA: SidebarNode[] = [
   {
     name: 'Stock',
     icons: 'stock.svg',
-    children: [{ name: 'Create New', icons: 'create-new.svg', link: '/pages/new-inventory/stock/product/create'}, { name: 'Item-wise', icons:'item-wise.svg', link: '/pages/new-inventory/item-wise' }, { name: 'Group-wise' , icons: 'group-wise.svg', link: '/pages/new-inventory/group-wise' }, { name: 'Variant-wise', icons: 'varient-wise.svg', link: '/pages/new-inventory/variant-wise' }, { name: 'Transactions', icons: 'transactions.svg' }],
+    children: [{ name: 'Create New', icons: 'create-new.svg', link: '/pages/new-inventory/stock/product/create'}, { name: 'Item-wise', icons:'item-wise.svg', link: '/pages/new-inventory/item-wise' }, { name: 'Group-wise' , icons: 'group-wise.svg', link: '/pages/new-inventory/group-wise' }, { name: 'Variant-wise', icons: 'varient-wise.svg', link: '/pages/new-inventory/variant-wise' }, { name: 'Transactions', icons: 'transactions.svg',link: '/pages/new-inventory/inventory-transaction-list' }],
   },
   {
     name: 'Services',
@@ -112,7 +112,7 @@ export class InventorySidebarComponent implements OnDestroy {
 
   /**
    * Initializes the component
-   * 
+   *
    * @memberof InventorySidebarComponent
   */
   public ngOnInit(): void {
@@ -159,10 +159,10 @@ export class InventorySidebarComponent implements OnDestroy {
       this.closeAsideEvent.emit(event);
     }
   }
-  
+
   /**
    * Function for routing list items by mat-tree-node
-   * 
+   *
    * @param {string} listName holds the value of item clicked on sidebar menu
    * @param {number} index is the index of the item
    * @memberof InventorySidebarComponent
@@ -170,7 +170,7 @@ export class InventorySidebarComponent implements OnDestroy {
   public gotoPage(node :any): void {
     if(node.link){
       this.router.navigate([node.link]);
-    } 
+    }
   }
 }
 
