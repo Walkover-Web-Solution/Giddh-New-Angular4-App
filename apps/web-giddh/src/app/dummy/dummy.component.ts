@@ -16,7 +16,6 @@ export class DummyComponent implements OnInit {
      * @memberof DummyComponent
      */
     public ngOnInit(): void {
-        console.log(this.router.url);
         setTimeout(() => {
             if (this.router.url === '/dummy') {
                 this.router.navigate(['/pages/home']);
