@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import {Router } from '@angular/router';
 
 @Component({
     selector: 'dummy',
@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
   `
 })
 export class DummyComponent implements OnInit {
-    constructor(private route: Router) { }
+    constructor(private router: Router) { }
 
     /**
      * This  hook will call on component initialization
@@ -16,8 +16,11 @@ export class DummyComponent implements OnInit {
      * @memberof DummyComponent
      */
     public ngOnInit(): void {
+        console.log(this.router.url);
         setTimeout(() => {
-            this.route.navigate(['/pages/home']);
+            if (this.router.url === '/dummy') {
+                this.router.navigate(['/pages/home']);
+            }
         }, 3000);
     }
 
