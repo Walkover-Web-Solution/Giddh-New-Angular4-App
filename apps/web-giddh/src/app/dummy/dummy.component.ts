@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'dummy',
@@ -6,6 +7,18 @@ import { Component } from '@angular/core';
         <giddh-page-loader></giddh-page-loader>
   `
 })
-export class DummyComponent {
-    
+export class DummyComponent implements OnInit {
+    constructor(private route: Router) { }
+
+    /**
+     * This  hook will call on component initialization
+     *
+     * @memberof DummyComponent
+     */
+    public ngOnInit(): void {
+        setTimeout(() => {
+            this.route.navigate(['/pages/home']);
+        }, 3000);
+    }
+
 }
