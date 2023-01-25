@@ -38,7 +38,6 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
     public updateCustomStockInProcess$: Observable<boolean>;
     public deleteCustomStockInProcessCode$: Observable<any[]>;
     public createCustomStockSuccess$: Observable<boolean>;
-    public stockUnitsList = StockUnits;
     public companyProfile: any;
     public country: string;
     public selectedUnitName: string;
@@ -62,6 +61,8 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
     public deleteCustomStockSuccess$: Observable<boolean>;
     /* Observable to update stock unit success */
     public updateCustomStockSuccess$: Observable<boolean>;
+    /* Hold all stock pre define units */
+    public stockUnitsList = [...StockUnits];
 
 
     constructor(
@@ -128,10 +129,20 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
         this.store.dispatch(this.customStockActions.getStockMappedUnits());
 
         this.stockMappedUnits$.subscribe(res => {
+            this.stockUnitsList = [...StockUnits];
+            this.allStockMappedUnits = [...StockUnits];
             res?.forEach((mapped: any) => {
-                let value = this.allStockMappedUnits?.filter(unit => unit?.value === mapped?.stockUnitX?.code);
-                if (!value?.length) {
+                let unitsList = this.stockUnitsList?.filter(unit => unit?.value === mapped?.stockUnitX?.code);
+                let mappedUnits = this.allStockMappedUnits?.filter(unit => unit?.value === mapped?.stockUnitX?.code);
+
+                if (!mappedUnits?.length) {
                     this.allStockMappedUnits?.push({
+                        label: mapped?.stockUnitX?.name,
+                        value: mapped?.stockUnitX?.code
+                    });
+                }
+                if (!unitsList?.length) {
+                    this.stockUnitsList?.push({
                         label: mapped?.stockUnitX?.name,
                         value: mapped?.stockUnitX?.code
                     });
@@ -371,12 +382,22 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
      * @memberof InventoryCustomStockComponent
      */
     public unitChange(): void {
-        let uniqueUnit = this.allStockMappedUnits?.filter(val => val?.value === this.customUnitObj.code?.toLowerCase());
-        if (!uniqueUnit?.length) {
-            this.allStockMappedUnits.push({
-                label: this.customUnitObj.name,
-                value:  this.customUnitObj.code?.toLowerCase()
-            });
+        if (this.customUnitObj.name && this.customUnitObj.code) {
+            let uniqueMappedUnit = this.allStockMappedUnits?.filter(val => val?.value === this.customUnitObj.code?.toLowerCase());
+            let uniqueUnitList = this.stockUnitsList?.filter(val => val?.value === this.customUnitObj.code?.toLowerCase());
+
+            if (!uniqueMappedUnit?.length) {
+                this.allStockMappedUnits.push({
+                    label: this.customUnitObj.name,
+                    value: this.customUnitObj.code?.toLowerCase()
+                });
+            }
+            if (!uniqueUnitList?.length) {
+                this.stockUnitsList.push({
+                    label: this.customUnitObj.name,
+                    value: this.customUnitObj.code?.toLowerCase()
+                });
+            }
         }
     }
 
