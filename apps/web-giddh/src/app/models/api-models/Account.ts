@@ -177,6 +177,7 @@ export class IAccountAddress {
     public isComposite: boolean;
     public partyType: string;
     public stateCodeName: string;
+    public pincode?: string;
 }
 export class AccountRequestV2 {
     public addresses: IAccountAddress[];
