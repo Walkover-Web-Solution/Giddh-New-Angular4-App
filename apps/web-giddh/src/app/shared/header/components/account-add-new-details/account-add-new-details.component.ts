@@ -549,20 +549,22 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         }
         delete accountRequest['addAccountForm'];
 
-        if (accountRequest.addresses && accountRequest.addresses.length > 0) {
-            let addressExists = false;
+        if (this.activeParentGroupUniqueName === "bankaccounts") {
+            if (accountRequest.addresses && accountRequest.addresses.length > 0) {
+                let addressExists = false;
 
-            accountRequest.addresses.forEach(address => {
-                if (address?.address?.trim() || address?.gstNumber?.trim() || address?.stateCode?.trim() || address?.pincode?.trim()) {
-                    addressExists = true;
+                accountRequest.addresses.forEach(address => {
+                    if (address?.address?.trim() || address?.gstNumber?.trim() || address?.stateCode?.trim() || address?.pincode?.trim()) {
+                        addressExists = true;
+                    }
+                });
+
+                if (!addressExists) {
+                    delete accountRequest['addresses'];
                 }
-            });
-
-            if(!addressExists) {
+            } else {
                 delete accountRequest['addresses'];
             }
-        } else {
-            delete accountRequest['addresses'];
         }
 
         if (!this.isHsnSacEnabledAcc) {
