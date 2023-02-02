@@ -295,7 +295,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @memberof SettingIntegrationComponent
      */
     public ngAfterViewInit(): void {
-        if (this.selectedTabParent !== undefined && this.selectedTabParent !== null) {
+        if (this.selectedTabParent) {
             this.loadTabData(this.selectedTabParent);
         }
     }
