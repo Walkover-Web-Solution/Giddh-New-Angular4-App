@@ -21,28 +21,28 @@ export function SubscriptionReducer(state: SubscriptionState = initialState, act
     switch (action.type) {
         case SubscriptionsActions.SubscribedCompaniesResponse: {
             let data: BaseResponse<any, string> = action.payload;
-            if (data.status === 'success') {
+            if (data?.status === 'success') {
                 return { ...state, subscriptions: data.body };
             }
             return state;
         }
         case SubscriptionsActions.SubscribedUserTransactionsResponse: {
             let data: BaseResponse<any, string> = action.payload;
-            if (data.status === 'success') {
+            if (data?.status === 'success') {
                 return { ...state, transactions: data.body };
             }
             return state;
         }
         case SubscriptionsActions.SubscribedCompanyTransactionsResponse: {
             let data: BaseResponse<any, string> = action.payload;
-            if (data.status === 'success') {
+            if (data?.status === 'success') {
                 return { ...state, companyTransactions: data.body };
             }
             return state;
         }
         case SubscriptionsActions.SubscribedCompaniesListResponse: {
             let data: BaseResponse<any, string> = action.payload;
-            if (data.status === 'success') {
+            if (data?.status === 'success') {
                 return { ...state, companies: data.body };
             }
             return state;

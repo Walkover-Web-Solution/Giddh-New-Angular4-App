@@ -171,7 +171,7 @@ export class ProfitLossGridComponent implements OnInit, OnChanges, OnDestroy {
         each(data, (grp: ChildGroup) => {
             if (grp.isIncludedInSearch) {
                 if (!grp.level1) {
-                    if (parentGroups.indexOf(grp.uniqueName) === -1) {
+                    if (parentGroups?.indexOf(grp?.uniqueName) === -1) {
                         grp.isCreated = false;
                         grp.isVisible = isVisible;
                         grp.isOpen = isVisible;

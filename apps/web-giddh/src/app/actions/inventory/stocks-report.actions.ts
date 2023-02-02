@@ -19,7 +19,7 @@ export class StockReportActions {
             switchMap((action: CustomActions) => {
                 return this._inventoryService.GetStocksReport_v2(action.payload).pipe(
                     map((response) => {
-                        const isStockNotFound = response && response.status === 'error' && response.code === 'STOCK_NOT_FOUND';
+                        const isStockNotFound = response && response?.status === 'error' && response.code === 'STOCK_NOT_FOUND';
                         if (response) {
                             return this.validateResponse<StockReportResponse, StockReportRequest>(response, {
                                 type: STOCKS_REPORT_ACTIONS.GET_STOCKS_REPORT_RESPONSE,
@@ -43,7 +43,7 @@ export class StockReportActions {
             switchMap((action: CustomActions) => {
                 return this._inventoryService.GetGroupStocksReport_V3(action.payload).pipe(
                     map((response) => {
-                        const isGroupNotFound = response && response.status === 'error' && response.code === 'STOCK_GROUP_NOT_FOUND';
+                        const isGroupNotFound = response && response?.status === 'error' && response.code === 'STOCK_GROUP_NOT_FOUND';
                         return this.validateResponse<GroupStockReportResponse, GroupStockReportRequest>(response, {
                             type: STOCKS_REPORT_ACTIONS.GET_GROUP_STOCKS_REPORT_RESPONSE,
                             payload: response.body
@@ -77,7 +77,7 @@ export class StockReportActions {
     }
 
     private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false, errorAction: CustomActions = { type: 'EmptyAction' }): CustomActions {
-        if (response.status === 'error') {
+        if (response?.status === 'error') {
             if (showToast) {
                 this._toasty.errorToast(response.message);
             }

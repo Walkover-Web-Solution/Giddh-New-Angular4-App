@@ -144,7 +144,7 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
             this.selectedGstNumber = params.selectedGst;
             this.filterParam.entityType = params.entityType;
             this.filterParam.type = params.type;
-            this.filterParam.status = params.status;
+            this.filterParam.status = params?.status;
             this.viewFilteredTxn('page', 1);
         });
         this.voucherApiVersion = this.generalService.voucherApiVersion;
@@ -180,7 +180,7 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
                     voucherType: invoice.voucherType,
                     accountUniqueName: invoice.account?.uniqueName
                 };
-            
+
                 this.store.dispatch(this.invoiceReceiptActions.VoucherPreview(downloadVoucherRequestObject, downloadVoucherRequestObject.accountUniqueName));
             }
         }

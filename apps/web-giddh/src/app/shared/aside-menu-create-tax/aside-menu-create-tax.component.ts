@@ -85,7 +85,7 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
                 if (taxes && taxes.length) {
                     let arr: IOption[] = [];
                     taxes.forEach(tax => {
-                        arr.push({ label: tax.name, value: tax.uniqueName });
+                        arr.push({ label: tax.name, value: tax?.uniqueName });
                     });
                     this.allTaxes = arr;
                 }
@@ -233,7 +233,7 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
         this.salesService.getAccountsWithCurrency(params).subscribe(response => {
             if (response?.body?.results) {
                 accounts = response.body.results.map(account => {
-                    return { label: `${account.name} - (${account.uniqueName})`, value: account.uniqueName };
+                    return { label: `${account.name} - (${account?.uniqueName})`, value: account?.uniqueName };
                 });
                 this.linkedAccountsOption = accounts;
             } else {

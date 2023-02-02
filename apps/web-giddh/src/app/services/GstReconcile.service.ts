@@ -131,7 +131,7 @@ export class GstReconcileService {
             ?.replace(':entityType', requestParam.entityType)
             ?.replace(':gstType', type)
             ?.replace(':type', requestParam.type)
-            ?.replace(':status', requestParam.status)
+            ?.replace(':status', requestParam?.status)
         )
             .pipe(
                 map((res) => {

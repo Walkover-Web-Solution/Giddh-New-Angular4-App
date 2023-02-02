@@ -37,7 +37,7 @@ export function ManufacturingReducer(state = initialState, action: CustomActions
             let newState = cloneDeep(state);
             newState.isMFReportLoading = false;
             let res: BaseResponse<StocksResponse, IMfStockSearchRequest> = action.payload;
-            if (res.status === 'success') {
+            if (res?.status === 'success') {
                 let response = cloneDeep(res.body);
                 response.results = orderBy(res.body.results, [(o) => o.voucherNumber], 'desc');
                 newState.reportData = response;
@@ -52,7 +52,7 @@ export function ManufacturingReducer(state = initialState, action: CustomActions
             let newState = cloneDeep(state);
             newState.isStockWithRateInprogress = false;
             let res: BaseResponse<StockDetailResponse, IMfStockSearchRequest> = action.payload;
-            if (res.status === 'success') {
+            if (res?.status === 'success') {
                 newState.stockWithRate = res.body;
                 return Object.assign({}, state, newState);
             } else {
@@ -66,7 +66,7 @@ export function ManufacturingReducer(state = initialState, action: CustomActions
         case MANUFACTURING_ACTIONS.CREATE_MF_ITEM_RESPONSE: {
             let newState = cloneDeep(state);
             let res: BaseResponse<IStocksItem, ManufacturingItemRequest> = action.payload;
-            if (res.status === 'success') {
+            if (res?.status === 'success') {
                 if (newState.reportData && newState.reportData.results) {
                     newState.reportData.results.push(res.body);
                     return Object.assign({}, state, newState);
@@ -80,8 +80,8 @@ export function ManufacturingReducer(state = initialState, action: CustomActions
         case MANUFACTURING_ACTIONS.UPDATE_MF_ITEM_RESPONSE: {
             let newState = cloneDeep(state);
             let res: BaseResponse<IStocksItem, ManufacturingItemRequest> = action.payload;
-            if (res.status === 'success') {
-                let indx = newState.reportData.results.findIndex((obj) => obj.uniqueName === res.body.uniqueName);
+            if (res?.status === 'success') {
+                let indx = newState.reportData.results.findIndex((obj) => obj?.uniqueName === res.body?.uniqueName);
                 if (indx > -1) {
                     newState.reportData.results[indx] = res.body;
                 }
@@ -94,9 +94,9 @@ export function ManufacturingReducer(state = initialState, action: CustomActions
         }
         case MANUFACTURING_ACTIONS.DELETE_MF_ITEM_RESPONSE: {
             let res: BaseResponse<any, any> = action.payload;
-            if (res.status === 'success') {
+            if (res?.status === 'success') {
                 let newState = cloneDeep(state);
-                let indx = newState.reportData.results.findIndex((MFitem) => MFitem.uniqueName === res.queryString.model.manufacturingUniqueName);
+                let indx = newState.reportData.results.findIndex((MFitem) => MFitem?.uniqueName === res.queryString.model.manufacturingUniqueName);
                 if (indx > -1) {
                     newState.reportData.results.splice(indx, 1);
                 }

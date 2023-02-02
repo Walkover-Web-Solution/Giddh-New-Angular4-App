@@ -98,7 +98,7 @@ export function GstRReducer(state: GstRReducerState = initialState, action: Cust
 
             let newState = _.cloneDeep(state);
 
-            if (response.status === 'success') {
+            if (response?.status === 'success') {
                 newState.gstR1TotalTransactions = response.body.count;
                 newState.gstr1OverViewData = response.body;
                 newState.gstr1OverViewDataFetchedSuccessfully = true;
@@ -132,7 +132,7 @@ export function GstRReducer(state: GstRReducerState = initialState, action: Cust
 
             let newState = _.cloneDeep(state);
 
-            if (action.payload.status === 'success') {
+            if (action.payload?.status === 'success') {
                 newState.gstr3BOverViewDate = res.data;
                 newState.gstr3BOverViewDataFetchedSuccessfully = true;
                 newState.gstr3BOverViewDataInProgress = false;
@@ -166,7 +166,7 @@ export function GstRReducer(state: GstRReducerState = initialState, action: Cust
 
             let newState = _.cloneDeep(state);
 
-            if (response.status === 'success') {
+            if (response?.status === 'success') {
                 newState.gstR2TotalTransactions = response.body.count;
                 newState.gstr2OverViewData = response.body;
                 newState.gstr2OverViewDataFetchedSuccessfully = true;
@@ -199,7 +199,7 @@ export function GstRReducer(state: GstRReducerState = initialState, action: Cust
         case GSTR_ACTIONS.GET_SUMMARY_TRANSACTIONS_RESPONSE: {
             let response: BaseResponse<GstTransactionResult, GStTransactionRequest> = action.payload;
             let newState = _.cloneDeep(state);
-            if (response.status === 'success') {
+            if (response?.status === 'success') {
                 newState.viewTransactionData = response.body;
             }
             newState.viewTransactionInProgress = false;
@@ -218,7 +218,7 @@ export function GstRReducer(state: GstRReducerState = initialState, action: Cust
         case GSTR_ACTIONS.GET_GSTR1_SUMMARY_DETAILS_RESPONSE: {
             let result = action.payload as BaseResponse<Gstr1SummaryResponse, Gstr1SummaryRequest>;
 
-            if (result.status === 'success') {
+            if (result?.status === 'success') {
                 return {
                     ...state,
                     gstr1SummaryDetailsInProcess: false,
@@ -252,7 +252,7 @@ export function GstRReducer(state: GstRReducerState = initialState, action: Cust
 
         case GSTR_ACTIONS.GST_SAVE_GSP_SESSION_RESPONSE: {
             let response: BaseResponse<any, GstSaveGspSessionRequest> = action.payload;
-            if (response.status === 'success') {
+            if (response?.status === 'success') {
                 let newState = _.cloneDeep(state);
                 newState.saveGspSessionInProcess = false;
                 newState.saveGspSessionOtpSent = true;
@@ -276,7 +276,7 @@ export function GstRReducer(state: GstRReducerState = initialState, action: Cust
 
         case GSTR_ACTIONS.GST_SAVE_GSP_SESSION_WITH_OTP_RESPONSE: {
             let response: BaseResponse<any, GstSaveGspSessionRequest> = action.payload;
-            if (response.status === 'success') {
+            if (response?.status === 'success') {
                 return {
                     ...state,
                     authorizeGspSessionOtpInProcess: false,
@@ -312,7 +312,7 @@ export function GstRReducer(state: GstRReducerState = initialState, action: Cust
 
         case GSTR_ACTIONS.GST_GET_GSP_SESSION_RESPONSE: {
             let response: BaseResponse<any, string> = action.payload;
-            if (response.status === 'success') {
+            if (response?.status === 'success') {
                 let newState = _.cloneDeep(state);
                 let session = response.body;
                 if (session.taxpro) {
@@ -340,7 +340,7 @@ export function GstRReducer(state: GstRReducerState = initialState, action: Cust
 
         case GSTR_ACTIONS.FILE_GSTR1_RESPONSE: {
             let response: BaseResponse<any, string> = action.payload;
-            if (response.status === 'success') {
+            if (response?.status === 'success') {
                 return {
                     ...state, gstReturnFileSuccess: true, gstReturnFileInProgress: false
                 };
@@ -358,7 +358,7 @@ export function GstRReducer(state: GstRReducerState = initialState, action: Cust
 
         case GST_RETURN_ACTIONS.FILE_JIO_GST_RESPONSE: {
             let response: BaseResponse<any, string> = action.payload;
-            if (response.status === 'success') {
+            if (response?.status === 'success') {
                 let newState = _.cloneDeep(state);
                 newState.gstReturnFileSuccess = true;
                 newState.gstReturnFileInProgress = false;

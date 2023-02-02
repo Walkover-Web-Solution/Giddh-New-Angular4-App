@@ -692,9 +692,9 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
 
     public clearModal() {
         if (this.GroupStockReportRequest.number || this.GroupStockReportRequest.condition || this.GroupStockReportRequest.value || this.GroupStockReportRequest.entity) {
-            this.shCategory.clear();
-            this.shCategoryType.clear();
-            this.shValueCondition.clear();
+            this.shCategory?.clear();
+            this.shCategoryType?.clear();
+            this.shValueCondition?.clear();
             this.advanceSearchForm.controls['filterAmount'].setValue(null);
 
             this.GroupStockReportRequest.number = null;

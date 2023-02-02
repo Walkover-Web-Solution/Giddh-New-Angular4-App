@@ -130,7 +130,7 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
             if (groups) {
                 let groupsRes: IOption[] = [];
                 groups.map(d => {
-                    groupsRes.push({ label: `${d.name} - (${d.uniqueName})`, value: d.uniqueName });
+                    groupsRes.push({ label: `${d.name} - (${d?.uniqueName})`, value: d?.uniqueName });
                 });
                 this.groups = cloneDeep(groupsRes);
             }
@@ -198,7 +198,7 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
             this.toaster.errorToast(this.localeData?.validations?.enter_url, this.localeData?.validation);
             return;
         }
-        
+
         this.settingsTriggersService.CreateTrigger(dataToSave).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.showToaster(this.commonLocaleData?.app_messages?.trigger_created, response);
         });
@@ -206,7 +206,7 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
 
     public deleteTax(taxToDelete) {
         this.newTriggerObj = taxToDelete;
-        this.selectedTax = this.availableTriggers.find((tax) => tax.uniqueName === taxToDelete?.uniqueName).name;
+        this.selectedTax = this.availableTriggers.find((tax) => tax?.uniqueName === taxToDelete?.uniqueName).name;
         let message = this.localeData?.delete_tax;
         message = message?.replace("[SELECTED_TAX]", this.selectedTax);
         this.confirmationMessage = message;
@@ -330,8 +330,8 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
                 if (data && data.body && data.body.results) {
                     const searchResults = data.body.results.map(result => {
                         return {
-                            value: result.uniqueName,
-                            label: `${result.name} - (${result.uniqueName})`
+                            value: result?.uniqueName,
+                            label: `${result.name} - (${result?.uniqueName})`
                         }
                     }) || [];
                     if (page === 1) {
@@ -388,8 +388,8 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
                 if (data && data.body && data.body.results) {
                     const searchResults = data.body.results.map(result => {
                         return {
-                            value: result.uniqueName,
-                            label: `${result.name} (${result.uniqueName})`
+                            value: result?.uniqueName,
+                            label: `${result.name} (${result?.uniqueName})`
                         }
                     }) || [];
                     if (page === 1) {
@@ -437,8 +437,8 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
                     if (!this.accountsSearchResultsPaginationData.query) {
                         const results = response.map(result => {
                             return {
-                                value: result.uniqueName,
-                                label: `${result.name} - (${result.uniqueName})`
+                                value: result?.uniqueName,
+                                label: `${result.name} - (${result?.uniqueName})`
                             }
                         }) || [];
                         this.defaultAccountSuggestions = this.defaultAccountSuggestions.concat(...results);
@@ -464,8 +464,8 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
                     if (!this.groupsSearchResultsPaginationData.query) {
                         const results = response.map(result => {
                             return {
-                                value: result.uniqueName,
-                                label: `${result.name} - (${result.uniqueName})`
+                                value: result?.uniqueName,
+                                label: `${result.name} - (${result?.uniqueName})`
                             }
                         }) || [];
                         this.defaultGroupSuggestions = this.defaultGroupSuggestions.concat(...results);
@@ -486,8 +486,8 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
         this.onAccountSearchQueryChanged('', 1, (response) => {
             this.defaultAccountSuggestions = response.map(result => {
                 return {
-                    value: result.uniqueName,
-                    label: `${result.name} - (${result.uniqueName})`
+                    value: result?.uniqueName,
+                    label: `${result.name} - (${result?.uniqueName})`
                 }
             }) || [];
             this.defaultAccountPaginationData.page = this.accountsSearchResultsPaginationData.page;
@@ -506,8 +506,8 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
         this.onGroupSearchQueryChanged('', 1, (response) => {
             this.defaultGroupSuggestions = response.map(result => {
                 return {
-                    value: result.uniqueName,
-                    label: `${result.name} - (${result.uniqueName})`
+                    value: result?.uniqueName,
+                    label: `${result.name} - (${result?.uniqueName})`
                 }
             }) || [];
             this.defaultGroupPaginationData.page = this.groupsSearchResultsPaginationData.page;
@@ -578,7 +578,7 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
         };
 
         this.showAllFilters();
-        
+
         setTimeout(() => {
             this.resetNewFormFields();
         }, 100);
@@ -611,7 +611,7 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
             this.getTriggers();
             this.toaster.successToast(successMessage, this.commonLocaleData?.app_success);
         } else {
-            this.toaster.errorToast(response?.message, response?.code);                
+            this.toaster.errorToast(response?.message, response?.code);
         }
     }
 }

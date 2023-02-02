@@ -146,7 +146,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.uniqueName = activeGroup.uniqueName;
                 if (activeGroup.applicableDiscounts && activeGroup.applicableDiscounts.length) {
                     activeGroup.applicableDiscounts.forEach(element => {
-                        this.selectedDiscounts.push(element.uniqueName)
+                        this.selectedDiscounts.push(element?.uniqueName)
                     });
                 }
                 this.groupDetailForm?.patchValue({ name: activeGroup.name, uniqueName: activeGroup.uniqueName, description: activeGroup.description, closingBalanceTriggerAmount: activeGroup.closingBalanceTriggerAmount, closingBalanceTriggerAmountType: activeGroup.closingBalanceTriggerAmountType });
@@ -193,7 +193,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
 
                             if (activeGroupTaxHierarchy.inheritedTaxes && activeGroupTaxHierarchy.inheritedTaxes.length) {
                                 let inheritedTaxes = flattenDeep(activeGroupTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((j: any) => j?.uniqueName);
-                                let allTaxes = applicableTaxes?.filter(f => inheritedTaxes.indexOf(f) === -1);
+                                let allTaxes = applicableTaxes?.filter(f => inheritedTaxes?.indexOf(f) === -1);
                                 // set value in tax group form
                                 setTimeout(() => {
                                     this.taxGroupForm.setValue({ taxes: allTaxes });
@@ -365,7 +365,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
             newParents = union([], parents);
             newParents.push({
                 name: listItem.name,
-                uniqueName: listItem.uniqueName
+                uniqueName: listItem?.uniqueName
             });
             listItem = Object.assign({}, listItem, { parentGroups: [] });
             listItem.parentGroups = newParents;
@@ -385,7 +385,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
         obj = map(rawList, (item: any) => {
             obj = {};
             obj.name = item.name;
-            obj.uniqueName = item.uniqueName;
+            obj.uniqueName = item?.uniqueName;
             obj.synonyms = item.synonyms;
             obj.parentGroups = item.parentGroups;
             return obj;
@@ -505,7 +505,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
    public isDebtorCreditorGroup(activeGroup: GroupResponse, returnIndividualStatus?: boolean): boolean | {isCreditor?: boolean, isDebtor?: boolean} {
         let isTaxableGroup: boolean = false;
         if (activeGroup && activeGroup.parentGroups) {
-            isTaxableGroup = (activeGroup.uniqueName === 'sundrydebtors' || activeGroup.uniqueName === 'sundrycreditors') || activeGroup.parentGroups?.some(groupName => groupName.uniqueName === 'sundrydebtors' || groupName.uniqueName === 'sundrycreditors');
+            isTaxableGroup = (activeGroup.uniqueName === 'sundrydebtors' || activeGroup.uniqueName === 'sundrycreditors') || activeGroup.parentGroups?.some(groupName => groupName?.uniqueName === 'sundrydebtors' || groupName?.uniqueName === 'sundrycreditors');
         }
         if (returnIndividualStatus) {
             if (activeGroup?.uniqueName === 'sundrydebtors' || activeGroup?.parentGroups?.some(groupName => groupName?.uniqueName === 'sundrydebtors')) {
@@ -583,7 +583,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
                     data.body.results = data.body.results.filter(group => group?.uniqueName !== activeGroupUniqueName);
                     const searchResults = data.body.results.map(result => {
                         return {
-                            value: result.uniqueName,
+                            value: result?.uniqueName,
                             label: result.name
                         }
                     }) || [];
@@ -631,7 +631,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
                     if (!this.groupsSearchResultsPaginationData.query) {
                         const results = response.map(result => {
                             return {
-                                value: result.uniqueName,
+                                value: result?.uniqueName,
                                 label: result.name
                             }
                         }) || [];
@@ -653,7 +653,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
         this.onGroupSearchQueryChanged('', 1, (response) => {
             this.defaultGroupSuggestions = response.map(result => {
                 return {
-                    value: result.uniqueName,
+                    value: result?.uniqueName,
                     label: result.name
                 }
             }) || [];
@@ -675,13 +675,13 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
         const {isDebtor, isCreditor}: any = this.isDebtorCreditorGroup(activeGroup, true);
         if (isDebtor) {
             // Only allow TDS receivable and TCS payable
-            this.companyTaxDropDown = this.companyTaxDropDown?.filter(tax => ['tdsrc', 'tcspay'].indexOf(tax?.additional?.taxType) > -1);
+            this.companyTaxDropDown = this.companyTaxDropDown?.filter(tax => ['tdsrc', 'tcspay']?.indexOf(tax?.additional?.taxType) > -1);
         } else if (isCreditor) {
             // Only allow TDS payable and TCS receivable
-            this.companyTaxDropDown = this.companyTaxDropDown?.filter(tax => ['tdspay', 'tcsrc'].indexOf(tax?.additional?.taxType) > -1);
+            this.companyTaxDropDown = this.companyTaxDropDown?.filter(tax => ['tdspay', 'tcsrc']?.indexOf(tax?.additional?.taxType) > -1);
         } else {
             // Only normal (non-other) taxes
-            this.companyTaxDropDown = this.companyTaxDropDown?.filter(tax => TCS_TDS_TAXES_TYPES.indexOf(tax?.additional?.taxType) === -1);
+            this.companyTaxDropDown = this.companyTaxDropDown?.filter(tax => TCS_TDS_TAXES_TYPES?.indexOf(tax?.additional?.taxType) === -1);
         }
     }
 }

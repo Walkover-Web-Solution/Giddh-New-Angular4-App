@@ -137,7 +137,7 @@ export class LoginActions {
         .pipe(
             ofType(LoginActions.SignupWithEmailResponce),
             map((action: CustomActions) => {
-                if (action.payload.status === 'success') {
+                if (action.payload?.status === 'success') {
                     this._toaster.successToast(action.payload.body);
                 } else {
                     this._toaster.errorToast(action.payload.message, action.payload.code);
@@ -158,7 +158,7 @@ export class LoginActions {
             ofType(LoginActions.VerifyEmailResponce),
             map((action: CustomActions) => {
                 let response: BaseResponse<VerifyEmailResponseModel, VerifyEmailModel> = action.payload;
-                if (response.status === 'error') {
+                if (response?.status === 'error') {
                     this._toaster.errorToast(action.payload.message, action.payload.code);
                     return { type: 'EmptyAction' };
                 }
@@ -175,7 +175,7 @@ export class LoginActions {
         .pipe(
             ofType(LoginActions.SignupWithMobileResponce),
             map((action: CustomActions) => {
-                if (action.payload.status === 'success') {
+                if (action.payload?.status === 'success') {
                     this._toaster.successToast(action.payload.body);
                 } else {
                     this._toaster.errorToast(action.payload.message, action.payload.code);
@@ -214,7 +214,7 @@ export class LoginActions {
                     });
                     return { type: 'EmptyAction' };
                 } else {
-                    if (stateDetail.body && stateDetail.status === 'success') {
+                    if (stateDetail.body && stateDetail?.status === 'success') {
                         this._generalService.companyUniqueName = stateDetail.body.companyUniqueName;
                         this._generalService.currentBranchUniqueName = stateDetail.body.branchUniqueName || '';
                         if (stateDetail.body.branchUniqueName) {
@@ -279,7 +279,7 @@ export class LoginActions {
                     });
                     return { type: 'EmptyAction' };
                 } else {
-                    if (stateDetail.body && stateDetail.status === 'success') {
+                    if (stateDetail.body && stateDetail?.status === 'success') {
                         this._generalService.companyUniqueName = stateDetail.body.companyUniqueName;
                         this._generalService.currentBranchUniqueName = stateDetail.body.branchUniqueName || '';
                         this._generalService.voucherApiVersion = stateDetail.body.voucherVersion || 1;
@@ -342,7 +342,7 @@ export class LoginActions {
             ofType(LoginActions.VerifyMobileResponce),
             map((action: CustomActions) => {
                 let response: BaseResponse<VerifyMobileResponseModel, VerifyMobileModel> = action.payload;
-                if (response.status === 'error') {
+                if (response?.status === 'error') {
                     this._toaster.errorToast(action.payload.message, action.payload.code);
                     return { type: 'EmptyAction' };
                 }
@@ -362,7 +362,7 @@ export class LoginActions {
             ofType(LoginActions.VerifyTwoWayAuthResponse),
             map((action: CustomActions) => {
                 let response: BaseResponse<VerifyMobileResponseModel, VerifyMobileModel> = action.payload;
-                if (response.status === 'error') {
+                if (response?.status === 'error') {
                     this._toaster.errorToast(response.message, response.code);
                     return { type: 'EmptyAction' };
                 }
@@ -383,7 +383,7 @@ export class LoginActions {
             ofType(CompanyActions.CHANGE_COMPANY),
             switchMap((action: CustomActions) => this._companyService.getStateDetails(action.payload.cmpUniqueName, action.payload.fetchLastState)),
             map(response => {
-                if ((response.status === 'error' || ROUTES.findIndex(p => p.path.split('/')[0] === response.body.lastState.split('/')[0]) === -1) || (response.status === 'error' || response.code === 'NOT_FOUND')) {
+                if ((response?.status === 'error' || ROUTES.findIndex(p => p.path.split('/')[0] === response.body.lastState.split('/')[0]) === -1) || (response?.status === 'error' || response.code === 'NOT_FOUND')) {
                     let dummyResponse = new BaseResponse<StateDetailsResponse, string>();
                     dummyResponse.body = new StateDetailsResponse();
                     dummyResponse.body.companyUniqueName = response.request;
@@ -445,7 +445,7 @@ export class LoginActions {
         .pipe(
             ofType(CompanyActions.CHANGE_COMPANY_RESPONSE),
             map((action: CustomActions) => {
-                if (action.payload.status === 'success') {
+                if (action.payload?.status === 'success') {
                     this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
                 }
                 return { type: 'EmptyAction' };
@@ -461,7 +461,7 @@ export class LoginActions {
         .pipe(
             ofType(LoginActions.AddNewMobileNoResponse),
             map((action: CustomActions) => {
-                if (action.payload.status === 'success') {
+                if (action.payload?.status === 'success') {
                     this._toaster.successToast(this.localeService.translate("app_messages.receive_otp"));
                 } else {
                     this._toaster.errorToast(action.payload.message, action.payload.code);
@@ -482,7 +482,7 @@ export class LoginActions {
             ofType(LoginActions.VerifyAddNewMobileNoResponse),
             map((action: CustomActions) => {
                 let response: BaseResponse<string, VerifyMobileModel> = action.payload;
-                if (response.status === 'error') {
+                if (response?.status === 'error') {
                     this._toaster.errorToast(response.message, response.code);
                     return { type: 'EmptyAction' };
                 }
@@ -524,7 +524,7 @@ export class LoginActions {
         .pipe(
             ofType(LoginActions.SignupWithPasswdResponse),
             map((action: CustomActions) => {
-                if (action.payload.status === 'success') {
+                if (action.payload?.status === 'success') {
                     this._toaster.successToast(this.localeService.translate("app_messages.otp_sent_email"));
                 } else {
                     this._toaster.errorToast(action.payload.message, action.payload.code,6000);
@@ -542,7 +542,7 @@ export class LoginActions {
         .pipe(
             ofType(LoginActions.LoginWithPasswdResponse),
             map((action: CustomActions) => {
-                if (action.payload.status === 'success') {
+                if (action.payload?.status === 'success') {
                     if (action.payload.body.statusCode === "AUTHENTICATE_TWO_WAY") {
                         if (action.payload.body.text) {
                             this._toaster.successToast(action.payload.body.text, action.payload.code);
@@ -566,7 +566,7 @@ export class LoginActions {
         .pipe(
             ofType(LoginActions.forgotPasswordResponse),
             map((action: CustomActions) => {
-                if (action.payload.status === 'success') {
+                if (action.payload?.status === 'success') {
                     this._toaster.successToast(action.payload.body);
                 } else {
                     this._toaster.errorToast(action.payload.message, action.payload.code);
@@ -584,7 +584,7 @@ export class LoginActions {
         .pipe(
             ofType(LoginActions.resetPasswordResponse),
             map((action: CustomActions) => {
-                if (action.payload.status === 'success') {
+                if (action.payload?.status === 'success') {
                     this._toaster.successToast(action.payload.body);
                 } else {
                     this._toaster.errorToast(action.payload.message, action.payload.code);
@@ -602,7 +602,7 @@ export class LoginActions {
         .pipe(
             ofType(LoginActions.renewSessionResponse),
             map((action: CustomActions) => {
-                if (action.payload.status === 'success' && action.payload.body && action.payload.body.session) {
+                if (action.payload?.status === 'success' && action.payload.body && action.payload.body.session) {
                     this._generalService.setCookie("giddh_session_id", action.payload.body.session.id, 30);
                 }
                 return { type: 'EmptyAction' };

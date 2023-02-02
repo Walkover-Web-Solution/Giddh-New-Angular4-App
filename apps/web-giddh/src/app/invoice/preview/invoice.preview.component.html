@@ -1121,7 +1121,7 @@
                                 >
                                     <div class="e-invoice-status font-14">
                                         <strong class="d-flex" [tooltip]="item.eInvoiceStatusTooltip">{{
-                                            item.status || "-"
+                                            item?.status || "-"
                                         }}</strong>
                                     </div>
                                 </td>
@@ -1403,7 +1403,7 @@
                                 >
                                     <div class="e-invoice-status font-14">
                                         <strong class="d-flex" [tooltip]="item.eInvoiceStatusTooltip">{{
-                                            item.status || "-"
+                                            item?.status || "-"
                                         }}</strong>
                                     </div>
                                 </td>

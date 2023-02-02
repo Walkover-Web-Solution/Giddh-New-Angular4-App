@@ -280,7 +280,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 if (this.activeCompany.countryV2 !== undefined && this.activeCompany.countryV2 !== null) {
                     this.getStates(this.activeCompany.countryV2.alpha2CountryCode);
                 }
-                this.companyCurrency = clone(this.activeCompany.baseCurrency);
+                this.companyCurrency = clone(this.activeCompany?.baseCurrency);
             }
         });
 
@@ -334,7 +334,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             this.addAccountForm.get('country').get('countryCode')?.setValue(countryCode);
             this.selectedCountry = `${countryCode} - ${countryName}`;
             this.selectedCountryCode = countryCode;
-            this.addAccountForm.get('currency')?.setValue(company.baseCurrency);
+            this.addAccountForm.get('currency')?.setValue(company?.baseCurrency);
             this.getOnboardingForm(countryCode);
             this.companyCountry = countryCode;
         } else {
@@ -1049,7 +1049,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 if (data && data.body && data.body.results) {
                     const searchResults = data.body.results.map(result => {
                         return {
-                            value: result.uniqueName,
+                            value: result?.uniqueName,
                             label: `${result.name}`,
                             additional: result.parentGroups
                         }
@@ -1109,7 +1109,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                     if (!this.groupsSearchResultsPaginationData.query) {
                         const results = response.map(result => {
                             return {
-                                value: result.uniqueName,
+                                value: result?.uniqueName,
                                 label: `${result.name}`,
                                 additional: result.parentGroups
                             }
@@ -1132,7 +1132,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         this.onGroupSearchQueryChanged('', 1, (response) => {
             this.defaultGroupSuggestions = response.map(result => {
                 return {
-                    value: result.uniqueName,
+                    value: result?.uniqueName,
                     label: `${result.name}`,
                     additional: result.parentGroups
                 }

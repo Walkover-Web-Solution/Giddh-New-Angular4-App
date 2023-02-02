@@ -86,7 +86,7 @@ export class VoucherAddBulkItemsComponent implements OnDestroy {
             return {
                 rate: 0,
                 stockUnitCode: '',
-                uniqueName: result.stock ? `${result.uniqueName}#${result.stock?.uniqueName}` : result.uniqueName,
+                uniqueName: result.stock ? `${result?.uniqueName}#${result.stock?.uniqueName}` : result?.uniqueName,
                 name: result.stock ? `${result.name} (${result.stock.name})` : result.name,
                 additional: result
             };
@@ -150,7 +150,7 @@ export class VoucherAddBulkItemsComponent implements OnDestroy {
             return;
         }
         let requestObject = {
-            stockUniqueName: item.additional && item.additional.stock ? item.additional.stock.uniqueName : ''
+            stockUniqueName: item.additional && item.additional.stock ? item.additional.stock?.uniqueName : ''
         };
         this.searchService.loadDetails(item.additional?.uniqueName, requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
             if (data && data.body) {
@@ -163,7 +163,7 @@ export class VoucherAddBulkItemsComponent implements OnDestroy {
                 item.additional = {
                     ...item.additional,
                     label: item.name,
-                    value: item.uniqueName,
+                    value: item?.uniqueName,
                     applicableTaxes: taxes,
                     currency: data.body.currency,
                     currencySymbol: data.body.currencySymbol,

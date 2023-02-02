@@ -27,7 +27,7 @@ export class InvoicePurchaseActions {
             ofType(PURCHASE_INVOICE_ACTIONS.SEND_GSTR3B_EMAIL_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, string> = response.payload;
-                if (data.status === 'error') {
+                if (data?.status === 'error') {
                     this.toasty.errorToast(data.message, data.code);
                 } else {
                     this.toasty.successToast(data.body);
@@ -55,7 +55,7 @@ export class InvoicePurchaseActions {
             ofType(GST_RETURN_ACTIONS.FILE_JIO_GST_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, string> = response.payload;
-                if (data.status === 'error') {
+                if (data?.status === 'error') {
                     this.toasty.errorToast(data.message, data.code);
                 } else {
                     this.toasty.successToast(data.body);
@@ -80,7 +80,7 @@ export class InvoicePurchaseActions {
             ofType(GST_RETURN_ACTIONS.FILE_GSTR3B_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, string> = response.payload;
-                if (data.status === 'error') {
+                if (data?.status === 'error') {
                     this.toasty.errorToast(data.message, data.code);
                 } else {
                     this.toasty.successToast(data.body);

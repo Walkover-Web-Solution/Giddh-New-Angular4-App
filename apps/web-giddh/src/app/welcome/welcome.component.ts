@@ -324,7 +324,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     public reFillTax() {
         if (this.createNewCompany.taxes && this.createNewCompany.taxes.length > 0) {
             this.createNewCompany.taxes.forEach(tax => {
-                if (this.currentTaxList[tax] !== undefined && this.selectedTaxes.indexOf(tax) === -1) {
+                if (this.currentTaxList[tax] !== undefined && this.selectedTaxes?.indexOf(tax) === -1) {
                     this.selectedTaxes.push(tax);
 
                     let matchedIndex = this.taxesList.findIndex(listedTax => listedTax.value === tax);
@@ -344,7 +344,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
             this.createNewCompanyPreparedObj.uniqueName = this.company.uniqueName ? this.company.uniqueName : '';
             this.createNewCompanyPreparedObj.isBranch = this.company.isBranch;
             this.createNewCompanyPreparedObj.country = this.company.country ? this.company.country : '';
-            this.createNewCompanyPreparedObj.baseCurrency = this.company.baseCurrency ? this.company.baseCurrency : '';
+            this.createNewCompanyPreparedObj.baseCurrency = this.company?.baseCurrency ? this.company?.baseCurrency : '';
             this.createNewCompanyPreparedObj.nameAlias = this.company.nameAlias ? this.company.nameAlias : '';
             this.getCountry();
             this.getCurrency();
@@ -540,7 +540,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
                 tax.isSelected = event.target.checked;
                 this.selectedTaxes.push(tax.value);
             } else {
-                let indx = this.selectedTaxes.indexOf(tax.value);
+                let indx = this.selectedTaxes?.indexOf(tax.value);
                 this.selectedTaxes.splice(indx, 1);
             }
         }
@@ -711,7 +711,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
             }
         }
 
-        let indx = this.selectedTaxes.indexOf(tax);
+        let indx = this.selectedTaxes?.indexOf(tax);
         this.selectedTaxes.splice(indx, 1);
 
         if (matchedIndex > -1) {
@@ -1167,7 +1167,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
         if (isChecked) {
             this.selectedTaxes.push(tax.value);
         } else {
-            let index = this.selectedTaxes.indexOf(tax.value);
+            let index = this.selectedTaxes?.indexOf(tax.value);
             this.selectedTaxes.splice(index, 1);
         }
         event.preventDefault();

@@ -150,7 +150,7 @@
                                                 ? activeCompany?.baseCurrencySymbol
                                                 : paymentsSummaryData?.total?.symbol
                                         "
-                                        [currencyCode]="activeCompany.baseCurrency"
+                                        [currencyCode]="activeCompany?.baseCurrency"
                                     >
                                     </amount-field>
                                 </span>
@@ -173,7 +173,7 @@
                                                 ? activeCompany?.baseCurrencySymbol
                                                 : paymentsSummaryData?.unUsed?.symbol
                                         "
-                                        [currencyCode]="activeCompany.baseCurrency"
+                                        [currencyCode]="activeCompany?.baseCurrency"
                                     >
                                     </amount-field>
                                 </span>
@@ -425,7 +425,7 @@
                                                 ? payment?.accountCurrencySymbol
                                                 : payment?.totalAmount?.symbol
                                         "
-                                        [currencyCode]="activeCompany.baseCurrency"
+                                        [currencyCode]="activeCompany?.baseCurrency"
                                     >
                                     </amount-field>
                                 </span>
@@ -450,7 +450,7 @@
                                                 ? payment?.accountCurrencySymbol
                                                 : payment?.unusedAmount?.symbol
                                         "
-                                        [currencyCode]="activeCompany.baseCurrency"
+                                        [currencyCode]="activeCompany?.baseCurrency"
                                     >
                                     </amount-field>
                                 </span>

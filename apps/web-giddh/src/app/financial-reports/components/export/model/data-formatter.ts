@@ -35,7 +35,7 @@ export class DataFormatter {
         csv += `${header}\r\n${title}`;
 
         this.exportData.forEach(obj => {
-            row += `${obj.groupName} (${obj.uniqueName}),${obj.forwardedBalance.amount} ${this.recType.transform(obj.forwardedBalance)},${obj.debitTotal},${obj.creditTotal},${obj.closingBalance.amount}${this.recType.transform(obj.closingBalance)}\r\n`;
+            row += `${obj.groupName} (${obj?.uniqueName}),${obj.forwardedBalance.amount} ${this.recType.transform(obj.forwardedBalance)},${obj.debitTotal},${obj.creditTotal},${obj.closingBalance.amount}${this.recType.transform(obj.closingBalance)}\r\n`;
             total = this.calculateTotal(obj, total);
         });
         csv += `${row}\r\n`;

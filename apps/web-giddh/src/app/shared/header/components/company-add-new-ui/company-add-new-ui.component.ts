@@ -432,7 +432,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy, AfterViewIni
                 this.currencySource$ = observableOf(this.currencies);
                 if (this.createBranch) {
                     this.company.baseCurrency = this.activeCompanyDetails ?
-                        this.activeCompanyDetails.baseCurrency : '';
+                        this.activeCompanyDetails?.baseCurrency : '';
                 }
             }
         });

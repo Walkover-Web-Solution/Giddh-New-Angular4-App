@@ -445,7 +445,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     txn.unitRate = txn.selectedAccount.stock.unitRates.map(unitRate => ({ ...unitRate, code: unitRate.stockUnitCode }));
                     stockName = defaultUnit.name;
                     rate = defaultUnit.rate;
-                    stockUniqueName = txn.selectedAccount.stock.uniqueName;
+                    stockUniqueName = txn.selectedAccount.stock?.uniqueName;
                     unitCode = defaultUnit.code;
                 }
                 if (stockName && stockUniqueName) {
@@ -952,13 +952,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
     private getAccountSearchPredictionData(requestModel: any[], bankTransactions: any): void {
         this.ledgerService.getAccountSearchPrediction(this.trxRequest.accountUniqueName, requestModel).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if(response?.status === "success" && response?.body?.length > 0) {
-                let mappedTransactions = response?.body?.filter(transaction => transaction.account !== null);
+                let mappedTransactions = response?.body?.filter(transaction => transaction?.account !== null);
                 if(mappedTransactions?.length > 0) {
                     mappedTransactions?.forEach(transaction => {
-                        let matchedTransaction = bankTransactions?.filter(bankTransaction => bankTransaction.transactionId === transaction.uniqueName);
+                        let matchedTransaction = bankTransactions?.filter(bankTransaction => bankTransaction.transactionId === transaction?.uniqueName);
                         if(matchedTransaction?.length > 0) {
-                            const account: IOption = { label: transaction.account.name, value: transaction.account.uniqueName, additional: { uniqueName: transaction.account.uniqueName } };
-                            matchedTransaction[0].transactions[0].particular = transaction.account.name;
+                            const account: IOption = { label: transaction.account.name, value: transaction.account.uniqueName, additional: { uniqueName: transaction?.account?.uniqueName } };
+                            matchedTransaction[0].transactions[0].particular = transaction?.account.name;
                             this.selectAccount(account, matchedTransaction[0]?.transactions[0]);
                         }
                     });
@@ -1177,7 +1177,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.lc.activeAccount$.pipe(take(1)).subscribe(p => activeAccount = p);
         let downloadRequest = new DownloadLedgerRequest();
         if (this.voucherApiVersion === 2) {
-            downloadRequest.uniqueName = transaction.voucherUniqueName;
+            downloadRequest.uniqueName = transaction?.voucherUniqueName;
         } else {
             downloadRequest.invoiceNumber = [transaction?.voucherNumber];
         }
@@ -1732,7 +1732,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.store.dispatch(this.ledgerActions.SelectGivenEntries([uniqueName]));
             const currentLength = this.isMobileScreen ?
                 this.checkedTrxWhileHovering?.length
-                : this.checkedTrxWhileHovering.filter(transaction => transaction.type === type)?.length;
+                : this.checkedTrxWhileHovering.filter(transaction => transaction?.type === type)?.length;
             if (currentLength === totalLength) {
                 if (type === 'credit') {
                     this.creditSelectAll = true;
@@ -1755,7 +1755,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.checkedTrxWhileHovering.splice(itemIndx, 1);
             const currentLength = this.isMobileScreen ?
                 this.checkedTrxWhileHovering?.length
-                : this.checkedTrxWhileHovering?.filter(transaction => transaction.type === type)?.length;
+                : this.checkedTrxWhileHovering?.filter(transaction => transaction?.type === type)?.length;
             if (this.checkedTrxWhileHovering && (currentLength === 0 || currentLength < totalLength)) {
                 if (type === 'credit') {
                     this.creditSelectAll = false;
@@ -1992,7 +1992,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @memberof LedgerComponent
      */
     public handleAmountInput(transaction: TransactionVM): void {
-        if (transaction.amount !== undefined) {
+        if (transaction?.amount !== undefined) {
             transaction.amount = Number(transaction.amount);
             this.needToReCalculate.next(true);
         }
@@ -2019,16 +2019,16 @@ export class LedgerComponent implements OnInit, OnDestroy {
      */
     private handleRcmVisibility(transaction: TransactionVM): void {
         let formattedCurrentLedgerAccountParentGroups = [];
-        if (transaction.selectedAccount && !transaction.selectedAccount.parentGroups[0]?.uniqueName) {
-            formattedCurrentLedgerAccountParentGroups = transaction.selectedAccount.parentGroups.map(parent => ({ uniqueName: parent }));
+        if (transaction?.selectedAccount && !transaction?.selectedAccount.parentGroups[0]?.uniqueName) {
+            formattedCurrentLedgerAccountParentGroups = transaction?.selectedAccount.parentGroups.map(parent => ({ uniqueName: parent }));
         }
         const currentLedgerAccountDetails = {
             uniqueName: this.lc.activeAccount ? this.lc.activeAccount?.uniqueName : '',
             parentGroups: this.lc.activeAccount && this.lc.activeAccount.parentGroups ? this.lc.activeAccount.parentGroups : []
         };
         const selectedAccountDetails = {
-            uniqueName: transaction.selectedAccount ? transaction.selectedAccount?.uniqueName : '',
-            parentGroups: formattedCurrentLedgerAccountParentGroups?.length ? formattedCurrentLedgerAccountParentGroups : transaction.selectedAccount ? transaction.selectedAccount.parentGroups : []
+            uniqueName: transaction?.selectedAccount ? transaction?.selectedAccount?.uniqueName : '',
+            parentGroups: formattedCurrentLedgerAccountParentGroups?.length ? formattedCurrentLedgerAccountParentGroups : transaction?.selectedAccount ? transaction?.selectedAccount.parentGroups : []
         };
         const shouldShowRcmEntry = this.generalService.shouldShowRcmSection(currentLedgerAccountDetails, selectedAccountDetails, this.activeCompany);
         if (this.lc && this.lc.currentBlankTxn) {
@@ -2050,13 +2050,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
         if (!this.lc || !this.lc.activeAccount || !this.lc.activeAccount.parentGroups || this.lc.activeAccount.parentGroups?.length < 2) {
             return;
         }
-        if (!transaction.selectedAccount || !transaction.selectedAccount.parentGroups || transaction.selectedAccount.parentGroups.length < 2) {
+        if (!transaction?.selectedAccount || !transaction?.selectedAccount.parentGroups || transaction?.selectedAccount.parentGroups.length < 2) {
             return;
         }
         const currentLedgerSecondParent: any = this.lc.activeAccount.parentGroups[1]?.uniqueName ?? this.lc.activeAccount.parentGroups[1];
-        const selectedAccountSecondParent: any = transaction.selectedAccount.parentGroups[1]?.uniqueName ?? transaction.selectedAccount.parentGroups[1];
+        const selectedAccountSecondParent: any = transaction?.selectedAccount.parentGroups[1]?.uniqueName ?? transaction?.selectedAccount.parentGroups[1];
         this.checkTouristSchemeApplicable(currentLedgerSecondParent, selectedAccountSecondParent);
-        if (currentLedgerSecondParent === 'reversecharge' && transaction.type === 'CREDIT') {
+        if (currentLedgerSecondParent === 'reversecharge' && transaction?.type === 'CREDIT') {
             // Current ledger is of reverse charge and user has entered the transaction on the right side (CREDIT) of the ledger
             if (selectedAccountSecondParent === 'dutiestaxes') {
                 /* Particular account belongs to the Duties and taxes then check the country based on which
@@ -2068,7 +2068,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     this.shouldShowItcSection = true;
                 }
             }
-        } else if (currentLedgerSecondParent === 'dutiestaxes' && transaction.type === 'DEBIT') {
+        } else if (currentLedgerSecondParent === 'dutiestaxes' && transaction?.type === 'DEBIT') {
             // Current ledger is of Duties and taxes and user has entered the transaction on the left side (DEBIT) of the ledger
             if (selectedAccountSecondParent === 'reversecharge') {
                 /* Particular account belongs to the Reverse charge then check the country based on which
@@ -2161,37 +2161,37 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
             if (this.visibleTransactionTypeMobile === "debit" && this.ledgerTransactions.debitTransactions) {
                 this.ledgerTransactions.debitTransactions.forEach(transaction => {
-                    if (this.allTransactionsList[transaction.entryDate] === undefined) {
-                        this.allTransactionsList[transaction.entryDate] = [];
+                    if (this.allTransactionsList[transaction?.entryDate] === undefined) {
+                        this.allTransactionsList[transaction?.entryDate] = [];
                     }
                     transaction.index = index;
-                    this.allTransactionsList[transaction.entryDate].push(transaction);
+                    this.allTransactionsList[transaction?.entryDate].push(transaction);
                     index++;
                 });
             } else if (this.visibleTransactionTypeMobile === "credit" && this.ledgerTransactions.creditTransactions) {
                 this.ledgerTransactions.creditTransactions.forEach(transaction => {
-                    if (this.allTransactionsList[transaction.entryDate] === undefined) {
-                        this.allTransactionsList[transaction.entryDate] = [];
+                    if (this.allTransactionsList[transaction?.entryDate] === undefined) {
+                        this.allTransactionsList[transaction?.entryDate] = [];
                     }
                     transaction.index = index;
-                    this.allTransactionsList[transaction.entryDate].push(transaction);
+                    this.allTransactionsList[transaction?.entryDate].push(transaction);
                     index++;
                 });
             } else {
                 this.ledgerTransactions.debitTransactions?.forEach(transaction => {
-                    if (this.allTransactionsList[transaction.entryDate] === undefined) {
-                        this.allTransactionsList[transaction.entryDate] = [];
+                    if (this.allTransactionsList[transaction?.entryDate] === undefined) {
+                        this.allTransactionsList[transaction?.entryDate] = [];
                     }
                     transaction.index = index;
-                    this.allTransactionsList[transaction.entryDate].push(transaction);
+                    this.allTransactionsList[transaction?.entryDate].push(transaction);
                     index++;
                 });
                 this.ledgerTransactions.creditTransactions?.forEach(transaction => {
-                    if (this.allTransactionsList[transaction.entryDate] === undefined) {
-                        this.allTransactionsList[transaction.entryDate] = [];
+                    if (this.allTransactionsList[transaction?.entryDate] === undefined) {
+                        this.allTransactionsList[transaction?.entryDate] = [];
                     }
                     transaction.index = index;
-                    this.allTransactionsList[transaction.entryDate].push(transaction);
+                    this.allTransactionsList[transaction?.entryDate].push(transaction);
                     index++;
                 });
             }
@@ -2368,12 +2368,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     this.accountUniquename = accountDetails?.uniqueName;
 
                     this.isBankOrCashAccount = accountDetails.parentGroups.some((grp) => grp?.uniqueName === 'bankaccounts' || grp?.uniqueName === 'loanandoverdraft');
-                    if (accountDetails.currency && profile.baseCurrency) {
-                        this.isLedgerAccountAllowsMultiCurrency = accountDetails.currency && accountDetails.currency !== profile.baseCurrency;
+                    if (accountDetails.currency && profile?.baseCurrency) {
+                        this.isLedgerAccountAllowsMultiCurrency = accountDetails.currency && accountDetails.currency !== profile?.baseCurrency;
                     } else {
                         this.isLedgerAccountAllowsMultiCurrency = false;
                     }
-                    this.foreignCurrencyDetails = { code: profile.baseCurrency, symbol: profile.baseCurrencySymbol };
+                    this.foreignCurrencyDetails = { code: profile?.baseCurrency, symbol: profile.baseCurrencySymbol };
                     if (this.isLedgerAccountAllowsMultiCurrency) {
                         this.baseCurrencyDetails = { code: accountDetails.currency, symbol: accountDetails.currencySymbol };
                         this.getCurrencyRate();
@@ -2445,7 +2445,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @memberof LedgerComponent
      */
     public deleteBankTransactions(): void {
-        let transactionIds = this.entryUniqueNamesForBulkAction.map((transaction: any) => transaction.transactionId);
+        let transactionIds = this.entryUniqueNamesForBulkAction.map((transaction: any) => transaction?.transactionId);
         let params = { transactionIds: transactionIds };
         this.ledgerService.deleteBankTransactions(this.trxRequest.accountUniqueName, params).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
@@ -2548,12 +2548,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public downloadFiles(transaction: any, downloadOption: string, event: any): void {
         if (this.voucherApiVersion === 2) {
             let dataToSend = {
-                voucherType: transaction.voucherGeneratedType,
-                entryUniqueName: (transaction.voucherUniqueName) ? undefined : transaction.entryUniqueName,
-                uniqueName: (transaction.voucherUniqueName) ? transaction.voucherUniqueName : undefined
+                voucherType: transaction?.voucherGeneratedType,
+                entryUniqueName: (transaction?.voucherUniqueName) ? undefined : transaction?.entryUniqueName,
+                uniqueName: (transaction?.voucherUniqueName) ? transaction?.voucherUniqueName : undefined
             };
 
-            let fileName = (downloadOption === "VOUCHER") ? transaction.voucherNumber + '.pdf' : transaction.attachedFileName;
+            let fileName = (downloadOption === "VOUCHER") ? transaction?.voucherNumber + '.pdf' : transaction?.attachedFileName;
 
             this.commonService.downloadFile(dataToSend, downloadOption, 'pdf').pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response?.status !== "error") {
@@ -2568,7 +2568,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             if (downloadOption === "VOUCHER") {
                 this.downloadInvoice(transaction, event);
             } else {
-                this.downloadAttachedFile(transaction.attachedFileUniqueName, event);
+                this.downloadAttachedFile(transaction?.attachedFileUniqueName, event);
             }
         }
     }

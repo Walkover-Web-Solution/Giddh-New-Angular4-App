@@ -91,7 +91,7 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
         roleObj?.scopes.forEach((role) => {
             if (role.name === 'SHARE') {
                 role.permissions = role.permissions?.filter((p) => {
-                    return shareScopes.indexOf(p.code) > -1;
+                    return shareScopes?.indexOf(p.code) > -1;
                 });
                 if (role.permissions?.length < 3) {
                     shareScopes.forEach((s: string) => {

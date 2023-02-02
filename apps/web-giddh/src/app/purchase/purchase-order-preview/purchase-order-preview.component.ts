@@ -246,8 +246,8 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
 
                     this.getPdf();
 
-                    if (this.purchaseOrder && this.purchaseOrder.account && this.purchaseOrder.account.billingDetails.country) {
-                        this.showGstAndTrnUsingCountry(this.purchaseOrder.account.billingDetails.country.countryCode, this.purchaseOrder.account.billingDetails.country.countryName);
+                    if (this.purchaseOrder && this.purchaseOrder.account && this.purchaseOrder.account.billingDetails?.country) {
+                        this.showGstAndTrnUsingCountry(this.purchaseOrder.account.billingDetails?.country.countryCode, this.purchaseOrder.account.billingDetails?.country.countryName);
                     } else {
                         this.showGstAndTrnUsingCountry('', '');
                     }
@@ -295,8 +295,8 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
      */
     public openSendMailModal(template: TemplateRef<any>): void {
         this.sendEmailRequest.email = this.purchaseOrder.account.email;
-        this.sendEmailRequest.uniqueName = this.purchaseOrder.uniqueName;
-        this.sendEmailRequest.accountUniqueName = this.purchaseOrder.account.uniqueName;
+        this.sendEmailRequest.uniqueName = this.purchaseOrder?.uniqueName;
+        this.sendEmailRequest.accountUniqueName = this.purchaseOrder.account?.uniqueName;
         this.sendEmailRequest.companyUniqueName = this.companyUniqueName;
         this.modalRef = this.modalService.show(template);
     }
@@ -426,7 +426,7 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
      * @memberof PurchaseOrderPreviewComponent
      */
     private showGstAndTrnUsingCountry(code: string, name: string): void {
-        if (this.selectedCompany.country === name) {
+        if (this.selectedCompany?.country === name) {
             if (name === 'India') {
                 this.showGSTINNo = true;
                 this.showTRNNo = false;

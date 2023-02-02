@@ -221,7 +221,7 @@ export class UpdateLedgerVm {
             return false;
         }
         let allowedUniqueNameArr = ['revenuefromoperations', 'otherincome', 'operatingcost', 'indirectexpenses', 'fixedassets'];
-        return allowedUniqueNameArr.indexOf(acc.parentGroups[0]?.uniqueName) > -1;
+        return allowedUniqueNameArr?.indexOf(acc.parentGroups[0]?.uniqueName) > -1;
     }
 
     public getEntryTotal() {
@@ -324,7 +324,7 @@ export class UpdateLedgerVm {
                 let tdsTaxPercentage = null;
                 let tcsTaxPercentage = null;
 
-                let transactions = this.selectedLedger?.transactions?.filter(transaction => !transaction.isTax);
+                let transactions = this.selectedLedger?.transactions?.filter(transaction => !transaction?.isTax);
                 let totalAmount = (transactions?.length > 0) ? Number(transactions[0].amount) : Number(this.selectedLedger.actualAmount);
 
                 if (this.selectedLedger.otherTaxType === "tcs") {
@@ -764,7 +764,7 @@ export class UpdateLedgerVm {
     public updateFirstEntryAmount(): void {
         if (this.selectedLedger?.transactions && this.selectedLedger?.transactions?.length > 0) {
             this.selectedLedger.transactions = this.selectedLedger.transactions.map(transaction => {
-                if (transaction?.particular?.uniqueName && !transaction.isTax) {
+                if (transaction?.particular?.uniqueName && !transaction?.isTax) {
                     transaction.amount = giddhRoundOff(Number(this.totalAmount), this.giddhBalanceDecimalPlaces);
                 }
                 return transaction;

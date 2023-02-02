@@ -120,8 +120,8 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
                 let allRoleArray = [];
                 roles.forEach((role) => {
                     allRoleArray.push({
-                        label: role.name,
-                        value: role.uniqueName
+                        label: role?.name,
+                        value: role?.uniqueName
                     });
                 });
                 this.allRoles = cloneDeep(allRoleArray);

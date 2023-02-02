@@ -133,7 +133,7 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
         private _ledgerActions: LedgerActions,
         private store: Store<AppState>,
         private _keyboardService: KeyboardService,
-        private _toaster: ToasterService, 
+        private _toaster: ToasterService,
         private _router: Router,
         private _tallyModuleService: TallyModuleService,
         private componentFactoryResolver: ComponentFactoryResolver,

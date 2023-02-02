@@ -33,7 +33,7 @@ export class InvoiceReceiptActions {
             ofType(INVOICE_RECEIPT_ACTIONS.GET_ALL_INVOICE_RECEIPT),
             switchMap((action: CustomActions) => this._receiptService.GetAllReceipt(action.payload.body, action.payload.type)),
             map((response: BaseResponse<ReciptResponse, InvoiceReceiptFilter>) => {
-                if (response.status !== 'success') {
+                if (response?.status !== 'success') {
                     this.showToaster(response.message, 'error');
                 }
                 return this.GetAllInvoiceReceiptResponse(response);
@@ -45,7 +45,7 @@ export class InvoiceReceiptActions {
             switchMap((action: CustomActions) => this._receiptService.GetVoucherDetails(action.payload.accountUniqueName,
                 action.payload.model)),
             map((response: BaseResponse<Voucher, ReceiptVoucherDetailsRequest>) => {
-                if (response.status !== 'success') {
+                if (response?.status !== 'success') {
                     this.showToaster(response.message, 'error');
                 }
                 return this.GetVoucherDetailsResponse(response);
@@ -57,7 +57,7 @@ export class InvoiceReceiptActions {
             switchMap((action: CustomActions) => this._receiptService.getVoucherDetailsV4(action.payload.accountUniqueName,
                 action.payload.model)),
             map((response: BaseResponse<Voucher, ReceiptVoucherDetailsRequest>) => {
-                if (response.status !== 'success') {
+                if (response?.status !== 'success') {
                     this.showToaster(response.message, 'error');
                 }
                 return this.GetVoucherDetailsResponseV4(response);
@@ -68,7 +68,7 @@ export class InvoiceReceiptActions {
             ofType(INVOICE_RECEIPT_ACTIONS.DELETE_INVOICE_RECEIPT),
             switchMap((action: CustomActions) => this._receiptService.DeleteReceipt(action.payload.accountUniqueName, action.payload.model)),
             map((response: BaseResponse<string, ReciptDeleteRequest>) => {
-                if (response.status === 'success') {
+                if (response?.status === 'success') {
                     this.showToaster(response.body);
                 } else {
                     this.showToaster(response.message, 'error');
@@ -108,7 +108,7 @@ export class InvoiceReceiptActions {
             ofType(INVOICE_RECEIPT_ACTIONS.GET_PURCHASE_RECORD_DETAILS),
             switchMap((action: CustomActions) => this._receiptService.GetPurchaseRecordDetails(action.payload.accountUniqueName, action.payload.purchaseRecordUniqueName)),
             map((response: BaseResponse<Voucher, ReceiptVoucherDetailsRequest>) => {
-                if (response.status !== 'success') {
+                if (response?.status !== 'success') {
                     this.showToaster(response.message, 'error');
                 }
                 return this.GetPurchaseRecordDetailsResponse(response);
@@ -300,7 +300,7 @@ export class InvoiceReceiptActions {
         showToast: boolean = false,
         errorAction: CustomActions = { type: 'EmptyAction' },
         message?: string): CustomActions {
-        if (response.status === 'error') {
+        if (response?.status === 'error') {
             if (showToast) {
                 this._toasty.errorToast(response.message);
             }

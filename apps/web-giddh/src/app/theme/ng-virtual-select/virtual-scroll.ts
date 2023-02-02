@@ -171,7 +171,7 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
     }
 
     public scrollInto(item: any) {
-        let index: number = (this.items || []).indexOf(item);
+        let index: number = (this.items || [])?.indexOf(item);
         if (index < 0 || index >= (this.items || [])?.length) {
             return;
         }

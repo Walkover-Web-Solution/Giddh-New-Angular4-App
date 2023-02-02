@@ -183,7 +183,7 @@ export class TrialBalanceExportPdfComponent implements OnInit, OnDestroy {
                 return {
                     closingBalance: `${p.closingBalance.amount} ${this.recType.transform(p.closingBalance)}`,
                     openingBalance: `${p.forwardedBalance.amount} ${this.recType.transform(p.forwardedBalance)}`,
-                    name: p.groupName + ' (' + p.uniqueName + ')',
+                    name: p.groupName + ' (' + p?.uniqueName + ')',
                     credit: p.creditTotal,
                     debit: p.debitTotal
                 } as GroupViewModel;
@@ -197,7 +197,7 @@ export class TrialBalanceExportPdfComponent implements OnInit, OnDestroy {
             drawCell: (cell, data) => {
 
                 pdf.setFontSize(8);
-                if (!isNaN(cell.raw) || cell.raw.indexOf('Cr.') > -1 || cell.raw.indexOf('Dr.') > -1) {
+                if (!isNaN(cell.raw) || cell.raw?.indexOf('Cr.') > -1 || cell.raw?.indexOf('Dr.') > -1) {
                     cell.text = cell.text[0] ? String(cell.raw) : [String(cell.text)];
                 }
             },

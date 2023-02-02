@@ -144,7 +144,7 @@
                             class="small-button"
                             mat-flat-button
                             color="primary"
-                            (click)="updateTriggerStatus(element.uniqueName)"
+                            (click)="updateTriggerStatus(element?.uniqueName)"
                         >
                             {{
                                 element?.isActive > 0
@@ -167,7 +167,7 @@
                         <img
                             class="mr-l2 icon-visibility cursor-pointer"
                             src="{{ imgPath }}delete.svg"
-                            (click)="deleteTrigger(element.uniqueName)"
+                            (click)="deleteTrigger(element?.uniqueName)"
                         />
                     </td>
                 </ng-container>

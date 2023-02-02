@@ -50,7 +50,7 @@ export class DecimalDigitsDirective implements OnDestroy {
     public onKeyDown(event) {
         let e = event as KeyboardEvent;
         if (this.OnlyNumber) {
-            if (this.navigationKeys.indexOf(e.key) > -1 ||
+            if (this.navigationKeys?.indexOf(e.key) > -1 ||
                 // Allow: Ctrl+A
                 (e.key === 'a' && e.ctrlKey === true) || // Allow: Ctrl+A
                 (e.key === 'c' && e.ctrlKey === true) || // Allow: Ctrl+C
@@ -114,7 +114,7 @@ export class DecimalDigitsDirective implements OnDestroy {
             // Checking Backspace etc.. keys because firefox doesn't pressing them while chrome does by default
             // tslint:disable-next-line:radix
             if (dotLength > 1 || (dotLength === 1 && e.key === '.') || (currentCursorPos === 0 && e.key === '.') || (decimalLength > (this.giddhDecimalPlaces - 1) &&
-                currentCursorPos > e.target.value.indexOf('.')) && ['Backspace', 'ArrowLeft', 'ArrowRight'].indexOf(e.key) === -1) {
+                currentCursorPos > e.target.value?.indexOf('.')) && ['Backspace', 'ArrowLeft', 'ArrowRight']?.indexOf(e.key) === -1) {
                 e.preventDefault();
             }
         }

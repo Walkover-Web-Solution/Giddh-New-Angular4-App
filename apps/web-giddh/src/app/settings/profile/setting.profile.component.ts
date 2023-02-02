@@ -832,7 +832,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                     ...result,
                     isDefault: false,
                     label: result.alias,
-                    value: result.uniqueName
+                    value: result?.uniqueName
                 }));
             }
         });
@@ -922,8 +922,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     public createNewAddress(addressDetails: any): void {
         this.isAddressChangeInProgress = true;
         const chosenState = addressDetails.addressDetails.stateList.find(selectedState => selectedState.value === addressDetails.formValue.state);
-        let linkEntity = addressDetails.addressDetails.linkedEntities?.filter(entity => (addressDetails.formValue.linkedEntity.includes(entity.uniqueName))).map(filteredEntity => ({
-            uniqueName: filteredEntity.uniqueName,
+        let linkEntity = addressDetails.addressDetails.linkedEntities?.filter(entity => (addressDetails.formValue.linkedEntity.includes(entity?.uniqueName))).map(filteredEntity => ({
+            uniqueName: filteredEntity?.uniqueName,
             isDefault: filteredEntity.isDefault,
             entity: filteredEntity.entity
         }));
@@ -966,8 +966,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         this.isAddressChangeInProgress = true;
         addressDetails.formValue.linkedEntity = addressDetails.formValue.linkedEntity || [];
         const chosenState = addressDetails.addressDetails.stateList.find(selectedState => selectedState.value === addressDetails.formValue.state);
-        const linkEntity = addressDetails.addressDetails.linkedEntities?.filter(entity => (addressDetails.formValue.linkedEntity.includes(entity.uniqueName))).map(filteredEntity => ({
-            uniqueName: filteredEntity.uniqueName,
+        const linkEntity = addressDetails.addressDetails.linkedEntities?.filter(entity => (addressDetails.formValue.linkedEntity.includes(entity?.uniqueName))).map(filteredEntity => ({
+            uniqueName: filteredEntity?.uniqueName,
             isDefault: filteredEntity.isDefault,
             entity: filteredEntity.entity
         }));
@@ -978,7 +978,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             address: addressDetails.formValue.address,
             name: addressDetails.formValue.name,
             pincode: addressDetails.formValue.pincode,
-            uniqueName: addressDetails.formValue.uniqueName,
+            uniqueName: addressDetails.formValue?.uniqueName,
             linkEntity
         };
         this.settingsProfileService.updateAddress(requestObj).pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -1002,7 +1002,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
      * @memberof SettingProfileComponent
      */
     public handleDeleteAddress(addressDetails: any): void {
-        this.settingsProfileService.deleteAddress(addressDetails.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.settingsProfileService.deleteAddress(addressDetails?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.loadAddresses('GET');
             this._toasty.successToast('Address deleted successfully');
         });
@@ -1018,7 +1018,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         const requestObject = {
             name: this.currentBranchDetails.name,
             alias: this.currentBranchDetails.alias,
-            linkAddresses: this.currentBranchDetails.addresses?.filter(address => address.uniqueName !== addressDetails.uniqueName)
+            linkAddresses: this.currentBranchDetails.addresses?.filter(address => address?.uniqueName !== addressDetails?.uniqueName)
         }
         this.settingsProfileService.updateBranchInfo(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.store.dispatch(this.settingsProfileActions.getBranchInfo());
@@ -1034,7 +1034,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
      */
     public handleDefaultAddress(addressDetails: any): void {
         this.addresses.forEach(add => {
-            if (add.uniqueName !== addressDetails.uniqueName) {
+            if (add?.uniqueName !== addressDetails?.uniqueName) {
                 add.isDefault = false;
             }
         })
@@ -1043,7 +1043,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             name: this.currentBranchDetails.name,
             alias: this.currentBranchDetails.alias,
             linkAddresses: this.currentBranchDetails.addresses.map(address => {
-                if (address.uniqueName === addressDetails.uniqueName) {
+                if (address?.uniqueName === addressDetails?.uniqueName) {
                     address.isDefault = addressDetails.isDefault;
                 } else {
                     address.isDefault = false;
@@ -1067,8 +1067,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     private handleCompanyProfileResponse(response: any): void {
         if (response.profileRequest || 1 === 1) {
             let profileObj = cloneDeep(response);
-            if (profileObj.contactNo && profileObj.contactNo.indexOf('-') > -1) {
-                profileObj.contactNo = profileObj.contactNo.substring(profileObj.contactNo.indexOf('-') + 1);
+            if (profileObj.contactNo && profileObj.contactNo?.indexOf('-') > -1) {
+                profileObj.contactNo = profileObj.contactNo.substring(profileObj.contactNo?.indexOf('-') + 1);
             }
             if (profileObj.addresses && profileObj.addresses.length > 3) {
                 this.gstDetailsBackup = cloneDeep(profileObj.addresses);
@@ -1096,7 +1096,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 companyName: profileObj.name,
                 headQuarterAlias: profileObj.headQuarterAlias,
                 nameAlias: profileObj.nameAlias,
-                uniqueName: profileObj.uniqueName,
+                uniqueName: profileObj?.uniqueName,
                 country: {
                     countryName: profileObj.countryV2 ? profileObj.countryV2.countryName : '',
                     countryCode: profileObj.countryV2 ? profileObj.countryV2.alpha2CountryCode?.toLowerCase() : '',
@@ -1139,7 +1139,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 ...this.companyProfileObj,
                 name: response.name,
                 parent: response.parentBranch,
-                uniqueName: response.uniqueName,
+                uniqueName: response?.uniqueName,
                 alias: response.alias,
                 taxType: response.taxType,
                 manageInventory: this.CompanySettingsObj && this.CompanySettingsObj.companyInventorySettings ? this.CompanySettingsObj.companyInventorySettings.manageInventory : false
@@ -1219,7 +1219,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                         this.loadTaxDetails(this.currentCompanyDetails.countryV2.alpha2CountryCode);
                         this.loadStates(this.currentCompanyDetails.countryV2.alpha2CountryCode);
                     }
-        
+
                     this.store.pipe(select(appState => appState.general.openGstSideMenu), takeUntil(this.destroyed$)).subscribe(shouldOpen => {
                         if (this.isMobileScreen) {
                             if (shouldOpen) {
@@ -1229,7 +1229,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                             }
                         }
                     });
-        
+
                     this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
                         if (activeCompany) {
                             if (this.vatSupportedCountries.includes(activeCompany.countryV2?.alpha2CountryCode)) {

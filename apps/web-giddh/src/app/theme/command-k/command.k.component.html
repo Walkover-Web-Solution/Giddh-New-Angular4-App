@@ -61,7 +61,7 @@
                                                                 '-' +
                                                                 (r.type === 'MENU'
                                                                     ? getPageUniqueName(r.route)
-                                                                    : r.uniqueName)
+                                                                    : r?.uniqueName)
                                                         }}"
                                                     >
                                                         {{ r.name }}
@@ -87,7 +87,7 @@
                                                     </ng-container>
                                                 </div>
                                                 <ng-container *ngIf="r.type === 'ACCOUNT'">
-                                                    <span class="command-hover-text">{{ r.uniqueName }}</span>
+                                                    <span class="command-hover-text">{{ r?.uniqueName }}</span>
                                                 </ng-container>
                                             </div>
                                         </div>

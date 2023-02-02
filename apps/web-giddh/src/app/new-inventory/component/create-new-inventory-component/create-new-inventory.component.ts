@@ -107,7 +107,7 @@ export class CreateNewInventoryComponent implements OnInit {
     }
 
     public remove(categorys: Category): void {
-        const index = this.category.indexOf(categorys);
+        const index = this.category?.indexOf(categorys);
 
         if (index >= 0) {
             this.category.splice(index, 1);

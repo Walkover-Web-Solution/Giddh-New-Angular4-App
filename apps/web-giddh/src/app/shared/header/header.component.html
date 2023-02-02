@@ -105,7 +105,7 @@
         class="plan-wrapper"
         *ngIf="
             subscribedPlan !== undefined &&
-            subscribedPlan.status !== 'expired' &&
+            subscribedPlan?.status !== 'expired' &&
             remainingSubscriptionDays !== false &&
             remainingSubscriptionDays <= 7
         "
@@ -121,7 +121,7 @@
 
     <div
         class="plan-wrapper"
-        *ngIf="subscribedPlan !== undefined && subscribedPlan.status === 'expired'"
+        *ngIf="subscribedPlan !== undefined && subscribedPlan?.status === 'expired'"
         [ngClass]="{ 'menu_open': isSidebarExpanded }"
     >
         <div class="white-row plan-issue">

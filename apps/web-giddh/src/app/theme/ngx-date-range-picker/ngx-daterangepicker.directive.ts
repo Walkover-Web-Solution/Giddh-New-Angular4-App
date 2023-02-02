@@ -192,7 +192,7 @@ export class NgxDaterangepickerDirective implements OnInit, OnChanges, DoCheck {
     ngOnChanges(changes: SimpleChanges): void {
         for (let change in changes) {
             if (changes.hasOwnProperty(change)) {
-                if (this.notForChangesProperty.indexOf(change) === -1) {
+                if (this.notForChangesProperty?.indexOf(change) === -1) {
                     this.picker[change] = changes[change].currentValue;
                     if (change === "inputStartDate" && changes[change].currentValue) {
                         this.picker.startDate = changes[change].currentValue;

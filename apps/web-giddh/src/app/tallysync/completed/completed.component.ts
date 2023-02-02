@@ -148,7 +148,7 @@ export class CompletedComponent implements OnInit, OnDestroy {
         this.companies$.subscribe(a => {
             if (a) {
                 a.forEach((element) => {
-                    this.CompanyList.push({ value: element.uniqueName, label: element.name });
+                    this.CompanyList.push({ value: element?.uniqueName, label: element.name });
                 })
             }
         });

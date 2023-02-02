@@ -71,7 +71,7 @@ export class QuickAccountComponent implements OnInit, AfterViewInit, OnDestroy {
                 }
             }
         });
-        
+
         this.newAccountForm = this._fb.group({
             name: ['', Validators.compose([Validators.required, Validators.maxLength(100)])],
             uniqueName: ['', [Validators.required]],
@@ -155,7 +155,7 @@ export class QuickAccountComponent implements OnInit, AfterViewInit, OnDestroy {
 
     public flattenGroup(rawList: GroupsWithAccountsResponse[], groupUniqueName: string, category: any) {
         for (let raw of rawList) {
-            if (raw.uniqueName === groupUniqueName) {
+            if (raw?.uniqueName === groupUniqueName) {
                 return raw.category;
             }
 
@@ -172,7 +172,7 @@ export class QuickAccountComponent implements OnInit, AfterViewInit, OnDestroy {
         const fixedArr = ['currentassets', 'fixedassets', 'noncurrentassets', 'indirectexpenses', 'operatingcost',
             'otherincome', 'revenuefromoperations', 'shareholdersfunds', 'currentliabilities', 'noncurrentliabilities'];
         return data?.filter(da => {
-            return !(fixedArr.indexOf(da?.groupUniqueName) > -1);
+            return !(fixedArr?.indexOf(da?.groupUniqueName) > -1);
         });
     }
 

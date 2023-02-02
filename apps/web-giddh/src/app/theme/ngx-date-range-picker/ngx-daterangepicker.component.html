@@ -540,7 +540,7 @@
                                         <option
                                             *ngFor="let i of timepickerVariables.start.hours"
                                             [value]="i"
-                                            [disabled]="timepickerVariables.start.disabledHours.indexOf(i) > -1"
+                                            [disabled]="timepickerVariables.start.disabledHours?.indexOf(i) > -1"
                                         >
                                             {{ i }}
                                         </option>
@@ -554,7 +554,7 @@
                                         <option
                                             *ngFor="let i of timepickerVariables.start.minutes; let index = index"
                                             [value]="i"
-                                            [disabled]="timepickerVariables.start.disabledMinutes.indexOf(i) > -1"
+                                            [disabled]="timepickerVariables.start.disabledMinutes?.indexOf(i) > -1"
                                         >
                                             {{ timepickerVariables.start.minutesLabel[index] }}
                                         </option>
@@ -569,7 +569,7 @@
                                         <option
                                             *ngFor="let i of timepickerVariables.start.seconds; let index = index"
                                             [value]="i"
-                                            [disabled]="timepickerVariables.start.disabledSeconds.indexOf(i) > -1"
+                                            [disabled]="timepickerVariables.start.disabledSeconds?.indexOf(i) > -1"
                                         >
                                             {{ timepickerVariables.start.secondsLabel[index] }}
                                         </option>
@@ -764,7 +764,7 @@
                                         <option
                                             *ngFor="let i of timepickerVariables.end.hours"
                                             [value]="i"
-                                            [disabled]="timepickerVariables.end.disabledHours.indexOf(i) > -1"
+                                            [disabled]="timepickerVariables.end.disabledHours?.indexOf(i) > -1"
                                         >
                                             {{ i }}
                                         </option>
@@ -778,7 +778,7 @@
                                         <option
                                             *ngFor="let i of timepickerVariables.end.minutes; let index = index"
                                             [value]="i"
-                                            [disabled]="timepickerVariables.end.disabledMinutes.indexOf(i) > -1"
+                                            [disabled]="timepickerVariables.end.disabledMinutes?.indexOf(i) > -1"
                                         >
                                             {{ timepickerVariables.end.minutesLabel[index] }}
                                         </option>
@@ -793,7 +793,7 @@
                                         <option
                                             *ngFor="let i of timepickerVariables.end.seconds; let index = index"
                                             [value]="i"
-                                            [disabled]="timepickerVariables.end.disabledSeconds.indexOf(i) > -1"
+                                            [disabled]="timepickerVariables.end.disabledSeconds?.indexOf(i) > -1"
                                         >
                                             {{ timepickerVariables.end.secondsLabel[index] }}
                                         </option>

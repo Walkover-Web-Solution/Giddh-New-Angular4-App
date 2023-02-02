@@ -262,18 +262,18 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, OnInit, O
                     this._maskService.maskAvailablePatterns[key].optional &&
                     this._maskService.maskAvailablePatterns[key].optional === true
                 ) {
-                    if (this._maskValue.indexOf(key) !== this._maskValue.lastIndexOf(key)) {
+                    if (this._maskValue?.indexOf(key) !== this._maskValue.lastIndexOf(key)) {
                         const opt: string = this._maskValue
                             .split('')
                             .filter((i: string) => i === key)
                             .join('');
                         counterOfOpt += opt?.length;
-                    } else if (this._maskValue.indexOf(key) !== -1) {
+                    } else if (this._maskValue?.indexOf(key) !== -1) {
                         counterOfOpt++;
                     }
                     if (
-                        this._maskValue.indexOf(key) !== -1 &&
-                        value?.toString()?.length >= this._maskValue.indexOf(key)
+                        this._maskValue?.indexOf(key) !== -1 &&
+                        value?.toString()?.length >= this._maskValue?.indexOf(key)
                     ) {
                         return null;
                     }
@@ -283,18 +283,18 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, OnInit, O
                 }
             }
             if (
-                this._maskValue.indexOf('*') === 1 ||
-                this._maskValue.indexOf('?') === 1 ||
-                this._maskValue.indexOf('{') === 1
+                this._maskValue?.indexOf('*') === 1 ||
+                this._maskValue?.indexOf('?') === 1 ||
+                this._maskValue?.indexOf('{') === 1
             ) {
                 return null;
             } else if (
-                (this._maskValue.indexOf('*') > 1 && value?.toString()?.length < this._maskValue.indexOf('*')) ||
-                (this._maskValue.indexOf('?') > 1 && value?.toString()?.length < this._maskValue.indexOf('?'))
+                (this._maskValue?.indexOf('*') > 1 && value?.toString()?.length < this._maskValue?.indexOf('*')) ||
+                (this._maskValue?.indexOf('?') > 1 && value?.toString()?.length < this._maskValue?.indexOf('?'))
             ) {
                 return { 'Mask error': true };
             }
-            if (this._maskValue.indexOf('*') === -1 || this._maskValue.indexOf('?') === -1) {
+            if (this._maskValue?.indexOf('*') === -1 || this._maskValue?.indexOf('?') === -1) {
                 const length: number = this._maskService.dropSpecialCharacters
                     ? this._maskValue?.length - this._maskService.checkSpecialCharAmount(this._maskValue) - counterOfOpt
                     : this._maskValue?.length - counterOfOpt;

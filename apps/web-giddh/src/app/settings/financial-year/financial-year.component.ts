@@ -60,7 +60,7 @@ export class FinancialYearComponent implements OnInit, OnDestroy {
             if (activeCompany) {
                 this.currentCompanyName = activeCompany.name;
                 this.financialOptions = activeCompany.financialYears?.map(element => {
-                    return { label: element.uniqueName, value: element.uniqueName };
+                    return { label: element?.uniqueName, value: element?.uniqueName };
                 });
             }
         });
@@ -108,7 +108,7 @@ export class FinancialYearComponent implements OnInit, OnDestroy {
         let year = cloneDeep(financialYear);
         let dataToSend = {
             lockAll: true,
-            uniqueName: year.uniqueName
+            uniqueName: year?.uniqueName
         };
         financialYear.isLocked = !financialYear.isLocked;
         if (financialYear.isLocked) {

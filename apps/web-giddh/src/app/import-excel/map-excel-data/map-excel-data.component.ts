@@ -60,7 +60,7 @@ export class MapExcelDataComponent implements OnInit {
                     });
                     return p;
                 }),
-                numRows: 0, 
+                numRows: 0,
                 totalRows: 0
             }
         };
@@ -115,7 +115,7 @@ export class MapExcelDataComponent implements OnInit {
 
             selectedIndex = value.mappings.findIndex(f => f.columnNumber === parseInt(field.columnNumber));
             if (selectedIndex > -1) {
-                options = value.giddhHeaders?.filter(f => allMappedColumnHeader?.filter(mf => mf !== value.mappings[selectedIndex].mappedColumn).indexOf(f) === -1).map(p => {
+                options = value.giddhHeaders?.filter(f => allMappedColumnHeader?.filter(mf => mf !== value.mappings[selectedIndex].mappedColumn)?.indexOf(f) === -1).map(p => {
                     return { label: p, value: p };
                 });
             }

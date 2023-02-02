@@ -182,7 +182,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         });
 
         this.store.pipe(select(prof => prof.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
-            this.companyCurrency = profile.baseCurrency || 'INR';
+            this.companyCurrency = profile?.baseCurrency || 'INR';
             this.companyFirstName = profile.name;
             this.baseCurrencySymbol = profile.baseCurrencySymbol;
             this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
@@ -217,7 +217,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
 
         });
         this.selectedAccForBulkPayment = this.selectedAccForBulkPayment?.filter((data, index) => {
-            return this.selectedAccForBulkPayment.indexOf(data) === index;
+            return this.selectedAccForBulkPayment?.indexOf(data) === index;
         });
         this.selectedAccForBulkPayment.forEach(item => {
             this.addAccountTransactionsFormObject(item);

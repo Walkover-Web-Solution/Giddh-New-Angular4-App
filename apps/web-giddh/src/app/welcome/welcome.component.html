@@ -90,7 +90,7 @@
                                     [disabled]="createNewCompanyPreparedObj.baseCurrency ? 'disabled' : null"
                                     [isFilterEnabled]="true"
                                     [(ngModel)]="createNewCompanyPreparedObj.baseCurrency"
-                                    [defaultValue]="createNewCompanyPreparedObj.baseCurrency"
+                                    [defaultValue]="createNewCompanyPreparedObj?.baseCurrency"
                                 ></sh-select>
                             </div>
                         </div>

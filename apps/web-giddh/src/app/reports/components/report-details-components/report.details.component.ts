@@ -247,7 +247,8 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
                     uniqueNameToSearch = (activeCompany.activeFinancialYear) ? activeCompany.activeFinancialYear.uniqueName : "";
                 }
                 selectedFinancialYear = this.financialOptions.find(p => p?.value === uniqueNameToSearch);
-                activeFinancialYear = this.selectedCompany.financialYears.find(p => p.uniqueName === uniqueNameToSearch);
+                activeFinancialYear = this.selectedCompany.financialYears.find(p => p?.uniqueName === uniqueNameToSearch);
+                this.activeFinacialYr = activeFinancialYear;
                 if (selectedFinancialYear) {
                     this.currentActiveFinacialYear = _.cloneDeep(selectedFinancialYear);
                 }
@@ -262,7 +263,7 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
 
     public selectFinancialYearOption(v: IOption) {
         if (v?.value) {
-            let financialYear = this.selectedCompany.financialYears.find(p => p.uniqueName === v?.value);
+            let financialYear = this.selectedCompany.financialYears.find(p => p?.uniqueName === v?.value);
             this.activeFinacialYr = financialYear;
             this.populateRecords(this.interval, this.selectedMonth);
         }
@@ -274,7 +275,7 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
             let endDate = this.activeFinacialYr.financialYearEnds?.toString();
             if (month) {
                 this.selectedMonth = month;
-                let startEndDate = this.getDateFromMonth(this.monthNames.indexOf(this.selectedMonth) + 1);
+                let startEndDate = this.getDateFromMonth(this.monthNames?.indexOf(this.selectedMonth) + 1);
                 startDate = startEndDate.firstDay;
                 endDate = startEndDate.lastDay;
             } else {
@@ -445,7 +446,7 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
         let startDate = this.activeFinacialYr.financialYearStarts?.toString();
         let endDate = this.activeFinacialYr.financialYearEnds?.toString();
         if (this.selectedMonth) {
-            let startEndDate = this.getDateFromMonth(this.monthNames.indexOf(this.selectedMonth) + 1);
+            let startEndDate = this.getDateFromMonth(this.monthNames?.indexOf(this.selectedMonth) + 1);
             startDate = startEndDate.firstDay;
             endDate = startEndDate.lastDay;
         }
