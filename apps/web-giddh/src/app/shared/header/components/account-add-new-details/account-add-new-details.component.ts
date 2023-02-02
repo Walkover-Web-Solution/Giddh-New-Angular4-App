@@ -549,9 +549,25 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         }
         delete accountRequest['addAccountForm'];
 
-        if (this.isHsnSacEnabledAcc) {
-            delete accountRequest['addresses'];
-        } else {
+        if (this.activeParentGroupUniqueName === "bankaccounts") {
+            if (accountRequest.addresses && accountRequest.addresses.length > 0) {
+                let addressExists = false;
+
+                accountRequest.addresses.forEach(address => {
+                    if (address?.address?.trim() || address?.gstNumber?.trim() || address?.stateCode?.trim() || address?.pincode?.trim()) {
+                        addressExists = true;
+                    }
+                });
+
+                if (!addressExists) {
+                    delete accountRequest['addresses'];
+                }
+            } else {
+                delete accountRequest['addresses'];
+            }
+        }
+
+        if (!this.isHsnSacEnabledAcc) {
             delete accountRequest['hsnOrSac'];
             delete accountRequest['hsnNumber'];
             delete accountRequest['sacNumber'];
@@ -567,7 +583,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             delete accountRequest['cashFreeVirtualAccountData'];
         }
 
-        if (this.activeGroupUniqueName === 'discount') {
+        if (this.isHsnSacEnabledAcc || this.activeGroupUniqueName === 'discount') {
             delete accountRequest['addresses'];
         }
 
