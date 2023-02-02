@@ -216,7 +216,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
 
     public ngOnInit(): void {
         this.voucherApiVersion = this._generalService.voucherApiVersion;
-        // Hide Thermal Feature 
+        // Hide Thermal Feature
         // this.invoiceTemplatesService.getAllCreatedTemplates("sales").pipe(takeUntil(this.destroyed$)).subscribe((res) => {
         //     if (res) {
         //         const defaultTemplate = res.body?.filter(res => res.isDefault);
@@ -498,7 +498,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
             if ([VoucherTypeEnum.sales, VoucherTypeEnum.cash, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote].includes(this.voucherType)) {
                 if (this.selectedItem) {
                     let model: DownloadVoucherRequest = {
-                        voucherType: this.selectedItem.voucherType === VoucherTypeEnum.cash ? VoucherTypeEnum.sales : this.selectedItem.voucherType,
+                        voucherType: this.selectedItem?.voucherType === VoucherTypeEnum.cash ? VoucherTypeEnum.sales : this.selectedItem?.voucherType,
                         voucherNumber: [this.selectedItem.voucherNumber]
                     };
 
@@ -603,14 +603,14 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                     request.fileType = fileType;
                     request.accountUniqueName = this.selectedItem.account?.uniqueName;
 
-                    if (this.selectedItem.voucherType === VoucherTypeEnum.generateProforma) {
+                    if (this.selectedItem?.voucherType === VoucherTypeEnum.generateProforma) {
                         request.proformaNumber = this.selectedItem.voucherNumber;
                     } else {
                         request.estimateNumber = this.selectedItem.voucherNumber;
                     }
 
                     this.sanitizedPdfFileUrl = null;
-                    this._proformaService.download(request, this.selectedItem.voucherType).pipe(takeUntil(this.destroyed$)).subscribe(result => {
+                    this._proformaService.download(request, this.selectedItem?.voucherType).pipe(takeUntil(this.destroyed$)).subscribe(result => {
                         if (result && result.status === 'success') {
                             let blob: Blob = this._generalService.base64ToBlob(result.body, 'application/pdf', 512);
                             if (this.selectedItem) {

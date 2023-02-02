@@ -305,7 +305,7 @@ export class MaskService extends MaskApplierService {
                     : Number(this._removeMask(this._removeSuffix(this._removePrefix(result)), this.maskSpecialCharacters));
             }
         } else if (
-            this._removeMask(this._removeSuffix(this._removePrefix(result)), this.maskSpecialCharacters).indexOf(
+            this._removeMask(this._removeSuffix(this._removePrefix(result)), this.maskSpecialCharacters)?.indexOf(
                 ','
             ) !== -1
         ) {
@@ -331,7 +331,7 @@ export class MaskService extends MaskApplierService {
     }
 
     private _checkPrecision(separatorExpression: string, separatorValue: string): number | string {
-        if (separatorExpression.indexOf('2') > 0) {
+        if (separatorExpression?.indexOf('2') > 0) {
             return Number(separatorValue).toFixed(2);
         }
         return Number(separatorValue);

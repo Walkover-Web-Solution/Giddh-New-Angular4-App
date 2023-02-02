@@ -82,7 +82,7 @@ export class LedgerActions {
             ofType(LEDGER.DELETE_TRX_ENTRY_RESPONSE),
             map((action: CustomActions) => {
                 let res = action.payload as BaseResponse<string, string>;
-                if (res.status === 'success') {
+                if (res?.status === 'success') {
                     this.toaster.showSnackBar("success", this.localeService.translate("app_messages.entry_deleted"), this.localeService.translate("app_success"));
                 } else {
                     this.toaster.showSnackBar("error", res.message);
@@ -109,7 +109,7 @@ export class LedgerActions {
         .pipe(
             ofType(LEDGER.LEDGER_SHARE_ACCOUNT_RESPONSE),
             map((action: CustomActions) => {
-                if (action.payload.status === 'error') {
+                if (action.payload?.status === 'error') {
                     this.toaster.showSnackBar("error", action.payload.message, action.payload.code);
                     return {
                         type: 'EmptyAction'
@@ -133,7 +133,7 @@ export class LedgerActions {
         .pipe(
             ofType(LEDGER.LEDGER_SHARED_ACCOUNT_WITH_RESPONSE),
             map((action: CustomActions) => {
-                if (action.payload.status === 'error') {
+                if (action.payload?.status === 'error') {
                     this.toaster.showSnackBar("error", action.payload.message, action.payload.code);
                 }
                 return {
@@ -155,13 +155,13 @@ export class LedgerActions {
             ofType(LEDGER.UPDATE_TXN_ENTRY_RESPONSE),
             map((action: CustomActions) => {
                 let response: BaseResponse<LedgerResponse, LedgerUpdateRequest> = action.payload;
-                if (response.status === 'error') {
+                if (response?.status === 'error') {
                     this.toaster.showSnackBar("error", response.message, response.code);
                     return { type: 'EmptyAction' };
-                } else if (response.status === 'no-network') {
+                } else if (response?.status === 'no-network') {
                     this.ResetUpdateLedger();
                     return { type: 'EmptyAction' };
-                } else if (response.status === 'confirm') {
+                } else if (response?.status === 'confirm') {
                     return {
                         type: LEDGER.SHOW_DUPLICATE_VOUCHER_CONFIRMATION,
                         payload: response
@@ -197,7 +197,7 @@ export class LedgerActions {
         .pipe(
             ofType(LEDGER.CREATE_QUICK_ACCOUNT_RESPONSE),
             map((action: CustomActions) => {
-                if (action.payload.status === 'error') {
+                if (action.payload?.status === 'error') {
                     this.toaster.showSnackBar("error", action.payload.message, action.payload.code);
                     return {
                         type: 'EmptyAction'
@@ -221,7 +221,7 @@ export class LedgerActions {
         .pipe(
             ofType(LEDGER.ADVANCE_SEARCH_RESPONSE),
             map((action: CustomActions) => {
-                if (action.payload.status === 'error') {
+                if (action.payload?.status === 'error') {
                     this.toaster.showSnackBar("error", action.payload.message, action.payload.code);
                 }
                 return { type: 'EmptyAction' };
@@ -232,7 +232,7 @@ export class LedgerActions {
             ofType(LEDGER.GENERATE_UPDATED_LEDGER_INVOICE),
             switchMap((action: CustomActions) => this.invoiceServices.GenerateBulkInvoice({ combined: false }, action.payload)),
             map(response => {
-                if (response.status === 'success') {
+                if (response?.status === 'success') {
                     if (typeof response.body === 'string') {
                         this.toaster.showSnackBar("success", response.body);
                         this.store.dispatch(this.setTxnForEdit(''));
@@ -267,7 +267,7 @@ export class LedgerActions {
                 let req: TransactionsRequest = action.payload as TransactionsRequest;
                 return this.ledgerService.GetReconciliation(req, req.accountUniqueName);
             }), map(response => {
-                if (response.status === 'success') {
+                if (response?.status === 'success') {
                     this.toaster.showSnackBar("info", response.body.message);
                 } else {
                     this.toaster.showSnackBar("error", response.message, response.code);
@@ -289,7 +289,7 @@ export class LedgerActions {
             ofType(LEDGER.DELETE_MULTIPLE_LEDGER_ENTRIES_RESPONSE),
             map((action: CustomActions) => {
                 let res: any = action.payload as BaseResponse<any, string>;
-                if (res.status === 'success') {
+                if (res?.status === 'success') {
                     if (Array.isArray(res.body)) {
                         let errorMessage = res.body[0].reason;
                         let failedEntries = res.body[0].failedEntries;
@@ -323,7 +323,7 @@ export class LedgerActions {
             ofType(LEDGER.GENERATE_BULK_LEDGER_INVOICE_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, GenerateBulkInvoiceRequest[]> = response.payload;
-                if (data.status === 'error') {
+                if (data?.status === 'error') {
                     this.toaster.showSnackBar("error", data.message, data.code);
                 } else {
                     if (typeof data.body === 'string') {
@@ -647,12 +647,12 @@ export class LedgerActions {
     }
 
     private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false, errorAction: CustomActions = { type: 'EmptyAction' }, isCreateLedger?: boolean): CustomActions {
-        if (response.status === 'error') {
+        if (response?.status === 'error') {
             if (showToast) {
                 this.toaster.showSnackBar("error", response.message);
             }
             return errorAction;
-        } else if (response.status === "confirm") {
+        } else if (response?.status === "confirm") {
             if (isCreateLedger) {
                 return {
                     type: LEDGER.SHOW_DUPLICATE_VOUCHER_CONFIRMATION,

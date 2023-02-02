@@ -174,7 +174,7 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
                     let units = p.inventory.stocksList.results;
 
                     return units.map(unit => {
-                        return { label: `${unit.name} (${unit.uniqueName})`, value: unit.uniqueName };
+                        return { label: `${unit.name} (${unit?.uniqueName})`, value: unit?.uniqueName };
                     });
                 }
             }
@@ -261,7 +261,7 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
             if (data?.status === 'success') {
                 let purchaseAccounts: IOption[] = [];
                 data?.body?.results?.map(d => {
-                    purchaseAccounts.push({ label: `${d.name} (${d.uniqueName})`, value: d.uniqueName });
+                    purchaseAccounts.push({ label: `${d.name} (${d?.uniqueName})`, value: d?.uniqueName });
                 });
                 this.purchaseAccountsDropDown$ = of(purchaseAccounts);
             }
@@ -272,7 +272,7 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
             if (data?.status === 'success') {
                 let salesAccounts: IOption[] = [];
                 data?.body?.results?.map(d => {
-                    salesAccounts.push({ label: `${d.name} (${d.uniqueName})`, value: d.uniqueName });
+                    salesAccounts.push({ label: `${d.name} (${d?.uniqueName})`, value: d?.uniqueName });
                 });
                 this.salesAccountsDropDown$ = of(salesAccounts);
             }
@@ -694,7 +694,7 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
             this.isUpdatingStockForm = true;
             this.addStockForm?.patchValue({
                 name: activeStock.name,
-                uniqueName: activeStock.uniqueName,
+                uniqueName: activeStock?.uniqueName,
                 stockUnitCode: activeStock.stockUnit ? activeStock.stockUnit.code : '',
                 openingQuantity: activeStock.openingQuantity,
                 openingAmount: activeStock.openingAmount
@@ -747,7 +747,7 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
 
         let formObj = _.cloneDeep(this.addStockForm.value);
         stockObj.name = formObj.name;
-        stockObj.uniqueName = formObj.uniqueName;
+        stockObj.uniqueName = formObj?.uniqueName;
         stockObj.stockUnitCode = formObj.stockUnitCode;
         stockObj.openingAmount = formObj.openingAmount;
         stockObj.openingQuantity = formObj.openingQuantity;
@@ -879,7 +879,7 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
             if (p) {
                 let newOption: IOption = { label: '', value: '' };
                 newOption.label = p.name;
-                newOption.value = p.uniqueName;
+                newOption.value = p?.uniqueName;
                 parents.push(newOption);
                 if (p.childStockGroups && p.childStockGroups.length > 0) {
                     this.flattenDATA(p.childStockGroups, parents);
@@ -975,7 +975,7 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
                 this.forceClear$ = of({ status: true });
                 this.addStockForm.controls['parentGroup'].enable();
                 if (this.activeGroup) {
-                    this.addStockForm.get('parentGroup')?.patchValue(this.activeGroup.uniqueName);
+                    this.addStockForm.get('parentGroup')?.patchValue(this.activeGroup?.uniqueName);
                 } else {
                     this.groupsData$.subscribe(p => {
                         if (p) {
@@ -1018,7 +1018,7 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
                             o.isChecked = false;
                             o.isDisabled = true;
                         }
-                        if (o.uniqueName === tax.uniqueName) {
+                        if (o?.uniqueName === tax?.uniqueName) {
                             tax.isChecked = true;
                             tax.isDisabled = false;
                             this.taxTempArray.push(tax);
@@ -1033,7 +1033,7 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
                 });
                 this.taxTempArray.push(tax);
             } else {
-                let idx = _.findIndex(this.taxTempArray, (o) => o.uniqueName === tax.uniqueName);
+                let idx = _.findIndex(this.taxTempArray, (o) => o?.uniqueName === tax?.uniqueName);
                 this.taxTempArray.splice(idx, 1);
                 tax.isChecked = false;
                 this.companyTaxesList$.subscribe((taxes) => {
@@ -1049,13 +1049,13 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
                 this.taxTempArray.push(tax);
                 tax.isChecked = true;
             } else {
-                let idx = _.findIndex(this.taxTempArray, (o) => o.uniqueName === tax.uniqueName);
+                let idx = _.findIndex(this.taxTempArray, (o) => o?.uniqueName === tax?.uniqueName);
                 this.taxTempArray.splice(idx, 1);
                 tax.isChecked = false;
             }
         }
 
-        this.addStockForm.get('taxes')?.patchValue(this.taxTempArray.map(m => m.uniqueName));
+        this.addStockForm.get('taxes')?.patchValue(this.taxTempArray.map(m => m?.uniqueName));
     }
 
     /**
@@ -1067,7 +1067,7 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
         let common = this.companyTaxesList$.subscribe(a => {
             _.filter(a, (tax) => {
                 _.find(taxes, (unq) => {
-                    if (unq === tax.uniqueName) {
+                    if (unq === tax?.uniqueName) {
                         return taxToMap.push(tax);
                     }
                 });

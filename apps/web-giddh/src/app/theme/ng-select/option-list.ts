@@ -65,7 +65,7 @@ export class OptionList {
         v = typeof v === 'undefined' || v === null ? [] : v;
 
         this.options.forEach((option) => {
-            option.selected = v.indexOf(option.value) > -1;
+            option.selected = v?.indexOf(option.value) > -1;
         });
         this.updateHasSelected();
     }
@@ -137,7 +137,7 @@ export class OptionList {
             this.options.forEach((option) => {
                 let l: string = Diacritics.strip(option.label).toUpperCase();
                 let t: string = Diacritics.strip(term).toUpperCase();
-                option.shown = l.indexOf(t) > -1;
+                option.shown = l?.indexOf(t) > -1;
 
                 if (option.shown) {
                     anyShown = true;

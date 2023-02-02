@@ -482,18 +482,18 @@
 
                             <td
                                 [attr.data-title]="commonLocaleData?.app_account"
-                                (dblclick)="modalUniqueName = item.uniqueName"
+                                (dblclick)="modalUniqueName = item?.uniqueName"
                                 class="cp no-dbl-click-select"
                             >
                                 {{ item.account.name }}
                                 <div
-                                    *ngIf="modalUniqueName === item.uniqueName"
+                                    *ngIf="modalUniqueName === item?.uniqueName"
                                     account-detail-modal-component
                                     [accountUniqueName]="item.account?.uniqueName"
                                     [voucherType]="'purchase'"
                                     [from]="this.from"
                                     [to]="this.to"
-                                    [isModalOpen]="modalUniqueName === item.uniqueName"
+                                    [isModalOpen]="modalUniqueName === item?.uniqueName"
                                     (modalClosed)="modalUniqueName = ''"
                                 ></div>
                                 <ng-container *ngIf="expand">

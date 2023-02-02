@@ -64,7 +64,7 @@ export class SettingsProfileActions {
             ofType(SETTINGS_PROFILE_ACTIONS.UPDATE_PROFILE_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, any> = response.payload;
-                if (data.status === 'error') {
+                if (data?.status === 'error') {
                     this.toasty.errorToast(data.message, data.code);
                 } else {
                     this.store.dispatch(this.companyActions.RefreshCompanies());
@@ -86,7 +86,7 @@ export class SettingsProfileActions {
             ofType(SETTINGS_PROFILE_ACTIONS.PATCH_PROFILE_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, any> = response.payload;
-                if (data.status === 'error') {
+                if (data?.status === 'error') {
                     this.toasty.errorToast(data.message, data.code);
                 } else {
                     this.store.dispatch(this.companyActions.RefreshCompanies());
@@ -111,7 +111,7 @@ export class SettingsProfileActions {
             ofType(SETTINGS_PROFILE_ACTIONS.UPDATE_INVENTORY_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, any> = response.payload;
-                if (data.status === 'error') {
+                if (data?.status === 'error') {
                     this.toasty.errorToast(data.message, data.code);
                 } else {
                     this.toasty.successToast(this.localeService.translate("app_messages.inventory_settings_updated"));
@@ -186,7 +186,7 @@ export class SettingsProfileActions {
 
     public validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false, errorAction: CustomActions = { type: 'EmptyAction' }): CustomActions {
         if (response) {
-            if (response.status === 'error') {
+            if (response?.status === 'error') {
                 if (showToast) {
                     this.toasty.errorToast(response.message);
                 }

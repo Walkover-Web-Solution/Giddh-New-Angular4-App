@@ -362,7 +362,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 if (this.generalService.currentBranchUniqueName) {
                     this.currentCompanyBranches$.pipe(take(1)).subscribe(response => {
                         if (response) {
-                            this.currentBranch = response.find(branch => (branch.uniqueName === this.generalService.currentBranchUniqueName));
+                            this.currentBranch = response.find(branch => (branch?.uniqueName === this.generalService.currentBranchUniqueName));
                             if (!this.activeCompanyForDb) {
                                 this.activeCompanyForDb = new CompAidataModel();
                             }
@@ -535,7 +535,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 let userEmail = u.email;
                 this.userEmail = clone(userEmail);
                 let userEmailDomain = userEmail?.replace(/.*@/, '');
-                this.userIsCompanyUser = userEmailDomain && this.companyDomains.indexOf(userEmailDomain) !== -1;
+                this.userIsCompanyUser = userEmailDomain && this.companyDomains?.indexOf(userEmailDomain) !== -1;
                 let name = u.name;
                 if (u.name.match(/\s/g)) {
                     this.userFullName = name;
@@ -575,7 +575,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                     if (!page?.additional) {
                         return;
                     }
-                    return (page?.uniqueName.substring(7, page?.uniqueName?.length).indexOf(lastState?.replace(tempParams, '')) > -1
+                    return (page?.uniqueName.substring(7, page?.uniqueName?.length)?.indexOf(lastState?.replace(tempParams, '')) > -1
                         && page.additional.tabIndex === Number(queryParams.tabindex));
                 });
 
@@ -625,9 +625,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             if (menu) {
                 let menuItem: IUlist = NAVIGATION_ITEM_LIST.find(item => {
                     if (menu.additional && item.additional) {
-                        return item.uniqueName.toLowerCase() === menu.uniqueName.toLowerCase() && item.additional.tabIndex === menu.additional.tabIndex;
+                        return item?.uniqueName.toLowerCase() === menu.uniqueName.toLowerCase() && item.additional.tabIndex === menu.additional.tabIndex;
                     }
-                    return item.uniqueName.toLocaleLowerCase() === menu.uniqueName.toLowerCase();
+                    return item?.uniqueName.toLocaleLowerCase() === menu.uniqueName.toLowerCase();
                 });
                 if (menuItem) {
                     this.doEntryInDb('menus', menuItem);
@@ -693,9 +693,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                     this.store.dispatch(this.commonActions.resetOnboardingForm());
                 }
                 if (res.subscription) {
-                    if (res.baseCurrency) {
+                    if (res?.baseCurrency) {
 
-                        this.companyCountry.baseCurrency = res.baseCurrency;
+                        this.companyCountry.baseCurrency = res?.baseCurrency;
                         this.companyCountry.country = res.country;
                         this.store.dispatch(this.companyActions.setCurrentCompanyCurrency(this.companyCountry));
                     }
@@ -797,7 +797,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                             response.financialYears.forEach(key => {
                                 if (this.selectedDateRange?.endDate >= dayjs(key.financialYearStarts, GIDDH_DATE_FORMAT) && this.selectedDateRange?.endDate <= dayjs(key.financialYearEnds, GIDDH_DATE_FORMAT)) {
                                     activeFinancialYear = {
-                                        uniqueName: key.uniqueName,
+                                        uniqueName: key?.uniqueName,
                                         isLocked: key.isLocked,
                                         financialYearStarts: dayjs(key.financialYearStarts, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT),
                                         financialYearEnds: dayjs(key.financialYearEnds, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT)
@@ -929,10 +929,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         let o: IUlist = find(NAVIGATION_ITEM_LIST, (item) => {
             if (queryParamsObj) {
                 if (item.additional) {
-                    return item.uniqueName.toLowerCase() === pageName.toLowerCase() && item.additional.tabIndex === queryParamsObj.tabIndex;
+                    return item?.uniqueName.toLowerCase() === pageName.toLowerCase() && item.additional.tabIndex === queryParamsObj.tabIndex;
                 }
             } else {
-                return item.uniqueName.toLocaleLowerCase() === pageName.toLowerCase();
+                return item?.uniqueName.toLocaleLowerCase() === pageName.toLowerCase();
             }
         });
         if (o) {
@@ -1081,7 +1081,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         let validElement = true;
 
         excludeElements.forEach(className => {
-            if (elementClass.indexOf(className) > -1) {
+            if (elementClass?.indexOf(className) > -1) {
                 validElement = false;
             }
         });
@@ -1341,7 +1341,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.store.dispatch(this._generalActions.setPageTitle(currentPageObj));
         } else {
             NAVIGATION_ITEM_LIST.find((page) => {
-                if (page.uniqueName === decodeURI(currentUrl)) {
+                if (page?.uniqueName === decodeURI(currentUrl)) {
                     this.setCurrentPageTitle(page);
                     return true;
                 }
@@ -1692,7 +1692,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         let currentUrl = this.router.url;
 
         NAVIGATION_ITEM_LIST.find((page) => {
-            if (page.uniqueName === decodeURI(currentUrl) && page.hasTabs === true) {
+            if (page?.uniqueName === decodeURI(currentUrl) && page.hasTabs === true) {
                 this.pageHasTabs = true;
                 return true;
             }

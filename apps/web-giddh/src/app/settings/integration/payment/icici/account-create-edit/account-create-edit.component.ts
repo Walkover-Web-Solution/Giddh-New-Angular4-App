@@ -71,7 +71,7 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         if (this.activeBankAccount) {
-            this.paymentAlerts = this.activeBankAccount?.iciciDetailsResource?.paymentAlerts?.map(user => user.uniqueName);
+            this.paymentAlerts = this.activeBankAccount?.iciciDetailsResource?.paymentAlerts?.map(user => user?.uniqueName);
 
             this.accountForm = this.formBuilder.group({
                 accountNumber: [this.activeBankAccount?.iciciDetailsResource?.accountNumber, Validators.compose([Validators.required, Validators.minLength(9), Validators.maxLength(18)])],
@@ -116,7 +116,7 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
             if (response?.body?.results) {
                 const bankAccounts = response.body.results.map(account => ({
                     label: account.name,
-                    value: account.uniqueName
+                    value: account?.uniqueName
                 }))
                 this.bankAccounts$ = observableOf(bankAccounts);
             }
@@ -148,7 +148,7 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
                         index++;
                     });
 
-                    let isAllOptionsChecked = this.paymentAlerts?.filter(paymentAlertUser => paymentAlertUser !== this.selectAllRecords); 
+                    let isAllOptionsChecked = this.paymentAlerts?.filter(paymentAlertUser => paymentAlertUser !== this.selectAllRecords);
                     if((isAllOptionsChecked?.length === this.paymentAlertsUsersList?.length - 1)) {
                         // if all options checked and select all is unchecked, we need to show select all as selected
                         this.paymentAlerts.push(this.selectAllRecords);
@@ -218,7 +218,7 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
                     this.paymentAlerts.push(event?.value);
                 }
 
-                let isAllOptionsChecked = this.paymentAlerts?.filter(paymentAlertUser => paymentAlertUser !== this.selectAllRecords); 
+                let isAllOptionsChecked = this.paymentAlerts?.filter(paymentAlertUser => paymentAlertUser !== this.selectAllRecords);
                 let isSelectAllChecked = this.paymentAlerts?.filter(paymentAlertUser => paymentAlertUser === this.selectAllRecords);
                 if((isAllOptionsChecked?.length === this.paymentAlertsUsersList?.length - 1) && !isSelectAllChecked?.length) {
                     // if all options checked and select all is unchecked, we need to show select all as selected

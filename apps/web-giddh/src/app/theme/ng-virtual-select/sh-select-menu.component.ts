@@ -74,11 +74,11 @@ export class ShSelectMenuComponent implements OnChanges {
         if (row?.value === this.selectAllRecords) {
             this._rows.forEach(key => {
                 if (this.isSelectAllChecked) {
-                    if (this.selectedValues.indexOf(key) !== -1) {
+                    if (this.selectedValues?.indexOf(key) !== -1) {
                         this.noToggleClick.emit(key);
                     }
                 } else {
-                    if (this.selectedValues.indexOf(key) === -1) {
+                    if (this.selectedValues?.indexOf(key) === -1) {
                         this.noToggleClick.emit(key);
                     }
                 }

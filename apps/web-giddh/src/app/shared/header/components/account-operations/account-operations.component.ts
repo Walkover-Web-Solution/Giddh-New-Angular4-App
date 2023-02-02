@@ -161,7 +161,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
                 let arr: IOption[] = [];
                 if (taxes) {
                     if (activeAccount) {
-                        let applicableTaxes = activeAccount.applicableTaxes.map(p => p.uniqueName);
+                        let applicableTaxes = activeAccount.applicableTaxes.map(p => p?.uniqueName);
 
                         // set isGstEnabledAcc or not
                         if (activeAccount.parentGroups[0]?.uniqueName) {
@@ -173,17 +173,17 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
                         if (activeAccountTaxHierarchy) {
 
                             if (activeAccountTaxHierarchy.inheritedTaxes) {
-                                let inheritedTaxes = flattenDeep(activeAccountTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((j: any) => j.uniqueName);
-                                let allTaxes = applicableTaxes?.filter(f => inheritedTaxes.indexOf(f) === -1);
+                                let inheritedTaxes = flattenDeep(activeAccountTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((j: any) => j?.uniqueName);
+                                let allTaxes = applicableTaxes?.filter(f => inheritedTaxes?.indexOf(f) === -1);
                                 // set value in tax group form
                                 this.taxGroupForm.setValue({ taxes: allTaxes });
                             } else {
                                 this.taxGroupForm.setValue({ taxes: applicableTaxes });
                             }
                             return differenceBy(taxes.map(p => {
-                                return { label: p.name, value: p.uniqueName };
+                                return { label: p.name, value: p?.uniqueName };
                             }), flattenDeep(activeAccountTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((p: any) => {
-                                return { label: p.name, value: p.uniqueName };
+                                return { label: p.name, value: p?.uniqueName };
                             }), 'value');
 
                         } else {
@@ -191,7 +191,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
                             this.taxGroupForm.setValue({ taxes: applicableTaxes });
 
                             return taxes.map(p => {
-                                return { label: p.name, value: p.uniqueName };
+                                return { label: p.name, value: p?.uniqueName };
                             });
 
                         }
@@ -265,7 +265,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
         this.showAddNewGroup$.subscribe(s => {
             if (s) {
-                if (this.breadcrumbPath.indexOf(this.commonLocaleData?.app_create_group) === -1) {
+                if (this.breadcrumbPath?.indexOf(this.commonLocaleData?.app_create_group) === -1) {
                     this.breadcrumbPath.push(this.commonLocaleData?.app_create_group);
                 }
             }
@@ -273,7 +273,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
         this.showAddNewAccount$.subscribe(s => {
             if (s) {
-                if (this.breadcrumbPath.indexOf(this.commonLocaleData?.app_create_account) === -1) {
+                if (this.breadcrumbPath?.indexOf(this.commonLocaleData?.app_create_account) === -1) {
                     this.breadcrumbPath.push(this.commonLocaleData?.app_create_account);
                 }
             }
@@ -409,7 +409,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
             newParents = union([], parents);
             newParents.push({
                 name: listItem.name,
-                uniqueName: listItem.uniqueName
+                uniqueName: listItem?.uniqueName
             });
             listItem = Object.assign({}, listItem, { parentGroups: [] });
             listItem.parentGroups = newParents;
@@ -450,7 +450,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         obj = map(rawList, (item: any) => {
             obj = {};
             obj.name = item.name;
-            obj.uniqueName = item.uniqueName;
+            obj.uniqueName = item?.uniqueName;
             obj.synonyms = item.synonyms;
             obj.parentGroups = item.parentGroups;
             return obj;

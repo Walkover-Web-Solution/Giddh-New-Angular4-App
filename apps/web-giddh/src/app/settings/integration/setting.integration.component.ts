@@ -324,7 +324,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     }
 
     public unlinkAccountFromRazorPay() {
-        if (this.razorPayObj.account && this.razorPayObj.account.name && this.razorPayObj.account.uniqueName) {
+        if (this.razorPayObj.account && this.razorPayObj.account.name && this.razorPayObj.account?.uniqueName) {
             let data = cloneDeep(this.razorPayObj);
             if (data) {
                 data.account.uniqueName = null;
@@ -526,7 +526,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                     };
                     this._authenticationService.saveGmailToken(dataToSave).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
 
-                        if (res.status === 'success') {
+                        if (res?.status === 'success') {
                             this.toasty.successToast(this.localeData?.email?.gmail_added_successfully, this.commonLocaleData?.app_success);
                         } else {
                             this.toasty.errorToast(res.message, res.code);
@@ -700,7 +700,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 if (data && data.body && data.body.results) {
                     const searchResults = data.body.results.map(result => {
                         return {
-                            value: result.uniqueName,
+                            value: result?.uniqueName,
                             label: result.name
                         }
                     }) || [];
@@ -749,7 +749,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                     if (!this.accountsSearchResultsPaginationData.query) {
                         const results = response.map(result => {
                             return {
-                                value: result.uniqueName,
+                                value: result?.uniqueName,
                                 label: result.name
                             }
                         }) || [];

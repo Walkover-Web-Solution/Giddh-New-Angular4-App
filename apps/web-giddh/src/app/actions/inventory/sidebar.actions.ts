@@ -21,7 +21,7 @@ export class SidebarAction {
             tap(a => console.log('called')),
             switchMap((action: CustomActions) => {
                 return this._inventoryService.GetGroupsStock(action.payload?.groupUniqueName).pipe(shareReplay(), map(response => {
-                    if (response.status === 'error') {
+                    if (response?.status === 'error') {
                         this._toasty.errorToast(response.message, response.code);
                     } else {
                         this.store.dispatch(this.GetInventoryGroupResponse(response));
@@ -49,7 +49,7 @@ export class SidebarAction {
         .pipe(
             ofType(InventoryActionsConst.GetInventoryStockResponse),
             map((action: CustomActions) => {
-                if (action.payload.status === 'error') {
+                if (action.payload?.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
                 }
                 return { type: 'EmptyAction' };
@@ -82,7 +82,7 @@ export class SidebarAction {
         .pipe(
             ofType(InventoryActionsConst.GetGroupsWithStocksHierarchyMinResponse),
             map((action: CustomActions) => {
-                if (action.payload.status === 'error') {
+                if (action.payload?.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
                 }
                 return { type: 'EmptyAction' };
@@ -100,7 +100,7 @@ export class SidebarAction {
         .pipe(
             ofType(InventoryActionsConst.SearchGroupsWithStocksResponse),
             map((action: CustomActions) => {
-                if (action.payload.status === 'error') {
+                if (action.payload?.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
                 }
                 return { type: 'EmptyAction' };

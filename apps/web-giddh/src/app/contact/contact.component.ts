@@ -525,7 +525,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
 
     public goToRoute(part: string, additionalParams: string = "", accUniqueName: string) {
-        let url = location.href + `?returnUrl=${part}/${accUniqueName}`;                
+        let url = location.href + `?returnUrl=${part}/${accUniqueName}`;
         if (additionalParams) {
             url = `${url}${additionalParams}`;
         }
@@ -554,7 +554,7 @@ export class ContactComponent implements OnInit, OnDestroy {
                 this.currentBranch.alias = this.currentBranchData.alias;
             } else {
                 this.currentBranch.name = this.activeCompany.name;
-                this.currentBranch.uniqueName = this.activeCompany.uniqueName;
+                this.currentBranch.uniqueName = this.activeCompany?.uniqueName;
                 this.currentBranch.alias = this.activeCompany.nameAlias ? this.activeCompany.nameAlias : this.activeCompany.name;
             }
         }
@@ -1196,7 +1196,7 @@ export class ContactComponent implements OnInit, OnDestroy {
 
                         // element.customFields = customFields;
 
-                        let indexOfItem = this.selectedCheckedContacts.indexOf(element?.uniqueName);
+                        let indexOfItem = this.selectedCheckedContacts?.indexOf(element?.uniqueName);
                         if (indexOfItem === -1) {
                             element.isSelected = false;
                         } else {
@@ -1224,7 +1224,7 @@ export class ContactComponent implements OnInit, OnDestroy {
 
                         // element.customFields = customFields;
 
-                        let indexOfItem = this.selectedCheckedContacts.indexOf(element?.uniqueName);
+                        let indexOfItem = this.selectedCheckedContacts?.indexOf(element?.uniqueName);
                         if (indexOfItem === -1) {
                             element.isSelected = false;
                         } else {
@@ -1395,7 +1395,7 @@ export class ContactComponent implements OnInit, OnDestroy {
             this.selectedAccountsList = this.selectedAccountsList?.filter(account => account?.uniqueName !== element?.uniqueName);
         }
         // selected contacts list
-        let indexOfEntrySelected = this.selectedCheckedContacts.indexOf(element?.uniqueName);
+        let indexOfEntrySelected = this.selectedCheckedContacts?.indexOf(element?.uniqueName);
         if (indexOfEntrySelected === -1 && isChecked) {
             this.selectedCheckedContacts.push(element?.uniqueName);
         } else if (indexOfEntrySelected > -1 && !isChecked) {
@@ -1440,7 +1440,7 @@ export class ContactComponent implements OnInit, OnDestroy {
                     let customFields = response.body.results?.map(field => {
                         return {
                             key: field.fieldName,
-                            uniqueName: field.uniqueName
+                            uniqueName: field?.uniqueName
                         }
                     });
 
@@ -1676,7 +1676,7 @@ export class ContactComponent implements OnInit, OnDestroy {
                 return itemObject?.bankPaymentDetails === true;
             });
             this.selectedAccountsList = this.selectedAccountsList.filter((data, index) => {
-                return this.selectedAccountsList.indexOf(data) === index;
+                return this.selectedAccountsList?.indexOf(data) === index;
             });
         }
         if (!this.selectedAccountsList?.length && item) {

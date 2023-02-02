@@ -86,7 +86,7 @@ export class VoucherAddBulkItemsComponent implements OnDestroy {
             return {
                 rate: 0,
                 stockUnitCode: '',
-                uniqueName: result.stock ? `${result.uniqueName}#${result.stock?.uniqueName}` : result.uniqueName,
+                uniqueName: result.stock ? `${result?.uniqueName}#${result.stock?.uniqueName}` : result?.uniqueName,
                 name: result.stock ? `${result.name} (${result.stock.name})` : result.name,
                 additional: result
             };
@@ -144,15 +144,15 @@ export class VoucherAddBulkItemsComponent implements OnDestroy {
     }
 
     addItemToSelectedArr(item: SalesAddBulkStockItems) {
-        let index = this.selectedItems.findIndex(f => f.uniqueName === item.uniqueName);
+        let index = this.selectedItems.findIndex(f => f?.uniqueName === item?.uniqueName);
         if (index > -1) {
             this.toaster.warningToast(this.localeData?.item_selected);
             return;
         }
         let requestObject = {
-            stockUniqueName: item.additional && item.additional.stock ? item.additional.stock.uniqueName : ''
+            stockUniqueName: item.additional && item.additional.stock ? item.additional.stock?.uniqueName : ''
         };
-        this.searchService.loadDetails(item.additional.uniqueName, requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+        this.searchService.loadDetails(item.additional?.uniqueName, requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
             if (data && data.body) {
                 // Take taxes of parent group and stock's own taxes
                 const taxes = data.body.taxes || [];
@@ -163,7 +163,7 @@ export class VoucherAddBulkItemsComponent implements OnDestroy {
                 item.additional = {
                     ...item.additional,
                     label: item.name,
-                    value: item.uniqueName,
+                    value: item?.uniqueName,
                     applicableTaxes: taxes,
                     currency: data.body.currency,
                     currencySymbol: data.body.currencySymbol,
@@ -173,7 +173,7 @@ export class VoucherAddBulkItemsComponent implements OnDestroy {
                     mobileNo: data.body.mobileNo,
                     nameStr: item.additional && item.additional.parentGroups ? item.additional.parentGroups.map(parent => parent.name).join(', ') : '',
                     stock: data.body.stock,
-                    uNameStr: item.additional && item.additional.parentGroups ? item.additional.parentGroups.map(parent => parent.uniqueName).join(', ') : '',
+                    uNameStr: item.additional && item.additional.parentGroups ? item.additional.parentGroups.map(parent => parent?.uniqueName).join(', ') : '',
                 };
                 item.rate = data.body.stock ? data.body.stock.rate || 0 : 0;
                 item.quantity = 1;
@@ -184,7 +184,7 @@ export class VoucherAddBulkItemsComponent implements OnDestroy {
     }
 
     removeSelectedItem(uniqueName: string) {
-        this.selectedItems = this.selectedItems?.filter(f => f.uniqueName !== uniqueName);
+        this.selectedItems = this.selectedItems?.filter(f => f?.uniqueName !== uniqueName);
     }
 
     alterQuantity(item: SalesAddBulkStockItems, mode: 'plus' | 'minus' = 'plus') {

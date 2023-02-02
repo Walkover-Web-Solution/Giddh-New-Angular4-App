@@ -353,7 +353,7 @@
                                     <amount-field
                                         [amount]="reverseCharge.taxableValue"
                                         [currencySymbol]="activeCompany.baseCurrencySymbol"
-                                        [currencyCode]="activeCompany.baseCurrency"
+                                        [currencyCode]="activeCompany?.baseCurrency"
                                     >
                                     </amount-field>
                                 </span>
@@ -373,7 +373,7 @@
                                     <amount-field
                                         [amount]="reverseCharge.taxAmount"
                                         [currencySymbol]="activeCompany.baseCurrencySymbol"
-                                        [currencyCode]="activeCompany.baseCurrency"
+                                        [currencyCode]="activeCompany?.baseCurrency"
                                     >
                                     </amount-field>
                                 </span>

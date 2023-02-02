@@ -87,7 +87,7 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
         private groupService: GroupService,
         private searchService: SearchService
     ) {
-        
+
     }
 
     public ngOnInit() {
@@ -201,8 +201,8 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
     }
 
     public customUserFilter(term: string, item: IOption) {
-        return (item.label.toLocaleLowerCase().indexOf(term) > -1 || item.value.toLocaleLowerCase().indexOf(term) > -1 ||
-            (item.additional && item.additional.userEmail && item.additional.userEmail.toLocaleLowerCase().indexOf(term) > -1));
+        return (item.label.toLocaleLowerCase()?.indexOf(term) > -1 || item.value.toLocaleLowerCase()?.indexOf(term) > -1 ||
+            (item.additional && item.additional.userEmail && item.additional.userEmail.toLocaleLowerCase()?.indexOf(term) > -1));
     }
 
     public resetFilters() {

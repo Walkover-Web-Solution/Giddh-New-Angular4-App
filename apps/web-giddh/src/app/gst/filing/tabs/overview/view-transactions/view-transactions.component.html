@@ -257,7 +257,7 @@
                             {{ item.accountGstin ? item.accountGstin : "-" }}
                         </td>
                         <td class="white-normal">{{ item.accountName ? item.accountName : "-" }}</td>
-                        <td>{{ item.status ? item.status : "-" }}</td>
+                        <td>{{ item?.status ? item?.status : "-" }}</td>
                         <td>{{ item.actionOnGstin ? item.actionOnGstin : "-" }}</td>
                         <td>
                             {{ item.pos ? item.pos : "-" }}

@@ -72,7 +72,7 @@ export function ProformaReducer(state: ProformaState = initialState, action: Cus
 
         case PROFORMA_ACTIONS.GENERATE_PROFORMA_RESPONSE: {
             let response: BaseResponse<VoucherClass, VoucherClass> = action.payload;
-            if (response.status === 'success') {
+            if (response?.status === 'success') {
                 let no: string;
                 switch (response.request.voucherDetails.voucherType) {
                     case 'proformas':
@@ -113,8 +113,8 @@ export function ProformaReducer(state: ProformaState = initialState, action: Cus
             return {
                 ...state,
                 getAllInProcess: false,
-                [response.request && response.request.isLastInvoicesRequest ? 'lastVouchers' : 'vouchers']: response.status === 'success' ? response.body : null,
-                hasVoucherListPermissions: !(response.status === 'error' && response.statusCode === UNAUTHORISED)
+                [response.request && response.request.isLastInvoicesRequest ? 'lastVouchers' : 'vouchers']: response?.status === 'success' ? response.body : null,
+                hasVoucherListPermissions: !(response?.status === 'error' && response.statusCode === UNAUTHORISED)
             }
         }
         // endregion
@@ -133,7 +133,7 @@ export function ProformaReducer(state: ProformaState = initialState, action: Cus
             return {
                 ...state,
                 isGetDetailsInProcess: false,
-                activeVoucher: response.status === 'success' ? response.body : null
+                activeVoucher: response?.status === 'success' ? response.body : null
             }
         }
         // endregion
@@ -149,7 +149,7 @@ export function ProformaReducer(state: ProformaState = initialState, action: Cus
         case PROFORMA_ACTIONS.UPDATE_PROFORMA_RESPONSE: {
             let vouchers = { ...state.vouchers };
             let result = action.payload as BaseResponse<any, VoucherClass>;
-            if (result.status === 'success') {
+            if (result?.status === 'success') {
                 return {
                     ...state,
                     isUpdateProformaInProcess: false,
@@ -185,7 +185,7 @@ export function ProformaReducer(state: ProformaState = initialState, action: Cus
             return {
                 ...state,
                 isDeleteProformaInProcess: false,
-                isDeleteProformaSuccess: action.payload.status === 'success'
+                isDeleteProformaSuccess: action.payload?.status === 'success'
             }
         }
         // endregion
@@ -202,7 +202,7 @@ export function ProformaReducer(state: ProformaState = initialState, action: Cus
             return {
                 ...state,
                 isUpdateProformaActionInProcess: false,
-                isUpdateProformaActionSuccess: action.payload.status === 'success'
+                isUpdateProformaActionSuccess: action.payload?.status === 'success'
             }
         }
         // endregion
@@ -220,7 +220,7 @@ export function ProformaReducer(state: ProformaState = initialState, action: Cus
             let res: BaseResponse<ProformaGetAllVersionsResponse, ProformaGetRequest> = action.payload;
             return {
                 ...state,
-                activeVoucherVersions: res.status === 'success' ? res.body.results : [],
+                activeVoucherVersions: res?.status === 'success' ? res.body.results : [],
                 isGetVoucherVersionInProcess: true
             }
         }
@@ -231,11 +231,11 @@ export function ProformaReducer(state: ProformaState = initialState, action: Cus
             return {
                 ...state,
                 isGenerateSalesOrderFromEstimateInProcess: true,
-                isGenerateSalesOrderFromEstimateSuccess: action.payload.status === 'success'
+                isGenerateSalesOrderFromEstimateSuccess: action.payload?.status === 'success'
             };
 
         case PROFORMA_ACTIONS.GENERATE_PROFORMA_FROM_ESTIMATE_RESPONSE:
-            if (action.payload.status === 'success') {
+            if (action.payload?.status === 'success') {
                 return {
                     ...state,
                     isGenerateSalesOrderFromEstimateInProcess: false,
@@ -258,7 +258,7 @@ export function ProformaReducer(state: ProformaState = initialState, action: Cus
             };
 
         case PROFORMA_ACTIONS.GENERATE_INVOICE_FROM_PROFORMA_OR_ESTIMATES_RESPONSE:
-            if (action.payload.status === 'success') {
+            if (action.payload?.status === 'success') {
                 return {
                     ...state,
                     isGenerateInvoiceFromProformaOrEstimatesInProcess: false,

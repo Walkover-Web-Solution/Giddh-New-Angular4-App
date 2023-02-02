@@ -22,7 +22,7 @@ export function SessionReducer(state: any = initialState, action: CustomActions)
             newState.Usersession = action.payload.body;
             return Object.assign({}, state, newState);
         case SessionActions.DELETE_SESSION_RESPONSE:
-            if (action.payload.status === 'success') {
+            if (action.payload?.status === 'success') {
                 const deletedSessionIndex = action.payload.queryString.sessionIndex;
                 newState.Usersession.splice(deletedSessionIndex, 1);
                 return Object.assign({}, state, newState);

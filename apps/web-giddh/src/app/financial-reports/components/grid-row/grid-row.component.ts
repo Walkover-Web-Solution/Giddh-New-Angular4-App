@@ -84,7 +84,7 @@ export class GridRowComponent implements OnChanges, OnDestroy {
                 const parentGroups = response.body.parentGroups?.join(', ');
                 const creditorsString = 'currentliabilities, sundrycreditors';
                 const debtorsString = 'currentassets, sundrydebtors';
-                if (parentGroups.indexOf(creditorsString) > -1 || parentGroups.indexOf(debtorsString) > -1) {
+                if (parentGroups?.indexOf(creditorsString) > -1 || parentGroups?.indexOf(debtorsString) > -1) {
                     this.modalUniqueName = response.body?.uniqueName;
                 } else {
                     this.modalUniqueName = '';

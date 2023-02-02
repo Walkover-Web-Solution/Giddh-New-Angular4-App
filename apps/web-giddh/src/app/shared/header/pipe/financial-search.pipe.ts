@@ -59,7 +59,7 @@ export class FinancialSearchPipe implements PipeTransform {
                 grp.isIncludedInSearch = false;
                 grp = this.search(grp, s, allIncluded);
                 if (grp.accounts.findIndex(p => p.isIncludedInSearch) > -1 || grp.childGroups.findIndex(p => p.isIncludedInSearch) > -1 ||
-                    this.checkIndex(grp.groupName?.toLowerCase(), s.toLowerCase()) || this.checkIndex(grp.uniqueName?.toLowerCase(), s.toLowerCase())
+                    this.checkIndex(grp.groupName?.toLowerCase(), s.toLowerCase()) || this.checkIndex(grp?.uniqueName?.toLowerCase(), s.toLowerCase())
                 ) {
                     grp.isVisible = true;
                     grp.isIncludedInSearch = true;
@@ -83,7 +83,7 @@ export class FinancialSearchPipe implements PipeTransform {
                 }
             } else {
                 for (const acc of input.accounts) {
-                    if ((this.checkIndex(acc.name?.toLowerCase(), s.toLowerCase()) || this.checkIndex(acc.uniqueName?.toLowerCase(), s.toLowerCase())) || input.isIncludedInSearch) {
+                    if ((this.checkIndex(acc.name?.toLowerCase(), s.toLowerCase()) || this.checkIndex(acc?.uniqueName?.toLowerCase(), s.toLowerCase())) || input.isIncludedInSearch) {
                         acc.isIncludedInSearch = true;
                         acc.isVisible = true;
                         hasAnyVisible = true;
@@ -119,7 +119,7 @@ export class FinancialSearchPipe implements PipeTransform {
         if (input) {
             for (let grp of input.childGroups) {
                 grp = this.resetGroup(grp);
-                grp.isVisible = parentGroups.includes(grp.uniqueName);
+                grp.isVisible = parentGroups.includes(grp?.uniqueName);
                 grp.isIncludedInSearch = true;
             }
             for (const acc of input.accounts) {
@@ -127,7 +127,7 @@ export class FinancialSearchPipe implements PipeTransform {
                 acc.isVisible = false;
             }
             input.isIncludedInSearch = true;
-            input.isVisible = parentGroups.includes(input.uniqueName);
+            input.isVisible = parentGroups.includes(input?.uniqueName);
         }
         return input;
     }

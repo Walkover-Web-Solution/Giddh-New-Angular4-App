@@ -890,7 +890,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
                 hsnNumber: '',
                 sacNumber: ''
             };
-            formObj.parentGroup = stockRequest.uniqueName;
+            formObj.parentGroup = stockRequest?.uniqueName;
             this.store.dispatch(this.inventoryAction.addNewGroup(stockRequest));
             this.createGroupSuccess$.subscribe(s => {
                 if (s && formObj.parentGroup) {

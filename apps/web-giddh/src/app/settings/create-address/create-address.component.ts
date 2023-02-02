@@ -89,7 +89,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
                     pincode: []
                 });
                 if (this.currentOrganizationUniqueName && this.addressConfiguration && this.addressConfiguration.linkedEntities
-                    && this.addressConfiguration.linkedEntities.some(entity => entity.uniqueName === this.currentOrganizationUniqueName)) {
+                    && this.addressConfiguration.linkedEntities.some(entity => entity?.uniqueName === this.currentOrganizationUniqueName)) {
                     // This will by default show the current organization unique name as selected linked entity
                     this.addressForm.get('linkedEntity')?.patchValue([`${this.currentOrganizationUniqueName}`]);
                 }
@@ -101,14 +101,14 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
                         taxNumber: [this.addressToUpdate.taxNumber, (taxValidatorPatterns && taxValidatorPatterns.length) ? validateFieldWithPatterns(taxValidatorPatterns) : null],
                         state: [{ value: this.addressToUpdate.stateCode, disabled: !!this.addressToUpdate.taxNumber && this.addressConfiguration.tax && this.addressConfiguration.tax.name === 'GSTIN' }, Validators.required],
                         address: [this.addressToUpdate.address, this.addressToUpdate.taxNumber && this.addressConfiguration.tax && this.addressConfiguration.tax.name === 'GSTIN' ? [Validators.required] : []],
-                        linkedEntity: [this.addressToUpdate.linkedEntities.map(entity => entity.uniqueName)],
+                        linkedEntity: [this.addressToUpdate.linkedEntities.map(entity => entity?.uniqueName)],
                         pincode: [this.addressToUpdate.pincode]
                     });
                     const linkedEntity = [...this.addressToUpdate.linkedEntities];
                     while (linkedEntity?.length) {
                         // Update the default entity status in UPDATE mode
                         const entity = linkedEntity.pop();
-                        const entityIndex = this.addressConfiguration.linkedEntities.findIndex(linkEntity => linkEntity.uniqueName === entity.uniqueName);
+                        const entityIndex = this.addressConfiguration.linkedEntities.findIndex(linkEntity => linkEntity?.uniqueName === entity?.uniqueName);
                         if (entityIndex > -1) {
                             this.addressConfiguration.linkedEntities[entityIndex].isDefault = entity.isDefault;
                         }
@@ -119,13 +119,13 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
                     this.addressForm = this.formBuilder.group({
                         name: [this.branchToUpdate.name, [Validators.required, Validators.maxLength(100)]],
                         alias: [this.branchToUpdate.alias, [Validators.required, Validators.maxLength(50)]],
-                        linkedEntity: [this.branchToUpdate.linkedEntities.map(entity => entity.uniqueName)]
+                        linkedEntity: [this.branchToUpdate.linkedEntities.map(entity => entity?.uniqueName)]
                     });
                     const linkedEntity = [...this.branchToUpdate.linkedEntities];
                     while (linkedEntity?.length) {
                         // Update the default entity status in UPDATE mode
                         const entity = linkedEntity.pop();
-                        const entityIndex = this.addressConfiguration.linkedEntities.findIndex(linkEntity => linkEntity.uniqueName === entity.uniqueName);
+                        const entityIndex = this.addressConfiguration.linkedEntities.findIndex(linkEntity => linkEntity?.uniqueName === entity?.uniqueName);
                         if (entityIndex > -1) {
                             this.addressConfiguration.linkedEntities[entityIndex].isDefault = entity.isDefault;
                         }
@@ -135,13 +135,13 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
                 if (this.warehouseToUpdate) {
                     this.addressForm = this.formBuilder.group({
                         name: [this.warehouseToUpdate.name, [Validators.required, Validators.maxLength(100)]],
-                        linkedEntity: [this.warehouseToUpdate.linkedEntities.map(entity => entity.uniqueName)]
+                        linkedEntity: [this.warehouseToUpdate.linkedEntities.map(entity => entity?.uniqueName)]
                     });
                     const linkedEntity = [...this.warehouseToUpdate.linkedEntities];
                     while (linkedEntity?.length) {
                         // Update the default entity status in UPDATE mode
                         const entity = linkedEntity.pop();
-                        const entityIndex = this.addressConfiguration.linkedEntities.findIndex(linkEntity => linkEntity.uniqueName === entity.uniqueName);
+                        const entityIndex = this.addressConfiguration.linkedEntities.findIndex(linkEntity => linkEntity?.uniqueName === entity?.uniqueName);
                         if (entityIndex > -1) {
                             this.addressConfiguration.linkedEntities[entityIndex].isDefault = entity.isDefault;
                         }
@@ -317,7 +317,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
      */
     public handleFinalSelection(selectedEntities: Array<any>): void {
         this.addressConfiguration.linkedEntities.forEach(entity => {
-            if (!selectedEntities.includes(entity.uniqueName)) {
+            if (!selectedEntities.includes(entity?.uniqueName)) {
                 entity.isDefault = false;
             }
         });

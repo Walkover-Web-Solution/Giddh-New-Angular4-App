@@ -145,7 +145,7 @@
                                     >
                                         <mat-option
                                             *ngFor="let module of fieldModules"
-                                            [value]="module.uniqueName"
+                                            [value]="module?.uniqueName"
                                             (click)="setModules(module)"
                                             >{{ module.name }}
                                         </mat-option>

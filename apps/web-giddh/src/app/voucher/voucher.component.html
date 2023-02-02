@@ -53,7 +53,7 @@
                             >
                                 <li
                                     role="menuitem"
-                                    (click)="pageChanged(item.value, item.additional.label)"
+                                    (click)="pageChanged(item?.value, item.additional.label)"
                                     *ngFor="let item of pageList"
                                 >
                                     <a class="dropdown-item cp">{{ item.additional?.label }}</a>
@@ -214,10 +214,10 @@
                                                             <ng-template #optionTemplate let-option="option">
                                                                 <a href="javascript:void(0)">
                                                                     <div class="option-label">
-                                                                        {{ option.label }}
+                                                                        {{ option?.label }}
                                                                     </div>
                                                                     <div class="option-value">
-                                                                        {{ option.value }}
+                                                                        {{ option?.value }}
                                                                     </div>
                                                                 </a>
                                                             </ng-template>
@@ -1512,7 +1512,7 @@
 
                                                 <mat-option
                                                     *ngFor="let option of fieldFilteredOptions"
-                                                    [value]="option.value"
+                                                    [value]="option?.value"
                                                     class="po-options-line"
                                                     [disabled]="showLoader"
                                                 >
@@ -2154,10 +2154,10 @@
                                         </p>
                                         <div class="date-hsn-code">
                                             <div class="row mr-0 ml-0">
-                                                <div class="col-6 col-sm-6 pl-0" *ngIf="entry.entryDate">
+                                                <div class="col-6 col-sm-6 pl-0" *ngIf="entry?.entryDate">
                                                     <div class="entry-date">
                                                         <label>{{ localeData?.entry_date }}: </label>
-                                                        {{ entry.entryDate }}
+                                                        {{ entry?.entryDate }}
                                                         <span class="edit-icon cp" *ngIf="!isUpdateMode">
                                                             <img src="assets/images/edit-pencilicon.svg" />
                                                         </span>
@@ -2483,7 +2483,7 @@
                                                     [placeholder]="localeData?.select_acc"
                                                     [options]="salesAccounts$ | async"
                                                     (selectedOption)="
-                                                        transaction.fakeAccForSelect2 = $event.value;
+                                                        transaction.fakeAccForSelect2 = $event?.value;
                                                         onSelectSalesAccount(
                                                             $event,
                                                             transaction,
@@ -2590,7 +2590,7 @@
                                                                 </span>
                                                             </span>
                                                             <span *ngIf="isUpdateMode">
-                                                                {{ entry.entryDate }}
+                                                                {{ entry?.entryDate }}
                                                             </span>
                                                         </div>
                                                     </div>
@@ -2858,7 +2858,7 @@
                                                 <tax-control
                                                     #taxControlComponent
                                                     [taxes]="companyTaxesList"
-                                                    [date]="entry.entryDate"
+                                                    [date]="entry?.entryDate"
                                                     [taxRenderData]="entry.taxes"
                                                     [totalForTax]="transaction.taxableValue"
                                                     [applicableTaxes]="transaction.applicableTaxes"
@@ -3385,7 +3385,8 @@
                                                 [useMask]="true"
                                                 [(ngModel)]="grandTotalMulDum"
                                                 (blur)="
-                                                    updateExchangeRate(grandTotalInr.value); recalculateConvertedTotal()
+                                                    updateExchangeRate(grandTotalInr?.value);
+                                                    recalculateConvertedTotal()
                                                 "
                                             ></text-field>
                                         </div>
@@ -3601,7 +3602,7 @@
                                                                 <text-field
                                                                     (change)="
                                                                         calculateBalanceDue();
-                                                                        updateDepositAmount($event.target.value)
+                                                                        updateDepositAmount($event?.target?.value)
                                                                     "
                                                                     [placeholder]="commonLocaleData?.app_amount"
                                                                     [cssClass]="
@@ -3728,11 +3729,11 @@
                                                 </p>
                                                 <div class="date-hsn-code pr-0">
                                                     <div class="row">
-                                                        <div class="col-sm-6" *ngIf="entry.entryDate">
+                                                        <div class="col-sm-6" *ngIf="entry?.entryDate">
                                                             <div class="entry-date">
                                                                 <label
                                                                     >{{ localeData?.entry_date }}:
-                                                                    {{ entry.entryDate }}
+                                                                    {{ entry?.entryDate }}
                                                                 </label>
                                                             </div>
                                                         </div>
@@ -3977,7 +3978,7 @@
                                                                 [name]="'transaction.fakeAccForSelect2_' + entryIdx"
                                                                 [placeholder]="localeData?.select_acc"
                                                                 (selectedOption)="
-                                                                    transaction.fakeAccForSelect2 = $event.value;
+                                                                    transaction.fakeAccForSelect2 = $event?.value;
                                                                     onSelectSalesAccount(
                                                                         $event,
                                                                         transaction,
@@ -4114,7 +4115,7 @@
                                                                             </span>
                                                                         </span>
                                                                         <span *ngIf="isUpdateMode">
-                                                                            {{ entry.entryDate }}
+                                                                            {{ entry?.entryDate }}
                                                                         </span>
                                                                     </div>
                                                                 </div>
@@ -4452,7 +4453,7 @@
                                                         <tax-control
                                                             #taxControlComponent
                                                             [taxes]="companyTaxesList"
-                                                            [date]="entry.entryDate"
+                                                            [date]="entry?.entryDate"
                                                             [taxRenderData]="entry.taxes"
                                                             [totalForTax]="transaction.taxableValue"
                                                             [applicableTaxes]="transaction.applicableTaxes"
@@ -4911,7 +4912,7 @@
                                             [useMask]="true"
                                             [(ngModel)]="grandTotalMulDum"
                                             (blur)="
-                                                updateExchangeRate(grandTotalInr.value); recalculateConvertedTotal()
+                                                updateExchangeRate(grandTotalInr?.value); recalculateConvertedTotal()
                                             "
                                         ></text-field>
                                     </div>
@@ -5018,7 +5019,7 @@
                                                             [type]="'text'"
                                                             (change)="
                                                                 calculateBalanceDue();
-                                                                updateDepositAmount($event.target.value)
+                                                                updateDepositAmount($event?.target?.value)
                                                             "
                                                             [placeholder]="commonLocaleData?.app_amount"
                                                             [name]="'dueAmount'"

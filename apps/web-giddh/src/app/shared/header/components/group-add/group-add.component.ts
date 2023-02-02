@@ -74,7 +74,7 @@ export class GroupAddComponent implements OnInit, OnDestroy {
 
         let grpObject: GroupCreateRequest;
         grpObject = this.groupDetailForm.value as GroupCreateRequest;
-        grpObject.uniqueName = grpObject.uniqueName;
+        grpObject.uniqueName = grpObject?.uniqueName;
         grpObject.parentGroupUniqueName = activeGrpUniqueName;
         grpObject.path = this.path;
         // add bredcrum to payload

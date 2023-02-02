@@ -276,7 +276,7 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
                 createdAt: this.seletedUserPlans.createdAt,
                 planDetails: this.seletedUserPlans.planDetails,
                 additionalCharges: this.seletedUserPlans.additionalCharges,
-                status: this.seletedUserPlans.status,
+                status: this.seletedUserPlans?.status,
                 subscriptionId: this.seletedUserPlans.subscriptionId,
                 balance: this.seletedUserPlans.balance,
                 expiry: this.seletedUserPlans.expiry,

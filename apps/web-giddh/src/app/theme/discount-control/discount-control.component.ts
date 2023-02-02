@@ -65,7 +65,7 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
                 // check for visibility while always include the current activeElement
                 return element.offsetWidth > 0 || element.offsetHeight > 0 || element === document.activeElement;
             });
-        let index = focussable.indexOf(document.activeElement);
+        let index = focussable?.indexOf(document.activeElement);
         if (index > -1) {
             let nextElement = focussable[index + 1] || focussable[0];
             nextElement.focus();
@@ -122,7 +122,7 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
     private processDiscountList(): void {
         this.discountsList.forEach(acc => {
             if (this.discountAccountsDetails) {
-                let hasItem = this.discountAccountsDetails.some(s => s.discountUniqueName === acc.uniqueName);
+                let hasItem = this.discountAccountsDetails.some(s => s.discountUniqueName === acc?.uniqueName);
                 if (!hasItem) {
                     let obj: LedgerDiscountClass = new LedgerDiscountClass();
                     obj.amount = acc.discountValue;
@@ -130,7 +130,7 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
                     obj.discountType = acc.discountType;
                     obj.isActive = false;
                     obj.particular = acc.linkAccount?.uniqueName;
-                    obj.discountUniqueName = acc.uniqueName;
+                    obj.discountUniqueName = acc?.uniqueName;
                     obj.name = acc.name;
                     this.discountAccountsDetails.push(obj);
                 }

@@ -325,7 +325,7 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
         }
 
         // prevent caret movement and animate selected element
-        if (this.isOpen && [UP_ARROW, DOWN_ARROW].indexOf(key) !== -1 && this.virtualScrollElem) {
+        if (this.isOpen && [UP_ARROW, DOWN_ARROW]?.indexOf(key) !== -1 && this.virtualScrollElem) {
             e.preventDefault();
             let item = this.virtualScrollElem.directionToll(key);
             if (item) {
@@ -369,7 +369,7 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
      */
     public removeItemFromSelectedGroups(item?: any): void {
         if (item) {
-            this.listOfSelectedGroups = remove(this.listOfSelectedGroups, o => item.uniqueName !== o.uniqueName);
+            this.listOfSelectedGroups = remove(this.listOfSelectedGroups, o => item.uniqueName !== o?.uniqueName);
         } else {
             this.listOfSelectedGroups.pop();
         }
@@ -416,7 +416,7 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
     public initSearch(e: KeyboardEvent, term: string): void {
         let key = e.which || e.keyCode;
         // preventing search operation on arrows key
-        if (this.isOpen && SPECIAL_KEYS.indexOf(key) !== -1) {
+        if (this.isOpen && SPECIAL_KEYS?.indexOf(key) !== -1) {
             return;
         }
         term = term.trim();

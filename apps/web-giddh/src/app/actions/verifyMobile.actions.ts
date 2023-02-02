@@ -25,7 +25,7 @@ export class VerifyMobileActions {
             ofType(VerifyMobileActions.VERIFY_MOBILE_REQUEST),
             switchMap((action: CustomActions) => this._authService.VerifyNumber(action.payload)),
             map(response => {
-                if (response.status === 'success') {
+                if (response?.status === 'success') {
                     this.store.dispatch(this.action(VerifyMobileActions.SET_VERIFIACATION_MOBILENO, response.request.mobileNumber));
                     this.store.dispatch(this.action(VerifyMobileActions.SHOW_VERIFICATION_BOX, true));
                 } else {
@@ -40,7 +40,7 @@ export class VerifyMobileActions {
             ofType(VerifyMobileActions.VERIFY_MOBILE_CODE_REQUEST),
             switchMap((action: CustomActions) => this._authService.VerifyNumberOTP(action.payload)),
             map(response => {
-                if (response.status === 'success') {
+                if (response?.status === 'success') {
                     this._toasty.successToast(response.body);
                     let no: string = null;
                     this.store.pipe(

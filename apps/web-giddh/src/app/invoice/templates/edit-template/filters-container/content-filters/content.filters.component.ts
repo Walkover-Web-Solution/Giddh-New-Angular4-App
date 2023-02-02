@@ -105,7 +105,7 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
             if (!a) {
                 return;
             }
-            this.voucherType = a.voucherType;
+            this.voucherType = a?.voucherType;
             // this.getVoucher(false);
         });
         this._invoiceUiDataService.templateVoucherType.pipe(takeUntil(this.destroyed$)).subscribe((voucherType: string) => {
@@ -173,7 +173,7 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
         //   template.sections.header.data.billingGstin.display = true;
         //   template.sections.header.data.billingState.display = true;
         // }
-        if (!template.sections.header.data.shippingAddress.display) {
+        if (!template.sections.header.data.shippingAddress?.display) {
             template.sections.header.data.shippingGstin.display = false;
             template.sections.header.data.shippingState.display = false;
 
@@ -186,7 +186,7 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
     }
     public changeDisableBilling() {
         let template = cloneDeep(this.customTemplate);
-        if (!template.sections.header.data.billingAddress.display) {
+        if (!template.sections.header.data.billingAddress?.display) {
             template.sections.header.data.billingGstin.display = false;
             template.sections.header.data.billingState.display = false;
         } else {
@@ -326,7 +326,7 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
     public changeDisableQuantity(): void {
         let template = cloneDeep(this.customTemplate);
         if (template && template.sections && template.sections.table && template.sections.table.data && template.sections.table.data.totalQuantity) {
-            if (!template.sections.table.data.quantity.display) {
+            if (!template.sections.table.data.quantity?.display) {
                 template.sections.table.data.totalQuantity.display = false;
             } else {
                 template.sections.table.data.totalQuantity.display = true;
@@ -345,14 +345,14 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
     public checkedTaxBifurcation(label: string, sectionType: string) {
         let template = cloneDeep(this.customTemplate);
         if (sectionType === 'table' && template && template.sections && template.sections.table && template.sections.table.data && template.sections.table.data.taxBifurcation) {
-            if (template.sections.table.data.taxBifurcation.display) {
+            if (template.sections.table.data.taxBifurcation?.display) {
                 template.sections.table.data.taxBifurcation.label = label;
             } else {
                 template.sections.table.data.taxBifurcation.label = '';
             }
         } else {
             if (template && template.sections && template.sections.footer && template.sections.footer.data && template.sections.footer.data.taxBifurcation) {
-                if (template.sections.footer.data.taxBifurcation.display) {
+                if (template.sections.footer.data.taxBifurcation?.display) {
                     template.sections.footer.data.taxBifurcation.label = label;
                 } else {
                     template.sections.footer.data.taxBifurcation.label = '';

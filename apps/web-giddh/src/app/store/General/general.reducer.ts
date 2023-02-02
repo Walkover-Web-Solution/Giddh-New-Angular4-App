@@ -70,7 +70,7 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
         }
         case GENERAL_ACTIONS.GENERAL_GET_GROUP_WITH_ACCOUNTS_RESPONSE: {
             let result: BaseResponse<GroupsWithAccountsResponse[], string> = action.payload;
-            if (result.status === 'success') {
+            if (result?.status === 'success') {
                 return {
                     ...state,
                     groupswithaccounts: result.body
@@ -80,7 +80,7 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
         }
         case GENERAL_ACTIONS.GENERAL_GET_ALL_STATES_RESPONSE: {
             let result: BaseResponse<States, string> = action.payload;
-            if (result.status === 'success') {
+            if (result?.status === 'success') {
                 return {
                     ...state,
                     states: result.body
@@ -154,7 +154,7 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
         case AccountsAction.CREATE_ACCOUNT_RESPONSEV2: {
             let accountData: BaseResponse<AccountResponseV2, AccountRequestV2> = action.payload;
             let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
-            if (accountData.status === 'success' && groupArray) {
+            if (accountData?.status === 'success' && groupArray) {
                 addCreatedAccountFunc(groupArray, accountData.body, accountData.queryString?.groupUniqueName, false);
                 return {
                     ...state,
@@ -165,7 +165,7 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
         }
         case AccountsAction.UPDATE_ACCOUNT_RESPONSEV2: {
             let updatedAccount: BaseResponse<AccountResponseV2, AccountRequestV2> = action.payload;
-            if (updatedAccount.status === 'success') {
+            if (updatedAccount?.status === 'success') {
                 let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
                 if (groupArray) {
                     UpdateAccountFunc(groupArray, updatedAccount.body, updatedAccount.queryString?.groupUniqueName, updatedAccount.queryString.accountUniqueName, false);
@@ -182,11 +182,11 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
         case SALES_ACTIONS.ADD_ACCOUNT_DETAILS_RESPONSE: {
             let accountData: BaseResponse<AccountResponseV2, AccountRequestV2> = action.payload;
             let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
-            if (accountData.status === 'success' && groupArray) {
+            if (accountData?.status === 'success' && groupArray) {
                 addCreatedAccountFunc(groupArray, accountData.body, accountData.queryString?.groupUniqueName, false);
 
                 let flattenItem = cloneDeep(accountData.body);
-                flattenItem.uNameStr = flattenItem.parentGroups.map(mp => mp.uniqueName)?.join(', ');
+                flattenItem.uNameStr = flattenItem.parentGroups.map(mp => mp?.uniqueName)?.join(', ');
 
                 if (state.flattenAccounts) {
                     return {
@@ -208,7 +208,7 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
         // update flatten accounts as because we are updating account through sidebar in sales/ proforma/ estimate module
         case SALES_ACTIONS.UPDATE_ACCOUNT_DETAILS_RESPONSE: {
             let updatedAccount: BaseResponse<AccountResponseV2, AccountRequestV2> = action.payload;
-            if (updatedAccount.status === 'success') {
+            if (updatedAccount?.status === 'success') {
                 let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
                 if (groupArray) {
                     UpdateAccountFunc(groupArray, updatedAccount.body, updatedAccount.queryString?.groupUniqueName, updatedAccount.queryString.accountUniqueName, false);
@@ -223,7 +223,7 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
 
         case AccountsAction.DELETE_ACCOUNT_RESPONSE: {
             let d: BaseResponse<string, any> = action.payload;
-            if (d.status === 'success') {
+            if (d?.status === 'success') {
                 let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
                 if (groupArray) {
                     removeAccountFunc(groupArray, action?.payload?.request?.groupUniqueName, d.request.accountUniqueName, null);
@@ -237,7 +237,7 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
         }
         case AccountsAction.MOVE_ACCOUNT_RESPONSE: {
             let mAcc: BaseResponse<string, AccountMoveRequest> = action.payload;
-            if (mAcc.status === 'success') {
+            if (mAcc?.status === 'success') {
                 let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
                 if (groupArray) {
                     let deletedItem = removeAccountFunc(groupArray, action?.payload?.queryString?.activeGroupUniqueName, mAcc.queryString.accountUniqueName, null);
@@ -252,11 +252,11 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
         }
         case AccountsAction.MERGE_ACCOUNT_RESPONSE: {
             let dd: BaseResponse<string, AccountMergeRequest[]> = action.payload;
-            if (dd.status === 'success') {
+            if (dd?.status === 'success') {
                 let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
                 if (groupArray) {
                     dd.request.forEach(f => {
-                        findAndRemoveAccountFunc(groupArray, f.uniqueName, false);
+                        findAndRemoveAccountFunc(groupArray, f?.uniqueName, false);
                     });
 
                     return {
@@ -300,7 +300,7 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
         case GENERAL_ACTIONS.UPDATE_CURRENT_LIABILITIES: {
             if (state?.flattenAccounts) {
                 let flattenAccountsArray = [...state.flattenAccounts];
-                flattenAccountsArray = flattenAccountsArray?.filter(account => account.uniqueName !== action.payload);
+                flattenAccountsArray = flattenAccountsArray?.filter(account => account?.uniqueName !== action.payload);
                 return {
                     ...state,
                     flattenAccounts: flattenAccountsArray
@@ -385,7 +385,7 @@ const AddAndActiveGroupFunc = (groups: IGroupsWithAccounts[], gData: BaseRespons
             newData.isActive = false;
             newData.name = gData.body.name;
             newData.synonyms = gData.body.synonyms;
-            newData.uniqueName = gData.body.uniqueName;
+            newData.uniqueName = gData.body?.uniqueName;
             grp.isOpen = true;
             grp.groups.push(newData);
             myChildElementIsOpen = true;
@@ -406,9 +406,9 @@ const updateActiveGroupFunc = (groups: IGroupsWithAccounts[], uniqueName: string
         return result;
     }
     for (let grp of groups) {
-        if (grp.uniqueName === uniqueName) {
+        if (grp?.uniqueName === uniqueName) {
             grp.name = updatedGroup.name;
-            grp.uniqueName = updatedGroup.uniqueName;
+            grp.uniqueName = updatedGroup?.uniqueName;
             grp.isActive = true;
             grp.isOpen = false;
             result = true;
@@ -447,7 +447,7 @@ const addNewGroupFunc = (groups: IGroupsWithAccounts[], gData: IGroupsWithAccoun
         return result;
     }
     for (let grp of groups) {
-        if (grp.uniqueName === parentUniqueName) {
+        if (grp?.uniqueName === parentUniqueName) {
             grp.groups.push(gData);
             result = true;
             return result;
@@ -467,11 +467,11 @@ const addCreatedAccountFunc = (groups: IGroupsWithAccounts[], aData: AccountResp
         return result;
     }
     for (let grp of groups) {
-        if (grp.uniqueName === grpUniqueName) {
+        if (grp?.uniqueName === grpUniqueName) {
             grp.isOpen = true;
             grp.accounts.push(
                 {
-                    uniqueName: aData.uniqueName,
+                    uniqueName: aData?.uniqueName,
                     name: aData.name,
                     isActive: true,
                     stocks: aData.stocks,
@@ -497,11 +497,11 @@ const UpdateAccountFunc = (groups: IGroupsWithAccounts[],
         return result;
     }
     for (let grp of groups) {
-        if (grp.uniqueName === grpUniqueName) {
+        if (grp?.uniqueName === grpUniqueName) {
             grp.isOpen = true;
-            let index = grp.accounts.findIndex(p => p.uniqueName === accountUniqueName);
+            let index = grp.accounts.findIndex(p => p?.uniqueName === accountUniqueName);
             if (index > -1) {
-                grp.accounts[index].uniqueName = aData.uniqueName;
+                grp.accounts[index].uniqueName = aData?.uniqueName;
                 grp.accounts[index].name = aData.name;
                 grp.accounts[index].isActive = true;
                 grp.accounts[index].stocks = aData.stocks;
@@ -522,8 +522,8 @@ const UpdateAccountFunc = (groups: IGroupsWithAccounts[],
 
 const removeAccountFunc = (groups: IGroupsWithAccounts[], uniqueName: string, accountUniqueName: string, result: IAccountsInfo): IAccountsInfo => {
     for (let grp of groups) {
-        if (grp.uniqueName === uniqueName) {
-            let index = grp.accounts.findIndex(a => a.uniqueName === accountUniqueName);
+        if (grp?.uniqueName === uniqueName) {
+            let index = grp.accounts.findIndex(a => a?.uniqueName === accountUniqueName);
             result = grp.accounts[index];
             grp.accounts.splice(index, 1);
             return result;
@@ -542,13 +542,13 @@ const addNewAccountFunc = (groups: IGroupsWithAccounts[], aData: IAccountsInfo, 
         return result;
     }
     for (let grp of groups) {
-        if (grp.uniqueName === grpUniqueName) {
+        if (grp?.uniqueName === grpUniqueName) {
             grp.isOpen = true;
             grp.accounts.push(aData);
             if (Array.isArray(parentPath)) {
                 parentPath.push({
                     name: grp.name,
-                    uniqueName: grp.uniqueName
+                    uniqueName: grp?.uniqueName
                 });
             }
             result = true;
@@ -560,7 +560,7 @@ const addNewAccountFunc = (groups: IGroupsWithAccounts[], aData: IAccountsInfo, 
                 if (Array.isArray(parentPath)) {
                     parentPath.push({
                         name: grp.name,
-                        uniqueName: grp.uniqueName
+                        uniqueName: grp?.uniqueName
                     });
                 }
                 return result;
@@ -572,7 +572,7 @@ const addNewAccountFunc = (groups: IGroupsWithAccounts[], aData: IAccountsInfo, 
 
 const findAndRemoveAccountFunc = (groups: IGroupsWithAccounts[], uniqueName: string, result: boolean) => {
     for (let grp of groups) {
-        let accIndex = grp.accounts.findIndex(f => f.uniqueName === uniqueName);
+        let accIndex = grp.accounts.findIndex(f => f?.uniqueName === uniqueName);
 
         if (accIndex > -1) {
             grp.accounts.splice(accIndex, 1);
@@ -595,7 +595,7 @@ const provideStrings = (arr: any[]) => {
     try {
         arr.forEach((item: INameUniqueName) => {
             o.nameStr.push(item.name);
-            o.uNameStr.push(item.uniqueName);
+            o.uNameStr.push(item?.uniqueName);
         });
         b.nameStr = o.nameStr.join(', ');
         b.uNameStr = o.uNameStr.join(', ');

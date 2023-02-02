@@ -61,7 +61,7 @@ export class JobworkSidebarComponent implements OnInit, OnDestroy, AfterViewInit
         this.inventoryUsers$.subscribe(res => {
             this.inventoryUsers = res;
         });
-        if (this.router.url.indexOf('person') > 0 && this.router.url.indexOf('jobwork') > 0) {
+        if (this.router.url?.indexOf('person') > 0 && this.router.url?.indexOf('jobwork') > 0) {
             this.reportType = 'person';
         } else {
             this.reportType = 'stock';
@@ -75,9 +75,9 @@ export class JobworkSidebarComponent implements OnInit, OnDestroy, AfterViewInit
     }
 
     public showReport(data: any) {
-        this.uniqueName = data.uniqueName;
-        this.invViewService.setJobworkActiveView(this.reportType, data.uniqueName, data.name);
-        this.router.navigate(['/pages', 'inventory', 'jobwork', this.reportType, data.uniqueName]);
+        this.uniqueName = data?.uniqueName;
+        this.invViewService.setJobworkActiveView(this.reportType, data?.uniqueName, data.name);
+        this.router.navigate(['/pages', 'inventory', 'jobwork', this.reportType, data?.uniqueName]);
     }
 
     public ngAfterViewInit() {
@@ -93,7 +93,7 @@ export class JobworkSidebarComponent implements OnInit, OnDestroy, AfterViewInit
                     });
                     if (val) {
                         this.stocksList = Object.assign([], this.stocksList).filter(
-                            item => item.name.toLowerCase().indexOf(val.toLowerCase()) > -1
+                            item => item.name.toLowerCase()?.indexOf(val.toLowerCase()) > -1
                         )
                     }
                 } else if (this.reportType === 'person') {
@@ -102,7 +102,7 @@ export class JobworkSidebarComponent implements OnInit, OnDestroy, AfterViewInit
                     });
                     if (val) {
                         this.inventoryUsers = Object.assign([], this.inventoryUsers).filter(
-                            item => item.name.toLowerCase().indexOf(val.toLowerCase()) > -1
+                            item => item.name.toLowerCase()?.indexOf(val.toLowerCase()) > -1
                         )
                     }
                 }
@@ -120,14 +120,14 @@ export class JobworkSidebarComponent implements OnInit, OnDestroy, AfterViewInit
             this.stocksList$.pipe(take(1)).subscribe(res => {
                 if (res && res.length > 0) {
                     let firstElement = res[0];
-                    this.uniqueName = firstElement.uniqueName;
+                    this.uniqueName = firstElement?.uniqueName;
                 }
             })
         } else {
             this.inventoryUsers$.pipe(take(1)).subscribe(res => {
                 if (res && res.length > 0) {
                     let firstElement = res[0];
-                    this.uniqueName = firstElement.uniqueName;
+                    this.uniqueName = firstElement?.uniqueName;
                 }
             })
         }

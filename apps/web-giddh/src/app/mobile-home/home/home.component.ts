@@ -351,7 +351,7 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
             this.focusInSearchBox();
             this.searchCommandK(true);
         } else {
-            let url = `ledger/${item.uniqueName}`;
+            let url = `ledger/${item?.uniqueName}`;
             this.router.navigate([url]);
         }
     }

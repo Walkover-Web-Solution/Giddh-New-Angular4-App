@@ -147,7 +147,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
                     });
                     this._selectedValues = selectedValues;
                 }
-                this._selectedValues = this._selectedValues?.filter(selected => val.indexOf(selected?.value) > -1);
+                this._selectedValues = this._selectedValues?.filter(selected => val?.indexOf(selected?.value) > -1);
             } else {
                 this._selectedValues = this.rows?.filter((f: any) => val.findIndex(p => p === f.label || p === f.value) !== -1);
             }
@@ -251,7 +251,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
                 if (this.customFilter) {
                     return this.customFilter(lowercaseFilter, item);
                 }
-                return !lowercaseFilter || String(item?.label).toLocaleLowerCase().indexOf(lowercaseFilter) !== -1;
+                return !lowercaseFilter || String(item?.label).toLocaleLowerCase()?.indexOf(lowercaseFilter) !== -1;
             }) : []) : ((this._options) ? this._options : []);
 
             if (this.customSorting) {
@@ -313,10 +313,10 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     }
 
     public selectMultiple(item) {
-        if (this.selectedValues.indexOf(item) === -1) {
+        if (this.selectedValues?.indexOf(item) === -1) {
             this.selectedValues.push(item);
         } else {
-            this.selectedValues.splice(this.selectedValues.indexOf(item), 1);
+            this.selectedValues.splice(this.selectedValues?.indexOf(item), 1);
         }
     }
 
@@ -483,7 +483,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
 
     public ngOnChanges(changes: SimpleChanges): void {
         if ('forceClearReactive' in changes && !changes.forceClearReactive.firstChange) {
-            if (this.forceClearReactive.status) {
+            if (this.forceClearReactive?.status) {
                 this.filter = '';
                 this.clear();
 

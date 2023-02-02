@@ -124,15 +124,6 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     public ngOnInit(): void {
-        /* RAZORPAY */
-        if (window['Razorpay'] === undefined) {
-            let scriptTag = document.createElement('script');
-            scriptTag.src = 'https://checkout.razorpay.com/v1/checkout.js';
-            scriptTag.type = 'text/javascript';
-            scriptTag.defer = true;
-            document.body.appendChild(scriptTag);
-        }
-        /* RAZORPAY */
 
         /** This will use for filter country  */
         this.searchCountry.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(search => {
@@ -171,7 +162,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
             if (res) {
                 if (!res.isBranch && !res.city) {
                     this.createNewCompany = res;
-                    this.UserCurrency = this.createNewCompany.baseCurrency;
+                    this.UserCurrency = this.createNewCompany?.baseCurrency;
                     this.orderId = this.createNewCompany.orderId;
                     this.razorpayAmount = this.getPayAmountForRazorPay(this.createNewCompany.amountPaid);
                     this.getOnboardingForm();
@@ -183,7 +174,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
             if (res) {
                 if (res.isBranch && res.city) {
                     this.createNewCompany = res;
-                    this.UserCurrency = this.createNewCompany.baseCurrency;
+                    this.UserCurrency = this.createNewCompany?.baseCurrency;
                     this.orderId = this.createNewCompany.orderId;
                     this.razorpayAmount = this.getPayAmountForRazorPay(this.createNewCompany.amountPaid);
                     this.getOnboardingForm();
@@ -261,13 +252,13 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.statesSource$.pipe(take(1)).subscribe(state => {
                     let stateCode = this.stateGstCode[gstVal.substr(0, 2)];
                     let s = state.find(st => st.value === stateCode);
-                    statesEle.setDisabledState(false);
+                    statesEle?.setDisabledState(false);
 
                     if (s) {
                         this.billingDetailsObj.stateCode = s.value;
-                        statesEle.setDisabledState(true);
+                        statesEle?.setDisabledState(true);
                     } else {
-                        statesEle.setDisabledState(false);
+                        statesEle?.setDisabledState(false);
                         this.toasty.clearAllToaster();
                         if (this.formFields['taxName'] && !this.billingForm.form.get('gstin')?.valid) {
                             this.billingDetailsObj.stateCode = '';
@@ -278,7 +269,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
                     }
                 });
             } else {
-                statesEle.setDisabledState(false);
+                statesEle?.setDisabledState(false);
                 this.billingDetailsObj.stateCode = '';
             }
         }
@@ -321,7 +312,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
                     this.store.dispatch(this.companyActions.selectedPlan(plan));
                     this.razorpayAmount = this.getPayAmountForRazorPay(this.ChangePaidPlanAMT);
                     this.ngAfterViewInit();
-                } else if(res?.message) {
+                } else if (res?.message) {
                     this.toasty.errorToast(res.message);
                 }
             });
@@ -360,7 +351,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     /**
-     * This function will use for on select state change 
+     * This function will use for on select state change
      *
      * @param {*} event
      * @memberof BillingDetailComponent
@@ -396,7 +387,23 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
         this.cdRef.detectChanges();
     }
 
+    /**
+     * This hook will be called when component is initialized
+     *
+     * @memberof BillingDetailComponent
+     */
     public ngAfterViewInit(): void {
+
+        /* RAZORPAY */
+        if (window['Razorpay'] === undefined) {
+            let scriptTag = document.createElement('script');
+            scriptTag.src = 'https://checkout.razorpay.com/v1/checkout.js';
+            scriptTag.type = 'text/javascript';
+            scriptTag.defer = true;
+            document.body.appendChild(scriptTag);
+        }
+        /* RAZORPAY */
+
         let that = this;
 
         this.options = {
@@ -756,7 +763,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
      *
      * @param {StateCode[]} stateList
      * @param {string} countryCode
-     * @return {IOption[]} 
+     * @return {IOption[]}
      * @memberof BillingDetailComponent
      */
     public modifyStateResp(stateList: StateCode[], countryCode: string): IOption[] {

@@ -128,7 +128,7 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
             if (response && response.length) {
                 this.currentCompanyBranches = response.map(branch => ({
                     label: branch.alias,
-                    value: branch.uniqueName,
+                    value: branch?.uniqueName,
                     name: branch.name,
                     parentBranch: branch.parentBranch
                 }));

@@ -48,7 +48,7 @@ export class AsideMenuOtherTaxes implements OnInit, OnChanges, OnDestroy {
         this.taxesOptions = this.taxes
             ?.filter(f => ['tcsrc', 'tcspay', 'tdsrc', 'tdspay'].includes(f.taxType))
             .map(m => {
-                return { label: m.name, value: m.uniqueName };
+                return { label: m.name, value: m?.uniqueName };
             })
 
         this.calculationMethodOptions = [
@@ -80,7 +80,7 @@ export class AsideMenuOtherTaxes implements OnInit, OnChanges, OnDestroy {
         if (tax && tax.value) {
             this.defaultOtherTaxesModal.appliedOtherTax = { name: tax.label, uniqueName: tax.value };
             if (!this.selectedTaxUniqueName) {
-                let taxType = this.taxes.find(f => f.uniqueName === tax.value).taxType;
+                let taxType = this.taxes.find(f => f?.uniqueName === tax.value).taxType;
                 const isTdsTax = ['tdsrc', 'tdspay'].includes(taxType);
                 if (!isTdsTax) {
                     this.defaultOtherTaxesModal.tcsCalculationMethod = SalesOtherTaxesCalculationMethodEnum.OnTotalAmount;

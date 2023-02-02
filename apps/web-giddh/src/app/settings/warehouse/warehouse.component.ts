@@ -579,8 +579,8 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
                     {
                         ...address,
                         isDefault: false,
-                        label: address.name,
-                        value: address.uniqueName
+                        label: address?.name,
+                        value: address?.uniqueName
                     }));
                 if (successCallback) {
                     successCallback();

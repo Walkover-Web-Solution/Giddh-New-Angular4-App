@@ -81,7 +81,7 @@ export class SettingsIntegrationActions {
             ofType(SETTINGS_INTEGRATION_ACTIONS.CREATE_PAYMENT_KEY_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<string, string> | any = response.payload;
-                if (data.status === 'error') {
+                if (data?.status === 'error') {
                     this.toasty.errorToast(data.message, data.code);
                 } else {
                     this.store.dispatch(this._companyAction.getAllRegistrations());
@@ -107,7 +107,7 @@ export class SettingsIntegrationActions {
             ofType(SETTINGS_INTEGRATION_ACTIONS.UPDATE_PAYMENT_KEY_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, string> = response.payload;
-                if (data.status === 'error') {
+                if (data?.status === 'error') {
                     this.toasty.errorToast(data.message, data.code);
                 } else {
                     this.store.dispatch(this._companyAction.getAllRegistrations());
@@ -175,7 +175,7 @@ export class SettingsIntegrationActions {
             ofType(SETTINGS_INTEGRATION_ACTIONS.SAVE_CASHFREE_DETAILS_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, any> = response.payload;
-                if (data.status === 'error') {
+                if (data?.status === 'error') {
                     this.toasty.clearAllToaster();
                     this.toasty.errorToast(data.message, data.code);
                 } else {
@@ -195,7 +195,7 @@ export class SettingsIntegrationActions {
             ofType(SETTINGS_INTEGRATION_ACTIONS.DELETE_CASHFREE_DETAILS_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<string, string> = response.payload;
-                if (data.status === 'error') {
+                if (data?.status === 'error') {
                     this.toasty.errorToast(data.message, data.code);
                 } else {
                     this.toasty.successToast(data.body, '');
@@ -214,7 +214,7 @@ export class SettingsIntegrationActions {
             ofType(SETTINGS_INTEGRATION_ACTIONS.ADD_AUTOCOLLECT_USER_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, any> = response.payload;
-                if (data.status === 'error') {
+                if (data?.status === 'error') {
                     this.toasty.clearAllToaster();
                     this.toasty.errorToast(data.message, data.code);
                 } else {
@@ -234,7 +234,7 @@ export class SettingsIntegrationActions {
             ofType(SETTINGS_INTEGRATION_ACTIONS.DELETE_AUTOCOLLECT_USER_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, any> = response.payload;
-                if (data.status === 'error') {
+                if (data?.status === 'error') {
                     this.toasty.clearAllToaster();
                     this.toasty.errorToast(data.message, data.code);
                 } else {
@@ -280,7 +280,7 @@ export class SettingsIntegrationActions {
             ofType(SETTINGS_INTEGRATION_ACTIONS.UPDATE_CASHFREE_DETAILS_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, any> = response.payload;
-                if (data.status === 'error') {
+                if (data?.status === 'error') {
                     this.toasty.clearAllToaster();
                     this.toasty.errorToast(data.message, data.code);
                 } else {
@@ -313,7 +313,7 @@ export class SettingsIntegrationActions {
             ofType(SETTINGS_INTEGRATION_ACTIONS.ADD_PAYMENT_GATEWAY_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, any> = response.payload;
-                if (data.status === 'error') {
+                if (data?.status === 'error') {
                     this.toasty.errorToast(data.message, data.code);
                 } else {
                     this.toasty.successToast(data.body, '');
@@ -332,7 +332,7 @@ export class SettingsIntegrationActions {
             ofType(SETTINGS_INTEGRATION_ACTIONS.UPDATE_PAYMENT_GATEWAY_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, any> = response.payload;
-                if (data.status === 'error') {
+                if (data?.status === 'error') {
                     this.toasty.errorToast(data.message, data.code);
                 } else {
                     this.toasty.successToast(data.body, '');
@@ -351,7 +351,7 @@ export class SettingsIntegrationActions {
             ofType(SETTINGS_INTEGRATION_ACTIONS.DELETE_PAYMENT_GATEWAY_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, any> = response.payload;
-                if (data.status === 'error') {
+                if (data?.status === 'error') {
                     this.toasty.errorToast(data.message, data.code);
                 } else {
                     this.toasty.successToast(data.body, '');
@@ -370,7 +370,7 @@ export class SettingsIntegrationActions {
             ofType(SETTINGS_INTEGRATION_ACTIONS.UPDATE_AUTOCOLLECT_USER_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, any> = response.payload;
-                if (data.status === 'error') {
+                if (data?.status === 'error') {
                     this.toasty.errorToast(data.message, data.code);
                 }
                 return { type: 'EmptyAction' };
@@ -387,7 +387,7 @@ export class SettingsIntegrationActions {
             ofType(SETTINGS_INTEGRATION_ACTIONS.ADD_AMAZON_SELLER_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, any> = response.payload;
-                if (data.status === 'error') {
+                if (data?.status === 'error') {
                     this.toasty.errorToast(data.message, data.code);
                 } else {
                     this.toasty.successToast(data.body, '');
@@ -406,7 +406,7 @@ export class SettingsIntegrationActions {
             ofType(SETTINGS_INTEGRATION_ACTIONS.UPDATE_AMAZON_SELLER_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, any> = response.payload;
-                if (data.status === 'error') {
+                if (data?.status === 'error') {
                     this.toasty.errorToast(data.message, data.code);
                 } else {
                     this.toasty.successToast(this.localeService.translate("app_messages.seller_updated"), '');
@@ -425,7 +425,7 @@ export class SettingsIntegrationActions {
             ofType(SETTINGS_INTEGRATION_ACTIONS.DELETE_AMAZON_SELLER_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, any> = response.payload;
-                if (data.status === 'error') {
+                if (data?.status === 'error') {
                     this.toasty.errorToast(data.message, data.code);
                 } else {
                     this.toasty.successToast(data.body, '');
@@ -463,7 +463,7 @@ export class SettingsIntegrationActions {
             ofType(SETTINGS_INTEGRATION_ACTIONS.REMOVE_ICICI_PAYMENT_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, any> = response.payload;
-                if (data.status === 'error') {
+                if (data?.status === 'error') {
                     this.toasty.errorToast(data.message, data.code);
                 } else {
                     this.toasty.successToast(this.localeService.translate("app_messages.account_removed"));
@@ -483,7 +483,7 @@ export class SettingsIntegrationActions {
             ofType(SETTINGS_INTEGRATION_ACTIONS.REMOVE_GMAIL_INTEGRATION_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, any> = response.payload;
-                if (data.status === 'error') {
+                if (data?.status === 'error') {
                     this.toasty.errorToast(data.message, data.code);
                 } else {
                     this.toasty.successToast(data.body, '');
@@ -538,7 +538,7 @@ export class SettingsIntegrationActions {
             payload: value
         };
     }
-    
+
     public GetRazorPayDetails(): CustomActions {
         return {
             type: SETTINGS_INTEGRATION_ACTIONS.GET_RAZOR_PAY_DETAILS,
@@ -829,7 +829,7 @@ export class SettingsIntegrationActions {
     }
 
     public validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false, errorAction: CustomActions = { type: 'EmptyAction' }): CustomActions {
-        if (response.status === 'error') {
+        if (response?.status === 'error') {
             if (showToast) {
                 this.toasty.errorToast(response.message);
             }
@@ -843,7 +843,7 @@ export class SettingsIntegrationActions {
     }
 
     public validatePayIntegrationResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false, errorAction: CustomActions = { type: 'EmptyAction' }): CustomActions {
-        if (response.status === 'error') {
+        if (response?.status === 'error') {
             if (showToast) {
                 this.toasty.errorToast(response.message);
             }

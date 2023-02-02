@@ -419,7 +419,7 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
                 if (data && data.body && data.body.results) {
                     const searchResults = data.body.results.map(result => {
                         return {
-                            value: result.uniqueName,
+                            value: result?.uniqueName,
                             label: `${result.name}`,
                             additional: result.parentGroups
                         }
@@ -468,7 +468,7 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
                     if (!this.groupsSearchResultsPaginationData.query) {
                         const results = response.map(result => {
                             return {
-                                value: result.uniqueName,
+                                value: result?.uniqueName,
                                 label: `${result.name}`,
                                 additional: result.parentGroups
                             }
@@ -491,7 +491,7 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
         this.onGroupSearchQueryChanged('', 1, (response) => {
             this.defaultGroupSuggestions = response.map(result => {
                 return {
-                    value: result.uniqueName,
+                    value: result?.uniqueName,
                     label: `${result.name}`,
                     additional: result.parentGroups
                 }
