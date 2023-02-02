@@ -58,7 +58,7 @@ export class OnReturnDirective {
                 if (this.selectedField && this.selectedField === allElements[indx] && allElements[indx].value === '') {
                     // detect by or to
                     const activatedRow: any = window.document.querySelectorAll('tr.active-row');
-                    const rowEntryType = activatedRow[0].children[0].children[0].value;
+                    const rowEntryType = activatedRow[0].children[0].children[0]?.value;
                     if (rowEntryType === 'by') {
                         target = allElements[indx + 4];
                     } else if (rowEntryType === 'to') {
@@ -85,7 +85,7 @@ export class OnReturnDirective {
                     if (this.activeIndx === indx) {
                         target = allElements[indx + 1];
                         return setTimeout(() => {
-                            if (target.disabled && allElements[indx].value.trim() === '') {
+                            if (target.disabled && allElements[indx]?.value.trim() === '') {
                                 return document.getElementById('invoice-narration').focus();
                             } else {
                                 this.activeIndx = null;
@@ -108,7 +108,7 @@ export class OnReturnDirective {
                             target.focus();
                         }, 210);
                     } else {
-                        if (target.value === 'NaN' || target.value === 0) {
+                        if (target?.value === 'NaN' || target?.value === 0) {
                             target.value = '';
                         }
                         if (this.clickCount > 1) {
@@ -128,7 +128,7 @@ export class OnReturnDirective {
                 let target = allElements[indx - 1];
 
                 const activatedRow: any = window.document.querySelectorAll('tr.active-row');
-                const rowEntryType = activatedRow[0].children[0].children[0].value;
+                const rowEntryType = activatedRow[0].children[0].children[0]?.value;
 
                 if (allElements[indx] && allElements[indx].classList.contains('debit-credit')) {
                     if (rowEntryType === 'by') {
@@ -147,8 +147,8 @@ export class OnReturnDirective {
                 //   return target.focus();
                 // }
                 // && !this.isOtherKeyPressed && this.selectedField !== target
-                if (target && e.target.value?.length === e.target.selectionEnd) {
-                    if (selectedEle.getAttribute('data-changed') === 'false' || selectedEle.value.trim() === '') {
+                if (target && e.target?.value?.length === e.target.selectionEnd) {
+                    if (selectedEle.getAttribute('data-changed') === 'false' || selectedEle?.value.trim() === '') {
                         e.preventDefault();
                         if (target.disabled) {
                             target = allElements[indx - 2];

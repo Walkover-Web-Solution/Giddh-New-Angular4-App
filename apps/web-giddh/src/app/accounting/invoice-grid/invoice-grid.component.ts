@@ -886,15 +886,15 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
             this.showLedgerAccountList = false;
         }, 200);
 
-        if (ev.value === 'createnewitem') {
+        if (ev?.value === 'createnewitem') {
             return this.showQuickAccountModal();
         }
 
         if (this.selectedField === 'account') {
             this.setAccount(ev.additional);
             setTimeout(() => {
-                let accIndx = this.accountsTransaction.findIndex((acc) => acc.selectedAccount?.UniqueName === ev.value);
-                let indexInTaxesToRemember = this.taxesToRemember.findIndex((t) => t.taxUniqueName === ev.value);
+                let accIndx = this.accountsTransaction.findIndex((acc) => acc.selectedAccount?.UniqueName === ev?.value);
+                let indexInTaxesToRemember = this.taxesToRemember.findIndex((t) => t.taxUniqueName === ev?.value);
                 if (indexInTaxesToRemember > -1 && accIndx > -1) {
                     let rate = this.taxesToRemember[indexInTaxesToRemember].taxValue;
                     this.accountsTransaction[accIndx].rate = rate;

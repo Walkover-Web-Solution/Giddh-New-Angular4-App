@@ -58,14 +58,14 @@ export class OptionList {
     /** Value. **/
 
     get value(): string[] {
-        return this.selection.map(option => option.value);
+        return this.selection.map(option => option?.value);
     }
 
     set value(v: string[]) {
         v = typeof v === 'undefined' || v === null ? [] : v;
 
         this.options.forEach((option) => {
-            option.selected = v?.indexOf(option.value) > -1;
+            option.selected = v?.indexOf(option?.value) > -1;
         });
         this.updateHasSelected();
     }

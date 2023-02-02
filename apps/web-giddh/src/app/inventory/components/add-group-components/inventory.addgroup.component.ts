@@ -254,7 +254,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
     public groupSelected(event: IOption) {
         let selected;
         this.groupsData$.subscribe(p => {
-            selected = p.find(q => q.value === event.value);
+            selected = p.find(q => q?.value === event?.value);
         });
         this.selectedGroup = selected;
         this.addGroupForm.updateValueAndValidity();
@@ -273,7 +273,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
         if (!this.addGroup) {
             return;
         }
-        let val: string = this.addGroupForm.controls['name'].value;
+        let val: string = this.addGroupForm.controls['name']?.value;
         val = uniqueNameInvalidStringReplace(val);
 
         /** unique name availability is check on server now
@@ -293,14 +293,14 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
             uniqueNameField?.patchValue(uniqueNameField.value?.replace(/ /g, '').toLowerCase());
         }
 
-        if (this.addGroupForm.get("showCodeType").value === "hsn") {
+        if (this.addGroupForm.get("showCodeType")?.value === "hsn") {
             this.addGroupForm.get('sacNumber')?.patchValue("");
         } else {
             this.addGroupForm.get('hsnNumber')?.patchValue("");
         }
 
-        stockRequest = this.addGroupForm.value as StockGroupRequest;
-        if (this.addGroupForm.value.isSubGroup && this.selectedGroup) {
+        stockRequest = this.addGroupForm?.value as StockGroupRequest;
+        if (this.addGroupForm?.value.isSubGroup && this.selectedGroup) {
             stockRequest.parentStockGroupUniqueName = this.selectedGroup.value;
         }
         if (!stockRequest.isSubGroup) {
@@ -308,7 +308,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
         }
         if (isObject(stockRequest.parentStockGroupUniqueName)) {
             let uniqName: any = cloneDeep(stockRequest.parentStockGroupUniqueName);
-            stockRequest.parentStockGroupUniqueName = uniqName.value;
+            stockRequest.parentStockGroupUniqueName = uniqName?.value;
         }
 
         if (!stockRequest.taxes) {
@@ -328,19 +328,19 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
             uniqueNameField?.patchValue(uniqueNameField.value?.replace(/ /g, '').toLowerCase());
         }
 
-        if (this.addGroupForm.get("showCodeType").value === "hsn") {
+        if (this.addGroupForm.get("showCodeType")?.value === "hsn") {
             this.addGroupForm.get('sacNumber')?.patchValue("");
         } else {
             this.addGroupForm.get('hsnNumber')?.patchValue("");
         }
 
-        stockRequest = this.addGroupForm.value as StockGroupRequest;
-        if (this.addGroupForm.value.isSubGroup) {
-            stockRequest.parentStockGroupUniqueName = this.selectedGroup.value;
+        stockRequest = this.addGroupForm?.value as StockGroupRequest;
+        if (this.addGroupForm?.value.isSubGroup) {
+            stockRequest.parentStockGroupUniqueName = this.selectedGroup?.value;
         }
         if (isObject(stockRequest.parentStockGroupUniqueName)) {
             let uniqName: any = cloneDeep(stockRequest.parentStockGroupUniqueName);
-            stockRequest.parentStockGroupUniqueName = uniqName.value;
+            stockRequest.parentStockGroupUniqueName = uniqName?.value;
         }
 
         if (!stockRequest.taxes) {
@@ -514,7 +514,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
                 let invoiceSettings = _.cloneDeep(response.body);
                 this.inventorySettings = invoiceSettings.companyInventorySettings;
 
-                if (!this.addGroupForm.get("showCodeType").value) {
+                if (!this.addGroupForm.get("showCodeType")?.value) {
                     if (this.inventorySettings?.manageInventory) {
                         this.addGroupForm.get("showCodeType")?.patchValue("hsn");
                     } else {

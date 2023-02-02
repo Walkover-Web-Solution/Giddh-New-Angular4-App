@@ -137,7 +137,7 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
         this.previousEnd = undefined;
         let currentItemIndex = -1;
         if (this.selectedValues && this.selectedValues.length > 0) {
-            currentItemIndex = this.items.findIndex(item => item.value === this.selectedValues[0].value);
+            currentItemIndex = this.items.findIndex(item => item?.value === this.selectedValues[0]?.value);
         }
         if (this.items && this.items.length) {
             currentItemIndex = (currentItemIndex === -1) ? 0 : currentItemIndex;
@@ -159,7 +159,7 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
 
     public ngAfterViewInit() {
         if (this.selectedValues && this.selectedValues.length > 0) {
-            let item = this.items?.find(p => p.value === (this.selectedValues.length > 0 ? this.selectedValues[0].value : (this.items?.length > 0 ? this.items[0].value : null)));
+            let item = this.items?.find(p => p?.value === (this.selectedValues.length > 0 ? this.selectedValues[0]?.value : (this.items?.length > 0 ? this.items[0]?.value : null)));
             setTimeout(() => {
                 this.scrollInto(item);
             }, 50);

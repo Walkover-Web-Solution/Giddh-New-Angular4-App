@@ -403,7 +403,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         });
 
         this.searchedAccountQuery.pipe(debounceTime(700), takeUntil(this.destroyed$)).subscribe((event: any) => {
-            this.searchAccount(event, event.target.value);
+            this.searchAccount(event, event.target?.value);
         });
 
         this.amountErrorMessage = this.localeData?.total_amount_error;
@@ -561,7 +561,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     }
 
     public onSubmitChequeDetail() {
-        const chequeDetails = this.chequeDetailForm.value;
+        const chequeDetails = this.chequeDetailForm?.value;
         this.requestObj.chequeNumber = chequeDetails.chequeNumber;
         this.requestObj.chequeClearanceDate = (chequeDetails.chequeClearanceDate) ? (typeof chequeDetails.chequeClearanceDate === "object") ? dayjs(chequeDetails.chequeClearanceDate).format(GIDDH_DATE_FORMAT) : dayjs(chequeDetails.chequeClearanceDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT) : "";
         this.closeChequeDetailForm();
@@ -829,7 +829,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                                 let advanceReceiptAmount = 0;
 
                                 if (adjustment.type === AdjustmentTypesEnum.advanceReceipt) {
-                                    taxAmount = adjustment.tax.value;
+                                    taxAmount = adjustment.tax?.value;
                                     advanceReceiptAmount = Number(adjustment.amount) - Number(taxAmount);
                                 }
 
@@ -1216,7 +1216,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             this.currentSelectedValue = '';
             this.showLedgerAccountList = false;
         }, 200);
-        if (ev.value === 'createnewitem') {
+        if (ev?.value === 'createnewitem') {
             return this.addNewAccount();
         }
         if (this.selectedField === 'account') {
@@ -1907,8 +1907,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         let adjustmentTypesOptions: IOption[] = [];
 
         adjustmentTypes.map(type => {
-            if ((index === 0 && (type.value === AdjustmentTypesEnum.receipt || type.value === AdjustmentTypesEnum.advanceReceipt)) || (index > 0 && type.value === AdjustmentTypesEnum.againstReference) || (entry && type.value === entry.type)) {
-                adjustmentTypesOptions.push({ label: type.label, value: type.value });
+            if ((index === 0 && (type?.value === AdjustmentTypesEnum.receipt || type?.value === AdjustmentTypesEnum.advanceReceipt)) || (index > 0 && type?.value === AdjustmentTypesEnum.againstReference) || (entry && type?.value === entry.type)) {
+                adjustmentTypesOptions.push({ label: type.label, value: type?.value });
             }
         });
 
@@ -1939,7 +1939,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @memberof AccountAsVoucherComponent
      */
     public onSelectAdjustmentType(event: any, entry: any): void {
-        if (event && event.value === AdjustmentTypesEnum.receipt) {
+        if (event && event?.value === AdjustmentTypesEnum.receipt) {
             entry.tax = {
                 name: '',
                 uniqueName: '',

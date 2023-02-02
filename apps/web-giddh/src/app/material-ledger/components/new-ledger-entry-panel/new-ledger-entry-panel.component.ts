@@ -1101,13 +1101,13 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         if (this.voucherApiVersion === 2) {
             this.resetInvoiceList();
         }
-        if (event.value === 'advance-receipt') {
+        if (event?.value === 'advance-receipt') {
             this.shouldShowAdvanceReceipt = true;
             this.isAdvanceReceipt = true;
-        } else if (event.value === VoucherTypeEnum.creditNote || event.value === VoucherTypeEnum.debitNote) {
+        } else if (event?.value === VoucherTypeEnum.creditNote || event?.value === VoucherTypeEnum.debitNote) {
             this.shouldShowAdvanceReceipt = false;
             this.removeSelectedInvoice();
-            this.getInvoiceListsForCreditNote.emit([this.currentTxn, event.value]);
+            this.getInvoiceListsForCreditNote.emit([this.currentTxn, event?.value]);
             this.isAdvanceReceipt = false;
         } else {
             this.shouldShowAdvanceReceipt = false;

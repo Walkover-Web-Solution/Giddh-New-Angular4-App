@@ -359,7 +359,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public selectAccount(e: IOption, txn: TransactionVM, clearAccount?: boolean) {
         this.keydownClassAdded = false;
         this.selectedTxnAccUniqueName = '';
-        if (!e.value || clearAccount) {
+        if (!e?.value || clearAccount) {
             // if there's no selected account set selectedAccount to null
             txn.selectedAccount = null;
             this.lc.currentBlankTxn = null;
@@ -410,7 +410,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     label: e.label,
                     name: e.label,
                     category: data.body.category,
-                    value: e.value,
+                    value: e?.value,
                     isHilighted: true,
                     applicableTaxes: taxes,
                     currency: data.body.currency,
@@ -2006,8 +2006,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
      */
     public handleBranchChange(selectedEntity: any): void {
         this.currentBranch.name = selectedEntity.label;
-        this.trxRequest.branchUniqueName = selectedEntity.value;
-        this.advanceSearchRequest.branchUniqueName = selectedEntity.value;
+        this.trxRequest.branchUniqueName = selectedEntity?.value;
+        this.advanceSearchRequest.branchUniqueName = selectedEntity?.value;
         this.getTransactionData();
     }
 

@@ -109,7 +109,7 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
 
             if (subTyp) {
                 this.tdsTcsTaxSubTypes.forEach(key => {
-                    if (key.value === subTyp) {
+                    if (key?.value === subTyp) {
                         this.selectedTaxType = key.label;
                     }
                 });
@@ -138,7 +138,7 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
         let val: string = this.newTaxObj.name;
         val = uniqueNameInvalidStringReplace(val);
         if (val) {
-            let isDuplicate = this.allTaxes.some(s => s.value.toLowerCase().includes(val));
+            let isDuplicate = this.allTaxes.some(s => s?.value.toLowerCase().includes(val));
             if (isDuplicate) {
                 this.newTaxObj.taxNumber = val + 1;
             } else {
@@ -170,9 +170,9 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
                 dataToSave.accounts = [];
             }
             this.linkedAccountsOption.forEach((obj) => {
-                if (obj.value === dataToSave.account) {
+                if (obj?.value === dataToSave.account) {
                     let accountObj = obj.label.split(' - ');
-                    dataToSave.accounts.push({ name: accountObj[0], uniqueName: obj.value });
+                    dataToSave.accounts.push({ name: accountObj[0], uniqueName: obj?.value });
                 }
             });
         }
@@ -203,7 +203,7 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
                         this.selectedTax = res.taxes[key]?.label;
                     }
 
-                    this.taxList.push({ label: res.taxes[key]?.label, value: res.taxes[key].value });
+                    this.taxList.push({ label: res.taxes[key]?.label, value: res.taxes[key]?.value });
                 });
                 this.taxListSource$ = observableOf(this.taxList);
             } else {

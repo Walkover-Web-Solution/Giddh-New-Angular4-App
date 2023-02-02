@@ -155,8 +155,8 @@ export class CompletedComponent implements OnInit, OnDestroy {
         });
         // set initial Data
         this.filterForm.get('filterDate')?.patchValue(dayjs(this.maxDate).format('D-MMM-YYYY'));
-        this.filterForm.get('filterTimeInterval')?.patchValue(this.timeInterval[5].value);
-        this.filter.timeRange = this.timeInterval[5].value;
+        this.filterForm.get('filterTimeInterval')?.patchValue(this.timeInterval[5]?.value);
+        this.filter.timeRange = this.timeInterval[5]?.value;
         this.filter.startDate = dayjs(this.maxDate).format(GIDDH_DATE_FORMAT);
         this.getReport();
     }
@@ -172,7 +172,7 @@ export class CompletedComponent implements OnInit, OnDestroy {
         this.filter.to = this.filter.startDate + ' ' + this.filter.timeRange.split('-')[1];
         this.paginationRequest.from = this.filter.from;
         this.paginationRequest.to = this.filter.to;
-        this.paginationRequest.branchUniqueName = this.filterForm.get('branchUniqueName').value;
+        this.paginationRequest.branchUniqueName = this.filterForm.get('branchUniqueName')?.value;
         this.tallysyncService.getCompletedSync(this.paginationRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if (res && res.results && res.results.length > 0) {
                 this.completedtallySyncDataResponse = res;
@@ -272,7 +272,7 @@ export class CompletedComponent implements OnInit, OnDestroy {
     }
 
     public onDDElementCompanySelect(event: IOption) {
-        this.filter.company = event.value;
+        this.filter.company = event?.value;
     }
 
     public onValueChange(event: Date): void {
@@ -280,7 +280,7 @@ export class CompletedComponent implements OnInit, OnDestroy {
     }
 
     public onDDElementTimeRangeSelect(event: IOption): void {
-        this.filter.timeRange = event.value;
+        this.filter.timeRange = event?.value;
     }
 
     public pageChanged(event) {
@@ -300,6 +300,6 @@ export class CompletedComponent implements OnInit, OnDestroy {
      */
     public handleBranchChange(selectedEntity: any): void {
         this.currentBranch.name = selectedEntity.label;
-        this.paginationRequest.branchUniqueName = this.filterForm.get('branchUniqueName').value;
+        this.paginationRequest.branchUniqueName = this.filterForm.get('branchUniqueName')?.value;
     }
 }

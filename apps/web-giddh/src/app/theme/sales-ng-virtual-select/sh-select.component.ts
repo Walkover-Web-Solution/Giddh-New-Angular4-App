@@ -275,7 +275,7 @@ export class SalesShSelectComponent implements ControlValueAccessor, AfterViewIn
         this.isOpen = true;
         this.onShow.emit();
         if (this.menuEle && this.menuEle.virtualScrollElm && this.menuEle.virtualScrollElm) {
-            let item = this.rows.find(p => p?.value === (this._selectedValues?.length > 0 ? this._selectedValues[0] : (this.rows?.length > 0 ? this.rows[0].value : null)));
+            let item = this.rows.find(p => p?.value === (this._selectedValues?.length > 0 ? this._selectedValues[0] : (this.rows?.length > 0 ? this.rows[0]?.value : null)));
             if (item !== null) {
                 this.menuEle.virtualScrollElm.scrollInto(item);
             }

@@ -309,9 +309,9 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, OnInit, O
     @HostListener('input', ['$event'])
     public onInput(e: CustomKeyboardEvent): void {
         const el: HTMLInputElement = e.target as HTMLInputElement;
-        this._inputValue = el.value;
+        this._inputValue = el?.value;
         if (!this._maskValue) {
-            this.onChange(el.value);
+            this.onChange(el?.value);
             return;
         }
         const position: number =
@@ -361,7 +361,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, OnInit, O
             if (this._maskService.showMaskTyped) {
                 // We are showing the mask in the input
                 this._maskService.maskIsShown = this._maskService.showMaskInInput();
-                if (el.setSelectionRange && this._maskService.prefix + this._maskService.maskIsShown === el.value) {
+                if (el.setSelectionRange && this._maskService.prefix + this._maskService.maskIsShown === el?.value) {
                     // the input ONLY contains the mask, so position the cursor at the start
                     el.focus();
                     el.setSelectionRange(posStart, posEnd);
@@ -378,12 +378,12 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, OnInit, O
             }
         }
         const nextValue: string | null =
-            !el.value || el.value === this._maskService.prefix
+            !el?.value || el?.value === this._maskService.prefix
                 ? this._maskService.prefix + this._maskService.maskIsShown
-                : el.value;
+                : el?.value;
 
         /** Fix of cursor position jumping to end in most browsers no matter where cursor is inserted onFocus */
-        if (el.value !== nextValue) {
+        if (el?.value !== nextValue) {
             el.value = nextValue;
         }
 
@@ -398,7 +398,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, OnInit, O
     public a(e: CustomKeyboardEvent): void {
         this._code = e.code ? e.code : e.key;
         const el: HTMLInputElement = e.target as HTMLInputElement;
-        this._inputValue = el.value;
+        this._inputValue = el?.value;
 
         // if some one have cleared whole text then cursor should be placed at the beginning but we need to prevent that cus we already have prefix
         if (this._maskService.prefix?.length > el.selectionStart) {
@@ -413,7 +413,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, OnInit, O
             // if (e.keyCode === 37) {
             //     el.selectionStart = (el.selectionEnd as number) - 1;
             // }
-            if (e.keyCode === 8 && el.value?.length === 0) { // backspace
+            if (e.keyCode === 8 && el?.value?.length === 0) { // backspace
                 el.selectionStart = el.selectionEnd;
             }
             if (e.keyCode === 8 && (el.selectionStart as number) !== 0) { // backspace
@@ -444,7 +444,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, OnInit, O
                 e.keyCode === 8 &&
                 !el.readOnly &&
                 cursorStart === 0 &&
-                el.selectionEnd === el.value?.length &&
+                el.selectionEnd === el?.value?.length &&
                 el.value?.length !== 0
             ) {
                 this._position = this._maskService.prefix ? this._maskService.prefix?.length : 0;

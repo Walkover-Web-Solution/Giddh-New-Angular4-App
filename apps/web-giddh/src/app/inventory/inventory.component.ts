@@ -452,7 +452,7 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
                 } else {
                     warehouse = warehouseData.formattedWarehouses[0]?.uniqueName;
                 }
-                const currentWarehouse = warehouseData.formattedWarehouses.find((data) => data?.uniqueName === warehouse || data.value === warehouse);
+                const currentWarehouse = warehouseData.formattedWarehouses.find((data) => data?.uniqueName === warehouse || data?.value === warehouse);
                 if (currentWarehouse && this.warehouseFilter) {
                     this.warehouseFilter.filter = currentWarehouse.label;
                 }

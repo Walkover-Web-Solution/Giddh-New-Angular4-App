@@ -464,7 +464,7 @@ export class ContactComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.searchedName.valueChanges.pipe(
+        this.searchedName?.valueChanges.pipe(
             debounceTime(700),
             distinctUntilChanged(),
             takeUntil(this.destroyed$),
@@ -791,20 +791,20 @@ export class ContactComponent implements OnInit, OnDestroy {
      * @memberof ContactComponent
      */
     public addValueToMsg(val: any) {
-        this.typeInTextarea(val.value);
+        this.typeInTextarea(val?.value);
     }
 
     public typeInTextarea(newText) {
         let el: HTMLInputElement = this.messageBox?.nativeElement;
         let start = el.selectionStart;
         let end = el.selectionEnd;
-        let text = el.value;
+        let text = el?.value;
         let before = text.substring(0, start);
         let after = text.substring(end, text?.length);
         el.value = (before + newText + after);
         el.selectionStart = el.selectionEnd = start + newText?.length;
         el.focus();
-        this.messageBody.msg = el.value;
+        this.messageBody.msg = el?.value;
     }
 
     /**
@@ -1473,7 +1473,7 @@ export class ContactComponent implements OnInit, OnDestroy {
                     };
                 }
 
-                let isColumnAvailable = this.availableColumnsCount?.filter(column => column.value === key?.uniqueName);
+                let isColumnAvailable = this.availableColumnsCount?.filter(column => column?.value === key?.uniqueName);
                 if (!isColumnAvailable?.length) {
                     this.availableColumnsCount.push({ key: index, value: key?.uniqueName });
                 }
@@ -1626,7 +1626,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     public handleClickOutside(event: any, element: any, searchedFieldName: string): void {
         this.showClearFilter = false;
         if (searchedFieldName === "name") {
-            if (this.searchedName.value) {
+            if (this.searchedName?.value) {
                 return;
             }
             if (this.generalService.childOf(event.target, element)) {

@@ -402,7 +402,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
         this.activeGroupUniqueName$.pipe(take(1)).subscribe(a => activeGroupUniqueName = a);
 
         let grpObject = new MoveGroupRequest();
-        grpObject.parentGroupUniqueName = this.moveGroupForm.value.moveto;
+        grpObject.parentGroupUniqueName = this.moveGroupForm?.value.moveto;
         this.store.dispatch(this.groupWithAccountsAction.moveGroup(grpObject, activeGroupUniqueName));
         this.moveGroupForm.reset();
 
@@ -421,10 +421,10 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     public updateGroup() {
         let activeGroupUniqueName: string;
         let uniqueName = this.groupDetailForm.get('uniqueName');
-        uniqueName?.patchValue(uniqueName.value?.replace(/ /g, '').toLowerCase());
+        uniqueName?.patchValue(uniqueName?.value?.replace(/ /g, '').toLowerCase());
 
         this.activeGroupUniqueName$.pipe(take(1)).subscribe(a => activeGroupUniqueName = a);
-        this.store.dispatch(this.groupWithAccountsAction.updateGroup(this.groupDetailForm.value, activeGroupUniqueName));
+        this.store.dispatch(this.groupWithAccountsAction.updateGroup(this.groupDetailForm?.value, activeGroupUniqueName));
     }
 
     public async taxHierarchy() {
@@ -469,7 +469,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
                 });
             }
         });
-        data.taxes.push.apply(data.taxes, this.taxGroupForm.value.taxes);
+        data.taxes.push.apply(data.taxes, this.taxGroupForm?.value.taxes);
         data.uniqueName = activeGroup?.uniqueName;
         this.store.dispatch(this.groupWithAccountsAction.applyGroupTax(data));
         this.showEditTaxSection = false;
@@ -484,7 +484,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     public closingBalanceTypeChanged(type: string) {
-        if (Number(this.groupDetailForm.get('closingBalanceTriggerAmount').value) > 0) {
+        if (Number(this.groupDetailForm.get('closingBalanceTriggerAmount')?.value) > 0) {
             this.groupDetailForm.get('closingBalanceTriggerAmountType')?.patchValue(type);
         }
     }

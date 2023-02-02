@@ -61,7 +61,7 @@ export class SettingsTaxesActions {
         .pipe(
             ofType(SETTINGS_TAXES_ACTIONS.DELETE_TAX),
             switchMap((action: CustomActions) => {
-                return this.settingsTaxesService.DeleteTax(action.payload.value).pipe(
+                return this.settingsTaxesService.DeleteTax(action.payload?.value).pipe(
                     tap(resp => {
                         if (action.payload.linkedAccount) {
                             this.store.dispatch(this.generalActions.updateCurrentLiabilities(action.payload.linkedAccount));

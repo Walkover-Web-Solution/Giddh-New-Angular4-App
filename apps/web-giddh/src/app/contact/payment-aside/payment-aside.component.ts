@@ -479,8 +479,8 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
      * @memberof PaymentAsideComponent
      */
     public setBankName(event: any, selectBankEle: ShSelectComponent): void {
-        selectBankEle.filter = event.target.value !== undefined ? event.target.value : selectBankEle.fixedValue;
-        this.selectedBankName = event.target.value !== undefined ? event.target.value : selectBankEle.fixedValue;
+        selectBankEle.filter = event.target?.value !== undefined ? event.target?.value : selectBankEle.fixedValue;
+        this.selectedBankName = event.target?.value !== undefined ? event.target?.value : selectBankEle.fixedValue;
     }
 
     /**

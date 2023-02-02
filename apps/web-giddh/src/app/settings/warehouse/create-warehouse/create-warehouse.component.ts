@@ -208,7 +208,7 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
         event.preventDefault();
         if (!option.isDefault) {
             this.addresses.forEach(address => {
-                if (address.value !== option.value) {
+                if (address?.value !== option?.value) {
                     address.isDefault = false;
                 }
             });
@@ -216,8 +216,8 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
         option.isDefault = !option.isDefault;
         if (option.isDefault) {
             this.warehouseForm.get('address')?.patchValue([
-                ...(this.warehouseForm.get('address').value || []),
-                option.value
+                ...(this.warehouseForm.get('address')?.value || []),
+                option?.value
             ]);
         }
     }
@@ -229,8 +229,8 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
      */
     public handleFormSubmit(): void {
         const requestObj = {
-            name: this.warehouseForm.value.name,
-            linkAddresses: this.addresses?.filter(address => this.warehouseForm.value.address.includes(address?.uniqueName))?.map(filteredAddress => ({
+            name: this.warehouseForm?.value.name,
+            linkAddresses: this.addresses?.filter(address => this.warehouseForm?.value.address.includes(address?.uniqueName))?.map(filteredAddress => ({
                 uniqueName: filteredAddress?.uniqueName,
                 isDefault: filteredAddress.isDefault
             }))
@@ -301,7 +301,7 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
      */
     public createNewAddress(addressDetails: any): void {
         this.isAddressChangeInProgress = true;
-        const chosenState = addressDetails.addressDetails.stateList.find(selectedState => selectedState.value === addressDetails.formValue.state);
+        const chosenState = addressDetails.addressDetails.stateList.find(selectedState => selectedState?.value === addressDetails.formValue.state);
         const linkEntity = addressDetails.addressDetails.linkedEntities?.filter(entity => (addressDetails.formValue.linkedEntity.includes(entity?.uniqueName))).map(filteredEntity => ({
             uniqueName: filteredEntity?.uniqueName,
             isDefault: filteredEntity.isDefault,

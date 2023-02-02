@@ -46,25 +46,25 @@
                             <ng-container *ngFor="let fields of item.get('field').controls; let idx = index">
                                 <ng-container [formGroupName]="idx">
                                     <label>
-                                        {{ item.get("label").value }}
-                                        <sup *ngIf="fields.get('isOptional').value === 'false'">*</sup></label
+                                        {{ item.get("label")?.value }}
+                                        <sup *ngIf="fields.get('isOptional')?.value === 'false'">*</sup></label
                                     >
                                     <input
-                                        [type]="fields.get('type').value"
-                                        [required]="fields.get('isOptional').value === 'false'"
-                                        [disabled]="fields.get('valueEditable').value === 'false'"
+                                        [type]="fields.get('type')?.value"
+                                        [required]="fields.get('isOptional')?.value === 'false'"
+                                        [disabled]="fields.get('valueEditable')?.value === 'false'"
                                         class="form-control"
                                         formControlName="value"
                                         *ngIf="
-                                            fields.get('type').value !== 'option' &&
-                                            fields.get('id').value !== 'image' &&
-                                            fields.get('type').value !== 'checkbox' &&
-                                            fields.get('type').value !== 'radio'
+                                            fields.get('type')?.value !== 'option' &&
+                                            fields.get('id')?.value !== 'image' &&
+                                            fields.get('type')?.value !== 'checkbox' &&
+                                            fields.get('type')?.value !== 'radio'
                                         "
                                     />
                                     <select
                                         class="form-control"
-                                        *ngIf="fields.get('type').value === 'option'"
+                                        *ngIf="fields.get('type')?.value === 'option'"
                                         formControlName="value"
                                     >
                                         <option [ngValue]="null" [selected]="true">
@@ -77,13 +77,13 @@
                                             {{ list.displayText }}
                                         </option>
                                     </select>
-                                    <ng-container *ngIf="fields.get('id').value === 'image'">
+                                    <ng-container *ngIf="fields.get('id')?.value === 'image'">
                                         <img class="img-responsive max-width-150" [src]="base64StringForModel" />
                                         <label>{{ localeData?.enter_above_text }}</label>
                                         <input
-                                            [type]="fields.get('type').value"
+                                            [type]="fields.get('type')?.value"
                                             formControlName="value"
-                                            [required]="fields.get('isOptional').value === 'false'"
+                                            [required]="fields.get('isOptional')?.value === 'false'"
                                             class="form-control"
                                         />
                                     </ng-container>

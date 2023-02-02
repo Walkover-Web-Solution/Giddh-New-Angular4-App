@@ -214,7 +214,7 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
             .pipe(
                 debounceTime(500),
                 distinctUntilChanged(),
-                map((event: any) => event.target.value),
+                map((event: any) => event.target?.value),
                 takeUntil(this.destroyed$)
             )
             .subscribe((term => {

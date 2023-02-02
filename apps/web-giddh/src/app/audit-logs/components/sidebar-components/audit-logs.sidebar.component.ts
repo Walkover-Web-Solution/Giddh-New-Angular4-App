@@ -154,7 +154,7 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
     }
 
     public selectAccount(v) {
-        this.vm.selectedAccountUnq = v.value || '';
+        this.vm.selectedAccountUnq = v?.value || '';
     }
 
     public clearDate(model: string) {
@@ -166,11 +166,11 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
     }
 
     public selectGroup(v) {
-        this.vm.selectedGroupUnq = v.value || '';
+        this.vm.selectedGroupUnq = v?.value || '';
     }
 
     public selectUser(v) {
-        this.vm.selectedUserUnq = v.value || '';
+        this.vm.selectedUserUnq = v?.value || '';
     }
 
     public getLogfilters() {
@@ -201,7 +201,7 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
     }
 
     public customUserFilter(term: string, item: IOption) {
-        return (item.label.toLocaleLowerCase()?.indexOf(term) > -1 || item.value.toLocaleLowerCase()?.indexOf(term) > -1 ||
+        return (item.label.toLocaleLowerCase()?.indexOf(term) > -1 || item?.value.toLocaleLowerCase()?.indexOf(term) > -1 ||
             (item.additional && item.additional.userEmail && item.additional.userEmail.toLocaleLowerCase()?.indexOf(term) > -1));
     }
 

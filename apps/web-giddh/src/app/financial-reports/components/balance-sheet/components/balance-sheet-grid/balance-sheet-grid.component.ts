@@ -129,7 +129,7 @@ export class BalanceSheetGridComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public clickedOutside(event, el) {
-        if (this.bsSearchControl.value !== null && this.bsSearchControl.value !== '') {
+        if (this.bsSearchControl?.value !== null && this.bsSearchControl?.value !== '') {
             return;
         }
 

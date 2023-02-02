@@ -231,7 +231,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
                 }
             }
         });
-        this.searchedName.valueChanges.pipe(
+        this.searchedName?.valueChanges.pipe(
             debounceTime(700),
             distinctUntilChanged(),
             takeUntil(this.destroyed$),
@@ -412,7 +412,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
      */
     public handleClickOutside(event: any, element: any, searchedFieldName: string): void {
         if (searchedFieldName === "name") {
-            if (this.searchedName.value) {
+            if (this.searchedName?.value) {
                 return;
             }
             if (this.generalService.childOf(event.target, element)) {

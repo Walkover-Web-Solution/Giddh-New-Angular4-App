@@ -96,7 +96,7 @@ export class MaskService extends MaskApplierService {
 
     public applyValueChanges(position: number = 0, cb: Function = () => {
     }): void {
-        this._formElement.value = this.applyMask(this._formElement.value, this.maskExpression, position, cb);
+        this._formElement.value = this.applyMask(this._formElement?.value, this.maskExpression, position, cb);
         if (this._formElement === this.document.activeElement) {
             return;
         }
@@ -176,10 +176,10 @@ export class MaskService extends MaskApplierService {
     public clearIfNotMatchFn(): void {
         if (
             this.clearIfNotMatch &&
-            this.prefix?.length + this.maskExpression?.length + this.suffix?.length !== this._formElement.value?.length
+            this.prefix?.length + this.maskExpression?.length + this.suffix?.length !== this._formElement?.value?.length
         ) {
             this.formElementProperty = ['value', ''];
-            this.applyMask(this._formElement.value, this.maskExpression);
+            this.applyMask(this._formElement?.value, this.maskExpression);
         }
     }
 

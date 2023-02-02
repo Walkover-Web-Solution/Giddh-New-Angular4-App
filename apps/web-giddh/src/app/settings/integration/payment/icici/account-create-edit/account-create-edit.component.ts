@@ -209,7 +209,7 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
                     this.paymentAlerts = [];
                     this.forceClearPaymentUpdates$ = observableOf({ status: true });
                 } else {
-                    this.paymentAlerts = this.paymentAlertsUsersList.map(user => user.value);
+                    this.paymentAlerts = this.paymentAlertsUsersList.map(user => user?.value);
                 }
             } else {
                 if(isSelectedValueAlreadyChecked?.length > 0) {
@@ -239,7 +239,7 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
      */
     public clearSingleItem(event: any): void {
         if(event) {
-            this.paymentAlerts = event?.map(user => user.value);
+            this.paymentAlerts = event?.map(user => user?.value);
             this.paymentAlerts = this.paymentAlerts?.filter(paymentAlertUser => paymentAlertUser !== this.selectAllRecords);
         }
     }

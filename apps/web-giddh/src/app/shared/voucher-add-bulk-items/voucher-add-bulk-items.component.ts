@@ -129,7 +129,7 @@ export class VoucherAddBulkItemsComponent implements OnDestroy {
             .forEach(option => {
                 let item = new SalesAddBulkStockItems();
                 item.name = option.label;
-                item.uniqueName = option.value;
+                item.uniqueName = option?.value;
                 item.rate = 0;
 
                 if (option.additional.stock.accountStockDetails.unitRates && option.additional.stock.accountStockDetails.unitRates.length) {
@@ -228,7 +228,7 @@ export class VoucherAddBulkItemsComponent implements OnDestroy {
                 fromEvent(this.searchElement?.nativeElement, 'input').pipe(
                     debounceTime(700),
                     distinctUntilChanged(),
-                    map((e: any) => e.target.value),
+                    map((e: any) => e.target?.value),
                     takeUntil(this.destroyed$)
                 ).subscribe((res: string) => {
                     if (res) {

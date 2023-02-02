@@ -72,7 +72,7 @@
                                                             class="list-item flex-column border-none"
                                                         >
                                                             <div class="item">{{ option.label }}</div>
-                                                            <div class="item-unique">{{ option.value }}</div>
+                                                            <div class="item-unique">{{ option?.value }}</div>
                                                         </a>
                                                     </ng-template>
 
@@ -2182,7 +2182,7 @@
                                             [suffix]="selectedSuffixForCurrency"
                                             [mask]="inputMaskFormat"
                                             [(ngModel)]="grandTotalMulDum"
-                                            (blur)="updateExchangeRate(grandTotalInr.value)"
+                                            (blur)="updateExchangeRate(grandTotalInr?.value)"
                                         />
                                     </div>
                                 </div>
@@ -3248,7 +3248,7 @@
                                 [suffix]="selectedSuffixForCurrency"
                                 [mask]="inputMaskFormat"
                                 [(ngModel)]="grandTotalMulDum"
-                                (blur)="updateExchangeRate(grandTotalInr.value)"
+                                (blur)="updateExchangeRate(grandTotalInr?.value)"
                             />
                         </div>
                     </div>

@@ -187,7 +187,7 @@ export class AccountsAction {
     public UpdateAccountV2$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(AccountsAction.UPDATE_ACCOUNTV2),
-            switchMap((action: CustomActions) => this._accountService.UpdateAccountV2(action.payload.account, action.payload.value)),
+            switchMap((action: CustomActions) => this._accountService.UpdateAccountV2(action.payload.account, action.payload?.value)),
             map(response => {
                 if (response?.status === 'success') {
                     this.store.dispatch(this.commonActions.accountUpdated(true));

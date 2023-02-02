@@ -149,7 +149,7 @@ export class TrialBalanceGridComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public clickedOutside(event, el) {
-        if (this.accountSearchControl.value !== null && this.accountSearchControl.value !== '') {
+        if (this.accountSearchControl?.value !== null && this.accountSearchControl?.value !== '') {
             return;
         }
 

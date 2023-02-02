@@ -17,17 +17,17 @@ export class SettingsUtilityService {
      */
     public getCreateWarehouseRequestObject(formControls: any): any {
         return {
-            name: (formControls.name) ? formControls.name.value : '',
+            name: (formControls.name) ? formControls.name?.value : '',
             addresses: [{
-                address: (formControls.address) ? formControls.address.value : '',
-                stateCode: (formControls.state) ? formControls.state.value : '',
+                address: (formControls.address) ? formControls.address?.value : '',
+                stateCode: (formControls.state) ? formControls.state?.value : '',
                 isDefault: true
             }],
             isDefault: false,
-            countryCode: (formControls.country) ? formControls.country.value : '',
-            currencyCode: (formControls?.baseCurrency) ? formControls?.baseCurrency.value : '',
-            callingCode: (formControls.phoneCode) ? formControls.phoneCode.value : '',
-            mobileNumber: (formControls.contactNo) ? formControls.contactNo.value : ''
+            countryCode: (formControls.country) ? formControls.country?.value : '',
+            currencyCode: (formControls?.baseCurrency) ? formControls?.baseCurrency?.value : '',
+            callingCode: (formControls.phoneCode) ? formControls.phoneCode?.value : '',
+            mobileNumber: (formControls.contactNo) ? formControls.contactNo?.value : ''
         };
     }
 

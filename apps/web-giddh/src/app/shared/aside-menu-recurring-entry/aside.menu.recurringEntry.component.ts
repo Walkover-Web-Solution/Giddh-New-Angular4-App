@@ -58,7 +58,7 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges, OnDe
         });
         this.form.controls.nextCronDate.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(p => {
             this.maxEndDate = p;
-            const { cronEndDate } = this.form.value;
+            const { cronEndDate } = this.form?.value;
             const end = dayjs(cronEndDate);
             const next = dayjs(p);
             if (end.isValid() && next.isAfter(end)) {
@@ -127,8 +127,8 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges, OnDe
     }
 
     public saveRecurringInvoice() {
-        let convertCronEndDate = dayjs(this.form.controls.cronEndDate.value).format(GIDDH_DATE_FORMAT);
-        let convertNextCronDate = dayjs(this.form.controls.nextCronDate.value).format(GIDDH_DATE_FORMAT);
+        let convertCronEndDate = dayjs(this.form.controls.cronEndDate?.value).format(GIDDH_DATE_FORMAT);
+        let convertNextCronDate = dayjs(this.form.controls.nextCronDate?.value).format(GIDDH_DATE_FORMAT);
         if (this.mode === 'update') {
             if (this.form.controls.cronEndDate.invalid) {
                 this._toaster.errorToast(this.localeData?.recurring_date_error);
@@ -145,7 +145,7 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges, OnDe
             this.isLoading = true;
             const cronEndDate = this.IsNotExpirable ? '' : convertCronEndDate;
             const nextCronDate = convertNextCronDate;
-            const invoiceModel: RecurringInvoice = { ...this.invoice, ...this.form.value, cronEndDate, nextCronDate };
+            const invoiceModel: RecurringInvoice = { ...this.invoice, ...this.form?.value, cronEndDate, nextCronDate };
             if (this.voucherType) {
                 invoiceModel.voucherType = this.voucherType;
             }

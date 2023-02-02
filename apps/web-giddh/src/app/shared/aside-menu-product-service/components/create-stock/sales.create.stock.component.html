@@ -34,7 +34,7 @@
                                         type="button"
                                         class="btn btn-default"
                                         (click)="moveStock()"
-                                        [disabled]="addStockForm.get('parentGroup').value === activeGroup?.uniqueName"
+                                        [disabled]="addStockForm.get('parentGroup')?.value === activeGroup?.uniqueName"
                                     >
                                         Move
                                     </button>
@@ -132,7 +132,7 @@
                                             maxlength="10"
                                             decimalDigitsDirective
                                             formControlName="hsnNumber"
-                                            *ngIf="addStockForm.get('showCodeType').value === 'hsn'"
+                                            *ngIf="addStockForm.get('showCodeType')?.value === 'hsn'"
                                         />
                                         <input
                                             type="text"
@@ -140,7 +140,7 @@
                                             maxlength="10"
                                             formControlName="sacNumber"
                                             decimalDigitsDirective
-                                            *ngIf="addStockForm.get('showCodeType').value === 'sac'"
+                                            *ngIf="addStockForm.get('showCodeType')?.value === 'sac'"
                                         />
                                     </div>
                                     <div class="form-group col-4 col-sm-4">
@@ -237,18 +237,18 @@
                                     <!-- field 1 -->
                                     <div
                                         class="form-group col-4 col-sm-4"
-                                        *ngIf="customField1 || addStockForm.controls['customField1Heading'].value"
+                                        *ngIf="customField1 || addStockForm.controls['customField1Heading']?.value"
                                     >
                                         <label>
                                             <span
                                                 *ngIf="
                                                     !customField1HeadingEditing &&
-                                                    !addStockForm.controls['customField1Heading'].value
+                                                    !addStockForm.controls['customField1Heading']?.value
                                                 "
                                                 >Custom field 1</span
                                             >
                                             <span *ngIf="!customField1HeadingEditing">{{
-                                                addStockForm.controls["customField1Heading"].value
+                                                addStockForm.controls["customField1Heading"]?.value
                                             }}</span>
                                             <input
                                                 type="text"
@@ -282,18 +282,18 @@
                                     <!-- field 2 -->
                                     <div
                                         class="form-group col-4 col-sm-4"
-                                        *ngIf="customField2 || addStockForm.controls['customField2Heading'].value"
+                                        *ngIf="customField2 || addStockForm.controls['customField2Heading']?.value"
                                     >
                                         <label>
                                             <span
                                                 *ngIf="
                                                     !customField2HeadingEditing &&
-                                                    !addStockForm.controls['customField2Heading'].value
+                                                    !addStockForm.controls['customField2Heading']?.value
                                                 "
                                                 >Custom field 2</span
                                             >
                                             <span *ngIf="!customField2HeadingEditing">{{
-                                                addStockForm.controls["customField2Heading"].value
+                                                addStockForm.controls["customField2Heading"]?.value
                                             }}</span>
                                             <input
                                                 type="text"
@@ -361,7 +361,7 @@
                                         [placeholder]="'select purchase account'"
                                         [multiple]="false"
                                         [ItemHeight]="33"
-                                        [disabled]="!addStockForm.controls['enablePurchase'].value"
+                                        [disabled]="!addStockForm.controls['enablePurchase']?.value"
                                         [forceClearReactive]="forceClear$ | async"
                                         (selected)="onSelectPurchaseAccount()"
                                     ></sh-select>
@@ -394,7 +394,7 @@
                                                     [multiple]="false"
                                                     [placeholder]="'Select Unit'"
                                                     [ItemHeight]="33"
-                                                    [disabled]="!addStockForm.controls['enablePurchase'].value"
+                                                    [disabled]="!addStockForm.controls['enablePurchase']?.value"
                                                     [forceClearReactive]="forceClear$ | async"
                                                     [notFoundLinkText]="'+ Add New'"
                                                     (noResultsClicked)="addNewStockUnit()"
@@ -456,7 +456,7 @@
                                         #salesAccountUniqueName
                                         formControlName="salesAccountUniqueName"
                                         [multiple]="false"
-                                        [disabled]="!addStockForm.controls['enableSales'].value"
+                                        [disabled]="!addStockForm.controls['enableSales']?.value"
                                         [placeholder]="'select sales account'"
                                         [ItemHeight]="33"
                                         [forceClearReactive]="forceClear$ | async"
@@ -489,7 +489,7 @@
                                                     #salesStockUnitCode
                                                     formControlName="stockUnitCode"
                                                     [multiple]="false"
-                                                    [disabled]="!addStockForm.controls['enableSales'].value"
+                                                    [disabled]="!addStockForm.controls['enableSales']?.value"
                                                     [placeholder]="'Select Unit'"
                                                     [ItemHeight]="33"
                                                     [forceClearReactive]="forceClear$ | async"
@@ -554,10 +554,10 @@
                             </div>
                         </div>
 
-                        <section class="mr-t2 mr-b3 col-12 col-sm-12 row" *ngIf="addStockForm.value.isFsStock">
+                        <section class="mr-t2 mr-b3 col-12 col-sm-12 row" *ngIf="addStockForm?.value.isFsStock">
                             <div class="pd-l05 pd-r05">
                                 <h1 class="section-head bd-rb">
-                                    <strong>{{ addStockForm.controls["name"].value }} (Made with)</strong>
+                                    <strong>{{ addStockForm.controls["name"]?.value }} (Made with)</strong>
                                 </h1>
                                 <table class="no-hover width-100">
                                     <tbody formGroupName="manufacturingDetails">
@@ -591,7 +591,7 @@
                                                 *ngIf="
                                                     addStockForm.controls['manufacturingDetails'].controls[
                                                         'manufacturingQuantity'
-                                                    ].value
+                                                    ]?.value
                                                 "
                                                 colspan="2"
                                             >
@@ -602,14 +602,14 @@
                                                         {{
                                                             addStockForm.controls["manufacturingDetails"].controls[
                                                                 "manufacturingQuantity"
-                                                            ].value
+                                                            ]?.value
                                                         }}
                                                         {{
                                                             addStockForm.controls["manufacturingDetails"].controls[
                                                                 "manufacturingUnitCode"
-                                                            ].value
+                                                            ]?.value
                                                         }}
-                                                        {{ addStockForm.controls["name"].value }} )</strong
+                                                        {{ addStockForm.controls["name"]?.value }} )</strong
                                                     ></span
                                                 >
                                             </td>

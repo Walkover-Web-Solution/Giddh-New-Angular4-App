@@ -193,7 +193,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         });
 
         fromEvent(this.branchSearch?.nativeElement, 'input').pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe((event: any) => {
-            this.handleBranchSearch(event.target.value);
+            this.handleBranchSearch(event.target?.value);
         });
 
         this.imgPath = isElectron ? 'assets/images/warehouse-vector.svg' : AppUrl + APP_FOLDER + 'assets/images/warehouse-vector.svg';

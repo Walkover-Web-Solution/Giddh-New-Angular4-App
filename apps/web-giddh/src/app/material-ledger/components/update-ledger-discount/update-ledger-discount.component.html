@@ -39,7 +39,7 @@
                         decimalDigitsDirective
                         [DecimalPlaces]="2"
                         [(ngModel)]="discountPercentageModal"
-                        (input)="discountFromInput('PERCENTAGE', $event.target.value)"
+                        (input)="discountFromInput('PERCENTAGE', $event.target?.value)"
                     />
                     <i class="fa fa-percent pos-abs"></i>
                 </div>
@@ -55,7 +55,7 @@
                     decimalDigitsDirective
                     [DecimalPlaces]="2"
                     [(ngModel)]="discountFixedValueModal"
-                    (input)="discountFromInput('FIX_AMOUNT', $event.target.value)"
+                    (input)="discountFromInput('FIX_AMOUNT', $event.target?.value)"
                 />
             </div>
         </div>

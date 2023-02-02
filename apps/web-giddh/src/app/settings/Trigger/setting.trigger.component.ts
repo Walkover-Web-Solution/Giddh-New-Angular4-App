@@ -188,7 +188,7 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
             this.toaster.errorToast(this.localeData?.validations?.action, this.localeData?.validation);
             return;
         }
-        if (!dataToSave.value && this.newTriggerObj.scope !== 'closing balance') {
+        if (!dataToSave?.value && this.newTriggerObj.scope !== 'closing balance') {
             this.toaster.errorToast(this.localeData?.validations?.enter_value, this.localeData?.validation);
             return;
         } else {
@@ -251,9 +251,9 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
     }
 
     public onEntityTypeSelected(ev) {
-        if (ev.value === 'account') {
+        if (ev?.value === 'account') {
             this.entityOptions$ = observableOf(this.accounts);
-        } else if (ev.value === 'group') {
+        } else if (ev?.value === 'group') {
             this.entityOptions$ = observableOf(this.groups);
         }
         this.onResetEntityType();
@@ -268,10 +268,10 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
      * onSelectScope
      */
     public onSelectScope(event) {
-        if (!event.value) {
+        if (!event?.value) {
             return;
         }
-        if (event.value === 'closing balance') {
+        if (event?.value === 'closing balance') {
             this.onSelectClosingBalance();
             if ((this.newTriggerObj.filter === 'amountGreaterThan') || (this.newTriggerObj.filter === 'amountSmallerThan')) {
                 return;

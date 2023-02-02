@@ -293,9 +293,9 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             }
         });
         this.addAccountForm.get('openingBalance').valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(a => {
-            if (a && (a === 0 || a <= 0) && this.addAccountForm.get('openingBalanceType').value) {
+            if (a && (a === 0 || a <= 0) && this.addAccountForm.get('openingBalanceType')?.value) {
                 this.addAccountForm.get('openingBalanceType')?.patchValue('CREDIT');
-            } else if (a && (a === 0 || a > 0) && this.addAccountForm.get('openingBalanceType').value === '') {
+            } else if (a && (a === 0 || a > 0) && this.addAccountForm.get('openingBalanceType')?.value === '') {
                 this.addAccountForm.get('openingBalanceType')?.patchValue('CREDIT');
             }
         });
@@ -420,7 +420,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     }
 
     public onViewReady(ev) {
-        let accountCountry = this.addAccountForm.get('country').get('countryCode').value;
+        let accountCountry = this.addAccountForm.get('country').get('countryCode')?.value;
         this.selectedCountryCode = accountCountry;
         if (accountCountry) {
             if (accountCountry !== 'IN') {
@@ -579,7 +579,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     }
 
     public getStateCode(gstForm: FormGroup, statesEle: ShSelectComponent) {
-        let gstVal: string = gstForm.get('gstNumber').value;
+        let gstVal: string = gstForm.get('gstNumber')?.value;
         gstForm.get('gstNumber')?.setValue(gstVal?.trim());
         if (gstVal?.length) {
             if (gstVal?.length !== 15) {
@@ -590,7 +590,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 this.statesSource$.pipe(take(1)).subscribe(state => {
                     let stateCode = this.stateGstCode[gstVal.substr(0, 2)];
 
-                    let currentState = state.find(st => st.value === stateCode);
+                    let currentState = state.find(st => st?.value === stateCode);
                     if (currentState) {
                         gstForm.get('stateCode')?.patchValue(currentState.value);
                         gstForm.get('state').get('code')?.patchValue(currentState.value);
@@ -620,7 +620,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     }
 
     public openingBalanceTypeChnaged(type: string) {
-        if (Number(this.addAccountForm.get('openingBalance').value) > 0) {
+        if (Number(this.addAccountForm.get('openingBalance')?.value) > 0) {
             this.addAccountForm.get('openingBalanceType')?.patchValue(type);
         }
     }
@@ -640,10 +640,10 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     }
 
     public submit() {
-        if (!this.addAccountForm.get('openingBalance').value) {
+        if (!this.addAccountForm.get('openingBalance')?.value) {
             this.addAccountForm.get('openingBalance')?.setValue('0');
         }
-        if (!this.addAccountForm.get('foreignOpeningBalance').value) {
+        if (!this.addAccountForm.get('foreignOpeningBalance')?.value) {
             this.addAccountForm.get('foreignOpeningBalance')?.patchValue('0');
         }
         if (this.showBankDetail) {
@@ -654,7 +654,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 return;
             }
         }
-        let accountRequest: AccountRequestV2 = this.addAccountForm.value as AccountRequestV2;
+        let accountRequest: AccountRequestV2 = this.addAccountForm?.value as AccountRequestV2;
         if (this.stateList && accountRequest.addresses && accountRequest.addresses.length > 0 && !this.isHsnSacEnabledAcc) {
             let selectedStateObj = this.getStateGSTCode(this.stateList, accountRequest.addresses[0].stateCode);
             if (selectedStateObj) {
@@ -718,7 +718,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     }
 
     public closingBalanceTypeChanged(type: string) {
-        if (Number(this.addAccountForm.get('closingBalanceTriggerAmount').value) > 0) {
+        if (Number(this.addAccountForm.get('closingBalanceTriggerAmount')?.value) > 0) {
             this.addAccountForm.get('closingBalanceTriggerAmountType')?.patchValue(type);
         }
     }
@@ -758,8 +758,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
     public selectedState(gstForm: FormGroup, event) {
         if (gstForm && event?.label) {
-            gstForm.get('stateCode')?.patchValue(event.value);
-            gstForm.get('state').get('code')?.patchValue(event.value);
+            gstForm.get('stateCode')?.patchValue(event?.value);
+            gstForm.get('state').get('code')?.patchValue(event?.value);
 
         }
 
@@ -857,11 +857,11 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public checkGstNumValidation(ele: HTMLInputElement) {
         let isValid: boolean = false;
 
-        if (ele.value?.trim()) {
+        if (ele?.value?.trim()) {
             if (this.formFields['taxName']['regex'] !== "" && this.formFields['taxName']['regex']?.length > 0) {
                 for (let key = 0; key < this.formFields['taxName']['regex'].length; key++) {
                     let regex = new RegExp(this.formFields['taxName']['regex'][key]);
-                    if (regex.test(ele.value)) {
+                    if (regex.test(ele?.value)) {
                         isValid = true;
                         break;
                     }
@@ -913,7 +913,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                             this.addAccountForm.get('currency').patchValue(this.selectedCountryCurrency);
                             this.selectedCurrency = this.selectedCountryCurrency;
                         }
-                        if (!this.addAccountForm.get('mobileCode').value) {
+                        if (!this.addAccountForm.get('mobileCode')?.value) {
                             this.addAccountForm.get('mobileCode')?.patchValue(this.selectedAccountCallingCode);
                         }
                     }
@@ -953,7 +953,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         let activeAcc;
         this.activeAccount$.pipe(take(1)).subscribe(p => activeAcc = p);
         let grpObject = new AccountMoveRequest();
-        grpObject.uniqueName = this.moveAccountForm.controls['moveto'].value;
+        grpObject.uniqueName = this.moveAccountForm.controls['moveto']?.value;
 
         this.store.dispatch(this.accountsAction.moveAccount(grpObject, activeAcc?.uniqueName, this.activeGroupUniqueName));
         this.moveAccountForm.reset();
@@ -1110,7 +1110,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      * @memberof AccountAddNewDetailsComponent
      */
     public checkActiveGroupCountry(): boolean {
-        if (this.activeCompany && this.activeCompany.countryV2 && this.activeCompany.countryV2.alpha2CountryCode === this.addAccountForm.get('country').get('countryCode').value && (this.activeGroupUniqueName === 'sundrycreditors' || this.activeParentGroup === 'sundrycreditors' || this.activeGroupUniqueName === 'sundrydebtors' || this.activeParentGroup === 'sundrydebtors')) {
+        if (this.activeCompany && this.activeCompany.countryV2 && this.activeCompany.countryV2.alpha2CountryCode === this.addAccountForm.get('country').get('countryCode')?.value && (this.activeGroupUniqueName === 'sundrycreditors' || this.activeParentGroup === 'sundrycreditors' || this.activeGroupUniqueName === 'sundrydebtors' || this.activeParentGroup === 'sundrydebtors')) {
             return true;
         } else {
             return false;
@@ -1147,7 +1147,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
    * @memberof AccountUpdateNewDetailsComponent
    */
     public bankDetailsValidator(element, type: string): void {
-        if (element.value && type) {
+        if (element?.value && type) {
             let trim: string = '';
             // changes account number validation for country india as well ref card : GIDK-1119
             trim = element.value?.replace(/[^a-zA-Z0-9]/g, '');
@@ -1757,7 +1757,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     if (customField.controls?.length) {
                         accountDetails.customFields.forEach(item => {
                             const fieldIndex = customField.controls?.findIndex(control => control?.value?.uniqueName === item?.uniqueName);
-                            customField?.at(fieldIndex).get('value').patchValue(item.value);
+                            customField?.at(fieldIndex).get('value').patchValue(item?.value);
                         });
                     }
                 }

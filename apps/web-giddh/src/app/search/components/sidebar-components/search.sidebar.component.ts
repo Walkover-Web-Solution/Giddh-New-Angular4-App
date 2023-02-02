@@ -207,7 +207,7 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
 
     public onSelectGroup(group: IOption) {
         this.groupName = group.label;
-        this.groupUniqueName = group.value;
+        this.groupUniqueName = group?.value;
     }
 
     public selectedDate(value: any) {
@@ -272,7 +272,7 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
      */
     public handleBranchChange(selectedEntity: any): void {
         this.currentBranch.name = selectedEntity.label;
-        this.currentBranchChanged.emit(selectedEntity.value);
+        this.currentBranchChanged.emit(selectedEntity?.value);
         this.loadDefaultGroupsSuggestions();
     }
 

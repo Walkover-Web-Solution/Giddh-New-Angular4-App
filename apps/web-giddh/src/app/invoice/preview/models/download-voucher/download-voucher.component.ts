@@ -54,7 +54,7 @@ export class DownloadVoucherComponent implements OnInit, OnDestroy {
     }
 
     public invoiceTypeChanged(event): void {
-        let val = event.target.value;
+        let val = event.target?.value;
         if (event.target.checked) {
             this.invoiceType.push(val);
         } else {
