@@ -276,8 +276,15 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         });
     }
 
-    public ngAfterViewInit() {
-        this.loadTabData(0);
+    /**
+     * This hook will be called after component is initialized
+     *
+     * @memberof SettingIntegrationComponent
+     */
+    public ngAfterViewInit(): void {
+        if (this.selectedTabParent !== undefined && this.selectedTabParent !== null) {
+            this.loadTabData(this.selectedTabParent);
+        }
     }
 
     public setDummyData() {
@@ -593,7 +600,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      */
     public loadEcommerceData(event?: any): void {
         if (event && event instanceof MatTabGroup || !event) {
-        this.store.dispatch(this.settingsIntegrationActions.GetAmazonSellers());
+            this.store.dispatch(this.settingsIntegrationActions.GetAmazonSellers());
         }
     }
 
@@ -642,7 +649,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @private
      * @memberof SettingIntegrationComponent
      */
-    private loadTabData(index:number): void {
+    private loadTabData(index: number): void {
         if (this.voucherApiVersion === 2) {
             if (SettingsIntegrationTab.Email === index) {
                 this.loadEmailData();
