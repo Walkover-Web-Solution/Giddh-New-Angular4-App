@@ -209,7 +209,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
      * @memberof StockCreateEditComponent
      */
     public addOption(event: MatChipInputEvent, index: number): void {
-        const value = (event.value || "").trim();
+        const value = (event?.value || "").trim();
         const valueIndex = this.stockForm.options[index]['values']?.indexOf(value);
         if (valueIndex === -1) {
             if (value) {
@@ -502,7 +502,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
      * @memberof StockCreateEditComponent
      */
     public selectVariantUnit(variant: any, event: any): void {
-        variant.warehouseBalance[0].stockUnit = { name: event.label, code: event.value };
+        variant.warehouseBalance[0].stockUnit = { name: event.label, code: event?.value };
     }
 
     /**
@@ -702,7 +702,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
      * @memberof StockCreateEditComponent
      */
     private findPurchaseAccountName(): void {
-        let purchaseAccountName = this.purchaseAccounts?.filter(purchaseAccount => purchaseAccount.value === this.stockForm?.purchaseAccountDetails?.accountUniqueName);
+        let purchaseAccountName = this.purchaseAccounts?.filter(purchaseAccount => purchaseAccount?.value === this.stockForm?.purchaseAccountDetails?.accountUniqueName);
         if (purchaseAccountName?.length > 0) {
             this.purchaseAccountName = purchaseAccountName[0]?.label;
         }
@@ -715,7 +715,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
      * @memberof StockCreateEditComponent
      */
     private findSalesAccountName(): void {
-        let salesAccountName = this.salesAccounts?.filter(salesAccount => salesAccount.value === this.stockForm?.salesAccountDetails?.accountUniqueName);
+        let salesAccountName = this.salesAccounts?.filter(salesAccount => salesAccount?.value === this.stockForm?.salesAccountDetails?.accountUniqueName);
         if (salesAccountName?.length > 0) {
             this.salesAccountName = salesAccountName[0]?.label;
         }
@@ -913,7 +913,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
             this.stockForm.customFields?.forEach(customField => {
                 const customFieldData = this.customFieldsData?.filter(cfData => cfData?.uniqueName === customField?.uniqueName);
                 if (customFieldData?.length > 0) {
-                    customField.value = customFieldData[0].value;
+                    customField.value = customFieldData[0]?.value;
                 }
             });
         }

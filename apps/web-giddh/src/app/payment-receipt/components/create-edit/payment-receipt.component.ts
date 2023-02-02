@@ -523,7 +523,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
             newItem.additional.email = newItem.additional.email || '';
             newItem.additional.mobileNo = newItem.additional.mobileNo || '';
         }
-        return (item.label.toLocaleLowerCase()?.indexOf(term) > -1 || item.value.toLocaleLowerCase()?.indexOf(term) > -1 || item.additional.email.toLocaleLowerCase()?.indexOf(term) > -1 || item.additional.mobileNo.toLocaleLowerCase()?.indexOf(term) > -1);
+        return (item.label.toLocaleLowerCase()?.indexOf(term) > -1 || item?.value.toLocaleLowerCase()?.indexOf(term) > -1 || item.additional.email.toLocaleLowerCase()?.indexOf(term) > -1 || item.additional.mobileNo.toLocaleLowerCase()?.indexOf(term) > -1);
     }
 
     /**
@@ -733,7 +733,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
      * @memberof PaymentReceiptComponent
      */
     public onSelectCustomer(item: IOption): void {
-        if (item.value) {
+        if (item?.value) {
             this.voucherFormData.account.name = item.label;
             this.getAccountDetails(item.value);
         }
@@ -926,7 +926,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
             if (response) {
                 response.forEach(account => {
                     if (typeof search !== "string" || account?.label?.toLowerCase()?.indexOf(search?.toLowerCase()) > -1) {
-                        bankAccounts.push({ label: account.label, value: account.value, additional: account });
+                        bankAccounts.push({ label: account.label, value: account?.value, additional: account });
                     }
                 });
 
@@ -1015,7 +1015,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
     public autoFillShippingDetails(): void {
         if (this.autoFillShipping) {
             this.voucherFormData.account.shippingDetails = cloneDeep(this.voucherFormData.account.billingDetails);
-            this.searchShippingStates.setValue(this.searchBillingStates.value);
+            this.searchShippingStates.setValue(this.searchBillingStates?.value);
             if (this.shippingState && this.shippingState.nativeElement) {
                 this.shippingState.nativeElement.classList.remove('error-box');
             }
@@ -1717,7 +1717,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
         let filteredStates: IOption[] = [];
         this.statesSource.forEach(state => {
             if (typeof search !== "string" || state?.label?.toLowerCase()?.indexOf(search?.toLowerCase()) > -1) {
-                filteredStates.push({ label: state.label, value: state.value, additional: state });
+                filteredStates.push({ label: state.label, value: state?.value, additional: state });
             }
         });
 

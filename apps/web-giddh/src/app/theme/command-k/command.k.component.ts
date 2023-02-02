@@ -345,7 +345,7 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
                 e.preventDefault();
                 e.stopPropagation();
                 // first escape
-                if (this.searchEle?.nativeElement.value) {
+                if (this.searchEle?.nativeElement?.value) {
                     this.searchEle.nativeElement.value = null;
                 } else {
                     // second time pressing escape
@@ -355,7 +355,7 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
         }
 
         if (this.isOpen && key === BACKSPACE) {
-            if (!this.searchEle?.nativeElement.value && this.listOfSelectedGroups && this.listOfSelectedGroups.length > 0) {
+            if (!this.searchEle?.nativeElement?.value && this.listOfSelectedGroups && this.listOfSelectedGroups.length > 0) {
                 this.removeItemFromSelectedGroups();
             }
         }
@@ -530,7 +530,7 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
     public onPasteInSearch(): void {
         setTimeout(() => {
             if (this.searchEle && this.searchEle.nativeElement) {
-                let term = this.searchEle.nativeElement.value;
+                let term = this.searchEle.nativeElement?.value;
                 term = (term) ? term.trim() : "";
                 this.searchSubject.next(term);
             }

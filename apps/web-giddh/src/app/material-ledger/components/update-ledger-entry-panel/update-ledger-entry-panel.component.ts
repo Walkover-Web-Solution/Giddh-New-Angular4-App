@@ -620,7 +620,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             // if ther's stock entry
             if (e.additional.stock) {
                 // check if we aleready have stock entry
-                if (this.vm.isThereStockEntry(e.value)) {
+                if (this.vm.isThereStockEntry(e?.value)) {
                     selectCmp.clear();
                     txn.particular.uniqueName = null;
                     txn.particular.name = null;
@@ -652,7 +652,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                             txn.selectedAccount = {
                                 ...e.additional,
                                 label: e.label,
-                                value: e.value,
+                                value: e?.value,
                                 isHilighted: true,
                                 applicableTaxes: taxes,
                                 currency: data.body.currency,
@@ -723,7 +723,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     });
                 }
             } else {
-                this.searchService.loadDetails(e.value).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+                this.searchService.loadDetails(e?.value).pipe(takeUntil(this.destroyed$)).subscribe(data => {
                     // directly assign additional property
                     if (data && data.body) {
                         // Take taxes of parent group
@@ -735,7 +735,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                         txn.selectedAccount = {
                             ...e.additional,
                             label: e.label,
-                            value: e.value,
+                            value: e?.value,
                             isHilighted: true,
 
                             applicableTaxes: taxes,
@@ -1029,9 +1029,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             return;
         }
 
-        this.changedAccountUniq = acc.value;
+        this.changedAccountUniq = acc?.value;
         this.baseAccountChanged = true;
-        this.accountUniqueName = acc.value;
+        this.accountUniqueName = acc?.value;
 
         if (this.voucherApiVersion === 2) {
             // get flatten_accounts list && get transactions list && get ledger account list
@@ -1075,10 +1075,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         if (this.voucherApiVersion === 2) {
             this.resetInvoiceList();
         }
-        if (event.value === VoucherTypeEnum.creditNote || event.value === VoucherTypeEnum.debitNote) {
+        if (event?.value === VoucherTypeEnum.creditNote || event?.value === VoucherTypeEnum.debitNote) {
             this.getInvoiceListsForCreditNote();
         }
-        this.isAdvanceReceipt = (event.value === 'advance-receipt');
+        this.isAdvanceReceipt = (event?.value === 'advance-receipt');
         this.currentVoucherLabel = this.generalService.getCurrentVoucherLabel(this.vm.selectedLedger?.voucher?.shortCode, this.commonLocaleData);
         this.handleAdvanceReceiptChange();
     }
@@ -1205,7 +1205,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                             additional: selectedInvoice
                         };
 
-                        const linkedInvoice = this.invoiceList.find(invoice => invoice.value === invoiceSelected.value);
+                        const linkedInvoice = this.invoiceList.find(invoice => invoice?.value === invoiceSelected?.value);
                         if (!linkedInvoice) {
                             this.invoiceList.push(invoiceSelected);
                         }
@@ -1218,7 +1218,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                             additional: selectedInvoice
                         };
 
-                        const linkedInvoice = this.invoiceList.find(invoice => invoice.value === invoiceSelected.value);
+                        const linkedInvoice = this.invoiceList.find(invoice => invoice?.value === invoiceSelected?.value);
                         if (!linkedInvoice) {
                             this.invoiceList.push(invoiceSelected);
                         }

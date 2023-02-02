@@ -766,7 +766,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             newItem.additional.email = newItem.additional.email || '';
             newItem.additional.mobileNo = newItem.additional.mobileNo || '';
         }
-        return (item.label.toLocaleLowerCase()?.indexOf(term) > -1 || item.value.toLocaleLowerCase()?.indexOf(term) > -1 || item.additional.email.toLocaleLowerCase()?.indexOf(term) > -1 || item.additional.mobileNo.toLocaleLowerCase()?.indexOf(term) > -1);
+        return (item.label.toLocaleLowerCase()?.indexOf(term) > -1 || item?.value.toLocaleLowerCase()?.indexOf(term) > -1 || item.additional.email.toLocaleLowerCase()?.indexOf(term) > -1 || item.additional.mobileNo.toLocaleLowerCase()?.indexOf(term) > -1);
     }
 
     /**
@@ -776,7 +776,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
      * @memberof CreatePurchaseOrderComponent
      */
     public onSelectVendor(item: IOption): void {
-        if (item.value) {
+        if (item?.value) {
             this.purchaseOrder.voucherDetails.customerName = item.label;
             this.purchaseOrder.accountDetails.name = '';
 
@@ -786,7 +786,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                 item.additional['currency'] = item.additional.currency || this.companyCurrency;
                 this.isMulticurrencyAccount = item.additional.currency !== this.companyCurrency;
             }
-            this.getAccountDetails(item.value);
+            this.getAccountDetails(item?.value);
         }
     }
 
@@ -849,7 +849,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
      */
     public fillShippingBillingDetails(event: any, isBilling: boolean, addressType: string): void {
         let stateName = event.label;
-        let stateCode = event.value;
+        let stateCode = event?.value;
 
         if (isBilling) {
             if (addressType === "vendor") {
@@ -1297,7 +1297,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     public onSelectSalesAccount(selectedAcc: any, txn: SalesTransactionItemClass, entry: SalesEntryClass, isBulkItem: boolean = false, entryIndex: number): any {
         this.purchaseOrder.entries[entryIndex] = entry;
         this.purchaseOrder.entries[entryIndex].transactions[0] = txn;
-        if ((selectedAcc.value || isBulkItem) && selectedAcc.additional?.uniqueName) {
+        if ((selectedAcc?.value || isBulkItem) && selectedAcc.additional?.uniqueName) {
             let requestObject;
             if (selectedAcc.additional.stock) {
                 requestObject = {
@@ -1319,7 +1319,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                         selectedAcc.additional = {
                             ...selectedAcc.additional,
                             label: selectedAcc.label,
-                            value: selectedAcc.value,
+                            value: selectedAcc?.value,
                             applicableTaxes: taxes,
                             currency: data.body.currency,
                             currencySymbol: data.body.currencySymbol,

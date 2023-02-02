@@ -56,7 +56,7 @@ export class AsideMenuOtherTaxes implements OnInit, OnChanges, OnDestroy {
             { label: this.commonLocaleData?.app_on_total_value, value: 'OnTotalAmount' }
         ];
 
-        this.selectedCalculationMethod = this.calculationMethodOptions?.filter(method => method.value === this.otherTaxesModal?.tcsCalculationMethod);
+        this.selectedCalculationMethod = this.calculationMethodOptions?.filter(method => method?.value === this.otherTaxesModal?.tcsCalculationMethod);
     }
 
     public ngOnChanges(changes: SimpleChanges): void {
@@ -71,13 +71,13 @@ export class AsideMenuOtherTaxes implements OnInit, OnChanges, OnDestroy {
             }
 
             if (this.calculationMethodOptions?.length > 0) {
-                this.selectedCalculationMethod = this.calculationMethodOptions?.filter(method => method.value === this.otherTaxesModal.tcsCalculationMethod);
+                this.selectedCalculationMethod = this.calculationMethodOptions?.filter(method => method?.value === this.otherTaxesModal.tcsCalculationMethod);
             }
         }
     }
 
     public applyTax(tax: IOption): void {
-        if (tax && tax.value) {
+        if (tax && tax?.value) {
             this.defaultOtherTaxesModal.appliedOtherTax = { name: tax.label, uniqueName: tax.value };
             if (!this.selectedTaxUniqueName) {
                 let taxType = this.taxes.find(f => f?.uniqueName === tax.value).taxType;

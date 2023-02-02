@@ -241,7 +241,7 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
      * onSelectInvoiceCopy
      */
     public onSelectInvoiceCopy(event) {
-        let val = event.target.value;
+        let val = event.target?.value;
         if (event.target.checked) {
             this.invoiceType.push(val);
         } else {

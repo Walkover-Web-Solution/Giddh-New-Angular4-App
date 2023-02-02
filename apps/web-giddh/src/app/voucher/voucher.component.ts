@@ -2113,11 +2113,11 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 }
             } else {
                 this.invoiceSelectedLabel = event?.label;
-                this.selectedInvoice = event.value;
+                this.selectedInvoice = event?.value;
                 this.invFormData.voucherDetails.invoiceLinkingRequest = {
                     linkedInvoices: [
                         {
-                            invoiceUniqueName: event.value,
+                            invoiceUniqueName: event?.value,
                             voucherType: event.additional?.additional?.voucherType ? event.additional?.additional?.voucherType : event.additional?.voucherType
                         }
                     ]
@@ -3981,7 +3981,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             }
             this.selectedBankAccount = event.label;
             this.selectPaymentValue = event.label;
-            this.depositAccountUniqueName = event.value;
+            this.depositAccountUniqueName = event?.value;
 
             if (event.additional) {
                 if (event.additional.additional) {

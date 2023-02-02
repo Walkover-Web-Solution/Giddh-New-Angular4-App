@@ -357,7 +357,7 @@ export class GstComponent implements OnInit, OnDestroy {
                 }));
 
                 if (!this.activeCompanyGstNumber && this.taxes?.length > 0) {
-                    this.activeCompanyGstNumber = this.taxes[0].value;
+                    this.activeCompanyGstNumber = this.taxes[0]?.value;
                     this.selectTax();
                 }
             }

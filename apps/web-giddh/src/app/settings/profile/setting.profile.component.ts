@@ -209,10 +209,10 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         this.getCountry();
         this.getCurrency();
         currencyNumberSystems.map(currency => {
-            this.numberSystemSource.push({ value: currency.value, label: `${currency.name}`, additional: currency });
+            this.numberSystemSource.push({ value: currency?.value, label: `${currency.name}`, additional: currency });
         });
         digitAfterDecimal.map(decimal => {
-            this.decimalDigitSource.push({ value: decimal.value, label: decimal.name });
+            this.decimalDigitSource.push({ value: decimal?.value, label: decimal.name });
         });
 
         this.initProfileObj();
@@ -401,8 +401,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
 
     public stateSelected(v, indx) {
         let profileObj = cloneDeep(this.companyProfileObj);
-        let selectedStateCode = v.value;
-        let selectedState = this.states.find((state) => state.value === selectedStateCode);
+        let selectedStateCode = v?.value;
+        let selectedState = this.states.find((state) => state?.value === selectedStateCode);
         if (selectedState && selectedState.value) {
             profileObj.addresses[indx].stateName = '';
             this.companyProfileObj = profileObj;
@@ -474,7 +474,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
 
     public checkGstNumValidation(ele: HTMLInputElement) {
         let isValid: boolean = false;
-        if (ele.value) {
+
+        if (ele?.value) {
             if (this.formFields['taxName']['regex'] !== "" && this.formFields['taxName']['regex']?.length > 0) {
                 for (let key = 0; key < this.formFields['taxName']['regex'].length; key++) {
                     let regex = new RegExp(this.formFields['taxName']['regex'][key]);
@@ -501,19 +502,17 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     }
 
     public setMainState(ele: HTMLInputElement) {
-        this.companyProfileObj.state = Number(ele.value.substring(0, 2));
+        this.companyProfileObj.state = Number(ele?.value.substring(0, 2));
     }
 
     public setChildState(ele: HTMLInputElement, index: number) {
-        let gstVal: string = ele.value;
+        let gstVal: string = ele?.value;
         if (gstVal?.length >= 2) {
             this.statesSource$.pipe(take(1)).subscribe(state => {
                 let stateCode = this.stateGstCode[gstVal.substr(0, 2)];
-                let s = state.find(st => st.value === stateCode);
-                uniqBy(s, 'value');
+                let s = state.find(st => st?.value === stateCode);
                 if (s) {
                     this.companyProfileObj.addresses[index].stateCode = s.value;
-                } else {
                     this.companyProfileObj.addresses[index].stateCode = '';
                 }
             });
@@ -537,7 +536,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
 
     public isValidPAN(ele: HTMLInputElement) {
         let panNumberRegExp = new RegExp(/[A-Za-z]{5}\d{4}[A-Za-z]{1}/g);
-        if (ele.value) {
+        if (ele?.value) {
             if (ele.value.match(panNumberRegExp)) {
                 ele.classList.remove('error-box');
                 this.isPANValid = true;
@@ -551,7 +550,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     }
 
     public isValidMobileNumber(ele: HTMLInputElement) {
-        if (ele.value) {
+        if (ele?.value) {
             if (ele.value.length > 9 && ele.value.length < 16) {
                 ele.classList.remove('error-box');
                 this.isMobileNumberValid = true;
@@ -921,7 +920,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
      */
     public createNewAddress(addressDetails: any): void {
         this.isAddressChangeInProgress = true;
-        const chosenState = addressDetails.addressDetails.stateList.find(selectedState => selectedState.value === addressDetails.formValue.state);
+        const chosenState = addressDetails.addressDetails.stateList.find(selectedState => selectedState?.value === addressDetails.formValue.state);
         let linkEntity = addressDetails.addressDetails.linkedEntities?.filter(entity => (addressDetails.formValue.linkedEntity.includes(entity?.uniqueName))).map(filteredEntity => ({
             uniqueName: filteredEntity?.uniqueName,
             isDefault: filteredEntity.isDefault,
@@ -965,7 +964,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     public updateAddress(addressDetails: any): void {
         this.isAddressChangeInProgress = true;
         addressDetails.formValue.linkedEntity = addressDetails.formValue.linkedEntity || [];
-        const chosenState = addressDetails.addressDetails.stateList.find(selectedState => selectedState.value === addressDetails.formValue.state);
+        const chosenState = addressDetails.addressDetails.stateList.find(selectedState => selectedState?.value === addressDetails.formValue.state);
         const linkEntity = addressDetails.addressDetails.linkedEntities?.filter(entity => (addressDetails.formValue.linkedEntity.includes(entity?.uniqueName))).map(filteredEntity => ({
             uniqueName: filteredEntity?.uniqueName,
             isDefault: filteredEntity.isDefault,

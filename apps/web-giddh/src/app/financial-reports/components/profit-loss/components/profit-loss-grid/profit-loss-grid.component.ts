@@ -148,7 +148,7 @@ export class ProfitLossGridComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public clickedOutside(event, el) {
-        if (this.plSearchControl.value !== null && this.plSearchControl.value !== '') {
+        if (this.plSearchControl?.value !== null && this.plSearchControl?.value !== '') {
             return;
         }
 

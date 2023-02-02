@@ -239,16 +239,16 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         this.activityFieldsObj.entityToDate = undefined;
 
         this.selectedFields.forEach(field => {
-            if (field.value === "LOG_DATE") {
+            if (field?.value === "LOG_DATE") {
                 this.activityFieldsObj.fromDate = this.activityObj.fromDate;
                 this.activityFieldsObj.toDate = this.activityObj.toDate;
-            } else if (field.value === "ENTITY") {
+            } else if (field?.value === "ENTITY") {
                 this.activityFieldsObj.entity = this.activityObj.entity;
-            } else if (field.value === "OPERATION") {
+            } else if (field?.value === "OPERATION") {
                 this.activityFieldsObj.operation = this.activityObj.operation;
-            } else if (field.value === "USERS") {
+            } else if (field?.value === "USERS") {
                 this.activityFieldsObj.userUniqueNames = this.activityObj.userUniqueNames;
-            } else if (field.value === "ENTITY_DATE") {
+            } else if (field?.value === "ENTITY_DATE") {
                 this.activityFieldsObj.entityFromDate = this.activityObj.entityFromDate;
                 this.activityFieldsObj.entityToDate = this.activityObj.entityToDate;
             }
@@ -622,15 +622,15 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         if (index >= 0) {
             this.selectedFields?.splice(index, 1);
         }
-        if (event.value === "ENTITY") {
+        if (event?.value === "ENTITY") {
             this.activityObjLabels.entity = '';
             this.activityObj.entity = '';
         }
-        if (event.value === "OPERATION") {
+        if (event?.value === "OPERATION") {
             this.activityObjLabels.operation = '';
             this.activityObj.operation = '';
         }
-        if (event.value === "USERS") {
+        if (event?.value === "USERS") {
             this.activityObjLabels.user = '';
             this.activityObj.userUniqueNames = [];
         }
@@ -644,8 +644,8 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
      * @memberof ActivityLogsComponent
      */
     public selectField(index: number, selectedValue: any): void {
-        let newValue = this.selectedFields.filter(val => val?.value === selectedValue.value);
-        if (this.selectedFields[index].value !== selectedValue.value) {
+        let newValue = this.selectedFields.filter(val => val?.value === selectedValue?.value);
+        if (this.selectedFields[index]?.value !== selectedValue?.value) {
             if (newValue?.length > 0) {
                 this.toaster.showSnackBar('warning', selectedValue.label + ' ' + this.localeData?.duplicate_values);
                 this.selectedFields[index] = {

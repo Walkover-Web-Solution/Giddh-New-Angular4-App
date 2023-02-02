@@ -377,7 +377,7 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
     public handleKeydown(e: any): void {
         let key = e.which || e.keyCode;
 
-        if (key === BACKSPACE && !this.searchElement?.nativeElement.value && this.listOfSelectedGroups && this.listOfSelectedGroups.length > 0) {
+        if (key === BACKSPACE && !this.searchElement?.nativeElement?.value && this.listOfSelectedGroups && this.listOfSelectedGroups.length > 0) {
             this.removeItemFromSelectedGroups();
         }
     }

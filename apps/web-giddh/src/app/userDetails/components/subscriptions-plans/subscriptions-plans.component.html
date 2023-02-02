@@ -297,7 +297,7 @@
                                         *ngIf="!showLoader"
                                         class="success-btn mr-t1 pl-3 pr-3"
                                         mat-raised-button
-                                        [disabled]="!licenceKey.value"
+                                        [disabled]="!licenceKey?.value"
                                         (click)="createCompanyViaActivationKey()"
                                     >
                                         {{ localeData?.subscription?.activate }}

@@ -166,7 +166,7 @@ export class SettingTaxesComponent implements OnInit, OnDestroy {
     }
 
     public customAccountFilter(term: string, item: IOption) {
-        return (item.label.toLocaleLowerCase()?.indexOf(term) > -1 || item.value.toLocaleLowerCase()?.indexOf(term) > -1);
+        return (item.label.toLocaleLowerCase()?.indexOf(term) > -1 || item?.value.toLocaleLowerCase()?.indexOf(term) > -1);
     }
 
     public customDateSorting(a: IOption, b: IOption) {

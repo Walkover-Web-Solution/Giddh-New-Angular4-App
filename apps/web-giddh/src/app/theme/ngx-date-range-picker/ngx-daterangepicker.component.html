@@ -108,7 +108,7 @@
                                 <input
                                     type="tel"
                                     (keyup)="uptoInputKeyUp($event)"
-                                    (change)="uptoToday($event, $event.target.value)"
+                                    (change)="uptoToday($event, $event.target?.value)"
                                 />
                                 {{ commonLocaleData?.app_datepicker?.days_upto_today }}
                             </button>
@@ -223,7 +223,7 @@
                                         (blur)="
                                             isOnScrollActive = false;
                                             initialCalendarMonths = true;
-                                            setStartDate($event.target.value)
+                                            setStartDate($event.target?.value)
                                         "
                                         (focus)="ActiveDate = 0"
                                         [class]="ActiveDate === 0 ? ActiveSelectedDateClass : ''"
@@ -250,7 +250,7 @@
                                         (blur)="
                                             isOnScrollActive = false;
                                             initialCalendarMonths = true;
-                                            setEndDate($event.target.value)
+                                            setEndDate($event.target?.value)
                                         "
                                         (focus)="ActiveDate = 1"
                                         [class]="ActiveDate === 1 ? ActiveSelectedDateClass : ''"

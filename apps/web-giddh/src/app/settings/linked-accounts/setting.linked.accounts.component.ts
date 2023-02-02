@@ -149,7 +149,7 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
                         rsession: data.body.rsession,
                         app: token.appId,
                         redirectReq: true,
-                        token: token.value,
+                        token: token?.value,
                         extraParams: ['callback=' + this.config.appUrl + 'app/yodlee-success.html?companyUniqueName=' + this.companyUniqueName]
                     });
                     this.yodleeFormHTML?.nativeElement.submit();

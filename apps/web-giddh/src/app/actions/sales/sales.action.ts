@@ -65,7 +65,7 @@ export class SalesActions {
     public UpdateAccountDetails$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SALES_ACTIONS.UPDATE_ACCOUNT_DETAILS),
-            switchMap((action: CustomActions) => this._accountService.UpdateAccountV2(action.payload.accountRequest, action.payload.value)),
+            switchMap((action: CustomActions) => this._accountService.UpdateAccountV2(action.payload.accountRequest, action.payload?.value)),
             map(response => {
                 if (response && response.body && response.queryString) {
                     const updateIndexDb: IUpdateDbRequest = {

@@ -370,7 +370,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
      */
     public selectLinkAccount(data) {
         let arrOfAcc = cloneDeep(this.accountList);
-        if (data.value && this.accountToSend) {
+        if (data?.value && this.accountToSend) {
             let result = arrOfAcc?.filter((obj) => obj?.uniqueName === data.value);
             this.accountToSend.name = result[0]?.name;
             this.accountToSend.uniqueName = result[0]?.uniqueName;
@@ -468,7 +468,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     }
 
     public onLockDateBlur(ev) {
-        this.isLockDateSet = !!ev.target.value;
+        this.isLockDateSet = !!ev.target?.value;
     }
 
     public ngOnDestroy() {

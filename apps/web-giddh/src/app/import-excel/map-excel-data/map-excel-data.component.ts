@@ -68,14 +68,14 @@ export class MapExcelDataComponent implements OnInit {
     }
 
     public columnSelected(val: IOption, data: DataModel) {
-        if (!val.value) {
+        if (!val?.value) {
             return;
         }
 
         // filter dataModel options as per selection and for handling duplicate column case
         this.dataModel = this.dataModel.map(m => {
             if (data.field.columnNumber !== m.field.columnNumber) {
-                m.options = m.options?.filter(f => f.value !== val.value);
+                m.options = m.options?.filter(f => f?.value !== val?.value);
             }
             return m;
         });
@@ -84,10 +84,10 @@ export class MapExcelDataComponent implements OnInit {
         let indexFromMappings = this._importData.mappings.findIndex(f => f.columnNumber === parseInt(data.field.columnNumber));
 
         if (indexFromMappings > -1) {
-            this._importData.mappings[indexFromMappings].mappedColumn = val.value;
+            this._importData.mappings[indexFromMappings].mappedColumn = val?.value;
         } else {
             let newMapping = new Mappings();
-            newMapping.mappedColumn = val.value;
+            newMapping.mappedColumn = val?.value;
             newMapping.columnNumber = parseInt(data.field.columnNumber);
             newMapping.columnHeader = data.field.columnHeader;
             this._importData.mappings.push(newMapping);

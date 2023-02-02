@@ -188,7 +188,7 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
      * @memberof SubscriptionsPlansComponent
      */
     public buyPlanClicked(plan: any) {
-        let activationKey = this.licenceKey.value;
+        let activationKey = this.licenceKey?.value;
         if (activationKey) {
             this.SubscriptionRequestObj.licenceKey = activationKey;
         } else {
@@ -217,7 +217,7 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
     }
 
     public createCompanyViaActivationKey() {
-        let activationKey = this.licenceKey.value;
+        let activationKey = this.licenceKey?.value;
         this.SubscriptionRequestObj.userUniqueName = this.logedInUser?.uniqueName;
         if (activationKey) {
             this.SubscriptionRequestObj.licenceKey = activationKey;

@@ -381,7 +381,7 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
     }
 
     public onSubmitChequeDetail() {
-        const chequeDetails = this.chequeDetailForm.value;
+        const chequeDetails = this.chequeDetailForm?.value;
         this.requestObj.chequeNumber = chequeDetails.chequeNumber;
         this.requestObj.chequeClearanceDate = chequeDetails.chequeClearanceDate;
         this.closeChequeDetailForm();
@@ -880,7 +880,7 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
             this.currentSelectedValue = '';
             this.showLedgerAccountList = false;
         }, 200);
-        if (ev.value === 'createnewitem') {
+        if (ev?.value === 'createnewitem') {
             return this.showQuickAccountModal();
         }
         if (this.selectedField === 'account') {

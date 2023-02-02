@@ -179,23 +179,23 @@ export class InwardNoteComponent implements OnInit, OnChanges, OnDestroy {
 
     public userChanged(option: IOption, index: number) {
         const items = this.form.get('transactions') as FormArray;
-        const user = this.userList.find(p => p?.uniqueName === option.value);
+        const user = this.userList.find(p => p?.uniqueName === option?.value);
         const inventoryUser = user ? { uniqueName: user?.uniqueName } : null;
 
         if (index >= 0) {
             const control = items.at(index);
             control?.patchValue({
-                ...control.value,
+                ...control?.value,
                 inventoryUser
             });
         } else {
-            items.controls.forEach(c => c?.patchValue({ ...c.value, inventoryUser }));
+            items.controls.forEach(c => c?.patchValue({ ...c?.value, inventoryUser }));
         }
     }
 
     public async stockChanged(option: IOption, index: number) {
         const items = this.transactions;
-        const stockItem = this.stockList.find(p => p?.uniqueName === option.value);
+        const stockItem = this.stockList.find(p => p?.uniqueName === option?.value);
         const stock = stockItem ? { uniqueName: stockItem?.uniqueName } : null;
         const stockUnit = stockItem ? stockItem.stockUnit.code : null;
 
@@ -234,9 +234,9 @@ export class InwardNoteComponent implements OnInit, OnChanges, OnDestroy {
 
         if (index >= 0) {
             const control = items.at(index);
-            control?.patchValue({ ...control.value, stock, stockUnit });
+            control?.patchValue({ ...control?.value, stock, stockUnit });
         } else {
-            items.controls.forEach(c => c?.patchValue({ ...c.value, stock, stockUnit }));
+            items.controls.forEach(c => c?.patchValue({ ...c?.value, stock, stockUnit }));
         }
     }
 
@@ -248,7 +248,7 @@ export class InwardNoteComponent implements OnInit, OnChanges, OnDestroy {
         const control = manufacturingDetailsContorl.controls['linkedStocks'] as FormArray;
         let count = 0;
         _.forEach(control.controls, (o) => {
-            if (o.value.stockUniqueName === uniqueName) {
+            if (o?.value.stockUniqueName === uniqueName) {
                 count++;
             }
         });
@@ -317,8 +317,8 @@ export class InwardNoteComponent implements OnInit, OnChanges, OnDestroy {
                 return rv;
             });
             let value: InventoryEntry = {
-                inventoryEntryDate: dayjs(this.inventoryEntryDate.value, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT),
-                description: this.description.value,
+                inventoryEntryDate: dayjs(this.inventoryEntryDate?.value, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT),
+                description: this.description?.value,
                 transactions: rawValues,
             };
 
@@ -326,13 +326,13 @@ export class InwardNoteComponent implements OnInit, OnChanges, OnDestroy {
                 value.transactions = value.transactions.map(trx => {
                     let linkedStocks: any = this.removeBlankLinkedStock(this.manufacturingDetails.controls.linkedStocks);
                     trx.manufacturingDetails = {
-                        manufacturingQuantity: this.manufacturingDetails.value.manufacturingQuantity,
-                        manufacturingUnitCode: this.manufacturingDetails.value.manufacturingUnitCode,
+                        manufacturingQuantity: this.manufacturingDetails?.value.manufacturingQuantity,
+                        manufacturingUnitCode: this.manufacturingDetails?.value.manufacturingUnitCode,
                         linkedStocks: linkedStocks.map(l => l),
                     };
                     return trx;
                 });
-                value.isManufactured = this.isManufactured.value;
+                value.isManufactured = this.isManufactured?.value;
             }
 
             this.onSave.emit({ ...value });

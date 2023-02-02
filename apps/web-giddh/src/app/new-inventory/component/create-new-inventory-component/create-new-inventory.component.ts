@@ -94,7 +94,7 @@ export class CreateNewInventoryComponent implements OnInit {
 
 
     public add(event: MatChipInputEvent): void {
-        const value = (event.value || "").trim();
+        const value = (event?.value || "").trim();
 
         // Add our fruit
         if (value) {

@@ -310,7 +310,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
             .pipe(
                 debounceTime(500),
                 distinctUntilChanged(),
-                map((ev: any) => ev.target.value),
+                map((ev: any) => ev.target?.value),
                 takeUntil(this.destroyed$)
             )
             .subscribe((term => {

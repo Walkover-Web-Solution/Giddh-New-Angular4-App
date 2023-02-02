@@ -264,9 +264,9 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
 
         // get openingblance value changes
         this.addAccountForm.get('openingBalance').valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(a => { // as disccused with back end team bydefault openingBalanceType will be CREDIT
-            if (a && (a === 0 || a <= 0) && this.addAccountForm.get('openingBalanceType').value) {
+            if (a && (a === 0 || a <= 0) && this.addAccountForm.get('openingBalanceType')?.value) {
                 this.addAccountForm.get('openingBalanceType')?.patchValue('CREDIT');
-            } else if (a && (a === 0 || a > 0) && this.addAccountForm.get('openingBalanceType').value === '') {
+            } else if (a && (a === 0 || a > 0) && this.addAccountForm.get('openingBalanceType')?.value === '') {
                 this.addAccountForm.get('openingBalanceType')?.patchValue('CREDIT');
             }
         });
@@ -305,7 +305,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             this.onlyPhoneNumber();
         }, 1000);
         this.addAccountForm.get('country').get('countryCode').setValidators(Validators.required);
-        let activegroupName = this.addAccountForm.get('activeGroupUniqueName').value;
+        let activegroupName = this.addAccountForm.get('activeGroupUniqueName')?.value;
         if (activegroupName === 'sundrydebtors' || activegroupName === 'sundrycreditors') {
             if (activegroupName === 'sundrycreditors') {
                 this.showBankDetail = true;
@@ -467,7 +467,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         if (keyAvoid.findIndex(key => key === event.key) > -1) {
             return;
         }
-        let gstVal: string = gstForm.get('gstNumber').value?.trim();
+        let gstVal: string = gstForm.get('gstNumber')?.value?.trim();
         gstForm.get('gstNumber')?.setValue(gstVal?.trim());
         if (gstVal?.length) {
             if (gstVal?.length !== 15) {
@@ -478,7 +478,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 this.statesSource$.pipe(take(1)).subscribe(state => {
                     let stateCode = this.stateGstCode[gstVal.substr(0, 2)];
 
-                    let currentState = state.find(st => st.value === stateCode);
+                    let currentState = state.find(st => st?.value === stateCode);
                     if (currentState) {
                         gstForm.get('stateCode')?.patchValue(currentState.value);
                         gstForm.get('state').get('code')?.patchValue(currentState.value);
@@ -507,7 +507,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
 
     public openingBalanceTypeChnaged(type: string) {
-        if (Number(this.addAccountForm.get('openingBalance').value) > 0) {
+        if (Number(this.addAccountForm.get('openingBalance')?.value) > 0) {
             this.addAccountForm.get('openingBalanceType')?.patchValue(type);
         }
     }
@@ -526,10 +526,10 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
 
     public submit() {
-        if (!this.addAccountForm.get('openingBalance').value) {
+        if (!this.addAccountForm.get('openingBalance')?.value) {
             this.addAccountForm.get('openingBalance')?.setValue('0');
         }
-        if (!this.addAccountForm.get('foreignOpeningBalance').value) {
+        if (!this.addAccountForm.get('foreignOpeningBalance')?.value) {
             this.addAccountForm.get('foreignOpeningBalance')?.patchValue('0');
         }
         if (this.showBankDetail) {
@@ -540,7 +540,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 return;
             }
         }
-        let accountRequest: AccountRequestV2 = this.addAccountForm.value as AccountRequestV2;
+        let accountRequest: AccountRequestV2 = this.addAccountForm?.value as AccountRequestV2;
         if (this.stateList && accountRequest.addresses && accountRequest.addresses.length > 0 && !this.isHsnSacEnabledAcc) {
             let selectedStateObj = this.getStateGSTCode(this.stateList, accountRequest.addresses[0].stateCode);
             if (selectedStateObj) {
@@ -600,7 +600,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
 
     public closingBalanceTypeChanged(type: string) {
-        if (Number(this.addAccountForm.get('closingBalanceTriggerAmount').value) > 0) {
+        if (Number(this.addAccountForm.get('closingBalanceTriggerAmount')?.value) > 0) {
             this.addAccountForm.get('closingBalanceTriggerAmountType')?.patchValue(type);
         }
     }
@@ -739,11 +739,11 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
 
     public checkGstNumValidation(ele: HTMLInputElement) {
         let isValid: boolean = false;
-        if (ele.value?.trim()) {
+        if (ele?.value?.trim()) {
             if (this.formFields['taxName']['regex'] !== "" && this.formFields['taxName']['regex']?.length > 0) {
                 for (let key = 0; key < this.formFields['taxName']['regex'].length; key++) {
                     let regex = new RegExp(this.formFields['taxName']['regex'][key]);
-                    if (regex.test(ele.value)) {
+                    if (regex.test(ele?.value)) {
                         isValid = true;
                         break;
                     }
@@ -831,7 +831,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
      * @memberof AccountAddNewDetailsComponent
      */
     public checkActiveGroupCountry(): boolean {
-        if (this.activeCompany && this.activeCompany.countryV2 && this.activeCompany.countryV2.alpha2CountryCode === this.addAccountForm.get('country').get('countryCode').value && (this.activeGroupUniqueName === 'sundrycreditors' || this.activeParentGroupUniqueName === 'sundrycreditors' || this.activeGroupUniqueName === 'sundrydebtors' || this.activeParentGroupUniqueName === 'sundrydebtors')) {
+        if (this.activeCompany && this.activeCompany.countryV2 && this.activeCompany.countryV2.alpha2CountryCode === this.addAccountForm.get('country').get('countryCode')?.value && (this.activeGroupUniqueName === 'sundrycreditors' || this.activeParentGroupUniqueName === 'sundrycreditors' || this.activeGroupUniqueName === 'sundrydebtors' || this.activeParentGroupUniqueName === 'sundrydebtors')) {
             return true;
         } else {
             return false;
@@ -869,7 +869,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
      */
     public bankDetailsValidator(element, type: string): void {
         let trim: string = '';
-        if (element.value && type) {
+        if (element?.value && type) {
             // changes account number validation for country india as well ref card : GIDK-1119
             trim = element.value?.replace(/[^a-zA-Z0-9]/g, '');
             let accountBankDetail = this.addAccountForm.get('accountBankDetails') as FormArray;
@@ -1055,7 +1055,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                         }
                     }) || [];
                     if (page === 1) {
-                        if (activeGroup && searchResults.findIndex(group => group.value === activeGroup?.uniqueName) === -1) {
+                        if (activeGroup && searchResults.findIndex(group => group?.value === activeGroup?.uniqueName) === -1) {
                             // Active group is not found in first page add it
                             searchResults.push({
                                 value: activeGroup?.uniqueName,

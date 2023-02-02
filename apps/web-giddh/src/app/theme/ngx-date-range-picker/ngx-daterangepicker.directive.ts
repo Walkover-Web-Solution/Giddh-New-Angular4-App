@@ -239,17 +239,17 @@ export class NgxDaterangepickerDirective implements OnInit, OnChanges, DoCheck {
         if (e.target.tagName.toLowerCase() !== 'input') {
             return;
         }
-        if (!e.target.value?.length) {
+        if (!e.target?.value?.length) {
             return;
         }
-        const dateString = e.target.value.split(this.picker.locale.separator);
+        const dateString = e.target?.value.split(this.picker.locale.separator);
         let start = null, end = null;
         if (dateString?.length === 2) {
             start = dayjs(dateString[0], this.picker.locale.format);
             end = dayjs(dateString[1], this.picker.locale.format);
         }
         if (this.singleDatePicker || start === null || end === null) {
-            start = dayjs(e.target.value, this.picker.locale.format);
+            start = dayjs(e.target?.value, this.picker.locale.format);
             end = start;
         }
         if (!start.isValid() || !end.isValid()) {

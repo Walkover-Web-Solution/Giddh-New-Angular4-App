@@ -91,7 +91,7 @@ export class FinancialYearComponent implements OnInit, OnDestroy {
                 let yearOptions = cloneDeep(this.yearOptions);
                 o.financialYears.forEach((fyear) => {
                     let year = dayjs(fyear.financialYearStarts, GIDDH_DATE_FORMAT).year();
-                    let yearIndx = yearOptions.findIndex((y: any) => y.value === year);
+                    let yearIndx = yearOptions.findIndex((y: any) => y?.value === year);
                     if (yearIndx !== -1) {
                         yearOptions.splice(yearIndx, 1);
                     }
@@ -119,11 +119,11 @@ export class FinancialYearComponent implements OnInit, OnDestroy {
     }
 
     public selectYear(data) {
-        this.selectedYear = data.value;
+        this.selectedYear = data?.value;
     }
 
     public selectFYPeriod(ev) {
-        this.selectedFYPeriod = ev ? ev.value : null;
+        this.selectedFYPeriod = ev ? ev?.value : null;
     }
 
     public updateFYPeriod() {

@@ -178,7 +178,7 @@ export class SettingCampaignComponent implements OnInit {
      */
     public verifyCommunicationPlatform(platform: string): void {
         this.mandatoryFields.authKey = false;
-        if (!this.communicationPlatformAuthModel.authFields[0].value) {
+        if (!this.communicationPlatformAuthModel.authFields[0]?.value) {
             this.mandatoryFields.authKey = true;
             this.toasty.showSnackBar("error", this.localeData?.communication?.invalid_key);
             return;

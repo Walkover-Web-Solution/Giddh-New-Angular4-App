@@ -411,15 +411,15 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
      * @memberof AdvanceReceiptAdjustmentComponent
      */
     public deleteAdjustVoucherRow(index: number): void {
-        let selectedItem = this.newAdjustVoucherOptions.find(item => item.value === this.adjustVoucherForm.adjustments[index]?.uniqueName);
-        if (selectedItem && selectedItem.value && selectedItem.label && selectedItem.additional) {
-            this.adjustVoucherOptions.push({ value: selectedItem.value, label: selectedItem.label, additional: selectedItem.additional });
+        let selectedItem = this.newAdjustVoucherOptions.find(item => item?.value === this.adjustVoucherForm.adjustments[index]?.uniqueName);
+        if (selectedItem && selectedItem?.value && selectedItem.label && selectedItem.additional) {
+            this.adjustVoucherOptions.push({ value: selectedItem?.value, label: selectedItem.label, additional: selectedItem.additional });
         }
         this.adjustVoucherOptions = _.uniqBy(this.adjustVoucherOptions, (item) => {
             if (item.label === '-') {
-                return item.value;
+                return item?.value;
             } else {
-                return item.value && item.label?.trim();
+                return item?.value && item.label?.trim();
             }
         });
         if (this.adjustVoucherForm?.adjustments?.length > 1 || this.adjustVoucherForm?.adjustments.every(adjustment => adjustment?.uniqueName !== '')) {
@@ -439,7 +439,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
     public tdsTaxSelected(event: IOption): void {
         if (event && event.additional && event.additional && event.additional.taxDetail && event.additional.taxDetail[0].taxValue && this.adjustPayment && this.adjustPayment.subTotal) {
             this.tdsAmount = cloneDeep(this.calculateTdsAmount(Number(this.adjustPayment.subTotal), Number(event.additional.taxDetail[0].taxValue)));
-            this.adjustVoucherForm.tdsTaxUniqueName = cloneDeep(event.value);
+            this.adjustVoucherForm.tdsTaxUniqueName = cloneDeep(event?.value);
             this.adjustVoucherForm.tdsAmount.amountForAccount = cloneDeep(this.tdsAmount);
             this.changeTdsAmount(this.tdsAmount);
             this.tdsTypeBox?.nativeElement?.classList?.remove('error-box');
@@ -611,17 +611,17 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
         this.adjustVoucherOptions = this.getAdvanceReceiptUnselectedVoucher();
 
         if (this.adjustVoucherForm && this.adjustVoucherForm.adjustments && this.adjustVoucherForm.adjustments.length && this.adjustVoucherForm.adjustments[index] && this.adjustVoucherForm.adjustments[index].voucherNumber) {
-            let selectedItem = this.newAdjustVoucherOptions.find(item => item.value === this.adjustVoucherForm.adjustments[index]?.uniqueName);
+            let selectedItem = this.newAdjustVoucherOptions.find(item => item?.value === this.adjustVoucherForm.adjustments[index]?.uniqueName);
             if (selectedItem) {
                 delete selectedItem['isHilighted'];
-                this.adjustVoucherOptions.splice(0, 0, { value: selectedItem.value, label: selectedItem.label, additional: selectedItem.additional })
+                this.adjustVoucherOptions.splice(0, 0, { value: selectedItem?.value, label: selectedItem.label, additional: selectedItem.additional })
             }
         }
         this.adjustVoucherOptions = _.uniqBy(this.adjustVoucherOptions, (item) => {
             if (item.label === '-' || item.label === this.commonLocaleData?.app_not_available) {
-                return item.value;
+                return item?.value;
             } else {
-                return item.value && item.label.trim();
+                return item?.value && item.label.trim();
             }
         });
 
@@ -645,9 +645,9 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
         for (let i = options?.length - 1; i >= 0; i--) {
             for (let j = 0; j < adjustVoucherAdjustment?.length; j++) {
                 if (options[i] && options[i].label && adjustVoucherAdjustment[j] && adjustVoucherAdjustment[j].voucherNumber &&
-                    options[i].value && adjustVoucherAdjustment[j].uniqueName &&
+                    options[i]?.value && adjustVoucherAdjustment[j].uniqueName &&
                     ((options[i].label.trim() !== '-' && options[i].label.trim() !== this.commonLocaleData?.app_not_available && adjustVoucherAdjustment[j].voucherNumber.trim() !== '-' && adjustVoucherAdjustment[j].voucherNumber.trim() !== this.commonLocaleData?.app_not_available && options[i].label.trim() === adjustVoucherAdjustment[j].voucherNumber.trim()) ||
-                        ((options[i].label.trim() === '-' || options[i].label.trim() === this.commonLocaleData?.app_not_available) && (adjustVoucherAdjustment[j].voucherNumber.trim() === '-' || adjustVoucherAdjustment[j].voucherNumber.trim() === this.commonLocaleData?.app_not_available) && options[i].value && adjustVoucherAdjustment[j].uniqueName && options[i].value.trim() === adjustVoucherAdjustment[j].uniqueName.trim()))) {
+                        ((options[i].label.trim() === '-' || options[i].label.trim() === this.commonLocaleData?.app_not_available) && (adjustVoucherAdjustment[j].voucherNumber.trim() === '-' || adjustVoucherAdjustment[j].voucherNumber.trim() === this.commonLocaleData?.app_not_available) && options[i]?.value && adjustVoucherAdjustment[j].uniqueName && options[i]?.value.trim() === adjustVoucherAdjustment[j].uniqueName.trim()))) {
                     options.splice(i, 1);
                 }
             }
@@ -972,12 +972,12 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
                 this.advanceReceiptAdjustmentUpdatedData.adjustments.forEach(item => {
                     if (this.adjustVoucherForm.adjustments[this.currentAdjustmentRowIndex]?.uniqueName === item?.uniqueName) {
                         item.voucherNumber = this.generalService.getVoucherNumberLabel(item.voucherType, item.voucherNumber, this.commonLocaleData);
-                        const itemPresentInVoucherOptions = this.adjustVoucherOptions.find(voucher => voucher.value === item?.uniqueName);
+                        const itemPresentInVoucherOptions = this.adjustVoucherOptions.find(voucher => voucher?.value === item?.uniqueName);
                         if (!itemPresentInVoucherOptions) {
                             this.adjustVoucherOptions.push({ value: item?.uniqueName, label: item.voucherNumber, additional: item });
                         }
 
-                        const itemPresentInNewVoucherOptions = this.newAdjustVoucherOptions.find(voucher => voucher.value === item?.uniqueName);
+                        const itemPresentInNewVoucherOptions = this.newAdjustVoucherOptions.find(voucher => voucher?.value === item?.uniqueName);
                         if (!itemPresentInNewVoucherOptions) {
                             this.newAdjustVoucherOptions.push({ value: item?.uniqueName, label: item.voucherNumber, additional: item });
                         }

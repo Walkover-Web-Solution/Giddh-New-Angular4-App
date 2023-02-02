@@ -340,7 +340,7 @@ export class ImportsComponent implements OnInit, OnDestroy {
    */
     public handleBranchChange(selectedEntity: any): void {
         this.currentBranch.name = selectedEntity.label;
-        this.importRequest.branchUniqueName = selectedEntity.value;
+        this.importRequest.branchUniqueName = selectedEntity?.value;
         this.getImports();
     }
 

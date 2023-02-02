@@ -391,7 +391,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
      */
     public handleBranchChange(selectedEntity: any): void {
         this.currentBranch.name = selectedEntity.label;
-        this.EwayBillfilterRequest.branchUniqueName = selectedEntity.value;
+        this.EwayBillfilterRequest.branchUniqueName = selectedEntity?.value;
         this.getAllFilteredInvoice();
     }
 
@@ -459,7 +459,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
     }
     public cancelEwayBill(cancelEway: NgForm) {
 
-        this.cancelEwayRequest = _.cloneDeep(cancelEway.value);
+        this.cancelEwayRequest = _.cloneDeep(cancelEway?.value);
         this.cancelEwayRequest.ewbNo = this.selectedEwayItem.ewbNo;
         if (cancelEway.valid) {
             this.store.dispatch(this.invoiceActions.cancelEwayBill(this.cancelEwayRequest));
@@ -469,11 +469,11 @@ export class EWayBillComponent implements OnInit, OnDestroy {
 
     public updateEwayTransport(updateEwayTransportfrom: NgForm) {
 
-        this.updateEwayVehicleObj = updateEwayTransportfrom.value;
+        this.updateEwayVehicleObj = updateEwayTransportfrom?.value;
         this.updateEwayVehicleObj['ewbNo'] = this.selectedEwayItem.ewbNo;
         this.updateEwayVehicleObj['transDocDate'] = this.updateEwayVehicleform['transDocDate'] ? dayjs(this.updateEwayVehicleform['transDocDate']).format('DD/MM/YYYY') : null;
         if (updateEwayTransportfrom.valid) {
-            this.store.dispatch(this.invoiceActions.UpdateEwayVehicle(updateEwayTransportfrom.value));
+            this.store.dispatch(this.invoiceActions.UpdateEwayVehicle(updateEwayTransportfrom?.value));
         }
         this.detectChange();
     }
@@ -702,7 +702,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
                 }));
 
                 if (!this.EwayBillfilterRequest.gstin && this.taxes?.length > 0) {
-                    this.EwayBillfilterRequest.gstin = this.taxes[0].value;
+                    this.EwayBillfilterRequest.gstin = this.taxes[0]?.value;
                     if (this.initialApiCalled) {
                         this.selectTax();
                     }

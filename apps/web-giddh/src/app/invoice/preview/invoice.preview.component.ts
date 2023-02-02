@@ -1112,19 +1112,19 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public clickedOutside(event: Event, el, fieldName: string) {
 
         if (fieldName === 'invoiceNumber') {
-            if (this.voucherNumberInput.value !== null && this.voucherNumberInput.value !== '') {
+            if (this.voucherNumberInput?.value !== null && this.voucherNumberInput?.value !== '') {
                 return;
             }
         } else if (fieldName === 'accountUniqueName') {
-            if (this.accountUniqueNameInput.value !== null && this.accountUniqueNameInput.value !== '') {
+            if (this.accountUniqueNameInput?.value !== null && this.accountUniqueNameInput?.value !== '') {
                 return;
             }
         } else if (fieldName === 'ProformaPurchaseOrder') {
-            if (this.ProformaPurchaseOrder.value !== null && this.ProformaPurchaseOrder.value !== '') {
+            if (this.ProformaPurchaseOrder?.value !== null && this.ProformaPurchaseOrder?.value !== '') {
                 return;
             }
         } else if (fieldName === 'purchaseOrderNumbers') {
-            if (this.purchaseOrderNumbersInput.value !== null && this.purchaseOrderNumbersInput.value !== '') {
+            if (this.purchaseOrderNumbersInput?.value !== null && this.purchaseOrderNumbersInput?.value !== '') {
                 return;
             }
         }

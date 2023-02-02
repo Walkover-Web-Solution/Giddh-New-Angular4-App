@@ -111,7 +111,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
     private formattedQuery: any;
 
     constructor(private store: Store<AppState>, private companyServices: CompanyService, private toaster: ToasterService, private generalService: GeneralService) {
-        this.searchResponse$ = this.store.pipe(select(p => p.search.value), takeUntil(this.destroyed$));
+        this.searchResponse$ = this.store.pipe(select(p => p.search?.value), takeUntil(this.destroyed$));
         this.searchResponse$.subscribe(p => this.searchResponseFiltered$ = this.searchResponse$);
         this.searchLoader$ = this.store.pipe(select(p => p.search.searchLoader), takeUntil(this.destroyed$));
         this.search$ = this.store.pipe(select(p => p.search.search), takeUntil(this.destroyed$));
@@ -327,20 +327,20 @@ export class SearchGridComponent implements OnInit, OnDestroy {
      * @memberof SearchGridComponent
      */
     public addValueToMsg(val: any): void {
-        this.typeInTextarea(val.value);
+        this.typeInTextarea(val?.value);
     }
 
     public typeInTextarea(newText) {
         let el: HTMLInputElement = this.messageBox?.nativeElement;
         let start = el.selectionStart;
         let end = el.selectionEnd;
-        let text = el.value;
+        let text = el?.value;
         let before = text.substring(0, start);
         let after = text.substring(end, (text ? text.length : 0));
         el.value = (before + newText + after);
         el.selectionStart = el.selectionEnd = start + (newText ? newText.length : 0);
         el.focus();
-        this.messageBody.msg = el.value;
+        this.messageBody.msg = el?.value;
     }
 
     /**

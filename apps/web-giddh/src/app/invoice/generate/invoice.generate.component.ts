@@ -389,7 +389,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         this.generateVoucherInProcess = false;
 
         let model;
-        
+
         if (this.voucherApiVersion === 2) {
             model = {
                 entryUniqueNames: uniq(this.selectedLedgerItems)
@@ -415,7 +415,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         } else {
             this.store.dispatch(this.invoiceActions.ModifiedInvoiceStateData(model?.uniqueNames));
         }
-        
+
         if (res?.account?.uniqueName) {
             this.generateVoucherInProcess = true;
             this.store.dispatch(this.invoiceActions.PreviewInvoice(res.account?.uniqueName, model));
@@ -473,7 +473,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
             });
             this.store.dispatch(this.invoiceActions.GenerateBulkInvoice({ combined: action }, model));
         }
-        
+
         this.selectedLedgerItems = [];
         this.selectedCountOfAccounts = [];
     }
@@ -516,17 +516,17 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         if (o.description) {
             model.description = o.description;
         }
-        if (o.entryTotalBy === this.comparisionFilters[0].value) {
+        if (o.entryTotalBy === this.comparisionFilters[0]?.value) {
             model.totalIsMore = true;
-        } else if (o.entryTotalBy === this.comparisionFilters[1].value) {
+        } else if (o.entryTotalBy === this.comparisionFilters[1]?.value) {
             model.totalIsLess = true;
-        } else if (o.entryTotalBy === this.comparisionFilters[2].value) {
+        } else if (o.entryTotalBy === this.comparisionFilters[2]?.value) {
             model.totalIsMore = true;
             model.totalIsEqual = true;
-        } else if (o.entryTotalBy === this.comparisionFilters[3].value) {
+        } else if (o.entryTotalBy === this.comparisionFilters[3]?.value) {
             model.totalIsLess = true;
             model.totalIsEqual = true;
-        } else if (o.entryTotalBy === this.comparisionFilters[4].value) {
+        } else if (o.entryTotalBy === this.comparisionFilters[4]?.value) {
             model.totalIsEqual = true;
         }
         return model;

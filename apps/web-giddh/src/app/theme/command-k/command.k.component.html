@@ -144,7 +144,7 @@
                     [placeholder]="commonLocaleData?.app_search"
                     (focus)="handleFocus()"
                     (keydown)="handleKeydown($event)"
-                    (keyup)="initSearch($event, $event.target.value)"
+                    (keyup)="initSearch($event, $event.target?.value)"
                     (paste)="onPasteInSearch()"
                 />
             </div>

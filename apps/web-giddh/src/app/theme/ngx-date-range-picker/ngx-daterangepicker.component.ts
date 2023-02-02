@@ -988,7 +988,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
      */
     public yearChanged(yearEvent: any, side: DateType): void {
         const month = this.calendarVariables[side].dropdowns.currentMonth;
-        const year = parseInt(yearEvent.target.value, 10);
+        const year = parseInt(yearEvent.target?.value, 10);
         this.monthOrYearChanged(month, year, side);
     }
 
@@ -1345,8 +1345,8 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
             return false;
         }
 
-        this.startDate = dates.value[0].clone();
-        this.endDate = dates.value[1].clone();
+        this.startDate = dates?.value[0].clone();
+        this.endDate = dates?.value[1].clone();
         if (this.showRangeLabelOnInput && range.name !== this.locale.customRangeLabel) {
             this.chosenLabel = range.name;
         } else {
@@ -1364,7 +1364,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
             this.isShown$.next(false); // hide calendars
             this.isShown = false;
         }
-        this.rangeClicked.emit({ name: range.name, startDate: dates.value[0], endDate: dates.value[1], event: 'save' });
+        this.rangeClicked.emit({ name: range.name, startDate: dates?.value[0], endDate: dates?.value[1], event: 'save' });
         if (!this.keepCalendarOpeningWithRange) {
             this.clickApply();
         } else {
@@ -1631,7 +1631,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         ranges = ranges.map(range => {
             range.isSelected = false;
             range.ranges = range.ranges ? range.ranges : [];
-            range.value = range.value ? range.value : [];
+            range.value = range?.value ? range?.value : [];
 
             if (range.ranges) {
                 this.parseRangesToVm(range.ranges);
@@ -1819,8 +1819,8 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
      * @memberof NgxDaterangepickerComponent
      */
     public clickFinancialYear(financialYear): void {
-        this.startDate = dayjs(new Date(financialYear.value.financialYearStarts.split("-").reverse().join("-")));
-        this.endDate = dayjs(new Date(financialYear.value.financialYearEnds.split("-").reverse().join("-")));
+        this.startDate = dayjs(new Date(financialYear?.value.financialYearStarts.split("-").reverse().join("-")));
+        this.endDate = dayjs(new Date(financialYear?.value.financialYearEnds.split("-").reverse().join("-")));
         this.chosenLabel = this.startDate.format(GIDDH_DATE_FORMAT) + " - " + this.endDate.format(GIDDH_DATE_FORMAT);
         this.showCalInRanges = (!this.ranges?.length) || this.alwaysShowCalendars;
 
@@ -1951,7 +1951,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
      * @memberof NgxDaterangepickerComponent
      */
     public saveInlineDates(event): void {
-        let inlineDate = dayjs(new Date(event.target.value.split("-").reverse().join("-")));
+        let inlineDate = dayjs(new Date(event.target?.value.split("-").reverse().join("-")));
 
         if (event.target.name === "inlineStartDate") {
             document.getElementsByTagName("ngx-daterangepicker-material")[0].classList.add("focus-start-date");
