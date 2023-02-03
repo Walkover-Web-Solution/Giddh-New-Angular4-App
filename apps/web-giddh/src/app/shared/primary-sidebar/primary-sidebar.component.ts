@@ -159,7 +159,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof PrimarySidebarComponent
      */
     public isRouteWithParamsActive(routeUrl: string): boolean {
-        const queryParamsIndex = this.router.url.indexOf('?');
+        const queryParamsIndex = this.router.url?.indexOf('?');
         const baseUrl = queryParamsIndex === -1 ? this.router.url :
             this.router.url.slice(0, queryParamsIndex);
         // For Trial balance module, strict comparison should be done
@@ -274,7 +274,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
 
         this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(event => {
             if (event instanceof NavigationEnd || event instanceof RouteConfigLoadEnd) {
-                const queryParamsIndex = this.router.url.indexOf('?');
+                const queryParamsIndex = this.router.url?.indexOf('?');
                 const baseUrl = queryParamsIndex === -1 ? this.router.url :
                     this.router.url.slice(0, queryParamsIndex);
                 this.isActiveRoute = baseUrl;
@@ -320,7 +320,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
                     item.time = +new Date();
                     item.route = this.router.url;
                     item.parentGroups = account.parentGroups;
-                    item.uniqueName = account.uniqueName;
+                    item.uniqueName = account?.uniqueName;
                     item.name = account.name;
                     this.doEntryInDb('accounts', item);
                 }

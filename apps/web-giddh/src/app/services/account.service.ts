@@ -82,7 +82,7 @@ export class AccountService {
             }),
             catchError((e) => this.errorHandler.HandleCatch<string, AssignDiscountRequestForAccount>(e)));
     }
-    
+
     public GetApplyDiscount(accountUniqueName: string): Observable<BaseResponse<any, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.get(this.config.apiUrl + APPLY_DISCOUNT_API.GET_APPLY_DISCOUNT_API?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName))).pipe(map((res) => {
@@ -143,7 +143,7 @@ export class AccountService {
     public UpdateEntityPermission(model: ShareRequestForm, entity: string, newRoleUniqueName: string): Observable<BaseResponse<string, ShareEntityRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
 
-        return this.http.put(this.config.apiUrl + ACCOUNTS_API.CHANGE_PERMISSION?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':assignRoleEntryUniqueName', encodeURIComponent(model.uniqueName)), model).pipe(
+        return this.http.put(this.config.apiUrl + ACCOUNTS_API.CHANGE_PERMISSION?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':assignRoleEntryUniqueName', encodeURIComponent(model?.uniqueName)), model).pipe(
             map((res) => {
                 let data: BaseResponse<string, ShareEntityRequest> = res;
                 data.queryString = { model, newRoleUniqueName, entity };

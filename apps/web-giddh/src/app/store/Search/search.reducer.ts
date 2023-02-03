@@ -47,7 +47,7 @@ export function searchReducer(state = initialState, action: CustomActions): Sear
         }
         case SearchActions.SEARCH_RESPONSE: {
             let searchResp: BaseResponse<any, SearchRequest> = action.payload;
-            if (searchResp.status === 'success') {
+            if (searchResp?.status === 'success') {
                 return Object.assign({}, state, {
                     searchPaginationInfo: {
                         totalPages: searchResp.body.totalPages,

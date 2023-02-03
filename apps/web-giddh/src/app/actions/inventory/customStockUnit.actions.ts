@@ -196,7 +196,7 @@ export class CustomStockUnitAction {
     }
 
     private validateResponse(response: BaseResponse<any, any>, successAction: CustomActions, showToast: boolean = false, ShowMessage: string = '', errorAction: CustomActions = { type: 'EmptyAction' }): CustomActions {
-        if (response.status === 'error') {
+        if (response?.status === 'error') {
             if (showToast) {
                 this._toasty.errorToast(response.message);
             }

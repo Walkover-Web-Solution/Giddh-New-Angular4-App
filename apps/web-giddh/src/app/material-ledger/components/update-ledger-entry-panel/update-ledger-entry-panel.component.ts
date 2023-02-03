@@ -476,10 +476,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         };
 
         this.vm.isMultiCurrencyAvailable = this.multiCurrencyAccDetails ?
-            !!(this.multiCurrencyAccDetails.currency && this.multiCurrencyAccDetails.currency !== this.profileObj.baseCurrency)
+            !!(this.multiCurrencyAccDetails.currency && this.multiCurrencyAccDetails.currency !== this.profileObj?.baseCurrency)
             : false;
 
-        this.vm.foreignCurrencyDetails = { code: this.profileObj.baseCurrency, symbol: this.profileObj.baseCurrencySymbol };
+        this.vm.foreignCurrencyDetails = { code: this.profileObj?.baseCurrency, symbol: this.profileObj.baseCurrencySymbol };
 
         if (this.vm.isMultiCurrencyAvailable) {
             let currencies: ICurrencyResponse[] = [];
@@ -620,7 +620,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             // if ther's stock entry
             if (e.additional.stock) {
                 // check if we aleready have stock entry
-                if (this.vm.isThereStockEntry(e.value)) {
+                if (this.vm.isThereStockEntry(e?.value)) {
                     selectCmp.clear();
                     txn.particular.uniqueName = null;
                     txn.particular.name = null;
@@ -652,7 +652,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                             txn.selectedAccount = {
                                 ...e.additional,
                                 label: e.label,
-                                value: e.value,
+                                value: e?.value,
                                 isHilighted: true,
                                 applicableTaxes: taxes,
                                 currency: data.body.currency,
@@ -723,7 +723,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     });
                 }
             } else {
-                this.searchService.loadDetails(e.value).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+                this.searchService.loadDetails(e?.value).pipe(takeUntil(this.destroyed$)).subscribe(data => {
                     // directly assign additional property
                     if (data && data.body) {
                         // Take taxes of parent group
@@ -735,7 +735,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                         txn.selectedAccount = {
                             ...e.additional,
                             label: e.label,
-                            value: e.value,
+                            value: e?.value,
                             isHilighted: true,
 
                             applicableTaxes: taxes,
@@ -899,9 +899,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             requestObj.transactions = requestObj.transactions?.filter(tx => tx.particular?.uniqueName !== "roundoff");
         }
         requestObj.transactions.map((transaction: any) => {
-            if (transaction.inventory && this.shouldShowWarehouse) {
+            if (transaction?.inventory && this.shouldShowWarehouse) {
                 // Update the warehouse details in update ledger flow
-                if (transaction.inventory.warehouse) {
+                if (transaction?.inventory.warehouse) {
                     transaction.inventory.warehouse.uniqueName = this.selectedWarehouse;
                 } else {
                     transaction.inventory.warehouse = { name: '', uniqueName: '' };
@@ -996,7 +996,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         e.stopPropagation();
         let downloadRequest = new DownloadLedgerRequest();
         if (this.voucherApiVersion === 2) {
-            downloadRequest.uniqueName = transaction.voucherUniqueName;
+            downloadRequest.uniqueName = transaction?.voucherUniqueName;
         } else {
             downloadRequest.invoiceNumber = [transaction?.voucherNumber];
         }
@@ -1029,9 +1029,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             return;
         }
 
-        this.changedAccountUniq = acc.value;
+        this.changedAccountUniq = acc?.value;
         this.baseAccountChanged = true;
-        this.accountUniqueName = acc.value;
+        this.accountUniqueName = acc?.value;
 
         if (this.voucherApiVersion === 2) {
             // get flatten_accounts list && get transactions list && get ledger account list
@@ -1075,10 +1075,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         if (this.voucherApiVersion === 2) {
             this.resetInvoiceList();
         }
-        if (event.value === VoucherTypeEnum.creditNote || event.value === VoucherTypeEnum.debitNote) {
+        if (event?.value === VoucherTypeEnum.creditNote || event?.value === VoucherTypeEnum.debitNote) {
             this.getInvoiceListsForCreditNote();
         }
-        this.isAdvanceReceipt = (event.value === 'advance-receipt');
+        this.isAdvanceReceipt = (event?.value === 'advance-receipt');
         this.currentVoucherLabel = this.generalService.getCurrentVoucherLabel(this.vm.selectedLedger?.voucher?.shortCode, this.commonLocaleData);
         this.handleAdvanceReceiptChange();
     }
@@ -1205,7 +1205,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                             additional: selectedInvoice
                         };
 
-                        const linkedInvoice = this.invoiceList.find(invoice => invoice.value === invoiceSelected.value);
+                        const linkedInvoice = this.invoiceList.find(invoice => invoice?.value === invoiceSelected?.value);
                         if (!linkedInvoice) {
                             this.invoiceList.push(invoiceSelected);
                         }
@@ -1218,7 +1218,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                             additional: selectedInvoice
                         };
 
-                        const linkedInvoice = this.invoiceList.find(invoice => invoice.value === invoiceSelected.value);
+                        const linkedInvoice = this.invoiceList.find(invoice => invoice?.value === invoiceSelected?.value);
                         if (!linkedInvoice) {
                             this.invoiceList.push(invoiceSelected);
                         }
@@ -1261,11 +1261,11 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
 
     public selectInvoice(invoiceNo, ev) {
-        invoiceNo.isSelected = ev.target.checked;
-        if (ev.target.checked) {
+        invoiceNo.isSelected = ev.target?.checked;
+        if (ev.target?.checked) {
             this.vm.selectedLedger.invoicesToBePaid.push(invoiceNo.label);
         } else {
-            let indx = this.vm.selectedLedger.invoicesToBePaid.indexOf(invoiceNo.label);
+            let indx = this.vm.selectedLedger.invoicesToBePaid?.indexOf(invoiceNo.label);
             this.vm.selectedLedger.invoicesToBePaid.splice(indx, 1);
         }
     }
@@ -1671,7 +1671,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     parentGroups: transactions[index].particular ? transactions[index].particular.parentGroups : []
                 }
                 const activeAccountDetails = {
-                    uniqueName: this.baseAccountDetails.particular ? this.baseAccountDetails.particular.uniqueName : '',
+                    uniqueName: this.baseAccountDetails.particular ? this.baseAccountDetails.particular?.uniqueName : '',
                     parentGroups: (this.baseAccountDetails && this.baseAccountDetails.parentGroups) ? this.baseAccountDetails.parentGroups : []
                 }
                 const isRcmEntry = this.generalService.shouldShowRcmSection(activeAccountDetails, selectedAccountDetails, this.activeCompany);
@@ -1916,8 +1916,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     private prepareAdjustVoucherConfiguration(): void {
         let customerUniqueName = [];
         this.vm.selectedLedger.transactions?.forEach(transaction => {
-            if (transaction.particular && transaction.particular?.uniqueName) {
-                const uniqueName = transaction.particular?.uniqueName.split('#')[0];
+            if (transaction?.particular && transaction?.particular?.uniqueName) {
+                const uniqueName = transaction?.particular?.uniqueName.split('#')[0];
                 customerUniqueName.push(uniqueName);
             }
         });
@@ -1976,7 +1976,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         if (this.voucherApiVersion === 2) {
             let particularAccount;
 
-            const mainTransaction = this.vm.selectedLedger?.transactions?.filter(transaction => !transaction.isDiscount && !transaction.isTax && transaction?.particular?.uniqueName && transaction?.particular?.uniqueName !== 'roundoff');
+            const mainTransaction = this.vm.selectedLedger?.transactions?.filter(transaction => !transaction?.isDiscount && !transaction?.isTax && transaction?.particular?.uniqueName && transaction?.particular?.uniqueName !== 'roundoff');
 
             particularAccount = (this.vm.selectedLedger?.particular?.uniqueName === this.activeAccount?.uniqueName) ? mainTransaction[0]?.particular : this.vm.selectedLedger?.particular;
 
@@ -2158,9 +2158,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
             resp[0].particularType = resp[1].body?.accountType;
 
-            if (resp[1].body?.currency !== resp[2].baseCurrency) {
+            if (resp[1].body?.currency !== resp[2]?.baseCurrency) {
                 let date = dayjs().format(GIDDH_DATE_FORMAT);
-                this.ledgerService.GetCurrencyRateNewApi(resp[1].body?.currency, resp[2].baseCurrency, date).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                this.ledgerService.GetCurrencyRateNewApi(resp[1].body?.currency, resp[2]?.baseCurrency, date).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     if (this.vm.selectedLedger) {
                         this.vm.selectedLedger.exchangeRate = response.body;
                     }
@@ -2294,7 +2294,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             t.amount = giddhRoundOff(t.amount, this.vm.giddhBalanceDecimalPlaces);
 
             if (this.vm.selectedLedger.discounts && this.vm.selectedLedger.discounts.length > 0 && !t?.isTax && t?.particular?.uniqueName !== 'roundoff') {
-                let category = this.vm.getAccountCategory(t.particular, t.particular.uniqueName);
+                let category = this.vm.getAccountCategory(t.particular, t.particular?.uniqueName);
                 if (this.vm.isValidCategory(category)) {
                     /**
                      * replace transaction amount with the actualAmount key that we got in response of get-ledger
@@ -2422,7 +2422,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         if (this.voucherApiVersion === 2) {
             let dataToSend = {
                 voucherType: this.vm.selectedLedger.voucherGeneratedType,
-                entryUniqueName: (this.vm.selectedLedger.voucherUniqueName) ? undefined : this.vm.selectedLedger.uniqueName,
+                entryUniqueName: (this.vm.selectedLedger.voucherUniqueName) ? undefined : this.vm.selectedLedger?.uniqueName,
                 uniqueName: (this.vm.selectedLedger.voucherUniqueName) ? this.vm.selectedLedger.voucherUniqueName : undefined
             };
 

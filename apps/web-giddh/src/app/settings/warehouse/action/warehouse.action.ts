@@ -49,7 +49,7 @@ export class WarehouseActions {
         ofType(WarehouseActions.CREATE_WAREHOUSE),
         switchMap((action: CustomActions) => this.settingsWarehouseService.createWarehouse(action.payload)),
         map((response: BaseResponse<any, any>) => {
-            if (response.status === 'error') {
+            if (response?.status === 'error') {
                 this.toast.errorToast(response.message, response.code);
                 return { type: 'EmptyAction' };
             }
@@ -68,7 +68,7 @@ export class WarehouseActions {
         ofType(WarehouseActions.GET_ALL_WAREHOUSE),
         switchMap((action: CustomActions) => this.settingsWarehouseService.fetchAllWarehouse(action.payload)),
         map((response: BaseResponse<any, any>) => {
-            if (response.status === 'error') {
+            if (response?.status === 'error') {
                 this.toast.errorToast(response.message, response.code);
                 return { type: 'EmptyAction' };
             }
@@ -87,7 +87,7 @@ export class WarehouseActions {
         ofType(WarehouseActions.UPDATE_WAREHOUSE),
         switchMap((action: CustomActions) => this.settingsWarehouseService.updateWarehouse(action.payload)),
         map((response: BaseResponse<any, any>) => {
-            if (response.status === 'error') {
+            if (response?.status === 'error') {
                 this.toast.errorToast(response.message, response.code);
                 return { type: 'EmptyAction' };
             }
@@ -107,7 +107,7 @@ export class WarehouseActions {
         ofType(WarehouseActions.SET_AS_DEFAULT_WAREHOUSE),
         switchMap((action: CustomActions) => this.settingsWarehouseService.setAsDefaultWarehouse(action.payload)),
         map((response: BaseResponse<any, any>) => {
-            if (response.status === 'error') {
+            if (response?.status === 'error') {
                 this.toast.errorToast(response.message, response.code);
                 return { type: 'EmptyAction' };
             }

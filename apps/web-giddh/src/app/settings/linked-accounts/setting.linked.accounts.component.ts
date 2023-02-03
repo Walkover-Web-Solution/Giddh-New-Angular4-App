@@ -149,7 +149,7 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
                         rsession: data.body.rsession,
                         app: token.appId,
                         redirectReq: true,
-                        token: token.value,
+                        token: token?.value,
                         extraParams: ['callback=' + this.config.appUrl + 'app/yodlee-success.html?companyUniqueName=' + this.companyUniqueName]
                     });
                     this.yodleeFormHTML?.nativeElement.submit();
@@ -178,7 +178,7 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
             switch (this.actionToPerform) {
                 case 'DeleteAddedBank':
                     let deleteWithAccountId = true;
-                    if (this.selectedBank.status !== 'ALREADY_ADDED') {
+                    if (this.selectedBank?.status !== 'ALREADY_ADDED') {
                         accountId = (this.selectedAccount && this.selectedAccount.providerAccount) ? this.selectedAccount.providerAccount.providerAccountId : 0;
                         deleteWithAccountId = false;
                     }
@@ -300,8 +300,8 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
                 if (data && data.body && data.body.results) {
                     const searchResults = data.body.results.map(result => {
                         return {
-                            value: result.uniqueName,
-                            label: `${result.name} (${result.uniqueName})`
+                            value: result?.uniqueName,
+                            label: `${result.name} (${result?.uniqueName})`
                         }
                     }) || [];
                     if (page === 1) {
@@ -348,8 +348,8 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
                     if (!this.accountsSearchResultsPaginationData.query) {
                         const results = response.map(result => {
                             return {
-                                value: result.uniqueName,
-                                label: `${result.name} (${result.uniqueName})`
+                                value: result?.uniqueName,
+                                label: `${result.name} (${result?.uniqueName})`
                             }
                         }) || [];
                         this.defaultAccountSuggestions = this.defaultAccountSuggestions.concat(...results);
@@ -370,8 +370,8 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
         this.onAccountSearchQueryChanged('', 1, (response) => {
             this.defaultAccountSuggestions = response.map(result => {
                 return {
-                    value: result.uniqueName,
-                    label: `${result.name} (${result.uniqueName})`
+                    value: result?.uniqueName,
+                    label: `${result.name} (${result?.uniqueName})`
                 }
             }) || [];
             this.defaultAccountPaginationData.page = this.accountsSearchResultsPaginationData.page;

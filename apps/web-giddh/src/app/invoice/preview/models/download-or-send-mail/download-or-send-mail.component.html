@@ -115,7 +115,7 @@
                         [disabled]="!emailList?.value || (currentVoucherFilter === 'invoices' && !invoiceType?.length)"
                         type="button"
                         class="btn btn-sm btn-success"
-                        (click)="onSendInvoiceOnMail(emailList.value)"
+                        (click)="onSendInvoiceOnMail(emailList?.value)"
                     >
                         {{ commonLocaleData?.app_send }}
                     </button>
@@ -132,7 +132,7 @@
                         [hidden]="!smsTabActive"
                         type="button"
                         class="btn btn-sm btn-success"
-                        (click)="onSendInvoiceOnSms(smsList.value)"
+                        (click)="onSendInvoiceOnSms(smsList?.value)"
                     >
                         {{ commonLocaleData?.app_send }}
                     </button>
@@ -225,7 +225,7 @@
                     [disabled]="!emailList?.value || (currentVoucherFilter === 'invoices' && !invoiceType?.length)"
                     type="button"
                     class="btn btn-sm btn-success"
-                    (click)="onSendInvoiceOnMail(emailList.value)"
+                    (click)="onSendInvoiceOnMail(emailList?.value)"
                 >
                     {{ commonLocaleData?.app_send }}
                 </button>
@@ -242,7 +242,7 @@
                     [hidden]="!smsTabActive"
                     type="button"
                     class="btn btn-sm btn-success"
-                    (click)="onSendInvoiceOnSms(smsList.value)"
+                    (click)="onSendInvoiceOnSms(smsList?.value)"
                 >
                     {{ commonLocaleData?.app_send }}
                 </button>

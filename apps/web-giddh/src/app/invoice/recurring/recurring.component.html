@@ -429,7 +429,7 @@
                                 <a
                                     *ngIf="!isMobileScreen"
                                     class="cp btn-link-2"
-                                    (click)="col.status !== 'inactive' && openUpdatePanel(col)"
+                                    (click)="col?.status !== 'inactive' && openUpdatePanel(col)"
                                     >{{ col.voucherNumber || "-" }}</a
                                 >
                                 <a *ngIf="isMobileScreen" class="cp btn-link-2">{{ col.voucherNumber || "-" }}</a>
@@ -441,7 +441,7 @@
                             <td [attr.data-title]="localeData?.last_invoice_date">{{ col.lastInvoiceDate || "-" }}</td>
                             <td [attr.data-title]="localeData?.next_invoice_date">{{ col.nextCronDate || "-" }}</td>
                             <td [attr.data-title]="commonLocaleData?.app_status">
-                                {{ col.status || "-" | titlecase }}
+                                {{ col?.status || "-" | titlecase }}
                             </td>
                             <td [attr.data-title]="localeData?.invoice_amount" class="text-right">
                                 <span class="d-inline-flex">

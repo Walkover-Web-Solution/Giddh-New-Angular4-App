@@ -42,7 +42,7 @@
                                 <amount-field
                                     [amount]="invoiceDue"
                                     [currencySymbol]="amountSettings.baseCurrencySymbol"
-                                    [currencyCode]="activeCompany.baseCurrency"
+                                    [currencyCode]="activeCompany?.baseCurrency"
                                 >
                                 </amount-field>
                             </span>
@@ -65,7 +65,7 @@
                                 <amount-field
                                     [amount]="billDue"
                                     [currencySymbol]="amountSettings.baseCurrencySymbol"
-                                    [currencyCode]="activeCompany.baseCurrency"
+                                    [currencyCode]="activeCompany?.baseCurrency"
                                 >
                                 </amount-field>
                             </span>

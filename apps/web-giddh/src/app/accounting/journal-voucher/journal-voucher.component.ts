@@ -159,7 +159,7 @@ export class JournalVoucherComponent implements OnInit, OnDestroy {
 
     @HostListener('document:keyup', ['$event'])
     public handleKeyboardEvent(event: KeyboardEvent) {
-        if (event.ctrlKey && event.key.toLowerCase() === 'a') { // Ctrl + A
+        if (event.ctrlKey && event.key?.toLowerCase() === 'a') { // Ctrl + A
             event.preventDefault();
             event.stopPropagation();
             if (this.gridType === 'voucher') {

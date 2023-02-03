@@ -149,7 +149,7 @@ export class UpdateLedgerTaxControlComponent implements OnDestroy, OnChanges {
                 } else {
                     taxObj.amount = tax.taxDetail[0].taxValue;
                 }
-                taxObj.isChecked = (this.applicableTaxes && (this.applicableTaxes.indexOf(tax?.uniqueName) > -1));
+                taxObj.isChecked = (this.applicableTaxes && (this.applicableTaxes?.indexOf(tax?.uniqueName) > -1));
                 this.taxRenderData.push(taxObj);
             }
         });
@@ -268,7 +268,7 @@ export class UpdateLedgerTaxControlComponent implements OnDestroy, OnChanges {
                 // check for visibility while always include the current activeElement
                 return element.offsetWidth > 0 || element.offsetHeight > 0 || element === document.activeElement
             });
-        let index = focussable.indexOf(document.activeElement);
+        let index = focussable?.indexOf(document.activeElement);
         if (index > -1) {
             let nextElement = focussable[index + 1] || focussable[0];
             nextElement.focus();

@@ -209,8 +209,8 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
      * @memberof StockCreateEditComponent
      */
     public addOption(event: MatChipInputEvent, index: number): void {
-        const value = (event.value || "").trim();
-        const valueIndex = this.stockForm.options[index]['values'].indexOf(value);
+        const value = (event?.value || "").trim();
+        const valueIndex = this.stockForm.options[index]['values']?.indexOf(value);
         if (valueIndex === -1) {
             if (value) {
                 this.stockForm.options[index]['values'].push(value);
@@ -232,7 +232,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
      * @memberof StockCreateEditComponent
      */
     public removeOption(value: any, index: number): void {
-        const valueIndex = this.stockForm.options[index]['values'].indexOf(value);
+        const valueIndex = this.stockForm.options[index]['values']?.indexOf(value);
         if (valueIndex > -1) {
             this.stockForm.options[index]['values'].splice(valueIndex, 1);
         }
@@ -502,7 +502,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
      * @memberof StockCreateEditComponent
      */
     public selectVariantUnit(variant: any, event: any): void {
-        variant.warehouseBalance[0].stockUnit = { name: event.label, code: event.value };
+        variant.warehouseBalance[0].stockUnit = { name: event.label, code: event?.value };
     }
 
     /**
@@ -702,7 +702,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
      * @memberof StockCreateEditComponent
      */
     private findPurchaseAccountName(): void {
-        let purchaseAccountName = this.purchaseAccounts?.filter(purchaseAccount => purchaseAccount.value === this.stockForm?.purchaseAccountDetails?.accountUniqueName);
+        let purchaseAccountName = this.purchaseAccounts?.filter(purchaseAccount => purchaseAccount?.value === this.stockForm?.purchaseAccountDetails?.accountUniqueName);
         if (purchaseAccountName?.length > 0) {
             this.purchaseAccountName = purchaseAccountName[0]?.label;
         }
@@ -715,7 +715,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
      * @memberof StockCreateEditComponent
      */
     private findSalesAccountName(): void {
-        let salesAccountName = this.salesAccounts?.filter(salesAccount => salesAccount.value === this.stockForm?.salesAccountDetails?.accountUniqueName);
+        let salesAccountName = this.salesAccounts?.filter(salesAccount => salesAccount?.value === this.stockForm?.salesAccountDetails?.accountUniqueName);
         if (salesAccountName?.length > 0) {
             this.salesAccountName = salesAccountName[0]?.label;
         }
@@ -803,7 +803,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                         tax.isChecked = false;
                         tax.isDisabled = true;
                     }
-                    if (tax.uniqueName === taxSelected.uniqueName) {
+                    if (tax?.uniqueName === taxSelected?.uniqueName) {
                         taxSelected.isChecked = true;
                         taxSelected.isDisabled = false;
                         this.taxTempArray.push(taxSelected);
@@ -817,7 +817,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 });
                 this.taxTempArray.push(taxSelected);
             } else {
-                let idx = findIndex(this.taxTempArray, (taxTemp) => taxTemp.uniqueName === taxSelected.uniqueName);
+                let idx = findIndex(this.taxTempArray, (taxTemp) => taxTemp?.uniqueName === taxSelected?.uniqueName);
                 this.taxTempArray.splice(idx, 1);
                 taxSelected.isChecked = false;
                 forEach(this.taxes, (tax) => {
@@ -834,12 +834,12 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 this.taxTempArray.push(taxSelected);
                 taxSelected.isChecked = true;
             } else {
-                let idx = findIndex(this.taxTempArray, (taxTemp) => taxTemp.uniqueName === taxSelected.uniqueName);
+                let idx = findIndex(this.taxTempArray, (taxTemp) => taxTemp?.uniqueName === taxSelected?.uniqueName);
                 this.taxTempArray.splice(idx, 1);
                 taxSelected.isChecked = false;
             }
         }
-        this.selectedTaxes = this.taxTempArray.map(tax => tax.uniqueName);
+        this.selectedTaxes = this.taxTempArray.map(tax => tax?.uniqueName);
     }
 
     /**
@@ -913,7 +913,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
             this.stockForm.customFields?.forEach(customField => {
                 const customFieldData = this.customFieldsData?.filter(cfData => cfData?.uniqueName === customField?.uniqueName);
                 if (customFieldData?.length > 0) {
-                    customField.value = customFieldData[0].value;
+                    customField.value = customFieldData[0]?.value;
                 }
             });
         }

@@ -33,7 +33,7 @@ export function salesReducer(state = initialState, action: CustomActions): Sales
         }
         case SALES_ACTIONS.GET_ACCOUNT_DETAILS_RESPONSE: {
             let res: BaseResponse<AccountResponseV2, string> = action.payload;
-            if (res.status === 'success') {
+            if (res?.status === 'success') {
                 return Object.assign({}, state, {
                     acDtl: action.payload.body
                 });
@@ -53,7 +53,7 @@ export function salesReducer(state = initialState, action: CustomActions): Sales
 
         case SALES_ACTIONS.ADD_ACCOUNT_DETAILS_RESPONSE: {
             let res: BaseResponse<AccountResponseV2, string> = action.payload;
-            if (res.status === 'success') {
+            if (res?.status === 'success') {
                 return {
                     ...state,
                     createAccountInProcess: false,
@@ -76,7 +76,7 @@ export function salesReducer(state = initialState, action: CustomActions): Sales
 
         case SALES_ACTIONS.UPDATE_ACCOUNT_DETAILS_RESPONSE: {
             let res: BaseResponse<AccountResponseV2, string> = action.payload;
-            if (res.status === 'success') {
+            if (res?.status === 'success') {
                 return {
                     ...state,
                     updatedAccountDetails: action.payload.body,

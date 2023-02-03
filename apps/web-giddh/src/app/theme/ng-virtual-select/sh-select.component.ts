@@ -141,15 +141,15 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
             if (this.doNotResetSelectedValues) {
                 if(typeof this._selectedValues[0] === "string") {
                     let selectedValues = this._selectedValues.map(value => {
-                        let filteredValue = this.rows?.filter(row => row.value === String(value));
+                        let filteredValue = this.rows?.filter(row => row?.value === String(value));
                         let rowNotFound: any = { label: value, value: value };
                         return (filteredValue && filteredValue[0]?.value) ? filteredValue[0] : rowNotFound;
                     });
                     this._selectedValues = selectedValues;
                 }
-                this._selectedValues = this._selectedValues?.filter(selected => val.indexOf(selected?.value) > -1);
+                this._selectedValues = this._selectedValues?.filter(selected => val?.indexOf(selected?.value) > -1);
             } else {
-                this._selectedValues = this.rows?.filter((f: any) => val.findIndex(p => p === f.label || p === f.value) !== -1);
+                this._selectedValues = this.rows?.filter((f: any) => val.findIndex(p => p === f.label || p === f?.value) !== -1);
             }
         } else {
             this._selectedValues = val;
@@ -251,7 +251,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
                 if (this.customFilter) {
                     return this.customFilter(lowercaseFilter, item);
                 }
-                return !lowercaseFilter || String(item?.label).toLocaleLowerCase().indexOf(lowercaseFilter) !== -1;
+                return !lowercaseFilter || String(item?.label).toLocaleLowerCase()?.indexOf(lowercaseFilter) !== -1;
             }) : []) : ((this._options) ? this._options : []);
 
             if (this.customSorting) {
@@ -313,10 +313,10 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     }
 
     public selectMultiple(item) {
-        if (this.selectedValues.indexOf(item) === -1) {
+        if (this.selectedValues?.indexOf(item) === -1) {
             this.selectedValues.push(item);
         } else {
-            this.selectedValues.splice(this.selectedValues.indexOf(item), 1);
+            this.selectedValues.splice(this.selectedValues?.indexOf(item), 1);
         }
     }
 
@@ -335,7 +335,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
         this.focusFilter();
         this.onShow.emit();
         if (this.menuEle && this.menuEle.virtualScrollElm) {
-            let item = this.rows.find(p => p?.value === (this._selectedValues?.length > 0 ? this._selectedValues[0] : (this.rows?.length > 0 ? this.rows[0].value : null)));
+            let item = this.rows.find(p => p?.value === (this._selectedValues?.length > 0 ? this._selectedValues[0] : (this.rows?.length > 0 ? this.rows[0]?.value : null)));
             if (item !== null) {
                 this.menuEle.virtualScrollElm.scrollInto(item);
             }
@@ -414,7 +414,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
         if (event.relatedTarget && this.ele?.nativeElement) {
             if (this.ele?.nativeElement.contains(event.relatedTarget)) {
                 return false;
-            } else if (this.doNotReset && event && event.target && event.target.value) {
+            } else if (this.doNotReset && event && event.target && event.target?.value) {
                 return false;
             } else {
                 this.hide();
@@ -483,7 +483,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
 
     public ngOnChanges(changes: SimpleChanges): void {
         if ('forceClearReactive' in changes && !changes.forceClearReactive.firstChange) {
-            if (this.forceClearReactive.status) {
+            if (this.forceClearReactive?.status) {
                 this.filter = '';
                 this.clear();
 
@@ -571,7 +571,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
                 };
             }
             this.filter = newValue.label;
-            this.propagateChange(newValue.value);
+            this.propagateChange(newValue?.value);
             this.selected.emit(newValue);
         }
     }

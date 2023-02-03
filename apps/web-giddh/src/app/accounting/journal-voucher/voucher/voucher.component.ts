@@ -403,7 +403,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         });
 
         this.searchedAccountQuery.pipe(debounceTime(700), takeUntil(this.destroyed$)).subscribe((event: any) => {
-            this.searchAccount(event, event.target.value);
+            this.searchAccount(event, event.target?.value);
         });
 
         this.amountErrorMessage = this.localeData?.total_amount_error;
@@ -561,7 +561,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     }
 
     public onSubmitChequeDetail() {
-        const chequeDetails = this.chequeDetailForm.value;
+        const chequeDetails = this.chequeDetailForm?.value;
         this.requestObj.chequeNumber = chequeDetails.chequeNumber;
         this.requestObj.chequeClearanceDate = (chequeDetails.chequeClearanceDate) ? (typeof chequeDetails.chequeClearanceDate === "object") ? dayjs(chequeDetails.chequeClearanceDate).format(GIDDH_DATE_FORMAT) : dayjs(chequeDetails.chequeClearanceDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT) : "";
         this.closeChequeDetailForm();
@@ -587,7 +587,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      */
     public setAccount(acc) {
         this.searchService.loadDetails(acc?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if ((response?.body?.currency?.code || this.activeCompany.baseCurrency) === this.activeCompany.baseCurrency) {
+            if ((response?.body?.currency?.code || this.activeCompany?.baseCurrency) === this.activeCompany?.baseCurrency) {
                 let openChequePopup = false;
                 if (acc && acc.parentGroups.find((pg) => pg?.uniqueName === 'bankaccounts')) {
                     openChequePopup = true;
@@ -604,7 +604,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                     }, () => { });
                     let accModel = {
                         name: acc.name,
-                        UniqueName: acc.uniqueName,
+                        UniqueName: acc?.uniqueName,
                         groupUniqueName: acc.parentGroups[acc.parentGroups?.length - 1]?.uniqueName,
                         account: acc.name,
                         parentGroups: acc.parentGroups
@@ -829,7 +829,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                                 let advanceReceiptAmount = 0;
 
                                 if (adjustment.type === AdjustmentTypesEnum.advanceReceipt) {
-                                    taxAmount = adjustment.tax.value;
+                                    taxAmount = adjustment.tax?.value;
                                     advanceReceiptAmount = Number(adjustment.amount) - Number(taxAmount);
                                 }
 
@@ -1216,7 +1216,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             this.currentSelectedValue = '';
             this.showLedgerAccountList = false;
         }, 200);
-        if (ev.value === 'createnewitem') {
+        if (ev?.value === 'createnewitem') {
             return this.addNewAccount();
         }
         if (this.selectedField === 'account') {
@@ -1408,7 +1408,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             let accList: IOption[] = [];
             let accountList = [];
             this.allAccounts.forEach((acc: IFlattenAccountsResultItem) => {
-                if (!accountList[acc?.uniqueName] && this.activeCompany && acc.currency === this.activeCompany.baseCurrency) {
+                if (!accountList[acc?.uniqueName] && this.activeCompany && acc.currency === this.activeCompany?.baseCurrency) {
                     if (this.requestObj.voucherType === VOUCHERS.CONTRA) {
                         const isContraAccount = acc.parentGroups.find((pg) => (pg?.uniqueName === 'bankaccounts' || pg?.uniqueName === 'cash' || pg?.uniqueName === 'currentliabilities' || (this.generalService.voucherApiVersion === 2 && pg?.uniqueName === 'loanandoverdraft')));
                         const isDisallowedAccount = acc.parentGroups.find((pg) => (pg?.uniqueName === 'sundrycreditors' || pg?.uniqueName === 'dutiestaxes'));
@@ -1907,8 +1907,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         let adjustmentTypesOptions: IOption[] = [];
 
         adjustmentTypes.map(type => {
-            if ((index === 0 && (type.value === AdjustmentTypesEnum.receipt || type.value === AdjustmentTypesEnum.advanceReceipt)) || (index > 0 && type.value === AdjustmentTypesEnum.againstReference) || (entry && type.value === entry.type)) {
-                adjustmentTypesOptions.push({ label: type.label, value: type.value });
+            if ((index === 0 && (type?.value === AdjustmentTypesEnum.receipt || type?.value === AdjustmentTypesEnum.advanceReceipt)) || (index > 0 && type?.value === AdjustmentTypesEnum.againstReference) || (entry && type?.value === entry.type)) {
+                adjustmentTypesOptions.push({ label: type.label, value: type?.value });
             }
         });
 
@@ -1939,7 +1939,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @memberof AccountAsVoucherComponent
      */
     public onSelectAdjustmentType(event: any, entry: any): void {
-        if (event && event.value === AdjustmentTypesEnum.receipt) {
+        if (event && event?.value === AdjustmentTypesEnum.receipt) {
             entry.tax = {
                 name: '',
                 uniqueName: '',

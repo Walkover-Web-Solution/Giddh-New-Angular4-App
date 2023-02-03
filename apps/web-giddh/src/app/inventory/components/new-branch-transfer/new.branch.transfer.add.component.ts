@@ -1178,7 +1178,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                 this.branchTransfer.dateOfSupply = response.body.dateOfSupply;
                 this.branchTransfer.challanNo = response.body.challanNo;
                 this.branchTransfer.note = response.body.note;
-                this.branchTransfer.uniqueName = response.body.uniqueName;
+                this.branchTransfer.uniqueName = response?.body?.uniqueName;
                 this.branchTransfer.sources = response.body.sources;
                 this.branchTransfer.destinations = response.body.destinations;
                 this.branchTransfer.products = response.body.products;

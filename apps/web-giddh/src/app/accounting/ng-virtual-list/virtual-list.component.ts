@@ -114,7 +114,7 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
             val = [val];
         }
         if (val.length > 0 && this.rows) {
-            this._selectedValues = this.rows.filter((f: any) => val.findIndex(p => p === f.label || p === f.value) !== -1);
+            this._selectedValues = this.rows.filter((f: any) => val.findIndex(p => p === f.label || p === f?.value) !== -1);
         } else {
             this._selectedValues = val;
         }
@@ -152,7 +152,7 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
         filteredArr = this.getFilteredArrOfIOptionItems(array, term, action);
 
         startsWithArr = filteredArr?.filter(function (item) {
-            if (startsWith(item.label.toLocaleLowerCase(), term) || startsWith(item.value.toLocaleLowerCase(), term)) {
+            if (startsWith(item.label.toLocaleLowerCase(), term) || startsWith(item?.value.toLocaleLowerCase(), term)) {
                 return item;
             } else {
                 includesArr.push(item);
@@ -173,7 +173,7 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
             });
         } else {
             return array?.filter((item: IOption) => {
-                return includes(item.label.toLocaleLowerCase(), term) || includes(item.value.toLocaleLowerCase(), term);
+                return includes(item.label.toLocaleLowerCase(), term) || includes(item?.value.toLocaleLowerCase(), term);
             });
         }
     }
@@ -189,7 +189,7 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
                 if (this.customFilter) {
                     return this.customFilter(lowercaseFilter, item);
                 }
-                return !lowercaseFilter || (item.label).toLocaleLowerCase().indexOf(lowercaseFilter) !== -1;
+                return !lowercaseFilter || (item.label).toLocaleLowerCase()?.indexOf(lowercaseFilter) !== -1;
             }) : [];
 
             if (this.customSorting) {
@@ -255,10 +255,10 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
     }
 
     public selectMultiple(item) {
-        if (this.selectedValues.indexOf(item) === -1) {
+        if (this.selectedValues?.indexOf(item) === -1) {
             this.selectedValues.push(item);
         } else {
-            this.selectedValues.splice(this.selectedValues.indexOf(item), 1);
+            this.selectedValues.splice(this.selectedValues?.indexOf(item), 1);
         }
     }
 
@@ -280,7 +280,7 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
         // this.focusFilter();
         this.onShow.emit();
         if (this.menuEle && this.menuEle.virtualScrollElm && this.menuEle.virtualScrollElm) {
-            let item = this.rows.find(p => p?.value === (this._selectedValues?.length > 0 ? this._selectedValues[0] : (this.rows?.length > 0 ? this.rows[0].value : null)));
+            let item = this.rows.find(p => p?.value === (this._selectedValues?.length > 0 ? this._selectedValues[0] : (this.rows?.length > 0 ? this.rows[0]?.value : null)));
             if (item !== null) {
                 this.menuEle.virtualScrollElm.scrollInto(item);
             }

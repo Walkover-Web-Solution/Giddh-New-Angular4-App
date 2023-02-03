@@ -34,7 +34,7 @@ export class GroupService {
             newParents = _.union([], parents);
             newParents.push({
                 name: listItem.name,
-                uniqueName: listItem.uniqueName
+                uniqueName: listItem?.uniqueName
             });
             listItem = Object.assign({}, listItem, { parentGroups: [] });
             listItem.parentGroups = newParents;

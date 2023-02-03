@@ -439,7 +439,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
                         this.voucherFormData.entries[entryLoop].transactions[transactionLoop] = {
                             account: {
                                 name: transaction.account.name,
-                                uniqueName: transaction.account.uniqueName
+                                uniqueName: transaction.account?.uniqueName
                             },
                             amount: {
                                 amountForAccount: transaction.amount.amountForAccount
@@ -453,7 +453,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
                         this.voucherFormData.entries[entryLoop].date = this.voucherFormData.date;
 
                         entry.taxes?.forEach(entryTax => {
-                            let selectedTax = this.companyTaxesList.find(tax => tax.uniqueName === entryTax.uniqueName);
+                            let selectedTax = this.companyTaxesList.find(tax => tax?.uniqueName === entryTax?.uniqueName);
                             entryTax.name = entryTax?.name || selectedTax?.name || entryTax?.uniqueName;
                             entryTax.isChecked = true;
                         });
@@ -478,7 +478,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
                 this.voucherFormData.exchangeRate = response[0].exchangeRate;
                 this.voucherFormData.subVoucher = response[0].subVoucher;
                 this.voucherFormData.updateAccountDetails = true;
-                this.voucherFormData.uniqueName = response[0].uniqueName;
+                this.voucherFormData.uniqueName = response[0]?.uniqueName;
                 this.allowFocus = false;
 
                 this.autoFillShipping = isEqual(this.voucherFormData.account?.billingDetails, this.voucherFormData.account?.shippingDetails);
@@ -523,7 +523,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
             newItem.additional.email = newItem.additional.email || '';
             newItem.additional.mobileNo = newItem.additional.mobileNo || '';
         }
-        return (item.label.toLocaleLowerCase().indexOf(term) > -1 || item.value.toLocaleLowerCase().indexOf(term) > -1 || item.additional.email.toLocaleLowerCase().indexOf(term) > -1 || item.additional.mobileNo.toLocaleLowerCase().indexOf(term) > -1);
+        return (item.label.toLocaleLowerCase()?.indexOf(term) > -1 || item?.value.toLocaleLowerCase()?.indexOf(term) > -1 || item.additional.email.toLocaleLowerCase()?.indexOf(term) > -1 || item.additional.mobileNo.toLocaleLowerCase()?.indexOf(term) > -1);
     }
 
     /**
@@ -544,7 +544,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
                     if (!query) {
                         const results = response.map(result => {
                             return {
-                                value: result.stock ? `${result.uniqueName}#${result.stock?.uniqueName}` : result.uniqueName,
+                                value: result.stock ? `${result?.uniqueName}#${result.stock?.uniqueName}` : result?.uniqueName,
                                 label: result.stock ? `${result.name} (${result.stock.name})` : result.name,
                                 additional: result
                             }
@@ -676,7 +676,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
     public prepareSearchLists(results: any, currentPage: number = 1, searchType: string): void {
         const searchResults = results.map(result => {
             return {
-                value: result.stock ? `${result.uniqueName}#${result.stock?.uniqueName}` : result.uniqueName,
+                value: result.stock ? `${result?.uniqueName}#${result.stock?.uniqueName}` : result?.uniqueName,
                 label: result.stock ? `${result.name} (${result.stock.name})` : result.name,
                 additional: result
             };
@@ -733,7 +733,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
      * @memberof PaymentReceiptComponent
      */
     public onSelectCustomer(item: IOption): void {
-        if (item.value) {
+        if (item?.value) {
             this.voucherFormData.account.name = item.label;
             this.getAccountDetails(item.value);
         }
@@ -848,7 +848,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
             }
             const results = response.map(result => {
                 return {
-                    value: result.stock ? `${result.uniqueName}#${result.stock?.uniqueName}` : result.uniqueName,
+                    value: result.stock ? `${result?.uniqueName}#${result.stock?.uniqueName}` : result?.uniqueName,
                     label: result.stock ? `${result.name} (${result.stock.name})` : result.name,
                     additional: result
                 }
@@ -907,7 +907,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
         let bankAccounts: IOption[] = [];
         if (data && data.body && data.body.results) {
             data.body.results.forEach(account => {
-                bankAccounts.push({ label: account.name, value: account.uniqueName, additional: account });
+                bankAccounts.push({ label: account.name, value: account?.uniqueName, additional: account });
             });
         }
         return orderBy(bankAccounts, 'label');
@@ -926,7 +926,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
             if (response) {
                 response.forEach(account => {
                     if (typeof search !== "string" || account?.label?.toLowerCase()?.indexOf(search?.toLowerCase()) > -1) {
-                        bankAccounts.push({ label: account.label, value: account.value, additional: account });
+                        bankAccounts.push({ label: account.label, value: account?.value, additional: account });
                     }
                 });
 
@@ -991,7 +991,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
      * @memberof PaymentReceiptComponent
      */
     public addAccountFromShortcut(): void {
-        if (!this.voucherFormData.account.uniqueName) {
+        if (!this.voucherFormData.account?.uniqueName) {
             this.selectedCustomerForDetails = null;
             this.toggleAccountAsidePane();
         }
@@ -1003,7 +1003,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
      * @memberof PaymentReceiptComponent
      */
     public getCustomerDetails(): void {
-        this.selectedCustomerForDetails = this.voucherFormData.account.uniqueName;
+        this.selectedCustomerForDetails = this.voucherFormData.account?.uniqueName;
         this.toggleAccountAsidePane();
     }
 
@@ -1015,7 +1015,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
     public autoFillShippingDetails(): void {
         if (this.autoFillShipping) {
             this.voucherFormData.account.shippingDetails = cloneDeep(this.voucherFormData.account.billingDetails);
-            this.searchShippingStates.setValue(this.searchBillingStates.value);
+            this.searchShippingStates.setValue(this.searchBillingStates?.value);
             if (this.shippingState && this.shippingState.nativeElement) {
                 this.shippingState.nativeElement.classList.remove('error-box');
             }
@@ -1164,7 +1164,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
         this.showGstAndTrnUsingCountryName(this.customerCountryName);
         this.prepareSearchLists([{
             name: data.name,
-            uniqueName: data.uniqueName
+            uniqueName: data?.uniqueName
         }], 1, "customer");
         this.makeCustomerList();
         this.loadBankCashAccounts(data.currency);
@@ -1414,8 +1414,8 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
         this.isValidForm = true;
         this.isLoading = false;
 
-        if (!this.voucherFormData.account.uniqueName?.trim() || !this.voucherFormData.date || !this.voucherFormData.entries[0].transactions[0].amount
-            .amountForAccount || !this.voucherFormData.entries[0].transactions[0].account.uniqueName || (this.isAdvanceReceipt && this.selectedTaxes?.length === 0)) {
+        if (!this.voucherFormData.account?.uniqueName?.trim() || !this.voucherFormData.date || !this.voucherFormData.entries[0].transactions[0].amount
+            .amountForAccount || !this.voucherFormData.entries[0].transactions[0].account?.uniqueName || (this.isAdvanceReceipt && this.selectedTaxes?.length === 0)) {
             this.isValidForm = false;
             return;
         }
@@ -1437,7 +1437,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
 
         let selectedTaxes = [];
         this.voucherFormData.entries[0].taxes?.filter(tax => tax.isChecked).forEach(tax => {
-            selectedTaxes.push({ uniqueName: tax.uniqueName });
+            selectedTaxes.push({ uniqueName: tax?.uniqueName });
         });
 
         this.voucherFormData.entries[0].taxes = selectedTaxes;
@@ -1539,7 +1539,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
 
         this.store.dispatch(this.invoiceReceiptAction.getVoucherDetailsV4(request.accountUniqueName, {
             voucherType: request.voucherType,
-            uniqueName: request.uniqueName
+            uniqueName: request?.uniqueName
         }));
     }
 
@@ -1553,8 +1553,8 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
         this.isValidForm = true;
         this.isLoading = false;
 
-        if (!this.voucherFormData.account.uniqueName?.trim() || !this.voucherFormData.date || !this.voucherFormData.entries[0].transactions[0].amount
-            .amountForAccount || !this.voucherFormData.entries[0].transactions[0].account.uniqueName || (this.isAdvanceReceipt && this.selectedTaxes?.length === 0)) {
+        if (!this.voucherFormData.account?.uniqueName?.trim() || !this.voucherFormData.date || !this.voucherFormData.entries[0].transactions[0].amount
+            .amountForAccount || !this.voucherFormData.entries[0].transactions[0].account?.uniqueName || (this.isAdvanceReceipt && this.selectedTaxes?.length === 0)) {
             this.isValidForm = false;
             return;
         }
@@ -1578,7 +1578,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
 
         let selectedTaxes = [];
         this.voucherFormData.entries[0].taxes?.filter(tax => tax.isChecked).forEach(tax => {
-            selectedTaxes.push({ uniqueName: tax.uniqueName });
+            selectedTaxes.push({ uniqueName: tax?.uniqueName });
         });
 
         this.voucherFormData.entries[0].taxes = selectedTaxes;
@@ -1591,7 +1591,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
                     message = message?.replace("[VOUCHER]", this.titleCasePipe.transform(this.voucherFormData.type));
                     this.toaster.showSnackBar("success", message);
 
-                    this.router.navigate(['/pages/voucher/' + this.voucherFormData.type + '/preview/' + this.voucherFormData.uniqueName + '/' + this.voucherFormData.account?.uniqueName]);
+                    this.router.navigate(['/pages/voucher/' + this.voucherFormData.type + '/preview/' + this.voucherFormData?.uniqueName + '/' + this.voucherFormData.account?.uniqueName]);
                 } else {
                     this.toaster.showSnackBar("error", response.message);
                 }
@@ -1717,7 +1717,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
         let filteredStates: IOption[] = [];
         this.statesSource.forEach(state => {
             if (typeof search !== "string" || state?.label?.toLowerCase()?.indexOf(search?.toLowerCase()) > -1) {
-                filteredStates.push({ label: state.label, value: state.value, additional: state });
+                filteredStates.push({ label: state.label, value: state?.value, additional: state });
             }
         });
 

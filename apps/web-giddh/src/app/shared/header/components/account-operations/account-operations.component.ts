@@ -174,7 +174,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
                             if (activeAccountTaxHierarchy.inheritedTaxes) {
                                 let inheritedTaxes = flattenDeep(activeAccountTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((j: any) => j?.uniqueName);
-                                let allTaxes = applicableTaxes?.filter(f => inheritedTaxes.indexOf(f) === -1);
+                                let allTaxes = applicableTaxes?.filter(f => inheritedTaxes?.indexOf(f) === -1);
                                 // set value in tax group form
                                 this.taxGroupForm.setValue({ taxes: allTaxes });
                             } else {
@@ -265,7 +265,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
         this.showAddNewGroup$.subscribe(s => {
             if (s) {
-                if (this.breadcrumbPath.indexOf(this.commonLocaleData?.app_create_group) === -1) {
+                if (this.breadcrumbPath?.indexOf(this.commonLocaleData?.app_create_group) === -1) {
                     this.breadcrumbPath.push(this.commonLocaleData?.app_create_group);
                 }
             }
@@ -273,7 +273,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
         this.showAddNewAccount$.subscribe(s => {
             if (s) {
-                if (this.breadcrumbPath.indexOf(this.commonLocaleData?.app_create_account) === -1) {
+                if (this.breadcrumbPath?.indexOf(this.commonLocaleData?.app_create_account) === -1) {
                     this.breadcrumbPath.push(this.commonLocaleData?.app_create_account);
                 }
             }
@@ -366,7 +366,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         this.activeAccount$.pipe(take(1)).subscribe(p => activeAcc = p);
         let accObject = new ShareAccountRequest();
         accObject.role = 'view_only';
-        accObject.user = this.shareAccountForm.controls['userEmail'].value;
+        accObject.user = this.shareAccountForm.controls['userEmail']?.value;
         this.store.dispatch(this._ledgerActions.shareAccount(accObject, activeAcc?.uniqueName));
         this.shareAccountForm.reset();
     }
@@ -380,7 +380,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         this.activeAccount$.pipe(take(1)).subscribe(p => activeAcc = p);
 
         let grpObject = new AccountMoveRequest();
-        grpObject.uniqueName = this.moveAccountForm.controls['moveto'].value;
+        grpObject.uniqueName = this.moveAccountForm.controls['moveto']?.value;
 
         let activeGrpName = this.breadcrumbUniquePath[this.breadcrumbUniquePath?.length - 2];
 
@@ -515,7 +515,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
                     });
                 }
             });
-            data.taxes.push.apply(data.taxes, this.taxGroupForm.value.taxes);
+            data.taxes.push.apply(data.taxes, this.taxGroupForm?.value.taxes);
             data.uniqueName = activeAccount.uniqueName;
             this.store.dispatch(this.accountsAction.applyAccountTax(data));
         }
@@ -574,7 +574,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         if (v?.length) {
             let accounts = [];
             v.map(a => {
-                accounts.push(a.value);
+                accounts.push(a?.value);
             });
             this.selectedaccountForMerge = accounts;
         } else {
@@ -634,7 +634,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
     public updateAccount(accRequestObject: { value: { groupUniqueName: string, accountUniqueName: string, isMasterOpen?: boolean }, accountRequest: AccountRequestV2 }) {
         accRequestObject.value.isMasterOpen = this.isMasterOpen;
-        this.store.dispatch(this.accountsAction.updateAccountV2(accRequestObject.value, accRequestObject.accountRequest));
+        this.store.dispatch(this.accountsAction.updateAccountV2(accRequestObject?.value, accRequestObject.accountRequest));
     }
 
     public showDeleteAccountModal() {

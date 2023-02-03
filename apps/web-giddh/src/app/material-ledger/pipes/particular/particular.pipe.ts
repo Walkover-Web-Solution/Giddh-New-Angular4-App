@@ -27,7 +27,7 @@ export class ParticularPipe implements PipeTransform {
         const toParticular = args[2];
 
         let particular = (toBy === 'by') ? byParticular : toParticular;
-        particular = particular?.replace('[PARTICULAR]', transaction.inventory ?
+        particular = particular?.replace('[PARTICULAR]', transaction?.inventory ?
             `${transaction?.particular?.name} (${transaction?.inventory?.stock?.name})` :
             transaction?.particular?.name);
         return particular;

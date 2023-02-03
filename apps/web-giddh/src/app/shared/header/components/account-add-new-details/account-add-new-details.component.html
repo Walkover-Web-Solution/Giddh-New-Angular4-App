@@ -75,7 +75,7 @@
 
                     <div class="form-group col-xs-12 col-sm-4 cr-dr-account">
                         <label>{{ localeData?.opening_balance }}</label>
-                        <div [ngClass]="{ 'input-group': addAccountForm.get('openingBalance').value > 0 }">
+                        <div [ngClass]="{ 'input-group': addAccountForm.get('openingBalance')?.value > 0 }">
                             <input
                                 type="tel"
                                 min="0"
@@ -97,11 +97,11 @@
                                 (click)="openingBalanceTypeChnaged('DEBIT')"
                                 [ngClass]="{
                                     'active-toggle-btn':
-                                        addAccountForm.get('openingBalanceType').value === 'DEBIT' &&
-                                        addAccountForm.get('openingBalance').value > 0,
-                                    'cp': addAccountForm.get('openingBalance').value > 0
+                                        addAccountForm.get('openingBalanceType')?.value === 'DEBIT' &&
+                                        addAccountForm.get('openingBalance')?.value > 0,
+                                    'cp': addAccountForm.get('openingBalance')?.value > 0
                                 }"
-                                *ngIf="addAccountForm.get('openingBalance').value > 0"
+                                *ngIf="addAccountForm.get('openingBalance')?.value > 0"
                             >
                                 {{ commonLocaleData?.app_dr?.toUpperCase() }}
                             </div>
@@ -110,11 +110,11 @@
                                 (click)="openingBalanceTypeChnaged('CREDIT')"
                                 [ngClass]="{
                                     'active-toggle-btn':
-                                        addAccountForm.get('openingBalanceType').value === 'CREDIT' &&
-                                        addAccountForm.get('openingBalance').value > 0,
-                                    'cp': addAccountForm.get('openingBalance').value > 0
+                                        addAccountForm.get('openingBalanceType')?.value === 'CREDIT' &&
+                                        addAccountForm.get('openingBalance')?.value > 0,
+                                    'cp': addAccountForm.get('openingBalance')?.value > 0
                                 }"
-                                *ngIf="addAccountForm.get('openingBalance').value > 0"
+                                *ngIf="addAccountForm.get('openingBalance')?.value > 0"
                             >
                                 {{ commonLocaleData?.app_cr?.toUpperCase() }}
                             </div>
@@ -122,11 +122,11 @@
                     </div>
                     <div
                         class="form-group col-xs-12 col-sm-4"
-                        *ngIf="addAccountForm.get('currency').value !== companyCurrency"
+                        *ngIf="addAccountForm.get('currency')?.value !== companyCurrency"
                     >
                         <div>
                             <label>{{ localeData?.foreign_opening_balance }}</label>
-                            <div [ngClass]="{ 'input-group': addAccountForm.get('foreignOpeningBalance').value > 0 }">
+                            <div [ngClass]="{ 'input-group': addAccountForm.get('foreignOpeningBalance')?.value > 0 }">
                                 <input
                                     type="tel"
                                     min="0"
@@ -147,10 +147,11 @@
                                     class="input-group-addon"
                                     (click)="openingBalanceTypeChnaged('DEBIT')"
                                     [ngClass]="{
-                                        'active-toggle-btn': addAccountForm.get('openingBalanceType').value === 'DEBIT',
-                                        'cp': addAccountForm.get('openingBalance').value > 0
+                                        'active-toggle-btn':
+                                            addAccountForm.get('openingBalanceType')?.value === 'DEBIT',
+                                        'cp': addAccountForm.get('openingBalance')?.value > 0
                                     }"
-                                    *ngIf="addAccountForm.get('foreignOpeningBalance').value > 0"
+                                    *ngIf="addAccountForm.get('foreignOpeningBalance')?.value > 0"
                                 >
                                     {{ commonLocaleData?.app_dr?.toUpperCase() }}
                                 </div>
@@ -159,10 +160,10 @@
                                     (click)="openingBalanceTypeChnaged('CREDIT')"
                                     [ngClass]="{
                                         'active-toggle-btn':
-                                            addAccountForm.get('openingBalanceType').value === 'CREDIT',
-                                        'cp': addAccountForm.get('openingBalance').value > 0
+                                            addAccountForm.get('openingBalanceType')?.value === 'CREDIT',
+                                        'cp': addAccountForm.get('openingBalance')?.value > 0
                                     }"
-                                    *ngIf="addAccountForm.get('foreignOpeningBalance').value > 0"
+                                    *ngIf="addAccountForm.get('foreignOpeningBalance')?.value > 0"
                                 >
                                     {{ commonLocaleData?.app_cr?.toUpperCase() }}
                                 </div>
@@ -210,7 +211,7 @@
                                     maxlength="10"
                                     decimalDigitsDirective
                                     formControlName="hsnNumber"
-                                    *ngIf="addAccountForm.get('hsnOrSac').value === 'hsn'"
+                                    *ngIf="addAccountForm.get('hsnOrSac')?.value === 'hsn'"
                                 />
                                 <input
                                     type="text"
@@ -218,7 +219,7 @@
                                     maxlength="10"
                                     formControlName="sacNumber"
                                     decimalDigitsDirective
-                                    *ngIf="addAccountForm.get('hsnOrSac').value === 'sac'"
+                                    *ngIf="addAccountForm.get('hsnOrSac')?.value === 'sac'"
                                 />
                             </div>
                         </div>
@@ -275,7 +276,7 @@
                                                         [offColor]="bootstrapToggleSwitch?.Off"
                                                         [size]="bootstrapToggleSwitch?.Size"
                                                         (statusChange)="
-                                                            isDefaultAddressSelected(gst.get('isDefault').value, i)
+                                                            isDefaultAddressSelected(gst.get('isDefault')?.value, i)
                                                         "
                                                     >
                                                     </ngx-switch>
@@ -419,7 +420,7 @@
                                     <a
                                         class="text-right btn btn-primary add-address-btn"
                                         href="javascript:void(0);"
-                                        (click)="addGstDetailsForm(gst.get('gstNumber').value)"
+                                        (click)="addGstDetailsForm(gst.get('gstNumber')?.value)"
                                     >
                                         <i class="icon-plus"></i> {{ localeData?.add_address }}
                                     </a>
@@ -601,7 +602,7 @@
                             <div
                                 class="input-group"
                                 [ngClass]="{
-                                    'input-group': addAccountForm.get('closingBalanceTriggerAmount').value > 0
+                                    'input-group': addAccountForm.get('closingBalanceTriggerAmount')?.value > 0
                                 }"
                             >
                                 <input
@@ -624,10 +625,10 @@
                                     (click)="closingBalanceTypeChanged('DEBIT')"
                                     [ngClass]="{
                                         'active-toggle-btn':
-                                            addAccountForm.get('closingBalanceTriggerAmountType').value === 'DEBIT',
-                                        'cp': addAccountForm.get('closingBalanceTriggerAmount').value > 0
+                                            addAccountForm.get('closingBalanceTriggerAmountType')?.value === 'DEBIT',
+                                        'cp': addAccountForm.get('closingBalanceTriggerAmount')?.value > 0
                                     }"
-                                    *ngIf="addAccountForm.get('closingBalanceTriggerAmount').value > 0"
+                                    *ngIf="addAccountForm.get('closingBalanceTriggerAmount')?.value > 0"
                                 >
                                     {{ commonLocaleData?.app_dr?.toUpperCase() }}
                                 </div>
@@ -636,10 +637,10 @@
                                     (click)="closingBalanceTypeChanged('CREDIT')"
                                     [ngClass]="{
                                         'active-toggle-btn':
-                                            addAccountForm.get('closingBalanceTriggerAmountType').value === 'CREDIT',
-                                        'cp': addAccountForm.get('closingBalanceTriggerAmount').value > 0
+                                            addAccountForm.get('closingBalanceTriggerAmountType')?.value === 'CREDIT',
+                                        'cp': addAccountForm.get('closingBalanceTriggerAmount')?.value > 0
                                     }"
-                                    *ngIf="addAccountForm.get('closingBalanceTriggerAmount').value > 0"
+                                    *ngIf="addAccountForm.get('closingBalanceTriggerAmount')?.value > 0"
                                 >
                                     {{ commonLocaleData?.app_cr?.toUpperCase() }}
                                 </div>
@@ -678,7 +679,7 @@
                         >
                             <div
                                 class="row mr-b15"
-                                *ngIf="item.uniqueName === customFieldsItem.get('uniqueName').value"
+                                *ngIf="item?.uniqueName === customFieldsItem.get('uniqueName')?.value"
                             >
                                 <div class="col-lg-8">
                                     <div class="name-of-field">
@@ -722,7 +723,7 @@
                                                     id="yes{{ index }}"
                                                     class="radio-custom cp ml-0"
                                                     type="radio"
-                                                    [checked]="customFieldsItem.get('value').value === 'true'"
+                                                    [checked]="customFieldsItem.get('value')?.value === 'true'"
                                                     (change)="selectedBooleanCustomField('true', index)"
                                                     name="booleanType{{ index }}"
                                                 />
@@ -736,7 +737,7 @@
                                                     id="no{{ index }}"
                                                     class="radio-custom cp ml-0"
                                                     type="radio"
-                                                    [checked]="customFieldsItem.get('value').value === 'false'"
+                                                    [checked]="customFieldsItem.get('value')?.value === 'false'"
                                                     (change)="selectedBooleanCustomField('false', index)"
                                                     name="booleanType{{ index }}"
                                                 />

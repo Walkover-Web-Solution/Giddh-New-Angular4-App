@@ -57,11 +57,11 @@
                                                 <div class="width-65">
                                                     <p
                                                         id="{{
-                                                            r.type.toLowerCase() +
+                                                            r.type?.toLowerCase() +
                                                                 '-' +
                                                                 (r.type === 'MENU'
                                                                     ? getPageUniqueName(r.route)
-                                                                    : r.uniqueName)
+                                                                    : r?.uniqueName)
                                                         }}"
                                                     >
                                                         {{ r.name }}
@@ -87,7 +87,7 @@
                                                     </ng-container>
                                                 </div>
                                                 <ng-container *ngIf="r.type === 'ACCOUNT'">
-                                                    <span class="command-hover-text">{{ r.uniqueName }}</span>
+                                                    <span class="command-hover-text">{{ r?.uniqueName }}</span>
                                                 </ng-container>
                                             </div>
                                         </div>
@@ -144,7 +144,7 @@
                     [placeholder]="commonLocaleData?.app_search"
                     (focus)="handleFocus()"
                     (keydown)="handleKeydown($event)"
-                    (keyup)="initSearch($event, $event.target.value)"
+                    (keyup)="initSearch($event, $event.target?.value)"
                     (paste)="onPasteInSearch()"
                 />
             </div>

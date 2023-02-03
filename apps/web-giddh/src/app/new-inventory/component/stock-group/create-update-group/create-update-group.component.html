@@ -85,7 +85,7 @@
                                 </mat-radio-group>
                             </div>
                             <div class="col-sm-6">
-                                <div *ngIf="groupForm.get('showCodeType').value === 'hsn'">
+                                <div *ngIf="groupForm.get('showCodeType')?.value === 'hsn'">
                                     <text-field
                                         [cssClass]="'form-control'"
                                         name="hsn-code"
@@ -96,7 +96,7 @@
                                         maxlength="10"
                                     ></text-field>
                                 </div>
-                                <div *ngIf="groupForm.get('showCodeType').value === 'sac'">
+                                <div *ngIf="groupForm.get('showCodeType')?.value === 'sac'">
                                     <text-field
                                         [cssClass]="'form-control'"
                                         name="sac-code"
@@ -132,7 +132,7 @@
                                 <sh-select
                                     [options]="groups$ | async"
                                     formControlName="parentStockGroupUniqueName"
-                                    [disabled]="!groupForm.get('isSubGroup').value"
+                                    [disabled]="!groupForm.get('isSubGroup')?.value"
                                     [placeholder]="'Select Parent Group'"
                                     [multiple]="false"
                                     [ItemHeight]="33"

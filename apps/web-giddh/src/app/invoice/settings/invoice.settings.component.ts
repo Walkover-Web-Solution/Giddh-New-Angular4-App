@@ -370,7 +370,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
      */
     public selectLinkAccount(data) {
         let arrOfAcc = cloneDeep(this.accountList);
-        if (data.value && this.accountToSend) {
+        if (data?.value && this.accountToSend) {
             let result = arrOfAcc?.filter((obj) => obj?.uniqueName === data.value);
             this.accountToSend.name = result[0]?.name;
             this.accountToSend.uniqueName = result[0]?.uniqueName;
@@ -434,20 +434,20 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     public validateDefaultDueDate(defaultDueDate: string) {
         if (defaultDueDate) {
             let invoiceSetting = cloneDeep(this.invoiceSetting);
-            if (isNaN(Number(defaultDueDate)) && defaultDueDate.indexOf('-') === -1) {
+            if (isNaN(Number(defaultDueDate)) && defaultDueDate?.indexOf('-') === -1) {
                 invoiceSetting.duePeriod = Number(defaultDueDate?.replace(/\D/g, '')) !== 0 && !isNaN(Number(defaultDueDate?.replace(/\D/g, ''))) ? Number(defaultDueDate?.replace(/\D/g, '')) : null;
                 setTimeout(() => {
                     this.invoiceSetting = invoiceSetting;
                 });
             }
-            if (defaultDueDate?.indexOf('-') !== -1 && (defaultDueDate.indexOf('-') !== defaultDueDate.lastIndexOf('-')) || defaultDueDate.indexOf('-') > 0) {
+            if (defaultDueDate?.indexOf('-') !== -1 && (defaultDueDate?.indexOf('-') !== defaultDueDate.lastIndexOf('-')) || defaultDueDate?.indexOf('-') > 0) {
                 invoiceSetting.duePeriod = Number(defaultDueDate?.replace(/\D/g, ''));
                 setTimeout(() => {
                     this.invoiceSetting = invoiceSetting;
                 });
             }
             if (String(defaultDueDate)?.length > 3) {
-                if (defaultDueDate.indexOf('-') !== -1) {
+                if (defaultDueDate?.indexOf('-') !== -1) {
                     invoiceSetting.duePeriod = Number(String(defaultDueDate).substring(0, 4));
                 } else {
                     invoiceSetting.duePeriod = Number(String(defaultDueDate).substring(0, 3));
@@ -468,7 +468,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     }
 
     public onLockDateBlur(ev) {
-        this.isLockDateSet = !!ev.target.value;
+        this.isLockDateSet = !!ev.target?.value;
     }
 
     public ngOnDestroy() {

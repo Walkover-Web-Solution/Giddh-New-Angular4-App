@@ -160,8 +160,8 @@ export class JobworkComponent implements OnInit, OnDestroy {
             stocksList: p.inventory.stocksList,
             inventoryUsers: p.inventoryInOutState.inventoryUsers
         })), takeUntil(this.destroyed$)).subscribe(p => p.inventoryUsers && p.stocksList &&
-            (this.stockOptions = p.stocksList.results.map(r => ({ label: r.name, value: r.uniqueName, additional: 'stock' }))
-                .concat(p.inventoryUsers.map(r => ({ label: r.name, value: r.uniqueName, additional: 'person' })))));
+            (this.stockOptions = p.stocksList.results.map(r => ({ label: r.name, value: r?.uniqueName, additional: 'stock' }))
+                .concat(p.inventoryUsers.map(r => ({ label: r.name, value: r?.uniqueName, additional: 'person' })))));
     }
 
     public ngOnInit() {
@@ -173,7 +173,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
             this.showWelcomePage = false;
             this.type = v.view;
             this.nameStockOrPerson = v.name;
-            if (v.uniqueName) {
+            if (v?.uniqueName) {
                 this.uniqueName = v.uniqueName;
                 let length = document.location.pathname.split('/')?.length;
                 if (!v.uniqueName && length === 6) {
@@ -199,7 +199,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
                             let firstElement = res[0];
                             this.showWelcomePage = false;
                             this.nameStockOrPerson = firstElement.name;
-                            this.uniqueName = firstElement.uniqueName;
+                            this.uniqueName = firstElement?.uniqueName;
                             this.filter.includeSenders = true;
                             this.filter.includeReceivers = true;
                             this.filter.receivers = [this.uniqueName];
@@ -215,7 +215,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
                             let firstElement = res[0];
                             this.showWelcomePage = false;
                             this.nameStockOrPerson = firstElement.name;
-                            this.uniqueName = firstElement.uniqueName;
+                            this.uniqueName = firstElement?.uniqueName;
                             this.applyFilters(1, false);
                         } else {
                             this.showWelcomePage = true;
@@ -268,9 +268,9 @@ export class JobworkComponent implements OnInit, OnDestroy {
                     this.showWelcomePage = false;
                     this.type = 'stock';
                     this.nameStockOrPerson = firstElement.name;
-                    this.uniqueName = firstElement.uniqueName;
+                    this.uniqueName = firstElement?.uniqueName;
 
-                    this._store.dispatch(this.inventoryReportActions.genReport(firstElement.uniqueName, this.startDate, this.endDate, 1, 6, this.filter));
+                    this._store.dispatch(this.inventoryReportActions.genReport(firstElement?.uniqueName, this.startDate, this.endDate, 1, 6, this.filter));
                 }
             } else {
                 this.showWelcomePage = true;
@@ -322,7 +322,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
      */
     public updateDescription(txn: any) {
         this.updateDescriptionIdx = null;
-        this.inventoryService.updateDescription(txn.uniqueName, txn.description).pipe(takeUntil(this.destroyed$)).subscribe(res => {
+        this.inventoryService.updateDescription(txn?.uniqueName, txn.description).pipe(takeUntil(this.destroyed$)).subscribe(res => {
             if (res?.status === 'success') {
                 this.updateDescriptionIdx = null;
             } else {
@@ -464,7 +464,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
         }
 
         //advanceSearchAction modal filter
-        this.comparisionFilter.clear();
+        this.comparisionFilter?.clear();
         this.advanceSearchForm.controls['filterAmount'].setValue(null);
 
         this.filter.sort = null;
@@ -495,7 +495,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
 
     public advanceSearchAction(type: string) {
         if (type === 'clear') {
-            this.comparisionFilter.clear();
+            this.comparisionFilter?.clear();
             this.advanceSearchForm.controls['filterAmount'].setValue(null);
             if (this.filter.senderName || this.filter.receiverName || this.senderName.nativeElement.value || this.receiverName.nativeElement.value
                 || this.filter.sortBy || this.filter.sort || this.filter.quantityGreaterThan || this.filter.quantityEqualTo || this.filter.quantityLessThan) {
@@ -555,24 +555,24 @@ export class JobworkComponent implements OnInit, OnDestroy {
     }
 
     public filterByCheck(type: string, event: boolean) {
-        let idx = this.filter.jobWorkTransactionType.indexOf('ALL');
+        let idx = this.filter.jobWorkTransactionType?.indexOf('ALL');
         if (idx !== -1) {
             this.initVoucherType();
         }
         if (event && type) {
             this.filter.jobWorkTransactionType.push(type);
         } else {
-            let index = this.filter.jobWorkTransactionType.indexOf(type);
+            let index = this.filter.jobWorkTransactionType?.indexOf(type);
             if (index !== -1) {
                 this.filter.jobWorkTransactionType.splice(index, 1);
             }
         }
         if (this.filter.jobWorkTransactionType?.length > 0 && this.filter.jobWorkTransactionType?.length < this.VOUCHER_TYPES.length) {
-            idx = this.filter.jobWorkTransactionType.indexOf('ALL');
+            idx = this.filter.jobWorkTransactionType?.indexOf('ALL');
             if (idx !== -1) {
                 this.filter.jobWorkTransactionType.splice(idx, 1);
             }
-            idx = this.filter.jobWorkTransactionType.indexOf('NONE');
+            idx = this.filter.jobWorkTransactionType?.indexOf('NONE');
             if (idx !== -1) {
                 this.filter.jobWorkTransactionType.splice(idx, 1);
             }

@@ -117,7 +117,7 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
                     businessType: response.businessType,
                     country: {
                         countryName: response.countryV2 ? response.countryV2.countryName : '',
-                        countryCode: response.countryV2 ? response.countryV2.alpha2CountryCode.toLowerCase() : '',
+                        countryCode: response.countryV2 ? response.countryV2.alpha2CountryCode?.toLowerCase() : '',
                         currencyCode: response.countryV2 && response.countryV2.currency ? response.countryV2.currency.code : '',
                         currencyName: response.countryV2 && response.countryV2.currency ? response.countryV2.currency.symbol : ''
                     }
@@ -192,7 +192,7 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
      */
     public handleFinalSelection(selectedAddresses: Array<any>): void {
         this.addresses.forEach(address => {
-            if (!selectedAddresses?.includes(address.uniqueName)) {
+            if (!selectedAddresses?.includes(address?.uniqueName)) {
                 address.isDefault = false;
             }
         });
@@ -222,7 +222,7 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
         event.preventDefault();
         if (!option.isDefault) {
             this.addresses.forEach(address => {
-                if (address.value !== option.value) {
+                if (address?.value !== option?.value) {
                     address.isDefault = false;
                 }
             });
@@ -230,8 +230,8 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
         option.isDefault = !option.isDefault;
         if (option.isDefault) {
             this.branchForm.get('address')?.patchValue([
-                ...(this.branchForm.get('address').value || []),
-                option.value
+                ...(this.branchForm.get('address')?.value || []),
+                option?.value
             ]);
         }
     }
@@ -243,10 +243,10 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
      */
     public handleFormSubmit(): void {
         const requestObj = {
-            name: this.branchForm.value.name,
-            alias: this.branchForm.value.alias,
-            linkAddresses: this.addresses?.filter(address => this.branchForm.value.address?.includes(address.uniqueName))?.map(filteredAddress => ({
-                uniqueName: filteredAddress.uniqueName,
+            name: this.branchForm?.value.name,
+            alias: this.branchForm?.value.alias,
+            linkAddresses: this.addresses?.filter(address => this.branchForm?.value.address?.includes(address?.uniqueName))?.map(filteredAddress => ({
+                uniqueName: filteredAddress?.uniqueName,
                 isDefault: filteredAddress.isDefault
             }))
         };
@@ -316,9 +316,9 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
      */
     public createNewAddress(addressDetails: any): void {
         this.isAddressChangeInProgress = true;
-        const chosenState = addressDetails.addressDetails.stateList.find(selectedState => selectedState.value === addressDetails.formValue.state);
-        const linkEntity = addressDetails.addressDetails.linkedEntities?.filter(entity => (addressDetails.formValue.linkedEntity?.includes(entity.uniqueName))).map(filteredEntity => ({
-            uniqueName: filteredEntity.uniqueName,
+        const chosenState = addressDetails.addressDetails.stateList.find(selectedState => selectedState?.value === addressDetails.formValue.state);
+        const linkEntity = addressDetails.addressDetails.linkedEntities?.filter(entity => (addressDetails.formValue.linkedEntity?.includes(entity?.uniqueName))).map(filteredEntity => ({
+            uniqueName: filteredEntity?.uniqueName,
             isDefault: filteredEntity.isDefault,
             entity: filteredEntity.entity
         }));
@@ -338,7 +338,7 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
                 this.addresses.push({
                     ...response.body,
                     label: response.body.name,
-                    value: response.body.uniqueName
+                    value: response.body?.uniqueName
                 })
                 this.toastService.successToast(this.localeData?.address_created);
             } else {
@@ -385,7 +385,7 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
                     ...result,
                     isDefault: false,
                     label: result.alias,
-                    value: result.uniqueName
+                    value: result?.uniqueName
                 }));
                 if (successCallback) {
                     successCallback();
@@ -425,9 +425,9 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
                         ...address,
                         isDefault: false,
                         label: address.name,
-                        value: address.uniqueName
+                        value: address?.uniqueName
                     }));
-                this.checkLinkEntity();    
+                this.checkLinkEntity();
             }
         });
     }

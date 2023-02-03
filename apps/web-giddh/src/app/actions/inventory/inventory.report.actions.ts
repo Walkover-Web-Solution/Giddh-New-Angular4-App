@@ -18,7 +18,7 @@ export class InventoryReportActions {
             ofType(INVENTORY_REPORT_ACTIONS.GENERATE_REPORT),
             switchMap((action: CustomActions) => this._inventoryService.GetInventoryReport_v2(action.payload)),
             map(response => {
-                if (response.status === 'error') {
+                if (response?.status === 'error') {
                     this._toasty.clearAllToaster();
                     this._toasty.errorToast(response.message, response.code);
                 } else {

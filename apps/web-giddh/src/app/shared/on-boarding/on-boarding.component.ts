@@ -230,14 +230,14 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
     }
 
     public isValidMobileNumber(ele: HTMLInputElement) {
-        if (ele.value) {
+        if (ele?.value) {
             this.checkMobileNo(ele);
         }
     }
 
     public checkMobileNo(ele) {
         try {
-            let parsedNumber = parsePhoneNumberFromString('+' + this.company.phoneCode + ele.value, this.company.country as CountryCode);
+            let parsedNumber = parsePhoneNumberFromString('+' + this.company.phoneCode + ele?.value, this.company.country as CountryCode);
             if (parsedNumber.isValid()) {
                 ele.classList.remove('error-box');
                 this.isMobileNumberValid = true;
@@ -276,7 +276,7 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
     private removeSpecialCharacters(str) {
         let finalString;
         finalString = str?.replace(/[^a-zA-Z0-9]/g, '');
-        return finalString.substr(0, 6).toLowerCase();
+        return finalString.substr(0, 6)?.toLowerCase();
     }
 
     private getSixCharRandom() {

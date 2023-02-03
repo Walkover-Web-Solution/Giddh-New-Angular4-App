@@ -213,11 +213,11 @@ export class RecurringComponent implements OnInit, OnDestroy {
 
     public clickedOutside(event, el, fieldName: string) {
         if (fieldName === 'invoiceNumber') {
-            if (this.invoiceNumberInput.value !== null && this.invoiceNumberInput.value !== '') {
+            if (this.invoiceNumberInput?.value !== null && this.invoiceNumberInput?.value !== '') {
                 return;
             }
         } else if (fieldName === 'customerName') {
-            if (this.customerNameInput.value !== null && this.customerNameInput.value !== '') {
+            if (this.customerNameInput?.value !== null && this.customerNameInput?.value !== '') {
                 return;
             }
         }

@@ -27,7 +27,7 @@ export class UniqueNameDirective {
 
     @HostListener('input', ['$event'])
     public onInput(event: any) {
-        this.el.value = this.el.value.toLowerCase();
+        this.el.value = this.el?.value?.toLowerCase();
     }
 
 }

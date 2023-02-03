@@ -48,7 +48,7 @@ export class PermissionService {
      */
     public UpdateRole(model: IRoleCommonResponseAndRequest): Observable<BaseResponse<IRoleCommonResponseAndRequest, IRoleCommonResponseAndRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.put(this.config.apiUrl + PERMISSION_API.UPDATE_ROLE?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':roleUniqueName', model.uniqueName), model).pipe(map((res) => {
+        return this.http.put(this.config.apiUrl + PERMISSION_API.UPDATE_ROLE?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':roleUniqueName', model?.uniqueName), model).pipe(map((res) => {
             let data: BaseResponse<IRoleCommonResponseAndRequest, IRoleCommonResponseAndRequest> = res;
             data.request = model;
             return data;

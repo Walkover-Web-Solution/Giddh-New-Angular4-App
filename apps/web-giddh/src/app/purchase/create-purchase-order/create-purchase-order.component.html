@@ -72,7 +72,7 @@
                                                             class="list-item flex-column border-none"
                                                         >
                                                             <div class="item">{{ option.label }}</div>
-                                                            <div class="item-unique">{{ option.value }}</div>
+                                                            <div class="item-unique">{{ option?.value }}</div>
                                                         </a>
                                                     </ng-template>
 
@@ -116,7 +116,7 @@
                                                             (click)="
                                                                 openPurchaseOrderPreviewPopup(
                                                                     purchaseOrderPreviewModal,
-                                                                    order.uniqueName,
+                                                                    order?.uniqueName,
                                                                     order.accountUniqueName
                                                                 )
                                                             "
@@ -1509,7 +1509,7 @@
                                                     </div>
                                                     <div class="item-stock">
                                                         {{ commonLocaleData?.app_stock }}:
-                                                        {{ option.additional?.stock.uniqueName }}
+                                                        {{ option.additional?.stock?.uniqueName }}
                                                     </div>
                                                 </a>
                                             </ng-container>
@@ -1943,7 +1943,7 @@
                                                     #shippingDate="ngModel"
                                                     [placeholder]="localeData?.ship_date"
                                                     name="shippingDate"
-                                                    [(ngModel)]="purchaseOrder.templateDetails.other.shippingDate"
+                                                    [(ngModel)]="purchaseOrder?.templateDetails?.other.shippingDate"
                                                     [class.invalid-inp]="
                                                         shippingDate.errors &&
                                                         (shippingDate.dirty || shippingDate.touched)
@@ -1965,7 +1965,7 @@
                                                 <input
                                                     type="text"
                                                     name="shippedVia"
-                                                    [(ngModel)]="purchaseOrder.templateDetails.other.shippedVia"
+                                                    [(ngModel)]="purchaseOrder.templateDetails?.other.shippedVia"
                                                     class="form-control"
                                                     [placeholder]="localeData?.ship_via"
                                                 />
@@ -1974,7 +1974,7 @@
                                                 <input
                                                     type="text"
                                                     name="trackingNumber"
-                                                    [(ngModel)]="purchaseOrder.templateDetails.other.trackingNumber"
+                                                    [(ngModel)]="purchaseOrder.templateDetails?.other.trackingNumber"
                                                     class="form-control"
                                                     [placeholder]="localeData?.tracking_number"
                                                 />
@@ -1990,7 +1990,7 @@
                                 <textarea
                                     class="form-control"
                                     name="message2"
-                                    [(ngModel)]="purchaseOrder.templateDetails.other.message2"
+                                    [(ngModel)]="purchaseOrder.templateDetails?.other.message2"
                                 ></textarea>
                             </div>
                             <!-- endregion -->
@@ -2184,7 +2184,7 @@
                                             [suffix]="selectedSuffixForCurrency"
                                             [mask]="inputMaskFormat"
                                             [(ngModel)]="grandTotalMulDum"
-                                            (blur)="updateExchangeRate(grandTotalInr.value)"
+                                            (blur)="updateExchangeRate(grandTotalInr?.value)"
                                         />
                                     </div>
                                 </div>
@@ -3036,7 +3036,7 @@
                                         #shippingDate="ngModel"
                                         [placeholder]="localeData?.ship_date"
                                         name="shippingDate"
-                                        [(ngModel)]="purchaseOrder.templateDetails.other.shippingDate"
+                                        [(ngModel)]="purchaseOrder.templateDetails?.other.shippingDate"
                                         [class.invalid-inp]="
                                             shippingDate.errors && (shippingDate.dirty || shippingDate.touched)
                                         "
@@ -3055,7 +3055,7 @@
                                     <input
                                         type="text"
                                         name="shippedVia"
-                                        [(ngModel)]="purchaseOrder.templateDetails.other.shippedVia"
+                                        [(ngModel)]="purchaseOrder.templateDetails?.other.shippedVia"
                                         class="form-control"
                                         [placeholder]="localeData?.ship_via"
                                     />
@@ -3065,7 +3065,7 @@
                                     <input
                                         type="text"
                                         name="trackingNumber"
-                                        [(ngModel)]="purchaseOrder.templateDetails.other.trackingNumber"
+                                        [(ngModel)]="purchaseOrder.templateDetails?.other.trackingNumber"
                                         class="form-control"
                                         [placeholder]="localeData?.tracking_number"
                                     />
@@ -3079,7 +3079,7 @@
                         <textarea
                             class="form-control"
                             name="message2"
-                            [(ngModel)]="purchaseOrder.templateDetails.other.message2"
+                            [(ngModel)]="purchaseOrder.templateDetails?.other.message2"
                         ></textarea>
                     </div>
                 </div>
@@ -3250,7 +3250,7 @@
                                 [suffix]="selectedSuffixForCurrency"
                                 [mask]="inputMaskFormat"
                                 [(ngModel)]="grandTotalMulDum"
-                                (blur)="updateExchangeRate(grandTotalInr.value)"
+                                (blur)="updateExchangeRate(grandTotalInr?.value)"
                             />
                         </div>
                     </div>

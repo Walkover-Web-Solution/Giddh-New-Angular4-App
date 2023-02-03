@@ -69,7 +69,7 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
             });
         case LEDGER.GET_LEDGER_ACCOUNT_RESPONSE:
             data = action.payload as BaseResponse<AccountResponse, string>;
-            if (data.status === 'success') {
+            if (data?.status === 'success') {
                 return Object.assign({}, state, {
                     accountInprogress: false,
                     account: data.body
@@ -84,7 +84,7 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
             });
         case LEDGER.GET_TRANSACTION_RESPONSE:
             transaction = action.payload as BaseResponse<TransactionsResponse, TransactionsRequest>;
-            if (transaction.status === 'success') {
+            if (transaction?.status === 'success') {
                 return Object.assign({}, state, {
                     transactionInprogress: false,
                     isAdvanceSearchApplied: false,
@@ -101,7 +101,7 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
             return Object.assign({}, state, { transactionInprogress: true });
         case LEDGER.ADVANCE_SEARCH_RESPONSE:
             transaction = action.payload as BaseResponse<TransactionsResponse, TransactionsRequest>;
-            if (transaction.status === 'success') {
+            if (transaction?.status === 'success') {
                 let ledgerTransactionsBalance = {
                     closingBalance: transaction.body.closingBalance,
                     convertedClosingBalance: transaction.body.convertedClosingBalance,
@@ -131,7 +131,7 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
             return Object.assign({}, state, { downloadInvoiceInProcess: true });
         case LEDGER.DOWNLOAD_LEDGER_INVOICE_RESPONSE:
             let downloadData = action.payload as BaseResponse<string, DownloadLedgerRequest>;
-            if (downloadData.status === 'success') {
+            if (downloadData?.status === 'success') {
                 return Object.assign({}, state, { downloadInvoiceInProcess: false });
             }
             return Object.assign({}, state, { downloadInvoiceInProcess: false });
@@ -142,7 +142,7 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
             });
         case LEDGER.CREATE_BLANK_LEDGER_RESPONSE:
             let ledgerResponse: BaseResponse<LedgerResponse[], BlankLedgerVM> = action.payload;
-            if (ledgerResponse.status === 'success') {
+            if (ledgerResponse?.status === 'success') {
                 return Object.assign({}, state, {
                     ledgerCreateSuccess: true,
                     ledgerCreateInProcess: false,
@@ -173,7 +173,7 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
             let delResp = action.payload as BaseResponse<string, string>;
             return {
                 ...state,
-                isDeleteTrxEntrySuccessfull: delResp.status === 'success'
+                isDeleteTrxEntrySuccessfull: delResp?.status === 'success'
             };
         case LEDGER.RESET_DELETE_TRX_ENTRY_MODAL:
             return {
@@ -182,7 +182,7 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
             };
         case LEDGER.LEDGER_SHARED_ACCOUNT_WITH_RESPONSE:
             let sharedAccountData: BaseResponse<AccountSharedWithResponse[], string> = action.payload;
-            if (sharedAccountData.status === 'success') {
+            if (sharedAccountData?.status === 'success') {
                 return {
                     ...state,
                     activeAccountSharedWith: sharedAccountData.body
@@ -205,7 +205,7 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
             };
         case LEDGER.UPDATE_TXN_ENTRY_RESPONSE:
             let updateResponse: BaseResponse<LedgerResponse, LedgerUpdateRequest> = action.payload;
-            if (updateResponse.status === 'success') {
+            if (updateResponse?.status === 'success') {
                 return {
                     ...state,
                     isTxnUpdateInProcess: false,
@@ -225,7 +225,7 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
                 isQuickAccountInProcess: true
             };
         case LEDGER.CREATE_QUICK_ACCOUNT_RESPONSE:
-            if (action.payload.status === 'success') {
+            if (action.payload?.status === 'success') {
                 return {
                     ...state,
                     isQuickAccountInProcess: false,
@@ -239,7 +239,7 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
             };
         case LEDGER.GET_LEDGER_TRX_DETAILS_RESPONSE: {
             let response: BaseResponse<LedgerResponse, string> = action.payload;
-            if (response.status === 'success') {
+            if (response?.status === 'success') {
                 return {
                     ...state,
                     transactionDetails: response.body
@@ -261,7 +261,7 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
             return cloneDeep(initialState);
         case LEDGER.GET_RECONCILIATION_RESPONSE: {
             let res = action.payload;
-            if (res.status === 'success') {
+            if (res?.status === 'success') {
                 return Object.assign({}, state, {
                     transactionsResponse: prepareTransactions(res.body)
                 });
@@ -364,7 +364,7 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
         }
         case LEDGER.GET_LEDGER_BALANCE_RESPONSE: {
             let res = action.payload;
-            if (res.status === 'success') {
+            if (res?.status === 'success') {
                 return Object.assign({}, state, {
                     ledgerTransactionsBalance: res.body
                 });
