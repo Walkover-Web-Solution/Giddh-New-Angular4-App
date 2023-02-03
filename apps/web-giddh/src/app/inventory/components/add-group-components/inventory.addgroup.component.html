@@ -66,7 +66,7 @@
                                         maxlength="10"
                                         decimalDigitsDirective
                                         formControlName="hsnNumber"
-                                        *ngIf="addGroupForm.get('showCodeType').value === 'hsn'"
+                                        *ngIf="addGroupForm.get('showCodeType')?.value === 'hsn'"
                                     />
                                     <input
                                         type="text"
@@ -74,14 +74,14 @@
                                         maxlength="10"
                                         formControlName="sacNumber"
                                         decimalDigitsDirective
-                                        *ngIf="addGroupForm.get('showCodeType').value === 'sac'"
+                                        *ngIf="addGroupForm.get('showCodeType')?.value === 'sac'"
                                     />
                                 </div>
                             </div>
                             <div class="pd-b1" [hidden]="defaultGrpActive">
                                 <label for="isSelfParentUpdt">
                                     <ngx-switch
-                                        [status]="addGroupForm.get('isSubGroup').value ? true : false"
+                                        [status]="addGroupForm.get('isSubGroup')?.value ? true : false"
                                         id="isSelfParentUpdt"
                                         name="parentStockGroup"
                                         [onText]="'On'"
@@ -102,7 +102,7 @@
                                         <sh-select
                                             [options]="groupsData$ | async"
                                             formControlName="parentStockGroupUniqueName"
-                                            [disabled]="!addGroupForm.get('isSubGroup').value"
+                                            [disabled]="!addGroupForm.get('isSubGroup')?.value"
                                             [placeholder]="'Select Parent Group'"
                                             [multiple]="false"
                                             (selected)="groupSelected($event)"

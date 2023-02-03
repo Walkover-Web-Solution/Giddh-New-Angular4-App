@@ -27,7 +27,7 @@ export function homeReducer(state = initialState, action: CustomActions): HomeSt
         }
         case HOME.GET_RATIO_ANALYSIS_RESPONSE: {
             let rationAnalysisRes: BaseResponse<any, string> = action.payload;
-            if (rationAnalysisRes.status === 'success') {
+            if (rationAnalysisRes?.status === 'success') {
                 return Object.assign({}, state, { RatioAnalysis: rationAnalysisRes.body });
             }
             return Object.assign({}, state, { RatioAnalysis: null });
@@ -35,7 +35,7 @@ export function homeReducer(state = initialState, action: CustomActions): HomeSt
 
         case HOME.GET_REVENUE_GRAPH_TYPES_RESPONSE: {
             let revenueGraphTypes: BaseResponse<GraphTypesResponse, string> = action.payload;
-            if (revenueGraphTypes.status === 'success') {
+            if (revenueGraphTypes?.status === 'success') {
                 return Object.assign({}, state, { revenueGraphTypes: revenueGraphTypes.body });
             }
             return Object.assign({}, state, { revenueGraphTypes: null });

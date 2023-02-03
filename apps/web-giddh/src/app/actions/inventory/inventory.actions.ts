@@ -29,7 +29,7 @@ export class InventoryAction {
             ofType(InventoryActionsConst.AddNewGroupResponse),
             map((response: CustomActions) => {
                 let data: BaseResponse<StockGroupResponse, StockGroupRequest> = response.payload;
-                if (data.status === 'error') {
+                if (data?.status === 'error') {
                     this._toasty.clearAllToaster();
                     this._toasty.errorToast(data.message, data.code);
                 } else {
@@ -51,7 +51,7 @@ export class InventoryAction {
             ofType(InventoryActionsConst.UpdateGroupResponse),
             map((response: CustomActions) => {
                 let data: BaseResponse<StockGroupResponse, StockGroupRequest> = response.payload;
-                if (data.status === 'error') {
+                if (data?.status === 'error') {
                     this._toasty.clearAllToaster();
                     this._toasty.errorToast(data.message, data.code);
                 } else {
@@ -73,7 +73,7 @@ export class InventoryAction {
             ofType(InventoryActionsConst.RemoveGroupResponse),
             map((response: CustomActions) => {
                 let data: BaseResponse<string, string> = response.payload;
-                if (data.status === 'error') {
+                if (data?.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 } else {
                     this._toasty.successToast(data.body, '');
@@ -165,7 +165,7 @@ export class InventoryAction {
             ofType(InventoryActionsConst.CreateStockResponse),
             map((response: CustomActions) => {
                 let data: BaseResponse<StockDetailResponse, CreateStockRequest> = response.payload;
-                if (data.status === 'error') {
+                if (data?.status === 'error') {
                     this._toasty.clearAllToaster();
                     this._toasty.errorToast(data.message, data.code);
                 } else {
@@ -194,7 +194,7 @@ export class InventoryAction {
             ofType(InventoryActionsConst.UpdateStockResponse),
             map((response: CustomActions) => {
                 let data: BaseResponse<StockDetailResponse, CreateStockRequest> = response.payload;
-                if (data.status === 'error') {
+                if (data?.status === 'error') {
                     this._toasty.clearAllToaster();
                     this._toasty.errorToast(data.message, data.code);
                 } else {
@@ -216,7 +216,7 @@ export class InventoryAction {
             ofType(InventoryActionsConst.RemoveStockResponse),
             map((response: CustomActions) => {
                 let data: BaseResponse<string, string> = response.payload;
-                if (data.status === 'error') {
+                if (data?.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 } else {
                     this._toasty.successToast(data.body, '');
@@ -250,14 +250,14 @@ export class InventoryAction {
             ofType(INVENTORY_BRANCH_TRANSFER.CREATE_TRANSFER),
             switchMap((action: CustomActions) => this._inventoryService.BranchTransfer(action.payload)),
             map((res: BaseResponse<BranchTransferResponse, TransferDestinationRequest | TransferProductsRequest>) => {
-                if (res.status === 'error') {
+                if (res?.status === 'error') {
                     this._toasty.errorToast(res.message);
                 } else {
                     this._toasty.successToast('Branch transferred successfully');
                 }
                 return {
                     type: INVENTORY_BRANCH_TRANSFER.CREATE_TRANSFER_RESPONSE,
-                    payload: res.status === 'success' ? res.body : null
+                    payload: res?.status === 'success' ? res.body : null
                 } as CustomActions;
             })));
 
@@ -266,13 +266,13 @@ export class InventoryAction {
             ofType(INVENTORY_LINKED_STOCKS.GET_LINKED_STOCKS),
             switchMap(() => this._inventoryService.getLinkedStocks()),
             map((res: BaseResponse<LinkedStocksResponse, string>) => {
-                if (res.status === 'error') {
+                if (res?.status === 'error') {
                     this._toasty.errorToast(res.message);
                 }
 
                 return {
                     type: INVENTORY_LINKED_STOCKS.GET_LINKED_STOCKS_RESPONSE,
-                    payload: res.status === 'success' ? res.body : null
+                    payload: res?.status === 'success' ? res.body : null
                 };
             })));
 
@@ -291,7 +291,7 @@ export class InventoryAction {
             ofType(InventoryActionsConst.MoveStockResponse),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, any> = response.payload;
-                if (data.status === 'error') {
+                if (data?.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 } else {
                     this._toasty.successToast(data.body, '');

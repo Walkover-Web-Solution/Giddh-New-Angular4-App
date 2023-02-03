@@ -175,10 +175,10 @@
                         </div>
                     </div>
 
-                    <section class="col-md-12" *ngIf="form.value.isManufactured">
+                    <section class="col-md-12" *ngIf="form?.value.isManufactured">
                         <div>
                             <h1 class="section-head bd-rb">
-                                <strong>{{ form.controls["stock"].value }} (Made with)</strong>
+                                <strong>{{ form.controls["stock"]?.value }} (Made with)</strong>
                             </h1>
 
                             <div formGroupName="manufacturingDetails">
@@ -217,15 +217,15 @@
 
                                     <div
                                         class="col-3 d-flex align-items-center height-30"
-                                        *ngIf="manufacturingDetails.controls['manufacturingQuantity'].value"
+                                        *ngIf="manufacturingDetails.controls['manufacturingQuantity']?.value"
                                     >
                                         <label>&nbsp;</label>
                                         <span class="d-block"
                                             ><strong
                                                 >= (
-                                                {{ manufacturingDetails.controls["manufacturingQuantity"].value }}
-                                                {{ manufacturingDetails.controls["manufacturingUnitCode"].value }}
-                                                {{ stock.value }} )</strong
+                                                {{ manufacturingDetails.controls["manufacturingQuantity"]?.value }}
+                                                {{ manufacturingDetails.controls["manufacturingUnitCode"]?.value }}
+                                                {{ stock?.value }} )</strong
                                             ></span
                                         >
                                     </div>

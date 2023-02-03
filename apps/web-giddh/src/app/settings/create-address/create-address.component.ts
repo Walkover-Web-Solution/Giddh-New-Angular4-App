@@ -10,7 +10,7 @@ import { SettingsAsideConfiguration } from '../constants/settings.constant';
 
 function validateFieldWithPatterns(patterns: Array<string>) {
     return (field: FormControl): { [key: string]: any } => {
-        return !field.value || patterns.some(pattern => new RegExp(pattern).test(field.value)) ? null : {
+        return !field?.value || patterns.some(pattern => new RegExp(pattern).test(field?.value)) ? null : {
             validateFieldWithPatterns: {
                 valid: false
             }
@@ -89,7 +89,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
                     pincode: []
                 });
                 if (this.currentOrganizationUniqueName && this.addressConfiguration && this.addressConfiguration.linkedEntities
-                    && this.addressConfiguration.linkedEntities.some(entity => entity.uniqueName === this.currentOrganizationUniqueName)) {
+                    && this.addressConfiguration.linkedEntities.some(entity => entity?.uniqueName === this.currentOrganizationUniqueName)) {
                     // This will by default show the current organization unique name as selected linked entity
                     this.addressForm.get('linkedEntity')?.patchValue([`${this.currentOrganizationUniqueName}`]);
                 }
@@ -101,14 +101,14 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
                         taxNumber: [this.addressToUpdate.taxNumber, (taxValidatorPatterns && taxValidatorPatterns.length) ? validateFieldWithPatterns(taxValidatorPatterns) : null],
                         state: [{ value: this.addressToUpdate.stateCode, disabled: !!this.addressToUpdate.taxNumber && this.addressConfiguration.tax && this.addressConfiguration.tax.name === 'GSTIN' }, Validators.required],
                         address: [this.addressToUpdate.address, this.addressToUpdate.taxNumber && this.addressConfiguration.tax && this.addressConfiguration.tax.name === 'GSTIN' ? [Validators.required] : []],
-                        linkedEntity: [this.addressToUpdate.linkedEntities.map(entity => entity.uniqueName)],
+                        linkedEntity: [this.addressToUpdate.linkedEntities.map(entity => entity?.uniqueName)],
                         pincode: [this.addressToUpdate.pincode]
                     });
                     const linkedEntity = [...this.addressToUpdate.linkedEntities];
                     while (linkedEntity?.length) {
                         // Update the default entity status in UPDATE mode
                         const entity = linkedEntity.pop();
-                        const entityIndex = this.addressConfiguration.linkedEntities.findIndex(linkEntity => linkEntity.uniqueName === entity.uniqueName);
+                        const entityIndex = this.addressConfiguration.linkedEntities.findIndex(linkEntity => linkEntity?.uniqueName === entity?.uniqueName);
                         if (entityIndex > -1) {
                             this.addressConfiguration.linkedEntities[entityIndex].isDefault = entity.isDefault;
                         }
@@ -119,13 +119,13 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
                     this.addressForm = this.formBuilder.group({
                         name: [this.branchToUpdate.name, [Validators.required, Validators.maxLength(100)]],
                         alias: [this.branchToUpdate.alias, [Validators.required, Validators.maxLength(50)]],
-                        linkedEntity: [this.branchToUpdate.linkedEntities.map(entity => entity.uniqueName)]
+                        linkedEntity: [this.branchToUpdate.linkedEntities.map(entity => entity?.uniqueName)]
                     });
                     const linkedEntity = [...this.branchToUpdate.linkedEntities];
                     while (linkedEntity?.length) {
                         // Update the default entity status in UPDATE mode
                         const entity = linkedEntity.pop();
-                        const entityIndex = this.addressConfiguration.linkedEntities.findIndex(linkEntity => linkEntity.uniqueName === entity.uniqueName);
+                        const entityIndex = this.addressConfiguration.linkedEntities.findIndex(linkEntity => linkEntity?.uniqueName === entity?.uniqueName);
                         if (entityIndex > -1) {
                             this.addressConfiguration.linkedEntities[entityIndex].isDefault = entity.isDefault;
                         }
@@ -135,13 +135,13 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
                 if (this.warehouseToUpdate) {
                     this.addressForm = this.formBuilder.group({
                         name: [this.warehouseToUpdate.name, [Validators.required, Validators.maxLength(100)]],
-                        linkedEntity: [this.warehouseToUpdate.linkedEntities.map(entity => entity.uniqueName)]
+                        linkedEntity: [this.warehouseToUpdate.linkedEntities.map(entity => entity?.uniqueName)]
                     });
                     const linkedEntity = [...this.warehouseToUpdate.linkedEntities];
                     while (linkedEntity?.length) {
                         // Update the default entity status in UPDATE mode
                         const entity = linkedEntity.pop();
-                        const entityIndex = this.addressConfiguration.linkedEntities.findIndex(linkEntity => linkEntity.uniqueName === entity.uniqueName);
+                        const entityIndex = this.addressConfiguration.linkedEntities.findIndex(linkEntity => linkEntity?.uniqueName === entity?.uniqueName);
                         if (entityIndex > -1) {
                             this.addressConfiguration.linkedEntities[entityIndex].isDefault = entity.isDefault;
                         }
@@ -152,8 +152,8 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
             if (this.addressConfiguration.type === SettingsAsideFormType.CreateAddress && this.hideLinkEntity) {
                 this.addressConfiguration?.linkedEntities?.forEach(option => {
                     this.addressForm.get('linkedEntity')?.patchValue([
-                        ...this.addressForm.get('linkedEntity').value,
-                        option.value
+                        ...this.addressForm.get('linkedEntity')?.value,
+                        option?.value
                     ]);
                 });
             }
@@ -162,7 +162,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
         if (this.addressConfiguration.tax && this.addressConfiguration.tax.name && this.addressConfiguration.tax.name === 'GSTIN') {
             const taxField = this.addressForm.get('taxNumber');
             taxField.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(value => {
-                if (taxField.valid && taxField.value) {
+                if (taxField.valid && taxField?.value) {
                     this.addressForm.get('address').setValidators([Validators.required]);
                 } else {
                     this.addressForm.get('address').setValidators(null);
@@ -201,9 +201,9 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
     public handleFormSubmit(): void {
         if (this.addressConfiguration.type === SettingsAsideFormType.EditAddress || this.addressConfiguration.type === SettingsAsideFormType.CreateAddress) {
             const taxField = this.addressForm.get('taxNumber');
-            if (taxField.value && taxField.valid && this.addressConfiguration.tax && this.addressConfiguration.tax.name === 'GSTIN') {
+            if (taxField?.value && taxField.valid && this.addressConfiguration.tax && this.addressConfiguration.tax.name === 'GSTIN') {
                 // Tax is valid and has value then address is mandatory for GST taxes
-                const addresssValue = (this.addressForm.get('address').value || '')?.trim();
+                const addresssValue = (this.addressForm.get('address')?.value || '')?.trim();
                 this.addressForm.get('address').setValue(addresssValue);
                 if (!addresssValue) {
                     return;
@@ -238,14 +238,14 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
             if (keyAvoid.findIndex(key => key === event.key) > -1) {
                 return;
             }
-            let gstVal: string = this.addressForm.get('taxNumber').value?.trim();
+            let gstVal: string = this.addressForm.get('taxNumber')?.value?.trim();
             this.addressForm.get('taxNumber').setValue(gstVal);
             if (gstVal?.length) {
 
                 if (gstVal.length >= 2) {
                     let currentState = this.addressConfiguration.stateList.find(state => state.code === gstVal.substring(0, 2));
                     if (currentState) {
-                        this.addressForm.get('state')?.patchValue(currentState.value);
+                        this.addressForm.get('state')?.patchValue(currentState?.value);
                         this.addressForm.get('state').disable();
                     } else {
                         this.addressForm.get('state')?.patchValue(null);
@@ -283,7 +283,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
         event.preventDefault();
         if (!option.isDefault) {
             this.addressConfiguration.linkedEntities.forEach(entity => {
-                if (entity.value !== option.value) {
+                if (entity?.value !== option?.value) {
                     entity.isDefault = false;
                 }
             });
@@ -291,8 +291,8 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
         option.isDefault = !option.isDefault;
         if (option.isDefault) {
             this.addressForm.get('linkedEntity')?.patchValue([
-                ...this.addressForm.get('linkedEntity').value,
-                option.value
+                ...this.addressForm.get('linkedEntity')?.value,
+                option?.value
             ]);
         }
     }
@@ -317,7 +317,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
      */
     public handleFinalSelection(selectedEntities: Array<any>): void {
         this.addressConfiguration.linkedEntities.forEach(entity => {
-            if (!selectedEntities.includes(entity.uniqueName)) {
+            if (!selectedEntities.includes(entity?.uniqueName)) {
                 entity.isDefault = false;
             }
         });

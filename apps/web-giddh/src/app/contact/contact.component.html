@@ -202,8 +202,8 @@
                                                     (click)="$event.stopPropagation()"
                                                     (keydown.enter)="
                                                         $event.stopPropagation();
-                                                        selectAllCheckbox.checked = !selectAllCheckbox.checked;
-                                                        selectAllColumns(selectAllCheckbox.checked)
+                                                        selectAllCheckbox.checked = !selectAllCheckbox?.checked;
+                                                        selectAllColumns(selectAllCheckbox?.checked)
                                                     "
                                                 >
                                                     <mat-checkbox
@@ -211,21 +211,21 @@
                                                         color="primary"
                                                         name="selectAll"
                                                         [(ngModel)]="selectAll"
-                                                        (change)="selectAllColumns($event.checked)"
+                                                        (change)="selectAllColumns($event?.checked)"
                                                         >{{ commonLocaleData?.app_select_all }}
                                                     </mat-checkbox>
                                                 </button>
                                                 <ng-container *ngFor="let item of availableColumnsCount">
                                                     <button
-                                                        *ngIf="showFieldFilter[item.value]"
+                                                        *ngIf="showFieldFilter[item?.value]"
                                                         mat-menu-item
                                                         (click)="$event.stopPropagation()"
                                                         (keydown.enter)="
                                                             $event.stopPropagation();
-                                                            optionsCheckbox.checked = !optionsCheckbox.checked;
+                                                            optionsCheckbox.checked = !optionsCheckbox?.checked;
                                                             columnFilter(
-                                                                !showFieldFilter[item.value].visibility,
-                                                                item.value
+                                                                !showFieldFilter[item?.value].visibility,
+                                                                item?.value
                                                             )
                                                         "
                                                     >
@@ -234,10 +234,10 @@
                                                             class="text-capitalize"
                                                             color="primary"
                                                             name="{{ item?.value }}"
-                                                            (ngModelChange)="columnFilter($event, item.value)"
-                                                            [(ngModel)]="showFieldFilter[item.value].visibility"
+                                                            (ngModelChange)="columnFilter($event, item?.value)"
+                                                            [(ngModel)]="showFieldFilter[item?.value].visibility"
                                                         >
-                                                            {{ showFieldFilter[item.value].displayName }}</mat-checkbox
+                                                            {{ showFieldFilter[item?.value].displayName }}</mat-checkbox
                                                         >
                                                     </button>
                                                 </ng-container>

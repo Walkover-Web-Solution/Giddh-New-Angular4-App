@@ -115,7 +115,7 @@ export class SignupComponent implements OnInit, OnDestroy {
 
         this.isSocialLogoutAttempted$ = this.store.pipe(select(p => p.login.isSocialLogoutAttempted), takeUntil(this.destroyed$));
         contriesWithCodes.map(c => {
-            this.countryCodeList.push({ value: c.countryName, label: c.value });
+            this.countryCodeList.push({ value: c.countryName, label: c?.value });
         });
         this.userLoginState$ = this.store.pipe(select(p => p.session.userLoginState), takeUntil(this.destroyed$));
         this.userDetails$ = this.store.pipe(select(p => p.session.user), takeUntil(this.destroyed$));
@@ -236,7 +236,7 @@ export class SignupComponent implements OnInit, OnDestroy {
         let data = new VerifyMobileModel();
         data.countryCode = Number(user.countryCode);
         data.mobileNumber = user.contactNumber;
-        data.oneTimePassword = this.twoWayOthForm.value.otp;
+        data.oneTimePassword = this.twoWayOthForm?.value.otp;
         this.store.dispatch(this.loginAction.VerifyTwoWayAuthRequest(data));
     }
 
@@ -322,8 +322,8 @@ export class SignupComponent implements OnInit, OnDestroy {
      * @memberof SignupComponent
      */
     public setCountryCode(event: IOption) {
-        if (event.value) {
-            let country = this.countryCodeList?.filter((obj) => obj.value === event.value);
+        if (event?.value) {
+            let country = this.countryCodeList?.filter((obj) => obj?.value === event.value);
             this.selectedCountry = country[0].label;
         }
     }
@@ -340,7 +340,7 @@ export class SignupComponent implements OnInit, OnDestroy {
     }
 
     public SignupWithPasswd(model: FormGroup) {
-        let ObjToSend = model.value;
+        let ObjToSend = model?.value;
         if (ObjToSend) {
             this.store.dispatch(this.loginAction.SignupWithPasswdRequest(ObjToSend));
         }

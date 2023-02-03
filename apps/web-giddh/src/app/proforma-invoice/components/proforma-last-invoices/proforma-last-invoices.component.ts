@@ -15,7 +15,7 @@ export class ProformaLastInvoicesComponent {
     }
 
     onInvoiceSelected(item: PreviousInvoicesVm) {
-        this.invoiceSelected.emit({ accountUniqueName: item.account?.uniqueName, invoiceNo: item.versionNumber, uniqueName: item.uniqueName });
+        this.invoiceSelected.emit({ accountUniqueName: item.account?.uniqueName, invoiceNo: item.versionNumber, uniqueName: item?.uniqueName });
     }
 
     public clickInside(event) {

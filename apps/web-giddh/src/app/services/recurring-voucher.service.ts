@@ -64,7 +64,7 @@ export class RecurringVoucherService {
         };
         return this.http.patch(this.config.apiUrl + RECURRING_VOUCHER_API.UPDATE
             ?.replace('{{companyname}}', companyUniqueName)
-            ?.replace('{{uniqueName}}', model.uniqueName), req).pipe(
+            ?.replace('{{uniqueName}}', model?.uniqueName), req).pipe(
                 map((res) => {
                     let data: BaseResponse<RecurringInvoice, string> = res;
                     data.queryString = {};

@@ -225,7 +225,7 @@ export class SettingsLinkedAccountsActions {
     }
 
     public validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false, errorAction: CustomActions = { type: 'EmptyAction' }): CustomActions {
-        if (response.status === 'error') {
+        if (response?.status === 'error') {
             if (showToast) {
                 this.toasty.errorToast(response.message);
             }

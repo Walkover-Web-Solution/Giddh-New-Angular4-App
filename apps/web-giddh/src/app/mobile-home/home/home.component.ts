@@ -351,7 +351,7 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
             this.focusInSearchBox();
             this.searchCommandK(true);
         } else {
-            let url = `ledger/${item.uniqueName}`;
+            let url = `ledger/${item?.uniqueName}`;
             this.router.navigate([url]);
         }
     }
@@ -377,7 +377,7 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
     public handleKeydown(e: any): void {
         let key = e.which || e.keyCode;
 
-        if (key === BACKSPACE && !this.searchElement?.nativeElement.value && this.listOfSelectedGroups && this.listOfSelectedGroups.length > 0) {
+        if (key === BACKSPACE && !this.searchElement?.nativeElement?.value && this.listOfSelectedGroups && this.listOfSelectedGroups.length > 0) {
             this.removeItemFromSelectedGroups();
         }
     }

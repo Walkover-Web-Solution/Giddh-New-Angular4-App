@@ -28,7 +28,7 @@ export class SettingsTaxesActions {
             ofType(SETTINGS_TAXES_ACTIONS.CREATE_TAX_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, any> = response.payload;
-                if (data.status === 'error') {
+                if (data?.status === 'error') {
                     this.toasty.errorToast(data.message, data.code);
                 } else {
                     this.toasty.successToast(this.localeService.translate("app_messages.tax_created"));
@@ -49,7 +49,7 @@ export class SettingsTaxesActions {
             ofType(SETTINGS_TAXES_ACTIONS.UPDATE_TAX_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, any> = response.payload;
-                if (data.status === 'error') {
+                if (data?.status === 'error') {
                     this.toasty.errorToast(data.message, data.code);
                 } else {
                     this.toasty.successToast(this.localeService.translate("app_messages.tax_updated"));
@@ -61,7 +61,7 @@ export class SettingsTaxesActions {
         .pipe(
             ofType(SETTINGS_TAXES_ACTIONS.DELETE_TAX),
             switchMap((action: CustomActions) => {
-                return this.settingsTaxesService.DeleteTax(action.payload.value).pipe(
+                return this.settingsTaxesService.DeleteTax(action.payload?.value).pipe(
                     tap(resp => {
                         if (action.payload.linkedAccount) {
                             this.store.dispatch(this.generalActions.updateCurrentLiabilities(action.payload.linkedAccount));
@@ -75,7 +75,7 @@ export class SettingsTaxesActions {
             ofType(SETTINGS_TAXES_ACTIONS.DELETE_TAX_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, any> = response.payload;
-                if (data.status === 'error') {
+                if (data?.status === 'error') {
                     this.toasty.errorToast(data.message, data.code);
                 } else {
                     this.toasty.successToast(this.localeService.translate("app_messages.tax_deleted"));
@@ -145,7 +145,7 @@ export class SettingsTaxesActions {
     }
 
     public validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false, errorAction: CustomActions = { type: 'EmptyAction' }): CustomActions {
-        if (response.status === 'error') {
+        if (response?.status === 'error') {
             if (showToast) {
                 this.toasty.errorToast(response.message);
             }

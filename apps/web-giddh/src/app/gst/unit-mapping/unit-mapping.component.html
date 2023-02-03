@@ -28,7 +28,7 @@
                         [placeholder]="'Select Unit'"
                         [options]="units"
                         [defaultValue]="unit?.mappedGstUnit"
-                        (selectedOption)="unit.mappedGstUnit = $event.value"
+                        (selectedOption)="unit.mappedGstUnit = $event?.value"
                     ></select-field>
                 </div>
             </mat-grid-tile>

@@ -108,7 +108,7 @@ export class SelectDropdownComponent
 
     public onSingleFilterInput(event: any) {
         if (!this.enableDynamicSearch) {
-            this.singleFilterInput.emit(event.target.value);
+            this.singleFilterInput.emit(event.target?.value);
         }
     }
 

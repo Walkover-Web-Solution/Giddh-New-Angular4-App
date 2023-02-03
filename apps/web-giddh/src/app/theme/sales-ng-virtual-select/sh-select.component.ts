@@ -185,7 +185,7 @@ export class SalesShSelectComponent implements ControlValueAccessor, AfterViewIn
             return array?.filter((item) => {
                 let mergedAccounts = item.additional && item.additional.mergedAccounts ?
                     _.cloneDeep(item.additional.mergedAccounts.split(',').map(a => a.trim().toLocaleLowerCase())) : '';
-                return _.includes(item.label.toLocaleLowerCase(), term) || _.includes(item.additional.uniqueName.toLocaleLowerCase(), term) || _.includes(mergedAccounts, term);
+                return _.includes(item.label.toLocaleLowerCase(), term) || _.includes(item.additional?.uniqueName.toLocaleLowerCase(), term) || _.includes(mergedAccounts, term);
             });
         } else {
             return array?.filter((item: IOption) => {
@@ -205,7 +205,7 @@ export class SalesShSelectComponent implements ControlValueAccessor, AfterViewIn
                 if (this.customFilter) {
                     return this.customFilter(lowercaseFilter, item);
                 }
-                return !lowercaseFilter || (item.label).toLocaleLowerCase().indexOf(lowercaseFilter) !== -1;
+                return !lowercaseFilter || (item.label).toLocaleLowerCase()?.indexOf(lowercaseFilter) !== -1;
             }) : [];
 
             if (this.customSorting) {
@@ -260,10 +260,10 @@ export class SalesShSelectComponent implements ControlValueAccessor, AfterViewIn
     }
 
     public selectMultiple(item) {
-        if (this.selectedValues.indexOf(item) === -1) {
+        if (this.selectedValues?.indexOf(item) === -1) {
             this.selectedValues.push(item);
         } else {
-            this.selectedValues.splice(this.selectedValues.indexOf(item), 1);
+            this.selectedValues.splice(this.selectedValues?.indexOf(item), 1);
         }
     }
 
@@ -275,7 +275,7 @@ export class SalesShSelectComponent implements ControlValueAccessor, AfterViewIn
         this.isOpen = true;
         this.onShow.emit();
         if (this.menuEle && this.menuEle.virtualScrollElm && this.menuEle.virtualScrollElm) {
-            let item = this.rows.find(p => p?.value === (this._selectedValues?.length > 0 ? this._selectedValues[0] : (this.rows?.length > 0 ? this.rows[0].value : null)));
+            let item = this.rows.find(p => p?.value === (this._selectedValues?.length > 0 ? this._selectedValues[0] : (this.rows?.length > 0 ? this.rows[0]?.value : null)));
             if (item !== null) {
                 this.menuEle.virtualScrollElm.scrollInto(item);
             }
@@ -383,7 +383,7 @@ export class SalesShSelectComponent implements ControlValueAccessor, AfterViewIn
 
     public ngOnChanges(changes: SimpleChanges): void {
         if ('forceClearReactive' in changes && !changes.forceClearReactive.firstChange) {
-            if (this.forceClearReactive.status) {
+            if (this.forceClearReactive?.status) {
                 this.filter = '';
                 this.clear();
 

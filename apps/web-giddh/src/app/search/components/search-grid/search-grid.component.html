@@ -131,7 +131,7 @@
                         <td [attr.data-title]="localeData?.select_item">
                             <input
                                 type="checkbox"
-                                [checked]="selectedItems.indexOf(item?.uniqueName) > -1"
+                                [checked]="selectedItems?.indexOf(item?.uniqueName) > -1"
                                 (change)="toggleSelection($event, item)"
                             />
                         </td>

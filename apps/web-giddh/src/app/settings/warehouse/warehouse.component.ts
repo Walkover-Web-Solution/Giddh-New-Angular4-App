@@ -160,7 +160,7 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
     public ngAfterViewInit(): void {
         fromEvent(this.searchWarehouse?.nativeElement, 'input').pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe((event: any) => {
             this.showLoader = true;
-            this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, query: encodeURIComponent(event.target.value), count: PAGINATION_LIMIT }));
+            this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, query: encodeURIComponent(event.target?.value), count: PAGINATION_LIMIT }));
         });
     }
 
@@ -579,8 +579,8 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
                     {
                         ...address,
                         isDefault: false,
-                        label: address.name,
-                        value: address.uniqueName
+                        label: address?.name,
+                        value: address?.uniqueName
                     }));
                 if (successCallback) {
                     successCallback();

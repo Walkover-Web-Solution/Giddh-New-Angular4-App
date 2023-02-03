@@ -303,7 +303,7 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
 
                         if (purchaseOrders && purchaseOrders.items && purchaseOrders.items.length > 0) {
                             purchaseOrders.items.map(item => {
-                                item.isSelected = this.generalService.checkIfValueExistsInArray(this.selectedPo, item.uniqueName);
+                                item.isSelected = this.generalService.checkIfValueExistsInArray(this.selectedPo, item?.uniqueName);
                                 let grandTotalConversionRate = 0, grandTotalAmountForCompany, grandTotalAmountForAccount;
                                 grandTotalAmountForCompany = Number(item?.grandTotal?.amountForCompany) || 0;
                                 grandTotalAmountForAccount = Number(item?.grandTotal?.amountForAccount) || 0;
@@ -515,9 +515,9 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
             item.isSelected = type;
 
             if (this.allItemsSelected) {
-                this.selectedPo = this.generalService.addValueInArray(this.selectedPo, item.uniqueName);
+                this.selectedPo = this.generalService.addValueInArray(this.selectedPo, item?.uniqueName);
             } else {
-                this.selectedPo = this.generalService.removeValueFromArray(this.selectedPo, item.uniqueName);
+                this.selectedPo = this.generalService.removeValueFromArray(this.selectedPo, item?.uniqueName);
             }
         });
     }
@@ -532,9 +532,9 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
     public toggleItem(item: any, action: boolean): void {
         item.isSelected = action;
         if (action) {
-            this.selectedPo = this.generalService.addValueInArray(this.selectedPo, item.uniqueName);
+            this.selectedPo = this.generalService.addValueInArray(this.selectedPo, item?.uniqueName);
         } else {
-            this.selectedPo = this.generalService.removeValueFromArray(this.selectedPo, item.uniqueName);
+            this.selectedPo = this.generalService.removeValueFromArray(this.selectedPo, item?.uniqueName);
             this.allItemsSelected = false;
         }
     }
@@ -689,8 +689,8 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
      */
     public openSendMailModal(item: any, template: TemplateRef<any>): void {
         this.sendEmailRequest.email = item.vendor.email;
-        this.sendEmailRequest.uniqueName = item.uniqueName;
-        this.sendEmailRequest.accountUniqueName = item.vendor.uniqueName;
+        this.sendEmailRequest.uniqueName = item?.uniqueName;
+        this.sendEmailRequest.accountUniqueName = item.vendor?.uniqueName;
         this.sendEmailRequest.companyUniqueName = this.purchaseOrderGetRequest.companyUniqueName;
         this.modalRef = this.modalService.show(template);
     }
@@ -808,7 +808,7 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
             text = this.localeData?.delayed_by_days;
             text = text?.replace("[DAYS]", String(this.formatNumber(dueDays)));
         }
-        
+
         return text;
     }
 }

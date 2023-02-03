@@ -164,7 +164,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
                     each(cmp.userEntityRoles, (company) => {
                         if (company.entity.entity === 'COMPANY' && company.role?.uniqueName === 'super_admin') {
                             if (branches?.length) {
-                                let existIndx = branches.findIndex((b) => b.uniqueName === cmp.uniqueName);
+                                let existIndx = branches.findIndex((b) => b?.uniqueName === cmp?.uniqueName);
                                 if (existIndx === -1) {
                                     companiesWithSuperAdminRole.push(cmp);
                                 }
@@ -193,7 +193,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         });
 
         fromEvent(this.branchSearch?.nativeElement, 'input').pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe((event: any) => {
-            this.handleBranchSearch(event.target.value);
+            this.handleBranchSearch(event.target?.value);
         });
 
         this.imgPath = isElectron ? 'assets/images/warehouse-vector.svg' : AppUrl + APP_FOLDER + 'assets/images/warehouse-vector.svg';
@@ -209,7 +209,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         let branches = [...this.unFilteredBranchList];
         if (query) {
             const lowercaseQuery = query.toLowerCase();
-            branches = this.unFilteredBranchList?.filter(branch => (branch.name && branch.name.toLowerCase().includes(lowercaseQuery)) || (branch.alias && branch.alias.toLowerCase().includes(lowercaseQuery)));
+            branches = this.unFilteredBranchList?.filter(branch => (branch.name && branch.name?.toLowerCase().includes(lowercaseQuery)) || (branch.alias && branch.alias?.toLowerCase().includes(lowercaseQuery)));
         }
         this.branches$ = observableOf(branches);
     }
@@ -288,10 +288,10 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     public selectAllCompanies(ev) {
         this.selectedCompaniesUniquename = [];
         this.selectedCompaniesName = [];
-        if (ev.target.checked) {
+        if (ev.target?.checked) {
             this.companies$.pipe(take(1)).subscribe((companies) => {
                 each(companies, (company) => {
-                    this.selectedCompaniesUniquename.push(company.uniqueName);
+                    this.selectedCompaniesUniquename.push(company?.uniqueName);
                     this.selectedCompaniesName.push(company);
                 });
             });
@@ -300,15 +300,15 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     public checkUncheckMe(cmp, ev) {
-        if (ev.target.checked) {
-            if (this.selectedCompaniesUniquename?.indexOf(cmp.uniqueName) === -1) {
-                this.selectedCompaniesUniquename.push(cmp.uniqueName);
+        if (ev.target?.checked) {
+            if (this.selectedCompaniesUniquename?.indexOf(cmp?.uniqueName) === -1) {
+                this.selectedCompaniesUniquename.push(cmp?.uniqueName);
             }
             if (cmp.name) {
                 this.selectedCompaniesName.push(cmp);
             }
         } else {
-            let indx = this.selectedCompaniesUniquename?.indexOf(cmp.uniqueName);
+            let indx = this.selectedCompaniesUniquename?.indexOf(cmp?.uniqueName);
             this.selectedCompaniesUniquename.splice(indx, 1);
             let idx = this.selectedCompaniesName?.indexOf(cmp);
             this.selectedCompaniesName.splice(idx, 1);
@@ -447,14 +447,14 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     public updateBranchInfo(branchDetails: any): void {
         branchDetails.formValue.linkedEntity = branchDetails.formValue.linkedEntity || [];
         this.isBranchChangeInProgress = true;
-        const linkAddresses = branchDetails.addressDetails.linkedEntities?.filter(entity => (branchDetails.formValue.linkedEntity.includes(entity.uniqueName))).map(filteredEntity => ({
-            uniqueName: filteredEntity.uniqueName,
+        const linkAddresses = branchDetails.addressDetails.linkedEntities?.filter(entity => (branchDetails.formValue.linkedEntity.includes(entity?.uniqueName))).map(filteredEntity => ({
+            uniqueName: filteredEntity?.uniqueName,
             isDefault: filteredEntity.isDefault,
         }));
         const requestObj = {
             name: branchDetails.formValue.name,
             alias: branchDetails.formValue.alias,
-            branchUniqueName: this.branchDetails.uniqueName,
+            branchUniqueName: this.branchDetails?.uniqueName,
             linkAddresses
         };
         this.settingsProfileService.updateBranchInfo(requestObj).pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -489,7 +489,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
 
         if (entityType === 'address') {
             branch.addresses.forEach(branchAddress => {
-                if (branchAddress.uniqueName === entity.uniqueName) {
+                if (branchAddress?.uniqueName === entity?.uniqueName) {
                     branchAddress.isDefault = entity.isDefault;
                 } else {
                     branchAddress.isDefault = false;
@@ -497,7 +497,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
             });
         } else if (entityType === 'warehouse') {
             branch.warehouseResource.forEach(warehouse => {
-                if (warehouse.uniqueName === entity.uniqueName) {
+                if (warehouse?.uniqueName === entity?.uniqueName) {
                     warehouse.isDefault = entity.isDefault;
                 } else {
                     warehouse.isDefault = false;
@@ -508,12 +508,12 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
             name: branch.name,
             alias: branch.alias,
             linkAddresses: branch.addresses,
-            branchUniqueName: branch.uniqueName,
+            branchUniqueName: branch?.uniqueName,
         }
         if (entityType === 'warehouse') {
             requestObject.defaultWarehouse = {
                 name: entity.name,
-                uniqueName: entity.uniqueName
+                uniqueName: entity?.uniqueName
             };
         }
         this.settingsProfileService.updateBranchInfo(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(() => {
@@ -547,7 +547,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
                         ...address,
                         isDefault: false,
                         label: address.name,
-                        value: address.uniqueName
+                        value: address?.uniqueName
                     }));
                 if (successCallback) {
                     successCallback();

@@ -57,8 +57,8 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
     public reportYear: string;
 
     constructor(
-        private store: Store<AppState>, 
-        private toaster: ToasterService, 
+        private store: Store<AppState>,
+        private toaster: ToasterService,
         private settingsFinancialYearActions: SettingsFinancialYearActions,
         private newVsOldInvoicesService: NewVsOldInvoicesService
     ) {
@@ -185,7 +185,7 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
     }
 
     public customMonthSorting(a: IOption, b: IOption) {
-        return (parseInt(a.value) - parseInt(b.value));
+        return (parseInt(a?.value) - parseInt(b?.value));
     }
 
     /**
@@ -212,9 +212,9 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
      */
     public getBifurcationClientsString(): void {
         if (this.NewVsOldInvoicesQueryRequest.type === 'month' && this.selectedmonth) {
-            this.columnName = this.monthOptions.find(f => f.value === this.selectedmonth)?.label;
+            this.columnName = this.monthOptions.find(f => f?.value === this.selectedmonth)?.label;
         } else if (this.NewVsOldInvoicesQueryRequest.type === 'quater' && this.selectedQuater) {
-            this.columnName = this.quaterOptions.find(f => f.value === this.selectedQuater)?.label;
+            this.columnName = this.quaterOptions.find(f => f?.value === this.selectedQuater)?.label;
         }
 
         if(this.columnName) {

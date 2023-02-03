@@ -40,7 +40,7 @@ export class AgingReportActions {
             ofType(AgingReportActions.CREATE_DUE_DAY_RANGE_RESPONSE),
             map((action: CustomActions) => {
                 let response = action.payload as BaseResponse<string, DueRangeRequest>;
-                if (response.status === 'error') {
+                if (response?.status === 'error') {
                     this._toasty.errorToast(response.message, response.code);
                     return { type: 'EmptyAction' };
                 }
@@ -61,7 +61,7 @@ export class AgingReportActions {
             ofType(AgingReportActions.GET_DUE_DAY_RANGE_RESPONSE),
             map((action: CustomActions) => {
                 let response = action.payload as BaseResponse<string[], string>;
-                if (response.status === 'error') {
+                if (response?.status === 'error') {
                     this._toasty.errorToast(response.message, response.code);
                     return { type: 'EmptyAction' };
                 }
@@ -150,7 +150,7 @@ export class AgingReportActions {
     }
 
     private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false, errorAction: CustomActions = { type: 'EmptyAction' }): CustomActions {
-        if (response.status === 'error') {
+        if (response?.status === 'error') {
             if (showToast) {
                 this._toasty.errorToast(response.message);
             }

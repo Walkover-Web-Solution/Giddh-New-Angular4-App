@@ -83,7 +83,7 @@
                                 </sh-select>
                             </div>
                         </div>
-                        <div class="form-group mr-r15" *ngIf="filterForm.get('selectedDateOption').value == '0'">
+                        <div class="form-group mr-r15" *ngIf="filterForm.get('selectedDateOption')?.value == '0'">
                             <div class="form-group">
                                 <sh-select
                                     [options]="financialOptions"
@@ -99,7 +99,7 @@
                         </div>
                         <div
                             class="form-group relative mr-r15 datepicker-field"
-                            *ngIf="filterForm.get('selectedDateOption').value == '1'"
+                            *ngIf="filterForm.get('selectedDateOption')?.value == '1'"
                         >
                             <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
                                 <i class="icon-calender calendar-addon"></i>
@@ -161,7 +161,7 @@
                 <div class="ml-1">
                     <trial-balance-export-csv
                         *ngIf="tbExportCsv"
-                        [trialBalanceRequest]="filterForm.value"
+                        [trialBalanceRequest]="filterForm?.value"
                         [selectedCompany]="selectedCompany"
                         (tbExportCsvEvent)="tbExportCsvEvent.emit($event)"
                         class="pull-right"
@@ -169,27 +169,27 @@
                     </trial-balance-export-csv>
                     <trial-balance-export-xls
                         *ngIf="tbExportXLS"
-                        [trialBalanceRequest]="filterForm.value"
+                        [trialBalanceRequest]="filterForm?.value"
                         class="pull-right mr-r05"
                     >
                     </trial-balance-export-xls>
                     <trial-balance-export-pdf
                         *ngIf="tbExportPdf"
-                        [trialBalanceRequest]="filterForm.value"
+                        [trialBalanceRequest]="filterForm?.value"
                         [selectedCompany]="selectedCompany"
                         (tbExportPdfEvent)="tbExportPdfEvent.emit($event)"
                         class="pull-right mr-r05"
                     ></trial-balance-export-pdf>
                     <profit-loss-export-xls
                         *ngIf="plBsExportXLS"
-                        [fy]="filterForm.controls['fy'].value"
-                        [filters]="filterForm.value"
+                        [fy]="filterForm.controls['fy']?.value"
+                        [filters]="filterForm?.value"
                         class="pull-right"
                     ></profit-loss-export-xls>
                     <balance-sheet-export-xls
                         *ngIf="BsExportXLS"
-                        [fy]="filterForm.controls['fy'].value"
-                        [filters]="filterForm.value"
+                        [fy]="filterForm.controls['fy']?.value"
+                        [filters]="filterForm?.value"
                         class="pull-right"
                     ></balance-sheet-export-xls>
                 </div>
@@ -269,7 +269,7 @@
                     </div>
                 </div>
 
-                <div class="form-group mb-0" *ngIf="filterForm.get('selectedDateOption').value == '0'">
+                <div class="form-group mb-0" *ngIf="filterForm.get('selectedDateOption')?.value == '0'">
                     <div class="form-group">
                         <sh-select
                             [options]="financialOptions"
@@ -285,7 +285,7 @@
                 </div>
                 <div
                     class="form-group relative datepicker-field"
-                    *ngIf="filterForm.get('selectedDateOption').value == '1'"
+                    *ngIf="filterForm.get('selectedDateOption')?.value == '1'"
                 >
                     <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
                         <i class="icon-calender calendar-addon"></i>
@@ -346,7 +346,7 @@
         <div class="d-flex w-100 mb-2">
             <trial-balance-export-csv
                 *ngIf="tbExportCsv"
-                [trialBalanceRequest]="filterForm.value"
+                [trialBalanceRequest]="filterForm?.value"
                 [selectedCompany]="selectedCompany"
                 (tbExportCsvEvent)="tbExportCsvEvent.emit($event)"
                 class="pull-left mr-r15"
@@ -354,27 +354,27 @@
             </trial-balance-export-csv>
             <trial-balance-export-xls
                 *ngIf="tbExportXLS"
-                [trialBalanceRequest]="filterForm.value"
+                [trialBalanceRequest]="filterForm?.value"
                 class="pull-left mr-r15"
             >
             </trial-balance-export-xls>
             <trial-balance-export-pdf
                 *ngIf="tbExportPdf"
-                [trialBalanceRequest]="filterForm.value"
+                [trialBalanceRequest]="filterForm?.value"
                 [selectedCompany]="selectedCompany"
                 (tbExportPdfEvent)="tbExportPdfEvent.emit($event)"
                 class="pull-left mr-r15"
             ></trial-balance-export-pdf>
             <profit-loss-export-xls
                 *ngIf="plBsExportXLS"
-                [fy]="filterForm.controls['fy'].value"
-                [filters]="filterForm.value"
+                [fy]="filterForm.controls['fy']?.value"
+                [filters]="filterForm?.value"
                 class="pull-left"
             ></profit-loss-export-xls>
             <balance-sheet-export-xls
                 *ngIf="BsExportXLS"
-                [fy]="filterForm.controls['fy'].value"
-                [filters]="filterForm.value"
+                [fy]="filterForm.controls['fy']?.value"
+                [filters]="filterForm?.value"
                 class="pull-left"
             ></balance-sheet-export-xls>
         </div>

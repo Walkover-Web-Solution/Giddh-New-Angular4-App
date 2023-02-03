@@ -46,7 +46,7 @@
                             class="form-control"
                             [(ngModel)]="searchString"
                             [placeholder]="commonLocaleData?.app_search"
-                            (keyup)="initSearch($event, $event.target.value)"
+                            (keyup)="initSearch($event, $event.target?.value)"
                             (keydown)="handleKeydown($event)"
                         />
                     </div>

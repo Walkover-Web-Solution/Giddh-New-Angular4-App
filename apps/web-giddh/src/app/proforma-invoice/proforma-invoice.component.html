@@ -55,7 +55,7 @@
                             >
                                 <li
                                     role="menuitem"
-                                    (click)="pageChanged(item.value, item.additional.label)"
+                                    (click)="pageChanged(item?.value, item.additional.label)"
                                     *ngFor="let item of pageList"
                                 >
                                     <a class="dropdown-item cp">{{ item.additional?.label }}</a>
@@ -248,7 +248,7 @@
                                                                     class="list-item flex-column"
                                                                 >
                                                                     <div class="item">{{ option?.label }}</div>
-                                                                    <div class="item-unique">{{ option.value }}</div>
+                                                                    <div class="item-unique">{{ option?.value }}</div>
                                                                 </a>
                                                             </ng-template>
 
@@ -1432,9 +1432,9 @@
                                                                 ><input
                                                                     type="checkbox"
                                                                     [checked]="
-                                                                        linkedPo && linkedPo.includes(option.value)
+                                                                        linkedPo && linkedPo.includes(option?.value)
                                                                     "
-                                                                    [value]="option.value" /></span
+                                                                    [value]="option?.value" /></span
                                                             >&nbsp;
                                                             <span>
                                                                 <div class="item">{{ option?.label }}</div>
@@ -3337,7 +3337,8 @@
                                                 [mask]="inputMaskFormat"
                                                 [(ngModel)]="grandTotalMulDum"
                                                 (blur)="
-                                                    updateExchangeRate(grandTotalInr.value); recalculateConvertedTotal()
+                                                    updateExchangeRate(grandTotalInr?.value);
+                                                    recalculateConvertedTotal()
                                                 "
                                             />
                                         </div>
@@ -3566,7 +3567,7 @@
                                                                                     {{ option.label }}
                                                                                 </div>
                                                                                 <div class="item-unique">
-                                                                                    {{ option.value }}
+                                                                                    {{ option?.value }}
                                                                                 </div>
                                                                             </a>
                                                                         </ng-template>
@@ -3594,7 +3595,7 @@
                                                                     type="text"
                                                                     (blur)="
                                                                         calculateBalanceDue();
-                                                                        updateDepositAmount($event.target.value)
+                                                                        updateDepositAmount($event.target?.value)
                                                                     "
                                                                     [placeholder]="commonLocaleData?.app_amount"
                                                                     name="dueAmount"
@@ -4991,7 +4992,7 @@
                                             [mask]="inputMaskFormat"
                                             [(ngModel)]="grandTotalMulDum"
                                             (blur)="
-                                                updateExchangeRate(grandTotalInr.value); recalculateConvertedTotal()
+                                                updateExchangeRate(grandTotalInr?.value); recalculateConvertedTotal()
                                             "
                                         />
                                     </div>
@@ -5079,7 +5080,7 @@
                                                                     <a href="javascript:void(0)" class="list-item">
                                                                         <div class="item">{{ option?.label }}</div>
                                                                         <div class="item-unique">
-                                                                            {{ option.value }}
+                                                                            {{ option?.value }}
                                                                         </div>
                                                                     </a>
                                                                 </ng-template>
@@ -5106,7 +5107,7 @@
                                                             type="text"
                                                             (blur)="
                                                                 calculateBalanceDue();
-                                                                updateDepositAmount($event.target.value)
+                                                                updateDepositAmount($event.target?.value)
                                                             "
                                                             [placeholder]="commonLocaleData?.app_amount"
                                                             name="dueAmount"

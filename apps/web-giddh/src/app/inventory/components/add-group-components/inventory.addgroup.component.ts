@@ -254,7 +254,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
     public groupSelected(event: IOption) {
         let selected;
         this.groupsData$.subscribe(p => {
-            selected = p.find(q => q.value === event.value);
+            selected = p.find(q => q?.value === event?.value);
         });
         this.selectedGroup = selected;
         this.addGroupForm.updateValueAndValidity();
@@ -273,7 +273,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
         if (!this.addGroup) {
             return;
         }
-        let val: string = this.addGroupForm.controls['name'].value;
+        let val: string = this.addGroupForm.controls['name']?.value;
         val = uniqueNameInvalidStringReplace(val);
 
         /** unique name availability is check on server now
@@ -290,17 +290,17 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
         let stockRequest = new StockGroupRequest();
         let uniqueNameField = this.addGroupForm.get('uniqueName');
         if (uniqueNameField && uniqueNameField.value) {
-            uniqueNameField?.patchValue(uniqueNameField.value?.replace(/ /g, '').toLowerCase());
+            uniqueNameField?.patchValue(uniqueNameField.value?.replace(/ /g, '')?.toLowerCase());
         }
 
-        if (this.addGroupForm.get("showCodeType").value === "hsn") {
+        if (this.addGroupForm.get("showCodeType")?.value === "hsn") {
             this.addGroupForm.get('sacNumber')?.patchValue("");
         } else {
             this.addGroupForm.get('hsnNumber')?.patchValue("");
         }
 
-        stockRequest = this.addGroupForm.value as StockGroupRequest;
-        if (this.addGroupForm.value.isSubGroup && this.selectedGroup) {
+        stockRequest = this.addGroupForm?.value as StockGroupRequest;
+        if (this.addGroupForm?.value.isSubGroup && this.selectedGroup) {
             stockRequest.parentStockGroupUniqueName = this.selectedGroup.value;
         }
         if (!stockRequest.isSubGroup) {
@@ -308,7 +308,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
         }
         if (isObject(stockRequest.parentStockGroupUniqueName)) {
             let uniqName: any = cloneDeep(stockRequest.parentStockGroupUniqueName);
-            stockRequest.parentStockGroupUniqueName = uniqName.value;
+            stockRequest.parentStockGroupUniqueName = uniqName?.value;
         }
 
         if (!stockRequest.taxes) {
@@ -325,22 +325,22 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
 
         this.activeGroup$.pipe(take(1)).subscribe(a => activeGroup = a);
         if (uniqueNameField && uniqueNameField.value) {
-            uniqueNameField?.patchValue(uniqueNameField.value?.replace(/ /g, '').toLowerCase());
+            uniqueNameField?.patchValue(uniqueNameField.value?.replace(/ /g, '')?.toLowerCase());
         }
 
-        if (this.addGroupForm.get("showCodeType").value === "hsn") {
+        if (this.addGroupForm.get("showCodeType")?.value === "hsn") {
             this.addGroupForm.get('sacNumber')?.patchValue("");
         } else {
             this.addGroupForm.get('hsnNumber')?.patchValue("");
         }
 
-        stockRequest = this.addGroupForm.value as StockGroupRequest;
-        if (this.addGroupForm.value.isSubGroup) {
-            stockRequest.parentStockGroupUniqueName = this.selectedGroup.value;
+        stockRequest = this.addGroupForm?.value as StockGroupRequest;
+        if (this.addGroupForm?.value.isSubGroup) {
+            stockRequest.parentStockGroupUniqueName = this.selectedGroup?.value;
         }
         if (isObject(stockRequest.parentStockGroupUniqueName)) {
             let uniqName: any = cloneDeep(stockRequest.parentStockGroupUniqueName);
-            stockRequest.parentStockGroupUniqueName = uniqName.value;
+            stockRequest.parentStockGroupUniqueName = uniqName?.value;
         }
 
         if (!stockRequest.taxes) {
@@ -402,7 +402,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
     public selectTax(event: any, tax: any): void {
         if (tax.taxType !== 'gstcess') {
             let index = _.findIndex(this.taxTempArray, (taxTemp) => taxTemp.taxType === tax.taxType);
-            if (index > -1 && event.target.checked) {
+            if (index > -1 && event.target?.checked) {
                 this.companyTaxesList$.subscribe((taxes) => {
                     _.forEach(taxes, (companyTax) => {
                         if (companyTax.taxType === tax.taxType) {
@@ -419,7 +419,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
                 });
             }
 
-            if (index < 0 && event.target.checked) {
+            if (index < 0 && event.target?.checked) {
                 this.companyTaxesList$.subscribe((taxes) => {
                     _.forEach(taxes, (companyTax) => {
                         if (companyTax.taxType === tax.taxType) {
@@ -440,7 +440,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
                         }
                     });
                 });
-            } else if (index > -1 && event.target.checked) {
+            } else if (index > -1 && event.target?.checked) {
                 tax.isChecked = true;
                 tax.isDisabled = false;
                 this.taxTempArray = this.taxTempArray?.filter(ele => {
@@ -465,7 +465,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
                 });
             }
         } else {
-            if (event.target.checked) {
+            if (event.target?.checked) {
                 this.taxTempArray.push(tax);
                 tax.isChecked = true;
             } else {
@@ -514,7 +514,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
                 let invoiceSettings = _.cloneDeep(response.body);
                 this.inventorySettings = invoiceSettings.companyInventorySettings;
 
-                if (!this.addGroupForm.get("showCodeType").value) {
+                if (!this.addGroupForm.get("showCodeType")?.value) {
                     if (this.inventorySettings?.manageInventory) {
                         this.addGroupForm.get("showCodeType")?.patchValue("hsn");
                     } else {

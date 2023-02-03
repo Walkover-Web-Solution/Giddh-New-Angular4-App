@@ -120,8 +120,8 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
                 let allRoleArray = [];
                 roles.forEach((role) => {
                     allRoleArray.push({
-                        label: role.name,
-                        value: role.uniqueName
+                        label: role?.name,
+                        value: role?.uniqueName
                     });
                 });
                 this.allRoles = cloneDeep(allRoleArray);
@@ -278,7 +278,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
         let msg: string;
         let arow = this.permissionForm.get(type) as FormArray;
         for (let control of arow.controls) {
-            let val = control.get('range').value;
+            let val = control.get('range')?.value;
             if (isNull(val) || isEmpty(val)) {
                 errFound = true;
                 msg = undefined;
@@ -313,7 +313,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
 
     public submitPermissionForm() {
         let obj: any = {};
-        let form: ShareRequestForm = cloneDeep(this.permissionForm.value);
+        let form: ShareRequestForm = cloneDeep(this.permissionForm?.value);
         let CidrArr = [];
         let IpArr = [];
         forEach(form.allowedCidrs, (n) => {

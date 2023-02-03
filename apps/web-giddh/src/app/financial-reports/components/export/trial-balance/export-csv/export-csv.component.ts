@@ -125,9 +125,9 @@ export class TrialBalanceExportCsvComponent implements OnInit, OnDestroy {
         let Idx;
         let sAgent;
         sAgent = window.navigator.userAgent;
-        Idx = sAgent.indexOf('MSIE');
+        Idx = sAgent?.indexOf('MSIE');
         if (Idx > 0) {
-            return parseInt(sAgent.substring(Idx + 5, sAgent.indexOf('.', Idx)));
+            return parseInt(sAgent.substring(Idx + 5, sAgent?.indexOf('.', Idx)));
         } else if (!!navigator.userAgent.match(/Trident\/7\./)) {
             return 11;
         } else {

@@ -65,7 +65,7 @@ export class ImportsService {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let apiUrl = IMPORTS_API.DOWNLOAD_SHEET
             .replace(':companyUniqueName', this.companyUniqueName)
-            .replace(':status', reqObj.status)
+            .replace(':status', reqObj?.status)
             .replace(':requestId', reqObj.requestId)
 
         return this.http.get(this.config.apiUrl + apiUrl).pipe(map((res) => {

@@ -139,7 +139,7 @@ export class InventoryTransactionListComponent implements OnInit {
      * @memberof DaybookComponent
      */
     public hideGiddhDatepicker(): void {
-        this.modalRef.hide();
+        this.modalRef?.hide();
     }
 
     /**

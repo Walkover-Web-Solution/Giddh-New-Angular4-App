@@ -33,7 +33,7 @@ export class LogsUtilityService {
      */
     public getFormattedEntries(entries: Array<string>): Array<IOption> {
         return entries.map((entry: string) => {
-            return { label: `${entry.substring(0, 1)}${entry.substring(1).toLowerCase()}`, value: entry };
+            return { label: `${entry.substring(0, 1)}${entry.substring(1)?.toLowerCase()}`, value: entry };
         });
     }
 }

@@ -170,9 +170,9 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
 
         this.companyListForFilter = companies?.filter((cmp) => {
             if (!cmp?.alias) {
-                return cmp?.name.toLowerCase().includes(event.toLowerCase());
+                return cmp?.name?.toLowerCase().includes(event?.toLowerCase());
             } else {
-                return cmp?.name.toLowerCase().includes(event.toLowerCase()) || cmp?.alias.toLowerCase().includes(event.toLowerCase());
+                return cmp?.name?.toLowerCase().includes(event?.toLowerCase()) || cmp?.alias?.toLowerCase().includes(event?.toLowerCase());
             }
         });
     }
@@ -289,7 +289,7 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
         if (!company.branches || reloadBranches) {
             company.branches = [];
             this.branchRefreshInProcess = true;
-            let branchFilterRequest: BranchFilterRequest = { from: '', to: '', companyUniqueName: company.uniqueName };
+            let branchFilterRequest: BranchFilterRequest = { from: '', to: '', companyUniqueName: company?.uniqueName };
             this.settingsBranchService.GetAllBranches(branchFilterRequest).subscribe(response => {
                 if (response?.status === "success") {
                     let unarchivedBranches = response?.body?.filter(branch => branch.isArchived === false);
@@ -380,9 +380,9 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
         if(this.companyBranches) {
             this.companyBranches.branches = this.branchList?.filter((branch) => {
                 if (!branch.alias) {
-                    return branch.name.toLowerCase().includes(event.toLowerCase());
+                    return branch.name?.toLowerCase().includes(event?.toLowerCase());
                 } else {
-                    return branch.name.toLowerCase().includes(event.toLowerCase()) || branch.alias.toLowerCase().includes(event.toLowerCase());
+                    return branch.name?.toLowerCase().includes(event?.toLowerCase()) || branch.alias?.toLowerCase().includes(event?.toLowerCase());
                 }
             });
             this.changeDetectorRef.detectChanges();

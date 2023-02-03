@@ -170,7 +170,7 @@
                                             >
                                             </ng-container>
                                         </section>
-                                        <section class="row-1" *ngIf="grp.groupName && grp.uniqueName === 'revenue'">
+                                        <section class="row-1" *ngIf="grp.groupName && grp?.uniqueName === 'revenue'">
                                             <div class="pl-grid-row row">
                                                 <div class="col-8 group pd-l1">{{ localeData?.total_revenue }}</div>
                                                 <div class="col-4 bd-rl group text-right pull-right pd-l1">
@@ -199,7 +199,7 @@
                                         </section>
                                         <div
                                             class="group clearfix row"
-                                            *ngIf="grp.groupName && grp.uniqueName === 'operatingcost'"
+                                            *ngIf="grp.groupName && grp?.uniqueName === 'operatingcost'"
                                         >
                                             <div class="col-8 group pd-l1">
                                                 {{ localeData?.total_operating_expenses }}
@@ -227,7 +227,7 @@
                                         </div>
                                         <div
                                             class="account clearfix font-16 row"
-                                            *ngIf="grp.groupName && grp.uniqueName === 'operatingcost'"
+                                            *ngIf="grp.groupName && grp?.uniqueName === 'operatingcost'"
                                         >
                                             <div class="col-8 group pd-1">
                                                 <strong class="font-16">{{ localeData?.operating_profit_loss }}</strong>
@@ -247,7 +247,7 @@
                                         </div>
                                         <section
                                             class="row-1"
-                                            *ngIf="grp.groupName && grp.uniqueName === 'otherexpenses'"
+                                            *ngIf="grp.groupName && grp?.uniqueName === 'otherexpenses'"
                                         >
                                             <div class="pl-grid-row row">
                                                 <div class="col-8 group pd-l1">

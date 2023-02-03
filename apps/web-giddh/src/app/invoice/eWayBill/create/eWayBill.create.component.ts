@@ -195,7 +195,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
             }
         });
         if (this.isUserlogedIn) {
-            this.generateBill = generateBillform.value;
+            this.generateBill = generateBillform?.value;
             this.generateBill['supplyType'] = 'O';                     // O is for Outword in case of invoice
             this.generateBill['transactionType'] = '1';                // transactionType is always 1 for Regular
             this.generateBill['invoiceNumber'] = this.invoiceNumber;
@@ -204,7 +204,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
             this.generateBill['uniqueName'] = this.generateEwayBillform?.uniqueName;
 
             if (generateBillform.valid) {
-                this.store.dispatch(this.invoiceActions.GenerateNewEwaybill(generateBillform.value));
+                this.store.dispatch(this.invoiceActions.GenerateNewEwaybill(generateBillform?.value));
             }
         } else {
             this.eWayBillCredentials.toggle();
@@ -246,13 +246,13 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     }
 
     public generateTransporter(generateTransporterForm: NgForm) {
-        this.store.dispatch(this.invoiceActions.addEwayBillTransporter(generateTransporterForm.value));
+        this.store.dispatch(this.invoiceActions.addEwayBillTransporter(generateTransporterForm?.value));
         this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
         this.detectChanges();
     }
 
     public updateTransporter(generateTransporterForm: NgForm) {
-        this.store.dispatch(this.invoiceActions.updateEwayBillTransporter(this.currenTransporterId, generateTransporterForm.value));
+        this.store.dispatch(this.invoiceActions.updateEwayBillTransporter(this.currenTransporterId, generateTransporterForm?.value));
         this.store.dispatch(this.invoiceActions.getALLTransporterList(this.transporterFilterRequest));
         this.transportEditMode = false;
         this.detectChanges();
@@ -336,9 +336,9 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         this.TransporterDocType = this.ModifiedTransporterDocType;
         if (event) {
             if (event.label === this.localeData?.subsupply_types_list?.supply || event.label === this.localeData?.subsupply_types_list?.export) {
-                this.TransporterDocType = this.TransporterDocType?.filter((item) => item.value !== 'CHL');
+                this.TransporterDocType = this.TransporterDocType?.filter((item) => item?.value !== 'CHL');
             } else if (event.label === this.localeData?.subsupply_types_list?.job_work) {
-                this.TransporterDocType = this.TransporterDocType?.filter((item) => item.value !== 'INV' && item.value !== 'BIL');
+                this.TransporterDocType = this.TransporterDocType?.filter((item) => item?.value !== 'INV' && item?.value !== 'BIL');
             } else {
                 this.TransporterDocType = this.ModifiedTransporterDocType;
             }

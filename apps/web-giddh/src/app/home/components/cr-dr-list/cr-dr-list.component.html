@@ -61,7 +61,7 @@
                                         <amount-field
                                             [amount]="account.latestBillAmount.amount"
                                             [currencySymbol]="account.latestBillAmount.symbol"
-                                            [currencyCode]="activeCompany.baseCurrency"
+                                            [currencyCode]="activeCompany?.baseCurrency"
                                         >
                                         </amount-field>
                                     </span>
@@ -78,7 +78,7 @@
                                         <amount-field
                                             [amount]="account.closingBalance.amount"
                                             [currencySymbol]="activeCompany.baseCurrencySymbol"
-                                            [currencyCode]="activeCompany.baseCurrency"
+                                            [currencyCode]="activeCompany?.baseCurrency"
                                         >
                                         </amount-field>
                                     </span>
@@ -131,7 +131,7 @@
                                         <amount-field
                                             [amount]="account.latestBillAmount.amount"
                                             [currencySymbol]="account.latestBillAmount.symbol"
-                                            [currencyCode]="activeCompany.baseCurrency"
+                                            [currencyCode]="activeCompany?.baseCurrency"
                                         >
                                         </amount-field>
                                     </span>
@@ -148,7 +148,7 @@
                                         <amount-field
                                             [amount]="account.closingBalance.amount"
                                             [currencySymbol]="activeCompany.baseCurrencySymbol"
-                                            [currencyCode]="activeCompany.baseCurrency"
+                                            [currencyCode]="activeCompany?.baseCurrency"
                                         >
                                         </amount-field>
                                     </span>

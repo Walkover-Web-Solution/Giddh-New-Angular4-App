@@ -299,20 +299,20 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
 
     public onSubmitMsgform(f: NgForm) {
         if (f.valid) {
-            this.store.dispatch(this.settingsIntegrationActions.SaveSMSKey(f.value.smsFormObj));
+            this.store.dispatch(this.settingsIntegrationActions.SaveSMSKey(f?.value.smsFormObj));
         }
     }
 
     public onSubmitEmailform(f: NgForm) {
         if (f.valid) {
-            this.store.dispatch(this.settingsIntegrationActions.SaveEmailKey(f.value));
+            this.store.dispatch(this.settingsIntegrationActions.SaveEmailKey(f?.value));
         }
     }
 
     public selectAccount(event: IOption) {
-        if (event.value) {
+        if (event?.value) {
             this.accounts$.subscribe((arr: IOption[]) => {
-                let res = find(arr, (o) => o.value === event.value);
+                let res = find(arr, (o) => o?.value === event.value);
                 if (res) {
                     this.razorPayObj.account.name = res.text;
                 }
@@ -331,7 +331,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     }
 
     public unlinkAccountFromRazorPay() {
-        if (this.razorPayObj.account && this.razorPayObj.account.name && this.razorPayObj.account.uniqueName) {
+        if (this.razorPayObj.account && this.razorPayObj.account.name && this.razorPayObj.account?.uniqueName) {
             let data = cloneDeep(this.razorPayObj);
             if (data) {
                 data.account.uniqueName = null;
@@ -354,7 +354,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public selectCashfreeAccount(event: IOption, objToApnd) {
         let accObj = {
             name: event.label,
-            uniqueName: event.value
+            uniqueName: event?.value
         };
         objToApnd.account = accObj;
     }
@@ -400,7 +400,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      */
     public saveAmazonSeller(obj) {
         let sellers = [];
-        sellers.push(cloneDeep(obj.value));
+        sellers.push(cloneDeep(obj?.value));
         this.store.dispatch(this.settingsIntegrationActions.AddAmazonSeller(sellers));
     }
 
@@ -408,10 +408,10 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * updateAmazonSeller
      */
     public updateAmazonSeller(obj) {
-        if (!obj.value.sellerId) {
+        if (!obj?.value.sellerId) {
             return;
         }
-        let sellerObj = cloneDeep(obj.value);
+        let sellerObj = cloneDeep(obj?.value);
         delete sellerObj['secretKey'];
         this.store.dispatch(this.settingsIntegrationActions.UpdateAmazonSeller(sellerObj));
     }
@@ -445,21 +445,21 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         if (item) {
             if (control.controls[i]) {
                 control.controls[i]?.patchValue(item);
-                if (control.controls[i].value.sellerId) {
+                if (control.controls[i]?.value.sellerId) {
                     control.controls[i].disable();
                 }
             } else {
                 control.push(this.initAmazonReseller());
                 setTimeout(() => {
                     control.controls[i]?.patchValue(item);
-                    if (control.controls[i].value.sellerId) {
+                    if (control.controls[i]?.value.sellerId) {
                         control.controls[i].disable();
                     }
                 }, 200);
             }
         } else {
-            let arr = control.value;
-            if (!control.value[arr?.length - 1]?.sellerId) {
+            let arr = control?.value;
+            if (!control?.value[arr?.length - 1]?.sellerId) {
                 return;
             }
             control.push(this.initAmazonReseller());
@@ -533,7 +533,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                     };
                     this._authenticationService.saveGmailToken(dataToSave).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
 
-                        if (res.status === 'success') {
+                        if (res?.status === 'success') {
                             this.toasty.successToast(this.localeData?.email?.gmail_added_successfully, this.commonLocaleData?.app_success);
                         } else {
                             this.toasty.errorToast(res.message, res.code);
@@ -707,7 +707,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 if (data && data.body && data.body.results) {
                     const searchResults = data.body.results.map(result => {
                         return {
-                            value: result.uniqueName,
+                            value: result?.uniqueName,
                             label: result.name
                         }
                     }) || [];
@@ -756,7 +756,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                     if (!this.accountsSearchResultsPaginationData.query) {
                         const results = response.map(result => {
                             return {
-                                value: result.uniqueName,
+                                value: result?.uniqueName,
                                 label: result.name
                             }
                         }) || [];

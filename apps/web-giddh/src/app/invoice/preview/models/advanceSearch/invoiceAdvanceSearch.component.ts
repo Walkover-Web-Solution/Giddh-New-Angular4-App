@@ -94,7 +94,7 @@ export class InvoiceAdvanceSearchComponent implements OnInit, OnChanges {
             { label: this.commonLocaleData?.app_date_options?.after, value: 'after' },
             { label: this.commonLocaleData?.app_date_options?.before, value: 'before' },
         ];
-        
+
         this.voucherApiVersion = this.generalService.voucherApiVersion;
     }
 
@@ -103,7 +103,7 @@ export class InvoiceAdvanceSearchComponent implements OnInit, OnChanges {
         this.request.totalLessThan = false;
         this.request.totalMoreThan = false;
 
-        switch (item.value) {
+        switch (item?.value) {
             case 'greaterThan':
                 this.request.totalMoreThan = true;
                 break;
@@ -130,7 +130,7 @@ export class InvoiceAdvanceSearchComponent implements OnInit, OnChanges {
         this.request.amountGreaterThan = false;
         this.request.amountLessThan = false;
 
-        switch (item.value) {
+        switch (item?.value) {
             case 'greaterThan':
                 this.request.amountGreaterThan = true;
                 break;
@@ -151,7 +151,7 @@ export class InvoiceAdvanceSearchComponent implements OnInit, OnChanges {
         this.request.balanceLessThan = false;
         this.request.balanceMoreThan = false;
 
-        switch (item.value) {
+        switch (item?.value) {
             case 'greaterThan':
                 this.request.balanceMoreThan = true;
                 break;
@@ -183,7 +183,7 @@ export class InvoiceAdvanceSearchComponent implements OnInit, OnChanges {
                 this.request.invoiceDateAfter = false;
                 this.request.invoiceDateBefore = false;
             }
-            switch (item.value) {
+            switch (item?.value) {
                 case 'on':
                     if (this.generalService.voucherApiVersion === 2) {
                         this.request.voucherDateEqual = true;
@@ -210,7 +210,7 @@ export class InvoiceAdvanceSearchComponent implements OnInit, OnChanges {
             this.request.dueDateEqual = false;
             this.request.dueDateAfter = false;
             this.request.dueDateBefore = false;
-            switch (item.value) {
+            switch (item?.value) {
                 case 'on':
                     this.request.dueDateEqual = true;
                     break;

@@ -60,7 +60,7 @@
                         [options]="userListOptions"
                         [multiple]="false"
                         [placeholder]="'Select Receiver'"
-                        (selected)="recieverUniqueName = $event.value"
+                        (selected)="recieverUniqueName = $event?.value"
                         [ItemHeight]="'33'"
                         [isRequired]="true"
                     >

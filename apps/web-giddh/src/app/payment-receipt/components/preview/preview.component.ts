@@ -190,8 +190,8 @@ export class PreviewComponent implements OnInit, OnDestroy, OnChanges, AfterView
      */
     public filterVoucher(term: any): void {
         this.filteredData = this.allVouchers?.filter(item => {
-            return item.voucherNumber.toLowerCase().includes(term.toLowerCase()) ||
-                item.account.name.toLowerCase().includes(term.toLowerCase()) ||
+            return item.voucherNumber?.toLowerCase().includes(term?.toLowerCase()) ||
+                item.account.name?.toLowerCase().includes(term?.toLowerCase()) ||
                 item.voucherDate.includes(term) ||
                 item.grandTotal.amountForAccount?.toString()?.includes(term);
         });
@@ -236,7 +236,7 @@ export class PreviewComponent implements OnInit, OnDestroy, OnChanges, AfterView
                 if (result.body.attachments?.length > 0) {
                     /** Creating attachment start */
                     this.selectedItem.hasAttachment = true;
-                    const fileExtention = result.body.attachments[0].type.toLowerCase();
+                    const fileExtention = result.body.attachments[0].type?.toLowerCase();
                     if (FILE_ATTACHMENT_TYPE.IMAGE.includes(fileExtention)) {
                         // Attached file type is image
                         this.attachedAttachmentBlob = this.generalService.base64ToBlob(result.body.attachments[0].encodedData, `image/${fileExtention}`, 512);

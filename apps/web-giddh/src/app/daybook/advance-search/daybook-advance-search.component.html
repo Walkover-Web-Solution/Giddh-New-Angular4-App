@@ -43,12 +43,12 @@
                                     >
                                         <span
                                             class="pull-left"
-                                            *ngIf="advanceSearchForm.get('includeParticulars').value"
+                                            *ngIf="advanceSearchForm.get('includeParticulars')?.value"
                                             >{{ commonLocaleData?.app_include }}</span
                                         >
                                         <span
                                             class="pull-right"
-                                            *ngIf="!advanceSearchForm.get('includeParticulars').value"
+                                            *ngIf="!advanceSearchForm.get('includeParticulars')?.value"
                                             >{{ commonLocaleData?.app_exclude }}</span
                                         >
                                     </mat-slide-toggle>
@@ -96,12 +96,12 @@
                                     >
                                         <span
                                             class="pull-left"
-                                            *ngIf="advanceSearchForm.get('includeVouchers').value"
+                                            *ngIf="advanceSearchForm.get('includeVouchers')?.value"
                                             >{{ commonLocaleData?.app_include }}</span
                                         >
                                         <span
                                             class="pull-right"
-                                            *ngIf="!advanceSearchForm.get('includeVouchers').value"
+                                            *ngIf="!advanceSearchForm.get('includeVouchers')?.value"
                                             >{{ commonLocaleData?.app_exclude }}</span
                                         >
                                     </mat-slide-toggle>
@@ -191,14 +191,14 @@
                                                     <span
                                                         class="pull-left"
                                                         *ngIf="
-                                                            advanceSearchForm.get('inventory.includeInventory').value
+                                                            advanceSearchForm.get('inventory.includeInventory')?.value
                                                         "
                                                         >{{ commonLocaleData?.app_include }}</span
                                                     >
                                                     <span
                                                         class="pull-right"
                                                         *ngIf="
-                                                            !advanceSearchForm.get('inventory.includeInventory').value
+                                                            !advanceSearchForm.get('inventory.includeInventory')?.value
                                                         "
                                                         >{{ commonLocaleData?.app_exclude }}</span
                                                     >

@@ -72,7 +72,7 @@ export class PermissionActions {
             ofType(PERMISSION_ACTIONS.CREATE_ROLE_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<CreateNewRoleResponse, CreateNewRoleRequest> = response.payload;
-                if (data.status === 'error') {
+                if (data?.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 } else {
                     this._toasty.successToast(this.localeService.translate("app_messages.role_created"));
@@ -94,7 +94,7 @@ export class PermissionActions {
             ofType(PERMISSION_ACTIONS.UPDATE_ROLE_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<IRoleCommonResponseAndRequest, IRoleCommonResponseAndRequest> = response.payload;
-                if (data.status === 'error') {
+                if (data?.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 } else {
                     this._toasty.successToast(this.localeService.translate("app_messages.role_updated"));
@@ -116,7 +116,7 @@ export class PermissionActions {
             ofType(PERMISSION_ACTIONS.DELETE_ROLE_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<string, string> = response.payload;
-                if (data.status === 'error') {
+                if (data?.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 } else {
                     this._toasty.successToast(this.localeService.translate("app_messages.role_deleted"));

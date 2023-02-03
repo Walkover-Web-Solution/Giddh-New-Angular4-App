@@ -238,18 +238,18 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
      * onFontSelect
      */
     public onFontSelect(font: IOption) {
-        this.onValueChange('font', font.value);
+        this.onValueChange('font', font?.value);
     }
 
     /**
      * onFontSizeSelect
      */
     public onFontSizeSelect(fontSize: IOption) {
-        if (!fontSize.value) {
+        if (!fontSize?.value) {
             let template = cloneDeep(this.customTemplate);
             this.onValueChange('fontSize', template.fontSize);
         } else {
-            this.onValueChange('fontSize', fontSize.value);
+            this.onValueChange('fontSize', fontSize?.value);
         }
     }
 
@@ -415,7 +415,7 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
         this.isFileUploadInProgress = false;
         this.showDeleteButton = false;
         this.showUploadButton = false;
-        if (this.logoFile) {
+        if (this.logoFile && this.logoFile.nativeElement) {
             this.logoFile.nativeElement.value = "";
         }
     }
@@ -438,7 +438,7 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
         if (this.customTemplate) {
             if (this.customTemplate.font) {
                 this.presetFonts.map(font => {
-                    if (font.value === this.customTemplate.font) {
+                    if (font?.value === this.customTemplate.font) {
                         this.selectedFont = font.label;
                     }
                 });
@@ -446,7 +446,7 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
 
             if (this.customTemplate.fontSize) {
                 this.presetFontsSize.map(fontSize => {
-                    if (fontSize.value === this.customTemplate.fontSize) {
+                    if (fontSize?.value === this.customTemplate.fontSize) {
                         this.selectedFontSize = fontSize.label;
                     }
                 });
