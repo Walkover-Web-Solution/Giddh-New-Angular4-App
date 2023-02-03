@@ -125,6 +125,16 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
 
     public ngOnInit(): void {
 
+        /* RAZORPAY */
+        if (window['Razorpay'] === undefined) {
+            let scriptTag = document.createElement('script');
+            scriptTag.src = 'https://checkout.razorpay.com/v1/checkout.js';
+            scriptTag.type = 'text/javascript';
+            scriptTag.defer = true;
+            document.body.appendChild(scriptTag);
+        }
+        /* RAZORPAY */
+
         /** This will use for filter country  */
         this.searchCountry?.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(search => {
             this.filterCountry(search);
@@ -393,16 +403,6 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof BillingDetailComponent
      */
     public ngAfterViewInit(): void {
-
-        /* RAZORPAY */
-        if (window['Razorpay'] === undefined) {
-            let scriptTag = document.createElement('script');
-            scriptTag.src = 'https://checkout.razorpay.com/v1/checkout.js';
-            scriptTag.type = 'text/javascript';
-            scriptTag.defer = true;
-            document.body.appendChild(scriptTag);
-        }
-        /* RAZORPAY */
 
         let that = this;
 
