@@ -8129,8 +8129,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         const errorMsg = document.querySelector("#init-contact-proforma-error-msg");
         const validMsg = document.querySelector("#init-contact-proforma-valid-msg");
         let errorMap = [this.localeData?.invalid_contact_number, this.commonLocaleData?.app_invalid_country_code, this.commonLocaleData?.app_invalid_contact_too_short, this.commonLocaleData?.app_invalid_contact_too_long, this.localeData?.invalid_contact_number];
-        if (window['intlTelInput'] && input) {
-            this.intl = window['intlTelInput'](input, {
+        if (<any>window['intlTelInput'] && input) {
+            this.intl = <any>window['intlTelInput'](input, {
                 nationalMode: true,
                 utilsScript: MOBILE_NUMBER_UTIL_URL,
                 autoHideDialCode: false,
