@@ -105,7 +105,7 @@ export class QuickAccountComponent implements OnInit, AfterViewInit, OnDestroy {
         let uniqueControl = this.newAccountForm.get('uniqueName');
         let unqName = control?.value;
         unqName = unqName?.replace(/ |,|\//g, '');
-        unqName = unqName.toLowerCase();
+        unqName = unqName?.toLowerCase();
         if (unqName?.length >= 1) {
             let unq = '';
             let text = '';

@@ -1261,8 +1261,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
 
     public selectInvoice(invoiceNo, ev) {
-        invoiceNo.isSelected = ev.target.checked;
-        if (ev.target.checked) {
+        invoiceNo.isSelected = ev.target?.checked;
+        if (ev.target?.checked) {
             this.vm.selectedLedger.invoicesToBePaid.push(invoiceNo.label);
         } else {
             let indx = this.vm.selectedLedger.invoicesToBePaid?.indexOf(invoiceNo.label);

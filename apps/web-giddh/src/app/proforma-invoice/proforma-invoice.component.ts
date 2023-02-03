@@ -2845,7 +2845,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             if (event && event.discount && event.isActive) {
                 this.accountAssignedApplicableDiscounts.forEach(item => {
                     if (item && event.discount && item.uniqueName === event.discount.discountUniqueName) {
-                        item.isActive = event.isActive.target.checked;
+                        item.isActive = event.isActive.target?.checked;
                     }
                 });
             }

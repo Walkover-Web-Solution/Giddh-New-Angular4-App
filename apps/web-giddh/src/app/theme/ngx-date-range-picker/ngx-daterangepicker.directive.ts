@@ -236,7 +236,7 @@ export class NgxDaterangepickerDirective implements OnInit, OnChanges, DoCheck {
 
     @HostListener('document:keyup', ['$event'])
     inputChanged(e) {
-        if (e.target.tagName.toLowerCase() !== 'input') {
+        if (e.target.tagName?.toLowerCase() !== 'input') {
             return;
         }
         if (!e.target?.value?.length) {

@@ -551,8 +551,8 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
     public filterPo(term): void {
         this.poSearch = term;
         this.filteredData = this.purchaseOrders.items?.filter(item => {
-            return item.voucherNumber.toLowerCase().includes(term.toLowerCase()) ||
-                item.vendor.name.toLowerCase().includes(term.toLowerCase()) ||
+            return item.voucherNumber?.toLowerCase().includes(term?.toLowerCase()) ||
+                item.vendor.name?.toLowerCase().includes(term?.toLowerCase()) ||
                 item.voucherDate.includes(term) ||
                 item.grandTotal.amountForAccount?.toString()?.includes(term);
         });

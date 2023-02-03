@@ -1694,7 +1694,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     public selectAllEntries(ev: any, type: 'debit' | 'credit' | 'all') {
-        if (!ev.checked) {
+        if (!ev?.checked) {
             if (type === 'all') {
                 this.debitCreditSelectAll = false;
             } else if (type === 'debit') {
@@ -1706,12 +1706,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }
         this.checkedTrxWhileHovering = [];
 
-        this.store.dispatch(this.ledgerActions.SelectDeSelectAllEntries(type, ev.checked));
+        this.store.dispatch(this.ledgerActions.SelectDeSelectAllEntries(type, ev?.checked));
     }
 
     public selectEntryForBulkAction(ev: any, entryUniqueName: string) {
         if (entryUniqueName) {
-            if (ev.checked) {
+            if (ev?.checked) {
                 this.entryUniqueNamesForBulkAction.push(entryUniqueName);
             } else {
                 let itemIndx = this.entryUniqueNamesForBulkAction.findIndex((item) => item === entryUniqueName);
@@ -1728,7 +1728,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         const totalLength = (type === 'debit') ? this.ledgerTransactions.debitTransactions?.length :
             (type === 'credit') ? this.ledgerTransactions.creditTransactions?.length :
                 (this.ledgerTransactions.debitTransactions?.length + this.ledgerTransactions.creditTransactions?.length);
-        if (ev.checked) {
+        if (ev?.checked) {
             this.checkedTrxWhileHovering.push({ type, uniqueName });
             this.store.dispatch(this.ledgerActions.SelectGivenEntries([uniqueName]));
             const currentLength = this.isMobileScreen ?
@@ -1922,7 +1922,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.toaster.showSnackBar("error", this.localeData?.save_unfinished_entry);
             return false;
         }
-        this.selectedCurrency = event.checked ? 1 : 0;
+        this.selectedCurrency = event?.checked ? 1 : 0;
         this.currencyTogglerModel = this.selectedCurrency === 1;
         this.assignPrefixAndSuffixForCurrency();
         this.trxRequest.accountCurrency = this.selectedCurrency !== 1;
@@ -1933,7 +1933,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.lc.blankLedger.baseCurrencyToDisplay = cloneDeep(this.baseCurrencyDetails);
         this.lc.blankLedger.foreignCurrencyToDisplay = cloneDeep(this.foreignCurrencyDetails);
         // If the currency toggle button is checked then it is not in account currency
-        this.lc.blankLedger.valuesInAccountCurrency = !event.checked;
+        this.lc.blankLedger.valuesInAccountCurrency = !event?.checked;
 
         this.getTransactionData();
     }

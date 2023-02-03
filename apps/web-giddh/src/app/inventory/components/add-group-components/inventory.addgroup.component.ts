@@ -290,7 +290,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
         let stockRequest = new StockGroupRequest();
         let uniqueNameField = this.addGroupForm.get('uniqueName');
         if (uniqueNameField && uniqueNameField.value) {
-            uniqueNameField?.patchValue(uniqueNameField.value?.replace(/ /g, '').toLowerCase());
+            uniqueNameField?.patchValue(uniqueNameField.value?.replace(/ /g, '')?.toLowerCase());
         }
 
         if (this.addGroupForm.get("showCodeType")?.value === "hsn") {
@@ -325,7 +325,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
 
         this.activeGroup$.pipe(take(1)).subscribe(a => activeGroup = a);
         if (uniqueNameField && uniqueNameField.value) {
-            uniqueNameField?.patchValue(uniqueNameField.value?.replace(/ /g, '').toLowerCase());
+            uniqueNameField?.patchValue(uniqueNameField.value?.replace(/ /g, '')?.toLowerCase());
         }
 
         if (this.addGroupForm.get("showCodeType")?.value === "hsn") {
@@ -402,7 +402,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
     public selectTax(event: any, tax: any): void {
         if (tax.taxType !== 'gstcess') {
             let index = _.findIndex(this.taxTempArray, (taxTemp) => taxTemp.taxType === tax.taxType);
-            if (index > -1 && event.target.checked) {
+            if (index > -1 && event.target?.checked) {
                 this.companyTaxesList$.subscribe((taxes) => {
                     _.forEach(taxes, (companyTax) => {
                         if (companyTax.taxType === tax.taxType) {
@@ -419,7 +419,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
                 });
             }
 
-            if (index < 0 && event.target.checked) {
+            if (index < 0 && event.target?.checked) {
                 this.companyTaxesList$.subscribe((taxes) => {
                     _.forEach(taxes, (companyTax) => {
                         if (companyTax.taxType === tax.taxType) {
@@ -440,7 +440,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
                         }
                     });
                 });
-            } else if (index > -1 && event.target.checked) {
+            } else if (index > -1 && event.target?.checked) {
                 tax.isChecked = true;
                 tax.isDisabled = false;
                 this.taxTempArray = this.taxTempArray?.filter(ele => {
@@ -465,7 +465,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
                 });
             }
         } else {
-            if (event.target.checked) {
+            if (event.target?.checked) {
                 this.taxTempArray.push(tax);
                 tax.isChecked = true;
             } else {

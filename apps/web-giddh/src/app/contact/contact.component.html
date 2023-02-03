@@ -202,8 +202,8 @@
                                                     (click)="$event.stopPropagation()"
                                                     (keydown.enter)="
                                                         $event.stopPropagation();
-                                                        selectAllCheckbox.checked = !selectAllCheckbox.checked;
-                                                        selectAllColumns(selectAllCheckbox.checked)
+                                                        selectAllCheckbox.checked = !selectAllCheckbox?.checked;
+                                                        selectAllColumns(selectAllCheckbox?.checked)
                                                     "
                                                 >
                                                     <mat-checkbox
@@ -211,7 +211,7 @@
                                                         color="primary"
                                                         name="selectAll"
                                                         [(ngModel)]="selectAll"
-                                                        (change)="selectAllColumns($event.checked)"
+                                                        (change)="selectAllColumns($event?.checked)"
                                                         >{{ commonLocaleData?.app_select_all }}
                                                     </mat-checkbox>
                                                 </button>
@@ -222,7 +222,7 @@
                                                         (click)="$event.stopPropagation()"
                                                         (keydown.enter)="
                                                             $event.stopPropagation();
-                                                            optionsCheckbox.checked = !optionsCheckbox.checked;
+                                                            optionsCheckbox.checked = !optionsCheckbox?.checked;
                                                             columnFilter(
                                                                 !showFieldFilter[item?.value].visibility,
                                                                 item?.value

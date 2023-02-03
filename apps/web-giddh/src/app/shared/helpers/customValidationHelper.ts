@@ -24,7 +24,7 @@ export const mobileValidator = (control: FormControl) => {
 export const uniqueNameValidator = (control: FormControl) => {
     return new Promise<any>((resolve, reject) => {
         let pattern = /^[a-z0-9]*$/;
-        let val = control?.value.toLowerCase();
+        let val = control?.value?.toLowerCase();
         if (!pattern.test(val)) {
             resolve({ notValidUniqueName: true });
         } else {

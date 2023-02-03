@@ -42,7 +42,7 @@ export class MobileSearchBranchComponent implements OnInit, OnDestroy {
         private companyActions: CompanyActions,
         private generalService: GeneralService,
         private router: Router,
-        private store: Store<AppState>, 
+        private store: Store<AppState>,
         private breakPointObservar: BreakpointObserver
     ) {
 
@@ -61,7 +61,7 @@ export class MobileSearchBranchComponent implements OnInit, OnDestroy {
                 this.router.navigate(["/pages/home"]);
             }
         });
-        
+
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
         this.currentCompanyBranches$.subscribe(response => {
             if (response && response.length) {
@@ -152,9 +152,9 @@ export class MobileSearchBranchComponent implements OnInit, OnDestroy {
             this.currentCompanyBranches = branches?.filter(branch => {
                 if (branch) {
                     if (!branch.alias) {
-                        return branch.name.toLowerCase().includes(branchName.toLowerCase());
+                        return branch.name?.toLowerCase().includes(branchName?.toLowerCase());
                     } else {
-                        return branch.name.toLowerCase().includes(branchName.toLowerCase()) || branch.alias.toLowerCase().includes(branchName.toLowerCase());
+                        return branch.name?.toLowerCase().includes(branchName?.toLowerCase()) || branch.alias?.toLowerCase().includes(branchName?.toLowerCase());
                     }
                 }
             });

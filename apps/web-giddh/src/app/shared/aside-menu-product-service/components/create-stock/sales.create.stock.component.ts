@@ -741,7 +741,7 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
         let stockObj = new CreateStockRequest();
         let uniqueName = this.addStockForm.get('uniqueName');
         if (uniqueName?.value) {
-            uniqueName?.patchValue(uniqueName.value?.replace(/ /g, '').toLowerCase());
+            uniqueName?.patchValue(uniqueName.value?.replace(/ /g, '')?.toLowerCase());
         }
         this.addStockForm.get('uniqueName').enable();
 
@@ -1000,7 +1000,7 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
     public selectTax(e, tax) {
         if (tax.taxType !== 'gstcess') {
             let index = _.findIndex(this.taxTempArray, (o) => o.taxType === tax.taxType);
-            if (index > -1 && e.target.checked) {
+            if (index > -1 && e.target?.checked) {
                 this.companyTaxesList$.subscribe((taxes) => {
                     _.forEach(taxes, (o) => {
                         if (o.taxType === tax.taxType) {
@@ -1011,7 +1011,7 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
                 });
             }
 
-            if (index < 0 && e.target.checked) {
+            if (index < 0 && e.target?.checked) {
                 this.companyTaxesList$.subscribe((taxes) => {
                     _.forEach(taxes, (o) => {
                         if (o.taxType === tax.taxType) {
@@ -1025,7 +1025,7 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
                         }
                     });
                 });
-            } else if (index > -1 && e.target.checked) {
+            } else if (index > -1 && e.target?.checked) {
                 tax.isChecked = true;
                 tax.isDisabled = false;
                 this.taxTempArray = this.taxTempArray?.filter(ele => {
@@ -1045,7 +1045,7 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
                 });
             }
         } else {
-            if (e.target.checked) {
+            if (e.target?.checked) {
                 this.taxTempArray.push(tax);
                 tax.isChecked = true;
             } else {

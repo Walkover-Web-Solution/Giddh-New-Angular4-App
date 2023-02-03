@@ -209,7 +209,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         let branches = [...this.unFilteredBranchList];
         if (query) {
             const lowercaseQuery = query.toLowerCase();
-            branches = this.unFilteredBranchList?.filter(branch => (branch.name && branch.name.toLowerCase().includes(lowercaseQuery)) || (branch.alias && branch.alias.toLowerCase().includes(lowercaseQuery)));
+            branches = this.unFilteredBranchList?.filter(branch => (branch.name && branch.name?.toLowerCase().includes(lowercaseQuery)) || (branch.alias && branch.alias?.toLowerCase().includes(lowercaseQuery)));
         }
         this.branches$ = observableOf(branches);
     }
@@ -288,7 +288,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     public selectAllCompanies(ev) {
         this.selectedCompaniesUniquename = [];
         this.selectedCompaniesName = [];
-        if (ev.target.checked) {
+        if (ev.target?.checked) {
             this.companies$.pipe(take(1)).subscribe((companies) => {
                 each(companies, (company) => {
                     this.selectedCompaniesUniquename.push(company?.uniqueName);
@@ -300,7 +300,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     public checkUncheckMe(cmp, ev) {
-        if (ev.target.checked) {
+        if (ev.target?.checked) {
             if (this.selectedCompaniesUniquename?.indexOf(cmp?.uniqueName) === -1) {
                 this.selectedCompaniesUniquename.push(cmp?.uniqueName);
             }

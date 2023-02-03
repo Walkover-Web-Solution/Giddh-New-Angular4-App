@@ -560,7 +560,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         // region subscribe to last state for showing title of page this.selectedPage
         this.store.pipe(select(s => s.session.lastState), take(1)).subscribe(s => {
             this.isLedgerAccSelected = false;
-            const lastState = s.toLowerCase();
+            const lastState = s?.toLowerCase();
 
             let lastStateHaveParams: boolean = lastState.includes('?');
             if (lastStateHaveParams) {
@@ -625,9 +625,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             if (menu) {
                 let menuItem: IUlist = NAVIGATION_ITEM_LIST.find(item => {
                     if (menu.additional && item.additional) {
-                        return item?.uniqueName.toLowerCase() === menu.uniqueName.toLowerCase() && item.additional.tabIndex === menu.additional.tabIndex;
+                        return item?.uniqueName?.toLowerCase() === menu.uniqueName?.toLowerCase() && item.additional.tabIndex === menu.additional.tabIndex;
                     }
-                    return item?.uniqueName.toLocaleLowerCase() === menu.uniqueName.toLowerCase();
+                    return item?.uniqueName.toLocaleLowerCase() === menu.uniqueName?.toLowerCase();
                 });
                 if (menuItem) {
                     this.doEntryInDb('menus', menuItem);
@@ -929,25 +929,25 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         let o: IUlist = find(NAVIGATION_ITEM_LIST, (item) => {
             if (queryParamsObj) {
                 if (item.additional) {
-                    return item?.uniqueName.toLowerCase() === pageName.toLowerCase() && item.additional.tabIndex === queryParamsObj.tabIndex;
+                    return item?.uniqueName?.toLowerCase() === pageName?.toLowerCase() && item.additional.tabIndex === queryParamsObj.tabIndex;
                 }
             } else {
-                return item?.uniqueName.toLocaleLowerCase() === pageName.toLowerCase();
+                return item?.uniqueName.toLocaleLowerCase() === pageName?.toLowerCase();
             }
         });
         if (o) {
             menu = { ...menu, ...o };
         } else {
             try {
-                menu.name = pageName.split('/pages/')[1].toLowerCase();
+                menu.name = pageName.split('/pages/')[1]?.toLowerCase();
                 if (!menu.name) {
-                    menu.name = pageName.split('/')[1].toLowerCase();
+                    menu.name = pageName.split('/')[1]?.toLowerCase();
                 }
             } catch (error) {
-                menu.name = pageName.toLowerCase();
+                menu.name = pageName?.toLowerCase();
             }
             menu.name = this.getReadableNameFromUrl(menu.name);
-            menu.uniqueName = pageName.toLowerCase();
+            menu.uniqueName = pageName?.toLowerCase();
             menu.type = 'MENU';
 
             if (queryParamsObj) {
@@ -1125,9 +1125,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
         this.companyListForFilter = companies?.filter((cmp) => {
             if (!cmp?.alias) {
-                return cmp?.name.toLowerCase().includes(ev.toLowerCase());
+                return cmp?.name?.toLowerCase().includes(ev?.toLowerCase());
             } else {
-                return cmp?.name.toLowerCase().includes(ev.toLowerCase()) || cmp?.alias.toLowerCase().includes(ev.toLowerCase());
+                return cmp?.name?.toLowerCase().includes(ev?.toLowerCase()) || cmp?.alias?.toLowerCase().includes(ev?.toLowerCase());
             }
         });
     }
@@ -1146,9 +1146,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         if (branchName) {
             this.currentCompanyBranches = branches?.filter(branch => {
                 if (!branch?.alias) {
-                    return branch?.name.toLowerCase().includes(branchName.toLowerCase());
+                    return branch?.name?.toLowerCase().includes(branchName?.toLowerCase());
                 } else {
-                    return branch?.alias.toLowerCase().includes(branchName.toLowerCase());
+                    return branch?.alias.toLowerCase().includes(branchName?.toLowerCase());
                 }
             });
         } else {

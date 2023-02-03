@@ -456,7 +456,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     }
 
     public setGstAsDefault(indx, ev) {
-        if (indx > -1 && ev.target.checked) {
+        if (indx > -1 && ev.target?.checked) {
             for (let entry of this.companyProfileObj.addresses) {
                 entry.isDefault = false;
             }

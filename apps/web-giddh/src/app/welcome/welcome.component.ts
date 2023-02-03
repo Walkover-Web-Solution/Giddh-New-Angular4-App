@@ -536,7 +536,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
     public selectApplicableTaxes(tax, event) {
         if (event && tax) {
-            if (event.target.checked) {
+            if (event.target?.checked) {
                 tax.isSelected = event.target.checked;
                 this.selectedTaxes.push(tax.value);
             } else {
@@ -594,7 +594,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
             } else {
                 let countryRequest = new CountryRequest();
                 if (this.isOnBoardingInProgress && this.itemOnBoardingDetails) {
-                    countryRequest.formName = this.itemOnBoardingDetails.onBoardingType.toLowerCase();
+                    countryRequest.formName = this.itemOnBoardingDetails.onBoardingType?.toLowerCase();
                 } else {
                     countryRequest.formName = 'onboarding';
                 }
@@ -665,7 +665,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
             } else {
                 let onboardingFormRequest = new OnboardingFormRequest();
                 if (this.isOnBoardingInProgress && this.itemOnBoardingDetails) {
-                    onboardingFormRequest.formName = this.itemOnBoardingDetails.onBoardingType.toLowerCase();
+                    onboardingFormRequest.formName = this.itemOnBoardingDetails.onBoardingType?.toLowerCase();
                 } else {
                     onboardingFormRequest.formName = 'onboarding';
                 }

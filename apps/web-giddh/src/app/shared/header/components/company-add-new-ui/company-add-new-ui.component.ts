@@ -382,7 +382,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy, AfterViewIni
     private removeSpecialCharacters(str) {
         let finalString;
         finalString = str?.replace(/[^a-zA-Z0-9]/g, '');
-        return finalString.substr(0, 6).toLowerCase();
+        return finalString.substr(0, 6)?.toLowerCase();
     }
 
     private getSixCharRandom() {

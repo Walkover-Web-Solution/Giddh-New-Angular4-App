@@ -992,8 +992,8 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
 
     public selectAccount(ev: MatCheckboxChange, item: any) {
-        this.prepareSelectedContactsList(item, ev.checked);
-        if (!ev.checked) {
+        this.prepareSelectedContactsList(item, ev?.checked);
+        if (!ev?.checked) {
             this.checkboxInfo[this.checkboxInfo.selectedPage] = false;
             this.allSelectionModel = this.checkboxInfo[this.checkboxInfo.selectedPage] ? true : false;
             if (this.selectedCheckedContacts?.length === 0) {

@@ -370,7 +370,7 @@
                             color="primary"
                             name="voucherpdf"
                             [(ngModel)]="createTrigger.campaignDetails.sendVoucherPdf"
-                            (change)="selectVoucherPdf($event.checked)"
+                            (change)="selectVoucherPdf($event?.checked)"
                             ><span class="compose">{{ localeData?.communication?.send_voucher }}</span>
                         </mat-checkbox>
                     </div>

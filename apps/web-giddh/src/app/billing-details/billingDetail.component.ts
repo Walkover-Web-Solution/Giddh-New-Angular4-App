@@ -281,7 +281,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
 
     public autoRenewSelected(event: any): void {
         if (event) {
-            this.billingDetailsObj.autorenew = event.target.checked;
+            this.billingDetailsObj.autorenew = event.target?.checked;
         }
     }
 
