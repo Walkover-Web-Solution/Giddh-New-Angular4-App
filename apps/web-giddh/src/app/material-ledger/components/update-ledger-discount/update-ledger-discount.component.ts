@@ -44,15 +44,15 @@ export class UpdateLedgerDiscountComponent implements OnInit, OnChanges, OnDestr
     }
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    /** List of discounts */	
-    private discountsList: any[] = [];	
-    /** True if get discounts list api call in progress */	
+    /** List of discounts */
+    private discountsList: any[] = [];
+    /** True if get discounts list api call in progress */
     private getDiscountsLoading: boolean = false;
 
-    constructor(	
-        private settingsDiscountService: SettingsDiscountService	
-    ) {	
-        	
+    constructor(
+        private settingsDiscountService: SettingsDiscountService
+    ) {
+
     }
 
     public ngOnInit() {
@@ -205,7 +205,7 @@ export class UpdateLedgerDiscountComponent implements OnInit, OnChanges, OnDestr
                 // check for visibility while always include the current activeElement
                 return element.offsetWidth > 0 || element.offsetHeight > 0 || element === document.activeElement;
             });
-        let index = focussable.indexOf(document.activeElement);
+        let index = focussable?.indexOf(document.activeElement);
         if (index > -1) {
             let nextElement = focussable[index + 1] || focussable[0];
             nextElement.focus();

@@ -255,7 +255,7 @@ export class ConnectBankModalComponent implements OnChanges, OnInit, OnDestroy {
                 }, 200);
             }
         } else {
-            if (inputRowControls.controls[i].value.rate && inputRowControls.controls[i].value.stockUnitCode) {
+            if (inputRowControls.controls[i]?.value.rate && inputRowControls.controls[i]?.value.stockUnitCode) {
                 control.push(this.rowArray());
             }
         }
@@ -290,7 +290,7 @@ export class ConnectBankModalComponent implements OnChanges, OnInit, OnDestroy {
         let objToSend = {
             loginForm: []
         };
-        objToSend.loginForm.push(this.loginForm.value);
+        objToSend.loginForm.push(this.loginForm?.value);
         this._settingsLinkedAccountsService.AddProvider(_.cloneDeep(objToSend), this.selectedProvider.id).pipe(takeUntil(this.destroyed$)).subscribe(res => {
             if (res?.status === 'success') {
                 this._toaster.successToast(res?.body);
@@ -343,7 +343,7 @@ export class ConnectBankModalComponent implements OnChanges, OnInit, OnDestroy {
             let response = _.cloneDeep(provider.loginForm[0]);
             this.providerId = provider.id;
             if (response.formType === 'image') {
-                this.bypassSecurityTrustResourceUrl(response.row[0].field[0].value);
+                this.bypassSecurityTrustResourceUrl(response.row[0].field[0]?.value);
             }
             response.row[0].field[0].value = '';
             this.createLoginForm(response);
@@ -371,7 +371,7 @@ export class ConnectBankModalComponent implements OnChanges, OnInit, OnDestroy {
             loginForm: [],
             providerAccountId: this.providerId
         };
-        objToSend.loginForm.push(this.loginForm.value);
+        objToSend.loginForm.push(this.loginForm?.value);
         this.refreshAccountEvent.emit(objToSend);
         this.getBankSyncStatus(this.providerAccountId);
     }

@@ -81,15 +81,15 @@ export class OtherSettingsComponent implements OnInit, OnChanges, OnDestroy {
      */
     public ngOnInit(): void {
         currencyNumberSystems.map(currency => {
-            this.numberSystemSource.push({ value: currency.value, label: `${currency.name}`, additional: currency });
+            this.numberSystemSource.push({ value: currency?.value, label: `${currency.name}`, additional: currency });
         });
         digitAfterDecimal.map(d => {
-            this.decimalDigitSource.push({ value: d.value, label: d.name });
+            this.decimalDigitSource.push({ value: d?.value, label: d.name });
         });
         this.saveProfileSubject.pipe(takeUntil(this.destroyed$)).subscribe(() => {
             this.saveProfile.emit(this.updatedData);
         });
-        const currencySystem = currencyNumberSystems.find(numberSystem => numberSystem.value === this.profileData.balanceDisplayFormat);
+        const currencySystem = currencyNumberSystems.find(numberSystem => numberSystem?.value === this.profileData.balanceDisplayFormat);
         if (currencySystem) {
             this.numberSystem = currencySystem.name;
         }
@@ -125,7 +125,7 @@ export class OtherSettingsComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof OtherSettingsComponent
      */
     public ngOnChanges(changes: SimpleChanges): void {
-        const currencySystem = currencyNumberSystems.find(numberSystem => numberSystem.value === changes?.profileData?.currentValue?.balanceDisplayFormat);
+        const currencySystem = currencyNumberSystems.find(numberSystem => numberSystem?.value === changes?.profileData?.currentValue?.balanceDisplayFormat);
         if (currencySystem) {
             this.numberSystem = currencySystem.name;
         }

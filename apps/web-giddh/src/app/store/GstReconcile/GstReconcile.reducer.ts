@@ -58,7 +58,7 @@ export function GstReconcileReducer(state: GstReconcileState = initialState, act
             return {
                 ...state,
                 isGenerateOtpInProcess: false,
-                isGenerateOtpSuccess: action.payload.status === 'success'
+                isGenerateOtpSuccess: action.payload?.status === 'success'
             };
 
         case GST_RECONCILE_ACTIONS.GST_RECONCILE_VERIFY_OTP_REQUEST:
@@ -72,7 +72,7 @@ export function GstReconcileReducer(state: GstReconcileState = initialState, act
             return {
                 ...state,
                 isGstReconcileVerifyOtpInProcess: false,
-                isGstReconcileVerifyOtpSuccess: action.payload.status === 'success'
+                isGstReconcileVerifyOtpSuccess: action.payload?.status === 'success'
             };
 
         case GST_RECONCILE_ACTIONS.GST_RECONCILE_INVOICE_REQUEST:
@@ -87,7 +87,7 @@ export function GstReconcileReducer(state: GstReconcileState = initialState, act
             let newState: GstReconcileState = _.cloneDeep(state);
             newState.isGstReconcileInvoiceInProcess = false;
 
-            if (response.status === 'success') {
+            if (response?.status === 'success') {
                 newState.isGstReconcileInvoiceSuccess = true;
                 newState.gstFoundOnGiddh = true;
 

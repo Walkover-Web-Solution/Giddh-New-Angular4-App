@@ -83,7 +83,7 @@ export class ShareLedgerComponent implements OnInit, OnDestroy {
             entityUniqueName: this.inputData?.accountUniqueName,
         };
         let selectedPermission = 'view';
-        this.store.dispatch(this.accountActions.shareEntity(userRole, selectedPermission.toLowerCase()));
+        this.store.dispatch(this.accountActions.shareEntity(userRole, selectedPermission?.toLowerCase()));
         this.email = '';
         setTimeout(() => {
             this.store.dispatch(this.ledgerActions.sharedAccountWith(this.inputData?.accountUniqueName));

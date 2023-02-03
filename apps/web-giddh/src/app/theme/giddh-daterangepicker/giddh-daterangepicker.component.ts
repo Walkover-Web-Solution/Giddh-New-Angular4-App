@@ -107,10 +107,10 @@ export class GiddhDaterangepickerComponent implements OnInit, OnChanges, OnDestr
      */
     public dateChange(type: string, event: MatDatepickerInputEvent<Date>): void {
         if (type === "start") {
-            this.startDate = dayjs(event.value, GIDDH_DATE_FORMAT).toDate();
+            this.startDate = dayjs(event?.value, GIDDH_DATE_FORMAT).toDate();
         }
         if (type === "end") {
-            this.endDate = dayjs(event.value, GIDDH_DATE_FORMAT).toDate();
+            this.endDate = dayjs(event?.value, GIDDH_DATE_FORMAT).toDate();
         }
     }
 

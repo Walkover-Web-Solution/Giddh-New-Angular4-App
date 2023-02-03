@@ -16,7 +16,7 @@ import { ReceiptService } from '../../../services/receipt.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
 import { ElementViewContainerRef } from '../../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
-import { AppState } from '../../../store'; 
+import { AppState } from '../../../store';
 import { PAYMENT_REPORT_FILTERS, PaymentAdvanceSearchModel } from '../../constants/reports.constant';
 import { PaymentAdvanceSearchComponent } from '../payment-advance-search/payment-advance-search.component';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -207,7 +207,7 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
             if (response && response.length) {
                 this.currentCompanyBranches = response.map(branch => ({
                     label: branch.alias,
-                    value: branch.uniqueName,
+                    value: branch?.uniqueName,
                     name: branch.name,
                     parentBranch: branch.parentBranch
                 }));
@@ -224,7 +224,7 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
                     let currentBranchUniqueName;
                     if (this.currentOrganizationType === OrganizationType.Branch) {
                         currentBranchUniqueName = this.generalService.currentBranchUniqueName;
-                        this.currentBranch = _.cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName)) || this.currentBranch;
+                        this.currentBranch = _.cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName)) || this.currentBranch;
                     } else {
                         currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : '';
                         this.currentBranch = {

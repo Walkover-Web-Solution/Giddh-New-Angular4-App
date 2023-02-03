@@ -80,11 +80,11 @@ export class AccountsAction {
         .pipe(
             ofType(AccountsAction.APPLY_GROUP_TAX_RESPONSE),
             map((action: CustomActions) => {
-                if (action.payload.status === 'error') {
+                if (action.payload?.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
                     return { type: 'EmptyAction' };
                 }
-                this._toasty.successToast(action.payload.body, action.payload.status);
+                this._toasty.successToast(action.payload.body, action.payload?.status);
                 this.store.pipe(take(1)).subscribe((s) => {
                     if (s.groupwithaccounts && s.groupwithaccounts.activeGroup) {
                         return this.getAccountDetails(s.groupwithaccounts.activeAccount?.uniqueName);
@@ -98,7 +98,7 @@ export class AccountsAction {
             ofType(AccountsAction.CREATE_ACCOUNTV2),
             switchMap((action: CustomActions) => this._accountService.CreateAccountV2(action.payload.account, action.payload.accountUniqueName)),
             map(response => {
-                if (response.status === 'success') {
+                if (response?.status === 'success') {
                     this.store.dispatch(this.groupWithAccountsAction.hideAddAccountForm());
                 }
                 return this.createAccountResponseV2(response);
@@ -108,7 +108,7 @@ export class AccountsAction {
         .pipe(
             ofType(AccountsAction.CREATE_ACCOUNT_RESPONSEV2),
             map((action: CustomActions) => {
-                if (action.payload.status === 'error') {
+                if (action.payload?.status === 'error') {
                     this._toasty.clearAllToaster();
                     this._toasty.errorToast(action.payload.message, action.payload.code);
                     return {
@@ -134,7 +134,7 @@ export class AccountsAction {
         .pipe(
             ofType(AccountsAction.GET_ACCOUNT_DETAILS_RESPONSE),
             map((action: CustomActions) => {
-                if (action.payload.status === 'error') {
+                if (action.payload?.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
                 }
                 return {
@@ -166,7 +166,7 @@ export class AccountsAction {
         .pipe(
             ofType(AccountsAction.UPDATE_ACCOUNT_RESPONSE),
             map((action: CustomActions) => {
-                if (action.payload.status === 'error') {
+                if (action.payload?.status === 'error') {
                     this._toasty.clearAllToaster();
                     this._toasty.errorToast(action.payload.message, action.payload.code);
                 } else {
@@ -187,9 +187,9 @@ export class AccountsAction {
     public UpdateAccountV2$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(AccountsAction.UPDATE_ACCOUNTV2),
-            switchMap((action: CustomActions) => this._accountService.UpdateAccountV2(action.payload.account, action.payload.value)),
+            switchMap((action: CustomActions) => this._accountService.UpdateAccountV2(action.payload.account, action.payload?.value)),
             map(response => {
-                if (response.status === 'success') {
+                if (response?.status === 'success') {
                     this.store.dispatch(this.commonActions.accountUpdated(true));
                     this.store.dispatch(this.groupWithAccountsAction.hideEditAccountForm());
                     const updateIndexDb: IUpdateDbRequest = {
@@ -211,7 +211,7 @@ export class AccountsAction {
             ofType(AccountsAction.UPDATE_ACCOUNT_RESPONSEV2),
             map((action: CustomActions) => {
                 let resData: BaseResponse<AccountResponseV2, AccountRequestV2> = action.payload;
-                if (action.payload.status === 'error') {
+                if (action.payload?.status === 'error') {
                     this._toasty.clearAllToaster();
                     this._toasty.errorToast(action.payload.message, action.payload.code);
                     return { type: 'EmptyAction' };
@@ -242,7 +242,7 @@ export class AccountsAction {
         .pipe(
             ofType(AccountsAction.GET_ACCOUNT_TAX_HIERARCHY_RESPONSE),
             map((action: CustomActions) => {
-                if (action.payload.status === 'error') {
+                if (action.payload?.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
                 }
                 return {
@@ -267,7 +267,7 @@ export class AccountsAction {
         .pipe(
             ofType(AccountsAction.SHARE_ENTITY_RESPONSE),
             map((action: CustomActions) => {
-                if (action.payload.status === 'error') {
+                if (action.payload?.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
                     return {
                         type: 'EmptyAction'
@@ -301,7 +301,7 @@ export class AccountsAction {
         .pipe(
             ofType(AccountsAction.UN_SHARE_ENTITY_RESPONSE),
             map((action: CustomActions) => {
-                if (action.payload.status === 'error') {
+                if (action.payload?.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
                     return {
                         type: 'EmptyAction'
@@ -335,7 +335,7 @@ export class AccountsAction {
         .pipe(
             ofType(AccountsAction.UPDATE_ENTITY_PERMISSION_RESPONSE),
             map((action: CustomActions) => {
-                if (action.payload.status === 'error') {
+                if (action.payload?.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
                     return {
                         type: 'EmptyAction'
@@ -365,7 +365,7 @@ export class AccountsAction {
         .pipe(
             ofType(AccountsAction.UNSHARE_ACCOUNT_RESPONSE),
             map((action: CustomActions) => {
-                if (action.payload.status === 'error') {
+                if (action.payload?.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
                     return {
                         type: 'EmptyAction'
@@ -392,7 +392,7 @@ export class AccountsAction {
         .pipe(
             ofType(AccountsAction.SHARED_ACCOUNT_WITH_RESPONSE),
             map((action: CustomActions) => {
-                if (action.payload.status === 'error') {
+                if (action.payload?.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
                 }
                 return {
@@ -418,7 +418,7 @@ export class AccountsAction {
         .pipe(
             ofType(AccountsAction.MOVE_ACCOUNT_RESPONSE),
             map((action: CustomActions) => {
-                if (action.payload.status === 'error') {
+                if (action.payload?.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
                 } else {
                     let data: BaseResponse<string, AccountMoveRequest> = action.payload;
@@ -447,7 +447,7 @@ export class AccountsAction {
         .pipe(
             ofType(AccountsAction.MERGE_ACCOUNT_RESPONSE),
             map((action: CustomActions) => {
-                if (action.payload.status === 'error') {
+                if (action.payload?.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
                 } else {
                     this._toasty.successToast(action.payload.body, '');
@@ -489,7 +489,7 @@ export class AccountsAction {
         .pipe(
             ofType(AccountsAction.UNMERGE_ACCOUNT_RESPONSE),
             map((action: CustomActions) => {
-                if (action.payload.status === 'error') {
+                if (action.payload?.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
                 } else {
                     this._toasty.successToast(action.payload.body, '');
@@ -513,7 +513,7 @@ export class AccountsAction {
         .pipe(
             ofType(AccountsAction.DELETE_ACCOUNT_RESPONSE),
             map((action: CustomActions) => {
-                if (action.payload.status === 'error') {
+                if (action.payload?.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
                 } else {
                     this._generalServices.invokeEvent.next(["accountdeleted", action.payload.request?.groupUniqueName]);
@@ -544,10 +544,10 @@ export class AccountsAction {
     public ApplyAccountDiscountResponseV2$: Observable<Action> = createEffect(() => this.action$
         .pipe(ofType(AccountsAction.APPLY_ACCOUNT_DISCOUNT_RESPONSE_V2),
             map((action: CustomActions) => {
-                if (action.payload.status === 'error') {
+                if (action.payload?.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
-                } else if (action.payload.status === 'success') {
-                    this._toasty.successToast(this.localeService.translate("app_messages.discount_linked"), action.payload.status);
+                } else if (action.payload?.status === 'success') {
+                    this._toasty.successToast(this.localeService.translate("app_messages.discount_linked"), action.payload?.status);
                 }
                 return { type: 'EmptyAction' };
             })));

@@ -62,7 +62,7 @@ export class RejectPettyCashEntryConfirmDialogComponent implements OnInit, OnDes
      */
     public submitReject(): void {
         this.actionPettyCashRequestBody = new ExpenseActionRequest();
-        this.actionPettyCashRequestBody.message = this.rejectReason.value;
+        this.actionPettyCashRequestBody.message = this.rejectReason?.value;
         this.actionPettyCashRequest.actionType = 'reject';
         this.actionPettyCashRequest.uniqueName = this.selectedItem?.uniqueName;
         this.actionPettyCashRequest.accountUniqueName = this.selectedItem.particularAccount?.uniqueName

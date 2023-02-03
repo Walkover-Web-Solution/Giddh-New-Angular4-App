@@ -297,14 +297,14 @@
                 >
                     <tr
                         *ngFor="let item of purchaseOrders.items; let i = index"
-                        (mouseenter)="hoveredItem = item.uniqueName"
+                        (mouseenter)="hoveredItem = item?.uniqueName"
                     >
                         <td data-title="#">
                             <span
                                 *ngIf="
-                                    hoveredItem !== item.uniqueName &&
+                                    hoveredItem !== item?.uniqueName &&
                                     !item.isSelected &&
-                                    selectedItem !== item.uniqueName
+                                    selectedItem !== item?.uniqueName
                                 "
                                 >{{
                                     purchaseOrderGetRequest.count * (purchaseOrderGetRequest.page - 1) + (i + 1)
@@ -313,9 +313,9 @@
                             <div
                                 class="check-img"
                                 *ngIf="
-                                    hoveredItem === item.uniqueName ||
+                                    hoveredItem === item?.uniqueName ||
                                     item.isSelected ||
-                                    selectedItem === item.uniqueName
+                                    selectedItem === item?.uniqueName
                                 "
                             >
                                 <img
@@ -334,7 +334,7 @@
                             {{ item.voucherDate }}
                         </td>
                         <td [attr.data-title]="localeData?.po_number">
-                            <a routerLink="/pages/purchase-management/purchase-orders/preview/{{ item.uniqueName }}">{{
+                            <a routerLink="/pages/purchase-management/purchase-orders/preview/{{ item?.uniqueName }}">{{
                                 item.voucherNumber
                             }}</a>
                         </td>
@@ -371,18 +371,18 @@
                             [attr.data-title]="commonLocaleData?.app_status"
                             class="d-flex align-items-center status-mobile pt-0 pb-0"
                         >
-                            <span class="d-flex"> {{ item.status }}</span>
+                            <span class="d-flex"> {{ item?.status }}</span>
                             <div
                                 class="action-icon ml-auto"
                                 *ngIf="
-                                    hoveredItem === item.uniqueName ||
+                                    hoveredItem === item?.uniqueName ||
                                     item.isSelected ||
-                                    selectedItem === item.uniqueName
+                                    selectedItem === item?.uniqueName
                                 "
                             >
                                 <a
                                     [tooltip]="localeData?.convert_tobill"
-                                    *ngIf="item.status === 'open' && !isCompany && voucherApiVersion !== 2"
+                                    *ngIf="item?.status === 'open' && !isCompany && voucherApiVersion !== 2"
                                     (click)="bulkUpdate('create_purchase_bill', item.voucherNumber)"
                                 >
                                     <span class="icon-tick font-12"></span>
@@ -396,7 +396,7 @@
                                 <a
                                     *ngIf="!isCompany"
                                     [tooltip]="commonLocaleData?.app_copy"
-                                    [routerLink]="['/pages/purchase-management/purchase-order/new/' + item.uniqueName]"
+                                    [routerLink]="['/pages/purchase-management/purchase-order/new/' + item?.uniqueName]"
                                 >
                                     <span class="icon-copy-small font-14"></span>
                                 </a>

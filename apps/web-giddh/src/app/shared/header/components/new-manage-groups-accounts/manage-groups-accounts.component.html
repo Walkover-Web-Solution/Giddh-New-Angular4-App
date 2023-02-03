@@ -22,7 +22,7 @@
                             #grpSrch
                             id="grpSrch"
                             [(ngModel)]="searchString"
-                            (keyup)="searchGroups(grpSrch.value)"
+                            (keyup)="searchGroups(grpSrch?.value)"
                             class="form-control"
                             [placeholder]="localeData?.search_accounts"
                             financial-accordion="search"
@@ -33,7 +33,7 @@
                             href="javascript:void(0);"
                             class="pos-abs btn-link"
                             (click)="resetGroupSearchString()"
-                            *ngIf="grpSrch.value"
+                            *ngIf="grpSrch?.value"
                             >{{ commonLocaleData?.app_clear }}</a
                         >
                     </div>
@@ -90,7 +90,7 @@
                                         'px'
                                 }"
                                 [height]="(myModelRect ? myModelRect.height : 0) - (headerRect ? headerRect.height : 0)"
-                                [isSearchingGroups]="!(grpSrch.value === '')"
+                                [isSearchingGroups]="!(grpSrch?.value === '')"
                                 [localeData]="localeData"
                                 [commonLocaleData]="commonLocaleData"
                                 (resetSearchString)="resetGroupSearchString(false)"

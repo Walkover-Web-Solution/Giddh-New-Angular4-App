@@ -290,7 +290,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
 
                     let flag = true;
                     if (
-                        (this.searchSubscription?.value && (subscriptionDetails?.subscriptionId?.toLowerCase()?.indexOf(this.searchSubscription?.value?.toLowerCase()) === -1 && !(subscriptionDetails?.companiesWithTransactions?.filter(company => company?.name?.toLowerCase().indexOf(this.searchSubscription?.value?.toLowerCase()) > -1)?.length)) ||
+                        (this.searchSubscription?.value && (subscriptionDetails?.subscriptionId?.toLowerCase()?.indexOf(this.searchSubscription?.value?.toLowerCase()) === -1 && !(subscriptionDetails?.companiesWithTransactions?.filter(company => company?.name?.toLowerCase()?.indexOf(this.searchSubscription?.value?.toLowerCase()) > -1)?.length)) ||
                         (this.filters?.plan && subscriptionDetails?.planDetails?.uniqueName !== this.filters?.plan) ||
                         (this.filters?.expiration && (subscriptionDetails?.remainingDays < 0 || subscriptionDetails?.remainingDays > this.filters?.expiration)) ||
                         (this.filters?.transactionBalance && (subscriptionDetails?.remainingTransactions < 0 || subscriptionDetails?.remainingTransactions > this.filters?.transactionBalance))
@@ -377,7 +377,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
                 createdAt: this.selectedSubscription.createdAt,
                 planDetails: this.selectedSubscription.planDetails,
                 additionalCharges: this.selectedSubscription.additionalCharges,
-                status: this.selectedSubscription.status,
+                status: this.selectedSubscription?.status,
                 subscriptionId: this.selectedSubscription.subscriptionId,
                 balance: this.selectedSubscription.balance,
                 expiry: this.selectedSubscription.expiry,
@@ -389,7 +389,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
             this.route.navigate(['pages', 'billing-detail', 'buy-plan']);
             this.store.dispatch(this.companyActions.selectedPlan(this.subscriptionPlan));
         } else {
-            this.subscriptionRequestObj.userUniqueName = this.loggedInUser.uniqueName;
+            this.subscriptionRequestObj.userUniqueName = this.loggedInUser?.uniqueName;
             if (this.selectedSubscription?.subscriptionId) {
                 this.subscriptionRequestObj.subscriptionId = this.selectedSubscription?.subscriptionId;
                 this.patchProfile({ subscriptionRequest: this.subscriptionRequestObj, callNewPlanApi: true });

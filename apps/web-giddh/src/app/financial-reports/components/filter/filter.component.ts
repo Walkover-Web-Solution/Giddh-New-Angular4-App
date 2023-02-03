@@ -152,7 +152,7 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
             return { label: q?.uniqueName, value: q?.uniqueName };
         });
 
-        if (this.filterForm.get('selectedDateOption').value === '0' && value.activeFinancialYear) {
+        if (this.filterForm.get('selectedDateOption')?.value === '0' && value.activeFinancialYear) {
             this.filterForm?.patchValue({
                 to: value.activeFinancialYear.financialYearEnds,
                 from: value.activeFinancialYear.financialYearStarts,
@@ -194,7 +194,7 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
                 });
 
                 // if filter type is not date picker then set filter as datepicker
-                if (this.filterForm.get('selectedDateOption').value === '0') {
+                if (this.filterForm.get('selectedDateOption')?.value === '0') {
                     this.filterForm?.patchValue({
                         selectedDateOption: '1'
                     });
@@ -218,7 +218,7 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
             }
         });
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
-        this.currentCompanyBranches$.subscribe(response => {           
+        this.currentCompanyBranches$.subscribe(response => {
             if (response?.length) {
                 this.filterForm.get('branchUniqueName').setValue("");
                 this.forceClear$ = observableOf({ status: true });
@@ -313,16 +313,16 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
     }
 
     public filterData() {
-        this.setFYFirstTime(this.filterForm.controls['selectedFinancialYearOption'].value);
-        this.onPropertyChanged.emit(this.filterForm.value);
+        this.setFYFirstTime(this.filterForm.controls['selectedFinancialYearOption']?.value);
+        this.onPropertyChanged.emit(this.filterForm?.value);
         // this will clear the search and reset it after we click apply --G0-2745
         let a = this.search = '';
         this.seachChange.emit(a);
     }
 
     public refreshData() {
-        this.setFYFirstTime(this.filterForm.controls['selectedFinancialYearOption'].value);
-        let data = cloneDeep(this.filterForm.value);
+        this.setFYFirstTime(this.filterForm.controls['selectedFinancialYearOption']?.value);
+        let data = cloneDeep(this.filterForm?.value);
         data.refresh = true;
         this.onPropertyChanged.emit(data);
         this.emitExpand(false);
@@ -350,7 +350,7 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
                 this.getTags();
                 this.toaster.successToast(this.commonLocaleData?.app_messages?.tag_created, this.commonLocaleData?.app_success);
             } else {
-                this.toaster.errorToast(response?.message, response?.code);                
+                this.toaster.errorToast(response?.message, response?.code);
             }
         });
         this.toggleTagsModal();
@@ -369,10 +369,10 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
     }
 
     public onTagSelected(ev) {
-        this.selectedTag = ev.value;
-        this.filterForm.get('tagName')?.patchValue(ev.value);
+        this.selectedTag = ev?.value;
+        this.filterForm.get('tagName')?.patchValue(ev?.value);
         this.filterForm.get('refresh')?.patchValue(true);
-        this.onPropertyChanged.emit(this.filterForm.value);
+        this.onPropertyChanged.emit(this.filterForm?.value);
     }
 
     public dateOptionIsSelected(ev) {
@@ -398,7 +398,7 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
         setTimeout(() => {
             this.expandAllChange.emit(false);
         }, 10);
-        this.onPropertyChanged.emit(this.filterForm.value);
+        this.onPropertyChanged.emit(this.filterForm?.value);
     }
 
     /**

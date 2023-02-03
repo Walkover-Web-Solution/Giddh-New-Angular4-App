@@ -71,11 +71,11 @@ export class SearchFilterComponent implements OnInit {
 
     public filterData() {
         this.isFiltered.emit(true);
-        this.searchQuery.emit(this.searchQueryForm.value.searchQuery);
+        this.searchQuery.emit(this.searchQueryForm?.value.searchQuery);
     }
 
     public createCSV() {
-        this.createCsv.emit(this.searchQueryForm.value.searchQuery);
+        this.createCsv.emit(this.searchQueryForm?.value.searchQuery);
     }
 
     public addSearchRow() {

@@ -400,7 +400,7 @@ export class CompanyService {
     public createNewBranch(companyUniqueName: string, requestObject: any): Observable<any> {
         const requestPayload = {
             name: requestObject.name,
-            uniqueName: requestObject.uniqueName,
+            uniqueName: requestObject?.uniqueName,
             alias: requestObject.nameAlias,
             parent_branch_unique_name: '',
             businessType: requestObject.businessType || '',

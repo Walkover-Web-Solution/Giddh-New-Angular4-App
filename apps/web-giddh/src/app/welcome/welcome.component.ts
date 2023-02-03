@@ -311,7 +311,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
             let stateLoop = 0;
             for (stateLoop; stateLoop < this.states?.length; stateLoop++) {
-                if (this.states[stateLoop].value === this.companyProfileObj.state) {
+                if (this.states[stateLoop]?.value === this.companyProfileObj.state) {
                     this.companyProfileObj.selectedState = this.states[stateLoop].label;
                 }
             }
@@ -324,7 +324,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     public reFillTax() {
         if (this.createNewCompany.taxes && this.createNewCompany.taxes.length > 0) {
             this.createNewCompany.taxes.forEach(tax => {
-                if (this.currentTaxList[tax] !== undefined && this.selectedTaxes.indexOf(tax) === -1) {
+                if (this.currentTaxList[tax] !== undefined && this.selectedTaxes?.indexOf(tax) === -1) {
                     this.selectedTaxes.push(tax);
 
                     let matchedIndex = this.taxesList.findIndex(listedTax => listedTax.value === tax);
@@ -344,7 +344,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
             this.createNewCompanyPreparedObj.uniqueName = this.company.uniqueName ? this.company.uniqueName : '';
             this.createNewCompanyPreparedObj.isBranch = this.company.isBranch;
             this.createNewCompanyPreparedObj.country = this.company.country ? this.company.country : '';
-            this.createNewCompanyPreparedObj.baseCurrency = this.company.baseCurrency ? this.company.baseCurrency : '';
+            this.createNewCompanyPreparedObj.baseCurrency = this.company?.baseCurrency ? this.company?.baseCurrency : '';
             this.createNewCompanyPreparedObj.nameAlias = this.company.nameAlias ? this.company.nameAlias : '';
             this.getCountry();
             this.getCurrency();
@@ -396,8 +396,8 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
                 }
                 // Validate address field
                 const addressField = this.welcomeForm.form.controls['address'];
-                addressField.setValue(addressField.value.trim());
-                if (!this.isAddressValid(addressField.value)) {
+                addressField.setValue(addressField?.value.trim());
+                if (!this.isAddressValid(addressField?.value)) {
                     addressField.setErrors({ 'required': true });
                     if (this.addressField) {
                         (this.addressField.nativeElement as HTMLElement).classList.add('error-box');
@@ -446,11 +446,11 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     public checkGstNumValidation(ele: HTMLInputElement) {
         let isValid: boolean = false;
 
-        if (ele.value) {
+        if (ele?.value) {
             if (this.formFields['taxName']['regex'] !== "" && this.formFields['taxName']['regex']?.length > 0) {
                 for (let key = 0; key < this.formFields['taxName']['regex'].length; key++) {
                     let regex = new RegExp(this.formFields['taxName']['regex'][key]);
-                    if (regex.test(ele.value)) {
+                    if (regex.test(ele?.value)) {
                         isValid = true;
                     }
                 }
@@ -475,19 +475,19 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
     public getStateCode(gstNo: HTMLInputElement, statesEle: ShSelectComponent) {
         if (this.createNewCompanyPreparedObj.country === "IN") {
-            let gstVal: string = gstNo.value;
+            let gstVal: string = gstNo?.value;
             this.companyProfileObj.gstNumber = gstVal;
 
             if (gstVal?.length >= 2) {
                 this.statesSource$.pipe(take(1)).subscribe(state => {
                     let stateCode = this.stateGstCode[gstVal.substr(0, 2)];
 
-                    let s = state.find(st => st.value === stateCode);
+                    let s = state.find(st => st?.value === stateCode);
                     _.uniqBy(s, 'value');
                     statesEle.setDisabledState(false);
 
                     if (s) {
-                        this.companyProfileObj.state = s.value;
+                        this.companyProfileObj.state = s?.value;
                         this.selectedstateName = s.label;
                         statesEle.setDisabledState(true);
 
@@ -536,11 +536,11 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
     public selectApplicableTaxes(tax, event) {
         if (event && tax) {
-            if (event.target.checked) {
+            if (event.target?.checked) {
                 tax.isSelected = event.target.checked;
                 this.selectedTaxes.push(tax.value);
             } else {
-                let indx = this.selectedTaxes.indexOf(tax.value);
+                let indx = this.selectedTaxes?.indexOf(tax.value);
                 this.selectedTaxes.splice(indx, 1);
             }
         }
@@ -594,7 +594,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
             } else {
                 let countryRequest = new CountryRequest();
                 if (this.isOnBoardingInProgress && this.itemOnBoardingDetails) {
-                    countryRequest.formName = this.itemOnBoardingDetails.onBoardingType.toLowerCase();
+                    countryRequest.formName = this.itemOnBoardingDetails.onBoardingType?.toLowerCase();
                 } else {
                     countryRequest.formName = 'onboarding';
                 }
@@ -657,7 +657,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
                         this.businessTypeList.push({ label: businessType, value: businessType });
                     });
                     if (this.businessTypeList && this.businessTypeList.length === 1) {
-                        this.selectedBusinesstype = this.businessTypeList[0].value;
+                        this.selectedBusinesstype = this.businessTypeList[0]?.value;
                         this.companyProfileObj.businessType = this.selectedBusinesstype;
                     }
                 }
@@ -665,7 +665,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
             } else {
                 let onboardingFormRequest = new OnboardingFormRequest();
                 if (this.isOnBoardingInProgress && this.itemOnBoardingDetails) {
-                    onboardingFormRequest.formName = this.itemOnBoardingDetails.onBoardingType.toLowerCase();
+                    onboardingFormRequest.formName = this.itemOnBoardingDetails.onBoardingType?.toLowerCase();
                 } else {
                     onboardingFormRequest.formName = 'onboarding';
                 }
@@ -705,13 +705,13 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
         let matchedIndex = -1;
 
         for (i; i < this.taxesList?.length; i++) {
-            if (tax === this.taxesList[i].value) {
+            if (tax === this.taxesList[i]?.value) {
                 matchedIndex = i;
                 break;
             }
         }
 
-        let indx = this.selectedTaxes.indexOf(tax);
+        let indx = this.selectedTaxes?.indexOf(tax);
         this.selectedTaxes.splice(indx, 1);
 
         if (matchedIndex > -1) {
@@ -796,7 +796,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     public isContactNumberValid(): boolean {
         const contactNumberElement = (this.contactNumberField && this.contactNumberField.nativeElement) ? this.contactNumberField.nativeElement : undefined;
         try {
-            let parsedNumber = parsePhoneNumberFromString('+' + this.createNewCompanyPreparedObj.phoneCode + contactNumberElement.value, this.company.country as CountryCode);
+            let parsedNumber = parsePhoneNumberFromString('+' + this.createNewCompanyPreparedObj.phoneCode + contactNumberElement?.value, this.company.country as CountryCode);
             if (parsedNumber.isValid()) {
                 if (contactNumberElement) {
                     contactNumberElement.classList.remove('error-box');
@@ -1165,9 +1165,9 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     public selectingApplicableTaxes(isChecked: boolean, tax: any, event: any): void {
         tax.isSelected = isChecked;
         if (isChecked) {
-            this.selectedTaxes.push(tax.value);
+            this.selectedTaxes.push(tax?.value);
         } else {
-            let index = this.selectedTaxes.indexOf(tax.value);
+            let index = this.selectedTaxes?.indexOf(tax?.value);
             this.selectedTaxes.splice(index, 1);
         }
         event.preventDefault();

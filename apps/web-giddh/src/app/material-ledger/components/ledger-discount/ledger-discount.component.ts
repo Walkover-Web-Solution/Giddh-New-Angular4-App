@@ -34,13 +34,13 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
     @Input() public suffixInput: string;
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    /** List of discounts */	
+    /** List of discounts */
     @Input() private discountsList: any[] = [];
 
     constructor(
-        
-    ) {	
-        	
+
+    ) {
+
     }
 
     public onFocusLastDiv(el) {
@@ -57,7 +57,7 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
                 // check for visibility while always include the current activeElement
                 return element.offsetWidth > 0 || element.offsetHeight > 0 || element === document.activeElement;
             });
-        let index = focussable.indexOf(document.activeElement);
+        let index = focussable?.indexOf(document.activeElement);
         if (index > -1) {
             let nextElement = focussable[index + 1] || focussable[0];
             nextElement.focus();

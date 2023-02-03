@@ -78,7 +78,7 @@ export class AccountDetailModalComponent implements OnChanges, OnDestroy {
 
     constructor(
         private _companyServices: CompanyService,
-        private _toaster: ToasterService, 
+        private _toaster: ToasterService,
         private _accountService: AccountService,
         private changeDetectorRef: ChangeDetectorRef
     ) {
@@ -175,7 +175,7 @@ export class AccountDetailModalComponent implements OnChanges, OnDestroy {
 
     // Add Selected Value to Message Body
     public addValueToMsg(val: any) {
-        this.typeInTextarea(val.value);
+        this.typeInTextarea(val?.value);
     }
 
     /**
@@ -188,13 +188,13 @@ export class AccountDetailModalComponent implements OnChanges, OnDestroy {
         let el: HTMLInputElement = this.messageBox?.nativeElement;
         let start = el.selectionStart;
         let end = el.selectionEnd;
-        let text = el.value;
+        let text = el?.value;
         let before = text?.substring(0, start);
         let after = text?.substring(end, text?.length);
         el.value = (before + newText + after);
         el.selectionStart = el.selectionEnd = start + newText?.length;
         el.focus();
-        this.messageBody.msg = el.value;
+        this.messageBody.msg = el?.value;
     }
 
     // Send Email/Sms for Accounts

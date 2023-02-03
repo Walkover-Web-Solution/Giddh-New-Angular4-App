@@ -41,7 +41,7 @@
                                 <amount-field
                                     [amount]="netProfitLoss"
                                     [currencySymbol]="amountSettings.baseCurrencySymbol"
-                                    [currencyCode]="activeCompany.baseCurrency"
+                                    [currencyCode]="activeCompany?.baseCurrency"
                                 >
                                 </amount-field>
                             </span>
@@ -56,7 +56,7 @@
                                 <amount-field
                                     [amount]="totalIncome"
                                     [currencySymbol]="amountSettings.baseCurrencySymbol"
-                                    [currencyCode]="activeCompany.baseCurrency"
+                                    [currencyCode]="activeCompany?.baseCurrency"
                                 >
                                 </amount-field>
                             </span>
@@ -72,7 +72,7 @@
                                 <amount-field
                                     [amount]="totalExpense"
                                     [currencySymbol]="amountSettings.baseCurrencySymbol"
-                                    [currencyCode]="activeCompany.baseCurrency"
+                                    [currencyCode]="activeCompany?.baseCurrency"
                                 >
                                 </amount-field> </span
                             >{{ totalExpenseType }}

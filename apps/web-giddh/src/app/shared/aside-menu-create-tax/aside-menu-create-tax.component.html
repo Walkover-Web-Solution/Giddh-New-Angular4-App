@@ -1,6 +1,6 @@
 <div class="aside-pane" [keyboardShortcut]="'esc'" (onShortcutPress)="closeEvent.emit()">
     <div class="form-header">
-        <h3 class="aside-title">{{ tax && tax.uniqueName ? localeData?.update_tax : localeData?.create_new_tax }}</h3>
+        <h3 class="aside-title">{{ tax && tax?.uniqueName ? localeData?.update_tax : localeData?.create_new_tax }}</h3>
     </div>
     <button id="close" (click)="closeEvent.emit()"><i class="icon-cross"></i></button>
     <div class="aside-body aside-create-tax-component">
@@ -52,7 +52,7 @@
                         </div>
 
                         <div class="form-group col-sm-6 col-xs-12">
-                            <ng-container *ngIf="tax && tax.uniqueName">
+                            <ng-container *ngIf="tax && tax?.uniqueName">
                                 <label>{{ commonLocaleData?.app_unique_name }} </label><br />
                                 <input
                                     type="text"
@@ -190,7 +190,7 @@
                             <button
                                 type="submit"
                                 class="btn btn-success"
-                                *ngIf="tax && tax.uniqueName"
+                                *ngIf="tax && tax?.uniqueName"
                                 [disabled]="taxForm.invalid"
                                 [ladda]="isUpdateTaxInProcess"
                             >

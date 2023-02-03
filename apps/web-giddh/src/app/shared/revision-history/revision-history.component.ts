@@ -49,9 +49,9 @@ export class RevisionHistoryComponent implements OnDestroy {
     public translationLoaded: boolean = false;
 
     constructor(
-        private purchaseOrderService: PurchaseOrderService, 
-        private toaster: ToasterService, 
-        private generalService: GeneralService, 
+        private purchaseOrderService: PurchaseOrderService,
+        private toaster: ToasterService,
+        private generalService: GeneralService,
         private purchaseRecordService: PurchaseRecordService,
         private cdRef: ChangeDetectorRef,
         private invoiceService: InvoiceService
@@ -177,7 +177,7 @@ export class RevisionHistoryComponent implements OnDestroy {
                 this.purchaseVersionsGetRequest.page = 1;
             }
 
-            const apiObservable = (this.generalService.voucherApiVersion === 2) ? this.invoiceService.getVoucherVersions(this.purchaseVersionsGetRequest, this.purchaseVersionsPostRequest.uniqueName) : this.purchaseRecordService.getAllVersions(this.purchaseVersionsGetRequest, this.purchaseVersionsPostRequest);
+            const apiObservable = (this.generalService.voucherApiVersion === 2) ? this.invoiceService.getVoucherVersions(this.purchaseVersionsGetRequest, this.purchaseVersionsPostRequest?.uniqueName) : this.purchaseRecordService.getAllVersions(this.purchaseVersionsGetRequest, this.purchaseVersionsPostRequest);
             apiObservable.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                 if (res) {
                     if (res.status === 'success') {
@@ -235,10 +235,10 @@ export class RevisionHistoryComponent implements OnDestroy {
             if (this.selectedVoucher) {
                 this.purchaseVersionsGetRequest.companyUniqueName = this.companyUniqueName;
                 this.purchaseVersionsGetRequest.accountUniqueName = this.selectedVoucher.account?.uniqueName;
-                this.purchaseVersionsPostRequest.uniqueName = this.selectedVoucher.uniqueName;
+                this.purchaseVersionsPostRequest.uniqueName = this.selectedVoucher?.uniqueName;
                 this.getVoucherVersions(true);
             }
-    
+
             if (this.purchaseOrder) {
                 this.purchaseVersionsGetRequest.companyUniqueName = this.purchaseOrder.company?.uniqueName;
                 this.purchaseVersionsGetRequest.accountUniqueName = this.purchaseOrder.account?.uniqueName;

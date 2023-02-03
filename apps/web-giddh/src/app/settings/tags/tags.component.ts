@@ -47,7 +47,7 @@ export class SettingsTagsComponent implements OnInit, OnDestroy {
         this.settingsTagService.GetAllTags().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success" && response?.body?.length > 0) {
                 map(response?.body, (tag) => {
-                    tag.uniqueName = tag.name;
+                    tag.uniqueName = tag?.name;
                 });
                 let tagsData = orderBy(response?.body, 'name');
                 this.tags = cloneDeep(tagsData);
@@ -129,7 +129,7 @@ export class SettingsTagsComponent implements OnInit, OnDestroy {
             this.getTags();
             this.toaster.successToast(successMessage, this.commonLocaleData?.app_success);
         } else {
-            this.toaster.errorToast(response?.message, response?.code);                
+            this.toaster.errorToast(response?.message, response?.code);
         }
     }
 }

@@ -255,82 +255,82 @@ export class TallyModuleService {
             }
         }
 
-        this.cashAccounts.next([this.cashAccounts.value, ...cashAccounts]);
-        this.purchaseAccounts.next([...this.purchaseAccounts.value, ...purchaseAccounts]);
-        this.bankAccounts.next([...this.bankAccounts.value, ...bankAccounts]);
-        this.taxAccounts.next([...this.taxAccounts.value, ...taxAccounts]);
-        this.expenseAccounts.next([...this.expenseAccounts.value, ...expenseAccounts]);
-        this.salesAccounts.next([...this.salesAccounts.value, ...salesAccounts]);
-        this.flattenAccounts.next([...this.flattenAccounts.value, account]);
-        this.filteredAccounts.next(this.flattenAccounts.value);
+        this.cashAccounts.next([this.cashAccounts?.value, ...cashAccounts]);
+        this.purchaseAccounts.next([...this.purchaseAccounts?.value, ...purchaseAccounts]);
+        this.bankAccounts.next([...this.bankAccounts?.value, ...bankAccounts]);
+        this.taxAccounts.next([...this.taxAccounts?.value, ...taxAccounts]);
+        this.expenseAccounts.next([...this.expenseAccounts?.value, ...expenseAccounts]);
+        this.salesAccounts.next([...this.salesAccounts?.value, ...salesAccounts]);
+        this.flattenAccounts.next([...this.flattenAccounts?.value, account]);
+        this.filteredAccounts.next(this.flattenAccounts?.value);
     }
 
     public getAccounts() {
         let accounts = [];
-        if (this.selectedPageInfo.value) {
+        if (this.selectedPageInfo?.value) {
             // console.log('this.selectedPageInfo.value inside service is :', this.selectedPageInfo.value);
-            switch (this.selectedPageInfo.value.page) {
+            switch (this.selectedPageInfo?.value.page) {
                 case 'Journal':
                     // accounts = this.flattenAccounts.value;
                     // As discussed with Manish, Cash and Bank account should not come in Journal entry
-                    if (this.purchaseAccounts.value) {
-                        accounts = this.purchaseAccounts.value.concat(this.expenseAccounts.value).concat(this.taxAccounts.value).concat(this.salesAccounts.value);
-                    } else if (this.expenseAccounts.value) {
-                        accounts = this.expenseAccounts.value.concat(this.taxAccounts.value).concat(this.salesAccounts.value);
-                    } else if (this.taxAccounts.value) {
-                        accounts = this.taxAccounts.value.concat(this.salesAccounts.value);
+                    if (this.purchaseAccounts?.value) {
+                        accounts = this.purchaseAccounts.value.concat(this.expenseAccounts?.value).concat(this.taxAccounts?.value).concat(this.salesAccounts?.value);
+                    } else if (this.expenseAccounts?.value) {
+                        accounts = this.expenseAccounts.value.concat(this.taxAccounts?.value).concat(this.salesAccounts?.value);
+                    } else if (this.taxAccounts?.value) {
+                        accounts = this.taxAccounts.value.concat(this.salesAccounts?.value);
                     } else {
-                        accounts = this.salesAccounts.value;
+                        accounts = this.salesAccounts?.value;
                     }
                     break;
                 case 'Purchase':
-                    if (this.bankAccounts.value) {
-                        accounts = this.bankAccounts.value.concat(this.cashAccounts.value).concat(this.expenseAccounts.value).concat(this.taxAccounts.value);
-                    } else if (this.cashAccounts.value) {
-                        accounts = this.cashAccounts.value.concat(this.expenseAccounts.value).concat(this.taxAccounts.value);
-                    } else if (this.expenseAccounts.value) {
-                        accounts = this.expenseAccounts.value.concat(this.taxAccounts.value);
+                    if (this.bankAccounts?.value) {
+                        accounts = this.bankAccounts.value.concat(this.cashAccounts?.value).concat(this.expenseAccounts?.value).concat(this.taxAccounts?.value);
+                    } else if (this.cashAccounts?.value) {
+                        accounts = this.cashAccounts.value.concat(this.expenseAccounts?.value).concat(this.taxAccounts?.value);
+                    } else if (this.expenseAccounts?.value) {
+                        accounts = this.expenseAccounts.value.concat(this.taxAccounts?.value);
                     } else {
-                        accounts = this.taxAccounts.value;
+                        accounts = this.taxAccounts?.value;
                     }
                     break;
                 case 'Sales':
-                    if (this.bankAccounts.value) {
-                        accounts = this.bankAccounts.value.concat(this.cashAccounts.value).concat(this.expenseAccounts.value).concat(this.salesAccounts.value);
-                    } else if (this.cashAccounts.value) {
-                        accounts = this.cashAccounts.value.concat(this.expenseAccounts.value).concat(this.salesAccounts.value);
-                    } else if (this.expenseAccounts.value) {
-                        accounts = this.expenseAccounts.value.concat(this.salesAccounts.value);
+                    if (this.bankAccounts?.value) {
+                        accounts = this.bankAccounts.value.concat(this.cashAccounts?.value).concat(this.expenseAccounts?.value).concat(this.salesAccounts?.value);
+                    } else if (this.cashAccounts?.value) {
+                        accounts = this.cashAccounts.value.concat(this.expenseAccounts?.value).concat(this.salesAccounts?.value);
+                    } else if (this.expenseAccounts?.value) {
+                        accounts = this.expenseAccounts.value.concat(this.salesAccounts?.value);
                     } else {
-                        accounts = this.salesAccounts.value;
+                        accounts = this.salesAccounts?.value;
                     }
                     break;
                 case 'Credit note':
-                    if (this.taxAccounts.value) {
-                        accounts = this.taxAccounts.value.concat(this.salesAccounts.value);
+                    if (this.taxAccounts?.value) {
+                        accounts = this.taxAccounts.value.concat(this.salesAccounts?.value);
                     } else {
-                        accounts = this.salesAccounts.value;
+                        accounts = this.salesAccounts?.value;
                     }
                     break;
                 case 'Debit note':
-                    if (this.purchaseAccounts.value) {
-                        accounts = this.purchaseAccounts.value.concat(this.taxAccounts.value).concat(this.expenseAccounts.value);
-                    } else if (this.taxAccounts.value) {
-                        accounts = this.taxAccounts.value.concat(this.expenseAccounts.value);
+                    if (this.purchaseAccounts?.value) {
+                        accounts = this.purchaseAccounts.value.concat(this.taxAccounts?.value).concat(this.expenseAccounts?.value);
+                    } else if (this.taxAccounts?.value) {
+                        accounts = this.taxAccounts.value.concat(this.expenseAccounts?.value);
                     } else {
-                        accounts = this.expenseAccounts.value;
+                        accounts = this.expenseAccounts?.value;
                     }
                     break;
                 case 'Payment':
-                    accounts = this.flattenAccounts.value;
+                    accounts = this.flattenAccounts?.value;
                     break;
                 case 'Receipt':
-                    accounts = this.flattenAccounts.value;
+                    accounts = this.flattenAccounts?.value;
                 case 'Contra':
-                    accounts = (this.cashAccounts.value) ? this.cashAccounts.value.concat(this.bankAccounts.value) : this.bankAccounts.value;
+                    accounts = (this.cashAccounts?.value) ? this.cashAccounts.value.concat(this.bankAccounts?.value) : this.bankAccounts?.value;
                     break;
                 default:
-                    accounts = this.flattenAccounts.value;
+                    accounts = this.flattenAccounts?.value;
             }
             if (accounts && accounts.length) {
                 // const endOfLine = {

@@ -36,13 +36,13 @@ export function InventoryInOutReducer(state: InventoryInOutState = initialState,
             return { ...state, entryInProcess: true, entrySuccess: false };
         }
         case INVENTORY_ENTRY_ACTIONS.CREATE_ENTRY_RESPONSE: {
-            return { ...state, entryInProcess: false, entrySuccess: action.payload.status === 'success' };
+            return { ...state, entryInProcess: false, entrySuccess: action.payload?.status === 'success' };
         }
         case INVENTORY_ENTRY_ACTIONS.CREATE_TRANSFER_ENTRY: {
             return { ...state, entryInProcess: false, entrySuccess: false };
         }
         case INVENTORY_ENTRY_ACTIONS.CREATE_TRANSFER_ENTRY_RESPONSE: {
-            return { ...state, entryInProcess: false, entrySuccess: action.payload.status === 'success' };
+            return { ...state, entryInProcess: false, entrySuccess: action.payload?.status === 'success' };
         }
         case INVENTORY_USER_ACTIONS.CREATE_USER: {
             return { ...state, userSuccess: false };

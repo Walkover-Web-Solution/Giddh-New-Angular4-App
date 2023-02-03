@@ -25,7 +25,7 @@ export class GstReconcileActions {
                 return this._reconcileService.GstReconcileGenerateOtp(action.payload.userName)
                     .pipe(
                         map((response: BaseResponse<string, string>) => {
-                            if (response.status === 'success') {
+                            if (response?.status === 'success') {
                                 this._toasty.successToast(response.body);
                             } else {
                                 this._toasty.errorToast(response.message);
@@ -42,7 +42,7 @@ export class GstReconcileActions {
                 return this._reconcileService.GstReconcileVerifyOtp(action.payload.model)
                     .pipe(
                         map((response: BaseResponse<string, VerifyOtpRequest>) => {
-                            if (response.status === 'success') {
+                            if (response?.status === 'success') {
                                 this._toasty.successToast(response.body);
                             } else {
                                 this._toasty.errorToast(response.message);
@@ -59,7 +59,7 @@ export class GstReconcileActions {
                 return this._reconcileService.GstReconcileGetInvoices(action.payload)
                     .pipe(
                         map((response: BaseResponse<GstReconcileInvoiceResponse, GstReconcileInvoiceRequest>) => {
-                            if (response.status !== 'success') {
+                            if (response?.status !== 'success') {
                                 this._toasty.errorToast(response.message);
                             }
                             return this.GstReconcileInvoiceResponse(response);
@@ -74,7 +74,7 @@ export class GstReconcileActions {
                 return this._reconcileService.GetGstrOverview(action.payload.type, action.payload.model)
                     .pipe(
                         map((response: BaseResponse<GstOverViewResult, GstOverViewRequest>) => {
-                            if (response.status !== 'success') {
+                            if (response?.status !== 'success') {
                                 this._toasty.errorToast(response.message);
                             }
                             return this.GetOverViewResponse(response);
@@ -89,7 +89,7 @@ export class GstReconcileActions {
                 return this._reconcileService.GetGstrOverview(action.payload.type, action.payload.model)
                     .pipe(
                         map((response: BaseResponse<GstOverViewResult, GstOverViewRequest>) => {
-                            if (response.status !== 'success') {
+                            if (response?.status !== 'success') {
                                 this._toasty.errorToast(response.message);
                             }
                             return this.GetOverViewResponse(response);
@@ -112,7 +112,7 @@ export class GstReconcileActions {
             ofType(GSTR_ACTIONS.GET_GSTR3B_OVERVIEW_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, GstOverViewRequest> = response.payload;
-                if (data.status === 'error') {
+                if (data?.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 }
                 return { type: 'EmptyAction' };
@@ -126,7 +126,7 @@ export class GstReconcileActions {
                 return this._reconcileService.GetSummaryTransaction(action.payload.type, action.payload.model)
                     .pipe(
                         map((response: BaseResponse<GstTransactionResult, GStTransactionRequest>) => {
-                            if (response.status !== 'success') {
+                            if (response?.status !== 'success') {
                                 this._toasty.errorToast(response.message);
                             }
                             return this.GetSummaryTransactionResponse(response);
@@ -141,7 +141,7 @@ export class GstReconcileActions {
                 return this._reconcileService.GetGstr1SummaryDetails(action.payload)
                     .pipe(
                         map((response: BaseResponse<Gstr1SummaryResponse, Gstr1SummaryRequest>) => {
-                            if (response.status !== 'success') {
+                            if (response?.status !== 'success') {
                                 this._toasty.errorToast(response.message);
                             }
                             return this.GetGSTR1SummaryDetailsResponse(response);
@@ -163,7 +163,7 @@ export class GstReconcileActions {
             ofType(GSTR_ACTIONS.DOWNLOAD_GSTR_SHEET_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, GstrSheetDownloadRequest> = response.payload;
-                if (data.status === 'error') {
+                if (data?.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 } else {
                     this.downloadFile(data);
@@ -190,7 +190,7 @@ export class GstReconcileActions {
             ofType(GSTR_ACTIONS.GST_SAVE_GSP_SESSION_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, GstSaveGspSessionRequest> = response.payload;
-                if (data.status === 'error') {
+                if (data?.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 } else {
                     this._toasty.successToast(data.body);
@@ -213,7 +213,7 @@ export class GstReconcileActions {
             ofType(GSTR_ACTIONS.GST_SAVE_GSP_SESSION_WITH_OTP_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, GstSaveGspSessionRequest> = response.payload;
-                if (data.status === 'error') {
+                if (data?.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 } else {
                     this._toasty.successToast(data.body);
@@ -229,7 +229,7 @@ export class GstReconcileActions {
                 return this._reconcileService.FileGstr1(action.payload)
                     .pipe(
                         map((response: BaseResponse<string, FileGstr1Request>) => {
-                            if (response.status === 'success') {
+                            if (response?.status === 'success') {
                                 this._toasty.successToast(response.body);
                             } else {
                                 this._toasty.errorToast(response.message);

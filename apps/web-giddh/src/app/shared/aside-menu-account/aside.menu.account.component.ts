@@ -148,7 +148,7 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
     }
 
     public updateAccount(accRequestObject: { value: { groupUniqueName: string, accountUniqueName: string }, accountRequest: AccountRequestV2 }) {
-        this.store.dispatch(this.accountsAction.updateAccountV2(accRequestObject.value, accRequestObject.accountRequest));
+        this.store.dispatch(this.accountsAction.updateAccountV2(accRequestObject?.value, accRequestObject.accountRequest));
         this.hideDeleteAccountModal();
     }
 

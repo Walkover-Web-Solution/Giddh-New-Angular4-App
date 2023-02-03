@@ -119,9 +119,9 @@ export class InventoryCreateUpdateGroupComponent implements OnInit, OnDestroy {
      * @memberof InventoryCreateUpdateGroupComponent
      */
     public changeCodeType(): void {
-        if (this.groupForm.get('showCodeType').value === 'hsn') {
+        if (this.groupForm.get('showCodeType')?.value === 'hsn') {
             this.groupForm?.patchValue({ sacNumber: "" });
-        } else if (this.groupForm.get('showCodeType').value === 'sac') {
+        } else if (this.groupForm.get('showCodeType')?.value === 'sac') {
             this.groupForm?.patchValue({ hsnNumber: "" });
         }
     }
@@ -136,7 +136,7 @@ export class InventoryCreateUpdateGroupComponent implements OnInit, OnDestroy {
             this.groupForm?.removeControl("image");
         }
         if (this.groupUniqueName) {
-            this.inventoryService.updateStockGroup(this.groupForm.value, this.groupUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            this.inventoryService.updateStockGroup(this.groupForm?.value, this.groupUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response?.status === "success") {
                     this.toaster.clearAllToaster();
                     this.toaster.successToast("Stock group updated successfully.");
@@ -146,7 +146,7 @@ export class InventoryCreateUpdateGroupComponent implements OnInit, OnDestroy {
                 }
             });
         } else {
-            this.inventoryService.createStockGroup(this.groupForm.value).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            this.inventoryService.createStockGroup(this.groupForm?.value).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response?.status === "success") {
                     this.resetGroupForm();
                     this.groupForm.addControl("image", this.formBuilder.group({
@@ -219,7 +219,7 @@ export class InventoryCreateUpdateGroupComponent implements OnInit, OnDestroy {
      * @memberof InventoryCreateUpdateGroupComponent
      */
     public generateUniqueName(): void {
-        let val: string = this.groupForm.controls['name'].value;
+        let val: string = this.groupForm.controls['name']?.value;
         val = uniqueNameInvalidStringReplace(val);
 
         if (val) {

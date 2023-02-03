@@ -56,13 +56,13 @@
                             </span>
                             <label
                                 *ngIf="
-                                    item.value.queryDiffer === 'Less' ||
-                                    item.value.queryDiffer === 'Greater' ||
-                                    !item.value.queryDiffer
+                                    item?.value.queryDiffer === 'Less' ||
+                                    item?.value.queryDiffer === 'Greater' ||
+                                    !item?.value.queryDiffer
                                 "
                                 >{{ localeData?.than }}</label
                             >
-                            <label *ngIf="item.value.queryDiffer === 'Equals'" [style.margin-right.px]="15">{{
+                            <label *ngIf="item?.value.queryDiffer === 'Equals'" [style.margin-right.px]="15">{{
                                 localeData?.to
                             }}</label>
                             <span class="form-group">
@@ -80,7 +80,7 @@
                             <!--By and To: Not required in paginated API -->
                             <span
                                 class="position-relative form-group"
-                                *ngIf="item.value.queryType === 'openingBalance'"
+                                *ngIf="item?.value.queryType === 'openingBalance'"
                             >
                                 <select class="form-control custom-select-field" formControlName="openingBalanceType">
                                     <option *ngFor="let type of balType" value="{{ type?.uniqueName }}">
@@ -91,7 +91,7 @@
                             </span>
                             <span
                                 class="position-relative form-group"
-                                *ngIf="item.value.queryType === 'closingBalance'"
+                                *ngIf="item?.value.queryType === 'closingBalance'"
                             >
                                 <select class="form-control custom-select-field" formControlName="closingBalanceType">
                                     <option *ngFor="let type of balType" value="{{ type?.uniqueName }}">
