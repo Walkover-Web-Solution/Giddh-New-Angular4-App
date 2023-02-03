@@ -285,7 +285,7 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
     public selectAllCompanies(ev) {
         this.selectedCompaniesUniquename = [];
         this.selectedCompaniesName = [];
-        if (ev.target.checked) {
+        if (ev.target?.checked) {
             this.companies$.pipe(take(1)).subscribe((companies) => {
                 each(companies, (company) => {
                     this.selectedCompaniesUniquename.push(company?.uniqueName);
@@ -297,7 +297,7 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     public checkUncheckMe(cmp, ev) {
-        if (ev.target.checked) {
+        if (ev.target?.checked) {
             if (this.selectedCompaniesUniquename?.indexOf(cmp?.uniqueName) === -1) {
                 this.selectedCompaniesUniquename.push(cmp?.uniqueName);
             }

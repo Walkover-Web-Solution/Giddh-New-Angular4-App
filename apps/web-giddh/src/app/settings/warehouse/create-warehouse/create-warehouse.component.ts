@@ -116,7 +116,7 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
                     businessType: response.businessType,
                     country: {
                         countryName: response.countryV2 ? response.countryV2.countryName : '',
-                        countryCode: response.countryV2 ? response.countryV2.alpha2CountryCode.toLowerCase() : '',
+                        countryCode: response.countryV2 ? response.countryV2.alpha2CountryCode?.toLowerCase() : '',
                         currencyCode: response.countryV2 && response.countryV2.currency ? response.countryV2.currency.code : '',
                         currencyName: response.countryV2 && response.countryV2.currency ? response.countryV2.currency.symbol : ''
                     }
@@ -143,7 +143,7 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
                     businessType: response.businessType,
                     country: {
                         countryName: response.countryV2 ? response.countryV2.countryName : '',
-                        countryCode: response.countryV2 ? response.countryV2.alpha2CountryCode.toLowerCase() : '',
+                        countryCode: response.countryV2 ? response.countryV2.alpha2CountryCode?.toLowerCase() : '',
                         currencyCode: response.countryV2 && response.countryV2.currency ? response.countryV2.currency.code : '',
                         currencyName: response.countryV2 && response.countryV2.currency ? response.countryV2.currency.symbol : ''
                     }

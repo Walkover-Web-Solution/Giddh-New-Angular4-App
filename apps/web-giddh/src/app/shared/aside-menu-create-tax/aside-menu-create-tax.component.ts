@@ -138,7 +138,7 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
         let val: string = this.newTaxObj.name;
         val = uniqueNameInvalidStringReplace(val);
         if (val) {
-            let isDuplicate = this.allTaxes.some(s => s?.value.toLowerCase().includes(val));
+            let isDuplicate = this.allTaxes.some(s => s?.value?.toLowerCase().includes(val));
             if (isDuplicate) {
                 this.newTaxObj.taxNumber = val + 1;
             } else {

@@ -197,7 +197,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
     }
 
     public toggleSelectAll(ev) {
-        let isAllChecked = ev.target.checked;
+        let isAllChecked = ev.target?.checked;
         this.checkboxInfo[this.checkboxInfo.selectedPage] = isAllChecked;
 
         this.searchResponseFiltered$.pipe(take(1)).subscribe(p => {
@@ -371,7 +371,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
     }
 
     public toggleSelection(ev, item: AccountFlat) {
-        let isChecked = ev.target.checked;
+        let isChecked = ev.target?.checked;
         let indexOfEntry = this.selectedItems?.indexOf(item?.uniqueName);
         if (isChecked && indexOfEntry === -1) {
             this.selectedItems.push(item?.uniqueName);

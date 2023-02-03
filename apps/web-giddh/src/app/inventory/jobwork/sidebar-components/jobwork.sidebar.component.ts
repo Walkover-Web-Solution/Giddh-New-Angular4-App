@@ -93,7 +93,7 @@ export class JobworkSidebarComponent implements OnInit, OnDestroy, AfterViewInit
                     });
                     if (val) {
                         this.stocksList = Object.assign([], this.stocksList).filter(
-                            item => item.name.toLowerCase()?.indexOf(val.toLowerCase()) > -1
+                            item => item.name?.toLowerCase()?.indexOf(val?.toLowerCase()) > -1
                         )
                     }
                 } else if (this.reportType === 'person') {
@@ -102,7 +102,7 @@ export class JobworkSidebarComponent implements OnInit, OnDestroy, AfterViewInit
                     });
                     if (val) {
                         this.inventoryUsers = Object.assign([], this.inventoryUsers).filter(
-                            item => item.name.toLowerCase()?.indexOf(val.toLowerCase()) > -1
+                            item => item.name?.toLowerCase()?.indexOf(val?.toLowerCase()) > -1
                         )
                     }
                 }

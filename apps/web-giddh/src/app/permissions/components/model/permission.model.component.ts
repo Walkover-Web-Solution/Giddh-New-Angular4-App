@@ -101,7 +101,7 @@ export class PermissionModelComponent implements OnInit, OnDestroy {
     }
 
     public selectAllPages(event) {
-        if (event.target.checked) {
+        if (event.target?.checked) {
             this.newRoleObj.isSelectedAllPages = true;
             this.newRoleObj.pageList.forEach((item: IPage) => item.isSelected = true);
         } else {
@@ -121,7 +121,7 @@ export class PermissionModelComponent implements OnInit, OnDestroy {
     }
 
     public selectPage(event) {
-        if (event.target.checked) {
+        if (event.target?.checked) {
             if (this.makeCount() === this.newRoleObj.pageList?.length) {
                 this.newRoleObj.isSelectedAllPages = true;
             }

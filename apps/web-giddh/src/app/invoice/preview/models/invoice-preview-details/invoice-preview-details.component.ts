@@ -447,7 +447,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                         if (this.selectedItem) {
                             this.selectedItem.hasAttachment = true;
                         }
-                        const fileExtention = result.body.attachments[0].type.toLowerCase();
+                        const fileExtention = result.body.attachments[0].type?.toLowerCase();
                         if (FILE_ATTACHMENT_TYPE.IMAGE.includes(fileExtention)) {
                             // Attached file type is image
                             this.attachedAttachmentBlob = this._generalService.base64ToBlob(result.body.attachments[0].encodedData, `image/${fileExtention}`, 512);
@@ -536,7 +536,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                         this.attachedPdfFileUrl = null;
                         this.imagePreviewSource = null;
                         if (data.body.fileType) {
-                            const fileExtention = data.body.fileType.toLowerCase();
+                            const fileExtention = data.body.fileType?.toLowerCase();
                             if (FILE_ATTACHMENT_TYPE.IMAGE.includes(fileExtention)) {
                                 // Attached file type is image
                                 this.attachedAttachmentBlob = this._generalService.base64ToBlob(data.body.uploadedFile, `image/${fileExtention}`, 512);
@@ -998,8 +998,8 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         this.invoiceSearch = term;
         this.invoiceSearchEvent.emit(this.invoiceSearch);
         this.filteredData = this.items?.filter(item => {
-            return item.voucherNumber?.toLowerCase()?.includes(term?.toLowerCase()) ||
-                item.account.name.toLowerCase().includes(term.toLowerCase()) ||
+            return item.voucherNumber?.toLowerCase().includes(term?.toLowerCase()) ||
+                item.account.name?.toLowerCase().includes(term?.toLowerCase()) ||
                 item.voucherDate.includes(term) ||
                 item.grandTotal?.toString().includes(term);
         });

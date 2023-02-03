@@ -811,7 +811,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         let stockObj = new CreateStockRequest();
         let uniqueName = this.addStockForm.get('uniqueName');
         if (uniqueName && uniqueName.value) {
-            uniqueName?.patchValue(uniqueName.value?.replace(/ /g, '').toLowerCase());
+            uniqueName?.patchValue(uniqueName.value?.replace(/ /g, '')?.toLowerCase());
         }
         this.addStockForm.get('uniqueName').enable();
 
@@ -916,13 +916,13 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         let stockObj = new CreateStockRequest();
         let uniqueName = this.addStockForm.get('uniqueName');
         if (uniqueName && uniqueName.value) {
-            uniqueName?.patchValue(uniqueName.value?.replace(/ /g, '').toLowerCase());
+            uniqueName?.patchValue(uniqueName.value?.replace(/ /g, '')?.toLowerCase());
         }
         this.addStockForm.get('uniqueName').enable();
 
         let formObj = this.addStockForm?.value;
         stockObj.name = formObj.name;
-        stockObj.uniqueName = formObj.uniqueName.toLowerCase();
+        stockObj.uniqueName = formObj.uniqueName?.toLowerCase();
         stockObj.stockUnitCode = formObj.stockUnitCode;
         stockObj.openingAmount = formObj.openingAmount || 0;
         stockObj.openingQuantity = formObj.openingQuantity || 0;
@@ -1148,7 +1148,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     public selectTax(e, tax) {
         if (tax.taxType !== 'gstcess') {
             let index = _.findIndex(this.taxTempArray, (o) => o.taxType === tax.taxType);
-            if (index > -1 && e.target.checked) {
+            if (index > -1 && e.target?.checked) {
                 this.companyTaxesList$.subscribe((taxes) => {
                     _.forEach(taxes, (o) => {
                         if (o.taxType === tax.taxType) {
@@ -1165,7 +1165,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
                 });
             }
 
-            if (index < 0 && e.target.checked) {
+            if (index < 0 && e.target?.checked) {
                 this.companyTaxesList$.subscribe((taxes) => {
                     _.forEach(taxes, (o) => {
                         if (o.taxType === tax.taxType) {
@@ -1186,7 +1186,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
                         }
                     });
                 });
-            } else if (index > -1 && e.target.checked) {
+            } else if (index > -1 && e.target?.checked) {
                 tax.isChecked = true;
                 tax.isDisabled = false;
                 this.taxTempArray = this.taxTempArray?.filter(ele => {
@@ -1211,7 +1211,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
                 });
             }
         } else {
-            if (e.target.checked) {
+            if (e.target?.checked) {
                 this.taxTempArray.push(tax);
                 tax.isChecked = true;
             } else {

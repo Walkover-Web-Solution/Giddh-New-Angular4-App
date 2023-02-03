@@ -488,7 +488,7 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         if (!rowHistory.selectedItems) {
             rowHistory.selectedItems = [];
         }
-        if (event.checked) {
+        if (event?.checked) {
             details.isChecked = true;
             rowHistory.selectedItems.push(details);
             if (rowHistory.selectedItems?.length > 2) {

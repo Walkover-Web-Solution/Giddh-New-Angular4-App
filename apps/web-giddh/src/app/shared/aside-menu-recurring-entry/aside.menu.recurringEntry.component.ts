@@ -74,7 +74,7 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges, OnDe
         if (this.invoice) {
             this.form?.patchValue({
                 voucherNumber: this.invoice.voucherNumber,
-                duration: this.invoice.duration.toLowerCase(),
+                duration: this.invoice.duration?.toLowerCase(),
                 nextCronDate: this.invoice.nextCronDate && dayjs(this.invoice.nextCronDate, GIDDH_DATE_FORMAT).toDate(),
                 cronEndDate: this.invoice.cronEndDate && dayjs(this.invoice.cronEndDate, GIDDH_DATE_FORMAT).toDate()
             });

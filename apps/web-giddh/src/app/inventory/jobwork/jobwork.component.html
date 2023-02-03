@@ -159,7 +159,7 @@
                                                         ><input
                                                             type="checkbox"
                                                             [(ngModel)]="item.checked"
-                                                            (click)="filterByCheck(item.value, $event.target.checked)"
+                                                            (click)="filterByCheck(item.value, $event.target?.checked)"
                                                         />
                                                         {{ item.label }}</label
                                                     >

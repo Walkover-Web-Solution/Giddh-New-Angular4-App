@@ -1997,7 +1997,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
      */
     public toggleRcmCheckbox(event: any): void {
         event.preventDefault();
-        this.rcmConfiguration = this.generalService.getRcmConfiguration(event.target.checked, this.commonLocaleData);
+        this.rcmConfiguration = this.generalService.getRcmConfiguration(event.target?.checked, this.commonLocaleData);
     }
 
     /**
