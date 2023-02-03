@@ -112,7 +112,7 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
         private modalService: BsModalService,
         private searchService: SearchService
     ) {
-        
+
     }
 
     public ngOnInit() {
@@ -219,7 +219,7 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
      * @memberof DaybookAdvanceSearchModelComponent
      */
     public emitAdvanceSearchParams(): void {
-        let dataToSend = _.cloneDeep(this.advanceSearchForm.value) as DayBookRequestModel;
+        let dataToSend = _.cloneDeep(this.advanceSearchForm?.value) as DayBookRequestModel;
         if (dataToSend.dateOnCheque) {
             if(typeof dataToSend.dateOnCheque === "object") {
                 dataToSend.dateOnCheque = dayjs(dataToSend.dateOnCheque).format(GIDDH_DATE_FORMAT);
@@ -245,7 +245,7 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
     public onDDElementSelect(type: string, data: any[]) {
         let values = [];
         data.forEach(element => {
-            values.push(element.value);
+            values.push(element?.value);
         });
         switch (type) {
             case 'particulars':
@@ -277,7 +277,7 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
      * onRangeSelect
      */
     public onRangeSelect(type: string, data: IOption) {
-        switch (type + '-' + data.value) {
+        switch (type + '-' + data?.value) {
             case 'amount-greaterThan':
                 this.advanceSearchForm.get('includeAmount')?.patchValue(true);
                 this.advanceSearchForm.get('amountGreaterThan')?.patchValue(true);
@@ -319,7 +319,7 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
                 this.advanceSearchForm.get('amountGreaterThan')?.patchValue(false);
                 this.advanceSearchForm.get('amountLessThan')?.patchValue(false);
                 this.advanceSearchForm.get('amountEqualTo')?.patchValue(false);
-                break;    
+                break;
             case 'inventoryQty-greaterThan':
                 this.advanceSearchForm.get('inventory.includeQuantity')?.patchValue(true);
                 this.advanceSearchForm.get('inventory.quantityGreaterThan')?.patchValue(true);
@@ -361,7 +361,7 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
                 this.advanceSearchForm.get('inventory.quantityGreaterThan')?.patchValue(false);
                 this.advanceSearchForm.get('inventory.quantityLessThan')?.patchValue(false);
                 this.advanceSearchForm.get('inventory.quantityEqualTo')?.patchValue(false);
-                break;     
+                break;
             case 'inventoryVal-greaterThan':
                 this.advanceSearchForm.get('inventory.includeItemValue')?.patchValue(true);
                 this.advanceSearchForm.get('inventory.itemValueGreaterThan')?.patchValue(true);
@@ -403,7 +403,7 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
                 this.advanceSearchForm.get('inventory.itemValueGreaterThan')?.patchValue(false);
                 this.advanceSearchForm.get('inventory.itemValueLessThan')?.patchValue(false);
                 this.advanceSearchForm.get('inventory.itemValueEqualTo')?.patchValue(false);
-                break;      
+                break;
         }
     }
 
@@ -411,7 +411,7 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
      * toggleOtherDetails
      */
     public toggleOtherDetails() {
-        let val: boolean = !this.advanceSearchForm.get('includeDescription').value;
+        let val: boolean = !this.advanceSearchForm.get('includeDescription')?.value;
         this.advanceSearchForm.get('includeDescription')?.patchValue(val);
         if (!val) {
             this.advanceSearchForm.get('description')?.patchValue(null);
@@ -470,7 +470,7 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
         if (this.searchFilterData) {
             this.advanceSearchForm?.patchValue(this.searchFilterData);
 
-            if(this.advanceSearchForm.get("includeDescription").value) {
+            if(this.advanceSearchForm.get("includeDescription")?.value) {
                 this.isExpanded = true;
             } else {
                 this.isExpanded = false;
@@ -561,7 +561,7 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
                             ...searchResults
                         ];
                     }
-                    this.accounts$ = observableOf(this.accounts);        
+                    this.accounts$ = observableOf(this.accounts);
                     this.accountsSearchResultsPaginationData.page = data.body.page;
                     this.accountsSearchResultsPaginationData.totalPages = data.body.totalPages;
                     if (successCallback) {

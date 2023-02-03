@@ -24,7 +24,7 @@ export class InventoryEntryActions {
             ofType(INVENTORY_ENTRY_ACTIONS.CREATE_ENTRY_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<InventoryEntry, InventoryEntry> = response.payload;
-                if (data.status === 'error') {
+                if (data?.status === 'error') {
                     this._toasty.clearAllToaster();
                     this._toasty.errorToast(data.message, data.code);
                 } else {
@@ -44,7 +44,7 @@ export class InventoryEntryActions {
             ofType(INVENTORY_ENTRY_ACTIONS.CREATE_TRANSFER_ENTRY_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<InventoryEntry, InventoryEntry> = response.payload;
-                if (data.status === 'error') {
+                if (data?.status === 'error') {
                     this._toasty.clearAllToaster();
                     this._toasty.errorToast(data.message, data.code);
                 } else {

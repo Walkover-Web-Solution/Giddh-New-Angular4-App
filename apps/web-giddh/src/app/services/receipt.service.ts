@@ -188,7 +188,7 @@ export class ReceiptService {
             ?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName));
         let requestObj: VoucherRequest | ReceiptVoucherDetailsRequest = Object.assign({}, model);
         if (this.generalService.voucherApiVersion === 2) {
-            requestObj = new VoucherRequest(model.invoiceNumber, model.voucherType, model.uniqueName);
+            requestObj = new VoucherRequest(model.invoiceNumber, model.voucherType, model?.uniqueName);
             url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
         }
         return this.http.post(url, requestObj

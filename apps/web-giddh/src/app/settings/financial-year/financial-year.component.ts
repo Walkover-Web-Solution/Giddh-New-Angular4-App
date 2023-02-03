@@ -60,7 +60,7 @@ export class FinancialYearComponent implements OnInit, OnDestroy {
             if (activeCompany) {
                 this.currentCompanyName = activeCompany.name;
                 this.financialOptions = activeCompany.financialYears?.map(element => {
-                    return { label: element.uniqueName, value: element.uniqueName };
+                    return { label: element?.uniqueName, value: element?.uniqueName };
                 });
             }
         });
@@ -91,7 +91,7 @@ export class FinancialYearComponent implements OnInit, OnDestroy {
                 let yearOptions = cloneDeep(this.yearOptions);
                 o.financialYears.forEach((fyear) => {
                     let year = dayjs(fyear.financialYearStarts, GIDDH_DATE_FORMAT).year();
-                    let yearIndx = yearOptions.findIndex((y: any) => y.value === year);
+                    let yearIndx = yearOptions.findIndex((y: any) => y?.value === year);
                     if (yearIndx !== -1) {
                         yearOptions.splice(yearIndx, 1);
                     }
@@ -108,7 +108,7 @@ export class FinancialYearComponent implements OnInit, OnDestroy {
         let year = cloneDeep(financialYear);
         let dataToSend = {
             lockAll: true,
-            uniqueName: year.uniqueName
+            uniqueName: year?.uniqueName
         };
         financialYear.isLocked = !financialYear.isLocked;
         if (financialYear.isLocked) {
@@ -119,11 +119,11 @@ export class FinancialYearComponent implements OnInit, OnDestroy {
     }
 
     public selectYear(data) {
-        this.selectedYear = data.value;
+        this.selectedYear = data?.value;
     }
 
     public selectFYPeriod(ev) {
-        this.selectedFYPeriod = ev ? ev.value : null;
+        this.selectedFYPeriod = ev ? ev?.value : null;
     }
 
     public updateFYPeriod() {

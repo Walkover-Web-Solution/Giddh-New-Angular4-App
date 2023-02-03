@@ -17,10 +17,10 @@
                         <perfect-scrollbar #perfectScrollbar *ngIf="filteredData && filteredData.length > 0">
                             <li
                                 class="single-invoice-detail cp"
-                                [ngClass]="{ 'activeItem': row.uniqueName === purchaseOrderUniqueName }"
+                                [ngClass]="{ 'activeItem': row?.uniqueName === purchaseOrderUniqueName }"
                                 *ngFor="let row of filteredData; let i = index"
                             >
-                                <div class="row" (click)="showPurchaseOrderPreview(row.uniqueName)">
+                                <div class="row" (click)="showPurchaseOrderPreview(row?.uniqueName)">
                                     <div class="col-7 col-sm-7">
                                         <div class="invoice-number-date">
                                             <span class="order-number">
@@ -98,7 +98,7 @@
                                                 <li
                                                     class="cp"
                                                     role="menuitem"
-                                                    *ngIf="purchaseOrder.status === 'OPEN' && voucherApiVersion !== 2"
+                                                    *ngIf="purchaseOrder?.status === 'OPEN' && voucherApiVersion !== 2"
                                                 >
                                                     <a class="dropdown-item" (click)="convertToBill()">{{
                                                         localeData?.convert_tobill
@@ -119,7 +119,7 @@
                                                         class="cp"
                                                         href="javascript:void(0)"
                                                         (click)="statusUpdate('cancelled')"
-                                                        *ngIf="purchaseOrder.status !== 'CANCELLED'"
+                                                        *ngIf="purchaseOrder?.status !== 'CANCELLED'"
                                                         >{{ commonLocaleData?.app_cancel }}</a
                                                     >
                                                     <a
@@ -127,8 +127,8 @@
                                                         href="javascript:void(0)"
                                                         (click)="statusUpdate('open')"
                                                         *ngIf="
-                                                            purchaseOrder.status === 'CANCELLED' ||
-                                                            purchaseOrder.status === 'EXPIRED'
+                                                            purchaseOrder?.status === 'CANCELLED' ||
+                                                            purchaseOrder?.status === 'EXPIRED'
                                                         "
                                                         >{{ localeData?.open }}</a
                                                     >

@@ -89,7 +89,7 @@ export class CompanyActions {
             ofType(CompanyActions.CREATE_COMPANY_RESPONSE),
             map((action: CustomActions) => {
                 let response = action.payload as BaseResponse<CompanyResponse, CompanyRequest>;
-                if (response.status === 'error') {
+                if (response?.status === 'error') {
                     this._toasty.errorToast(response.message, response.code);
                     return { type: 'EmptyAction' };
                 }
@@ -148,7 +148,7 @@ export class CompanyActions {
             ofType(CompanyActions.CREATE_NEW_COMPANY_RESPONSE),
             map((action: CustomActions) => {
                 let response = action.payload as BaseResponse<CompanyResponse, CompanyCreateRequest>;
-                if (response.status === 'error') {
+                if (response?.status === 'error') {
                     this._toasty.errorToast(response.message, response.code);
                     return { type: 'EmptyAction' };
                 }
@@ -211,7 +211,7 @@ export class CompanyActions {
             ofType(CompanyActions.REFRESH_COMPANIES),
             switchMap((action: CustomActions) => this._companyService.CompanyList()),
             map(response => {
-                if (response.status === 'error') {
+                if (response?.status === 'error') {
                     this._toasty.errorToast(response.message, response.code);
                     return { type: 'EmptyAction' };
                 }
@@ -295,10 +295,10 @@ export class CompanyActions {
             ofType(CompanyActions.SET_APPLICATION_DATE),
             switchMap((action: CustomActions) => this._companyService.setApplicationDate(action.payload)),
             map(response => {
-                if (response.status === 'error') {
+                if (response?.status === 'error') {
                     this._toasty.errorToast(response.message, response.code);
                     return { type: 'EmptyAction' };
-                } else if (response.status === 'success') {
+                } else if (response?.status === 'success') {
                     this._toasty.successToast(this.localeService.translate("app_messages.universal_date_updated"), this.localeService.translate("app_success"));
                     return this.SeApplicationDateResponse(response);
                 }
@@ -316,7 +316,7 @@ export class CompanyActions {
         .pipe(
             ofType(CompanyActions.GET_TAX_RESPONSE),
             map((action: CustomActions) => {
-                if (action.payload.status === 'error') {
+                if (action.payload?.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
                 }
                 return { type: 'EmptyAction' };
@@ -334,7 +334,7 @@ export class CompanyActions {
         .pipe(
             ofType(CompanyActions.GET_REGISTRATION_ACCOUNT_RESPONSE),
             map((action: CustomActions) => {
-                if (action.payload.status === 'error') {
+                if (action.payload?.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
                 }
                 return { type: 'EmptyAction' };
@@ -352,7 +352,7 @@ export class CompanyActions {
         .pipe(
             ofType(CompanyActions.GET_ALL_INTEGRATED_BANK_RESPONSE),
             map((action: CustomActions) => {
-                if (action.payload.status === 'error') {
+                if (action.payload?.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
                 }
                 return { type: 'EmptyAction' };
@@ -370,7 +370,7 @@ export class CompanyActions {
         .pipe(
             ofType(CompanyActions.GET_COMPANY_USER_RESPONSE),
             map((action: CustomActions) => {
-                if (action.payload.status === 'error') {
+                if (action.payload?.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
                 }
                 return { type: 'EmptyAction' };

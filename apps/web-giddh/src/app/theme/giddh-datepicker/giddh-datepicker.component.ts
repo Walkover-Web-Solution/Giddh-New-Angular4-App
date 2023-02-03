@@ -56,7 +56,7 @@ export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, O
     private onChangeCallback: (_: any) => void = noop;
 
     constructor(
-        private adapter: DateAdapter<any>, 
+        private adapter: DateAdapter<any>,
         private store: Store<AppState>,
         private changeDetectorRef: ChangeDetectorRef
     ) {
@@ -93,7 +93,7 @@ export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, O
      * @memberof GiddhDatepickerComponent
      */
     public dateChange(event: MatDatepickerInputEvent<Date>): void {
-        let selectedDate = (typeof(event.value) === "object") ? dayjs(event.value).toDate() : dayjs(event.value, GIDDH_DATE_FORMAT).toDate();
+        let selectedDate = (typeof(event?.value) === "object") ? dayjs(event?.value).toDate() : dayjs(event?.value, GIDDH_DATE_FORMAT).toDate();
         this.onChangeCallback(selectedDate);
         this.dateSelected.emit(selectedDate);
     }

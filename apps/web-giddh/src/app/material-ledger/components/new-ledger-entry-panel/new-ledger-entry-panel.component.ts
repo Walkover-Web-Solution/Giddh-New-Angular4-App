@@ -763,11 +763,11 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         /* Add warehouse to the stock entry if the user hits 'Save' button without clicking on 'Add to CR/DR' button
             This will add the warehouse to the entered item */
         this.blankLedger.transactions.map((transaction) => {
-            if (transaction.inventory && !transaction.inventory.warehouse) {
+            if (transaction?.inventory && !transaction?.inventory.warehouse) {
                 transaction.inventory.warehouse = { name: '', uniqueName: this.selectedWarehouse };
             }
             if (transaction?.voucherAdjustments?.adjustments?.length > 0) {
-                transaction.voucherAdjustments.adjustments.forEach((adjustment: any) => {
+                transaction?.voucherAdjustments.adjustments.forEach((adjustment: any) => {
                     if (adjustment.balanceDue !== undefined) {
                         delete adjustment.balanceDue;
                     }
@@ -1037,7 +1037,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         if (ev?.target?.checked) {
             this.blankLedger.invoicesToBePaid.push(invoiceNo.label);
         } else {
-            let indx = this.blankLedger.invoicesToBePaid.indexOf(invoiceNo.label);
+            let indx = this.blankLedger.invoicesToBePaid?.indexOf(invoiceNo.label);
             this.blankLedger.invoicesToBePaid.splice(indx, 1);
         }
     }
@@ -1101,13 +1101,13 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         if (this.voucherApiVersion === 2) {
             this.resetInvoiceList();
         }
-        if (event.value === 'advance-receipt') {
+        if (event?.value === 'advance-receipt') {
             this.shouldShowAdvanceReceipt = true;
             this.isAdvanceReceipt = true;
-        } else if (event.value === VoucherTypeEnum.creditNote || event.value === VoucherTypeEnum.debitNote) {
+        } else if (event?.value === VoucherTypeEnum.creditNote || event?.value === VoucherTypeEnum.debitNote) {
             this.shouldShowAdvanceReceipt = false;
             this.removeSelectedInvoice();
-            this.getInvoiceListsForCreditNote.emit([this.currentTxn, event.value]);
+            this.getInvoiceListsForCreditNote.emit([this.currentTxn, event?.value]);
             this.isAdvanceReceipt = false;
         } else {
             this.shouldShowAdvanceReceipt = false;
@@ -1188,7 +1188,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         }
 
         if (modal?.appliedOtherTax && modal?.appliedOtherTax?.uniqueName) {
-            const amount = (this.isAdvanceReceipt) ? transaction.advanceReceiptAmount : transaction.amount;
+            const amount = (this.isAdvanceReceipt) ? transaction?.advanceReceiptAmount : transaction?.amount;
             let tax = companyTaxes.find(ct => ct?.uniqueName === modal?.appliedOtherTax?.uniqueName);
             if (tax) {
                 this.blankLedger.otherTaxType = ['tcsrc', 'tcspay'].includes(tax.taxType) ? 'tcs' : 'tds';
@@ -1213,14 +1213,14 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 this.currentTxn.advanceReceiptAmount = taxableValue;
                 this.totalForTax = taxableValue;
                 if (modal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTotalAmount) {
-                    taxableValue = (taxableValue + transaction.tax);
+                    taxableValue = (taxableValue + transaction?.tax);
                 }
             } else {
                 if (modal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount) {
-                    taxableValue = Number(amount) - transaction.discount;
+                    taxableValue = Number(amount) - transaction?.discount;
                 } else if (modal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTotalAmount) {
-                    let rawAmount = Number(amount) - transaction.discount;
-                    taxableValue = (rawAmount + transaction.tax);
+                    let rawAmount = Number(amount) - transaction?.discount;
+                    taxableValue = (rawAmount + transaction?.tax);
                 }
             }
             this.blankLedger.tdsTcsTaxesSum = giddhRoundOff(((taxableValue * totalTaxes) / 100), this.giddhBalanceDecimalPlaces);
@@ -1623,7 +1623,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         let expensesAccArray = ['operatingcost', 'indirectexpenses'];
         let assetsAccArray = ['assets'];
         let incomeAndExpensesAccArray = [...incomeAccArray, ...expensesAccArray, ...assetsAccArray];
-        if (incomeAndExpensesAccArray.indexOf(parentAcc) > -1) {
+        if (incomeAndExpensesAccArray?.indexOf(parentAcc) > -1) {
             let appTaxes = [];
             if (accountDetails && accountDetails.applicableTaxes && accountDetails.applicableTaxes.length > 0) {
                 accountDetails.applicableTaxes.forEach(app => appTaxes.push(app?.uniqueName));

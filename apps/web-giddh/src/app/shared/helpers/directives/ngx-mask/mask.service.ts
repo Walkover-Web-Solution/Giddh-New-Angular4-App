@@ -96,7 +96,7 @@ export class MaskService extends MaskApplierService {
 
     public applyValueChanges(position: number = 0, cb: Function = () => {
     }): void {
-        this._formElement.value = this.applyMask(this._formElement.value, this.maskExpression, position, cb);
+        this._formElement.value = this.applyMask(this._formElement?.value, this.maskExpression, position, cb);
         if (this._formElement === this.document.activeElement) {
             return;
         }
@@ -176,10 +176,10 @@ export class MaskService extends MaskApplierService {
     public clearIfNotMatchFn(): void {
         if (
             this.clearIfNotMatch &&
-            this.prefix?.length + this.maskExpression?.length + this.suffix?.length !== this._formElement.value?.length
+            this.prefix?.length + this.maskExpression?.length + this.suffix?.length !== this._formElement?.value?.length
         ) {
             this.formElementProperty = ['value', ''];
-            this.applyMask(this._formElement.value, this.maskExpression);
+            this.applyMask(this._formElement?.value, this.maskExpression);
         }
     }
 
@@ -305,7 +305,7 @@ export class MaskService extends MaskApplierService {
                     : Number(this._removeMask(this._removeSuffix(this._removePrefix(result)), this.maskSpecialCharacters));
             }
         } else if (
-            this._removeMask(this._removeSuffix(this._removePrefix(result)), this.maskSpecialCharacters).indexOf(
+            this._removeMask(this._removeSuffix(this._removePrefix(result)), this.maskSpecialCharacters)?.indexOf(
                 ','
             ) !== -1
         ) {
@@ -331,7 +331,7 @@ export class MaskService extends MaskApplierService {
     }
 
     private _checkPrecision(separatorExpression: string, separatorValue: string): number | string {
-        if (separatorExpression.indexOf('2') > 0) {
+        if (separatorExpression?.indexOf('2') > 0) {
             return Number(separatorValue).toFixed(2);
         }
         return Number(separatorValue);

@@ -585,24 +585,24 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
     }
 
     public filterByCheck(type: string, event: boolean) {
-        let idx = this.stockReportRequest.voucherTypes.indexOf('ALL');
+        let idx = this.stockReportRequest.voucherTypes?.indexOf('ALL');
         if (idx !== -1) {
             this.initVoucherType();
         }
         if (event && type) {
             this.stockReportRequest.voucherTypes.push(type);
         } else {
-            let index = this.stockReportRequest.voucherTypes.indexOf(type);
+            let index = this.stockReportRequest.voucherTypes?.indexOf(type);
             if (index !== -1) {
                 this.stockReportRequest.voucherTypes.splice(index, 1);
             }
         }
         if (this.stockReportRequest.voucherTypes?.length > 0 && this.stockReportRequest.voucherTypes?.length < this.VOUCHER_TYPES.length) {
-            idx = this.stockReportRequest.voucherTypes.indexOf('ALL');
+            idx = this.stockReportRequest.voucherTypes?.indexOf('ALL');
             if (idx !== -1) {
                 this.stockReportRequest.voucherTypes.splice(idx, 1);
             }
-            idx = this.stockReportRequest.voucherTypes.indexOf('NONE');
+            idx = this.stockReportRequest.voucherTypes?.indexOf('NONE');
             if (idx !== -1) {
                 this.stockReportRequest.voucherTypes.splice(idx, 1);
             }
@@ -749,11 +749,11 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
 
     public clearModal() {
         if (this.stockReportRequest.param || this.stockReportRequest.val || this.stockReportRequest.expression) {
-            this.shCategory.clear();
+            this.shCategory?.clear();
             if (this.shCategoryType) {
                 this.shCategoryType.clear();
             }
-            this.shValueCondition.clear();
+            this.shValueCondition?.clear();
             this.advanceSearchForm.controls['filterAmount'].setValue(null);
             this.getStockReport(true);
         }

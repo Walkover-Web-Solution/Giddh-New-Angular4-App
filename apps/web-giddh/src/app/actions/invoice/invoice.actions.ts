@@ -121,7 +121,7 @@ export class InvoiceActions {
             ofType(INVOICE_ACTIONS.GENERATE_BULK_INVOICE_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, any> = response.payload;
-                if (data.status === 'error') {
+                if (data?.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 } else {
                     if (typeof data.body === 'string') {
@@ -150,7 +150,7 @@ export class InvoiceActions {
             ofType(INVOICE_ACTIONS.DELETE_INVOICE_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<string, string> = response.payload;
-                if (data.status === 'error') {
+                if (data?.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 } else {
                     this._toasty.successToast(this.localeService.translate("app_messages.invoice_deleted"));
@@ -173,7 +173,7 @@ export class InvoiceActions {
             ofType(INVOICE_ACTIONS.ACTION_ON_INVOICE_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<string, string> = response.payload;
-                if (data.status === 'error') {
+                if (data?.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 } else {
                     this._toasty.successToast(this.localeService.translate("app_messages.invoice_updated"));
@@ -366,7 +366,7 @@ export class InvoiceActions {
             ofType(INVOICE_ACTIONS.DOWNLOAD_INVOICE_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, string> = response.payload;
-                if (data.status === 'error') {
+                if (data?.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 } else {
                     let type = 'pdf';
@@ -401,7 +401,7 @@ export class InvoiceActions {
             ofType(INVOICE_ACTIONS.SEND_MAIL_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, string> = response.payload;
-                if (data.status === 'error') {
+                if (data?.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 } else {
                     this._toasty.successToast(data.body);
@@ -422,7 +422,7 @@ export class InvoiceActions {
             ofType(INVOICE_ACTIONS.SEND_SMS_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, string> = response.payload;
-                if (data.status === 'error') {
+                if (data?.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 } else {
                     this._toasty.successToast(data.body);
@@ -445,7 +445,7 @@ export class InvoiceActions {
             ofType(EWAYBILL_ACTIONS.ADD_TRANSPORTER_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, string> = response.payload;
-                if (data.status === 'error') {
+                if (data?.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 } else {
                     this._toasty.successToast(this.localeService.translate("app_messages.transporter_added"));
@@ -466,7 +466,7 @@ export class InvoiceActions {
             ofType(EWAYBILL_ACTIONS.UPDATE_TRANSPORTER_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, string> = response.payload;
-                if (data.status === 'error') {
+                if (data?.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 } else {
                     this._toasty.successToast(this.localeService.translate("app_messages.transporter_updated"));
@@ -495,7 +495,7 @@ export class InvoiceActions {
             ofType(EWAYBILL_ACTIONS.LOGIN_EAYBILL_USER_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, string> = response.payload;
-                if (data.status === 'error') {
+                if (data?.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 } else {
                     this._toasty.successToast(data.body);
@@ -537,7 +537,7 @@ export class InvoiceActions {
             ofType(EWAYBILL_ACTIONS.GENERATE_EWAYBILL_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, string> = response.payload;
-                if (data.status === 'error') {
+                if (data?.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 } else {
                     let text = this.localeService.translate("app_messages.eway_bill_generated");
@@ -564,10 +564,10 @@ export class InvoiceActions {
             ofType(EWAYBILL_ACTIONS.CANCEL_EWAYBILL_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, string> = response.payload;
-                if (data.status === 'error') {
+                if (data?.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 } else {
-                    if (data.status === 'success') {
+                    if (data?.status === 'success') {
                         this._toasty.successToast(data.body);
                     }
                 }
@@ -579,7 +579,7 @@ export class InvoiceActions {
             ofType(EWAYBILL_ACTIONS.UPDATE_EWAY_VEHICLE_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, any> = response.payload;
-                if (data.status === 'error') {
+                if (data?.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 } else {
                     let text = this.localeService.translate("app_messages.vehicle_data_updated");
@@ -596,7 +596,7 @@ export class InvoiceActions {
             ofType(EWAYBILL_ACTIONS.GET_All_LIST_EWAYBILLS),
             switchMap((action: CustomActions) => this._invoiceService.getAllEwaybillsList()),
             map((response: BaseResponse<IEwayBillAllList, any>) => {
-                if (response.status === 'success') {
+                if (response?.status === 'success') {
                     // this.showToaster('');
                 } else {
                     this._toasty.errorToast(response.message);
@@ -625,7 +625,7 @@ export class InvoiceActions {
             ofType(EWAYBILL_ACTIONS.GET_ALL_TRANSPORTER),
             switchMap((action: CustomActions) => this._invoiceService.getAllTransporterList(action.payload)),
             map((response: BaseResponse<IEwayBillTransporter, any>) => {
-                if (response.status === 'success') {
+                if (response?.status === 'success') {
                     // this.showToaster('');
                 } else {
                     this._toasty.errorToast(response.message);
@@ -660,7 +660,7 @@ export class InvoiceActions {
             ofType(EWAYBILL_ACTIONS.DELETE_TRANSPORTER_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, any> = response.payload;
-                if (data.status === 'error') {
+                if (data?.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 } else {
                     this._toasty.successToast(data.body);
@@ -733,7 +733,7 @@ export class InvoiceActions {
             ofType(INVOICE.TEMPLATE.SET_TEMPLATE_AS_DEFAULT_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, any> = response.payload;
-                if (data.status === 'error') {
+                if (data?.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 } else {
                     this._toasty.successToast(this.localeService.translate("app_messages.template_marked_default"));
@@ -1343,7 +1343,7 @@ export class InvoiceActions {
         showToast: boolean = false,
         errorAction: CustomActions = { type: 'EmptyAction' },
         message?: string): CustomActions {
-        if (response.status === 'error') {
+        if (response?.status === 'error') {
             if (showToast) {
                 this._toasty.errorToast(response.message);
             }

@@ -196,7 +196,7 @@ export class GstAsideMenuComponent implements OnInit, OnDestroy {
 
     public submitGstReturn() {
         this.submitGstForm.isAccepted = true;
-        if (this.submitGstForm.txtVal.toLowerCase() !== 'SUBMIT'.toLowerCase()) {
+        if (this.submitGstForm.txtVal?.toLowerCase() !== 'SUBMIT'?.toLowerCase()) {
             this.toaster.errorToast(this.localeData?.aside_menu?.submit_gst_error);
             return;
         }

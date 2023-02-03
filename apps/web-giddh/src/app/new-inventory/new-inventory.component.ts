@@ -72,7 +72,7 @@ export class NewInventoryComponent implements OnInit {
      * @memberof DaybookComponent
      */
     public hideGiddhDatepicker(): void {
-        this.modalRef.hide();
+        this.modalRef?.hide();
     }
     /**
      * Call back function for date/range selection in datepicker

@@ -118,7 +118,7 @@ export class ImportsComponent implements OnInit, OnDestroy {
             if (response && response.length) {
                 this.currentCompanyBranches = response.map(branch => ({
                     label: branch.alias,
-                    value: branch.uniqueName,
+                    value: branch?.uniqueName,
                     name: branch.name,
                     parentBranch: branch.parentBranch
                 }));
@@ -340,7 +340,7 @@ export class ImportsComponent implements OnInit, OnDestroy {
    */
     public handleBranchChange(selectedEntity: any): void {
         this.currentBranch.name = selectedEntity.label;
-        this.importRequest.branchUniqueName = selectedEntity.value;
+        this.importRequest.branchUniqueName = selectedEntity?.value;
         this.getImports();
     }
 

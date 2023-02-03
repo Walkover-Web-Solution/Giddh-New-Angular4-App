@@ -134,29 +134,29 @@ export class OutwardNoteComponent implements OnChanges {
 
     public userChanged(option: IOption, index: number) {
         const items = this.form.get('transactions') as FormArray;
-        const user = this.userList.find(p => p?.uniqueName === option.value);
+        const user = this.userList.find(p => p?.uniqueName === option?.value);
         const inventoryUser = user ? { uniqueName: user?.uniqueName } : null;
         if (index >= 0) {
             const control = items.at(index);
             control?.patchValue({
-                ...control.value,
+                ...control?.value,
                 inventoryUser
             });
         } else {
-            items.controls.forEach(c => c?.patchValue({ ...c.value, inventoryUser }));
+            items.controls.forEach(c => c?.patchValue({ ...c?.value, inventoryUser }));
         }
     }
 
     public stockChanged(option: IOption, index: number) {
         const items = this.transactions;
-        const stockItem = this.stockList.find(p => p?.uniqueName === option.value);
+        const stockItem = this.stockList.find(p => p?.uniqueName === option?.value);
         const stock = stockItem ? { uniqueName: stockItem?.uniqueName } : null;
         const stockUnit = stockItem ? stockItem.stockUnit.code : null;
         if (index >= 0) {
             const control = items.at(index);
-            control?.patchValue({ ...control.value, stock, stockUnit });
+            control?.patchValue({ ...control?.value, stock, stockUnit });
         } else {
-            items.controls.forEach(c => c?.patchValue({ ...c.value, stock, stockUnit }));
+            items.controls.forEach(c => c?.patchValue({ ...c?.value, stock, stockUnit }));
         }
     }
 
@@ -169,8 +169,8 @@ export class OutwardNoteComponent implements OnChanges {
                 return rv;
             });
             let value: InventoryEntry = {
-                inventoryEntryDate: dayjs(this.inventoryEntryDate.value, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT),
-                description: this.description.value,
+                inventoryEntryDate: dayjs(this.inventoryEntryDate?.value, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT),
+                description: this.description?.value,
                 transactions: rawValues
             };
             this.onSave.emit({ ...value });

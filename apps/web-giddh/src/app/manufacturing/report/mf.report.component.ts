@@ -315,7 +315,7 @@ export class MfReportComponent implements OnInit, OnDestroy {
         this.mfStockSearchRequest.branchUniqueName = selectedEntity?.value;
 
         this.forceClearWarehouse$ = observableOf({ status: true });
-        this.warehouses = this.allWarehouses[selectedEntity.value];
+        this.warehouses = this.allWarehouses[selectedEntity?.value];
     }
 
     public ngOnDestroy() {

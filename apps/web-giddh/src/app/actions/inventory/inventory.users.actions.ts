@@ -25,7 +25,7 @@ export class InventoryUsersActions {
             ofType(INVENTORY_USER_ACTIONS.CREATE_USER_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<InventoryUser, string> = response.payload;
-                if (data.status === 'error') {
+                if (data?.status === 'error') {
                     this._toasty.clearAllToaster();
                     this._toasty.errorToast(data.message, data.code);
                 } else {
@@ -39,7 +39,7 @@ export class InventoryUsersActions {
             ofType(INVENTORY_USER_ACTIONS.GET_ALL_USERS),
             switchMap((action: CustomActions) => this._inventoryService.GetAllInventoryUser()),
             map(data => {
-                if (data.status === 'error') {
+                if (data?.status === 'error') {
                     this._toasty.clearAllToaster();
                     this._toasty.errorToast(data.message, data.code);
                 } else {

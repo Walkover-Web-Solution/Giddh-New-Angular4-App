@@ -20,7 +20,7 @@ export class ProformaActions {
             ofType(PROFORMA_ACTIONS.GENERATE_PROFORMA_REQUEST),
             switchMap((action: CustomActions) => this.proformaService.generate(action.payload)),
             map((response) => {
-                if (response.status === 'success') {
+                if (response?.status === 'success') {
                     let no: string;
                     switch (response.request.voucherDetails.voucherType) {
                         case 'proformas':
@@ -48,7 +48,7 @@ export class ProformaActions {
             ofType(PROFORMA_ACTIONS.GET_ALL_PROFORMA_REQUEST),
             switchMap((action: CustomActions) => this.proformaService.getAll(action.payload.request, action.payload.voucherType)),
             map((response) => {
-                if (response.status !== 'success') {
+                if (response?.status !== 'success') {
                     this._toasty.errorToast(response.message, response.code);
                 }
                 return this.getAllResponse(response);
@@ -60,7 +60,7 @@ export class ProformaActions {
             ofType(PROFORMA_ACTIONS.GET_PROFORMA_DETAILS_REQUEST),
             switchMap((action: CustomActions) => this.proformaService.get(action.payload.request, action.payload.voucherType)),
             map((response) => {
-                if (response.status !== 'success') {
+                if (response?.status !== 'success') {
                     this._toasty.errorToast(response.message, response.code);
                 }
                 return this.getProformaDetailsResponse(response);
@@ -72,7 +72,7 @@ export class ProformaActions {
             ofType(PROFORMA_ACTIONS.UPDATE_PROFORMA_REQUEST),
             switchMap((action: CustomActions) => this.proformaService.update(action.payload)),
             map((response) => {
-                if (response.status === 'success') {
+                if (response?.status === 'success') {
                     this._toasty.successToast(this.localeService.translate("app_messages.voucher_updated"));
                 } else {
                     this._toasty.errorToast(response.message, response.code);
@@ -86,7 +86,7 @@ export class ProformaActions {
             ofType(PROFORMA_ACTIONS.DELETE_PROFORMA_REQUEST),
             switchMap((action: CustomActions) => this.proformaService.delete(action.payload.request, action.payload.voucherType)),
             map((response) => {
-                if (response.status === 'success') {
+                if (response?.status === 'success') {
                     this._toasty.successToast(this.localeService.translate("app_messages.voucher_deleted"));
                 } else {
                     this._toasty.errorToast(response.message, response.code);
@@ -100,7 +100,7 @@ export class ProformaActions {
             ofType(PROFORMA_ACTIONS.UPDATE_PROFORMA_ACTION),
             switchMap((action: CustomActions) => this.proformaService.updateAction(action.payload.request, action.payload.voucherType)),
             map((response) => {
-                if (response.status === 'success') {
+                if (response?.status === 'success') {
                     this._toasty.successToast(this.localeService.translate("app_messages.status_updated"));
                 } else {
                     this._toasty.errorToast(response.message, response.code);
@@ -114,7 +114,7 @@ export class ProformaActions {
             ofType(PROFORMA_ACTIONS.GET_ESTIMATE_VERSIONS),
             switchMap((action: CustomActions) => this.proformaService.getAllVersions(action.payload.request, action.payload.voucherType)),
             map((response) => {
-                if (response.status === 'error') {
+                if (response?.status === 'error') {
                     this._toasty.errorToast(response.message, response.code);
                 }
                 return this.getEstimateVersionResponse(response);
@@ -126,7 +126,7 @@ export class ProformaActions {
             ofType(PROFORMA_ACTIONS.GENERATE_INVOICE_FROM_PROFORMA_OR_ESTIMATES),
             switchMap((action: CustomActions) => this.proformaService.generateInvoice(action.payload.request, action.payload.voucherType)),
             map((response) => {
-                if (response.status === 'error') {
+                if (response?.status === 'error') {
                     this._toasty.errorToast(response.message, response.code);
                 }
                 return this.generateInvoiceResponse(response);
@@ -138,7 +138,7 @@ export class ProformaActions {
             ofType(PROFORMA_ACTIONS.GENERATE_PROFORMA_FROM_ESTIMATE),
             switchMap((action: CustomActions) => this.proformaService.generateProforma(action.payload.request, action.payload.voucherType)),
             map((response) => {
-                if (response.status === 'error') {
+                if (response?.status === 'error') {
                     this._toasty.errorToast(response.message, response.code);
                 } else {
                     this._toasty.successToast(this.localeService.translate("app_messages.proforma_generated"));
@@ -152,7 +152,7 @@ export class ProformaActions {
             ofType(PROFORMA_ACTIONS.SEND_EMAIL),
             switchMap((action: CustomActions) => this.proformaService.sendEmail(action.payload.request, action.payload.voucherType)),
             map((response) => {
-                if (response.status === 'error') {
+                if (response?.status === 'error') {
                     this._toasty.errorToast(response.message, response.code);
                 } else {
                     this._toasty.successToast(response.body);

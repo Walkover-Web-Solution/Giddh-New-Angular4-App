@@ -173,7 +173,7 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
     private getFiles(): void {
         let getRequest = {
             voucherType: (this.selectedItem.voucherGeneratedType) ? this.selectedItem.voucherGeneratedType : undefined,
-            entryUniqueName: this.selectedItem.voucherUniqueName ?? this.selectedItem.entryUniqueName ?? this.selectedItem.uniqueName,
+            entryUniqueName: this.selectedItem.voucherUniqueName ?? this.selectedItem.entryUniqueName ?? this.selectedItem?.uniqueName,
             uniqueName: (this.selectedItem.voucherUniqueName) ? this.selectedItem.voucherUniqueName : undefined
         };
 
@@ -200,7 +200,7 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
                             fileExtention = "unsupported";
                         }
 
-                        return { name: attachment.name, uniqueName: attachment.uniqueName, type: fileExtention, src: fileSource, originalSrc: objectURL, encodedData: attachment.encodedData, isChecked: false, originalFileExtension: attachment?.type?.toLowerCase() };
+                        return { name: attachment.name, uniqueName: attachment?.uniqueName, type: fileExtention, src: fileSource, originalSrc: objectURL, encodedData: attachment.encodedData, isChecked: false, originalFileExtension: attachment?.type?.toLowerCase() };
                     });
                 }
 
@@ -404,7 +404,7 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
             if (response) {
                 this.ledgerService.removeAttachment(this.attachments[index]?.uniqueName).subscribe((response) => {
                     if (response?.status === 'success') {
-                        let updatedAttachments = this.attachments?.filter(attachment => attachment.uniqueName !== this.attachments[index]?.uniqueName);
+                        let updatedAttachments = this.attachments?.filter(attachment => attachment?.uniqueName !== this.attachments[index]?.uniqueName);
                         this.attachments = updatedAttachments;
                         this.refreshAfterClose = true;
 

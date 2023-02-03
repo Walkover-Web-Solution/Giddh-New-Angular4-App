@@ -129,12 +129,12 @@
                 <ng-container matColumnDef="count">
                     <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_count }}</th>
                     <td mat-cell *matCellDef="let element">
-                        <ng-container *ngIf="element.status !== 'SUBMITTED'">
+                        <ng-container *ngIf="element?.status !== 'SUBMITTED'">
                             <span>{{ localeData?.success }} : {{ element.count.success }}</span
                             ><br /><span>{{ localeData?.failed }} : {{ element.count.failed }}</span
                             ><br /><span>{{ localeData?.total }} : {{ element.count.total }}</span>
                         </ng-container>
-                        <ng-container *ngIf="element.status === 'SUBMITTED'"> - </ng-container>
+                        <ng-container *ngIf="element?.status === 'SUBMITTED'"> - </ng-container>
                     </td>
                 </ng-container>
                 <!-- Error Sheet Column -->
@@ -143,13 +143,13 @@
                     <td mat-cell *matCellDef="let element">
                         <div
                             class="import-text"
-                            *ngIf="element.status !== 'COMPLETED'"
-                            [matTooltip]="element.status === 'SUBMITTED' ? localeData?.mapping_pending : ''"
+                            *ngIf="element?.status !== 'COMPLETED'"
+                            [matTooltip]="element?.status === 'SUBMITTED' ? localeData?.mapping_pending : ''"
                         >
-                            {{ element.status }}
+                            {{ element?.status }}
                         </div>
                         <a
-                            *ngIf="element.status === 'COMPLETED'"
+                            *ngIf="element?.status === 'COMPLETED'"
                             target="_blank"
                             (click)="downloadErrorSheet(element)"
                             mat-button
@@ -165,13 +165,13 @@
                     <td mat-cell *matCellDef="let element">
                         <div
                             class="import-text"
-                            *ngIf="element.status !== 'COMPLETED'"
-                            [matTooltip]="element.status === 'SUBMITTED' ? localeData?.mapping_pending : ''"
+                            *ngIf="element?.status !== 'COMPLETED'"
+                            [matTooltip]="element?.status === 'SUBMITTED' ? localeData?.mapping_pending : ''"
                         >
-                            {{ element.status }}
+                            {{ element?.status }}
                         </div>
                         <a
-                            *ngIf="element.status === 'COMPLETED'"
+                            *ngIf="element?.status === 'COMPLETED'"
                             target="_blank"
                             (click)="downloadSuccessSheet(element)"
                             mat-button

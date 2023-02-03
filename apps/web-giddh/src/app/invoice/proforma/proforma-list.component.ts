@@ -473,11 +473,11 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
 
     public clickedOutside(event, el, fieldName: string) {
         if (fieldName === 'voucherNumber') {
-            if (this.voucherNumberInput.value !== null && this.voucherNumberInput.value !== '') {
+            if (this.voucherNumberInput?.value !== null && this.voucherNumberInput?.value !== '') {
                 return;
             }
         } else if (fieldName === 'customerName') {
-            if (this.customerNameInput.value !== null && this.customerNameInput.value !== '') {
+            if (this.customerNameInput?.value !== null && this.customerNameInput?.value !== '') {
                 return;
             }
         }

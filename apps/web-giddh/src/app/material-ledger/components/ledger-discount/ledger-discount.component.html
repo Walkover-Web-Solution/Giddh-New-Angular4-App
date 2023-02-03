@@ -38,7 +38,7 @@
                         [DecimalPlaces]="2"
                         name="discountPercentageModal"
                         [(ngModel)]="discountPercentageModal"
-                        (input)="discountFromInput('PERCENTAGE', $event.target.value)"
+                        (input)="discountFromInput('PERCENTAGE', $event.target?.value)"
                     />
                     <i class="fa fa-percent position-absolute"></i>
                 </div>
@@ -55,7 +55,7 @@
                         [DecimalPlaces]="2"
                         name="discountFixedValueModal"
                         [(ngModel)]="discountFixedValueModal"
-                        (input)="discountFromInput('FIX_AMOUNT', $event.target.value)"
+                        (input)="discountFromInput('FIX_AMOUNT', $event.target?.value)"
                     />
                 </div>
             </div>

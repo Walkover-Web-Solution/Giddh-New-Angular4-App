@@ -418,7 +418,7 @@ export class InventoryService {
         } else {
             url = url?.replace(':entity', '');
         }
-        if (stockReportRequest.value) {
+        if (stockReportRequest?.value) {
             url = url?.replace(':value', encodeURIComponent(stockReportRequest.value));
         } else {
             url = url?.replace(':value', '');
@@ -470,7 +470,7 @@ export class InventoryService {
         } else {
             url = url?.replace(':entity', '');
         }
-        if (stockReportRequest.value) {
+        if (stockReportRequest?.value) {
             url = url?.replace(':value', encodeURIComponent(stockReportRequest.value));
         } else {
             url = url?.replace(':value', '');
@@ -691,14 +691,14 @@ export class InventoryService {
                 ?.replace(':sortBy', encodeURIComponent(request.sortBy ? request.sortBy?.toString() : ''))
                 ?.replace(':sort', encodeURIComponent(request.sort ? request.sort?.toString() : ''))
                 ?.replace(':entity', encodeURIComponent(request.entity ? request.entity?.toString() : ''))
-                ?.replace(':value', encodeURIComponent(request.value ? request.value?.toString() : ''))
+                ?.replace(':value', encodeURIComponent(request?.value ? request.value?.toString() : ''))
                 ?.replace(':number', encodeURIComponent(request.number ? request.number?.toString() : ''))
                 ?.replace(':condition', encodeURIComponent(request.condition ? request.condition?.toString() : ''))
         }
         else if (request.reportType === 'group') {
             requestObject = {
                 entity: request.entity,
-                value: request.value,
+                value: request?.value,
                 number: request.number,
                 condition: request.condition,
                 warehouseUniqueName: request.warehouseUniqueName,

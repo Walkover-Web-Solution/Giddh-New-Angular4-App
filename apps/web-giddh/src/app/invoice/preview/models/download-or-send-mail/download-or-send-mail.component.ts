@@ -102,7 +102,7 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
             this.invoiceType.push('Original');
 
             let getRequest = {
-                voucherType: this.selectedVoucher.voucherType,
+                voucherType: this.selectedVoucher?.voucherType,
                 uniqueName: this.selectedVoucher?.uniqueName
             };
 
@@ -118,14 +118,14 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
                     this.sanitizedPdfFileUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.pdfFileURL);
 
                     this.selectedInvoiceNo = this.selectedVoucher.voucherNumber;
-                    this.selectedVoucherType = this.selectedVoucher.voucherType;
+                    this.selectedVoucherType = this.selectedVoucher?.voucherType;
                     this.selectedVoucherUniqueName = this.selectedVoucher?.uniqueName;
 
                     let accountUniqueName = (this.selectedVoucher?.accountUniqueName || this.selectedVoucher.account?.uniqueName);
 
                     this.store.dispatch(this.invoiceReceiptActions.getVoucherDetailsV4(accountUniqueName, {
                         invoiceNumber:this.selectedVoucher.voucherNumber,
-                        voucherType: this.selectedVoucher.voucherType,
+                        voucherType: this.selectedVoucher?.voucherType,
                         uniqueName: this.selectedVoucher?.uniqueName
                     }));
 
@@ -157,7 +157,7 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
 
                     this.store.dispatch(this.invoiceReceiptActions.getVoucherDetailsV4(o.request.accountUniqueName, {
                         invoiceNumber: o.request.voucherNumber?.join(),
-                        voucherType: o.request.voucherType,
+                        voucherType: o.request?.voucherType,
                         uniqueName: (this.voucherApiVersion === 2) ? o.request?.uniqueName : undefined
                     }));
 
@@ -243,8 +243,8 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
      * onSelectInvoiceCopy
      */
     public onSelectInvoiceCopy(event) {
-        let val = event.target.value;
-        if (event.target.checked) {
+        let val = event.target?.value;
+        if (event.target?.checked) {
             this.invoiceType.push(val);
         } else {
             let idx = findIndex(this.invoiceType, (o) => o === val);

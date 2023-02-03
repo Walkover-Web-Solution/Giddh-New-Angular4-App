@@ -104,7 +104,7 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
         let filteredOptions: IOption[] = [];
         this.options?.forEach(option => {
             if (typeof search !== "string" || option?.label?.toLowerCase()?.indexOf(search?.toLowerCase()) > -1) {
-                filteredOptions.push({ label: option.label, value: option.value, additional: option });
+                filteredOptions.push({ label: option.label, value: option?.value, additional: option });
             }
         });
 

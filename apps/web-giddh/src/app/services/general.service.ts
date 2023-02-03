@@ -713,7 +713,7 @@ export class GeneralService {
     public isRtlCurrency(currencyCode: string): boolean {
         const rtlCurrencyCodes = ['AED'];
 
-        if (rtlCurrencyCodes.indexOf(currencyCode) > -1) {
+        if (rtlCurrencyCodes?.indexOf(currencyCode) > -1) {
             return true;
         } else {
             return false;
@@ -1021,7 +1021,7 @@ export class GeneralService {
                 balanceDueAmountForCompany = Number(item.totalBalance.amountForCompany) || 0;
                 balanceDueAmountForAccount = Number(item.totalBalance.amountForAccount) || 0;
             }
-            if ([VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.purchase, VoucherTypeEnum.receipt, VoucherTypeEnum.payment].indexOf(selectedVoucher) > -1 && item.grandTotal) {
+            if ([VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.purchase, VoucherTypeEnum.receipt, VoucherTypeEnum.payment]?.indexOf(selectedVoucher) > -1 && item.grandTotal) {
                 grandTotalAmountForCompany = Number(item.grandTotal.amountForCompany) || 0;
                 grandTotalAmountForAccount = Number(item.grandTotal.amountForAccount) || 0;
             }
