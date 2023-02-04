@@ -8129,7 +8129,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         if (isElectron) {
             let ipcRenderer = (window as any).require('electron').ipcRenderer;
             let ipcMain = (window as any).require('electron').ipcMain;
-            ipcRenderer.send('send-window-object', window);
+            let cloneWindowObj = cloneDeep(window)
+            ipcRenderer.send('send-window-object', cloneWindowObj);
             ipcMain.on('send-window-object', (event, windowObject) => {
                 console.log(event);
                 console.log(windowObject);
