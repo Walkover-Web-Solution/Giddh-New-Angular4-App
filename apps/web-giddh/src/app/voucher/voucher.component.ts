@@ -8127,37 +8127,20 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     */
     public onlyPhoneNumber(): void {
         if (isElectron) {
-            // let ipcRenderer = (window as any)?.require('electron').ipcRenderer;
-            // console.log('ipc',ipcRenderer);
-            // console.log('ipc send',ipcRenderer.send('Hello'));
-
-
-            let win = (window as any)?.require('electron').ipcRenderer.send("Dil","Preet");
-            let win1= (window as any)?.require('electron').ipcRenderer.send('win1',window);
-            console.log('win',win);
-            console.log('win1',win1);
-            console.log('winsend',win.send('KK'));
-            console.log('win1 send',win1.send('DD'));
-            win.on('receive win', (_event, arg) => {
-                console.log('win arg',arg) // prints "pong" in the DevTools console
-              });
-              win1.on('receive win', (_event, arg) => {
-                console.log('win1 arg',arg) // prints "pong" in the DevTools console
+            let ipcRenderer = (window as any).require('electron').ipcRenderer;
+            let ipcMain = (window as any).require('electron').ipcMain;
+            console.log('ipc',ipcRenderer);
+            ipcRenderer.send('message-from-renderer send', 'Hello, Main Process!');
+            ipcMain.on('message-from-renderer', (event, message) => {
+                console.log('Rendere to main- message recieve',message);
+                console.log('Rendere to main - event recieve',event);
               });
 
-              const result = win.sendSync('synchronous-win', 'ping');
-              console.log('win',result);
-              const result1 = win1.sendSync('synchronous-win1', 'pong');
-              console.log('win1',result1);
-
-
-              const handlewin = win.handle('window',window);
-              const handlewin1 = win1.handle('window2','PP');
-              console.log('handlewin',handlewin);
-              console.log('handlewin1',handlewin1);
-
-
-
+              ipcMain.emit('message-from-main Main to renderer - send', 'Hello, Renderer Process!');
+              ipcRenderer.on('message-from-main Main to Renderer recieve', (event, message) => {
+                console.log('Main to renderer- message recieve',message);
+                console.log('Main to renderer - event recieve',event);
+              });
         }
         let input = document.getElementById('init-contact-proforma');
         const errorMsg = document.querySelector("#init-contact-proforma-error-msg");
