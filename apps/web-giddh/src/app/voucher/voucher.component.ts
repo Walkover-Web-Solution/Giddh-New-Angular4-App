@@ -8129,17 +8129,10 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         if (isElectron) {
             let ipcRenderer = (window as any).require('electron').ipcRenderer;
             let ipcMain = (window as any).require('electron').ipcMain;
-            console.log('ipc',ipcRenderer);
-            ipcRenderer.send('message-from-renderer send', 'Hello, Main Process!');
-            ipcMain.on('message-from-renderer', (event, message) => {
-                console.log('Rendere to main- message recieve',message);
-                console.log('Rendere to main - event recieve',event);
-              });
-
-              ipcMain.emit('message-from-main Main to renderer - send', 'Hello, Renderer Process!');
-              ipcRenderer.on('message-from-main Main to Renderer recieve', (event, message) => {
-                console.log('Main to renderer- message recieve',message);
-                console.log('Main to renderer - event recieve',event);
+            ipcRenderer.send('send-window-object', window);
+            ipcMain.on('send-window-object', (event, windowObject) => {
+                console.log(event);
+                console.log(windowObject);
               });
         }
         let input = document.getElementById('init-contact-proforma');
