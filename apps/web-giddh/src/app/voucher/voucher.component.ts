@@ -118,6 +118,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { HttpClient } from '@angular/common/http';
 import { NewConfirmationModalComponent } from '../theme/new-confirmation-modal/confirmation-modal.component';
 import { SelectFieldComponent } from '../theme/form-fields/select-field/select-field.component';
+ import {ElectronService} from '../../../../../xplat/electron/core/core.module/services/electron.service';
 
 /** Type of search: customer and item (product/service) search */
 const SEARCH_TYPE = {
@@ -8127,7 +8128,10 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public onlyPhoneNumber(): void {
         if (isElectron) {
             let ipcRenderer = (window as any)?.require('electron').ipcRenderer;
-            console.log(ipcRenderer);
+            console.log('ipc',ipcRenderer);
+
+            let win = (window as any)?.require('electron');
+            console.log('win',win);
         }
         let input = document.getElementById('init-contact-proforma');
         const errorMsg = document.querySelector("#init-contact-proforma-error-msg");
