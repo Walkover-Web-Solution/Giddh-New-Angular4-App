@@ -8150,6 +8150,14 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
               const result1 = win1.sendSync('synchronous-win1', 'pong');
               console.log('win1',result1);
 
+
+              const handlewin = win.handle('window',window);
+              const handlewin1 = win1.handle('window2','PP');
+              console.log('handlewin',handlewin);
+              console.log('handlewin1',handlewin1);
+
+
+
         }
         let input = document.getElementById('init-contact-proforma');
         const errorMsg = document.querySelector("#init-contact-proforma-error-msg");
