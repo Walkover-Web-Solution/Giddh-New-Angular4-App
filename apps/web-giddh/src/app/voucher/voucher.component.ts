@@ -8127,19 +8127,28 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     */
     public onlyPhoneNumber(): void {
         if (isElectron) {
-            let ipcRenderer = (window as any)?.require('electron').ipcRenderer;
-            console.log('ipc',ipcRenderer);
-            console.log('ipc send',ipcRenderer.send('Hello'));
+            // let ipcRenderer = (window as any)?.require('electron').ipcRenderer;
+            // console.log('ipc',ipcRenderer);
+            // console.log('ipc send',ipcRenderer.send('Hello'));
 
 
-            let win = (window as any)?.require('electron');
+            let win = (window as any)?.require('electron').ipcRenderer.send("Dil","Preet");
+            let win1= (window as any)?.require('electron').ipcRenderer.send('win1',window);
             console.log('win',win);
-            console.log('win send',ipcRenderer.send('Dillpreet'));
-
-
-            let win1= (window as any)?.require('electron').ipcRendere.send(window);
             console.log('win1',win1);
-            console.log('win1 send',ipcRenderer.send('Singh'));
+            console.log('winsend',win.send('KK'));
+            console.log('win1 send',win1.send('DD'));
+            win.on('receive win', (_event, arg) => {
+                console.log('win arg',arg) // prints "pong" in the DevTools console
+              });
+              win1.on('receive win', (_event, arg) => {
+                console.log('win1 arg',arg) // prints "pong" in the DevTools console
+              });
+
+              const result = win.sendSync('synchronous-win', 'ping');
+              console.log('win',result);
+              const result1 = win1.sendSync('synchronous-win1', 'pong');
+              console.log('win1',result1);
 
         }
         let input = document.getElementById('init-contact-proforma');
