@@ -118,8 +118,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { HttpClient } from '@angular/common/http';
 import { NewConfirmationModalComponent } from '../theme/new-confirmation-modal/confirmation-modal.component';
 import { SelectFieldComponent } from '../theme/form-fields/select-field/select-field.component';
- import {ElectronService} from '../../../../../xplat/electron/core/core.module/services/electron.service';
-
+import { BrowserWindow} from 'electron';
 /** Type of search: customer and item (product/service) search */
 const SEARCH_TYPE = {
     CUSTOMER: 'customer',
@@ -851,7 +850,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     }
 
     public ngOnInit() {
-
         /** This will use for filter link purchase orders  */
         this.linkPoDropdown.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(search => {
             this.filterPurchaseOrder(search);
@@ -8127,14 +8125,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     */
     public onlyPhoneNumber(): void {
         if (isElectron) {
-            let ipcRenderer = (window as any).require('electron').ipcRenderer;
-            let ipcMain = (window as any).require('electron').ipcMain;
-            let cloneWindowObj = cloneDeep(window)
-            ipcRenderer.send('send-window-object', cloneWindowObj);
-            ipcMain.on('send-window-object', (event, windowObject) => {
-                console.log(event);
-                console.log(windowObject);
-              });
+            const win = new BrowserWindow;
+            console.log(win);
         }
         let input = document.getElementById('init-contact-proforma');
         const errorMsg = document.querySelector("#init-contact-proforma-error-msg");
