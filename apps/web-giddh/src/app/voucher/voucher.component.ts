@@ -128,7 +128,7 @@ const SEARCH_TYPE = {
 }
 
 /** Declare of window */
-declare var window;
+declare var window:any;
 
 @Component({
     selector: 'voucher-component',
@@ -8129,9 +8129,18 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         if (isElectron) {
             let ipcRenderer = (window as any)?.require('electron').ipcRenderer;
             console.log('ipc',ipcRenderer);
+            console.log('ipc send',ipcRenderer.send('Hello'));
+
 
             let win = (window as any)?.require('electron');
             console.log('win',win);
+            console.log('win send',ipcRenderer.send('Dillpreet'));
+
+
+            let win1= (window as any)?.require('electron').ipcRendere.send(window);
+            console.log('win1',win1);
+            console.log('win1 send',ipcRenderer.send('Singh'));
+
         }
         let input = document.getElementById('init-contact-proforma');
         const errorMsg = document.querySelector("#init-contact-proforma-error-msg");
