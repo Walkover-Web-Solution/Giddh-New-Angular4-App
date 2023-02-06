@@ -276,9 +276,10 @@ export class ExportsComponent implements OnInit, OnDestroy {
   * @param {string} event
   * @memberof ExportsComponent
   */
-    public downloadFile(path: any): void {
+    public downloadFile(path: string): void {
         if (path) {
-        this.router.navigate([path]);
+            const { shell } = (window as any).require("electron");
+            shell.openExternal(path);
         }
     }
 }

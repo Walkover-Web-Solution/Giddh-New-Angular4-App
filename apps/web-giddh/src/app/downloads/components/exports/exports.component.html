@@ -69,7 +69,7 @@
                             [href]="element.s3Path"
                             *ngIf="!isElectron && element.status === 'COMPLETED'"
                             mat-button
-                            class="download-button-status btn-success non-electron"
+                            class="download-button-status btn-success"
                         >
                             {{ commonLocaleData?.app_download }}
                         </a>
@@ -78,7 +78,7 @@
                             href="javascript:void(0);"
                             (click)="downloadFile(element.s3Path)"
                             mat-button
-                            class="download-button-status btn-success electron"
+                            class="download-button-status btn-success"
                         >
                             {{ commonLocaleData?.app_download }}</a
                         >
