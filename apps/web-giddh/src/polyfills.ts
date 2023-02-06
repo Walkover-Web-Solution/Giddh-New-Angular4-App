@@ -43,11 +43,6 @@ import 'core-js/es/reflect';
 
 import '@angular/localize/init';
 
-import 'node_modules/intl-tel-input/build/js/intlTelInput.min.js';
-import 'node_modules/intl-tel-input/build/js/utils.js';
-import 'node_modules/intl-tel-input/build/js/intlTelInput.js';
-
-
 /**
  * By default, zone.js will patch all possible macroTask and DomEvents
  * user can disable parts of macroTask/DomEvents patch by setting following flags
