@@ -15,6 +15,7 @@ import { DownloadData, DownloadsRequest } from '../../../models/api-models/downl
 import { cloneDeep } from '../../../lodash-optimized';
 import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from '../../../app.constant';
 import { ExportsJsonComponent } from '../exports-json/exports-json.component';
+import { Router } from '@angular/router';
 
 /** Hold information of Download  */
 const ELEMENT_DATA: DownloadData[] = [];
@@ -77,7 +78,7 @@ export class ExportsComponent implements OnInit, OnDestroy {
     /** This will use for from date static*/
     public fromDate: string;
 
-    constructor(public dialog: MatDialog, private downloadsService: DownloadsService, private changeDetection: ChangeDetectorRef, private generalService: GeneralService, private modalService: BsModalService, private store: Store<AppState>) {
+    constructor(public dialog: MatDialog, private downloadsService: DownloadsService, private changeDetection: ChangeDetectorRef, private generalService: GeneralService, private router: Router, private modalService: BsModalService, private store: Store<AppState>) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
     }
 
@@ -262,6 +263,18 @@ export class ExportsComponent implements OnInit, OnDestroy {
     public translationComplete(event: boolean): void {
         if (event) {
             this.getDownloads(true);
+        }
+    }
+
+    /**
+  * Download export file
+  *
+  * @param {string} event
+  * @memberof ExportsComponent
+  */
+    public downloadFile(path: string): void {
+        if (path) {
+            this.router.navigateByUrl(path);
         }
     }
 }
