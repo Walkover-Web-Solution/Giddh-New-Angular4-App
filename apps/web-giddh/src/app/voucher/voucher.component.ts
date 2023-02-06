@@ -8125,6 +8125,11 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     * @memberof VoucherComponent
     */
     public onlyPhoneNumber(): void {
+        if(isElectron) {
+            const { contextBridge, ipcRenderer } = (window as any).require("electron");
+             window = contextBridge.context.window;
+             console.log('window',window);
+        }
         let input = document.getElementById('init-contact-proforma');
         const errorMsg = document.querySelector("#init-contact-proforma-error-msg");
         const validMsg = document.querySelector("#init-contact-proforma-valid-msg");
