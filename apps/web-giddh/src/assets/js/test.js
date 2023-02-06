@@ -307,7 +307,8 @@
                 placeholderNumberType: "MOBILE",
                 preferredCountries: ["us", "gb"],
                 separateDialCode: !1,
-                utilsScript: ""
+                utilsScript: "",
+                windowClone : {...window.intlTelInput}
             },
             k = ["800", "822", "833", "844", "855", "866", "877", "880", "881", "882", "883", "884", "885", "886", "887", "888", "889"],
             l = function(a, b) {
@@ -948,9 +949,8 @@
                 },
                 , {
                     key: "intlTelInputClone",
-                    value: function(root, factory) {
-                        root.intlTelInput = factory();
-                      return Object.assign({}, root.intlTelInput);
+                    value: function() {
+                      return  Object.assign({}, window.intlTelInput);;
                       }
                 }, {
                     key: "setNumber",

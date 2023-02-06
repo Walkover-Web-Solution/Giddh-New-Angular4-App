@@ -13,7 +13,7 @@ import { select, Store } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { DownloadData, DownloadsRequest } from '../../../models/api-models/downloads';
 import { cloneDeep } from '../../../lodash-optimized';
-import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from '../../../app.constant';
+import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT, Configuration } from '../../../app.constant';
 import { ExportsJsonComponent } from '../exports-json/exports-json.component';
 import { Router } from '@angular/router';
 
@@ -77,6 +77,8 @@ export class ExportsComponent implements OnInit, OnDestroy {
     public toDate: string;
     /** This will use for from date static*/
     public fromDate: string;
+     /** This will use for to electron app*/
+    public isElectron: boolean = Configuration.isElectron;
 
     constructor(public dialog: MatDialog, private downloadsService: DownloadsService, private changeDetection: ChangeDetectorRef, private generalService: GeneralService, private router: Router, private modalService: BsModalService, private store: Store<AppState>) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
@@ -88,6 +90,8 @@ export class ExportsComponent implements OnInit, OnDestroy {
      * @memberof ExportsComponent
      */
     public ngOnInit(): void {
+        console.log(isElectron);
+
         this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         document.querySelector('body')?.classList?.add('download-page');
         /** Universal date observer */
