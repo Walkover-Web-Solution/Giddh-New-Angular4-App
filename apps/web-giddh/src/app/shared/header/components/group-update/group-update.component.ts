@@ -384,10 +384,10 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
         let obj;
         obj = map(rawList, (item: any) => {
             obj = {};
-            obj.name = item.name;
+            obj.name = item?.name;
             obj.uniqueName = item?.uniqueName;
-            obj.synonyms = item.synonyms;
-            obj.parentGroups = item.parentGroups;
+            obj.synonyms = item?.synonyms;
+            obj.parentGroups = item?.parentGroups;
             return obj;
         });
         return obj;

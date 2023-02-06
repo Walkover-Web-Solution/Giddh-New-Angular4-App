@@ -1384,8 +1384,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     const searchResults = data.body.results.map(result => {
                         return {
                             value: result?.uniqueName,
-                            label: `${result.name}`,
-                            additional: result.parentGroups
+                            label: `${result?.name}`,
+                            additional: result?.parentGroups
                         }
                     }) || [];
                     if (page === 1) {
@@ -1453,8 +1453,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                         const results = response.map(result => {
                             return {
                                 value: result?.uniqueName,
-                                label: `${result.name}`,
-                                additional: result.parentGroups
+                                label: `${result?.name}`,
+                                additional: result?.parentGroups
                             }
                         }) || [];
                         this.defaultGroupSuggestions = this.defaultGroupSuggestions.concat(...results);
@@ -1476,8 +1476,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             this.defaultGroupSuggestions = response.map(result => {
                 return {
                     value: result?.uniqueName,
-                    label: `${result.name}`,
-                    additional: result.parentGroups
+                    label: `${result?.name}`,
+                    additional: result?.parentGroups
                 }
             }) || [];
             this.defaultGroupPaginationData.page = this.groupsSearchResultsPaginationData.page;
