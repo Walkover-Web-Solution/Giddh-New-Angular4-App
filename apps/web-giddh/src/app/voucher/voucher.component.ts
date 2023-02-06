@@ -1723,7 +1723,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 this.onlyPhoneNumber();
                 clearInterval(interval);
             }
-        }, 1000);
+        }, 5000);
         if (!this.isUpdateMode) {
             this.toggleBodyClass();
         }
@@ -8125,9 +8125,10 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public onlyPhoneNumber(): void {
         if(isElectron) {
             const { contextBridge, ipcRenderer } = (window as any).require("electron");
-             window = contextBridge.context.window;
+             let window2 = contextBridge.context.window;
              let renderer = ipcRenderer.window;
              console.log('renderer',renderer);
+             console.log('window2',window2);
              console.log('window',window);
              console.log('exposeInMainWorld',window.exposeInMainWorld());
         }
