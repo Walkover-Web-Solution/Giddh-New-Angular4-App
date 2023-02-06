@@ -264,4 +264,17 @@ export class ExportsComponent implements OnInit, OnDestroy {
             this.getDownloads(true);
         }
     }
+
+    /**
+    * Download export file
+    *
+    * @param {string} event
+    * @memberof ExportsComponent
+    */
+    public downloadFile(path: string): void {
+        if (path) {
+            const { shell } = (window as any).require("electron");
+            shell.openExternal(path);
+        }
+    }
 }
