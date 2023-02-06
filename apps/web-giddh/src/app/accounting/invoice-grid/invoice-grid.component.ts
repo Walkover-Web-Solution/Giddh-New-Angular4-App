@@ -433,7 +433,7 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
                 let accModel = {
                     name: acc.name,
                     UniqueName: acc.uniqueName,
-                    groupUniqueName: acc?.parentGroups[acc.parentGroups?.length - 1],
+                    groupUniqueName: acc.parentGroups[acc.parentGroups?.length - 1],
                     account: acc.name
                 };
                 this.accountsTransaction[idx].particular = accModel?.UniqueName;
@@ -1125,7 +1125,7 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
                     if (data?.status === 'success') {
                         this.allFlattenAccounts = cloneDeep(data.body.results);
                         if (groupUniqueName) {
-                            const filteredAccounts: IFlattenAccountsResultItem[] = data.body.results?.filter((acc) => acc.parentGroups.findIndex((g) => g?.uniqueName === groupUniqueName) > -1);
+                            const filteredAccounts: IFlattenAccountsResultItem[] = data.body.results?.filter((acc) => acc?.parentGroups.findIndex((g) => g?.uniqueName === groupUniqueName) > -1);
                             this._tallyModuleService.setFlattenAccounts(filteredAccounts);
                             this.isAccountListFiltered = true;
                         } else {

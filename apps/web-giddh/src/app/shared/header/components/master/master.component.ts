@@ -94,7 +94,7 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
                     name: response.name,
                     uniqueName: response?.uniqueName,
                     parentGroups: [
-                        ...response.parentGroups
+                        ...response?.parentGroups
                     ]
                 };
                 this.getBreadCrumbPathFromGroup(currentAccount, null, this.breadcrumbPath, this.breadcrumbUniqueNamePath);
