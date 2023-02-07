@@ -15,6 +15,7 @@ import { DownloadData, DownloadsRequest } from '../../../models/api-models/downl
 import { cloneDeep } from '../../../lodash-optimized';
 import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT, Configuration } from '../../../app.constant';
 import { ExportsJsonComponent } from '../exports-json/exports-json.component';
+import { download } from '@giddh-workspaces/utils';
 
 /** Hold information of Download  */
 const ELEMENT_DATA: DownloadData[] = [];
@@ -276,8 +277,7 @@ export class ExportsComponent implements OnInit, OnDestroy {
         if (isElectron) {
             console.log("path",path);
             if (path) {
-                const { shell } = (window as any).require("electron");
-                shell.openExternal(path);
+                return download(path,"","");
             }
         }
     }

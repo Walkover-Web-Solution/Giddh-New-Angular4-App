@@ -76,6 +76,7 @@
                         <a
                             *ngIf="isElectron && element.status === 'COMPLETED'"
                             [routerLink]="[element.s3Path]"
+                            href="javascript:void(0)"
                             mat-button
                             class="download-button-status btn-success electron"
                         >
