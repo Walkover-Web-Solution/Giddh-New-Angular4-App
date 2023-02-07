@@ -273,11 +273,13 @@ export class ExportsComponent implements OnInit, OnDestroy {
     * @param {string} event
     * @memberof ExportsComponent
     */
-    public downloadFile(path: string): void {
+    public downloadFile(path: any): void {
         if (isElectron) {
             console.log("path",path);
             if (path) {
-                return download(path,"","");
+                let url = path;
+                let fileName =  url.substring(url.lastIndexOf('/') + 1);
+                return download(fileName,url,"");
             }
         }
     }
