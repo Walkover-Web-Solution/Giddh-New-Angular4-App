@@ -61,6 +61,8 @@ import { GroupwiseComponent } from "./component/stock-group/group-wise/group-wis
 import { ItemWiseComponent } from "./component/stock-group/item-wise/item-wise.component";
 import { VariantWiseComponent } from "./component/variant-wise/variant-wise.component";
 import { NgxMatSelectSearchModule } from "ngx-mat-select-search";
+import { GiddhPageLoaderModule } from "../shared/giddh-page-loader/giddh-page-loader.module";
+import { PaginationModule } from "ngx-bootstrap/pagination";
 
 @NgModule({
     declarations: [
@@ -127,7 +129,9 @@ import { NgxMatSelectSearchModule } from "ngx-mat-select-search";
         MatSelectModule,
         InventorySidebarModule,
         StockCreateEditModule,
-        NgxMatSelectSearchModule
+        NgxMatSelectSearchModule,
+        GiddhPageLoaderModule,
+        PaginationModule
     ],
     exports: [
         NewInventoryComponent,
