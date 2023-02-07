@@ -1,7 +1,7 @@
 <div class="inventory-advance-search">
     <div class="modal-header">
         <h4 class="modal-title pull-left">Advance Search</h4>
-        <button type="button" class="close pull-right" (click)="modalRef?.hide()" aria-label="Close">
+        <button type="button" class="close pull-right" (click)="closePopup()" aria-label="Close">
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
@@ -12,16 +12,16 @@
                     <label>Date</label>
                 </div>
                 <div class="col-lg-8">
-                    <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
-                        <i class="icon-calender calendar-addon"></i>
-                        <input
-                            type="text"
-                            id="select-date"
-                            name="selectedDateRange"
-                            [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
-                            class="giddh-datepicker date-range-picker border-radius-2"
-                            placeholder="Enter Date"
-                        />
+                    <div class="custom-datepicker-wrapper">
+                        <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
+                            <i class="icon-calender calendar-addon"></i>
+                            <input
+                                type="text"
+                                name="selectedDateRange"
+                                [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                                class="giddh-datepicker date-range-picker"
+                            />
+                        </div>
                     </div>
                 </div>
             </div>
@@ -82,7 +82,6 @@
         </form>
     </div>
 </div>
-<!-- datepicker template -->
 <ng-template #datepickerTemplate>
     <div class="datepicker-modal">
         <div class="modal-body">
@@ -90,13 +89,14 @@
                 [inputStartDate]="selectedDateRange?.startDate"
                 [inputEndDate]="selectedDateRange?.endDate"
                 [alwaysShowCalendars]="true"
-                [ranges]="datePickerOption"
+                [ranges]="datePickerOptions"
                 [selectedRangeLabel]="selectedRangeLabel"
                 [showCustomRangeLabel]="true"
                 [showClearButton]="false"
                 [showCancel]="true"
                 [linkedCalendars]="true"
                 [showDropdowns]="true"
+                [locale]="{ applyLabel: commonLocaleData?.app_done }"
                 (rangeClicked)="dateSelectedCallback($event)"
                 (datesUpdated)="dateSelectedCallback($event)"
                 [keepCalendarOpeningWithRange]="false"
