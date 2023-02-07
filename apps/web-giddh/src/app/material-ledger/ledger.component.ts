@@ -2363,6 +2363,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
                     this.getBankTransactions();
                     let accountDetails: AccountResponse | AccountResponseV2 = data[0];
+                    let parentOfAccount = accountDetails?.parentGroups[0];
 
                     this.lc.getUnderstandingText(accountDetails?.accountType, accountDetails?.name, accountDetails?.parentGroups, this.localeData);
                     this.accountUniquename = accountDetails?.uniqueName;
