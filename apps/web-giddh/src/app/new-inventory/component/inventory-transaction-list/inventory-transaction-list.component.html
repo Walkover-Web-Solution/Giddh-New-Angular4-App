@@ -1,3 +1,146 @@
+<!--new inventory header-->
+<div class="inventory-filter-bar">
+    <div class="custom-datepicker-wrapper">
+        <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
+            <i class="icon-calender calendar-addon"></i>
+            <input
+                type="text"
+                name="selectedDateRange"
+                [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                class="giddh-datepicker date-range-picker"
+            />
+        </div>
+    </div>
+    <div class="pl-1">
+        <mat-select
+            name="selectedWarehouse"
+            [multiple]="true"
+            [(ngModel)]="selectedWarehouse"
+            class="stock-mat-salect"
+            [placeholder]="'Select Warehouse'"
+        >
+            <mat-option class="balance-options">
+                <ngx-mat-select-search
+                    [noEntriesFoundLabel]="'No Result Found'"
+                    [formControl]="warehousesDropdown"
+                    [placeholderLabel]="'Select Warehouse'"
+                >
+                    <i class="icon-cross" ngxMatSelectSearchClear></i>
+                </ngx-mat-select-search>
+            </mat-option>
+
+            <mat-option class="balance-options"> Warehouse 1 </mat-option>
+            <mat-option class="balance-options"> Warehouse 2 </mat-option>
+            <mat-option class="balance-options"> Warehouse 3 </mat-option>
+        </mat-select>
+    </div>
+    <div class="pl-1">
+        <mat-select
+            name="selectedBranch"
+            [multiple]="true"
+            [(ngModel)]="selectedBranch"
+            class="stock-mat-salect"
+            [placeholder]="'Select Branch'"
+        >
+            <mat-option class="balance-options">
+                <ngx-mat-select-search
+                    [noEntriesFoundLabel]="'No Result Found'"
+                    [formControl]="branchesDropdown"
+                    [placeholderLabel]="'Select Branch'"
+                >
+                    <i class="icon-cross" ngxMatSelectSearchClear></i>
+                </ngx-mat-select-search>
+            </mat-option>
+
+            <mat-option class="balance-options"> Branch 1 </mat-option>
+            <mat-option class="balance-options"> Branch 2 </mat-option>
+            <mat-option class="balance-options"> Branch 3 </mat-option>
+        </mat-select>
+    </div>
+    <div
+        class="clear-filter align-items-center d-flex justify-content-xl-center justify-content-lg-start w-50"
+        *ngIf="showClearFilter"
+    >
+        <button
+            mat-raised-button
+            class="create-btn-inventory btn-sky-blue ml-3 mr-0"
+            color="primary"
+            (click)="resetAdvanceSearch()"
+        >
+            <span class="icon-cross"></span> Clear
+        </button>
+    </div>
+</div>
+
+<div class="inventory-filter-bar">
+    <div class="search-control">
+        <i class="icon-search search-icon"></i>
+        <sh-select placeholder="Search Branch Alice"></sh-select>
+        <!-- This will remove after select field component or any othe input -->
+        <div class="menu-btn-control">
+            <button mat-button (click)="openModal()">
+                <i class="icon-advance-filter mr-2"></i>
+                Advance Filter
+            </button>
+
+            <button mat-button [matMenuTriggerFor]="customise" aria-label="Customise">
+                <i class="icon-options mr-2"> </i>
+                Customise
+            </button>
+            <mat-menu #customise="matMenu">
+                <div class="menu-selector">
+                    <button mat-menu-item>
+                        <mat-checkbox color="primary">Select All</mat-checkbox>
+                    </button>
+                    <button mat-menu-item>
+                        <mat-checkbox color="primary">Opening Value</mat-checkbox>
+                    </button>
+                    <button mat-menu-item>
+                        <mat-checkbox color="primary">Inward Value</mat-checkbox>
+                    </button>
+                    <button mat-menu-item>
+                        <mat-checkbox color="primary">Outward Value</mat-checkbox>
+                    </button>
+                    <button mat-menu-item>
+                        <mat-checkbox color="primary">Less Stock</mat-checkbox>
+                    </button>
+                    <button mat-menu-item>
+                        <mat-checkbox color="primary">Zero Stock</mat-checkbox>
+                    </button>
+                    <button mat-menu-item>
+                        <mat-checkbox color="primary">Negative Stock</mat-checkbox>
+                    </button>
+                </div>
+            </mat-menu>
+        </div>
+    </div>
+
+    <div class="d-flex">
+        <button class="round-btn" mat-icon-button [matMenuTriggerFor]="importExport" aria-label="Customise">
+            <i class="svg">
+                <svg xmlns="http://www.w3.org/2000/svg" width="12.444" height="16" viewBox="0 0 12.444 16">
+                    <path
+                        class="a"
+                        d="M82.456,1185.2l3.556,3.556H83.344v6.222H81.567v-6.222H78.9Zm6.222,12.444h2.667l-3.556,3.556-3.556-3.556H86.9v-6.222h1.778Z"
+                        transform="translate(-78.9 -1185.2)"
+                    />
+                </svg>
+            </i>
+        </button>
+        <mat-menu #importExport="matMenu">
+            <div class="menu-selector">
+                <button mat-menu-item>
+                    <span>CSV</span>
+                </button>
+                <button mat-menu-item>
+                    <span>XLS</span>
+                </button>
+            </div>
+        </mat-menu>
+    </div>
+</div>
+
+<!-- end new inventory header-->
 <div class="inventory-transaction-list">
     <div class="p-3">
         <div class="row">
@@ -59,53 +202,10 @@
     </div>
     <div class="row">
         <div class="col-12 horizontal-padding">
-            <div class="table-responsive">
-                <!--                <table class="table giddh-table on-mobile-view">-->
-                <!--                    <thead>-->
-                <!--                        <tr>-->
-                <!--                            <th colspan="3">-->
-                <!--                                <div class="custom-datepicker">-->
-                <!--                                    <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">-->
-                <!--                                        <i class="icon-calender calendar-addon bdr-radius-50"></i>-->
-                <!--                                        <input-->
-                <!--                                            type="text"-->
-                <!--                                            id="select-date"-->
-                <!--                                            name="selectedDateRange"-->
-                <!--                                            [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"-->
-                <!--                                            class="giddh-datepicker date-range-picker bdr-radius-50"-->
-                <!--                                            placeholder="Enter Date"-->
-                <!--                                        />-->
-                <!--                                    </div>-->
-                <!--                                </div>-->
-                <!--                            </th>-->
-                <!--                            <th class="text-center" colspan="4">Transaction</th>-->
-                <!--                            <th colspan="1">Closing Stock</th>-->
-                <!--                        </tr>-->
-                <!--                        <tr>-->
-                <!--                            <th>Date</th>-->
-                <!--                            <th>Voucher Type</th>-->
-                <!--                            <th>Account Name</th>-->
-                <!--                            <th class="text-right">Inwards</th>-->
-                <!--                            <th class="text-right">Outwards</th>-->
-                <!--                            <th class="text-right">Rate</th>-->
-                <!--                            <th class="text-right">Value</th>-->
-                <!--                            <th class="text-right">Qty</th>-->
-                <!--                        </tr>-->
-                <!--                    </thead>-->
-                <!--                    <tbody>-->
-                <!--                        <tr>-->
-                <!--                            <td data-title="Date">09-10-2020</td>-->
-                <!--                            <td date-title="Voucher Type">SALES</td>-->
-                <!--                            <td data-title="Account Name">USD Account</td>-->
-                <!--                            <td data-title="Inwards" class="text-right">-</td>-->
-                <!--                            <td data-title="Outwards" class="text-right">1.00 Box</td>-->
-                <!--                            <td data-title="Rate" class="text-right">1,02,378.60</td>-->
-                <!--                            <td data-title="Value" class="text-right">1,02,378.60</td>-->
-                <!--                            <td data-title="Qty" class="text-right">432.00box</td>-->
-                <!--                        </tr>-->
-                <!--                    </tbody>-->
-                <!--                </table>-->
-
+            <div *ngIf="isLoading">
+                <giddh-page-loader></giddh-page-loader>
+            </div>
+            <div class="table-responsive" *ngIf="!isLoading">
                 <table mat-table [dataSource]="dataSource" class="table giddh-table on-mobile-view">
                     <ng-container matColumnDef="date">
                         <th mat-header-cell *matHeaderCellDef>Date</th>
@@ -152,59 +252,38 @@
                         </td>
                     </ng-container>
 
-                    <ng-container matColumnDef="qty">
+                    <!-- <ng-container matColumnDef="qty">
                         <th class="text-right" mat-header-cell *matHeaderCellDef>qty</th>
                         <td data-title="Qty" class="text-right" mat-cell *matCellDef="let element">
                             {{ element.qty }}
                         </td>
-                    </ng-container>
+                    </ng-container> -->
 
                     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                 </table>
+                <section class="no-logs" *ngIf="!dataSource?.length && !isLoading">
+                    <div class="no-data">
+                        <h1>No data found</h1>
+                    </div>
+                </section>
             </div>
-        </div>
-    </div>
-</div>
-<div *ngIf="false" class="sticky-footer stock-group-footer">
-    <div class="footer-wrapper">
-        <div class="row">
-            <div class="col-lg-3 col-md-6 col-12">
-                <div class="text-left pd-l15">
-                    <label class="text-gray font-14">Profit/Loss</label>
-                    <p class="text-purple">1,02,377.50 <span class="by-date">(Apr 1, 2018 - Dec 11, 2020)</span></p>
-                </div>
-            </div>
-            <div class="col-lg-2 col-md-6 col-12">
-                <label class="text-gray font-14"
-                    >Transaction Count : <span class="total-transction text-purple">1.00</span></label
-                >
-                <p>Inward: <span class="total-inward">0.00</span></p>
-                <p>Outward: <span class="total-outward">0.00</span></p>
-            </div>
-            <div class="col-lg-7 col-md-12">
-                <div class="d-flex justify-content-end stock-value">
-                    <div class="total-stock-value">
-                        <label class="text-gray font-14">Opening</label>
-                        <p class="font-16">432.00</p>
-                        <p class="font-14">(433.00 box)</p>
-                    </div>
-                    <div class="total-stock-value">
-                        <label class="text-gray font-14">Inward</label>
-                        <p class="font-16">432.00</p>
-                        <p class="font-14">(433.00 box)</p>
-                    </div>
-                    <div class="total-stock-value">
-                        <label class="text-gray font-14">Outward</label>
-                        <p class="font-16">1,02,378.50</p>
-                        <p class="font-14">(433.00 box)</p>
-                    </div>
-                    <div class="total-stock-value">
-                        <label class="text-gray font-14">Closing Stock</label>
-                        <p class="font-16 text-purple">432.00</p>
-                        <p class="font-14">(433.00 box)</p>
-                    </div>
-                </div>
+            <!-- *ngIf="inventoryObj?.totalItems > inventoryObj.count && !isLoading" -->
+            <div class="pagination-wrapper">
+                <pagination
+                    [totalItems]="inventoryObj?.totalItems"
+                    [(ngModel)]="inventoryObj.page"
+                    [maxSize]="5"
+                    class="pagination-sm"
+                    [boundaryLinks]="true"
+                    [itemsPerPage]="inventoryObj.count"
+                    [rotate]="false"
+                    (pageChanged)="pageChanged($event)"
+                    [firstText]="'First'"
+                    [previousText]="'Previous'"
+                    [nextText]="'Next'"
+                    [lastText]="'Last'"
+                ></pagination>
             </div>
         </div>
     </div>
@@ -216,13 +295,14 @@
                 [inputStartDate]="selectedDateRange?.startDate"
                 [inputEndDate]="selectedDateRange?.endDate"
                 [alwaysShowCalendars]="true"
-                [ranges]="datePickerOption"
+                [ranges]="datePickerOptions"
                 [selectedRangeLabel]="selectedRangeLabel"
                 [showCustomRangeLabel]="true"
                 [showClearButton]="false"
                 [showCancel]="true"
                 [linkedCalendars]="true"
                 [showDropdowns]="true"
+                [locale]="{ applyLabel: commonLocaleData?.app_done }"
                 (rangeClicked)="dateSelectedCallback($event)"
                 (datesUpdated)="dateSelectedCallback($event)"
                 [keepCalendarOpeningWithRange]="false"
@@ -231,4 +311,8 @@
             ></app-datepicker-wrapper>
         </div>
     </div>
+</ng-template>
+<!-- inventory advance search  -->
+<ng-template #inventoryAdvanceSearch>
+    <new-inventory-advance-search></new-inventory-advance-search>
 </ng-template>
