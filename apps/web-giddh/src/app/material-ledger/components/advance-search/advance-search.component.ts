@@ -280,7 +280,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
         if (this.advanceSearchRequest) {
             this.advanceSearchForm?.patchValue(this.advanceSearchRequest.dataToSend);
 
-            if (this.advanceSearchForm.get('includeDescription').value) {
+            if (this.advanceSearchForm.get('includeDescription')?.value) {
                 this.isExpanded = true;
             } else {
                 this.isExpanded = false;
@@ -336,7 +336,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
      * onSearch
      */
     public onSearch() {
-        this.advanceSearchRequest.dataToSend = this.advanceSearchForm.value;
+        this.advanceSearchRequest.dataToSend = this.advanceSearchForm?.value;
         if (this.advanceSearchRequest.dataToSend && typeof this.advanceSearchRequest.dataToSend.bsRangeValue === 'string') {
             this.advanceSearchRequest.dataToSend.bsRangeValue = [this.fromDate, this.toDate];
         }
@@ -347,7 +347,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
     }
 
     public prepareRequest() {
-        let dataToSend = _.cloneDeep(this.advanceSearchForm.value);
+        let dataToSend = _.cloneDeep(this.advanceSearchForm?.value);
         if (dataToSend.dateOnCheque) {
             dataToSend.dateOnCheque = dayjs(dataToSend.dateOnCheque).format(GIDDH_DATE_FORMAT);
         }
@@ -361,7 +361,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
         let values = [];
         if (data && data.length > 0) {
             data.forEach(element => {
-                values.push(element.value);
+                values.push(element?.value);
             });
         }
         switch (type) {
@@ -394,7 +394,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
      * onRangeSelect
      */
     public onRangeSelect(type: string, data: IOption) {
-        switch (type + '-' + data.value) {
+        switch (type + '-' + data?.value) {
             case 'amount-greaterThan':
                 this.advanceSearchForm.get('includeAmount')?.patchValue(true);
                 this.advanceSearchForm.get('amountGreaterThan')?.patchValue(true);
@@ -436,7 +436,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
                 this.advanceSearchForm.get('amountGreaterThan')?.patchValue(false);
                 this.advanceSearchForm.get('amountLessThan')?.patchValue(false);
                 this.advanceSearchForm.get('amountEqualTo')?.patchValue(false);
-                break;    
+                break;
             case 'inventoryQty-greaterThan':
                 this.advanceSearchForm.get('inventory.includeQuantity')?.patchValue(true);
                 this.advanceSearchForm.get('inventory.quantityGreaterThan')?.patchValue(true);
@@ -520,7 +520,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
                 this.advanceSearchForm.get('inventory.includeItemGreaterThan')?.patchValue(false);
                 this.advanceSearchForm.get('inventory.includeItemLessThan')?.patchValue(false);
                 this.advanceSearchForm.get('inventory.includeItemEqualTo')?.patchValue(false);
-                break;    
+                break;
         }
     }
 
@@ -530,7 +530,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
      * @memberof AdvanceSearchModelComponent
      */
     public toggleOtherDetails() {
-        let val: boolean = !this.advanceSearchForm.get('includeDescription').value;
+        let val: boolean = !this.advanceSearchForm.get('includeDescription')?.value;
         this.advanceSearchForm.get('includeDescription')?.patchValue(val);
         if (!val) {
             this.advanceSearchForm.get('description')?.patchValue(null);

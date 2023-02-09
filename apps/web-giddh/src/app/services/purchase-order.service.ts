@@ -110,7 +110,7 @@ export class PurchaseOrderService {
         let url: string = this.config.apiUrl + PURCHASE_ORDER_API.EMAIL;
         url = url?.replace(':companyUniqueName', getRequestObject.companyUniqueName);
         url = url?.replace(':accountUniqueName', encodeURIComponent(getRequestObject.accountUniqueName));
-        url = url?.replace(':poUniqueName', getRequestObject.uniqueName);
+        url = url?.replace(':poUniqueName', getRequestObject?.uniqueName);
 
         return this.http.post(url, postRequestObject).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e, getRequestObject)));
     }

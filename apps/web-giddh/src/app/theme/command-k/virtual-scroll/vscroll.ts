@@ -152,7 +152,7 @@ export class ScrollComponent implements OnInit, OnChanges, OnDestroy {
     public scrollInto(item: any, direction?: string) {
 
         let el: Element = this.parentScroll instanceof Window ? document.body : this.parentScroll || this.element?.nativeElement;
-        let index: number = (this.items || []).indexOf(item);
+        let index: number = (this.items || [])?.indexOf(item);
         if (index < 0 || index >= (this.items || [])?.length) {
             return;
         }

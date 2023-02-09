@@ -154,12 +154,12 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
         }
 
         this.taxes.map(tax => {
-            let index = this.taxRenderData.findIndex(f => f.uniqueName === tax.uniqueName);
+            let index = this.taxRenderData.findIndex(f => f?.uniqueName === tax?.uniqueName);
 
             // if tax is already prepared then only check if it's checked or not on basis of applicable taxes
             if (index > -1) {
                 this.taxRenderData[index].isChecked =
-                    this.applicableTaxes && this.applicableTaxes.length ? this.applicableTaxes.some(item => item === tax.uniqueName) :
+                    this.applicableTaxes && this.applicableTaxes.length ? this.applicableTaxes.some(item => item === tax?.uniqueName) :
                         this.taxRenderData[index].isChecked ? this.taxRenderData[index].isChecked : false;
                 if (this.date && tax.taxDetail && tax.taxDetail.length) {
                     this.taxRenderData[index].amount =
@@ -170,7 +170,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
 
                 let taxObj = new TaxControlData();
                 taxObj.name = tax.name;
-                taxObj.uniqueName = tax.uniqueName;
+                taxObj.uniqueName = tax?.uniqueName;
                 taxObj.type = tax.taxType;
 
                 if (this.date) {
@@ -191,7 +191,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
                 } else {
                     taxObj.amount = tax.taxDetail[0].taxValue;
                 }
-                taxObj.isChecked = this.applicableTaxes && this.applicableTaxes.length ? this.applicableTaxes.some(s => s === tax.uniqueName) : false;
+                taxObj.isChecked = this.applicableTaxes && this.applicableTaxes.length ? this.applicableTaxes.some(s => s === tax?.uniqueName) : false;
 
                 taxObj.isDisabled = false;
                 this.taxRenderData.push(taxObj);
@@ -203,11 +203,11 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     public trackByFn(index, tax) {
-        return tax.uniqueName; // or item.id
+        return tax?.uniqueName; // or item.id
     }
 
-    /**	
-    * hide menus on outside click of span	
+    /**
+    * hide menus on outside click of span
     */
     public toggleTaxPopup(action: any) {
         this.showTaxPopup = action;
@@ -305,7 +305,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
                 // check for visibility while always include the current activeElement
                 return element.offsetWidth > 0 || element.offsetHeight > 0 || element === document.activeElement
             });
-        let index = focussable.indexOf(document.activeElement);
+        let index = focussable?.indexOf(document.activeElement);
         if (index > -1) {
             let nextElement = focussable[index + 1] || focussable[0];
             nextElement.focus();
@@ -351,7 +351,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
      * @returns {string[]}
      */
     private generateSelectedTaxes(): string[] {
-        return this.taxRenderData?.filter(p => p.isChecked).map(p => p.uniqueName);
+        return this.taxRenderData?.filter(p => p.isChecked).map(p => p?.uniqueName);
     }
 
     /**
@@ -371,20 +371,20 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
         }
     }
 
-    /**	
-    * Adds styling on focused Dropdown List	
-    *	
-    * @param {HTMLElement} taxLabel	
-    * @memberof TaxControlComponent	
+    /**
+    * Adds styling on focused Dropdown List
+    *
+    * @param {HTMLElement} taxLabel
+    * @memberof TaxControlComponent
     */
     public taxLabelFocusing(taxLabel: HTMLElement): void {
         this.generalService.dropdownFocusIn(taxLabel);
     }
-    /**	
-     * Removes styling from focused Dropdown List	
-     *	
-     * @param {HTMLElement} taxLabel	
-     * @memberof TaxControlComponent	
+    /**
+     * Removes styling from focused Dropdown List
+     *
+     * @param {HTMLElement} taxLabel
+     * @memberof TaxControlComponent
      */
     public taxLabelBluring(taxLabel: HTMLElement): void {
         this.generalService.dropdownFocusOut(taxLabel);

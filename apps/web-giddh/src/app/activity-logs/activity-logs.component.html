@@ -37,7 +37,7 @@
                         [name]="'entity'"
                         [placeholder]="commonLocaleData?.app_entity"
                         [options]="entities"
-                        (selectedOption)="activityObj.entity = $event.value; activityObjLabels.entity = $event.label"
+                        (selectedOption)="activityObj.entity = $event?.value; activityObjLabels.entity = $event.label"
                         [defaultValue]="activityObjLabels?.entity"
                         (onClear)="resetEntity($event)"
                         [allowValueReset]="true"
@@ -62,7 +62,7 @@
                         [placeholder]="localeData?.operation"
                         [options]="activityOperations"
                         (selectedOption)="
-                            activityObj.operation = $event.value; activityObjLabels.operation = $event.label
+                            activityObj.operation = $event?.value; activityObjLabels.operation = $event.label
                         "
                         [defaultValue]="activityObjLabels?.operation"
                         (onClear)="resetOperation($event)"

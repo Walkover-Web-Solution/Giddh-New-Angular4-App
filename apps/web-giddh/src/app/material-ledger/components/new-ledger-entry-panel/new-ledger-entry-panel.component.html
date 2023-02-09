@@ -33,7 +33,7 @@
                                                         ? 'disabled'
                                                         : null
                                                 "
-                                                (change)="changeQuantity($event.target.value)"
+                                                (change)="changeQuantity($event.target?.value)"
                                                 [(ngModel)]="currentTxn?.inventory.quantity"
                                                 decimalDigitsDirective
                                                 [DecimalPlaces]="4"

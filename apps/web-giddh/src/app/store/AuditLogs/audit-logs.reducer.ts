@@ -46,7 +46,7 @@ export function auditLogsReducer(state = initialState, action: CustomActions): A
         }
         case AUDIT_LOGS_ACTIONS.GET_LOGS_RESPONSE: {
             data = action.payload as BaseResponse<LogsResponse, LogsRequest>;
-            if (data.status === 'success') {
+            if (data?.status === 'success') {
                 newState = _.cloneDeep(state);
                 newState.currentPage = 1;
                 newState.currentLogsRequest = data.request;
@@ -66,7 +66,7 @@ export function auditLogsReducer(state = initialState, action: CustomActions): A
         }
         case AUDIT_LOGS_ACTIONS.LOAD_MORE_LOGS_RESPONSE: {
             data = action.payload as BaseResponse<LogsResponse, LogsRequest>;
-            if (data.status === 'success') {
+            if (data?.status === 'success') {
                 newState = _.cloneDeep(state);
                 newState.currentPage = data.queryString.page;
                 newState.getLogInProcess = false;
@@ -91,7 +91,7 @@ export function auditLogsReducer(state = initialState, action: CustomActions): A
         }
         case AUDIT_LOGS_ACTIONS_V2.GET_LOGS_RESPONSE_V2: {
             auditLogsData = action.payload as BaseResponse<AuditLogsResponse, GetAuditLogsRequest>;
-            if (auditLogsData.status === 'success') {
+            if (auditLogsData?.status === 'success') {
                 newState = _.cloneDeep(state);
                 newState.currentPage = auditLogsData.body.page;
                 newState.auditLogsRequest = auditLogsData.request;

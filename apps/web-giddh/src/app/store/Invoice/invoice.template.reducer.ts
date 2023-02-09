@@ -403,7 +403,7 @@ export function InvoiceTemplateReducer(state = initialState, action: CustomActio
             if (res && res.status === 'success') {
                 nextState.customCreatedTemplates = _.sortBy(res.body, [(o) => !o.isDefault]);
                 nextState.hasInvoiceTemplatePermissions = true;
-            } else if(res.status === 'error' && res.statusCode === UNAUTHORISED) {
+            } else if(res?.status === 'error' && res.statusCode === UNAUTHORISED) {
                 nextState.hasInvoiceTemplatePermissions = false;
             }
             return Object.assign({}, state, nextState);
@@ -413,7 +413,7 @@ export function InvoiceTemplateReducer(state = initialState, action: CustomActio
             let res: BaseResponse<any, string> = action.payload;
             if (res?.status === 'success') {
                 let uniqName = res.queryString?.templateUniqueName;
-                let indx = nextState.customCreatedTemplates.findIndex((template) => template.uniqueName === uniqName);
+                let indx = nextState.customCreatedTemplates.findIndex((template) => template?.uniqueName === uniqName);
                 if (indx > -1) {
                     if (res.body.type === 'voucher') {
                         nextState.customCreatedTemplates.forEach((tem) => tem.isDefaultForVoucher = false);
@@ -432,7 +432,7 @@ export function InvoiceTemplateReducer(state = initialState, action: CustomActio
             let res: BaseResponse<any, string> = action.payload;
             if (res?.status === 'success') {
                 let uniqName = res?.queryString?.templateUniqueName;
-                let indx = nextState.customCreatedTemplates.findIndex((template) => template.uniqueName === uniqName);
+                let indx = nextState.customCreatedTemplates.findIndex((template) => template?.uniqueName === uniqName);
                 if (indx > -1) {
                     nextState.customCreatedTemplates.splice(indx, 1);
                 }

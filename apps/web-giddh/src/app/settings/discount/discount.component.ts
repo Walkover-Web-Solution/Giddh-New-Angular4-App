@@ -139,7 +139,7 @@ export class DiscountComponent implements OnInit, OnDestroy {
         this.salesService.getAccountsWithCurrency('discount').pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.body?.results) {
                 this.accounts = response.body.results.map(discount => {
-                    return { label: discount.name, value: discount.uniqueName };
+                    return { label: discount.name, value: discount?.uniqueName };
                 });
             } else {
                 this.accounts = [];

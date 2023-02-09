@@ -53,7 +53,7 @@ export class InvoiceUiDataService {
     public initCustomTemplate(companyUniqueName: string = '', companies: CompanyResponse[] = [], defaultTemplate: CustomTemplateResponse) {
         this.isLogoVisible.next(true);
         let uniqueName = companyUniqueName;
-        let currentCompany = companies.find((company) => company.uniqueName === uniqueName);
+        let currentCompany = companies.find((company) => company?.uniqueName === uniqueName);
         if (currentCompany) {
             this.companyName = currentCompany.name;
             this.companyAddress = currentCompany.address;
@@ -250,7 +250,7 @@ export class InvoiceUiDataService {
                         };
                 }
                 if (!selectedTemplate.sections['table'].data['showDescriptionInRows']) {
-                    selectedTemplate.sections['table'].data['showDescriptionInRows'] = defaultTemplate ? 
+                    selectedTemplate.sections['table'].data['showDescriptionInRows'] = defaultTemplate ?
                         defaultTemplate.sections['table'].data['showDescriptionInRows'] : {
                             label: '',
                             display: false,

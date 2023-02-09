@@ -44,7 +44,7 @@ export class DiscountListComponent implements OnInit, OnChanges, OnDestroy {
     constructor(
         private settingsDiscountService: SettingsDiscountService
     ) {
-        
+
     }
 
     public ngOnInit() {
@@ -109,7 +109,7 @@ export class DiscountListComponent implements OnInit, OnChanges, OnDestroy {
     private processDiscountList(): void {
         this.discountsList.forEach(acc => {
             if (this.discountAccountsDetails) {
-                let hasItem = this.discountAccountsDetails.some(s => s.discountUniqueName === acc.uniqueName);
+                let hasItem = this.discountAccountsDetails.some(s => s.discountUniqueName === acc?.uniqueName);
                 if (!hasItem) {
                     let obj: LedgerDiscountClass = new LedgerDiscountClass();
                     obj.amount = acc.discountValue;
@@ -117,7 +117,7 @@ export class DiscountListComponent implements OnInit, OnChanges, OnDestroy {
                     obj.discountType = acc.discountType;
                     obj.isActive = false;
                     obj.particular = acc.linkAccount?.uniqueName;
-                    obj.discountUniqueName = acc.uniqueName;
+                    obj.discountUniqueName = acc?.uniqueName;
                     obj.name = acc.name;
                     this.discountAccountsDetails.push(obj);
                 }

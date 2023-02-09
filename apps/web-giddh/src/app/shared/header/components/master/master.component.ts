@@ -92,7 +92,7 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
 
                 const currentAccount = {
                     name: response.name,
-                    uniqueName: response.uniqueName,
+                    uniqueName: response?.uniqueName,
                     parentGroups: [
                         ...response.parentGroups
                     ]
@@ -320,7 +320,7 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
      */
     public onGroupClick(item: any, currentIndex: number, loadMaster: boolean = true): void {
         this.currentGroupColumnIndex = currentIndex;
-        this.currentGroupUniqueName = item.uniqueName;
+        this.currentGroupUniqueName = item?.uniqueName;
         this.showCreateNewButton = true;
         this.useAccountBreadcrumb = false;
         this.breadcrumbPath = [];

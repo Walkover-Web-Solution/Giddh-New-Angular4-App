@@ -63,7 +63,7 @@
                             [tooltip]="commonLocaleData?.app_refresh"
                             placement="top"
                             (click)="onRefreshToken(acc.yodleeAccounts[0], false)"
-                            *ngIf="acc.status !== 'FAILED'"
+                            *ngIf="acc?.status !== 'FAILED'"
                         >
                             <i class="icon-refresh"></i> {{ commonLocaleData?.app_refresh }}
                         </button>
@@ -74,7 +74,7 @@
                             (click)="
                                 connectBank(acc.siteId, acc?.yodleeAccounts[0]?.providerAccount?.providerAccountId)
                             "
-                            *ngIf="acc.status === 'FAILED'"
+                            *ngIf="acc?.status === 'FAILED'"
                         >
                             <i class="icon-refresh"></i> {{ commonLocaleData?.app_refresh }}
                         </button>
@@ -87,7 +87,7 @@
                             *ngFor="let card of acc.yodleeAccounts; let i = index"
                         >
                             <aside class="title">{{ card.accountName }}</aside>
-                            <ng-container *ngIf="acc.status !== 'FAILED'">
+                            <ng-container *ngIf="acc?.status !== 'FAILED'">
                                 <div class="account-number">
                                     <b>{{ commonLocaleData?.app_account }}</b
                                     >: {{ card.accountNumber }}
@@ -122,7 +122,7 @@
                                 <div class="balance text-left">{{ card.balanceCurrencyCode }} {{ card.balance }}</div>
                                 <small class="with" *ngIf="card.giddhAccount">
                                     {{ localeData?.linked_with }}: {{ card.giddhAccount.name }} ({{
-                                        card.giddhAccount.uniqueName
+                                        card.giddhAccount?.uniqueName
                                     }})
                                 </small>
                                 <div class="select-account form-group" *ngIf="card.showAccList">
@@ -175,7 +175,7 @@
                                 </button>
                             </ng-container>
 
-                            <ng-container *ngIf="acc.status === 'FAILED'">
+                            <ng-container *ngIf="acc?.status === 'FAILED'">
                                 <div class="account-number">
                                     <b>{{ localeData?.provider_id }}</b
                                     >: {{ card?.providerAccount?.providerAccountId }}
@@ -183,7 +183,7 @@
                                 <p class="mr-t2">
                                     {{ commonLocaleData?.app_status }}:
                                     <span class="text-danger font-14"
-                                        ><i class="fa fa-exclamation-circle"></i>{{ acc.status }}</span
+                                        ><i class="fa fa-exclamation-circle"></i>{{ acc?.status }}</span
                                     >
                                 </p>
                                 <p>{{ localeData?.reason }}: {{ acc.reason }}</p>
@@ -197,7 +197,7 @@
                                 </button>
                             </ng-container>
 
-                            <ng-container *ngIf="acc.status === 'ALREADY_ADDED' && card.status !== 'SUCCESS'">
+                            <ng-container *ngIf="acc?.status === 'ALREADY_ADDED' && card?.status !== 'SUCCESS'">
                                 <div class="account-number">
                                     <b>{{ localeData?.provider_id }}</b
                                     >: {{ card?.providerAccount?.providerAccountId }}
@@ -205,37 +205,37 @@
                                 <p class="mr-t2">
                                     {{ commonLocaleData?.app_status }}:
                                     <span class="text-danger font-14"
-                                        ><i class="fa fa-exclamation-circle"></i>{{ acc.status }}</span
+                                        ><i class="fa fa-exclamation-circle"></i>{{ acc?.status }}</span
                                     >
                                 </p>
                                 <p>{{ localeData?.reason }}: {{ acc.reason }}</p>
-                                <div class="clearfix mr-t2" *ngIf="acc.status === 'ALREADY_ADDED'">
+                                <div class="clearfix mr-t2" *ngIf="acc?.status === 'ALREADY_ADDED'">
                                     <button
                                         class="btn btn-default"
-                                        *ngIf="card.status !== 'INCORRECT_CREDENTIALS'"
+                                        *ngIf="card?.status !== 'INCORRECT_CREDENTIALS'"
                                         (click)="onRefreshToken(card)"
                                     >
                                         {{ localeData?.reconnect }}
                                     </button>
                                     <button
                                         class="btn btn-default"
-                                        *ngIf="card.status === 'INCORRECT_CREDENTIALS'"
+                                        *ngIf="card?.status === 'INCORRECT_CREDENTIALS'"
                                         (click)="connectBank(acc.siteId, card?.providerAccount?.providerAccountId)"
                                     >
                                         {{ localeData?.try_again }}
                                     </button>
                                 </div>
-                                <div class="clearfix mr-t2" *ngIf="acc.status !== 'ALREADY_ADDED'">
+                                <div class="clearfix mr-t2" *ngIf="acc?.status !== 'ALREADY_ADDED'">
                                     <button
                                         class="btn btn-default"
-                                        *ngIf="acc.status !== 'INCORRECT_CREDENTIALS'"
+                                        *ngIf="acc?.status !== 'INCORRECT_CREDENTIALS'"
                                         (click)="onRefreshToken(card)"
                                     >
                                         {{ localeData?.reconnect }}
                                     </button>
                                     <button
                                         class="btn btn-default"
-                                        *ngIf="acc.status === 'INCORRECT_CREDENTIALS'"
+                                        *ngIf="acc?.status === 'INCORRECT_CREDENTIALS'"
                                         (click)="connectBank(acc.siteId, card?.providerAccount?.providerAccountId)"
                                     >
                                         {{ localeData?.try_again }}

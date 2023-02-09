@@ -84,9 +84,9 @@ export class MaskApplierService {
                 const precision: number = this.getPrecision(maskExpression);
                 inputValue = this.checkInputPrecision(inputValue, precision, '.');
             }
-            if (inputValue.indexOf('.') > 0 && !this.percentage(inputValue.substring(0, inputValue.indexOf('.')))) {
-                const base: string = inputValue.substring(0, inputValue.indexOf('.') - 1);
-                inputValue = `${base}${inputValue.substring(inputValue.indexOf('.'), inputValue?.length)}`;
+            if (inputValue?.indexOf('.') > 0 && !this.percentage(inputValue.substring(0, inputValue?.indexOf('.')))) {
+                const base: string = inputValue.substring(0, inputValue?.indexOf('.') - 1);
+                inputValue = `${base}${inputValue.substring(inputValue?.indexOf('.'), inputValue?.length)}`;
             }
             if (this.percentage(inputValue)) {
                 result = inputValue;
@@ -116,7 +116,7 @@ export class MaskApplierService {
                 if (
                     inputValue.includes(',') &&
                     inputValue?.endsWith(',') &&
-                    inputValue.indexOf(',') !== inputValue.lastIndexOf(',')
+                    inputValue?.indexOf(',') !== inputValue.lastIndexOf(',')
                 ) {
                     inputValue = inputValue.substring(0, inputValue?.length - 1);
                 }
@@ -124,9 +124,9 @@ export class MaskApplierService {
             }
             if (maskExpression.startsWith(Separators.DOT_SEPARATOR)) {
                 if (
-                    inputValue.indexOf('.') !== -1 &&
-                    inputValue.indexOf('.') === inputValue.lastIndexOf('.') &&
-                    (inputValue.indexOf('.') > 3 || inputValue?.length < 6)
+                    inputValue?.indexOf('.') !== -1 &&
+                    inputValue?.indexOf('.') === inputValue.lastIndexOf('.') &&
+                    (inputValue?.indexOf('.') > 3 || inputValue?.length < 6)
                 ) {
                     inputValue = inputValue?.replace('.', ',');
                 }
@@ -177,7 +177,7 @@ export class MaskApplierService {
                 result = this.currencySeparator(strForSep, '\'', '.', precision);
             }
 
-            const commaShift: number = result.indexOf(',') - inputValue.indexOf(',');
+            const commaShift: number = result?.indexOf(',') - inputValue?.indexOf(',');
             let shiftStep: number = result?.length - inputValue?.length;
 
             // position shifting issue fixed for custom separators
@@ -193,8 +193,8 @@ export class MaskApplierService {
                         _shift++;
                     } while (_shift < shiftStep);
                 } else if (
-                    (commaShift !== 0 && position > 0 && !(result.indexOf(',') >= position && position > 3)) ||
-                    (!(result.indexOf('.') >= position && position > 3) && shiftStep <= 0)
+                    (commaShift !== 0 && position > 0 && !(result?.indexOf(',') >= position && position > 3)) ||
+                    (!(result?.indexOf('.') >= position && position > 3) && shiftStep <= 0)
                 ) {
                     this._shift.clear();
                     backspaceShift = true;
@@ -346,7 +346,7 @@ export class MaskApplierService {
 
                     result += inputSymbol;
                     cursor++;
-                } else if (this.maskSpecialCharacters.indexOf(maskExpression[cursor]) !== -1) {
+                } else if (this.maskSpecialCharacters?.indexOf(maskExpression[cursor]) !== -1) {
                     result += maskExpression[cursor];
                     cursor++;
                     const shiftStep: number = /[*?]/g.test(maskExpression.slice(0, cursor))
@@ -355,7 +355,7 @@ export class MaskApplierService {
                     this._shift.add(shiftStep + this.prefix?.length || 0);
                     i--;
                 } else if (
-                    this.maskSpecialCharacters.indexOf(inputSymbol) > -1 &&
+                    this.maskSpecialCharacters?.indexOf(inputSymbol) > -1 &&
                     this.maskAvailablePatterns[maskExpression[cursor]] &&
                     this.maskAvailablePatterns[maskExpression[cursor]].optional
                 ) {
@@ -379,7 +379,7 @@ export class MaskApplierService {
                     result += inputSymbol;
                 } else if (
                     this.showMaskTyped &&
-                    this.maskSpecialCharacters.indexOf(inputSymbol) < 0 &&
+                    this.maskSpecialCharacters?.indexOf(inputSymbol) < 0 &&
                     inputSymbol !== '_'
                 ) {
                     stepBack = true;
@@ -388,7 +388,7 @@ export class MaskApplierService {
         }
         if (
             result?.length + 1 === maskExpression?.length &&
-            this.maskSpecialCharacters.indexOf(maskExpression[maskExpression?.length - 1]) !== -1
+            this.maskSpecialCharacters?.indexOf(maskExpression[maskExpression?.length - 1]) !== -1
         ) {
             result += maskExpression[maskExpression?.length - 1];
         }

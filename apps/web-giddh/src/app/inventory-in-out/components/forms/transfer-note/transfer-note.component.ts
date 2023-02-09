@@ -90,23 +90,23 @@ export class TransferNoteComponent implements OnChanges {
     }
 
     public stockChanged(option: IOption) {
-        const stockItem = this.stockList.find(p => p?.uniqueName === option.value);
+        const stockItem = this.stockList.find(p => p?.uniqueName === option?.value);
         const stockUnit = stockItem ? stockItem.stockUnit.code : null;
-        this.form?.patchValue({ ...this.form.value, stockUnit });
+        this.form?.patchValue({ ...this.form?.value, stockUnit });
     }
 
     public save() {
         if (this.form.valid) {
 
             let value: any = {
-                inventoryEntryDate: dayjs(this.inventoryEntryDate.value, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT),
-                description: this.description.value,
+                inventoryEntryDate: dayjs(this.inventoryEntryDate?.value, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT),
+                description: this.description?.value,
                 transactions: [{
-                    stock: { uniqueName: this.stock.value },
-                    inventoryUser: { uniqueName: this.inventoryUser.value },
-                    stockUnit: { code: this.stockUnit.value },
-                    type: this.type.value,
-                    quantity: this.quantity.value
+                    stock: { uniqueName: this.stock?.value },
+                    inventoryUser: { uniqueName: this.inventoryUser?.value },
+                    stockUnit: { code: this.stockUnit?.value },
+                    type: this.type?.value,
+                    quantity: this.quantity?.value
                 }]
             };
 

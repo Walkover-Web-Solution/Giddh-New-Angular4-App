@@ -539,7 +539,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
      */
     public handleBranchChange(selectedEntity: any): void {
         this.currentBranch.name = selectedEntity.label;
-        this.daybookQueryRequest.branchUniqueName = selectedEntity.value;
+        this.daybookQueryRequest.branchUniqueName = selectedEntity?.value;
         this.getDaybook();
     }
 

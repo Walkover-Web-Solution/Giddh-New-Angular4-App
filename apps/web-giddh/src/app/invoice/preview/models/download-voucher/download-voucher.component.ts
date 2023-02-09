@@ -50,12 +50,12 @@ export class DownloadVoucherComponent implements OnInit, OnDestroy {
             this.invoiceType.push('Original');
         }
 
-        this.isProformaEstimatesInvoice = (this.selectedItem) ? [VoucherTypeEnum.estimate, VoucherTypeEnum.generateEstimate, VoucherTypeEnum.proforma, VoucherTypeEnum.generateProforma].includes(this.selectedItem.voucherType) : false;
+        this.isProformaEstimatesInvoice = (this.selectedItem) ? [VoucherTypeEnum.estimate, VoucherTypeEnum.generateEstimate, VoucherTypeEnum.proforma, VoucherTypeEnum.generateProforma].includes(this.selectedItem?.voucherType) : false;
     }
 
     public invoiceTypeChanged(event): void {
-        let val = event.target.value;
-        if (event.target.checked) {
+        let val = event.target?.value;
+        if (event.target?.checked) {
             this.invoiceType.push(val);
         } else {
             this.invoiceType = this.invoiceType?.filter(f => f !== val);
@@ -64,7 +64,7 @@ export class DownloadVoucherComponent implements OnInit, OnDestroy {
 
     public onDownloadInvoiceEvent(): void {
         // as discussed with backend team voucherType will never be cash, It will be sales always for download vouchers
-        let voucherType = this.selectedItem && this.selectedItem.voucherType === VoucherTypeEnum.cash ? VoucherTypeEnum.sales : this.selectedItem.voucherType;
+        let voucherType = this.selectedItem && this.selectedItem.voucherType === VoucherTypeEnum.cash ? VoucherTypeEnum.sales : this.selectedItem?.voucherType;
 
         if (this.generalService.voucherApiVersion === 2) {
             let dataToSend = {

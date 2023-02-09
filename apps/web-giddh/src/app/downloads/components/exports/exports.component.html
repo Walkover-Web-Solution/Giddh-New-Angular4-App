@@ -61,8 +61,8 @@
                 <ng-container matColumnDef="download">
                     <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_status }}</th>
                     <td mat-cell *matCellDef="let element">
-                        <div class="download-text" *ngIf="element.status !== 'COMPLETED'">
-                            {{ element.status }}
+                        <div class="download-text" *ngIf="element?.status !== 'COMPLETED'">
+                            {{ element?.status }}
                         </div>
                         <a
                             target="_blank"

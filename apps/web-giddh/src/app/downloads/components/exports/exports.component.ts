@@ -256,11 +256,11 @@ export class ExportsComponent implements OnInit, OnDestroy {
     }
 
     /**
-   * Callback for translation response complete
-   *
-   * @param {boolean} event
-   * @memberof ExportsComponent
-   */
+     * Callback for translation response complete
+     *
+     * @param {boolean} event
+     * @memberof ExportsComponent
+     */
     public translationComplete(event: boolean): void {
         if (event) {
             this.getDownloads(true);
@@ -268,19 +268,15 @@ export class ExportsComponent implements OnInit, OnDestroy {
     }
 
     /**
-    * Download export file
-    *
-    * @param {string} event
-    * @memberof ExportsComponent
-    */
-    public downloadFile(path: any): void {
-        if (isElectron) {
-            console.log("path",path);
-            if (path) {
-                let url = path;
-                let fileName =  url.substring(url.lastIndexOf('/') + 1);
-                return download(fileName,url,"");
-            }
+     * Download export file
+     *
+     * @param {*} url
+     * @memberof ExportsComponent
+     */
+    public downloadFile(url: any): void {
+        if (url) {
+            let fileName = url.substring(url.lastIndexOf('/') + 1);
+            return download(fileName, url, "");
         }
     }
 }

@@ -25,7 +25,7 @@ export class SettingsPermissionActions {
             ofType(SETTINGS_PERMISSION_ACTIONS.GET_USERS_WITH_COMPANY_PERMISSIONS_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, any> = response.payload;
-                if (data.status === 'error') {
+                if (data?.status === 'error') {
                     this.toasty.errorToast(data.message, data.code);
                 }
                 return { type: 'EmptyAction' };
@@ -51,7 +51,7 @@ export class SettingsPermissionActions {
     }
 
     public validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false, errorAction: CustomActions = { type: 'EmptyAction' }): CustomActions {
-        if (response.status === 'error') {
+        if (response?.status === 'error') {
             if (showToast) {
                 this.toasty.errorToast(response.message);
             }

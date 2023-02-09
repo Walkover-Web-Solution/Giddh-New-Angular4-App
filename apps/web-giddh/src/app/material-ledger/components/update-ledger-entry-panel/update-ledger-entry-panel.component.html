@@ -1929,7 +1929,11 @@
                                                 id="update-ledger-generate-voucher"
                                                 class="pull-left"
                                                 name="generateInvoice"
-                                                [(ngModel)]="vm.selectedLedger.generateInvoice"
+                                                [(ngModel)]="
+                                                    vm.isInvoiceGeneratedAlready
+                                                        ? vm.isInvoiceGeneratedAlready
+                                                        : vm.selectedLedger.generateInvoice
+                                                "
                                                 [disabled]="
                                                     vm.isInvoiceGeneratedAlready ||
                                                     (!isPettyCash &&

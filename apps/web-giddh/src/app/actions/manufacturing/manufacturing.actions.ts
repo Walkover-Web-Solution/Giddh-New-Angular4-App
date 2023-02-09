@@ -29,7 +29,7 @@ export class ManufacturingActions {
             ofType(MANUFACTURING_ACTIONS.MF_REPORT_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<ICommonResponseOfManufactureItem, ICommonResponseOfManufactureItem> = response.payload;
-                if (data.status === 'error') {
+                if (data?.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 }
                 return { type: 'EmptyAction' };
@@ -51,7 +51,7 @@ export class ManufacturingActions {
             ofType(MANUFACTURING_ACTIONS.GET_STOCK_WITH_RATE_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<ICommonResponseOfManufactureItem, ICommonResponseOfManufactureItem> = response.payload;
-                if (data.status === 'error') {
+                if (data?.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 }
                 return { type: 'EmptyAction' };
@@ -72,7 +72,7 @@ export class ManufacturingActions {
             ofType(MANUFACTURING_ACTIONS.CREATE_MF_ITEM_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<ICommonResponseOfManufactureItem, ICommonResponseOfManufactureItem> = response.payload;
-                if (data.status === 'error') {
+                if (data?.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 } else {
                     this._toasty.successToast('Manufacturing Entry Created Successfully');
@@ -96,7 +96,7 @@ export class ManufacturingActions {
             ofType(MANUFACTURING_ACTIONS.UPDATE_MF_ITEM_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<ICommonResponseOfManufactureItem, ICommonResponseOfManufactureItem> = response.payload;
-                if (data.status === 'error') {
+                if (data?.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 } else {
                     this._toasty.successToast('Manufacturing Entry Updated Successfully');
@@ -121,7 +121,7 @@ export class ManufacturingActions {
             ofType(MANUFACTURING_ACTIONS.DELETE_MF_ITEM_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<ICommonResponseOfManufactureItem, ICommonResponseOfManufactureItem> = response.payload;
-                if (data.status === 'error') {
+                if (data?.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 } else {
                     this._toasty.successToast('Manufacturing Entry Deleted Successfully');

@@ -100,7 +100,7 @@
                                                     class="btn btn-xs"
                                                     type="button"
                                                     [hidden]="usrGrp.rows[0].isLoggedInUser"
-                                                    (click)="onRevokePermission(user.uniqueName)"
+                                                    (click)="onRevokePermission(user?.uniqueName)"
                                                 >
                                                     <i aria-hidden="true" class="icon-trash"></i>
                                                 </button>

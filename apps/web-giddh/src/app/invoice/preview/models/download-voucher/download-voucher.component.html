@@ -65,7 +65,7 @@
     </ng-template>
 
     <div class="clearfix">
-        <ng-container *ngIf="selectedItem.voucherType === 'sales'">
+        <ng-container *ngIf="selectedItem?.voucherType === 'sales'">
             <h3 class="font-16 mr-b05">{{ localeData?.invoice_copy }}</h3>
             <hr />
         </ng-container>
@@ -81,13 +81,13 @@
                     (change)="invoiceTypeChanged($event)"
                 />
                 {{
-                    selectedItem.voucherType === "purchase"
+                    selectedItem?.voucherType === "purchase"
                         ? commonLocaleData?.app_purchase_bill
                         : localeData?.invoice_copy_options?.original
                 }}
             </label>
         </div>
-        <div class="checkbox" *ngIf="selectedItem.voucherType === 'sales'">
+        <div class="checkbox" *ngIf="selectedItem?.voucherType === 'sales'">
             <label>
                 <input
                     type="checkbox"
@@ -99,7 +99,7 @@
             </label>
         </div>
 
-        <div class="checkbox" *ngIf="selectedItem.voucherType === 'sales'">
+        <div class="checkbox" *ngIf="selectedItem?.voucherType === 'sales'">
             <label>
                 <input
                     type="checkbox"

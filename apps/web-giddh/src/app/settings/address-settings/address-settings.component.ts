@@ -407,19 +407,19 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
      */
     public clickedOutside(event: Event, el: HTMLElement, fieldName: string): void {
         if (fieldName === 'searchAddressNameInput') {
-            if (this.searchAddressNameInput.value !== null && this.searchAddressNameInput.value !== '') {
+            if (this.searchAddressNameInput?.value !== null && this.searchAddressNameInput?.value !== '') {
                 return;
             }
         } else if (fieldName === 'searchAddressInput') {
-            if (this.searchAddressInput.value !== null && this.searchAddressInput.value !== '') {
+            if (this.searchAddressInput?.value !== null && this.searchAddressInput?.value !== '') {
                 return;
             }
         } else if (fieldName === 'searchTaxInput') {
-            if (this.searchTaxInput.value !== null && this.searchTaxInput.value !== '') {
+            if (this.searchTaxInput?.value !== null && this.searchTaxInput?.value !== '') {
                 return;
             }
         } else if (fieldName === 'searchStateInput') {
-            if (this.searchStateInput.value !== null && this.searchStateInput.value !== '') {
+            if (this.searchStateInput?.value !== null && this.searchStateInput?.value !== '') {
                 return;
             }
         }

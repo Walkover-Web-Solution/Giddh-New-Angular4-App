@@ -76,12 +76,12 @@ export class PurchaseAdvanceSearchComponent implements OnInit, OnDestroy {
         ];
 
         purchaseOrderStatus.map(status => {
-            this.filtersForStatus.push({ label: status.label, value: status.value });
+            this.filtersForStatus.push({ label: status.label, value: status?.value });
         });
 
         if (this.purchaseOrderPostRequest && this.purchaseOrderPostRequest.grandTotalOperation) {
             this.filtersForAmount.forEach(operator => {
-                if (operator.value === this.purchaseOrderPostRequest.grandTotalOperation) {
+                if (operator?.value === this.purchaseOrderPostRequest.grandTotalOperation) {
                     this.selectedGrandTotalOperator = operator.label;
                 }
             });

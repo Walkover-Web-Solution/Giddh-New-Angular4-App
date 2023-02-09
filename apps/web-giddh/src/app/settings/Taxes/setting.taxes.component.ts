@@ -66,7 +66,7 @@ export class SettingTaxesComponent implements OnInit, OnDestroy {
         private _companyActions: CompanyActions,
         private _settingsTaxesActions: SettingsTaxesActions
     ) {
-        
+
     }
 
     public ngOnInit() {
@@ -76,7 +76,7 @@ export class SettingTaxesComponent implements OnInit, OnDestroy {
         }
 
         this.store.dispatch(this._companyActions.getTax());
-        
+
         this.store.pipe(select(p => p.company), takeUntil(this.destroyed$)).subscribe((o) => {
             if (o.taxes) {
                 this.forceClear$ = observableOf({ status: true });
@@ -103,7 +103,7 @@ export class SettingTaxesComponent implements OnInit, OnDestroy {
 
     public deleteTax(taxToDelete) {
         this.newTaxObj = taxToDelete;
-        this.selectedTax = this.availableTaxes.find((tax) => tax.uniqueName === taxToDelete.uniqueName);
+        this.selectedTax = this.availableTaxes.find((tax) => tax?.uniqueName === taxToDelete?.uniqueName);
         let message = this.localeData?.tax_delete_message;
         message = message?.replace("[TAX_NAME]", this.selectedTax.name);
         this.confirmationMessage = message;
@@ -130,11 +130,11 @@ export class SettingTaxesComponent implements OnInit, OnDestroy {
         if (userResponse) {
             if (this.confirmationFor === 'delete' && this.newTaxObj.taxType === 'others') {
                 if (this.newTaxObj && this.newTaxObj.accounts && this.newTaxObj.accounts.length) {
-                    let linkedAccountUniqueName = this.newTaxObj.accounts[0].uniqueName;
+                    let linkedAccountUniqueName = this.newTaxObj.accounts[0]?.uniqueName;
                     this.store.dispatch(this._settingsTaxesActions.DeleteTax(this.newTaxObj.uniqueName, linkedAccountUniqueName));
                 }
             } else if (this.confirmationFor === 'delete') {
-                this.store.dispatch(this._settingsTaxesActions.DeleteTax(this.newTaxObj.uniqueName));
+                this.store.dispatch(this._settingsTaxesActions.DeleteTax(this.newTaxObj?.uniqueName));
             } else if (this.confirmationFor === 'edit') {
                 each(this.newTaxObj.taxDetail, (tax) => {
                     tax.date = dayjs(tax.date).format(GIDDH_DATE_FORMAT);
@@ -166,7 +166,7 @@ export class SettingTaxesComponent implements OnInit, OnDestroy {
     }
 
     public customAccountFilter(term: string, item: IOption) {
-        return (item.label.toLocaleLowerCase().indexOf(term) > -1 || item.value.toLocaleLowerCase().indexOf(term) > -1);
+        return (item.label.toLocaleLowerCase()?.indexOf(term) > -1 || item?.value.toLocaleLowerCase()?.indexOf(term) > -1);
     }
 
     public customDateSorting(a: IOption, b: IOption) {

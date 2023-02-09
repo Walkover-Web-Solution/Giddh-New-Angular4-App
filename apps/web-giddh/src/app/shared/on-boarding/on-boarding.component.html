@@ -86,7 +86,7 @@
                                         [disabled]="onBoardingType === 'Warehouse' ? 'disabled' : null"
                                         [isFilterEnabled]="true"
                                         [(ngModel)]="company.baseCurrency"
-                                        [defaultValue]="company.baseCurrency"
+                                        [defaultValue]="company?.baseCurrency"
                                     ></sh-select>
                                 </div>
                             </div>

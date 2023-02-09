@@ -22,7 +22,7 @@
                         class="form-control"
                         name="modules"
                         [placeholder]="localeData?.modules_placeholder"
-                        (selectionChange)="customFieldsRequest.moduleUniqueName = $event.value; getCustomFields()"
+                        (selectionChange)="customFieldsRequest.moduleUniqueName = $event?.value; getCustomFields()"
                         [(value)]="customFieldsRequest.moduleUniqueName"
                     >
                         <mat-option *ngFor="let module of fieldModules" [value]="module?.uniqueName"
@@ -58,7 +58,7 @@
                         <td mat-cell *matCellDef="let element">
                             <a
                                 href="javascript:;"
-                                [routerLink]="['/pages/custom-fields/edit/' + element.uniqueName]"
+                                [routerLink]="['/pages/custom-fields/edit/' + element?.uniqueName]"
                                 [matTooltip]="commonLocaleData?.app_edit"
                                 [matTooltipPosition]="'above'"
                                 matTooltipClass="tooltip-black"
@@ -69,7 +69,7 @@
                                 [matTooltip]="commonLocaleData?.app_delete"
                                 [matTooltipPosition]="'above'"
                                 matTooltipClass="tooltip-black"
-                                (click)="deleteCustomField(element.uniqueName)"
+                                (click)="deleteCustomField(element?.uniqueName)"
                                 ><i class="icon-trash"></i
                             ></a>
                         </td>

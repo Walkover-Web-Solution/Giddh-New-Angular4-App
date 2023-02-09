@@ -50,7 +50,7 @@ export class DecimalDigitsDirective implements OnDestroy {
     public onKeyDown(event) {
         let e = event as KeyboardEvent;
         if (this.OnlyNumber) {
-            if (this.navigationKeys.indexOf(e.key) > -1 ||
+            if (this.navigationKeys?.indexOf(e.key) > -1 ||
                 // Allow: Ctrl+A
                 (e.key === 'a' && e.ctrlKey === true) || // Allow: Ctrl+A
                 (e.key === 'c' && e.ctrlKey === true) || // Allow: Ctrl+C
@@ -79,7 +79,7 @@ export class DecimalDigitsDirective implements OnDestroy {
     public onKeyPress(event) {
         let e = event as any;
 
-        let valInFloat: number = parseFloat(e.target.value);
+        let valInFloat: number = parseFloat(e.target?.value);
 
         if (this.minValue) {
             // (isNaN(valInFloat) && e.key === "0") - When user enters value for first time valInFloat will be NaN, e.key condition is
@@ -104,17 +104,17 @@ export class DecimalDigitsDirective implements OnDestroy {
                 // Probably an old IE browser
             }
 
-            let dotLength: number = e.target.value?.replace(/[^.]/g, '')?.length;
+            let dotLength: number = e.target?.value?.replace(/[^.]/g, '')?.length;
 
-            // If user has not entered a dot(.) e.target.value.split(".")[1] will be undefined
-            let decimalLength = e.target.value.split('.')[1] ? e.target.value.split('.')[1]?.length : 0;
+            // If user has not entered a dot(.) e.target?.value.split(".")[1] will be undefined
+            let decimalLength = e.target?.value.split('.')[1] ? e.target?.value.split('.')[1]?.length : 0;
 
             // (this.giddhDecimalPlaces - 1) because we don't get decimalLength including currently pressed character
             // currentCursorPos > e.target.value.indexOf(".") because we must allow user's to enter value before dot(.)
             // Checking Backspace etc.. keys because firefox doesn't pressing them while chrome does by default
             // tslint:disable-next-line:radix
             if (dotLength > 1 || (dotLength === 1 && e.key === '.') || (currentCursorPos === 0 && e.key === '.') || (decimalLength > (this.giddhDecimalPlaces - 1) &&
-                currentCursorPos > e.target.value.indexOf('.')) && ['Backspace', 'ArrowLeft', 'ArrowRight'].indexOf(e.key) === -1) {
+                currentCursorPos > e.target?.value?.indexOf('.')) && ['Backspace', 'ArrowLeft', 'ArrowRight']?.indexOf(e.key) === -1) {
                 e.preventDefault();
             }
         }
