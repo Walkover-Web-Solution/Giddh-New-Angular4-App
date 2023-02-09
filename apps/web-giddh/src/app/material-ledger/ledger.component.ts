@@ -512,16 +512,19 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        this.lc.activeAccount$.pipe(takeUntil(this.destroyed$)).subscribe((ledgerAccount) => {
-            ledgerAccount?.parentGroups?.forEach(group => {
-                if (["sundrycreditors", "sundrydebtors"].includes(group?.uniqueName)) {
-                    this.enableAutopaid = true;
-                } else {
-                    this.enableAutopaid = false;
-                }
+        if (this.generalService.voucherApiVersion === 2) {
+            this.lc.activeAccount$.pipe(takeUntil(this.destroyed$)).subscribe(ledgerAccount => {
+                ledgerAccount?.parentGroups?.forEach(group => {
+                    if (["sundrycreditors", "sundrydebtors"].includes(group?.uniqueName)) {
+                        this.enableAutopaid = true;
+                    } else {
+                        this.enableAutopaid = false;
+                    }
+                });
             });
-
-        });
+        } else {
+            this.enableAutopaid = false;
+        }
 
         if (!this.generalService.checkIfCssExists("./assets/css/ledgerfont/ledgerfont.css")) {
             this.generalService.addLinkTag("./assets/css/ledgerfont/ledgerfont.css");
