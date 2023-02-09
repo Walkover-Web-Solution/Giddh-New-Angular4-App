@@ -175,28 +175,28 @@ export class TallyModuleService {
         let expenseAccounts = [];
         let salesAccounts = [];
         accounts.forEach((acc) => {
-            let cashAccount = acc.parentGroups.find((pg) => pg?.uniqueName === 'cash');
+            let cashAccount = acc?.parentGroups.find((pg) => pg?.uniqueName === 'cash');
             if (cashAccount) {
                 cashAccounts.push(acc);
             }
-            let purchaseAccount = acc.parentGroups.find((pg) => pg?.uniqueName === 'purchases' || pg?.uniqueName === 'directexpenses');
+            let purchaseAccount = acc?.parentGroups.find((pg) => pg?.uniqueName === 'purchases' || pg?.uniqueName === 'directexpenses');
             if (purchaseAccount) {
                 purchaseAccounts.push(acc);
             }
-            let bankAccount = acc.parentGroups.find((pg) => pg?.uniqueName === 'bankaccounts');
+            let bankAccount = acc?.parentGroups.find((pg) => pg?.uniqueName === 'bankaccounts');
             if (bankAccount) {
                 bankAccounts.push(acc);
             }
-            let taxAccount = acc.parentGroups.find((pg) => pg?.uniqueName === 'currentliabilities');
+            let taxAccount = acc?.parentGroups.find((pg) => pg?.uniqueName === 'currentliabilities');
             if (taxAccount) {
                 taxAccounts.push(acc);
             }
-            let expenseAccount = acc.parentGroups.find((pg) => pg?.uniqueName === 'indirectexpenses' || pg?.uniqueName === 'operatingcost');
+            let expenseAccount = acc?.parentGroups.find((pg) => pg?.uniqueName === 'indirectexpenses' || pg?.uniqueName === 'operatingcost');
             if (expenseAccount) {
                 expenseAccounts.push(acc);
             }
             // pg?.uniqueName === 'income'
-            let salesAccount = acc.parentGroups.find((pg) => pg?.uniqueName === 'revenuefromoperations' || pg?.uniqueName === 'currentassets' || pg?.uniqueName === 'currentliabilities');
+            let salesAccount = acc?.parentGroups.find((pg) => pg?.uniqueName === 'revenuefromoperations' || pg?.uniqueName === 'currentassets' || pg?.uniqueName === 'currentliabilities');
             if (salesAccount) {
                 salesAccounts.push(acc);
             }
