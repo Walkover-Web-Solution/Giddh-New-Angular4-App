@@ -555,6 +555,17 @@ $custom-typography: mat-typography-config(
 .inventory-units-mapped:hover .icon-visibility {
     visibility: visible !important;
 }
+.autopaid {
+    .mat-dialog-container {
+        .modal-body {
+            font-size: 14px !important;
+        }
+    }
+}
+
+.autopaid-icon {
+    width: 18px !important;
+}
 @media screen and (max-width: 1366px) and (orientation: portrait) {
     .subscription-form-select {
         float: left !important;

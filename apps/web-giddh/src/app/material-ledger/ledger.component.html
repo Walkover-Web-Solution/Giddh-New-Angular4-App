@@ -509,6 +509,20 @@
                                     >
                                         <i class="icon-refresh lh-0 font-18"></i>
                                     </a>
+
+                                    <a
+                                        *ngIf="voucherApiVersion === 2 && enableAutopaid"
+                                        mat-button
+                                        class="icomoon-ico d-flex align-items-center"
+                                        id="autopaid"
+                                        href="javascript:void(0)"
+                                        [matTooltip]="this.localeData?.autopaid_title"
+                                        [matTooltipPosition]="'below'"
+                                        matTooltipClass="tooltip-black"
+                                        (click)="showAutopaidModal()"
+                                    >
+                                        <img class="autopaid-icon" src=" assets/images/autopaid.svg" />
+                                    </a>
                                 </div>
                             </div>
                         </div>
