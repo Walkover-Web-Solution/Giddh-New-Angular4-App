@@ -1667,7 +1667,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             for (let index = 0; index < transactions.length; index++) {
                 const selectedAccountDetails = {
                     uniqueName: transactions[index].particular?.uniqueName || '',
-                    parentGroups: transactions[index].particular ? transactions[index].particular.parentGroups : []
+                    parentGroups: transactions[index].particular ? transactions[index].particular?.parentGroups : []
                 }
                 const activeAccountDetails = {
                     uniqueName: this.baseAccountDetails.particular ? this.baseAccountDetails.particular?.uniqueName : '',
@@ -1694,7 +1694,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     private checkTouristSchemeApplicable(baseAccountDetails: any, selectedAccountDetails, companyProfile): boolean {
         if (baseAccountDetails?.touristSchemeApplicable) {
             return true;
-        } else if (baseAccountDetails?.voucher && (baseAccountDetails?.voucher?.name === 'sales' || baseAccountDetails?.voucher?.name === 'cash') && selectedAccountDetails && selectedAccountDetails.body && selectedAccountDetails.body.parentGroups && selectedAccountDetails.body.parentGroups.length > 1 && selectedAccountDetails.body.parentGroups[1]?.uniqueName && this.allowParentGroup.includes(selectedAccountDetails.body.parentGroups[1]?.uniqueName) && companyProfile && companyProfile.countryV2 && companyProfile.countryV2.alpha2CountryCode && companyProfile.countryV2.alpha2CountryCode === 'AE') {
+        } else if (baseAccountDetails?.voucher && (baseAccountDetails?.voucher?.name === 'sales' || baseAccountDetails?.voucher?.name === 'cash') && selectedAccountDetails && selectedAccountDetails.body && selectedAccountDetails.body.parentGroups && selectedAccountDetails.body.parentGroups.length > 1 && selectedAccountDetails.body?.parentGroups[1]?.uniqueName && this.allowParentGroup.includes(selectedAccountDetails.body.parentGroups[1]?.uniqueName) && companyProfile && companyProfile.countryV2 && companyProfile.countryV2.alpha2CountryCode && companyProfile.countryV2.alpha2CountryCode === 'AE') {
             return true;
         } else {
             return false;

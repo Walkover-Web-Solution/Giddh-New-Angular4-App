@@ -456,7 +456,7 @@ export class GeneralService {
      * @memberof GeneralService
      */
     public getAccountCategory(account: any, accountName: string): string {
-        let parent = account.parentGroups ? account.parentGroups[0] : '';
+        let parent = account?.parentGroups ? account.parentGroups[0] : '';
         if (parent) {
             if (find(['shareholdersfunds', 'noncurrentliabilities', 'currentliabilities'], p => p === parent?.uniqueName)) {
                 return 'liabilities';
@@ -470,7 +470,7 @@ export class GeneralService {
                 if (accountName === 'roundoff') {
                     return 'roundoff';
                 }
-                let subParent = account.parentGroups[1];
+                let subParent = account?.parentGroups[1];
                 if (subParent && subParent?.uniqueName === 'discount') {
                     return 'discount';
                 }
