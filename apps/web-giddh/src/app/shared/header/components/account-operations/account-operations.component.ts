@@ -181,9 +181,9 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
                                 this.taxGroupForm.setValue({ taxes: applicableTaxes });
                             }
                             return differenceBy(taxes.map(p => {
-                                return { label: p.name, value: p?.uniqueName };
+                                return { label: p?.name, value: p?.uniqueName };
                             }), flattenDeep(activeAccountTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((p: any) => {
-                                return { label: p.name, value: p?.uniqueName };
+                                return { label: p?.name, value: p?.uniqueName };
                             }), 'value');
 
                         } else {
@@ -191,7 +191,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
                             this.taxGroupForm.setValue({ taxes: applicableTaxes });
 
                             return taxes.map(p => {
-                                return { label: p.name, value: p?.uniqueName };
+                                return { label: p?.name, value: p?.uniqueName };
                             });
 
                         }
@@ -408,7 +408,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
             let result;
             newParents = union([], parents);
             newParents.push({
-                name: listItem.name,
+                name: listItem?.name,
                 uniqueName: listItem?.uniqueName
             });
             listItem = Object.assign({}, listItem, { parentGroups: [] });
@@ -449,10 +449,10 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         let obj;
         obj = map(rawList, (item: any) => {
             obj = {};
-            obj.name = item.name;
+            obj.name = item?.name;
             obj.uniqueName = item?.uniqueName;
-            obj.synonyms = item.synonyms;
-            obj.parentGroups = item.parentGroups;
+            obj.synonyms = item?.synonyms;
+            obj.parentGroups = item?.parentGroups;
             return obj;
         });
         return obj;
@@ -685,7 +685,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
                 this.groupExportLedgerBodyRequest.fileType = response.fileType;
                 this.ledgerService.exportData(this.groupExportLedgerBodyRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     if (response?.status === 'success') {
-                        this.router.navigate(["/pages/downloads"]);
+                        this.router.navigate(["/pages/downloads/exports"]);
                         this.toaster.showSnackBar("success", response?.body);
                         this.store.dispatch(this.generalAction.addAndManageClosed());
                         this.store.dispatch(this.groupWithAccountsAction.HideAddAndManageFromOutside());

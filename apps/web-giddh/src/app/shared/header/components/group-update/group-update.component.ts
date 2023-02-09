@@ -186,9 +186,9 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
                         if (activeGroupTaxHierarchy) {
                             // prepare drop down options
                             this.companyTaxDropDown = differenceBy(taxes.map(p => {
-                                return { label: p.name, value: p?.uniqueName, additional: p };
+                                return { label: p?.name, value: p?.uniqueName, additional: p };
                             }), flattenDeep(activeGroupTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((p: any) => {
-                                return { label: p.name, value: p?.uniqueName, additional: p };
+                                return { label: p?.name, value: p?.uniqueName, additional: p };
                             }), 'value');
 
                             if (activeGroupTaxHierarchy.inheritedTaxes && activeGroupTaxHierarchy.inheritedTaxes.length) {
@@ -206,7 +206,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
 
                         } else {
                             this.companyTaxDropDown = taxes.map(p => {
-                                return { label: p.name, value: p?.uniqueName, additional: p };
+                                return { label: p?.name, value: p?.uniqueName, additional: p };
                             });
                             // set value in tax group form
                             setTimeout(() => {
@@ -384,10 +384,10 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
         let obj;
         obj = map(rawList, (item: any) => {
             obj = {};
-            obj.name = item.name;
+            obj.name = item?.name;
             obj.uniqueName = item?.uniqueName;
-            obj.synonyms = item.synonyms;
-            obj.parentGroups = item.parentGroups;
+            obj.synonyms = item?.synonyms;
+            obj.parentGroups = item?.parentGroups;
             return obj;
         });
         return obj;

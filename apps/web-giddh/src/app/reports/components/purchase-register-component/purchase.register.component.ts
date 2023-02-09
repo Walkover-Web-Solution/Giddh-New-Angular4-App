@@ -50,14 +50,15 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
     public currentBranch: any = { name: '', uniqueName: '' };
     /** Stores the current company */
     public activeCompany: any;
-    /** Stores the current organization type */
-    public currentOrganizationType: OrganizationType;
     /* This will hold local JSON data */
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** Stores the current organization type */
+    public currentOrganizationType: OrganizationType;
     /* This will hold if it's mobile screen or not */
     public isMobileScreen: boolean = false;
+
     constructor(
         private router: Router,
         private activeRoute: ActivatedRoute,
@@ -406,16 +407,6 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Releases memory
-     *
-     * @memberof PurchaseRegisterComponent
-     */
-    public ngOnDestroy(): void {
-        this.destroyed$.next(true);
-        this.destroyed$.complete();
-    }
-
-    /*
      * Callback for translation response complete
      *
      * @param {boolean} event
@@ -427,6 +418,47 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
 
             this.setCurrentFY();
         }
+    }
+
+    /**
+     * Releases memory
+     *
+     * @memberof PurchaseRegisterComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
+    }
+
+    /**
+     * Exports purchase register overview report
+     *
+     * @memberof PurchaseRegisterComponent
+     */
+    public export(): void {
+        let startDate = this.activeFinacialYr.financialYearStarts?.toString();
+        let endDate = this.activeFinacialYr.financialYearEnds?.toString();
+        if (this.selectedMonth) {
+            let startEndDate = this.getDateFromMonth(this.monthNames?.indexOf(this.selectedMonth) + 1);
+            startDate = startEndDate.firstDay;
+            endDate = startEndDate.lastDay;
+        }
+
+        let exportBodyRequest: ExportBodyRequest = new ExportBodyRequest();
+        exportBodyRequest.from = startDate;
+        exportBodyRequest.to = endDate;
+        exportBodyRequest.exportType = "PURCHASE_REGISTER_OVERVIEW_EXPORT";
+        exportBodyRequest.fileType = "CSV";
+        exportBodyRequest.interval = this.interval;
+        exportBodyRequest.branchUniqueName = this.currentBranch?.uniqueName;
+        this.ledgerService.exportData(exportBodyRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === 'success') {
+                this._toaster.successToast(response?.body);
+                this.router.navigate(["/pages/downloads"]);
+            } else {
+                this._toaster.errorToast(response?.message);
+            }
+        });
     }
 
     /**

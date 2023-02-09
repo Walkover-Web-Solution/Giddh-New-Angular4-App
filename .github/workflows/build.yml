@@ -8,7 +8,7 @@ on:
     branches: [ giddh-2.0, beta-stage, beta-branch, production ]
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
-concurrency: prod-build
+concurrency: test-build
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"

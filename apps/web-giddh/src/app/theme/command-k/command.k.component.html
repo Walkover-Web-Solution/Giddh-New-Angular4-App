@@ -71,11 +71,14 @@
                                                             <small>{{ localeData?.menu }}</small>
                                                         </ng-container>
                                                     </ng-container>
-                                                    <ng-container *ngIf="r.parentGroups">
+                                                    <ng-container *ngIf="r?.parentGroups">
                                                         <p class="small-para-details">
                                                             <small>
                                                                 <span
-                                                                    *ngFor="let item of r.parentGroups; let idx = index"
+                                                                    *ngFor="
+                                                                        let item of r?.parentGroups;
+                                                                        let idx = index
+                                                                    "
                                                                 >
                                                                     <ng-container *ngIf="idx > 0">
                                                                         <span>&nbsp;❯&nbsp;</span>
