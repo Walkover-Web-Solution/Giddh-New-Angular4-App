@@ -261,7 +261,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public restrictedVouchersForDownload: any[] = RESTRICTED_VOUCHERS_FOR_DOWNLOAD;
     /** Holds side of entry (dr/cr) */
     public entrySide: string = "";
-    /** This will show/hide for v2 for autopaid accordiing to sundrydebtor and sundrycreditor*/
+    /** This will show/hide for v2 for autopaid if ledger account is sundrydebtor and sundrycreditor*/
     public enableAutopaid: boolean = false;
 
     constructor(
@@ -512,8 +512,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-
-        this.store.pipe(select(value => value?.ledger.account), takeUntil(this.destroyed$)).subscribe(ledgerAccount => {
+        this.lc.activeAccount$.pipe(takeUntil(this.destroyed$)).subscribe((ledgerAccount) => {
             ledgerAccount?.parentGroups?.forEach(group => {
                 if (["sundrycreditors", "sundrydebtors"].includes(group?.uniqueName)) {
                     this.enableAutopaid = true;
@@ -521,6 +520,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     this.enableAutopaid = false;
                 }
             });
+
         });
 
         if (!this.generalService.checkIfCssExists("./assets/css/ledgerfont/ledgerfont.css")) {
@@ -2629,7 +2629,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public showAutopaidModal(): void {
         let dialogRef = this.dialog?.open(ConfirmModalComponent, {
             width: '40%',
-            panelClass:'autopaid',
+            panelClass: 'autopaid',
             data: {
                 title: this.localeData?.autopaid_title,
                 body: this.localeData?.autopaid_confirmation,
