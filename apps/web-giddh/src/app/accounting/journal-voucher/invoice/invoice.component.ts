@@ -1043,7 +1043,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
                     if (data?.status === 'success') {
                         this.allFlattenAccounts = cloneDeep(data.body.results);
                         if (groupUniqueName) {
-                            const filteredAccounts: IFlattenAccountsResultItem[] = data.body.results?.filter((acc) => acc.parentGroups.findIndex((g) => g?.uniqueName === groupUniqueName) > -1);
+                            const filteredAccounts: IFlattenAccountsResultItem[] = data.body.results?.filter((acc) => acc?.parentGroups.findIndex((g) => g?.uniqueName === groupUniqueName) > -1);
                             this._tallyModuleService.setFlattenAccounts(filteredAccounts);
                             this.isAccountListFiltered = true;
                         } else {
