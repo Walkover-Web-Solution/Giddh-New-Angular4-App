@@ -283,7 +283,7 @@ export class LedgerService {
     }
 
     /**
-     *This will use for ledger export  
+     *This will use for ledger export
      *
      * @param {ExportLedgerRequest} model
      * @param {string} accountUniqueName
@@ -401,7 +401,7 @@ export class LedgerService {
     }
 
     /**
-     * This will use for group ledger export 
+     * This will use for group ledger export
      *
      * @param {ExportBodyRequest} model
      * @return {*}  {Observable<BaseResponse<any, ExportBodyRequest>>}
@@ -678,7 +678,7 @@ export class LedgerService {
     }
 
     /**
-     * Get the list of account 
+     * Get the list of account
      *
      * @param {*} accountUniqueName
      * @param {*} model
@@ -694,5 +694,31 @@ export class LedgerService {
             let data: BaseResponse<any, string> = res;
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
+    }
+
+    /**
+     * This will use for export Autopaid
+     *
+     * @param {string} accountUniqueName
+     * @param {string} [branchUniqueName]
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof LedgerService
+     */
+    public exportAutopaid(accountUniqueName: string, branchUniqueName?: string): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        let url = this.config.apiUrl + LEDGER_API.EXPORT_AUTOPAID?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName));
+        if (branchUniqueName) {
+            url = url.concat(`?branchUniqueName=${branchUniqueName}`);
+        }
+        if (this.generalService.voucherApiVersion === 2) {
+            url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
+        }
+        return this.http.post(url, {}).pipe(
+            map((res) => {
+                let data: BaseResponse<string, string> = res;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<string, string>(e, '')));
     }
 }
