@@ -13,8 +13,9 @@ import { select, Store } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { DownloadData, DownloadsRequest } from '../../../models/api-models/downloads';
 import { cloneDeep } from '../../../lodash-optimized';
-import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from '../../../app.constant';
+import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT, Configuration } from '../../../app.constant';
 import { ExportsJsonComponent } from '../exports-json/exports-json.component';
+import { download } from '@giddh-workspaces/utils';
 
 /** Hold information of Download  */
 const ELEMENT_DATA: DownloadData[] = [];
@@ -76,6 +77,7 @@ export class ExportsComponent implements OnInit, OnDestroy {
     public toDate: string;
     /** This will use for from date static*/
     public fromDate: string;
+    public isElectron  : boolean = Configuration.isElectron;
 
     constructor(public dialog: MatDialog, private downloadsService: DownloadsService, private changeDetection: ChangeDetectorRef, private generalService: GeneralService, private modalService: BsModalService, private store: Store<AppState>) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
@@ -262,6 +264,23 @@ export class ExportsComponent implements OnInit, OnDestroy {
     public translationComplete(event: boolean): void {
         if (event) {
             this.getDownloads(true);
+        }
+    }
+
+    /**
+    * Download export file
+    *
+    * @param {string} event
+    * @memberof ExportsComponent
+    */
+    public downloadFile(path: any): void {
+        if (isElectron) {
+            console.log("path",path);
+            if (path) {
+                let url = path;
+                let fileName =  url.substring(url.lastIndexOf('/') + 1);
+                return download(fileName,url,"");
+            }
         }
     }
 }
