@@ -77,6 +77,8 @@ export class ExportsComponent implements OnInit, OnDestroy {
     public toDate: string;
     /** This will use for from date static*/
     public fromDate: string;
+    /** Instance of is electron variable */
+    public isElectron: any = isElectron;
 
     constructor(public dialog: MatDialog, private downloadsService: DownloadsService, private changeDetection: ChangeDetectorRef, private generalService: GeneralService, private modalService: BsModalService, private store: Store<AppState>) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
