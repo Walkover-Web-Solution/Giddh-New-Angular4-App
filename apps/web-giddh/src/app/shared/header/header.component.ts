@@ -739,7 +739,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         /* intlTelInputGlobals */
         if (window['intlTelInputGlobals'] === undefined) {
             let scriptTag = document.createElement('script');
-            scriptTag.src = 'https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.17/js/intlTelInput.min.js';
+            scriptTag.src = './assets/js/intl-tel-input.js';
             scriptTag.type = 'text/javascript';
             scriptTag.defer = true;
             document.body.appendChild(scriptTag);
@@ -757,7 +757,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 if (isElectron) {
                     this.router.navigate(['/login']);
                 } else {
-                    window.location.href = (environment.production) ? `https://giddh.com/login/?action=logout` : `https://test.giddh.com/login/?action=logout`;
+                    window.location.href = (environment.production) ? `https://beta.giddh.com/login/?action=logout` : `https://test.giddh.com/login/?action=logout`;
                 }
             } else if (s === userLoginStateEnum.newUserLoggedIn) {
                 this.zone.run(() => {
