@@ -67,7 +67,6 @@
                 return document.readyState === "complete";
             }
         };
-        var intTelInputElectron;
         if (typeof window === "object") window.intlTelInputGlobals = intlTelInputGlobals;
         // these vars persist through all instances of the plugin
         var id = 0;
