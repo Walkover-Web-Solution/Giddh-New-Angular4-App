@@ -13,8 +13,9 @@ import { select, Store } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { DownloadData, DownloadsRequest } from '../../../models/api-models/downloads';
 import { cloneDeep } from '../../../lodash-optimized';
-import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from '../../../app.constant';
+import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT, Configuration } from '../../../app.constant';
 import { ExportsJsonComponent } from '../exports-json/exports-json.component';
+import { download } from '@giddh-workspaces/utils';
 
 /** Hold information of Download  */
 const ELEMENT_DATA: DownloadData[] = [];
@@ -254,14 +255,27 @@ export class ExportsComponent implements OnInit, OnDestroy {
     }
 
     /**
-   * Callback for translation response complete
-   *
-   * @param {boolean} event
-   * @memberof ExportsComponent
-   */
+     * Callback for translation response complete
+     *
+     * @param {boolean} event
+     * @memberof ExportsComponent
+     */
     public translationComplete(event: boolean): void {
         if (event) {
             this.getDownloads(true);
+        }
+    }
+
+    /**
+     * Download export file
+     *
+     * @param {*} url
+     * @memberof ExportsComponent
+     */
+    public downloadFile(url: any): void {
+        if (url) {
+            let fileName = url.substring(url.lastIndexOf('/') + 1);
+            return download(fileName, url, "");
         }
     }
 }

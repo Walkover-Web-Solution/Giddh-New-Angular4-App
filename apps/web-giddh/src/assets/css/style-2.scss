@@ -505,10 +505,9 @@ $custom-typography: mat-typography-config(
         margin-right: 0 !important;
     }
 }
-.import-page {
-    .linked-entities {
-        width: 200px;
-        margin-right: 0 !important;
+.stock-balance {
+    .virtual-group-list {
+        min-width: 124px !important;
     }
 }
 .stock-balance-wrapper {

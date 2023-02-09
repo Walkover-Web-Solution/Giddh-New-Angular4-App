@@ -510,7 +510,9 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         if (gstVal?.length >= 2) {
             this.statesSource$.pipe(take(1)).subscribe(state => {
                 let stateCode = this.stateGstCode[gstVal.substr(0, 2)];
+
                 let s = state.find(st => st?.value === stateCode);
+                uniqBy(s, 'value');
                 if (s) {
                     this.companyProfileObj.addresses[index].stateCode = s.value;
                     this.companyProfileObj.addresses[index].stateCode = '';
