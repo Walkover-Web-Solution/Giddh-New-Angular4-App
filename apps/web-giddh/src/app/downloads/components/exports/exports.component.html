@@ -67,12 +67,20 @@
                         <a
                             target="_blank"
                             [href]="element.s3Path"
-                            *ngIf="element.status === 'COMPLETED'"
+                            *ngIf="!isElectron && element.status === 'COMPLETED'"
                             mat-button
-                            class="download-button-status btn-success"
+                            class="download-button-status btn-success desktop"
                         >
                             {{ commonLocaleData?.app_download }}
                         </a>
+                        <a
+                            *ngIf="isElectron && element.status === 'COMPLETED'"
+                            (click)="downloadFile(element.s3Path)"
+                            mat-button
+                            class="download-button-status btn-success electron"
+                        >
+                            {{ commonLocaleData?.app_download }}</a
+                        >
                     </td>
                 </ng-container>
 
