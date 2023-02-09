@@ -460,35 +460,4 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
             }
         });
     }
-
-    /**
-     * Exports purchase register overview report
-     *
-     * @memberof PurchaseRegisterComponent
-     */
-    public export(): void {
-        let startDate = this.activeFinacialYr.financialYearStarts?.toString();
-        let endDate = this.activeFinacialYr.financialYearEnds?.toString();
-        if (this.selectedMonth) {
-            let startEndDate = this.getDateFromMonth(this.monthNames?.indexOf(this.selectedMonth) + 1);
-            startDate = startEndDate.firstDay;
-            endDate = startEndDate.lastDay;
-        }
-
-        let exportBodyRequest: ExportBodyRequest = new ExportBodyRequest();
-        exportBodyRequest.from = startDate;
-        exportBodyRequest.to = endDate;
-        exportBodyRequest.exportType = "PURCHASE_REGISTER_OVERVIEW_EXPORT";
-        exportBodyRequest.fileType = "CSV";
-        exportBodyRequest.interval = this.interval;
-        exportBodyRequest.branchUniqueName = this.currentBranch?.uniqueName;
-        this.ledgerService.exportData(exportBodyRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response?.status === 'success') {
-                this._toaster.successToast(response?.body);
-                this.router.navigate(["/pages/downloads"]);
-            } else {
-                this._toaster.errorToast(response?.message);
-            }
-        });
-    }
 }
