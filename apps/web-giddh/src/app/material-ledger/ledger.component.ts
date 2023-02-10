@@ -514,13 +514,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public ngOnInit() {
         if (this.generalService.voucherApiVersion === 2) {
             this.lc.activeAccount$.pipe(takeUntil(this.destroyed$)).subscribe(ledgerAccount => {
-                ledgerAccount?.parentGroups?.forEach(group => {
-                    if (["sundrycreditors", "sundrydebtors"].includes(group?.uniqueName)) {
-                        this.enableAutopaid = true;
-                    } else {
-                        this.enableAutopaid = false;
-                    }
-                });
+                if (["sundrycreditors", "sundrydebtors"].includes(ledgerAccount?.parentGroups[1]?.uniqueName)) {
+                    this.enableAutopaid = true;
+                } else {
+                    this.enableAutopaid = false;
+                }
             });
         } else {
             this.enableAutopaid = false;
