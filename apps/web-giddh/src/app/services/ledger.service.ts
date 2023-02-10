@@ -714,7 +714,7 @@ export class LedgerService {
         if (this.generalService.voucherApiVersion === 2) {
             url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
         }
-        return this.http.post(url, {}).pipe(
+        return this.http.get(url).pipe(
             map((res) => {
                 let data: BaseResponse<string, string> = res;
                 return data;
