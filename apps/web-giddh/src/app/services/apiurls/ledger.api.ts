@@ -49,6 +49,6 @@ export const LEDGER_API = {
     EXPORT_BILL_TO_BILL: 'v4/company/:companyUniqueName/accounts/:accountUniqueName/vouchers/bill-to-bill/export?from=:from&to=:to',
     ACCOUNT_SEARCH_PREDICTION: 'company/:companyUniqueName/account-search-predicted?accountUniqueName=:accountUniqueName',
 
-    // Export Auto-paid
-    EXPORT_AUTOPAID: 'company/:companyUniqueName/accounts/:accountUniqueName/autopaid'
+    // Run Auto-paid
+   RUN_AUTOPAID: 'company/:companyUniqueName/accounts/:accountUniqueName/autopaid'
 };
