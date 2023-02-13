@@ -261,6 +261,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public restrictedVouchersForDownload: any[] = RESTRICTED_VOUCHERS_FOR_DOWNLOAD;
     /** Holds side of entry (dr/cr) */
     public entrySide: string = "";
+    /** This will show/hide for v2 for autopaid if ledger account is sundrydebtor and sundrycreditor*/
+    public enableAutopaid: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -510,6 +512,18 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        if (this.generalService.voucherApiVersion === 2) {
+            this.lc.activeAccount$.pipe(takeUntil(this.destroyed$)).subscribe(ledgerAccount => {
+                if (["sundrycreditors", "sundrydebtors"].includes(ledgerAccount?.parentGroups[1]?.uniqueName)) {
+                    this.enableAutopaid = true;
+                } else {
+                    this.enableAutopaid = false;
+                }
+            });
+        } else {
+            this.enableAutopaid = false;
+        }
+
         if (!this.generalService.checkIfCssExists("./assets/css/ledgerfont/ledgerfont.css")) {
             this.generalService.addLinkTag("./assets/css/ledgerfont/ledgerfont.css");
         }
@@ -719,7 +733,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     dateRange = this.generalService.dateConversionToSetComponentDatePicker(lt.from, lt.to);
                     this.selectedDateRange = { startDate: dayjs(dateRange.fromDate, GIDDH_DATE_FORMAT_MM_DD_YYYY), endDate: dayjs(dateRange.toDate, GIDDH_DATE_FORMAT_MM_DD_YYYY) };
                     this.selectedDateRangeUi = dayjs(dateRange.fromDate, GIDDH_DATE_FORMAT_MM_DD_YYYY).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateRange.toDate, GIDDH_DATE_FORMAT_MM_DD_YYYY).format(GIDDH_NEW_DATE_FORMAT_UI);
-          }
+                }
 
                 this.ledgerTransactions = lt;
 
@@ -918,24 +932,24 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @memberof LedgerComponent
      */
     public getAccountSearchPrediction(bankTransactions: any): void {
-        if(bankTransactions?.length > 0) {
+        if (bankTransactions?.length > 0) {
             let requestModel = [];
 
             bankTransactions.forEach(transaction => {
-                if(transaction?.transactionId && transaction?.description) {
+                if (transaction?.transactionId && transaction?.description) {
                     requestModel.push({
                         uniqueName: transaction.transactionId,
                         description: transaction.description
                     });
                 }
 
-                if(requestModel?.length === 10) {
+                if (requestModel?.length === 10) {
                     this.getAccountSearchPredictionData(requestModel, bankTransactions);
                     requestModel = [];
                 }
             });
 
-            if(requestModel?.length > 0) {
+            if (requestModel?.length > 0) {
                 this.getAccountSearchPredictionData(requestModel, bankTransactions);
                 requestModel = [];
             }
@@ -952,12 +966,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
      */
     private getAccountSearchPredictionData(requestModel: any[], bankTransactions: any): void {
         this.ledgerService.getAccountSearchPrediction(this.trxRequest.accountUniqueName, requestModel).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if(response?.status === "success" && response?.body?.length > 0) {
+            if (response?.status === "success" && response?.body?.length > 0) {
                 let mappedTransactions = response?.body?.filter(transaction => transaction?.account !== null);
-                if(mappedTransactions?.length > 0) {
+                if (mappedTransactions?.length > 0) {
                     mappedTransactions?.forEach(transaction => {
                         let matchedTransaction = bankTransactions?.filter(bankTransaction => bankTransaction.transactionId === transaction?.uniqueName);
-                        if(matchedTransaction?.length > 0) {
+                        if (matchedTransaction?.length > 0) {
                             const account: IOption = { label: transaction.account.name, value: transaction.account.uniqueName, additional: { uniqueName: transaction?.account?.uniqueName } };
                             matchedTransaction[0].transactions[0].particular = transaction?.account.name;
                             this.selectAccount(account, matchedTransaction[0]?.transactions[0]);
@@ -2604,6 +2618,35 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this.restrictedVouchersForDownload.push(AdjustedVoucherType.PurchaseInvoice);
             } else {
                 this.restrictedVouchersForDownload = this.restrictedVouchersForDownload?.filter(voucherType => voucherType !== AdjustedVoucherType.PurchaseInvoice);
+            }
+        });
+    }
+
+    /**
+     * This will use for run autopaid only for sundrydebtor and sundrycreidtor accounts
+     *
+     * @memberof LedgerComponent
+     */
+    public showAutopaidModal(): void {
+        let dialogRef = this.dialog?.open(ConfirmModalComponent, {
+            width: '40%',
+            panelClass: 'autopaid',
+            data: {
+                title: this.localeData?.autopaid_title,
+                body: this.localeData?.autopaid_confirmation,
+                ok: this.commonLocaleData?.app_yes,
+                cancel: this.commonLocaleData?.app_no
+            }
+        });
+        dialogRef?.afterClosed().pipe(take(1)).subscribe(response => {
+            if (response) {
+                this.ledgerService.runAutopaid(this.trxRequest.accountUniqueName, this.trxRequest.branchUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                    if (response?.status === "success") {
+                        this.toaster.showSnackBar("success", response?.body);
+                    } else {
+                        this.toaster.showSnackBar("error", response?.message);
+                    }
+                });
             }
         });
     }
