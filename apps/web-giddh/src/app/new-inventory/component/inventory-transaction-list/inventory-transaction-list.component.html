@@ -13,29 +13,6 @@
     </div>
     <div class="pl-1">
         <mat-select
-            name="selectedWarehouse"
-            [multiple]="true"
-            [(ngModel)]="selectedWarehouse"
-            class="stock-mat-salect"
-            [placeholder]="'Select Warehouse'"
-        >
-            <mat-option class="balance-options">
-                <ngx-mat-select-search
-                    [noEntriesFoundLabel]="'No Result Found'"
-                    [formControl]="warehousesDropdown"
-                    [placeholderLabel]="'Select Warehouse'"
-                >
-                    <i class="icon-cross" ngxMatSelectSearchClear></i>
-                </ngx-mat-select-search>
-            </mat-option>
-
-            <mat-option class="balance-options"> Warehouse 1 </mat-option>
-            <mat-option class="balance-options"> Warehouse 2 </mat-option>
-            <mat-option class="balance-options"> Warehouse 3 </mat-option>
-        </mat-select>
-    </div>
-    <div class="pl-1">
-        <mat-select
             name="selectedBranch"
             [multiple]="true"
             [(ngModel)]="selectedBranch"
@@ -57,18 +34,28 @@
             <mat-option class="balance-options"> Branch 3 </mat-option>
         </mat-select>
     </div>
-    <div
-        class="clear-filter align-items-center d-flex justify-content-xl-center justify-content-lg-start w-50"
-        *ngIf="showClearFilter"
-    >
-        <button
-            mat-raised-button
-            class="create-btn-inventory btn-sky-blue ml-3 mr-0"
-            color="primary"
-            (click)="resetAdvanceSearch()"
+    <div class="pl-1">
+        <mat-select
+            name="selectedWarehouse"
+            [multiple]="true"
+            [(ngModel)]="selectedWarehouse"
+            class="stock-mat-salect"
+            [placeholder]="'Select Warehouse'"
         >
-            <span class="icon-cross"></span> Clear
-        </button>
+            <mat-option class="balance-options">
+                <ngx-mat-select-search
+                    [noEntriesFoundLabel]="'No Result Found'"
+                    [formControl]="warehousesDropdown"
+                    [placeholderLabel]="'Select Warehouse'"
+                >
+                    <i class="icon-cross" ngxMatSelectSearchClear></i>
+                </ngx-mat-select-search>
+            </mat-option>
+
+            <mat-option class="balance-options"> Warehouse 1 </mat-option>
+            <mat-option class="balance-options"> Warehouse 2 </mat-option>
+            <mat-option class="balance-options"> Warehouse 3 </mat-option>
+        </mat-select>
     </div>
 </div>
 
@@ -115,17 +102,12 @@
         </div>
     </div>
 
-    <div class="d-flex">
-        <button class="round-btn" mat-icon-button [matMenuTriggerFor]="importExport" aria-label="Customise">
-            <i class="svg">
-                <svg xmlns="http://www.w3.org/2000/svg" width="12.444" height="16" viewBox="0 0 12.444 16">
-                    <path
-                        class="a"
-                        d="M82.456,1185.2l3.556,3.556H83.344v6.222H81.567v-6.222H78.9Zm6.222,12.444h2.667l-3.556,3.556-3.556-3.556H86.9v-6.222h1.778Z"
-                        transform="translate(-78.9 -1185.2)"
-                    />
-                </svg>
-            </i>
+    <!-- <div class="d-flex transactional-filter-section">
+            <button
+            mat-mini-fab
+            class="transactional-wise-common-btn d-flex align-items-center justify-content-center mr-l1"  [matMenuTriggerFor]="importExport" aria-label="Customise"
+        >
+            <span class="icon-download-circle strong"></span>
         </button>
         <mat-menu #importExport="matMenu">
             <div class="menu-selector">
@@ -137,9 +119,8 @@
                 </button>
             </div>
         </mat-menu>
-    </div>
+    </div> -->
 </div>
-
 <!-- end new inventory header-->
 <div class="inventory-transaction-list">
     <div class="p-3">
@@ -205,48 +186,101 @@
             <div *ngIf="isLoading">
                 <giddh-page-loader></giddh-page-loader>
             </div>
+            <div
+                class="clear-filter align-items-center d-flex justify-content-xl-center justify-content-lg-start"
+                *ngIf="showClearFilter"
+            >
+                <button
+                    mat-raised-button
+                    class="create-btn-inventory btn-sky-blue ml-3 mr-0"
+                    color="primary"
+                    (click)="resetAdvanceSearch()"
+                >
+                    <span class="icon-cross"></span> Clear
+                </button>
+            </div>
             <div class="table-responsive" *ngIf="!isLoading">
-                <table mat-table [dataSource]="dataSource" class="table giddh-table on-mobile-view">
+                <table
+                    mat-table
+                    [dataSource]="dataSource"
+                    matSort
+                    (matSortChange)="sortChange($event)"
+                    class="table giddh-table on-mobile-view"
+                >
                     <ng-container matColumnDef="date">
-                        <th mat-header-cell *matHeaderCellDef>Date</th>
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
                         <td data-title="Date" mat-cell *matCellDef="let element">{{ element.date }}</td>
                     </ng-container>
 
                     <ng-container matColumnDef="voucherType">
-                        <th mat-header-cell *matHeaderCellDef>Voucher Type</th>
+                        <th width="8%" mat-header-cell *matHeaderCellDef [matMenuTriggerFor]="voucherTypes">
+                            Voucher Type
+                            <i
+                                class="fa fa-ellipsis-v pull-right text-light-2 mt-1 cursor-pointer"
+                                aria-hidden="true"
+                            ></i>
+                        </th>
+
                         <td date-title="Voucher Type" mat-cell *matCellDef="let element">{{ element.voucherType }}</td>
+                        <mat-menu #voucherTypes="matMenu">
+                            <div class="menu-selector" *ngFor="let item of VOUCHER_TYPES">
+                                <button mat-menu-item>
+                                    <mat-checkbox color="primary"> {{ item.label }}</mat-checkbox>
+                                </button>
+                            </div>
+                        </mat-menu>
                     </ng-container>
 
                     <ng-container matColumnDef="accountName">
-                        <th class="text-right" mat-header-cell *matHeaderCellDef>Account Name</th>
+                        <th
+                            class="td-search-box text-right"
+                            width="10%"
+                            mat-header-cell
+                            *matHeaderCellDef
+                            #searchCustomerContainer
+                            (clickOutside)="clickedOutside($event, searchCustomerContainer, 'accountUniqueName')"
+                        >
+                            <ng-container
+                                *ngTemplateOutlet="
+                                    searchTemplate;
+                                    context: {
+                                        $implicit: showAccountSearch,
+                                        fieldName: 'accountUniqueName',
+                                        formControl: accountNameSearching,
+                                        title: 'Account Name'
+                                    }
+                                "
+                            ></ng-container>
+                        </th>
+
                         <td data-title="Account Name" class="text-right" mat-cell *matCellDef="let element">
                             {{ element.accountName }}
                         </td>
                     </ng-container>
 
                     <ng-container matColumnDef="inwards">
-                        <th class="text-right" mat-header-cell *matHeaderCellDef>Inwards</th>
+                        <th class="text-right" mat-header-cell *matHeaderCellDef mat-sort-header>Inwards</th>
                         <td data-title="Inwards" class="text-right" mat-cell *matCellDef="let element">
                             {{ element.inwards }}
                         </td>
                     </ng-container>
 
                     <ng-container matColumnDef="outwards">
-                        <th class="text-right" mat-header-cell *matHeaderCellDef>Outwards</th>
+                        <th class="text-right" mat-header-cell *matHeaderCellDef mat-sort-header>Outwards</th>
                         <td data-title="Outwards" class="text-right" mat-cell *matCellDef="let element">
                             {{ element.outwards }}
                         </td>
                     </ng-container>
 
                     <ng-container matColumnDef="rate">
-                        <th class="text-right" mat-header-cell *matHeaderCellDef>Rate</th>
+                        <th class="text-right" mat-header-cell *matHeaderCellDef mat-sort-header>Rate</th>
                         <td data-title="Rate" class="text-right" mat-cell *matCellDef="let element">
                             {{ element.rate }}
                         </td>
                     </ng-container>
 
                     <ng-container matColumnDef="value">
-                        <th class="text-right" mat-header-cell *matHeaderCellDef>Value</th>
+                        <th class="text-right" mat-header-cell *matHeaderCellDef mat-sort-header>Value</th>
                         <td data-title="Value" class="text-right" mat-cell *matCellDef="let element">
                             {{ element?.value }}
                         </td>
@@ -316,3 +350,20 @@
 <ng-template #inventoryAdvanceSearch>
     <new-inventory-advance-search></new-inventory-advance-search>
 </ng-template>
+<!-- region search template -->
+<ng-template #searchTemplate let-show let-title="title" let-fieldName="fieldName" let-formControl="formControl">
+    <div [hidden]="show">
+        <span> {{ title }}</span>
+        <i class="icon-search" (click)="toggleSearch(fieldName, searchBox)"></i>
+    </div>
+    <div class="input-container" [hidden]="!show">
+        <input
+            type="text"
+            [placeholder]="getSearchFieldText(title)"
+            class="w-100"
+            #searchBox
+            [formControl]="formControl"
+        />
+    </div>
+</ng-template>
+<!-- endregion -->

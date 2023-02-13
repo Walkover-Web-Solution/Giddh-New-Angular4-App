@@ -7,9 +7,10 @@ import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from "../../../shared/hel
 import { Observable, ReplaySubject } from "rxjs";
 import { select, Store } from "@ngrx/store";
 import { AppState } from "../../../store";
-import { takeUntil } from "rxjs/operators";
+import { debounceTime, distinctUntilChanged, takeUntil } from "rxjs/operators";
 import { FormControl } from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
+import { MatSort } from "@angular/material/sort";
 
 export interface PeriodicElement {
     date: string;
@@ -39,44 +40,7 @@ const ELEMENT_DATA: PeriodicElement[] = [
         outwards: "1.00 Box",
         rate: "1, 02, 378.60",
         value: "1,02,378.60",
-    },
-    {
-        date: "09-10-2020",
-        voucherType: "SALES",
-        accountName: "USD Account",
-        inwards: "-",
-        outwards: "1.00 Box",
-        rate: "1, 02, 378.60",
-        value: "1,02,378.60",
-    },
-    {
-        date: "09-10-2020",
-        voucherType: "SALES",
-        accountName: "USD Account",
-        inwards: "-",
-        outwards: "1.00 Box",
-        rate: "1, 02, 378.60",
-        value: "1,02,378.60",
-    },
-    {
-        date: "09-10-2020",
-        voucherType: "SALES",
-        accountName: "USD Account",
-        inwards: "-",
-        outwards: "1.00 Box",
-        rate: "1, 02, 378.60",
-        value: "1,02,378.60",
-    },
-    {
-        date: "09-10-2020",
-        voucherType: "SALES",
-        accountName: "USD Account",
-        inwards: "-",
-        outwards: "1.00 Box",
-        rate: "1, 02, 378.60",
-        value: "1,02,378.60",
-    },
-
+    }
 ];
 
 @Component({
@@ -91,8 +55,11 @@ export class InventoryTransactionListComponent implements OnInit {
     @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
     /** Instance of mail modal */
     @ViewChild("inventoryAdvanceSearch") public inventoryAdvanceSearch: TemplateRef<any>;
-    displayedColumns: string[] = ["date", "voucherType", "accountName", "inwards", "outwards", "rate", "value"];
-    dataSource = ELEMENT_DATA;
+    @ViewChild('accountName', { static: true }) public accountName: ElementRef;
+    /** Instance of sort header */
+    @ViewChild(MatSort) sortBy: MatSort;
+    public displayedColumns: string[] = ["date", "voucherType", "accountName", "inwards", "outwards", "rate", "value"];
+    public dataSource = ELEMENT_DATA;
     /* This will store modal reference */
     public modalRef: BsModalRef;
     /* dayjs object */
@@ -140,6 +107,49 @@ export class InventoryTransactionListComponent implements OnInit {
     public selectedBranch: any[] = [];
     /** This will use for instance of lwarehouses Dropdown */
     public branchesDropdown: FormControl = new FormControl();
+    public VOUCHER_TYPES: any[] = [
+        {
+            "value": "SALES",
+            "label": "Sales",
+            "checked": true
+        },
+        {
+            "value": "PURCHASE",
+            "label": "Purchase",
+            "checked": true
+        },
+        {
+            "value": "MANUFACTURING",
+            "label": "Manufacturing",
+            "checked": true
+        },
+        {
+            "value": "TRANSFER",
+            "label": "Transfer",
+            "checked": true
+        },
+        {
+            "value": "JOURNAL",
+            "label": "Journal Voucher",
+            "checked": true
+        },
+        {
+            "value": "CREDIT_NOTE",
+            "label": "Credit Note",
+            "checked": true
+        },
+        {
+            "value": "DEBIT_NOTE",
+            "label": "Debit Note",
+            "checked": true
+        }
+    ];
+    /** Thsi will use for searching for stock */
+    public accountNameSearching: FormControl = new FormControl();
+    /** Image path variable */
+    public imgPath: string = '';
+    public showAccountSearch: boolean = false;
+    @ViewChild('searchBox', { static: true }) public searchBox: ElementRef;
 
 
 
@@ -153,6 +163,7 @@ export class InventoryTransactionListComponent implements OnInit {
 
 
     public ngOnInit(): void {
+        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         /** Universal date observer */
         this.universalDate$.subscribe(dateObj => {
             if (dateObj) {
@@ -161,6 +172,14 @@ export class InventoryTransactionListComponent implements OnInit {
                 this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                 // this.getStockTransactions(); This will use for intially api call
             }
+        });
+        this.accountNameSearching.valueChanges.pipe(
+            debounceTime(700),
+            distinctUntilChanged(),
+            takeUntil(this.destroyed$)
+        ).subscribe(s => {
+            // this.GroupStockReportRequest.stockName = s;
+            // this.getStocks();
         });
     }
 
@@ -231,4 +250,46 @@ export class InventoryTransactionListComponent implements OnInit {
             panelClass: 'advance-search-container'
         });
     }
+
+    public sortChange(event: any): void {
+    }
+
+
+    public toggleSearch(fieldName: string, el: any) {
+        if (fieldName === 'accountUniqueName') {
+            this.showAccountSearch = true;
+        }
+
+        setTimeout(() => {
+            el.focus();
+        }, 200);
+    }
+
+    /**
+* Returns the search field text
+*
+* @param {*} title
+* @returns {string}
+* @memberof InvoicePreviewComponent
+*/
+    public getSearchFieldText(title: any): string {
+        let searchField = "Search Account";
+        // searchField = searchField?.replace("[FIELD]", title);
+        return searchField;
+    }
+
+
+    public clickedOutside(event: Event, el, fieldName: string) {
+        if (fieldName === 'accountUniqueName') {
+            if (this.accountNameSearching?.value !== null && this.accountNameSearching?.value !== '') {
+                return;
+            }
+        }
+        if (fieldName === 'accountUniqueName') {
+            this.showAccountSearch = false;
+        }
+    }
+
+
+
 }
