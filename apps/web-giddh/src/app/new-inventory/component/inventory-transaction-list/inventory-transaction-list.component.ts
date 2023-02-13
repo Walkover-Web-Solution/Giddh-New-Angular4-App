@@ -11,6 +11,10 @@ import { debounceTime, distinctUntilChanged, takeUntil } from "rxjs/operators";
 import { FormControl } from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
 import { MatSort } from "@angular/material/sort";
+import { OrganizationType } from "../../../models/user-login-state";
+import { CompanyResponse } from "../../../models/api-models/Company";
+import { WarehouseActions } from "../../../settings/warehouse/action/warehouse.action";
+import { cloneDeep } from "../../../lodash-optimized";
 
 export interface PeriodicElement {
     date: string;
@@ -56,6 +60,7 @@ export class InventoryTransactionListComponent implements OnInit {
     /** Instance of mail modal */
     @ViewChild("inventoryAdvanceSearch") public inventoryAdvanceSearch: TemplateRef<any>;
     @ViewChild('accountName', { static: true }) public accountName: ElementRef;
+    @ViewChild('searchBox', { static: true }) public searchBox: ElementRef;
     /** Instance of sort header */
     @ViewChild(MatSort) sortBy: MatSort;
     public displayedColumns: string[] = ["date", "voucherType", "accountName", "inwards", "outwards", "rate", "value"];
@@ -101,8 +106,8 @@ export class InventoryTransactionListComponent implements OnInit {
     public selectedWarehouse: any[] = [];
     /** This will use for instance of lwarehouses Dropdown */
     public warehousesDropdown: FormControl = new FormControl();
-    /** Warehouse data for warehouse drop down */
-    public warehouses: Array<any>;
+    /** List of warehouses */
+    public warehouses: any[] = [];
     /** Hold warehouse checked  */
     public selectedBranch: any[] = [];
     /** This will use for instance of lwarehouses Dropdown */
@@ -149,7 +154,14 @@ export class InventoryTransactionListComponent implements OnInit {
     /** Image path variable */
     public imgPath: string = '';
     public showAccountSearch: boolean = false;
-    @ViewChild('searchBox', { static: true }) public searchBox: ElementRef;
+    /** Current branches */
+    public branches: Array<any>;
+    /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
+    public isCompany: boolean;
+    /** Hold all warehouses */
+    public allWarehouses: any[] = [];
+    /** Hold all warehouses */
+    public allBranches: any[] = [];
 
 
 
@@ -157,6 +169,7 @@ export class InventoryTransactionListComponent implements OnInit {
         private generalService: GeneralService,
         public dialog: MatDialog,
         public modalService: BsModalService,
+        private warehouseAction: WarehouseActions,
         private store: Store<AppState>) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
     }
@@ -173,14 +186,29 @@ export class InventoryTransactionListComponent implements OnInit {
                 // this.getStockTransactions(); This will use for intially api call
             }
         });
-        this.accountNameSearching.valueChanges.pipe(
-            debounceTime(700),
-            distinctUntilChanged(),
-            takeUntil(this.destroyed$)
-        ).subscribe(s => {
-            // this.GroupStockReportRequest.stockName = s;
-            // this.getStocks();
+        this.store.dispatch(this.warehouseAction.fetchAllWarehouses({ page: 1, count: 0 }));
+
+        this.branchesDropdown.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(search => {
+            console.log(this.allBranches);
+
+            let branchesClone = cloneDeep(this.allBranches);
+            if (search) {
+                branchesClone = this.allBranches?.filter(branch => (branch.alias?.toLowerCase()?.indexOf(search?.toLowerCase()) > -1));
+            }
+            this.branches = branchesClone;
         });
+
+
+        this.warehousesDropdown.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(search => {
+            let warehousesClone = cloneDeep(this.allWarehouses);
+            if (search) {
+                warehousesClone = this.allWarehouses?.filter(warehouse => (warehouse.name?.toLowerCase()?.indexOf(search?.toLowerCase()) > -1));
+            }
+            this.warehouses = warehousesClone;
+        });
+
+        this.getBranches();
+        this.getWarehouses();
     }
 
     /**
@@ -288,6 +316,30 @@ export class InventoryTransactionListComponent implements OnInit {
         if (fieldName === 'accountUniqueName') {
             this.showAccountSearch = false;
         }
+    }
+
+
+    public getWarehouses(): void {
+        this.store.pipe(select(state => state.warehouse.warehouses), takeUntil(this.destroyed$)).subscribe((warehouses: any) => {
+            if (warehouses) {
+                this.warehouses = warehouses.results;
+                this.allWarehouses = warehouses.results;
+            } else {
+                this.store.dispatch(this.warehouseAction.fetchAllWarehouses({ page: 1, count: 0 }));
+            }
+        });
+    }
+
+    public getBranches(): void {
+        this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+            console.log(response);
+
+                this.branches = response || [];
+                this.allBranches = response;
+                this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && this.branches?.length > 1;
+            }
+        });
     }
 
 

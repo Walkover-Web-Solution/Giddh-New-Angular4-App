@@ -11,7 +11,7 @@
             />
         </div>
     </div>
-    <div class="pl-1">
+    <div class="pl-1" *ngIf="isCompany">
         <mat-select
             name="selectedBranch"
             [multiple]="true"
@@ -29,9 +29,9 @@
                 </ngx-mat-select-search>
             </mat-option>
 
-            <mat-option class="balance-options"> Branch 1 </mat-option>
-            <mat-option class="balance-options"> Branch 2 </mat-option>
-            <mat-option class="balance-options"> Branch 3 </mat-option>
+            <mat-option class="balance-options" *ngFor="let branch of branches" [value]="branch?.uniqueName">
+                {{ branch?.alias ?? "-" }}
+            </mat-option>
         </mat-select>
     </div>
     <div class="pl-1">
@@ -44,18 +44,31 @@
         >
             <mat-option class="balance-options">
                 <ngx-mat-select-search
-                    [noEntriesFoundLabel]="'No Result Found'"
+                    [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
                     [formControl]="warehousesDropdown"
                     [placeholderLabel]="'Select Warehouse'"
                 >
                     <i class="icon-cross" ngxMatSelectSearchClear></i>
                 </ngx-mat-select-search>
             </mat-option>
-
-            <mat-option class="balance-options"> Warehouse 1 </mat-option>
-            <mat-option class="balance-options"> Warehouse 2 </mat-option>
-            <mat-option class="balance-options"> Warehouse 3 </mat-option>
+            <!-- (click)="
+        calculationWarehouse(warehouse?.uniqueName);
+        updateCalculationWarehouse(warehouse?.uniqueName)
+    " -->
+            <mat-option class="balance-options" *ngFor="let warehouse of warehouses" [value]="warehouse?.uniqueName">
+                {{ warehouse.name ?? "-" }}
+            </mat-option>
         </mat-select>
+    </div>
+    <div class="clear-filter d-flex" *ngIf="showClearFilter">
+        <button
+            mat-raised-button
+            class="create-btn-inventory btn-sky-blue ml-3 mr-0"
+            color="primary"
+            (click)="resetAdvanceSearch()"
+        >
+            <span class="icon-cross"></span> Clear
+        </button>
     </div>
 </div>
 
@@ -185,19 +198,6 @@
         <div class="col-12 horizontal-padding">
             <div *ngIf="isLoading">
                 <giddh-page-loader></giddh-page-loader>
-            </div>
-            <div
-                class="clear-filter align-items-center d-flex justify-content-xl-center justify-content-lg-start"
-                *ngIf="showClearFilter"
-            >
-                <button
-                    mat-raised-button
-                    class="create-btn-inventory btn-sky-blue ml-3 mr-0"
-                    color="primary"
-                    (click)="resetAdvanceSearch()"
-                >
-                    <span class="icon-cross"></span> Clear
-                </button>
             </div>
             <div class="table-responsive" *ngIf="!isLoading">
                 <table
