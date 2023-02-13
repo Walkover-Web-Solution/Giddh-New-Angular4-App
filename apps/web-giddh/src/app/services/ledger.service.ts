@@ -697,16 +697,16 @@ export class LedgerService {
     }
 
     /**
-     * This will use for export Autopaid
+     * This will use for run Autopaid
      *
      * @param {string} accountUniqueName
      * @param {string} [branchUniqueName]
      * @return {*}  {Observable<BaseResponse<any, any>>}
      * @memberof LedgerService
      */
-    public exportAutopaid(accountUniqueName: string, branchUniqueName?: string): Observable<BaseResponse<any, any>> {
+    public runAutopaid(accountUniqueName: string, branchUniqueName?: string): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        let url = this.config.apiUrl + LEDGER_API.EXPORT_AUTOPAID?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+        let url = this.config.apiUrl + LEDGER_API.RUN_AUTOPAID?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             ?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName));
         if (branchUniqueName) {
             url = url.concat(`?branchUniqueName=${branchUniqueName}`);

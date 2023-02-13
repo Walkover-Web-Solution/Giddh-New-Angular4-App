@@ -2622,7 +2622,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * This will use for export autopaid only for sundrydebtor and sundrycreidtor accounts
+     * This will use for run autopaid only for sundrydebtor and sundrycreidtor accounts
      *
      * @memberof LedgerComponent
      */
@@ -2639,7 +2639,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         });
         dialogRef?.afterClosed().pipe(take(1)).subscribe(response => {
             if (response) {
-                this.ledgerService.exportAutopaid(this.trxRequest.accountUniqueName, this.trxRequest.branchUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                this.ledgerService.runAutopaid(this.trxRequest.accountUniqueName, this.trxRequest.branchUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     if (response?.status === "success") {
                         this.toaster.showSnackBar("success", response?.body);
                     } else {
