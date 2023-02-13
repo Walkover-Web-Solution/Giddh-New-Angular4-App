@@ -45,7 +45,10 @@ export const LEDGER_API = {
     // Export Ledger Entry and Group Ledger entry
     EXPORT: 'company/:companyUniqueName/exports',
 
-    //Export Bill to Bill Report 
+    //Export Bill to Bill Report
     EXPORT_BILL_TO_BILL: 'v4/company/:companyUniqueName/accounts/:accountUniqueName/vouchers/bill-to-bill/export?from=:from&to=:to',
-    ACCOUNT_SEARCH_PREDICTION: 'company/:companyUniqueName/account-search-predicted?accountUniqueName=:accountUniqueName'
+    ACCOUNT_SEARCH_PREDICTION: 'company/:companyUniqueName/account-search-predicted?accountUniqueName=:accountUniqueName',
+
+    // Run Auto-paid
+   RUN_AUTOPAID: 'company/:companyUniqueName/accounts/:accountUniqueName/autopaid'
 };
