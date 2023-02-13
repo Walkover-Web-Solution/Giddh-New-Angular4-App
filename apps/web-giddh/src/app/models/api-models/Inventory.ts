@@ -142,6 +142,27 @@ export class StockReportRequest {
     public branchUniqueName?: string;
 }
 
+export class StockReportRequestNew {
+    public from: string = '';
+    public to: string = '';
+    public count: number = 20;
+    public page: number = 1;
+    public sort: string;
+    public sortBy: string;
+    public totalItems?: number;
+    public stockGroupUniqueNames: any[];
+    public stockUniqueNames: any[];
+    public transactionType: string;
+    public accountName: string;
+    public voucherTypes?: any[];
+    public param?: string;
+    public expression?: string;
+    public val?: number;
+    public warehouseUniqueNames?: any[];
+    public branchUniqueNames?: any[];
+}
+
+
 export class GroupStockReportRequest {
     public stockGroupUniqueName: string;
     public stockUniqueName: string;

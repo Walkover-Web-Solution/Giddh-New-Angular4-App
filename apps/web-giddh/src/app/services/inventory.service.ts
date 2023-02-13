@@ -12,7 +12,8 @@ import {
     StockUnitRequest,
     StockUnitResponse,
     InventoryDownloadRequest,
-    StockMappedUnitResponse
+    StockMappedUnitResponse,
+    StockReportRequestNew
 } from '../models/api-models/Inventory';
 import { Inject, Injectable, Optional } from '@angular/core';
 import { HttpWrapperService } from './httpWrapper.service';
@@ -401,6 +402,42 @@ export class InventoryService {
                 }), catchError((e) => this.errorHandler.HandleCatch<StockReportResponse, StockReportRequest>(e, stockReportRequest, {
                     stockGroupUniqueName: stockReportRequest.stockGroupUniqueName,
                     stockUniqueName: stockReportRequest.stockUniqueName,
+                    from: stockReportRequest.from,
+                    to: stockReportRequest.to,
+                    count: stockReportRequest.count,
+                    page: stockReportRequest.page
+                })));
+    }
+
+    public GetStocksReportNew_v2(stockReportRequest: StockReportRequestNew): Observable<BaseResponse<StockReportResponse, StockReportRequestNew>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+
+        return this.http.post(this.config.apiUrl + INVENTORY_API.NEWSTOCK_REPORT_V2?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':stockGroupUniqueName', encodeURIComponent(<any>stockReportRequest.stockGroupUniqueNames))
+            ?.replace(':stockUniqueName', encodeURIComponent(<any>stockReportRequest.stockUniqueNames))
+            ?.replace(':transactionType', encodeURIComponent(stockReportRequest.transactionType ? stockReportRequest.transactionType?.toString() : 'all'))
+            ?.replace(':from', encodeURIComponent(stockReportRequest.from))
+            ?.replace(':to', encodeURIComponent(stockReportRequest.to))
+            ?.replace(':count', encodeURIComponent(stockReportRequest.count?.toString()))
+            ?.replace(':page', encodeURIComponent(stockReportRequest.page?.toString()))
+            ?.replace(':sort', encodeURIComponent(stockReportRequest.sort ? stockReportRequest.sort?.toString() : ''))
+            ?.replace(':sortBy', encodeURIComponent(stockReportRequest.sortBy ? stockReportRequest.sortBy?.toString() : ''))
+            , stockReportRequest).pipe(
+                map((res) => {
+                    let data: BaseResponse<StockReportResponse, StockReportRequestNew> = res;
+                    data.request = stockReportRequest;
+                    data.queryString = {
+                        stockGroupUniqueName: stockReportRequest.stockGroupUniqueNames,
+                        stockUniqueName: stockReportRequest.stockUniqueNames,
+                        from: stockReportRequest.from,
+                        to: stockReportRequest.to,
+                        count: stockReportRequest.count,
+                        page: stockReportRequest.page
+                    };
+                    return data;
+                }), catchError((e) => this.errorHandler.HandleCatch<StockReportResponse, StockReportRequestNew>(e, stockReportRequest, {
+                    stockGroupUniqueName: stockReportRequest.stockGroupUniqueNames,
+                    stockUniqueName: stockReportRequest.stockUniqueNames,
                     from: stockReportRequest.from,
                     to: stockReportRequest.to,
                     count: stockReportRequest.count,

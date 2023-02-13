@@ -209,7 +209,7 @@
                 >
                     <ng-container matColumnDef="date">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
-                        <td data-title="Date" mat-cell *matCellDef="let element">{{ element.date }}</td>
+                        <td data-title="Date" mat-cell *matCellDef="let element">{{ element.entryDate ?? "-" }}</td>
                     </ng-container>
 
                     <ng-container matColumnDef="voucherType">
@@ -254,35 +254,35 @@
                         </th>
 
                         <td data-title="Account Name" class="text-right" mat-cell *matCellDef="let element">
-                            {{ element.accountName }}
+                            {{ element?.account?.name ?? "-" }}
                         </td>
                     </ng-container>
 
                     <ng-container matColumnDef="inwards">
                         <th class="text-right" mat-header-cell *matHeaderCellDef mat-sort-header>Inwards</th>
                         <td data-title="Inwards" class="text-right" mat-cell *matCellDef="let element">
-                            {{ element.inwards }}
+                            {{ element.inwardBalance ?? "-" }}
                         </td>
                     </ng-container>
 
                     <ng-container matColumnDef="outwards">
                         <th class="text-right" mat-header-cell *matHeaderCellDef mat-sort-header>Outwards</th>
                         <td data-title="Outwards" class="text-right" mat-cell *matCellDef="let element">
-                            {{ element.outwards }}
+                            {{ element.outwardBalance ?? "-" }}
                         </td>
                     </ng-container>
 
                     <ng-container matColumnDef="rate">
                         <th class="text-right" mat-header-cell *matHeaderCellDef mat-sort-header>Rate</th>
                         <td data-title="Rate" class="text-right" mat-cell *matCellDef="let element">
-                            {{ element.rate }}
+                            {{ element.rate ?? "-" }}
                         </td>
                     </ng-container>
 
                     <ng-container matColumnDef="value">
                         <th class="text-right" mat-header-cell *matHeaderCellDef mat-sort-header>Value</th>
                         <td data-title="Value" class="text-right" mat-cell *matCellDef="let element">
-                            {{ element?.value }}
+                            {{ element?.amount ?? "-" }}
                         </td>
                     </ng-container>
 
@@ -302,21 +302,22 @@
                     </div>
                 </section>
             </div>
-            <!-- *ngIf="inventoryObj?.totalItems > inventoryObj.count && !isLoading" -->
+            <!--  -->
             <div class="pagination-wrapper">
                 <pagination
-                    [totalItems]="inventoryObj?.totalItems"
-                    [(ngModel)]="inventoryObj.page"
+                    *ngIf="stockReportRequest?.totalItems > stockReportRequest.count && !isLoading"
+                    [totalItems]="stockReportRequest?.totalItems"
+                    [(ngModel)]="stockReportRequest.page"
                     [maxSize]="5"
                     class="pagination-sm"
                     [boundaryLinks]="true"
-                    [itemsPerPage]="inventoryObj.count"
+                    [itemsPerPage]="stockReportRequest.count"
                     [rotate]="false"
                     (pageChanged)="pageChanged($event)"
-                    [firstText]="'First'"
-                    [previousText]="'Previous'"
-                    [nextText]="'Next'"
-                    [lastText]="'Last'"
+                    [firstText]="commonLocaleData?.app_first"
+                    [previousText]="commonLocaleData?.app_previous"
+                    [nextText]="commonLocaleData?.app_next"
+                    [lastText]="commonLocaleData?.app_last"
                 ></pagination>
             </div>
         </div>

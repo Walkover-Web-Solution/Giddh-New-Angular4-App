@@ -75,5 +75,8 @@ export const INVENTORY_API = {
         CREATE: 'company/:companyUniqueName/stock-group/:stockGroupUniqueName/stock',
         GET: 'company/:companyUniqueName/stock/:stockUniqueName',
         UPDATE: 'company/:companyUniqueName/stock-group/:stockGroupUniqueName/stock/:stockUniqueName'
-    }
+    },
+
+    NEWSTOCK_REPORT_V2: 'company/:companyUniqueName/inventory/transaction-report?from=:from&to=:to&count=:count&page=:page&sort=:sort&sortBy=:sortBy&transaction_type=:transactionType', // post for filter rest all get
+
 };
