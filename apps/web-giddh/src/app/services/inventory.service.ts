@@ -409,10 +409,10 @@ export class InventoryService {
                 })));
     }
 
-    public GetStocksReportNew_v2(stockReportRequest: StockReportRequestNew): Observable<BaseResponse<StockReportResponse, StockReportRequestNew>> {
+    public GetStockTransactionReport(stockReportRequest: StockReportRequestNew): Observable<BaseResponse<StockReportResponse, StockReportRequestNew>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
 
-        return this.http.post(this.config.apiUrl + INVENTORY_API.NEWSTOCK_REPORT_V2?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+        return this.http.post(this.config.apiUrl + INVENTORY_API.TRANSACTIONAL_STOCK_REPORT_V2?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             ?.replace(':stockGroupUniqueName', encodeURIComponent(<any>stockReportRequest.stockGroupUniqueNames))
             ?.replace(':stockUniqueName', encodeURIComponent(<any>stockReportRequest.stockUniqueNames))
             ?.replace(':transactionType', encodeURIComponent(stockReportRequest.transactionType ? stockReportRequest.transactionType?.toString() : 'all'))
@@ -445,6 +445,32 @@ export class InventoryService {
                 })));
     }
 
+    public GetStockTransactionReportBalance(stockReportRequest: StockReportRequestNew): Observable<BaseResponse<StockReportResponse, StockReportRequestNew>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+
+        return this.http.post(this.config.apiUrl + INVENTORY_API.TRANSACTIONAL_STOCK_REPORT_BALANCE_V2?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':stockGroupUniqueName', encodeURIComponent(<any>stockReportRequest.stockGroupUniqueNames))
+            ?.replace(':stockUniqueName', encodeURIComponent(<any>stockReportRequest.stockUniqueNames))
+            ?.replace(':from', encodeURIComponent(stockReportRequest.from))
+            ?.replace(':to', encodeURIComponent(stockReportRequest.to))
+            , stockReportRequest).pipe(
+                map((res) => {
+                    let data: BaseResponse<StockReportResponse, StockReportRequestNew> = res;
+                    data.request = stockReportRequest;
+                    data.queryString = {
+                        stockGroupUniqueName: stockReportRequest.stockGroupUniqueNames,
+                        stockUniqueName: stockReportRequest.stockUniqueNames,
+                        from: stockReportRequest.from,
+                        to: stockReportRequest.to,
+                    };
+                    return data;
+                }), catchError((e) => this.errorHandler.HandleCatch<StockReportResponse, StockReportRequestNew>(e, stockReportRequest, {
+                    stockGroupUniqueName: stockReportRequest.stockGroupUniqueNames,
+                    stockUniqueName: stockReportRequest.stockUniqueNames,
+                    from: stockReportRequest.from,
+                    to: stockReportRequest.to,
+                })));
+    }
     /**
      * get GetGroupStocksReport
      */

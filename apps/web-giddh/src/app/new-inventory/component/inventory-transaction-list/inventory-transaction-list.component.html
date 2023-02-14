@@ -60,12 +60,12 @@
             </mat-option>
         </mat-select>
     </div>
-    <div class="clear-filter d-flex" *ngIf="showClearFilter">
+    <div class="clear-filter d-flex" *ngIf="isFilterCorrect">
         <button
             mat-raised-button
             class="create-btn-inventory btn-sky-blue ml-3 mr-0"
             color="primary"
-            (click)="resetAdvanceSearch()"
+            (click)="resetFilter()"
         >
             <span class="icon-cross"></span> Clear
         </button>
@@ -145,7 +145,9 @@
                             <h5>
                                 Transaction Count
                                 <div class="mt-2">
-                                    <span class="d-inline-flex number-total"> 1.00 </span>
+                                    <span class="d-inline-flex number-total"
+                                        >{{ stockReportRequest?.totalItems ?? "-" }}
+                                    </span>
                                 </div>
                             </h5>
                         </div>
@@ -153,7 +155,9 @@
                             <h5>
                                 Profit/Loss
                                 <div class="mt-2">
-                                    <span class="d-inline-flex number-total"> 1,02,377.50 </span>
+                                    <span class="d-inline-flex number-total"
+                                        >{{ stockTransactionReportBalance?.profit ?? "-" }}
+                                    </span>
                                 </div>
                             </h5>
                         </div>
@@ -161,7 +165,9 @@
                             <h5>
                                 Opening
                                 <div class="mt-2">
-                                    <span class="d-inline-flex number-total"> 432.00 </span>
+                                    <span class="d-inline-flex number-total">
+                                        {{ stockTransactionReportBalance?.opening?.amount ?? "-" }}
+                                    </span>
                                 </div>
                             </h5>
                         </div>
@@ -169,7 +175,9 @@
                             <h5>
                                 Inward
                                 <div class="mt-2">
-                                    <span class="d-inline-flex number-total"> 432.00 </span>
+                                    <span class="d-inline-flex number-total">
+                                        {{ stockTransactionReportBalance?.inwards?.amount ?? "-" }}
+                                    </span>
                                 </div>
                             </h5>
                         </div>
@@ -177,7 +185,9 @@
                             <h5>
                                 Outward
                                 <div class="mt-2">
-                                    <span class="d-inline-flex number-total"> 1,02,378.50 </span>
+                                    <span class="d-inline-flex number-total">
+                                        {{ stockTransactionReportBalance?.outwards?.amount ?? "-" }}
+                                    </span>
                                 </div>
                             </h5>
                         </div>
@@ -185,7 +195,9 @@
                             <h5>
                                 Closing
                                 <div class="mt-2">
-                                    <span class="d-inline-flex number-total"> 432.00 </span>
+                                    <span class="d-inline-flex number-total">
+                                        {{ stockTransactionReportBalance?.closing?.amount ?? "-" }}
+                                    </span>
                                 </div>
                             </h5>
                         </div>
@@ -199,12 +211,14 @@
             <div *ngIf="isLoading">
                 <giddh-page-loader></giddh-page-loader>
             </div>
-            <div class="table-responsive" *ngIf="!isLoading">
+            <div class="table-responsive table-content" *ngIf="!isLoading">
                 <table
                     mat-table
                     [dataSource]="dataSource"
                     matSort
                     (matSortChange)="sortChange($event)"
+                    [matSortActive]="stockReportRequest.sortBy"
+                    [matSortDirection]="stockReportRequest.sort"
                     class="table giddh-table on-mobile-view"
                 >
                     <ng-container matColumnDef="date">
@@ -219,33 +233,49 @@
                                 class="fa fa-ellipsis-v pull-right text-light-2 mt-1 cursor-pointer"
                                 aria-hidden="true"
                             ></i>
+                            <mat-menu #voucherTypes="matMenu">
+                                <ng-container *ngFor="let item of VOUCHER_TYPES">
+                                    <button
+                                        mat-menu-item
+                                        (click)="$event.stopPropagation()"
+                                        (keydown.enter)="
+                                            $event.stopPropagation();
+                                            item.checked = !item?.checked;
+                                            filterByCheck(item?.value, $event?.checked)
+                                        "
+                                    >
+                                        <mat-checkbox
+                                            color="primary"
+                                            name="{{ item?.value }}"
+                                            (change)="filterByCheck(item?.value, $event?.checked)"
+                                            [(ngModel)]="item.value"
+                                            (click)="$event.stopPropagation()"
+                                        >
+                                            {{ item.label }}</mat-checkbox
+                                        >
+                                    </button>
+                                </ng-container>
+                            </mat-menu>
                         </th>
 
                         <td date-title="Voucher Type" mat-cell *matCellDef="let element">{{ element.voucherType }}</td>
-                        <mat-menu #voucherTypes="matMenu">
-                            <div class="menu-selector" *ngFor="let item of VOUCHER_TYPES">
-                                <button mat-menu-item>
-                                    <mat-checkbox color="primary"> {{ item.label }}</mat-checkbox>
-                                </button>
-                            </div>
-                        </mat-menu>
                     </ng-container>
 
                     <ng-container matColumnDef="accountName">
                         <th
-                            class="td-search-box text-right"
-                            width="10%"
+                            class="td-search-box"
+                            width="15%"
                             mat-header-cell
-                            *matHeaderCellDef
                             #searchCustomerContainer
-                            (clickOutside)="clickedOutside($event, searchCustomerContainer, 'accountUniqueName')"
+                            *matHeaderCellDef
+                            (clickOutside)="handleClickOutside($event, searchCustomerContainer, 'name')"
                         >
                             <ng-container
                                 *ngTemplateOutlet="
                                     searchTemplate;
                                     context: {
                                         $implicit: showAccountSearch,
-                                        fieldName: 'accountUniqueName',
+                                        fieldName: 'name',
                                         formControl: accountNameSearching,
                                         title: 'Account Name'
                                     }
@@ -293,25 +323,25 @@
                         </td>
                     </ng-container> -->
 
-                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
                     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                 </table>
                 <section class="no-logs" *ngIf="!dataSource?.length && !isLoading">
                     <div class="no-data">
-                        <h1>No data found</h1>
+                        <h1>No Data Found</h1>
                     </div>
                 </section>
             </div>
             <!--  -->
             <div class="pagination-wrapper">
                 <pagination
-                    *ngIf="stockReportRequest?.totalItems > stockReportRequest.count && !isLoading"
+                    *ngIf="stockReportRequest?.totalItems > stockReportRequest?.count && !isLoading"
                     [totalItems]="stockReportRequest?.totalItems"
                     [(ngModel)]="stockReportRequest.page"
                     [maxSize]="5"
                     class="pagination-sm"
                     [boundaryLinks]="true"
-                    [itemsPerPage]="stockReportRequest.count"
+                    [itemsPerPage]="stockReportRequest?.count"
                     [rotate]="false"
                     (pageChanged)="pageChanged($event)"
                     [firstText]="commonLocaleData?.app_first"
@@ -351,20 +381,27 @@
 <ng-template #inventoryAdvanceSearch>
     <new-inventory-advance-search></new-inventory-advance-search>
 </ng-template>
-<!-- region search template -->
-<ng-template #searchTemplate let-show let-title="title" let-fieldName="fieldName" let-formControl="formControl">
-    <div [hidden]="show">
-        <span> {{ title }}</span>
-        <i class="icon-search" (click)="toggleSearch(fieldName, searchBox)"></i>
+<ng-template
+    #searchTemplate
+    let-show
+    let-title="title"
+    let-placeholder="placeholder"
+    let-fieldName="fieldName"
+    let-formControl="formControl"
+>
+    <div class="align-items-center d-flex" [hidden]="show">
+        <span>{{ title }}</span>
+        <button mat-icon-button (click)="toggleSearch(fieldName)">
+            <span class="icon-search"></span>
+        </button>
     </div>
-    <div class="input-container" [hidden]="!show">
-        <input
-            type="text"
-            [placeholder]="getSearchFieldText(title)"
-            class="w-100"
-            #searchBox
+    <div [hidden]="!show">
+        <text-field
+            [type]="'text'"
+            [placeholder]="getSearchFieldText(fieldName)"
+            [cssClass]="'form-control search-table mat-field-border'"
             [formControl]="formControl"
-        />
+            [autoFocus]="show"
+        ></text-field>
     </div>
 </ng-template>
-<!-- endregion -->

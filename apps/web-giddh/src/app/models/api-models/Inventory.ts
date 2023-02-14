@@ -145,11 +145,12 @@ export class StockReportRequest {
 export class StockReportRequestNew {
     public from: string = '';
     public to: string = '';
-    public count: number = 20;
+    public count: number = PAGINATION_LIMIT;
     public page: number = 1;
     public sort: string;
     public sortBy: string;
     public totalItems?: number;
+    public totalPages?: number;
     public stockGroupUniqueNames: any[];
     public stockUniqueNames: any[];
     public transactionType: string;
@@ -160,6 +161,15 @@ export class StockReportRequestNew {
     public val?: number;
     public warehouseUniqueNames?: any[];
     public branchUniqueNames?: any[];
+    public variantUniqueNames?: any[];
+}
+
+export class TransactionalStockReportResponse {
+    public profit?: number;
+    public opening?: any;
+    public closing?: any;
+    public inwards?: any;
+    public outwards?: any;
 }
 
 

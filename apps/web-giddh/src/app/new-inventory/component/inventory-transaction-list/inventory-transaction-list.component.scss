@@ -58,6 +58,11 @@
         }
     }
 }
+.table-content {
+    max-height: calc(100vh - 450px);
+    overflow-y: auto;
+    height: calc(100vh - 450px);
+}
 
 ::ng-deep {
     .mat-pseudo-checkbox-checked {

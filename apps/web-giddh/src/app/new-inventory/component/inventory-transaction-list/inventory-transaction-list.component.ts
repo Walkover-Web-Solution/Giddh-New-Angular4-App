@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, TemplateRef, ChangeDetectionStrategy, ChangeDetectorRef } from "@angular/core";
+import { Component, OnInit, ViewChild, ElementRef, TemplateRef, ChangeDetectionStrategy, ChangeDetectorRef, AfterViewInit } from "@angular/core";
 import { GeneralService } from "../../../services/general.service";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from "../../../app.constant";
@@ -15,19 +15,8 @@ import { OrganizationType } from "../../../models/user-login-state";
 import { CompanyResponse } from "../../../models/api-models/Company";
 import { WarehouseActions } from "../../../settings/warehouse/action/warehouse.action";
 import { cloneDeep } from "../../../lodash-optimized";
-import { StockReportRequest, StockReportRequestNew, StockReportResponse } from "../../../models/api-models/Inventory";
+import { StockReportRequest, StockReportRequestNew, StockReportResponse, TransactionalStockReportResponse } from "../../../models/api-models/Inventory";
 import { InventoryService } from "../../../services/inventory.service";
-
-export interface PeriodicElement {
-    date: string;
-    voucherType: string;
-    accountName: string;
-    inwards: string;
-    outwards: string;
-    rate: string;
-    value: string;
-}
-
 
 @Component({
     selector: "inventory-transaction-list",
@@ -45,7 +34,7 @@ export class InventoryTransactionListComponent implements OnInit {
     @ViewChild('accountName', { static: true }) public accountName: ElementRef;
     @ViewChild('searchBox', { static: true }) public searchBox: ElementRef;
     /** Instance of sort header */
-    @ViewChild(MatSort) sortBy: MatSort;
+    @ViewChild(MatSort) sort: MatSort;
     public displayedColumns: string[] = ["date", "voucherType", "accountName", "inwards", "outwards", "rate", "value"];
     public dataSource = [];
     /* This will store modal reference */
@@ -76,15 +65,6 @@ export class InventoryTransactionListComponent implements OnInit {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** True if api call in progress */
     public isLoading: boolean = false;
-    /** This will use for activity logs object */
-    public inventoryObj = {
-        count: PAGINATION_LIMIT,
-        page: 1,
-        totalPages: 0,
-        totalItems: 0,
-        fromDate: "",
-        toDate: ""
-    }
     /** Hold warehouse checked  */
     public selectedWarehouse: any[] = [];
     /** This will use for instance of lwarehouses Dropdown */
@@ -147,10 +127,12 @@ export class InventoryTransactionListComponent implements OnInit {
     public allBranches: any[] = [];
     public groupUniqueName: string;
     public stockUniqueName: string;
-    public stockReportRequest: StockReportRequestNew;
+    public stockReportRequest: StockReportRequestNew = new StockReportRequestNew();
     public stockReport: StockReportResponse;
     public toDate: string;
     public fromDate: string;
+    public isFilterCorrect: boolean = false;
+    public stockTransactionReportBalance: TransactionalStockReportResponse;
 
 
 
@@ -163,7 +145,6 @@ export class InventoryTransactionListComponent implements OnInit {
         private inventoryService: InventoryService,
         private store: Store<AppState>) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
-        this.stockReportRequest = new StockReportRequestNew();
     }
 
 
@@ -177,10 +158,23 @@ export class InventoryTransactionListComponent implements OnInit {
                 this.universalDate = _.cloneDeep(dateObj);
                 this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
                 this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-                this.getStockReport(true);
+                this.initTransactionalReport(false, true);
+                this.initTransactionalReportBalance(true)
             }
         });
-        this.store.dispatch(this.warehouseAction.fetchAllWarehouses({ page: 1, count: 0 }));
+
+        this.accountNameSearching.valueChanges.pipe(
+            debounceTime(700),
+            distinctUntilChanged(),
+            takeUntil(this.destroyed$)
+        ).subscribe(s => {
+            this.isFilterCorrect = true;
+            this.stockReportRequest.accountName = s;
+            this.initTransactionalReport(true, false);
+            if (s === '') {
+                this.showAccountSearch = false;
+            }
+        });
 
         this.branchesDropdown.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(search => {
             let branchesClone = cloneDeep(this.allBranches);
@@ -201,29 +195,22 @@ export class InventoryTransactionListComponent implements OnInit {
 
         this.getBranches();
         this.getWarehouses();
-        this.initReport();
+        this.initVoucherType();
     }
 
-    public initReport() {
-        this.stockReportRequest.stockGroupUniqueNames = [];
-        this.stockReportRequest.stockUniqueNames = [];
-        this.stockReportRequest.transactionType = 'all';
-        this.stockReportRequest.warehouseUniqueNames = [];
-        this.stockReportRequest.branchUniqueNames = [];
-        this.stockReportRequest.voucherTypes = null;
-        this.stockReportRequest.val = 0;
-        this.stockReportRequest.param = null;
-        this.stockReportRequest.expression = null;
-        this.inventoryService.GetStocksReportNew_v2(cloneDeep(this.stockReportRequest)).subscribe(res => {
-            this.dataSource = res?.body?.transactions;
-            this.changeDetection.detectChanges();
-        });
-    }
+    public initTransactionalReport(resetPage: boolean, initiallyApiICall: boolean): void {
+        if (initiallyApiICall) {
+            this.stockReportRequest.stockGroupUniqueNames = [];
+            this.stockReportRequest.stockUniqueNames = [];
+            this.stockReportRequest.transactionType = 'all';
+            this.stockReportRequest.warehouseUniqueNames = [];
+            this.stockReportRequest.branchUniqueNames = [];
+            this.stockReportRequest.variantUniqueNames = [];
+            this.stockReportRequest.from = this.fromDate || null;
+            this.stockReportRequest.to = this.toDate || null;
+            this.stockReportRequest.voucherTypes = null;
+        }
 
-
-    public getStockReport(resetPage: boolean) {
-        this.stockReportRequest.from = this.fromDate || null;
-        this.stockReportRequest.to = this.toDate || null;
         if (resetPage) {
             this.stockReportRequest.page = 1;
         }
@@ -235,11 +222,60 @@ export class InventoryTransactionListComponent implements OnInit {
             delete this.stockReportRequest.param;
             delete this.stockReportRequest.val;
         }
-        this.inventoryService.GetStocksReportNew_v2(cloneDeep(this.stockReportRequest)).subscribe(res => {
-            console.log(res);
+        this.isLoading = true;
+        this.inventoryService.GetStockTransactionReport(cloneDeep(this.stockReportRequest)).subscribe(response => {
+            this.isLoading = false;
+            if (response && response.body && response.status === 'success') {
+                this.dataSource = response.body.transactions;
+                this.stockReportRequest.page = response.body.page;
+                this.stockReportRequest.totalItems = response.body.totalItems;
+                this.stockReportRequest.totalPages = response.body.totalPages;
+                this.stockReportRequest.count = response.body.count;
+            } else {
+                this.dataSource = [];
+                this.stockReportRequest.totalItems = 0;
+            }
+            this.changeDetection.detectChanges();
         });
-        this.changeDetection.detectChanges();
+    }
 
+    public initTransactionalReportBalance(initiallyApiICall: boolean,resetPage?: boolean): void {
+        if (initiallyApiICall) {
+            this.stockReportRequest.stockGroupUniqueNames = [];
+            this.stockReportRequest.stockUniqueNames = [];
+            this.stockReportRequest.warehouseUniqueNames = [];
+            this.stockReportRequest.branchUniqueNames = [];
+            this.stockReportRequest.variantUniqueNames = [];
+            this.stockReportRequest.from = this.fromDate || null;
+            this.stockReportRequest.to = this.toDate || null;
+            this.stockReportRequest.voucherTypes = null;
+            this.stockReportRequest.val = 0;
+            this.stockReportRequest.param = null;
+            this.stockReportRequest.expression = null;
+            delete this.stockReportRequest.count;
+            delete this.stockReportRequest.page;
+            delete this.stockReportRequest.transactionType;
+        }
+
+        if (!this.stockReportRequest.stockGroupUniqueNames || !this.stockReportRequest.stockUniqueNames) {
+            return;
+        }
+        // if (!this.stockReportRequest.expression || !this.stockReportRequest.param || !this.stockReportRequest.val) {
+        //     delete this.stockReportRequest.expression;
+        //     delete this.stockReportRequest.param;
+        //     delete this.stockReportRequest.val;
+        // }
+        this.isLoading = true;
+
+        this.inventoryService.GetStockTransactionReportBalance(cloneDeep(this.stockReportRequest)).subscribe(response => {
+            this.isLoading = false;
+            if (response && response.body && response.status === 'success') {
+             this.stockTransactionReportBalance = response.body;
+            } else {
+
+            }
+            this.changeDetection.detectChanges();
+        });
     }
 
     /**
@@ -298,10 +334,13 @@ export class InventoryTransactionListComponent implements OnInit {
     * @memberof InventoryTransactionListComponent
     */
     public pageChanged(event: any): void {
-        this.stockReportRequest.page = event.page;
-        this.getStockReport(false);
+        if (this.stockReportRequest.page !== event.page) {
+            this.stockReportRequest.page = event.page;
+            this.initTransactionalReport(false, false);
+
+        }
     }
-    /* advance serach modal */
+
     public openModal(): void {
         this.dialog.open(this.inventoryAdvanceSearch, {
             panelClass: 'advance-search-container'
@@ -309,38 +348,36 @@ export class InventoryTransactionListComponent implements OnInit {
     }
 
     public sortChange(event: any): void {
+
+        this.stockReportRequest.sortBy = event?.active;
+        this.stockReportRequest.sort = event?.direction;
+        this.initTransactionalReport(false, false);
     }
 
 
-    public toggleSearch(fieldName: string, el: any) {
-        if (fieldName === 'accountUniqueName') {
+    public toggleSearch(fieldName: string): void {
+        if (fieldName === "name") {
             this.showAccountSearch = true;
         }
-
-        setTimeout(() => {
-            el.focus();
-        }, 200);
     }
 
-
-    public getSearchFieldText(title: any): string {
-        let searchField = "Search Account";
-        // searchField = searchField?.replace("[FIELD]", title);
-        return searchField;
-
+    public getSearchFieldText(fieldName: string): string {
+        if (fieldName === "name") {
+            return "Account Name";
+        }
+        return "";
     }
-
-
-    public clickedOutside(event: Event, el, fieldName: string) {
-        if (fieldName === 'accountUniqueName') {
-            if (this.accountNameSearching?.value !== null && this.accountNameSearching?.value !== '') {
+    public handleClickOutside(event: any, element: any, searchedFieldName: string): void {
+        if (searchedFieldName === "name") {
+            if (this.accountNameSearching?.value) {
                 return;
             }
+            if (this.generalService.childOf(event.target, element)) {
+                return;
+            } else {
+                this.showAccountSearch = false;
+            }
         }
-        if (fieldName === 'accountUniqueName') {
-            this.showAccountSearch = false;
-        }
-        this.changeDetection.detectChanges();
     }
 
 
@@ -373,9 +410,70 @@ export class InventoryTransactionListComponent implements OnInit {
         this.VOUCHER_TYPES.forEach(element => {
             element.checked = true;
             this.stockReportRequest.voucherTypes.push(element.value);
+            this.changeDetection.detectChanges();
+        });
+    }
+
+    //******* Advance search modal *******//
+    public resetFilter(isReset?: boolean) {
+        this.isFilterCorrect = false;
+        this.stockReportRequest.sort = null;
+        this.stockReportRequest.sortBy = null;
+        this.stockReportRequest.accountName = null;
+        this.showAccountSearch = false;
+        this.stockReportRequest.val = null;
+        this.stockReportRequest.param = null;
+        this.stockReportRequest.expression = null;
+        this.accountNameSearching.reset();
+
+        this.initVoucherType();
+        // this.advanceSearchForm.controls['filterAmount'].setValue(null);
+        //Reset Date with universal date
+        this.universalDate$.subscribe(dateObj => {
+            if (dateObj) {
+                this.stockReportRequest.from = dayjs(dateObj[0]).format(GIDDH_DATE_FORMAT);
+                this.stockReportRequest.to = dayjs(dateObj[1]).format(GIDDH_DATE_FORMAT);
+                let universalDate = cloneDeep(dateObj);
+                this.selectedDateRange = { startDate: dayjs(universalDate[0]), endDate: dayjs(universalDate[1]) };
+                this.selectedDateRangeUi = dayjs(universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+            }
         });
         this.changeDetection.detectChanges();
     }
+    public filterByCheck(type: string, event: boolean) {
+        let idx = this.stockReportRequest.voucherTypes?.indexOf('ALL');
+        if (idx !== -1) {
+            this.initVoucherType();
+        }
+        if (event && type) {
+            this.stockReportRequest.voucherTypes.push(type);
+        } else {
+            let index = this.stockReportRequest.voucherTypes?.indexOf(type);
+            if (index !== -1) {
+                this.stockReportRequest.voucherTypes.splice(index, 1);
+            }
+        }
+        if (this.stockReportRequest.voucherTypes?.length > 0 && this.stockReportRequest.voucherTypes?.length < this.VOUCHER_TYPES.length) {
+            idx = this.stockReportRequest.voucherTypes?.indexOf('ALL');
+            if (idx !== -1) {
+                this.stockReportRequest.voucherTypes.splice(idx, 1);
+            }
+            idx = this.stockReportRequest.voucherTypes?.indexOf('NONE');
+            if (idx !== -1) {
+                this.stockReportRequest.voucherTypes.splice(idx, 1);
+            }
+        }
+        if (this.stockReportRequest.voucherTypes?.length === this.VOUCHER_TYPES.length) {
+            this.stockReportRequest.voucherTypes = ['ALL'];
+        }
+        if (this.stockReportRequest.voucherTypes?.length === 0) {
+            this.stockReportRequest.voucherTypes = ['NONE'];
+        }
+        this.initTransactionalReport(false, false);
+        this.isFilterCorrect = true;
+        this.changeDetection.detectChanges();
+    }
+
 
     public ngOnDestroy() {
         this.destroyed$.next(true);
