@@ -134,8 +134,6 @@ export class InventoryTransactionListComponent implements OnInit {
     public isFilterCorrect: boolean = false;
     public stockTransactionReportBalance: TransactionalStockReportResponse;
 
-
-
     constructor(
         private generalService: GeneralService,
         public dialog: MatDialog,
@@ -158,8 +156,7 @@ export class InventoryTransactionListComponent implements OnInit {
                 this.universalDate = _.cloneDeep(dateObj);
                 this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
                 this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-                this.initTransactionalReport(false, true);
-                this.initTransactionalReportBalance(true)
+                this.getStockTransactionalReport(false,true);
             }
         });
 
@@ -170,7 +167,7 @@ export class InventoryTransactionListComponent implements OnInit {
         ).subscribe(s => {
             this.isFilterCorrect = true;
             this.stockReportRequest.accountName = s;
-            this.initTransactionalReport(true, false);
+            this.getStockTransactionalReport(false,true);
             if (s === '') {
                 this.showAccountSearch = false;
             }
@@ -198,31 +195,24 @@ export class InventoryTransactionListComponent implements OnInit {
         this.initVoucherType();
     }
 
-    public initTransactionalReport(resetPage: boolean, initiallyApiICall: boolean): void {
-        if (initiallyApiICall) {
-            this.stockReportRequest.stockGroupUniqueNames = [];
-            this.stockReportRequest.stockUniqueNames = [];
-            this.stockReportRequest.transactionType = 'all';
-            this.stockReportRequest.warehouseUniqueNames = [];
-            this.stockReportRequest.branchUniqueNames = [];
-            this.stockReportRequest.variantUniqueNames = [];
-            this.stockReportRequest.from = this.fromDate || null;
-            this.stockReportRequest.to = this.toDate || null;
-            this.stockReportRequest.voucherTypes = null;
-        }
 
-        if (resetPage) {
-            this.stockReportRequest.page = 1;
+    public getStockTransactionalReport(resetPage?: boolean, type?: boolean): void {
+        this.isLoading = true;
+        this.stockReportRequest.from = this.fromDate;
+        this.stockReportRequest.to = this.toDate;
+        console.log(this.stockReportRequest.voucherTypes);
+
+        // Condition sah krna h galat h API se issue h
+        if (type) {
+            this.stockReportRequest.voucherTypes = [];
         }
         if (!this.stockReportRequest.stockGroupUniqueNames || !this.stockReportRequest.stockUniqueNames) {
             return;
         }
-        if (!this.stockReportRequest.expression || !this.stockReportRequest.param || !this.stockReportRequest.val) {
-            delete this.stockReportRequest.expression;
-            delete this.stockReportRequest.param;
-            delete this.stockReportRequest.val;
+        if (resetPage) {
+            this.stockReportRequest.page = 1;
+            this.stockReportRequest.count = PAGINATION_LIMIT;
         }
-        this.isLoading = true;
         this.inventoryService.GetStockTransactionReport(cloneDeep(this.stockReportRequest)).subscribe(response => {
             this.isLoading = false;
             if (response && response.body && response.status === 'success') {
@@ -237,40 +227,13 @@ export class InventoryTransactionListComponent implements OnInit {
             }
             this.changeDetection.detectChanges();
         });
-    }
-
-    public initTransactionalReportBalance(initiallyApiICall: boolean,resetPage?: boolean): void {
-        if (initiallyApiICall) {
-            this.stockReportRequest.stockGroupUniqueNames = [];
-            this.stockReportRequest.stockUniqueNames = [];
-            this.stockReportRequest.warehouseUniqueNames = [];
-            this.stockReportRequest.branchUniqueNames = [];
-            this.stockReportRequest.variantUniqueNames = [];
-            this.stockReportRequest.from = this.fromDate || null;
-            this.stockReportRequest.to = this.toDate || null;
-            this.stockReportRequest.voucherTypes = null;
-            this.stockReportRequest.val = 0;
-            this.stockReportRequest.param = null;
-            this.stockReportRequest.expression = null;
-            delete this.stockReportRequest.count;
-            delete this.stockReportRequest.page;
-            delete this.stockReportRequest.transactionType;
-        }
-
-        if (!this.stockReportRequest.stockGroupUniqueNames || !this.stockReportRequest.stockUniqueNames) {
-            return;
-        }
-        // if (!this.stockReportRequest.expression || !this.stockReportRequest.param || !this.stockReportRequest.val) {
-        //     delete this.stockReportRequest.expression;
-        //     delete this.stockReportRequest.param;
-        //     delete this.stockReportRequest.val;
-        // }
-        this.isLoading = true;
-
+        delete this.stockReportRequest.count;
+        delete this.stockReportRequest.page;
+        delete this.stockReportRequest.transactionType;
         this.inventoryService.GetStockTransactionReportBalance(cloneDeep(this.stockReportRequest)).subscribe(response => {
             this.isLoading = false;
             if (response && response.body && response.status === 'success') {
-             this.stockTransactionReportBalance = response.body;
+                this.stockTransactionReportBalance = response.body;
             } else {
 
             }
@@ -285,7 +248,7 @@ export class InventoryTransactionListComponent implements OnInit {
      * @return {*}  {void}
      * @memberof InventoryTransactionListComponent
      */
-    public dateSelectedCallback(value?: any): void {
+    public dateSelectedCallback(value?: any, from?: any): void {
         if (value && value.event === "cancel") {
             this.hideGiddhDatepicker();
             return;
@@ -299,7 +262,14 @@ export class InventoryTransactionListComponent implements OnInit {
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.stockReportRequest.from = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
+            this.stockReportRequest.to = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
+            this.fromDate = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
+            this.toDate = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
         }
+        this.isFilterCorrect = true;
+        this.getStockTransactionalReport(false,true);
+
     }
 
     /**
@@ -336,7 +306,7 @@ export class InventoryTransactionListComponent implements OnInit {
     public pageChanged(event: any): void {
         if (this.stockReportRequest.page !== event.page) {
             this.stockReportRequest.page = event.page;
-            this.initTransactionalReport(false, false);
+            this.getStockTransactionalReport(false,true);
 
         }
     }
@@ -348,10 +318,13 @@ export class InventoryTransactionListComponent implements OnInit {
     }
 
     public sortChange(event: any): void {
+        if (this.stockReportRequest.sort !== event?.direction) {
+            this.stockReportRequest.sort = event?.direction;
+            this.stockReportRequest.sortBy = event?.active;
+            this.getStockTransactionalReport(false,true);
 
-        this.stockReportRequest.sortBy = event?.active;
-        this.stockReportRequest.sort = event?.direction;
-        this.initTransactionalReport(false, false);
+        }
+        this.isFilterCorrect = true;
     }
 
 
@@ -367,6 +340,7 @@ export class InventoryTransactionListComponent implements OnInit {
         }
         return "";
     }
+
     public handleClickOutside(event: any, element: any, searchedFieldName: string): void {
         if (searchedFieldName === "name") {
             if (this.accountNameSearching?.value) {
@@ -416,7 +390,7 @@ export class InventoryTransactionListComponent implements OnInit {
 
     //******* Advance search modal *******//
     public resetFilter(isReset?: boolean) {
-        this.isFilterCorrect = false;
+        this.accountNameSearching.reset();
         this.stockReportRequest.sort = null;
         this.stockReportRequest.sortBy = null;
         this.stockReportRequest.accountName = null;
@@ -424,22 +398,25 @@ export class InventoryTransactionListComponent implements OnInit {
         this.stockReportRequest.val = null;
         this.stockReportRequest.param = null;
         this.stockReportRequest.expression = null;
-        this.accountNameSearching.reset();
 
         this.initVoucherType();
-        // this.advanceSearchForm.controls['filterAmount'].setValue(null);
         //Reset Date with universal date
         this.universalDate$.subscribe(dateObj => {
             if (dateObj) {
                 this.stockReportRequest.from = dayjs(dateObj[0]).format(GIDDH_DATE_FORMAT);
                 this.stockReportRequest.to = dayjs(dateObj[1]).format(GIDDH_DATE_FORMAT);
+                this.fromDate = dayjs(dateObj[0]).format(GIDDH_DATE_FORMAT);
+                this.toDate = dayjs(dateObj[1]).format(GIDDH_DATE_FORMAT);
                 let universalDate = cloneDeep(dateObj);
                 this.selectedDateRange = { startDate: dayjs(universalDate[0]), endDate: dayjs(universalDate[1]) };
                 this.selectedDateRangeUi = dayjs(universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
             }
+            this.isFilterCorrect = false;
         });
         this.changeDetection.detectChanges();
     }
+
+
     public filterByCheck(type: string, event: boolean) {
         let idx = this.stockReportRequest.voucherTypes?.indexOf('ALL');
         if (idx !== -1) {
@@ -469,7 +446,7 @@ export class InventoryTransactionListComponent implements OnInit {
         if (this.stockReportRequest.voucherTypes?.length === 0) {
             this.stockReportRequest.voucherTypes = ['NONE'];
         }
-        this.initTransactionalReport(false, false);
+        this.getStockTransactionalReport(false, false);
         this.isFilterCorrect = true;
         this.changeDetection.detectChanges();
     }

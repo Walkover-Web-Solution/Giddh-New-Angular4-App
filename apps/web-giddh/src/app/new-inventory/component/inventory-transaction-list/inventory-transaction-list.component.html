@@ -208,10 +208,7 @@
     </div>
     <div class="row">
         <div class="col-12 horizontal-padding">
-            <div *ngIf="isLoading">
-                <giddh-page-loader></giddh-page-loader>
-            </div>
-            <div class="table-responsive table-content" *ngIf="!isLoading">
+            <div class="table-responsive table-content">
                 <table
                     mat-table
                     [dataSource]="dataSource"
@@ -223,7 +220,11 @@
                 >
                     <ng-container matColumnDef="date">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
-                        <td data-title="Date" mat-cell *matCellDef="let element">{{ element.entryDate ?? "-" }}</td>
+                        <td data-title="Date" mat-cell *matCellDef="let element">
+                            <ng-container *ngIf="!isLoading && dataSource?.length">
+                                {{ element.entryDate ?? "-" }}
+                            </ng-container>
+                        </td>
                     </ng-container>
 
                     <ng-container matColumnDef="voucherType">
@@ -247,7 +248,7 @@
                                         <mat-checkbox
                                             color="primary"
                                             name="{{ item?.value }}"
-                                            (change)="filterByCheck(item?.value, $event?.checked)"
+                                            (ngModelChange)="filterByCheck(item?.value, $event?.checked)"
                                             [(ngModel)]="item.value"
                                             (click)="$event.stopPropagation()"
                                         >
@@ -257,8 +258,11 @@
                                 </ng-container>
                             </mat-menu>
                         </th>
-
-                        <td date-title="Voucher Type" mat-cell *matCellDef="let element">{{ element.voucherType }}</td>
+                        <td date-title="Voucher Type" mat-cell *matCellDef="let element">
+                            <ng-container *ngIf="!isLoading && dataSource?.length">
+                                {{ element.voucherType }}
+                            </ng-container>
+                        </td>
                     </ng-container>
 
                     <ng-container matColumnDef="accountName">
@@ -282,37 +286,46 @@
                                 "
                             ></ng-container>
                         </th>
-
                         <td data-title="Account Name" class="text-right" mat-cell *matCellDef="let element">
-                            {{ element?.account?.name ?? "-" }}
+                            <ng-container *ngIf="!isLoading && dataSource?.length">
+                                {{ element?.account?.name ?? "-" }}
+                            </ng-container>
                         </td>
                     </ng-container>
 
                     <ng-container matColumnDef="inwards">
                         <th class="text-right" mat-header-cell *matHeaderCellDef mat-sort-header>Inwards</th>
                         <td data-title="Inwards" class="text-right" mat-cell *matCellDef="let element">
-                            {{ element.inwardBalance ?? "-" }}
+                            <ng-container *ngIf="!isLoading && dataSource?.length">
+                                {{ element.inwardBalance ?? "-" }}
+                            </ng-container>
                         </td>
                     </ng-container>
 
                     <ng-container matColumnDef="outwards">
                         <th class="text-right" mat-header-cell *matHeaderCellDef mat-sort-header>Outwards</th>
                         <td data-title="Outwards" class="text-right" mat-cell *matCellDef="let element">
-                            {{ element.outwardBalance ?? "-" }}
+                            <ng-container *ngIf="!isLoading && dataSource?.length">
+                                {{ element.outwardBalance ?? "-" }}
+                            </ng-container>
                         </td>
                     </ng-container>
 
                     <ng-container matColumnDef="rate">
                         <th class="text-right" mat-header-cell *matHeaderCellDef mat-sort-header>Rate</th>
                         <td data-title="Rate" class="text-right" mat-cell *matCellDef="let element">
-                            {{ element.rate ?? "-" }}
+                            <ng-container *ngIf="!isLoading && dataSource?.length">
+                                {{ element.rate ?? "-" }}
+                            </ng-container>
                         </td>
                     </ng-container>
 
                     <ng-container matColumnDef="value">
                         <th class="text-right" mat-header-cell *matHeaderCellDef mat-sort-header>Value</th>
                         <td data-title="Value" class="text-right" mat-cell *matCellDef="let element">
-                            {{ element?.amount ?? "-" }}
+                            <ng-container *ngIf="!isLoading && dataSource?.length">
+                                {{ element?.amount ?? "-" }}
+                            </ng-container>
                         </td>
                     </ng-container>
 
@@ -326,12 +339,15 @@
                     <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
                     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                 </table>
-                <section class="no-logs" *ngIf="!dataSource?.length && !isLoading">
-                    <div class="no-data">
-                        <h1>No Data Found</h1>
-                    </div>
-                </section>
+                <div *ngIf="isLoading">
+                    <giddh-page-loader></giddh-page-loader>
+                </div>
             </div>
+            <section class="no-logs" *ngIf="!dataSource?.length && !isLoading">
+                <div class="no-data">
+                    <h1>No Data Found</h1>
+                </div>
+            </section>
             <!--  -->
             <div class="pagination-wrapper">
                 <pagination

@@ -145,8 +145,8 @@ export class StockReportRequest {
 export class StockReportRequestNew {
     public from: string = '';
     public to: string = '';
-    public count: number = PAGINATION_LIMIT;
-    public page: number = 1;
+    public count: number;
+    public page: number;
     public sort: string;
     public sortBy: string;
     public totalItems?: number;
@@ -154,14 +154,27 @@ export class StockReportRequestNew {
     public stockGroupUniqueNames: any[];
     public stockUniqueNames: any[];
     public transactionType: string;
-    public accountName: string;
-    public voucherTypes?: any[];
+    public accountName: string ;
+    public voucherTypes?: any[] ;
     public param?: string;
-    public expression?: string;
+    public expression?: string ;
     public val?: number;
     public warehouseUniqueNames?: any[];
-    public branchUniqueNames?: any[];
+    public branchUniqueNames?: any[] ;
     public variantUniqueNames?: any[];
+    constructor() {
+        this.count = PAGINATION_LIMIT;
+        this.page = 1;
+        this.stockGroupUniqueNames = [];
+        this.stockUniqueNames = [];
+        this.accountName = "";
+        this.param = null;
+        this.expression = null;
+        this.val = 0;
+        this.warehouseUniqueNames = [];
+        this.branchUniqueNames = [];
+        this.variantUniqueNames = [];
+    }
 }
 
 export class TransactionalStockReportResponse {
