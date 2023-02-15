@@ -1010,8 +1010,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             return;
         }
 
-        let classList = event?.path?.map(m => {
-            return m?.classList;
+        let classList =(event?.path ? event?.path : event?.target)?.map(element => {
+            return element?.classList;
         });
 
         if (classList && classList instanceof Array) {
