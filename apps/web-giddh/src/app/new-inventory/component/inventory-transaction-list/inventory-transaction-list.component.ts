@@ -8,7 +8,7 @@ import { Observable, ReplaySubject } from "rxjs";
 import { select, Store } from "@ngrx/store";
 import { AppState } from "../../../store";
 import { debounceTime, distinctUntilChanged, takeUntil } from "rxjs/operators";
-import { FormControl } from "@angular/forms";
+import { FormControl, FormGroup } from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
 import { MatSort } from "@angular/material/sort";
 import { OrganizationType } from "../../../models/user-login-state";
@@ -128,7 +128,6 @@ export class InventoryTransactionListComponent implements OnInit {
     public groupUniqueName: string;
     public stockUniqueName: string;
     public stockReportRequest: StockReportRequestNew = new StockReportRequestNew();
-    public stockReport: StockReportResponse;
     public toDate: string;
     public fromDate: string;
     public isFilterCorrect: boolean = false;
@@ -156,7 +155,7 @@ export class InventoryTransactionListComponent implements OnInit {
                 this.universalDate = _.cloneDeep(dateObj);
                 this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
                 this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-                this.getStockTransactionalReport(false,true);
+                this.getStockTransactionalReport(false, true);
             }
         });
 
@@ -167,7 +166,7 @@ export class InventoryTransactionListComponent implements OnInit {
         ).subscribe(s => {
             this.isFilterCorrect = true;
             this.stockReportRequest.accountName = s;
-            this.getStockTransactionalReport(false,true);
+            this.getStockTransactionalReport(false, true);
             if (s === '') {
                 this.showAccountSearch = false;
             }
@@ -268,7 +267,7 @@ export class InventoryTransactionListComponent implements OnInit {
             this.toDate = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
         }
         this.isFilterCorrect = true;
-        this.getStockTransactionalReport(false,true);
+        this.getStockTransactionalReport(false, true);
 
     }
 
@@ -306,7 +305,7 @@ export class InventoryTransactionListComponent implements OnInit {
     public pageChanged(event: any): void {
         if (this.stockReportRequest.page !== event.page) {
             this.stockReportRequest.page = event.page;
-            this.getStockTransactionalReport(false,true);
+            this.getStockTransactionalReport(false, true);
 
         }
     }
@@ -321,7 +320,7 @@ export class InventoryTransactionListComponent implements OnInit {
         if (this.stockReportRequest.sort !== event?.direction) {
             this.stockReportRequest.sort = event?.direction;
             this.stockReportRequest.sortBy = event?.active;
-            this.getStockTransactionalReport(false,true);
+            this.getStockTransactionalReport(false, true);
 
         }
         this.isFilterCorrect = true;

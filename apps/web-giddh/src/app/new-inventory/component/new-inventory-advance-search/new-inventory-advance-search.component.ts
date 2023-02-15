@@ -10,6 +10,7 @@ import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/hel
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { MatDialog } from '@angular/material/dialog';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 
 @Component({
@@ -42,7 +43,53 @@ export class NewInventoryAdavanceSearch implements OnInit {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* dayjs object */
     public dayjs = dayjs;
+    public advanceSearchCatergory: any[] = [
+        {
+            value: "INWARD_QUANTITY",
+            label: "Inwards"
+        },
+        {
+            value: "OUTWARD_QUANTITY",
+            label: "Outwards "
+        }
+    ];
 
+    public advanceSearchCatergoryOptions: any[] = [
+        {
+            value: "INWARD_AMOUNT",
+            label: "Inwards"
+        },
+        {
+            value: "OUTWARD_AMOUNT",
+            label: "Outwards"
+        }
+    ];
+
+
+    public advanceSearchValue: any[] = [
+        {
+            value: "EQUALS",
+            label: "Equals"
+        },
+        {
+            value: "GREATER_THAN",
+            label: "Greater than"
+        },
+        {
+            value: "LESS_THAN",
+            label: "Less than"
+        },
+        {
+            value: "NOT_EQUALS",
+            label: "Excluded"
+        }
+    ];
+    /** True if valid fields*/
+    public mandatoryFields: any = {
+        val: false
+    }
+    /** Instance of create trigger form*/
+    public advanceSearchFormObj: any = {};
 
     constructor(
         private _breakPointObservar: BreakpointObserver,
@@ -117,9 +164,59 @@ export class NewInventoryAdavanceSearch implements OnInit {
             Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
         );
     }
-    public closePopup():void {
-        this.dialog?.closeAll();
+
+
+    public initFormFields(): void {
+        this.advanceSearchFormObj =
+        {
+            expression: null,
+            param: null,
+            value:null,
+            val: 0
+        }
     }
+
+
+    public allowOnlyNumbers(event: any): boolean {
+        return this.generalService.allowOnlyNumbers(event);
+    }
+
+
+    public selectCategory(category: any): void {
+        if (category) {
+            this.advanceSearchFormObj.param = category;
+        }
+    }
+    public selectCategoryOptions(expression: any): void {
+        if (expression) {
+            this.advanceSearchFormObj.expression = expression;
+        }
+    }
+    public selectValue(value: any): void {
+        if (value) {
+            this.advanceSearchFormObj.value = value;
+        }
+    }
+    public advanceSearchAction(type?: string) {
+        if (type === 'cancel') {
+            this.advanceSearchFormObj.param = null;
+            this.advanceSearchFormObj.expression = null;
+            this.advanceSearchFormObj.value = null;
+            this.advanceSearchFormObj.val = null;
+            this.dialog?.closeAll();
+            return;
+        } else if (type === 'clear') {
+            this.advanceSearchFormObj.param = null;
+            this.advanceSearchFormObj.expression = null;
+            this.advanceSearchFormObj.value = null;
+            this.advanceSearchFormObj.val = null;
+            return;
+        }
+
+            // this.getStockReport(true); // y  call krna pdega normal search krne pr
+
+    }
+
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
