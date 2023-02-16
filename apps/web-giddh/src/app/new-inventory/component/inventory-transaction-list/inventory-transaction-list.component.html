@@ -87,30 +87,46 @@
                 <i class="icon-options mr-2"> </i>
                 Customise
             </button>
+
             <mat-menu #customise="matMenu">
-                <div class="menu-selector">
-                    <button mat-menu-item>
-                        <mat-checkbox color="primary">Select All</mat-checkbox>
+                <button
+                    mat-menu-item
+                    (click)="$event.stopPropagation()"
+                    (keydown.enter)="
+                        $event.stopPropagation();
+                        selectAllCheckbox.checked = !selectAllCheckbox?.checked;
+                        selectAllColumns(selectAllCheckbox?.checked)
+                    "
+                >
+                    <mat-checkbox
+                        #selectAllCheckbox
+                        color="primary"
+                        name="selectAll"
+                        [(ngModel)]="selectAll"
+                        (change)="selectAllColumns($event?.checked)"
+                    >
+                        Select All
+                    </mat-checkbox>
+                </button>
+                <ng-container *ngFor="let item of REPORT_COLUMNS">
+                    <button
+                        mat-menu-item
+                        (click)="$event.stopPropagation()"
+                        (keydown.enter)="
+                            $event.stopPropagation(); item.checked = !item?.checked; saveColumns(item?.value, $event)
+                        "
+                    >
+                        <mat-checkbox
+                            color="primary"
+                            name="{{ item?.value }}"
+                            (ngModelChange)="saveColumns(item?.value, $event)"
+                            [(ngModel)]="item.value"
+                            (click)="$event.stopPropagation()"
+                        >
+                            {{ item.label }}</mat-checkbox
+                        >
                     </button>
-                    <button mat-menu-item>
-                        <mat-checkbox color="primary">Opening Value</mat-checkbox>
-                    </button>
-                    <button mat-menu-item>
-                        <mat-checkbox color="primary">Inward Value</mat-checkbox>
-                    </button>
-                    <button mat-menu-item>
-                        <mat-checkbox color="primary">Outward Value</mat-checkbox>
-                    </button>
-                    <button mat-menu-item>
-                        <mat-checkbox color="primary">Less Stock</mat-checkbox>
-                    </button>
-                    <button mat-menu-item>
-                        <mat-checkbox color="primary">Zero Stock</mat-checkbox>
-                    </button>
-                    <button mat-menu-item>
-                        <mat-checkbox color="primary">Negative Stock</mat-checkbox>
-                    </button>
-                </div>
+                </ng-container>
             </mat-menu>
         </div>
     </div>
@@ -391,10 +407,6 @@
             ></app-datepicker-wrapper>
         </div>
     </div>
-</ng-template>
-<!-- inventory advance search  -->
-<ng-template #inventoryAdvanceSearch>
-    <new-inventory-advance-search></new-inventory-advance-search>
 </ng-template>
 <ng-template
     #searchTemplate

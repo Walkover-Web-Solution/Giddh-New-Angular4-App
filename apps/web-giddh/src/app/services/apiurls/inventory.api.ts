@@ -78,5 +78,7 @@ export const INVENTORY_API = {
     },
 
     TRANSACTIONAL_STOCK_REPORT_V2: 'company/:companyUniqueName/inventory/transaction-report?from=:from&to=:to&count=:count&page=:page&sort=:sort&sortBy=:sortBy&transaction_type=:transactionType', // post for filter rest all get
-    TRANSACTIONAL_STOCK_REPORT_BALANCE_V2 :  'company/:companyUniqueName/inventory/balance?from=:from&to=:to', //
+    TRANSACTIONAL_STOCK_REPORT_BALANCE_V2 :  'company/:companyUniqueName/inventory/balance?from=:from&to=:to',
+    TRANSACTIONAL_STOCK_REPORT_COLUMNS :  'company/:companyUniqueName/report-filters?module=:module',
+
 };

@@ -146,6 +146,7 @@ export class StockReportRequestNew {
     public from: string = '';
     public to: string = '';
     public count: number;
+    public dataToSend?:any='';
     public page: number;
     public sort: string;
     public sortBy: string;

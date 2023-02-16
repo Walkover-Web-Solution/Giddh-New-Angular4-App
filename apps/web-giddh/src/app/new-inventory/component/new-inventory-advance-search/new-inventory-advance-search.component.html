@@ -37,9 +37,9 @@
                                 [placeholder]="'Select Category'"
                                 [options]="advanceSearchCatergory"
                                 (selectedOption)="selectCategory($event?.value)"
-                                [defaultValue]="advanceSearchFormObj.param"
+                                [defaultValue]="advanceSearchFormObj.param1"
                                 [allowValueReset]="true"
-                                (onClear)="advanceSearchFormObj.param = ''"
+                                (onClear)="advanceSearchFormObj.param1 = ''"
                             ></select-field>
                         </div>
                         <div class="col-lg-6 col-sm-6 col-12 mr-b15">
@@ -48,9 +48,9 @@
                                 [placeholder]="'Select Type'"
                                 [options]="advanceSearchCatergoryOptions"
                                 (selectedOption)="selectCategoryOptions($event?.value)"
-                                [defaultValue]="advanceSearchFormObj.expression"
+                                [defaultValue]="advanceSearchFormObj.param2"
                                 [allowValueReset]="true"
-                                (onClear)="advanceSearchFormObj.expression = ''"
+                                (onClear)="advanceSearchFormObj.param2 = ''"
                             ></select-field>
                         </div>
                     </div>
@@ -68,9 +68,9 @@
                                 [placeholder]="'Select Type'"
                                 [options]="advanceSearchValue"
                                 (selectedOption)="selectValue($event?.value)"
-                                [defaultValue]="advanceSearchFormObj.value"
+                                [defaultValue]="advanceSearchFormObj.expression"
                                 [allowValueReset]="true"
-                                (onClear)="advanceSearchFormObj.value = ''"
+                                (onClear)="advanceSearchFormObj.expression = ''"
                             ></select-field>
                         </div>
                         <div class="col-lg-6 col-sm-6 col-12 mr-b15">
@@ -108,7 +108,17 @@
             <div class="row mr-b15">
                 <div class="col-sm-12">
                     <div class="button-group d-flex justify-content-end">
-                        <button id="search-btn" class="btn btn-success" (click)="advanceSearchAction('search')">
+                        <button
+                            id="search-btn"
+                            class="btn btn-success"
+                            (click)="advanceSearchAction('search')"
+                            [disabled]="
+                                !advanceSearchFormObj.param1 ||
+                                !advanceSearchFormObj.param2 ||
+                                !advanceSearchFormObj.expression ||
+                                !advanceSearchFormObj.val
+                            "
+                        >
                             Search
                         </button>
                         <button id="clear-btn" class="btn btn-danger mr-0" (click)="advanceSearchAction('clear')">

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, TemplateRef, ChangeDetectionStrategy, ChangeDetectorRef, AfterViewInit } from "@angular/core";
+import { Component, OnInit, ViewChild, ElementRef, ChangeDetectionStrategy, ChangeDetectorRef } from "@angular/core";
 import { GeneralService } from "../../../services/general.service";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from "../../../app.constant";
@@ -7,16 +7,17 @@ import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from "../../../shared/hel
 import { Observable, ReplaySubject } from "rxjs";
 import { select, Store } from "@ngrx/store";
 import { AppState } from "../../../store";
-import { debounceTime, distinctUntilChanged, takeUntil } from "rxjs/operators";
-import { FormControl, FormGroup } from "@angular/forms";
+import { debounceTime, distinctUntilChanged, take, takeUntil } from "rxjs/operators";
+import { FormControl } from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
 import { MatSort } from "@angular/material/sort";
 import { OrganizationType } from "../../../models/user-login-state";
-import { CompanyResponse } from "../../../models/api-models/Company";
 import { WarehouseActions } from "../../../settings/warehouse/action/warehouse.action";
 import { cloneDeep } from "../../../lodash-optimized";
-import { StockReportRequest, StockReportRequestNew, StockReportResponse, TransactionalStockReportResponse } from "../../../models/api-models/Inventory";
+import { StockReportRequestNew, TransactionalStockReportResponse } from "../../../models/api-models/Inventory";
 import { InventoryService } from "../../../services/inventory.service";
+import { NewInventoryAdavanceSearch } from "../new-inventory-advance-search/new-inventory-advance-search.component";
+import { ToasterService } from "../../../services/toaster.service";
 
 @Component({
     selector: "inventory-transaction-list",
@@ -30,7 +31,6 @@ export class InventoryTransactionListComponent implements OnInit {
     /** Directive to get reference of element */
     @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
     /** Instance of mail modal */
-    @ViewChild("inventoryAdvanceSearch") public inventoryAdvanceSearch: TemplateRef<any>;
     @ViewChild('accountName', { static: true }) public accountName: ElementRef;
     @ViewChild('searchBox', { static: true }) public searchBox: ElementRef;
     /** Instance of sort header */
@@ -112,6 +112,44 @@ export class InventoryTransactionListComponent implements OnInit {
             "checked": true
         }
     ];
+
+    public REPORT_COLUMNS: any[] = [
+        {
+            "value": "date",
+            "label": "Date",
+            "checked": true
+        },
+        {
+            "value": "voucherType",
+            "label": "Voucher Type",
+            "checked": true
+        },
+        {
+            "value": "accountName",
+            "label": "Account Name",
+            "checked": true
+        },
+        {
+            "value": "inwards",
+            "label": "Invards",
+            "checked": true
+        },
+        {
+            "value": "outwards",
+            "label": "Outwards",
+            "checked": true
+        },
+        {
+            "value": "rate",
+            "label": "Rate",
+            "checked": true
+        },
+        {
+            "value": "value",
+            "label": "Value",
+            "checked": true
+        }
+    ];
     /** Thsi will use for searching for stock */
     public accountNameSearching: FormControl = new FormControl();
     /** Image path variable */
@@ -132,6 +170,9 @@ export class InventoryTransactionListComponent implements OnInit {
     public fromDate: string;
     public isFilterCorrect: boolean = false;
     public stockTransactionReportBalance: TransactionalStockReportResponse;
+    public showAdvanceSearchModal: boolean = false;
+    /** True/false if select all is checked */
+    public selectAll: boolean = false;
 
     constructor(
         private generalService: GeneralService,
@@ -140,6 +181,7 @@ export class InventoryTransactionListComponent implements OnInit {
         private warehouseAction: WarehouseActions,
         private changeDetection: ChangeDetectorRef,
         private inventoryService: InventoryService,
+        private toaster: ToasterService,
         private store: Store<AppState>) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
     }
@@ -155,6 +197,11 @@ export class InventoryTransactionListComponent implements OnInit {
                 this.universalDate = _.cloneDeep(dateObj);
                 this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
                 this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                this.stockReportRequest = Object.assign({}, this.stockReportRequest, {
+                    dataToSend: Object.assign({}, this.stockReportRequest.dataToSend, {
+                        bsRangeValue: [dateObj[0], dateObj[1]]
+                    })
+                });
                 this.getStockTransactionalReport(false, true);
             }
         });
@@ -192,15 +239,16 @@ export class InventoryTransactionListComponent implements OnInit {
         this.getBranches();
         this.getWarehouses();
         this.initVoucherType();
+        this.getReportColumns();
     }
 
 
     public getStockTransactionalReport(resetPage?: boolean, type?: boolean): void {
         this.isLoading = true;
-        this.stockReportRequest.from = this.fromDate;
-        this.stockReportRequest.to = this.toDate;
-        console.log(this.stockReportRequest.voucherTypes);
-
+        if (!this.showAdvanceSearchModal) {
+            this.stockReportRequest.from = this.fromDate;
+            this.stockReportRequest.to = this.toDate;
+        }
         // Condition sah krna h galat h API se issue h
         if (type) {
             this.stockReportRequest.voucherTypes = [];
@@ -212,6 +260,7 @@ export class InventoryTransactionListComponent implements OnInit {
             this.stockReportRequest.page = 1;
             this.stockReportRequest.count = PAGINATION_LIMIT;
         }
+        delete this.stockReportRequest.dataToSend;
         this.inventoryService.GetStockTransactionReport(cloneDeep(this.stockReportRequest)).subscribe(response => {
             this.isLoading = false;
             if (response && response.body && response.status === 'success') {
@@ -223,6 +272,7 @@ export class InventoryTransactionListComponent implements OnInit {
             } else {
                 this.dataSource = [];
                 this.stockReportRequest.totalItems = 0;
+                // this.toaster.showSnackBar("error", response?.message);
             }
             this.changeDetection.detectChanges();
         });
@@ -234,7 +284,7 @@ export class InventoryTransactionListComponent implements OnInit {
             if (response && response.body && response.status === 'success') {
                 this.stockTransactionReportBalance = response.body;
             } else {
-
+                // this.toaster.showSnackBar("error", response?.message);
             }
             this.changeDetection.detectChanges();
         });
@@ -266,6 +316,11 @@ export class InventoryTransactionListComponent implements OnInit {
             this.fromDate = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
             this.toDate = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
         }
+        this.stockReportRequest = Object.assign({}, this.stockReportRequest, {
+            dataToSend: Object.assign({}, this.stockReportRequest.dataToSend, {
+                bsRangeValue: [value.startDate, value.endDate]
+            })
+        });
         this.isFilterCorrect = true;
         this.getStockTransactionalReport(false, true);
 
@@ -311,9 +366,39 @@ export class InventoryTransactionListComponent implements OnInit {
     }
 
     public openModal(): void {
-        this.dialog.open(this.inventoryAdvanceSearch, {
-            panelClass: 'advance-search-container'
+        this.showAdvanceSearchModal = true;
+
+        let dialogRef = this.dialog.open(NewInventoryAdavanceSearch, {
+            panelClass: 'advance-search-container',
+            data: {
+                stockReportRequest: this.stockReportRequest
+            }
         });
+
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            if (response) {
+                this.onShowAdvanceSearchFilter(response);
+            }
+        });
+    }
+
+    public onShowAdvanceSearchFilter(data: any): void {
+        console.log(data);
+
+        // let advanceSearch = cloneDeep(this.stockReportRequest);
+        if (data) {
+            this.stockReportRequest.param = data.stockReportRequest.param;
+            this.stockReportRequest.expression = data.stockReportRequest.expression;
+            this.stockReportRequest.from = data.stockReportRequest.fromDate;
+            this.stockReportRequest.to = data.stockReportRequest.toDate;
+            this.stockReportRequest.val = data.stockReportRequest.val;
+            this.isFilterCorrect = data.stockReportRequest.searching;
+        }
+        console.log(this.stockReportRequest);
+        this.showAdvanceSearchModal = true;
+        this.getStockTransactionalReport(false, false);
+
+        this.changeDetection.detectChanges();
     }
 
     public sortChange(event: any): void {
@@ -450,6 +535,53 @@ export class InventoryTransactionListComponent implements OnInit {
         this.changeDetection.detectChanges();
     }
 
+    public getReportColumns(): void {
+        this.inventoryService.getStockTransactionReportColumns("INVENTORY_TRANSACTION_REPORT").subscribe(response => {
+            this.isLoading = false;
+            if (response && response.body && response.status === 'success') {
+                if (response.body?.columns && response.body?.columns.length > 0) {
+                    this.REPORT_COLUMNS = response.body.columns;
+                }
+            } else {
+                this.toaster.showSnackBar("error", response?.message);
+            }
+            this.changeDetection.detectChanges();
+        });
+    }
+
+    public saveColumns(value: string, event: boolean): void {
+        if (this.displayedColumns.includes(value)) {
+            this.displayedColumns = this.displayedColumns.filter(col => col !== value);
+        } else {
+            this.displayedColumns.push(value);
+        }
+        console.log(this.REPORT_COLUMNS);
+        // let columnsArr = cloneDeep(this.REPORT_COLUMNS);
+        // let updatedColumns = columnsArr.filter(column => column.value === value)
+        let saveColumnReq = {
+            module: "INVENTORY_TRANSACTION_REPORT",
+            columns: this.REPORT_COLUMNS
+        }
+        this.inventoryService.saveStockTransactionReportColumns(saveColumnReq).subscribe(response => {
+            this.isLoading = false;
+            if (response && response.body && response.status === 'success') {
+                this.toaster.showSnackBar("success", response.message);
+            } else {
+                this.toaster.showSnackBar("error", response?.message);
+            }
+            this.changeDetection.detectChanges();
+        });
+    }
+
+    public selectAllColumns(event:any): void {
+        console.log(this.REPORT_COLUMNS);
+
+        Object.keys(this.REPORT_COLUMNS).forEach(key => {
+            console.log(key);
+
+            this.REPORT_COLUMNS[key].visibility = event
+        });
+    }
 
     public ngOnDestroy() {
         this.destroyed$.next(true);
