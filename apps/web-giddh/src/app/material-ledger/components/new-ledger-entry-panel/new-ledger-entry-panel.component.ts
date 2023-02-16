@@ -257,6 +257,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public discountsList: any[] = [];
     /** Is advance receipt with tds/tcs */
     public isAdvanceReceiptWithTds: boolean = false;
+    /**True if  Is advance receipt popup open */
+    public isAdvanceReceiptPopup = false;
 
     constructor(private store: Store<AppState>,
         private cdRef: ChangeDetectorRef,
@@ -279,6 +281,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
 
     public ngOnInit() {
+
         this.voucherTypeList = observableOf([{
             label: this.commonLocaleData?.app_voucher_types.sales,
             value: 'sal'
@@ -1010,10 +1013,13 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             return;
         }
 
-        let classList = event?.target?.classList;
-        if (classList) {
+        if (this.isAdvanceReceiptPopup) {
             return;
         }
+
+        let classList = event?.path?.map(m => {
+            return m?.classList;
+        });
         if (classList && classList instanceof Array) {
             const shouldNotClose = classList.some((className: DOMTokenList) => {
                 if (!className) {
@@ -1473,7 +1479,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 this.blankLedger.generateInvoice = true;
             }
         }
-
         this.adjustmentDialogRef.close();
     }
 
@@ -1827,5 +1832,15 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         };
 
         return this.ledgerUtilityService.checkIfExportIsValid(data);
+    }
+
+    /**
+     * True if the advance receipt open popup
+     *
+     * @param {boolean} value
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public isAdvancePopupOpen(value: boolean) {
+        this.isAdvanceReceiptPopup = value;
     }
 }
