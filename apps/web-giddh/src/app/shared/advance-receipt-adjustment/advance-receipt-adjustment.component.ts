@@ -95,10 +95,6 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
     @Output() public closeModelEvent: EventEmitter<{ adjustVoucherData: VoucherAdjustments, adjustPaymentData: AdjustAdvancePaymentModal }> = new EventEmitter();
     /** Submit modal event emitter */
     @Output() public submitClicked: EventEmitter<{ adjustVoucherData: VoucherAdjustments, adjustPaymentData: AdjustAdvancePaymentModal }> = new EventEmitter();
-    /** Advance Receipt Popup  event emitter */
-    @Output() isAdvanceReceiptPopup = new EventEmitter<boolean>();
-    /* True, if  popup is open */
-    public advanceReceiptPopupOpen = false;
     /* This will hold local JSON data */
     public localeData: any = {};
     /* This will hold common JSON data */
@@ -135,8 +131,6 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
      * @memberof AdvanceReceiptAdjustmentComponent
      */
     public ngOnInit() {
-        this.advanceReceiptPopupOpen = true;
-        this.isAdvanceReceiptPopup.emit(this.isAdvancePopup);
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         if (this.voucherApiVersion !== 2) {
             this.paginationLimit = 500;
@@ -222,17 +216,6 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
             }
         });
         this.enableVoucherAdjustmentMultiCurrency = enableVoucherAdjustmentMultiCurrency;
-    }
-
-    /**
-     * This will use for get value of popup is open or closed
-     *
-     * @readonly
-     * @type {boolean}
-     * @memberof AdvanceReceiptAdjustmentComponent
-     */
-    public get isAdvancePopup(): boolean {
-        return this.advanceReceiptPopupOpen;
     }
 
     /**

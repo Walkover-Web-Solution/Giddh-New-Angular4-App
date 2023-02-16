@@ -1605,12 +1605,18 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      * @memberof NewLedgerEntryPanelComponent
      */
     private openAdjustPaymentModal(): void {
+        this.isAdvanceReceiptPopup = true;
         if (this.voucherApiVersion === 2) {
             this.invoiceListRequestParams = { particularAccount: this.currentTxn?.selectedAccount, voucherType: this.blankLedger.voucherType, ledgerAccount: this.activeAccount };
         }
         this.adjustmentDialogRef = this.dialog.open(this.adjustPaymentModal, {
             width: '980px',
             panelClass: 'container-modal-class'
+        });
+        this.adjustmentDialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            if (response) {
+                this.isAdvanceReceiptPopup = false
+            }
         });
     }
 
@@ -1832,15 +1838,5 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         };
 
         return this.ledgerUtilityService.checkIfExportIsValid(data);
-    }
-
-    /**
-     * True if the advance receipt open popup
-     *
-     * @param {boolean} value
-     * @memberof NewLedgerEntryPanelComponent
-     */
-    public isAdvancePopupOpen(value: boolean) {
-        this.isAdvanceReceiptPopup = value;
     }
 }
