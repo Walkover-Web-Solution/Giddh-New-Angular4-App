@@ -50,7 +50,6 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
     public isMultiCurrencyAccount: boolean;
     /** Stores the multi-lingual label of current voucher */
     public currentVoucherLabel: string;
-
     @ViewChild('tdsTypeBox', { static: true }) public tdsTypeBox: ElementRef;
     @ViewChild('tdsAmountBox', { static: true }) public tdsAmountBox: ElementRef;
 
@@ -1135,7 +1134,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
             return;
         }
 
-        if(this.voucherApiVersion === 2) {
+        if (this.voucherApiVersion === 2) {
             requestObject.uniqueName = this.invoiceFormDetails?.voucherDetails?.voucherUniqueName;
             requestObject.voucherBalanceType = this.invoiceFormDetails?.type;
         }
