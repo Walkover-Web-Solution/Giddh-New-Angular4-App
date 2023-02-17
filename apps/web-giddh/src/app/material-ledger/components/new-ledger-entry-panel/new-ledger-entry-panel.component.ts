@@ -259,6 +259,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public isAdvanceReceiptWithTds: boolean = false;
     /** True if adjustment popup is open */
     public isAdjustmentPopupOpen = false;
+    /** True if rcm popup is open */
+    public isRcmPopupOpen = false;
 
     constructor(private store: Store<AppState>,
         private cdRef: ChangeDetectorRef,
@@ -1009,7 +1011,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
 
     public clickedOutside(event: any): void {
-        if (this.isDatepickerOpen || this.isAdjustmentPopupOpen) {
+        if (this.isDatepickerOpen || this.isAdjustmentPopupOpen || this.isRcmPopupOpen) {
             return;
         }
 
@@ -1361,6 +1363,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
         this.rcmConfiguration = this.generalService.getRcmConfiguration(isChecked, this.commonLocaleData);
 
+        this.isRcmPopupOpen = true;
+
         let dialogRef = this.dialog.open(NewConfirmationModalComponent, {
             width: '630px',
             data: {
@@ -1369,6 +1373,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         });
 
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            this.isRcmPopupOpen = false;
             this.handleRcmChange(response);
         });
     }
