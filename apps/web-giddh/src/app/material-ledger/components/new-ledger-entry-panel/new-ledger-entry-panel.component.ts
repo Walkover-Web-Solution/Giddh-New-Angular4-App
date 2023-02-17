@@ -257,6 +257,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public discountsList: any[] = [];
     /** Is advance receipt with tds/tcs */
     public isAdvanceReceiptWithTds: boolean = false;
+    /** True if adjustment popup is open */
+    public isAdjustmentPopupOpen = false;
+    /** True if rcm popup is open */
+    public isRcmPopupOpen = false;
 
     constructor(private store: Store<AppState>,
         private cdRef: ChangeDetectorRef,
@@ -279,6 +283,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
 
     public ngOnInit() {
+
         this.voucherTypeList = observableOf([{
             label: this.commonLocaleData?.app_voucher_types.sales,
             value: 'sal'
@@ -762,7 +767,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         }
         /* Add warehouse to the stock entry if the user hits 'Save' button without clicking on 'Add to CR/DR' button
             This will add the warehouse to the entered item */
-        this.blankLedger.transactions.map((transaction) => {
+        this.blankLedger.transactions?.map((transaction) => {
             if (transaction?.inventory && !transaction?.inventory.warehouse) {
                 transaction.inventory.warehouse = { name: '', uniqueName: this.selectedWarehouse };
             }
@@ -1006,7 +1011,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
 
     public clickedOutside(event: any): void {
-        if (this.isDatepickerOpen) {
+        if (this.isDatepickerOpen || this.isAdjustmentPopupOpen || this.isRcmPopupOpen) {
             return;
         }
 
@@ -1358,6 +1363,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
         this.rcmConfiguration = this.generalService.getRcmConfiguration(isChecked, this.commonLocaleData);
 
+        this.isRcmPopupOpen = true;
+
         let dialogRef = this.dialog.open(NewConfirmationModalComponent, {
             width: '630px',
             data: {
@@ -1366,6 +1373,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         });
 
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            this.isRcmPopupOpen = false;
             this.handleRcmChange(response);
         });
     }
@@ -1473,7 +1481,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 this.blankLedger.generateInvoice = true;
             }
         }
-
         this.adjustmentDialogRef.close();
     }
 
@@ -1537,7 +1544,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      * @memberof NewLedgerEntryPanelComponent
      */
     private validateTaxes(): boolean {
-        const taxes = [...this.currentTxn.taxesVm?.filter(p => p.isChecked).map(p => p?.uniqueName)];
+        const taxes = [...this.currentTxn.taxesVm?.filter(p => p.isChecked)?.map(p => p?.uniqueName)];
         return taxes && taxes.length > 0;
     }
 
@@ -1600,12 +1607,19 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      * @memberof NewLedgerEntryPanelComponent
      */
     private openAdjustPaymentModal(): void {
+        this.isAdjustmentPopupOpen = true;
+
         if (this.voucherApiVersion === 2) {
             this.invoiceListRequestParams = { particularAccount: this.currentTxn?.selectedAccount, voucherType: this.blankLedger.voucherType, ledgerAccount: this.activeAccount };
         }
+
         this.adjustmentDialogRef = this.dialog.open(this.adjustPaymentModal, {
             width: '980px',
             panelClass: 'container-modal-class'
+        });
+
+        this.adjustmentDialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            this.isAdjustmentPopupOpen = false;
         });
     }
 
@@ -1641,7 +1655,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         if (accountDetails.otherApplicableTaxes && accountDetails.otherApplicableTaxes.length) {
             accountDetails.applicableTaxes.unshift(accountDetails.otherApplicableTaxes[0]);
         }
-        this.accountOtherApplicableDiscount.map(item => item.isActive = true);
+        this.accountOtherApplicableDiscount?.map(item => item.isActive = true);
     }
 
     /**
@@ -1652,11 +1666,11 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public preparePreAppliedDiscounts(): void {
         if (this.currentTxn && this.currentTxn.selectedAccount && this.currentTxn.selectedAccount.accountApplicableDiscounts && this.currentTxn.selectedAccount.accountApplicableDiscounts.length) {
             this.currentTxn.selectedAccount.accountApplicableDiscounts.map(item => item.isActive = true);
-            this.currentTxn.discounts.map(item => { item.isActive = false });
+            this.currentTxn.discounts?.map(item => { item.isActive = false });
             if (this.currentTxn.discounts && this.currentTxn.discounts.length === 1) {
                 setTimeout(() => {
                     this.currentTxn.selectedAccount.accountApplicableDiscounts.forEach(element => {
-                        this.currentTxn.discounts.map(item => {
+                        this.currentTxn.discounts?.map(item => {
                             if (element?.uniqueName === item?.discountUniqueName) {
                                 item.isActive = true;
                             }
@@ -1666,7 +1680,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 }, 300);
             } else {
                 this.currentTxn.selectedAccount.accountApplicableDiscounts.forEach(element => {
-                    this.currentTxn.discounts.map(item => {
+                    this.currentTxn.discounts?.map(item => {
                         if (element?.uniqueName === item?.discountUniqueName) {
                             item.isActive = true;
                         }
@@ -1675,9 +1689,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 });
             }
         } else if (this.accountOtherApplicableDiscount && this.accountOtherApplicableDiscount.length) {
-            this.currentTxn.discounts.map(item => { item.isActive = false });
+            this.currentTxn.discounts?.map(item => { item.isActive = false });
             this.accountOtherApplicableDiscount.forEach(element => {
-                this.currentTxn.discounts.map(item => {
+                this.currentTxn.discounts?.map(item => {
                     if (element?.uniqueName === item?.discountUniqueName) {
                         item.isActive = true;
                     }
@@ -1685,7 +1699,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 });
             });
         } else {
-            this.currentTxn.discounts.map(item => {
+            this.currentTxn.discounts?.map(item => {
                 item.isActive = false;
                 return item;
             });
