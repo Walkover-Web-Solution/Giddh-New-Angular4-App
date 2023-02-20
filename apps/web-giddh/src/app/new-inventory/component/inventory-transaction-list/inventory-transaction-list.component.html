@@ -84,7 +84,7 @@
                     [removable]="true"
                     (removed)="removeOption(chip, indx)"
                 >
-                    {{ chip }}
+                    {{ chip?.name }}
                     <i class="icon-cross" matChipRemove></i>
                 </mat-chip>
                 <input
@@ -136,8 +136,11 @@
                         #selectAllCheckbox
                         color="primary"
                         name="selectAll"
-                        [(ngModel)]="selectAll"
                         (change)="selectAllColumns($event?.checked)"
+                        [checked]="displayedColumns?.length === REPORT_COLUMNS.length"
+                        [indeterminate]="
+                            displayedColumns?.length < REPORT_COLUMNS.length && displayedColumns.length > 0
+                        "
                     >
                         Select All
                     </mat-checkbox>
@@ -154,7 +157,7 @@
                             color="primary"
                             name="{{ item?.value }}"
                             (ngModelChange)="saveColumns(item?.value, $event)"
-                            [(ngModel)]="item.value"
+                            [(ngModel)]="item.checked"
                             (click)="$event.stopPropagation()"
                         >
                             {{ item.label }}</mat-checkbox
@@ -258,7 +261,7 @@
     </div>
     <div class="row">
         <div class="col-12 horizontal-padding">
-            <div class="table-responsive table-content">
+            <div class="table-responsive table-content" *ngIf="displayedColumns?.length">
                 <table
                     mat-table
                     [dataSource]="dataSource"
@@ -309,9 +312,7 @@
                             </mat-menu>
                         </th>
                         <td date-title="Voucher Type" mat-cell *matCellDef="let element">
-                            <ng-container *ngIf="!isLoading && dataSource?.length">
-                                {{ element.voucherType }}
-                            </ng-container>
+                            {{ element.voucherType }}
                         </td>
                     </ng-container>
 
@@ -337,45 +338,35 @@
                             ></ng-container>
                         </th>
                         <td data-title="Account Name" class="text-right" mat-cell *matCellDef="let element">
-                            <ng-container *ngIf="!isLoading && dataSource?.length">
-                                {{ element?.account?.name ?? "-" }}
-                            </ng-container>
+                            {{ element?.account?.name ?? "-" }}
                         </td>
                     </ng-container>
 
                     <ng-container matColumnDef="inwards">
                         <th class="text-right" mat-header-cell *matHeaderCellDef mat-sort-header>Inwards</th>
                         <td data-title="Inwards" class="text-right" mat-cell *matCellDef="let element">
-                            <ng-container *ngIf="!isLoading && dataSource?.length">
-                                {{ element.inwardBalance ?? "-" }}
-                            </ng-container>
+                            {{ element.inwardBalance ?? "-" }}
                         </td>
                     </ng-container>
 
                     <ng-container matColumnDef="outwards">
                         <th class="text-right" mat-header-cell *matHeaderCellDef mat-sort-header>Outwards</th>
                         <td data-title="Outwards" class="text-right" mat-cell *matCellDef="let element">
-                            <ng-container *ngIf="!isLoading && dataSource?.length">
-                                {{ element.outwardBalance ?? "-" }}
-                            </ng-container>
+                            {{ element.outwardBalance ?? "-" }}
                         </td>
                     </ng-container>
 
                     <ng-container matColumnDef="rate">
                         <th class="text-right" mat-header-cell *matHeaderCellDef mat-sort-header>Rate</th>
                         <td data-title="Rate" class="text-right" mat-cell *matCellDef="let element">
-                            <ng-container *ngIf="!isLoading && dataSource?.length">
-                                {{ element.rate ?? "-" }}
-                            </ng-container>
+                            {{ element.rate ?? "-" }}
                         </td>
                     </ng-container>
 
                     <ng-container matColumnDef="value">
                         <th class="text-right" mat-header-cell *matHeaderCellDef mat-sort-header>Value</th>
                         <td data-title="Value" class="text-right" mat-cell *matCellDef="let element">
-                            <ng-container *ngIf="!isLoading && dataSource?.length">
-                                {{ element?.amount ?? "-" }}
-                            </ng-container>
+                            {{ element?.amount ?? "-" }}
                         </td>
                     </ng-container>
 
@@ -400,7 +391,11 @@
             </section>
             <div class="pagination-wrapper">
                 <pagination
-                    *ngIf="stockReportRequest?.totalItems > stockReportRequest?.count && !isLoading"
+                    *ngIf="
+                        stockReportRequest?.totalItems > stockReportRequest?.count &&
+                        !isLoading &&
+                        displayedColumns?.length
+                    "
                     [totalItems]="stockReportRequest?.totalItems"
                     [(ngModel)]="stockReportRequest.page"
                     [maxSize]="5"

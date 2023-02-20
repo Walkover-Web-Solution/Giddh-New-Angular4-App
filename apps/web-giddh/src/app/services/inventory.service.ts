@@ -1091,7 +1091,7 @@ export class InventoryService {
 
     public getStockTransactionReportColumns(module: string): Observable<BaseResponse<any, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.get(this.config.apiUrl + INVENTORY_API.TRANSACTIONAL_STOCK_REPORT_COLUMNS?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':module', encodeURIComponent(module))).pipe(map((res) => {
+        return this.http.get(this.config.apiUrl + INVENTORY_API.TRANSACTIONAL_STOCK_REPORT_COLUMNS?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':module', module)).pipe(map((res) => {
             let data: BaseResponse<any, string> = res;
             data.request = '';
             data.queryString = {};
@@ -1100,9 +1100,11 @@ export class InventoryService {
     }
 
     public saveStockTransactionReportColumns(model: any): Observable<BaseResponse<any, any>> {
+        console.log(model);
+
         this.companyUniqueName = this.generalService.companyUniqueName;
-        let url =this.config.apiUrl + INVENTORY_API.TRANSACTIONAL_STOCK_REPORT_COLUMNS;
-        url = url?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
+        let url = this.config.apiUrl + INVENTORY_API.TRANSACTIONAL_STOCK_REPORT_COLUMNS;
+        url = url?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':module', model.module);
         return this.http.post(url, model).pipe(map((res) => {
             let data: BaseResponse<any, any> = res;
             data.request = model;
@@ -1112,7 +1114,7 @@ export class InventoryService {
 
     public searchStockTransactionReport(model: any): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        let url =this.config.apiUrl + INVENTORY_API.SEARCH_STOCK_TRANSACTION_FILTERS;
+        let url = this.config.apiUrl + INVENTORY_API.SEARCH_STOCK_TRANSACTION_FILTERS;
         url = url?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
         return this.http.post(url, model).pipe(map((res) => {
             let data: BaseResponse<any, any> = res;
