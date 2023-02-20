@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, ChangeDetectionStrategy, ChangeDetectorRef } from "@angular/core";
+import { Component, OnInit, ViewChild, ElementRef, ChangeDetectionStrategy, ChangeDetectorRef, QueryList, ViewChildren } from "@angular/core";
 import { GeneralService } from "../../../services/general.service";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from "../../../app.constant";
@@ -7,7 +7,7 @@ import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from "../../../shared/hel
 import { Observable, ReplaySubject } from "rxjs";
 import { select, Store } from "@ngrx/store";
 import { AppState } from "../../../store";
-import { debounceTime, distinctUntilChanged, take, takeUntil } from "rxjs/operators";
+import { debounceTime, distinctUntilChanged, map, startWith, take, takeUntil } from "rxjs/operators";
 import { FormControl } from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
 import { MatSort } from "@angular/material/sort";
@@ -18,6 +18,10 @@ import { StockReportRequestNew, TransactionalStockReportResponse } from "../../.
 import { InventoryService } from "../../../services/inventory.service";
 import { NewInventoryAdavanceSearch } from "../new-inventory-advance-search/new-inventory-advance-search.component";
 import { ToasterService } from "../../../services/toaster.service";
+import { SettingsWarehouseService } from "../../../services/settings.warehouse.service";
+import { SelectMultipleFieldsComponent } from "../../../theme/form-fields/select-multiple-fields/select-multiple-fields.component";
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { IOption } from "../../../theme/ng-virtual-select/sh-options.interface";
 
 @Component({
     selector: "inventory-transaction-list",
@@ -78,76 +82,66 @@ export class InventoryTransactionListComponent implements OnInit {
     public VOUCHER_TYPES: any[] = [
         {
             "value": "SALES",
-            "label": "Sales",
-            "checked": true
+            "label": "Sales"
         },
         {
             "value": "PURCHASE",
-            "label": "Purchase",
-            "checked": true
+            "label": "Purchase"
         },
         {
-            "value": "MANUFACTURING",
-            "label": "Manufacturing",
-            "checked": true
+            "value": "MANUFACTURED",
+            "label": "Manufactured"
         },
         {
             "value": "TRANSFER",
-            "label": "Transfer",
-            "checked": true
+            "label": "Transfer"
         },
         {
             "value": "JOURNAL",
-            "label": "Journal Voucher",
-            "checked": true
+            "label": "Journal Voucher"
         },
         {
-            "value": "CREDIT_NOTE",
-            "label": "Credit Note",
-            "checked": true
+            "value": "SALES_CREDIT_NOTE",
+            "label": "Sales Credit note"
         },
         {
-            "value": "DEBIT_NOTE",
-            "label": "Debit Note",
-            "checked": true
-        }
+            "value": "PURCHASE_DEBIT_NOTE",
+            "label": "Purchase credit note"
+        },
+        {
+            "value": "RAW_MATERIAL",
+            "label": "Raw Material"
+        },
     ];
 
     public REPORT_COLUMNS: any[] = [
         {
             "value": "date",
-            "label": "Date",
-            "checked": true
+            "label": "Date"
         },
         {
             "value": "voucherType",
-            "label": "Voucher Type",
-            "checked": true
+            "label": "Voucher Type"
         },
         {
             "value": "accountName",
-            "label": "Account Name",
-            "checked": true
+            "label": "Account Name"
         },
         {
             "value": "inwards",
-            "label": "Invards",
-            "checked": true
+            "label": "Invards"
         },
         {
             "value": "outwards",
-            "label": "Outwards",
-            "checked": true
+            "label": "Outwards"
         },
         {
             "value": "rate",
-            "label": "Rate",
-            "checked": true
+            "label": "Rate"
         },
         {
             "value": "value",
-            "label": "Value",
-            "checked": true
+            "label": "Value"
         }
     ];
     /** Thsi will use for searching for stock */
@@ -160,25 +154,41 @@ export class InventoryTransactionListComponent implements OnInit {
     /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
     public isCompany: boolean;
     /** Hold all warehouses */
-    public allWarehouses: any[] = [];
+    public allWarehouses: any;
     /** Hold all warehouses */
-    public allBranches: any[] = [];
+    public allBranches: any;
     public groupUniqueName: string;
     public stockUniqueName: string;
     public stockReportRequest: StockReportRequestNew = new StockReportRequestNew();
     public toDate: string;
     public fromDate: string;
-    public isFilterCorrect: boolean = false;
+    // public isFilterCorrect: boolean = false;
     public stockTransactionReportBalance: TransactionalStockReportResponse;
     public showAdvanceSearchModal: boolean = false;
     /** True/false if select all is checked */
     public selectAll: boolean = false;
+    public allBranchWarehouses: any;
+    /** List of field suggestions */
+    public fieldsSuggestion: any[] = [];
+    /** List of chips based on selected values */
+    public chipList: any[] = [];
+    /** Search field form control */
+    public searchFormControl = new FormControl();
+    /** Filtered options to show in autocomplete list */
+    public fieldFilteredOptions: any[] = [];
+    /** Emit with seperate code for chiplist */
+    public separatorKeysCodes: number[] = [ENTER, COMMA];
+    /** True if we need to allow adding of new chips */
+    private allowAddChip: boolean = true;
+    /** CSS class name to add on the field */
+    public showError: boolean = false;
+
+
 
     constructor(
         private generalService: GeneralService,
         public dialog: MatDialog,
         public modalService: BsModalService,
-        private warehouseAction: WarehouseActions,
         private changeDetection: ChangeDetectorRef,
         private inventoryService: InventoryService,
         private toaster: ToasterService,
@@ -211,7 +221,7 @@ export class InventoryTransactionListComponent implements OnInit {
             distinctUntilChanged(),
             takeUntil(this.destroyed$)
         ).subscribe(s => {
-            this.isFilterCorrect = true;
+            // this.isFilterCorrect = true;
             this.stockReportRequest.accountName = s;
             this.getStockTransactionalReport(false, true);
             if (s === '') {
@@ -236,15 +246,100 @@ export class InventoryTransactionListComponent implements OnInit {
             this.warehouses = warehousesClone;
         });
 
-        this.getBranches();
-        this.getWarehouses();
+        this.searchFormControl?.valueChanges.pipe(
+            debounceTime(700),
+            distinctUntilChanged(),
+            takeUntil(this.destroyed$),
+        ).subscribe(searchedText => {
+            if (searchedText !== null && searchedText !== undefined) {
+                this.stockReportRequest.q = searchedText;
+                this.getStockTransactionReportFilters();
+
+                console.log("searching");
+
+            }
+        });
+
+
+
+        this.getBranchWiseWarehouse();
         this.initVoucherType();
         this.getReportColumns();
     }
 
 
+
+
+    /**
+     * Callback for select option from dropdown
+     *
+     * @param {*} option
+     * @memberof SelectMultipleFieldsComponent
+     */
+    public selectOption(option: any): void {
+        const selectOptionValue = option?.option?.value?.name;
+        this.chipList.push(selectOptionValue);
+        if (option?.option?.value?.type === 'STOCK GROUP') {
+            this.stockReportRequest.stockGroupUniqueNames[0] = option?.option?.value?.uniqueName;
+        } else if (option?.option?.value?.type === 'STOCK') {
+            this.stockReportRequest.stockUniqueNames?.push(option?.option?.value?.uniqueName);
+        } else {
+            this.stockReportRequest.variantUniqueNames?.push(option?.option?.value?.uniqueName);
+        }
+        this.allowAddChip = false;
+
+        setTimeout(() => {
+            this.allowAddChip = true;
+        }, 300);
+    }
+
+    /**
+     * Callback for remove option from chip
+     *
+     * @param {number} index
+     * @memberof SelectMultipleFieldsComponent
+     */
+    public removeOption(selectOptionValue: any, index: number): void {
+        console.log(this.chipList);
+        console.log(selectOptionValue, index);
+
+        if (selectOptionValue) {
+            if (selectOptionValue && this.chipList.includes(selectOptionValue && (this.stockReportRequest.stockGroupUniqueNames.includes(selectOptionValue) || this.stockReportRequest.stockUniqueNames.includes(selectOptionValue) || this.stockReportRequest.variantUniqueNames.includes(selectOptionValue)))) {
+                this.chipList.splice(index, 1);
+                this.stockReportRequest.stockGroupUniqueNames =  this.stockReportRequest.stockGroupUniqueNames.filter(value => value!= selectOptionValue);
+                this.stockReportRequest.stockUniqueNames =  this.stockReportRequest.stockGroupUniqueNames.filter(value => value!= selectOptionValue);
+                this.stockReportRequest.variantUniqueNames =  this.stockReportRequest.stockGroupUniqueNames.filter(value => value!= selectOptionValue);
+                // this.stockReportRequest.stockGroupUniqueNames.splice(index, 1);
+                // this.stockReportRequest.stockUniqueNames.splice(index, 1);
+                // this.stockReportRequest.variantUniqueNames.splice(index, 1);
+            }
+        }
+        this.changeDetection.detectChanges();
+    }
+
+
+    public getStockTransactionReportFilters(): void {
+        delete this.stockReportRequest.totalPages;
+        delete this.stockReportRequest.totalItems;
+        delete this.stockReportRequest.branchUniqueNames;
+        delete this.stockReportRequest.warehouseUniqueNames;
+        delete this.stockReportRequest.accountName;
+        delete this.stockReportRequest.dataToSend;
+        delete this.stockReportRequest.expression;
+        delete this.stockReportRequest.from;
+        delete this.stockReportRequest.param;
+        delete this.stockReportRequest.to;
+        delete this.stockReportRequest.val;
+        delete this.stockReportRequest.voucherTypes;
+        this.inventoryService.searchStockTransactionReport(this.stockReportRequest).subscribe(response => {
+            if (response && response.body && response.status === 'success') {
+                this.fieldFilteredOptions = response.body.results;
+            }
+            this.changeDetection.detectChanges();
+        });
+
+    }
     public getStockTransactionalReport(resetPage?: boolean, type?: boolean): void {
-        this.isLoading = true;
         if (!this.showAdvanceSearchModal) {
             this.stockReportRequest.from = this.fromDate;
             this.stockReportRequest.to = this.toDate;
@@ -261,6 +356,7 @@ export class InventoryTransactionListComponent implements OnInit {
             this.stockReportRequest.count = PAGINATION_LIMIT;
         }
         delete this.stockReportRequest.dataToSend;
+        this.isLoading = true;
         this.inventoryService.GetStockTransactionReport(cloneDeep(this.stockReportRequest)).subscribe(response => {
             this.isLoading = false;
             if (response && response.body && response.status === 'success') {
@@ -321,7 +417,7 @@ export class InventoryTransactionListComponent implements OnInit {
                 bsRangeValue: [value.startDate, value.endDate]
             })
         });
-        this.isFilterCorrect = true;
+        // this.isFilterCorrect = true;
         this.getStockTransactionalReport(false, true);
 
     }
@@ -383,7 +479,6 @@ export class InventoryTransactionListComponent implements OnInit {
     }
 
     public onShowAdvanceSearchFilter(data: any): void {
-        console.log(data);
 
         // let advanceSearch = cloneDeep(this.stockReportRequest);
         if (data) {
@@ -392,9 +487,8 @@ export class InventoryTransactionListComponent implements OnInit {
             this.stockReportRequest.from = data.stockReportRequest.fromDate;
             this.stockReportRequest.to = data.stockReportRequest.toDate;
             this.stockReportRequest.val = data.stockReportRequest.val;
-            this.isFilterCorrect = data.stockReportRequest.searching;
+            // this.isFilterCorrect = data.stockReportRequest.searching;
         }
-        console.log(this.stockReportRequest);
         this.showAdvanceSearchModal = true;
         this.getStockTransactionalReport(false, false);
 
@@ -408,7 +502,7 @@ export class InventoryTransactionListComponent implements OnInit {
             this.getStockTransactionalReport(false, true);
 
         }
-        this.isFilterCorrect = true;
+        // this.isFilterCorrect = true;
     }
 
 
@@ -439,23 +533,16 @@ export class InventoryTransactionListComponent implements OnInit {
     }
 
 
-    public getWarehouses(): void {
-        this.store.pipe(select(state => state.warehouse.warehouses), takeUntil(this.destroyed$)).subscribe((warehouses: any) => {
-            if (warehouses) {
-                this.warehouses = warehouses.results;
-                this.allWarehouses = warehouses.results;
-            } else {
-                this.store.dispatch(this.warehouseAction.fetchAllWarehouses({ page: 1, count: 0 }));
-            }
-            this.changeDetection.detectChanges();
-        });
-    }
-
-    public getBranches(): void {
-        this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                this.branches = response || [];
-                this.allBranches = response;
+    public getBranchWiseWarehouse(): void {
+        this.inventoryService.getLinkedStocks().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response && response.body) {
+                this.allBranchWarehouses = response.body;
+                this.allBranches = response.body.results;
+                this.branches = response.body.results;
+                response.body?.results.forEach((branches) => {
+                    this.allWarehouses = branches?.warehouses;
+                    this.warehouses = branches?.warehouses;
+                });
                 this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && this.branches?.length > 1;
             }
             this.changeDetection.detectChanges();
@@ -465,9 +552,9 @@ export class InventoryTransactionListComponent implements OnInit {
     public initVoucherType() {
         // initialization for voucher type array inially all selected
         this.stockReportRequest.voucherTypes = [];
-        this.VOUCHER_TYPES.forEach(element => {
+        this.VOUCHER_TYPES?.forEach(element => {
             element.checked = true;
-            this.stockReportRequest.voucherTypes.push(element.value);
+            this.stockReportRequest.voucherTypes?.push(element.value);
             this.changeDetection.detectChanges();
         });
     }
@@ -495,7 +582,7 @@ export class InventoryTransactionListComponent implements OnInit {
                 this.selectedDateRange = { startDate: dayjs(universalDate[0]), endDate: dayjs(universalDate[1]) };
                 this.selectedDateRangeUi = dayjs(universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
             }
-            this.isFilterCorrect = false;
+            // this.isFilterCorrect = false;
         });
         this.changeDetection.detectChanges();
     }
@@ -531,7 +618,7 @@ export class InventoryTransactionListComponent implements OnInit {
             this.stockReportRequest.voucherTypes = ['NONE'];
         }
         this.getStockTransactionalReport(false, false);
-        this.isFilterCorrect = true;
+        // this.isFilterCorrect = true;
         this.changeDetection.detectChanges();
     }
 
@@ -543,7 +630,7 @@ export class InventoryTransactionListComponent implements OnInit {
                     this.REPORT_COLUMNS = response.body.columns;
                 }
             } else {
-                this.toaster.showSnackBar("error", response?.message);
+                // this.toaster.showSnackBar("error", response?.message);
             }
             this.changeDetection.detectChanges();
         });
@@ -555,7 +642,6 @@ export class InventoryTransactionListComponent implements OnInit {
         } else {
             this.displayedColumns.push(value);
         }
-        console.log(this.REPORT_COLUMNS);
         // let columnsArr = cloneDeep(this.REPORT_COLUMNS);
         // let updatedColumns = columnsArr.filter(column => column.value === value)
         let saveColumnReq = {
@@ -567,21 +653,20 @@ export class InventoryTransactionListComponent implements OnInit {
             if (response && response.body && response.status === 'success') {
                 this.toaster.showSnackBar("success", response.message);
             } else {
-                this.toaster.showSnackBar("error", response?.message);
+                // this.toaster.showSnackBar("error", response?.message);
             }
             this.changeDetection.detectChanges();
         });
     }
 
-    public selectAllColumns(event:any): void {
-        console.log(this.REPORT_COLUMNS);
-
+    public selectAllColumns(event: any): void {
         Object.keys(this.REPORT_COLUMNS).forEach(key => {
-            console.log(key);
-
             this.REPORT_COLUMNS[key].visibility = event
         });
     }
+
+
+
 
     public ngOnDestroy() {
         this.destroyed$.next(true);

@@ -163,6 +163,7 @@ export class StockReportRequestNew {
     public warehouseUniqueNames?: any[];
     public branchUniqueNames?: any[] ;
     public variantUniqueNames?: any[];
+    public q?: any;
     constructor() {
         this.count = PAGINATION_LIMIT;
         this.page = 1;

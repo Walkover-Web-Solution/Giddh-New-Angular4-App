@@ -52,12 +52,15 @@ export class SettingsWarehouseService {
      * @returns {Observable<BaseResponse<any, any>>} Observable of fetch warehouse to carry out further operations
      * @memberof SettingsWarehouseService
      */
-    public fetchAllWarehouse(params: any): Observable<BaseResponse<any, any>> {
+    public fetchAllWarehouse(params: any, branchUniqueName?:any): Observable<BaseResponse<any, any>> {
         const companyUniqueName: string = this.generalService.companyUniqueName;
         let contextPath: string = `${this.config.apiUrl}${WAREHOUSE_API.FETCH
             ?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName))
             ?.replace(':page', params.page)
             }`;
+            if (branchUniqueName) {
+                contextPath = contextPath.concat(`&&branchUniqueName=${branchUniqueName}`);
+            }
         if (Number.isInteger(params.count)) {
             contextPath = contextPath.concat(`&count=${params.count}`);
         }

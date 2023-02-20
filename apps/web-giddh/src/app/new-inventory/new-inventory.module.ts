@@ -64,6 +64,7 @@ import { NgxMatSelectSearchModule } from "ngx-mat-select-search";
 import { GiddhPageLoaderModule } from "../shared/giddh-page-loader/giddh-page-loader.module";
 import { PaginationModule } from "ngx-bootstrap/pagination";
 import { MatDialogModule } from "@angular/material/dialog";
+import { MatAutocompleteModule } from "@angular/material/autocomplete";
 
 @NgModule({
     declarations: [
@@ -133,7 +134,8 @@ import { MatDialogModule } from "@angular/material/dialog";
         NgxMatSelectSearchModule,
         GiddhPageLoaderModule,
         PaginationModule,
-        MatDialogModule
+        MatDialogModule,
+        MatAutocompleteModule
     ],
     exports: [
         NewInventoryComponent,

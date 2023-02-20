@@ -29,7 +29,12 @@
                 </ngx-mat-select-search>
             </mat-option>
 
-            <mat-option class="balance-options" *ngFor="let branch of branches" [value]="branch?.uniqueName">
+            <mat-option
+                class="balance-options"
+                *ngFor="let branch of branches"
+                (click)="getBranchWiseWarehouse(branch)"
+                [value]="branch?.uniqueName"
+            >
                 {{ branch?.alias ?? "-" }}
             </mat-option>
         </mat-select>
@@ -51,16 +56,12 @@
                     <i class="icon-cross" ngxMatSelectSearchClear></i>
                 </ngx-mat-select-search>
             </mat-option>
-            <!-- (click)="
-        calculationWarehouse(warehouse?.uniqueName);
-        updateCalculationWarehouse(warehouse?.uniqueName)
-    " -->
             <mat-option class="balance-options" *ngFor="let warehouse of warehouses" [value]="warehouse?.uniqueName">
                 {{ warehouse.name ?? "-" }}
             </mat-option>
         </mat-select>
     </div>
-    <div class="clear-filter d-flex" *ngIf="isFilterCorrect">
+    <!-- <div class="clear-filter d-flex" *ngIf="isFilterCorrect">
         <button
             mat-raised-button
             class="create-btn-inventory btn-sky-blue ml-3 mr-0"
@@ -69,13 +70,46 @@
         >
             <span class="icon-cross"></span> Clear
         </button>
-    </div>
+    </div> -->
 </div>
 
 <div class="inventory-filter-bar">
     <div class="search-control">
         <i class="icon-search search-icon"></i>
-        <sh-select placeholder="Search Branch Alice"></sh-select>
+        <mat-form-field floatLabel="never" class="select-multiple-chiplist-inventory">
+            <mat-chip-list #matChipList>
+                <mat-chip
+                    *ngFor="let chip of chipList; let indx = index"
+                    [selectable]="true"
+                    [removable]="true"
+                    (removed)="removeOption(chip, indx)"
+                >
+                    {{ chip }}
+                    <i class="icon-cross" matChipRemove></i>
+                </mat-chip>
+                <input
+                    type="text"
+                    matInput
+                    [formControl]="searchFormControl"
+                    [placeholder]="'Searching'"
+                    [matAutocomplete]="auto"
+                    [matChipInputFor]="matChipList"
+                    [ngClass]="{ 'chiplist-error': showError }"
+                    #trigger="matAutocompleteTrigger"
+                    [name]="'stocks'"
+                    #selectField
+                    autocomplete="off"
+                    matAutocompletePosition="auto"
+                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                />
+            </mat-chip-list>
+            <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectOption($event); selectField.value = ''">
+                <mat-option *ngFor="let option of fieldFilteredOptions" [value]="option">
+                    {{ option.name }} ( {{ option.type }} )
+                </mat-option>
+            </mat-autocomplete>
+        </mat-form-field>
+
         <!-- This will remove after select field component or any othe input -->
         <div class="menu-btn-control">
             <button mat-button (click)="openModal()">

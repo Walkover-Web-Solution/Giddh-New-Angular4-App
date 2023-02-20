@@ -555,6 +555,21 @@ $custom-typography: mat-typography-config(
 .inventory-units-mapped:hover .icon-visibility {
     visibility: visible !important;
 }
+.select-multiple-chiplist-inventory {
+    width: 80% !important;
+    .mat-form-field {
+        width: 98% !important;
+        .mat-form-field-wrapper {
+            padding-bottom: 32px !important;
+            margin-top: 18px !important;
+            .mat-form-field-infix {
+                padding: 0 !important;
+                margin: 0 !important;
+                border-top: 0 !important;
+            }
+        }
+    }
+}
 @media screen and (max-width: 1366px) and (orientation: portrait) {
     .subscription-form-select {
         float: left !important;
@@ -13091,7 +13106,7 @@ hamburger-menu {
         margin-right: 15px;
 
         .search-icon {
-            padding: 10px;
+            padding: 21px;
         }
 
         input.form-control {
