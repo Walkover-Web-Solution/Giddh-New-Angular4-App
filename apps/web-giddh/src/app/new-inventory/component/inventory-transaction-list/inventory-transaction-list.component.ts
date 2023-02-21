@@ -81,35 +81,43 @@ export class InventoryTransactionListComponent implements OnInit {
     public VOUCHER_TYPES: any[] = [
         {
             "value": "SALES",
-            "label": "Sales"
+            "label": "Sales",
+            "checked": false
         },
         {
             "value": "PURCHASE",
-            "label": "Purchase"
+            "label": "Purchase",
+            "checked": false
         },
         {
             "value": "MANUFACTURED",
-            "label": "Manufactured"
+            "label": "Manufactured",
+            "checked": false
         },
         {
             "value": "TRANSFER",
-            "label": "Transfer"
+            "label": "Transfer",
+            "checked": false
         },
         {
             "value": "JOURNAL",
-            "label": "Journal Voucher"
+            "label": "Journal Voucher",
+            "checked": false
         },
         {
             "value": "SALES_CREDIT_NOTE",
-            "label": "Sales Credit note"
+            "label": "Sales Credit note",
+            "checked": false
         },
         {
             "value": "PURCHASE_DEBIT_NOTE",
-            "label": "Purchase credit note"
+            "label": "Purchase credit note",
+            "checked": false
         },
         {
             "value": "RAW_MATERIAL",
-            "label": "Raw Material"
+            "label": "Raw Material",
+            "checked": false
         },
     ];
     public displayedColumns: string[] = [];
@@ -127,6 +135,18 @@ export class InventoryTransactionListComponent implements OnInit {
         {
             "value": "accountName",
             "label": "Account Name",
+            "checked": true
+
+        },
+        {
+            "value": "stockName",
+            "label": "Stock Name",
+            "checked": true
+
+        },
+        {
+            "value": "variantName",
+            "label": "Variant Name",
             "checked": true
 
         },
@@ -269,7 +289,7 @@ export class InventoryTransactionListComponent implements OnInit {
 
 
         this.getBranchWiseWarehouse();
-        this.initVoucherType();
+        // this.initVoucherType();
         this.getReportColumns();
     }
 
@@ -303,6 +323,7 @@ export class InventoryTransactionListComponent implements OnInit {
         }
         this.chipList.push(selectOptionValue);
         this.getStockTransactionReportFilters();
+        this.getStockTransactionalReport();
     }
 
     /**
@@ -319,6 +340,7 @@ export class InventoryTransactionListComponent implements OnInit {
             this.stockReportRequest.variantUniqueNames = this.stockReportRequest.variantUniqueNames.filter(value => value != selectOptionValue.uniqueName);
         }
         this.getStockTransactionReportFilters();
+        this.getStockTransactionalReport();
         this.changeDetection.detectChanges();
     }
 
@@ -349,17 +371,12 @@ export class InventoryTransactionListComponent implements OnInit {
             this.stockReportRequest.from = this.fromDate;
             this.stockReportRequest.to = this.toDate;
         }
-        // Condition sah krna h galat h API se issue h
-        if (type) {
-            this.stockReportRequest.voucherTypes = [];
-        }
         if (!this.stockReportRequest.stockGroupUniqueNames || !this.stockReportRequest.stockUniqueNames) {
             return;
         }
-        if (resetPage) {
-            this.stockReportRequest.page = 1;
-            this.stockReportRequest.count = PAGINATION_LIMIT;
-        }
+
+        this.stockReportRequest.page = 1;
+        this.stockReportRequest.count = PAGINATION_LIMIT;
         delete this.stockReportRequest.dataToSend;
         this.isLoading = true;
         this.inventoryService.GetStockTransactionReport(cloneDeep(this.stockReportRequest)).subscribe(response => {
@@ -380,6 +397,7 @@ export class InventoryTransactionListComponent implements OnInit {
         delete this.stockReportRequest.count;
         delete this.stockReportRequest.page;
         delete this.stockReportRequest.transactionType;
+
         this.inventoryService.GetStockTransactionReportBalance(cloneDeep(this.stockReportRequest)).subscribe(response => {
             this.isLoading = false;
             if (response && response.body && response.status === 'success') {
@@ -501,15 +519,11 @@ export class InventoryTransactionListComponent implements OnInit {
     }
 
     public sortChange(event: any): void {
-        console.log(event);
-
         if (this.stockReportRequest.sort !== event?.direction) {
             this.stockReportRequest.sort = event?.direction;
             this.stockReportRequest.sortBy = event?.active;
             this.getStockTransactionalReport(false, true);
-
         }
-        // this.isFilterCorrect = true;
     }
 
 
@@ -556,15 +570,6 @@ export class InventoryTransactionListComponent implements OnInit {
         });
     }
 
-    public initVoucherType() {
-        // initialization for voucher type array inially all selected
-        this.stockReportRequest.voucherTypes = [];
-        this.VOUCHER_TYPES?.forEach(element => {
-            element.checked = true;
-            this.stockReportRequest.voucherTypes?.push(element.value);
-            this.changeDetection.detectChanges();
-        });
-    }
 
     //******* Advance search modal *******//
     public resetFilter(isReset?: boolean) {
@@ -577,7 +582,7 @@ export class InventoryTransactionListComponent implements OnInit {
         this.stockReportRequest.param = null;
         this.stockReportRequest.expression = null;
 
-        this.initVoucherType();
+        // this.initVoucherType();
         //Reset Date with universal date
         this.universalDate$.subscribe(dateObj => {
             if (dateObj) {
@@ -595,38 +600,17 @@ export class InventoryTransactionListComponent implements OnInit {
     }
 
 
-    public filterByCheck(type: string, event: boolean) {
-        let idx = this.stockReportRequest.voucherTypes?.indexOf('ALL');
-        if (idx !== -1) {
-            this.initVoucherType();
-        }
-        if (event && type) {
-            this.stockReportRequest.voucherTypes.push(type);
-        } else {
-            let index = this.stockReportRequest.voucherTypes?.indexOf(type);
-            if (index !== -1) {
-                this.stockReportRequest.voucherTypes.splice(index, 1);
+    public filterByCheck(type: string) {
+        setTimeout(() => {
+            if (!this.stockReportRequest.voucherTypes.includes(type)) {
+                this.stockReportRequest.voucherTypes.push(type);
+            } else {
+                this.stockReportRequest.voucherTypes = this.stockReportRequest.voucherTypes.filter(value => value != type);
             }
-        }
-        if (this.stockReportRequest.voucherTypes?.length > 0 && this.stockReportRequest.voucherTypes?.length < this.VOUCHER_TYPES.length) {
-            idx = this.stockReportRequest.voucherTypes?.indexOf('ALL');
-            if (idx !== -1) {
-                this.stockReportRequest.voucherTypes.splice(idx, 1);
-            }
-            idx = this.stockReportRequest.voucherTypes?.indexOf('NONE');
-            if (idx !== -1) {
-                this.stockReportRequest.voucherTypes.splice(idx, 1);
-            }
-        }
-        if (this.stockReportRequest.voucherTypes?.length === this.VOUCHER_TYPES.length) {
-            this.stockReportRequest.voucherTypes = ['ALL'];
-        }
-        if (this.stockReportRequest.voucherTypes?.length === 0) {
-            this.stockReportRequest.voucherTypes = ['NONE'];
-        }
-        this.getStockTransactionalReport(false, false);
-        // this.isFilterCorrect = true;
-        this.changeDetection.detectChanges();
+            this.changeDetection.detectChanges();
+            this.getStockTransactionalReport(false, false);
+            this.changeDetection.detectChanges();
+        });
     }
 
     public getReportColumns(): void {
@@ -647,10 +631,8 @@ export class InventoryTransactionListComponent implements OnInit {
     }
 
     public saveColumns(value: string, event: boolean): void {
-        console.log(event, value, cloneDeep(this.REPORT_COLUMNS));
         setTimeout(() => {
             this.displayedColumns = this.REPORT_COLUMNS.filter(value => value.checked).map(column => column.value);
-            console.log(event, value, cloneDeep(this.REPORT_COLUMNS));
             this.changeDetection.detectChanges();
             let saveColumnReq = {
                 module: "INVENTORY_TRANSACTION_REPORT",
@@ -659,7 +641,6 @@ export class InventoryTransactionListComponent implements OnInit {
             this.inventoryService.saveStockTransactionReportColumns(saveColumnReq).subscribe(response => {
             });
         });
-
     }
 
     public selectAllColumns(event: any): void {

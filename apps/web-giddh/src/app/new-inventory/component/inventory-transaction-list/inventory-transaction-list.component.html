@@ -288,21 +288,21 @@
                                 aria-hidden="true"
                             ></i>
                             <mat-menu #voucherTypes="matMenu">
-                                <ng-container *ngFor="let item of VOUCHER_TYPES">
+                                <ng-container *ngFor="let item of VOUCHER_TYPES; let idx = index">
                                     <button
                                         mat-menu-item
                                         (click)="$event.stopPropagation()"
                                         (keydown.enter)="
                                             $event.stopPropagation();
                                             item.checked = !item?.checked;
-                                            filterByCheck(item?.value, $event?.checked)
+                                            filterByCheck(item?.value)
                                         "
                                     >
                                         <mat-checkbox
                                             color="primary"
                                             name="{{ item?.value }}"
-                                            (ngModelChange)="filterByCheck(item?.value, $event?.checked)"
-                                            [(ngModel)]="item.value"
+                                            (ngModelChange)="filterByCheck(item?.value)"
+                                            [(ngModel)]="item.checked"
                                             (click)="$event.stopPropagation()"
                                         >
                                             {{ item.label }}</mat-checkbox
@@ -342,6 +342,18 @@
                         </td>
                     </ng-container>
 
+                    <ng-container matColumnDef="stockName">
+                        <th class="text-right" mat-header-cell *matHeaderCellDef mat-sort-header>Stock Name</th>
+                        <td data-title="Stock Name" class="text-right" mat-cell *matCellDef="let element">
+                            {{ element?.stockNameUniqueName?.name ?? "-" }}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="variantName">
+                        <th class="text-right" mat-header-cell *matHeaderCellDef mat-sort-header>Variant Name</th>
+                        <td data-title="Variant Name" class="text-right" mat-cell *matCellDef="let element">
+                            {{ element?.variant?.name ?? "-" }}
+                        </td>
+                    </ng-container>
                     <ng-container matColumnDef="inwards">
                         <th class="text-right" mat-header-cell *matHeaderCellDef mat-sort-header>Inwards</th>
                         <td data-title="Inwards" class="text-right" mat-cell *matCellDef="let element">

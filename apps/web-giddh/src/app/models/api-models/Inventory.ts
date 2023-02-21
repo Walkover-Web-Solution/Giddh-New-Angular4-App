@@ -176,8 +176,20 @@ export class StockReportRequestNew {
         this.warehouseUniqueNames = [];
         this.branchUniqueNames = [];
         this.variantUniqueNames = [];
+        this.voucherTypes = [];
     }
 }
+
+export class StockReportRequestTransactionParams {
+    public from: string = '';
+    public to: string = '';
+    public count: number;
+    public page: number;
+    public sort: string;
+    public sortBy: string;
+}
+
+
 
 export class TransactionalStockReportResponse {
     public profit?: number;
