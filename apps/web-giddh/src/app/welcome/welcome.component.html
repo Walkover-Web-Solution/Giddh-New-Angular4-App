@@ -149,7 +149,7 @@
                                         [disabled]="
                                             companyProfileObj.businessType && isOnBoardingInProgress ? 'disabled' : null
                                         "
-                                        (selected)="selectedbusinessType($event)"
+                                        (selected)="selectedbusinessType($event); saveFilledData()"
                                         [(ngModel)]="companyProfileObj.businessType"
                                         [options]="businessTypeList"
                                         [ItemHeight]="33"
@@ -175,6 +175,7 @@
                                         [isFilterEnabled]="true"
                                         [ItemHeight]="33"
                                         [defaultValue]="companyProfileObj.businessNature"
+                                        (selected)="saveFilledData()"
                                     >
                                     </sh-select>
                                 </div>
@@ -200,6 +201,7 @@
                                         name="gstNumber"
                                         [(ngModel)]="companyProfileObj.taxNumber"
                                         [placeholder]="getEnterTaxText()"
+                                        (ngModelChange)="saveFilledData()"
                                     />
 
                                     <span class="same-as-head" *ngIf="isBranch || isOnBoardingInProgress">
@@ -209,6 +211,7 @@
                                             [(ngModel)]="isTaxNumberSameAsHeadQuarter"
                                             value="1"
                                             (change)="sameAsHeadQuarter(gstNumberField, states)"
+                                            (ngModelChange)="saveFilledData()"
                                         />
                                         {{ localeData?.same_as_company }}</span
                                     >
@@ -230,6 +233,7 @@
                                             [(ngModel)]="companyProfileObj.state"
                                             class="width-100"
                                             [defaultValue]="companyProfileObj.selectedState"
+                                            (selected)="saveFilledData()"
                                         ></sh-select>
                                     </div>
                                 </div>
@@ -316,6 +320,7 @@
                                                 decimalDigitsDirective
                                                 [preventDecimal]="true"
                                                 [(ngModel)]="companyProfileObj.pincode"
+                                                (ngModelChange)="saveFilledData()"
                                             />
                                         </div>
                                     </div>
@@ -346,6 +351,7 @@
                                     name="address"
                                     id="address"
                                     [(ngModel)]="companyProfileObj.address"
+                                    (ngModelChange)="saveFilledData()"
                                 ></textarea>
                             </div>
                         </div>
