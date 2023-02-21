@@ -2,8 +2,8 @@
     <div class="modal-header advance-header theme-bg pd-2 pd-l2 pd-r2 clearfix">
         <div class="d-flex justify-content-between w-100 align-items-center">
             <h3 class="modal-title bg" id="modal-title">{{ commonLocaleData?.app_advance_search }}</h3>
-            <button mat-icon-button (click)="onCancel()"><i class="icon-cross" aria-hidden="true"></i></button>
         </div>
+        <button mat-icon-button class="close" (click)="onCancel()">×</button>
     </div>
     <div class="modal-body pd-l2 pd-r2 clearfix ipad-responsive-modal" id="export-body">
         <form name="newRole" novalidate autocomplete="off">

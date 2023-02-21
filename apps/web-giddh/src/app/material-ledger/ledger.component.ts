@@ -824,10 +824,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
             distinctUntilChanged(),
             takeUntil(this.destroyed$))
             .subscribe(term => {
+                const searchCleared = (this.trxRequest.q && !term);
                 this.trxRequest.q = term;
                 this.trxRequest.page = 0;
                 this.needToShowLoader = false;
-                if (term || this.trxRequest.q) {
+                if (term || this.trxRequest.q || searchCleared) {
                     this.getTransactionData();
                 }
             });
