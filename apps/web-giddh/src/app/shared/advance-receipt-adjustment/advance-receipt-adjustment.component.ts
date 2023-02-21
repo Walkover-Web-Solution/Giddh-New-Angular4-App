@@ -251,6 +251,9 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
             description: '',
             adjustments: this.resetAdjustments()
         };
+
+        this.calculateBalanceDue();
+
         if (isFormReset) {
             setTimeout(() => {
                 this.isFormReset = false;
