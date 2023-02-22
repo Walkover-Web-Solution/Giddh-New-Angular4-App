@@ -1152,9 +1152,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
             if (o) {
                 if (this.invFormData?.accountDetails?.currency?.code) {
-                    this.loadBankCashAccounts(this.invFormData?.accountDetails?.currency?.code);
+                    this.loadBankCashAccounts(this.invFormData?.accountDetails?.currency?.code, false);
                 } else {
-                    this.loadBankCashAccounts("");
+                    this.loadBankCashAccounts("", false);
                 }
             }
         });
@@ -1166,9 +1166,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             }
             if (o) {
                 if (this.invFormData?.accountDetails?.currency?.code) {
-                    this.loadBankCashAccounts(this.invFormData?.accountDetails?.currency?.code);
+                    this.loadBankCashAccounts(this.invFormData?.accountDetails?.currency?.code, false);
                 } else {
-                    this.loadBankCashAccounts("");
+                    this.loadBankCashAccounts("", false);
                 }
             }
         });
@@ -1725,7 +1725,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 this.onlyPhoneNumber();
                 clearInterval(interval);
             }
-        }, 2000);
+        }, 500);
         if (!this.isUpdateMode) {
             this.toggleBodyClass();
         }
@@ -4485,6 +4485,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             this.isUpdateMode = false;
 
             if (this.callFromOutside) {
+                this.store.dispatch(this.invoiceReceiptActions.setVoucherForDetails(null, null));
                 this.store.dispatch(this.gstAction.resetGstr3BOverViewResponse());
                 this.location?.back();
             }
@@ -6722,10 +6723,12 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @param {string} customerCurrency Currency of the customer selected
      * @memberof VoucherComponent
      */
-    private loadBankCashAccounts(customerCurrency: string): void {
-        this.depositAccountUniqueName = '';
-        this.selectedPaymentMode = null;
-        this.userDeposit = null;
+    private loadBankCashAccounts(customerCurrency: string, resetDeposit: boolean = true): void {
+        if (resetDeposit) {
+            this.depositAccountUniqueName = '';
+            this.selectedPaymentMode = null;
+            this.userDeposit = null;
+        }
         let groups = "cash, bankaccounts";
         if (this.voucherApiVersion === 2) {
             groups += ", loanandoverdraft";

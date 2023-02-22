@@ -72,6 +72,7 @@
     background: var(--color-white-secondary);
     color: var(--color-white-secondary);
     cursor: not-allowed;
+    visibility: hidden !important;
 }
 .bs-datepicker-head button.next,
 .bs-datepicker-head button.previous {
