@@ -126,3 +126,13 @@ tr.fsstock td {
         display: block;
     }
 }
+::ng-deep {
+    .ng-untouched {
+        .pull-right {
+            button {
+                padding-right: 10px !important;
+                min-width: auto !important;
+            }
+        }
+    }
+}

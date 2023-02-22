@@ -169,7 +169,6 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                 this.activeCompany = companyInfo;
                 this.inputMaskFormat = this.activeCompany.balanceDisplayFormat ? this.activeCompany.balanceDisplayFormat.toLowerCase() : '';
                 this.getOnboardingForm(companyInfo.countryV2.alpha2CountryCode);
-                this.assignCurrentCompany();
             }
         });
 
