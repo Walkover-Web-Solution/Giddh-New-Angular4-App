@@ -32,7 +32,7 @@
             <mat-option
                 class="balance-options"
                 *ngFor="let branch of branches"
-                (click)="getBranchWiseWarehouse(branch)"
+                (click)="getBranches()"
                 [value]="branch?.uniqueName"
             >
                 {{ branch?.alias ?? "-" }}
@@ -56,7 +56,12 @@
                     <i class="icon-cross" ngxMatSelectSearchClear></i>
                 </ngx-mat-select-search>
             </mat-option>
-            <mat-option class="balance-options" *ngFor="let warehouse of warehouses" [value]="warehouse?.uniqueName">
+            <mat-option
+                class="balance-options"
+                *ngFor="let warehouse of warehouses"
+                [value]="warehouse?.uniqueName"
+                (click)="getWarehouses()"
+            >
                 {{ warehouse.name ?? "-" }}
             </mat-option>
         </mat-select>
@@ -149,14 +154,12 @@
                     <button
                         mat-menu-item
                         (click)="$event.stopPropagation()"
-                        (keydown.enter)="
-                            $event.stopPropagation(); item.checked = !item?.checked; saveColumns(item?.value, $event)
-                        "
+                        (keydown.enter)="$event.stopPropagation(); item.checked = !item?.checked; saveColumns()"
                     >
                         <mat-checkbox
                             color="primary"
                             name="{{ item?.value }}"
-                            (ngModelChange)="saveColumns(item?.value, $event)"
+                            (ngModelChange)="saveColumns()"
                             [(ngModel)]="item.checked"
                             (click)="$event.stopPropagation()"
                         >
@@ -261,7 +264,7 @@
     </div>
     <div class="row">
         <div class="col-12 horizontal-padding">
-            <div class="table-responsive table-content" *ngIf="displayedColumns?.length">
+            <div class="table-responsive table-content">
                 <table
                     mat-table
                     [dataSource]="dataSource"
@@ -274,9 +277,7 @@
                     <ng-container matColumnDef="date">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
                         <td data-title="Date" mat-cell *matCellDef="let element">
-                            <ng-container *ngIf="!isLoading && dataSource?.length">
-                                {{ element.entryDate ?? "-" }}
-                            </ng-container>
+                            {{ element.entryDate ?? "-" }}
                         </td>
                     </ng-container>
 
@@ -391,16 +392,22 @@
 
                     <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
                     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                    <tr class="mat-row" *matNoDataRow>
+                        <td
+                            class="mat-cell p-5"
+                            style="border-bottom: 0px"
+                            [attr.colspan]="displayedColumns.length ? displayedColumns.length : 9"
+                        >
+                            <div class="no-data" *ngIf="isLoading">
+                                <giddh-page-loader></giddh-page-loader>
+                            </div>
+                            <div class="no-data" *ngIf="!isLoading">
+                                <h1>No Data Found</h1>
+                            </div>
+                        </td>
+                    </tr>
                 </table>
-                <div *ngIf="isLoading">
-                    <giddh-page-loader></giddh-page-loader>
-                </div>
             </div>
-            <section class="no-logs" *ngIf="!dataSource?.length && !isLoading">
-                <div class="no-data">
-                    <h1>No Data Found</h1>
-                </div>
-            </section>
             <div class="pagination-wrapper">
                 <pagination
                     *ngIf="
