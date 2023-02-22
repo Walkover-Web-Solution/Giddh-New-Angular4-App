@@ -279,6 +279,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
 
     public setDisabledState(isDisabled: boolean) {
         this.disabled = isDisabled;
+        this.cdRef.detectChanges();
     }
 
     public toggleSelected(item) {

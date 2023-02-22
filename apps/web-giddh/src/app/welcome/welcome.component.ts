@@ -250,7 +250,6 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
         } else {
             this.store.pipe(select(s => s.session.createCompanyUserStoreRequestObj), take(1)).subscribe(res => {
                 if (res) {
-                    console.log(res);
                     this.isBranch = res.isBranch;
                     this.createNewCompany = res;
                     this.company = this.createNewCompany;
@@ -303,10 +302,12 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
             if (this.selectedBusinesstype === 'Registered') {
                 if (this.createNewCompany.addresses !== undefined && this.createNewCompany.addresses[0] !== undefined) {
                     this.companyProfileObj.taxNumber = this.createNewCompany.addresses[0].taxNumber;
-                    this.companyProfileObj.pincode = this.createNewCompany.addresses[0].pincode;
                 }
             }
             this.companyProfileObj.address = this.createNewCompany.address;
+            if (this.createNewCompany.addresses !== undefined && this.createNewCompany.addresses[0] !== undefined) {
+                this.companyProfileObj.pincode = this.createNewCompany.addresses[0].pincode;
+            }
         }
     }
 
@@ -970,6 +971,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
         if (entity) {
             this.companyProfileObj.address = entity.address;
             this.companyProfileObj.state = entity.stateCode;
+            this.companyProfileObj.pincode = entity.pincode;
         }
         return !!(this.companyProfileObj.address || this.companyProfileObj.state);
     }
