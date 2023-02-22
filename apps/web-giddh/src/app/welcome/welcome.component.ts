@@ -169,15 +169,15 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     /** True if API is in progress */
     @Input() isApiInProgress: boolean;
     /** States dropdown instance */
-    @ViewChild('states', { static: true }) statesDropdown: ShSelectComponent;
+    @ViewChild('states', { static: false }) statesDropdown: ShSelectComponent;
     /** GST number field */
-    @ViewChild('gstNumberField', { static: true }) gstNumberField: ElementRef<any>;
+    @ViewChild('gstNumberField', { static: false }) gstNumberField: ElementRef<any>;
     /** Contact number field */
     @ViewChild('mobileNoEl', { static: true }) contactNumberField: ElementRef<any>;
     /** Address field */
     @ViewChild('address', { static: true }) addressField: ElementRef<any>;
     /** Form instance */
-    @ViewChild('welcomeForm', { static: true }) welcomeForm: NgForm;
+    @ViewChild('welcomeForm', { static: false }) welcomeForm: NgForm;
     /** Applicable taxes dropdown instance */
     @ViewChild('dropdown') public dropdown: any;
 
@@ -255,6 +255,9 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
                     this.company = this.createNewCompany;
                     this.company.contactNo = this.getFormattedContactNumber(this.company.contactNo);
                     this.prepareWelcomeForm();
+                    setTimeout(() => {
+                        this.getStateCode(this.gstNumberField?.nativeElement, this.statesDropdown);
+                    }, 500);
                 }
             });
         }
@@ -302,6 +305,9 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
                 }
             }
             this.companyProfileObj.address = this.createNewCompany.address;
+            if (this.createNewCompany.addresses !== undefined && this.createNewCompany.addresses[0] !== undefined) {
+                this.companyProfileObj.pincode = this.createNewCompany.addresses[0].pincode;
+            }
         }
     }
 
@@ -484,15 +490,15 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
                     let s = state.find(st => st?.value === stateCode);
                     _.uniqBy(s, 'value');
-                    statesEle.setDisabledState(false);
+                    statesEle?.setDisabledState(false);
 
                     if (s) {
                         this.companyProfileObj.state = s?.value;
                         this.selectedstateName = s.label;
-                        statesEle.setDisabledState(true);
+                        statesEle?.setDisabledState(true);
 
                     } else {
-                        statesEle.setDisabledState(false);
+                        statesEle?.setDisabledState(false);
                         this.toasty.clearAllToaster();
 
                         if (this.formFields['taxName'] && !this.welcomeForm.form.get('gstNumber')?.valid) {
@@ -504,7 +510,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
                     }
                 });
             } else {
-                statesEle.setDisabledState(false);
+                statesEle?.setDisabledState(false);
                 this.companyProfileObj.state = '';
             }
         }
@@ -965,6 +971,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
         if (entity) {
             this.companyProfileObj.address = entity.address;
             this.companyProfileObj.state = entity.stateCode;
+            this.companyProfileObj.pincode = entity.pincode;
         }
         return !!(this.companyProfileObj.address || this.companyProfileObj.state);
     }
@@ -1183,5 +1190,25 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
         if (last) {
             this.dropdown.hide();
         }
+    }
+
+    /**
+     * Saves filled data in store
+     *
+     * @memberof WelcomeComponent
+     */
+    public saveFilledData(): void {
+        this.createNewCompanyPreparedObj.businessNature = this.companyProfileObj.businessNature ? this.companyProfileObj.businessNature : '';
+        this.createNewCompanyPreparedObj.businessType = this.companyProfileObj.businessType ? this.companyProfileObj.businessType : '';
+        this.createNewCompanyPreparedObj.address = this.companyProfileObj.address ? this.companyProfileObj.address : '';
+        this.createNewCompanyPreparedObj.taxes = (this.selectedTaxes?.length > 0) ? this.selectedTaxes : [];
+        let gstDetails = this.prepareGstDetail(this.companyProfileObj);
+        if (gstDetails.taxNumber || gstDetails.address || gstDetails.stateCode || gstDetails.pincode) {
+            this.createNewCompanyPreparedObj.addresses = [];
+            this.createNewCompanyPreparedObj.addresses.push(gstDetails);
+        } else {
+            this.createNewCompanyPreparedObj.addresses = [];
+        }
+        this.store.dispatch(this.companyActions.userStoreCreateCompany(this.createNewCompanyPreparedObj));
     }
 }

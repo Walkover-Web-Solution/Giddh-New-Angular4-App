@@ -67,8 +67,8 @@
                     </ng-container>
                 </mat-option>
                 <mat-option disabled *ngIf="fieldFilteredOptions?.length === 0">No results found</mat-option>
-                <mat-option *ngIf="fieldFilteredOptions?.length === 0 && showCreateNew">
-                    <a href="javascript:;" (click)="createNewRecord()" class="options-class-create">
+                <mat-option *ngIf="fieldFilteredOptions?.length === 0 && showCreateNew" (click)="createNewRecord()">
+                    <a href="javascript:;" class="options-class-create">
                         {{ commonLocaleData?.app_create_new }}
                     </a></mat-option
                 >
