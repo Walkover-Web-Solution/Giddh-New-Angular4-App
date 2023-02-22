@@ -23,7 +23,6 @@ import { LEDGER_API } from 'apps/web-giddh/src/app/services/apiurls/ledger.api';
 import { CommonService } from 'apps/web-giddh/src/app/services/common.service';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service';
-import { InvoiceTemplatesService } from 'apps/web-giddh/src/app/services/invoice.templates.service';
 import { PurchaseRecordService } from 'apps/web-giddh/src/app/services/purchase-record.service';
 import { SalesService } from 'apps/web-giddh/src/app/services/sales.service';
 import { ThermalService } from 'apps/web-giddh/src/app/services/thermal.service';
@@ -184,8 +183,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         private modalService: BsModalService,
         private domSanitizer: DomSanitizer,
         private commonService: CommonService,
-        private thermalService: ThermalService,
-        private invoiceTemplatesService: InvoiceTemplatesService) {
+        private thermalService: ThermalService) {
         this._breakPointObservar.observe([
             '(max-width: 1023px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
