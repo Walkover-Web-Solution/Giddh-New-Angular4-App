@@ -2,7 +2,7 @@ import { Component, OnInit, ElementRef, ViewChild, Inject, ChangeDetectionStrate
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { GeneralService } from '../../../services/general.service';
 import { take, takeUntil } from 'rxjs/operators';
-import { Observable, ReplaySubject } from 'rxjs';
+import { from, Observable, ReplaySubject } from 'rxjs';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 import * as dayjs from 'dayjs';
@@ -43,6 +43,7 @@ export class NewInventoryAdavanceSearch implements OnInit {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* dayjs object */
     public dayjs = dayjs;
+    /* Hold advance search category*/
     public advanceSearchCatergory: any[] = [
         {
             value: "Inward",
@@ -53,6 +54,7 @@ export class NewInventoryAdavanceSearch implements OnInit {
             label: "Outwards "
         }
     ];
+    /* Hold advance search category options*/
     public advanceSearchCatergoryOptions: any[] = [
         {
             value: "Amount",
@@ -63,6 +65,7 @@ export class NewInventoryAdavanceSearch implements OnInit {
             label: "Quantity",
         }
     ];
+    /* Hold advance search vslue*/
     public advanceSearchValue: any[] = [
         {
             value: "Equals",
@@ -81,11 +84,7 @@ export class NewInventoryAdavanceSearch implements OnInit {
             label: "Excluded"
         }
     ];
-    /** True if valid fields*/
-    public mandatoryFields: any = {
-        val: false
-    }
-    /** Instance of create trigger form*/
+    /** Instance of advance search form*/
     public advanceSearchFormObj: any = {};
 
     constructor(
@@ -97,19 +96,25 @@ export class NewInventoryAdavanceSearch implements OnInit {
         private store: Store<AppState>) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
     }
+
+    /**
+     * This will use in component initialization
+     *
+     * @memberof NewInventoryAdavanceSearch
+     */
     public ngOnInit() {
-        this._breakPointObservar.observe([
+     this._breakPointObservar.observe([
             '(max-width: 767px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.isMobileScreen = result.matches;
         });
-        if (this.inputData?.stockReportRequest?.dataToSend?.bsRangeValue) {
-            let dateObj = this.inputData?.stockReportRequest?.dataToSend?.bsRangeValue;
-            let universalDate = _.cloneDeep(dateObj);
-            this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
-            this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-            this.advanceSearchFormObj.fromDate = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);
-            this.advanceSearchFormObj.toDate = dayjs(universalDate[1]).format(GIDDH_DATE_FORMAT);
+        if (this.inputData?.stockReportRequest) {
+            let from = this.inputData?.stockReportRequest.from;
+            let to = this.inputData?.stockReportRequest.to;
+            this.selectedDateRange = { startDate: dayjs(from, GIDDH_DATE_FORMAT), endDate: dayjs(to,GIDDH_DATE_FORMAT) };
+            this.selectedDateRangeUi = dayjs(from,GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(to,GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.advanceSearchFormObj.fromDate = dayjs(from,GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+            this.advanceSearchFormObj.toDate = dayjs(to,GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
         } else {
             this.universalDate$.pipe(take(1)).subscribe(dateObj => {
                 if (dateObj) {
@@ -123,6 +128,11 @@ export class NewInventoryAdavanceSearch implements OnInit {
         }
     }
 
+    /**
+     * This will use for advance searhc fields
+     *
+     * @memberof NewInventoryAdavanceSearch
+     */
     public initFormFields(): void {
         this.advanceSearchFormObj =
         {
@@ -137,29 +147,62 @@ export class NewInventoryAdavanceSearch implements OnInit {
         }
     }
 
-
+    /**
+     * This will use for allow only number
+     *
+     * @param {*} event
+     * @return {*}  {boolean}
+     * @memberof NewInventoryAdavanceSearch
+     */
     public allowOnlyNumbers(event: any): boolean {
         return this.generalService.allowOnlyNumbers(event);
     }
 
-
+    /**
+     * This will use for advance search  category
+     *
+     * @param {*} category
+     * @memberof NewInventoryAdavanceSearch
+     */
     public selectCategory(category: any): void {
         if (category) {
             this.advanceSearchFormObj.param1 = category;
         }
     }
+
+    /**
+     * This will use for select category options
+     *
+     * @param {*} expression
+     * @memberof NewInventoryAdavanceSearch
+     */
     public selectCategoryOptions(expression: any): void {
         if (expression) {
             this.advanceSearchFormObj.param2 = expression;
         }
     }
+
+    /**
+     * This will use for select advanced search value
+     *
+     * @param {*} value
+     * @memberof NewInventoryAdavanceSearch
+     */
     public selectValue(value: any): void {
         if (value) {
             this.advanceSearchFormObj.expression = value;
         }
     }
+
+    /**
+     *This will use for advanced search action
+     *
+     * @param {string} [type]
+     * @return {*}  {void}
+     * @memberof NewInventoryAdavanceSearch
+     */
     public advanceSearchAction(type?: string): void {
-        if (this.advanceSearchFormObj.param1 && this.advanceSearchFormObj.param2) { // creating value for key parma like "qty_cr", "amt_cr"
+        if (this.advanceSearchFormObj.param1 && this.advanceSearchFormObj.param2) {
             this.advanceSearchFormObj.param = this.advanceSearchFormObj.param1?.toUpperCase() + '_' + this.advanceSearchFormObj.param2?.toUpperCase();
         }
         if (this.advanceSearchFormObj.expression == 'Equals') {
@@ -205,6 +248,13 @@ export class NewInventoryAdavanceSearch implements OnInit {
         this.advanceSearchFormObj.searching = true;
     }
 
+    /**
+     * Callback function of datepicker
+     *
+     * @param {*} [value]
+     * @return {*}  {void}
+     * @memberof NewInventoryAdavanceSearch
+     */
     public dateSelectedCallback(value?: any): void {
         if (value && value.event === "cancel") {
             this.hideGiddhDatepicker();
@@ -223,10 +273,20 @@ export class NewInventoryAdavanceSearch implements OnInit {
         }
     }
 
+    /**
+     * This will use for hide giddh datepicker
+     *
+     * @memberof NewInventoryAdavanceSearch
+     */
     public hideGiddhDatepicker(): void {
         this.modalRef?.hide();
     }
-
+    /**
+     * This will use for show giddh datepicker
+     *
+     * @param {*} element
+     * @memberof NewInventoryAdavanceSearch
+     */
     public showGiddhDatepicker(element: any): void {
         if (element) {
             this.dateFieldPosition = this.generalService.getPosition(element.target);
@@ -237,6 +297,11 @@ export class NewInventoryAdavanceSearch implements OnInit {
         );
     }
 
+    /**
+     * This hook will use for on destroyed the component
+     *
+     * @memberof NewInventoryAdavanceSearch
+     */
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();

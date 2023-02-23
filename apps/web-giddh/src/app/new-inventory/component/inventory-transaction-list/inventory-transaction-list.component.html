@@ -62,7 +62,7 @@
                 [value]="warehouse?.uniqueName"
                 (click)="getWarehouses()"
             >
-                {{ warehouse.name ?? "-" }}
+                {{ warehouse?.name ?? "-" }}
             </mat-option>
         </mat-select>
     </div>
@@ -84,7 +84,7 @@
         <mat-form-field floatLabel="never" class="select-multiple-chiplist-inventory">
             <mat-chip-list #matChipList>
                 <mat-chip
-                    *ngFor="let chip of chipList; let indx = index"
+                    *ngFor="let chip of filtersChipList; let indx = index"
                     [selectable]="true"
                     [removable]="true"
                     (removed)="removeOption(chip, indx)"
@@ -95,11 +95,10 @@
                 <input
                     type="text"
                     matInput
-                    [formControl]="searchFormControl"
-                    [placeholder]="'Searching'"
+                    [formControl]="searchingFilters"
+                    [placeholder]="'Searching  Stock Group , Multiple  Stocks, Multiple Variants'"
                     [matAutocomplete]="auto"
                     [matChipInputFor]="matChipList"
-                    [ngClass]="{ 'chiplist-error': showError }"
                     #trigger="matAutocompleteTrigger"
                     [name]="'stocks'"
                     #selectField
@@ -110,29 +109,25 @@
             </mat-chip-list>
             <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectOption($event); selectField.value = ''">
                 <mat-option *ngFor="let option of fieldFilteredOptions" [value]="option">
-                    {{ option.name }} ( {{ option.type }} )
+                    {{ option?.name }} ( {{ option?.type }} )
                 </mat-option>
             </mat-autocomplete>
         </mat-form-field>
-
-        <!-- This will remove after select field component or any othe input -->
         <div class="menu-btn-control">
-            <button mat-button (click)="openModal()">
+            <button mat-button (click)="openModal()" class="advance-filter-button">
                 <i class="icon-advance-filter mr-2"></i>
                 Advance Filter
             </button>
-
-            <button mat-button [matMenuTriggerFor]="customise" aria-label="Customise">
+            <button mat-button [matMenuTriggerFor]="customise" aria-label="Customise" class="customise-filter-button">
                 <i class="icon-options mr-2"> </i>
                 Customise
             </button>
-
             <mat-menu #customise="matMenu">
                 <button
                     mat-menu-item
-                    (click)="$event.stopPropagation()"
+                    (click)="$event?.stopPropagation()"
                     (keydown.enter)="
-                        $event.stopPropagation();
+                        $event?.stopPropagation();
                         selectAllCheckbox.checked = !selectAllCheckbox?.checked;
                         selectAllColumns(selectAllCheckbox?.checked)
                     "
@@ -142,35 +137,34 @@
                         color="primary"
                         name="selectAll"
                         (change)="selectAllColumns($event?.checked)"
-                        [checked]="displayedColumns?.length === REPORT_COLUMNS.length"
+                        [checked]="displayedColumns?.length === CUSTOMISE_COLUMNS?.length"
                         [indeterminate]="
-                            displayedColumns?.length < REPORT_COLUMNS.length && displayedColumns.length > 0
+                            displayedColumns?.length < CUSTOMISE_COLUMNS?.length && displayedColumns?.length > 0
                         "
                     >
                         Select All
                     </mat-checkbox>
                 </button>
-                <ng-container *ngFor="let item of REPORT_COLUMNS">
+                <ng-container *ngFor="let item of CUSTOMISE_COLUMNS">
                     <button
                         mat-menu-item
-                        (click)="$event.stopPropagation()"
-                        (keydown.enter)="$event.stopPropagation(); item.checked = !item?.checked; saveColumns()"
+                        (click)="$event?.stopPropagation()"
+                        (keydown.enter)="$event?.stopPropagation(); item.checked = !item?.checked; saveColumns()"
                     >
                         <mat-checkbox
                             color="primary"
                             name="{{ item?.value }}"
                             (ngModelChange)="saveColumns()"
                             [(ngModel)]="item.checked"
-                            (click)="$event.stopPropagation()"
+                            (click)="$event?.stopPropagation()"
                         >
-                            {{ item.label }}</mat-checkbox
+                            {{ item?.label }}</mat-checkbox
                         >
                     </button>
                 </ng-container>
             </mat-menu>
         </div>
     </div>
-
     <!-- <div class="d-flex transactional-filter-section">
             <button
             mat-mini-fab
@@ -190,12 +184,12 @@
         </mat-menu>
     </div> -->
 </div>
-<!-- end new inventory header-->
 <div class="inventory-transaction-list">
     <div class="p-3">
         <div class="row">
             <div class="col-12">
                 <div class="top-content">
+                    <!-- {{ stockTransactionReportBalance | json }} -->
                     <div class="d-flex w-100 justify-content-between overflow-x-auto">
                         <div class="total-details-box mr-r05 count-box">
                             <h5>
@@ -211,9 +205,17 @@
                             <h5>
                                 Profit/Loss
                                 <div class="mt-2">
-                                    <span class="d-inline-flex number-total"
-                                        >{{ stockTransactionReportBalance?.profit ?? "-" }}
+                                    <span
+                                        class="d-inline-flex number-total w-100"
+                                        [matTooltip]="stockTransactionReportBalance?.profit"
+                                    >
+                                        {{
+                                            stockTransactionReportBalance?.profit
+                                                ? (stockTransactionReportBalance?.profit | giddhCurrency)
+                                                : "-"
+                                        }}
                                     </span>
+                                    <span class="d-inline-flex mt-1"> ({{ fromDate + "-" + toDate }}) </span>
                                 </div>
                             </h5>
                         </div>
@@ -221,8 +223,23 @@
                             <h5>
                                 Opening
                                 <div class="mt-2">
-                                    <span class="d-inline-flex number-total">
-                                        {{ stockTransactionReportBalance?.opening?.amount ?? "-" }}
+                                    <span
+                                        class="d-inline-flex number-total w-100"
+                                        [matTooltip]="stockTransactionReportBalance?.opening?.amount"
+                                    >
+                                        {{
+                                            stockTransactionReportBalance?.opening?.amount
+                                                ? (stockTransactionReportBalance?.opening?.amount | giddhCurrency)
+                                                : "-"
+                                        }}
+                                    </span>
+                                    <span class="d-inline-flex mt-1">
+                                        (
+                                        {{
+                                            stockTransactionReportBalance?.opening?.quantity
+                                                ? (stockTransactionReportBalance?.opening?.quantity | giddhCurrency)
+                                                : "-"
+                                        }})
                                     </span>
                                 </div>
                             </h5>
@@ -231,8 +248,23 @@
                             <h5>
                                 Inward
                                 <div class="mt-2">
-                                    <span class="d-inline-flex number-total">
-                                        {{ stockTransactionReportBalance?.inwards?.amount ?? "-" }}
+                                    <span
+                                        class="d-inline-flex number-total w-100"
+                                        [matTooltip]="stockTransactionReportBalance?.inwards?.amount"
+                                    >
+                                        {{
+                                            stockTransactionReportBalance?.inwards?.amount
+                                                ? (stockTransactionReportBalance?.inwards?.amount | giddhCurrency)
+                                                : "-"
+                                        }}
+                                    </span>
+                                    <span class="d-inline-flex mt-1">
+                                        (
+                                        {{
+                                            stockTransactionReportBalance?.inwards?.quantity
+                                                ? (stockTransactionReportBalance?.inwards?.quantity | giddhCurrency)
+                                                : "-"
+                                        }})
                                     </span>
                                 </div>
                             </h5>
@@ -241,8 +273,23 @@
                             <h5>
                                 Outward
                                 <div class="mt-2">
-                                    <span class="d-inline-flex number-total">
-                                        {{ stockTransactionReportBalance?.outwards?.amount ?? "-" }}
+                                    <span
+                                        class="d-inline-flex number-total w-100"
+                                        [matTooltip]="stockTransactionReportBalance?.outwards?.amount"
+                                    >
+                                        {{
+                                            stockTransactionReportBalance?.outwards?.amount
+                                                ? (stockTransactionReportBalance?.outwards?.amount | giddhCurrency)
+                                                : "-"
+                                        }}
+                                    </span>
+                                    <span class="d-inline-flex mt-1">
+                                        (
+                                        {{
+                                            stockTransactionReportBalance?.outwards?.quantity
+                                                ? (stockTransactionReportBalance?.outwards?.quantity | giddhCurrency)
+                                                : "-"
+                                        }})
                                     </span>
                                 </div>
                             </h5>
@@ -251,8 +298,23 @@
                             <h5>
                                 Closing
                                 <div class="mt-2">
-                                    <span class="d-inline-flex number-total">
-                                        {{ stockTransactionReportBalance?.closing?.amount ?? "-" }}
+                                    <span
+                                        class="d-inline-flex number-total w-100"
+                                        [matTooltip]="stockTransactionReportBalance?.closing?.amount"
+                                    >
+                                        {{
+                                            stockTransactionReportBalance?.closing?.amount
+                                                ? (stockTransactionReportBalance?.closing?.amount | giddhCurrency)
+                                                : "-"
+                                        }}
+                                    </span>
+                                    <span class="d-inline-flex mt-1">
+                                        (
+                                        {{
+                                            stockTransactionReportBalance?.closing?.quantity
+                                                ? (stockTransactionReportBalance?.closing?.quantity | giddhCurrency)
+                                                : "-"
+                                        }})
                                     </span>
                                 </div>
                             </h5>
@@ -270,14 +332,14 @@
                     [dataSource]="dataSource"
                     matSort
                     (matSortChange)="sortChange($event)"
-                    [matSortActive]="stockReportRequest.sortBy"
-                    [matSortDirection]="stockReportRequest.sort"
+                    [matSortActive]="stockReportRequest?.sortBy"
+                    [matSortDirection]="stockReportRequest?.sort"
                     class="table giddh-table on-mobile-view"
                 >
                     <ng-container matColumnDef="date">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
                         <td data-title="Date" mat-cell *matCellDef="let element">
-                            {{ element.entryDate ?? "-" }}
+                            {{ element?.entryDate ?? "-" }}
                         </td>
                     </ng-container>
 
@@ -292,9 +354,9 @@
                                 <ng-container *ngFor="let item of VOUCHER_TYPES; let idx = index">
                                     <button
                                         mat-menu-item
-                                        (click)="$event.stopPropagation()"
+                                        (click)="$event?.stopPropagation()"
                                         (keydown.enter)="
-                                            $event.stopPropagation();
+                                            $event?.stopPropagation();
                                             item.checked = !item?.checked;
                                             filterByCheck(item?.value)
                                         "
@@ -304,19 +366,18 @@
                                             name="{{ item?.value }}"
                                             (ngModelChange)="filterByCheck(item?.value)"
                                             [(ngModel)]="item.checked"
-                                            (click)="$event.stopPropagation()"
+                                            (click)="$event?.stopPropagation()"
                                         >
-                                            {{ item.label }}</mat-checkbox
+                                            {{ item?.label }}</mat-checkbox
                                         >
                                     </button>
                                 </ng-container>
                             </mat-menu>
                         </th>
                         <td date-title="Voucher Type" mat-cell *matCellDef="let element">
-                            {{ element.voucherType }}
+                            {{ element?.voucherType }}
                         </td>
                     </ng-container>
-
                     <ng-container matColumnDef="accountName">
                         <th
                             class="td-search-box"
@@ -342,7 +403,6 @@
                             {{ element?.account?.name ?? "-" }}
                         </td>
                     </ng-container>
-
                     <ng-container matColumnDef="stockName">
                         <th class="text-right" mat-header-cell *matHeaderCellDef mat-sort-header>Stock Name</th>
                         <td data-title="Stock Name" class="text-right" mat-cell *matCellDef="let element">
@@ -357,46 +417,65 @@
                     </ng-container>
                     <ng-container matColumnDef="inwards">
                         <th class="text-right" mat-header-cell *matHeaderCellDef mat-sort-header>Inwards</th>
-                        <td data-title="Inwards" class="text-right" mat-cell *matCellDef="let element">
-                            {{ element.inwardBalance ?? "-" }}
+                        <td
+                            data-title="Inwards"
+                            class="text-right"
+                            mat-cell
+                            *matCellDef="let element"
+                            [matTooltip]="element?.inwardBalance"
+                        >
+                            {{ element?.inwardBalance ? (element?.inwardBalance | giddhCurrency) : "-" }}
                         </td>
                     </ng-container>
-
                     <ng-container matColumnDef="outwards">
                         <th class="text-right" mat-header-cell *matHeaderCellDef mat-sort-header>Outwards</th>
-                        <td data-title="Outwards" class="text-right" mat-cell *matCellDef="let element">
-                            {{ element.outwardBalance ?? "-" }}
+                        <td
+                            data-title="Outwards"
+                            class="text-right"
+                            mat-cell
+                            *matCellDef="let element"
+                            [matTooltip]="element?.outwardBalance"
+                        >
+                            {{ element?.outwardBalance ? (element?.outwardBalance | giddhCurrency) : "-" }}
                         </td>
                     </ng-container>
-
                     <ng-container matColumnDef="rate">
                         <th class="text-right" mat-header-cell *matHeaderCellDef mat-sort-header>Rate</th>
-                        <td data-title="Rate" class="text-right" mat-cell *matCellDef="let element">
-                            {{ element.rate ?? "-" }}
+                        <td
+                            data-title="Rate"
+                            class="text-right"
+                            mat-cell
+                            *matCellDef="let element"
+                            [matTooltip]="element?.rate"
+                        >
+                            {{ element?.rate ? (element?.rate | giddhCurrency) : "-" }}
                         </td>
                     </ng-container>
-
                     <ng-container matColumnDef="value">
                         <th class="text-right" mat-header-cell *matHeaderCellDef mat-sort-header>Value</th>
-                        <td data-title="Value" class="text-right" mat-cell *matCellDef="let element">
-                            {{ element?.amount ?? "-" }}
+                        <td
+                            data-title="Value"
+                            class="text-right"
+                            mat-cell
+                            *matCellDef="let element"
+                            [matTooltip]="element?.amount"
+                        >
+                            {{ element?.amount ? (element?.amount | giddhCurrency) : "-" }}
                         </td>
                     </ng-container>
-
                     <!-- <ng-container matColumnDef="qty">
                         <th class="text-right" mat-header-cell *matHeaderCellDef>qty</th>
                         <td data-title="Qty" class="text-right" mat-cell *matCellDef="let element">
                             {{ element.qty }}
                         </td>
                     </ng-container> -->
-
                     <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
                     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                     <tr class="mat-row" *matNoDataRow>
                         <td
                             class="mat-cell p-5"
                             style="border-bottom: 0px"
-                            [attr.colspan]="displayedColumns.length ? displayedColumns.length : 9"
+                            [attr.colspan]="displayedColumns?.length ? displayedColumns?.length : 9"
                         >
                             <div class="no-data" *ngIf="isLoading">
                                 <giddh-page-loader></giddh-page-loader>

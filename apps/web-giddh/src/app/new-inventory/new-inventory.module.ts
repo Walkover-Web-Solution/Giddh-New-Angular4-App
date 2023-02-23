@@ -65,6 +65,7 @@ import { GiddhPageLoaderModule } from "../shared/giddh-page-loader/giddh-page-lo
 import { PaginationModule } from "ngx-bootstrap/pagination";
 import { MatDialogModule } from "@angular/material/dialog";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
+import { MatTooltipModule } from "@angular/material/tooltip";
 
 @NgModule({
     declarations: [
@@ -135,7 +136,8 @@ import { MatAutocompleteModule } from "@angular/material/autocomplete";
         GiddhPageLoaderModule,
         PaginationModule,
         MatDialogModule,
-        MatAutocompleteModule
+        MatAutocompleteModule,
+        MatTooltipModule
     ],
     exports: [
         NewInventoryComponent,

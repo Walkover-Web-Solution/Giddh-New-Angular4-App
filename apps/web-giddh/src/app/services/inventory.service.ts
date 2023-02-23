@@ -409,68 +409,6 @@ export class InventoryService {
                 })));
     }
 
-    public GetStockTransactionReport(stockReportRequest: StockReportRequestNew): Observable<BaseResponse<StockReportResponse, StockReportRequestNew>> {
-        this.companyUniqueName = this.generalService.companyUniqueName;
-
-        return this.http.post(this.config.apiUrl + INVENTORY_API.TRANSACTIONAL_STOCK_REPORT_V2?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            ?.replace(':stockGroupUniqueName', encodeURIComponent(<any>stockReportRequest.stockGroupUniqueNames))
-            ?.replace(':stockUniqueName', encodeURIComponent(<any>stockReportRequest.stockUniqueNames))
-            ?.replace(':transactionType', encodeURIComponent(stockReportRequest.transactionType ? stockReportRequest.transactionType?.toString() : 'all'))
-            ?.replace(':from', encodeURIComponent(stockReportRequest.from))
-            ?.replace(':to', encodeURIComponent(stockReportRequest.to))
-            ?.replace(':count', encodeURIComponent(stockReportRequest.count?.toString()))
-            ?.replace(':page', encodeURIComponent(stockReportRequest.page?.toString()))
-            ?.replace(':sort', encodeURIComponent(stockReportRequest.sort ? stockReportRequest.sort?.toString() : ''))
-            ?.replace(':sortBy', encodeURIComponent(stockReportRequest.sortBy ? stockReportRequest.sortBy?.toString() : ''))
-            , stockReportRequest).pipe(
-                map((res) => {
-                    let data: BaseResponse<StockReportResponse, StockReportRequestNew> = res;
-                    data.request = stockReportRequest;
-                    data.queryString = {
-                        stockGroupUniqueName: stockReportRequest.stockGroupUniqueNames,
-                        stockUniqueName: stockReportRequest.stockUniqueNames,
-                        from: stockReportRequest.from,
-                        to: stockReportRequest.to,
-                        count: stockReportRequest.count,
-                        page: stockReportRequest.page
-                    };
-                    return data;
-                }), catchError((e) => this.errorHandler.HandleCatch<StockReportResponse, StockReportRequestNew>(e, stockReportRequest, {
-                    stockGroupUniqueName: stockReportRequest.stockGroupUniqueNames,
-                    stockUniqueName: stockReportRequest.stockUniqueNames,
-                    from: stockReportRequest.from,
-                    to: stockReportRequest.to,
-                    count: stockReportRequest.count,
-                    page: stockReportRequest.page
-                })));
-    }
-
-    public GetStockTransactionReportBalance(stockReportRequest: StockReportRequestNew): Observable<BaseResponse<StockReportResponse, StockReportRequestNew>> {
-        this.companyUniqueName = this.generalService.companyUniqueName;
-
-        return this.http.post(this.config.apiUrl + INVENTORY_API.TRANSACTIONAL_STOCK_REPORT_BALANCE_V2?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            ?.replace(':stockGroupUniqueName', encodeURIComponent(<any>stockReportRequest.stockGroupUniqueNames))
-            ?.replace(':stockUniqueName', encodeURIComponent(<any>stockReportRequest.stockUniqueNames))
-            ?.replace(':from', encodeURIComponent(stockReportRequest.from))
-            ?.replace(':to', encodeURIComponent(stockReportRequest.to))
-            , stockReportRequest).pipe(
-                map((res) => {
-                    let data: BaseResponse<StockReportResponse, StockReportRequestNew> = res;
-                    data.request = stockReportRequest;
-                    data.queryString = {
-                        stockGroupUniqueName: stockReportRequest.stockGroupUniqueNames,
-                        stockUniqueName: stockReportRequest.stockUniqueNames,
-                        from: stockReportRequest.from,
-                        to: stockReportRequest.to,
-                    };
-                    return data;
-                }), catchError((e) => this.errorHandler.HandleCatch<StockReportResponse, StockReportRequestNew>(e, stockReportRequest, {
-                    stockGroupUniqueName: stockReportRequest.stockGroupUniqueNames,
-                    stockUniqueName: stockReportRequest.stockUniqueNames,
-                    from: stockReportRequest.from,
-                    to: stockReportRequest.to,
-                })));
-    }
     /**
      * get GetGroupStocksReport
      */
@@ -1089,6 +1027,13 @@ export class InventoryService {
         }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
     }
 
+    /**
+     * This will use for get stock transaction report columns data
+     *
+     * @param {string} module
+     * @return {*}  {Observable<BaseResponse<any, string>>}
+     * @memberof InventoryService
+     */
     public getStockTransactionReportColumns(module: string): Observable<BaseResponse<any, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.get(this.config.apiUrl + INVENTORY_API.TRANSACTIONAL_STOCK_REPORT_COLUMNS?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':module', module)).pipe(map((res) => {
@@ -1099,9 +1044,14 @@ export class InventoryService {
         }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '', {})));
     }
 
+    /**
+     * This will use for save stock transaction report columns
+     *
+     * @param {*} model
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof InventoryService
+     */
     public saveStockTransactionReportColumns(model: any): Observable<BaseResponse<any, any>> {
-        console.log(model);
-
         this.companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + INVENTORY_API.TRANSACTIONAL_STOCK_REPORT_COLUMNS;
         url = url?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':module', model.module);
@@ -1112,6 +1062,13 @@ export class InventoryService {
         }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
     }
 
+    /**
+     * This will use for search stock transaction report
+     *
+     * @param {*} model
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof InventoryService
+     */
     public searchStockTransactionReport(model: any): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + INVENTORY_API.SEARCH_STOCK_TRANSACTION_FILTERS;
@@ -1121,6 +1078,82 @@ export class InventoryService {
             data.request = model;
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
+    }
+
+    /**
+     * This will use for get stock transaction report
+     *
+     * @param {StockReportRequestNew} stockReportRequest
+     * @return {*}  {Observable<BaseResponse<StockReportResponse, StockReportRequestNew>>}
+     * @memberof InventoryService
+     */
+    public getStockTransactionReport(stockReportRequest: StockReportRequestNew): Observable<BaseResponse<StockReportResponse, StockReportRequestNew>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.post(this.config.apiUrl + INVENTORY_API.TRANSACTIONAL_STOCK_REPORT_V2?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':stockGroupUniqueName', encodeURIComponent(<any>stockReportRequest.stockGroupUniqueNames))
+            ?.replace(':stockUniqueName', encodeURIComponent(<any>stockReportRequest.stockUniqueNames))
+            ?.replace(':transactionType', encodeURIComponent(stockReportRequest.transactionType ? stockReportRequest.transactionType?.toString() : 'all'))
+            ?.replace(':from', encodeURIComponent(stockReportRequest.from))
+            ?.replace(':to', encodeURIComponent(stockReportRequest.to))
+            ?.replace(':count', encodeURIComponent(stockReportRequest.count?.toString()))
+            ?.replace(':page', encodeURIComponent(stockReportRequest.page?.toString()))
+            ?.replace(':sort', encodeURIComponent(stockReportRequest.sort ? stockReportRequest.sort?.toString() : ''))
+            ?.replace(':sortBy', encodeURIComponent(stockReportRequest.sortBy ? stockReportRequest.sortBy?.toString() : ''))
+            , stockReportRequest).pipe(
+                map((res) => {
+                    let data: BaseResponse<StockReportResponse, StockReportRequestNew> = res;
+                    data.request = stockReportRequest;
+                    data.queryString = {
+                        stockGroupUniqueName: stockReportRequest.stockGroupUniqueNames,
+                        stockUniqueName: stockReportRequest.stockUniqueNames,
+                        from: stockReportRequest.from,
+                        to: stockReportRequest.to,
+                        count: stockReportRequest.count,
+                        page: stockReportRequest.page
+                    };
+                    return data;
+                }), catchError((e) => this.errorHandler.HandleCatch<StockReportResponse, StockReportRequestNew>(e, stockReportRequest, {
+                    stockGroupUniqueName: stockReportRequest.stockGroupUniqueNames,
+                    stockUniqueName: stockReportRequest.stockUniqueNames,
+                    from: stockReportRequest.from,
+                    to: stockReportRequest.to,
+                    count: stockReportRequest.count,
+                    page: stockReportRequest.page
+                })));
+    }
+
+    /**
+     * This will use for get stock transaction report balance
+     *
+     * @param {StockReportRequestNew} stockReportRequest
+     * @return {*}  {Observable<BaseResponse<StockReportResponse, StockReportRequestNew>>}
+     * @memberof InventoryService
+     */
+    public getStockTransactionReportBalance(stockReportRequest: StockReportRequestNew): Observable<BaseResponse<StockReportResponse, StockReportRequestNew>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+
+        return this.http.post(this.config.apiUrl + INVENTORY_API.TRANSACTIONAL_STOCK_REPORT_BALANCE_V2?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':stockGroupUniqueName', encodeURIComponent(<any>stockReportRequest.stockGroupUniqueNames))
+            ?.replace(':stockUniqueName', encodeURIComponent(<any>stockReportRequest.stockUniqueNames))
+            ?.replace(':from', encodeURIComponent(stockReportRequest.from))
+            ?.replace(':to', encodeURIComponent(stockReportRequest.to))
+            , stockReportRequest).pipe(
+                map((res) => {
+                    let data: BaseResponse<StockReportResponse, StockReportRequestNew> = res;
+                    data.request = stockReportRequest;
+                    data.queryString = {
+                        stockGroupUniqueName: stockReportRequest.stockGroupUniqueNames,
+                        stockUniqueName: stockReportRequest.stockUniqueNames,
+                        from: stockReportRequest.from,
+                        to: stockReportRequest.to,
+                    };
+                    return data;
+                }), catchError((e) => this.errorHandler.HandleCatch<StockReportResponse, StockReportRequestNew>(e, stockReportRequest, {
+                    stockGroupUniqueName: stockReportRequest.stockGroupUniqueNames,
+                    stockUniqueName: stockReportRequest.stockUniqueNames,
+                    from: stockReportRequest.from,
+                    to: stockReportRequest.to,
+                })));
     }
 
 }

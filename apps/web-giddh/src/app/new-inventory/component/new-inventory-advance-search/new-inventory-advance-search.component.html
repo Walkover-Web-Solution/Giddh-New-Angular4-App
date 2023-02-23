@@ -80,7 +80,6 @@
                                 [placeholder]="'Amount'"
                                 [name]="'amount'"
                                 [(ngModel)]="advanceSearchFormObj.val"
-                                [ngClass]="{ 'fields-error': mandatoryFields.val }"
                                 (keypress)="allowOnlyNumbers($event)"
                                 (onClear)="advanceSearchFormObj.val = ''"
                             >
