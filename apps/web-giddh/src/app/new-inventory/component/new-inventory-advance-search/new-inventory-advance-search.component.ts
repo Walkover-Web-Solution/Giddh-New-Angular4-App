@@ -10,6 +10,8 @@ import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/hel
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { I } from '@angular/cdk/keycodes';
+import { cloneDeep } from '../../../lodash-optimized';
 
 
 @Component({
@@ -109,6 +111,9 @@ export class NewInventoryAdavanceSearch implements OnInit {
             this.isMobileScreen = result.matches;
         });
         if (this.inputData?.stockReportRequest) {
+            if(this.inputData?.advanceSearchResponse){
+                this.advanceSearchFormObj = cloneDeep(this.inputData.advanceSearchResponse?.stockReportRequest);
+            }
             let from = this.inputData?.stockReportRequest.from;
             let to = this.inputData?.stockReportRequest.to;
             this.selectedDateRange = { startDate: dayjs(from, GIDDH_DATE_FORMAT), endDate: dayjs(to,GIDDH_DATE_FORMAT) };
@@ -216,12 +221,6 @@ export class NewInventoryAdavanceSearch implements OnInit {
             this.advanceSearchFormObj.expression = "GEATER_THAN";
         }
         if (type === 'cancel') {
-            this.advanceSearchFormObj.param = null;
-            this.advanceSearchFormObj.param1 = null;
-            this.advanceSearchFormObj.param2 = null;
-            this.advanceSearchFormObj.expression = null;
-            this.advanceSearchFormObj.val = null;
-            this.advanceSearchFormObj.searching = false;
             this.dialogRef.close();
             return;
         } else if (type === 'clear') {

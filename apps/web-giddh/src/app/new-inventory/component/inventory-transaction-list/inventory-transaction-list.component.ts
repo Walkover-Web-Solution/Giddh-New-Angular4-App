@@ -215,6 +215,8 @@ export class InventoryTransactionListComponent implements OnInit {
     public isLoading: boolean = false;
     /** True if search account name */
     public showAccountSearchInput: boolean = false;
+    /** Hold advance search modal response */
+    public advanceSearchModalResponse: object = null;
 
     constructor(
         private generalService: GeneralService,
@@ -252,10 +254,11 @@ export class InventoryTransactionListComponent implements OnInit {
             debounceTime(700),
             distinctUntilChanged(),
             takeUntil(this.destroyed$)
-        ).subscribe(s => {
-            this.stockReportRequest.accountName = s;
+        ).subscribe(search => {
+            this.stockReportRequest.accountName = search;
+            this.isFilterActive();
             this.getStockTransactionalReport(false);
-            if (s === '') {
+            if (search === '') {
                 this.showAccountSearchInput = false;
             }
         });
@@ -331,6 +334,7 @@ export class InventoryTransactionListComponent implements OnInit {
             this.stockReportRequest.variantUniqueNames?.push(option?.option?.value?.uniqueName);
         }
         this.filtersChipList?.push(selectOptionValue);
+        this.isFilterActive();
         this.getStockTransactionReportFilters();
         this.getStockTransactionalReport(false);
     }
@@ -362,6 +366,7 @@ export class InventoryTransactionListComponent implements OnInit {
                     this.filteredDisplayColumns();
                 }
             }
+            this.isFilterActive();
             this.getStockTransactionReportFilters();
             this.getStockTransactionalReport(false);
             this.changeDetection.detectChanges();
@@ -436,6 +441,8 @@ export class InventoryTransactionListComponent implements OnInit {
         delete this.stockReportRequest.count;
         delete this.stockReportRequest.page;
         delete this.stockReportRequest.transactionType;
+        delete this.stockReportRequest.totalItems;
+        delete this.stockReportRequest.totalPages;
         this.inventoryService.getStockTransactionReportBalance(cloneDeep(this.stockReportRequest)).subscribe(response => {
             if (response && response.body && response.status === 'success') {
                 this.stockTransactionReportBalance = response.body;
@@ -524,11 +531,14 @@ export class InventoryTransactionListComponent implements OnInit {
         let dialogRef = this.dialog?.open(NewInventoryAdavanceSearch, {
             panelClass: 'advance-search-container',
             data: {
-                stockReportRequest: this.stockReportRequest
+                stockReportRequest: this.stockReportRequest,
+                advanceSearchResponse: this.advanceSearchModalResponse
             }
         });
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response) {
+                this.advanceSearchModalResponse = response;
+                this.isFilterActive();
                 this.onShowAdvanceSearchFilter(response);
             }
         });
@@ -642,8 +652,8 @@ export class InventoryTransactionListComponent implements OnInit {
      */
     public getWarehouses(): void {
         this.stockReportRequest.warehouseUniqueNames = this.selectedWarehouse;
+        this.isFilterActive();
         this.getStockTransactionalReport(false);
-
     }
 
     /**
@@ -655,7 +665,6 @@ export class InventoryTransactionListComponent implements OnInit {
     public getBranches(apiCall: boolean = true): void {
         this.selectedWarehouse = [];
         this.allBranches?.forEach((branches) => {
-            this.allWarehouses = [];
             this.allWarehouses = this.allWarehouses?.concat(branches?.warehouses);
         });
         if (this.selectedBranch?.length === 0) {
@@ -673,38 +682,56 @@ export class InventoryTransactionListComponent implements OnInit {
         if (apiCall) {
             this.getStockTransactionalReport(false);
         }
+        this.isFilterActive();
         this.changeDetection.detectChanges();
     }
 
-    // /**
-    //  * This will use for reset filters
-    //  *
-    //  * @param {boolean} [isReset]
-    //  * @memberof InventoryTransactionListComponent
-    //  */
-    // public resetFilter(isReset?: boolean) {
-    //     this.accountNameSearching.reset();
-    //     this.stockReportRequest.sort = null;
-    //     this.stockReportRequest.sortBy = null;
-    //     this.stockReportRequest.accountName = null;
-    //     this.showAccountSearchInput = false;
-    //     this.stockReportRequest.val = null;
-    //     this.stockReportRequest.param = null;
-    //     this.stockReportRequest.expression = null;
-    //     //Reset Date with universal date
-    //     this.universalDate$.subscribe(dateObj => {
-    //         if (dateObj) {
-    //             this.stockReportRequest.from = dayjs(dateObj[0]).format(GIDDH_DATE_FORMAT);
-    //             this.stockReportRequest.to = dayjs(dateObj[1]).format(GIDDH_DATE_FORMAT);
-    //             this.fromDate = dayjs(dateObj[0]).format(GIDDH_DATE_FORMAT);
-    //             this.toDate = dayjs(dateObj[1]).format(GIDDH_DATE_FORMAT);
-    //             let universalDate = cloneDeep(dateObj);
-    //             this.selectedDateRange = { startDate: dayjs(universalDate[0]), endDate: dayjs(universalDate[1]) };
-    //             this.selectedDateRangeUi = dayjs(universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-    //         }
-    //     });
-    //     this.changeDetection.detectChanges();
-    // }
+    /**
+     * This will use for reset filters
+     *
+     * @param {boolean} [isReset]
+     * @memberof InventoryTransactionListComponent
+     */
+    public resetFilter(isReset?: boolean) {
+        this.showClearFilter = false;
+        this.showAccountSearchInput = false;
+        this.advanceSearchModalResponse = null;
+        this.stockReportRequest = new StockReportRequestNew();
+        this.filtersChipList = [];
+        this.selectedBranch = [];
+        this.getBranches(false);
+        //Reset Date with universal date
+        this.universalDate$.subscribe(dateObj => {
+            if (dateObj) {
+                this.stockReportRequest.from = dayjs(dateObj[0]).format(GIDDH_DATE_FORMAT);
+                this.stockReportRequest.to = dayjs(dateObj[1]).format(GIDDH_DATE_FORMAT);
+                this.fromDate = dayjs(dateObj[0]).format(GIDDH_DATE_FORMAT);
+                this.toDate = dayjs(dateObj[1]).format(GIDDH_DATE_FORMAT);
+                let universalDate = cloneDeep(dateObj);
+                this.selectedDateRange = { startDate: dayjs(universalDate[0]), endDate: dayjs(universalDate[1]) };
+                this.selectedDateRangeUi = dayjs(universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+            }
+        });
+        this.VOUCHER_TYPES.forEach(response => {
+            response.checked = false;
+        });
+        if (this.accountNameSearching.value === null) {
+            this.getStockTransactionalReport();
+        } else {
+            this.accountNameSearching.reset();
+        }
+        this.changeDetection.detectChanges();
+    }
+
+    public isFilterActive(): void {
+        if (this.selectedBranch.length || this.selectedWarehouse.length
+            || this.filtersChipList.length || this.advanceSearchModalResponse || this.stockReportRequest?.voucherTypes.length || this.stockReportRequest.accountName?.length) {
+            this.showClearFilter = true;
+        } else {
+            this.showClearFilter = false;
+        }
+
+    }
 
     /**
      * This will use for filter by check for Voucher type s column
@@ -720,6 +747,7 @@ export class InventoryTransactionListComponent implements OnInit {
                 this.stockReportRequest.voucherTypes = this.stockReportRequest.voucherTypes?.filter(value => value != type);
             }
             this.changeDetection.detectChanges();
+            this.isFilterActive();
             this.getStockTransactionalReport(false);
             this.changeDetection.detectChanges();
         });

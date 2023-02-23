@@ -66,7 +66,7 @@
             </mat-option>
         </mat-select>
     </div>
-    <!-- <div class="clear-filter d-flex" *ngIf="isFilterCorrect">
+    <div class="clear-filter d-flex" *ngIf="showClearFilter">
         <button
             mat-raised-button
             class="create-btn-inventory btn-sky-blue ml-3 mr-0"
@@ -75,7 +75,7 @@
         >
             <span class="icon-cross"></span> Clear
         </button>
-    </div> -->
+    </div>
 </div>
 
 <div class="inventory-filter-bar">
@@ -391,7 +391,7 @@
                                 *ngTemplateOutlet="
                                     searchTemplate;
                                     context: {
-                                        $implicit: showAccountSearch,
+                                        $implicit: showAccountSearchInput,
                                         fieldName: 'name',
                                         formControl: accountNameSearching,
                                         title: 'Account Name'
