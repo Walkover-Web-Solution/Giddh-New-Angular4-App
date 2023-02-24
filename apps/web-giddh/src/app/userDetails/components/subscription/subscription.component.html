@@ -1,7 +1,7 @@
 <div *ngIf="!isPlanShow">
     <div class="main-content-subscription">
         <div class="menu-one-button">
-            <button mat-flat-button color="primary" (click)="isPlanShow = true" *ngIf="!showLoader">
+            <button mat-raised-button color="primary" (click)="isPlanShow = true" *ngIf="!showLoader">
                 {{ commonLocaleData?.app_buy_new_plan }}
             </button>
         </div>
@@ -226,7 +226,7 @@
                                     </p>
                                 </div>
                                 <button
-                                    mat-flat-button
+                                    mat-raised-button
                                     color="primary"
                                     class="right-side-btn"
                                     *ngIf="selectedSubscription?.status !== 'trial'"
@@ -234,7 +234,7 @@
                                 >
                                     {{ commonLocaleData?.app_renew }}
                                 </button>
-                                <!-- <button mat-flat-button color="primary">Buy Add-ons</button> -->
+                                <!-- <button mat-raised-button color="primary">Buy Add-ons</button> -->
                             </div>
                         </mat-toolbar>
                         <!-- Addons selector  -->
@@ -332,537 +332,537 @@
                                 <mat-expansion-panel-header>
                                     <mat-panel-title> January, 2021 </mat-panel-title>
                                 </mat-expansion-panel-header>
-    
+
                                 <img src="{{ imgPath }}transaction.png" alt="" class="consumed-transaction" />
                                 <img src="{{ imgPath }}branch.png" alt="" class="consumed-branch" />
                                 <img src="{{ imgPath }}warehouse.png" alt="" class="consumed-warehouse" />
-    
+
                                 <table mat-table [dataSource]="dataSource" class="monthly-table">
                                     <ng-container matColumnDef="consumed">
                                         <th mat-header-cell *matHeaderCellDef>Consumed</th>
                                         <td mat-cell *matCellDef="let element">{{ element.consumed }}</td>
                                     </ng-container>
-    
+
                                     <ng-container matColumnDef="balance">
                                         <th mat-header-cell *matHeaderCellDef>Balance</th>
                                         <td mat-cell *matCellDef="let element">{{ element.balance }}</td>
                                     </ng-container>
-    
+
                                     <ng-container matColumnDef="dues">
                                         <th mat-header-cell *matHeaderCellDef>Dues</th>
                                         <td mat-cell *matCellDef="let element">{{ element.dues }}</td>
                                     </ng-container>
-    
+
                                     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                                     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                                 </table>
-    
+
                                 <img src="{{ imgPath }}transaction.png" alt="" class="added-transaction" />
                                 <img src="{{ imgPath }}branch.png" alt="" class="added-branch" />
                                 <img src="{{ imgPath }}warehouse.png" alt="" class="added-warehouse" />
-    
+
                                 <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
                                     <ng-container matColumnDef="consumed">
                                         <th mat-header-cell *matHeaderCellDef class="added-row">Added</th>
                                         <td mat-cell *matCellDef="let element">{{ element.consumed }}</td>
                                     </ng-container>
-    
+
                                     <ng-container matColumnDef="balance">
                                         <th mat-header-cell *matHeaderCellDef class="added-balance">Balance</th>
                                         <td mat-cell *matCellDef="let element">{{ element.balance }}</td>
                                     </ng-container>
-    
+
                                     <ng-container matColumnDef="dues">
                                         <th mat-header-cell *matHeaderCellDef class="added-charges">Charges</th>
                                         <td mat-cell *matCellDef="let element">{{ element.dues }}</td>
                                     </ng-container>
-    
+
                                     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                                     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                                 </table>
                             </mat-expansion-panel>
-    
+
                             <mat-expansion-panel hideToggle>
                                 <mat-expansion-panel-header>
                                     <mat-panel-title> December, 2020 </mat-panel-title>
                                 </mat-expansion-panel-header>
-    
+
                                 <img src="{{ imgPath }}transaction.png" alt="" class="consumed-transaction" />
                                 <img src="{{ imgPath }}branch.png" alt="" class="consumed-branch" />
                                 <img src="{{ imgPath }}warehouse.png" alt="" class="consumed-warehouse" />
-    
+
                                 <table mat-table [dataSource]="dataSource" class="monthly-table">
                                     <ng-container matColumnDef="consumed">
                                         <th mat-header-cell *matHeaderCellDef>Consumed</th>
                                         <td mat-cell *matCellDef="let element">{{ element.consumed }}</td>
                                     </ng-container>
-    
+
                                     <ng-container matColumnDef="balance">
                                         <th mat-header-cell *matHeaderCellDef>Balance</th>
                                         <td mat-cell *matCellDef="let element">{{ element.balance }}</td>
                                     </ng-container>
-    
+
                                     <ng-container matColumnDef="dues">
                                         <th mat-header-cell *matHeaderCellDef>Dues</th>
                                         <td mat-cell *matCellDef="let element">{{ element.dues }}</td>
                                     </ng-container>
-    
+
                                     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                                     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                                 </table>
-    
+
                                 <img src="{{ imgPath }}transaction.png" alt="" class="added-transaction" />
                                 <img src="{{ imgPath }}branch.png" alt="" class="added-branch" />
                                 <img src="{{ imgPath }}warehouse.png" alt="" class="added-warehouse" />
-    
+
                                 <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
                                     <ng-container matColumnDef="consumed">
                                         <th mat-header-cell *matHeaderCellDef class="added-row">Added</th>
                                         <td mat-cell *matCellDef="let element">{{ element.consumed }}</td>
                                     </ng-container>
-    
+
                                     <ng-container matColumnDef="balance">
                                         <th mat-header-cell *matHeaderCellDef class="added-balance">Balance</th>
                                         <td mat-cell *matCellDef="let element">{{ element.balance }}</td>
                                     </ng-container>
-    
+
                                     <ng-container matColumnDef="dues">
                                         <th mat-header-cell *matHeaderCellDef class="added-charges">Charges</th>
                                         <td mat-cell *matCellDef="let element">{{ element.dues }}</td>
                                     </ng-container>
-    
+
                                     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                                     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                                 </table>
                             </mat-expansion-panel>
-    
+
                             <mat-expansion-panel hideToggle>
                                 <mat-expansion-panel-header>
                                     <mat-panel-title> November, 2020 </mat-panel-title>
                                 </mat-expansion-panel-header>
-    
+
                                 <img src="{{ imgPath }}transaction.png" alt="" class="consumed-transaction" />
                                 <img src="{{ imgPath }}branch.png" alt="" class="consumed-branch" />
                                 <img src="{{ imgPath }}warehouse.png" alt="" class="consumed-warehouse" />
-    
+
                                 <table mat-table [dataSource]="dataSource" class="monthly-table">
                                     <ng-container matColumnDef="consumed">
                                         <th mat-header-cell *matHeaderCellDef>Consumed</th>
                                         <td mat-cell *matCellDef="let element">{{ element.consumed }}</td>
                                     </ng-container>
-    
+
                                     <ng-container matColumnDef="balance">
                                         <th mat-header-cell *matHeaderCellDef>Balance</th>
                                         <td mat-cell *matCellDef="let element">{{ element.balance }}</td>
                                     </ng-container>
-    
+
                                     <ng-container matColumnDef="dues">
                                         <th mat-header-cell *matHeaderCellDef>Dues</th>
                                         <td mat-cell *matCellDef="let element">{{ element.dues }}</td>
                                     </ng-container>
-    
+
                                     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                                     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                                 </table>
-    
+
                                 <img src="{{ imgPath }}transaction.png" alt="" class="added-transaction" />
                                 <img src="{{ imgPath }}branch.png" alt="" class="added-branch" />
                                 <img src="{{ imgPath }}warehouse.png" alt="" class="added-warehouse" />
-    
+
                                 <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
                                     <ng-container matColumnDef="consumed">
                                         <th mat-header-cell *matHeaderCellDef class="added-row">Added</th>
                                         <td mat-cell *matCellDef="let element">{{ element.consumed }}</td>
                                     </ng-container>
-    
+
                                     <ng-container matColumnDef="balance">
                                         <th mat-header-cell *matHeaderCellDef class="added-balance">Balance</th>
                                         <td mat-cell *matCellDef="let element">{{ element.balance }}</td>
                                     </ng-container>
-    
+
                                     <ng-container matColumnDef="dues">
                                         <th mat-header-cell *matHeaderCellDef class="added-charges">Charges</th>
                                         <td mat-cell *matCellDef="let element">{{ element.dues }}</td>
                                     </ng-container>
-    
+
                                     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                                     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                                 </table>
                             </mat-expansion-panel>
-    
+
                             <mat-expansion-panel hideToggle>
                                 <mat-expansion-panel-header>
                                     <mat-panel-title> October, 2020 </mat-panel-title>
                                 </mat-expansion-panel-header>
-    
+
                                 <img src="{{ imgPath }}transaction.png" alt="" class="consumed-transaction" />
                                 <img src="{{ imgPath }}branch.png" alt="" class="consumed-branch" />
                                 <img src="{{ imgPath }}warehouse.png" alt="" class="consumed-warehouse" />
-    
+
                                 <table mat-table [dataSource]="dataSource" class="monthly-table">
                                     <ng-container matColumnDef="consumed">
                                         <th mat-header-cell *matHeaderCellDef>Consumed</th>
                                         <td mat-cell *matCellDef="let element">{{ element.consumed }}</td>
                                     </ng-container>
-    
+
                                     <ng-container matColumnDef="balance">
                                         <th mat-header-cell *matHeaderCellDef>Balance</th>
                                         <td mat-cell *matCellDef="let element">{{ element.balance }}</td>
                                     </ng-container>
-    
+
                                     <ng-container matColumnDef="dues">
                                         <th mat-header-cell *matHeaderCellDef>Dues</th>
                                         <td mat-cell *matCellDef="let element">{{ element.dues }}</td>
                                     </ng-container>
-    
+
                                     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                                     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                                 </table>
-    
+
                                 <img src="{{ imgPath }}transaction.png" alt="" class="added-transaction" />
                                 <img src="{{ imgPath }}branch.png" alt="" class="added-branch" />
                                 <img src="{{ imgPath }}warehouse.png" alt="" class="added-warehouse" />
-    
+
                                 <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
                                     <ng-container matColumnDef="consumed">
                                         <th mat-header-cell *matHeaderCellDef class="added-row">Added</th>
                                         <td mat-cell *matCellDef="let element">{{ element.consumed }}</td>
                                     </ng-container>
-    
+
                                     <ng-container matColumnDef="balance">
                                         <th mat-header-cell *matHeaderCellDef class="added-balance">Balance</th>
                                         <td mat-cell *matCellDef="let element">{{ element.balance }}</td>
                                     </ng-container>
-    
+
                                     <ng-container matColumnDef="dues">
                                         <th mat-header-cell *matHeaderCellDef class="added-charges">Charges</th>
                                         <td mat-cell *matCellDef="let element">{{ element.dues }}</td>
                                     </ng-container>
-    
+
                                     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                                     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                                 </table>
                             </mat-expansion-panel>
-    
+
                             <mat-expansion-panel hideToggle>
                                 <mat-expansion-panel-header>
                                     <mat-panel-title> September, 2020 </mat-panel-title>
                                 </mat-expansion-panel-header>
-    
+
                                 <img src="{{ imgPath }}transaction.png" alt="" class="consumed-transaction" />
                                 <img src="{{ imgPath }}branch.png" alt="" class="consumed-branch" />
                                 <img src="{{ imgPath }}warehouse.png" alt="" class="consumed-warehouse" />
-    
+
                                 <table mat-table [dataSource]="dataSource" class="monthly-table">
                                     <ng-container matColumnDef="consumed">
                                         <th mat-header-cell *matHeaderCellDef>Consumed</th>
                                         <td mat-cell *matCellDef="let element">{{ element.consumed }}</td>
                                     </ng-container>
-    
+
                                     <ng-container matColumnDef="balance">
                                         <th mat-header-cell *matHeaderCellDef>Balance</th>
                                         <td mat-cell *matCellDef="let element">{{ element.balance }}</td>
                                     </ng-container>
-    
+
                                     <ng-container matColumnDef="dues">
                                         <th mat-header-cell *matHeaderCellDef>Dues</th>
                                         <td mat-cell *matCellDef="let element">{{ element.dues }}</td>
                                     </ng-container>
-    
+
                                     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                                     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                                 </table>
-    
+
                                 <img src="{{ imgPath }}transaction.png" alt="" class="added-transaction" />
                                 <img src="{{ imgPath }}branch.png" alt="" class="added-branch" />
                                 <img src="{{ imgPath }}warehouse.png" alt="" class="added-warehouse" />
-    
+
                                 <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
                                     <ng-container matColumnDef="consumed">
                                         <th mat-header-cell *matHeaderCellDef class="added-row">Added</th>
                                         <td mat-cell *matCellDef="let element">{{ element.consumed }}</td>
                                     </ng-container>
-    
+
                                     <ng-container matColumnDef="balance">
                                         <th mat-header-cell *matHeaderCellDef class="added-balance">Balance</th>
                                         <td mat-cell *matCellDef="let element">{{ element.balance }}</td>
                                     </ng-container>
-    
+
                                     <ng-container matColumnDef="dues">
                                         <th mat-header-cell *matHeaderCellDef class="added-charges">Charges</th>
                                         <td mat-cell *matCellDef="let element">{{ element.dues }}</td>
                                     </ng-container>
-    
+
                                     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                                     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                                 </table>
                             </mat-expansion-panel>
-    
+
                             <mat-expansion-panel hideToggle>
                                 <mat-expansion-panel-header>
                                     <mat-panel-title> August, 2020 </mat-panel-title>
                                 </mat-expansion-panel-header>
-    
+
                                 <img src="{{ imgPath }}transaction.png" alt="" class="consumed-transaction" />
                                 <img src="{{ imgPath }}branch.png" alt="" class="consumed-branch" />
                                 <img src="{{ imgPath }}warehouse.png" alt="" class="consumed-warehouse" />
-    
+
                                 <table mat-table [dataSource]="dataSource" class="monthly-table">
                                     <ng-container matColumnDef="consumed">
                                         <th mat-header-cell *matHeaderCellDef>Consumed</th>
                                         <td mat-cell *matCellDef="let element">{{ element.consumed }}</td>
                                     </ng-container>
-    
+
                                     <ng-container matColumnDef="balance">
                                         <th mat-header-cell *matHeaderCellDef>Balance</th>
                                         <td mat-cell *matCellDef="let element">{{ element.balance }}</td>
                                     </ng-container>
-    
+
                                     <ng-container matColumnDef="dues">
                                         <th mat-header-cell *matHeaderCellDef>Dues</th>
                                         <td mat-cell *matCellDef="let element">{{ element.dues }}</td>
                                     </ng-container>
-    
+
                                     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                                     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                                 </table>
-    
+
                                 <img src="{{ imgPath }}transaction.png" alt="" class="added-transaction" />
                                 <img src="{{ imgPath }}branch.png" alt="" class="added-branch" />
                                 <img src="{{ imgPath }}warehouse.png" alt="" class="added-warehouse" />
-    
+
                                 <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
                                     <ng-container matColumnDef="consumed">
                                         <th mat-header-cell *matHeaderCellDef class="added-row">Added</th>
                                         <td mat-cell *matCellDef="let element">{{ element.consumed }}</td>
                                     </ng-container>
-    
+
                                     <ng-container matColumnDef="balance">
                                         <th mat-header-cell *matHeaderCellDef class="added-balance">Balance</th>
                                         <td mat-cell *matCellDef="let element">{{ element.balance }}</td>
                                     </ng-container>
-    
+
                                     <ng-container matColumnDef="dues">
                                         <th mat-header-cell *matHeaderCellDef class="added-charges">Charges</th>
                                         <td mat-cell *matCellDef="let element">{{ element.dues }}</td>
                                     </ng-container>
-    
+
                                     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                                     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                                 </table>
                             </mat-expansion-panel>
-    
+
                             <mat-expansion-panel hideToggle>
                                 <mat-expansion-panel-header>
                                     <mat-panel-title> July, 2020 </mat-panel-title>
                                 </mat-expansion-panel-header>
-    
+
                                 <img src="{{ imgPath }}transaction.png" alt="" class="consumed-transaction" />
                                 <img src="{{ imgPath }}branch.png" alt="" class="consumed-branch" />
                                 <img src="{{ imgPath }}warehouse.png" alt="" class="consumed-warehouse" />
-    
+
                                 <table mat-table [dataSource]="dataSource" class="monthly-table">
                                     <ng-container matColumnDef="consumed">
                                         <th mat-header-cell *matHeaderCellDef>Consumed</th>
                                         <td mat-cell *matCellDef="let element">{{ element.consumed }}</td>
                                     </ng-container>
-    
+
                                     <ng-container matColumnDef="balance">
                                         <th mat-header-cell *matHeaderCellDef>Balance</th>
                                         <td mat-cell *matCellDef="let element">{{ element.balance }}</td>
                                     </ng-container>
-    
+
                                     <ng-container matColumnDef="dues">
                                         <th mat-header-cell *matHeaderCellDef>Dues</th>
                                         <td mat-cell *matCellDef="let element">{{ element.dues }}</td>
                                     </ng-container>
-    
+
                                     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                                     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                                 </table>
-    
+
                                 <img src="{{ imgPath }}transaction.png" alt="" class="added-transaction" />
                                 <img src="{{ imgPath }}branch.png" alt="" class="added-branch" />
                                 <img src="{{ imgPath }}warehouse.png" alt="" class="added-warehouse" />
-    
+
                                 <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
                                     <ng-container matColumnDef="consumed">
                                         <th mat-header-cell *matHeaderCellDef class="added-row">Added</th>
                                         <td mat-cell *matCellDef="let element">{{ element.consumed }}</td>
                                     </ng-container>
-    
+
                                     <ng-container matColumnDef="balance">
                                         <th mat-header-cell *matHeaderCellDef class="added-balance">Balance</th>
                                         <td mat-cell *matCellDef="let element">{{ element.balance }}</td>
                                     </ng-container>
-    
+
                                     <ng-container matColumnDef="dues">
                                         <th mat-header-cell *matHeaderCellDef class="added-charges">Charges</th>
                                         <td mat-cell *matCellDef="let element">{{ element.dues }}</td>
                                     </ng-container>
-    
+
                                     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                                     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                                 </table>
                             </mat-expansion-panel>
-    
+
                             <mat-expansion-panel hideToggle>
                                 <mat-expansion-panel-header>
                                     <mat-panel-title> June, 2020 </mat-panel-title>
                                 </mat-expansion-panel-header>
-    
+
                                 <img src="{{ imgPath }}transaction.png" alt="" class="consumed-transaction" />
                                 <img src="{{ imgPath }}branch.png" alt="" class="consumed-branch" />
                                 <img src="{{ imgPath }}warehouse.png" alt="" class="consumed-warehouse" />
-    
+
                                 <table mat-table [dataSource]="dataSource" class="monthly-table">
                                     <ng-container matColumnDef="consumed">
                                         <th mat-header-cell *matHeaderCellDef>Consumed</th>
                                         <td mat-cell *matCellDef="let element">{{ element.consumed }}</td>
                                     </ng-container>
-    
+
                                     <ng-container matColumnDef="balance">
                                         <th mat-header-cell *matHeaderCellDef>Balance</th>
                                         <td mat-cell *matCellDef="let element">{{ element.balance }}</td>
                                     </ng-container>
-    
+
                                     <ng-container matColumnDef="dues">
                                         <th mat-header-cell *matHeaderCellDef>Dues</th>
                                         <td mat-cell *matCellDef="let element">{{ element.dues }}</td>
                                     </ng-container>
-    
+
                                     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                                     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                                 </table>
-    
+
                                 <img src="{{ imgPath }}transaction.png" alt="" class="added-transaction" />
                                 <img src="{{ imgPath }}branch.png" alt="" class="added-branch" />
                                 <img src="{{ imgPath }}warehouse.png" alt="" class="added-warehouse" />
-    
+
                                 <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
                                     <ng-container matColumnDef="consumed">
                                         <th mat-header-cell *matHeaderCellDef class="added-row">Added</th>
                                         <td mat-cell *matCellDef="let element">{{ element.consumed }}</td>
                                     </ng-container>
-    
+
                                     <ng-container matColumnDef="balance">
                                         <th mat-header-cell *matHeaderCellDef class="added-balance">Balance</th>
                                         <td mat-cell *matCellDef="let element">{{ element.balance }}</td>
                                     </ng-container>
-    
+
                                     <ng-container matColumnDef="dues">
                                         <th mat-header-cell *matHeaderCellDef class="added-charges">Charges</th>
                                         <td mat-cell *matCellDef="let element">{{ element.dues }}</td>
                                     </ng-container>
-    
+
                                     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                                     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                                 </table>
                             </mat-expansion-panel>
-    
+
                             <mat-expansion-panel hideToggle>
                                 <mat-expansion-panel-header>
                                     <mat-panel-title> May, 2020 </mat-panel-title>
                                 </mat-expansion-panel-header>
-    
+
                                 <img src="{{ imgPath }}transaction.png" alt="" class="consumed-transaction" />
                                 <img src="{{ imgPath }}branch.png" alt="" class="consumed-branch" />
                                 <img src="{{ imgPath }}warehouse.png" alt="" class="consumed-warehouse" />
-    
+
                                 <table mat-table [dataSource]="dataSource" class="monthly-table">
                                     <ng-container matColumnDef="consumed">
                                         <th mat-header-cell *matHeaderCellDef>Consumed</th>
                                         <td mat-cell *matCellDef="let element">{{ element.consumed }}</td>
                                     </ng-container>
-    
+
                                     <ng-container matColumnDef="balance">
                                         <th mat-header-cell *matHeaderCellDef>Balance</th>
                                         <td mat-cell *matCellDef="let element">{{ element.balance }}</td>
                                     </ng-container>
-    
+
                                     <ng-container matColumnDef="dues">
                                         <th mat-header-cell *matHeaderCellDef>Dues</th>
                                         <td mat-cell *matCellDef="let element">{{ element.dues }}</td>
                                     </ng-container>
-    
+
                                     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                                     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                                 </table>
-    
+
                                 <img src="{{ imgPath }}transaction.png" alt="" class="added-transaction" />
                                 <img src="{{ imgPath }}branch.png" alt="" class="added-branch" />
                                 <img src="{{ imgPath }}warehouse.png" alt="" class="added-warehouse" />
-    
+
                                 <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
                                     <ng-container matColumnDef="consumed">
                                         <th mat-header-cell *matHeaderCellDef class="added-row">Added</th>
                                         <td mat-cell *matCellDef="let element">{{ element.consumed }}</td>
                                     </ng-container>
-    
+
                                     <ng-container matColumnDef="balance">
                                         <th mat-header-cell *matHeaderCellDef class="added-balance">Balance</th>
                                         <td mat-cell *matCellDef="let element">{{ element.balance }}</td>
                                     </ng-container>
-    
+
                                     <ng-container matColumnDef="dues">
                                         <th mat-header-cell *matHeaderCellDef class="added-charges">Charges</th>
                                         <td mat-cell *matCellDef="let element">{{ element.dues }}</td>
                                     </ng-container>
-    
+
                                     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                                     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                                 </table>
                             </mat-expansion-panel>
-    
+
                             <mat-expansion-panel hideToggle>
                                 <mat-expansion-panel-header>
                                     <mat-panel-title> April, 2020 </mat-panel-title>
                                 </mat-expansion-panel-header>
-    
+
                                 <img src="{{ imgPath }}transaction.png" alt="" class="consumed-transaction" />
                                 <img src="{{ imgPath }}branch.png" alt="" class="consumed-branch" />
                                 <img src="{{ imgPath }}warehouse.png" alt="" class="consumed-warehouse" />
-    
+
                                 <table mat-table [dataSource]="dataSource" class="monthly-table">
                                     <ng-container matColumnDef="consumed">
                                         <th mat-header-cell *matHeaderCellDef>Consumed</th>
                                         <td mat-cell *matCellDef="let element">{{ element.consumed }}</td>
                                     </ng-container>
-    
+
                                     <ng-container matColumnDef="balance">
                                         <th mat-header-cell *matHeaderCellDef>Balance</th>
                                         <td mat-cell *matCellDef="let element">{{ element.balance }}</td>
                                     </ng-container>
-    
+
                                     <ng-container matColumnDef="dues">
                                         <th mat-header-cell *matHeaderCellDef>Dues</th>
                                         <td mat-cell *matCellDef="let element">{{ element.dues }}</td>
                                     </ng-container>
-    
+
                                     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                                     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                                 </table>
-    
+
                                 <img src="{{ imgPath }}transaction.png" alt="" class="added-transaction" />
                                 <img src="{{ imgPath }}branch.png" alt="" class="added-branch" />
                                 <img src="{{ imgPath }}warehouse.png" alt="" class="added-warehouse" />
-    
+
                                 <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
                                     <ng-container matColumnDef="consumed">
                                         <th mat-header-cell *matHeaderCellDef class="added-row">Added</th>
                                         <td mat-cell *matCellDef="let element">{{ element.consumed }}</td>
                                     </ng-container>
-    
+
                                     <ng-container matColumnDef="balance">
                                         <th mat-header-cell *matHeaderCellDef class="added-balance">Balance</th>
                                         <td mat-cell *matCellDef="let element">{{ element.balance }}</td>
                                     </ng-container>
-    
+
                                     <ng-container matColumnDef="dues">
                                         <th mat-header-cell *matHeaderCellDef class="added-charges">Charges</th>
                                         <td mat-cell *matCellDef="let element">{{ element.dues }}</td>
                                     </ng-container>
-    
+
                                     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                                     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                                 </table>
