@@ -13385,7 +13385,14 @@ hamburger-menu {
 }
 
 //inventory control styling
-
+.mat-select-search-inventory {
+    .mat-select-search-no-entries-found {
+        padding: 0px !important;
+    }
+    .mat-select-search-input {
+        padding: 0px 0px 0px 0px !important;
+    }
+}
 .inventory-filter-bar {
     padding: 15px;
     display: flex;
