@@ -38,9 +38,9 @@ export class InventoryTransactionListComponent implements OnInit {
     /** This will use for instance of branches Dropdown */
     public branchesDropdown: FormControl = new FormControl();
     /** Thsi will use for searching for stock */
-    public accountNameSearching: FormControl = new FormControl();
+    public searchAccountName: FormControl = new FormControl();
     /** Search field form control */
-    public searchingFilters: FormControl = new FormControl();
+    public searchFilters: FormControl = new FormControl();
     /* This will store datepicker modal reference */
     public modalRef: BsModalRef;
     /* dayjs object */
@@ -57,6 +57,8 @@ export class InventoryTransactionListComponent implements OnInit {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /* This will hold active company data */
+    public activeCompany: any = {};
     /** This will store universalDate */
     public universalDate: any;
     /** Image path variable */
@@ -252,7 +254,7 @@ export class InventoryTransactionListComponent implements OnInit {
             }
         });
 
-        this.accountNameSearching.valueChanges.pipe(
+        this.searchAccountName.valueChanges.pipe(
             debounceTime(700),
             distinctUntilChanged(),
             takeUntil(this.destroyed$)
@@ -281,17 +283,22 @@ export class InventoryTransactionListComponent implements OnInit {
             this.warehouses = warehousesClone;
         });
 
-        this.searchingFilters?.valueChanges.pipe(
+        this.searchFilters?.valueChanges.pipe(
             debounceTime(700),
             distinctUntilChanged(),
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
             if (searchedText !== null && searchedText !== undefined && typeof searchedText === 'string') {
                 this.searchStockReportRequest.q = searchedText;
-                this.getStockTransactionReportFilters();
+                this.searchStockTransactionReport();
             }
         });
         this.getBranchWiseWarehouse();
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if (activeCompany) {
+                this.activeCompany = activeCompany;
+            }
+        });
     }
 
     /**
@@ -308,15 +315,10 @@ export class InventoryTransactionListComponent implements OnInit {
             this.allowAddChip = true;
         }, 300);
         if (option?.option?.value?.type === 'STOCK GROUP') {
-            if (this.stockReportRequest.stockGroupUniqueNames?.length > 0) {
-                this.stockReportRequest.stockGroupUniqueNames = option?.option?.value?.uniqueName;
-                return;
-            } else {
-                this.stockReportRequest.stockGroupUniqueNames?.push(option?.option?.value?.uniqueName);
-            }
+            this.stockReportRequest.stockGroupUniqueNames = [option?.option?.value?.uniqueName];
         } else if (option?.option?.value?.type === 'STOCK') {
             const findStockColumnCheck = this.customiseColumns?.find(value => value?.value === "stockName");
-            if (this.stockReportRequest.stockUniqueNames?.length == 0 && findStockColumnCheck?.checked) {
+            if (this.stockReportRequest.stockUniqueNames?.length === 0 && findStockColumnCheck?.checked) {
                 findStockColumnCheck.checked = false;
                 this.displayedColumns = this.displayedColumns?.filter(value => value !== "stockName");
             } else if (this.stockReportRequest.stockUniqueNames?.length > 0 && !findStockColumnCheck?.checked) {
@@ -326,7 +328,7 @@ export class InventoryTransactionListComponent implements OnInit {
             this.stockReportRequest.stockUniqueNames?.push(option?.option?.value?.uniqueName);
         } else {
             const findVariantColumnCheck = this.customiseColumns?.find(value => value?.value === "variantName");
-            if (this.stockReportRequest.variantUniqueNames?.length == 0 && findVariantColumnCheck?.checked) {
+            if (this.stockReportRequest.variantUniqueNames?.length === 0 && findVariantColumnCheck?.checked) {
                 findVariantColumnCheck.checked = false;
                 this.displayedColumns = this.displayedColumns.filter(value => value !== "variantName");
             } else if (this.stockReportRequest.variantUniqueNames?.length > 0 && !findVariantColumnCheck?.checked) {
@@ -337,7 +339,7 @@ export class InventoryTransactionListComponent implements OnInit {
         }
         this.filtersChipList?.push(selectOptionValue);
         this.isFilterActive();
-        this.getStockTransactionReportFilters();
+        this.searchStockTransactionReport();
         this.getStockTransactionalReport(false);
     }
 
@@ -369,7 +371,7 @@ export class InventoryTransactionListComponent implements OnInit {
                 }
             }
             this.isFilterActive();
-            this.getStockTransactionReportFilters();
+            this.searchStockTransactionReport();
             this.getStockTransactionalReport(false);
             this.changeDetection.detectChanges();
         }
@@ -380,7 +382,9 @@ export class InventoryTransactionListComponent implements OnInit {
      *
      * @memberof InventoryTransactionListComponent
      */
-    public getStockTransactionReportFilters(): void {
+    public searchStockTransactionReport(): void {
+        delete this.searchStockReportRequest.totalItems;
+        delete this.searchStockReportRequest.totalPages;
         this.searchStockReportRequest.stockGroupUniqueNames = this.stockReportRequest.stockGroupUniqueNames;
         this.searchStockReportRequest.stockUniqueNames = this.stockReportRequest.stockUniqueNames;
         this.searchStockReportRequest.variantUniqueNames = this.stockReportRequest.variantUniqueNames;
@@ -389,10 +393,12 @@ export class InventoryTransactionListComponent implements OnInit {
                 this.fieldFilteredOptions = response.body.results;
                 this.searchStockReportRequest.page = response.body.page;
                 this.searchStockReportRequest.count = response.body.count;
-                this.searchStockReportRequest.count = response.body.totalItems;
-                this.searchStockReportRequest.count = response.body.totalPages;
+                this.searchStockReportRequest.totalItems = response.body.totalItems;
+                this.searchStockReportRequest.totalPages = response.body.totalPages;
             } else {
-                this.toaster.showSnackBar("success", response?.body);
+                this.fieldFilteredOptions = [];
+                this.searchStockReportRequest.totalItems = 0;
+                this.toaster.showSnackBar("warning", response?.body);
             }
             this.changeDetection.detectChanges();
         });
@@ -442,6 +448,7 @@ export class InventoryTransactionListComponent implements OnInit {
             if (response && response.body && response.status === 'success') {
                 this.stockTransactionReportBalance = response.body;
             } else {
+                this.stockTransactionReportBalance = null;
                 this.toaster.showSnackBar("error", response?.message);
             }
             this.changeDetection.detectChanges();
@@ -612,7 +619,7 @@ export class InventoryTransactionListComponent implements OnInit {
      */
     public handleClickOutside(event: any, element: any, searchedFieldName: string): void {
         if (searchedFieldName === "name") {
-            if (this.accountNameSearching?.value) {
+            if (this.searchAccountName?.value) {
                 return;
             }
             if (this.generalService.childOf(event?.target, element)) {
@@ -712,10 +719,10 @@ export class InventoryTransactionListComponent implements OnInit {
         this.voucherTypes.forEach(response => {
             response.checked = false;
         });
-        if (this.accountNameSearching.value === null) {
+        if (this.searchAccountName.value === null) {
             this.getStockTransactionalReport();
         } else {
-            this.accountNameSearching.reset();
+            this.searchAccountName.reset();
         }
         this.changeDetection.detectChanges();
     }
