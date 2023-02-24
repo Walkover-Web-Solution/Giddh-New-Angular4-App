@@ -435,7 +435,6 @@ export class InventoryTransactionListComponent implements OnInit {
             } else {
                 this.dataSource = [];
                 this.stockReportRequest.totalItems = 0;
-                this.toaster.showSnackBar("error", response?.message);
             }
             this.changeDetection.detectChanges();
         });
@@ -449,7 +448,6 @@ export class InventoryTransactionListComponent implements OnInit {
                 this.stockTransactionReportBalance = response.body;
             } else {
                 this.stockTransactionReportBalance = null;
-                this.toaster.showSnackBar("error", response?.message);
             }
             this.changeDetection.detectChanges();
         });
@@ -776,8 +774,6 @@ export class InventoryTransactionListComponent implements OnInit {
                     });
                 }
                 this.filteredDisplayColumns();
-            } else {
-                this.toaster.showSnackBar("error", response?.message);
             }
         });
     }
