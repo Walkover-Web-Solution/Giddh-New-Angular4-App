@@ -286,7 +286,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
         private adjustmentUtilityService: AdjustmentUtilityService,
         private invoiceAction: InvoiceActions
     ) {
-
         this.lc = new LedgerVM();
         this.advanceSearchRequest = new AdvanceSearchRequest();
         this.trxRequest = new TransactionsRequest();
@@ -1549,7 +1548,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             const currentLedgerCategory = this.lc.activeAccount ? this.generalService.getAccountCategory(this.lc.activeAccount, this.lc.activeAccount?.uniqueName) : '';
             // If current ledger is of income or expense category then send current ledger as stockAccountUniqueName. Only required for ledger.
             const accountUniqueName = (currentLedgerCategory === 'income' || currentLedgerCategory === 'expenses') ?
-                this.lc.activeAccount ? this.lc.activeAccount?.uniqueName : '' :
+                this.lc.activeAccount ? this.lc.activeAccount.uniqueName : '' :
                 '';
             const requestObject = {
                 q: encodeURIComponent(query),

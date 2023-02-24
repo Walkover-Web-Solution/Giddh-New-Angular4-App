@@ -732,7 +732,6 @@ export class InventoryTransactionListComponent implements OnInit {
         } else {
             this.showClearFilter = false;
         }
-
     }
 
     /**

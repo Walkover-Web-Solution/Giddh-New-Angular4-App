@@ -68,7 +68,6 @@ import { AsideMenuProductServiceModule } from '../shared/aside-menu-product-serv
         VoucherAddBulkItemsModule,
         AsideMenuOtherTaxesModule,
         AsideMenuProductServiceModule
-
     ],
     exports: [ProformaInvoiceComponent],
     declarations: [

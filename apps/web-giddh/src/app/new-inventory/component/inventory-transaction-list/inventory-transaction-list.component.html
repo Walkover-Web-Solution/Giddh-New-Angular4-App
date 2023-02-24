@@ -501,6 +501,11 @@
                         </td>
                     </tr>
                 </table>
+                <section class="no-logs" *ngIf="!dataSource?.length && !isLoading">
+                    <div class="no-data">
+                        <h1>No data found</h1>
+                    </div>
+                </section>
             </div>
             <div class="pagination-wrapper">
                 <pagination
