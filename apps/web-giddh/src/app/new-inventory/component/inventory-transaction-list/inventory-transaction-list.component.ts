@@ -13,7 +13,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { MatSort } from "@angular/material/sort";
 import { OrganizationType } from "../../../models/user-login-state";
 import { cloneDeep } from "../../../lodash-optimized";
-import { StockReportRequestNew, TransactionalStockReportResponse } from "../../../models/api-models/Inventory";
+import { SearchStockTransactionReportRequest, StockTransactionReportRequest, TransactionStockReportResponse } from "../../../models/api-models/Inventory";
 import { InventoryService } from "../../../services/inventory.service";
 import { NewInventoryAdavanceSearch } from "../new-inventory-advance-search/new-inventory-advance-search.component";
 import { ToasterService } from "../../../services/toaster.service";
@@ -48,9 +48,11 @@ export class InventoryTransactionListComponent implements OnInit {
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Stock Transactional Object */
-    public stockReportRequest: StockReportRequestNew = new StockReportRequestNew();
+    public stockReportRequest: StockTransactionReportRequest = new StockTransactionReportRequest();
+    /** Stock Transactional Object */
+    public searchStockReportRequest: SearchStockTransactionReportRequest = new SearchStockTransactionReportRequest();
     /** Stock Transactional Report Balance Response */
-    public stockTransactionReportBalance: TransactionalStockReportResponse;
+    public stockTransactionReportBalance: TransactionStockReportResponse;
     /* This will hold local JSON data */
     public localeData: any = {};
     /* This will hold common JSON data */
@@ -82,7 +84,7 @@ export class InventoryTransactionListComponent implements OnInit {
     /**Hold branches */
     public branches: any[] = [];
     /** This will use for stock report voucher types column check values */
-    public VOUCHER_TYPES: any[] = [
+    public voucherTypes: any[] = [
         {
             "value": "SALES",
             "label": "Sales",
@@ -127,7 +129,7 @@ export class InventoryTransactionListComponent implements OnInit {
     /** This will use for stock report displayed columns */
     public displayedColumns: string[] = [];
     /** This will use for stock report voucher types column check values */
-    public CUSTOMISE_COLUMNS = [
+    public customiseColumns = [
         {
             "value": "date",
             "label": "Date",
@@ -285,7 +287,7 @@ export class InventoryTransactionListComponent implements OnInit {
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
             if (searchedText !== null && searchedText !== undefined && typeof searchedText === 'string') {
-                this.stockReportRequest.q = searchedText;
+                this.searchStockReportRequest.q = searchedText;
                 this.getStockTransactionReportFilters();
             }
         });
@@ -293,13 +295,13 @@ export class InventoryTransactionListComponent implements OnInit {
     }
 
     /**
-     * This wii use for select filters in chiplist
+     *  This will use for select filters in chiplist
      *
      * @param {*} option
      * @return {*}  {void}
      * @memberof InventoryTransactionListComponent
      */
-    public selectOption(option: any): void {
+    public selectChiplistValue(option: any): void {
         const selectOptionValue = option?.option?.value;
         this.allowAddChip = false;
         setTimeout(() => {
@@ -313,7 +315,7 @@ export class InventoryTransactionListComponent implements OnInit {
                 this.stockReportRequest.stockGroupUniqueNames?.push(option?.option?.value?.uniqueName);
             }
         } else if (option?.option?.value?.type === 'STOCK') {
-            const findStockColumnCheck = this.CUSTOMISE_COLUMNS?.find(value => value?.value === "stockName");
+            const findStockColumnCheck = this.customiseColumns?.find(value => value?.value === "stockName");
             if (this.stockReportRequest.stockUniqueNames?.length == 0 && findStockColumnCheck?.checked) {
                 findStockColumnCheck.checked = false;
                 this.displayedColumns = this.displayedColumns?.filter(value => value !== "stockName");
@@ -323,7 +325,7 @@ export class InventoryTransactionListComponent implements OnInit {
             }
             this.stockReportRequest.stockUniqueNames?.push(option?.option?.value?.uniqueName);
         } else {
-            const findVariantColumnCheck = this.CUSTOMISE_COLUMNS?.find(value => value?.value === "variantName");
+            const findVariantColumnCheck = this.customiseColumns?.find(value => value?.value === "variantName");
             if (this.stockReportRequest.variantUniqueNames?.length == 0 && findVariantColumnCheck?.checked) {
                 findVariantColumnCheck.checked = false;
                 this.displayedColumns = this.displayedColumns.filter(value => value !== "variantName");
@@ -355,14 +357,14 @@ export class InventoryTransactionListComponent implements OnInit {
             if (selectOptionValue.type === "STOCK") {
                 this.stockReportRequest.stockUniqueNames = this.stockReportRequest.stockUniqueNames.filter(value => value != selectOptionValue.uniqueName);
                 if (this.stockReportRequest.stockUniqueNames.length <= 1) {
-                    this.CUSTOMISE_COLUMNS.find(value => value?.value === "stockName").checked = (this.stockReportRequest.stockUniqueNames?.length === 1 ? false : true);
+                    this.customiseColumns.find(value => value?.value === "stockName").checked = (this.stockReportRequest.stockUniqueNames?.length === 1 ? false : true);
                     this.filteredDisplayColumns();
                 }
             }
             if (selectOptionValue.type === "VARIANT") {
                 this.stockReportRequest.variantUniqueNames = this.stockReportRequest.variantUniqueNames?.filter(value => value != selectOptionValue.uniqueName);
                 if (this.stockReportRequest.variantUniqueNames?.length <= 1) {
-                    this.CUSTOMISE_COLUMNS.find(value => value?.value === "variantName").checked = (this.stockReportRequest.variantUniqueNames.length === 1 ? false : true);
+                    this.customiseColumns.find(value => value?.value === "variantName").checked = (this.stockReportRequest.variantUniqueNames.length === 1 ? false : true);
                     this.filteredDisplayColumns();
                 }
             }
@@ -379,20 +381,16 @@ export class InventoryTransactionListComponent implements OnInit {
      * @memberof InventoryTransactionListComponent
      */
     public getStockTransactionReportFilters(): void {
-        delete this.stockReportRequest.totalPages;
-        delete this.stockReportRequest.totalItems;
-        delete this.stockReportRequest.branchUniqueNames;
-        delete this.stockReportRequest.warehouseUniqueNames;
-        delete this.stockReportRequest.accountName;
-        delete this.stockReportRequest.expression;
-        delete this.stockReportRequest.from;
-        delete this.stockReportRequest.param;
-        delete this.stockReportRequest.to;
-        delete this.stockReportRequest.val;
-        delete this.stockReportRequest.voucherTypes;
-        this.inventoryService.searchStockTransactionReport(this.stockReportRequest).subscribe(response => {
+        this.searchStockReportRequest.stockGroupUniqueNames = this.stockReportRequest.stockGroupUniqueNames;
+        this.searchStockReportRequest.stockUniqueNames = this.stockReportRequest.stockUniqueNames;
+        this.searchStockReportRequest.variantUniqueNames = this.stockReportRequest.variantUniqueNames;
+        this.inventoryService.searchStockTransactionReport(this.searchStockReportRequest).pipe(take(1)).subscribe(response => {
             if (response && response.body && response.status === 'success') {
                 this.fieldFilteredOptions = response.body.results;
+                this.searchStockReportRequest.page = response.body.page;
+                this.searchStockReportRequest.count = response.body.count;
+                this.searchStockReportRequest.count = response.body.totalItems;
+                this.searchStockReportRequest.count = response.body.totalPages;
             } else {
                 this.toaster.showSnackBar("success", response?.body);
             }
@@ -408,13 +406,10 @@ export class InventoryTransactionListComponent implements OnInit {
      * @return {*}  {void}
      * @memberof InventoryTransactionListComponent
      */
-    public getStockTransactionalReport(apiCall: boolean = true, type?: boolean): void {
+    public getStockTransactionalReport(apiCall: boolean = true): void {
         if (!this.showAdvanceSearchModal) {
             this.stockReportRequest.from = this.fromDate;
             this.stockReportRequest.to = this.toDate;
-        }
-        if (!this.stockReportRequest.stockGroupUniqueNames || !this.stockReportRequest.stockUniqueNames) {
-            return;
         }
         this.stockReportRequest.page = 1;
         this.stockReportRequest.count = PAGINATION_LIMIT;
@@ -423,7 +418,7 @@ export class InventoryTransactionListComponent implements OnInit {
         if (apiCall) {
             this.getReportColumns();
         }
-        this.inventoryService.getStockTransactionReport(cloneDeep(this.stockReportRequest)).subscribe(response => {
+        this.inventoryService.getStockTransactionReport(cloneDeep(this.stockReportRequest)).pipe(take(1)).subscribe(response => {
             this.isLoading = false;
             if (response && response.body && response.status === 'success') {
                 this.dataSource = response.body.transactions;
@@ -443,7 +438,7 @@ export class InventoryTransactionListComponent implements OnInit {
         delete this.stockReportRequest.transactionType;
         delete this.stockReportRequest.totalItems;
         delete this.stockReportRequest.totalPages;
-        this.inventoryService.getStockTransactionReportBalance(cloneDeep(this.stockReportRequest)).subscribe(response => {
+        this.inventoryService.getStockTransactionReportBalance(cloneDeep(this.stockReportRequest)).pipe(take(1)).subscribe(response => {
             if (response && response.body && response.status === 'success') {
                 this.stockTransactionReportBalance = response.body;
             } else {
@@ -460,7 +455,7 @@ export class InventoryTransactionListComponent implements OnInit {
      * @return {*}  {void}
      * @memberof InventoryTransactionListComponent
      */
-    public dateSelectedCallback(value?: any, from?: any): void {
+    public dateSelectedCallback(value?: any): void {
         if (value && value.event === "cancel") {
             this.hideGiddhDatepicker();
             return;
@@ -517,6 +512,7 @@ export class InventoryTransactionListComponent implements OnInit {
     public pageChanged(event: any): void {
         if (this.stockReportRequest.page !== event?.page) {
             this.stockReportRequest.page = event?.page;
+            this.searchStockReportRequest.page = event?.page;
             this.getStockTransactionalReport(false);
         }
     }
@@ -541,6 +537,7 @@ export class InventoryTransactionListComponent implements OnInit {
                 this.isFilterActive();
                 this.onShowAdvanceSearchFilter(response);
             }
+            this.changeDetection.detectChanges();
         });
         this.changeDetection.detectChanges();
     }
@@ -696,7 +693,7 @@ export class InventoryTransactionListComponent implements OnInit {
         this.showClearFilter = false;
         this.showAccountSearchInput = false;
         this.advanceSearchModalResponse = null;
-        this.stockReportRequest = new StockReportRequestNew();
+        this.stockReportRequest = new StockTransactionReportRequest();
         this.filtersChipList = [];
         this.selectedBranch = [];
         this.getBranches(false);
@@ -712,7 +709,7 @@ export class InventoryTransactionListComponent implements OnInit {
                 this.selectedDateRangeUi = dayjs(universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
             }
         });
-        this.VOUCHER_TYPES.forEach(response => {
+        this.voucherTypes.forEach(response => {
             response.checked = false;
         });
         if (this.accountNameSearching.value === null) {
@@ -723,6 +720,11 @@ export class InventoryTransactionListComponent implements OnInit {
         this.changeDetection.detectChanges();
     }
 
+    /**
+     *This will use for check is any filter active
+     *
+     * @memberof InventoryTransactionListComponent
+     */
     public isFilterActive(): void {
         if (this.selectedBranch?.length || this.selectedWarehouse?.length
             || this.filtersChipList?.length || this.advanceSearchModalResponse || this.stockReportRequest?.voucherTypes?.length || this.stockReportRequest.accountName?.length) {
@@ -739,14 +741,13 @@ export class InventoryTransactionListComponent implements OnInit {
      * @param {string} type
      * @memberof InventoryTransactionListComponent
      */
-    public filterByCheck(type: string) {
+    public filterByCheck(type: string): void {
         setTimeout(() => {
             if (!this.stockReportRequest.voucherTypes?.includes(type)) {
                 this.stockReportRequest.voucherTypes?.push(type);
             } else {
                 this.stockReportRequest.voucherTypes = this.stockReportRequest.voucherTypes?.filter(value => value != type);
             }
-            this.changeDetection.detectChanges();
             this.isFilterActive();
             this.getStockTransactionalReport(false);
             this.changeDetection.detectChanges();
@@ -759,10 +760,10 @@ export class InventoryTransactionListComponent implements OnInit {
      * @memberof InventoryTransactionListComponent
      */
     public getReportColumns(): void {
-        this.inventoryService.getStockTransactionReportColumns("INVENTORY_TRANSACTION_REPORT").subscribe(response => {
+        this.inventoryService.getStockTransactionReportColumns("INVENTORY_TRANSACTION_REPORT").pipe(take(1)).subscribe(response => {
             if (response && response.body && response.status === 'success') {
                 if (response.body?.columns) {
-                    this.CUSTOMISE_COLUMNS?.forEach(column => {
+                    this.customiseColumns?.forEach(column => {
                         if (!response.body.columns?.includes(column?.value)) {
                             column.checked = false;
                         }
@@ -771,7 +772,6 @@ export class InventoryTransactionListComponent implements OnInit {
                 this.filteredDisplayColumns();
             } else {
                 this.toaster.showSnackBar("error", response?.message);
-
             }
         });
     }
@@ -784,16 +784,11 @@ export class InventoryTransactionListComponent implements OnInit {
     public saveColumns(): void {
         setTimeout(() => {
             this.filteredDisplayColumns();
-            this.changeDetection.detectChanges();
             let saveColumnReq = {
                 module: "INVENTORY_TRANSACTION_REPORT",
                 columns: this.displayedColumns
             }
-            this.inventoryService.saveStockTransactionReportColumns(saveColumnReq).subscribe(response => {
-                if (response && response.body && response.status === 'success') {
-                    this.toaster.showSnackBar("success", response?.body);
-                }
-            });
+            this.inventoryService.saveStockTransactionReportColumns(saveColumnReq);
         });
     }
 
@@ -804,7 +799,7 @@ export class InventoryTransactionListComponent implements OnInit {
      * @memberof InventoryTransactionListComponent
      */
     public selectAllColumns(event: any): void {
-        this.CUSTOMISE_COLUMNS?.forEach(column => {
+        this.customiseColumns?.forEach(column => {
             if (column) {
                 column.checked = event;
             }
@@ -820,7 +815,7 @@ export class InventoryTransactionListComponent implements OnInit {
      * @memberof InventoryTransactionListComponent
      */
     public filteredDisplayColumns(): void {
-        this.displayedColumns = this.CUSTOMISE_COLUMNS?.filter(value => value?.checked).map(column => column?.value);
+        this.displayedColumns = this.customiseColumns?.filter(value => value?.checked).map(column => column?.value);
         this.changeDetection.detectChanges();
     }
 

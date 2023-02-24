@@ -119,7 +119,6 @@ export class StockReportResponse implements IStockReport {
     public transactions: IStockTransaction[];
     public profit: number;
 }
-
 export class StockReportRequest {
     public stockGroupUniqueName: string;
     public stockUniqueName: string;
@@ -142,7 +141,7 @@ export class StockReportRequest {
     public branchUniqueName?: string;
 }
 
-export class StockReportRequestNew {
+export class StockTransactionReportRequest {
     public from: string = '';
     public to: string = '';
     public count: number;
@@ -154,15 +153,14 @@ export class StockReportRequestNew {
     public stockGroupUniqueNames: any[];
     public stockUniqueNames: any[];
     public transactionType: string;
-    public accountName: string ;
-    public voucherTypes?: any[] ;
+    public accountName: string;
+    public voucherTypes?: any[];
     public param?: string;
-    public expression?: string ;
+    public expression?: string;
     public val?: number;
     public warehouseUniqueNames?: any[];
-    public branchUniqueNames?: any[] ;
+    public branchUniqueNames?: any[];
     public variantUniqueNames?: any[];
-    public q?: any;
     constructor() {
         this.count = PAGINATION_LIMIT;
         this.page = 1;
@@ -179,6 +177,25 @@ export class StockReportRequestNew {
     }
 }
 
+
+export class SearchStockTransactionReportRequest {
+    public stockGroupUniqueNames: any[];
+    public variantUniqueNames: any[];
+    public stockUniqueNames: any[];
+    public q: any;
+    public count: number;
+    public page: number;
+    public totalItems?: number;
+    public totalPages?: number;
+    constructor() {
+        this.count = PAGINATION_LIMIT;
+        this.page = 1;
+        this.stockGroupUniqueNames = [];
+        this.stockUniqueNames = [];
+        this.variantUniqueNames = [];
+    }
+}
+
 export class StockReportRequestTransactionParams {
     public from: string = '';
     public to: string = '';
@@ -188,16 +205,13 @@ export class StockReportRequestTransactionParams {
     public sortBy: string;
 }
 
-
-
-export class TransactionalStockReportResponse {
+export class TransactionStockReportResponse {
     public profit?: number;
     public opening?: any;
     public closing?: any;
     public inwards?: any;
     public outwards?: any;
 }
-
 
 export class GroupStockReportRequest {
     public stockGroupUniqueName: string;

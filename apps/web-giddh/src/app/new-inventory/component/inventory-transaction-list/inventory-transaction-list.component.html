@@ -96,7 +96,7 @@
                     type="text"
                     matInput
                     [formControl]="searchingFilters"
-                    [placeholder]="'Searching  Stock Group , Multiple  Stocks, Multiple Variants'"
+                    [placeholder]="'Search stock group, stocks, variant'"
                     [matAutocomplete]="auto"
                     [matChipInputFor]="matChipList"
                     #trigger="matAutocompleteTrigger"
@@ -107,7 +107,10 @@
                     [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
                 />
             </mat-chip-list>
-            <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectOption($event); selectField.value = ''">
+            <mat-autocomplete
+                #auto="matAutocomplete"
+                (optionSelected)="selectChiplistValue($event); selectField.value = ''"
+            >
                 <mat-option *ngFor="let option of fieldFilteredOptions" [value]="option">
                     {{ option?.name }} ( {{ option?.type }} )
                 </mat-option>
@@ -137,15 +140,15 @@
                         color="primary"
                         name="selectAll"
                         (change)="selectAllColumns($event?.checked)"
-                        [checked]="displayedColumns?.length === CUSTOMISE_COLUMNS?.length"
+                        [checked]="displayedColumns?.length === customiseColumns?.length"
                         [indeterminate]="
-                            displayedColumns?.length < CUSTOMISE_COLUMNS?.length && displayedColumns?.length > 0
+                            displayedColumns?.length < customiseColumns?.length && displayedColumns?.length > 0
                         "
                     >
                         Select All
                     </mat-checkbox>
                 </button>
-                <ng-container *ngFor="let item of CUSTOMISE_COLUMNS">
+                <ng-container *ngFor="let item of customiseColumns">
                     <button
                         mat-menu-item
                         (click)="$event?.stopPropagation()"
@@ -356,14 +359,14 @@
                     </ng-container>
 
                     <ng-container matColumnDef="voucherType">
-                        <th width="8%" mat-header-cell *matHeaderCellDef [matMenuTriggerFor]="voucherTypes">
+                        <th width="8%" mat-header-cell *matHeaderCellDef [matMenuTriggerFor]="voucherTypesMenu">
                             Voucher Type
                             <i
                                 class="fa fa-ellipsis-v pull-right text-light-2 mt-1 cursor-pointer"
                                 aria-hidden="true"
                             ></i>
-                            <mat-menu #voucherTypes="matMenu">
-                                <ng-container *ngFor="let item of VOUCHER_TYPES; let idx = index">
+                            <mat-menu #voucherTypesMenu="matMenu">
+                                <ng-container *ngFor="let item of voucherTypes; let idx = index">
                                     <button
                                         mat-menu-item
                                         (click)="$event?.stopPropagation()"

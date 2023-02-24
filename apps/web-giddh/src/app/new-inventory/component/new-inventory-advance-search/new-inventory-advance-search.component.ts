@@ -53,7 +53,7 @@ export class NewInventoryAdavanceSearch implements OnInit {
         },
         {
             value: "Outward",
-            label: "Outwards "
+            label: "Outwards"
         }
     ];
     /* Hold advance search category options*/
@@ -148,21 +148,9 @@ export class NewInventoryAdavanceSearch implements OnInit {
             val: 0,
             fromDate: null,
             toDate: null,
-            searching: Boolean
+            searching: false
         }
     }
-
-    /**
-     * This will use for allow only number
-     *
-     * @param {*} event
-     * @return {*}  {boolean}
-     * @memberof NewInventoryAdavanceSearch
-     */
-    public allowOnlyNumbers(event: any): boolean {
-        return this.generalService.allowOnlyNumbers(event);
-    }
-
     /**
      * This will use for advance search  category
      *
@@ -193,7 +181,7 @@ export class NewInventoryAdavanceSearch implements OnInit {
      * @param {*} value
      * @memberof NewInventoryAdavanceSearch
      */
-    public selectValue(value: any): void {
+    public selectValueType(value: any): void {
         if (value) {
             this.advanceSearchFormObj.expression = value;
         }
@@ -211,14 +199,13 @@ export class NewInventoryAdavanceSearch implements OnInit {
             this.advanceSearchFormObj.param = this.advanceSearchFormObj.param1?.toUpperCase() + '_' + this.advanceSearchFormObj.param2?.toUpperCase();
         }
         if (this.advanceSearchFormObj.expression == 'Equals') {
-            let expression = this.advanceSearchFormObj.expression?.toUpperCase();
-            this.advanceSearchFormObj.expression = expression;
+            this.advanceSearchFormObj.expression = "EQUALS";
         } else if (this.advanceSearchFormObj.expression == 'Excluded') {
             this.advanceSearchFormObj.expression = "NOT_EQUALS";
         } else if (this.advanceSearchFormObj.expression == "Less Than") {
             this.advanceSearchFormObj.expression = "LESS_THAN";
         } else if (this.advanceSearchFormObj.expression == "Greater Than") {
-            this.advanceSearchFormObj.expression = "GEATER_THAN";
+            this.advanceSearchFormObj.expression = "GREATER_THAN";
         }
         if (type === 'cancel') {
             this.dialogRef.close();

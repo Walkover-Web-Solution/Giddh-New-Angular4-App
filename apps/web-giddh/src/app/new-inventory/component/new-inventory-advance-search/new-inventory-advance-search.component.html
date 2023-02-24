@@ -67,7 +67,7 @@
                                 [cssClass]="'form-control mat-field-border'"
                                 [placeholder]="'Select Type'"
                                 [options]="advanceSearchValue"
-                                (selectedOption)="selectValue($event?.value)"
+                                (selectedOption)="selectValueType($event?.value)"
                                 [defaultValue]="advanceSearchFormObj.expression"
                                 [allowValueReset]="true"
                                 (onClear)="advanceSearchFormObj.expression = ''"
@@ -75,12 +75,12 @@
                         </div>
                         <div class="col-lg-6 col-sm-6 col-12 mr-b15">
                             <text-field
-                                [type]="'text'"
+                                [type]="'number'"
                                 [cssClass]="'form-control mat-field-border'"
                                 [placeholder]="'Amount'"
                                 [name]="'amount'"
                                 [(ngModel)]="advanceSearchFormObj.val"
-                                (keypress)="allowOnlyNumbers($event)"
+                                [allowDigitsOnly]="true"
                                 (onClear)="advanceSearchFormObj.val = ''"
                             >
                             </text-field>

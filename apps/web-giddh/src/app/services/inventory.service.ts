@@ -13,7 +13,7 @@ import {
     StockUnitResponse,
     InventoryDownloadRequest,
     StockMappedUnitResponse,
-    StockReportRequestNew
+    StockTransactionReportRequest
 } from '../models/api-models/Inventory';
 import { Inject, Injectable, Optional } from '@angular/core';
 import { HttpWrapperService } from './httpWrapper.service';
@@ -1083,11 +1083,11 @@ export class InventoryService {
     /**
      * This will use for get stock transaction report
      *
-     * @param {StockReportRequestNew} stockReportRequest
-     * @return {*}  {Observable<BaseResponse<StockReportResponse, StockReportRequestNew>>}
+     * @param {StockTransactionReportRequest} stockReportRequest
+     * @return {*}  {Observable<BaseResponse<StockReportResponse, StockTransactionReportRequest>>}
      * @memberof InventoryService
      */
-    public getStockTransactionReport(stockReportRequest: StockReportRequestNew): Observable<BaseResponse<StockReportResponse, StockReportRequestNew>> {
+    public getStockTransactionReport(stockReportRequest: StockTransactionReportRequest): Observable<BaseResponse<StockReportResponse, StockTransactionReportRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.post(this.config.apiUrl + INVENTORY_API.TRANSACTIONAL_STOCK_REPORT_V2?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             ?.replace(':stockGroupUniqueName', encodeURIComponent(<any>stockReportRequest.stockGroupUniqueNames))
@@ -1101,7 +1101,7 @@ export class InventoryService {
             ?.replace(':sortBy', encodeURIComponent(stockReportRequest.sortBy ? stockReportRequest.sortBy?.toString() : ''))
             , stockReportRequest).pipe(
                 map((res) => {
-                    let data: BaseResponse<StockReportResponse, StockReportRequestNew> = res;
+                    let data: BaseResponse<StockReportResponse, StockTransactionReportRequest> = res;
                     data.request = stockReportRequest;
                     data.queryString = {
                         stockGroupUniqueName: stockReportRequest.stockGroupUniqueNames,
@@ -1112,7 +1112,7 @@ export class InventoryService {
                         page: stockReportRequest.page
                     };
                     return data;
-                }), catchError((e) => this.errorHandler.HandleCatch<StockReportResponse, StockReportRequestNew>(e, stockReportRequest, {
+                }), catchError((e) => this.errorHandler.HandleCatch<StockReportResponse, StockTransactionReportRequest>(e, stockReportRequest, {
                     stockGroupUniqueName: stockReportRequest.stockGroupUniqueNames,
                     stockUniqueName: stockReportRequest.stockUniqueNames,
                     from: stockReportRequest.from,
@@ -1125,11 +1125,11 @@ export class InventoryService {
     /**
      * This will use for get stock transaction report balance
      *
-     * @param {StockReportRequestNew} stockReportRequest
-     * @return {*}  {Observable<BaseResponse<StockReportResponse, StockReportRequestNew>>}
+     * @param {StockTransactionReportRequest} stockReportRequest
+     * @return {*}  {Observable<BaseResponse<StockReportResponse, StockTransactionReportRequest>>}
      * @memberof InventoryService
      */
-    public getStockTransactionReportBalance(stockReportRequest: StockReportRequestNew): Observable<BaseResponse<StockReportResponse, StockReportRequestNew>> {
+    public getStockTransactionReportBalance(stockReportRequest: StockTransactionReportRequest): Observable<BaseResponse<StockReportResponse, StockTransactionReportRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
 
         return this.http.post(this.config.apiUrl + INVENTORY_API.TRANSACTIONAL_STOCK_REPORT_BALANCE_V2?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
@@ -1139,7 +1139,7 @@ export class InventoryService {
             ?.replace(':to', encodeURIComponent(stockReportRequest.to))
             , stockReportRequest).pipe(
                 map((res) => {
-                    let data: BaseResponse<StockReportResponse, StockReportRequestNew> = res;
+                    let data: BaseResponse<StockReportResponse, StockTransactionReportRequest> = res;
                     data.request = stockReportRequest;
                     data.queryString = {
                         stockGroupUniqueName: stockReportRequest.stockGroupUniqueNames,
@@ -1148,7 +1148,7 @@ export class InventoryService {
                         to: stockReportRequest.to,
                     };
                     return data;
-                }), catchError((e) => this.errorHandler.HandleCatch<StockReportResponse, StockReportRequestNew>(e, stockReportRequest, {
+                }), catchError((e) => this.errorHandler.HandleCatch<StockReportResponse, StockTransactionReportRequest>(e, stockReportRequest, {
                     stockGroupUniqueName: stockReportRequest.stockGroupUniqueNames,
                     stockUniqueName: stockReportRequest.stockUniqueNames,
                     from: stockReportRequest.from,
