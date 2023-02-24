@@ -105,21 +105,21 @@ export class NewInventoryAdavanceSearch implements OnInit {
      * @memberof NewInventoryAdavanceSearch
      */
     public ngOnInit() {
-     this._breakPointObservar.observe([
+        this._breakPointObservar.observe([
             '(max-width: 767px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.isMobileScreen = result.matches;
         });
         if (this.inputData?.stockReportRequest) {
-            if(this.inputData?.advanceSearchResponse){
+            if (this.inputData?.advanceSearchResponse) {
                 this.advanceSearchFormObj = cloneDeep(this.inputData.advanceSearchResponse?.stockReportRequest);
             }
             let from = this.inputData?.stockReportRequest.from;
             let to = this.inputData?.stockReportRequest.to;
-            this.selectedDateRange = { startDate: dayjs(from, GIDDH_DATE_FORMAT), endDate: dayjs(to,GIDDH_DATE_FORMAT) };
-            this.selectedDateRangeUi = dayjs(from,GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(to,GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
-            this.advanceSearchFormObj.fromDate = dayjs(from,GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
-            this.advanceSearchFormObj.toDate = dayjs(to,GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+            this.selectedDateRange = { startDate: dayjs(from, GIDDH_DATE_FORMAT), endDate: dayjs(to, GIDDH_DATE_FORMAT) };
+            this.selectedDateRangeUi = dayjs(from, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(to, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.advanceSearchFormObj.fromDate = dayjs(from, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+            this.advanceSearchFormObj.toDate = dayjs(to, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
         } else {
             this.universalDate$.pipe(take(1)).subscribe(dateObj => {
                 if (dateObj) {

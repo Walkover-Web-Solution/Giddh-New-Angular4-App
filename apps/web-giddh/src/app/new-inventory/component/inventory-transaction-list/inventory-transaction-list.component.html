@@ -233,7 +233,10 @@
                                                 : "-"
                                         }}
                                     </span>
-                                    <span class="d-inline-flex mt-1">
+                                    <span
+                                        class="d-inline-flex mt-1"
+                                        *ngIf="stockTransactionReportBalance?.opening?.quantity"
+                                    >
                                         (
                                         {{
                                             stockTransactionReportBalance?.opening?.quantity
@@ -258,7 +261,10 @@
                                                 : "-"
                                         }}
                                     </span>
-                                    <span class="d-inline-flex mt-1">
+                                    <span
+                                        class="d-inline-flex mt-1"
+                                        *ngIf="stockTransactionReportBalance?.inwards?.quantity"
+                                    >
                                         (
                                         {{
                                             stockTransactionReportBalance?.inwards?.quantity
@@ -283,7 +289,10 @@
                                                 : "-"
                                         }}
                                     </span>
-                                    <span class="d-inline-flex mt-1">
+                                    <span
+                                        class="d-inline-flex mt-1"
+                                        *ngIf="stockTransactionReportBalance?.outwards?.quantity"
+                                    >
                                         (
                                         {{
                                             stockTransactionReportBalance?.outwards?.quantity
@@ -308,7 +317,10 @@
                                                 : "-"
                                         }}
                                     </span>
-                                    <span class="d-inline-flex mt-1">
+                                    <span
+                                        class="d-inline-flex mt-1"
+                                        *ngIf="stockTransactionReportBalance?.closing?.quantity"
+                                    >
                                         (
                                         {{
                                             stockTransactionReportBalance?.closing?.quantity

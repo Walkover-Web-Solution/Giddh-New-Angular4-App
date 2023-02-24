@@ -77,9 +77,9 @@
 .select-multiple-chiplist-inventory {
     width: 100%;
     padding-bottom: 7px;
-    height: 30px !important;
     font-weight: 400 !important;
     font-size: 13px !important;
+
     .mat-chip.mat-standard-chip {
         color: var(--color-chips-primary) !important;
         background-color: var(--color-body-background) !important;
@@ -88,7 +88,25 @@
     }
 }
 
+@media (max-width: 1024px) {
+    .select-multiple-chiplist-inventory {
+        width: 56% !important;
+    }
+
+    .stock-mat-salect {
+        min-width: 187px;
+    }
+}
+
 @media (max-width: 1019px) {
+    .select-multiple-chiplist-inventory {
+        width: 47% !important;
+    }
+
+    .stock-mat-salect {
+        min-width: 199px;
+    }
+
     .stock-group-footer {
         width: 100% !important;
         position: fixed !important;

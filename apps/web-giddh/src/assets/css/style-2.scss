@@ -10464,6 +10464,11 @@ body.update-scroll-hidden {
     .trigger-form-left-side {
         width: 30% !important;
     }
+    .search-control {
+        .mat-form-field-wrapper {
+            width: 95%;
+        }
+    }
 
     .small-button {
         width: 100% !important;
@@ -13099,7 +13104,9 @@ hamburger-menu {
         border-radius: 53px;
         flex: 1;
         margin-right: 15px;
-
+        .mat-form-field-wrapper {
+            width: 95%;
+        }
         .search-icon {
             padding: 20px;
         }
