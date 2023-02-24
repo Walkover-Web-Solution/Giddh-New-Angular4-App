@@ -1152,9 +1152,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
             if (o) {
                 if (this.invFormData?.accountDetails?.currency?.code) {
-                    this.loadBankCashAccounts(this.invFormData?.accountDetails?.currency?.code);
+                    this.loadBankCashAccounts(this.invFormData?.accountDetails?.currency?.code, false);
                 } else {
-                    this.loadBankCashAccounts("");
+                    this.loadBankCashAccounts("", false);
                 }
             }
         });
@@ -1166,9 +1166,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             }
             if (o) {
                 if (this.invFormData?.accountDetails?.currency?.code) {
-                    this.loadBankCashAccounts(this.invFormData?.accountDetails?.currency?.code);
+                    this.loadBankCashAccounts(this.invFormData?.accountDetails?.currency?.code, false);
                 } else {
-                    this.loadBankCashAccounts("");
+                    this.loadBankCashAccounts("", false);
                 }
             }
         });
@@ -1725,7 +1725,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 this.onlyPhoneNumber();
                 clearInterval(interval);
             }
-        }, 2000);
+        }, 500);
         if (!this.isUpdateMode) {
             this.toggleBodyClass();
         }
@@ -4485,6 +4485,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             this.isUpdateMode = false;
 
             if (this.callFromOutside) {
+                this.store.dispatch(this.invoiceReceiptActions.setVoucherForDetails(null, null));
                 this.store.dispatch(this.gstAction.resetGstr3BOverViewResponse());
                 this.location?.back();
             }
@@ -6722,10 +6723,12 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @param {string} customerCurrency Currency of the customer selected
      * @memberof VoucherComponent
      */
-    private loadBankCashAccounts(customerCurrency: string): void {
-        this.depositAccountUniqueName = '';
-        this.selectedPaymentMode = null;
-        this.userDeposit = null;
+    private loadBankCashAccounts(customerCurrency: string, resetDeposit: boolean = true): void {
+        if (resetDeposit) {
+            this.depositAccountUniqueName = '';
+            this.selectedPaymentMode = null;
+            this.userDeposit = null;
+        }
         let groups = "cash, bankaccounts";
         if (this.voucherApiVersion === 2) {
             groups += ", loanandoverdraft";
@@ -8129,8 +8132,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         const errorMsg = document.querySelector("#init-contact-proforma-error-msg");
         const validMsg = document.querySelector("#init-contact-proforma-valid-msg");
         let errorMap = [this.localeData?.invalid_contact_number, this.commonLocaleData?.app_invalid_country_code, this.commonLocaleData?.app_invalid_contact_too_short, this.commonLocaleData?.app_invalid_contact_too_long, this.localeData?.invalid_contact_number];
-        if (window['intlTelInput'] && input) {
-            this.intl = window['intlTelInput'](input, {
+        const intlTelInput = !isElectron ? window['intlTelInput'] : window['intlTelInputGlobals']['electron'];
+        if (intlTelInput && input) {
+            this.intl = intlTelInput(input, {
                 nationalMode: true,
                 utilsScript: MOBILE_NUMBER_UTIL_URL,
                 autoHideDialCode: false,
@@ -8141,23 +8145,23 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     const fetchIPApi = this.http.get<any>(MOBILE_NUMBER_SELF_URL);
                     fetchIPApi.subscribe(
                         (res) => {
-                            if (res?.response?.ipAddress) {
-                                const fetchCountryByIpApi = this.http.get<any>(MOBILE_NUMBER_IP_ADDRESS_URL + `${res.response.ipAddress}`);
+                            if (res?.ipAddress) {
+                                const fetchCountryByIpApi = this.http.get<any>(MOBILE_NUMBER_IP_ADDRESS_URL + `${res.ipAddress}`);
                                 fetchCountryByIpApi.subscribe(
                                     (fetchCountryByIpApiRes) => {
-                                        if (fetchCountryByIpApiRes?.response?.countryCode) {
-                                            return success(fetchCountryByIpApiRes.response.countryCode);
+                                        if (fetchCountryByIpApiRes?.countryCode) {
+                                            return success(fetchCountryByIpApiRes.countryCode);
                                         } else {
                                             return success(countryCode);
                                         }
                                     },
                                     (fetchCountryByIpApiErr) => {
-                                        const fetchCountryByIpInfoApi = this.http.get<any>(MOBILE_NUMBER_ADDRESS_JSON_URL + `${res.response.ipAddress}`);
+                                        const fetchCountryByIpInfoApi = this.http.get<any>(MOBILE_NUMBER_ADDRESS_JSON_URL + `${res?.ipAddress}`);
 
                                         fetchCountryByIpInfoApi.subscribe(
                                             (fetchCountryByIpInfoApiRes) => {
-                                                if (fetchCountryByIpInfoApiRes?.response?.country) {
-                                                    return success(fetchCountryByIpInfoApiRes.response.country);
+                                                if (fetchCountryByIpInfoApiRes?.country) {
+                                                    return success(fetchCountryByIpInfoApiRes.country);
                                                 } else {
                                                     return success(countryCode);
                                                 }

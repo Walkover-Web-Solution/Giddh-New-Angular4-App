@@ -135,14 +135,17 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
      */
     public ngOnChanges(changes: SimpleChanges): void {
         if (changes?.options) {
-            if (this.selectedValue && !changes.options.currentValue?.length && changes.options.previousValue?.length) {
-                this.fieldFilteredOptions = cloneDeep(changes.options.previousValue);
-            } else {
-                this.fieldFilteredOptions = cloneDeep(changes.options.currentValue);
-            }
+            this.fieldFilteredOptions = cloneDeep(changes.options.currentValue);
         }
         if (changes?.defaultValue) {
             this.searchFormControl.setValue({ label: changes?.defaultValue.currentValue });
+            if(!this.options || this.options?.length === 0) {
+                if (this.enableDynamicSearch) {
+                    this.dynamicSearchedQuery.emit(changes?.defaultValue.currentValue);
+                } else {
+                    this.filterOptions(changes?.defaultValue.currentValue);
+                }
+            }
         }
     }
 
@@ -203,8 +206,10 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
      * @memberof SelectFieldComponent
      */
     public optionSelected(event: any): void {
-        this.selectedValue = event?.option?.value?.label;
-        this.selectedOption.emit(event?.option?.value);
+        if (event?.option?.value?.label) {
+            this.selectedValue = event?.option?.value?.label;
+            this.selectedOption.emit(event?.option?.value);
+        }
     }
 
     /**
@@ -247,7 +252,7 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
      */
     public onBlur(): void {
         setTimeout(() => {
-            if (!this.searchFormControl?.value) {
+            if (!this.searchFormControl?.value && !this.defaultValue) {
                 this.selectedValue = "";
                 this.selectedOption.emit({ label: '', value: '' });
             }

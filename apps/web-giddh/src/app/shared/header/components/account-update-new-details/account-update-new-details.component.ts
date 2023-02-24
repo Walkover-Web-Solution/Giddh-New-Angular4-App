@@ -1407,8 +1407,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     const searchResults = data.body.results.map(result => {
                         return {
                             value: result?.uniqueName,
-                            label: `${result.name}`,
-                            additional: result.parentGroups
+                            label: `${result?.name}`,
+                            additional: result?.parentGroups
                         }
                     }) || [];
                     if (page === 1) {
@@ -1453,8 +1453,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                         const results = response.map(result => {
                             return {
                                 value: result?.uniqueName,
-                                label: `${result.name}`,
-                                additional: result.parentGroups
+                                label: `${result?.name}`,
+                                additional: result?.parentGroups
                             }
                         }) || [];
                         this.defaultGroupSuggestions = this.defaultGroupSuggestions.concat(...results);
@@ -1476,8 +1476,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             this.defaultGroupSuggestions = response.map(result => {
                 return {
                     value: result?.uniqueName,
-                    label: `${result.name}`,
-                    additional: result.parentGroups
+                    label: `${result?.name}`,
+                    additional: result?.parentGroups
                 }
             }) || [];
             this.defaultGroupPaginationData.page = this.groupsSearchResultsPaginationData.page;
@@ -1812,7 +1812,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         const errorMsg = document.querySelector("#init-contact-update-error-msg");
         const validMsg = document.querySelector("#init-contact-update-valid-msg");
         let errorMap = [this.localeData?.invalid_contact_number, this.commonLocaleData?.app_invalid_country_code, this.commonLocaleData?.app_invalid_contact_too_short, this.commonLocaleData?.app_invalid_contact_too_long, this.localeData?.invalid_contact_number];
-        let intlTelInput = window['intlTelInput'];
+        const intlTelInput = !isElectron ? window['intlTelInput'] : window['intlTelInputGlobals']['electron'];
         if (intlTelInput && input) {
             this.intl = intlTelInput(input, {
                 nationalMode: true,
@@ -1825,23 +1825,23 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     const fetchIPApi = this.http.get<any>(MOBILE_NUMBER_SELF_URL);
                     fetchIPApi.subscribe(
                         (res) => {
-                            if (res?.response?.ipAddress) {
-                                const fetchCountryByIpApi = this.http.get<any>(MOBILE_NUMBER_IP_ADDRESS_URL + `${res.response.ipAddress}`);
+                            if (res?.ipAddress) {
+                                const fetchCountryByIpApi = this.http.get<any>(MOBILE_NUMBER_IP_ADDRESS_URL + `${res.ipAddress}`);
                                 fetchCountryByIpApi.subscribe(
                                     (fetchCountryByIpApiRes) => {
-                                        if (fetchCountryByIpApiRes?.response?.countryCode) {
-                                            return success(fetchCountryByIpApiRes.response.countryCode);
+                                        if (fetchCountryByIpApiRes?.countryCode) {
+                                            return success(fetchCountryByIpApiRes.countryCode);
                                         } else {
                                             return success(countryCode);
                                         }
                                     },
                                     (fetchCountryByIpApiErr) => {
-                                        const fetchCountryByIpInfoApi = this.http.get<any>(MOBILE_NUMBER_ADDRESS_JSON_URL + `${res.response.ipAddress}`);
+                                        const fetchCountryByIpInfoApi = this.http.get<any>(MOBILE_NUMBER_ADDRESS_JSON_URL + `${res.ipAddress}`);
 
                                         fetchCountryByIpInfoApi.subscribe(
                                             (fetchCountryByIpInfoApiRes) => {
-                                                if (fetchCountryByIpInfoApiRes?.response?.country) {
-                                                    return success(fetchCountryByIpInfoApiRes.response.country);
+                                                if (fetchCountryByIpInfoApiRes?.country) {
+                                                    return success(fetchCountryByIpInfoApiRes.country);
                                                 } else {
                                                     return success(countryCode);
                                                 }
