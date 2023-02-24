@@ -63,6 +63,9 @@ import { VariantWiseComponent } from "./component/variant-wise/variant-wise.comp
 import { NgxMatSelectSearchModule } from "ngx-mat-select-search";
 import { GiddhPageLoaderModule } from "../shared/giddh-page-loader/giddh-page-loader.module";
 import { PaginationModule } from "ngx-bootstrap/pagination";
+import { MatDialogModule } from "@angular/material/dialog";
+import { MatAutocompleteModule } from "@angular/material/autocomplete";
+import { MatTooltipModule } from "@angular/material/tooltip";
 
 @NgModule({
     declarations: [
@@ -131,7 +134,10 @@ import { PaginationModule } from "ngx-bootstrap/pagination";
         StockCreateEditModule,
         NgxMatSelectSearchModule,
         GiddhPageLoaderModule,
-        PaginationModule
+        PaginationModule,
+        MatDialogModule,
+        MatAutocompleteModule,
+        MatTooltipModule
     ],
     exports: [
         NewInventoryComponent,

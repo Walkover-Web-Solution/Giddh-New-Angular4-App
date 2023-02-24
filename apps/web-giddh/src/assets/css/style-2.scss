@@ -552,6 +552,16 @@ $custom-typography: mat-typography-config(
 .inventory-units-mapped:hover .icon-visibility {
     visibility: visible !important;
 }
+.select-multiple-chiplist-inventory {
+    width: 80% !important;
+    .mat-form-field-infix {
+        padding-top: 0 !important;
+        margin-bottom: 6px !important;
+    }
+    .mat-form-field {
+        width: 98% !important;
+    }
+}
 .autopaid {
     .mat-dialog-container {
         .modal-body {
@@ -10530,6 +10540,11 @@ body.update-scroll-hidden {
     .trigger-form-left-side {
         width: 30% !important;
     }
+    .search-control {
+        .mat-form-field-wrapper {
+            width: 95%;
+        }
+    }
 
     .small-button {
         width: 100% !important;
@@ -13370,7 +13385,14 @@ hamburger-menu {
 }
 
 //inventory control styling
-
+.mat-select-search-inventory {
+    .mat-select-search-no-entries-found {
+        padding: 0px !important;
+    }
+    .mat-select-search-input {
+        padding: 0px 0px 0px 0px !important;
+    }
+}
 .inventory-filter-bar {
     padding: 15px;
     display: flex;
@@ -13381,9 +13403,11 @@ hamburger-menu {
         border-radius: 53px;
         flex: 1;
         margin-right: 15px;
-
+        .mat-form-field-wrapper {
+            width: 95%;
+        }
         .search-icon {
-            padding: 10px;
+            padding: 20px;
         }
 
         input.form-control {
@@ -13400,15 +13424,26 @@ hamburger-menu {
             border-bottom-right-radius: 20px;
             display: flex;
 
-            button {
+            .advance-filter-button {
                 border-left: 1px solid var(--color-gray);
                 border-radius: 0;
                 margin-right: 0 !important;
                 height: 100%;
-
                 &:hover {
                     background: var(--color-white-secondary);
                     color: var(--color-giddh-blue) !important;
+                    border-radius: 0px 0px 0px 0px;
+                }
+            }
+            .customise-filter-button {
+                border-left: 1px solid var(--color-gray);
+                border-radius: 0;
+                margin-right: 0 !important;
+                height: 100%;
+                &:hover {
+                    background: var(--color-white-secondary);
+                    color: var(--color-giddh-blue) !important;
+                    border-radius: 0px 45px 45px 0px;
                 }
             }
         }

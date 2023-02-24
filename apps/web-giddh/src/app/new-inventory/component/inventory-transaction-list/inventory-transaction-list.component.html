@@ -11,30 +11,7 @@
             />
         </div>
     </div>
-    <div class="pl-1">
-        <mat-select
-            name="selectedWarehouse"
-            [multiple]="true"
-            [(ngModel)]="selectedWarehouse"
-            class="stock-mat-salect"
-            [placeholder]="'Select Warehouse'"
-        >
-            <mat-option class="balance-options">
-                <ngx-mat-select-search
-                    [noEntriesFoundLabel]="'No Result Found'"
-                    [formControl]="warehousesDropdown"
-                    [placeholderLabel]="'Select Warehouse'"
-                >
-                    <i class="icon-cross" ngxMatSelectSearchClear></i>
-                </ngx-mat-select-search>
-            </mat-option>
-
-            <mat-option class="balance-options"> Warehouse 1 </mat-option>
-            <mat-option class="balance-options"> Warehouse 2 </mat-option>
-            <mat-option class="balance-options"> Warehouse 3 </mat-option>
-        </mat-select>
-    </div>
-    <div class="pl-1">
+    <div class="pl-1" *ngIf="isCompany">
         <mat-select
             name="selectedBranch"
             [multiple]="true"
@@ -47,25 +24,56 @@
                     [noEntriesFoundLabel]="'No Result Found'"
                     [formControl]="branchesDropdown"
                     [placeholderLabel]="'Select Branch'"
+                    class="mat-select-search-inventory"
                 >
                     <i class="icon-cross" ngxMatSelectSearchClear></i>
                 </ngx-mat-select-search>
             </mat-option>
 
-            <mat-option class="balance-options"> Branch 1 </mat-option>
-            <mat-option class="balance-options"> Branch 2 </mat-option>
-            <mat-option class="balance-options"> Branch 3 </mat-option>
+            <mat-option
+                class="balance-options"
+                *ngFor="let branch of branches"
+                (click)="getBranches()"
+                [value]="branch?.uniqueName"
+            >
+                {{ branch?.alias ?? "-" }}
+            </mat-option>
         </mat-select>
     </div>
-    <div
-        class="clear-filter align-items-center d-flex justify-content-xl-center justify-content-lg-start w-50"
-        *ngIf="showClearFilter"
-    >
+    <div class="pl-1">
+        <mat-select
+            name="selectedWarehouse"
+            [multiple]="true"
+            [(ngModel)]="selectedWarehouse"
+            class="stock-mat-salect"
+            [placeholder]="'Select Warehouse'"
+        >
+            <mat-option class="balance-options">
+                <ngx-mat-select-search
+                    noEntriesFoundLabel="No Result Found"
+                    [formControl]="warehousesDropdown"
+                    [placeholderLabel]="'Select Warehouse'"
+                    class="mat-select-search-inventory"
+                >
+                    <i class="icon-cross" ngxMatSelectSearchClear></i>
+                </ngx-mat-select-search>
+            </mat-option>
+            <mat-option
+                class="balance-options"
+                *ngFor="let warehouse of warehouses"
+                [value]="warehouse?.uniqueName"
+                (click)="getWarehouses()"
+            >
+                {{ warehouse?.name ?? "-" }}
+            </mat-option>
+        </mat-select>
+    </div>
+    <div class="clear-filter d-flex" *ngIf="showClearFilter">
         <button
             mat-raised-button
             class="create-btn-inventory btn-sky-blue ml-3 mr-0"
             color="primary"
-            (click)="resetAdvanceSearch()"
+            (click)="resetFilter()"
         >
             <span class="icon-cross"></span> Clear
         </button>
@@ -75,57 +83,100 @@
 <div class="inventory-filter-bar">
     <div class="search-control">
         <i class="icon-search search-icon"></i>
-        <sh-select placeholder="Search Branch Alice"></sh-select>
-        <!-- This will remove after select field component or any othe input -->
+        <mat-form-field floatLabel="never" class="select-multiple-chiplist-inventory">
+            <mat-chip-list #matChipList>
+                <mat-chip
+                    *ngFor="let chip of filtersChipList; let indx = index"
+                    [selectable]="true"
+                    [removable]="true"
+                    (removed)="removeOption(chip, indx)"
+                >
+                    {{ chip?.name }}
+                    <i class="icon-cross" matChipRemove></i>
+                </mat-chip>
+                <input
+                    type="text"
+                    matInput
+                    [formControl]="searchFilters"
+                    [placeholder]="'Search stock group, stock, variant'"
+                    [matAutocomplete]="auto"
+                    [matChipInputFor]="matChipList"
+                    #trigger="matAutocompleteTrigger"
+                    [name]="'q'"
+                    #selectField
+                    autocomplete="off"
+                    matAutocompletePosition="auto"
+                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                />
+            </mat-chip-list>
+            <mat-autocomplete
+                #auto="matAutocomplete"
+                (optionSelected)="selectChiplistValue($event); selectField.value = ''"
+            >
+                <mat-option *ngFor="let option of fieldFilteredOptions" [value]="option">
+                    {{ option?.name }} ( {{ option?.type }} )
+                </mat-option>
+                <mat-option *ngIf="!fieldFilteredOptions?.length"> No Result Found </mat-option>
+            </mat-autocomplete>
+        </mat-form-field>
         <div class="menu-btn-control">
-            <button mat-button (click)="openModal()">
+            <button mat-button (click)="openModal()" class="advance-filter-button">
                 <i class="icon-advance-filter mr-2"></i>
                 Advance Filter
             </button>
-
-            <button mat-button [matMenuTriggerFor]="customise" aria-label="Customise">
+            <button mat-button [matMenuTriggerFor]="customise" aria-label="Customise" class="customise-filter-button">
                 <i class="icon-options mr-2"> </i>
                 Customise
             </button>
             <mat-menu #customise="matMenu">
-                <div class="menu-selector">
-                    <button mat-menu-item>
-                        <mat-checkbox color="primary">Select All</mat-checkbox>
+                <button
+                    mat-menu-item
+                    (click)="$event?.stopPropagation()"
+                    (keydown.enter)="
+                        $event?.stopPropagation();
+                        selectAllCheckbox.checked = !selectAllCheckbox?.checked;
+                        selectAllColumns(selectAllCheckbox?.checked)
+                    "
+                >
+                    <mat-checkbox
+                        #selectAllCheckbox
+                        color="primary"
+                        name="selectAll"
+                        (change)="selectAllColumns($event?.checked)"
+                        [checked]="displayedColumns?.length === customiseColumns?.length"
+                        [indeterminate]="
+                            displayedColumns?.length < customiseColumns?.length && displayedColumns?.length > 0
+                        "
+                    >
+                        Select All
+                    </mat-checkbox>
+                </button>
+                <ng-container *ngFor="let item of customiseColumns">
+                    <button
+                        mat-menu-item
+                        (click)="$event?.stopPropagation()"
+                        (keydown.enter)="$event?.stopPropagation(); item.checked = !item?.checked; saveColumns()"
+                    >
+                        <mat-checkbox
+                            color="primary"
+                            name="{{ item?.value }}"
+                            (ngModelChange)="saveColumns()"
+                            [(ngModel)]="item.checked"
+                            (click)="$event?.stopPropagation()"
+                        >
+                            {{ item?.label }}</mat-checkbox
+                        >
                     </button>
-                    <button mat-menu-item>
-                        <mat-checkbox color="primary">Opening Value</mat-checkbox>
-                    </button>
-                    <button mat-menu-item>
-                        <mat-checkbox color="primary">Inward Value</mat-checkbox>
-                    </button>
-                    <button mat-menu-item>
-                        <mat-checkbox color="primary">Outward Value</mat-checkbox>
-                    </button>
-                    <button mat-menu-item>
-                        <mat-checkbox color="primary">Less Stock</mat-checkbox>
-                    </button>
-                    <button mat-menu-item>
-                        <mat-checkbox color="primary">Zero Stock</mat-checkbox>
-                    </button>
-                    <button mat-menu-item>
-                        <mat-checkbox color="primary">Negative Stock</mat-checkbox>
-                    </button>
-                </div>
+                </ng-container>
             </mat-menu>
         </div>
     </div>
-
-    <div class="d-flex">
-        <button class="round-btn" mat-icon-button [matMenuTriggerFor]="importExport" aria-label="Customise">
-            <i class="svg">
-                <svg xmlns="http://www.w3.org/2000/svg" width="12.444" height="16" viewBox="0 0 12.444 16">
-                    <path
-                        class="a"
-                        d="M82.456,1185.2l3.556,3.556H83.344v6.222H81.567v-6.222H78.9Zm6.222,12.444h2.667l-3.556,3.556-3.556-3.556H86.9v-6.222h1.778Z"
-                        transform="translate(-78.9 -1185.2)"
-                    />
-                </svg>
-            </i>
+    <!-- <div class="d-flex transactional-filter-section">
+            <button
+            mat-mini-fab
+            class="transactional-wise-common-btn d-flex align-items-center justify-content-center mr-l1"  [matMenuTriggerFor]="importExport" aria-label="Customise"
+        >
+            <span class="icon-download-circle strong"></span>
         </button>
         <mat-menu #importExport="matMenu">
             <div class="menu-selector">
@@ -137,21 +188,22 @@
                 </button>
             </div>
         </mat-menu>
-    </div>
+    </div> -->
 </div>
-
-<!-- end new inventory header-->
 <div class="inventory-transaction-list">
     <div class="p-3">
         <div class="row">
             <div class="col-12">
                 <div class="top-content">
+                    <!-- {{ stockTransactionReportBalance | json }} -->
                     <div class="d-flex w-100 justify-content-between overflow-x-auto">
                         <div class="total-details-box mr-r05 count-box">
                             <h5>
                                 Transaction Count
                                 <div class="mt-2">
-                                    <span class="d-inline-flex number-total"> 1.00 </span>
+                                    <span class="d-inline-flex number-total"
+                                        >{{ stockReportRequest?.totalItems ?? "-" }}
+                                    </span>
                                 </div>
                             </h5>
                         </div>
@@ -159,7 +211,26 @@
                             <h5>
                                 Profit/Loss
                                 <div class="mt-2">
-                                    <span class="d-inline-flex number-total"> 1,02,377.50 </span>
+                                    <span
+                                        class="d-inline-flex number-total w-100"
+                                        [matTooltip]="
+                                            activeCompany?.baseCurrency + ' ' + stockTransactionReportBalance?.profit
+                                                ? stockTransactionReportBalance?.profit
+                                                : 0
+                                        "
+                                    >
+                                        <amount-field
+                                            [amount]="
+                                                stockTransactionReportBalance?.profit
+                                                    ? stockTransactionReportBalance?.profit
+                                                    : 0
+                                            "
+                                            [currencySymbol]="activeCompany.baseCurrencySymbol"
+                                            [currencyCode]="activeCompany?.baseCurrency"
+                                        >
+                                        </amount-field>
+                                    </span>
+                                    <span class="d-inline-flex mt-1"> ({{ fromDate + "-" + toDate }}) </span>
                                 </div>
                             </h5>
                         </div>
@@ -167,7 +238,38 @@
                             <h5>
                                 Opening
                                 <div class="mt-2">
-                                    <span class="d-inline-flex number-total"> 432.00 </span>
+                                    <span
+                                        class="d-inline-flex number-total w-100"
+                                        [matTooltip]="
+                                            activeCompany?.baseCurrency +
+                                            ' ' +
+                                            stockTransactionReportBalance?.opening?.amount
+                                                ? stockTransactionReportBalance?.opening?.amount
+                                                : 0
+                                        "
+                                    >
+                                        <amount-field
+                                            [amount]="
+                                                stockTransactionReportBalance?.opening?.amount
+                                                    ? stockTransactionReportBalance?.opening?.amount
+                                                    : 0
+                                            "
+                                            [currencySymbol]="activeCompany.baseCurrencySymbol"
+                                            [currencyCode]="activeCompany?.baseCurrency"
+                                        >
+                                        </amount-field>
+                                    </span>
+                                    <span
+                                        class="d-inline-flex mt-1"
+                                        *ngIf="stockTransactionReportBalance?.opening?.quantity"
+                                    >
+                                        (
+                                        {{
+                                            stockTransactionReportBalance?.opening?.quantity
+                                                ? (stockTransactionReportBalance?.opening?.quantity | giddhCurrency)
+                                                : "-"
+                                        }})
+                                    </span>
                                 </div>
                             </h5>
                         </div>
@@ -175,7 +277,38 @@
                             <h5>
                                 Inward
                                 <div class="mt-2">
-                                    <span class="d-inline-flex number-total"> 432.00 </span>
+                                    <span
+                                        class="d-inline-flex number-total w-100"
+                                        [matTooltip]="
+                                            activeCompany?.baseCurrency +
+                                            ' ' +
+                                            stockTransactionReportBalance?.inwards?.amount
+                                                ? stockTransactionReportBalance?.inwards?.amount
+                                                : 0
+                                        "
+                                    >
+                                        <amount-field
+                                            [amount]="
+                                                stockTransactionReportBalance?.inwards?.amount
+                                                    ? stockTransactionReportBalance?.inwards?.amount
+                                                    : 0
+                                            "
+                                            [currencySymbol]="activeCompany.baseCurrencySymbol"
+                                            [currencyCode]="activeCompany?.baseCurrency"
+                                        >
+                                        </amount-field>
+                                    </span>
+                                    <span
+                                        class="d-inline-flex mt-1"
+                                        *ngIf="stockTransactionReportBalance?.inwards?.quantity"
+                                    >
+                                        (
+                                        {{
+                                            stockTransactionReportBalance?.inwards?.quantity
+                                                ? (stockTransactionReportBalance?.inwards?.quantity | giddhCurrency)
+                                                : "-"
+                                        }})
+                                    </span>
                                 </div>
                             </h5>
                         </div>
@@ -183,7 +316,38 @@
                             <h5>
                                 Outward
                                 <div class="mt-2">
-                                    <span class="d-inline-flex number-total"> 1,02,378.50 </span>
+                                    <span
+                                        class="d-inline-flex number-total w-100"
+                                        [matTooltip]="
+                                            activeCompany?.baseCurrency +
+                                            ' ' +
+                                            stockTransactionReportBalance?.outwards?.amount
+                                                ? stockTransactionReportBalance?.outwards?.amount
+                                                : 0
+                                        "
+                                    >
+                                        <amount-field
+                                            [amount]="
+                                                stockTransactionReportBalance?.outwards?.amount
+                                                    ? stockTransactionReportBalance?.outwards?.amount
+                                                    : 0
+                                            "
+                                            [currencySymbol]="activeCompany.baseCurrencySymbol"
+                                            [currencyCode]="activeCompany?.baseCurrency"
+                                        >
+                                        </amount-field>
+                                    </span>
+                                    <span
+                                        class="d-inline-flex mt-1"
+                                        *ngIf="stockTransactionReportBalance?.outwards?.quantity"
+                                    >
+                                        (
+                                        {{
+                                            stockTransactionReportBalance?.outwards?.quantity
+                                                ? (stockTransactionReportBalance?.outwards?.quantity | giddhCurrency)
+                                                : "-"
+                                        }})
+                                    </span>
                                 </div>
                             </h5>
                         </div>
@@ -191,7 +355,38 @@
                             <h5>
                                 Closing
                                 <div class="mt-2">
-                                    <span class="d-inline-flex number-total"> 432.00 </span>
+                                    <span
+                                        class="d-inline-flex number-total w-100"
+                                        [matTooltip]="
+                                            activeCompany?.baseCurrency +
+                                            ' ' +
+                                            stockTransactionReportBalance?.closing?.amount
+                                                ? stockTransactionReportBalance?.closing?.amount
+                                                : 0
+                                        "
+                                    >
+                                        <amount-field
+                                            [amount]="
+                                                stockTransactionReportBalance?.closing?.amount
+                                                    ? stockTransactionReportBalance?.closing?.amount
+                                                    : 0
+                                            "
+                                            [currencySymbol]="activeCompany.baseCurrencySymbol"
+                                            [currencyCode]="activeCompany?.baseCurrency"
+                                        >
+                                        </amount-field>
+                                    </span>
+                                    <span
+                                        class="d-inline-flex mt-1"
+                                        *ngIf="stockTransactionReportBalance?.closing?.quantity"
+                                    >
+                                        (
+                                        {{
+                                            stockTransactionReportBalance?.closing?.quantity
+                                                ? (stockTransactionReportBalance?.closing?.quantity | giddhCurrency)
+                                                : "-"
+                                        }})
+                                    </span>
                                 </div>
                             </h5>
                         </div>
@@ -202,65 +397,191 @@
     </div>
     <div class="row">
         <div class="col-12 horizontal-padding">
-            <div *ngIf="isLoading">
-                <giddh-page-loader></giddh-page-loader>
-            </div>
-            <div class="table-responsive" *ngIf="!isLoading">
-                <table mat-table [dataSource]="dataSource" class="table giddh-table on-mobile-view">
+            <div class="table-responsive table-content">
+                <table
+                    mat-table
+                    [dataSource]="dataSource"
+                    matSort
+                    (matSortChange)="sortChange($event)"
+                    [matSortActive]="stockReportRequest?.sortBy"
+                    [matSortDirection]="stockReportRequest?.sort"
+                    class="table giddh-table on-mobile-view"
+                >
                     <ng-container matColumnDef="date">
-                        <th mat-header-cell *matHeaderCellDef>Date</th>
-                        <td data-title="Date" mat-cell *matCellDef="let element">{{ element.date }}</td>
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
+                        <td data-title="Date" mat-cell *matCellDef="let element">
+                            {{ element?.entryDate ?? "-" }}
+                        </td>
                     </ng-container>
 
                     <ng-container matColumnDef="voucherType">
-                        <th mat-header-cell *matHeaderCellDef>Voucher Type</th>
-                        <td date-title="Voucher Type" mat-cell *matCellDef="let element">{{ element.voucherType }}</td>
+                        <th width="8%" mat-header-cell *matHeaderCellDef [matMenuTriggerFor]="voucherTypesMenu">
+                            Voucher Type
+                            <i
+                                class="fa fa-ellipsis-v pull-right text-light-2 mt-1 cursor-pointer"
+                                aria-hidden="true"
+                            ></i>
+                            <mat-menu #voucherTypesMenu="matMenu">
+                                <ng-container *ngFor="let item of voucherTypes; let idx = index">
+                                    <button
+                                        mat-menu-item
+                                        (click)="$event?.stopPropagation()"
+                                        (keydown.enter)="
+                                            $event?.stopPropagation();
+                                            item.checked = !item?.checked;
+                                            filterByCheck(item?.value)
+                                        "
+                                    >
+                                        <mat-checkbox
+                                            color="primary"
+                                            name="{{ item?.value }}"
+                                            (ngModelChange)="filterByCheck(item?.value)"
+                                            [(ngModel)]="item.checked"
+                                            (click)="$event?.stopPropagation()"
+                                        >
+                                            {{ item?.label }}</mat-checkbox
+                                        >
+                                    </button>
+                                </ng-container>
+                            </mat-menu>
+                        </th>
+                        <td date-title="Voucher Type" mat-cell *matCellDef="let element">
+                            {{ element?.voucherType }}
+                        </td>
                     </ng-container>
-
                     <ng-container matColumnDef="accountName">
-                        <th class="text-right" mat-header-cell *matHeaderCellDef>Account Name</th>
+                        <th
+                            class="td-search-box"
+                            width="15%"
+                            mat-header-cell
+                            #searchCustomerContainer
+                            *matHeaderCellDef
+                            (clickOutside)="handleClickOutside($event, searchCustomerContainer, 'name')"
+                        >
+                            <ng-container
+                                *ngTemplateOutlet="
+                                    searchTemplate;
+                                    context: {
+                                        $implicit: showAccountSearchInput,
+                                        fieldName: 'name',
+                                        formControl: searchAccountName,
+                                        title: 'Account Name'
+                                    }
+                                "
+                            ></ng-container>
+                        </th>
                         <td data-title="Account Name" class="text-right" mat-cell *matCellDef="let element">
-                            {{ element.accountName }}
+                            {{ element?.account?.name ?? "-" }}
                         </td>
                     </ng-container>
-
+                    <ng-container matColumnDef="stockName">
+                        <th class="text-right" mat-header-cell *matHeaderCellDef mat-sort-header>Stock Name</th>
+                        <td data-title="Stock Name" class="text-right" mat-cell *matCellDef="let element">
+                            {{ element?.stock?.name ?? "-" }}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="variantName">
+                        <th class="text-right" mat-header-cell *matHeaderCellDef mat-sort-header>Variant Name</th>
+                        <td data-title="Variant Name" class="text-right" mat-cell *matCellDef="let element">
+                            {{ element?.variant?.name ?? "-" }}
+                        </td>
+                    </ng-container>
                     <ng-container matColumnDef="inwards">
-                        <th class="text-right" mat-header-cell *matHeaderCellDef>Inwards</th>
-                        <td data-title="Inwards" class="text-right" mat-cell *matCellDef="let element">
-                            {{ element.inwards }}
+                        <th class="text-right" mat-header-cell *matHeaderCellDef mat-sort-header>Inwards</th>
+                        <td
+                            data-title="Inwards"
+                            class="text-right"
+                            mat-cell
+                            *matCellDef="let element"
+                            [matTooltip]="
+                                activeCompany?.baseCurrency + ' ' + element?.inwardBalance ? element?.inwardBalance : 0
+                            "
+                        >
+                            <amount-field
+                                [amount]="element?.inwardBalance ? element?.inwardBalance : 0"
+                                [currencySymbol]="activeCompany.baseCurrencySymbol"
+                                [currencyCode]="activeCompany?.baseCurrency"
+                            >
+                            </amount-field>
                         </td>
                     </ng-container>
-
                     <ng-container matColumnDef="outwards">
-                        <th class="text-right" mat-header-cell *matHeaderCellDef>Outwards</th>
-                        <td data-title="Outwards" class="text-right" mat-cell *matCellDef="let element">
-                            {{ element.outwards }}
+                        <th class="text-right" mat-header-cell *matHeaderCellDef mat-sort-header>Outwards</th>
+                        <td
+                            data-title="Outwards"
+                            class="text-right"
+                            mat-cell
+                            *matCellDef="let element"
+                            [matTooltip]="
+                                activeCompany?.baseCurrency + ' ' + element?.outwardBalance
+                                    ? element?.outwardBalance
+                                    : 0
+                            "
+                        >
+                            <amount-field
+                                [amount]="element?.outwardBalance ? element?.outwardBalance : 0"
+                                [currencySymbol]="activeCompany.baseCurrencySymbol"
+                                [currencyCode]="activeCompany?.baseCurrency"
+                            >
+                            </amount-field>
                         </td>
                     </ng-container>
-
                     <ng-container matColumnDef="rate">
-                        <th class="text-right" mat-header-cell *matHeaderCellDef>Rate</th>
-                        <td data-title="Rate" class="text-right" mat-cell *matCellDef="let element">
-                            {{ element.rate }}
+                        <th class="text-right" mat-header-cell *matHeaderCellDef mat-sort-header>Rate</th>
+                        <td
+                            data-title="Rate"
+                            class="text-right"
+                            mat-cell
+                            *matCellDef="let element"
+                            [matTooltip]="activeCompany?.baseCurrency + ' ' + element?.rate ? element?.rate : 0"
+                        >
+                            <amount-field
+                                [amount]="element?.rate ? element?.rate : 0"
+                                [currencySymbol]="activeCompany.baseCurrencySymbol"
+                                [currencyCode]="activeCompany?.baseCurrency"
+                            >
+                            </amount-field>
                         </td>
                     </ng-container>
-
                     <ng-container matColumnDef="value">
-                        <th class="text-right" mat-header-cell *matHeaderCellDef>Value</th>
-                        <td data-title="Value" class="text-right" mat-cell *matCellDef="let element">
-                            {{ element?.value }}
+                        <th class="text-right" mat-header-cell *matHeaderCellDef mat-sort-header>Value</th>
+                        <td
+                            data-title="Value"
+                            class="text-right"
+                            mat-cell
+                            *matCellDef="let element"
+                            [matTooltip]="activeCompany?.baseCurrency + ' ' + element?.amount ? element?.amount : 0"
+                        >
+                            <amount-field
+                                [amount]="element?.amount ? element?.amount : 0"
+                                [currencySymbol]="activeCompany.baseCurrencySymbol"
+                                [currencyCode]="activeCompany?.baseCurrency"
+                            >
+                            </amount-field>
                         </td>
                     </ng-container>
-
                     <!-- <ng-container matColumnDef="qty">
                         <th class="text-right" mat-header-cell *matHeaderCellDef>qty</th>
                         <td data-title="Qty" class="text-right" mat-cell *matCellDef="let element">
                             {{ element.qty }}
                         </td>
                     </ng-container> -->
-
-                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
                     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                    <tr class="mat-row" *matNoDataRow>
+                        <td
+                            class="mat-cell p-5"
+                            style="border-bottom: 0px"
+                            [attr.colspan]="displayedColumns?.length ? displayedColumns?.length : 9"
+                        >
+                            <div class="no-data" *ngIf="isLoading">
+                                <giddh-page-loader></giddh-page-loader>
+                            </div>
+                            <div class="no-data" *ngIf="!isLoading">
+                                <h1>No Data Found</h1>
+                            </div>
+                        </td>
+                    </tr>
                 </table>
                 <section class="no-logs" *ngIf="!dataSource?.length && !isLoading">
                     <div class="no-data">
@@ -268,21 +589,25 @@
                     </div>
                 </section>
             </div>
-            <!-- *ngIf="inventoryObj?.totalItems > inventoryObj.count && !isLoading" -->
             <div class="pagination-wrapper">
                 <pagination
-                    [totalItems]="inventoryObj?.totalItems"
-                    [(ngModel)]="inventoryObj.page"
+                    *ngIf="
+                        stockReportRequest?.totalItems > stockReportRequest?.count &&
+                        !isLoading &&
+                        displayedColumns?.length
+                    "
+                    [totalItems]="stockReportRequest?.totalItems"
+                    [(ngModel)]="stockReportRequest.page"
                     [maxSize]="5"
                     class="pagination-sm"
                     [boundaryLinks]="true"
-                    [itemsPerPage]="inventoryObj.count"
+                    [itemsPerPage]="stockReportRequest?.count"
                     [rotate]="false"
                     (pageChanged)="pageChanged($event)"
-                    [firstText]="'First'"
-                    [previousText]="'Previous'"
-                    [nextText]="'Next'"
-                    [lastText]="'Last'"
+                    [firstText]="commonLocaleData?.app_first"
+                    [previousText]="commonLocaleData?.app_previous"
+                    [nextText]="commonLocaleData?.app_next"
+                    [lastText]="commonLocaleData?.app_last"
                 ></pagination>
             </div>
         </div>
@@ -312,7 +637,27 @@
         </div>
     </div>
 </ng-template>
-<!-- inventory advance search  -->
-<ng-template #inventoryAdvanceSearch>
-    <new-inventory-advance-search></new-inventory-advance-search>
+<ng-template
+    #searchTemplate
+    let-show
+    let-title="title"
+    let-placeholder="placeholder"
+    let-fieldName="fieldName"
+    let-formControl="formControl"
+>
+    <div class="align-items-center d-flex" [hidden]="show">
+        <span>{{ title }}</span>
+        <button mat-icon-button (click)="toggleSearch(fieldName)">
+            <span class="icon-search"></span>
+        </button>
+    </div>
+    <div [hidden]="!show">
+        <text-field
+            [type]="'text'"
+            [placeholder]="getSearchFieldText(fieldName)"
+            [cssClass]="'form-control search-table mat-field-border'"
+            [formControl]="formControl"
+            [autoFocus]="show"
+        ></text-field>
+    </div>
 </ng-template>
