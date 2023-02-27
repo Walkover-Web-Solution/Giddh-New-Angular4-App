@@ -98,6 +98,36 @@ export class InventoryTransactionListComponent implements OnInit {
             "checked": false
         },
         {
+            "value": "SALES_CREDIT_NOTE",
+            "label": "Sales Credit note",
+            "checked": false
+        },
+        {
+            "value": "SALES_DEBIT_NOTE",
+            "label": "Sales Debit note",
+            "checked": false
+        },
+        {
+            "value": "PURCHASE_DEBIT_NOTE",
+            "label": "Purchase debit note",
+            "checked": false
+        },
+        {
+            "value": "PURCHASE_CREDIT_NOTE",
+            "label": "Purchase credit note",
+            "checked": false
+        },
+        {
+            "value": "DELIVERY_NOTE",
+            "label": "Delivery note",
+            "checked": false
+        },
+        {
+            "value": "RECEIPT_NOTE",
+            "label": "Receipt note",
+            "checked": false
+        },
+        {
             "value": "MANUFACTURED",
             "label": "Manufactured",
             "checked": false
@@ -113,16 +143,6 @@ export class InventoryTransactionListComponent implements OnInit {
             "checked": false
         },
         {
-            "value": "SALES_CREDIT_NOTE",
-            "label": "Sales Credit note",
-            "checked": false
-        },
-        {
-            "value": "PURCHASE_DEBIT_NOTE",
-            "label": "Purchase credit note",
-            "checked": false
-        },
-        {
             "value": "RAW_MATERIAL",
             "label": "Raw Material",
             "checked": false
@@ -133,7 +153,7 @@ export class InventoryTransactionListComponent implements OnInit {
     /** This will use for stock report voucher types column check values */
     public customiseColumns = [
         {
-            "value": "date",
+            "value": "entry_date",
             "label": "Date",
             "checked": true
         },
@@ -161,13 +181,13 @@ export class InventoryTransactionListComponent implements OnInit {
 
         },
         {
-            "value": "inwards",
+            "value": "inward_quantity",
             "label": "Invards",
             "checked": true
 
         },
         {
-            "value": "outwards",
+            "value": "outward_quantity",
             "label": "Outwards",
             "checked": true
 
@@ -179,7 +199,7 @@ export class InventoryTransactionListComponent implements OnInit {
 
         },
         {
-            "value": "value",
+            "value": "transaction_val",
             "label": "Value",
             "checked": true
 
@@ -299,6 +319,7 @@ export class InventoryTransactionListComponent implements OnInit {
                 this.activeCompany = activeCompany;
             }
         });
+        this.searchStockTransactionReport();
     }
 
     /**
@@ -417,16 +438,11 @@ export class InventoryTransactionListComponent implements OnInit {
             this.stockReportRequest.from = this.fromDate;
             this.stockReportRequest.to = this.toDate;
         }
-        this.stockReportRequest.page = 1;
-        this.stockReportRequest.count = PAGINATION_LIMIT;
-        this.isLoading = true;
         this.dataSource = [];
-        if (apiCall) {
-            this.getReportColumns();
-        }
+        this.isLoading = true;
         this.inventoryService.getStockTransactionReport(cloneDeep(this.stockReportRequest)).pipe(take(1)).subscribe(response => {
-            this.isLoading = false;
             if (response && response.body && response.status === 'success') {
+                this.isLoading = false;
                 this.dataSource = response.body.transactions;
                 this.stockReportRequest.page = response.body.page;
                 this.stockReportRequest.totalItems = response.body.totalItems;
@@ -451,6 +467,9 @@ export class InventoryTransactionListComponent implements OnInit {
             }
             this.changeDetection.detectChanges();
         });
+        if (apiCall) {
+            this.getReportColumns();
+        }
     }
 
     /**
@@ -637,8 +656,8 @@ export class InventoryTransactionListComponent implements OnInit {
         this.inventoryService.getLinkedStocks().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.body) {
                 this.allBranchWarehouses = response.body;
-                this.allBranches = response.body.results;
-                this.branches = response.body.results;
+                this.allBranches = response.body.results?.filter(branch => branch?.isCompany != true);
+                this.branches = response.body.results?.filter(branch => branch?.isCompany != true);
                 this.allWarehouses = [];
                 this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && this.branches?.length > 1;
             }
@@ -667,13 +686,13 @@ export class InventoryTransactionListComponent implements OnInit {
     public getBranches(apiCall: boolean = true): void {
         this.selectedWarehouse = [];
         this.allBranches?.forEach((branches) => {
-            this.allWarehouses = this.allWarehouses?.concat(branches?.warehouses);
+            this.allWarehouses = this.allWarehouses?.concat(branches?.warehouses)?.filter(warehouse => warehouse?.isCompany != true);
         });
         if (this.selectedBranch?.length === 0) {
             this.warehouses = this.allWarehouses;
         } else {
             let warehouses = [];
-            this.branches?.filter(value => this.selectedBranch?.includes(value?.uniqueName)).forEach((branches) => {
+            this.branches?.filter(value => this.selectedBranch?.includes(value?.uniqueName))?.forEach((branches) => {
                 warehouses = warehouses?.concat(branches?.warehouses);
             });
             this.warehouses = warehouses;
@@ -790,7 +809,11 @@ export class InventoryTransactionListComponent implements OnInit {
                 module: "INVENTORY_TRANSACTION_REPORT",
                 columns: this.displayedColumns
             }
-            this.inventoryService.saveStockTransactionReportColumns(saveColumnReq);
+            this.inventoryService.saveStockTransactionReportColumns(saveColumnReq).pipe(take(1)).subscribe(response => {
+                if (response && response.body && response.status === 'success') {
+                    this.isLoading = false;
+                }
+            });
         });
     }
 

@@ -142,7 +142,7 @@
                         #selectAllCheckbox
                         color="primary"
                         name="selectAll"
-                        (change)="selectAllColumns($event?.checked)"
+                        (change)="selectAllColumns($event?.checked); saveColumns()"
                         [checked]="displayedColumns?.length === customiseColumns?.length"
                         [indeterminate]="
                             displayedColumns?.length < customiseColumns?.length && displayedColumns?.length > 0
@@ -230,7 +230,7 @@
                                         >
                                         </amount-field>
                                     </span>
-                                    <span class="d-inline-flex mt-1"> ({{ fromDate + "-" + toDate }}) </span>
+                                    <span class="d-inline-flex mt-1"> ({{ selectedDateRangeUi }}) </span>
                                 </div>
                             </h5>
                         </div>
@@ -407,7 +407,7 @@
                     [matSortDirection]="stockReportRequest?.sort"
                     class="table giddh-table on-mobile-view"
                 >
-                    <ng-container matColumnDef="date">
+                    <ng-container matColumnDef="entry_date">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
                         <td data-title="Date" mat-cell *matCellDef="let element">
                             {{ element?.entryDate ?? "-" }}
@@ -475,18 +475,18 @@
                         </td>
                     </ng-container>
                     <ng-container matColumnDef="stockName">
-                        <th class="text-right" mat-header-cell *matHeaderCellDef mat-sort-header>Stock Name</th>
+                        <th class="text-right" mat-header-cell *matHeaderCellDef>Stock Name</th>
                         <td data-title="Stock Name" class="text-right" mat-cell *matCellDef="let element">
                             {{ element?.stock?.name ?? "-" }}
                         </td>
                     </ng-container>
                     <ng-container matColumnDef="variantName">
-                        <th class="text-right" mat-header-cell *matHeaderCellDef mat-sort-header>Variant Name</th>
+                        <th class="text-right" mat-header-cell *matHeaderCellDef>Variant Name</th>
                         <td data-title="Variant Name" class="text-right" mat-cell *matCellDef="let element">
                             {{ element?.variant?.name ?? "-" }}
                         </td>
                     </ng-container>
-                    <ng-container matColumnDef="inwards">
+                    <ng-container matColumnDef="inward_quantity">
                         <th class="text-right" mat-header-cell *matHeaderCellDef mat-sort-header>Inwards</th>
                         <td
                             data-title="Inwards"
@@ -497,15 +497,17 @@
                                 activeCompany?.baseCurrency + ' ' + element?.inwardBalance ? element?.inwardBalance : 0
                             "
                         >
-                            <amount-field
-                                [amount]="element?.inwardBalance ? element?.inwardBalance : 0"
-                                [currencySymbol]="activeCompany.baseCurrencySymbol"
-                                [currencyCode]="activeCompany?.baseCurrency"
-                            >
-                            </amount-field>
+                            <span class="d-inline-flex">
+                                <amount-field
+                                    [amount]="element?.inwardBalance ? element?.inwardBalance : 0"
+                                    [currencySymbol]="activeCompany.baseCurrencySymbol"
+                                    [currencyCode]="activeCompany?.baseCurrency"
+                                >
+                                </amount-field>
+                            </span>
                         </td>
                     </ng-container>
-                    <ng-container matColumnDef="outwards">
+                    <ng-container matColumnDef="outward_quantity">
                         <th class="text-right" mat-header-cell *matHeaderCellDef mat-sort-header>Outwards</th>
                         <td
                             data-title="Outwards"
@@ -518,12 +520,14 @@
                                     : 0
                             "
                         >
-                            <amount-field
-                                [amount]="element?.outwardBalance ? element?.outwardBalance : 0"
-                                [currencySymbol]="activeCompany.baseCurrencySymbol"
-                                [currencyCode]="activeCompany?.baseCurrency"
-                            >
-                            </amount-field>
+                            <span class="d-inline-flex">
+                                <amount-field
+                                    [amount]="element?.outwardBalance ? element?.outwardBalance : 0"
+                                    [currencySymbol]="activeCompany.baseCurrencySymbol"
+                                    [currencyCode]="activeCompany?.baseCurrency"
+                                >
+                                </amount-field>
+                            </span>
                         </td>
                     </ng-container>
                     <ng-container matColumnDef="rate">
@@ -535,15 +539,17 @@
                             *matCellDef="let element"
                             [matTooltip]="activeCompany?.baseCurrency + ' ' + element?.rate ? element?.rate : 0"
                         >
-                            <amount-field
-                                [amount]="element?.rate ? element?.rate : 0"
-                                [currencySymbol]="activeCompany.baseCurrencySymbol"
-                                [currencyCode]="activeCompany?.baseCurrency"
-                            >
-                            </amount-field>
+                            <span class="d-inline-flex">
+                                <amount-field
+                                    [amount]="element?.rate ? element?.rate : 0"
+                                    [currencySymbol]="activeCompany.baseCurrencySymbol"
+                                    [currencyCode]="activeCompany?.baseCurrency"
+                                >
+                                </amount-field>
+                            </span>
                         </td>
                     </ng-container>
-                    <ng-container matColumnDef="value">
+                    <ng-container matColumnDef="transaction_val">
                         <th class="text-right" mat-header-cell *matHeaderCellDef mat-sort-header>Value</th>
                         <td
                             data-title="Value"
@@ -552,12 +558,14 @@
                             *matCellDef="let element"
                             [matTooltip]="activeCompany?.baseCurrency + ' ' + element?.amount ? element?.amount : 0"
                         >
-                            <amount-field
-                                [amount]="element?.amount ? element?.amount : 0"
-                                [currencySymbol]="activeCompany.baseCurrencySymbol"
-                                [currencyCode]="activeCompany?.baseCurrency"
-                            >
-                            </amount-field>
+                            <span class="d-inline-flex">
+                                <amount-field
+                                    [amount]="element?.amount ? element?.amount : 0"
+                                    [currencySymbol]="activeCompany.baseCurrencySymbol"
+                                    [currencyCode]="activeCompany?.baseCurrency"
+                                >
+                                </amount-field>
+                            </span>
                         </td>
                     </ng-container>
                     <!-- <ng-container matColumnDef="qty">
@@ -570,14 +578,13 @@
                     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                     <tr class="mat-row" *matNoDataRow>
                         <td
-                            class="mat-cell p-5"
-                            style="border-bottom: 0px"
+                            class="mat-cell p-5 no-data-section"
                             [attr.colspan]="displayedColumns?.length ? displayedColumns?.length : 9"
                         >
                             <div class="no-data" *ngIf="isLoading">
                                 <giddh-page-loader></giddh-page-loader>
                             </div>
-                            <div class="no-data" *ngIf="!isLoading">
+                            <div class="no-data" *ngIf="!isLoading && !dataSource?.length">
                                 <h1>No Data Found</h1>
                             </div>
                         </td>

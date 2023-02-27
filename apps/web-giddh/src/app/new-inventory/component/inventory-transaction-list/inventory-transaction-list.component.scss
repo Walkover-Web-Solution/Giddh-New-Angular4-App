@@ -72,25 +72,42 @@
     .mat-pseudo-checkbox-checked {
         background: var(--color-giddh-blue) !important;
     }
+
+    .inventory-transaction-list {
+        tbody {
+            .mat-no-data-row:last-child {
+                border-bottom: none !important;
+
+                td {
+                    border-bottom: none !important;
+                }
+            }
+        }
+    }
 }
 
 .select-multiple-chiplist-inventory {
-    width: 100%;
-    padding-bottom: 7px;
     font-weight: 400 !important;
-    font-size: 13px !important;
+    font-size: 14px !important;
+    min-width: 78%;
 
     .mat-chip.mat-standard-chip {
         color: var(--color-chips-primary) !important;
         background-color: var(--color-body-background) !important;
         border: 1px solid var(--color-primary-login-box-body-text) !important;
-        font-size: 13px !important;
+        font-size: 14px !important;
+    }
+}
+
+@media (max-width: 1440px) {
+    .select-multiple-chiplist-inventory {
+        min-width: 70%;
     }
 }
 
 @media (max-width: 1024px) {
     .select-multiple-chiplist-inventory {
-        width: 56% !important;
+        min-width: 55%;
     }
 
     .stock-mat-salect {
@@ -100,7 +117,7 @@
 
 @media (max-width: 1019px) {
     .select-multiple-chiplist-inventory {
-        width: 47% !important;
+        min-width: 55%;
     }
 
     .stock-mat-salect {
