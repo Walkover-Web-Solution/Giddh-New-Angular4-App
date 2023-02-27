@@ -8,10 +8,6 @@
         float: right;
         font-weight: 500;
         color: var(--color-secondary-button-text);
-        background-color: var(--color-secondary-button-background);
-        &:hover {
-            background-color: var(--color-secondary-button-background-hover);
-        }
     }
 }
 
