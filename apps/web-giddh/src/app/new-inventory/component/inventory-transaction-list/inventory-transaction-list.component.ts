@@ -718,7 +718,7 @@ export class InventoryTransactionListComponent implements OnInit {
             response.checked = false;
         });
         if (this.searchAccountName.value === null) {
-            this.getStockTransactionalReport();
+            this.getStockTransactionalReport(false);
         } else {
             this.searchAccountName.reset();
         }
@@ -737,7 +737,6 @@ export class InventoryTransactionListComponent implements OnInit {
         } else {
             this.showClearFilter = false;
         }
-
     }
 
     /**
@@ -774,8 +773,9 @@ export class InventoryTransactionListComponent implements OnInit {
                         }
                     });
                 }
-                this.filteredDisplayColumns();
             }
+            this.filteredDisplayColumns();
+            this.changeDetection.detectChanges();
         });
     }
 
