@@ -775,7 +775,6 @@ export class InventoryTransactionListComponent implements OnInit {
                 }
             }
             this.filteredDisplayColumns();
-            this.changeDetection.detectChanges();
         });
     }
 
