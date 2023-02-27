@@ -113,6 +113,15 @@ export class NewInventoryAdavanceSearch implements OnInit {
         if (this.inputData?.stockReportRequest) {
             if (this.inputData?.advanceSearchResponse) {
                 this.advanceSearchFormObj = cloneDeep(this.inputData.advanceSearchResponse?.stockReportRequest);
+                if (this.advanceSearchFormObj.expression === 'EQUALS') {
+                    this.advanceSearchFormObj.expression = "Equals";
+                } else if (this.advanceSearchFormObj.expression === 'NOT_EQUALS') {
+                    this.advanceSearchFormObj.expression = "Excluded";
+                } else if (this.advanceSearchFormObj.expression === "LESS_THAN") {
+                    this.advanceSearchFormObj.expression = "Less than ";
+                } else if (this.advanceSearchFormObj.expression === "GREATER_THAN") {
+                    this.advanceSearchFormObj.expression = "Greater than";
+                }
             }
             let from = this.inputData?.stockReportRequest.from;
             let to = this.inputData?.stockReportRequest.to;
@@ -198,13 +207,13 @@ export class NewInventoryAdavanceSearch implements OnInit {
         if (this.advanceSearchFormObj.param1 && this.advanceSearchFormObj.param2) {
             this.advanceSearchFormObj.param = this.advanceSearchFormObj.param1?.toUpperCase() + '_' + this.advanceSearchFormObj.param2?.toUpperCase();
         }
-        if (this.advanceSearchFormObj.expression == 'Equals') {
+        if (this.advanceSearchFormObj.expression === 'Equals') {
             this.advanceSearchFormObj.expression = "EQUALS";
-        } else if (this.advanceSearchFormObj.expression == 'Excluded') {
+        } else if (this.advanceSearchFormObj.expression === 'Excluded') {
             this.advanceSearchFormObj.expression = "NOT_EQUALS";
-        } else if (this.advanceSearchFormObj.expression == "Less Than") {
+        } else if (this.advanceSearchFormObj.expression === "Less than") {
             this.advanceSearchFormObj.expression = "LESS_THAN";
-        } else if (this.advanceSearchFormObj.expression == "Greater Than") {
+        } else if (this.advanceSearchFormObj.expression === "Greater than") {
             this.advanceSearchFormObj.expression = "GREATER_THAN";
         }
         if (type === 'cancel') {
