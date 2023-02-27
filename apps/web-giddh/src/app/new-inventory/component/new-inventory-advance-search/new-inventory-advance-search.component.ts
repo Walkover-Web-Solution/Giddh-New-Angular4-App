@@ -118,7 +118,7 @@ export class NewInventoryAdavanceSearch implements OnInit {
                 } else if (this.advanceSearchFormObj.expression === 'NOT_EQUALS') {
                     this.advanceSearchFormObj.expression = "Excluded";
                 } else if (this.advanceSearchFormObj.expression === "LESS_THAN") {
-                    this.advanceSearchFormObj.expression = "Less than ";
+                    this.advanceSearchFormObj.expression = "Less than";
                 } else if (this.advanceSearchFormObj.expression === "GREATER_THAN") {
                     this.advanceSearchFormObj.expression = "Greater than";
                 }
