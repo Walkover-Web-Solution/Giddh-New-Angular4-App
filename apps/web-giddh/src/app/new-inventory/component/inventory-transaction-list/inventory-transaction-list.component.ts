@@ -657,7 +657,7 @@ export class InventoryTransactionListComponent implements OnInit {
                 this.allBranches = response.body.results?.filter(branch => branch?.isCompany !== true);
                 this.branches = response.body.results?.filter(branch => branch?.isCompany !== true);
                 this.allWarehouses = [];
-                this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && this.branches?.length > 1;
+                this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && this.branches?.length > 1 ;
             }
             this.getBranches(false);
             this.changeDetection.detectChanges();
