@@ -149,7 +149,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
                 }
                 this._selectedValues = this._selectedValues?.filter(selected => val?.indexOf(selected?.value) > -1);
             } else {
-                this._selectedValues = this.rows?.filter((f: any) => val.findIndex(p => p === f.label || p === f?.value) !== -1);
+                this._selectedValues = this.rows?.filter((f: any) => val?.findIndex(p => p === f.label || p === f?.value) !== -1);
             }
         } else {
             this._selectedValues = val;

@@ -504,7 +504,7 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
             let AmazonSellerRes: BaseResponse<any, any> = action.payload;
             if (AmazonSellerRes?.status === 'success') {
                 // debugger;
-                let seller = state.integration.amazonSeller.findIndex(p => p.sellerId === AmazonSellerRes.body.sellerId);
+                let seller = state.integration.amazonSeller?.findIndex(p => p.sellerId === AmazonSellerRes.body.sellerId);
                 newState.integration.amazonSeller[seller] = cloneDeep(AmazonSellerRes.body);
                 newState.amazonState.isSellerUpdated = true;
                 return Object.assign({}, state, newState);
@@ -514,7 +514,7 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
         case SETTINGS_INTEGRATION_ACTIONS.DELETE_AMAZON_SELLER_RESPONSE: {
             let deleteAmazonSellerRes: BaseResponse<any, any> = action.payload;
             if (deleteAmazonSellerRes?.status === 'success') {
-                let st = newState.integration.amazonSeller.findIndex(p => p.sellerId === deleteAmazonSellerRes.request.sellerId);
+                let st = newState.integration.amazonSeller?.findIndex(p => p.sellerId === deleteAmazonSellerRes.request.sellerId);
                 newState.integration.amazonSeller.splice(st, 1);
                 return Object.assign({}, state, newState);
             }

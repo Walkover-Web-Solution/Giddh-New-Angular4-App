@@ -294,7 +294,7 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
     public selectFinancialYearOption(v: IOption) {
         if (v.value) {
             let financialYear = this._selectedCompany.financialYears.find(p => p?.uniqueName === v.value);
-            let index = this._selectedCompany.financialYears.findIndex(p => p?.uniqueName === v.value);
+            let index = this._selectedCompany.financialYears?.findIndex(p => p?.uniqueName === v.value);
             if (financialYear) {
                 this.filterForm?.patchValue({
                     to: financialYear.financialYearEnds,
@@ -330,7 +330,7 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
 
     public setFYFirstTime(selectedFY: string) {
         if (selectedFY) {
-            let inx = this._selectedCompany.financialYears.findIndex(p => p?.uniqueName === selectedFY);
+            let inx = this._selectedCompany.financialYears?.findIndex(p => p?.uniqueName === selectedFY);
             if (inx !== -1) {
                 this.filterForm?.patchValue({
                     fy: inx === 0 ? 0 : inx * -1

@@ -271,7 +271,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
                 // get voucherDetailsNo so we can open that voucher in details mode
                 if (res[0] && res[1] && res[2]) {
                     this.selectedVoucher = null;
-                    let voucherIndex = (res[0] as ProformaResponse).results.findIndex(f => {
+                    let voucherIndex = (res[0] as ProformaResponse)?.results?.findIndex(f => {
                         if (f.estimateNumber) {
                             return f.estimateNumber === this.voucherNoForDetail;
                         } else {

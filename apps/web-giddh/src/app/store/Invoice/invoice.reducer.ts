@@ -252,7 +252,7 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
             let res: BaseResponse<string, string> = action.payload;
             if (res?.status === 'success') {
                 let uniqueName = res.queryString?.uniquename;
-                let indx = newState.settings.webhooks.findIndex((obj) => obj?.uniqueName === uniqueName);
+                let indx = newState.settings.webhooks?.findIndex((obj) => obj?.uniqueName === uniqueName);
                 if (indx > -1) {
                     newState.settings.webhooks.splice(indx, 1);
                 }

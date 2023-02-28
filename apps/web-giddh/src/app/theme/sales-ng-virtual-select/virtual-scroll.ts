@@ -163,7 +163,7 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
     }
 
     public getHighlightedOption(): IOption {
-        let index = this.items.findIndex(p => p.isHilighted);
+        let index = this.items?.findIndex(p => p.isHilighted);
         if (index > -1) {
             return this.items[index];
         }
@@ -171,7 +171,7 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
     }
 
     public getPreviousHilightledOption(): IOption {
-        let index = this.items.findIndex(p => p.isHilighted);
+        let index = this.items?.findIndex(p => p.isHilighted);
         if (index > 0) {
             return this.items[index - 1];
         } else {

@@ -622,7 +622,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
             });
         } else {
             if (this.isOpen) {
-                const activeItemIndex = this.allItems.findIndex(item => item.isActive);
+                const activeItemIndex = this.allItems?.findIndex(item => item.isActive);
                 this.itemDropdown?.forEach((dropdown: BsDropdownDirective, index: number) => {
                     if (index === activeItemIndex) {
                         dropdown.show();

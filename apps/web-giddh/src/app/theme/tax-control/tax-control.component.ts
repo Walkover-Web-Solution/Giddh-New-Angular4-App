@@ -154,7 +154,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
         }
 
         this.taxes.map(tax => {
-            let index = this.taxRenderData.findIndex(f => f?.uniqueName === tax?.uniqueName);
+            let index = this.taxRenderData?.findIndex(f => f?.uniqueName === tax?.uniqueName);
 
             // if tax is already prepared then only check if it's checked or not on basis of applicable taxes
             if (index > -1) {
