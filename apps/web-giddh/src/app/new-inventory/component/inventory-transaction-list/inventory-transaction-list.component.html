@@ -144,7 +144,7 @@
                 <i class="icon-options mr-2"> </i>
                 Customise
             </button>
-            <mat-menu #customise="matMenu">
+            <mat-menu #customise="matMenu" class="customise-columns-wrapper">
                 <button
                     mat-menu-item
                     (click)="$event?.stopPropagation()"
@@ -436,7 +436,7 @@
                         <th mat-header-cell *matHeaderCellDef [matMenuTriggerFor]="voucherTypesMenu">
                             Voucher Type
                             <i class="fa fa-ellipsis-v ml-1 text-light-2 mt-1 cursor-pointer" aria-hidden="true"></i>
-                            <mat-menu #voucherTypesMenu="matMenu">
+                            <mat-menu #voucherTypesMenu="matMenu" class="columns-wrapper">
                                 <ng-container *ngFor="let item of voucherTypes; let idx = index">
                                     <button
                                         mat-menu-item
@@ -448,6 +448,7 @@
                                         "
                                     >
                                         <mat-checkbox
+                                            class="inventory-checkbox"
                                             color="primary"
                                             name="{{ item?.value }}"
                                             (ngModelChange)="filterByCheck(item?.value)"
