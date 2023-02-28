@@ -411,7 +411,7 @@ export class InventoryTransactionListComponent implements OnInit {
      *
      * @memberof InventoryTransactionListComponent
      */
-    public searchStockTransactionReport(initiallyApiCall?: boolean): void {
+    public searchStockTransactionReport(loadMore?: boolean): void {
         delete this.searchStockReportRequest.totalItems;
         delete this.searchStockReportRequest.totalPages;
         this.searchStockReportRequest.stockGroupUniqueNames = this.stockReportRequest.stockGroupUniqueNames;
@@ -420,8 +420,10 @@ export class InventoryTransactionListComponent implements OnInit {
         this.balanceStockReportRequest.stockGroupUniqueNames = this.stockReportRequest.stockGroupUniqueNames;
         this.balanceStockReportRequest.stockUniqueNames = this.stockReportRequest.stockUniqueNames;
         this.balanceStockReportRequest.variantUniqueNames = this.stockReportRequest.variantUniqueNames;
-        if (initiallyApiCall) {
+        if (loadMore) {
             this.searchStockReportRequest.page++;
+        } else {
+            this.searchStockReportRequest.page = 1;
         }
         this.inventoryService.searchStockTransactionReport(this.searchStockReportRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.body && response.status === 'success') {
