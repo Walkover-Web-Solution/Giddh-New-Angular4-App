@@ -580,6 +580,24 @@ $custom-typography: mat-typography-config(
         padding-bottom: 0px !important;
     }
 }
+.columns-wrapper {
+    .inventory-checkbox {
+        width: 100%;
+        button {
+            cursor: none !important;
+        }
+        .mat-checkbox-layout {
+            float: left;
+            width: 100%;
+            padding-top: 12px;
+            .mat-checkbox-inner-container {
+                float: left;
+                margin-left: 0 !important;
+            }
+        }
+    }
+}
+
 @media screen and (max-width: 1366px) and (orientation: portrait) {
     .subscription-form-select {
         float: left !important;
