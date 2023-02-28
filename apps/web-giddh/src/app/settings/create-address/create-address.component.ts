@@ -108,7 +108,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
                     while (linkedEntity?.length) {
                         // Update the default entity status in UPDATE mode
                         const entity = linkedEntity.pop();
-                        const entityIndex = this.addressConfiguration.linkedEntities.findIndex(linkEntity => linkEntity?.uniqueName === entity?.uniqueName);
+                        const entityIndex = this.addressConfiguration.linkedEntities?.findIndex(linkEntity => linkEntity?.uniqueName === entity?.uniqueName);
                         if (entityIndex > -1) {
                             this.addressConfiguration.linkedEntities[entityIndex].isDefault = entity.isDefault;
                         }
@@ -125,7 +125,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
                     while (linkedEntity?.length) {
                         // Update the default entity status in UPDATE mode
                         const entity = linkedEntity.pop();
-                        const entityIndex = this.addressConfiguration.linkedEntities.findIndex(linkEntity => linkEntity?.uniqueName === entity?.uniqueName);
+                        const entityIndex = this.addressConfiguration.linkedEntities?.findIndex(linkEntity => linkEntity?.uniqueName === entity?.uniqueName);
                         if (entityIndex > -1) {
                             this.addressConfiguration.linkedEntities[entityIndex].isDefault = entity.isDefault;
                         }
@@ -141,7 +141,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
                     while (linkedEntity?.length) {
                         // Update the default entity status in UPDATE mode
                         const entity = linkedEntity.pop();
-                        const entityIndex = this.addressConfiguration.linkedEntities.findIndex(linkEntity => linkEntity?.uniqueName === entity?.uniqueName);
+                        const entityIndex = this.addressConfiguration.linkedEntities?.findIndex(linkEntity => linkEntity?.uniqueName === entity?.uniqueName);
                         if (entityIndex > -1) {
                             this.addressConfiguration.linkedEntities[entityIndex].isDefault = entity.isDefault;
                         }

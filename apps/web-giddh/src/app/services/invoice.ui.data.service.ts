@@ -167,7 +167,7 @@ export class InvoiceUiDataService {
     public setTemplateUniqueName(uniqueName: string, mode: string, customCreatedTemplates: CustomTemplateResponse[] = [], defaultTemplate: CustomTemplateResponse) {
         if (customCreatedTemplates && customCreatedTemplates.length) {
             let allTemplates = _.cloneDeep(customCreatedTemplates);
-            let selectedTemplateIndex = allTemplates.findIndex((template) => template?.uniqueName === uniqueName);
+            let selectedTemplateIndex = allTemplates?.findIndex((template) => template?.uniqueName === uniqueName);
             let selectedTemplate = _.cloneDeep(allTemplates[selectedTemplateIndex]);
 
             if (selectedTemplate) {

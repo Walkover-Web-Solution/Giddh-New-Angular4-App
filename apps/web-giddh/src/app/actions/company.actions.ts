@@ -235,7 +235,7 @@ export class CompanyActions {
                     this.store.pipe(select(s => s.session.totalNumberOfcompanies), take(1)).subscribe(res => totalCompany = res);
 
                     if (activeCompanyName) {
-                        let companyIndex = response.body.findIndex(cmp => cmp?.uniqueName === activeCompanyName);
+                        let companyIndex = response.body?.findIndex(cmp => cmp?.uniqueName === activeCompanyName);
                         if (companyIndex > -1) {
                             // if active company find no action needed
                             if (response.body.length === totalCompany) { // if company created success then only change to new created company otherwise refresh Api call will return null action

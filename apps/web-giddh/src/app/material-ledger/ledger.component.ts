@@ -514,7 +514,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public ngOnInit() {
         if (this.generalService.voucherApiVersion === 2) {
             this.lc.activeAccount$.pipe(takeUntil(this.destroyed$)).subscribe(ledgerAccount => {
-                if (["sundrycreditors", "sundrydebtors"].includes(ledgerAccount?.parentGroups[1]?.uniqueName)) {
+                if (ledgerAccount?.parentGroups?.length && ["sundrycreditors", "sundrydebtors"].includes(ledgerAccount?.parentGroups[1]?.uniqueName)) {
                     this.enableAutopaid = true;
                 } else {
                     this.enableAutopaid = false;
@@ -1729,8 +1729,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
             if (ev?.checked) {
                 this.entryUniqueNamesForBulkAction.push(entryUniqueName);
             } else {
-                let itemIndx = this.entryUniqueNamesForBulkAction.findIndex((item) => item === entryUniqueName);
-                this.entryUniqueNamesForBulkAction.splice(itemIndx, 1);
+                let itemIndx = this.entryUniqueNamesForBulkAction?.findIndex((item) => item === entryUniqueName);
+                this.entryUniqueNamesForBulkAction?.splice(itemIndx, 1);
             }
         }
     }
@@ -1767,7 +1767,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 }
             }
         } else {
-            let itemIndx = this.checkedTrxWhileHovering.findIndex((item) => item?.uniqueName === uniqueName);
+            let itemIndx = this.checkedTrxWhileHovering?.findIndex((item) => item?.uniqueName === uniqueName);
             this.checkedTrxWhileHovering.splice(itemIndx, 1);
             const currentLength = this.isMobileScreen ?
                 this.checkedTrxWhileHovering?.length
@@ -2378,12 +2378,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
                     this.getBankTransactions();
                     let accountDetails: AccountResponse | AccountResponseV2 = data[0];
-                    let parentOfAccount = accountDetails?.parentGroups[0];
+                    let parentOfAccount = (accountDetails?.parentGroups?.length) ? accountDetails?.parentGroups[0] : null;
 
                     this.lc.getUnderstandingText(accountDetails?.accountType, accountDetails?.name, accountDetails?.parentGroups, this.localeData);
                     this.accountUniquename = accountDetails?.uniqueName;
 
-                    this.isBankOrCashAccount = accountDetails?.parentGroups.some((grp) => grp?.uniqueName === 'bankaccounts' || grp?.uniqueName === 'loanandoverdraft');
+                    this.isBankOrCashAccount = accountDetails?.parentGroups?.some((grp) => grp?.uniqueName === 'bankaccounts' || grp?.uniqueName === 'loanandoverdraft');
                     if (accountDetails.currency && profile?.baseCurrency) {
                         this.isLedgerAccountAllowsMultiCurrency = accountDetails.currency && accountDetails.currency !== profile?.baseCurrency;
                     } else {

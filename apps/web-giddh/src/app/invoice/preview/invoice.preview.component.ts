@@ -388,7 +388,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                         this.itemsListForDetails = allItems;
                         this.toggleBodyClass();
                         setTimeout(() => {
-                            const itemIndex = this.itemsListForDetails.findIndex(item => item?.uniqueName === record.purchaseRecordUniqueName);
+                            const itemIndex = this.itemsListForDetails?.findIndex(item => item?.uniqueName === record.purchaseRecordUniqueName);
                             this.selectedInvoiceForDetails = allItems[itemIndex];
                             this.store.dispatch(this.invoiceReceiptActions.setVoucherForDetails(null, null));
                             this.store.dispatch(this.purchaseRecordActions.resetUpdatePurchaseRecord());
@@ -1914,7 +1914,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                     // get voucherDetailsNo so we can open that voucher in details mode
                     if (res[0] && res[1] && res[2]) {
                         this.selectedInvoiceForDetails = null;
-                        let voucherIndex = (res[0] as ReciptResponse).items.findIndex(f => f.voucherNumber === res[1]);
+                        let voucherIndex = (res[0] as ReciptResponse)?.items?.findIndex(f => f.voucherNumber === res[1]);
                         if (voucherIndex > -1) {
                             let allItems: InvoicePreviewDetailsVm[] = cloneDeep(this.itemsListForDetails);
                             const removedItem = allItems.splice(voucherIndex, 1)[0];

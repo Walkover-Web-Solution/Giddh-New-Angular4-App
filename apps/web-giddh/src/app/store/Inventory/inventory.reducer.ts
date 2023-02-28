@@ -857,7 +857,7 @@ const addNewStockToGroup = (groups: IGroupsWithStocksHierarchyMinItem[], stock: 
 const removeStockItemAndReturnIt = (groups: IGroupsWithStocksHierarchyMinItem[], grpUniqueName: string, stockUniqueName: string, result: INameUniqueName): INameUniqueName => {
     for (let grp of groups) {
         if (grp?.uniqueName === grpUniqueName) {
-            let st = grp.stocks.findIndex(p => p?.uniqueName === stockUniqueName);
+            let st = grp.stocks?.findIndex(p => p?.uniqueName === stockUniqueName);
             result = grp.stocks[st];
             grp.stocks.splice(st, 1);
             return result;
@@ -877,7 +877,7 @@ const removeStockItemAndReturnIt = (groups: IGroupsWithStocksHierarchyMinItem[],
 const updateStockIteminGroupArray = (groups: IGroupsWithStocksHierarchyMinItem[], grpUniqueName: string, response: BaseResponse<StockDetailResponse, CreateStockRequest>): void => {
     for (let grp of groups) {
         if (grp?.uniqueName === grpUniqueName) {
-            let index = grp.stocks.findIndex(stock => stock?.uniqueName === response.queryString.stockUniqueName);
+            let index = grp.stocks?.findIndex(stock => stock?.uniqueName === response.queryString.stockUniqueName);
             if (index > -1) {
                 grp.stocks[index] = {
                     name: response.body.name,

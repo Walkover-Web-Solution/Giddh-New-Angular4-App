@@ -114,7 +114,7 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
             val = [val];
         }
         if (val.length > 0 && this.rows) {
-            this._selectedValues = this.rows.filter((f: any) => val.findIndex(p => p === f.label || p === f?.value) !== -1);
+            this._selectedValues = this.rows.filter((f: any) => val?.findIndex(p => p === f.label || p === f?.value) !== -1);
         } else {
             this._selectedValues = val;
         }
