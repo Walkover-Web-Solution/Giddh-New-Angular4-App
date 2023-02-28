@@ -2336,7 +2336,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                 // add quantity to additional because we are using quantity from bulk modal so we have to pass it to onSelectSalesAccount
                 item.additional['quantity'] = item.quantity;
                 let lastIndex = -1;
-                let blankItemIndex = this.purchaseOrder.entries.findIndex(sItem => !sItem.transactions[0].accountUniqueName);
+                let blankItemIndex = this.purchaseOrder.entries?.findIndex(sItem => !sItem.transactions[0].accountUniqueName);
                 let isBlankItemInBetween;
                 if (blankItemIndex > -1) {
                     lastIndex = blankItemIndex;
