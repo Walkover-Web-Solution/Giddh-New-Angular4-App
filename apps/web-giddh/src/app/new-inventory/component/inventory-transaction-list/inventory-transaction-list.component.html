@@ -155,6 +155,7 @@
                     "
                 >
                     <mat-checkbox
+                        class="inventory-checkbox"
                         #selectAllCheckbox
                         color="primary"
                         name="selectAll"
@@ -174,6 +175,7 @@
                         (keydown.enter)="$event?.stopPropagation(); item.checked = !item?.checked; saveColumns()"
                     >
                         <mat-checkbox
+                            class="inventory-checkbox"
                             color="primary"
                             name="{{ item?.value }}"
                             (ngModelChange)="saveColumns()"
@@ -412,7 +414,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-12 horizontal-padding">
+        <div class="col-12 horizontal-padding" *ngIf="displayedColumns?.length">
             <div class="table-responsive table-content">
                 <table
                     mat-table
@@ -483,7 +485,12 @@
                                 "
                             ></ng-container>
                         </th>
-                        <td data-title="Account Name" class="text-left" mat-cell *matCellDef="let element">
+                        <td
+                            data-title="Account Name"
+                            class="text-left account-name-column"
+                            mat-cell
+                            *matCellDef="let element"
+                        >
                             {{ element?.account?.name ?? "-" }}
                         </td>
                     </ng-container>
@@ -510,7 +517,11 @@
                         >
                             <span class="d-inline-flex" *ngIf="element?.type === 'dr'">
                                 <amount-field
-                                    [amount]="element?.quantity"
+                                    [amount]="
+                                        element?.voucherType === 'PURCHASE_DEBIT_NOTE'
+                                            ? '-' + element?.quantity
+                                            : element?.quantity
+                                    "
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
                                 >
@@ -531,7 +542,11 @@
                         >
                             <span class="d-inline-flex" *ngIf="element.type === 'cr'">
                                 <amount-field
-                                    [amount]="element?.quantity"
+                                    [amount]="
+                                        element?.voucherType === 'SALES_CREDIT_NOTE'
+                                            ? '-' + element?.quantity
+                                            : element?.quantity
+                                    "
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
                                 >
