@@ -420,7 +420,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * deleteAmazonSeller
      */
     public deleteAmazonSeller(sellerId, idx) {
-        let seller = this.amazonSellerRes.findIndex((o) => o.sellerId === sellerId);
+        let seller = this.amazonSellerRes?.findIndex((o) => o.sellerId === sellerId);
         if (seller > -1) {
             this.store.dispatch(this.settingsIntegrationActions.DeleteAmazonSeller(sellerId));
             this.removeAmazonSeller(idx);

@@ -96,7 +96,7 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
             let newState = _.cloneDeep(state);
             let res: BaseResponse<string, ReciptDeleteRequest> = action.payload;
             if (res?.status === 'success') {
-                let indx = (res.request.invoiceNumber) ? newState.vouchers?.items.findIndex(f => f.voucherNumber === res.request.invoiceNumber) : newState.vouchers?.items.findIndex(f => f?.uniqueName === res.request?.uniqueName);
+                let indx = (res.request.invoiceNumber) ? newState.vouchers?.items?.findIndex(f => f.voucherNumber === res.request.invoiceNumber) : newState.vouchers?.items?.findIndex(f => f?.uniqueName === res.request?.uniqueName);
                 if (indx > -1) {
                     newState.vouchers?.items.splice(indx, 1);
                     newState.isDeleteSuccess = true;
@@ -221,7 +221,7 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
             let newState = _.cloneDeep(state);
             let res: BaseResponse<string, string> = action.payload;
             if (res?.status === 'success') {
-                let indx = newState.vouchers?.items.findIndex((o) => o.voucherNumber === res.request);
+                let indx = newState.vouchers?.items?.findIndex((o) => o.voucherNumber === res.request);
                 if (indx > -1) {
                     newState.vouchers?.items.splice(indx, 1);
                 }

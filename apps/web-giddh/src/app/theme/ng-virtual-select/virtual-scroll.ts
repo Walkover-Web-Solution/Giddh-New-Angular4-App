@@ -137,7 +137,7 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
         this.previousEnd = undefined;
         let currentItemIndex = -1;
         if (this.selectedValues && this.selectedValues.length > 0) {
-            currentItemIndex = this.items.findIndex(item => item?.value === this.selectedValues[0]?.value);
+            currentItemIndex = this.items?.findIndex(item => item?.value === this.selectedValues[0]?.value);
         }
         if (this.items && this.items.length) {
             currentItemIndex = (currentItemIndex === -1) ? 0 : currentItemIndex;
@@ -191,7 +191,7 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
     }
 
     public getHighlightedOption(): IOption {
-        let index = this.items.findIndex(p => p.isHilighted);
+        let index = this.items?.findIndex(p => p.isHilighted);
         if (index > -1) {
             return this.items[index];
         }
@@ -199,7 +199,7 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
     }
 
     public getPreviousHilightledOption(): IOption {
-        let index = this.items.findIndex(p => p.isHilighted);
+        let index = this.items?.findIndex(p => p.isHilighted);
         if (index > 0) {
             return this.items[index - 1];
         } else {

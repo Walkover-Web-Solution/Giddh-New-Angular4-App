@@ -81,7 +81,7 @@ export function ManufacturingReducer(state = initialState, action: CustomActions
             let newState = cloneDeep(state);
             let res: BaseResponse<IStocksItem, ManufacturingItemRequest> = action.payload;
             if (res?.status === 'success') {
-                let indx = newState.reportData.results.findIndex((obj) => obj?.uniqueName === res.body?.uniqueName);
+                let indx = newState.reportData.results?.findIndex((obj) => obj?.uniqueName === res.body?.uniqueName);
                 if (indx > -1) {
                     newState.reportData.results[indx] = res.body;
                 }
@@ -96,7 +96,7 @@ export function ManufacturingReducer(state = initialState, action: CustomActions
             let res: BaseResponse<any, any> = action.payload;
             if (res?.status === 'success') {
                 let newState = cloneDeep(state);
-                let indx = newState.reportData.results.findIndex((MFitem) => MFitem?.uniqueName === res.queryString.model.manufacturingUniqueName);
+                let indx = newState.reportData.results?.findIndex((MFitem) => MFitem?.uniqueName === res.queryString.model.manufacturingUniqueName);
                 if (indx > -1) {
                     newState.reportData.results.splice(indx, 1);
                 }
