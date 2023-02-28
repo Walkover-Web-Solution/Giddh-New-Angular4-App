@@ -221,7 +221,7 @@ export class UpdateLedgerVm {
             return false;
         }
         let allowedUniqueNameArr = ['revenuefromoperations', 'otherincome', 'operatingcost', 'indirectexpenses', 'fixedassets'];
-        return allowedUniqueNameArr?.indexOf(acc?.parentGroups[0]?.uniqueName) > -1;
+        return (acc?.parentGroups?.length) ? allowedUniqueNameArr?.indexOf(acc?.parentGroups[0]?.uniqueName) > -1 : false;
     }
 
     public getEntryTotal() {
