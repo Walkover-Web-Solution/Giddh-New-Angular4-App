@@ -1,4 +1,4 @@
-import { PAGINATION_LIMIT } from '../../app.constant';
+import { API_COUNT_LIMIT, PAGINATION_LIMIT } from '../../app.constant';
 import { IPaginatedResponse } from '../interfaces/paginatedResponse.interface';
 import { IAccountDetails, IManufacturingDetails, IStockDetail, IStockItem, IStockReport, IStockReportItem, IStocksItem, IStockTransaction, IStockUnit, IStockUnitItem, IStockUnitResponse } from '../interfaces/stocksItem.interface';
 
@@ -188,7 +188,7 @@ export class SearchStockTransactionReportRequest {
     public totalItems?: number;
     public totalPages?: number;
     constructor() {
-        this.count = PAGINATION_LIMIT;
+        this.count = API_COUNT_LIMIT;
         this.page = 1;
         this.stockGroupUniqueNames = [];
         this.stockUniqueNames = [];
