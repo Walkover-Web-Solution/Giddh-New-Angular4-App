@@ -113,10 +113,26 @@
                 #auto="matAutocomplete"
                 (optionSelected)="selectChiplistValue($event); selectField.value = ''"
             >
-                <mat-option *ngFor="let option of fieldFilteredOptions" [value]="option">
-                    {{ option?.name }} ( {{ option?.type }} )
-                </mat-option>
-                <mat-option *ngIf="!fieldFilteredOptions?.length"> No Result Found </mat-option>
+                <app-cdk-scroll
+                    (fetchNextPage)="searchStockTransactionReport()"
+                    [scrollableElementId]="scrollableElementId"
+                >
+                    <cdk-virtual-scroll-viewport
+                        class="virtual-group-list overflow-x-hidden"
+                        [itemSize]="33"
+                        [minBufferPx]="300"
+                        [maxBufferPx]="300"
+                        [id]="scrollableElementId"
+                        [ngStyle]="{
+                            'min-height': (fieldFilteredOptions?.length * 51 > 193 ? 193 : 51) + 'px'
+                        }"
+                    >
+                        <mat-option *ngFor="let option of fieldFilteredOptions" [value]="option">
+                            {{ option?.name }} ( {{ option?.type }} )
+                        </mat-option>
+                        <mat-option disabled *ngIf="fieldFilteredOptions?.length === 0">No results found</mat-option>
+                    </cdk-virtual-scroll-viewport>
+                </app-cdk-scroll>
             </mat-autocomplete>
         </mat-form-field>
         <div class="menu-btn-control">
@@ -490,20 +506,18 @@
                             class="text-right"
                             mat-cell
                             *matCellDef="let element"
-                            [matTooltip]="element?.type == 'dr' ? element?.quantity : ''"
+                            [matTooltip]="element?.type === 'dr' ? element?.quantity : ''"
                         >
-                            <span class="d-inline-flex" *ngIf="element.type == 'dr'">
+                            <span class="d-inline-flex" *ngIf="element?.type === 'dr'">
                                 <amount-field
-                                    [amount]="element?.type == 'dr' ? element?.quantity : ''"
+                                    [amount]="element?.quantity"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
                                 >
                                 </amount-field>
-                                <span class="ml-1 unit-badge">
-                                    {{ element?.type == "dr" ? element?.stockUnit : "-" }}</span
-                                >
+                                <span class="ml-1 unit-badge"> {{ element?.stockUnit }}</span>
                             </span>
-                            <span *ngIf="element.type == 'cr'">-</span>
+                            <span *ngIf="element?.type === 'cr'">-</span>
                         </td>
                     </ng-container>
                     <ng-container matColumnDef="outward_quantity">
@@ -513,20 +527,18 @@
                             class="text-right"
                             mat-cell
                             *matCellDef="let element"
-                            [matTooltip]="element?.type == 'cr' ? element?.quantity : ''"
+                            [matTooltip]="element?.type === 'cr' ? element?.quantity : ''"
                         >
-                            <span class="d-inline-flex" *ngIf="element.type == 'cr'">
+                            <span class="d-inline-flex" *ngIf="element.type === 'cr'">
                                 <amount-field
-                                    [amount]="element?.type == 'cr' ? element?.quantity : ''"
+                                    [amount]="element?.quantity"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
                                 >
                                 </amount-field>
-                                <span class="ml-1 unit-badge">
-                                    {{ element?.type == "cr" ? element?.stockUnit : "-" }}</span
-                                >
+                                <span class="ml-1 unit-badge"> {{ element?.stockUnit }}</span>
                             </span>
-                            <span *ngIf="element.type == 'dr'">-</span>
+                            <span *ngIf="element?.type === 'dr'">-</span>
                         </td>
                     </ng-container>
                     <ng-container matColumnDef="rate">
