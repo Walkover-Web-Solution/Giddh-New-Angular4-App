@@ -145,6 +145,10 @@
     }
 }
 
+.account-name-column {
+    padding-left: 0 !important;
+}
+
 @media (max-width: 767px) {
     .stock-group-footer {
         position: static !important;
