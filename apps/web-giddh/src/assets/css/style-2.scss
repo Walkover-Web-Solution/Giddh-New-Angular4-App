@@ -554,8 +554,11 @@ $custom-typography: mat-typography-config(
 }
 .select-multiple-chiplist-inventory {
     .mat-form-field-infix {
-        margin-bottom: 6px !important;
-        padding-top: 10px;
+        margin-bottom: 0px;
+        padding-top: 5px;
+        border-top: 5px !important;
+        border-bottom: 5px !important;
+        margin-top: 4px;
     }
 }
 .autopaid {

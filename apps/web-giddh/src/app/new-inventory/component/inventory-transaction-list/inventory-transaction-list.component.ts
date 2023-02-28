@@ -608,11 +608,9 @@ export class InventoryTransactionListComponent implements OnInit {
      * @memberof InventoryTransactionListComponent
      */
     public sortChange(event: any): void {
-        if (this.stockReportRequest.sort !== event?.direction) {
             this.stockReportRequest.sort = event?.direction;
             this.stockReportRequest.sortBy = event?.active;
             this.getStockTransactionalReport();
-        }
     }
 
     /**
@@ -703,9 +701,16 @@ export class InventoryTransactionListComponent implements OnInit {
     public getBranches(apiCall: boolean = true): void {
         this.selectedWarehouse = [];
         this.allWarehouses = [];
-        this.allBranches?.forEach((branches) => {
-            this.allWarehouses = this.allWarehouses?.concat(branches?.warehouses)?.filter(warehouse => warehouse?.isCompany !== true);
-        });
+
+        if (!this.isCompany) {
+            let currentBranch = this.allBranches?.filter(branch => branch?.uniqueName === this.generalService.currentBranchUniqueName);
+            this.allWarehouses = currentBranch[0]?.warehouses?.filter(warehouse => warehouse?.isCompany !== true);
+        } else {
+            this.allBranches?.forEach((branches) => {
+                this.allWarehouses = this.allWarehouses?.concat(branches?.warehouses)?.filter(warehouse => warehouse?.isCompany !== true);
+            });
+        }
+
         if (this.selectedBranch?.length === 0) {
             this.warehouses = this.allWarehouses;
         } else {
