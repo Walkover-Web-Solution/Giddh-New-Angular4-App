@@ -196,6 +196,34 @@ export class SearchStockTransactionReportRequest {
     }
 }
 
+export class BalanceStockTransactionReportRequest {
+    public stockGroupUniqueNames: any[];
+    public stockUniqueNames: any[];
+    public transactionType: string;
+    public accountName: string;
+    public voucherTypes?: any[];
+    public param?: string;
+    public expression?: string;
+    public val?: number;
+    public warehouseUniqueNames?: any[];
+    public branchUniqueNames?: any[];
+    public variantUniqueNames?: any[];
+    public from: string = '';
+    public to: string = '';
+    constructor() {
+        this.stockGroupUniqueNames = [];
+        this.stockUniqueNames = [];
+        this.accountName = "";
+        this.param = null;
+        this.expression = null;
+        this.val = 0;
+        this.warehouseUniqueNames = [];
+        this.branchUniqueNames = [];
+        this.variantUniqueNames = [];
+        this.voucherTypes = [];
+    }
+}
+
 export class StockReportRequestTransactionParams {
     public from: string = '';
     public to: string = '';
