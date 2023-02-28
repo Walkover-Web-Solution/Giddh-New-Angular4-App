@@ -1055,7 +1055,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                         }
                     }) || [];
                     if (page === 1) {
-                        if (activeGroup && searchResults.findIndex(group => group?.value === activeGroup?.uniqueName) === -1) {
+                        if (activeGroup && searchResults?.findIndex(group => group?.value === activeGroup?.uniqueName) === -1) {
                             // Active group is not found in first page add it
                             searchResults.push({
                                 value: activeGroup?.uniqueName,

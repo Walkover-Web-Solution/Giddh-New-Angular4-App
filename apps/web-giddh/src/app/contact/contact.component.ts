@@ -1515,11 +1515,11 @@ export class ContactComponent implements OnInit, OnDestroy {
         if (this.activeTab === "vendor" && computedColumns?.length) {
             computedColumns?.push("action");
         }
-        if (computedColumns.findIndex(s => s === "openingBalance") > -1) {
+        if (computedColumns?.findIndex(s => s === "openingBalance") > -1) {
             computedColumns = computedColumns?.filter(s => s !== "openingBalance");
             computedColumns.splice(1, 0, "openingBalance");
         }
-        if (computedColumns.findIndex(s => s === "parentGroup") > -1) {
+        if (computedColumns?.findIndex(s => s === "parentGroup") > -1) {
             computedColumns = computedColumns?.filter(s => s !== "parentGroup");
             computedColumns.splice(1, 0, "parentGroup");
         }

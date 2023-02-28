@@ -91,12 +91,12 @@ class AppDatabase extends Dexie {
             if (entity === 'menus') {
                 // if any fromInvalidState remove it and replace it with new menu
                 if (fromInvalidState) {
-                    let invalidEntryIndex = arr.findIndex(f => f?.uniqueName === fromInvalidState.previous?.uniqueName);
+                    let invalidEntryIndex = arr?.findIndex(f => f?.uniqueName === fromInvalidState.previous?.uniqueName);
                     arr[invalidEntryIndex] = Object.assign({}, model, { isRemoved: true, pIndex: arr[invalidEntryIndex].pIndex, isInvalidState: false });
                 } else {
 
                     let duplicateIndex: number;
-                    duplicateIndex = arr.findIndex(s => {
+                    duplicateIndex = arr?.findIndex(s => {
                         if (model.additional) {
                             if (s.additional) {
                                 return s?.uniqueName === model?.uniqueName && s.additional.tabIndex === model.additional.tabIndex;
@@ -108,7 +108,7 @@ class AppDatabase extends Dexie {
 
                     // if duplicate item found then skip it
                     if (duplicateIndex === -1) {
-                        let indDefaultIndex = this.clonedMenus.findIndex((item) => {
+                        let indDefaultIndex = this.clonedMenus?.findIndex((item) => {
                             if (model.additional) {
                                 if (item.additional) {
                                     return item?.uniqueName === model?.uniqueName && item.name === model.name && item.additional.tabIndex === model.additional.tabIndex;
@@ -121,7 +121,7 @@ class AppDatabase extends Dexie {
                         // if searched menu is in default list then add it to menu and mark that item as not removed in default menu
                         if (indDefaultIndex > -1) {
                             // index where menu should be added
-                            let index = arr.findIndex(a => this.clonedMenus[indDefaultIndex].pIndex === a.pIndex);
+                            let index = arr?.findIndex(a => this.clonedMenus[indDefaultIndex].pIndex === a.pIndex);
                             if (isSmallScreen && index > limit) {
                                 index = this.smallScreenHandler(index, isCompany);
                             }
@@ -141,7 +141,7 @@ class AppDatabase extends Dexie {
                                 this.clonedMenus = DEFAULT_MENUS;
                             }
                             // index where menu should be added
-                            let index = arr.findIndex(a => sorted[0].pIndex === a.pIndex);
+                            let index = arr?.findIndex(a => sorted[0].pIndex === a.pIndex);
 
                             let originalIndex = duplicateIndex;
                             if (isSmallScreen && index > limit) {

@@ -201,7 +201,7 @@ export function EwayBillreducer(state: EwayBillState = initialState, action: Cus
         case EWAYBILL_ACTIONS.UPDATE_TRANSPORTER_RESPONSE: {
             let addTransportResponse: BaseResponse<any, any> = action.payload;
             if (addTransportResponse?.status === 'success') {
-                let index = state.TransporterList.findIndex(item => item.transporterId === addTransportResponse.queryString.transporterId);
+                let index = state.TransporterList?.findIndex(item => item.transporterId === addTransportResponse.queryString.transporterId);
                 state.TransporterList.splice(index, 1, addTransportResponse.body);
                 return Object.assign({}, state, { TransporterList: state.TransporterList.map(p => p.transporterId === action.payload.transporterId ? action.payload.unit : p), updateTransporterInProcess: false, updateTransporterSuccess: true });
             }

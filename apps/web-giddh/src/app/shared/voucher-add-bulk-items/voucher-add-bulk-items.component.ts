@@ -144,7 +144,7 @@ export class VoucherAddBulkItemsComponent implements OnDestroy {
     }
 
     addItemToSelectedArr(item: SalesAddBulkStockItems) {
-        let index = this.selectedItems.findIndex(f => f?.uniqueName === item?.uniqueName);
+        let index = this.selectedItems?.findIndex(f => f?.uniqueName === item?.uniqueName);
         if (index > -1) {
             this.toaster.warningToast(this.localeData?.item_selected);
             return;

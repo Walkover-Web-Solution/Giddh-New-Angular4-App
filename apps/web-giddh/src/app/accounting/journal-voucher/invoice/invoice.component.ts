@@ -855,8 +855,8 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
         if (this.selectedField === 'account') {
             this.setAccount(ev.additional);
             setTimeout(() => {
-                let accIndx = this.accountsTransaction.findIndex((acc) => acc.selectedAccount?.UniqueName === ev?.value);
-                let indexInTaxesToRemember = this.taxesToRemember.findIndex((t) => t.taxUniqueName === ev?.value);
+                let accIndx = this.accountsTransaction?.findIndex((acc) => acc.selectedAccount?.UniqueName === ev?.value);
+                let indexInTaxesToRemember = this.taxesToRemember?.findIndex((t) => t.taxUniqueName === ev?.value);
                 if (indexInTaxesToRemember > -1 && accIndx > -1) {
                     let rate = this.taxesToRemember[indexInTaxesToRemember].taxValue;
                     this.accountsTransaction[accIndx].rate = rate;
@@ -865,7 +865,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
             }, 100);
         } else if (this.selectedField === 'stock') {
             let stockUniqueName = ev?.value;
-            let taxIndex = this.taxesToRemember.findIndex((i) => i.stockUniqueName === stockUniqueName);
+            let taxIndex = this.taxesToRemember?.findIndex((i) => i.stockUniqueName === stockUniqueName);
             if (taxIndex === -1) {
                 this.inventoryService.GetStockUniqueNameWithDetail(stockUniqueName).pipe(takeUntil(this.destroyed$)).subscribe((stockFullDetails) => {
                     if (stockFullDetails && stockFullDetails.body.taxes && stockFullDetails.body.taxes.length) {
@@ -878,7 +878,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
                                         taxTotalValue += st.taxValue;
                                     });
                                 }
-                                let taxIndx = this.taxesToRemember.findIndex((i) => i.taxUniqueName === tax);
+                                let taxIndx = this.taxesToRemember?.findIndex((i) => i.taxUniqueName === tax);
                                 if (taxIndx === -1) {
                                     this.taxesToRemember.push({ stockUniqueName, taxUniqueName: tax, taxValue: taxTotalValue });
                                 }
@@ -1043,7 +1043,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
                     if (data?.status === 'success') {
                         this.allFlattenAccounts = cloneDeep(data.body.results);
                         if (groupUniqueName) {
-                            const filteredAccounts: IFlattenAccountsResultItem[] = data.body.results?.filter((acc) => acc?.parentGroups.findIndex((g) => g?.uniqueName === groupUniqueName) > -1);
+                            const filteredAccounts: IFlattenAccountsResultItem[] = data.body.results?.filter((acc) => acc?.parentGroups?.findIndex((g) => g?.uniqueName === groupUniqueName) > -1);
                             this._tallyModuleService.setFlattenAccounts(filteredAccounts);
                             this.isAccountListFiltered = true;
                         } else {

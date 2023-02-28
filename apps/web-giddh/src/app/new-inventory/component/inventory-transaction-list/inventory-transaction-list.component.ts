@@ -7,7 +7,7 @@ import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from "../../../shared/hel
 import { Observable, ReplaySubject } from "rxjs";
 import { select, Store } from "@ngrx/store";
 import { AppState } from "../../../store";
-import { debounceTime, distinctUntilChanged, take, takeUntil } from "rxjs/operators";
+import { debounceTime, distinctUntilChanged, takeUntil } from "rxjs/operators";
 import { FormControl } from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
 import { MatSort } from "@angular/material/sort";
@@ -136,7 +136,7 @@ export class InventoryTransactionListComponent implements OnInit {
         },
         {
             "value": "RAW_MATERIAL",
-            "label": "Raw Material",
+            "label": "Raw material",
             "checked": false
         },
     ];
@@ -145,7 +145,7 @@ export class InventoryTransactionListComponent implements OnInit {
     /** This will use for stock report voucher types column check values */
     public customiseColumns = [
         {
-            "value": "date",
+            "value": "entry_date",
             "label": "Date",
             "checked": true
         },
@@ -173,13 +173,13 @@ export class InventoryTransactionListComponent implements OnInit {
 
         },
         {
-            "value": "inwards",
+            "value": "inward_quantity",
             "label": "Invards",
             "checked": true
 
         },
         {
-            "value": "outwards",
+            "value": "outward_quantity",
             "label": "Outwards",
             "checked": true
 
@@ -191,7 +191,7 @@ export class InventoryTransactionListComponent implements OnInit {
 
         },
         {
-            "value": "value",
+            "value": "transaction_val",
             "label": "Value",
             "checked": true
 
@@ -277,7 +277,7 @@ export class InventoryTransactionListComponent implements OnInit {
             this.stockReportRequest.accountName = search;
             this.balanceStockReportRequest.accountName = search;
             this.isFilterActive();
-            this.getStockTransactionalReport(false);
+            this.getStockTransactionalReport();
             if (search === '') {
                 this.showAccountSearchInput = false;
             }
@@ -315,6 +315,7 @@ export class InventoryTransactionListComponent implements OnInit {
                 this.activeCompany = activeCompany;
             }
         });
+        this.searchStockTransactionReport();
     }
 
     /**
@@ -360,7 +361,7 @@ export class InventoryTransactionListComponent implements OnInit {
         this.isFilterActive();
         this.searchStockReportRequest.q = "";
         this.searchStockTransactionReport();
-        this.getStockTransactionalReport(false);
+        this.getStockTransactionalReport();
     }
 
     /**
@@ -395,7 +396,7 @@ export class InventoryTransactionListComponent implements OnInit {
             this.balanceStockReportRequest.variantUniqueNames = this.stockReportRequest.variantUniqueNames;
             this.isFilterActive();
             this.searchStockTransactionReport();
-            this.getStockTransactionalReport(false);
+            this.getStockTransactionalReport();
             this.changeDetection.detectChanges();
         }
     }
@@ -436,21 +437,16 @@ export class InventoryTransactionListComponent implements OnInit {
      * @return {*}  {void}
      * @memberof InventoryTransactionListComponent
      */
-    public getStockTransactionalReport(apiCall: boolean = true): void {
+    public getStockTransactionalReport(): void {
         if (!this.showAdvanceSearchModal) {
             this.stockReportRequest.from = this.fromDate;
             this.stockReportRequest.to = this.toDate;
             this.balanceStockReportRequest.from = this.fromDate;
             this.balanceStockReportRequest.to = this.toDate;
         }
-        this.stockReportRequest.page = 1;
-        this.stockReportRequest.count = PAGINATION_LIMIT;
-        this.isLoading = true;
         this.dataSource = [];
-        if (apiCall) {
-            this.getReportColumns();
-        }
-        this.inventoryService.getStockTransactionReport(cloneDeep(this.stockReportRequest)).pipe(take(1)).subscribe(response => {
+        this.isLoading = true;
+        this.inventoryService.getStockTransactionReport(cloneDeep(this.stockReportRequest)).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.isLoading = false;
             if (response && response.body && response.status === 'success') {
                 this.dataSource = response.body.transactions;
@@ -504,7 +500,7 @@ export class InventoryTransactionListComponent implements OnInit {
             this.balanceStockReportRequest.to = this.toDate;
 
         }
-        this.getStockTransactionalReport(false);
+        this.getStockTransactionalReport();
     }
 
     /**
@@ -542,7 +538,7 @@ export class InventoryTransactionListComponent implements OnInit {
         if (this.stockReportRequest.page !== event?.page) {
             this.stockReportRequest.page = event?.page;
             this.searchStockReportRequest.page = event?.page;
-            this.getStockTransactionalReport(false);
+            this.getStockTransactionalReport();
         }
     }
 
@@ -560,7 +556,7 @@ export class InventoryTransactionListComponent implements OnInit {
                 advanceSearchResponse: this.advanceSearchModalResponse
             }
         });
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        dialogRef.afterClosed().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.advanceSearchModalResponse = response;
                 this.isFilterActive();
@@ -591,7 +587,7 @@ export class InventoryTransactionListComponent implements OnInit {
             this.balanceStockReportRequest.to = data.stockReportRequest?.toDate;
         }
         this.showAdvanceSearchModal = true;
-        this.getStockTransactionalReport(false);
+        this.getStockTransactionalReport();
         this.changeDetection.detectChanges();
     }
 
@@ -605,7 +601,7 @@ export class InventoryTransactionListComponent implements OnInit {
         if (this.stockReportRequest.sort !== event?.direction) {
             this.stockReportRequest.sort = event?.direction;
             this.stockReportRequest.sortBy = event?.active;
-            this.getStockTransactionalReport(false);
+            this.getStockTransactionalReport();
         }
     }
 
@@ -666,8 +662,8 @@ export class InventoryTransactionListComponent implements OnInit {
         this.inventoryService.getLinkedStocks().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.body) {
                 this.allBranchWarehouses = response.body;
-                this.allBranches = response.body.results;
-                this.branches = response.body.results;
+                this.allBranches = response.body.results?.filter(branch => branch?.isCompany !== true);
+                this.branches = response.body.results?.filter(branch => branch?.isCompany !== true);
                 this.allWarehouses = [];
                 this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && this.branches?.length > 1;
             }
@@ -685,7 +681,7 @@ export class InventoryTransactionListComponent implements OnInit {
         this.stockReportRequest.warehouseUniqueNames = this.selectedWarehouse;
         this.balanceStockReportRequest.warehouseUniqueNames = this.selectedWarehouse;
         this.isFilterActive();
-        this.getStockTransactionalReport(false);
+        this.getStockTransactionalReport();
     }
 
     /**
@@ -698,13 +694,13 @@ export class InventoryTransactionListComponent implements OnInit {
         this.selectedWarehouse = [];
         this.allWarehouses = [];
         this.allBranches?.forEach((branches) => {
-            this.allWarehouses = this.allWarehouses?.concat(branches?.warehouses);
+            this.allWarehouses = this.allWarehouses?.concat(branches?.warehouses)?.filter(warehouse => warehouse?.isCompany !== true);
         });
         if (this.selectedBranch?.length === 0) {
             this.warehouses = this.allWarehouses;
         } else {
             let warehouses = [];
-            this.branches?.filter(value => this.selectedBranch?.includes(value?.uniqueName)).forEach((branches) => {
+            this.branches?.filter(value => this.selectedBranch?.includes(value?.uniqueName))?.forEach((branches) => {
                 warehouses = warehouses?.concat(branches?.warehouses);
             });
             this.warehouses = warehouses;
@@ -715,7 +711,7 @@ export class InventoryTransactionListComponent implements OnInit {
         this.balanceStockReportRequest.branchUniqueNames = this.selectedBranch;
         this.balanceStockReportRequest.warehouseUniqueNames = [];
         if (apiCall) {
-            this.getStockTransactionalReport(false);
+            this.getStockTransactionalReport();
         }
         this.isFilterActive();
         this.changeDetection.detectChanges();
@@ -790,7 +786,7 @@ export class InventoryTransactionListComponent implements OnInit {
             }
             this.balanceStockReportRequest.voucherTypes = this.stockReportRequest.voucherTypes;
             this.isFilterActive();
-            this.getStockTransactionalReport(false);
+            this.getStockTransactionalReport();
             this.changeDetection.detectChanges();
         });
     }
@@ -801,7 +797,7 @@ export class InventoryTransactionListComponent implements OnInit {
      * @memberof InventoryTransactionListComponent
      */
     public getReportColumns(): void {
-        this.inventoryService.getStockTransactionReportColumns("INVENTORY_TRANSACTION_REPORT").pipe(take(1)).subscribe(response => {
+        this.inventoryService.getStockTransactionReportColumns("INVENTORY_TRANSACTION_REPORT").pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.body && response.status === 'success') {
                 if (response.body?.columns) {
                     this.customiseColumns?.forEach(column => {
@@ -810,8 +806,8 @@ export class InventoryTransactionListComponent implements OnInit {
                         }
                     });
                 }
-                this.filteredDisplayColumns();
             }
+            this.filteredDisplayColumns();
         });
     }
 
@@ -827,7 +823,9 @@ export class InventoryTransactionListComponent implements OnInit {
                 module: "INVENTORY_TRANSACTION_REPORT",
                 columns: this.displayedColumns
             }
-            this.inventoryService.saveStockTransactionReportColumns(saveColumnReq);
+            this.inventoryService.saveStockTransactionReportColumns(saveColumnReq).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                this.isLoading = false;
+            });
         });
     }
 
