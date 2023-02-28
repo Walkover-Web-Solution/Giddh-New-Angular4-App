@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, ChangeDetectionStrategy, ChangeDetectorRef } from "@angular/core";
+import { Component, OnInit, ViewChild, ElementRef, ChangeDetectionStrategy, ChangeDetectorRef, ViewChildren, QueryList, Input, Output, EventEmitter } from "@angular/core";
 import { GeneralService } from "../../../services/general.service";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from "../../../app.constant";
@@ -18,6 +18,7 @@ import { InventoryService } from "../../../services/inventory.service";
 import { NewInventoryAdavanceSearch } from "../new-inventory-advance-search/new-inventory-advance-search.component";
 import { ToasterService } from "../../../services/toaster.service";
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { CdkVirtualScrollViewport } from "@angular/cdk/scrolling";
 @Component({
     selector: "inventory-transaction-list",
     templateUrl: "./inventory-transaction-list.component.html",
@@ -33,7 +34,15 @@ export class InventoryTransactionListComponent implements OnInit {
     @ViewChild('accountName', { static: true }) public accountName: ElementRef;
     /** Instance of sort header */
     @ViewChild(MatSort) sort: MatSort;
+    /** Instance of cdk virtual scroller */
+    @ViewChildren(CdkVirtualScrollViewport) virtualScroll: QueryList<CdkVirtualScrollViewport>;
     /** This will use for instance of warehouses Dropdown */
+    /** True when pagination should be enabled */
+    @Input() public isPaginationEnabled: boolean;
+    /** True if we need to scroll element by id */
+    @Input() public scrollableElementId = '';
+    /** Emits the scroll to bottom event when pagination is required  */
+    @Output() public scrollEnd: EventEmitter<void> = new EventEmitter();
     public warehousesDropdown: FormControl = new FormControl();
     /** This will use for instance of branches Dropdown */
     public branchesDropdown: FormControl = new FormControl();
@@ -121,7 +130,7 @@ export class InventoryTransactionListComponent implements OnInit {
         },
         {
             "value": "DELIVERY_NOTE",
-            "label": "Delivery Challan",
+            "label": "Delivery challan",
             "checked": false
         },
         {
@@ -207,6 +216,8 @@ export class InventoryTransactionListComponent implements OnInit {
     public filtersChipList: any[] = [];
     /** Filtered options to show in autocomplete list */
     public fieldFilteredOptions: any[] = [];
+    /** List of data */
+    @Input() public options: any;
     /** Hold all branch warehouses */
     public allBranchWarehouses: any;
     /** Emit with seperate code for filtersChipList */
@@ -355,7 +366,7 @@ export class InventoryTransactionListComponent implements OnInit {
             this.stockReportRequest.variantUniqueNames?.push(option?.option?.value?.uniqueName);
         }
         this.balanceStockReportRequest.stockGroupUniqueNames = this.stockReportRequest.stockGroupUniqueNames;
-        this.balanceStockReportRequest.stockGroupUniqueNames = this.stockReportRequest.stockUniqueNames;
+        this.balanceStockReportRequest.stockUniqueNames = this.stockReportRequest.stockUniqueNames;
         this.balanceStockReportRequest.variantUniqueNames = this.stockReportRequest.variantUniqueNames;
         this.filtersChipList?.push(selectOptionValue);
         this.isFilterActive();
@@ -392,7 +403,7 @@ export class InventoryTransactionListComponent implements OnInit {
                 }
             }
             this.balanceStockReportRequest.stockGroupUniqueNames = this.stockReportRequest.stockGroupUniqueNames;
-            this.balanceStockReportRequest.stockGroupUniqueNames = this.stockReportRequest.stockUniqueNames;
+            this.balanceStockReportRequest.stockUniqueNames = this.stockReportRequest.stockUniqueNames;
             this.balanceStockReportRequest.variantUniqueNames = this.stockReportRequest.variantUniqueNames;
             this.isFilterActive();
             this.searchStockTransactionReport();
@@ -415,6 +426,8 @@ export class InventoryTransactionListComponent implements OnInit {
         this.balanceStockReportRequest.stockGroupUniqueNames = this.stockReportRequest.stockGroupUniqueNames;
         this.balanceStockReportRequest.stockUniqueNames = this.stockReportRequest.stockUniqueNames;
         this.balanceStockReportRequest.variantUniqueNames = this.stockReportRequest.variantUniqueNames;
+        this.searchStockReportRequest.page = this.searchStockReportRequest.page;
+        this.searchStockReportRequest.page++;
         this.inventoryService.searchStockTransactionReport(this.searchStockReportRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.body && response.status === 'success') {
                 this.fieldFilteredOptions = response.body.results;
@@ -854,6 +867,18 @@ export class InventoryTransactionListComponent implements OnInit {
     public filteredDisplayColumns(): void {
         this.displayedColumns = this.customiseColumns?.filter(value => value?.checked).map(column => column?.value);
         this.changeDetection.detectChanges();
+    }
+
+    /**
+     * Emits true if scrolling end event
+     *
+     * @memberof InventoryTransactionListComponent
+     */
+    public scrollEndEvent(event: any): void {
+        if (this.scrollableElementId === event) {
+            this.fieldFilteredOptions = this.options;
+            this.scrollEnd.emit();
+        }
     }
 
     /**

@@ -19,6 +19,13 @@
         }
     }
 }
+
+.virtual-group-list {
+    height: 100%;
+    min-height: 51px;
+    max-height: 193px !important;
+}
+
 .stock-mat-salect {
     border: 1px solid var(--color-secondary-input-bar-border);
     border-radius: 5px !important;
