@@ -5776,7 +5776,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @memberof VoucherComponent
      */
     public handleOutsideClick(event: any): void {
-        if (event?.target?.className?.indexOf("option") === -1 && this.accountAsideMenuState === 'out' && this.asideMenuStateForProductService === 'out' && this.asideMenuStateForRecurringEntry === 'out' && this.asideMenuStateForOtherTaxes === 'out') {
+        if ((typeof event?.target?.className === "string" && event?.target?.className?.indexOf("option") === -1) && this.accountAsideMenuState === 'out' && this.asideMenuStateForProductService === 'out' && this.asideMenuStateForRecurringEntry === 'out' && this.asideMenuStateForOtherTaxes === 'out') {
             this.activeIndx = null;
             this.checkVoucherEntries();
         }
