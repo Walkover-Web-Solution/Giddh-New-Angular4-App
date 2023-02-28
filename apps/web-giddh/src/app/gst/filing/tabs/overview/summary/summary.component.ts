@@ -122,7 +122,7 @@ export class OverviewSummaryComponent implements OnInit, OnDestroy {
         let manipulatedData: GstOverViewSummary[] = _.cloneDeep(data);
 
         manipulatedData = _.sortBy(manipulatedData, (o: GstOverViewSummary) => {
-            let index = sequencingList.findIndex(f => f.gstReturnType === o.gstReturnType);
+            let index = sequencingList?.findIndex(f => f.gstReturnType === o.gstReturnType);
             o.name = sequencingList[index].name;
             return index;
         });

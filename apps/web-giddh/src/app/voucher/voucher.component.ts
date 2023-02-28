@@ -4131,7 +4131,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 // add quantity to additional because we are using quantity from bulk modal so we have to pass it to onSelectSalesAccount
                 item.additional['quantity'] = item.quantity;
                 let lastIndex = -1;
-                let blankItemIndex = this.invFormData.entries.findIndex(f => !f.transactions[0].accountUniqueName);
+                let blankItemIndex = this.invFormData.entries?.findIndex(f => !f.transactions[0].accountUniqueName);
                 let isBlankItemInBetween;
                 if (blankItemIndex > -1) {
                     lastIndex = blankItemIndex;
@@ -5776,7 +5776,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @memberof VoucherComponent
      */
     public handleOutsideClick(event: any): void {
-        if (event?.target?.className?.indexOf("option") === -1 && this.accountAsideMenuState === 'out' && this.asideMenuStateForProductService === 'out' && this.asideMenuStateForRecurringEntry === 'out' && this.asideMenuStateForOtherTaxes === 'out') {
+        if ((typeof event?.target?.className === "string" && event?.target?.className?.indexOf("option") === -1) && this.accountAsideMenuState === 'out' && this.asideMenuStateForProductService === 'out' && this.asideMenuStateForRecurringEntry === 'out' && this.asideMenuStateForOtherTaxes === 'out') {
             this.activeIndx = null;
             this.checkVoucherEntries();
         }
@@ -6909,7 +6909,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      */
     public addPoItems(poUniqueName: string, entries: any, totalPending: number): void {
         this.startLoader(true);
-        let blankItemIndex = this.invFormData.entries.findIndex(entry => !entry.transactions[0].accountUniqueName);
+        let blankItemIndex = this.invFormData.entries?.findIndex(entry => !entry.transactions[0].accountUniqueName);
         let isBlankItemPresent;
         let startIndex = this.invFormData.entries?.length;
         if (blankItemIndex > -1) {
@@ -6958,7 +6958,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
                 if (item.additional.maxQuantity > 0) {
                     let lastIndex = -1;
-                    let blankItemIndex = this.invFormData.entries.findIndex(f => !f.transactions[transactionLoop].accountUniqueName);
+                    let blankItemIndex = this.invFormData.entries?.findIndex(f => !f.transactions[transactionLoop].accountUniqueName);
 
                     if (blankItemIndex > -1) {
                         lastIndex = blankItemIndex;

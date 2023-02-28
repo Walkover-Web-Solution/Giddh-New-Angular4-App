@@ -688,8 +688,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 let res = response.body;
                 this.store.dispatch(this.companyActions.setActiveCompanyData(res));
 
-                if (res.countryV2 !== null && res.countryV2 !== undefined) {
-                    this.getStates(res.countryV2.alpha2CountryCode);
+                if (res?.countryV2 !== null && res?.countryV2 !== undefined) {
+                    this.getStates(res?.countryV2.alpha2CountryCode);
                     this.store.dispatch(this.commonActions.resetOnboardingForm());
                 }
                 if (res.subscription) {

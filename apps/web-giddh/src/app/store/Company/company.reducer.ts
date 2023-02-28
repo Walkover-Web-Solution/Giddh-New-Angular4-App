@@ -151,7 +151,7 @@ export function CompanyReducer(state: CurrentCompanyState = initialState, action
             let res: BaseResponse<TaxResponse, string> = action.payload;
             if (res?.status === 'success') {
                 let newState = _.cloneDeep(state);
-                let taxIndx = newState.taxes.findIndex((tax) => tax.uniqueName === res.request);
+                let taxIndx = newState.taxes?.findIndex((tax) => tax.uniqueName === res.request);
                 if (taxIndx > -1) {
                     newState.taxes.splice(taxIndx, 1);
                 }

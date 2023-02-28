@@ -607,7 +607,7 @@ export class UpdateLedgerVm {
 
     public reInitilizeDiscount(resp: LedgerResponse) {
         let discountArray: LedgerDiscountClass[] = [];
-        let defaultDiscountIndex = resp.discounts.findIndex(f => !f.discount?.uniqueName);
+        let defaultDiscountIndex = resp.discounts?.findIndex(f => !f.discount?.uniqueName);
 
         if (defaultDiscountIndex > -1) {
             discountArray.push({

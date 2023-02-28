@@ -333,7 +333,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
                 if (this.currentTaxList[tax] !== undefined && this.selectedTaxes?.indexOf(tax) === -1) {
                     this.selectedTaxes.push(tax);
 
-                    let matchedIndex = this.taxesList.findIndex(listedTax => listedTax.value === tax);
+                    let matchedIndex = this.taxesList?.findIndex(listedTax => listedTax.value === tax);
                     if (matchedIndex > -1) {
                         this.taxesList[matchedIndex].isSelected = true;
                     }

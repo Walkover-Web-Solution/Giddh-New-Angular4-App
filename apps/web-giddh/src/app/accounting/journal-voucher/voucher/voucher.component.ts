@@ -930,7 +930,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             const byOrTo = data.voucherType === VOUCHERS.PAYMENT ? 'to' : 'by';
             const toAccounts = data.transactions?.filter((acc) => acc.type === byOrTo);
             const AccountOfCashOrBank = toAccounts?.filter((acc) => {
-                const indexOfCashOrBank = acc.selectedAccount?.parentGroups.findIndex((pg) => pg?.uniqueName === 'cash' || pg?.uniqueName === 'bankaccounts' || (this.generalService.voucherApiVersion === 2 && pg?.uniqueName === 'loanandoverdraft'));
+                const indexOfCashOrBank = acc.selectedAccount?.parentGroups?.findIndex((pg) => pg?.uniqueName === 'cash' || pg?.uniqueName === 'bankaccounts' || (this.generalService.voucherApiVersion === 2 && pg?.uniqueName === 'loanandoverdraft'));
                 return indexOfCashOrBank !== -1 ? true : false;
             });
             return (AccountOfCashOrBank && AccountOfCashOrBank.length) ? true : false;
