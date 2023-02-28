@@ -44,11 +44,11 @@
     }
 }
 
-.td-search-box {
-    div {
-        float: right;
-    }
+.unit-badge {
+    text-transform: lowercase;
+}
 
+.td-search-box {
     .input-container {
         input {
             height: 36px;

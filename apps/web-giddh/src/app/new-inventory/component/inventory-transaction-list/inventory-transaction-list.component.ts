@@ -359,6 +359,7 @@ export class InventoryTransactionListComponent implements OnInit {
         this.balanceStockReportRequest.variantUniqueNames = this.stockReportRequest.variantUniqueNames;
         this.filtersChipList?.push(selectOptionValue);
         this.isFilterActive();
+        this.searchStockReportRequest.q = "";
         this.searchStockTransactionReport();
         this.getStockTransactionalReport();
     }
@@ -417,8 +418,6 @@ export class InventoryTransactionListComponent implements OnInit {
         this.inventoryService.searchStockTransactionReport(this.searchStockReportRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.body && response.status === 'success') {
                 this.fieldFilteredOptions = response.body.results;
-                this.searchStockReportRequest.page = response.body.page;
-                this.searchStockReportRequest.count = response.body.count;
                 this.searchStockReportRequest.totalItems = response.body.totalItems;
                 this.searchStockReportRequest.totalPages = response.body.totalPages;
             } else {

@@ -415,12 +415,9 @@
                     </ng-container>
 
                     <ng-container matColumnDef="voucherType">
-                        <th width="8%" mat-header-cell *matHeaderCellDef [matMenuTriggerFor]="voucherTypesMenu">
+                        <th mat-header-cell *matHeaderCellDef [matMenuTriggerFor]="voucherTypesMenu">
                             Voucher Type
-                            <i
-                                class="fa fa-ellipsis-v pull-right text-light-2 mt-1 cursor-pointer"
-                                aria-hidden="true"
-                            ></i>
+                            <i class="fa fa-ellipsis-v ml-1 text-light-2 mt-1 cursor-pointer" aria-hidden="true"></i>
                             <mat-menu #voucherTypesMenu="matMenu">
                                 <ng-container *ngFor="let item of voucherTypes; let idx = index">
                                     <button
@@ -451,7 +448,7 @@
                     </ng-container>
                     <ng-container matColumnDef="accountName">
                         <th
-                            class="td-search-box"
+                            class="td-search-box text-left"
                             width="15%"
                             mat-header-cell
                             #searchCustomerContainer
@@ -470,19 +467,19 @@
                                 "
                             ></ng-container>
                         </th>
-                        <td data-title="Account Name" class="text-right" mat-cell *matCellDef="let element">
+                        <td data-title="Account Name" class="text-left" mat-cell *matCellDef="let element">
                             {{ element?.account?.name ?? "-" }}
                         </td>
                     </ng-container>
                     <ng-container matColumnDef="stockName">
-                        <th class="text-right" mat-header-cell *matHeaderCellDef>Stock Name</th>
-                        <td data-title="Stock Name" class="text-right" mat-cell *matCellDef="let element">
+                        <th class="text-left" mat-header-cell *matHeaderCellDef>Stock Name</th>
+                        <td data-title="Stock Name" class="text-left" mat-cell *matCellDef="let element">
                             {{ element?.stock?.name ?? "-" }}
                         </td>
                     </ng-container>
                     <ng-container matColumnDef="variantName">
-                        <th class="text-right" mat-header-cell *matHeaderCellDef>Variant Name</th>
-                        <td data-title="Variant Name" class="text-right" mat-cell *matCellDef="let element">
+                        <th class="text-left" mat-header-cell *matHeaderCellDef>Variant Name</th>
+                        <td data-title="Variant Name" class="text-left" mat-cell *matCellDef="let element">
                             {{ element?.variant?.name ?? "-" }}
                         </td>
                     </ng-container>
@@ -493,18 +490,20 @@
                             class="text-right"
                             mat-cell
                             *matCellDef="let element"
-                            [matTooltip]="
-                                activeCompany?.baseCurrency + ' ' + element?.inwardBalance ? element?.inwardBalance : 0
-                            "
+                            [matTooltip]="element?.type == 'dr' ? element?.quantity : ''"
                         >
-                            <span class="d-inline-flex">
+                            <span class="d-inline-flex" *ngIf="element.type == 'dr'">
                                 <amount-field
-                                    [amount]="element?.inwardBalance ? element?.inwardBalance : 0"
-                                    [currencySymbol]="activeCompany.baseCurrencySymbol"
-                                    [currencyCode]="activeCompany?.baseCurrency"
+                                    [amount]="element?.type == 'dr' ? element?.quantity : ''"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false"
                                 >
                                 </amount-field>
+                                <span class="ml-1 unit-badge">
+                                    {{ element?.type == "dr" ? element?.stockUnit : "-" }}</span
+                                >
                             </span>
+                            <span *ngIf="element.type == 'cr'">-</span>
                         </td>
                     </ng-container>
                     <ng-container matColumnDef="outward_quantity">
@@ -514,20 +513,20 @@
                             class="text-right"
                             mat-cell
                             *matCellDef="let element"
-                            [matTooltip]="
-                                activeCompany?.baseCurrency + ' ' + element?.outwardBalance
-                                    ? element?.outwardBalance
-                                    : 0
-                            "
+                            [matTooltip]="element?.type == 'cr' ? element?.quantity : ''"
                         >
-                            <span class="d-inline-flex">
+                            <span class="d-inline-flex" *ngIf="element.type == 'cr'">
                                 <amount-field
-                                    [amount]="element?.outwardBalance ? element?.outwardBalance : 0"
-                                    [currencySymbol]="activeCompany.baseCurrencySymbol"
-                                    [currencyCode]="activeCompany?.baseCurrency"
+                                    [amount]="element?.type == 'cr' ? element?.quantity : ''"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false"
                                 >
                                 </amount-field>
+                                <span class="ml-1 unit-badge">
+                                    {{ element?.type == "cr" ? element?.stockUnit : "-" }}</span
+                                >
                             </span>
+                            <span *ngIf="element.type == 'dr'">-</span>
                         </td>
                     </ng-container>
                     <ng-container matColumnDef="rate">
