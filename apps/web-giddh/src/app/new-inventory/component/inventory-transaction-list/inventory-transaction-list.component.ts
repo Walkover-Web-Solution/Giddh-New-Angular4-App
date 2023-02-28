@@ -36,13 +36,9 @@ export class InventoryTransactionListComponent implements OnInit {
     @ViewChild(MatSort) sort: MatSort;
     /** Instance of cdk virtual scroller */
     @ViewChildren(CdkVirtualScrollViewport) virtualScroll: QueryList<CdkVirtualScrollViewport>;
-    /** This will use for instance of warehouses Dropdown */
-    /** True when pagination should be enabled */
-    @Input() public isPaginationEnabled: boolean;
-    /** True if we need to scroll element by id */
-    @Input() public scrollableElementId = '';
     /** Emits the scroll to bottom event when pagination is required  */
     @Output() public scrollEnd: EventEmitter<void> = new EventEmitter();
+    /** This will use for instance of warehouses Dropdown */
     public warehousesDropdown: FormControl = new FormControl();
     /** This will use for instance of branches Dropdown */
     public branchesDropdown: FormControl = new FormControl();
@@ -216,8 +212,6 @@ export class InventoryTransactionListComponent implements OnInit {
     public filtersChipList: any[] = [];
     /** Filtered options to show in autocomplete list */
     public fieldFilteredOptions: any[] = [];
-    /** List of data */
-    @Input() public options: any;
     /** Hold all branch warehouses */
     public allBranchWarehouses: any;
     /** Emit with seperate code for filtersChipList */
@@ -417,7 +411,7 @@ export class InventoryTransactionListComponent implements OnInit {
      *
      * @memberof InventoryTransactionListComponent
      */
-    public searchStockTransactionReport(): void {
+    public searchStockTransactionReport(initiallyApiCall?: boolean): void {
         delete this.searchStockReportRequest.totalItems;
         delete this.searchStockReportRequest.totalPages;
         this.searchStockReportRequest.stockGroupUniqueNames = this.stockReportRequest.stockGroupUniqueNames;
@@ -426,8 +420,9 @@ export class InventoryTransactionListComponent implements OnInit {
         this.balanceStockReportRequest.stockGroupUniqueNames = this.stockReportRequest.stockGroupUniqueNames;
         this.balanceStockReportRequest.stockUniqueNames = this.stockReportRequest.stockUniqueNames;
         this.balanceStockReportRequest.variantUniqueNames = this.stockReportRequest.variantUniqueNames;
-        this.searchStockReportRequest.page = this.searchStockReportRequest.page;
-        this.searchStockReportRequest.page++;
+        if (initiallyApiCall) {
+            this.searchStockReportRequest.page++;
+        }
         this.inventoryService.searchStockTransactionReport(this.searchStockReportRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.body && response.status === 'success') {
                 this.fieldFilteredOptions = response.body.results;
@@ -742,6 +737,7 @@ export class InventoryTransactionListComponent implements OnInit {
         this.advanceSearchModalResponse = null;
         this.stockReportRequest = new StockTransactionReportRequest();
         this.balanceStockReportRequest = new BalanceStockTransactionReportRequest();
+        this.searchStockReportRequest = new SearchStockTransactionReportRequest();
         this.filtersChipList = [];
         this.selectedBranch = [];
         this.getBranches(false);
@@ -867,18 +863,6 @@ export class InventoryTransactionListComponent implements OnInit {
     public filteredDisplayColumns(): void {
         this.displayedColumns = this.customiseColumns?.filter(value => value?.checked).map(column => column?.value);
         this.changeDetection.detectChanges();
-    }
-
-    /**
-     * Emits true if scrolling end event
-     *
-     * @memberof InventoryTransactionListComponent
-     */
-    public scrollEndEvent(event: any): void {
-        if (this.scrollableElementId === event) {
-            this.fieldFilteredOptions = this.options;
-            this.scrollEnd.emit();
-        }
     }
 
     /**

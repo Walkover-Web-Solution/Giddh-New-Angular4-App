@@ -114,15 +114,15 @@
                 (optionSelected)="selectChiplistValue($event); selectField.value = ''"
             >
                 <app-cdk-scroll
-                    (fetchNextPage)="searchStockTransactionReport()"
-                    [scrollableElementId]="scrollableElementId"
+                    (fetchNextPage)="searchStockTransactionReport(true)"
+                    [scrollableElementId]="'stock-transaction'"
                 >
                     <cdk-virtual-scroll-viewport
                         class="virtual-group-list overflow-x-hidden"
                         [itemSize]="33"
                         [minBufferPx]="300"
                         [maxBufferPx]="300"
-                        [id]="scrollableElementId"
+                        [id]="'stock-transaction'"
                         [ngStyle]="{
                             'min-height': (fieldFilteredOptions?.length * 51 > 193 ? 193 : 51) + 'px'
                         }"
