@@ -646,7 +646,8 @@
         </div>
     </div>
     <div class="no-data-inventory" *ngIf="!isLoading && !dataSource?.length">
-        <h1>No Data Found</h1>
+        <h1>No entries found within given criteria.</h1>
+        <h1>Do search with some other dates</h1>
     </div>
 
     <div class="no-data" *ngIf="isLoading">
