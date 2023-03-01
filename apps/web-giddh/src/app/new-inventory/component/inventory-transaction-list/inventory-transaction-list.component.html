@@ -12,7 +12,7 @@
                 />
             </div>
         </div>
-        <div class="pl-1" *ngIf="isCompany">
+        <div class="pl-1 filter-dropdown" *ngIf="isCompany && allBranches?.length > 1">
             <mat-select
                 name="selectedBranch"
                 [multiple]="true"
@@ -41,7 +41,7 @@
                 </mat-option>
             </mat-select>
         </div>
-        <div class="pl-1" *ngIf="allWarehouses?.length > 1">
+        <div class="pl-1 filter-dropdown" *ngIf="allWarehouses?.length > 1">
             <mat-select
                 name="selectedWarehouse"
                 [multiple]="true"

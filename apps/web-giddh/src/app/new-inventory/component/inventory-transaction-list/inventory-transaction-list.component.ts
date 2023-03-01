@@ -269,7 +269,7 @@ export class InventoryTransactionListComponent implements OnInit {
                 this.stockReportRequest.to = this.toDate;
                 this.balanceStockReportRequest.from = this.fromDate;
                 this.balanceStockReportRequest.to = this.toDate;
-                this.getStockTransactionalReport();
+                this.getStockTransactionalReport(true);
                 this.getReportColumns();
             }
         });
@@ -455,12 +455,10 @@ export class InventoryTransactionListComponent implements OnInit {
 
         this.dataSource = [];
         this.isLoading = true;
+
         if (!this.isCompany) {
-            this.stockReportRequest.branchUniqueNames = [this.generalService.currentBranchUniqueName];
-            this.balanceStockReportRequest.branchUniqueNames = [this.generalService.currentBranchUniqueName];
-        }else {
-            this.stockReportRequest.branchUniqueNames = [];
-            this.balanceStockReportRequest.branchUniqueNames = [];
+            this.stockReportRequest.branchUniqueNames = this.generalService.currentBranchUniqueName ? [this.generalService.currentBranchUniqueName] : [];
+            this.balanceStockReportRequest.branchUniqueNames = this.generalService.currentBranchUniqueName ? [this.generalService.currentBranchUniqueName] : [];
         }
         this.inventoryService.getStockTransactionReport(cloneDeep(this.stockReportRequest)).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.isLoading = false;
@@ -682,7 +680,7 @@ export class InventoryTransactionListComponent implements OnInit {
                 this.allBranches = response.body.results?.filter(branch => branch?.isCompany !== true);
                 this.branches = response.body.results?.filter(branch => branch?.isCompany !== true);
                 this.allWarehouses = [];
-                this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && this.branches?.length > 1;
+                this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch;
             }
             this.getBranches(false);
             this.changeDetection.detectChanges();
@@ -710,7 +708,6 @@ export class InventoryTransactionListComponent implements OnInit {
     public getBranches(apiCall: boolean = true): void {
         this.selectedWarehouse = [];
         this.allWarehouses = [];
-
         if (!this.isCompany) {
             let currentBranch = this.allBranches?.filter(branch => branch?.uniqueName === this.generalService.currentBranchUniqueName);
             this.allWarehouses = currentBranch[0]?.warehouses;
@@ -732,7 +729,7 @@ export class InventoryTransactionListComponent implements OnInit {
         this.currentWarehouses = this.warehouses;
         this.stockReportRequest.branchUniqueNames = this.selectedBranch?.length ? this.selectedBranch : [];
         this.stockReportRequest.warehouseUniqueNames = [];
-        this.balanceStockReportRequest.branchUniqueNames =  this.selectedBranch?.length ? this.selectedBranch : [];
+        this.balanceStockReportRequest.branchUniqueNames = this.selectedBranch?.length ? this.selectedBranch : [];
         this.balanceStockReportRequest.warehouseUniqueNames = [];
         if (apiCall) {
             this.getStockTransactionalReport();
