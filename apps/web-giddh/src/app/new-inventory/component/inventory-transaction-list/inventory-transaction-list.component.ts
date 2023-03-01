@@ -445,17 +445,22 @@ export class InventoryTransactionListComponent implements OnInit {
      * @return {*}  {void}
      * @memberof InventoryTransactionListComponent
      */
-    public getStockTransactionalReport(): void {
+    public getStockTransactionalReport(fetchBalance: boolean = true): void {
         if (!this.showAdvanceSearchModal) {
             this.stockReportRequest.from = this.fromDate;
             this.stockReportRequest.to = this.toDate;
             this.balanceStockReportRequest.from = this.fromDate;
             this.balanceStockReportRequest.to = this.toDate;
         }
+
         this.dataSource = [];
         this.isLoading = true;
         if (!this.isCompany) {
-            this.stockReportRequest.branchUniqueNames.push(this.generalService.currentBranchUniqueName);
+            this.stockReportRequest.branchUniqueNames = [this.generalService.currentBranchUniqueName];
+            this.balanceStockReportRequest.branchUniqueNames = [this.generalService.currentBranchUniqueName];
+        }else {
+            this.stockReportRequest.branchUniqueNames = [];
+            this.balanceStockReportRequest.branchUniqueNames = [];
         }
         this.inventoryService.getStockTransactionReport(cloneDeep(this.stockReportRequest)).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.isLoading = false;
@@ -472,15 +477,16 @@ export class InventoryTransactionListComponent implements OnInit {
             }
             this.changeDetection.detectChanges();
         });
-
-        this.inventoryService.getStockTransactionReportBalance(cloneDeep(this.balanceStockReportRequest)).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response && response.body && response.status === 'success') {
-                this.stockTransactionReportBalance = response.body;
-            } else {
-                this.stockTransactionReportBalance = null;
-            }
-            this.changeDetection.detectChanges();
-        });
+        if (fetchBalance) {
+            this.inventoryService.getStockTransactionReportBalance(cloneDeep(this.balanceStockReportRequest)).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                if (response && response.body && response.status === 'success') {
+                    this.stockTransactionReportBalance = response.body;
+                } else {
+                    this.stockTransactionReportBalance = null;
+                }
+                this.changeDetection.detectChanges();
+            });
+        }
     }
 
     /**
@@ -612,7 +618,8 @@ export class InventoryTransactionListComponent implements OnInit {
     public sortChange(event: any): void {
         this.stockReportRequest.sort = event?.direction;
         this.stockReportRequest.sortBy = event?.active;
-        this.getStockTransactionalReport();
+        this.stockReportRequest.page = 1;
+        this.getStockTransactionalReport(false);
     }
 
     /**
@@ -723,9 +730,9 @@ export class InventoryTransactionListComponent implements OnInit {
             this.warehouses = warehouses;
         }
         this.currentWarehouses = this.warehouses;
-        this.stockReportRequest.branchUniqueNames = this.selectedBranch;
+        this.stockReportRequest.branchUniqueNames = this.selectedBranch?.length ? this.selectedBranch : [];
         this.stockReportRequest.warehouseUniqueNames = [];
-        this.balanceStockReportRequest.branchUniqueNames = this.selectedBranch;
+        this.balanceStockReportRequest.branchUniqueNames =  this.selectedBranch?.length ? this.selectedBranch : [];
         this.balanceStockReportRequest.warehouseUniqueNames = [];
         if (apiCall) {
             this.getStockTransactionalReport();
@@ -769,7 +776,7 @@ export class InventoryTransactionListComponent implements OnInit {
             response.checked = false;
         });
         if (this.searchAccountName.value === null) {
-            this.getStockTransactionalReport();
+            this.getStockTransactionalReport(true);
         } else {
             this.searchAccountName.reset();
         }
