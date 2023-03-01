@@ -713,10 +713,10 @@ export class InventoryTransactionListComponent implements OnInit {
 
         if (!this.isCompany) {
             let currentBranch = this.allBranches?.filter(branch => branch?.uniqueName === this.generalService.currentBranchUniqueName);
-            this.allWarehouses = currentBranch[0]?.warehouses?.filter(warehouse => warehouse?.isCompany !== true);
+            this.allWarehouses = currentBranch[0]?.warehouses;
         } else {
             this.allBranches?.forEach((branches) => {
-                this.allWarehouses = this.allWarehouses?.concat(branches?.warehouses)?.filter(warehouse => warehouse?.isCompany !== true);
+                this.allWarehouses = this.allWarehouses?.concat(branches?.warehouses);
             });
         }
 
