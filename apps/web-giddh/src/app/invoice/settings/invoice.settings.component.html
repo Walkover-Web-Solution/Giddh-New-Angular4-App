@@ -789,6 +789,68 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="clearfix pd-t1">
+                                    <div class="row">
+                                        <div class="col-sm-12 col-md-12 col-lg-3 flex-container">
+                                            <ngx-switch
+                                                [(status)]="invoiceSetting.salesRoundOff"
+                                                name="salesRoundOff"
+                                                class="show-on-mobile"
+                                                [onText]="commonLocaleData?.app_on"
+                                                [offText]="commonLocaleData?.app_off"
+                                                [onColor]="bootstrapToggleSwitch?.On"
+                                                [offColor]="bootstrapToggleSwitch?.Off"
+                                                [size]="bootstrapToggleSwitch?.Size"
+                                            >
+                                            </ngx-switch>
+                                            <label>{{ localeData?.apply_sales_round_off }}</label>
+                                        </div>
+                                        <div class="col-sm-12 col-md-9 form-group">
+                                            <ngx-switch
+                                                [(status)]="invoiceSetting.salesRoundOff"
+                                                name="salesRoundOff"
+                                                class="hide-on-mobile"
+                                                [onText]="commonLocaleData?.app_on"
+                                                [offText]="commonLocaleData?.app_off"
+                                                [onColor]="bootstrapToggleSwitch?.On"
+                                                [offColor]="bootstrapToggleSwitch?.Off"
+                                                [size]="bootstrapToggleSwitch?.Size"
+                                            >
+                                            </ngx-switch>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="clearfix pd-t1">
+                                    <div class="row">
+                                        <div class="col-sm-12 col-md-12 col-lg-3 flex-container">
+                                            <ngx-switch
+                                                [(status)]="invoiceSetting.creditNoteRoundOff"
+                                                name="creditNoteRoundOff"
+                                                class="show-on-mobile"
+                                                [onText]="commonLocaleData?.app_on"
+                                                [offText]="commonLocaleData?.app_off"
+                                                [onColor]="bootstrapToggleSwitch?.On"
+                                                [offColor]="bootstrapToggleSwitch?.Off"
+                                                [size]="bootstrapToggleSwitch?.Size"
+                                            >
+                                            </ngx-switch>
+                                            <label>{{ localeData?.apply_credit_note_round_off }}</label>
+                                        </div>
+                                        <div class="col-sm-12 col-md-9 form-group">
+                                            <ngx-switch
+                                                [(status)]="invoiceSetting.creditNoteRoundOff"
+                                                name="creditNoteRoundOff"
+                                                class="hide-on-mobile"
+                                                [onText]="commonLocaleData?.app_on"
+                                                [offText]="commonLocaleData?.app_off"
+                                                [onColor]="bootstrapToggleSwitch?.On"
+                                                [offColor]="bootstrapToggleSwitch?.Off"
+                                                [size]="bootstrapToggleSwitch?.Size"
+                                            >
+                                            </ngx-switch>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div
                                     *ngIf="(activeCompany$ | async)?.countryV2?.alpha2CountryCode === 'IN'"
                                     class="clearfix pd-t1"

@@ -44,5 +44,7 @@
     "e_invoice_password_label": "संकेतशब्द",
     "e_invoice_gstin_label": "जीएसटीआयएन",
     "e_invoice_fields_required_error_message": "ई-इनव्हॉइसिंग प्रमाणीकरणासाठी सर्व फील्ड आवश्यक आहेत",
-    "e_invoice_invalid_gstin_error_message": "कृपया एक वैध जीएसटीआयएन प्रदान करा"
+    "e_invoice_invalid_gstin_error_message": "कृपया एक वैध जीएसटीआयएन प्रदान करा",
+    "apply_sales_round_off": "विक्री/नगदी व्हाउचरवर राउंड ऑफ लागू करा",
+    "apply_credit_note_round_off": "क्रेडिट नोट व्हाउचरवर राउंड ऑफ लागू करा"
 }

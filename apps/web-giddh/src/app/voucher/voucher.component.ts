@@ -947,6 +947,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     this.invoiceType = decodeURI(params['invoiceType']) as VoucherTypeEnum;
                     this.prepareInvoiceTypeFlags();
                     this.resetInvoiceForm(this.invoiceForm);
+                    this.getInventorySettings();
 
                     // reset customer company when invoice type changes, re-check for company currency and country
                     this.store.pipe(select(s => s.settings.profile), take(1)).subscribe(profile => {
@@ -6176,11 +6177,25 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      */
     public getInventorySettings(): void {
         this.store.pipe(select((s: AppState) => s.invoice.settings), takeUntil(this.destroyed$)).subscribe((settings: InvoiceSetting) => {
-            if (settings && settings.companyInventorySettings) {
-                this.inventorySettings = settings.companyInventorySettings;
-            }
-            if (settings?.invoiceSettings) {
-                this.useCustomInvoiceNumber = settings.invoiceSettings.useCustomInvoiceNumber;
+            if (settings) {
+                if (settings.companyInventorySettings) {
+                    this.inventorySettings = settings.companyInventorySettings;
+                }
+                if (settings?.invoiceSettings) {
+                    this.useCustomInvoiceNumber = settings.invoiceSettings.useCustomInvoiceNumber;
+                }
+
+                if (this.invoiceType === VoucherTypeEnum.sales || this.invoiceType === VoucherTypeEnum.cash) {
+                    this.applyRoundOff = settings.invoiceSettings.salesRoundOff;
+                } else if (this.invoiceType === VoucherTypeEnum.purchase) {
+                    this.applyRoundOff = settings.invoiceSettings.purchaseRoundOff;
+                } else if (this.invoiceType === VoucherTypeEnum.debitNote) {
+                    this.applyRoundOff = settings.invoiceSettings.debitNoteRoundOff;
+                } else if (this.invoiceType === VoucherTypeEnum.creditNote) {
+                    this.applyRoundOff = settings.invoiceSettings.creditNoteRoundOff;
+                } else if (this.invoiceType === VoucherTypeEnum.estimate || this.invoiceType === VoucherTypeEnum.generateEstimate || this.invoiceType === VoucherTypeEnum.proforma || this.invoiceType === VoucherTypeEnum.generateProforma) {
+                    this.applyRoundOff = true;
+                }
             }
         });
     }
