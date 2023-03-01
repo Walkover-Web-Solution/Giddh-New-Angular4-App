@@ -6186,15 +6186,19 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     this.useCustomInvoiceNumber = settings.invoiceSettings.useCustomInvoiceNumber;
                 }
 
-                if (this.invoiceType === VoucherTypeEnum.sales || this.invoiceType === VoucherTypeEnum.cash) {
-                    this.applyRoundOff = settings.invoiceSettings.salesRoundOff;
-                } else if (this.invoiceType === VoucherTypeEnum.purchase) {
-                    this.applyRoundOff = settings.invoiceSettings.purchaseRoundOff;
-                } else if (this.invoiceType === VoucherTypeEnum.debitNote) {
-                    this.applyRoundOff = settings.invoiceSettings.debitNoteRoundOff;
-                } else if (this.invoiceType === VoucherTypeEnum.creditNote) {
-                    this.applyRoundOff = settings.invoiceSettings.creditNoteRoundOff;
-                } else if (this.invoiceType === VoucherTypeEnum.estimate || this.invoiceType === VoucherTypeEnum.generateEstimate || this.invoiceType === VoucherTypeEnum.proforma || this.invoiceType === VoucherTypeEnum.generateProforma) {
+                if (this.voucherApiVersion === 2) {
+                    if (this.invoiceType === VoucherTypeEnum.sales || this.invoiceType === VoucherTypeEnum.cash) {
+                        this.applyRoundOff = settings.invoiceSettings.salesRoundOff;
+                    } else if (this.invoiceType === VoucherTypeEnum.purchase) {
+                        this.applyRoundOff = settings.invoiceSettings.purchaseRoundOff;
+                    } else if (this.invoiceType === VoucherTypeEnum.debitNote) {
+                        this.applyRoundOff = settings.invoiceSettings.debitNoteRoundOff;
+                    } else if (this.invoiceType === VoucherTypeEnum.creditNote) {
+                        this.applyRoundOff = settings.invoiceSettings.creditNoteRoundOff;
+                    } else if (this.invoiceType === VoucherTypeEnum.estimate || this.invoiceType === VoucherTypeEnum.generateEstimate || this.invoiceType === VoucherTypeEnum.proforma || this.invoiceType === VoucherTypeEnum.generateProforma) {
+                        this.applyRoundOff = true;
+                    }
+                } else {
                     this.applyRoundOff = true;
                 }
             }
