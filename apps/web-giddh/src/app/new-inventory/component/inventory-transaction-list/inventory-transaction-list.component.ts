@@ -424,7 +424,11 @@ export class InventoryTransactionListComponent implements OnInit {
             delete this.searchStockReportRequest.totalPages;
             this.inventoryService.searchStockTransactionReport(this.searchStockReportRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response && response.body && response.status === 'success') {
-                    this.fieldFilteredOptions = response.body.results;
+                    if (loadMore) {
+                        this.fieldFilteredOptions = this.fieldFilteredOptions.concat(response.body.results);
+                    } else {
+                        this.fieldFilteredOptions = response.body.results;
+                    }
                     this.searchStockReportRequest.totalItems = response.body.totalItems;
                     this.searchStockReportRequest.totalPages = response.body.totalPages;
                 } else {
