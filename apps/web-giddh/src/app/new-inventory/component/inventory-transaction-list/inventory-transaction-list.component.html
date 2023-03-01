@@ -209,11 +209,11 @@
     </div> -->
 </div>
 <div class="inventory-transaction-list" *ngIf="!isLoading">
-    <div class="p-3">
+    <div class="p-3" *ngIf="isDataAvailable">
         <div class="row">
             <div class="col-12">
                 <div class="top-content">
-                    <div class="d-flex w-100 justify-content-between overflow-x-auto" *ngIf="dataSource?.length">
+                    <div class="d-flex w-100 justify-content-between overflow-x-auto">
                         <div class="total-details-box mr-r05 count-box">
                             <h5>
                                 Transaction Count
@@ -412,9 +412,9 @@
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-12 horizontal-padding inventory-report-table">
-            <div class="table-responsive table-content" *ngIf="dataSource?.length && displayedColumns?.length">
+    <div class="row" *ngIf="isDataAvailable">
+        <div class="col-12 horizontal-padding">
+            <div class="table-responsive inventory-report-table" *ngIf="displayedColumns?.length">
                 <table
                     mat-table
                     [dataSource]="dataSource"
@@ -600,21 +600,8 @@
                             {{ element.qty }}
                         </td>
                     </ng-container> -->
-                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
                     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-                    <tr class="mat-row" *matNoDataRow>
-                        <td
-                            class="mat-cell p-5 no-data-section"
-                            [attr.colspan]="displayedColumns?.length ? displayedColumns?.length : 9"
-                        >
-                            <div class="no-data" *ngIf="isLoading">
-                                <giddh-page-loader></giddh-page-loader>
-                            </div>
-                            <div class="no-data" *ngIf="!isLoading && !dataSource?.length">
-                                <h1>No Data Found</h1>
-                            </div>
-                        </td>
-                    </tr>
                 </table>
             </div>
             <div class="pagination-wrapper">
@@ -641,7 +628,7 @@
         </div>
     </div>
 </div>
-<div class="no-data-inventory" *ngIf="(!isLoading && !dataSource?.length) || !displayedColumns?.length">
+<div class="no-data-inventory" *ngIf="!isLoading && !dataSource?.length">
     <h1>No Data Found</h1>
 </div>
 

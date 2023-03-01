@@ -68,20 +68,6 @@
     }
 }
 
-.table-content {
-    // max-height: calc(100vh - 500px);
-    // overflow-y: auto;
-    // height: calc(100vh - 500px);
-
-    .inventory-report-table {
-        thead {
-            position: fixed;
-            top: 60px;
-            width: 100%;
-        }
-    }
-}
-
 ::ng-deep {
     .mat-pseudo-checkbox-checked {
         background: var(--color-giddh-blue) !important;
@@ -96,6 +82,13 @@
                     border-bottom: none !important;
                 }
             }
+        }
+    }
+
+    .inventory-report-table {
+        overflow-x: visible !important;
+        .mat-table-sticky {
+            top: 60px !important;
         }
     }
 }
