@@ -119,6 +119,10 @@
     color: var(--color-gray);
 }
 
+.filter-dropdown {
+    max-width: 250px;
+}
+
 @media (max-width: 1440px) {
     .select-multiple-chiplist-inventory {
         min-width: 70%;
