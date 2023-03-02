@@ -177,15 +177,13 @@
                             name="selectAll"
                             (change)="selectAllColumns($event?.checked); saveColumns()"
                             [checked]="displayedColumns?.length === customiseColumns?.length"
-                            [indeterminate]="
-                                displayedColumns?.length < customiseColumns?.length && displayedColumns?.length > 0
-                            "
                         >
                             Select All
                         </mat-checkbox>
                     </button>
                     <ng-container *ngFor="let item of customiseColumns">
                         <button
+                            class="menu-buttons"
                             mat-menu-item
                             (click)="$event?.stopPropagation()"
                             (keydown.enter)="$event?.stopPropagation(); item.checked = !item?.checked; saveColumns()"

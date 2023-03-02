@@ -618,7 +618,11 @@ export class InventoryTransactionListComponent implements OnInit {
      * @memberof InventoryTransactionListComponent
      */
     public sortChange(event: any): void {
-        this.stockReportRequest.sort = event?.direction ? event?.direction : 'asc';
+        if (event?.direction) {
+            this.stockReportRequest.sort = event?.direction;
+        } else if (event?.direction === '') {
+            this.stockReportRequest.sort = 'asc';
+        }
         this.stockReportRequest.sortBy = event?.active;
         this.stockReportRequest.page = 1;
         this.getStockTransactionalReport(false);
@@ -810,7 +814,7 @@ export class InventoryTransactionListComponent implements OnInit {
         if (checkedValues?.length) {
             this.stockReportRequest.voucherTypes = [];
             checkedValues?.forEach(type => {
-                    this.stockReportRequest.voucherTypes?.push(type?.value);
+                this.stockReportRequest.voucherTypes?.push(type?.value);
             });
         } else {
             this.stockReportRequest.voucherTypes = [];
