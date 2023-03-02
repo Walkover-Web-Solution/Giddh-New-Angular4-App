@@ -114,6 +114,7 @@
                     />
                 </mat-chip-list>
                 <mat-autocomplete
+                    class="inventory-autocomplete"
                     #auto="matAutocomplete"
                     (optionSelected)="selectChiplistValue($event); selectField.value = ''"
                 >
@@ -160,6 +161,7 @@
                 </button>
                 <mat-menu #customise="matMenu" class="columns-wrapper">
                     <button
+                        class="menu-buttons"
                         mat-menu-item
                         (click)="$event?.stopPropagation()"
                         (keydown.enter)="
@@ -462,6 +464,7 @@
                                 >
                                     <ng-container *ngFor="let item of voucherTypes; let idx = index">
                                         <button
+                                            class="menu-buttons"
                                             mat-menu-item
                                             (click)="$event?.stopPropagation()"
                                             (keydown.enter)="item.checked = !item?.checked"
@@ -549,7 +552,7 @@
                                         [currencyCode]="false"
                                     >
                                     </amount-field>
-                                    <span class="ml-1 unit-badge"> {{ element?.stockUnit }}</span>
+                                    <span class="ml-1 unit-badge"> {{ element?.stockUnit?.code }}</span>
                                 </span>
                                 <span *ngIf="element?.type === 'cr'">-</span>
                             </td>
@@ -574,7 +577,7 @@
                                         [currencyCode]="false"
                                     >
                                     </amount-field>
-                                    <span class="ml-1 unit-badge"> {{ element?.stockUnit }}</span>
+                                    <span class="ml-1 unit-badge"> {{ element?.stockUnit?.code }}</span>
                                 </span>
                                 <span *ngIf="element?.type === 'dr'">-</span>
                             </td>
