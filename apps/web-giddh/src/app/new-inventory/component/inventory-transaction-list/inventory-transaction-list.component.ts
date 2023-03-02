@@ -799,24 +799,32 @@ export class InventoryTransactionListComponent implements OnInit {
     }
 
     /**
-     * This will use for filter by check for Voucher type s column
+     * This will use for filter by check for Voucher types column
      *
      * @param {string} type
      * @memberof InventoryTransactionListComponent
      */
-    public filterByCheck(type: string): void {
-        setTimeout(() => {
-            if (!this.stockReportRequest.voucherTypes?.includes(type)) {
-                this.stockReportRequest.voucherTypes?.push(type);
-            } else {
-                this.stockReportRequest.voucherTypes = this.stockReportRequest.voucherTypes?.filter(value => value != type);
-            }
-            this.balanceStockReportRequest.voucherTypes = this.stockReportRequest.voucherTypes;
+    public filterByVoucherTypes(): void {
+        let checkedValues = this.voucherTypes?.filter(value => value?.checked === true);
+        const currentVoucherTypes = cloneDeep(this.stockReportRequest.voucherTypes);
+        if (checkedValues?.length) {
+            this.stockReportRequest.voucherTypes = [];
+            checkedValues?.forEach(type => {
+                    this.stockReportRequest.voucherTypes?.push(type?.value);
+            });
+        } else {
+            this.stockReportRequest.voucherTypes = [];
+        }
+        let difference = currentVoucherTypes?.filter(x => !this.stockReportRequest.voucherTypes?.includes(x));
+        let hasDifference = (difference?.length || currentVoucherTypes?.length !== this.stockReportRequest.voucherTypes?.length)
+        this.balanceStockReportRequest.voucherTypes = this.stockReportRequest.voucherTypes;
+        this.isFilterActive();
+        if (hasDifference) {
             this.stockReportRequest.page = 1;
-            this.isFilterActive();
             this.getStockTransactionalReport();
-            this.changeDetection.detectChanges();
-        });
+        }
+        this.changeDetection.detectChanges();
+
     }
 
     /**

@@ -578,6 +578,9 @@ $custom-typography: mat-typography-config(
 .select-multiple-chiplist-inventory {
     .mat-form-field-wrapper {
         padding-bottom: 0px !important;
+        label {
+            color: var(--color-gray) !important;
+        }
     }
 }
 .columns-wrapper {
@@ -13127,11 +13130,8 @@ hamburger-menu {
 
 //inventory control styling
 .mat-select-search-inventory {
-    .mat-select-search-no-entries-found {
-        padding: 0px !important;
-    }
     .mat-select-search-input {
-        padding: 0px 0px 0px 17px !important;
+        padding: 0px 30px 0px 17px !important;
     }
 }
 .inventory-filter-bar {

@@ -455,22 +455,21 @@
                                     class="fa fa-ellipsis-v ml-1 text-light-2 mt-1 cursor-pointer"
                                     aria-hidden="true"
                                 ></i>
-                                <mat-menu #voucherTypesMenu="matMenu" class="columns-wrapper">
+                                <mat-menu
+                                    #voucherTypesMenu="matMenu"
+                                    class="columns-wrapper"
+                                    (closed)="filterByVoucherTypes()"
+                                >
                                     <ng-container *ngFor="let item of voucherTypes; let idx = index">
                                         <button
                                             mat-menu-item
                                             (click)="$event?.stopPropagation()"
-                                            (keydown.enter)="
-                                                $event?.stopPropagation();
-                                                item.checked = !item?.checked;
-                                                filterByCheck(item?.value)
-                                            "
+                                            (keydown.enter)="item.checked = !item?.checked"
                                         >
                                             <mat-checkbox
                                                 class="inventory-checkbox"
                                                 color="primary"
                                                 name="{{ item?.value }}"
-                                                (ngModelChange)="filterByCheck(item?.value)"
                                                 [(ngModel)]="item.checked"
                                                 (click)="$event?.stopPropagation()"
                                             >
