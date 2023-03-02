@@ -371,11 +371,13 @@ $custom-typography: mat-typography-config(
         }
     }
 }
-.mat-select-search-no-entries-found {
-    padding: 16px !important;
-    z-index: 99999 !important;
-    position: relative !important;
-    padding-top: 5px !important;
+.purchase-link {
+    .mat-select-search-no-entries-found {
+        padding: 16px !important;
+        z-index: 99999 !important;
+        position: relative !important;
+        padding-top: 5px !important;
+    }
 }
 .trigger-dropdown {
     font-size: 16px;
@@ -13134,6 +13136,10 @@ hamburger-menu {
 .mat-select-search-inventory {
     .mat-select-search-input {
         padding: 0px 30px 0px 17px !important;
+    }
+    .mat-select-search-clear {
+        right: 0 !important;
+        margin-right: 0 !important;
     }
 }
 .inventory-filter-bar {

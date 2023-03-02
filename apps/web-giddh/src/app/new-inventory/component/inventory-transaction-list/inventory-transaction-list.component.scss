@@ -92,6 +92,12 @@
             }
         }
     }
+
+    .columns-wrapper {
+        .menu-buttons {
+            cursor: none !important;
+        }
+    }
 }
 
 .transaction-report-wrapper {
@@ -121,6 +127,7 @@
 
 .filter-dropdown {
     max-width: 250px;
+    margin-left: 10px;
 }
 
 @media (max-width: 1440px) {
