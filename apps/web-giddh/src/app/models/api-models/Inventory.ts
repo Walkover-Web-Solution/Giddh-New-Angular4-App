@@ -81,6 +81,7 @@ export class StockUnitResponse implements IStockUnitResponse {
     public parentStockUnit?: IStockItem;
     public quantityPerUnit: number;
     public displayQuantityPerUnit?: number;
+    public uniqueName: string;
 }
 
 /**
@@ -245,6 +246,7 @@ export class CreateStockRequest {
 export class StockUnitRequest {
     public name: string;
     public code: string;
+    public uniqueName?: string;
     public mappings: any[] = [];
 }
 

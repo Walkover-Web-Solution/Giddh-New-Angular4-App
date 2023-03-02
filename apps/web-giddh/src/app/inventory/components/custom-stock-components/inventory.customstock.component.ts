@@ -230,7 +230,7 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
      * @memberof InventoryCustomStockComponent
      */
     public editUnit(item: any) {
-        this.store.dispatch(this.customStockActions.getStockMappedUnitByCode(item.stockUnitX.code));
+        this.store.dispatch(this.customStockActions.getStockMappedUnitByUniqueName(item.stockUnitX.uniqueName));
     }
 
     /**

@@ -69,18 +69,18 @@ export class CustomStockUnitAction {
             })));
 
     /**
-     * This  will use for get stock mapped unit by name
+     * This  will use for get stock mapped unit by unique name
      *
      * @type {Observable<Action>}
      * @memberof CustomStockUnitAction
      */
-    public getStockMappedUnitByCode$: Observable<Action> = createEffect(() => this.action$
+    public getStockMappedUnitByUniqueName$: Observable<Action> = createEffect(() => this.action$
         .pipe(
-            ofType(CUSTOM_STOCK_UNIT_ACTIONS.GET_STOCK_MAPPED_UNIT_CODE),
+            ofType(CUSTOM_STOCK_UNIT_ACTIONS.GET_STOCK_MAPPED_UNIT_UNIQUE_NAME),
             switchMap((action: CustomActions) => {
-                return this._inventoryService.getStockMappedUnitByCode(action.payload.code).pipe(
+                return this._inventoryService.getStockMappedUnitByUniqueName(action.payload.uniqueName).pipe(
                     map((r) => this.validateResponse(r, {
-                        type: CUSTOM_STOCK_UNIT_ACTIONS.GET_STOCK_MAPPED_UNIT_CODE_RESPONSE,
+                        type: CUSTOM_STOCK_UNIT_ACTIONS.GET_STOCK_MAPPED_UNIT_UNIQUE_NAME_RESPONSE,
                         payload: r.body
                     })));
             })));
@@ -164,14 +164,14 @@ export class CustomStockUnitAction {
     /**
      * This will use for get stock mapped units by unique name
      *
-     * @param {string} code
+     * @param {string} uniqueName
      * @return {*}  {CustomActions}
      * @memberof CustomStockUnitAction
      */
-    public getStockMappedUnitByCode(code: string): CustomActions {
+    public getStockMappedUnitByUniqueName(uniqueName: string): CustomActions {
         return {
-            type: CUSTOM_STOCK_UNIT_ACTIONS.GET_STOCK_MAPPED_UNIT_CODE,
-            payload: { code }
+            type: CUSTOM_STOCK_UNIT_ACTIONS.GET_STOCK_MAPPED_UNIT_UNIQUE_NAME,
+            payload: { uniqueName }
         };
     }
 

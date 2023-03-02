@@ -204,13 +204,13 @@ export class InventoryService {
     /**
    * This will use for get stock mapped units by unique name
    */
-    public getStockMappedUnitByCode(code: string): Observable<BaseResponse<StockMappedUnitResponse, any>> {
+    public getStockMappedUnitByUniqueName(uniqueName: string): Observable<BaseResponse<StockMappedUnitResponse, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.get(this.config.apiUrl + INVENTORY_API.UPDATE_STOCK_UNIT?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':uName', code)).pipe(map((res) => {
+        return this.http.get(this.config.apiUrl + INVENTORY_API.UPDATE_STOCK_UNIT?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':uniqueName', uniqueName)).pipe(map((res) => {
             let data: BaseResponse<StockMappedUnitResponse, string> = res;
-            data.queryString = { code };
+            data.queryString = { uniqueName };
             return data;
-        }), catchError((e) => this.errorHandler.HandleCatch<StockMappedUnitResponse, string>(e, { code })));
+        }), catchError((e) => this.errorHandler.HandleCatch<StockMappedUnitResponse, string>(e, { uniqueName })));
     }
 
     /**

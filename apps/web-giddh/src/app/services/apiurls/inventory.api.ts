@@ -34,7 +34,7 @@ export const INVENTORY_API = {
     DELETE_STOCK: 'company/:companyUniqueName/stock-group/:stockGroupUniqueName/stock/:stockUniqueName', // DELETE call
     DELETE_STOCK_UNIT: 'company/:companyUniqueName/stock-unit/:uName', // DELETE call
     UPDATE_STOCK: 'company/:companyUniqueName/stock-group/:stockGroupUniqueName/stock/:stockUniqueName', // PUT call
-    UPDATE_STOCK_UNIT: 'company/:companyUniqueName/stock-unit/:uName', // PUT call
+    UPDATE_STOCK_UNIT: 'company/:companyUniqueName/stock-unit/:uniqueName', // PUT call
     GET_RATE_FOR_STOCK: 'company/:companyUniqueName/stock/:stockUniqueName/rate-for-stock', // Get call
     GET_STOCK_WITH_UNIQUENAME: 'company/:companyUniqueName/stock/:stockUniqueName', // GET call
     GET_STOCK_UNIT_WITH_NAME: 'company/:companyUniqueName/stock-unit/:uName', // GET call
