@@ -554,11 +554,13 @@ $custom-typography: mat-typography-config(
 }
 .select-multiple-chiplist-inventory {
     .mat-form-field-infix {
-        margin-bottom: 0px;
+        margin-bottom: 7px;
         padding-top: 2px;
         border-top: 5px !important;
         border-bottom: 5px !important;
-        margin-top: 4px;
+        margin-top: 7px;
+        padding-bottom: 0px !important;
+        line-height: 1 !important;
     }
 }
 .autopaid {
@@ -581,11 +583,11 @@ $custom-typography: mat-typography-config(
     }
 }
 .columns-wrapper {
+    .menu-buttons {
+        cursor: none !important;
+    }
     .inventory-checkbox {
         width: 100%;
-        button {
-            cursor: none !important;
-        }
         .mat-checkbox-layout {
             float: left;
             width: 100%;
