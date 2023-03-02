@@ -124,11 +124,14 @@
                         <cdk-virtual-scroll-viewport
                             class="virtual-group-list overflow-x-hidden"
                             [itemSize]="33"
-                            [minBufferPx]="300"
-                            [maxBufferPx]="300"
                             [id]="'stock-transaction'"
                             [ngStyle]="{
-                                'min-height': (fieldFilteredOptions?.length * 51 > 193 ? 193 : 51) + 'px'
+                                'min-height':
+                                    (fieldFilteredOptions?.length * 51 > 193
+                                        ? 193
+                                        : !fieldFilteredOptions?.length
+                                        ? 51
+                                        : 104) + 'px'
                             }"
                         >
                             <mat-option *ngFor="let option of fieldFilteredOptions" [value]="option">
@@ -483,8 +486,7 @@
                         </ng-container>
                         <ng-container matColumnDef="accountName">
                             <th
-                                class="td-search-box text-left"
-                                width="15%"
+                                class="td-search-box text-left word-wrap"
                                 mat-header-cell
                                 #searchCustomerContainer
                                 *matHeaderCellDef
@@ -513,13 +515,18 @@
                         </ng-container>
                         <ng-container matColumnDef="stockName">
                             <th class="text-left" mat-header-cell *matHeaderCellDef>Stock Name</th>
-                            <td data-title="Stock Name" class="text-left" mat-cell *matCellDef="let element">
+                            <td data-title="Stock Name" class="text-left word-wrap" mat-cell *matCellDef="let element">
                                 {{ element?.stock?.name ?? "-" }}
                             </td>
                         </ng-container>
                         <ng-container matColumnDef="variantName">
                             <th class="text-left" mat-header-cell *matHeaderCellDef>Variant Name</th>
-                            <td data-title="Variant Name" class="text-left" mat-cell *matCellDef="let element">
+                            <td
+                                data-title="Variant Name"
+                                class="text-left word-wrap"
+                                mat-cell
+                                *matCellDef="let element"
+                            >
                                 {{ element?.variant?.name ?? "-" }}
                             </td>
                         </ng-container>
