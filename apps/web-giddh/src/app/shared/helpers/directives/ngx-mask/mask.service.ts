@@ -2,6 +2,7 @@ import { ElementRef, Inject, Injectable, Renderer2 } from '@angular/core';
 import { config, IConfig } from './config';
 import { DOCUMENT } from '@angular/common';
 import { MaskApplierService, Separators } from './mask-applier.service';
+import { giddhRoundOff } from '../../helperFunctions';
 
 @Injectable()
 export class MaskService extends MaskApplierService {
@@ -298,11 +299,11 @@ export class MaskService extends MaskApplierService {
                 this.maskExpression === Separators.INT_SPACE_SEPARATED || this.maskExpression === Separators.INT_COMMA_SEPARATED) {
                 return result === ''
                     ? result
-                    : Number(this._removeMask(this._removeSuffix(this._removePrefix(result)), this.maskSpecialCharacters?.filter(f => f !== '.')));
+                    : giddhRoundOff(Number(this._removeMask(this._removeSuffix(this._removePrefix(result)), this.maskSpecialCharacters?.filter(f => f !== '.'))), this.giddhDecimalPlaces);
             } else {
                 return result === ''
                     ? result
-                    : Number(this._removeMask(this._removeSuffix(this._removePrefix(result)), this.maskSpecialCharacters));
+                    : giddhRoundOff(Number(this._removeMask(this._removeSuffix(this._removePrefix(result)), this.maskSpecialCharacters)), this.giddhDecimalPlaces);
             }
         } else if (
             this._removeMask(this._removeSuffix(this._removePrefix(result)), this.maskSpecialCharacters)?.indexOf(
@@ -332,7 +333,7 @@ export class MaskService extends MaskApplierService {
 
     private _checkPrecision(separatorExpression: string, separatorValue: string): number | string {
         if (separatorExpression?.indexOf('2') > 0) {
-            return Number(separatorValue).toFixed(2);
+            return Number(separatorValue).toFixed(this.giddhDecimalPlaces || 2);
         }
         return Number(separatorValue);
     }

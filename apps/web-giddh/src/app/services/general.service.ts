@@ -1012,7 +1012,7 @@ export class GeneralService {
      * @returns {*} Modified item with tooltup text for grand total and total due amount
      * @memberof GeneralService
      */
-    public addToolTipText(selectedVoucher: any, baseCurrency: string, item: any, localeData: any, commonLocaleData: any): any {
+    public addToolTipText(selectedVoucher: any, baseCurrency: string, item: any, localeData: any, commonLocaleData: any, giddhBalanceDecimalPlaces: number): any {
         try {
             let balanceDueAmountForCompany, balanceDueAmountForAccount, grandTotalAmountForCompany,
                 grandTotalAmountForAccount;
@@ -1030,10 +1030,10 @@ export class GeneralService {
             if (this.voucherApiVersion === 2) {
                 grandTotalConversionRate = item.exchangeRate;
             } else if (grandTotalAmountForCompany && grandTotalAmountForAccount) {
-                grandTotalConversionRate = +((grandTotalAmountForCompany / grandTotalAmountForAccount) || 0).toFixed(2);
+                grandTotalConversionRate = +((grandTotalAmountForCompany / grandTotalAmountForAccount) || 0).toFixed(giddhBalanceDecimalPlaces);
             }
             if (balanceDueAmountForCompany && balanceDueAmountForAccount) {
-                balanceDueAmountConversionRate = +((balanceDueAmountForCompany / balanceDueAmountForAccount) || 0).toFixed(2);
+                balanceDueAmountConversionRate = +((balanceDueAmountForCompany / balanceDueAmountForAccount) || 0).toFixed(giddhBalanceDecimalPlaces);
                 if (this.voucherApiVersion !== 2) {
                     item.exchangeRate = balanceDueAmountConversionRate;
                 }

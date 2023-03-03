@@ -244,6 +244,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public selectedEInvoice: any;
     /** True if dropdown menu needs to show upwards */
     public isDropUp: boolean = false;
+    /** Decimal places from company settings */
+    public giddhBalanceDecimalPlaces: number = 2;
 
     constructor(
         private store: Store<AppState>,
@@ -281,6 +283,12 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
         this.voucherDetails$ = this.store.pipe(select(s => s.receipt.voucher), takeUntil(this.destroyed$));
         this.companyName$ = this.store.pipe(select(state => state.session.companyUniqueName), takeUntil(this.destroyed$));
+
+        this.store.pipe(select(state => state.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
+            if (profile) {
+                this.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
+            }
+        });
     }
 
     /**
@@ -1377,8 +1385,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
     private parseBalRes(res) {
         if (res && res.body) {
-            this.totalSale = giddhRoundOff(res.body.grandTotal, 2);
-            this.totalDue = giddhRoundOff(res.body.totalDue, 2);
+            this.totalSale = giddhRoundOff(res.body.grandTotal, this.giddhBalanceDecimalPlaces);
+            this.totalDue = giddhRoundOff(res.body.totalDue, this.giddhBalanceDecimalPlaces);
         }
         // get user country from his profile
         this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$)).subscribe(profile => {
@@ -1856,7 +1864,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                             }
                             if (MULTI_CURRENCY_MODULES?.indexOf(this.selectedVoucher) > -1) {
                                 // For CR/DR note and Cash/Sales invoice
-                                item = this.generalService.addToolTipText(this.selectedVoucher, this.baseCurrency, item, this.localeData, this.commonLocaleData);
+                                item = this.generalService.addToolTipText(this.selectedVoucher, this.baseCurrency, item, this.localeData, this.commonLocaleData, this.giddhBalanceDecimalPlaces);
 
                                 if (this.gstEInvoiceEnable) {
                                     item.eInvoiceStatusTooltip = this.getEInvoiceTooltipText(item);

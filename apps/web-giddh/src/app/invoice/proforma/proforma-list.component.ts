@@ -190,6 +190,8 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
     public commonLocaleData: any = {};
     /** True if user has voucher list permission */
     public hasVoucherListPermissions: boolean = true;
+    /** Decimal places from company settings */
+    public giddhBalanceDecimalPlaces: number = 2;
 
     constructor(private store: Store<AppState>, private proformaActions: ProformaActions, private router: Router, private _cdr: ChangeDetectorRef, private _breakPointObservar: BreakpointObserver, private generalService: GeneralService, private modalService: BsModalService, private commonActions: CommonActions) {
         this.advanceSearchFilter.page = 1;
@@ -218,6 +220,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
             if (profile) {
                 this.baseCurrencySymbol = profile.baseCurrencySymbol;
                 this.baseCurrency = profile.baseCurrency;
+                this.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
             }
         });
 
@@ -804,7 +807,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
 
             let grandTotalConversionRate = 0;
             if (grandTotalAmountForCompany && grandTotalAmountForAccount) {
-                grandTotalConversionRate = +((grandTotalAmountForCompany / grandTotalAmountForAccount) || 0).toFixed(2);
+                grandTotalConversionRate = +((grandTotalAmountForCompany / grandTotalAmountForAccount) || 0).toFixed(this.giddhBalanceDecimalPlaces);
             }
 
             item['grandTotalTooltipText'] = `In ${this.baseCurrency}: ${grandTotalAmountForCompany}<br />(Conversion Rate: ${grandTotalConversionRate})`;
