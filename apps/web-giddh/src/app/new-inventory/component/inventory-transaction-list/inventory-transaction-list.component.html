@@ -246,13 +246,13 @@
                                             [matTooltipPosition]="'above'"
                                             [matTooltip]="
                                                 stockTransactionReportBalance?.profit
-                                                    ? activeCompany.baseCurrency +
+                                                    ? activeCompany.baseCurrencySymbol +
                                                       ' ' +
                                                       giddhRoundOff(
                                                           stockTransactionReportBalance?.profit,
                                                           giddhBalanceDecimalPlaces
                                                       )
-                                                    : activeCompany.baseCurrency + 0
+                                                    : activeCompany.baseCurrencySymbol + 0
                                             "
                                         >
                                             <amount-field
