@@ -19,7 +19,7 @@ import { ElementViewContainerRef } from '../../../shared/helpers/directives/elem
 import { AppState } from '../../../store';
 import { ADVANCE_RECEIPT_REPORT_FILTERS, ReceiptAdvanceSearchModel } from '../../constants/reports.constant';
 import { ReceiptAdvanceSearchComponent } from '../receipt-advance-search/receipt-advance-search.component';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { InvoiceBulkUpdateService } from '../../../services/invoice.bulkupdate.service';
 
 @Component({
@@ -181,6 +181,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
         private generalService: GeneralService,
         private settingsBranchAction: SettingsBranchActions,
         private modalService: BsModalService,
+        private router: Router,
         private route: ActivatedRoute,
         private invoiceBulkUpdateService: InvoiceBulkUpdateService
     ) {
