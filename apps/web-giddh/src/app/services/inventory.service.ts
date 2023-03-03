@@ -205,13 +205,13 @@ export class InventoryService {
     /**
    * This will use for get stock mapped units by unique name
    */
-    public getStockMappedUnitByCode(code: string): Observable<BaseResponse<StockMappedUnitResponse, any>> {
+    public getStockMappedUnitByUniqueName(uniqueName: string): Observable<BaseResponse<StockMappedUnitResponse, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.get(this.config.apiUrl + INVENTORY_API.UPDATE_STOCK_UNIT?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':uName', code)).pipe(map((res) => {
+        return this.http.get(this.config.apiUrl + INVENTORY_API.UPDATE_STOCK_UNIT?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':uniqueName', uniqueName)).pipe(map((res) => {
             let data: BaseResponse<StockMappedUnitResponse, string> = res;
-            data.queryString = { code };
+            data.queryString = { uniqueName };
             return data;
-        }), catchError((e) => this.errorHandler.HandleCatch<StockMappedUnitResponse, string>(e, { code })));
+        }), catchError((e) => this.errorHandler.HandleCatch<StockMappedUnitResponse, string>(e, { uniqueName })));
     }
 
     /**
@@ -229,27 +229,27 @@ export class InventoryService {
     /**
      * Update StockUnit
      */
-    public UpdateStockUnit(model: StockUnitRequest, uName: string): Observable<BaseResponse<StockUnitResponse, StockUnitRequest>> {
+    public UpdateStockUnit(model: StockUnitRequest, uniqueName: string): Observable<BaseResponse<StockUnitResponse, StockUnitRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.put(this.config.apiUrl + INVENTORY_API.UPDATE_STOCK_UNIT?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':uName', uName), model).pipe(map((res) => {
+        return this.http.put(this.config.apiUrl + INVENTORY_API.UPDATE_STOCK_UNIT?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':uniqueName', uniqueName), model).pipe(map((res) => {
             let data: BaseResponse<StockUnitResponse, StockUnitRequest> = res;
             data.request = model;
-            data.queryString = { uName };
+            data.queryString = { uniqueName };
             return data;
-        }), catchError((e) => this.errorHandler.HandleCatch<StockUnitResponse, StockUnitRequest>(e, model, { uName })));
+        }), catchError((e) => this.errorHandler.HandleCatch<StockUnitResponse, StockUnitRequest>(e, model, { uniqueName })));
     }
 
     /**
      * Delete StockUnit
      */
-    public DeleteStockUnit(uName: string): Observable<BaseResponse<string, string>> {
+    public DeleteStockUnit(uniqueName: string): Observable<BaseResponse<string, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.delete(this.config.apiUrl + INVENTORY_API.DELETE_STOCK_UNIT?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':uName', uName)).pipe(map((res) => {
+        return this.http.delete(this.config.apiUrl + INVENTORY_API.DELETE_STOCK_UNIT?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':uniqueName', uniqueName)).pipe(map((res) => {
             let data: BaseResponse<string, string> = res;
-            data.request = uName;
-            data.queryString = { uName };
+            data.request = uniqueName;
+            data.queryString = { uniqueName };
             return data;
-        }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, uName, { uName })));
+        }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, uniqueName, { uniqueName })));
     }
 
     /**

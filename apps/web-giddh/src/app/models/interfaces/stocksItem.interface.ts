@@ -23,6 +23,7 @@ export interface IStocksItem extends INameUniqueName {
 export interface IStockItem {
     name: string;
     code: string;
+    uniqueName: string;
 }
 
 export interface IStockReportItem {
