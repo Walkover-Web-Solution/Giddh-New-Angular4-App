@@ -71,6 +71,7 @@ export class IStockItemDetail {
 }
 
 export interface IManufacturingDetails {
+    manufacturingUnitUniqueName?: any;
     manufacturingQuantity: number;
     manufacturingUnitCode: string;
     linkedStocks: IStockItemDetail[];
