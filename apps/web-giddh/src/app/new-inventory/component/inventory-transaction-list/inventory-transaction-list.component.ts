@@ -19,6 +19,7 @@ import { NewInventoryAdavanceSearch } from "../new-inventory-advance-search/new-
 import { ToasterService } from "../../../services/toaster.service";
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { CdkVirtualScrollViewport } from "@angular/cdk/scrolling";
+import { giddhRoundOff } from "../../../shared/helpers/helperFunctions";
 @Component({
     selector: "inventory-transaction-list",
     templateUrl: "./inventory-transaction-list.component.html",
@@ -179,7 +180,7 @@ export class InventoryTransactionListComponent implements OnInit {
         },
         {
             "value": "inward_quantity",
-            "label": "Invards",
+            "label": "Inwards",
             "checked": true
 
         },
@@ -238,6 +239,10 @@ export class InventoryTransactionListComponent implements OnInit {
     public advanceSearchModalResponse: object = null;
     /** True if data available */
     public isDataAvailable: boolean = false;
+    /** This will use for round off value */
+    public giddhRoundOff: any = giddhRoundOff;
+    /** Decimal places from company settings */
+    public giddhBalanceDecimalPlaces: number = 2;
 
     constructor(
         private generalService: GeneralService,
@@ -248,6 +253,11 @@ export class InventoryTransactionListComponent implements OnInit {
         private toaster: ToasterService,
         private store: Store<AppState>) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
+        this.store.pipe(select(state => state.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
+            if (profile) {
+                this.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
+            }
+        });
     }
 
     /**
@@ -474,6 +484,7 @@ export class InventoryTransactionListComponent implements OnInit {
                 this.stockReportRequest.totalPages = response.body.totalPages;
                 this.stockReportRequest.count = response.body.count;
             } else {
+                this.toaster.errorToast(response?.message);
                 this.dataSource = [];
                 this.stockReportRequest.totalItems = 0;
             }
@@ -618,7 +629,7 @@ export class InventoryTransactionListComponent implements OnInit {
      * @memberof InventoryTransactionListComponent
      */
     public sortChange(event: any): void {
-        this.stockReportRequest.sort = event?.direction ? event?.direction : 'asc' ;
+        this.stockReportRequest.sort = event?.direction ? event?.direction : 'asc';
         this.stockReportRequest.sortBy = event?.active;
         this.stockReportRequest.page = 1;
         this.getStockTransactionalReport(false);

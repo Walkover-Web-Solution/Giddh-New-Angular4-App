@@ -95,6 +95,7 @@
         .menu-buttons {
             padding-right: 0;
             margin-right: 10px;
+            padding-left: 0 !important;
         }
     }
 }
@@ -106,14 +107,16 @@
 .select-multiple-chiplist-inventory {
     font-weight: 400 !important;
     font-size: 14px !important;
-    min-width: 80%;
-
+    width: 82%;
     .mat-chip.mat-standard-chip {
         color: var(--color-chips-primary) !important;
         background-color: var(--color-body-background) !important;
         border: 1px solid var(--color-primary-login-box-body-text) !important;
         font-size: 12px !important;
     }
+}
+.searching-bar-chiplist {
+    width: 83% !important;
 }
 
 .no-data-inventory {
@@ -124,30 +127,41 @@
     color: var(--color-gray);
 }
 
-.filter-dropdown {
+.filter-dropdown-branch {
     max-width: 250px;
-    margin-left: 10px;
+}
+
+.filter-dropdown-warehouse {
+    max-width: 250px;
+    margin-left: 5px;
+}
+
+.top-main-bar {
+    padding-top: 15px;
 }
 
 @media (max-width: 1440px) {
     .select-multiple-chiplist-inventory {
-        min-width: 72%;
+        width: 68%;
     }
 }
 
 @media (max-width: 1024px) {
     .select-multiple-chiplist-inventory {
-        min-width: 57%;
+        width: 57%;
     }
 
     .stock-mat-salect {
         min-width: 187px;
     }
+    .inventory-report-table {
+        overflow-x: scroll !important;
+    }
 }
 
 @media (max-width: 1019px) {
     .select-multiple-chiplist-inventory {
-        min-width: 57%;
+        width: 57%;
     }
 
     .stock-mat-salect {
