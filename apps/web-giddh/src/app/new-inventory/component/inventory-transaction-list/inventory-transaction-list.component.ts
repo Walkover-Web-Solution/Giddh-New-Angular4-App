@@ -618,11 +618,7 @@ export class InventoryTransactionListComponent implements OnInit {
      * @memberof InventoryTransactionListComponent
      */
     public sortChange(event: any): void {
-        if (event?.direction) {
-            this.stockReportRequest.sort = event?.direction;
-        } else if (event?.direction === '') {
-            this.stockReportRequest.sort = 'asc';
-        }
+        this.stockReportRequest.sort = event?.direction ? event?.direction : 'asc' ;
         this.stockReportRequest.sortBy = event?.active;
         this.stockReportRequest.page = 1;
         this.getStockTransactionalReport(false);
