@@ -1,6 +1,6 @@
 <!--new inventory header-->
 <div class="transaction-report-wrapper">
-    <div class="inventory-filter-bar">
+    <div class="inventory-filter-bar top-main-bar">
         <div class="custom-datepicker-wrapper">
             <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
                 <i class="icon-calender calendar-addon"></i>
@@ -12,7 +12,7 @@
                 />
             </div>
         </div>
-        <div class="pl-1 filter-dropdown" *ngIf="isCompany && allBranches?.length > 1">
+        <div class="pl-1 filter-dropdown-branch" *ngIf="isCompany && allBranches?.length > 1">
             <mat-select
                 name="selectedBranch"
                 [multiple]="true"
@@ -41,7 +41,7 @@
                 </mat-option>
             </mat-select>
         </div>
-        <div class="pl-1 filter-dropdown" *ngIf="allWarehouses?.length > 1">
+        <div class="pl-1 filter-dropdown-warehouse" *ngIf="allWarehouses?.length > 1">
             <mat-select
                 name="selectedWarehouse"
                 [multiple]="true"
@@ -70,12 +70,7 @@
             </mat-select>
         </div>
         <div class="clear-filter d-flex" *ngIf="showClearFilter">
-            <button
-                mat-raised-button
-                class="create-btn-inventory btn-sky-blue ml-3 mr-0"
-                color="primary"
-                (click)="resetFilter()"
-            >
+            <button mat-raised-button class="create-btn-inventory ml-3 mr-0" color="primary" (click)="resetFilter()">
                 <span class="icon-cross"></span> Clear
             </button>
         </div>
@@ -86,7 +81,7 @@
             <mat-form-field
                 floatLabel="never"
                 class="select-multiple-chiplist-inventory"
-                [ngClass]="{ 'pl-1': filtersChipList?.length }"
+                [ngClass]="{ 'searching-bar-chiplist': filtersChipList?.length }"
             >
                 <mat-chip-list #matChipList>
                     <mat-chip
@@ -227,7 +222,7 @@
     </div> -->
     </div>
     <div class="inventory-transaction-list" *ngIf="!isLoading">
-        <div class="p-3" *ngIf="isDataAvailable">
+        <div *ngIf="isDataAvailable">
             <div class="row">
                 <div class="col-12">
                     <div class="top-content">
@@ -248,12 +243,16 @@
                                     <div class="mt-2">
                                         <span
                                             class="d-inline-flex number-total w-100"
+                                            [matTooltipPosition]="'above'"
                                             [matTooltip]="
-                                                activeCompany?.baseCurrency +
-                                                ' ' +
                                                 stockTransactionReportBalance?.profit
-                                                    ? stockTransactionReportBalance?.profit
-                                                    : 0
+                                                    ? activeCompany.baseCurrency +
+                                                      ' ' +
+                                                      giddhRoundOff(
+                                                          stockTransactionReportBalance?.profit,
+                                                          giddhBalanceDecimalPlaces
+                                                      )
+                                                    : activeCompany.baseCurrency + 0
                                             "
                                         >
                                             <amount-field
@@ -277,12 +276,16 @@
                                     <div class="mt-2">
                                         <span
                                             class="d-inline-flex number-total w-100"
+                                            [matTooltipPosition]="'above'"
                                             [matTooltip]="
-                                                activeCompany?.baseCurrency +
+                                                activeCompany.baseCurrencySymbol +
                                                 ' ' +
                                                 stockTransactionReportBalance?.opening?.amount
-                                                    ? stockTransactionReportBalance?.opening?.amount
-                                                    : 0
+                                                    ? giddhRoundOff(
+                                                          stockTransactionReportBalance?.opening?.amount,
+                                                          giddhBalanceDecimalPlaces
+                                                      )
+                                                    : activeCompany.baseCurrencySymbol + ' ' + 0
                                             "
                                         >
                                             <amount-field
@@ -299,13 +302,28 @@
                                         <span
                                             class="d-inline-flex mt-1"
                                             *ngIf="stockTransactionReportBalance?.opening?.quantity"
+                                            [matTooltipPosition]="'above'"
+                                            [matTooltip]="
+                                                stockTransactionReportBalance?.opening?.quantity
+                                                    ? giddhRoundOff(
+                                                          stockTransactionReportBalance?.opening?.quantity,
+                                                          giddhBalanceDecimalPlaces
+                                                      )
+                                                    : '-'
+                                            "
                                         >
                                             (
-                                            {{
-                                                stockTransactionReportBalance?.opening?.quantity
-                                                    ? (stockTransactionReportBalance?.opening?.quantity | giddhCurrency)
-                                                    : "-"
-                                            }})
+                                            <amount-field
+                                                [amount]="
+                                                    stockTransactionReportBalance?.opening?.quantity
+                                                        ? stockTransactionReportBalance?.opening?.quantity
+                                                        : '-'
+                                                "
+                                                [currencySymbol]="false"
+                                                [currencyCode]="false"
+                                            >
+                                            </amount-field
+                                            >)
                                         </span>
                                     </div>
                                 </h5>
@@ -316,12 +334,16 @@
                                     <div class="mt-2">
                                         <span
                                             class="d-inline-flex number-total w-100"
+                                            [matTooltipPosition]="'above'"
                                             [matTooltip]="
-                                                activeCompany?.baseCurrency +
-                                                ' ' +
                                                 stockTransactionReportBalance?.inwards?.amount
-                                                    ? stockTransactionReportBalance?.inwards?.amount
-                                                    : 0
+                                                    ? activeCompany.baseCurrencySymbol +
+                                                      ' ' +
+                                                      giddhRoundOff(
+                                                          stockTransactionReportBalance?.inwards?.amount,
+                                                          giddhBalanceDecimalPlaces
+                                                      )
+                                                    : activeCompany.baseCurrencySymbol + ' ' + 0
                                             "
                                         >
                                             <amount-field
@@ -338,13 +360,28 @@
                                         <span
                                             class="d-inline-flex mt-1"
                                             *ngIf="stockTransactionReportBalance?.inwards?.quantity"
+                                            [matTooltipPosition]="'above'"
+                                            [matTooltip]="
+                                                stockTransactionReportBalance?.inwards?.quantity
+                                                    ? giddhRoundOff(
+                                                          stockTransactionReportBalance?.inwards?.quantity,
+                                                          giddhBalanceDecimalPlaces
+                                                      )
+                                                    : '-'
+                                            "
                                         >
                                             (
-                                            {{
-                                                stockTransactionReportBalance?.inwards?.quantity
-                                                    ? (stockTransactionReportBalance?.inwards?.quantity | giddhCurrency)
-                                                    : "-"
-                                            }})
+                                            <amount-field
+                                                [amount]="
+                                                    stockTransactionReportBalance?.inwards?.quantity
+                                                        ? stockTransactionReportBalance?.inwards?.quantity
+                                                        : '-'
+                                                "
+                                                [currencySymbol]="false"
+                                                [currencyCode]="false"
+                                            >
+                                            </amount-field
+                                            >)
                                         </span>
                                     </div>
                                 </h5>
@@ -355,12 +392,16 @@
                                     <div class="mt-2">
                                         <span
                                             class="d-inline-flex number-total w-100"
+                                            [matTooltipPosition]="'above'"
                                             [matTooltip]="
-                                                activeCompany?.baseCurrency +
-                                                ' ' +
                                                 stockTransactionReportBalance?.outwards?.amount
-                                                    ? stockTransactionReportBalance?.outwards?.amount
-                                                    : 0
+                                                    ? activeCompany.baseCurrencySymbol +
+                                                      ' ' +
+                                                      giddhRoundOff(
+                                                          stockTransactionReportBalance?.outwards?.amount,
+                                                          giddhBalanceDecimalPlaces
+                                                      )
+                                                    : activeCompany.baseCurrencySymbol + ' ' + 0
                                             "
                                         >
                                             <amount-field
@@ -377,14 +418,28 @@
                                         <span
                                             class="d-inline-flex mt-1"
                                             *ngIf="stockTransactionReportBalance?.outwards?.quantity"
+                                            [matTooltipPosition]="'above'"
+                                            [matTooltip]="
+                                                stockTransactionReportBalance?.outwards?.quantity
+                                                    ? giddhRoundOff(
+                                                          stockTransactionReportBalance?.outwards?.quantity,
+                                                          giddhBalanceDecimalPlaces
+                                                      )
+                                                    : '-'
+                                            "
                                         >
                                             (
-                                            {{
-                                                stockTransactionReportBalance?.outwards?.quantity
-                                                    ? (stockTransactionReportBalance?.outwards?.quantity
-                                                      | giddhCurrency)
-                                                    : "-"
-                                            }})
+                                            <amount-field
+                                                [amount]="
+                                                    stockTransactionReportBalance?.outwards?.quantity
+                                                        ? stockTransactionReportBalance?.outwards?.quantity
+                                                        : '-'
+                                                "
+                                                [currencySymbol]="false"
+                                                [currencyCode]="false"
+                                            >
+                                            </amount-field
+                                            >)
                                         </span>
                                     </div>
                                 </h5>
@@ -395,12 +450,16 @@
                                     <div class="mt-2">
                                         <span
                                             class="d-inline-flex number-total w-100"
+                                            [matTooltipPosition]="'above'"
                                             [matTooltip]="
-                                                activeCompany?.baseCurrency +
-                                                ' ' +
                                                 stockTransactionReportBalance?.closing?.amount
-                                                    ? stockTransactionReportBalance?.closing?.amount
-                                                    : 0
+                                                    ? activeCompany.baseCurrencySymbol +
+                                                      ' ' +
+                                                      giddhRoundOff(
+                                                          stockTransactionReportBalance?.closing?.amount,
+                                                          giddhBalanceDecimalPlaces
+                                                      )
+                                                    : activeCompany.baseCurrencySymbol + ' ' + 0
                                             "
                                         >
                                             <amount-field
@@ -417,13 +476,28 @@
                                         <span
                                             class="d-inline-flex mt-1"
                                             *ngIf="stockTransactionReportBalance?.closing?.quantity"
+                                            [matTooltipPosition]="'above'"
+                                            [matTooltip]="
+                                                stockTransactionReportBalance?.closing?.quantity
+                                                    ? giddhRoundOff(
+                                                          stockTransactionReportBalance?.closing?.quantity,
+                                                          giddhBalanceDecimalPlaces
+                                                      )
+                                                    : '-'
+                                            "
                                         >
                                             (
-                                            {{
-                                                stockTransactionReportBalance?.closing?.quantity
-                                                    ? (stockTransactionReportBalance?.closing?.quantity | giddhCurrency)
-                                                    : "-"
-                                            }})
+                                            <amount-field
+                                                [amount]="
+                                                    stockTransactionReportBalance?.closing?.quantity
+                                                        ? stockTransactionReportBalance?.closing?.quantity
+                                                        : '-'
+                                                "
+                                                [currencySymbol]="false"
+                                                [currencyCode]="false"
+                                            >
+                                            </amount-field
+                                            >)
                                         </span>
                                     </div>
                                 </h5>
@@ -446,7 +520,7 @@
                         class="table giddh-table on-mobile-view"
                     >
                         <ng-container matColumnDef="entry_date">
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
+                            <th class="date-column" mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
                             <td data-title="Date" mat-cell *matCellDef="let element">
                                 {{ element?.entryDate ?? "-" }}
                             </td>
@@ -541,15 +615,16 @@
                                 class="text-right"
                                 mat-cell
                                 *matCellDef="let element"
-                                [matTooltip]="element?.type === 'dr' ? element?.quantity : ''"
+                                [matTooltipPosition]="'above'"
+                                [matTooltip]="
+                                    element?.type === 'dr'
+                                        ? giddhRoundOff(element?.quantity, giddhBalanceDecimalPlaces)
+                                        : ''
+                                "
                             >
                                 <span class="d-inline-flex" *ngIf="element?.type === 'dr'">
                                     <amount-field
-                                        [amount]="
-                                            element?.voucherType === 'PURCHASE_DEBIT_NOTE'
-                                                ? '-' + element?.quantity
-                                                : element?.quantity
-                                        "
+                                        [amount]="element?.quantity ? element?.quantity : '-'"
                                         [currencySymbol]="false"
                                         [currencyCode]="false"
                                     >
@@ -566,15 +641,16 @@
                                 class="text-right"
                                 mat-cell
                                 *matCellDef="let element"
-                                [matTooltip]="element?.type === 'cr' ? element?.quantity : ''"
+                                [matTooltipPosition]="'above'"
+                                [matTooltip]="
+                                    element?.type === 'cr'
+                                        ? giddhRoundOff(element?.quantity, giddhBalanceDecimalPlaces)
+                                        : ''
+                                "
                             >
                                 <span class="d-inline-flex" *ngIf="element.type === 'cr'">
                                     <amount-field
-                                        [amount]="
-                                            element?.voucherType === 'SALES_CREDIT_NOTE'
-                                                ? '-' + element?.quantity
-                                                : element?.quantity
-                                        "
+                                        [amount]="element?.quantity ? element?.quantity : '-'"
                                         [currencySymbol]="false"
                                         [currencyCode]="false"
                                     >
@@ -591,7 +667,14 @@
                                 class="text-right"
                                 mat-cell
                                 *matCellDef="let element"
-                                [matTooltip]="activeCompany?.baseCurrency + ' ' + element?.rate ? element?.rate : 0"
+                                [matTooltipPosition]="'above'"
+                                [matTooltip]="
+                                    element?.rate
+                                        ? activeCompany.baseCurrencySymbol +
+                                          ' ' +
+                                          giddhRoundOff(element?.rate, giddhBalanceDecimalPlaces)
+                                        : activeCompany.baseCurrencySymbol + ' ' + 0
+                                "
                             >
                                 <span class="d-inline-flex">
                                     <amount-field
@@ -610,7 +693,14 @@
                                 class="text-right"
                                 mat-cell
                                 *matCellDef="let element"
-                                [matTooltip]="activeCompany?.baseCurrency + ' ' + element?.amount ? element?.amount : 0"
+                                [matTooltipPosition]="'above'"
+                                [matTooltip]="
+                                    element?.amount
+                                        ? activeCompany.baseCurrencySymbol +
+                                          ' ' +
+                                          giddhRoundOff(element?.amount, giddhBalanceDecimalPlaces)
+                                        : activeCompany.baseCurrencySymbol + ' ' + 0
+                                "
                             >
                                 <span class="d-inline-flex">
                                     <amount-field
