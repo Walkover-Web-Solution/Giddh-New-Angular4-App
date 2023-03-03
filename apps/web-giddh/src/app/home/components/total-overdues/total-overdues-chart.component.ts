@@ -72,9 +72,17 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
     public activeCompany: any = {};
     /** Stores the voucher API version of company */
     public voucherApiVersion: 1 | 2;
+    /** Decimal places from company settings */
+    public giddhBalanceDecimalPlaces: number = 2;
 
     constructor(private store: Store<AppState>, private dashboardService: DashboardService, public currencyPipe: GiddhCurrencyPipe, private cdRef: ChangeDetectorRef, private modalService: BsModalService, private generalService: GeneralService, private receiptService: ReceiptService) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
+
+        this.store.pipe(select(p => p.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
+            if (profile) {
+                this.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
+            }
+        });
     }
 
     public ngOnInit() {
@@ -246,11 +254,11 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
         combineLatest([this.receiptService.getAllReceiptBalanceDue({from: this.toRequest.from, to: this.toRequest.to}, "sales"), this.receiptService.getAllReceiptBalanceDue({from: this.toRequest.from, to: this.toRequest.to}, "purchase"), this.dashboardService.getPendingVouchersCount(this.toRequest.from, this.toRequest.to, "sales"), this.dashboardService.getPendingVouchersCount(this.toRequest.from, this.toRequest.to, "purchase")]).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
             if(response[0] && response[1] && response[2] && response[3]) {
                 if (response[0] && response[0].status === 'success' && response[0].body) {
-                    this.invoiceDue = giddhRoundOff(response[0].body.totalDue, 2);
+                    this.invoiceDue = giddhRoundOff(response[0].body.totalDue, this.giddhBalanceDecimalPlaces);
                     this.dataFound = true;
                 }
                 if (response[1] && response[1].status === 'success' && response[1].body) {
-                    this.billDue = giddhRoundOff(response[1].body.totalDue, 2);
+                    this.billDue = giddhRoundOff(response[1].body.totalDue, this.giddhBalanceDecimalPlaces);
                     this.dataFound = true;
                 }
                 if (response[2] && response[2].status === 'success' && response[2].body) {

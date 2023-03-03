@@ -2328,7 +2328,15 @@
                                                 <div class="wrap-td-data">
                                                     <span class="d-flex justify-content-end">
                                                         <amount-field
-                                                            [amount]="entry.taxSum + entry.cessSum"
+                                                            [amount]="
+                                                                giddhRoundOff(
+                                                                    giddhRoundOff(
+                                                                        entry.taxSum + entry.cessSum,
+                                                                        highPrecisionRate
+                                                                    ),
+                                                                    giddhBalanceDecimalPlaces
+                                                                )
+                                                            "
                                                             [currencySymbol]="
                                                                 isMulticurrencyAccount
                                                                     ? invFormData.accountDetails?.currencySymbol
@@ -3901,7 +3909,12 @@
                                                     </p>
                                                     <div class="differ-currency" *ngIf="isMulticurrencyAccount">
                                                         <amount-field
-                                                            [amount]="(entry.taxSum + entry.cessSum) * exchangeRate"
+                                                            [amount]="
+                                                                giddhRoundOff(
+                                                                    (entry.taxSum + entry.cessSum) * exchangeRate,
+                                                                    giddhBalanceDecimalPlaces
+                                                                )
+                                                            "
                                                             [currencySymbol]="baseCurrencySymbol"
                                                             [currencyCode]="companyCurrency"
                                                         >
@@ -4474,7 +4487,12 @@
                                                     </div>
                                                     <div class="differ-currency" *ngIf="isMulticurrencyAccount">
                                                         <amount-field
-                                                            [amount]="(entry.taxSum + entry.cessSum) * exchangeRate"
+                                                            [amount]="
+                                                                giddhRoundOff(
+                                                                    (entry.taxSum + entry.cessSum) * exchangeRate,
+                                                                    giddhBalanceDecimalPlaces
+                                                                )
+                                                            "
                                                             [currencySymbol]="baseCurrencySymbol"
                                                             [currencyCode]="companyCurrency"
                                                         >
