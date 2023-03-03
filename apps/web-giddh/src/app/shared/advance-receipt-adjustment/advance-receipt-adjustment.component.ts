@@ -113,6 +113,8 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
     private currentAdjustmentRowIndex: number = 0;
     /** Pagination Limit */
     private paginationLimit: number = PAGINATION_LIMIT;
+    /** Decimal places from company settings */
+    public giddhBalanceDecimalPlaces: number = 2;
 
     constructor(
         private store: Store<AppState>,
@@ -146,6 +148,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
             } else {
                 this.currencySymbol = this.baseCurrencySymbol;
             }
+            this.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
         });
 
         if (this.advanceReceiptAdjustmentUpdatedData) {
@@ -499,7 +502,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
         let amount: number = 0;
         amount = cloneDeep(Number(productAmount));
         taxAmount = Number((amount * rate) / (rate + 100));
-        return Number(taxAmount.toFixed(2));
+        return Number(taxAmount.toFixed(this.giddhBalanceDecimalPlaces));
     }
 
 
@@ -516,7 +519,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
         let amount: number = 0;
         amount = cloneDeep(Number(productAmount));
         taxAmount = Number((amount * rate) / 100);
-        return Number(taxAmount.toFixed(2));
+        return Number(taxAmount.toFixed(this.giddhBalanceDecimalPlaces));
     }
 
     /**
@@ -785,9 +788,9 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
      */
     public getBalanceDue(): number {
         if (this.isPaymentReceipt) {
-            return parseFloat(Number(this.adjustPayment.grandTotal - this.adjustPayment.totalAdjustedAmount - this.depositAmount).toFixed(2));
+            return parseFloat(Number(this.adjustPayment.grandTotal - this.adjustPayment.totalAdjustedAmount - this.depositAmount).toFixed(this.giddhBalanceDecimalPlaces));
         } else {
-            return parseFloat(Number(this.adjustPayment.grandTotal + this.adjustPayment.tcsTotal - this.adjustPayment.totalAdjustedAmount - this.depositAmount - this.adjustPayment.tdsTotal).toFixed(2));
+            return parseFloat(Number(this.adjustPayment.grandTotal + this.adjustPayment.tcsTotal - this.adjustPayment.totalAdjustedAmount - this.depositAmount - this.adjustPayment.tdsTotal).toFixed(this.giddhBalanceDecimalPlaces));
         }
     }
 
@@ -800,7 +803,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
     public getConvertedBalanceDue(): number {
         return parseFloat(Number(
             this.getConvertedCompanyAmount(this.adjustPayment?.grandTotal, this.invoiceFormDetails?.voucherDetails?.exchangeRate) +
-            this.adjustPayment.tcsTotal - this.adjustPayment.convertedTotalAdjustedAmount - this.depositAmount - this.adjustPayment.tdsTotal).toFixed(2));
+            this.adjustPayment.tcsTotal - this.adjustPayment.convertedTotalAdjustedAmount - this.depositAmount - this.adjustPayment.tdsTotal).toFixed(this.giddhBalanceDecimalPlaces));
     }
 
     /**

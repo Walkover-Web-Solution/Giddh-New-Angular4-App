@@ -20,6 +20,7 @@ import { TaxControlData } from '../../../theme/tax-control/tax-control.component
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 import { difference, orderBy } from '../../../lodash-optimized';
 import { GeneralService } from '../../../services/general.service';
+import { HIGH_RATE_FIELD_PRECISION } from '../../../app.constant';
 
 export const TAX_CONTROL_VALUE_ACCESSOR: any = {
     provide: NG_VALUE_ACCESSOR,
@@ -68,6 +69,7 @@ export class UpdateLedgerTaxControlComponent implements OnDestroy, OnChanges {
     @Input() public maskInput: string;
     @Input() public prefixInput: string;
     @Input() public suffixInput: string;
+    @Input() public giddhBalanceDecimalPlaces: number = 2;
 
     @Output() public isApplicableTaxesEvent: EventEmitter<boolean> = new EventEmitter();
     @Output() public taxAmountSumEvent: EventEmitter<number> = new EventEmitter();
@@ -80,6 +82,8 @@ export class UpdateLedgerTaxControlComponent implements OnDestroy, OnChanges {
     public sum: number = 0;
     public formattedTotal: string;
     private selectedTaxes: UpdateLedgerTaxData[] = [];
+    /* Amount should have precision up to 16 digits for better calculation */
+    public highPrecisionRate = HIGH_RATE_FIELD_PRECISION;
 
     constructor(private generalService: GeneralService) {
 
@@ -323,10 +327,10 @@ export class UpdateLedgerTaxControlComponent implements OnDestroy, OnChanges {
     private calculateInclusiveOrExclusiveFormattedTax(): void {
         if (this.isAdvanceReceipt) {
             // Inclusive tax calculation
-            this.formattedTotal = `${giddhRoundOff((this.totalForTax * this.sum) / (100 + this.sum), 2)}`;
+            this.formattedTotal = `${giddhRoundOff(giddhRoundOff((this.totalForTax * this.sum) / (100 + this.sum), this.highPrecisionRate), this.giddhBalanceDecimalPlaces)}`;
         } else {
             // Exclusive tax calculation
-            this.formattedTotal = `${giddhRoundOff(((this.totalForTax * this.sum) / 100), 2)}`;
+            this.formattedTotal = `${giddhRoundOff(giddhRoundOff(((this.totalForTax * this.sum) / 100), this.highPrecisionRate), this.giddhBalanceDecimalPlaces)}`;
         }
     }
 

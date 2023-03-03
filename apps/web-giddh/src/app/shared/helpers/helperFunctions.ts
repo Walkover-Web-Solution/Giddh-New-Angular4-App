@@ -23,7 +23,6 @@ export const validateEmail = (emailStr: string) => {
     return EMAIL_VALIDATION_REGEX.test(emailStr);
 };
 
-
 export const giddhRoundOff = (number, decimals = 0) => {
     return (!isNaN(Number(`${Math.round(Number(number + 'e' + decimals))}e-${decimals}`))) ? Number(`${Math.round(Number(number + 'e' + decimals))}e-${decimals}`) : 0;
 };
