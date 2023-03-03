@@ -78,7 +78,7 @@
                                         <label>Unit Name<sup>*</sup></label>
                                         <div class="d-flex">
                                             <sh-select
-                                                [options]="allStockMappedUnits"
+                                                [options]="stockUnitsList"
                                                 [name]="'stockUnitX' + i"
                                                 [placeholder]="'Choose unit'"
                                                 [(ngModel)]="mappingField.stockUnitX.code"
@@ -240,7 +240,7 @@
                                                     item?.stockUnitX?.code
                                                 ) > -1
                                             "
-                                            (click)="deleteUnit(item?.stockUnitX?.code)"
+                                            (click)="deleteUnit(item?.stockUnitX?.uniqueName)"
                                         >
                                             <i class="fa fa-trash"></i>
                                         </button>

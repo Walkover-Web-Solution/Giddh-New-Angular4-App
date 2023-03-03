@@ -32,7 +32,7 @@ export const INVENTORY_API = {
     CREATE_STOCK: 'company/:companyUniqueName/stock-group/:stockGroupUniqueName/stock', // post call
     CREATE_STOCK_UNIT: 'company/:companyUniqueName/stock-unit', // post call
     DELETE_STOCK: 'company/:companyUniqueName/stock-group/:stockGroupUniqueName/stock/:stockUniqueName', // DELETE call
-    DELETE_STOCK_UNIT: 'company/:companyUniqueName/stock-unit/:uName', // DELETE call
+    DELETE_STOCK_UNIT: 'company/:companyUniqueName/stock-unit/:uniqueName', // DELETE call
     UPDATE_STOCK: 'company/:companyUniqueName/stock-group/:stockGroupUniqueName/stock/:stockUniqueName', // PUT call
     UPDATE_STOCK_UNIT: 'company/:companyUniqueName/stock-unit/:uniqueName', // PUT call
     GET_RATE_FOR_STOCK: 'company/:companyUniqueName/stock/:stockUniqueName/rate-for-stock', // Get call

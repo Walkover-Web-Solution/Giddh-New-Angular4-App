@@ -44,11 +44,11 @@ export class CustomStockUnitAction {
         .pipe(
             ofType(CUSTOM_STOCK_UNIT_ACTIONS.UPDATE_STOCK_UNIT),
             switchMap((action: CustomActions) => {
-                return this._inventoryService.UpdateStockUnit(action.payload.unit, action.payload.code).pipe(
+                return this._inventoryService.UpdateStockUnit(action.payload.unit, action.payload.uniqueName).pipe(
                     map((data: BaseResponse<StockUnitResponse, StockUnitRequest>) => this.validateResponse(data, {
                         type: CUSTOM_STOCK_UNIT_ACTIONS.UPDATE_STOCK_UNIT_RESPONSE,
                         payload: data.body
-                    }, true, 'Unit Updated Successfully')));
+                    }, true, 'Unit has been updated successfully')));
             })));
 
     /**
@@ -129,10 +129,10 @@ export class CustomStockUnitAction {
         };
     }
 
-    public UpdateStockUnit(unit: StockUnitRequest, code: string): CustomActions {
+    public UpdateStockUnit(unit: StockUnitRequest, uniqueName: string): CustomActions {
         return {
             type: CUSTOM_STOCK_UNIT_ACTIONS.UPDATE_STOCK_UNIT,
-            payload: { unit, code }
+            payload: { unit, uniqueName }
         };
     }
 
