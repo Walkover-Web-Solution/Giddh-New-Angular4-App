@@ -106,7 +106,7 @@
 .select-multiple-chiplist-inventory {
     font-weight: 400 !important;
     font-size: 14px !important;
-    min-width: 78%;
+    min-width: 80%;
 
     .mat-chip.mat-standard-chip {
         color: var(--color-chips-primary) !important;
@@ -131,13 +131,13 @@
 
 @media (max-width: 1440px) {
     .select-multiple-chiplist-inventory {
-        min-width: 70%;
+        min-width: 72%;
     }
 }
 
 @media (max-width: 1024px) {
     .select-multiple-chiplist-inventory {
-        min-width: 55%;
+        min-width: 57%;
     }
 
     .stock-mat-salect {
@@ -147,7 +147,7 @@
 
 @media (max-width: 1019px) {
     .select-multiple-chiplist-inventory {
-        min-width: 55%;
+        min-width: 57%;
     }
 
     .stock-mat-salect {

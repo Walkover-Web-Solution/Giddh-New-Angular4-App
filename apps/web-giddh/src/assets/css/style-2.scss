@@ -13211,7 +13211,9 @@ input[type="checkbox"].cdk-visually-hidden::after {
     }
 }
 
-#mat-select-0-panel {
+#mat-select-0-panel,
+#mat-select-1-panel,
+#mat-select-2-panel {
     min-width: calc(100% + 24px) !important;
     position: absolute;
     top: 44px;
@@ -13432,9 +13434,7 @@ hamburger-menu {
         border-radius: 53px;
         flex: 1;
         .search-icon {
-            text-align: center;
-            margin: auto;
-            min-width: 2%;
+            margin: 9px;
         }
         input.form-control {
             border: none !important;
