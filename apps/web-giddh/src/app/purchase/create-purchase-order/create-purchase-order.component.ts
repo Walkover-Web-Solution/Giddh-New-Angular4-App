@@ -375,6 +375,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     public activeEntry: any;
     /** This will hold true if creating new account */
     private isCreatingNewAccount: boolean = false;
+    /** Decimal places from company settings */
+    public giddhBalanceDecimalPlaces: number = 2;
 
     constructor(
         private store: Store<AppState>,
@@ -547,6 +549,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                     this.getUpdatedStateCodes(profile.countryV2.alpha2CountryCode, true);
                 }
 
+                this.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
                 this.changeDetection.detectChanges();
             } else {
                 this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
@@ -1520,9 +1523,9 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     public calculateConvertedAmount(transaction: SalesTransactionItemClass): void {
         if (this.isMulticurrencyAccount) {
             if (transaction.isStockTxn) {
-                transaction.convertedAmount = giddhRoundOff(transaction.quantity * ((transaction.rate * this.exchangeRate) ? transaction.rate * this.exchangeRate : 0), 2);
+                transaction.convertedAmount = giddhRoundOff(transaction.quantity * ((transaction.rate * this.exchangeRate) ? transaction.rate * this.exchangeRate : 0), this.highPrecisionRate);
             } else {
-                transaction.convertedAmount = giddhRoundOff(transaction.amount * this.exchangeRate, 2);
+                transaction.convertedAmount = giddhRoundOff(transaction.amount * this.exchangeRate, this.highPrecisionRate);
             }
         }
     }
@@ -1582,8 +1585,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             }
         });
 
-        entry.taxSum = giddhRoundOff(((taxPercentage * (trx.amount - entry.discountSum)) / 100), 2);
-        entry.cessSum = giddhRoundOff(((cessPercentage * (trx.amount - entry.discountSum)) / 100), 2);
+        entry.taxSum = giddhRoundOff(((taxPercentage * (trx.amount - entry.discountSum)) / 100), this.highPrecisionRate);
+        entry.cessSum = giddhRoundOff(((cessPercentage * (trx.amount - entry.discountSum)) / 100), this.highPrecisionRate);
 
         if (isNaN(entry.taxSum)) {
             entry.taxSum = 0;
@@ -1649,9 +1652,9 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
 
         // Calculate amount with inclusive tax
         transaction.amount = giddhRoundOff(((Number(transaction.total) + fixedDiscountTotal + 0.01 * fixedDiscountTotal * Number(taxTotal)) /
-            (1 - 0.01 * percentageDiscountTotal + 0.01 * Number(taxTotal) - 0.0001 * percentageDiscountTotal * Number(taxTotal))), 2);
-        let perFromAmount = giddhRoundOff(((percentageDiscountTotal * transaction.amount) / 100), 2);
-        entry.discountSum = giddhRoundOff(perFromAmount + fixedDiscountTotal, 2);
+            (1 - 0.01 * percentageDiscountTotal + 0.01 * Number(taxTotal) - 0.0001 * percentageDiscountTotal * Number(taxTotal))), this.highPrecisionRate);
+        let perFromAmount = giddhRoundOff(((percentageDiscountTotal * transaction.amount) / 100), this.highPrecisionRate);
+        entry.discountSum = giddhRoundOff(perFromAmount + fixedDiscountTotal, this.highPrecisionRate);
         if (isNaN(entry.discountSum)) {
             entry.discountSum = 0;
         }
@@ -1659,8 +1662,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         if (isNaN(transaction.taxableValue)) {
             transaction.taxableValue = 0;
         }
-        entry.taxSum = giddhRoundOff(((taxPercentage * (transaction.amount - entry.discountSum)) / 100), 2);
-        entry.cessSum = giddhRoundOff(((cessPercentage * (transaction.amount - entry.discountSum)) / 100), 2);
+        entry.taxSum = giddhRoundOff(((taxPercentage * (transaction.amount - entry.discountSum)) / 100), this.highPrecisionRate);
+        entry.cessSum = giddhRoundOff(((cessPercentage * (transaction.amount - entry.discountSum)) / 100), this.highPrecisionRate);
         if (isNaN(entry.taxSum)) {
             entry.taxSum = 0;
         }
@@ -1772,17 +1775,17 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         //Save the Grand Total for Edit
         if (calculatedGrandTotal > 0) {
             if (this.applyRoundOff) {
-                this.calculatedRoundOff = Number((Math.round(calculatedGrandTotal) - calculatedGrandTotal).toFixed(2));
+                this.calculatedRoundOff = Number((Math.round(calculatedGrandTotal) - calculatedGrandTotal).toFixed(this.giddhBalanceDecimalPlaces));
             } else {
-                this.calculatedRoundOff = Number((calculatedGrandTotal - calculatedGrandTotal).toFixed(2));
+                this.calculatedRoundOff = Number((calculatedGrandTotal - calculatedGrandTotal).toFixed(this.giddhBalanceDecimalPlaces));
             }
 
-            calculatedGrandTotal = Number((calculatedGrandTotal + this.calculatedRoundOff).toFixed(2));
+            calculatedGrandTotal = Number((calculatedGrandTotal + this.calculatedRoundOff).toFixed(this.giddhBalanceDecimalPlaces));
         } else if (calculatedGrandTotal === 0) {
             this.calculatedRoundOff = 0;
         }
         this.purchaseOrder.voucherDetails.grandTotal = calculatedGrandTotal;
-        this.grandTotalMulDum = giddhRoundOff(calculatedGrandTotal * this.exchangeRate, 2);
+        this.grandTotalMulDum = giddhRoundOff(calculatedGrandTotal * this.exchangeRate, this.highPrecisionRate);
     }
 
     /**
@@ -1830,7 +1833,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                 totalTaxes += tax.taxDetail[0].taxValue;
             }
 
-            entry.otherTaxSum = giddhRoundOff(((taxableValue * totalTaxes) / 100), 2);
+            entry.otherTaxSum = giddhRoundOff(((taxableValue * totalTaxes) / 100), this.highPrecisionRate);
             entry.otherTaxModal = modal;
         } else {
             entry.otherTaxSum = 0;
@@ -2120,7 +2123,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         if (data.entries && data.entries.length > 0) {
             _.forEach(data.entries, (entry) => {
                 _.forEach(entry.transactions, (txn: SalesTransactionItemClass) => {
-                    txn.convertedAmount = this.fetchedConvertedRate > 0 ? giddhRoundOff((Number(txn.amount) * this.fetchedConvertedRate), 2) : 0;
+                    txn.convertedAmount = this.fetchedConvertedRate > 0 ? giddhRoundOff((Number(txn.amount) * this.fetchedConvertedRate), this.highPrecisionRate) : 0;
 
                     // will get errors of string and if not error then true boolean
                     if (!txn.isValid()) {
@@ -3743,18 +3746,18 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
      */
     private calculateConvertedTotal(entry: SalesEntryClass, transaction: SalesTransactionItemClass): void {
         if (this.excludeTax) {
-            transaction.total = giddhRoundOff((transaction.amount - entry.discountSum), 2);
+            transaction.total = giddhRoundOff((transaction.amount - entry.discountSum), this.highPrecisionRate);
             if (transaction.isStockTxn) {
-                transaction.convertedTotal = giddhRoundOff((transaction.quantity * transaction.rate * this.exchangeRate) - entry.discountSum, 2);
+                transaction.convertedTotal = giddhRoundOff((transaction.quantity * transaction.rate * this.exchangeRate) - entry.discountSum, this.highPrecisionRate);
             } else {
-                transaction.convertedTotal = giddhRoundOff(transaction.total * this.exchangeRate, 2);
+                transaction.convertedTotal = giddhRoundOff(transaction.total * this.exchangeRate, this.highPrecisionRate);
             }
         } else {
-            transaction.total = giddhRoundOff((transaction.amount - entry.discountSum) + (entry.taxSum + entry.cessSum), 2);
+            transaction.total = giddhRoundOff((transaction.amount - entry.discountSum) + (entry.taxSum + entry.cessSum), this.highPrecisionRate);
             if (transaction.isStockTxn) {
-                transaction.convertedTotal = giddhRoundOff(((transaction.quantity * transaction.rate * this.exchangeRate) - entry.discountSum) + (entry.taxSum + entry.cessSum), 2);
+                transaction.convertedTotal = giddhRoundOff(((transaction.quantity * transaction.rate * this.exchangeRate) - entry.discountSum) + (entry.taxSum + entry.cessSum), this.highPrecisionRate);
             } else {
-                transaction.convertedTotal = giddhRoundOff(transaction.total * this.exchangeRate, 2);
+                transaction.convertedTotal = giddhRoundOff(transaction.total * this.exchangeRate, this.highPrecisionRate);
             }
         }
     }

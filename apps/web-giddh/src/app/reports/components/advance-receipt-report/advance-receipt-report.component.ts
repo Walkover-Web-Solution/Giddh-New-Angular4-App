@@ -19,7 +19,7 @@ import { ElementViewContainerRef } from '../../../shared/helpers/directives/elem
 import { AppState } from '../../../store';
 import { ADVANCE_RECEIPT_REPORT_FILTERS, ReceiptAdvanceSearchModel } from '../../constants/reports.constant';
 import { ReceiptAdvanceSearchComponent } from '../receipt-advance-search/receipt-advance-search.component';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { InvoiceBulkUpdateService } from '../../../services/invoice.bulkupdate.service';
 
 @Component({
@@ -167,6 +167,8 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
     public hoveredReceiptTable: boolean = false;
     /** Holds currency */
     public baseCurrency: string = '';
+    /** Decimal places from company settings */
+    public giddhBalanceDecimalPlaces: number = 2;
 
     /** @ignore */
     constructor(
@@ -179,7 +181,6 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
         private generalService: GeneralService,
         private settingsBranchAction: SettingsBranchActions,
         private modalService: BsModalService,
-        private router: Router,
         private route: ActivatedRoute,
         private invoiceBulkUpdateService: InvoiceBulkUpdateService
     ) {
@@ -194,6 +195,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
         this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$)).subscribe(profile => {
             if (profile) {
                 this.baseCurrency = profile.baseCurrency;
+                this.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
             }
         });
     }
@@ -639,7 +641,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
                     if(isSeleted) {
                         receipt.isSelected = true;
                     }
-                    receipt = this.generalService.addToolTipText("receipt", this.baseCurrency, receipt, this.localeData, this.commonLocaleData);
+                    receipt = this.generalService.addToolTipText("receipt", this.baseCurrency, receipt, this.localeData, this.commonLocaleData, this.giddhBalanceDecimalPlaces);
                 });
 
                 this.changeDetectorRef.detectChanges();

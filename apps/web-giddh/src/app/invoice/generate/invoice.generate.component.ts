@@ -138,6 +138,8 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     private voucherApiVersion: 1 | 2;
     /** True if voucher generate in process */
     public generateVoucherInProcess: boolean = false;
+    /** Decimal places from company settings */
+    public giddhBalanceDecimalPlaces: number = 2;
 
     constructor(
         private store: Store<AppState>,
@@ -252,6 +254,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
             if (profile) {
                 this.baseCurrencySymbol = profile.baseCurrencySymbol;
                 this.baseCurrency = profile.baseCurrency;
+                this.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
             }
         });
         // Refresh report data according to universal date
@@ -714,7 +717,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
 
             let grandTotalConversionRate = 0;
             if (grandTotalAmountForCompany && grandTotalAmountForAccount) {
-                grandTotalConversionRate = +((grandTotalAmountForCompany / grandTotalAmountForAccount) || 0).toFixed(2);
+                grandTotalConversionRate = +((grandTotalAmountForCompany / grandTotalAmountForAccount) || 0).toFixed(this.giddhBalanceDecimalPlaces);
             }
 
             let currencyConversion = this.localeData?.currency_conversion;

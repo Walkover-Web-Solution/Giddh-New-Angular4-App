@@ -136,6 +136,8 @@ export class PurchaseOrderComponent implements OnDestroy {
     public translationLoaded: boolean = false;
     /** Stores the voucher API version of current company */
     public voucherApiVersion: 1 | 2;
+    /** Decimal places from company settings */
+    public giddhBalanceDecimalPlaces: number = 2;
 
     constructor(private modalService: BsModalService, private generalService: GeneralService, private breakPointObservar: BreakpointObserver, public purchaseOrderService: PurchaseOrderService, private store: Store<AppState>, private toaster: ToasterService, public route: ActivatedRoute, private router: Router, public purchaseOrderActions: PurchaseOrderActions, private settingsUtilityService: SettingsUtilityService, private warehouseActions: WarehouseActions) {
         this.activeCompanyUniqueName$ = this.store.pipe(select(state => state.session.companyUniqueName), (takeUntil(this.destroyed$)));
@@ -148,6 +150,12 @@ export class PurchaseOrderComponent implements OnDestroy {
                 this.purchaseOrderUniqueName = params['purchaseOrderUniqueName'];
             } else {
                 this.purchaseOrderUniqueName = '';
+            }
+        });
+
+        this.store.pipe(select(state => state.settings.profile), takeUntil(this.destroyed$)).subscribe(profile => {
+            if (profile) {
+                this.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
             }
         });
 
@@ -309,7 +317,7 @@ export class PurchaseOrderComponent implements OnDestroy {
                                 grandTotalAmountForAccount = Number(item?.grandTotal?.amountForAccount) || 0;
 
                                 if (grandTotalAmountForCompany && grandTotalAmountForAccount) {
-                                    grandTotalConversionRate = +((grandTotalAmountForCompany / grandTotalAmountForAccount) || 0).toFixed(2);
+                                    grandTotalConversionRate = +((grandTotalAmountForCompany / grandTotalAmountForAccount) || 0).toFixed(this.giddhBalanceDecimalPlaces);
                                 }
                                 let currencyConversion = this.localeData?.currency_conversion;
                                 currencyConversion = currencyConversion?.replace("[BASE_CURRENCY]", item.grandTotal?.currencyForCompany?.code)?.replace("[AMOUNT]", grandTotalAmountForCompany)?.replace("[CONVERSION_RATE]", grandTotalConversionRate);
