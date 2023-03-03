@@ -118,31 +118,43 @@
                     #auto="matAutocomplete"
                     (optionSelected)="selectChiplistValue($event); selectField.value = ''"
                 >
-                    <app-cdk-scroll
-                        (fetchNextPage)="searchStockTransactionReport(true)"
-                        [scrollableElementId]="'stock-transaction'"
-                    >
-                        <cdk-virtual-scroll-viewport
-                            class="virtual-group-list overflow-x-hidden"
-                            [itemSize]="33"
-                            [id]="'stock-transaction'"
-                            [ngStyle]="{
-                                'min-height':
-                                    (fieldFilteredOptions?.length * 51 > 193
-                                        ? 193
-                                        : !fieldFilteredOptions?.length
-                                        ? 51
-                                        : 104) + 'px'
-                            }"
+                    <ng-container *ngIf="fieldFilteredOptions?.length <= 5; else searchedData">
+                        <mat-option *ngFor="let option of fieldFilteredOptions" [value]="option">
+                            {{ option?.name }} ( {{ option?.type }} )
+                        </mat-option>
+                        <mat-option disabled *ngIf="fieldFilteredOptions?.length === 0">No results found</mat-option>
+                    </ng-container>
+                    <ng-template #searchedData>
+                        <app-cdk-scroll
+                            (fetchNextPage)="searchStockTransactionReport(true)"
+                            [scrollableElementId]="'stock-transaction'"
                         >
-                            <mat-option *ngFor="let option of fieldFilteredOptions" [value]="option">
-                                {{ option?.name }} ( {{ option?.type }} )
-                            </mat-option>
-                            <mat-option disabled *ngIf="fieldFilteredOptions?.length === 0"
-                                >No results found</mat-option
+                            <cdk-virtual-scroll-viewport
+                                class="virtual-group-list overflow-x-hidden"
+                                [itemSize]="33"
+                                [id]="'stock-transaction'"
+                                [ngStyle]="{
+                                    'height':
+                                        (fieldFilteredOptions?.length * 51 > 200
+                                            ? fieldFilteredOptions?.length * 51
+                                            : !fieldFilteredOptions?.length
+                                            ? 51
+                                            : 51) + 'px'
+                                }"
                             >
-                        </cdk-virtual-scroll-viewport>
-                    </app-cdk-scroll>
+                                <mat-option
+                                    class="item-height"
+                                    *ngFor="let option of fieldFilteredOptions"
+                                    [value]="option"
+                                >
+                                    {{ option?.name }} ( {{ option?.type }} )
+                                </mat-option>
+                                <mat-option class="item-height" disabled *ngIf="fieldFilteredOptions?.length === 0"
+                                    >No results found</mat-option
+                                >
+                            </cdk-virtual-scroll-viewport>
+                        </app-cdk-scroll>
+                    </ng-template>
                 </mat-autocomplete>
             </mat-form-field>
             <div class="menu-btn-control">
