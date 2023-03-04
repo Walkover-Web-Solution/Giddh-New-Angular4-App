@@ -1332,8 +1332,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     public showShareLedgerModal() {
-        this.shareLedgerDates.from = dayjs(this.selectedDateRange.startDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
-        this.shareLedgerDates.to = dayjs(this.selectedDateRange.endDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+        this.shareLedgerDates.from = dayjs(this.selectedDateRange?.startDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+        this.shareLedgerDates.to = dayjs(this.selectedDateRange?.endDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
 
         this.dialog.open(ShareLedgerComponent, {
             width: '630px',
