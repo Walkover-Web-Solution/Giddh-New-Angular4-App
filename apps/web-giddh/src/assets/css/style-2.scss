@@ -10547,6 +10547,12 @@ body.update-scroll-hidden {
         font-size: 20px;
     }
 
+    .inventory-filter-bar {
+        .search-icon {
+            line-height: 2.5;
+        }
+    }
+
     .date-column {
         min-width: 100px !important;
     }
@@ -13448,7 +13454,7 @@ hamburger-menu {
         border-radius: 53px;
         flex: 1;
         .search-icon {
-            line-height: 2.5;
+            line-height: 2;
             margin-left: 10px;
         }
         input.form-control {
