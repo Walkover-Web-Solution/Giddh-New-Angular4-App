@@ -174,7 +174,7 @@
                             #selectAllCheckbox
                             color="primary"
                             name="selectAll"
-                            (change)="selectAllColumns($event?.checked); saveColumns()"
+                            (change)="selectAllColumns($event?.checked)"
                             [checked]="displayedColumns?.length === customiseColumns?.length"
                         >
                             Select All
