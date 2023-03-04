@@ -174,7 +174,7 @@
                             #selectAllCheckbox
                             color="primary"
                             name="selectAll"
-                            (change)="selectAllColumns($event?.checked); saveColumns()"
+                            (change)="selectAllColumns($event?.checked)"
                             [checked]="displayedColumns?.length === customiseColumns?.length"
                         >
                             Select All
@@ -238,11 +238,11 @@
                                 </h5>
                             </div>
                             <div class="total-details-box mr-r05 border-none opening-box">
-                                <h5>
+                                <h5 class="float-left">
                                     Profit/Loss
                                     <div class="mt-2">
                                         <span
-                                            class="d-inline-flex number-total w-100"
+                                            class="d-inline-flex number-total"
                                             [matTooltipPosition]="'above'"
                                             [matTooltip]="
                                                 stockTransactionReportBalance?.profit
@@ -266,16 +266,17 @@
                                             >
                                             </amount-field>
                                         </span>
+                                        <br />
                                         <span class="d-inline-flex mt-1"> ({{ selectedDateRangeUi }}) </span>
                                     </div>
                                 </h5>
                             </div>
                             <div class="total-details-box mr-r05 border-none sales-purchase">
-                                <h5>
+                                <h5 class="float-left">
                                     Opening
                                     <div class="mt-2">
                                         <span
-                                            class="d-inline-flex number-total w-100"
+                                            class="d-inline-flex number-total"
                                             [matTooltipPosition]="'above'"
                                             [matTooltip]="
                                                 activeCompany.baseCurrencySymbol +
@@ -299,6 +300,7 @@
                                             >
                                             </amount-field>
                                         </span>
+                                        <br />
                                         <span
                                             class="d-inline-flex mt-1"
                                             *ngIf="stockTransactionReportBalance?.opening?.quantity"
@@ -329,11 +331,11 @@
                                 </h5>
                             </div>
                             <div class="total-details-box mr-r05 border-none payment-receipt">
-                                <h5>
+                                <h5 class="float-left">
                                     Inward
                                     <div class="mt-2">
                                         <span
-                                            class="d-inline-flex number-total w-100"
+                                            class="d-inline-flex number-total"
                                             [matTooltipPosition]="'above'"
                                             [matTooltip]="
                                                 stockTransactionReportBalance?.inwards?.amount
@@ -357,6 +359,7 @@
                                             >
                                             </amount-field>
                                         </span>
+                                        <br />
                                         <span
                                             class="d-inline-flex mt-1"
                                             *ngIf="stockTransactionReportBalance?.inwards?.quantity"
@@ -387,11 +390,11 @@
                                 </h5>
                             </div>
                             <div class="total-details-box mr-r05 border-none due-box">
-                                <h5>
+                                <h5 class="float-left">
                                     Outward
                                     <div class="mt-2">
                                         <span
-                                            class="d-inline-flex number-total w-100"
+                                            class="d-inline-flex number-total"
                                             [matTooltipPosition]="'above'"
                                             [matTooltip]="
                                                 stockTransactionReportBalance?.outwards?.amount
@@ -415,6 +418,7 @@
                                             >
                                             </amount-field>
                                         </span>
+                                        <br />
                                         <span
                                             class="d-inline-flex mt-1"
                                             *ngIf="stockTransactionReportBalance?.outwards?.quantity"
@@ -445,11 +449,11 @@
                                 </h5>
                             </div>
                             <div class="total-details-box border-none closing-box">
-                                <h5>
+                                <h5 class="float-left">
                                     Closing
                                     <div class="mt-2">
                                         <span
-                                            class="d-inline-flex number-total w-100"
+                                            class="d-inline-flex number-total"
                                             [matTooltipPosition]="'above'"
                                             [matTooltip]="
                                                 stockTransactionReportBalance?.closing?.amount
@@ -473,6 +477,7 @@
                                             >
                                             </amount-field>
                                         </span>
+                                        <br />
                                         <span
                                             class="d-inline-flex mt-1"
                                             *ngIf="stockTransactionReportBalance?.closing?.quantity"
@@ -750,7 +755,9 @@
         <h1>No entries found within given criteria.</h1>
         <h1>Do search with some other dates</h1>
     </div>
-
+    <div class="no-data-inventory" *ngIf="!isLoading && dataSource?.length && !displayedColumns?.length">
+        <h1>No columns are selected from customise filter.</h1>
+    </div>
     <div class="no-data" *ngIf="isLoading">
         <giddh-page-loader></giddh-page-loader>
     </div>
