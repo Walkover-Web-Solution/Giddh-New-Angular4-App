@@ -58,7 +58,7 @@ export class TextFieldComponent implements OnInit, OnChanges, OnDestroy, Control
     private onTouchedCallback: () => void = noop;
     private onChangeCallback: (_: any) => void = noop;
     /** True if field is autocomplete */
-    @Input() public autocomplete: boolean;
+    @Input() public autocomplete: string;
 
     constructor(
         @Optional() @Self() public ngControl: NgControl,
