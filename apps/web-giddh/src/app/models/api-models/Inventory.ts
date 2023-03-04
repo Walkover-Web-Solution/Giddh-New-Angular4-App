@@ -119,6 +119,8 @@ export class StockReportResponse implements IStockReport {
     public totalPages: number;
     public transactions: IStockTransaction[];
     public profit: number;
+    public fromDate?: string = '';
+    public toDate?: string = '';
 }
 export class StockReportRequest {
     public stockGroupUniqueName: string;

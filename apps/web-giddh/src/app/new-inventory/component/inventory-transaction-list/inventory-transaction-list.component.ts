@@ -4,10 +4,10 @@ import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from "../../../app.constant";
 import * as dayjs from "dayjs";
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from "../../../shared/helpers/defaultDateFormat";
-import { Observable, ReplaySubject } from "rxjs";
+import { Observable, ReplaySubject, of as observableOf } from "rxjs";
 import { select, Store } from "@ngrx/store";
 import { AppState } from "../../../store";
-import { debounceTime, distinctUntilChanged, takeUntil } from "rxjs/operators";
+import { debounceTime, distinctUntilChanged, take, takeUntil } from "rxjs/operators";
 import { FormControl } from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
 import { MatSort } from "@angular/material/sort";
@@ -243,6 +243,10 @@ export class InventoryTransactionListComponent implements OnInit {
     public giddhRoundOff: any = giddhRoundOff;
     /** Decimal places from company settings */
     public giddhBalanceDecimalPlaces: number = 2;
+    /** This will hold if today is selected in universal */
+    public todaySelected: boolean = false;
+    /** Observable to subscribe and get today selected */
+    public todaySelected$: Observable<boolean> = observableOf(false);
 
     constructor(
         private generalService: GeneralService,
@@ -268,19 +272,26 @@ export class InventoryTransactionListComponent implements OnInit {
     public ngOnInit(): void {
         this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         /** Universal date observer */
-        this.universalDate$.subscribe(dateObj => {
+        this.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe(dateObj => {
             if (dateObj) {
-                this.fromDate = dayjs(dateObj[0]).format(GIDDH_DATE_FORMAT);
-                this.toDate = dayjs(dateObj[1]).format(GIDDH_DATE_FORMAT);
-                this.universalDate = _.cloneDeep(dateObj);
-                this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
-                this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-                this.stockReportRequest.from = this.fromDate;
-                this.stockReportRequest.to = this.toDate;
-                this.balanceStockReportRequest.from = this.fromDate;
-                this.balanceStockReportRequest.to = this.toDate;
-                this.getStockTransactionalReport(true);
-                this.getReportColumns();
+                let universalDate = _.cloneDeep(dateObj);
+                setTimeout(() => {
+                    this.store.pipe(select(state => state.session.todaySelected), take(1)).subscribe(response => {
+                        this.todaySelected = response;
+                        if (universalDate && !this.todaySelected) {
+                            this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
+                            this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                            this.fromDate = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);
+                            this.toDate = dayjs(universalDate[1]).format(GIDDH_DATE_FORMAT);
+                            this.stockReportRequest.from = this.fromDate;
+                            this.stockReportRequest.to = this.toDate;
+                            this.balanceStockReportRequest.from = this.fromDate;
+                            this.balanceStockReportRequest.to = this.toDate;
+                        }
+                        this.getStockTransactionalReport(true);
+                        this.getReportColumns();
+                    });
+                });
             }
         });
 
@@ -474,6 +485,12 @@ export class InventoryTransactionListComponent implements OnInit {
             this.stockReportRequest.branchUniqueNames = this.generalService.currentBranchUniqueName ? [this.generalService.currentBranchUniqueName] : [];
             this.balanceStockReportRequest.branchUniqueNames = this.generalService.currentBranchUniqueName ? [this.generalService.currentBranchUniqueName] : [];
         }
+        if (this.todaySelected) {
+            this.stockReportRequest.from = "";
+            this.stockReportRequest.to = "";
+            this.balanceStockReportRequest.from = "";
+            this.balanceStockReportRequest.to = "";
+        }
         this.inventoryService.getStockTransactionReport(cloneDeep(this.stockReportRequest)).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.isLoading = false;
             if (response && response.body && response.status === 'success') {
@@ -483,6 +500,14 @@ export class InventoryTransactionListComponent implements OnInit {
                 this.stockReportRequest.totalItems = response.body.totalItems;
                 this.stockReportRequest.totalPages = response.body.totalPages;
                 this.stockReportRequest.count = response.body.count;
+                if (this.todaySelected) {
+                    this.stockReportRequest.from = dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                    this.stockReportRequest.to = dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                    this.fromDate = dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                    this.toDate = dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                    this.selectedDateRange = { startDate: dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT), endDate: dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT) };
+                    this.selectedDateRangeUi = dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
+                }
             } else {
                 this.toaster.errorToast(response?.message);
                 this.dataSource = [];
@@ -519,6 +544,7 @@ export class InventoryTransactionListComponent implements OnInit {
         if (value && value.name) {
             this.selectedRangeLabel = value.name;
         }
+        this.todaySelected = false;
         this.hideGiddhDatepicker();
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
@@ -771,17 +797,26 @@ export class InventoryTransactionListComponent implements OnInit {
         this.selectedBranch = [];
         this.getBranches(false);
         //Reset Date with universal date
-        this.universalDate$.subscribe(dateObj => {
-            if (dateObj) {
-                this.stockReportRequest.from = dayjs(dateObj[0]).format(GIDDH_DATE_FORMAT);
-                this.stockReportRequest.to = dayjs(dateObj[1]).format(GIDDH_DATE_FORMAT);
-                this.balanceStockReportRequest.from = dayjs(dateObj[0]).format(GIDDH_DATE_FORMAT);
-                this.balanceStockReportRequest.to = dayjs(dateObj[1]).format(GIDDH_DATE_FORMAT);
-                this.fromDate = dayjs(dateObj[0]).format(GIDDH_DATE_FORMAT);
-                this.toDate = dayjs(dateObj[1]).format(GIDDH_DATE_FORMAT);
-                let universalDate = cloneDeep(dateObj);
-                this.selectedDateRange = { startDate: dayjs(universalDate[0]), endDate: dayjs(universalDate[1]) };
-                this.selectedDateRangeUi = dayjs(universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+        this.universalDate$.subscribe(res => {
+            if (res) {
+                this.fromDate = dayjs(res[0]).format(GIDDH_DATE_FORMAT);
+                this.toDate = dayjs(res[1]).format(GIDDH_DATE_FORMAT);
+                let universalDate = _.cloneDeep(res);
+                if (universalDate && !this.todaySelected) {
+                    this.selectedDateRange = { startDate: dayjs(res[0]), endDate: dayjs(res[1]) };
+                    this.selectedDateRangeUi = dayjs(res[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(res[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                    this.fromDate = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);
+                    this.toDate = dayjs(universalDate[1]).format(GIDDH_DATE_FORMAT);
+                    this.stockReportRequest.from = dayjs(res[0]).format(GIDDH_DATE_FORMAT);
+                    this.stockReportRequest.to = dayjs(res[1]).format(GIDDH_DATE_FORMAT);
+                    this.balanceStockReportRequest.from = dayjs(res[0]).format(GIDDH_DATE_FORMAT);
+                    this.balanceStockReportRequest.to = dayjs(res[1]).format(GIDDH_DATE_FORMAT);
+                } else {
+                    this.stockReportRequest.from = "";
+                    this.stockReportRequest.to = "";
+                    this.balanceStockReportRequest.from = "";
+                    this.balanceStockReportRequest.to = "";
+                }
             }
         });
         this.voucherTypes.forEach(response => {
