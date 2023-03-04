@@ -65,12 +65,14 @@ export class IStockItemDetail {
     public stockUniqueName: string;
     public quantity: number;
     public stockUnitCode: string;
+    public stockUnitUniqueName?: string;
     public rate?: number;
     public amount?: number;
     public manufacturingUnit?: string;
 }
 
 export interface IManufacturingDetails {
+    manufacturingUnitUniqueName?: any;
     manufacturingQuantity: number;
     manufacturingUnitCode: string;
     linkedStocks: IStockItemDetail[];

@@ -322,6 +322,7 @@ export class CreateStockRequest {
     public purchaseAccountDetails: IAccountDetails;
     public salesAccountDetails: IAccountDetails;
     public stockUnitCode: string;
+    public stockUnitUniqueName: string;
     public uniqueName: string;
     public hsnNumber?: number;
     public sacNumber?: number;

@@ -50,7 +50,7 @@
                                 <label>Stock Unit <sup>*</sup></label>
                                 <sh-select
                                     [options]="stockUnitsDropDown$ | async"
-                                    formControlName="stockUnitCode"
+                                    formControlName="stockUnitUniqueName"
                                     [placeholder]="'Choose a parent unit'"
                                     [multiple]="false"
                                     [ItemHeight]="33"
@@ -375,7 +375,7 @@
                                         <div class="form-group col-7 col-sm-7">
                                             <sh-select
                                                 [options]="stockUnitsDropDown$ | async"
-                                                formControlName="stockUnitCode"
+                                                formControlName="stockUnitUniqueName"
                                                 [multiple]="false"
                                                 [placeholder]="'Select Unit'"
                                                 [ItemHeight]="33"
@@ -464,7 +464,7 @@
                                         <div class="form-group col-7 col-sm-7">
                                             <sh-select
                                                 [options]="stockUnitsDropDown$ | async"
-                                                formControlName="stockUnitCode"
+                                                formControlName="stockUnitUniqueName"
                                                 [multiple]="false"
                                                 [disabled]="!addStockForm.controls['enableSales']?.value"
                                                 [placeholder]="'Select Unit'"
@@ -538,7 +538,7 @@
                                             <label>Stock Unit <sup>*</sup></label>
                                             <sh-select
                                                 [options]="stockUnitsDropDown$ | async"
-                                                formControlName="manufacturingUnitCode"
+                                                formControlName="manufacturingUnitUniqueName"
                                                 [placeholder]="'Select Unit'"
                                                 [multiple]="false"
                                                 [ItemHeight]="33"
@@ -621,7 +621,7 @@
                                                 <label class="input-label-stock">Stock Unit</label>
                                                 <sh-select
                                                     [options]="stockUnitsDropDown$ | async"
-                                                    formControlName="stockUnitCode"
+                                                    formControlName="stockUnitUniqueName"
                                                     [multiple]="false"
                                                     [placeholder]="'Select Unit'"
                                                     [ItemHeight]="33"

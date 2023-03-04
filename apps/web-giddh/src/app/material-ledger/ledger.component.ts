@@ -435,6 +435,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 let unitCode = '';
                 let stockName = '';
                 let stockUniqueName = '';
+                let stockUnitUniqueName = '';
 
                 //#region unit rates logic
                 if (txn.selectedAccount && txn.selectedAccount.stock) {
@@ -449,6 +450,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     rate = defaultUnit.rate;
                     stockUniqueName = txn.selectedAccount.stock?.uniqueName;
                     unitCode = defaultUnit.code;
+                    stockUnitUniqueName = txn.selectedAccount.stock.stockUnitUniqueName;
                 }
                 if (stockName && stockUniqueName) {
                     txn.inventory = {
@@ -460,7 +462,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
                         unit: {
                             stockUnitCode: unitCode,
                             code: unitCode,
-                            rate
+                            rate: rate,
+                            stockUnitUniqueName: stockUnitUniqueName
                         }
                     };
                 } else {

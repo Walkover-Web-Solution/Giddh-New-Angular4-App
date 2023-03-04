@@ -840,7 +840,7 @@
                                     >
                                         <mat-option
                                             *ngFor="let item of vm.stockTrxEntry?.unitRate"
-                                            [value]="item?.code"
+                                            [value]="item?.stockUnitUniqueName"
                                         >
                                             {{ item?.stockUnitCode }}
                                         </mat-option>
