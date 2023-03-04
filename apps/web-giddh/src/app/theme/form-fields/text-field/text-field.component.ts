@@ -20,7 +20,7 @@ const noop = () => {
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TextFieldComponent implements OnInit, OnChanges, OnDestroy, ControlValueAccessor {
-    @ViewChild('textField', {static: false}) public textField: ElementRef;
+    @ViewChild('textField', { static: false }) public textField: ElementRef;
     @Input() public pattern: any = null;
     @Input() public required: boolean = false;
     @Input() public min: number = null;
@@ -57,6 +57,8 @@ export class TextFieldComponent implements OnInit, OnChanges, OnDestroy, Control
     /** Placeholders for the callbacks which are later provided by the Control Value Accessor */
     private onTouchedCallback: () => void = noop;
     private onChangeCallback: (_: any) => void = noop;
+    /** True if field is autocomplete */
+    @Input() public autocomplete: boolean;
 
     constructor(
         @Optional() @Self() public ngControl: NgControl,
@@ -83,7 +85,7 @@ export class TextFieldComponent implements OnInit, OnChanges, OnDestroy, Control
      * @memberof TextFieldComponent
      */
     public ngOnChanges(changes: SimpleChanges): void {
-        if(this.autoFocus) {
+        if (this.autoFocus) {
             setTimeout(() => {
                 this.textField?.nativeElement?.focus();
             }, 20);
