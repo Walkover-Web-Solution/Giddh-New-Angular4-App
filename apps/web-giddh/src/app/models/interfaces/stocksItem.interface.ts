@@ -65,6 +65,7 @@ export class IStockItemDetail {
     public stockUniqueName: string;
     public quantity: number;
     public stockUnitCode: string;
+    public stockUnitUniqueName?: string;
     public rate?: number;
     public amount?: number;
     public manufacturingUnit?: string;

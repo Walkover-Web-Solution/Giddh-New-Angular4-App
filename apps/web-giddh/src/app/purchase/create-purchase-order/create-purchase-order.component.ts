@@ -1467,7 +1467,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     public prepareUnitArr(unitArr): any {
         let unitArray = [];
         _.forEach(unitArr, (item) => {
-            unitArray.push({ id: item.stockUnitCode, text: item.stockUnitCode, rate: item.rate });
+            unitArray.push({ id: item.stockUnitUniqueName, text: item.stockUnitCode, rate: item.rate });
         });
         return unitArray;
     }
@@ -2260,7 +2260,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                     salesAddBulkStockItems.rate.amountForAccount = transaction.rate;
                     salesAddBulkStockItems.sku = transaction.stockDetails.skuCode;
                     salesAddBulkStockItems.stockUnit = new CodeStockMulticurrency();
-                    salesAddBulkStockItems.stockUnit.code = transaction.stockUnit;
+                    salesAddBulkStockItems.stockUnit.uniqueName = transaction.stockUnit;
 
                     transactionClassMul.stock = salesAddBulkStockItems;
                 }
@@ -2684,7 +2684,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                     salesTransactionItemClass.quantity = transaction.stock.quantity;
                     salesTransactionItemClass.rate = transaction.stock.rate.amountForAccount;
                     salesTransactionItemClass.stockDetails.skuCode = transaction.stock.sku;
-                    salesTransactionItemClass.stockUnit = transaction.stock.stockUnit.code;
+                    salesTransactionItemClass.stockUnit = transaction.stock.stockUnit.uniqueName;
                     salesTransactionItemClass.fakeAccForSelect2 = transaction.account?.uniqueName + '#' + transaction.stock.uniqueName;
 
                     let stock = salesTransactionItemClass.stockDetails;
@@ -2714,7 +2714,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                     stock.unitRates = stock.unitRates || [];
                     const unitRate = stock.unitRates.find(rate => rate.code === stock.stockUnit.code);
                     let stockUnit: IStockUnit = {
-                        id: stock.stockUnit.code,
+                        id: stock.stockUnit.uniqueName,
                         text: unitRate ? unitRate.stockUnitName : ''
                     };
                     salesTransactionItemClass.stockList = [];
@@ -3342,7 +3342,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             // set rate auto
             transaction.rate = null;
             let obj: IStockUnit = {
-                id: additional.stock.stockUnitCode,
+                id: additional.stock.stockUnitUniqueName,
                 text: additional.stock.stockUnitName
             };
             transaction.stockList = [];
@@ -3352,7 +3352,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                 transaction.rate = Number((transaction.stockList[0].rate / this.exchangeRate).toFixed(this.highPrecisionRate));
             } else {
                 transaction.stockList.push(obj);
-                transaction.stockUnit = additional.stock.stockUnit.code;
+                transaction.stockUnit = additional.stock.stockUnit.uniqueName;
             }
             transaction.stockDetails = _.omit(additional.stock, ['accountStockDetails', 'stockUnit']);
             transaction.isStockTxn = true;

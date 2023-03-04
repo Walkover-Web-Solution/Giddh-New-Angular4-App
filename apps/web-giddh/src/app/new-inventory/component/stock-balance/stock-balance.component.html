@@ -281,8 +281,10 @@
                                                 [placeholder]="Unit"
                                                 [options]="stockUnits"
                                                 (selectedOption)="
-                                                    warehouseVariant.stockUnit.code = $event?.value;
+                                                    warehouseVariant.stockUnit.uniqueName = $event?.value;
                                                     warehouseVariant.stockUnit.name = $event.label;
+                                                    warehouseVariant.stockUnit.code =
+                                                        $event.additional?.code || $event.additional?.additional?.code;
                                                     stockUpdate(stock, warehouseVariant)
                                                 "
                                                 [defaultValue]="warehouseVariant?.stockUnit?.code"

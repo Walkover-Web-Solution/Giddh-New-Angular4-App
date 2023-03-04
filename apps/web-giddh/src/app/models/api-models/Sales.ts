@@ -613,6 +613,7 @@ export class SalesAddBulkStockItems {
 
 export class CodeStockMulticurrency {
     code: string;
+    uniqueName: any;
 }
 
 export class Currency {
