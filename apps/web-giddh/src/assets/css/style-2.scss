@@ -13167,7 +13167,9 @@ hamburger-menu {
         border-radius: 53px;
         flex: 1;
         .search-icon {
-            margin: 9px;
+            margin: 12px;
+            margin-right: 0;
+            margin-top: 9px;
         }
         input.form-control {
             border: none !important;
