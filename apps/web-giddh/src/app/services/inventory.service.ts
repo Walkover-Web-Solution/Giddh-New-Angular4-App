@@ -34,6 +34,7 @@ import {
     NewBranchTransferRequest, NewBranchTransferResponse, NewBranchTransferListResponse, NewBranchTransferListPostRequestParams, NewBranchTransferListGetRequestParams, NewBranchTransferDownloadRequest
 } from '../models/api-models/BranchTransfer';
 import { PAGINATION_LIMIT } from '../app.constant';
+import { cloneDeep } from '../lodash-optimized';
 
 declare var _: any;
 
@@ -1089,6 +1090,9 @@ export class InventoryService {
      */
     public getStockTransactionReport(stockReportRequest: StockTransactionReportRequest): Observable<BaseResponse<StockReportResponse, StockTransactionReportRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
+        let updatedStockTransactionRequest = cloneDeep(stockReportRequest);
+        delete updatedStockTransactionRequest.from;
+        delete updatedStockTransactionRequest.to;
         return this.http.post(this.config.apiUrl + INVENTORY_API.TRANSACTIONAL_STOCK_REPORT_V2?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             ?.replace(':stockGroupUniqueName', encodeURIComponent(<any>stockReportRequest.stockGroupUniqueNames))
             ?.replace(':stockUniqueName', encodeURIComponent(<any>stockReportRequest.stockUniqueNames))
@@ -1099,10 +1103,10 @@ export class InventoryService {
             ?.replace(':page', encodeURIComponent(stockReportRequest.page?.toString()))
             ?.replace(':sort', encodeURIComponent(stockReportRequest.sort ? stockReportRequest.sort?.toString() : ''))
             ?.replace(':sortBy', encodeURIComponent(stockReportRequest.sortBy ? stockReportRequest.sortBy?.toString() : ''))
-            , stockReportRequest).pipe(
+            , updatedStockTransactionRequest).pipe(
                 map((res) => {
                     let data: BaseResponse<StockReportResponse, StockTransactionReportRequest> = res;
-                    data.request = stockReportRequest;
+                    data.request = updatedStockTransactionRequest;
                     data.queryString = {
                         stockGroupUniqueName: stockReportRequest.stockGroupUniqueNames,
                         stockUniqueName: stockReportRequest.stockUniqueNames,
@@ -1131,16 +1135,18 @@ export class InventoryService {
      */
     public getStockTransactionReportBalance(stockReportRequest: StockTransactionReportRequest): Observable<BaseResponse<StockReportResponse, StockTransactionReportRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-
+        let updatedBalanceRequest = cloneDeep(stockReportRequest);
+        delete updatedBalanceRequest.from;
+        delete updatedBalanceRequest.to;
         return this.http.post(this.config.apiUrl + INVENTORY_API.TRANSACTIONAL_STOCK_REPORT_BALANCE_V2?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             ?.replace(':stockGroupUniqueName', encodeURIComponent(<any>stockReportRequest.stockGroupUniqueNames))
             ?.replace(':stockUniqueName', encodeURIComponent(<any>stockReportRequest.stockUniqueNames))
             ?.replace(':from', encodeURIComponent(stockReportRequest.from))
             ?.replace(':to', encodeURIComponent(stockReportRequest.to))
-            , stockReportRequest).pipe(
+            , updatedBalanceRequest).pipe(
                 map((res) => {
                     let data: BaseResponse<StockReportResponse, StockTransactionReportRequest> = res;
-                    data.request = stockReportRequest;
+                    data.request = updatedBalanceRequest;
                     data.queryString = {
                         stockGroupUniqueName: stockReportRequest.stockGroupUniqueNames,
                         stockUniqueName: stockReportRequest.stockUniqueNames,
