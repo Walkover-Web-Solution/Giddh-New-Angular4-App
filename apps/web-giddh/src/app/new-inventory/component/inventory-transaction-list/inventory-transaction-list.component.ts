@@ -302,6 +302,7 @@ export class InventoryTransactionListComponent implements OnInit {
         ).subscribe(search => {
             this.stockReportRequest.accountName = search;
             this.balanceStockReportRequest.accountName = search;
+            this.stockReportRequest.page = 1;
             this.isFilterActive();
             this.getStockTransactionalReport();
             if (search === '') {
@@ -439,6 +440,7 @@ export class InventoryTransactionListComponent implements OnInit {
             this.searchStockReportRequest.page++;
         } else {
             this.searchStockReportRequest.page = 1;
+            this.stockReportRequest.page = 1;
         }
         if (this.searchStockReportRequest.page === 1 || this.searchStockReportRequest.page <= this.searchStockReportRequest.totalPages) {
             delete this.searchStockReportRequest.totalItems;
@@ -644,6 +646,7 @@ export class InventoryTransactionListComponent implements OnInit {
             this.balanceStockReportRequest.from = data.stockReportRequest?.fromDate;
             this.balanceStockReportRequest.to = data.stockReportRequest?.toDate;
         }
+        this.stockReportRequest.page = 1;
         this.showAdvanceSearchModal = true;
         this.getStockTransactionalReport();
         this.changeDetection.detectChanges();
