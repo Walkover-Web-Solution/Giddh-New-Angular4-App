@@ -491,7 +491,7 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
             if (entities) {
                 if (entities.length) {
                     const branches = cloneDeep(entities);
-                    if (this.selectedCmp && branches.findIndex(p => p?.uniqueName === this.selectedCmp?.uniqueName) === -1) {
+                    if (this.selectedCmp && branches?.findIndex(p => p?.uniqueName === this.selectedCmp?.uniqueName) === -1) {
                         this.selectedCmp['label'] = this.selectedCmp.name;
                         branches.push(this.selectedCmp);
                     }

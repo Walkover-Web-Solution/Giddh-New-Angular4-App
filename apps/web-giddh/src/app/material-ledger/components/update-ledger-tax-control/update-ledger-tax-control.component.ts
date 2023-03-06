@@ -118,7 +118,7 @@ export class UpdateLedgerTaxControlComponent implements OnDestroy, OnChanges {
             this.taxes = this.taxes?.filter(f => !this.exceptTaxTypes.includes(f.taxType));
         }
         this.taxes.map(tax => {
-            const index = this.taxRenderData.findIndex(f => f?.uniqueName === tax?.uniqueName);
+            const index = this.taxRenderData?.findIndex(f => f?.uniqueName === tax?.uniqueName);
             // if tax is already prepared then only check if it's checked or not on basis of applicable taxes
             if (index > -1) {
                 if (this.date && tax.taxDetail && tax.taxDetail.length) {

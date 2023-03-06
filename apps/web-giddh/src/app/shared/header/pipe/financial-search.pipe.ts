@@ -41,7 +41,7 @@ export class FinancialSearchPipe implements PipeTransform {
             for (let grp of input) {
                 grp.isIncludedInSearch = false;
                 grp = this.search(grp, this.srch);
-                if (grp.accounts.findIndex(p => p.isIncludedInSearch) > -1 || grp.childGroups.findIndex(p => p.isIncludedInSearch) > -1) {
+                if (grp.accounts?.findIndex(p => p.isIncludedInSearch) > -1 || grp.childGroups?.findIndex(p => p.isIncludedInSearch) > -1) {
                     grp.isVisible = true;
                     grp.isIncludedInSearch = true;
                 } else {
@@ -58,7 +58,7 @@ export class FinancialSearchPipe implements PipeTransform {
             for (let grp of input.childGroups) {
                 grp.isIncludedInSearch = false;
                 grp = this.search(grp, s, allIncluded);
-                if (grp.accounts.findIndex(p => p.isIncludedInSearch) > -1 || grp.childGroups.findIndex(p => p.isIncludedInSearch) > -1 ||
+                if (grp.accounts?.findIndex(p => p.isIncludedInSearch) > -1 || grp.childGroups?.findIndex(p => p.isIncludedInSearch) > -1 ||
                     this.checkIndex(grp.groupName?.toLowerCase(), s?.toLowerCase()) || this.checkIndex(grp?.uniqueName?.toLowerCase(), s?.toLowerCase())
                 ) {
                     grp.isVisible = true;

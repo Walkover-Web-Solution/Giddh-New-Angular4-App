@@ -221,7 +221,7 @@ export class UpdateLedgerVm {
             return false;
         }
         let allowedUniqueNameArr = ['revenuefromoperations', 'otherincome', 'operatingcost', 'indirectexpenses', 'fixedassets'];
-        return allowedUniqueNameArr?.indexOf(acc?.parentGroups[0]?.uniqueName) > -1;
+        return (acc?.parentGroups?.length) ? allowedUniqueNameArr?.indexOf(acc?.parentGroups[0]?.uniqueName) > -1 : false;
     }
 
     public getEntryTotal() {
@@ -607,7 +607,7 @@ export class UpdateLedgerVm {
 
     public reInitilizeDiscount(resp: LedgerResponse) {
         let discountArray: LedgerDiscountClass[] = [];
-        let defaultDiscountIndex = resp.discounts.findIndex(f => !f.discount?.uniqueName);
+        let defaultDiscountIndex = resp.discounts?.findIndex(f => !f.discount?.uniqueName);
 
         if (defaultDiscountIndex > -1) {
             discountArray.push({

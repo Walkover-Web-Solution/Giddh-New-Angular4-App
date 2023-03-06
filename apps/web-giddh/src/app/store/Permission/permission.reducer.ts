@@ -70,7 +70,7 @@ export function PermissionReducer(state = initialState, action: CustomActions): 
         }
         case PERMISSION_ACTIONS.UPDATE_ROLE_RESPONSE: {
             let newState = cloneDeep(state);
-            let roleIndx = newState.roles.findIndex((role) => role?.uniqueName === action.payload.roleUniqueName);
+            let roleIndx = newState?.roles?.findIndex((role) => role?.uniqueName === action.payload.roleUniqueName);
             if (roleIndx > -1) {
                 newState.roles[roleIndx] = action.payload;
                 return { ...state, ...newState, addUpdateRoleInProcess: false };

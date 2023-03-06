@@ -705,7 +705,7 @@ const removeAccountFunc = (groups: IGroupsWithAccounts[], uniqueName: string, ac
     if (groups) {
         for (let grp of groups) {
             if (grp?.uniqueName === uniqueName) {
-                let index = grp.accounts.findIndex(a => a?.uniqueName === accountUniqueName);
+                let index = grp.accounts?.findIndex(a => a?.uniqueName === accountUniqueName);
                 grp.isOpen = false;
                 grp.isActive = false;
                 result = grp.accounts[index];
@@ -803,7 +803,7 @@ const UpdateAccountFunc = (groups: IGroupsWithAccounts[],
         for (let grp of groups) {
             if (grp?.uniqueName === grpUniqueName) {
                 grp.isOpen = true;
-                let index = grp.accounts.findIndex(p => p?.uniqueName === accountUniqueName);
+                let index = grp.accounts?.findIndex(p => p?.uniqueName === accountUniqueName);
                 if (index > -1) {
                     grp.accounts[index].uniqueName = aData?.uniqueName;
                     grp.accounts[index].name = aData.name;
@@ -827,7 +827,7 @@ const UpdateAccountFunc = (groups: IGroupsWithAccounts[],
 
 const findAndRemoveAccountFunc = (groups: IGroupsWithAccounts[], uniqueName: string, result: boolean) => {
     for (let grp of groups) {
-        let accIndex = grp.accounts.findIndex(f => f?.uniqueName === uniqueName);
+        let accIndex = grp.accounts?.findIndex(f => f?.uniqueName === uniqueName);
 
         if (accIndex > -1) {
             grp.accounts.splice(accIndex, 1);

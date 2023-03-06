@@ -42,7 +42,7 @@ export class OnReturnDirective {
             const selectedEle = e.target;
             const allElements: any = window.document.querySelectorAll('input[onReturn][type="text"], textarea[onReturn]');
             const nodeList = Array.from(allElements);
-            const indx = nodeList.findIndex((ele) => ele === selectedEle);
+            const indx = nodeList?.findIndex((ele) => ele === selectedEle);
 
             // nodeList[indx + 1].focus();
             if (e.key === KEY_CODE_CONSTANTS.ENTER || e.code === KEY_CODE_CONSTANTS.ENTER) {

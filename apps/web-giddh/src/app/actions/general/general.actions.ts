@@ -47,7 +47,7 @@ export class GeneralActions {
                     const items = data.itemData;
                     switch (payload.type) {
                         case "accounts": {
-                            const matchedIndex = (items && items.aidata && items.aidata.accounts) ? items.aidata.accounts.findIndex(item => item && item?.uniqueName && item?.uniqueName === payload.oldUniqueName) : -1;
+                            const matchedIndex = (items && items.aidata && items.aidata.accounts) ? items.aidata.accounts?.findIndex(item => item && item?.uniqueName && item?.uniqueName === payload.oldUniqueName) : -1;
                             if (matchedIndex > -1) {
                                 items.aidata.accounts[matchedIndex] = {
                                     ...items.aidata.accounts[matchedIndex],

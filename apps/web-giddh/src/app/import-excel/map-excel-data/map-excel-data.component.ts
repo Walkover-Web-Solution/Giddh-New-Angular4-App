@@ -81,7 +81,7 @@ export class MapExcelDataComponent implements OnInit {
         });
 
         // change mapping column header as per selection
-        let indexFromMappings = this._importData.mappings.findIndex(f => f.columnNumber === parseInt(data.field.columnNumber));
+        let indexFromMappings = this._importData.mappings?.findIndex(f => f.columnNumber === parseInt(data.field.columnNumber));
 
         if (indexFromMappings > -1) {
             this._importData.mappings[indexFromMappings].mappedColumn = val?.value;
@@ -113,7 +113,7 @@ export class MapExcelDataComponent implements OnInit {
             let allMappedColumnHeader = value.mappings.map(m => m.mappedColumn);
             let options: IOption[] = [];
 
-            selectedIndex = value.mappings.findIndex(f => f.columnNumber === parseInt(field.columnNumber));
+            selectedIndex = value.mappings?.findIndex(f => f.columnNumber === parseInt(field.columnNumber));
             if (selectedIndex > -1) {
                 options = value.giddhHeaders?.filter(f => allMappedColumnHeader?.filter(mf => mf !== value.mappings[selectedIndex].mappedColumn)?.indexOf(f) === -1).map(p => {
                     return { label: p, value: p };
