@@ -10,7 +10,6 @@ import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/hel
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { I } from '@angular/cdk/keycodes';
 import { cloneDeep } from '../../../lodash-optimized';
 
 
@@ -21,7 +20,7 @@ import { cloneDeep } from '../../../lodash-optimized';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class NewInventoryAdavanceSearch implements OnInit {
+export class NewInventoryAdvanceSearch implements OnInit {
     /** Directive to get reference of element */
     @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
     public isMobileScreen: boolean = false;
@@ -102,7 +101,7 @@ export class NewInventoryAdavanceSearch implements OnInit {
     /**
      * This will use in component initialization
      *
-     * @memberof NewInventoryAdavanceSearch
+     * @memberof NewInventoryAdvanceSearch
      */
     public ngOnInit() {
         this._breakPointObservar.observe([
@@ -145,7 +144,7 @@ export class NewInventoryAdavanceSearch implements OnInit {
     /**
      * This will use for advance searhc fields
      *
-     * @memberof NewInventoryAdavanceSearch
+     * @memberof NewInventoryAdvanceSearch
      */
     public initFormFields(): void {
         this.advanceSearchFormObj =
@@ -164,7 +163,7 @@ export class NewInventoryAdavanceSearch implements OnInit {
      * This will use for advance search  category
      *
      * @param {*} category
-     * @memberof NewInventoryAdavanceSearch
+     * @memberof NewInventoryAdvanceSearch
      */
     public selectCategory(category: any): void {
         if (category) {
@@ -176,7 +175,7 @@ export class NewInventoryAdavanceSearch implements OnInit {
      * This will use for select category options
      *
      * @param {*} expression
-     * @memberof NewInventoryAdavanceSearch
+     * @memberof NewInventoryAdvanceSearch
      */
     public selectCategoryOptions(expression: any): void {
         if (expression) {
@@ -188,7 +187,7 @@ export class NewInventoryAdavanceSearch implements OnInit {
      * This will use for select advanced search value
      *
      * @param {*} value
-     * @memberof NewInventoryAdavanceSearch
+     * @memberof NewInventoryAdvanceSearch
      */
     public selectValueType(value: any): void {
         if (value) {
@@ -201,7 +200,7 @@ export class NewInventoryAdavanceSearch implements OnInit {
      *
      * @param {string} [type]
      * @return {*}  {void}
-     * @memberof NewInventoryAdavanceSearch
+     * @memberof NewInventoryAdvanceSearch
      */
     public advanceSearchAction(type?: string): void {
         if (this.advanceSearchFormObj.param1 && this.advanceSearchFormObj.param2) {
@@ -248,7 +247,7 @@ export class NewInventoryAdavanceSearch implements OnInit {
      *
      * @param {*} [value]
      * @return {*}  {void}
-     * @memberof NewInventoryAdavanceSearch
+     * @memberof NewInventoryAdvanceSearch
      */
     public dateSelectedCallback(value?: any): void {
         if (value && value.event === "cancel") {
@@ -271,7 +270,7 @@ export class NewInventoryAdavanceSearch implements OnInit {
     /**
      * This will use for hide giddh datepicker
      *
-     * @memberof NewInventoryAdavanceSearch
+     * @memberof NewInventoryAdvanceSearch
      */
     public hideGiddhDatepicker(): void {
         this.modalRef?.hide();
@@ -280,7 +279,7 @@ export class NewInventoryAdavanceSearch implements OnInit {
      * This will use for show giddh datepicker
      *
      * @param {*} element
-     * @memberof NewInventoryAdavanceSearch
+     * @memberof NewInventoryAdvanceSearch
      */
     public showGiddhDatepicker(element: any): void {
         if (element) {
@@ -295,7 +294,7 @@ export class NewInventoryAdavanceSearch implements OnInit {
     /**
      * This hook will use for on destroyed the component
      *
-     * @memberof NewInventoryAdavanceSearch
+     * @memberof NewInventoryAdvanceSearch
      */
     public ngOnDestroy(): void {
         this.destroyed$.next(true);

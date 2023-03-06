@@ -189,12 +189,14 @@ export class SearchStockTransactionReportRequest {
     public page: number;
     public totalItems?: number;
     public totalPages?: number;
+    public searchPage?: string;
     constructor() {
         this.count = API_COUNT_LIMIT;
         this.page = 1;
         this.stockGroupUniqueNames = [];
         this.stockUniqueNames = [];
         this.variantUniqueNames = [];
+        this.searchPage = "";
     }
 }
 
