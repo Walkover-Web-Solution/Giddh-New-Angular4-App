@@ -2988,7 +2988,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     }
 
     public calculateStockEntryAmount(trx: SalesTransactionItemClass) {
-        trx.amount = Number(trx.quantity) * Number(trx.rate);
+        trx.amount = giddhRoundOff(giddhRoundOff(Number(trx.quantity) * Number(trx.rate), this.highPrecisionRate), this.giddhBalanceDecimalPlaces);
         trx.highPrecisionAmount = trx.amount;
     }
 

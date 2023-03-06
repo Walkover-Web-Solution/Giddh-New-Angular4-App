@@ -12,6 +12,7 @@ import { GiddhCurrencyPipe } from '../../../shared/helpers/pipes/currencyPipe/cu
 import { GeneralService } from "../../../services/general.service";
 import { DashboardService } from '../../../services/dashboard.service';
 import { ToasterService } from '../../../services/toaster.service';
+import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
 
 @Component({
     selector: 'revenue-chart',
@@ -53,6 +54,8 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
     /** True if chart changed */
     public chartChanged: boolean = false;
+    /** Decimal places from company settings */
+    public giddhBalanceDecimalPlaces: number = 2;
 
     constructor(private store: Store<AppState>, private homeActions: HomeActions, public currencyPipe: GiddhCurrencyPipe, private generalService: GeneralService, private dashboardService: DashboardService, private toasterService: ToasterService) {
         this.getCurrentWeekStartEndDate = this.getWeekStartEndDate(new Date());
@@ -65,6 +68,12 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
         this.graphParams.currentTo = dayjs(this.getCurrentWeekStartEndDate[1]).format(GIDDH_DATE_FORMAT);
         this.graphParams.previousFrom = dayjs(this.getPreviousWeekStartEndDate[0]).format(GIDDH_DATE_FORMAT);
         this.graphParams.previousTo = dayjs(this.getPreviousWeekStartEndDate[1]).format(GIDDH_DATE_FORMAT);
+
+        this.store.pipe(select(p => p.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
+            if (profile) {
+                this.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
+            }
+        });
     }
 
     public ngOnInit() {
@@ -124,7 +133,7 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
                         if (res.balances[key].current) {
                             this.currentData.push({
                                 x: x,
-                                y: res.balances[key].current.closingBalance.amount,
+                                y: giddhRoundOff(res.balances[key].current.closingBalance.amount, this.giddhBalanceDecimalPlaces),
                                 tooltip: res.balances[key].current.dateLabel + "<br />" + this.graphParams?.uniqueName + ": " + this.activeCompany.baseCurrencySymbol + " " + this.currencyPipe.transform(res.balances[key].current.closingBalance.amount)
                             });
                         }
@@ -132,7 +141,7 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
                         if (res.balances[key].previous) {
                             this.previousData.push({
                                 x: x,
-                                y: res.balances[key].previous.closingBalance.amount,
+                                y: giddhRoundOff(res.balances[key].previous.closingBalance.amount, this.giddhBalanceDecimalPlaces),
                                 tooltip: res.balances[key].previous.dateLabel + "<br />" + this.graphParams?.uniqueName + ": " + this.activeCompany.baseCurrencySymbol + " " + this.currencyPipe.transform(res.balances[key].previous.closingBalance.amount)
                             });
                         }
@@ -147,42 +156,42 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
                 let previousLowest = 0;
 
                 if (res.currentClosingBalance !== null && res.currentClosingBalance.amount !== null) {
-                    this.summaryData.totalCurrent = res.currentClosingBalance.amount;
+                    this.summaryData.totalCurrent = giddhRoundOff(res.currentClosingBalance.amount, this.giddhBalanceDecimalPlaces);
                 }
 
                 if (res.previousClosingBalance !== null && res.previousClosingBalance.amount !== null) {
-                    this.summaryData.totalLast = res.previousClosingBalance.amount;
+                    this.summaryData.totalLast = giddhRoundOff(res.previousClosingBalance.amount, this.giddhBalanceDecimalPlaces);
                 }
 
                 if (res.previousHighestClosingBalance !== null && res.previousHighestClosingBalance.amount !== null) {
-                    previousHighest = Number(res.previousHighestClosingBalance.amount);
+                    previousHighest = giddhRoundOff(Number(res.previousHighestClosingBalance.amount), this.giddhBalanceDecimalPlaces);
                 }
 
                 if (res.currentHighestClosingBalance !== null && res.currentHighestClosingBalance.amount !== null) {
-                    currentHighest = Number(res.currentHighestClosingBalance.amount);
+                    currentHighest = giddhRoundOff(Number(res.currentHighestClosingBalance.amount), this.giddhBalanceDecimalPlaces);
                 }
 
                 if (res.previousLowestClosingBalance !== null && res.previousLowestClosingBalance.amount !== null) {
-                    previousLowest = Number(res.previousLowestClosingBalance.amount);
+                    previousLowest = giddhRoundOff(Number(res.previousLowestClosingBalance.amount), this.giddhBalanceDecimalPlaces);
                 }
 
                 if (res.currentLowestClosingBalance !== null && res.currentLowestClosingBalance.amount !== null) {
-                    currentLowest = Number(res.currentLowestClosingBalance.amount);
+                    currentLowest = giddhRoundOff(Number(res.currentLowestClosingBalance.amount), this.giddhBalanceDecimalPlaces);
                 }
 
                 if (currentHighest > previousHighest) {
-                    this.summaryData.highest = res.currentHighestClosingBalance.amount;
+                    this.summaryData.highest = giddhRoundOff(res.currentHighestClosingBalance.amount, this.giddhBalanceDecimalPlaces);
                     this.summaryData.highestLabel = res.currentHighestClosingBalance.dateLabel;
                 } else {
-                    this.summaryData.highest = res.previousHighestClosingBalance.amount;
+                    this.summaryData.highest = giddhRoundOff(res.previousHighestClosingBalance.amount, this.giddhBalanceDecimalPlaces);
                     this.summaryData.highestLabel = res.previousHighestClosingBalance.dateLabel;
                 }
 
                 if (currentLowest < previousLowest) {
-                    this.summaryData.lowest = res.currentLowestClosingBalance.amount;
+                    this.summaryData.lowest = giddhRoundOff(res.currentLowestClosingBalance.amount, this.giddhBalanceDecimalPlaces);
                     this.summaryData.lowestLabel = res.currentLowestClosingBalance.dateLabel;
                 } else {
-                    this.summaryData.lowest = res.previousLowestClosingBalance.amount;
+                    this.summaryData.lowest = giddhRoundOff(res.previousLowestClosingBalance.amount, this.giddhBalanceDecimalPlaces);
                     this.summaryData.lowestLabel = res.previousLowestClosingBalance.dateLabel;
                 }
 
