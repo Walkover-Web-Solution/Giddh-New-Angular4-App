@@ -488,6 +488,7 @@ export class InventoryTransactionListComponent implements OnInit {
         if (this.todaySelected) {
             this.stockReportRequest.from = "";
             this.stockReportRequest.to = "";
+            this.stockReportRequest.page = 1;
             this.balanceStockReportRequest.from = "";
             this.balanceStockReportRequest.to = "";
         }
