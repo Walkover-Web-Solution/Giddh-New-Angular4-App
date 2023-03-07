@@ -50,7 +50,8 @@
                                             >
                                                 <mat-option
                                                     *ngFor="let item of currentTxn?.unitRate"
-                                                    [value]="item?.stockUnitUniqueName"
+                                                    [value]="item?.code"
+                                                    (click)="$event.stopPropagation()"
                                                 >
                                                     {{ item?.stockUnitCode }}
                                                 </mat-option>
