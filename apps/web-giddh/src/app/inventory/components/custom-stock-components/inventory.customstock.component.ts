@@ -259,6 +259,7 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
         if (unit !== undefined && unit?.length > 0) {
             this.customUnitObj.code = unit[0]?.value;
             this.customUnitObj.name = unit[0]?.value;
+            this.customUnitObj.uniqueName = unit[0]?.uniqueName;
             this.selectedUnitName = unit[0].label;
         }
         this.addDefaultMapping();
