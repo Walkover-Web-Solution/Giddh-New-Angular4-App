@@ -19,7 +19,7 @@
                                     [(ngModel)]="customUnitObj.name"
                                     *ngIf="country == 'india'"
                                     [placeholder]="'Select unit'"
-                                    (selected)="setUnitName($event?.value)"
+                                    (selected)="setUnitName($event?.value); unitChange()"
                                     [ItemHeight]="33"
                                     (onClear)="clearUnit()"
                                     [forceClearReactive]="forceClear$ | async"
@@ -28,7 +28,6 @@
                                     [isRequired]="true"
                                     [doNotReset]="true"
                                     [disabled]="editMode"
-                                    (ngModelChange)="unitChange()"
                                     [fixedValue]="editMode ? customUnitObj.name : ''"
                                 >
                                     <ng-template #optionTemplate let-option="option">

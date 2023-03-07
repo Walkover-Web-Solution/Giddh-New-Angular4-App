@@ -594,8 +594,8 @@ export class UpdateLedgerVm {
         this.generateCompoundTotal();
     }
 
-    public unitChanged(stockUnitCode: string) {
-        let unit = this.stockTrxEntry.unitRate.find(p => p.stockUnitCode === stockUnitCode);
+    public unitChanged(stockUnitUniqueName: string) {
+        let unit = this.stockTrxEntry.unitRate.find(p => p.stockUnitUniqueName === stockUnitUniqueName);
         this.stockTrxEntry.inventory.unit = { code: unit.stockUnitCode, rate: unit.rate, stockUnitCode: unit.stockUnitCode, stockUnitUniqueName: unit.stockUnitUniqueName };
         this.stockTrxEntry.inventory.rate = this.stockTrxEntry.inventory.unit.rate;
         this.inventoryPriceChanged(Number(this.stockTrxEntry.inventory.unit.rate));
