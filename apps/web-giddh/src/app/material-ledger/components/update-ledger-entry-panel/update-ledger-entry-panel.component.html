@@ -835,7 +835,7 @@
                                             branches?.length > 1
                                         "
                                         class="form-control text-right"
-                                        [(ngModel)]="vm.stockTrxEntry.inventory.unit.code"
+                                        [(ngModel)]="vm.stockTrxEntry.inventory.unit.uniqueName"
                                         (selectionChange)="vm.unitChanged($event?.value)"
                                     >
                                         <mat-option

@@ -844,9 +844,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         });
     }
 
-    public unitChanged(stockUnitCode: string) {
-        let unit = this.currentTxn.selectedAccount.stock.unitRates.find(p => p.stockUnitCode === stockUnitCode);
-        this.currentTxn.inventory.unit = { code: unit.stockUnitCode, rate: unit.rate, stockUnitCode: unit.stockUnitCode };
+    public unitChanged(stockUnitUniqueName: string) {
+        let unit = this.currentTxn.selectedAccount.stock.unitRates.find(p => p.stockUnitUniqueName === stockUnitUniqueName);
+        this.currentTxn.inventory.unit = { code: unit.stockUnitCode, rate: unit.rate, stockUnitCode: unit.stockUnitCode, uniqueName: unit.stockUnitUniqueName };
         if (this.currentTxn.inventory.unit) {
             this.changePrice(this.currentTxn.inventory.unit.rate?.toString());
         }
@@ -1272,7 +1272,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         }
         if (this.currentTxn.inventory && this.currentTxn.inventory.unit && this.currentTxn.unitRate) {
             const stock = this.currentTxn.unitRate.find(rate => {
-                return rate.stockUnitCode === this.currentTxn.inventory.unit.code;
+                return rate.stockUnitUniqueName === this.currentTxn.inventory.unit.uniqueName;
             });
             const stockRate = stock ? stock.rate : 0;
             this.currentTxn.inventory.rate = Number((stockRate / this.blankLedger?.exchangeRate).toFixed(this.ratePrecision));

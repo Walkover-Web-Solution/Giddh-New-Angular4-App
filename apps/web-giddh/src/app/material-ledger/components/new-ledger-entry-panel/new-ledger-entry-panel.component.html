@@ -46,7 +46,7 @@
                                                 class="form-control"
                                                 [disabled]="shouldShowAdvanceReceiptMandatoryFields ? 'disabled' : null"
                                                 (selectionChange)="unitChanged($event?.value)"
-                                                [value]="currentTxn?.inventory?.unit?.code"
+                                                [value]="currentTxn?.inventory?.unit?.uniqueName"
                                             >
                                                 <mat-option
                                                     *ngFor="let item of currentTxn?.unitRate"
