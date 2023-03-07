@@ -2724,7 +2724,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                     if (stock.unitRates && stock.unitRates.length) {
                         salesTransactionItemClass.stockList = this.prepareUnitArr(stock.unitRates);
                     } else {
-                        salesTransactionItemClass.stockList.push(stockUnit);
+                        salesTransactionItemClass.stockList.push({ id: salesTransactionItemClass.stockDetails.stockUnit.code , text: salesTransactionItemClass.stockDetails.stockUnit.name ? salesTransactionItemClass.stockDetails.stockUnit.name : salesTransactionItemClass.stockUnit });
                     }
                 }
                 salesEntryClass.transactions.push(salesTransactionItemClass);
