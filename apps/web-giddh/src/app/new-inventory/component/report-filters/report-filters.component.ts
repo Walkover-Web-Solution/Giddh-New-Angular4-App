@@ -139,6 +139,11 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
     }
 
+    /**
+     * Life cycle hook for init event
+     *
+     * @memberof ReportFiltersComponent
+     */
     public ngOnInit(): void {
         this.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe(dateObj => {
             if (dateObj) {
@@ -150,7 +155,6 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
                         this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                         this.fromDate = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);
                         this.toDate = dayjs(universalDate[1]).format(GIDDH_DATE_FORMAT);
-                        this.stockReportRequest.page = 1;
                         this.stockReportRequest.from = this.fromDate;
                         this.stockReportRequest.to = this.toDate;
                         this.balanceStockReportRequest.from = this.fromDate;
@@ -158,12 +162,12 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
                     } else if (this.todaySelected) {
                         this.selectedDateRange = { startDate: dayjs(), endDate: dayjs() };
                         this.selectedDateRangeUi = dayjs().format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs().format(GIDDH_NEW_DATE_FORMAT_UI);
-                        this.stockReportRequest.page = 1;
                         this.stockReportRequest.from = "";
                         this.stockReportRequest.to = "";
                         this.balanceStockReportRequest.from = "";
                         this.balanceStockReportRequest.to = "";
                     }
+                    this.stockReportRequest.page = 1;
                     this.emitFilters();
                 });
             }
@@ -202,6 +206,12 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
         this.searchInventory();
     }
 
+    /**
+     * Life cycle hook for change event
+     *
+     * @param {SimpleChanges} changes
+     * @memberof ReportFiltersComponent
+     */
     public ngOnChanges(changes: SimpleChanges): void {
         if (changes?.fromToDate?.currentValue) {
             this.selectedDateRange = { startDate: dayjs(changes?.fromToDate?.currentValue?.from, GIDDH_DATE_FORMAT), endDate: dayjs(changes?.fromToDate?.currentValue?.to, GIDDH_DATE_FORMAT) };
@@ -218,9 +228,9 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
-     *This will use for get customise columns
+     * This will get customised columns
      *
-     * @memberof InventoryTransactionListComponent
+     * @memberof ReportFiltersComponent
      */
     public getReportColumns(): void {
         this.inventoryService.getStockTransactionReportColumns(this.moduleName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -238,9 +248,9 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
-     *This will use for save customise columns
+     * This will use to save customised columns
      *
-     * @memberof InventoryTransactionListComponent
+     * @memberof ReportFiltersComponent
      */
     public saveColumns(): void {
         setTimeout(() => {
@@ -256,10 +266,10 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
-     *This will use for select all customse columns
+     * This will use to select all customised columns
      *
      * @param {*} event
-     * @memberof InventoryTransactionListComponent
+     * @memberof ReportFiltersComponent
      */
     public selectAllColumns(event: any): void {
         this.customiseColumns?.forEach(column => {
@@ -273,9 +283,9 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
-     *This will use for filtering the display columns
+     * This will be used for filtering the display columns
      *
-     * @memberof InventoryTransactionListComponent
+     * @memberof ReportFiltersComponent
      */
     public filteredDisplayColumns(): void {
         this.displayedColumns = this.customiseColumns?.filter(value => value?.checked).map(column => column?.value);
@@ -286,13 +296,18 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     /**
      * This hook will use for on destroyed component
      *
-     * @memberof InventoryTransactionListComponent
+     * @memberof ReportFiltersComponent
      */
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
 
+    /**
+     * Opens the advance search modal
+     *
+     * @memberof ReportFiltersComponent
+     */
     public openModal(): void {
         this.showAdvanceSearchModal = true;
         let dialogRef = this.dialog?.open(NewInventoryAdvanceSearch, {
@@ -305,35 +320,40 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
         dialogRef.afterClosed().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.advanceSearchModalResponse = response;
-                this.onShowAdvanceSearchFilter(response);
+                this.stockReportRequest.param = response.stockReportRequest?.param;
+                this.stockReportRequest.expression = response.stockReportRequest?.expression;
+                this.stockReportRequest.from = response.stockReportRequest?.fromDate;
+                this.stockReportRequest.to = response.stockReportRequest?.toDate;
+                this.stockReportRequest.val = response.stockReportRequest?.val;
+                this.balanceStockReportRequest.param = response.stockReportRequest?.param;
+                this.balanceStockReportRequest.expression = response.stockReportRequest?.expression;
+                this.balanceStockReportRequest.val = response.stockReportRequest?.val;
+                this.balanceStockReportRequest.from = response.stockReportRequest?.fromDate;
+                this.balanceStockReportRequest.to = response.stockReportRequest?.toDate;
+                this.stockReportRequest.page = 1;
+                this.showAdvanceSearchModal = true;
                 this.isFilterActive();
+                this.emitFilters();
             }
         });
         this.changeDetection.detectChanges();
     }
 
-    public onShowAdvanceSearchFilter(data: any): void {
-        if (data) {
-            this.stockReportRequest.param = data.stockReportRequest?.param;
-            this.stockReportRequest.expression = data.stockReportRequest?.expression;
-            this.stockReportRequest.from = data.stockReportRequest?.fromDate;
-            this.stockReportRequest.to = data.stockReportRequest?.toDate;
-            this.stockReportRequest.val = data.stockReportRequest?.val;
-            this.balanceStockReportRequest.param = data.stockReportRequest?.param;
-            this.balanceStockReportRequest.expression = data.stockReportRequest?.expression;
-            this.balanceStockReportRequest.val = data.stockReportRequest?.val;
-            this.balanceStockReportRequest.from = data.stockReportRequest?.fromDate;
-            this.balanceStockReportRequest.to = data.stockReportRequest?.toDate;
-        }
-        this.showAdvanceSearchModal = true;
-        this.emitFilters();
-        this.changeDetection.detectChanges();
-    }
-
+    /**
+     * Emits the filters and data to parent 
+     *
+     * @private
+     * @memberof ReportFiltersComponent
+     */
     private emitFilters(): void {
         this.filters.emit({ stockReportRequest: this.stockReportRequest, balanceStockReportRequest: this.balanceStockReportRequest, displayedColumns: this.displayedColumns, todaySelected: this.todaySelected, showClearFilter: this.showClearFilter });
     }
 
+    /**
+     * Shows/hides the clear button
+     *
+     * @memberof ReportFiltersComponent
+     */
     public isFilterActive(): void {
         if (this.selectedBranch?.length || this.selectedWarehouse?.length || this.filtersChipList?.length || this.advanceSearchModalResponse || this.stockReportRequest?.voucherTypes?.length || this.stockReportRequest.accountName?.length) {
             this.showClearFilter = true;
@@ -343,6 +363,11 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
         this.changeDetection.detectChanges();
     }
 
+    /**
+     * Resets the filters
+     *
+     * @memberof ReportFiltersComponent
+     */
     public resetFilter() {
         this.showClearFilter = false;
         this.advanceSearchModalResponse = null;
@@ -383,9 +408,9 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
-     *  This will use for get branch wise warehouse
+     *  This will use to get branch wise warehouse
      *
-     * @memberof InventoryTransactionListComponent
+     * @memberof ReportFiltersComponent
      */
     public getBranchWiseWarehouse(): void {
         this.inventoryService.getLinkedStocks().pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -407,9 +432,9 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
-     * This will use for get warehouses
+     * This will be used to get warehouses
      *
-     * @memberof InventoryTransactionListComponent
+     * @memberof ReportFiltersComponent
      */
     public getWarehouses(): void {
         this.stockReportRequest.warehouseUniqueNames = this.selectedWarehouse;
@@ -419,10 +444,10 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
-     * This will use for get branches
+     * This will be used to get branches
      *
      * @param {boolean} [apiCall=true]
-     * @memberof InventoryTransactionListComponent
+     * @memberof ReportFiltersComponent
      */
     public getBranches(apiCall: boolean = true): void {
         this.selectedWarehouse = [];
@@ -461,11 +486,11 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
-     *Call back function for date/range selection in datepicker
+     * Call back function for date/range selection in datepicker
      *
      * @param {*} [value]
      * @return {*}  {void}
-     * @memberof InventoryTransactionListComponent
+     * @memberof ReportFiltersComponent
      */
     public dateSelectedCallback(value?: any): void {
         if (value && value.event === "cancel") {
@@ -494,19 +519,19 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
-   * This will hide the datepicker
-   *
-   * @memberof InventoryTransactionListComponent
-   */
+     * This will hide the datepicker
+     *
+     * @memberof ReportFiltersComponent
+     */
     public hideGiddhDatepicker(): void {
         this.modalRef?.hide();
     }
 
     /**
-     *To show the datepicker
+     * To show the datepicker
      *
      * @param {*} element
-     * @memberof InventoryTransactionListComponent
+     * @memberof ReportFiltersComponent
      */
     public showGiddhDatepicker(element: any): void {
         if (element) {
@@ -519,11 +544,11 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
-     *  This will use for select filters in chiplist
+     * This will use for select filters in chiplist
      *
      * @param {*} option
      * @return {*}  {void}
-     * @memberof InventoryTransactionListComponent
+     * @memberof ReportFiltersComponent
      */
     public selectChiplistValue(option: any): void {
         const selectOptionValue = option?.option?.value;
@@ -561,11 +586,11 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
-     * This will use for remove chiplist from search filter
+     * This will be used for remove chiplist from search filter
      *
      * @param {*} selectOptionValue
      * @param {number} index
-     * @memberof InventoryTransactionListComponent
+     * @memberof ReportFiltersComponent
      */
     public removeOption(selectOptionValue: any, index: number): void {
         this.filtersChipList?.splice(index, 1);
@@ -596,6 +621,12 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
         }
     }
 
+    /**
+     * Searches the group/stock/variant
+     *
+     * @param {boolean} [loadMore]
+     * @memberof ReportFiltersComponent
+     */
     public searchInventory(loadMore?: boolean): void {
         this.searchRequest.stockGroupUniqueNames = this.stockReportRequest.stockGroupUniqueNames;
         this.searchRequest.stockUniqueNames = this.stockReportRequest.stockUniqueNames;
