@@ -439,6 +439,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     public getWarehouses(): void {
         this.stockReportRequest.warehouseUniqueNames = this.selectedWarehouse;
         this.balanceStockReportRequest.warehouseUniqueNames = this.selectedWarehouse;
+        this.stockReportRequest.page = 1;
         this.isFilterActive();
         this.emitFilters();
     }
@@ -475,8 +476,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
         this.stockReportRequest.warehouseUniqueNames = [];
         this.balanceStockReportRequest.branchUniqueNames = cloneDeep(this.stockReportRequest.branchUniqueNames);
         this.balanceStockReportRequest.warehouseUniqueNames = cloneDeep(this.stockReportRequest.warehouseUniqueNames);
-
-        console.log(this.stockReportRequest.branchUniqueNames);
+        this.stockReportRequest.page = 1;
 
         if (apiCall) {
             this.emitFilters();
