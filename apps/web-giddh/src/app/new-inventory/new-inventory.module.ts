@@ -28,7 +28,7 @@ import { AdjustProductServiceComponent } from "./component/adjust-product-servic
 import { InventoryAdjustmentReasonAside } from "./component/inventory-adjustment-aside/inventory-adjustment-aside.component";
 import { InventoryAdjustmentBulkEntryComponent } from "./component/inventory-adjust-bulk-entry/inventory-adjust-bulk-entry.component";
 import { CreateNewInventoryComponent } from "./component/create-new-inventory-component/create-new-inventory.component";
-import { NewInventoryAdavanceSearch } from "./component/new-inventory-advance-search/new-inventory-advance-search.component";
+import { NewInventoryAdvanceSearch } from "./component/new-inventory-advance-search/new-inventory-advance-search.component";
 import { InventoryDashboardComponent } from "./component/inventory-dashboard/inventory-dashboard.component";
 import { InventoryActivityComponent } from "./component/inventory-dashboard/inventory-activity/inventory-activity.component";
 import { DashboardItemProductDetail } from "./component/inventory-dashboard/dashboard-item-product-detail/dashboard-item-product-detail.component";
@@ -66,6 +66,7 @@ import { PaginationModule } from "ngx-bootstrap/pagination";
 import { MatDialogModule } from "@angular/material/dialog";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { MatTooltipModule } from "@angular/material/tooltip";
+import { ReportFiltersComponent } from "./component/report-filters/report-filters.component";
 
 @NgModule({
     declarations: [
@@ -93,7 +94,7 @@ import { MatTooltipModule } from "@angular/material/tooltip";
         InventoryAdjustmentReasonAside,
         InventoryAdjustmentBulkEntryComponent,
         CreateNewInventoryComponent,
-        NewInventoryAdavanceSearch,
+        NewInventoryAdvanceSearch,
         InventoryDashboardComponent,
         InventoryActivityComponent,
         DashboardItemProductDetail,
@@ -106,7 +107,8 @@ import { MatTooltipModule } from "@angular/material/tooltip";
         StockBalanceComponent,
         GroupwiseComponent,
         ItemWiseComponent,
-        VariantWiseComponent
+        VariantWiseComponent,
+        ReportFiltersComponent
     ],
     imports: [
         NewInventoryRoutingModule,
@@ -165,7 +167,7 @@ import { MatTooltipModule } from "@angular/material/tooltip";
         InventoryAdjustmentReasonAside,
         InventoryAdjustmentBulkEntryComponent,
         CreateNewInventoryComponent,
-        NewInventoryAdavanceSearch,
+        NewInventoryAdvanceSearch,
         InventoryDashboardComponent,
         InventoryActivityComponent,
         DashboardItemProductDetail,
@@ -173,7 +175,8 @@ import { MatTooltipModule } from "@angular/material/tooltip";
         DashboardProfitStockList,
         DashboardPurchaseReport,
         DashboardSalesReport,
-        DashboardSellingReport
+        DashboardSellingReport,
+        ReportFiltersComponent
     ]
 })
 export class NewInventoryModule { }
