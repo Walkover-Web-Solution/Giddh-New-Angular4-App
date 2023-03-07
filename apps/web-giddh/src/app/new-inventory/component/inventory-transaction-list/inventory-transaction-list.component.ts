@@ -396,6 +396,7 @@ export class InventoryTransactionListComponent implements OnInit {
             this.stockReportRequest.page = 1;
             this.getStockTransactionalReport();
         }
+        this.reportFiltersComponent.isFilterActive();
         this.changeDetection.detectChanges();
     }
 
