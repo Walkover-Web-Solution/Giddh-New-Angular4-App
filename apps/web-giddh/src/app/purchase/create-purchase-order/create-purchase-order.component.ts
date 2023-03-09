@@ -2717,8 +2717,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                     }
                     stock.unitRates = stock.unitRates || [];
                     let stockUnit: IStockUnit = {
-                        id: salesTransactionItemClass.stockDetails.stockUnit.uniqueName,
-                        text: salesTransactionItemClass.stockDetails.stockUnit.code
+                        id: salesTransactionItemClass.stockDetails?.stockUnit?.uniqueName,
+                        text: salesTransactionItemClass.stockDetails?.stockUnit?.code
                     };
                     salesTransactionItemClass.stockList = [];
                     if (stock.unitRates && stock.unitRates.length) {
@@ -3345,8 +3345,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             // set rate auto
             transaction.rate = null;
             let obj: IStockUnit = {
-                id: additional.stock.stockUnit.uniqueName,
-                text: additional.stock.stockUnit.code
+                id: additional.stock.stockUnit?.uniqueName,
+                text: additional.stock.stockUnit?.code
             };
             transaction.stockList = [];
             if (additional.stock && additional.stock.unitRates && additional.stock.unitRates.length) {
