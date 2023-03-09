@@ -1976,7 +1976,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                         if (this.voucherApiVersion === 2) {
                             const selectedInvoice = this.invFormData.voucherDetails.referenceVoucher;
                             if (selectedInvoice) {
-                                selectedInvoice['voucherDate'] = selectedInvoice['invoiceDate'] || selectedInvoice['date'] ;
+                                selectedInvoice['voucherDate'] = selectedInvoice['invoiceDate'] || selectedInvoice['date'];
                                 invoiceSelected = {
                                     label: selectedInvoice.number ? selectedInvoice.number : this.commonLocaleData?.app_not_available,
                                     value: selectedInvoice.uniqueName,
@@ -3562,8 +3562,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             // set rate auto
             transaction.rate = null;
             let obj: IStockUnit = {
-                id: o.stock.stockUnitUniqueName,
-                text: o.stock.stockUnitName
+                id:  o.stock.stockUnit.uniqueName,
+                text:  o.stock.stockUnit.code
             };
             transaction.stockList = [];
             if (o.stock && o.stock.unitRates && o.stock.unitRates.length) {
@@ -3572,9 +3572,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 transaction.stockUnitCode = transaction.stockList[0].text;
                 transaction.rate = Number((transaction.stockList[0].rate / this.exchangeRate).toFixed(this.highPrecisionRate));
             } else {
-                transaction.stockList.push(obj);
                 transaction.stockUnit = o.stock.stockUnit.uniqueName;
                 transaction.stockUnitCode = o.stock.stockUnit.code;
+                transaction.stockList.push(obj);
             }
             transaction.stockDetails = omit(o.stock, ['accountStockDetails', 'stockUnit']);
             transaction.isStockTxn = true;
@@ -3707,7 +3707,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.intl?.setNumber("");
         this.typeaheadNoResultsOfCustomer = false;
         this.referenceVouchersCurrentPage = 1;
-        if (item &&item?.value) {
+        if (item && item?.value) {
             this.invFormData.voucherDetails.customerName = item.label;
             this.invFormData.voucherDetails.customerUniquename = item.value;
             this.getAccountDetails(item.value);
@@ -4958,18 +4958,17 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                         }
 
                         stock.unitRates = stock.unitRates || [];
-                        const unitRate = stock.unitRates.find(rate => rate.code === stock.stockUnit.code);
 
                         let stockUnit: IStockUnit = {
-                            id: stock.stockUnit.uniqueName,
-                            text: unitRate ? unitRate.stockUnitName : ''
+                            id: newTrxObj.stockDetails.stockUnit.uniqueName,
+                            text: newTrxObj.stockDetails.stockUnit.code
                         };
 
                         newTrxObj.stockList = [];
                         if (stock.unitRates && stock.unitRates.length) {
                             newTrxObj.stockList = this.prepareUnitArr(stock.unitRates);
                         } else {
-                            newTrxObj.stockList.push({ id: newTrxObj.stockDetails.stockUnit.code, text: newTrxObj.stockDetails.stockUnit.name });
+                            newTrxObj.stockList.push(stockUnit);
                         }
                     }
 
