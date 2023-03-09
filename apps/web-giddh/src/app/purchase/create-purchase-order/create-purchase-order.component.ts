@@ -25,7 +25,7 @@ import { IForceClear, SalesTransactionItemClass, SalesEntryClass, IStockUnit, Sa
 import { TaxResponse } from '../../models/api-models/Company';
 import { IContentCommon } from '../../models/api-models/Invoice';
 import { giddhRoundOff } from '../../shared/helpers/helperFunctions';
-import { cloneDeep } from '../../lodash-optimized';
+import { cloneDeep, find } from '../../lodash-optimized';
 import * as dayjs from 'dayjs';
 import * as customParseFormat from 'dayjs/plugin/customParseFormat';
 dayjs.extend(customParseFormat);
@@ -1366,6 +1366,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         transaction.quantity = null;
         transaction.isStockTxn = false;
         transaction.stockUnit = null;
+        transaction.stockUnitCode = null;
         transaction.stockDetails = null;
         transaction.stockList = [];
         transaction.rate = null;
@@ -2261,6 +2262,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                     salesAddBulkStockItems.sku = transaction.stockDetails.skuCode;
                     salesAddBulkStockItems.stockUnit = new CodeStockMulticurrency();
                     salesAddBulkStockItems.stockUnit.uniqueName = transaction.stockUnit;
+                    salesAddBulkStockItems.stockUnit.code = transaction.stockUnitCode;
 
                     transactionClassMul.stock = salesAddBulkStockItems;
                 }
@@ -2375,11 +2377,9 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
      * @memberof CreatePurchaseOrderComponent
      */
     public onChangeUnit(transaction: any, selectedUnit: any): void {
-        if (!event) {
-            return;
-        }
-        _.find(transaction.stockList, (txn) => {
+        find(transaction.stockList, (txn) => {
             if (txn.id === selectedUnit) {
+                transaction.stockUnitCode = txn.text;
                 return transaction.rate = txn.rate;
             }
         });
@@ -2685,6 +2685,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                     salesTransactionItemClass.rate = transaction.stock.rate.amountForAccount;
                     salesTransactionItemClass.stockDetails.skuCode = transaction.stock.sku;
                     salesTransactionItemClass.stockUnit = transaction.stock.stockUnit.uniqueName;
+                    salesTransactionItemClass.stockUnitCode = transaction.stock.stockUnit.code;
                     salesTransactionItemClass.fakeAccForSelect2 = transaction.account?.uniqueName + '#' + transaction.stock.uniqueName;
 
                     let stock = salesTransactionItemClass.stockDetails;
@@ -3349,16 +3350,19 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             if (additional.stock && additional.stock.unitRates && additional.stock.unitRates.length) {
                 transaction.stockList = this.prepareUnitArr(additional.stock.unitRates);
                 transaction.stockUnit = transaction.stockList[0].id;
+                transaction.stockUnitCode = transaction.stockList[0].text;
                 transaction.rate = Number((transaction.stockList[0].rate / this.exchangeRate).toFixed(this.highPrecisionRate));
             } else {
                 transaction.stockList.push(obj);
                 transaction.stockUnit = additional.stock.stockUnit.uniqueName;
+                transaction.stockUnitCode = additional.stock.stockUnit.code;
             }
             transaction.stockDetails = _.omit(additional.stock, ['accountStockDetails', 'stockUnit']);
             transaction.isStockTxn = true;
         } else {
             transaction.isStockTxn = false;
             transaction.stockUnit = null;
+            transaction.stockUnitCode = null;
             transaction.stockDetails = null;
             transaction.stockList = [];
             // reset fields
