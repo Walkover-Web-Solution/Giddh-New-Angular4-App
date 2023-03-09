@@ -3562,8 +3562,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             // set rate auto
             transaction.rate = null;
             let obj: IStockUnit = {
-                id:  o.stock.stockUnit.uniqueName,
-                text:  o.stock.stockUnit.code
+                id:  o.stock.stockUnit?.uniqueName,
+                text:  o.stock.stockUnit?.code
             };
             transaction.stockList = [];
             if (o.stock && o.stock.unitRates && o.stock.unitRates.length) {
@@ -4960,8 +4960,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                         stock.unitRates = stock.unitRates || [];
 
                         let stockUnit: IStockUnit = {
-                            id: newTrxObj.stockDetails.stockUnit.uniqueName,
-                            text: newTrxObj.stockDetails.stockUnit.code
+                            id: newTrxObj.stockDetails?.stockUnit?.uniqueName,
+                            text: newTrxObj.stockDetails?.stockUnit?.code
                         };
 
                         newTrxObj.stockList = [];
