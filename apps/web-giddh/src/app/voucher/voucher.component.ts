@@ -1976,7 +1976,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                         if (this.voucherApiVersion === 2) {
                             const selectedInvoice = this.invFormData.voucherDetails.referenceVoucher;
                             if (selectedInvoice) {
-                                selectedInvoice['voucherDate'] = selectedInvoice['invoiceDate'] || selectedInvoice['date'] ;
+                                selectedInvoice['voucherDate'] = selectedInvoice['invoiceDate'] || selectedInvoice['date'];
                                 invoiceSelected = {
                                     label: selectedInvoice.number ? selectedInvoice.number : this.commonLocaleData?.app_not_available,
                                     value: selectedInvoice.uniqueName,
@@ -3707,7 +3707,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.intl?.setNumber("");
         this.typeaheadNoResultsOfCustomer = false;
         this.referenceVouchersCurrentPage = 1;
-        if (item &&item?.value) {
+        if (item && item?.value) {
             this.invFormData.voucherDetails.customerName = item.label;
             this.invFormData.voucherDetails.customerUniquename = item.value;
             this.getAccountDetails(item.value);
@@ -4969,7 +4969,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                         if (stock.unitRates && stock.unitRates.length) {
                             newTrxObj.stockList = this.prepareUnitArr(stock.unitRates);
                         } else {
-                            newTrxObj.stockList.push({ id: newTrxObj.stockDetails.stockUnit.code, text: newTrxObj.stockDetails.stockUnit.name });
+                            newTrxObj.stockList.push({ id: newTrxObj.stockDetails.stockUnit.code, text: (newTrxObj.stockDetails.stockUnit.code === newTrxObj.stockUnit ? newTrxObj.stockDetails.stockUnit.code : newTrxObj.stockUnit) });
                         }
                     }
 
