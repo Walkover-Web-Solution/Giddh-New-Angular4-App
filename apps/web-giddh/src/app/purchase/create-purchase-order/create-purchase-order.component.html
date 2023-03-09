@@ -1219,7 +1219,7 @@
                             </div>
                         </td>
                         <td class="text-right stock-unit">
-                            <div class="wrap-td-data">{{ transaction.quantity }} {{ transaction.stockUnit }}</div>
+                            <div class="wrap-td-data">{{ transaction.quantity }} {{ transaction.stockUnitCode }}</div>
                         </td>
                         <td class="text-right trans-rate item-rate">
                             <div *ngIf="transaction.rate > 0 || transaction.isStockTxn">
@@ -2298,7 +2298,7 @@
                                 <div class="single-card-row">
                                     <div class="qty-unit">
                                         <label class="card-label">{{ commonLocaleData?.app_quantity_unit }}</label>
-                                        <p>{{ transaction.quantity }} {{ transaction.stockUnit }}</p>
+                                        <p>{{ transaction.quantity }} {{ transaction.stockUnitCode }}</p>
                                     </div>
                                 </div>
                             </div>
