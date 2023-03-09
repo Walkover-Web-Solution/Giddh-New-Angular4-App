@@ -3572,9 +3572,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 transaction.stockUnitCode = transaction.stockList[0].text;
                 transaction.rate = Number((transaction.stockList[0].rate / this.exchangeRate).toFixed(this.highPrecisionRate));
             } else {
-                transaction.stockList.push(obj);
                 transaction.stockUnit = o.stock.stockUnit.uniqueName;
                 transaction.stockUnitCode = o.stock.stockUnit.code;
+                transaction.stockList.push({ id: transaction.stockUnit, text: transaction.stockUnitCode });
             }
             transaction.stockDetails = omit(o.stock, ['accountStockDetails', 'stockUnit']);
             transaction.isStockTxn = true;
@@ -4969,7 +4969,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                         if (stock.unitRates && stock.unitRates.length) {
                             newTrxObj.stockList = this.prepareUnitArr(stock.unitRates);
                         } else {
-                            newTrxObj.stockList.push({ id: newTrxObj.stockDetails.stockUnit.code, text: (newTrxObj.stockDetails.stockUnit.code === newTrxObj.stockUnit ? newTrxObj.stockDetails.stockUnit.code : newTrxObj.stockUnit) });
+                            newTrxObj.stockList.push({ id: newTrxObj.stockDetails.stockUnit.uniqueName, text: newTrxObj.stockDetails.stockUnit.code });
                         }
                     }
 
