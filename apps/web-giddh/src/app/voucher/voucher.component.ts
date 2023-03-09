@@ -3562,8 +3562,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             // set rate auto
             transaction.rate = null;
             let obj: IStockUnit = {
-                id: o.stock.stockUnitUniqueName,
-                text: o.stock.stockUnitName
+                id:  o.stock.stockUnit.uniqueName,
+                text:  o.stock.stockUnit.code
             };
             transaction.stockList = [];
             if (o.stock && o.stock.unitRates && o.stock.unitRates.length) {
@@ -3574,7 +3574,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             } else {
                 transaction.stockUnit = o.stock.stockUnit.uniqueName;
                 transaction.stockUnitCode = o.stock.stockUnit.code;
-                transaction.stockList.push({ id: transaction.stockUnit, text: transaction.stockUnitCode });
+                transaction.stockList.push(obj);
             }
             transaction.stockDetails = omit(o.stock, ['accountStockDetails', 'stockUnit']);
             transaction.isStockTxn = true;
@@ -4958,18 +4958,17 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                         }
 
                         stock.unitRates = stock.unitRates || [];
-                        const unitRate = stock.unitRates.find(rate => rate.code === stock.stockUnit.code);
 
                         let stockUnit: IStockUnit = {
-                            id: stock.stockUnit.uniqueName,
-                            text: unitRate ? unitRate.stockUnitName : ''
+                            id: newTrxObj.stockDetails.stockUnit.uniqueName,
+                            text: newTrxObj.stockDetails.stockUnit.code
                         };
 
                         newTrxObj.stockList = [];
                         if (stock.unitRates && stock.unitRates.length) {
                             newTrxObj.stockList = this.prepareUnitArr(stock.unitRates);
                         } else {
-                            newTrxObj.stockList.push({ id: newTrxObj.stockDetails.stockUnit.uniqueName, text: newTrxObj.stockDetails.stockUnit.code });
+                            newTrxObj.stockList.push(stockUnit);
                         }
                     }
 

@@ -2716,16 +2716,15 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                         salesTransactionItemClass.sku_and_customfields = description.join(', ');
                     }
                     stock.unitRates = stock.unitRates || [];
-                    const unitRate = stock.unitRates.find(rate => rate.code === stock.stockUnit.code);
                     let stockUnit: IStockUnit = {
-                        id: stock.stockUnit.uniqueName,
-                        text: unitRate ? unitRate.stockUnitName : ''
+                        id: salesTransactionItemClass.stockDetails.stockUnit.uniqueName,
+                        text: salesTransactionItemClass.stockDetails.stockUnit.code
                     };
                     salesTransactionItemClass.stockList = [];
                     if (stock.unitRates && stock.unitRates.length) {
                         salesTransactionItemClass.stockList = this.prepareUnitArr(stock.unitRates);
                     } else {
-                        salesTransactionItemClass.stockList.push({ id: salesTransactionItemClass.stockDetails.stockUnit.uniqueName, text:salesTransactionItemClass.stockDetails.stockUnit.code });
+                        salesTransactionItemClass.stockList.push(stockUnit);
                     }
                 }
                 salesEntryClass.transactions.push(salesTransactionItemClass);
@@ -3346,8 +3345,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             // set rate auto
             transaction.rate = null;
             let obj: IStockUnit = {
-                id: additional.stock.stockUnitUniqueName,
-                text: additional.stock.stockUnitName
+                id: additional.stock.stockUnit.uniqueName,
+                text: additional.stock.stockUnit.code
             };
             transaction.stockList = [];
             if (additional.stock && additional.stock.unitRates && additional.stock.unitRates.length) {
@@ -3356,9 +3355,9 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                 transaction.stockUnitCode = transaction.stockList[0].text;
                 transaction.rate = Number((transaction.stockList[0].rate / this.exchangeRate).toFixed(this.highPrecisionRate));
             } else {
-                transaction.stockList.push(obj);
                 transaction.stockUnit = additional.stock.stockUnit.uniqueName;
                 transaction.stockUnitCode = additional.stock.stockUnit.code;
+                transaction.stockList.push(obj);
             }
             transaction.stockDetails = _.omit(additional.stock, ['accountStockDetails', 'stockUnit']);
             transaction.isStockTxn = true;
