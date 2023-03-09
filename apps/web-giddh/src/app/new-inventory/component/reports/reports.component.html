@@ -325,71 +325,6 @@
                             </td>
                         </ng-container>
 
-                        <ng-container matColumnDef="voucherType">
-                            <th mat-header-cell *matHeaderCellDef [matMenuTriggerFor]="voucherTypesMenu">
-                                Voucher Type
-                                <i
-                                    class="fa fa-ellipsis-v ml-1 text-light-2 mt-1 cursor-pointer"
-                                    aria-hidden="true"
-                                ></i>
-                                <mat-menu
-                                    #voucherTypesMenu="matMenu"
-                                    class="columns-wrapper"
-                                    (closed)="filterByVoucherTypes()"
-                                >
-                                    <ng-container *ngFor="let item of voucherTypes; let idx = index">
-                                        <button
-                                            class="menu-buttons"
-                                            mat-menu-item
-                                            (click)="$event?.stopPropagation()"
-                                            (keydown.enter)="item.checked = !item?.checked"
-                                        >
-                                            <mat-checkbox
-                                                class="inventory-checkbox"
-                                                color="primary"
-                                                name="{{ item?.value }}"
-                                                [(ngModel)]="item.checked"
-                                                (click)="$event?.stopPropagation()"
-                                            >
-                                                {{ item?.label }}</mat-checkbox
-                                            >
-                                        </button>
-                                    </ng-container>
-                                </mat-menu>
-                            </th>
-                            <td date-title="Voucher Type" mat-cell *matCellDef="let element">
-                                {{ element?.voucherType }}
-                            </td>
-                        </ng-container>
-                        <ng-container matColumnDef="accountName">
-                            <th
-                                class="td-search-box text-left word-wrap"
-                                mat-header-cell
-                                #searchCustomerContainer
-                                *matHeaderCellDef
-                                (clickOutside)="handleClickOutside($event, searchCustomerContainer, 'name')"
-                            >
-                                <ng-container
-                                    *ngTemplateOutlet="
-                                        searchTemplate;
-                                        context: {
-                                            $implicit: showAccountSearchInput,
-                                            fieldName: 'name',
-                                            formControl: searchAccountName,
-                                            title: 'Account Name'
-                                        }
-                                    "
-                                ></ng-container>
-                            </th>
-                            <td
-                                data-title="Account Name"
-                                class="text-left account-name-column"
-                                mat-cell
-                                *matCellDef="let element"
-                            >
-                                {{ element?.account?.name ?? "-" }}
-                            </td>
-                        </ng-container>
                         <ng-container matColumnDef="stockName">
                             <th class="text-left" mat-header-cell *matHeaderCellDef>Stock Name</th>
                             <td data-title="Stock Name" class="text-left word-wrap" mat-cell *matCellDef="let element">
@@ -555,28 +490,4 @@
     <div class="no-data" *ngIf="isLoading">
         <giddh-page-loader></giddh-page-loader>
     </div>
-    <ng-template
-        #searchTemplate
-        let-show
-        let-title="title"
-        let-placeholder="placeholder"
-        let-fieldName="fieldName"
-        let-formControl="formControl"
-    >
-        <div class="align-items-center d-flex" [hidden]="show">
-            <span>{{ title }}</span>
-            <button mat-icon-button (click)="toggleSearch(fieldName)">
-                <span class="icon-search"></span>
-            </button>
-        </div>
-        <div [hidden]="!show">
-            <text-field
-                [type]="'text'"
-                [placeholder]="getSearchFieldText(fieldName)"
-                [cssClass]="'form-control search-table mat-field-border'"
-                [formControl]="formControl"
-                [autoFocus]="show"
-            ></text-field>
-        </div>
-    </ng-template>
 </div>

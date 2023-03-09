@@ -10,7 +10,7 @@ import { FormControl } from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
 import { MatSort } from "@angular/material/sort";
 import { cloneDeep } from "../../../lodash-optimized";
-import { BalanceStockTransactionReportRequest, StockTransactionReportRequest, TransactionStockReportResponse } from "../../../models/api-models/Inventory";
+import { BalanceStockTransactionReportRequest, InventoryReportBalanceResponse, StockTransactionReportRequest } from "../../../models/api-models/Inventory";
 import { InventoryService } from "../../../services/inventory.service";
 import { ToasterService } from "../../../services/toaster.service";
 import { CdkVirtualScrollViewport } from "@angular/cdk/scrolling";
@@ -44,7 +44,7 @@ export class InventoryTransactionListComponent implements OnInit {
     /** Stock Transactional Object */
     public balanceStockReportRequest: BalanceStockTransactionReportRequest = new BalanceStockTransactionReportRequest();
     /** Stock Transactional Report Balance Response */
-    public stockTransactionReportBalance: TransactionStockReportResponse;
+    public stockTransactionReportBalance: InventoryReportBalanceResponse;
     /* This will hold local JSON data */
     public localeData: any = {};
     /* This will hold common JSON data */

@@ -237,7 +237,7 @@ export class StockReportRequestTransactionParams {
     public sortBy: string;
 }
 
-export class TransactionStockReportResponse {
+export class InventoryReportBalanceResponse {
     public profit?: number;
     public opening?: any;
     public closing?: any;
@@ -403,4 +403,75 @@ export class InventoryDownloadRequest {
     public sortBy?: string;
     public warehouseUniqueName?: string;
     public branchUniqueName?: string;
+}
+
+export class InventoryReportRequest {
+    public totalItems?: number;
+    public totalPages?: number;
+    public param?: string;
+    public expression?: string;
+    public val?: number;
+    public stockGroupUniqueNames?: any[];
+    public stockUniqueNames?: any[];
+    public warehouseUniqueNames?: any[];
+    public branchUniqueNames?: any[];
+    public from: string = '';
+    public to: string = '';
+    public count: number;
+    public page: number;
+    public sort: string;
+    public sortBy: string;
+    constructor() {
+        this.param = null;
+        this.expression = null;
+        this.val = 0;
+        this.count = PAGINATION_LIMIT;
+        this.page = 1;
+        this.stockGroupUniqueNames = [];
+        this.stockUniqueNames = [];
+        this.warehouseUniqueNames = [];
+        this.branchUniqueNames = [];
+    }
+}
+
+export class InventoryReportResponse {
+    public count: number;
+    public page: number;
+    public totalItems: number;
+    public totalPages: number;
+    public results: IReportTransaction[];
+    public size: number;
+    public openingBalance: IInventoryBalance;
+    public closingBalance: IInventoryBalance;
+    public debitTotal: number;
+    public creditTotal: number;
+}
+
+export class IReportTransaction {
+    public opening: IInventoryQtyAmt;
+    public inwards: IInventoryQtyAmt;
+    public outwards: IInventoryQtyAmt;
+    public closing: IInventoryQtyAmt;
+    public profile: number;
+    public stock: IGroupWiseStock;
+    public stockGroup: IGroupWiseStock;
+    public stockUnit: IGroupWiseStockUnit;
+    public stockGroupHasChild: boolean;
+}
+
+export class IInventoryQtyAmt {
+    public quantity: number;
+    public amount: number;
+}
+export class IGroupWiseStock {
+    public name: string;
+    public uniqueName: string;
+}
+export class IGroupWiseStockUnit {
+    public name: string;
+    public code: string;
+}
+export class IInventoryBalance {
+    public amount: number;
+    public type: string;
 }

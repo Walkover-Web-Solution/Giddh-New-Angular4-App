@@ -13,7 +13,9 @@ import {
     StockUnitResponse,
     InventoryDownloadRequest,
     StockMappedUnitResponse,
-    StockTransactionReportRequest
+    StockTransactionReportRequest,
+    InventoryReportRequest,
+    InventoryReportResponse
 } from '../models/api-models/Inventory';
 import { Inject, Injectable, Optional } from '@angular/core';
 import { HttpWrapperService } from './httpWrapper.service';
@@ -1161,5 +1163,8 @@ export class InventoryService {
                     to: stockReportRequest.to,
                 })));
     }
+
+
+
 
 }

@@ -5,8 +5,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSort } from '@angular/material/sort';
 import { select, Store } from '@ngrx/store';
 import { ReplaySubject } from 'rxjs';
-import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
-import { BalanceStockTransactionReportRequest, StockTransactionReportRequest, TransactionStockReportResponse } from '../../../models/api-models/Inventory';
+import { takeUntil } from 'rxjs/operators';
+import { BalanceStockTransactionReportRequest, InventoryReportRequest, InventoryReportBalanceResponse } from '../../../models/api-models/Inventory';
 import { GeneralService } from '../../../services/general.service';
 import { InventoryService } from '../../../services/inventory.service';
 import { ToasterService } from '../../../services/toaster.service';
@@ -40,11 +40,11 @@ export class ReportsComponent implements OnInit {
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Stock Transactional Object */
-    public stockReportRequest: StockTransactionReportRequest = new StockTransactionReportRequest();
+    public stockReportRequest: InventoryReportRequest = new InventoryReportRequest();
     /** Stock Transactional Object */
     public balanceStockReportRequest: BalanceStockTransactionReportRequest = new BalanceStockTransactionReportRequest();
     /** Stock Transactional Report Balance Response */
-    public stockTransactionReportBalance: TransactionStockReportResponse;
+    public stockTransactionReportBalance: InventoryReportBalanceResponse;
     /* This will hold local JSON data */
     public localeData: any = {};
     /* This will hold common JSON data */
@@ -212,19 +212,6 @@ export class ReportsComponent implements OnInit {
     public ngOnInit(): void {
         this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
 
-        this.searchAccountName.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(search => {
-            if (this.showAccountSearchInput) {
-                this.stockReportRequest.accountName = search;
-                this.balanceStockReportRequest.accountName = search;
-                this.stockReportRequest.page = 1;
-                if (search === '') {
-                    this.showAccountSearchInput = false;
-                }
-                this.reportFiltersComponent.isFilterActive();
-                this.getStockTransactionalReport();
-            }
-        });
-
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
                 this.activeCompany = activeCompany;
@@ -369,34 +356,6 @@ export class ReportsComponent implements OnInit {
             response.checked = false;
         });
         this.searchAccountName.reset();
-        this.changeDetection.detectChanges();
-    }
-
-    /**
-     * This will use for filter by check for Voucher types column
-     *
-     * @param {string} type
-     * @memberof InventoryTransactionListComponent
-     */
-    public filterByVoucherTypes(): void {
-        let checkedValues = this.voucherTypes?.filter(value => value?.checked === true);
-        const currentVoucherTypes = cloneDeep(this.stockReportRequest.voucherTypes);
-        if (checkedValues?.length) {
-            this.stockReportRequest.voucherTypes = [];
-            checkedValues?.forEach(type => {
-                this.stockReportRequest.voucherTypes?.push(type?.value);
-            });
-        } else {
-            this.stockReportRequest.voucherTypes = [];
-        }
-        let difference = currentVoucherTypes?.filter(x => !this.stockReportRequest.voucherTypes?.includes(x));
-        let hasDifference = (difference?.length || currentVoucherTypes?.length !== this.stockReportRequest.voucherTypes?.length)
-        this.balanceStockReportRequest.voucherTypes = this.stockReportRequest.voucherTypes;
-        if (hasDifference) {
-            this.stockReportRequest.page = 1;
-            this.getStockTransactionalReport();
-        }
-        this.reportFiltersComponent.isFilterActive();
         this.changeDetection.detectChanges();
     }
 
