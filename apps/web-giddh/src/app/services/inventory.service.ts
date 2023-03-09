@@ -1037,7 +1037,7 @@ export class InventoryService {
      */
     public getStockTransactionReportColumns(module: string): Observable<BaseResponse<any, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.get(this.config.apiUrl + INVENTORY_API.TRANSACTIONAL_STOCK_REPORT_COLUMNS?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':module', module)).pipe(map((res) => {
+        return this.http.get(this.config.apiUrl + INVENTORY_API.TRANSACTION_STOCK_REPORT_COLUMNS?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':module', module)).pipe(map((res) => {
             let data: BaseResponse<any, string> = res;
             data.request = '';
             data.queryString = {};
@@ -1054,7 +1054,7 @@ export class InventoryService {
      */
     public saveStockTransactionReportColumns(model: any): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        let url = this.config.apiUrl + INVENTORY_API.TRANSACTIONAL_STOCK_REPORT_COLUMNS;
+        let url = this.config.apiUrl + INVENTORY_API.TRANSACTION_STOCK_REPORT_COLUMNS;
         url = url?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':module', model.module);
         return this.http.post(url, model).pipe(map((res) => {
             let data: BaseResponse<any, any> = res;
@@ -1093,7 +1093,7 @@ export class InventoryService {
         let updatedStockTransactionRequest = cloneDeep(stockReportRequest);
         delete updatedStockTransactionRequest.from;
         delete updatedStockTransactionRequest.to;
-        return this.http.post(this.config.apiUrl + INVENTORY_API.TRANSACTIONAL_STOCK_REPORT_V2?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+        return this.http.post(this.config.apiUrl + INVENTORY_API.TRANSACTION_STOCK_REPORT_V2?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             ?.replace(':stockGroupUniqueName', encodeURIComponent(<any>stockReportRequest.stockGroupUniqueNames))
             ?.replace(':stockUniqueName', encodeURIComponent(<any>stockReportRequest.stockUniqueNames))
             ?.replace(':transactionType', encodeURIComponent(stockReportRequest.transactionType ? stockReportRequest.transactionType?.toString() : 'all'))
@@ -1138,7 +1138,7 @@ export class InventoryService {
         let updatedBalanceRequest = cloneDeep(stockReportRequest);
         delete updatedBalanceRequest.from;
         delete updatedBalanceRequest.to;
-        return this.http.post(this.config.apiUrl + INVENTORY_API.TRANSACTIONAL_STOCK_REPORT_BALANCE_V2?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+        return this.http.post(this.config.apiUrl + INVENTORY_API.TRANSACTION_STOCK_REPORT_BALANCE_V2?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             ?.replace(':stockGroupUniqueName', encodeURIComponent(<any>stockReportRequest.stockGroupUniqueNames))
             ?.replace(':stockUniqueName', encodeURIComponent(<any>stockReportRequest.stockUniqueNames))
             ?.replace(':from', encodeURIComponent(stockReportRequest.from))
