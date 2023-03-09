@@ -229,6 +229,7 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
     public description: string;
     public quantity: number;
     public stockUnit: string;
+    public stockUnitCode?: string;
     public rate: number;
     public date: any;
     public taxableValue: number;

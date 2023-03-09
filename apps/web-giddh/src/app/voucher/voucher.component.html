@@ -2195,7 +2195,7 @@
                                         *ngIf="!currentVoucherFormDetails || currentVoucherFormDetails?.quantityAllowed"
                                     >
                                         <div class="wrap-td-data">
-                                            {{ transaction.quantity | giddhCurrency }} {{ transaction.stockUnit }}
+                                            {{ transaction.quantity | giddhCurrency }} {{ transaction.stockUnitCode }}
                                         </div>
                                     </td>
                                     <td
@@ -3777,7 +3777,7 @@
                                                     <label class="card-label">{{
                                                         commonLocaleData?.app_quantity_unit
                                                     }}</label>
-                                                    <p>{{ transaction.quantity }} {{ transaction.stockUnit }}</p>
+                                                    <p>{{ transaction.quantity }} {{ transaction.stockUnitCode }}</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -4286,7 +4286,6 @@
                                                                 commonLocaleData?.app_unit
                                                             }}</label>
                                                             <mat-select
-                                                                name="transaction.stockUnit_'+entryIdx"
                                                                 class="form-control"
                                                                 [disabled]="!transaction.isStockTxn"
                                                                 (selectionChange)="
