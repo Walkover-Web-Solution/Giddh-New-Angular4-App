@@ -4957,14 +4957,13 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
                         let stockUnit: IStockUnit = {
                             id: stock.stockUnit.code,
-                            text: unitRate ? unitRate.stockUnitName : ''
+                            text: unitRate ?  unitRate?.stockUnitName:stock.stockUnit.code
                         };
-
                         newTrxObj.stockList = [];
                         if (stock.unitRates && stock.unitRates.length) {
                             newTrxObj.stockList = this.prepareUnitArr(stock.unitRates);
                         } else {
-                            newTrxObj.stockList.push({ id: newTrxObj.stockDetails.stockUnit.code, text: (newTrxObj.stockDetails.stockUnit.code === newTrxObj.stockUnit ? newTrxObj.stockDetails.stockUnit.code : newTrxObj.stockUnit) });
+                            newTrxObj.stockList.push(stockUnit);
                         }
                     }
 

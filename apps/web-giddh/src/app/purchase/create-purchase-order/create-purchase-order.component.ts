@@ -2715,15 +2715,14 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                     const unitRate = stock.unitRates.find(rate => rate.code === stock.stockUnit.code);
                     let stockUnit: IStockUnit = {
                         id: stock.stockUnit.code,
-                        text: unitRate ? unitRate.stockUnitName : ''
+                        text: unitRate ? unitRate?.stockUnitName : stock.stockUnit.code
                     };
-
 
                     salesTransactionItemClass.stockList = [];
                     if (stock.unitRates && stock.unitRates.length) {
                         salesTransactionItemClass.stockList = this.prepareUnitArr(stock.unitRates);
                     } else {
-                        salesTransactionItemClass.stockList.push({ id: salesTransactionItemClass.stockDetails.stockUnit.code, text: (salesTransactionItemClass.stockDetails.stockUnit.code === salesTransactionItemClass.stockUnit ? salesTransactionItemClass.stockDetails.stockUnit.code : salesTransactionItemClass.stockUnit) });
+                        salesTransactionItemClass.stockList.push(stockUnit);
                     }
                 }
                 salesEntryClass.transactions.push(salesTransactionItemClass);
