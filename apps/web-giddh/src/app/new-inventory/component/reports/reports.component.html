@@ -12,7 +12,7 @@
         (filters)="getSelectedFilters($event)"
         (resetFilters)="resetFilter()"
         (isLoading)="isLoading = $event"
-        (selectedColumns)="displayedColumns = $event"
+        (selectedColumns)="getCustomiseHeaderColumns($event)"
     ></report-filters>
     <div class="inventory-transaction-list" *ngIf="!isLoading">
         <div *ngIf="isDataAvailable">
@@ -305,6 +305,7 @@
                 </div>
             </div>
         </div>
+
         <div class="row" *ngIf="isDataAvailable">
             <div class="col-12 horizontal-padding">
                 <!-- *ngIf="displayedColumns?.length" -->
@@ -388,11 +389,12 @@
                                 {{ element?.closing?.amount ?? "-" }}
                             </td>
                         </ng-container>
-                        <ng-container matColumnDef="header_column">
+
+                        <ng-container matColumnDef="entity_group_name">
                             <th class="text-right" mat-header-cell *matHeaderCellDef [attr.colspan]="1"></th>
                         </ng-container>
                         <!-- Opening Stock group -->
-                        <ng-container matColumnDef="opening-stock">
+                        <ng-container matColumnDef="opening_stock">
                             <th class="text-right" mat-header-cell *matHeaderCellDef [attr.colspan]="2">
                                 Opening Stock
                             </th>
@@ -409,21 +411,12 @@
                         </ng-container>
 
                         <!-- Closing Stock group -->
-                        <ng-container matColumnDef="closing-stock">
+                        <ng-container matColumnDef="closing_stock">
                             <th class="text-right" mat-header-cell *matHeaderCellDef [attr.colspan]="2">
                                 Closing Stock
                             </th>
                         </ng-container>
-                        <tr
-                            mat-header-row
-                            *matHeaderRowDef="[
-                                'header_column',
-                                'opening-stock',
-                                'inwards',
-                                'outwards',
-                                'closing-stock'
-                            ]"
-                        ></tr>
+                        <tr mat-header-row *matHeaderRowDef="displayHeaderColumns"></tr>
                         <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
                         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                     </table>

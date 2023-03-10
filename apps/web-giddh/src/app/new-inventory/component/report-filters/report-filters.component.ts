@@ -340,7 +340,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
-     * Emits the filters and data to parent 
+     * Emits the filters and data to parent
      *
      * @private
      * @memberof ReportFiltersComponent

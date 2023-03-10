@@ -58,7 +58,15 @@ export class ReportsComponent implements OnInit {
     /** Holds stock transaction report data */
     public dataSource = [];
     /** This will use for stock report displayed columns */
-    public displayedColumns: string[] = [];
+    public displayedColumns: any[] = [];
+    /** This will use for  table report header displayed columns */
+    public displayHeaderColumns: any[] = [
+        'entity_group_name',
+        'opening_stock',
+        'inwards',
+        'outwards',
+        'closing_stock'
+    ];
     /** This will use for stock report voucher types column check values */
     public customiseColumns = [
         {
@@ -69,42 +77,42 @@ export class ReportsComponent implements OnInit {
 
         {
             "value": "opening_quantity",
-            "label": "Qty",
+            "label": "Opening Stock Qty",
             "checked": true
         },
         {
             "value": "opening_amount",
-            "label": "Value",
+            "label": "Opening Stock Value",
             "checked": true
         },
         {
             "value": "inward_quantity",
-            "label": "Qty",
+            "label": "Inward Quantity",
             "checked": true
         },
         {
             "value": "inward_amount",
-            "label": "Value",
+            "label": "Inward Value",
             "checked": true
         },
         {
             "value": "outward_quantity",
-            "label": "Qty",
+            "label": "Outward Qty",
             "checked": true
         },
         {
             "value": "outward_amount",
-            "label": "Value",
+            "label": "Outward Amount",
             "checked": true
         },
         {
             "value": "closing_quantity",
-            "label": "Qty",
+            "label": "Closing Qty",
             "checked": true
         },
         {
             "value": "closing_amount",
-            "label": "Value",
+            "label": "Closing Value",
             "checked": true
         }
     ];
@@ -158,6 +166,7 @@ export class ReportsComponent implements OnInit {
             }
         });
     }
+
 
     /**
      * This will use for get stock transactions report data
@@ -269,9 +278,34 @@ export class ReportsComponent implements OnInit {
     public getSelectedFilters(event: any): void {
         this.stockReportRequest = event?.stockReportRequest;
         this.balanceStockReportRequest = event?.balanceStockReportRequest;
-        this.displayedColumns = event?.displayedColumns;
         this.todaySelected = event?.todaySelected;
         this.showClearFilter = event?.showClearFilter;
         this.getStockTransactionalReport();
+    }
+
+    /**
+     * This will use for show hide main table headers from customise columns
+     *
+     * @param {*} event
+     * @memberof ReportsComponent
+     */
+    public getCustomiseHeaderColumns(event: any): void {
+        this.displayedColumns = event;
+        // console.log(this.displayedColumns);
+        // if (this.displayedColumns.includes("group_name")) {
+        //     this.displayHeaderColumns = this.displayHeaderColumns.filter(value => value !== 'entity_group_name');
+        // }
+        // if (this.displayedColumns.includes('opening_quantity', 'opening_amount')) {
+
+        // }
+        this.displayedColumns?.forEach(column => {
+            if (column === "group_name") {
+                this.displayHeaderColumns = this.displayHeaderColumns.filter(value => value !== 'entity_group_name');
+            }
+            if (column === 'opening_quantity' && column === 'opening_amount') {
+                this.displayHeaderColumns = this.displayHeaderColumns.filter(value => value !== 'opening_stock');
+            }
+        });
+        console.log(this.displayedColumns, this.displayHeaderColumns);
     }
 }
