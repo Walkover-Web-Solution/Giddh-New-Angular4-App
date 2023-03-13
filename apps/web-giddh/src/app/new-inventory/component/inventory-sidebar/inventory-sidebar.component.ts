@@ -71,7 +71,7 @@ export class InventorySidebarComponent implements OnDestroy {
   dataList: any[] = TREE_DATA;
   /** Holds images folder path */
   public imgPath: string = "";
-
+public selectedNode : string = '';
   private transformer = (node: SidebarNode, level: number) => {
     return {
       expandable: !!node.children && node.children.length > 0,
@@ -171,6 +171,12 @@ export class InventorySidebarComponent implements OnDestroy {
     if(node.link){
       this.router.navigate([node.link]);
     }
+
+  }
+  public isSelected(node) {
+    // return true if the node is selected
+    // replace 'selectedNode' with the variable that stores the selected node
+    return node === this.selectedNode;
   }
 }
 

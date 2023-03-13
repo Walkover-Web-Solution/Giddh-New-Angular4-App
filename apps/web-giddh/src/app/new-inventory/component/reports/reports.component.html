@@ -8,9 +8,9 @@
         [fromToDate]="fromToDate"
         [stockReportRequest]="stockReportRequest"
         [balanceStockReportRequest]="balanceStockReportRequest"
-        [searchPage]="'GROUP'"
         (filters)="getSelectedFilters($event)"
         (resetFilters)="resetFilter()"
+        [searchPage]="reportType"
         (isLoading)="isLoading = $event"
         (selectedColumns)="getCustomiseHeaderColumns($event)"
     ></report-filters>
@@ -321,7 +321,13 @@
                     >
                         <ng-container matColumnDef="group_name">
                             <th class="group-column" mat-header-cell *matHeaderCellDef>Group Name</th>
-                            <td data-title="Date" mat-cell *matCellDef="let element">
+                            <td
+                                data-title="Date"
+                                class="text-left word-wrap"
+                                mat-cell
+                                *matCellDef="let element"
+                                (click)="getReports($event, element)"
+                            >
                                 {{ element?.stockGroup?.name ?? "-" }}
                             </td>
                         </ng-container>
@@ -329,64 +335,204 @@
                             <th class="group-column text-right" mat-header-cell *matHeaderCellDef mat-sort-header>
                                 Qty
                             </th>
-                            <td class="text-right" data-title="Date" mat-cell *matCellDef="let element">
-                                {{ element?.opening?.quantity ?? "-" }}
+                            <td
+                                class="text-right"
+                                data-title="Opening Quantity"
+                                mat-cell
+                                *matCellDef="let element"
+                                [matTooltipPosition]="'above'"
+                                [matTooltip]="
+                                    element?.opening?.quantity
+                                        ? giddhRoundOff(element?.opening?.quantity, giddhBalanceDecimalPlaces)
+                                        : '-'
+                                "
+                            >
+                                <span class="d-inline-flex">
+                                    <amount-field
+                                        [amount]="element?.opening?.quantity ? element?.opening?.quantity : '-'"
+                                        [currencySymbol]="false"
+                                        [currencyCode]="false"
+                                    >
+                                    </amount-field>
+                                </span>
                             </td>
                         </ng-container>
                         <ng-container matColumnDef="opening_amount">
                             <th class="group-column text-right" mat-header-cell *matHeaderCellDef mat-sort-header>
                                 Value
                             </th>
-                            <td class="text-right" data-title="Date" mat-cell *matCellDef="let element">
-                                {{ element?.opening?.amount ?? "-" }}
+                            <td
+                                data-title="Opening Amount"
+                                class="text-right"
+                                mat-cell
+                                *matCellDef="let element"
+                                [matTooltipPosition]="'above'"
+                                [matTooltip]="
+                                    element?.opening?.amount
+                                        ? activeCompany.baseCurrencySymbol +
+                                          ' ' +
+                                          giddhRoundOff(element?.opening?.amount, giddhBalanceDecimalPlaces)
+                                        : activeCompany.baseCurrencySymbol + ' ' + 0
+                                "
+                            >
+                                <span class="d-inline-flex">
+                                    <amount-field
+                                        [amount]="element?.opening?.amount ? element?.opening?.amount : 0"
+                                        [currencySymbol]="activeCompany.baseCurrencySymbol"
+                                        [currencyCode]="activeCompany?.baseCurrency"
+                                    >
+                                    </amount-field>
+                                </span>
                             </td>
                         </ng-container>
                         <ng-container matColumnDef="inward_quantity">
                             <th class="inward-column text-right" mat-header-cell *matHeaderCellDef mat-sort-header>
                                 Qty
                             </th>
-                            <td class="text-right" data-title="Date" mat-cell *matCellDef="let element">
-                                {{ element?.inwards?.quantity ?? "-" }}
+                            <td
+                                class="text-right"
+                                data-title="Inwards Quantity"
+                                mat-cell
+                                *matCellDef="let element"
+                                [matTooltipPosition]="'above'"
+                                [matTooltip]="giddhRoundOff(element?.inwards?.quantity, giddhBalanceDecimalPlaces)"
+                            >
+                                <span class="d-inline-flex">
+                                    <amount-field
+                                        [amount]="element?.inwards?.quantity ? element?.inwards?.quantity : '-'"
+                                        [currencySymbol]="false"
+                                        [currencyCode]="false"
+                                    >
+                                    </amount-field>
+                                </span>
                             </td>
                         </ng-container>
                         <ng-container matColumnDef="inward_amount">
                             <th class="group-column text-right" mat-header-cell *matHeaderCellDef mat-sort-header>
                                 Value
                             </th>
-                            <td class="text-right" data-title="Date" mat-cell *matCellDef="let element">
-                                {{ element?.inwards?.amount ?? "-" }}
+                            <td
+                                data-title="Inwards Amount"
+                                class="text-right"
+                                mat-cell
+                                *matCellDef="let element"
+                                [matTooltipPosition]="'above'"
+                                [matTooltip]="
+                                    element?.inwards?.amount
+                                        ? activeCompany.baseCurrencySymbol +
+                                          ' ' +
+                                          giddhRoundOff(element?.inwards?.amount, giddhBalanceDecimalPlaces)
+                                        : activeCompany.baseCurrencySymbol + ' ' + 0
+                                "
+                            >
+                                <span class="d-inline-flex">
+                                    <amount-field
+                                        [amount]="element?.inwards?.amount ? element?.inwards?.amount : 0"
+                                        [currencySymbol]="activeCompany.baseCurrencySymbol"
+                                        [currencyCode]="activeCompany?.baseCurrency"
+                                    >
+                                    </amount-field>
+                                </span>
                             </td>
                         </ng-container>
                         <ng-container matColumnDef="outward_quantity">
                             <th class="group-column text-right" mat-header-cell *matHeaderCellDef mat-sort-header>
                                 Qty
                             </th>
-                            <td class="text-right" data-title="Date" mat-cell *matCellDef="let element">
-                                {{ element?.opening?.quantity ?? "-" }}
+                            <td
+                                class="text-right"
+                                data-title="Outwards Quantity"
+                                mat-cell
+                                *matCellDef="let element"
+                                [matTooltipPosition]="'above'"
+                                [matTooltip]="giddhRoundOff(element?.outwards?.quantity, giddhBalanceDecimalPlaces)"
+                            >
+                                <span class="d-inline-flex">
+                                    <amount-field
+                                        [amount]="element?.outwards?.quantity ? element?.outwards?.quantity : '-'"
+                                        [currencySymbol]="false"
+                                        [currencyCode]="false"
+                                    >
+                                    </amount-field>
+                                </span>
                             </td>
                         </ng-container>
                         <ng-container matColumnDef="outward_amount">
                             <th class="group-column text-right" mat-header-cell *matHeaderCellDef mat-sort-header>
                                 Value
                             </th>
-                            <td class="text-right" data-title="Date" mat-cell *matCellDef="let element">
-                                {{ element?.outwards?.amount ?? "-" }}
+                            <td
+                                data-title="Outwards Amount"
+                                class="text-right"
+                                mat-cell
+                                *matCellDef="let element"
+                                [matTooltipPosition]="'above'"
+                                [matTooltip]="
+                                    element?.outwards?.amount
+                                        ? activeCompany.baseCurrencySymbol +
+                                          ' ' +
+                                          giddhRoundOff(element?.outwards?.amount, giddhBalanceDecimalPlaces)
+                                        : activeCompany.baseCurrencySymbol + ' ' + 0
+                                "
+                            >
+                                <span class="d-inline-flex">
+                                    <amount-field
+                                        [amount]="element?.outwards?.amount ? element?.outwards?.amount : 0"
+                                        [currencySymbol]="activeCompany.baseCurrencySymbol"
+                                        [currencyCode]="activeCompany?.baseCurrency"
+                                    >
+                                    </amount-field>
+                                </span>
                             </td>
                         </ng-container>
                         <ng-container matColumnDef="closing_quantity">
                             <th class="group-column text-right" mat-header-cell *matHeaderCellDef mat-sort-header>
                                 Qty
                             </th>
-                            <td class="text-right" data-title="Date" mat-cell *matCellDef="let element">
-                                {{ element?.closing?.quantity ?? "-" }}
+                            <td
+                                class="text-right"
+                                data-title="Closing Quantity"
+                                mat-cell
+                                *matCellDef="let element"
+                                [matTooltipPosition]="'above'"
+                                [matTooltip]="giddhRoundOff(element?.closing?.quantity, giddhBalanceDecimalPlaces)"
+                            >
+                                <span class="d-inline-flex">
+                                    <amount-field
+                                        [amount]="element?.closing?.quantity ? element?.closing?.quantity : '-'"
+                                        [currencySymbol]="false"
+                                        [currencyCode]="false"
+                                    >
+                                    </amount-field>
+                                </span>
                             </td>
                         </ng-container>
                         <ng-container matColumnDef="closing_amount">
                             <th class="group-column text-right" mat-header-cell *matHeaderCellDef mat-sort-header>
                                 Value
                             </th>
-                            <td class="text-right" data-title="Date" mat-cell *matCellDef="let element">
-                                {{ element?.closing?.amount ?? "-" }}
+                            <td
+                                data-title="Closing Amount"
+                                class="text-right"
+                                mat-cell
+                                *matCellDef="let element"
+                                [matTooltipPosition]="'above'"
+                                [matTooltip]="
+                                    element?.closing?.amount
+                                        ? activeCompany.baseCurrencySymbol +
+                                          ' ' +
+                                          giddhRoundOff(element?.closing?.amount, giddhBalanceDecimalPlaces)
+                                        : activeCompany.baseCurrencySymbol + ' ' + 0
+                                "
+                            >
+                                <span class="d-inline-flex">
+                                    <amount-field
+                                        [amount]="element?.closing?.amount ? element?.closing?.amount : 0"
+                                        [currencySymbol]="activeCompany.baseCurrencySymbol"
+                                        [currencyCode]="activeCompany?.baseCurrency"
+                                    >
+                                    </amount-field>
+                                </span>
                             </td>
                         </ng-container>
 
@@ -416,7 +562,7 @@
                                 Closing Stock
                             </th>
                         </ng-container>
-                        <tr mat-header-row *matHeaderRowDef="displayHeaderColumns"></tr>
+                        <tr mat-header-row *matHeaderRowDef="tableHeaderColumns"></tr>
                         <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
                         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                     </table>

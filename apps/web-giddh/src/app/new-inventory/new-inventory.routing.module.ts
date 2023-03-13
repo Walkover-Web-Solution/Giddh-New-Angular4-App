@@ -49,7 +49,15 @@ const routes: Routes = [
                 component: InventoryCustomFieldComponent,
             },
             {
-                path: "group-wise",
+                path: "reports",
+                component: ReportsComponent,
+            },
+            {
+                path: "reports/:reportType",
+                component: ReportsComponent,
+            },
+            {
+                path: "reports/:reportType/:uniqueName",
                 component: ReportsComponent,
             },
         ],

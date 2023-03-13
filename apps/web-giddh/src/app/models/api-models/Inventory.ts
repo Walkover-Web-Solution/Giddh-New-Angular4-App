@@ -415,6 +415,7 @@ export class InventoryReportRequest {
     public stockUniqueNames?: any[];
     public warehouseUniqueNames?: any[];
     public branchUniqueNames?: any[];
+    public variantUniqueNames?: any[];
     public from: string = '';
     public to: string = '';
     public count: number;
@@ -431,6 +432,7 @@ export class InventoryReportRequest {
         this.stockUniqueNames = [];
         this.warehouseUniqueNames = [];
         this.branchUniqueNames = [];
+        this.variantUniqueNames = [];
     }
 }
 
