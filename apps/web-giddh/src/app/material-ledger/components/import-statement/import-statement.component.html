@@ -22,7 +22,6 @@
                         class="form-control file-upload-field"
                         (change)="onFileChange($event.target.files)"
                         required
-                        accept="application/pdf"
                     />
                 </label>
                 <span class="path-name"> {{ selectedFile }} </span>
@@ -40,6 +39,15 @@
                         />
                     </label>
                 </mat-form-field>
+            </div>
+            <div
+                class="pd-b2 clearfix password-label"
+                *ngIf="getRequest.entity === 'csv' || getRequest.entity === 'xls' || getRequest.entity === 'xlsx'"
+            >
+                <label for="isHeaderProvided" class="w100">{{ inputData?.localeData?.header_provided }}</label>
+                <mat-checkbox name="isHeaderProvided" [(ngModel)]="postRequest.isHeaderProvided" color="primary"
+                    >&nbsp;</mat-checkbox
+                >
             </div>
             <div class="modal-wrap">
                 <button
