@@ -5,6 +5,8 @@ import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service'
 import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ImportExcelService } from '../../services/import-excel.service';
+import { AppState } from '../../store';
+import { select, Store } from '@ngrx/store';
 
 @Component({
     selector: 'import-wizard',
@@ -38,7 +40,8 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
         private activatedRoute: ActivatedRoute,
         private importExcelService: ImportExcelService,
         private cdRef: ChangeDetectorRef,
-        private toaster: ToasterService
+        private toaster: ToasterService,
+        private store: Store<AppState>
     ) {
     }
 
@@ -79,6 +82,13 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
             requestState: ImportExcelRequestStates.Default,
             importStatus: importStatusRequest
         };
+
+        this.store.pipe(select(state => state.common.importBankTransactions), takeUntil(this.destroyed$)).subscribe(response => {
+            if(response) {
+                this.mappedData = response;
+                this.step = 2;
+            }
+        });
     }
 
     public ngOnDestroy() {
@@ -191,6 +201,10 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
                 
             case "stock":
                 importType = "INVENTORY_IMPORT";
+                break;
+
+            case "banktransactions":
+                importType = "BANK_TRANSACTIONS_IMPORT";
                 break;    
         }
 
