@@ -423,6 +423,8 @@ export class InventoryTransactionListComponent implements OnInit {
         this.displayedColumns = event?.displayedColumns;
         this.todaySelected = event?.todaySelected;
         this.showClearFilter = event?.showClearFilter;
+        console.log(event);
+
         this.getStockTransactionalReport();
     }
 }

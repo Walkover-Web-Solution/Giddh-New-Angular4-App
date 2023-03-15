@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Even
 import { FormControl } from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
-import { Observable, ReplaySubject, of as observableOf } from "rxjs";
+import { Observable, ReplaySubject, of as observableOf, combineLatest } from "rxjs";
 import { debounceTime, distinctUntilChanged, take, takeUntil } from "rxjs/operators";
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from "../../../app.constant";
 import { BalanceStockTransactionReportRequest, SearchStockTransactionReportRequest, StockTransactionReportRequest } from "../../../models/api-models/Inventory";
@@ -145,7 +145,10 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ReportFiltersComponent
      */
     public ngOnInit(): void {
-        this.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe(dateObj => {
+
+        combineLatest([this.universalDate$, this.inventoryService.getLinkedStocks()]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            this.getBranches(false);
+            let dateObj = result[0];
             if (dateObj) {
                 let universalDate = _.cloneDeep(dateObj);
                 this.store.pipe(select(state => state.session.todaySelected), take(1)).subscribe(response => {
@@ -168,12 +171,23 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
                         this.balanceStockReportRequest.to = "";
                     }
                     this.stockReportRequest.page = 1;
-                    this.emitFilters();
                 });
             }
-        });
+            let response = result[1];
+            if (response && response.body) {
+                this.allBranchWarehouses = response.body;
+                this.allBranches = response.body.results?.filter(branch => branch?.isCompany !== true);
+                this.branches = response.body.results?.filter(branch => branch?.isCompany !== true);
+                this.allWarehouses = [];
+                this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch;
 
-        this.getBranchWiseWarehouse();
+                if (!this.isCompany) {
+                    this.stockReportRequest.branchUniqueNames = this.generalService.currentBranchUniqueName ? [this.generalService.currentBranchUniqueName] : [];
+                    this.balanceStockReportRequest.branchUniqueNames = this.generalService.currentBranchUniqueName ? [this.generalService.currentBranchUniqueName] : [];
+                }
+            }
+            this.emitFilters();
+        });
         this.getReportColumns();
 
         this.branchesDropdown.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(search => {
@@ -223,7 +237,6 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
             this.balanceStockReportRequest.from = this.fromDate;
             this.balanceStockReportRequest.to = this.toDate;
         }
-
         this.isFilterActive();
     }
 
@@ -340,7 +353,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
-     * Emits the filters and data to parent 
+     * Emits the filters and data to parent
      *
      * @private
      * @memberof ReportFiltersComponent
@@ -413,22 +426,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ReportFiltersComponent
      */
     public getBranchWiseWarehouse(): void {
-        this.inventoryService.getLinkedStocks().pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response && response.body) {
-                this.allBranchWarehouses = response.body;
-                this.allBranches = response.body.results?.filter(branch => branch?.isCompany !== true);
-                this.branches = response.body.results?.filter(branch => branch?.isCompany !== true);
-                this.allWarehouses = [];
-                this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch;
 
-                if (!this.isCompany) {
-                    this.stockReportRequest.branchUniqueNames = this.generalService.currentBranchUniqueName ? [this.generalService.currentBranchUniqueName] : [];
-                    this.balanceStockReportRequest.branchUniqueNames = this.generalService.currentBranchUniqueName ? [this.generalService.currentBranchUniqueName] : [];
-                }
-            }
-            this.getBranches(false);
-            this.changeDetection.detectChanges();
-        });
     }
 
     /**
@@ -513,7 +511,6 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
             this.stockReportRequest.to = this.toDate;
             this.balanceStockReportRequest.from = this.fromDate;
             this.balanceStockReportRequest.to = this.toDate;
-
         }
         this.emitFilters();
     }
