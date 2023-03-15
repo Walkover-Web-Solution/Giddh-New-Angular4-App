@@ -221,6 +221,7 @@ export class InventoryTransactionListComponent implements OnInit {
                     this.showAccountSearchInput = false;
                 }
                 this.reportFiltersComponent.isFilterActive();
+                this.showClearFilter = true;
                 this.getStockTransactionalReport();
             }
         });
