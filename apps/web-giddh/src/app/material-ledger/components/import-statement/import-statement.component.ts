@@ -24,7 +24,7 @@ export class ImportStatementComponent implements OnDestroy {
     /** Object for API request parameters */
     public getRequest: any = { entity: 'pdf', companyUniqueName: '', accountUniqueName: '' };
     /** Object for API post parameters */
-    public postRequest: any = { file: '', password: '' };
+    public postRequest: any = { file: '', password: '', isHeaderProvided: true, accountUniqueName: undefined, sameDebitCreditAmountColumn: undefined };
     /** Subject to release subscription memory */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -87,6 +87,7 @@ export class ImportStatementComponent implements OnDestroy {
                 }
             });
         } else {
+            this.postRequest.accountUniqueName = this.getRequest.accountUniqueName;
             this.importExcelService.uploadFile("BANK_TRANSACTIONS_IMPORT", this.postRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response?.status === "success" && response.body) {
                     this.store.dispatch(this.commonAction.setImportBankTransactionsResponse(response.body));

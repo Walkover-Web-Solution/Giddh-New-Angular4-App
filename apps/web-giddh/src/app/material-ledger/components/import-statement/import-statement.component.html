@@ -41,11 +41,25 @@
                 </mat-form-field>
             </div>
             <div
-                class="pd-b2 clearfix password-label"
+                class="pd-b2 clearfix"
                 *ngIf="getRequest.entity === 'csv' || getRequest.entity === 'xls' || getRequest.entity === 'xlsx'"
             >
                 <label for="isHeaderProvided" class="w100">{{ inputData?.localeData?.header_provided }}</label>
                 <mat-checkbox name="isHeaderProvided" [(ngModel)]="postRequest.isHeaderProvided" color="primary"
+                    >&nbsp;</mat-checkbox
+                >
+            </div>
+            <div
+                class="pd-b2 clearfix"
+                *ngIf="getRequest.entity === 'csv' || getRequest.entity === 'xls' || getRequest.entity === 'xlsx'"
+            >
+                <label for="sameDebitCreditAmountColumn" class="w100">{{
+                    inputData?.localeData?.same_debit_credit_column
+                }}</label>
+                <mat-checkbox
+                    name="sameDebitCreditAmountColumn"
+                    [(ngModel)]="postRequest.sameDebitCreditAmountColumn"
+                    color="primary"
                     >&nbsp;</mat-checkbox
                 >
             </div>
