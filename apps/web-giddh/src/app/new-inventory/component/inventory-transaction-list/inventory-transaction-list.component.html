@@ -362,7 +362,7 @@
                         </ng-container>
                         <ng-container matColumnDef="accountName">
                             <th
-                                class="td-search-box text-left word-wrap"
+                                class="td-search-box text-left"
                                 mat-header-cell
                                 #searchCustomerContainer
                                 *matHeaderCellDef
@@ -391,18 +391,13 @@
                         </ng-container>
                         <ng-container matColumnDef="stockName">
                             <th class="text-left" mat-header-cell *matHeaderCellDef>Stock Name</th>
-                            <td data-title="Stock Name" class="text-left word-wrap" mat-cell *matCellDef="let element">
+                            <td data-title="Stock Name" class="text-left" mat-cell *matCellDef="let element">
                                 {{ element?.stock?.name ?? "-" }}
                             </td>
                         </ng-container>
                         <ng-container matColumnDef="variantName">
                             <th class="text-left" mat-header-cell *matHeaderCellDef>Variant Name</th>
-                            <td
-                                data-title="Variant Name"
-                                class="text-left word-wrap"
-                                mat-cell
-                                *matCellDef="let element"
-                            >
+                            <td data-title="Variant Name" class="text-left" mat-cell *matCellDef="let element">
                                 {{ element?.variant?.name ?? "-" }}
                             </td>
                         </ng-container>
