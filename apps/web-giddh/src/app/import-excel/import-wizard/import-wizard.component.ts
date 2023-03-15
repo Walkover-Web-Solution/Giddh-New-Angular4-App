@@ -58,7 +58,11 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
             // if rows grater then 400 rows show report page
             if (this.excelState.importResponse.message) {
                 this.toaster.successToast(this.excelState.importResponse.message);
-                this.showReport();
+                if (this.entity === "banktransactions") {
+                    this.router.navigate(['/pages', 'ledger', this.mappedData.accountUniqueName]);
+                } else {
+                    this.router.navigate(['/pages', 'downloads', 'imports']);
+                }
             } else {
                 // go to import success page
                 this.step++;
@@ -151,11 +155,11 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
     }
 
     public onBack() {
-        this.step--;
-    }
-
-    public showReport() {
-        this.router.navigate(['/pages', 'downloads', 'imports']);
+        if (this.entity === "banktransactions") {
+            this.router.navigate(['/pages', 'ledger', this.mappedData.accountUniqueName]);
+        } else {
+            this.step--;
+        }
     }
 
     public onSubmit(data: any) {
