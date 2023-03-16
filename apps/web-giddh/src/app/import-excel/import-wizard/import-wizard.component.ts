@@ -7,6 +7,7 @@ import { takeUntil } from 'rxjs/operators';
 import { ImportExcelService } from '../../services/import-excel.service';
 import { AppState } from '../../store';
 import { select, Store } from '@ngrx/store';
+import { CommonActions } from '../../actions/common.actions';
 
 @Component({
     selector: 'import-wizard',
@@ -41,7 +42,8 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
         private importExcelService: ImportExcelService,
         private cdRef: ChangeDetectorRef,
         private toaster: ToasterService,
-        private store: Store<AppState>
+        private store: Store<AppState>,
+        private commonAction: CommonActions
     ) {
     }
 
@@ -58,7 +60,7 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
             // if rows grater then 400 rows show report page
             if (this.excelState.importResponse.message) {
                 this.toaster.successToast(this.excelState.importResponse.message);
-                if (this.entity === "banktransactions") {
+                if (this.entity === "banktransactions" && this.mappedData?.accountUniqueName) {
                     this.router.navigate(['/pages', 'ledger', this.mappedData.accountUniqueName]);
                 } else {
                     this.router.navigate(['/pages', 'downloads', 'imports']);
@@ -91,11 +93,20 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
             if(response) {
                 this.mappedData = response;
                 this.step = 2;
+            } else {
+                if (this.entity === "banktransactions") {
+                    if (this.mappedData?.accountUniqueName) {
+                        this.router.navigate(['/pages', 'ledger', this.mappedData.accountUniqueName]);
+                    } else {
+                        this.router.navigate(['/pages/import/select-type']);
+                    }
+                }
             }
         });
     }
 
     public ngOnDestroy() {
+        this.store.dispatch(this.commonAction.setImportBankTransactionsResponse(null));
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
@@ -155,7 +166,7 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
     }
 
     public onBack() {
-        if (this.entity === "banktransactions") {
+        if (this.entity === "banktransactions" && this.mappedData?.accountUniqueName) {
             this.router.navigate(['/pages', 'ledger', this.mappedData.accountUniqueName]);
         } else {
             this.step--;

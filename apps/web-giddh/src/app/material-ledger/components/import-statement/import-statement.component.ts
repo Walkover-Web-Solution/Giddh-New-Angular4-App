@@ -38,7 +38,7 @@ export class ImportStatementComponent implements OnDestroy {
         private router: Router,
         @Inject(MAT_DIALOG_DATA) public inputData,
         public dialogRef: MatDialogRef<any>) {
-
+        this.store.dispatch(this.commonAction.setImportBankTransactionsResponse(null));
     }
 
     /**
