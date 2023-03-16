@@ -2,7 +2,6 @@ import { ElementRef, Inject, Injectable, Renderer2 } from '@angular/core';
 import { config, IConfig } from './config';
 import { DOCUMENT } from '@angular/common';
 import { MaskApplierService, Separators } from './mask-applier.service';
-import { giddhRoundOff } from '../../helperFunctions';
 
 @Injectable()
 export class MaskService extends MaskApplierService {
@@ -299,11 +298,11 @@ export class MaskService extends MaskApplierService {
                 this.maskExpression === Separators.INT_SPACE_SEPARATED || this.maskExpression === Separators.INT_COMMA_SEPARATED) {
                 return result === ''
                     ? result
-                    : giddhRoundOff(Number(this._removeMask(this._removeSuffix(this._removePrefix(result)), this.maskSpecialCharacters?.filter(f => f !== '.'))), this.giddhDecimalPlaces);
+                    : Number(this._removeMask(this._removeSuffix(this._removePrefix(result)), this.maskSpecialCharacters?.filter(f => f !== '.')));
             } else {
                 return result === ''
                     ? result
-                    : giddhRoundOff(Number(this._removeMask(this._removeSuffix(this._removePrefix(result)), this.maskSpecialCharacters)), this.giddhDecimalPlaces);
+                    : Number(this._removeMask(this._removeSuffix(this._removePrefix(result)), this.maskSpecialCharacters));
             }
         } else if (
             this._removeMask(this._removeSuffix(this._removePrefix(result)), this.maskSpecialCharacters)?.indexOf(
