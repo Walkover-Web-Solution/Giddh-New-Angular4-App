@@ -143,8 +143,8 @@
                     *matTreeNodeDef="let node"
                     matTreeNodePadding
                     class="sub-option"
-                    (click)="gotoPage(node); selectedNode = node"
-                    [class.active]="isSelected(node)"
+                    [routerLink]="node?.link"
+                    routerLinkActive="active"
                 >
                     <img src="{{ imgPath }}{{ node.icons }}" class="sidebar-menu-icons" alt="" />
                     <h5>{{ node.name }}</h5>

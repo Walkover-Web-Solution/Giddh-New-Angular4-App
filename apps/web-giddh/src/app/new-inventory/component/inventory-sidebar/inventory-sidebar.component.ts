@@ -160,23 +160,5 @@ public selectedNode : string = '';
     }
   }
 
-  /**
-   * Function for routing list items by mat-tree-node
-   *
-   * @param {string} listName holds the value of item clicked on sidebar menu
-   * @param {number} index is the index of the item
-   * @memberof InventorySidebarComponent
-   */
-  public gotoPage(node :any): void {
-    if(node.link){
-      this.router.navigate([node.link]);
-    }
-
-  }
-  public isSelected(node) {
-    // return true if the node is selected
-    // replace 'selectedNode' with the variable that stores the selected node
-    return node === this.selectedNode;
-  }
 }
 
