@@ -24,5 +24,14 @@ export const validateEmail = (emailStr: string) => {
 };
 
 export const giddhRoundOff = (number, decimals = 0) => {
-    return (!isNaN(Number(`${Math.round(Number(number + 'e' + decimals))}e-${decimals}`))) ? Number(`${Math.round(Number(number + 'e' + decimals))}e-${decimals}`) : 0;
+    if (!("" + number).includes("e")) {
+        return +(Math.round(Number(number + "e+" + decimals)) + "e-" + decimals);
+    } else {
+        var arr = ("" + number).split("e");
+        var sig = ""
+        if (+arr[1] + decimals > 0) {
+            sig = "+";
+        }
+        return +(Math.round(Number(+arr[0] + "e" + sig + (+arr[1] + decimals))) + "e-" + decimals);
+    }
 };
