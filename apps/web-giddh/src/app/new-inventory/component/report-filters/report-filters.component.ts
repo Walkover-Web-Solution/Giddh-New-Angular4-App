@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Even
 import { FormControl } from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
-import { Observable, ReplaySubject, of as observableOf, combineLatest } from "rxjs";
+import { Observable, ReplaySubject, of as observableOf } from "rxjs";
 import { debounceTime, distinctUntilChanged, take, takeUntil } from "rxjs/operators";
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from "../../../app.constant";
 import { BalanceStockTransactionReportRequest, SearchStockTransactionReportRequest, StockTransactionReportRequest } from "../../../models/api-models/Inventory";
@@ -146,49 +146,37 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
      */
     public ngOnInit(): void {
 
-        combineLatest([this.universalDate$, this.inventoryService.getLinkedStocks()]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            if (result[0] && result[1]) {
-                let dateObj = result[0];
-                if (dateObj) {
-                    let universalDate = _.cloneDeep(dateObj);
-                    this.store.pipe(select(state => state.session.todaySelected), take(1)).subscribe(response => {
-                        this.todaySelected = response;
-                        if (universalDate && !this.todaySelected) {
-                            this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
-                            this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-                            this.fromDate = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);
-                            this.toDate = dayjs(universalDate[1]).format(GIDDH_DATE_FORMAT);
-                            this.stockReportRequest.from = this.fromDate;
-                            this.stockReportRequest.to = this.toDate;
-                            this.balanceStockReportRequest.from = this.fromDate;
-                            this.balanceStockReportRequest.to = this.toDate;
-                        } else if (this.todaySelected) {
-                            this.selectedDateRange = { startDate: dayjs(), endDate: dayjs() };
-                            this.selectedDateRangeUi = dayjs().format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs().format(GIDDH_NEW_DATE_FORMAT_UI);
-                            this.stockReportRequest.from = "";
-                            this.stockReportRequest.to = "";
-                            this.balanceStockReportRequest.from = "";
-                            this.balanceStockReportRequest.to = "";
-                        }
-                        this.stockReportRequest.page = 1;
-                    });
-                }
-                let response = result[1];
-                if (response && response.body) {
-                    this.allBranchWarehouses = response.body;
-                    this.allBranches = response.body.results?.filter(branch => branch?.isCompany !== true);
-                    this.branches = response.body.results?.filter(branch => branch?.isCompany !== true);
-                    this.allWarehouses = [];
-                    this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch;
-                    if (!this.isCompany) {
-                        this.stockReportRequest.branchUniqueNames = this.generalService.currentBranchUniqueName ? [this.generalService.currentBranchUniqueName] : [];
-                        this.balanceStockReportRequest.branchUniqueNames = this.generalService.currentBranchUniqueName ? [this.generalService.currentBranchUniqueName] : [];
+        this.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe(dateObj => {
+            if (dateObj) {
+                let universalDate = _.cloneDeep(dateObj);
+                this.store.pipe(select(state => state.session.todaySelected), take(1)).subscribe(response => {
+                    this.todaySelected = response;
+                    if (universalDate && !this.todaySelected) {
+                        this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
+                        this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                        this.fromDate = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);
+                        this.toDate = dayjs(universalDate[1]).format(GIDDH_DATE_FORMAT);
+                        this.stockReportRequest.from = this.fromDate;
+                        this.stockReportRequest.to = this.toDate;
+                        this.balanceStockReportRequest.from = this.fromDate;
+                        this.balanceStockReportRequest.to = this.toDate;
+                    } else if (this.todaySelected) {
+                        this.selectedDateRange = { startDate: dayjs(), endDate: dayjs() };
+                        this.selectedDateRangeUi = dayjs().format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs().format(GIDDH_NEW_DATE_FORMAT_UI);
+                        this.stockReportRequest.from = "";
+                        this.stockReportRequest.to = "";
+                        this.balanceStockReportRequest.from = "";
+                        this.balanceStockReportRequest.to = "";
                     }
-                }
-                this.getBranches(false);
-                this.emitFilters();
+                    this.stockReportRequest.page = 1;
+                    setTimeout(() => {
+                        this.emitFilters();
+                    }, 100);
+                });
             }
         });
+
+        this.getBranchWiseWarehouse();
         this.getReportColumns();
 
         this.branchesDropdown.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(search => {
@@ -415,6 +403,10 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
                 }
             }
 
+            if (!this.isCompany) {
+                this.stockReportRequest.branchUniqueNames = [this.generalService.currentBranchUniqueName];
+                this.balanceStockReportRequest.branchUniqueNames = [this.generalService.currentBranchUniqueName];
+            }
             this.resetFilters.emit(true);
             this.emitFilters();
             this.changeDetection.detectChanges();
@@ -432,6 +424,30 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
         this.stockReportRequest.page = 1;
         this.isFilterActive();
         this.emitFilters();
+    }
+
+    /**
+     *This will be used to get branch wise warehouses
+     *
+     * @memberof ReportFiltersComponent
+     */
+    public getBranchWiseWarehouse(): void {
+        this.inventoryService.getLinkedStocks().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response && response.body) {
+                this.allBranchWarehouses = response.body;
+                this.allBranches = response.body.results?.filter(branch => branch?.isCompany !== true);
+                this.branches = response.body.results?.filter(branch => branch?.isCompany !== true);
+                this.allWarehouses = [];
+                this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch;
+
+                if (!this.isCompany) {
+                    this.stockReportRequest.branchUniqueNames = this.generalService.currentBranchUniqueName ? [this.generalService.currentBranchUniqueName] : [];
+                    this.balanceStockReportRequest.branchUniqueNames = this.generalService.currentBranchUniqueName ? [this.generalService.currentBranchUniqueName] : [];
+                }
+            }
+            this.getBranches(false);
+            this.changeDetection.detectChanges();
+        });
     }
 
     /**
@@ -462,8 +478,12 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
             this.warehouses = warehouses;
         }
         this.currentWarehouses = this.warehouses;
-        if (this.selectedBranch?.length) {
-            this.stockReportRequest.branchUniqueNames = this.selectedBranch;
+        this.stockReportRequest.branchUniqueNames = this.selectedBranch?.length ? this.selectedBranch : [];
+        this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch;
+
+        if (!this.isCompany) {
+            this.stockReportRequest.branchUniqueNames = this.generalService.currentBranchUniqueName ? [this.generalService.currentBranchUniqueName] : [];
+            this.balanceStockReportRequest.branchUniqueNames = this.generalService.currentBranchUniqueName ? [this.generalService.currentBranchUniqueName] : [];
         }
         this.stockReportRequest.warehouseUniqueNames = [];
         this.balanceStockReportRequest.branchUniqueNames = cloneDeep(this.stockReportRequest.branchUniqueNames);
@@ -506,7 +526,6 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
             this.balanceStockReportRequest.from = this.fromDate;
             this.balanceStockReportRequest.to = this.toDate;
         }
-        this.emitFilters();
     }
 
     /**
