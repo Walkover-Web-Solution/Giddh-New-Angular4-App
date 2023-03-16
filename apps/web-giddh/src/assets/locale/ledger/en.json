@@ -80,7 +80,7 @@
     "add_account": "Add Account",
     "add_stock": "Add Stock",
     "upload": "Upload",
-    "import_error": "Only PDF files are supported for Import",
+    "import_error": "Only PDF/CSV/EXCEL files are supported for Import",
     "import_success": "File has been uploaded successfully.",
     "import_page_heading": "Import Statement (PDF/CSV/EXCEL only)",
     "file": "File",
