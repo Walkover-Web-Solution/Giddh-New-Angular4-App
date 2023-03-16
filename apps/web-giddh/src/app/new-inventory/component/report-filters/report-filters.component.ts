@@ -422,15 +422,6 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
-     *  This will use to get branch wise warehouse
-     *
-     * @memberof ReportFiltersComponent
-     */
-    public getBranchWiseWarehouse(): void {
-
-    }
-
-    /**
      * This will be used to get warehouses
      *
      * @memberof ReportFiltersComponent
