@@ -248,9 +248,7 @@ export class InventoryTransactionListComponent implements OnInit {
         this.inventoryService.getStockTransactionReport(cloneDeep(this.stockReportRequest)).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.isLoading = false;
             if (response && response.body && response.status === 'success') {
-                if (this.isDataAvailable === null) {
-                    this.isDataAvailable = (response.body.transactions?.length) ? true : false;
-                }
+                this.isDataAvailable = (response.body.transactions?.length) ? true : false;
                 this.dataSource = response.body.transactions;
                 this.stockReportRequest.page = response.body.page;
                 this.stockReportRequest.totalItems = response.body.totalItems;

@@ -15,7 +15,11 @@
         (selectedColumns)="displayedColumns = $event"
     ></report-filters>
     <div class="inventory-transaction-list" *ngIf="!isLoading">
-        <div *ngIf="isDataAvailable">
+        <div
+            *ngIf="
+                isDataAvailable || stockReportRequest?.voucherTypes?.length || stockReportRequest?.accountName?.length
+            "
+        >
             <div class="row">
                 <div class="col-12">
                     <div class="top-content">
@@ -305,7 +309,12 @@
                 </div>
             </div>
         </div>
-        <div class="row" *ngIf="isDataAvailable">
+        <div
+            class="row"
+            *ngIf="
+                isDataAvailable || stockReportRequest?.voucherTypes?.length || stockReportRequest?.accountName?.length
+            "
+        >
             <div class="col-12 horizontal-padding">
                 <div class="table-responsive inventory-report-table" *ngIf="displayedColumns?.length">
                     <table
@@ -390,13 +399,13 @@
                             </td>
                         </ng-container>
                         <ng-container matColumnDef="stockName">
-                            <th class="text-left" mat-header-cell *matHeaderCellDef>Stock Name</th>
+                            <th width="17%" class="text-left" mat-header-cell *matHeaderCellDef>Stock Name</th>
                             <td data-title="Stock Name" class="text-left" mat-cell *matCellDef="let element">
                                 {{ element?.stock?.name ?? "-" }}
                             </td>
                         </ng-container>
                         <ng-container matColumnDef="variantName">
-                            <th class="text-left" mat-header-cell *matHeaderCellDef>Variant Name</th>
+                            <th width="17%" class="text-left" mat-header-cell *matHeaderCellDef>Variant Name</th>
                             <td data-title="Variant Name" class="text-left" mat-cell *matCellDef="let element">
                                 {{ element?.variant?.name ?? "-" }}
                             </td>
