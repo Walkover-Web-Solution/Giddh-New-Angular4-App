@@ -26,7 +26,7 @@
 .select-multiple-chiplist-inventory {
     font-weight: 400 !important;
     font-size: 14px !important;
-    width: 83%;
+    width: 84%;
     .mat-chip.mat-standard-chip {
         color: var(--color-chips-primary) !important;
         background-color: var(--color-body-background) !important;
@@ -58,7 +58,7 @@
 
 @media (max-width: 1024px) {
     .select-multiple-chiplist-inventory {
-        width: 57%;
+        width: 60%;
     }
 
     .stock-mat-salect {
