@@ -13,7 +13,9 @@
     <div class="modal-body">
         <form name="importStatementForm" novalidate autocomplete="off">
             <div class="pd-b2 clearfix browse-file-btn">
-                <label class="w100 file-upload-label">{{ inputData?.localeData?.file }} <sup>*</sup></label>
+                <label class="import-field-label file-upload-label"
+                    >{{ inputData?.localeData?.file }} <sup>*</sup></label
+                >
                 <label class="radio-inline p-0 browse-file-label">
                     {{ inputData?.localeData?.choose_file }}
                     <input
@@ -28,7 +30,7 @@
             </div>
             <div class="pd-b2 clearfix password-label">
                 <mat-form-field appearance="fill">
-                    <label class="w100">{{ inputData?.localeData?.password }}</label>
+                    <label class="import-field-label">{{ inputData?.localeData?.password }}</label>
                     <label class="radio-inline p-0">
                         <input
                             matInput
@@ -44,24 +46,37 @@
                 class="pd-b2 clearfix"
                 *ngIf="getRequest.entity === 'csv' || getRequest.entity === 'xls' || getRequest.entity === 'xlsx'"
             >
-                <label for="isHeaderProvided" class="w100">{{ inputData?.localeData?.header_provided }}</label>
-                <mat-checkbox name="isHeaderProvided" [(ngModel)]="postRequest.isHeaderProvided" color="primary"
-                    >&nbsp;</mat-checkbox
-                >
+                <label for="isHeaderProvided" class="import-field-label">{{
+                    inputData?.localeData?.header_provided
+                }}</label>
+                <mat-slide-toggle color="primary" name="isHeaderProvided" [(ngModel)]="postRequest.isHeaderProvided">
+                    <span class="pull-left" *ngIf="postRequest.isHeaderProvided">{{
+                        inputData?.commonLocaleData?.app_yes
+                    }}</span>
+                    <span class="pull-right" *ngIf="!postRequest.isHeaderProvided">{{
+                        inputData?.commonLocaleData?.app_no
+                    }}</span>
+                </mat-slide-toggle>
             </div>
             <div
                 class="pd-b2 clearfix"
                 *ngIf="getRequest.entity === 'csv' || getRequest.entity === 'xls' || getRequest.entity === 'xlsx'"
             >
-                <label for="sameDebitCreditAmountColumn" class="w100">{{
+                <label for="sameDebitCreditAmountColumn" class="import-field-label">{{
                     inputData?.localeData?.same_debit_credit_column
                 }}</label>
-                <mat-checkbox
+                <mat-slide-toggle
+                    color="primary"
                     name="sameDebitCreditAmountColumn"
                     [(ngModel)]="postRequest.sameDebitCreditAmountColumn"
-                    color="primary"
-                    >&nbsp;</mat-checkbox
                 >
+                    <span class="pull-left" *ngIf="postRequest.sameDebitCreditAmountColumn">{{
+                        inputData?.commonLocaleData?.app_yes
+                    }}</span>
+                    <span class="pull-right" *ngIf="!postRequest.sameDebitCreditAmountColumn">{{
+                        inputData?.commonLocaleData?.app_no
+                    }}</span>
+                </mat-slide-toggle>
             </div>
             <div class="modal-wrap">
                 <button
