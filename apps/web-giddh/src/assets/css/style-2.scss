@@ -558,9 +558,6 @@ $custom-typography: mat-typography-config(
     visibility: visible !important;
 }
 .select-multiple-chiplist-inventory {
-    .mat-chip-list-wrapper input.mat-input-element {
-        height: 27px !important;
-    }
     .mat-form-field-infix {
         margin-bottom: 7px;
         padding-top: 0;
@@ -13170,7 +13167,7 @@ hamburger-menu {
         border-radius: 53px;
         flex: 1;
         .search-icon {
-            line-height: 2.5;
+            line-height: 2.2;
             margin-left: 10px;
         }
         input.form-control {

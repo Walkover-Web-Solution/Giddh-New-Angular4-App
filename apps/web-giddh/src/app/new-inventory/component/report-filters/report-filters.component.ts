@@ -526,6 +526,8 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
             this.balanceStockReportRequest.from = this.fromDate;
             this.balanceStockReportRequest.to = this.toDate;
         }
+        this.emitFilters();
+        this.changeDetection.detach();
     }
 
     /**
