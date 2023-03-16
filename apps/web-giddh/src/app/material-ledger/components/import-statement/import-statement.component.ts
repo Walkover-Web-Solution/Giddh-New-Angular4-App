@@ -51,6 +51,7 @@ export class ImportStatementComponent implements OnDestroy {
     public onFileChange(file: FileList): void {
         let validExtensions = ['pdf', 'csv', 'xls', 'xlsx'];
         let type = (file && file.item(0)) ? this.generalService.getFileExtension(file.item(0).name) : 'null';
+        type = type?.toLowerCase();
         let isValidFileType = validExtensions.some(extension => type === extension);
         this.selectedFile = file.item(0).name;
 
