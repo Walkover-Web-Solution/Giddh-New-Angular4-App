@@ -180,7 +180,7 @@ export class InventoryTransactionListComponent implements OnInit {
     /** True if search account name */
     public showAccountSearchInput: boolean = false;
     /** True if data available */
-    public isDataAvailable: boolean = false;
+    public isDataAvailable: boolean = null;
     /** This will use for round off value */
     public giddhRoundOff: any = giddhRoundOff;
     /** Decimal places from company settings */
@@ -221,6 +221,7 @@ export class InventoryTransactionListComponent implements OnInit {
                     this.showAccountSearchInput = false;
                 }
                 this.reportFiltersComponent.isFilterActive();
+                this.showClearFilter = true;
                 this.getStockTransactionalReport();
             }
         });
@@ -247,7 +248,9 @@ export class InventoryTransactionListComponent implements OnInit {
         this.inventoryService.getStockTransactionReport(cloneDeep(this.stockReportRequest)).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.isLoading = false;
             if (response && response.body && response.status === 'success') {
-                this.isDataAvailable = (response.body.transactions?.length) ? true : this.showClearFilter;
+                if (this.isDataAvailable === null) {
+                    this.isDataAvailable = (response.body.transactions?.length) ? true : false;
+                }
                 this.dataSource = response.body.transactions;
                 this.stockReportRequest.page = response.body.page;
                 this.stockReportRequest.totalItems = response.body.totalItems;
