@@ -570,6 +570,9 @@ $custom-typography: mat-typography-config(
     .mat-chip-list-wrapper {
         padding: 8px !important;
     }
+    .mat-form-field-label-wrapper {
+        margin-top: 1px !important;
+    }
 }
 .autopaid {
     .mat-dialog-container {
@@ -13167,7 +13170,7 @@ hamburger-menu {
         border-radius: 53px;
         flex: 1;
         .search-icon {
-            line-height: 2.2;
+            line-height: 44px;
             margin-left: 10px;
         }
         input.form-control {
