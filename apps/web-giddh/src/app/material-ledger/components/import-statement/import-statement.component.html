@@ -28,7 +28,7 @@
                 </label>
                 <span class="path-name"> {{ selectedFile }} </span>
             </div>
-            <div class="pd-b2 clearfix password-label">
+            <div class="pd-b2 clearfix password-label" *ngIf="getRequest.entity === 'pdf'">
                 <mat-form-field appearance="fill">
                     <label class="import-field-label">{{ inputData?.localeData?.password }}</label>
                     <label class="radio-inline p-0">
