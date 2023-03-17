@@ -42,3 +42,14 @@
     width: 170px;
     vertical-align: bottom;
 }
+.sample-file-buttons {
+    margin-left: 58px;
+    width: 443px;
+
+    a {
+        &:focus {
+            outline: none !important;
+            box-shadow: none !important;
+        }
+    }
+}
