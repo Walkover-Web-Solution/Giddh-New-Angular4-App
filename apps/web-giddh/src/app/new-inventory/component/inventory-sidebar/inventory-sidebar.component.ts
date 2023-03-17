@@ -16,22 +16,19 @@ interface SidebarNode {
     link?: string;
     children?: SidebarNode[];
 }
-
 const TREE_DATA: SidebarNode[] = [
     {
         name: 'Stock',
         icons: 'stock.svg',
-        children: [{ name: 'Create New', icons: 'create-new.svg', link: '/pages/new-inventory/stock/product/create' }, { name: 'Item-wise', icons: 'item-wise.svg', link: '/pages/new-inventory/item-wise' }, { name: 'Group-wise', icons: 'group-wise.svg', link: '/pages/new-inventory/group-wise' }, { name: 'Variant-wise', icons: 'varient-wise.svg', link: '/pages/new-inventory/variant-wise' }, { name: 'Transactions', icons: 'transactions.svg', link: '/pages/new-inventory/inventory-transaction-list' }],
+        children: [{ name: 'Create New', icons: 'create-new.svg', link: '/pages/new-inventory/stock/product/create' }, { name: 'Item-wise', icons: 'item-wise.svg', link: '/pages/new-inventory/item-wise' }, { name: 'Group-wise', icons: 'group-wise.svg', link: '/pages/new-inventory/reports' }, { name: 'Variant-wise', icons: 'varient-wise.svg', link: '/pages/new-inventory/variant-wise' }, { name: 'Transactions', icons: 'transactions.svg', link: '/pages/new-inventory/inventory-transaction-list' }],
     },
     {
         name: 'Services',
-        icons: 'service.svg',
-        children: [{ name: 'Create New', icons: 'create-new.svg', link: '/pages/new-inventory/stock/service/create' }, { name: 'Item-wise', icons: 'item-wise.svg', link: '/pages/new-inventory/item-wise' }, { name: 'Group-wise', icons: 'group-wise.svg', link: '/pages/new-inventory/group-wise' }, { name: 'Variant-wise', icons: 'varient-wise.svg', link: '/pages/new-inventory/variant-wise' }, { name: 'Transactions', icons: 'transactions.svg' }],
+        icons: 'service.svg'
     },
     {
         name: 'Fixed Assets',
-        icons: 'fixed-assets.svg',
-        children: [{ name: 'Create New', icons: 'create-new.svg', link: '/pages/new-inventory/stock/product/create' }, { name: 'Item-wise', icons: 'item-wise.svg', link: '/pages/new-inventory/item-wise' }, { name: 'Group-wise', icons: 'group-wise.svg', link: '/pages/new-inventory/group-wise' }, { name: 'Variant-wise', icons: 'varient-wise.svg', link: '/pages/new-inventory/variant-wise' }, { name: 'Transactions', icons: 'transactions.svg' }],
+        icons: 'fixed-assets.svg'
     },
     {
         name: 'Branch Transfer',
@@ -47,14 +44,12 @@ const TREE_DATA: SidebarNode[] = [
         icons: 'warehouse-opening-balance.svg'
     },
 ];
-
 /** Flat node with expandable and level information */
 interface SidebarFlatNode {
     expandable: boolean;
     name: string;
     level: number;
 }
-
 @Component({
     selector: 'inventory-sidebar',
     templateUrl: './inventory-sidebar.component.html',
@@ -66,13 +61,12 @@ export class InventorySidebarComponent implements OnDestroy {
     /** True if mobile screen */
     public isMobileScreen: boolean = true;
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
-    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Holding data in SidebarNode Array */
-    dataList: any[] = TREE_DATA;
+    public dataList: any[] = TREE_DATA;
     /** Holds images folder path */
     public imgPath: string = "";
-    public selectedNode: string = '';
-    private transformer = (node: SidebarNode, level: number) => {
+    public transformer = (node: SidebarNode, level: number) => {
         return {
             expandable: !!node.children && node.children.length > 0,
             name: node.name,
@@ -81,20 +75,17 @@ export class InventorySidebarComponent implements OnDestroy {
             link: node.link
         };
     };
-
-    treeControl = new FlatTreeControl<SidebarFlatNode>(
+    public treeControl = new FlatTreeControl<SidebarFlatNode>(
         node => node.level,
         node => node.expandable,
     );
-
-    treeFlattener = new MatTreeFlattener(
+    public treeFlattener = new MatTreeFlattener(
         this.transformer,
         node => node.level,
         node => node.expandable,
         node => node.children,
     );
-
-    dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
+    public dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
 
     constructor(
         private router: Router,
@@ -108,7 +99,7 @@ export class InventorySidebarComponent implements OnDestroy {
         this.dataSource.data = TREE_DATA;
     }
 
-    hasChild = (_: number, node: SidebarFlatNode) => node.expandable;
+    public hasChild = (_: number, node: SidebarFlatNode) => node.expandable;
 
     /**
      * Initializes the component
@@ -117,41 +108,33 @@ export class InventorySidebarComponent implements OnDestroy {
     */
     public ngOnInit(): void {
         this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
-
         this.openActiveMenu(this.router.url);
-
         this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(event => {
-            console.log(event);
             if (event instanceof NavigationEnd) {
                 this.openActiveMenu(event.url);
             }
         });
     }
 
+    /**
+     * This will use for open active node in sidebar
+     *
+     * @param {string} url
+     * @memberof InventorySidebarComponent
+     */
     public openActiveMenu(url: string): void {
         let activeNodeIndex = null;
-        TREE_DATA.forEach((tree, index) => {
-            if(activeNodeIndex === null) {
-                let activeNode = tree.children?.filter(node => node.link === url);
-                if(activeNode?.length) {
+        TREE_DATA?.forEach((tree, index) => {
+            if (activeNodeIndex === null) {
+                let activeNode = tree?.children?.filter(node => node?.link === url);
+                if (activeNode?.length) {
                     activeNodeIndex = index;
                 }
             }
         });
-
-        if(activeNodeIndex !== null) {
+        if (activeNodeIndex !== null) {
             this.treeControl.expand(this.treeControl.dataNodes[activeNodeIndex]);
         }
-    }
-
-    /**
-     * Releases the memory
-     *
-     * @memberof InventorySidebarComponent
-     */
-    public ngOnDestroy(): void {
-        this.destroyed$.next(true);
-        this.destroyed$.complete();
     }
 
     /**
@@ -183,6 +166,16 @@ export class InventorySidebarComponent implements OnDestroy {
         if (this.isMobileScreen && event?.target?.className !== "icon-bar") {
             this.closeAsideEvent.emit(event);
         }
+    }
+
+    /**
+    * Releases the memory
+    *
+    * @memberof InventorySidebarComponent
+    */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 
 }

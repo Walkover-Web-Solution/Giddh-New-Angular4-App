@@ -638,8 +638,6 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
         } else {
             this.searchRequest.page = 1;
         }
-        console.log(this.searchPage);
-
         this.searchRequest.searchPage = this.searchPage;
         if (this.searchRequest.page === 1 || this.searchRequest.page <= this.searchRequest.totalPages) {
             delete this.searchRequest.totalItems;

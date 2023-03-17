@@ -183,9 +183,7 @@ export class ReportsComponent implements OnInit {
         this.dataSource = [];
         this.isLoading = true;
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            this.reportType = (response?.reportType).toUpperCase();
-            console.log(this.reportType);
-
+            this.reportType = (response?.reportType)?.toUpperCase();
             if (response?.reportType === 'group') {
                 this.stockReportRequest.stockGroupUniqueNames = [response.uniqueName] ?? [];
                 this.balanceStockReportRequest.stockGroupUniqueNames = [response.uniqueName] ?? [];
