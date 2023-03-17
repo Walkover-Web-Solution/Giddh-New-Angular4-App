@@ -10,6 +10,7 @@ import { CommonActions } from '../../../actions/common.actions';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { Router } from '@angular/router';
+import { SAMPLE_FILES_URL } from '../../../app.constant';
 
 @Component({
     selector: 'import-statement',
@@ -110,5 +111,22 @@ export class ImportStatementComponent implements OnDestroy {
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+    }
+
+    /**
+     * Download sample files
+     *
+     * @param {boolean} [isCsv=false]
+     * @memberof ImportStatementComponent
+     */
+    public async downloadSampleFile(isCsv: boolean = false) {
+        const fileUrl = SAMPLE_FILES_URL + `bank-transaction.${isCsv ? 'csv' : 'xlsx'}`;
+        const fileName = `bank-transaction-sample.${isCsv ? 'csv' : 'xlsx'}`;
+        try {
+            let blob = await fetch(fileUrl).then(r => r.blob());
+            saveAs(blob, fileName);
+        } catch (e) {
+            this.toaster.showSnackBar("error", this.inputData?.commonLocaleData?.app_something_went_wrong);
+        }
     }
 }
