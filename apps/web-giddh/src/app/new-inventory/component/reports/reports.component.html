@@ -308,8 +308,7 @@
 
         <div class="row" *ngIf="isDataAvailable">
             <div class="col-12 horizontal-padding">
-                <!-- *ngIf="displayedColumns?.length" -->
-                <div class="table-responsive inventory-report-table">
+                <div class="table-responsive inventory-report-table" *ngIf="displayedColumns?.length">
                     <table
                         mat-table
                         [dataSource]="dataSource"
@@ -323,7 +322,7 @@
                             <th class="group-column" mat-header-cell *matHeaderCellDef>Group Name</th>
                             <td
                                 data-title="Date"
-                                class="text-left word-wrap"
+                                class="text-left word-wrap cursor-pointer"
                                 mat-cell
                                 *matCellDef="let element"
                                 (click)="getReports($event, element)"

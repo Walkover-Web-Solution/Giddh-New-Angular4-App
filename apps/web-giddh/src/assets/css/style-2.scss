@@ -558,9 +558,6 @@ $custom-typography: mat-typography-config(
     visibility: visible !important;
 }
 .select-multiple-chiplist-inventory {
-    .mat-chip-list-wrapper input.mat-input-element {
-        height: 27px !important;
-    }
     .mat-form-field-infix {
         margin-bottom: 7px;
         padding-top: 0;
@@ -569,6 +566,12 @@ $custom-typography: mat-typography-config(
         padding-bottom: 0px !important;
         margin-left: 7px;
         padding-left: 0 !important;
+    }
+    .mat-chip-list-wrapper {
+        padding: 8px !important;
+    }
+    .mat-form-field-label-wrapper {
+        margin-top: 1px !important;
     }
 }
 .autopaid {
@@ -13167,7 +13170,7 @@ hamburger-menu {
         border-radius: 53px;
         flex: 1;
         .search-icon {
-            line-height: 2.5;
+            line-height: 44px;
             margin-left: 10px;
         }
         input.form-control {

@@ -145,6 +145,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ReportFiltersComponent
      */
     public ngOnInit(): void {
+
         this.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe(dateObj => {
             if (dateObj) {
                 let universalDate = _.cloneDeep(dateObj);
@@ -168,7 +169,9 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
                         this.balanceStockReportRequest.to = "";
                     }
                     this.stockReportRequest.page = 1;
-                    this.emitFilters();
+                    setTimeout(() => {
+                        this.emitFilters();
+                    }, 100);
                 });
             }
         });
@@ -221,7 +224,6 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
             this.balanceStockReportRequest.from = this.fromDate;
             this.balanceStockReportRequest.to = this.toDate;
         }
-
         this.isFilterActive();
         this.searchInventory();
     }
@@ -400,6 +402,10 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
                 }
             }
 
+            if (!this.isCompany) {
+                this.stockReportRequest.branchUniqueNames = [this.generalService.currentBranchUniqueName];
+                this.balanceStockReportRequest.branchUniqueNames = [this.generalService.currentBranchUniqueName];
+            }
             this.resetFilters.emit(true);
             this.emitFilters();
             this.changeDetection.detectChanges();
@@ -407,7 +413,20 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
-     *  This will use to get branch wise warehouse
+     * This will be used to get warehouses
+     *
+     * @memberof ReportFiltersComponent
+     */
+    public getWarehouses(): void {
+        this.stockReportRequest.warehouseUniqueNames = this.selectedWarehouse;
+        this.balanceStockReportRequest.warehouseUniqueNames = this.selectedWarehouse;
+        this.stockReportRequest.page = 1;
+        this.isFilterActive();
+        this.emitFilters();
+    }
+
+    /**
+     *This will be used to get branch wise warehouses
      *
      * @memberof ReportFiltersComponent
      */
@@ -428,19 +447,6 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
             this.getBranches(false);
             this.changeDetection.detectChanges();
         });
-    }
-
-    /**
-     * This will be used to get warehouses
-     *
-     * @memberof ReportFiltersComponent
-     */
-    public getWarehouses(): void {
-        this.stockReportRequest.warehouseUniqueNames = this.selectedWarehouse;
-        this.balanceStockReportRequest.warehouseUniqueNames = this.selectedWarehouse;
-        this.stockReportRequest.page = 1;
-        this.isFilterActive();
-        this.emitFilters();
     }
 
     /**
@@ -472,6 +478,12 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
         }
         this.currentWarehouses = this.warehouses;
         this.stockReportRequest.branchUniqueNames = this.selectedBranch?.length ? this.selectedBranch : [];
+        this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch;
+
+        if (!this.isCompany) {
+            this.stockReportRequest.branchUniqueNames = this.generalService.currentBranchUniqueName ? [this.generalService.currentBranchUniqueName] : [];
+            this.balanceStockReportRequest.branchUniqueNames = this.generalService.currentBranchUniqueName ? [this.generalService.currentBranchUniqueName] : [];
+        }
         this.stockReportRequest.warehouseUniqueNames = [];
         this.balanceStockReportRequest.branchUniqueNames = cloneDeep(this.stockReportRequest.branchUniqueNames);
         this.balanceStockReportRequest.warehouseUniqueNames = cloneDeep(this.stockReportRequest.warehouseUniqueNames);
@@ -512,9 +524,9 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
             this.stockReportRequest.to = this.toDate;
             this.balanceStockReportRequest.from = this.fromDate;
             this.balanceStockReportRequest.to = this.toDate;
-
         }
         this.emitFilters();
+        this.changeDetection.detach();
     }
 
     /**

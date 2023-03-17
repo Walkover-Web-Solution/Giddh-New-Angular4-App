@@ -20,7 +20,7 @@ const TREE_DATA: SidebarNode[] = [
     {
         name: 'Stock',
         icons: 'stock.svg',
-        children: [{ name: 'Create New', icons: 'create-new.svg', link: '/pages/new-inventory/stock/product/create' }, { name: 'Item-wise', icons: 'item-wise.svg', link: '/pages/new-inventory/item-wise' }, { name: 'Group-wise', icons: 'group-wise.svg', link: '/pages/new-inventory/reports' }, { name: 'Variant-wise', icons: 'varient-wise.svg', link: '/pages/new-inventory/variant-wise' }, { name: 'Transactions', icons: 'transactions.svg', link: '/pages/new-inventory/inventory-transaction-list' }],
+        children: [{ name: 'Create New', icons: 'create-new.svg', link: '/pages/new-inventory/stock/product/create' }, { name: 'Item-wise', icons: 'item-wise.svg', link: '/pages/new-inventory/item-wise' }, { name: 'Group-wise', icons: 'group-wise.svg', link: '/pages/new-inventory/reports/group' }, { name: 'Variant-wise', icons: 'varient-wise.svg', link: '/pages/new-inventory/variant-wise' }, { name: 'Transactions', icons: 'transactions.svg', link: '/pages/new-inventory/inventory-transaction-list' }],
     },
     {
         name: 'Services',
