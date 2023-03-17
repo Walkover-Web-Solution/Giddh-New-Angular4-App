@@ -78,15 +78,31 @@
                     }}</span>
                 </mat-slide-toggle>
             </div>
-            <div class="modal-wrap">
+            <div class="modal-wrap mr-b5">
                 <button
                     mat-button
                     [disabled]="!postRequest.file"
-                    class="btn btn-success mr-t1"
+                    class="btn btn-success mr-t1 pull-left"
                     (click)="importStatement()"
                 >
                     {{ inputData?.localeData?.upload }}
                 </button>
+                <div class="pull-left mr-t1 d-flex sample-file-buttons">
+                    <a
+                        href="javascript:;"
+                        class="btn btn-sm btn-link pr-0 text-align-left"
+                        (click)="downloadSampleFile()"
+                    >
+                        {{ inputData?.localeData?.download_sample_xls }}
+                    </a>
+                    <a
+                        href="javascript:;"
+                        class="btn btn-sm btn-link pull-right text-align-left"
+                        (click)="downloadSampleFile(true)"
+                    >
+                        {{ inputData?.localeData?.download_sample_csv }}
+                    </a>
+                </div>
             </div>
         </form>
     </div>

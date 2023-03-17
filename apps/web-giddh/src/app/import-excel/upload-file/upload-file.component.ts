@@ -5,6 +5,7 @@ import { saveAs } from 'file-saver';
 import { Observable, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
+import { SAMPLE_FILES_URL } from '../../app.constant';
 import { OrganizationType } from '../../models/user-login-state';
 import { GeneralService } from '../../services/general.service';
 import { ToasterService } from '../../services/toaster.service';
@@ -79,7 +80,7 @@ export class UploadFileComponent implements OnInit, OnDestroy {
     }
 
     public async downloadSampleFile(entity: string, isCsv: boolean = false) {
-        const fileUrl = `https://giddh-app-builds.s3.ap-south-1.amazonaws.com/sample-file-${entity}.${isCsv ? 'csv' : 'xlsx'}`;
+        const fileUrl = SAMPLE_FILES_URL + `${entity}.${isCsv ? 'csv' : 'xlsx'}`;
         const fileName = `${entity}-sample.${isCsv ? 'csv' : 'xlsx'}`;
         try {
             let blob = await fetch(fileUrl).then(r => r.blob());
