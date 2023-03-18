@@ -45,6 +45,10 @@ const routes: Routes = [
                 component: InventoryTransactionListComponent,
             },
             {
+                path: "inventory-transaction-list/:variantUniqueName",
+                component: InventoryTransactionListComponent,
+            },
+            {
                 path: "inventory-custom-field",
                 component: InventoryCustomFieldComponent,
             },

@@ -14,6 +14,8 @@ import { giddhRoundOff } from "../../../shared/helpers/helperFunctions";
 import * as dayjs from "dayjs";
 import { cloneDeep } from '../../../lodash-optimized';
 import { ActivatedRoute, Router } from '@angular/router';
+import { InventoryReportType } from '../../inventory.enum';
+import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
 
 @Component({
     selector: 'app-reports',
@@ -64,7 +66,6 @@ export class ReportsComponent implements OnInit {
         'closing_stock'
     ];
     /** This will use for  table report header columns */
-
     public tableHeaderColumns: any[] = [];
     /** This will use for stock report voucher types column check values */
     public customiseColumns = [
@@ -135,7 +136,9 @@ export class ReportsComponent implements OnInit {
     public todaySelected: boolean = false;
     /** Holds from/to date */
     public fromToDate: any = {};
+    /** Holds report type */
     public reportType: string = '';
+    /** Holds report unique name */
     public reportUniqueName: string = '';
 
     constructor(
@@ -187,7 +190,7 @@ export class ReportsComponent implements OnInit {
         this.dataSource = [];
         this.isLoading = true;
 
-        if (this.reportType === 'group') {
+        if (this.reportType === InventoryReportType.group) {
             this.stockReportRequest.stockGroupUniqueNames = [this.reportUniqueName] ?? [];
             this.balanceStockReportRequest.stockGroupUniqueNames = [this.reportUniqueName] ?? [];
             this.inventoryService.getGroupWiseReport(cloneDeep(this.stockReportRequest)).pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -199,18 +202,18 @@ export class ReportsComponent implements OnInit {
                     this.stockReportRequest.totalItems = response.body.totalItems;
                     this.stockReportRequest.totalPages = response.body.totalPages;
                     this.stockReportRequest.count = response.body.count;
-                    // this.stockReportRequest.from = dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
-                    // this.stockReportRequest.to = dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
-                    // this.fromDate = dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
-                    // this.toDate = dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
-                    // this.selectedDateRange = { startDate: dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT), endDate: dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT) };
-                    // this.selectedDateRangeUi = dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
+                    this.stockReportRequest.from = dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                    this.stockReportRequest.to = dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                    this.fromDate = dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                    this.toDate = dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                    this.selectedDateRange = { startDate: dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT), endDate: dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT) };
+                    this.selectedDateRangeUi = dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
 
-                    // if (this.todaySelected) {
-                    //     this.fromToDate = { from: response?.body?.fromDate, to: response?.body?.toDate };
-                    // } else {
-                    //     this.fromToDate = null;
-                    // }
+                    if (this.todaySelected) {
+                        this.fromToDate = { from: response?.body?.fromDate, to: response?.body?.toDate };
+                    } else {
+                        this.fromToDate = null;
+                    }
                 } else {
                     this.toaster.errorToast(response?.message);
                     this.dataSource = [];
@@ -218,7 +221,7 @@ export class ReportsComponent implements OnInit {
                 }
                 this.changeDetection.detectChanges();
             });
-        } else if (this.reportType === 'stock') {
+        } else if (this.reportType === InventoryReportType.stock) {
             this.stockReportRequest.stockUniqueNames = [this.reportUniqueName] ?? [];
             this.balanceStockReportRequest.stockUniqueNames = [this.reportUniqueName] ?? [];
             this.inventoryService.getItemWiseReport(cloneDeep(this.stockReportRequest)).pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -230,18 +233,18 @@ export class ReportsComponent implements OnInit {
                     this.stockReportRequest.totalItems = response.body.totalItems;
                     this.stockReportRequest.totalPages = response.body.totalPages;
                     this.stockReportRequest.count = response.body.count;
-                    // this.stockReportRequest.from = dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
-                    // this.stockReportRequest.to = dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
-                    // this.fromDate = dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
-                    // this.toDate = dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
-                    // this.selectedDateRange = { startDate: dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT), endDate: dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT) };
-                    // this.selectedDateRangeUi = dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
+                    this.stockReportRequest.from = dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                    this.stockReportRequest.to = dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                    this.fromDate = dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                    this.toDate = dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                    this.selectedDateRange = { startDate: dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT), endDate: dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT) };
+                    this.selectedDateRangeUi = dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
 
-                    // if (this.todaySelected) {
-                    //     this.fromToDate = { from: response?.body?.fromDate, to: response?.body?.toDate };
-                    // } else {
-                    //     this.fromToDate = null;
-                    // }
+                    if (this.todaySelected) {
+                        this.fromToDate = { from: response?.body?.fromDate, to: response?.body?.toDate };
+                    } else {
+                        this.fromToDate = null;
+                    }
                 } else {
                     this.toaster.errorToast(response?.message);
                     this.dataSource = [];
@@ -249,7 +252,7 @@ export class ReportsComponent implements OnInit {
                 }
                 this.changeDetection.detectChanges();
             });
-        } else if (this.reportType === 'variant') {
+        } else if (this.reportType === InventoryReportType.variant) {
             this.stockReportRequest.variantUniqueNames = [this.reportUniqueName] ?? [];
             this.balanceStockReportRequest.variantUniqueNames = [this.reportUniqueName] ?? [];
             this.inventoryService.getVariantWiseReport(cloneDeep(this.stockReportRequest)).pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -261,18 +264,18 @@ export class ReportsComponent implements OnInit {
                     this.stockReportRequest.totalItems = response.body.totalItems;
                     this.stockReportRequest.totalPages = response.body.totalPages;
                     this.stockReportRequest.count = response.body.count;
-                    // this.stockReportRequest.from = dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
-                    // this.stockReportRequest.to = dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
-                    // this.fromDate = dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
-                    // this.toDate = dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
-                    // this.selectedDateRange = { startDate: dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT), endDate: dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT) };
-                    // this.selectedDateRangeUi = dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
+                    this.stockReportRequest.from = dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                    this.stockReportRequest.to = dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                    this.fromDate = dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                    this.toDate = dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                    this.selectedDateRange = { startDate: dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT), endDate: dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT) };
+                    this.selectedDateRangeUi = dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
 
-                    // if (this.todaySelected) {
-                    //     this.fromToDate = { from: response?.body?.fromDate, to: response?.body?.toDate };
-                    // } else {
-                    //     this.fromToDate = null;
-                    // }
+                    if (this.todaySelected) {
+                        this.fromToDate = { from: response?.body?.fromDate, to: response?.body?.toDate };
+                    } else {
+                        this.fromToDate = null;
+                    }
                 } else {
                     this.toaster.errorToast(response?.message);
                     this.dataSource = [];
@@ -280,8 +283,6 @@ export class ReportsComponent implements OnInit {
                 }
                 this.changeDetection.detectChanges();
             });
-        } else {
-            this.stockReportRequest = new InventoryReportRequest;
         }
         if (initialCall) {
             this.inventoryService.getGroupWiseReport(cloneDeep(this.stockReportRequest)).pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -293,18 +294,18 @@ export class ReportsComponent implements OnInit {
                     this.stockReportRequest.totalItems = response.body.totalItems;
                     this.stockReportRequest.totalPages = response.body.totalPages;
                     this.stockReportRequest.count = response.body.count;
-                    // this.stockReportRequest.from = dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
-                    // this.stockReportRequest.to = dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
-                    // this.fromDate = dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
-                    // this.toDate = dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
-                    // this.selectedDateRange = { startDate: dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT), endDate: dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT) };
-                    // this.selectedDateRangeUi = dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
+                    this.stockReportRequest.from = dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                    this.stockReportRequest.to = dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                    this.fromDate = dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                    this.toDate = dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                    this.selectedDateRange = { startDate: dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT), endDate: dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT) };
+                    this.selectedDateRangeUi = dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
 
-                    // if (this.todaySelected) {
-                    //     this.fromToDate = { from: response?.body?.fromDate, to: response?.body?.toDate };
-                    // } else {
-                    //     this.fromToDate = null;
-                    // }
+                    if (this.todaySelected) {
+                        this.fromToDate = { from: response?.body?.fromDate, to: response?.body?.toDate };
+                    } else {
+                        this.fromToDate = null;
+                    }
                 } else {
                     this.toaster.errorToast(response?.message);
                     this.dataSource = [];
@@ -334,7 +335,7 @@ export class ReportsComponent implements OnInit {
     public pageChanged(event: any): void {
         if (this.stockReportRequest.page !== event?.page) {
             this.stockReportRequest.page = event?.page;
-            this.getStockTransactionalReport(false);
+            this.getStockTransactionalReport(false, true);
         }
     }
 
@@ -348,11 +349,8 @@ export class ReportsComponent implements OnInit {
         this.stockReportRequest.sort = event?.direction ? event?.direction : 'asc';
         this.stockReportRequest.sortBy = event?.active;
         this.stockReportRequest.page = 1;
-        this.getStockTransactionalReport(false);
+        this.getStockTransactionalReport(false, true);
     }
-
-
-
 
     /**
      * This will use for reset filters
@@ -385,7 +383,7 @@ export class ReportsComponent implements OnInit {
         this.balanceStockReportRequest = event?.balanceStockReportRequest;
         this.todaySelected = event?.todaySelected;
         this.showClearFilter = event?.showClearFilter;
-        this.getStockTransactionalReport(false, true);
+        this.getStockTransactionalReport(true, true);
     }
 
     /**
@@ -414,21 +412,23 @@ export class ReportsComponent implements OnInit {
         }
     }
 
+    /**
+      * This will use for get reports by unqiue name
+     *
+     * @param {*} event
+     * @param {*} element
+     * @memberof ReportsComponent
+     */
     public getReports(event: any, element: any): void {
-        console.log(element);
-        console.log(this.reportType);
-
-        if (this.reportType === 'group') {
+        if (this.reportType === InventoryReportType.group.toUpperCase()) {
             if (element?.stockGroupHasChild) {
                 this.router.navigate(['/pages', 'new-inventory', 'reports', 'group', element?.stockGroup?.uniqueName]);
             } else {
                 this.router.navigate(['/pages', 'new-inventory', 'reports', 'stock', element?.stockGroup?.uniqueName]);
             }
-        } else if (this.reportType === 'stock') {
-            this.router.navigate(['/pages', 'new-inventory', 'reports', 'stock', element?.stock?.uniqueName]);
-        } else if (this.reportType === 'variant') {
-            this.router.navigate(['/pages', 'new-inventory', 'reports', 'variant', element?.variant?.uniqueName]);
-        } else {
+        } else if (this.reportType === InventoryReportType.stock.toUpperCase()) {
+            this.router.navigate(['/pages', 'new-inventory', 'reports', 'variant', element?.stock?.uniqueName]);
+        } else if (this.reportType === InventoryReportType.variant.toUpperCase()) {
             this.router.navigate(['/pages', 'new-inventory', 'inventory-transaction-list']);
         }
     }

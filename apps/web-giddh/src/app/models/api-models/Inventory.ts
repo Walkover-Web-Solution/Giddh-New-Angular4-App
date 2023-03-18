@@ -447,6 +447,8 @@ export class InventoryReportResponse {
     public closingBalance: IInventoryBalance;
     public debitTotal: number;
     public creditTotal: number;
+    public fromDate?: string = '';
+    public toDate?: string = '';
 }
 
 export class IReportTransaction {

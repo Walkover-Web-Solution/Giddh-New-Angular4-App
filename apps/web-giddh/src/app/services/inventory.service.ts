@@ -1165,9 +1165,19 @@ export class InventoryService {
     }
 
 
-
+    /**
+     * This will use for get inventory gorup report
+     *
+     * @param {InventoryReportRequest} stockReportRequest
+     * @return {*}  {Observable<BaseResponse<InventoryReportResponse, InventoryReportRequest>>}
+     * @memberof InventoryService
+     */
     public getGroupWiseReport(stockReportRequest: InventoryReportRequest): Observable<BaseResponse<InventoryReportResponse, InventoryReportRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
+        let updatedReportRequest = cloneDeep(stockReportRequest);
+        delete updatedReportRequest.from;
+        delete updatedReportRequest.to;
+        console.log(stockReportRequest);
         return this.http.post(this.config.apiUrl + INVENTORY_API.INVENTORY_GROUP_WISE_REPORT?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             ?.replace(':from', encodeURIComponent(stockReportRequest.from))
             ?.replace(':to', encodeURIComponent(stockReportRequest.to))
@@ -1175,10 +1185,10 @@ export class InventoryService {
             ?.replace(':page', encodeURIComponent(stockReportRequest.page?.toString()))
             ?.replace(':sort', encodeURIComponent(stockReportRequest.sort ? stockReportRequest.sort?.toString() : ''))
             ?.replace(':sortBy', encodeURIComponent(stockReportRequest.sortBy ? stockReportRequest.sortBy?.toString() : ''))
-            , stockReportRequest).pipe(
+            , updatedReportRequest).pipe(
                 map((res) => {
                     let data: BaseResponse<InventoryReportResponse, InventoryReportRequest> = res;
-                    data.request = stockReportRequest;
+                    data.request = updatedReportRequest;
                     data.queryString = {
                         from: stockReportRequest.from,
                         to: stockReportRequest.to,
@@ -1194,8 +1204,18 @@ export class InventoryService {
                 })));
     }
 
+    /**
+     *This will use for get inventory stock  report
+     *
+     * @param {InventoryReportRequest} stockReportRequest
+     * @return {*}  {Observable<BaseResponse<InventoryReportResponse, InventoryReportRequest>>}
+     * @memberof InventoryService
+     */
     public getItemWiseReport(stockReportRequest: InventoryReportRequest): Observable<BaseResponse<InventoryReportResponse, InventoryReportRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
+        let updatedReportRequest = cloneDeep(stockReportRequest);
+        delete updatedReportRequest.from;
+        delete updatedReportRequest.to;
         return this.http.post(this.config.apiUrl + INVENTORY_API.INVENTORY_ITEM_WISE_REPORT?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             ?.replace(':from', encodeURIComponent(stockReportRequest.from))
             ?.replace(':to', encodeURIComponent(stockReportRequest.to))
@@ -1203,10 +1223,10 @@ export class InventoryService {
             ?.replace(':page', encodeURIComponent(stockReportRequest.page?.toString()))
             ?.replace(':sort', encodeURIComponent(stockReportRequest.sort ? stockReportRequest.sort?.toString() : ''))
             ?.replace(':sortBy', encodeURIComponent(stockReportRequest.sortBy ? stockReportRequest.sortBy?.toString() : ''))
-            , stockReportRequest).pipe(
+            , updatedReportRequest).pipe(
                 map((res) => {
                     let data: BaseResponse<InventoryReportResponse, InventoryReportRequest> = res;
-                    data.request = stockReportRequest;
+                    data.request = updatedReportRequest;
                     data.queryString = {
                         from: stockReportRequest.from,
                         to: stockReportRequest.to,
@@ -1222,8 +1242,18 @@ export class InventoryService {
                 })));
     }
 
+    /**
+     *This will use for get inventory variant report
+     *
+     * @param {InventoryReportRequest} stockReportRequest
+     * @return {*}  {Observable<BaseResponse<InventoryReportResponse, InventoryReportRequest>>}
+     * @memberof InventoryService
+     */
     public getVariantWiseReport(stockReportRequest: InventoryReportRequest): Observable<BaseResponse<InventoryReportResponse, InventoryReportRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
+        let updatedReportRequest = cloneDeep(stockReportRequest);
+        delete updatedReportRequest.from;
+        delete updatedReportRequest.to;
         return this.http.post(this.config.apiUrl + INVENTORY_API.INVENTORY_VARIANT_WISE_REPORT?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             ?.replace(':from', encodeURIComponent(stockReportRequest.from))
             ?.replace(':to', encodeURIComponent(stockReportRequest.to))
@@ -1231,10 +1261,10 @@ export class InventoryService {
             ?.replace(':page', encodeURIComponent(stockReportRequest.page?.toString()))
             ?.replace(':sort', encodeURIComponent(stockReportRequest.sort ? stockReportRequest.sort?.toString() : ''))
             ?.replace(':sortBy', encodeURIComponent(stockReportRequest.sortBy ? stockReportRequest.sortBy?.toString() : ''))
-            , stockReportRequest).pipe(
+            , updatedReportRequest).pipe(
                 map((res) => {
                     let data: BaseResponse<InventoryReportResponse, InventoryReportRequest> = res;
-                    data.request = stockReportRequest;
+                    data.request = updatedReportRequest;
                     data.queryString = {
                         from: stockReportRequest.from,
                         to: stockReportRequest.to,
@@ -1249,8 +1279,4 @@ export class InventoryService {
                     page: stockReportRequest.page
                 })));
     }
-
-
-
-
 }
