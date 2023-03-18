@@ -25,6 +25,7 @@
         border-radius: 2px;
         text-align: center;
         background-color: var(--color-denary-button-background);
+        margin-left: 14px;
     }
     input[type="file"] {
         display: none;
@@ -35,5 +36,20 @@
         float: right;
         width: 58%;
         padding-left: 5px;
+    }
+}
+.import-field-label {
+    width: 170px;
+    vertical-align: bottom;
+}
+.sample-file-buttons {
+    margin-left: 58px;
+    width: 443px;
+
+    a {
+        &:focus {
+            outline: none !important;
+            box-shadow: none !important;
+        }
     }
 }

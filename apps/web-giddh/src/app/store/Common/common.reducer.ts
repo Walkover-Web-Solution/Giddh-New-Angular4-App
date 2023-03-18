@@ -16,6 +16,7 @@ export interface CurrentCommonState {
     partyTypes: IOption[],
     getOnboardingFormInProcess: boolean;
     isAccountUpdated: boolean;
+    importBankTransactions: any;
 }
 
 const initialState: CurrentCommonState = {
@@ -26,7 +27,8 @@ const initialState: CurrentCommonState = {
     onboardingform: null,
     partyTypes: null,
     getOnboardingFormInProcess: false,
-    isAccountUpdated: false
+    isAccountUpdated: false,
+    importBankTransactions: null
 };
 
 export function CommonReducer(state: CurrentCommonState = initialState, action: CustomActions): CurrentCommonState {
@@ -92,6 +94,10 @@ export function CommonReducer(state: CurrentCommonState = initialState, action: 
 
         case CommonActions.ACCOUNT_UPDATED: {
             return Object.assign({}, state, { isAccountUpdated: action.payload });
+        }
+
+        case CommonActions.SET_IMPORT_BANK_TRANSACTIONS_RESPONSE: {
+            return Object.assign({}, state, { importBankTransactions: action.payload });
         }
 
         default:
