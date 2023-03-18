@@ -149,7 +149,7 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
      * on change of discount amount
      */
     public change(event?: any, discount?: any) {
-        this.discountTotal = giddhRoundOff(giddhRoundOff(this.generateTotal(), this.highPrecisionRate), this.giddhBalanceDecimalPlaces);
+        this.discountTotal = giddhRoundOff(this.generateTotal(), this.giddhBalanceDecimalPlaces);
         this.discountTotalUpdated.emit({ discountTotal: this.discountTotal, isActive: event, discount: discount });
     }
 

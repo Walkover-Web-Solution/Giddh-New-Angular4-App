@@ -366,10 +366,10 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
     private calculateInclusiveOrExclusiveTaxes(): void {
         if (this.isAdvanceReceipt) {
             // Inclusive tax rate
-            this.taxTotalAmount = giddhRoundOff(giddhRoundOff((this.totalForTax * this.taxSum) / (100 + this.taxSum), this.highPrecisionRate), this.giddhBalanceDecimalPlaces);
+            this.taxTotalAmount = giddhRoundOff((this.totalForTax * this.taxSum) / (100 + this.taxSum), this.giddhBalanceDecimalPlaces);
         } else {
             // Exclusive tax rate
-            this.taxTotalAmount = giddhRoundOff(giddhRoundOff(((this.totalForTax * this.taxSum) / 100), this.highPrecisionRate), this.giddhBalanceDecimalPlaces);
+            this.taxTotalAmount = giddhRoundOff(((this.totalForTax * this.taxSum) / 100), this.giddhBalanceDecimalPlaces);
         }
     }
 
