@@ -52,6 +52,7 @@ export interface IStockReport extends IPagination {
 }
 
 export interface IUnitRateItem {
+    stockUnitUniqueName?: any;
     rate: number;
     stockUnitCode: string;
 }

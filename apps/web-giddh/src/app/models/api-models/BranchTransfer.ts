@@ -97,6 +97,7 @@ export class NewBranchTransferProductStockDetails {
     public amount: any;
     public rate: any;
     public quantity: any;
+    public stockUnitCode?: any;
 }
 
 export class NewBranchTransferProduct {
