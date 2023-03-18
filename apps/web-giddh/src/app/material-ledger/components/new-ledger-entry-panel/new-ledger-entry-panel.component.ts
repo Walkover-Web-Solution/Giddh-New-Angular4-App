@@ -547,9 +547,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             return cv.isChecked ? pv + cv.amount : pv;
         }, 0);
         if (this.generalService.isReceiptPaymentEntry(this.activeAccount, this.currentTxn.selectedAccount, this.blankLedger.voucherType) && !this.isAdvanceReceiptWithTds) {
-            this.currentTxn.tax = giddhRoundOff(giddhRoundOff(this.generalService.calculateInclusiveOrExclusiveTaxes(false, this.currentTxn.advanceReceiptAmount, totalPercentage, this.currentTxn.discount), this.highPrecisionRate), this.giddhBalanceDecimalPlaces);
+            this.currentTxn.tax = giddhRoundOff(this.generalService.calculateInclusiveOrExclusiveTaxes(false, this.currentTxn.advanceReceiptAmount, totalPercentage, this.currentTxn.discount), this.giddhBalanceDecimalPlaces);
         } else {
-            this.currentTxn.tax = giddhRoundOff(giddhRoundOff(this.generalService.calculateInclusiveOrExclusiveTaxes(this.isAdvanceReceipt, this.currentTxn.amount, totalPercentage, this.currentTxn.discount), this.highPrecisionRate), this.giddhBalanceDecimalPlaces);
+            this.currentTxn.tax = giddhRoundOff(this.generalService.calculateInclusiveOrExclusiveTaxes(this.isAdvanceReceipt, this.currentTxn.amount, totalPercentage, this.currentTxn.discount), this.giddhBalanceDecimalPlaces);
         }
         this.currentTxn.convertedTax = this.calculateConversionRate(this.currentTxn.tax);
         this.calculateTotal();
@@ -576,18 +576,18 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 const isExportValid = this.checkIfExportIsValid();
 
                 if (this.isAdvanceReceipt) {
-                    this.currentTxn.advanceReceiptAmount = giddhRoundOff(giddhRoundOff((this.currentTxn.amount - this.currentTxn.tax), this.highPrecisionRate), this.giddhBalanceDecimalPlaces);
-                    this.currentTxn.total = giddhRoundOff(giddhRoundOff((this.currentTxn.advanceReceiptAmount + (!isExportValid ? this.currentTxn.tax : 0)), this.highPrecisionRate), this.giddhBalanceDecimalPlaces);
+                    this.currentTxn.advanceReceiptAmount = giddhRoundOff((this.currentTxn.amount - this.currentTxn.tax), this.giddhBalanceDecimalPlaces);
+                    this.currentTxn.total = giddhRoundOff((this.currentTxn.advanceReceiptAmount + (!isExportValid ? this.currentTxn.tax : 0)), this.giddhBalanceDecimalPlaces);
                     this.totalForTax = this.currentTxn.total;
-                    this.currentTxn.convertedTotal = giddhRoundOff(giddhRoundOff((this.currentTxn.convertedAmount - (!isExportValid ? this.currentTxn.convertedTax : 0)), this.highPrecisionRate), this.giddhBalanceDecimalPlaces);
+                    this.currentTxn.convertedTotal = giddhRoundOff((this.currentTxn.convertedAmount - (!isExportValid ? this.currentTxn.convertedTax : 0)), this.giddhBalanceDecimalPlaces);
                 } else {
                     let total = (this.currentTxn.amount - this.currentTxn.discount) || 0;
                     const convertedTotal = (this.currentTxn.convertedAmount - this.currentTxn.convertedDiscount) || 0;
                     this.totalForTax = total;
                     const taxApplied = (this.isRcmEntry || isExportValid) ? 0 : this.currentTxn.tax;
                     const convertedTaxApplied = (this.isRcmEntry || isExportValid) ? 0 : this.currentTxn.convertedTax;
-                    this.currentTxn.total = giddhRoundOff(giddhRoundOff((total + taxApplied), this.highPrecisionRate), this.giddhBalanceDecimalPlaces);
-                    this.currentTxn.convertedTotal = giddhRoundOff(giddhRoundOff((convertedTotal + convertedTaxApplied), this.highPrecisionRate), this.giddhBalanceDecimalPlaces);
+                    this.currentTxn.total = giddhRoundOff((total + taxApplied), this.giddhBalanceDecimalPlaces);
+                    this.currentTxn.convertedTotal = giddhRoundOff((convertedTotal + convertedTaxApplied), this.giddhBalanceDecimalPlaces);
                 }
             } else {
                 // Amount is zero, set other parameters to zero
@@ -644,7 +644,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.currentTxn.inventory.unit.highPrecisionRate = this.currentTxn.inventory.unit.rate;
             this.currentTxn.convertedRate = this.calculateConversionRate(this.currentTxn.inventory.unit.rate, this.ratePrecision);
 
-            this.currentTxn.amount = giddhRoundOff(giddhRoundOff((this.currentTxn.inventory.unit.rate * this.currentTxn.inventory.quantity), this.highPrecisionRate), this.giddhBalanceDecimalPlaces);
+            this.currentTxn.amount = giddhRoundOff((this.currentTxn.inventory.unit.rate * this.currentTxn.inventory.quantity), this.giddhBalanceDecimalPlaces);
             if (this.currentTxn.inventory) {
                 this.currentTxn.convertedAmount = this.currentTxn.inventory.quantity * this.currentTxn.convertedRate;
             } else {
@@ -704,8 +704,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 }, 0) || 0;
         }
 
-        this.currentTxn.amount = giddhRoundOff(giddhRoundOff(((Number(this.currentTxn.total) + fixDiscount + 0.01 * fixDiscount * Number(taxTotal)) /
-            (1 - 0.01 * percentageDiscount + 0.01 * Number(taxTotal) - 0.0001 * percentageDiscount * Number(taxTotal))), this.highPrecisionRate), this.giddhBalanceDecimalPlaces);
+        this.currentTxn.amount = giddhRoundOff(((Number(this.currentTxn.total) + fixDiscount + 0.01 * fixDiscount * Number(taxTotal)) /
+            (1 - 0.01 * percentageDiscount + 0.01 * Number(taxTotal) - 0.0001 * percentageDiscount * Number(taxTotal))), this.giddhBalanceDecimalPlaces);
         if (this.currentTxn.inventory) {
             this.currentTxn.convertedAmount = this.currentTxn.inventory.quantity * this.currentTxn.convertedRate;
         } else {
@@ -743,9 +743,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         let creditTotal = Number(sumBy(this.blankLedger.transactions?.filter(t => t.type === 'CREDIT'), (trxn) => Number(trxn.total))) || 0;
 
         if (debitTotal > creditTotal) {
-            this.blankLedger.compoundTotal = giddhRoundOff(giddhRoundOff((debitTotal - creditTotal), this.highPrecisionRate), this.giddhBalanceDecimalPlaces);
+            this.blankLedger.compoundTotal = giddhRoundOff((debitTotal - creditTotal), this.giddhBalanceDecimalPlaces);
         } else {
-            this.blankLedger.compoundTotal = giddhRoundOff(giddhRoundOff((creditTotal - debitTotal), this.highPrecisionRate), this.giddhBalanceDecimalPlaces);
+            this.blankLedger.compoundTotal = giddhRoundOff((creditTotal - debitTotal), this.giddhBalanceDecimalPlaces);
         }
 
         if (this.voucherApiVersion === 2 && (this.blankLedger.voucherType === "sal" || this.blankLedger.voucherType === "pur" || this.blankLedger.voucherType === "credit note" || this.blankLedger.voucherType === "debit note")) {
@@ -1249,10 +1249,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                     taxableValue = (rawAmount + transaction?.tax);
                 }
             }
-            this.blankLedger.tdsTcsTaxesSum = giddhRoundOff(giddhRoundOff(((taxableValue * totalTaxes) / 100), this.highPrecisionRate), this.giddhBalanceDecimalPlaces);
+            this.blankLedger.tdsTcsTaxesSum = giddhRoundOff(((taxableValue * totalTaxes) / 100), this.giddhBalanceDecimalPlaces);
             this.blankLedger.otherTaxModal = modal;
             this.blankLedger.tcsCalculationMethod = modal.tcsCalculationMethod;
-            this.blankLedger.otherTaxesSum = giddhRoundOff(giddhRoundOff((this.blankLedger.tdsTcsTaxesSum), this.highPrecisionRate), this.giddhBalanceDecimalPlaces);
+            this.blankLedger.otherTaxesSum = giddhRoundOff((this.blankLedger.tdsTcsTaxesSum), this.giddhBalanceDecimalPlaces);
         } else {
             this.blankLedger.otherTaxesSum = 0;
             this.blankLedger.tdsTcsTaxesSum = 0;
@@ -1316,7 +1316,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         if (!baseModel || !this.blankLedger?.exchangeRate) {
             return 0;
         }
-        return giddhRoundOff(giddhRoundOff((baseModel * Number(this.blankLedger?.exchangeRate)), this.highPrecisionRate), (customDecimalPlaces) ? customDecimalPlaces : this.giddhBalanceDecimalPlaces);
+        return giddhRoundOff((baseModel * Number(this.blankLedger?.exchangeRate)), (customDecimalPlaces) ? customDecimalPlaces : this.giddhBalanceDecimalPlaces);
     }
 
     /**
