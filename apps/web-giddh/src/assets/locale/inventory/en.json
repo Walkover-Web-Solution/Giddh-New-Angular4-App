@@ -1,0 +1,16 @@
+{
+    "sidebar":{
+        "inventory":"INVENTORY",
+        "stock":"Stock",
+        "create_new":"Create New",
+        "item_wise":"Item-wise",
+        "group_wise":"Group-wise",
+        "variant_wise":"'Variant-wise",
+        "transactions":"Transactions",
+        "services":"Services",
+        "fixed_assets":"Fixed Assets",
+        "branch_transfer":"Branch Transfer",
+        "manfacturing":"Manufacturing",
+        "warehouse_balance":"Warehouse Opening Balance"
+    }
+}

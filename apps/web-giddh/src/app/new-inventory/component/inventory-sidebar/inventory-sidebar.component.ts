@@ -20,7 +20,12 @@ const TREE_DATA: SidebarNode[] = [
     {
         name: 'Stock',
         icons: 'stock.svg',
-        children: [{ name: 'Create New', icons: 'create-new.svg', link: '/pages/new-inventory/stock/product/create' }, { name: 'Item-wise', icons: 'item-wise.svg', link: '/pages/new-inventory/item-wise' }, { name: 'Group-wise', icons: 'group-wise.svg', link: '/pages/new-inventory/reports/group' }, { name: 'Variant-wise', icons: 'varient-wise.svg', link: '/pages/new-inventory/variant-wise' }, { name: 'Transactions', icons: 'transactions.svg', link: '/pages/new-inventory/inventory-transaction-list' }],
+        children: [
+            { name: 'Create New', icons: 'create-new.svg', link: '/pages/new-inventory/stock/product/create' },
+            { name: 'Item-wise', icons: 'item-wise.svg', link: '/pages/new-inventory/reports/stock' },
+            { name: 'Group-wise', icons: 'group-wise.svg', link: '/pages/new-inventory/reports/group' },
+            { name: 'Variant-wise', icons: 'varient-wise.svg', link: '/pages/new-inventory/reports/variant' },
+            { name: 'Transactions', icons: 'transactions.svg', link: '/pages/new-inventory/reports/transactions' }],
     },
     {
         name: 'Services',
@@ -56,6 +61,12 @@ interface SidebarFlatNode {
     styleUrls: [`./inventory-sidebar.component.scss`],
 })
 export class InventorySidebarComponent implements OnDestroy {
+    /** This will hold local JSON data */
+    public localeData: any = {};
+    /** This will hold common JSON data */
+    public commonLocaleData: any = {};
+    /** True if translations loaded */
+    public translationLoaded: boolean = false;
     /* Event emitter for close sidebar popup event */
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
     /** True if mobile screen */
@@ -165,6 +176,18 @@ export class InventorySidebarComponent implements OnDestroy {
     public closeAsidePaneIfMobile(event?: any): void {
         if (this.isMobileScreen && event?.target?.className !== "icon-bar") {
             this.closeAsideEvent.emit(event);
+        }
+    }
+
+    /**
+ * Callback for translation response complete
+ *
+ * @param {*} event
+ * @memberof ActivityLogsComponent
+ */
+    public translationComplete(event: any): void {
+        if (event) {
+            this.translationLoaded = true;
         }
     }
 

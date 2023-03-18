@@ -1177,7 +1177,6 @@ export class InventoryService {
         let updatedReportRequest = cloneDeep(stockReportRequest);
         delete updatedReportRequest.from;
         delete updatedReportRequest.to;
-        console.log(stockReportRequest);
         return this.http.post(this.config.apiUrl + INVENTORY_API.INVENTORY_GROUP_WISE_REPORT?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             ?.replace(':from', encodeURIComponent(stockReportRequest.from))
             ?.replace(':to', encodeURIComponent(stockReportRequest.to))

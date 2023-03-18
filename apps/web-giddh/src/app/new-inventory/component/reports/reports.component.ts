@@ -140,6 +140,8 @@ export class ReportsComponent implements OnInit {
     public reportType: string = '';
     /** Holds report unique name */
     public reportUniqueName: string = '';
+    /** True  if report is loaded */
+    public isReportLoaded: boolean = false;
 
     constructor(
         public dialog: MatDialog,
@@ -171,6 +173,9 @@ export class ReportsComponent implements OnInit {
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.reportType = (response?.reportType)?.toUpperCase();
             this.reportUniqueName = response?.uniqueName;
+            if (this.isReportLoaded) {
+                this.getReport(true);
+            }
         });
     }
 
@@ -183,16 +188,16 @@ export class ReportsComponent implements OnInit {
      * @return {*}  {void}
      * @memberof InventoryTransactionListComponent
      */
-    public getStockTransactionalReport(fetchBalance: boolean = true, initialCall?: boolean): void {
+    public getReport(fetchBalance: boolean = true): void {
         if (!this.reportType) {
             return;
         }
         this.dataSource = [];
         this.isLoading = true;
-
+        this.isReportLoaded = true;
         if (this.reportType === InventoryReportType.group) {
-            this.stockReportRequest.stockGroupUniqueNames = [this.reportUniqueName] ?? [];
-            this.balanceStockReportRequest.stockGroupUniqueNames = [this.reportUniqueName] ?? [];
+            this.stockReportRequest.stockGroupUniqueNames = this.reportUniqueName ? [this.reportUniqueName] : [];
+            this.balanceStockReportRequest.stockGroupUniqueNames = this.reportUniqueName ? [this.reportUniqueName] : [];
             this.inventoryService.getGroupWiseReport(cloneDeep(this.stockReportRequest)).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 this.isLoading = false;
                 if (response && response.body && response.status === 'success') {
@@ -208,7 +213,6 @@ export class ReportsComponent implements OnInit {
                     this.toDate = dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
                     this.selectedDateRange = { startDate: dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT), endDate: dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT) };
                     this.selectedDateRangeUi = dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
-
                     if (this.todaySelected) {
                         this.fromToDate = { from: response?.body?.fromDate, to: response?.body?.toDate };
                     } else {
@@ -221,9 +225,10 @@ export class ReportsComponent implements OnInit {
                 }
                 this.changeDetection.detectChanges();
             });
-        } else if (this.reportType === InventoryReportType.stock) {
-            this.stockReportRequest.stockUniqueNames = [this.reportUniqueName] ?? [];
-            this.balanceStockReportRequest.stockUniqueNames = [this.reportUniqueName] ?? [];
+        }
+        if (this.reportType === InventoryReportType.stock) {
+            this.stockReportRequest.stockGroupUniqueNames = this.reportUniqueName ? [this.reportUniqueName] : [];
+            this.balanceStockReportRequest.stockGroupUniqueNames = this.reportUniqueName ? [this.reportUniqueName] : [];
             this.inventoryService.getItemWiseReport(cloneDeep(this.stockReportRequest)).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 this.isLoading = false;
                 if (response && response.body && response.status === 'success') {
@@ -252,40 +257,11 @@ export class ReportsComponent implements OnInit {
                 }
                 this.changeDetection.detectChanges();
             });
-        } else if (this.reportType === InventoryReportType.variant) {
-            this.stockReportRequest.variantUniqueNames = [this.reportUniqueName] ?? [];
-            this.balanceStockReportRequest.variantUniqueNames = [this.reportUniqueName] ?? [];
-            this.inventoryService.getVariantWiseReport(cloneDeep(this.stockReportRequest)).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                this.isLoading = false;
-                if (response && response.body && response.status === 'success') {
-                    this.isDataAvailable = (response.body.results?.length) ? true : this.showClearFilter;
-                    this.dataSource = response.body.results;
-                    this.stockReportRequest.page = response.body.page;
-                    this.stockReportRequest.totalItems = response.body.totalItems;
-                    this.stockReportRequest.totalPages = response.body.totalPages;
-                    this.stockReportRequest.count = response.body.count;
-                    this.stockReportRequest.from = dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
-                    this.stockReportRequest.to = dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
-                    this.fromDate = dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
-                    this.toDate = dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
-                    this.selectedDateRange = { startDate: dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT), endDate: dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT) };
-                    this.selectedDateRangeUi = dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
-
-                    if (this.todaySelected) {
-                        this.fromToDate = { from: response?.body?.fromDate, to: response?.body?.toDate };
-                    } else {
-                        this.fromToDate = null;
-                    }
-                } else {
-                    this.toaster.errorToast(response?.message);
-                    this.dataSource = [];
-                    this.stockReportRequest.totalItems = 0;
-                }
-                this.changeDetection.detectChanges();
-            });
         }
-        if (initialCall) {
-            this.inventoryService.getGroupWiseReport(cloneDeep(this.stockReportRequest)).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        if (this.reportType === InventoryReportType.variant) {
+            this.stockReportRequest.stockUniqueNames = this.reportUniqueName ? [this.reportUniqueName] : [];
+            this.balanceStockReportRequest.stockUniqueNames = this.reportUniqueName ? [this.reportUniqueName] : [];
+            this.inventoryService.getVariantWiseReport(cloneDeep(this.stockReportRequest)).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 this.isLoading = false;
                 if (response && response.body && response.status === 'success') {
                     this.isDataAvailable = (response.body.results?.length) ? true : this.showClearFilter;
@@ -335,7 +311,7 @@ export class ReportsComponent implements OnInit {
     public pageChanged(event: any): void {
         if (this.stockReportRequest.page !== event?.page) {
             this.stockReportRequest.page = event?.page;
-            this.getStockTransactionalReport(false, true);
+            this.getReport(false);
         }
     }
 
@@ -349,7 +325,7 @@ export class ReportsComponent implements OnInit {
         this.stockReportRequest.sort = event?.direction ? event?.direction : 'asc';
         this.stockReportRequest.sortBy = event?.active;
         this.stockReportRequest.page = 1;
-        this.getStockTransactionalReport(false, true);
+        this.getReport(false);
     }
 
     /**
@@ -383,7 +359,7 @@ export class ReportsComponent implements OnInit {
         this.balanceStockReportRequest = event?.balanceStockReportRequest;
         this.todaySelected = event?.todaySelected;
         this.showClearFilter = event?.showClearFilter;
-        this.getStockTransactionalReport(true, true);
+        this.getReport(true);
     }
 
     /**
@@ -419,17 +395,17 @@ export class ReportsComponent implements OnInit {
      * @param {*} element
      * @memberof ReportsComponent
      */
-    public getReports(event: any, element: any): void {
-        if (this.reportType === InventoryReportType.group.toUpperCase()) {
+    public getReportsByReportType(event: any, element: any): void {
+        if (this.reportType === InventoryReportType.group) {
             if (element?.stockGroupHasChild) {
                 this.router.navigate(['/pages', 'new-inventory', 'reports', 'group', element?.stockGroup?.uniqueName]);
             } else {
                 this.router.navigate(['/pages', 'new-inventory', 'reports', 'stock', element?.stockGroup?.uniqueName]);
             }
-        } else if (this.reportType === InventoryReportType.stock.toUpperCase()) {
+        } else if (this.reportType === InventoryReportType.stock) {
             this.router.navigate(['/pages', 'new-inventory', 'reports', 'variant', element?.stock?.uniqueName]);
-        } else if (this.reportType === InventoryReportType.variant.toUpperCase()) {
-            this.router.navigate(['/pages', 'new-inventory', 'inventory-transaction-list']);
+        } else if (this.reportType === InventoryReportType.variant) {
+            this.router.navigate(['/pages', 'new-inventory', 'reports', 'transactions']);
         }
     }
 }

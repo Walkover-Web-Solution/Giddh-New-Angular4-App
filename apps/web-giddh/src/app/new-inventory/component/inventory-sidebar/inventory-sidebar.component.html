@@ -1,44 +1,52 @@
-<div class="aside-pane" (clickOutside)="closeAsidePaneIfMobile($event)" asideInventorySidebarMenuState>
-    <div class="help-aside-body">
-        <div class="back-to-main-slider">
-            <a href="javascript:;">
-                <span (click)="goToPreviousPage()">
-                    <i class="icon-back-arrow"></i>
-                </span>
-            </a>
-            <h1 class="heading">INVENTORY</h1>
-        </div>
-        <div class="inventory-items">
-            <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
-                <mat-tree-node
-                    *matTreeNodeDef="let node"
-                    matTreeNodePadding
-                    class="sub-option"
-                    [routerLink]="node?.link"
-                    routerLinkActive="active"
-                >
-                    <img src="{{ imgPath }}{{ node.icons }}" class="sidebar-menu-icons" alt="" />
-                    <h5>{{ node.name }}</h5>
-                </mat-tree-node>
-                <mat-tree-node
-                    *matTreeNodeDef="let node; when: hasChild"
-                    matTreeNodePadding
-                    matTreeNodeToggle
-                    class="list"
-                >
-                    <button mat-icon-button disableRipple matTreeNodeToggle class="arrow-btn">
-                        <span class="sidebar-list-icon">
-                            <i *ngIf="treeControl.isExpanded(node)" class="icon-up mr-l1 font-14 sidebar-icon"></i>
-                            <i
-                                *ngIf="!treeControl.isExpanded(node)"
-                                class="icon-down-new mr-l1 font-14 sidebar-icon"
-                            ></i>
-                        </span>
-                    </button>
-                    <img src="{{ imgPath }}{{ node.icons }}" class="sidebar-menu-icons" alt="" />
-                    <h5>{{ node.name }}</h5>
-                </mat-tree-node>
-            </mat-tree>
+<ng-container
+    appTranslate
+    [file]="'inventory'"
+    (commonLocaleData)="commonLocaleData = $event"
+    (localeData)="localeData = $event"
+    (translationComplete)="translationComplete($event)"
+>
+    <div class="aside-pane" (clickOutside)="closeAsidePaneIfMobile($event)" asideInventorySidebarMenuState>
+        <div class="help-aside-body">
+            <div class="back-to-main-slider">
+                <a href="javascript:;">
+                    <span (click)="goToPreviousPage()">
+                        <i class="icon-back-arrow"></i>
+                    </span>
+                </a>
+                <h1 class="heading">INVENTORY</h1>
+            </div>
+            <div class="inventory-items">
+                <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
+                    <mat-tree-node
+                        *matTreeNodeDef="let node"
+                        matTreeNodePadding
+                        class="sub-option"
+                        [routerLink]="node?.link"
+                        routerLinkActive="active"
+                    >
+                        <img src="{{ imgPath }}{{ node.icons }}" class="sidebar-menu-icons" alt="" />
+                        <h5>{{ node.name }}</h5>
+                    </mat-tree-node>
+                    <mat-tree-node
+                        *matTreeNodeDef="let node; when: hasChild"
+                        matTreeNodePadding
+                        matTreeNodeToggle
+                        class="list"
+                    >
+                        <button mat-icon-button disableRipple matTreeNodeToggle class="arrow-btn">
+                            <span class="sidebar-list-icon">
+                                <i *ngIf="treeControl.isExpanded(node)" class="icon-up mr-l1 font-14 sidebar-icon"></i>
+                                <i
+                                    *ngIf="!treeControl.isExpanded(node)"
+                                    class="icon-down-new mr-l1 font-14 sidebar-icon"
+                                ></i>
+                            </span>
+                        </button>
+                        <img src="{{ imgPath }}{{ node.icons }}" class="sidebar-menu-icons" alt="" />
+                        <h5>{{ node.name }}</h5>
+                    </mat-tree-node>
+                </mat-tree>
+            </div>
         </div>
     </div>
-</div>
+</ng-container>

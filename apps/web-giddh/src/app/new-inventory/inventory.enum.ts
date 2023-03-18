@@ -1,5 +1,5 @@
 export enum InventoryReportType {
-    group = 'group',
-    stock = 'stock',
-    variant = 'variant'
+    group = 'GROUP',
+    stock = 'STOCK',
+    variant = 'VARIANT'
 }

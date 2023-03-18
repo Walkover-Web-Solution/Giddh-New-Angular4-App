@@ -325,7 +325,7 @@
                                 class="text-left word-wrap cursor-pointer"
                                 mat-cell
                                 *matCellDef="let element"
-                                (click)="getReports($event, element)"
+                                (click)="getReportsByReportType($event, element)"
                             >
                                 {{ element?.stockGroup?.name ?? "-" }}
                             </td>
