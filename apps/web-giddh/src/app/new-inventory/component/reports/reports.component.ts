@@ -248,7 +248,13 @@ export class ReportsComponent implements OnInit {
         });
     }
 
-
+    private getStockReportRequestObject(): any {
+        let stockReportRequest = cloneDeep(this.stockReportRequest);
+        stockReportRequest.stockGroups = undefined;
+        stockReportRequest.stocks = undefined;
+        stockReportRequest.variants = undefined;
+        return stockReportRequest;
+    }
     /**
      * This will use for get stock transactions report data
      *
@@ -267,7 +273,10 @@ export class ReportsComponent implements OnInit {
         if (this.reportType === InventoryReportType.group) {
             this.stockReportRequest.stockGroupUniqueNames = this.reportUniqueName ? [this.reportUniqueName] : [];
             this.balanceStockReportRequest.stockGroupUniqueNames = this.reportUniqueName ? [this.reportUniqueName] : [];
-            this.inventoryService.getGroupWiseReport(cloneDeep(this.stockReportRequest)).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+
+            let stockReportRequest = this.getStockReportRequestObject();
+
+            this.inventoryService.getGroupWiseReport(cloneDeep(stockReportRequest)).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 this.isLoading = false;
                 if (response && response.body && response.status === 'success') {
                     this.isDataAvailable = (response.body.results?.length) ? true : this.showClearFilter;
@@ -302,7 +311,10 @@ export class ReportsComponent implements OnInit {
         if (this.reportType === InventoryReportType.stock) {
             this.stockReportRequest.stockGroupUniqueNames = this.reportUniqueName ? [this.reportUniqueName] : [];
             this.balanceStockReportRequest.stockGroupUniqueNames = this.reportUniqueName ? [this.reportUniqueName] : [];
-            this.inventoryService.getItemWiseReport(cloneDeep(this.stockReportRequest)).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+
+            let stockReportRequest = this.getStockReportRequestObject();
+
+            this.inventoryService.getItemWiseReport(cloneDeep(stockReportRequest)).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 this.isLoading = false;
                 if (response && response.body && response.status === 'success') {
                     this.isDataAvailable = (response.body.results?.length) ? true : this.showClearFilter;
@@ -335,7 +347,10 @@ export class ReportsComponent implements OnInit {
         if (this.reportType === InventoryReportType.variant) {
             this.stockReportRequest.stockUniqueNames = this.reportUniqueName ? [this.reportUniqueName] : [];
             this.balanceStockReportRequest.stockUniqueNames = this.reportUniqueName ? [this.reportUniqueName] : [];
-            this.inventoryService.getVariantWiseReport(cloneDeep(this.stockReportRequest)).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+
+            let stockReportRequest = this.getStockReportRequestObject();
+
+            this.inventoryService.getVariantWiseReport(cloneDeep(stockReportRequest)).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 this.isLoading = false;
                 if (response && response.body && response.status === 'success') {
                     this.isDataAvailable = (response.body.results?.length) ? true : this.showClearFilter;
@@ -441,11 +456,9 @@ export class ReportsComponent implements OnInit {
             this.balanceStockReportRequest = event?.balanceStockReportRequest;
             this.todaySelected = event?.todaySelected;
             this.showClearFilter = event?.showClearFilter;
-
-            this.router.navigate([], { relativeTo: this.route, queryParams: { from: this.stockReportRequest.from, to: this.stockReportRequest.to }, queryParamsHandling: 'merge', skipLocationChange: false });
+            console.log(event);
         } else {
             this.initialLoad = false;
-            this.router.navigate([], { relativeTo: this.route, queryParams: { from: this.stockReportRequest.from, to: this.stockReportRequest.to }, queryParamsHandling: 'merge', skipLocationChange: false });
         }
         this.pullUniversalDate = true;
         this.getReport(true);

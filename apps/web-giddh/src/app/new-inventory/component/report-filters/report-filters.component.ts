@@ -233,6 +233,23 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
         if (changes?.searchPage) {
             this.getReportColumns();
         }
+        if(changes?.stockReportRequest?.currentValue) {
+            if(changes?.stockReportRequest?.currentValue?.stockGroups) {
+                changes?.stockReportRequest?.currentValue?.stockGroups?.forEach(group => {
+                    this.filtersChipList.push(group);
+                });
+            }
+            if(changes?.stockReportRequest?.currentValue?.stocks) {
+                changes?.stockReportRequest?.currentValue?.stocks?.forEach(stock => {
+                    this.filtersChipList.push(stock);
+                });
+            }
+            if(changes?.stockReportRequest?.currentValue?.variants) {
+                changes?.stockReportRequest?.currentValue?.variants?.forEach(variant => {
+                    this.filtersChipList.push(variant);
+                });
+            }
+        }
         this.isFilterActive();
         this.searchInventory();
     }
@@ -567,7 +584,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
         const selectOptionValue = option?.option?.value;
         if (option?.option?.value?.type === 'STOCK GROUP') {
             this.stockReportRequest.stockGroupUniqueNames = [option?.option?.value?.uniqueName];
-
+            this.stockReportRequest.stockGroups = [option?.option?.value];
         } else if (option?.option?.value?.type === 'STOCK') {
             const findStockColumnCheck = this.customiseColumns?.find(value => value?.value === "stockName");
             if (this.stockReportRequest.stockUniqueNames?.length === 0 && findStockColumnCheck?.checked) {
@@ -578,6 +595,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
                 this.filteredDisplayColumns();
             }
             this.stockReportRequest.stockUniqueNames?.push(option?.option?.value?.uniqueName);
+            this.stockReportRequest.stocks = [option?.option?.value];
         } else {
             const findVariantColumnCheck = this.customiseColumns?.find(value => value?.value === "variantName");
             if (this.stockReportRequest.variantUniqueNames?.length === 0 && findVariantColumnCheck?.checked) {
@@ -588,6 +606,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
                 this.filteredDisplayColumns();
             }
             this.stockReportRequest.variantUniqueNames?.push(option?.option?.value?.uniqueName);
+            this.stockReportRequest.variants = [option?.option?.value];
         }
         this.balanceStockReportRequest.stockGroupUniqueNames = this.stockReportRequest.stockGroupUniqueNames;
         this.balanceStockReportRequest.stockUniqueNames = this.stockReportRequest.stockUniqueNames;
@@ -611,9 +630,11 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
         if (selectOptionValue) {
             if (selectOptionValue.type === "STOCK GROUP") {
                 this.stockReportRequest.stockGroupUniqueNames = this.stockReportRequest.stockGroupUniqueNames?.filter(value => value != selectOptionValue.uniqueName);
+                this.stockReportRequest.stockGroups = this.stockReportRequest.stockGroups?.filter(value => value?.uniqueName != selectOptionValue.uniqueName);
             }
             if (selectOptionValue.type === "STOCK") {
                 this.stockReportRequest.stockUniqueNames = this.stockReportRequest.stockUniqueNames.filter(value => value != selectOptionValue.uniqueName);
+                this.stockReportRequest.stocks = this.stockReportRequest.stocks?.filter(value => value?.uniqueName != selectOptionValue.uniqueName);
                 if (this.stockReportRequest.stockUniqueNames.length <= 1) {
                     this.customiseColumns.find(value => value?.value === "stockName").checked = (this.stockReportRequest.stockUniqueNames?.length === 1 ? false : true);
                     this.filteredDisplayColumns();
@@ -621,6 +642,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
             }
             if (selectOptionValue.type === "VARIANT") {
                 this.stockReportRequest.variantUniqueNames = this.stockReportRequest.variantUniqueNames?.filter(value => value != selectOptionValue.uniqueName);
+                this.stockReportRequest.variants = this.stockReportRequest.variants?.filter(value => value?.uniqueName != selectOptionValue.uniqueName);
                 if (this.stockReportRequest.variantUniqueNames?.length <= 1) {
                     this.customiseColumns.find(value => value?.value === "variantName").checked = (this.stockReportRequest.variantUniqueNames.length === 1 ? false : true);
                     this.filteredDisplayColumns();

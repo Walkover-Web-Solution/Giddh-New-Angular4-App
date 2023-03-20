@@ -163,6 +163,9 @@ export class StockTransactionReportRequest {
     public warehouseUniqueNames?: any[];
     public branchUniqueNames?: any[];
     public variantUniqueNames?: any[];
+    public stockGroups?: any[];
+    public stocks?: any[];
+    public variants?: any[];
     constructor() {
         this.count = PAGINATION_LIMIT;
         this.page = 1;
