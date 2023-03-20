@@ -1,5 +1,5 @@
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, OnInit, Output, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, OnChanges, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSort } from '@angular/material/sort';
 import { select, Store } from '@ngrx/store';
@@ -14,7 +14,7 @@ import { giddhRoundOff } from "../../../shared/helpers/helperFunctions";
 import * as dayjs from "dayjs";
 import { cloneDeep } from '../../../lodash-optimized';
 import { ActivatedRoute, Router } from '@angular/router';
-import { InventoryReportType } from '../../inventory.enum';
+import { INVENTORY_COMMON_COLUMNS, InventoryReportType, InventoryModuleName } from '../../inventory.enum';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
 
 @Component({
@@ -68,54 +68,7 @@ export class ReportsComponent implements OnInit {
     /** This will use for  table report header columns */
     public tableHeaderColumns: any[] = [];
     /** This will use for stock report voucher types column check values */
-    public customiseColumns = [
-        {
-            "value": "group_name",
-            "label": "Group Name",
-            "checked": true
-        },
-
-        {
-            "value": "opening_quantity",
-            "label": "Opening Stock Qty",
-            "checked": true
-        },
-        {
-            "value": "opening_amount",
-            "label": "Opening Stock Value",
-            "checked": true
-        },
-        {
-            "value": "inward_quantity",
-            "label": "Inward Quantity",
-            "checked": true
-        },
-        {
-            "value": "inward_amount",
-            "label": "Inward Value",
-            "checked": true
-        },
-        {
-            "value": "outward_quantity",
-            "label": "Outward Qty",
-            "checked": true
-        },
-        {
-            "value": "outward_amount",
-            "label": "Outward Amount",
-            "checked": true
-        },
-        {
-            "value": "closing_quantity",
-            "label": "Closing Qty",
-            "checked": true
-        },
-        {
-            "value": "closing_amount",
-            "label": "Closing Value",
-            "checked": true
-        }
-    ];
+    public customiseColumns = [];
     /** Hold From Date*/
     public toDate: string;
     /** Hold To Date*/
@@ -142,6 +95,8 @@ export class ReportsComponent implements OnInit {
     public reportUniqueName: string = '';
     /** True  if report is loaded */
     public isReportLoaded: boolean = false;
+    /** Holds module name */
+    public moduleName = '';
 
     constructor(
         public dialog: MatDialog,
@@ -173,6 +128,50 @@ export class ReportsComponent implements OnInit {
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.reportType = (response?.reportType)?.toUpperCase();
             this.reportUniqueName = response?.uniqueName;
+            this.customiseColumns = cloneDeep(INVENTORY_COMMON_COLUMNS);
+            if (this.reportType === InventoryReportType.group.toUpperCase()) {
+                this.customiseColumns.splice(0, 0, {
+                    "value": "group_name",
+                    "label": "Group Name",
+                    "checked": true
+                })
+                this.moduleName = InventoryModuleName.group;
+            }
+            if (this.reportType === InventoryReportType.stock.toUpperCase()) {
+                this.customiseColumns.splice(0, 0,
+                    {
+                        "value": "group_name",
+                        "label": "Group Name",
+                        "checked": true
+                    },
+                    {
+                        "value": "stock_name",
+                        "label": "Stock Name",
+                        "checked": true
+                    },)
+                this.moduleName = InventoryModuleName.stock;
+
+            }
+            if (this.reportType === InventoryReportType.variant.toUpperCase()) {
+                this.customiseColumns.splice(0, 0,
+                    {
+                        "value": "group_name",
+                        "label": "Group Name",
+                        "checked": true
+                    },
+                    {
+                        "value": "stock_name",
+                        "label": "Stock Name",
+                        "checked": true
+                    },
+                    {
+                        "value": "variant_name",
+                        "label": "Variant Name",
+                        "checked": true
+                    },)
+                this.moduleName = InventoryModuleName.variant;
+
+            }
             if (this.isReportLoaded) {
                 this.getReport(true);
             }
@@ -207,16 +206,18 @@ export class ReportsComponent implements OnInit {
                     this.stockReportRequest.totalItems = response.body.totalItems;
                     this.stockReportRequest.totalPages = response.body.totalPages;
                     this.stockReportRequest.count = response.body.count;
-                    this.stockReportRequest.from = dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
-                    this.stockReportRequest.to = dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
-                    this.fromDate = dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
-                    this.toDate = dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
-                    this.selectedDateRange = { startDate: dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT), endDate: dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT) };
-                    this.selectedDateRangeUi = dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
-                    if (this.todaySelected) {
-                        this.fromToDate = { from: response?.body?.fromDate, to: response?.body?.toDate };
-                    } else {
-                        this.fromToDate = null;
+                    if (response?.body?.fromDate && response?.body?.toDate) {
+                        this.stockReportRequest.from = dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                        this.stockReportRequest.to = dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                        this.fromDate = dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                        this.toDate = dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                        this.selectedDateRange = { startDate: dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT), endDate: dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT) };
+                        this.selectedDateRangeUi = dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
+                        if (this.todaySelected) {
+                            this.fromToDate = { from: response?.body?.fromDate, to: response?.body?.toDate };
+                        } else {
+                            this.fromToDate = null;
+                        }
                     }
                 } else {
                     this.toaster.errorToast(response?.message);
@@ -238,17 +239,18 @@ export class ReportsComponent implements OnInit {
                     this.stockReportRequest.totalItems = response.body.totalItems;
                     this.stockReportRequest.totalPages = response.body.totalPages;
                     this.stockReportRequest.count = response.body.count;
-                    this.stockReportRequest.from = dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
-                    this.stockReportRequest.to = dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
-                    this.fromDate = dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
-                    this.toDate = dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
-                    this.selectedDateRange = { startDate: dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT), endDate: dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT) };
-                    this.selectedDateRangeUi = dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
-
-                    if (this.todaySelected) {
-                        this.fromToDate = { from: response?.body?.fromDate, to: response?.body?.toDate };
-                    } else {
-                        this.fromToDate = null;
+                    if (response?.body?.fromDate && response?.body?.toDate) {
+                        this.stockReportRequest.from = dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                        this.stockReportRequest.to = dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                        this.fromDate = dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                        this.toDate = dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                        this.selectedDateRange = { startDate: dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT), endDate: dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT) };
+                        this.selectedDateRangeUi = dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
+                        if (this.todaySelected) {
+                            this.fromToDate = { from: response?.body?.fromDate, to: response?.body?.toDate };
+                        } else {
+                            this.fromToDate = null;
+                        }
                     }
                 } else {
                     this.toaster.errorToast(response?.message);
@@ -270,17 +272,19 @@ export class ReportsComponent implements OnInit {
                     this.stockReportRequest.totalItems = response.body.totalItems;
                     this.stockReportRequest.totalPages = response.body.totalPages;
                     this.stockReportRequest.count = response.body.count;
-                    this.stockReportRequest.from = dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
-                    this.stockReportRequest.to = dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
-                    this.fromDate = dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
-                    this.toDate = dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
-                    this.selectedDateRange = { startDate: dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT), endDate: dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT) };
-                    this.selectedDateRangeUi = dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
+                    if (response?.body?.fromDate && response?.body?.toDate) {
+                        this.stockReportRequest.from = dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                        this.stockReportRequest.to = dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                        this.fromDate = dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                        this.toDate = dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                        this.selectedDateRange = { startDate: dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT), endDate: dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT) };
+                        this.selectedDateRangeUi = dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
 
-                    if (this.todaySelected) {
-                        this.fromToDate = { from: response?.body?.fromDate, to: response?.body?.toDate };
-                    } else {
-                        this.fromToDate = null;
+                        if (this.todaySelected) {
+                            this.fromToDate = { from: response?.body?.fromDate, to: response?.body?.toDate };
+                        } else {
+                            this.fromToDate = null;
+                        }
                     }
                 } else {
                     this.toaster.errorToast(response?.message);
@@ -355,6 +359,8 @@ export class ReportsComponent implements OnInit {
      * @memberof InventoryTransactionListComponent
      */
     public getSelectedFilters(event: any): void {
+        console.log(event);
+
         this.stockReportRequest = event?.stockReportRequest;
         this.balanceStockReportRequest = event?.balanceStockReportRequest;
         this.todaySelected = event?.todaySelected;

@@ -3,7 +3,7 @@
     <report-filters
         [localeData]="localeData"
         [commonLocaleData]="commonLocaleData"
-        [moduleName]="'INVENTORY_TRANSACTION_REPORT'"
+        [moduleName]="moduleName"
         [customiseColumns]="customiseColumns"
         [fromToDate]="fromToDate"
         [stockReportRequest]="stockReportRequest"
@@ -305,7 +305,7 @@
                 </div>
             </div>
         </div>
-
+        {{ displayedColumns | json }}
         <div class="row" *ngIf="isDataAvailable">
             <div class="col-12 horizontal-padding">
                 <div class="table-responsive inventory-report-table" *ngIf="displayedColumns?.length">
@@ -328,6 +328,30 @@
                                 (click)="getReportsByReportType($event, element)"
                             >
                                 {{ element?.stockGroup?.name ?? "-" }}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="stock_name">
+                            <th class="stock-column" mat-header-cell *matHeaderCellDef>Stock Name</th>
+                            <td
+                                data-title="Date"
+                                class="text-left word-wrap cursor-pointer"
+                                mat-cell
+                                *matCellDef="let element"
+                                (click)="getReportsByReportType($event, element)"
+                            >
+                                {{ element?.stock?.name ?? "-" }}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="variant_name">
+                            <th class="variant-column" mat-header-cell *matHeaderCellDef>Variant Name</th>
+                            <td
+                                data-title="Date"
+                                class="text-left word-wrap cursor-pointer"
+                                mat-cell
+                                *matCellDef="let element"
+                                (click)="getReportsByReportType($event, element)"
+                            >
+                                {{ element?.variant?.name ?? "-" }}
                             </td>
                         </ng-container>
                         <ng-container matColumnDef="opening_quantity">

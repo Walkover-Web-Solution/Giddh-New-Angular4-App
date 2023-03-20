@@ -177,7 +177,6 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
         });
 
         this.getBranchWiseWarehouse();
-        this.getReportColumns();
 
         this.branchesDropdown.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(search => {
             let branchesClone = cloneDeep(this.allBranches);
@@ -214,7 +213,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ReportFiltersComponent
      */
     public ngOnChanges(changes: SimpleChanges): void {
-        if (changes?.fromToDate?.currentValue) {
+        if (changes?.fromToDate?.currentValue?.from) {
             this.selectedDateRange = { startDate: dayjs(changes?.fromToDate?.currentValue?.from, GIDDH_DATE_FORMAT), endDate: dayjs(changes?.fromToDate?.currentValue?.to, GIDDH_DATE_FORMAT) };
             this.selectedDateRangeUi = dayjs(changes?.fromToDate?.currentValue?.from, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(changes?.fromToDate?.currentValue?.to, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
             this.fromDate = dayjs(changes?.fromToDate?.currentValue?.from, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
@@ -223,6 +222,9 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
             this.stockReportRequest.to = this.toDate;
             this.balanceStockReportRequest.from = this.fromDate;
             this.balanceStockReportRequest.to = this.toDate;
+        }
+        if (changes?.searchPage) {
+            this.getReportColumns();
         }
         this.isFilterActive();
         this.searchInventory();
@@ -660,6 +662,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
                         this.fieldFilteredOptions = this.fieldFilteredOptions.concat(response.body.results);
                     } else {
                         this.fieldFilteredOptions = response.body.results;
+
                     }
                     this.searchRequest.totalItems = response.body.totalItems;
                     this.searchRequest.totalPages = response.body.totalPages;
