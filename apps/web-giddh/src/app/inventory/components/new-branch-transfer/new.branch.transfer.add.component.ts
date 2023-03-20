@@ -256,8 +256,8 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                     taxNumber: null,
                     address: null,
                     stockDetails: {
+                        stockUnitUniqueName: null,
                         stockUnit: null,
-                        stockUnitCode: null,
                         amount: null,
                         rate: null,
                         quantity: null
@@ -273,8 +273,8 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                     taxNumber: null,
                     address: null,
                     stockDetails: {
+                        stockUnitUniqueName: null,
                         stockUnit: null,
-                        stockUnitCode: null,
                         amount: null,
                         rate: null,
                         quantity: null
@@ -289,8 +289,8 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                 skuCode: null,
                 uniqueName: null,
                 stockDetails: {
+                    stockUnitUniqueName: null,
                     stockUnit: null,
-                    stockUnitCode: null,
                     amount: null,
                     rate: null,
                     quantity: null
@@ -334,8 +334,8 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                         this.branchTransfer.sources[index].warehouse.address = "";
                         if (!this.branchTransfer.sources[index].warehouse.stockDetails) {
                             this.branchTransfer.sources[index].warehouse.stockDetails = {
+                                stockUnitUniqueName: null,
                                 stockUnit: null,
-                                stockUnitCode: null,
                                 amount: null,
                                 rate: null,
                                 quantity: null
@@ -357,8 +357,8 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
 
                         if (!this.branchTransfer.destinations[index].warehouse.stockDetails) {
                             this.branchTransfer.destinations[index].warehouse.stockDetails = {
+                                stockUnitUniqueName: null,
                                 stockUnit: null,
-                                stockUnitCode: null,
                                 amount: null,
                                 rate: null,
                                 quantity: null
@@ -424,8 +424,8 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                 taxNumber: null,
                 address: null,
                 stockDetails: {
+                    stockUnitUniqueName: (this.branchTransfer.products[0].stockDetails.stockUnitUniqueName) ? this.branchTransfer.products[0].stockDetails.stockUnitUniqueName : null,
                     stockUnit: (this.branchTransfer.products[0].stockDetails.stockUnit) ? this.branchTransfer.products[0].stockDetails.stockUnit : null,
-                    stockUnitCode: (this.branchTransfer.products[0].stockDetails.stockUnitCode) ? this.branchTransfer.products[0].stockDetails.stockUnitCode : null,
                     amount: null,
                     rate: null,
                     quantity: null
@@ -447,8 +447,8 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                 taxNumber: null,
                 address: null,
                 stockDetails: {
+                    stockUnitUniqueName: (this.branchTransfer.products[0].stockDetails.stockUnitUniqueName) ? this.branchTransfer.products[0].stockDetails.stockUnitUniqueName : null,
                     stockUnit: (this.branchTransfer.products[0].stockDetails.stockUnit) ? this.branchTransfer.products[0].stockDetails.stockUnit : null,
-                    stockUnitCode: (this.branchTransfer.products[0].stockDetails.stockUnitCode) ? this.branchTransfer.products[0].stockDetails.stockUnitCode : null,
                     amount: null,
                     rate: null,
                     quantity: null
@@ -469,8 +469,8 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
             skuCode: null,
             uniqueName: null,
             stockDetails: {
+                stockUnitUniqueName: null,
                 stockUnit: null,
-                stockUnitCode: null,
                 amount: null,
                 rate: null,
                 quantity: null
@@ -589,19 +589,19 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     public selectProduct(event, product): void {
         if (event && event.additional) {
             product.name = event.additional.name;
-            product.stockDetails.stockUnitCode = event.additional.stockUnit.code;
-            product.stockDetails.stockUnit = event.additional.stockUnit.uniqueName;
+            product.stockDetails.stockUnit = event.additional.stockUnit.code;
+            product.stockDetails.stockUnitUniqueName = event.additional.stockUnit.uniqueName;
             product.stockDetails.rate = 0;
 
             this.inventoryService.GetStockDetails(event.additional.stockGroup?.uniqueName, event.value).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
                 if (response?.status === 'success') {
                     product.stockDetails.rate = response?.body?.purchaseAccountDetails?.unitRates[0]?.rate;
                     if (!response?.body?.purchaseAccountDetails) {
-                        product.stockDetails.stockUnit = response?.body?.stockUnit?.uniqueName;
-                        product.stockDetails.stockUnitCode = response?.body?.stockUnit?.code;
+                        product.stockDetails.stockUnitUniqueName = response?.body?.stockUnit?.uniqueName;
+                        product.stockDetails.stockUnit = response?.body?.stockUnit?.code;
                     } else {
-                        product.stockDetails.stockUnit = response?.body?.purchaseAccountDetails?.unitRates[0]?.stockUnitUniqueName;
-                        product.stockDetails.stockUnitCode = response?.body?.purchaseAccountDetails?.unitRates[0]?.stockUnitCode;
+                        product.stockDetails.stockUnitUniqueName = response?.body?.purchaseAccountDetails?.unitRates[0]?.stockUnitUniqueName;
+                        product.stockDetails.stockUnit = response?.body?.purchaseAccountDetails?.unitRates[0]?.stockUnitCode;
                     }
                     this.calculateRowTotal(product);
                 }
@@ -635,10 +635,10 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
             }
 
             if (this.transferType === 'senders') {
-                this.branchTransfer.destinations[0].warehouse.stockDetails.stockUnitCode = event.additional.stockUnit.code;
-                this.branchTransfer.destinations[0].warehouse.stockDetails.stockUnit = event.additional.stockUnit.uniqueName;
-                this.branchTransfer.sources[0].warehouse.stockDetails.stockUnitCode = event.additional.stockUnit.code;
-                this.branchTransfer.sources[0].warehouse.stockDetails.stockUnit = event.additional.stockUnit.uniqueName;
+                this.branchTransfer.destinations[0].warehouse.stockDetails.stockUnit = event.additional.stockUnit.code;
+                this.branchTransfer.destinations[0].warehouse.stockDetails.stockUnitUniqueName = event.additional.stockUnit.uniqueName;
+                this.branchTransfer.sources[0].warehouse.stockDetails.stockUnit = event.additional.stockUnit.code;
+                this.branchTransfer.sources[0].warehouse.stockDetails.stockUnitUniqueName = event.additional.stockUnit.uniqueName;
 
                 this.focusDefaultSource();
             }

@@ -856,12 +856,12 @@
                                                 decimalDigitsDirective
                                                 [(ngModel)]="product.stockDetails.quantity"
                                             />
-                                            {{ product.stockDetails.stockUnitCode }}
+                                            {{ product.stockDetails.stockUnit }}
                                         </div>
                                         <div *ngIf="activeRow !== i">
                                             <div class="text-right">
                                                 {{ product.stockDetails.quantity }}
-                                                {{ product.stockDetails.stockUnitCode }}
+                                                {{ product.stockDetails.stockUnit }}
                                             </div>
                                         </div>
                                     </td>
