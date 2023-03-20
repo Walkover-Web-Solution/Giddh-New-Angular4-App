@@ -195,6 +195,7 @@ export class ReportsComponent implements OnInit {
                     this.changeDetection.detectChanges();
                 });
             } else {
+                this.reportType = (response?.reportType)?.toUpperCase();
                 this.reportUniqueName = response?.uniqueName;
                 this.customiseColumns = cloneDeep(INVENTORY_COMMON_COLUMNS);
                 if (this.reportType === InventoryReportType.group.toUpperCase()) {
@@ -202,7 +203,7 @@ export class ReportsComponent implements OnInit {
                         "value": "group_name",
                         "label": "Group Name",
                         "checked": true
-                    })
+                    });
                     this.moduleName = InventoryModuleName.group;
                 }
                 if (this.reportType === InventoryReportType.stock.toUpperCase()) {
@@ -239,7 +240,6 @@ export class ReportsComponent implements OnInit {
                         })
                     this.moduleName = InventoryModuleName.variant;
                 }
-                this.reportType = (response?.reportType)?.toUpperCase();
 
                 if (this.isReportLoaded) {
                     this.getReport(true);
@@ -271,8 +271,10 @@ export class ReportsComponent implements OnInit {
         this.isLoading = true;
         this.isReportLoaded = true;
         if (this.reportType === InventoryReportType.group) {
-            this.stockReportRequest.stockGroupUniqueNames = this.reportUniqueName ? [this.reportUniqueName] : [];
-            this.balanceStockReportRequest.stockGroupUniqueNames = this.reportUniqueName ? [this.reportUniqueName] : [];
+            if (this.reportUniqueName) {
+                this.stockReportRequest.stockGroupUniqueNames = [this.reportUniqueName];
+                this.balanceStockReportRequest.stockGroupUniqueNames = [this.reportUniqueName];
+            }
 
             let stockReportRequest = this.getStockReportRequestObject();
 
@@ -309,8 +311,11 @@ export class ReportsComponent implements OnInit {
             });
         }
         if (this.reportType === InventoryReportType.stock) {
-            this.stockReportRequest.stockGroupUniqueNames = this.reportUniqueName ? [this.reportUniqueName] : [];
-            this.balanceStockReportRequest.stockGroupUniqueNames = this.reportUniqueName ? [this.reportUniqueName] : [];
+
+            if (this.reportUniqueName) {
+                this.stockReportRequest.stockGroupUniqueNames = [this.reportUniqueName];
+                this.balanceStockReportRequest.stockGroupUniqueNames = [this.reportUniqueName];
+            }
 
             let stockReportRequest = this.getStockReportRequestObject();
 
@@ -345,8 +350,10 @@ export class ReportsComponent implements OnInit {
             });
         }
         if (this.reportType === InventoryReportType.variant) {
-            this.stockReportRequest.stockUniqueNames = this.reportUniqueName ? [this.reportUniqueName] : [];
-            this.balanceStockReportRequest.stockUniqueNames = this.reportUniqueName ? [this.reportUniqueName] : [];
+            if (this.reportUniqueName) {
+                this.stockReportRequest.stockGroupUniqueNames = [this.reportUniqueName];
+                this.balanceStockReportRequest.stockGroupUniqueNames = [this.reportUniqueName];
+            }
 
             let stockReportRequest = this.getStockReportRequestObject();
 
@@ -456,7 +463,6 @@ export class ReportsComponent implements OnInit {
             this.balanceStockReportRequest = event?.balanceStockReportRequest;
             this.todaySelected = event?.todaySelected;
             this.showClearFilter = event?.showClearFilter;
-            console.log(event);
         } else {
             this.initialLoad = false;
         }
