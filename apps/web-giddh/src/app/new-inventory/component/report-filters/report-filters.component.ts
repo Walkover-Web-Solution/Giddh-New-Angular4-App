@@ -145,7 +145,6 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ReportFiltersComponent
      */
     public ngOnInit(): void {
-
         this.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe(dateObj => {
             if (dateObj) {
                 let universalDate = _.cloneDeep(dateObj);
@@ -297,22 +296,14 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
-     * This hook will use for on destroyed component
-     *
-     * @memberof ReportFiltersComponent
-     */
-    public ngOnDestroy() {
-        this.destroyed$.next(true);
-        this.destroyed$.complete();
-    }
-
-    /**
      * Opens the advance search modal
      *
      * @memberof ReportFiltersComponent
      */
     public openModal(): void {
         this.showAdvanceSearchModal = true;
+        this.stockReportRequest.from = this.selectedDateRange.startDate;
+        this.stockReportRequest.to = this.selectedDateRange.startDate;
         let dialogRef = this.dialog?.open(NewInventoryAdvanceSearch, {
             panelClass: 'advance-search-container',
             data: {
@@ -528,7 +519,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
             this.balanceStockReportRequest.to = this.toDate;
         }
         this.emitFilters();
-        this.changeDetection.detach();
+        this.changeDetection.detectChanges();
     }
 
     /**
@@ -567,6 +558,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
         const selectOptionValue = option?.option?.value;
         if (option?.option?.value?.type === 'STOCK GROUP') {
             this.stockReportRequest.stockGroupUniqueNames = [option?.option?.value?.uniqueName];
+
         } else if (option?.option?.value?.type === 'STOCK') {
             const findStockColumnCheck = this.customiseColumns?.find(value => value?.value === "stockName");
             if (this.stockReportRequest.stockUniqueNames?.length === 0 && findStockColumnCheck?.checked) {
@@ -674,5 +666,15 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
                 this.changeDetection.detectChanges();
             });
         }
+    }
+
+    /**
+    * This hook will use for on destroyed component
+    *
+    * @memberof ReportFiltersComponent
+    */
+    public ngOnDestroy() {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 }
