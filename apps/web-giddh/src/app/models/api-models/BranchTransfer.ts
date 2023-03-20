@@ -93,11 +93,11 @@ export class NewBranchTransferSourceDestination {
 }
 
 export class NewBranchTransferProductStockDetails {
-    public stockUnit: any;
+    public stockUnit?: any;
     public amount: any;
     public rate: any;
     public quantity: any;
-    public stockUnitCode?: any;
+    public stockUnitUniqueName?: any;
 }
 
 export class NewBranchTransferProduct {
