@@ -123,7 +123,7 @@ export class ReportsComponent implements OnInit {
             }
         });
 
-        this.currentUrl = this.router.url?.split('?')[0];
+        this.currentUrl = this.router.url;
 
         this.store.pipe(select(state => state.session.filters), takeUntil(this.destroyed$)).subscribe(response => {
             if (response && !this.storeFilters?.length) {
@@ -162,7 +162,7 @@ export class ReportsComponent implements OnInit {
             }
         });
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            this.currentUrl = this.router.url?.split('?')[0];
+            this.currentUrl = this.router.url;
             if (this.reportType && (response?.reportType)?.toUpperCase() !== this.reportType) {
                 this.reportType = (response?.reportType)?.toUpperCase();
                 this.showContent = false;
