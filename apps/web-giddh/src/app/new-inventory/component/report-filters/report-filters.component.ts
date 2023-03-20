@@ -44,6 +44,9 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public balanceStockReportRequest: BalanceStockTransactionReportRequest = new BalanceStockTransactionReportRequest();
     /** Holds report type */
     @Input() public searchPage: string = "";
+    /** Hold advance search modal response */
+    @Input() public advanceSearchModalResponse: any = null;
+    @Input() public pullUniversalDate: boolean = true;
 
     /** Emits the selected filters */
     @Output() public filters: EventEmitter<any> = new EventEmitter();
@@ -68,8 +71,6 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Stock Transactional Object */
     public searchRequest: SearchStockTransactionReportRequest = new SearchStockTransactionReportRequest();
-    /** Hold advance search modal response */
-    public advanceSearchModalResponse: object = null;
     /** This will store universalDate */
     public universalDate: any;
     /** Universal date observer */
@@ -147,31 +148,38 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     public ngOnInit(): void {
         this.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe(dateObj => {
             if (dateObj) {
-                let universalDate = _.cloneDeep(dateObj);
-                this.store.pipe(select(state => state.session.todaySelected), take(1)).subscribe(response => {
-                    this.todaySelected = response;
-                    if (universalDate && !this.todaySelected) {
-                        this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
-                        this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-                        this.fromDate = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);
-                        this.toDate = dayjs(universalDate[1]).format(GIDDH_DATE_FORMAT);
-                        this.stockReportRequest.from = this.fromDate;
-                        this.stockReportRequest.to = this.toDate;
-                        this.balanceStockReportRequest.from = this.fromDate;
-                        this.balanceStockReportRequest.to = this.toDate;
-                    } else if (this.todaySelected) {
-                        this.selectedDateRange = { startDate: dayjs(), endDate: dayjs() };
-                        this.selectedDateRangeUi = dayjs().format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs().format(GIDDH_NEW_DATE_FORMAT_UI);
-                        this.stockReportRequest.from = "";
-                        this.stockReportRequest.to = "";
-                        this.balanceStockReportRequest.from = "";
-                        this.balanceStockReportRequest.to = "";
-                    }
+                this.universalDate = _.cloneDeep(dateObj);
+                if (this.pullUniversalDate) {
+                    this.store.pipe(select(state => state.session.todaySelected), take(1)).subscribe(response => {
+                        this.todaySelected = response;
+                        if (this.universalDate && !this.todaySelected) {
+                            this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
+                            this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                            this.fromDate = dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
+                            this.toDate = dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
+                            this.stockReportRequest.from = this.fromDate;
+                            this.stockReportRequest.to = this.toDate;
+                            this.balanceStockReportRequest.from = this.fromDate;
+                            this.balanceStockReportRequest.to = this.toDate;
+                        } else if (this.todaySelected) {
+                            this.selectedDateRange = { startDate: dayjs(), endDate: dayjs() };
+                            this.selectedDateRangeUi = dayjs().format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs().format(GIDDH_NEW_DATE_FORMAT_UI);
+                            this.stockReportRequest.from = "";
+                            this.stockReportRequest.to = "";
+                            this.balanceStockReportRequest.from = "";
+                            this.balanceStockReportRequest.to = "";
+                        }
+                        this.stockReportRequest.page = 1;
+                        setTimeout(() => {
+                            this.emitFilters();
+                        }, 100);
+                    });
+                } else {
                     this.stockReportRequest.page = 1;
                     setTimeout(() => {
                         this.emitFilters();
                     }, 100);
-                });
+                }
             }
         });
 
@@ -340,7 +348,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ReportFiltersComponent
      */
     private emitFilters(): void {
-        this.filters.emit({ stockReportRequest: this.stockReportRequest, balanceStockReportRequest: this.balanceStockReportRequest, displayedColumns: this.displayedColumns, todaySelected: this.todaySelected, showClearFilter: this.showClearFilter });
+        this.filters.emit({ stockReportRequest: this.stockReportRequest, balanceStockReportRequest: this.balanceStockReportRequest, displayedColumns: this.displayedColumns, todaySelected: this.todaySelected, showClearFilter: this.showClearFilter, advanceSearchModalResponse: this.advanceSearchModalResponse });
     }
 
     /**
@@ -449,7 +457,8 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ReportFiltersComponent
      */
     public getBranches(apiCall: boolean = true): void {
-        this.selectedWarehouse = [];
+        this.selectedWarehouse = this.stockReportRequest?.warehouseUniqueNames || [];
+        this.selectedBranch = this.stockReportRequest?.branchUniqueNames || [];
         this.allWarehouses = [];
         if (!this.isCompany) {
             let currentBranch = this.allBranches?.filter(branch => branch?.uniqueName === this.generalService.currentBranchUniqueName);

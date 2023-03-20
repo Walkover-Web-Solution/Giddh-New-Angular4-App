@@ -1,5 +1,5 @@
 <!--new inventory header-->
-<div class="transaction-report-wrapper">
+<div class="transaction-report-wrapper" *ngIf="showContent">
     <report-filters
         [localeData]="localeData"
         [commonLocaleData]="commonLocaleData"
@@ -8,6 +8,8 @@
         [fromToDate]="fromToDate"
         [stockReportRequest]="stockReportRequest"
         [balanceStockReportRequest]="balanceStockReportRequest"
+        [advanceSearchModalResponse]="advanceSearchModalResponse"
+        [pullUniversalDate]="pullUniversalDate"
         (filters)="getSelectedFilters($event)"
         (resetFilters)="resetFilter()"
         [searchPage]="reportType"
