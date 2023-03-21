@@ -1,11 +1,10 @@
 import { takeUntil } from 'rxjs/operators';
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
-import { Store, select } from '@ngrx/store';
-import { AppState } from '../../../store';
-import { Observable, ReplaySubject } from 'rxjs';
+import { ReplaySubject } from 'rxjs';
 import { INameUniqueName } from '../../../models/api-models/Inventory';
-import { IDiscountList, LedgerDiscountClass } from '../../../models/api-models/SettingsDiscount';
+import { LedgerDiscountClass } from '../../../models/api-models/SettingsDiscount';
 import { SettingsDiscountService } from '../../../services/settings.discount.service';
+import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
 
 export class UpdateLedgerDiscountData {
     public particular: INameUniqueName = { name: '', uniqueName: '' };
@@ -25,7 +24,7 @@ export class UpdateLedgerDiscountComponent implements OnInit, OnChanges, OnDestr
     @Input() public ledgerAmount: number = 0;
     @Output() public discountTotalUpdated: EventEmitter<number> = new EventEmitter();
     @Output() public hideOtherPopups: EventEmitter<boolean> = new EventEmitter<boolean>();
-
+    @Input() public giddhBalanceDecimalPlaces: number = 2;
     @Input() public discountMenu: boolean;
     @Input() public maskInput: string;
     @Input() public prefixInput: string;
@@ -179,8 +178,8 @@ export class UpdateLedgerDiscountComponent implements OnInit, OnChanges, OnDestr
                 return Number(cv.discountValue) ? Number(pv) + Number(cv.discountValue) : Number(pv);
             }, 0) || 0;
 
-        let perFromAmount = Math.round(((percentageListTotal * (this.ledgerAmount || 0)) / 100) * 100) / 100;
-        return perFromAmount + Math.round(fixedListTotal * 100) / 100;
+        let perFromAmount = (((percentageListTotal * (this.ledgerAmount || 0)) / 100) * 100) / 100;
+        return giddhRoundOff((perFromAmount + (fixedListTotal * 100) / 100), this.giddhBalanceDecimalPlaces);
     }
 
     public trackByFn(index) {
