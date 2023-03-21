@@ -16,6 +16,8 @@ import { ToasterService } from "../../../services/toaster.service";
 import { CdkVirtualScrollViewport } from "@angular/cdk/scrolling";
 import { giddhRoundOff } from "../../../shared/helpers/helperFunctions";
 import { ReportFiltersComponent } from "../report-filters/report-filters.component";
+import { ActivatedRoute } from "@angular/router";
+import { InventoryModuleName, InventoryReportType } from "../../inventory.enum";
 
 @Component({
     selector: "inventory-transaction-list",
@@ -189,12 +191,21 @@ export class InventoryTransactionListComponent implements OnInit {
     public todaySelected: boolean = false;
     /** Holds from/to date */
     public fromToDate: any = {};
+    /** Holds module name */
+    public moduleName = '';
+    /** Holds report type */
+    public reportType: string = '';
+    /** Holds report unique name */
+    public reportUniqueName: string = '';
+    /** True  if report is loaded */
+    public isReportLoaded: boolean = false;
 
     constructor(
         private generalService: GeneralService,
         public dialog: MatDialog,
         private changeDetection: ChangeDetectorRef,
         private inventoryService: InventoryService,
+        public route: ActivatedRoute,
         private toaster: ToasterService,
         private store: Store<AppState>) {
         this.store.pipe(select(state => state.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
@@ -231,6 +242,19 @@ export class InventoryTransactionListComponent implements OnInit {
                 this.activeCompany = activeCompany;
             }
         });
+
+        this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.reportType = 'TRANSACTION';
+                if (this.reportType === InventoryReportType.transaction.toUpperCase()) {
+                    this.moduleName = InventoryModuleName.transaction;
+                    this.reportUniqueName = response?.uniqueName;
+                    if (this.isReportLoaded) {
+                        this.getStockTransactionalReport(true);
+                    }
+                }
+            }
+        });
     }
 
     /**
@@ -244,7 +268,11 @@ export class InventoryTransactionListComponent implements OnInit {
     public getStockTransactionalReport(fetchBalance: boolean = true): void {
         this.dataSource = [];
         this.isLoading = true;
-
+        this.isReportLoaded = true;
+        if (this.reportUniqueName) {
+            this.stockReportRequest.variantUniqueNames = [this.reportUniqueName];
+            this.balanceStockReportRequest.variantUniqueNames = [this.reportUniqueName];
+        }
         this.inventoryService.getStockTransactionReport(cloneDeep(this.stockReportRequest)).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.isLoading = false;
             if (response && response.body && response.status === 'success') {

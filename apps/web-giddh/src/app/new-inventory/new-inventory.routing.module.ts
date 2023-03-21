@@ -41,11 +41,11 @@ const routes: Routes = [
                 component: InventoryComboListComponent,
             },
             {
-                path: "reports/transactions",
+                path: "reports/transaction",
                 component: InventoryTransactionListComponent,
             },
             {
-                path: "reports/transactions/:variantUniqueName",
+                path: "reports/transaction/:uniqueName",
                 component: InventoryTransactionListComponent,
             },
             {

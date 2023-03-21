@@ -1,7 +1,14 @@
 export enum InventoryReportType {
     group = 'GROUP',
     stock = 'STOCK',
-    variant = 'VARIANT'
+    variant = 'VARIANT',
+    transaction = 'TRANSACTION'
+}
+export enum InventoryModuleName {
+    group = 'GROUP_WISE_REPORT',
+    stock = 'ITEM_WISE_REPORT',
+    variant = 'VARIANT_WISE_REPORT',
+    transaction = 'INVENTORY_TRANSACTION_REPORT'
 }
 export const INVENTORY_COMMON_COLUMNS = [
     {
@@ -45,8 +52,3 @@ export const INVENTORY_COMMON_COLUMNS = [
         "checked": true
     }
 ];
-export enum InventoryModuleName {
-    group = 'CUSTOMER',
-    stock = 'VENDOR',
-    variant = 'SALES_REGISTER'
-}

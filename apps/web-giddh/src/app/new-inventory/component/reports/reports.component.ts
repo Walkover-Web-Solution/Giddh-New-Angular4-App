@@ -179,7 +179,6 @@ export class ReportsComponent implements OnInit {
                     this.todaySelected = cloneDeep(this.storeFilters[this.currentUrl]?.todaySelected);
                     this.showClearFilter = cloneDeep(this.storeFilters[this.currentUrl]?.showClearFilter);
                     this.advanceSearchModalResponse = cloneDeep(this.storeFilters[this.currentUrl]?.advanceSearchModalResponse);
-
                     this.fromDate = dayjs(this.stockReportRequest?.from, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
                     this.toDate = dayjs(this.stockReportRequest?.to, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
                     this.stockReportRequest.from = this.fromDate;
@@ -437,16 +436,6 @@ export class ReportsComponent implements OnInit {
     }
 
     /**
-     * This hook will use for on destroyed component
-     *
-     * @memberof InventoryTransactionListComponent
-     */
-    public ngOnDestroy() {
-        this.destroyed$.next(true);
-        this.destroyed$.complete();
-    }
-
-    /**
      * Gets the data output by report filters
      *
      * @param {*} event
@@ -513,7 +502,17 @@ export class ReportsComponent implements OnInit {
         } else if (this.reportType === InventoryReportType.stock) {
             this.router.navigate(['/pages', 'new-inventory', 'reports', 'variant', element?.stock?.uniqueName]);
         } else if (this.reportType === InventoryReportType.variant) {
-            this.router.navigate(['/pages', 'new-inventory', 'reports', 'transactions']);
+            this.router.navigate(['/pages', 'new-inventory', 'reports', 'transactions', element?.variant?.uniqueName]);
         }
+    }
+
+    /**
+    * This hook will use for on destroyed component
+    *
+    * @memberof InventoryTransactionListComponent
+    */
+    public ngOnDestroy() {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 }
