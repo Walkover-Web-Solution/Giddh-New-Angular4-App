@@ -146,7 +146,7 @@
                     (click)="gotoPage(node)"
                 >
                     <img src="{{ imgPath }}{{ node.icons }}" class="sidebar-menu-icons" alt="" />
-                    {{ node.name }}
+                    <h5>{{ node.name }}</h5>
                 </mat-tree-node>
                 <mat-tree-node
                     *matTreeNodeDef="let node; when: hasChild"
@@ -164,7 +164,7 @@
                         </span>
                     </button>
                     <img src="{{ imgPath }}{{ node.icons }}" class="sidebar-menu-icons" alt="" />
-                    {{ node.name }}
+                    <h5>{{ node.name }}</h5>
                 </mat-tree-node>
             </mat-tree>
         </div>

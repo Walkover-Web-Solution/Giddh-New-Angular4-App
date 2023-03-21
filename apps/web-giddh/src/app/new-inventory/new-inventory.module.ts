@@ -28,7 +28,7 @@ import { AdjustProductServiceComponent } from "./component/adjust-product-servic
 import { InventoryAdjustmentReasonAside } from "./component/inventory-adjustment-aside/inventory-adjustment-aside.component";
 import { InventoryAdjustmentBulkEntryComponent } from "./component/inventory-adjust-bulk-entry/inventory-adjust-bulk-entry.component";
 import { CreateNewInventoryComponent } from "./component/create-new-inventory-component/create-new-inventory.component";
-import { NewInventoryAdavanceSearch } from "./component/new-inventory-advance-search/new-inventory-advance-search.component";
+import { NewInventoryAdvanceSearch } from "./component/new-inventory-advance-search/new-inventory-advance-search.component";
 import { InventoryDashboardComponent } from "./component/inventory-dashboard/inventory-dashboard.component";
 import { InventoryActivityComponent } from "./component/inventory-dashboard/inventory-activity/inventory-activity.component";
 import { DashboardItemProductDetail } from "./component/inventory-dashboard/dashboard-item-product-detail/dashboard-item-product-detail.component";
@@ -61,6 +61,12 @@ import { GroupwiseComponent } from "./component/stock-group/group-wise/group-wis
 import { ItemWiseComponent } from "./component/stock-group/item-wise/item-wise.component";
 import { VariantWiseComponent } from "./component/variant-wise/variant-wise.component";
 import { NgxMatSelectSearchModule } from "ngx-mat-select-search";
+import { GiddhPageLoaderModule } from "../shared/giddh-page-loader/giddh-page-loader.module";
+import { PaginationModule } from "ngx-bootstrap/pagination";
+import { MatDialogModule } from "@angular/material/dialog";
+import { MatAutocompleteModule } from "@angular/material/autocomplete";
+import { MatTooltipModule } from "@angular/material/tooltip";
+import { ReportFiltersComponent } from "./component/report-filters/report-filters.component";
 
 @NgModule({
     declarations: [
@@ -88,7 +94,7 @@ import { NgxMatSelectSearchModule } from "ngx-mat-select-search";
         InventoryAdjustmentReasonAside,
         InventoryAdjustmentBulkEntryComponent,
         CreateNewInventoryComponent,
-        NewInventoryAdavanceSearch,
+        NewInventoryAdvanceSearch,
         InventoryDashboardComponent,
         InventoryActivityComponent,
         DashboardItemProductDetail,
@@ -101,7 +107,8 @@ import { NgxMatSelectSearchModule } from "ngx-mat-select-search";
         StockBalanceComponent,
         GroupwiseComponent,
         ItemWiseComponent,
-        VariantWiseComponent
+        VariantWiseComponent,
+        ReportFiltersComponent
     ],
     imports: [
         NewInventoryRoutingModule,
@@ -127,7 +134,12 @@ import { NgxMatSelectSearchModule } from "ngx-mat-select-search";
         MatSelectModule,
         InventorySidebarModule,
         StockCreateEditModule,
-        NgxMatSelectSearchModule
+        NgxMatSelectSearchModule,
+        GiddhPageLoaderModule,
+        PaginationModule,
+        MatDialogModule,
+        MatAutocompleteModule,
+        MatTooltipModule
     ],
     exports: [
         NewInventoryComponent,
@@ -155,7 +167,7 @@ import { NgxMatSelectSearchModule } from "ngx-mat-select-search";
         InventoryAdjustmentReasonAside,
         InventoryAdjustmentBulkEntryComponent,
         CreateNewInventoryComponent,
-        NewInventoryAdavanceSearch,
+        NewInventoryAdvanceSearch,
         InventoryDashboardComponent,
         InventoryActivityComponent,
         DashboardItemProductDetail,
@@ -163,7 +175,8 @@ import { NgxMatSelectSearchModule } from "ngx-mat-select-search";
         DashboardProfitStockList,
         DashboardPurchaseReport,
         DashboardSalesReport,
-        DashboardSellingReport
+        DashboardSellingReport,
+        ReportFiltersComponent
     ]
 })
 export class NewInventoryModule { }
