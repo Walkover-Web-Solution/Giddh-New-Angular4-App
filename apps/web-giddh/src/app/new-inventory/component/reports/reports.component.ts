@@ -163,6 +163,7 @@ export class ReportsComponent implements OnInit {
         });
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.currentUrl = this.router.url;
+            this.reportUniqueName = response?.uniqueName;
             if (this.reportType && (response?.reportType)?.toUpperCase() !== this.reportType) {
                 this.reportType = (response?.reportType)?.toUpperCase();
                 this.showContent = false;
@@ -195,7 +196,6 @@ export class ReportsComponent implements OnInit {
                 });
             } else {
                 this.reportType = (response?.reportType)?.toUpperCase();
-                this.reportUniqueName = response?.uniqueName;
                 this.customiseColumns = cloneDeep(INVENTORY_COMMON_COLUMNS);
                 if (this.reportType === InventoryReportType.group.toUpperCase()) {
                     this.customiseColumns.splice(0, 0, {
@@ -247,6 +247,13 @@ export class ReportsComponent implements OnInit {
         });
     }
 
+    /**
+     * This will use for get stock report request obj
+     *
+     * @private
+     * @return {*}  {*}
+     * @memberof ReportsComponent
+     */
     private getStockReportRequestObject(): any {
         let stockReportRequest = cloneDeep(this.stockReportRequest);
         stockReportRequest.stockGroups = undefined;
@@ -348,14 +355,15 @@ export class ReportsComponent implements OnInit {
                 this.changeDetection.detectChanges();
             });
         }
+
         if (this.reportType === InventoryReportType.variant) {
             if (this.reportUniqueName) {
-                this.stockReportRequest.stockGroupUniqueNames = [this.reportUniqueName];
-                this.balanceStockReportRequest.stockGroupUniqueNames = [this.reportUniqueName];
+                this.stockReportRequest.stockUniqueNames = [this.reportUniqueName];
+                this.balanceStockReportRequest.stockUniqueNames = [this.reportUniqueName];
             }
 
-            let stockReportRequest = this.getStockReportRequestObject();
 
+            let stockReportRequest = this.getStockReportRequestObject();
             this.inventoryService.getVariantWiseReport(cloneDeep(stockReportRequest)).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 this.isLoading = false;
                 if (response && response.body && response.status === 'success') {
@@ -502,7 +510,7 @@ export class ReportsComponent implements OnInit {
         } else if (this.reportType === InventoryReportType.stock) {
             this.router.navigate(['/pages', 'new-inventory', 'reports', 'variant', element?.stock?.uniqueName]);
         } else if (this.reportType === InventoryReportType.variant) {
-            this.router.navigate(['/pages', 'new-inventory', 'reports', 'transactions', element?.variant?.uniqueName]);
+            this.router.navigate(['/pages', 'new-inventory', 'reports', 'transaction', element?.variant?.uniqueName]);
         }
     }
 

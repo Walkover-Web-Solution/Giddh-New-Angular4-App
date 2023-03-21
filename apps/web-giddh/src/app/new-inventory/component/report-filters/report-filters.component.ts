@@ -17,6 +17,7 @@ import { ToasterService } from "../../../services/toaster.service";
 import { cloneDeep } from "../../../lodash-optimized";
 import { AppState } from "../../../store";
 import { select, Store } from "@ngrx/store";
+import { Location } from '@angular/common';
 
 @Component({
     selector: "report-filters",
@@ -46,8 +47,10 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public searchPage: string = "";
     /** Hold advance search modal response */
     @Input() public advanceSearchModalResponse: any = null;
+    /** False if pull unitversal date  */
     @Input() public pullUniversalDate: boolean = true;
-
+    /** Holds module name for customised columns */
+    @Input() public reportUniqueName: string = "";
     /** Emits the selected filters */
     @Output() public filters: EventEmitter<any> = new EventEmitter();
     /** Emits true if filters are reset */
@@ -56,7 +59,6 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     @Output() public isLoading: EventEmitter<boolean> = new EventEmitter();
     /** Emits the selected filters */
     @Output() public selectedColumns: EventEmitter<any> = new EventEmitter();
-
     /** True if show advance search model*/
     public showAdvanceSearchModal: boolean = false;
     /** This will use for instance of warehouses Dropdown */
@@ -127,9 +129,12 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     public todaySelected$: Observable<boolean> = observableOf(false);
     /** This will use for stock report displayed columns */
     public displayedColumns: string[] = [];
+    // True if  only single group in search API
+    public singleGroup: boolean = false;
 
     constructor(
         public dialog: MatDialog,
+        private location: Location,
         public modalService: BsModalService,
         private changeDetection: ChangeDetectorRef,
         private inventoryService: InventoryService,
@@ -233,18 +238,18 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
         if (changes?.searchPage) {
             this.getReportColumns();
         }
-        if(changes?.stockReportRequest?.currentValue) {
-            if(changes?.stockReportRequest?.currentValue?.stockGroups) {
+        if (changes?.stockReportRequest?.currentValue) {
+            if (changes?.stockReportRequest?.currentValue?.stockGroups) {
                 changes?.stockReportRequest?.currentValue?.stockGroups?.forEach(group => {
                     this.filtersChipList.push(group);
                 });
             }
-            if(changes?.stockReportRequest?.currentValue?.stocks) {
+            if (changes?.stockReportRequest?.currentValue?.stocks) {
                 changes?.stockReportRequest?.currentValue?.stocks?.forEach(stock => {
                     this.filtersChipList.push(stock);
                 });
             }
-            if(changes?.stockReportRequest?.currentValue?.variants) {
+            if (changes?.stockReportRequest?.currentValue?.variants) {
                 changes?.stockReportRequest?.currentValue?.variants?.forEach(variant => {
                     this.filtersChipList.push(variant);
                 });
@@ -474,8 +479,10 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ReportFiltersComponent
      */
     public getBranches(apiCall: boolean = true): void {
-        this.selectedWarehouse = this.stockReportRequest?.warehouseUniqueNames || [];
-        this.selectedBranch = this.stockReportRequest?.branchUniqueNames || [];
+        if (!this.pullUniversalDate) {
+            this.selectedBranch = this.stockReportRequest?.branchUniqueNames || [];
+            this.selectedWarehouse = this.stockReportRequest?.warehouseUniqueNames || [];
+        }
         this.allWarehouses = [];
         if (!this.isCompany) {
             let currentBranch = this.allBranches?.filter(branch => branch?.uniqueName === this.generalService.currentBranchUniqueName);
@@ -485,7 +492,6 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
                 this.allWarehouses = this.allWarehouses?.concat(branches?.warehouses);
             });
         }
-
         if (this.selectedBranch?.length === 0) {
             this.warehouses = this.allWarehouses;
         } else {
@@ -684,7 +690,15 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
                     if (loadMore) {
                         this.fieldFilteredOptions = this.fieldFilteredOptions.concat(response.body.results);
                     } else {
-                        this.fieldFilteredOptions = response.body.results;
+                        if (response?.body?.results?.length < 1) {
+                            this.singleGroup = true;
+                            response?.body?.results?.forEach(result => {
+                                this.stockReportRequest.stockGroupUniqueNames = [result?.uniqueName];
+                            });
+                            this.emitFilters();
+                        } else {
+                            this.fieldFilteredOptions = response.body.results;
+                        }
 
                     }
                     this.searchRequest.totalItems = response.body.totalItems;
@@ -697,6 +711,11 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
                 this.changeDetection.detectChanges();
             });
         }
+    }
+
+    public backToPreviousPage(): void {
+
+        this.location.back();
     }
 
     /**

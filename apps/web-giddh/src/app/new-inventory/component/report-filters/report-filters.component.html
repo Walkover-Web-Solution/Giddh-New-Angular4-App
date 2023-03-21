@@ -1,4 +1,7 @@
 <div class="inventory-filter-bar top-main-bar">
+    <div class="back-btnn" *ngIf="reportUniqueName">
+        <button mat-button class="report-back-button" (click)="backToPreviousPage()">Back</button>
+    </div>
     <div class="custom-datepicker-wrapper">
         <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
             <i class="icon-calender calendar-addon"></i>

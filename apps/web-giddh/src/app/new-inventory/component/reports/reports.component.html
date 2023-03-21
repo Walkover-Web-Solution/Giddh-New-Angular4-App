@@ -1,16 +1,11 @@
 <!--new inventory header-->
 <div class="transaction-report-wrapper" *ngIf="showContent">
-    <div class="back-btnn">
-        <button class="btn btn-default back-button" *ngIf="reportUniqueName">
-            <i class="icon-left back-left"></i>
-            {{ commonLocaleData?.app_back }}
-        </button>
-    </div>
     <report-filters
         [localeData]="localeData"
         [commonLocaleData]="commonLocaleData"
         [moduleName]="moduleName"
         [customiseColumns]="customiseColumns"
+        [reportUniqueName]="reportUniqueName"
         [fromToDate]="fromToDate"
         [stockReportRequest]="stockReportRequest"
         [balanceStockReportRequest]="balanceStockReportRequest"
