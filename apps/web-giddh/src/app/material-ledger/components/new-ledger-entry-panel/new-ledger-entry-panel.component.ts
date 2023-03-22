@@ -68,6 +68,7 @@ import { MatAccordion } from '@angular/material/expansion';
 import { AdjustmentUtilityService } from '../../../shared/advance-receipt-adjustment/services/adjustment-utility.service';
 import { SettingsDiscountService } from '../../../services/settings.discount.service';
 import { LedgerUtilityService } from '../../services/ledger-utility.service';
+import { InvoiceSetting } from '../../../models/interfaces/invoice.setting.interface';
 
 /** New ledger entries */
 const NEW_LEDGER_ENTRIES = [
@@ -242,7 +243,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     /** Stores the voucher API version of current company */
     public voucherApiVersion: 1 | 2;
     /** True if user itself checked the generate voucher  */
-    public manualGenerateVoucherChecked: boolean = false;
+    public manualGenerateVoucherChecked: boolean = true;
     /** Holds input to get invoice list request params */
     public invoiceListRequestParams: any = {};
     /** Round off amount */
@@ -261,6 +262,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public isAdjustmentPopupOpen = false;
     /** True if rcm popup is open */
     public isRcmPopupOpen = false;
+    /** Holds invoice settings */
+    public invoiceSettings: any = {};
 
     constructor(private store: Store<AppState>,
         private cdRef: ChangeDetectorRef,
@@ -280,6 +283,12 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.companyName$ = this.store.pipe(select(p => p.session.companyUniqueName), takeUntil(this.destroyed$));
         this.activeAccount$ = this.store.pipe(select(p => p.ledger.account), takeUntil(this.destroyed$));
         this.isLedgerCreateInProcess$ = this.store.pipe(select(p => p.ledger.ledgerCreateInProcess), takeUntil(this.destroyed$));
+
+        this.store.pipe(select(state => state.invoice.settings), takeUntil(this.destroyed$)).subscribe((settings: InvoiceSetting) => {
+            if (settings) {
+                this.invoiceSettings = settings;
+            }
+        });
     }
 
     public ngOnInit() {
@@ -649,7 +658,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             }
 
             this.calculateTotal();
-            this.calculateCompoundTotal();
         }
     }
 
@@ -669,7 +677,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         }
 
         this.calculateTotal();
-        this.calculateCompoundTotal();
     }
 
     public calculateAmount() {
@@ -742,8 +749,22 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         }
 
         if (this.voucherApiVersion === 2 && (this.blankLedger.voucherType === "sal" || this.blankLedger.voucherType === "pur" || this.blankLedger.voucherType === "credit note" || this.blankLedger.voucherType === "debit note")) {
-            this.calculatedRoundOff = Number(Math.round(this.blankLedger.compoundTotal) - this.blankLedger.compoundTotal);
-            this.blankLedger.compoundTotal = Number(((this.blankLedger.compoundTotal) + this.calculatedRoundOff).toFixed(2));
+            let applyRoundOff = true;
+            if (this.blankLedger.voucherType === "sal") {
+                applyRoundOff = this.invoiceSettings.invoiceSettings.salesRoundOff;
+            } else if (this.blankLedger.voucherType === "pur") {
+                applyRoundOff = this.invoiceSettings.invoiceSettings.purchaseRoundOff;
+            } else if (this.blankLedger.voucherType === VoucherTypeEnum.debitNote) {
+                applyRoundOff = this.invoiceSettings.invoiceSettings.debitNoteRoundOff;
+            } else if (this.blankLedger.voucherType === VoucherTypeEnum.creditNote) {
+                applyRoundOff = this.invoiceSettings.invoiceSettings.creditNoteRoundOff;
+            }
+            if (applyRoundOff) {
+                this.calculatedRoundOff = Number(Math.round(this.blankLedger.compoundTotal) - this.blankLedger.compoundTotal);
+                this.blankLedger.compoundTotal = Number(((this.blankLedger.compoundTotal) + this.calculatedRoundOff).toFixed(this.giddhBalanceDecimalPlaces));
+            } else {
+                this.calculatedRoundOff = 0;
+            }
         } else {
             this.calculatedRoundOff = 0;
         }
@@ -844,9 +865,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         });
     }
 
-    public unitChanged(stockUnitCode: string) {
-        let unit = this.currentTxn.selectedAccount.stock.unitRates.find(p => p.stockUnitCode === stockUnitCode);
-        this.currentTxn.inventory.unit = { code: unit.stockUnitCode, rate: unit.rate, stockUnitCode: unit.stockUnitCode };
+    public unitChanged(stockUnitUniqueName: string) {
+        let unit = this.currentTxn.selectedAccount.stock.unitRates.find(p => p.stockUnitUniqueName === stockUnitUniqueName);
+        this.currentTxn.inventory.unit = { code: unit.stockUnitCode, rate: unit.rate, stockUnitCode: unit.stockUnitCode, uniqueName: unit.stockUnitUniqueName };
         if (this.currentTxn.inventory.unit) {
             this.changePrice(this.currentTxn.inventory.unit.rate?.toString());
         }
@@ -1272,7 +1293,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         }
         if (this.currentTxn.inventory && this.currentTxn.inventory.unit && this.currentTxn.unitRate) {
             const stock = this.currentTxn.unitRate.find(rate => {
-                return rate.stockUnitCode === this.currentTxn.inventory.unit.code;
+                return rate.stockUnitUniqueName === this.currentTxn.inventory.unit.uniqueName;
             });
             const stockRate = stock ? stock.rate : 0;
             this.currentTxn.inventory.rate = Number((stockRate / this.blankLedger?.exchangeRate).toFixed(this.ratePrecision));
@@ -1295,7 +1316,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         if (!baseModel || !this.blankLedger?.exchangeRate) {
             return 0;
         }
-        return giddhRoundOff(baseModel * Number(this.blankLedger?.exchangeRate), (customDecimalPlaces) ? customDecimalPlaces : this.giddhBalanceDecimalPlaces);
+        return giddhRoundOff((baseModel * Number(this.blankLedger?.exchangeRate)), (customDecimalPlaces) ? customDecimalPlaces : this.giddhBalanceDecimalPlaces);
     }
 
     /**
@@ -1417,7 +1438,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         if (this.isAdjustReceiptSelected || this.isAdjustAdvanceReceiptSelected || this.isAdjustVoucherSelected) {
             this.prepareAdjustVoucherConfiguration();
             this.openAdjustPaymentModal();
-            this.blankLedger.generateInvoice = true;
         } else {
             this.removeAdjustment();
         }

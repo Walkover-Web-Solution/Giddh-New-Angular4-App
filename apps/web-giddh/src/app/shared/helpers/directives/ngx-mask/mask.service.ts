@@ -332,7 +332,7 @@ export class MaskService extends MaskApplierService {
 
     private _checkPrecision(separatorExpression: string, separatorValue: string): number | string {
         if (separatorExpression?.indexOf('2') > 0) {
-            return Number(separatorValue).toFixed(2);
+            return Number(separatorValue).toFixed(this.giddhDecimalPlaces || 2);
         }
         return Number(separatorValue);
     }

@@ -24,6 +24,7 @@ import { AppState } from '../../store';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { isEqual, orderBy } from '../../lodash-optimized';
 import { GeneralService } from '../../services/general.service';
+import { HIGH_RATE_FIELD_PRECISION } from '../../app.constant';
 
 export const TAX_CONTROL_VALUE_ACCESSOR: any = {
     provide: NG_VALUE_ACCESSOR,
@@ -82,7 +83,6 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
     @Output() public selectedTaxEvent: EventEmitter<string[]> = new EventEmitter();
     @Output() public hideOtherPopups: EventEmitter<boolean> = new EventEmitter<boolean>();
 
-
     @ViewChild('taxInputElement', { static: false }) public taxInputElement: ElementRef;
 
     public taxSum: number = 0;
@@ -90,6 +90,8 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
     public giddhBalanceDecimalPlaces: number = 2;
     private selectedTaxes: string[] = [];
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /* Amount should have precision up to 16 digits for better calculation */
+    public highPrecisionRate = HIGH_RATE_FIELD_PRECISION;
 
     constructor(
         private cdr: ChangeDetectorRef,

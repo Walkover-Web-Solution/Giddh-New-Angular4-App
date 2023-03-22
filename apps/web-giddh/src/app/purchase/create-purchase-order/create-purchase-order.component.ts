@@ -25,7 +25,7 @@ import { IForceClear, SalesTransactionItemClass, SalesEntryClass, IStockUnit, Sa
 import { TaxResponse } from '../../models/api-models/Company';
 import { IContentCommon } from '../../models/api-models/Invoice';
 import { giddhRoundOff } from '../../shared/helpers/helperFunctions';
-import { cloneDeep } from '../../lodash-optimized';
+import { cloneDeep, find } from '../../lodash-optimized';
 import * as dayjs from 'dayjs';
 import * as customParseFormat from 'dayjs/plugin/customParseFormat';
 dayjs.extend(customParseFormat);
@@ -365,16 +365,18 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     public translationLoaded: boolean = false;
     /** Length of entry description */
     public entryDescriptionLength: number = ENTRY_DESCRIPTION_LENGTH;
-    /** Stores the voucher API version of current company */
-    public voucherApiVersion: 1 | 2;
     /** True if form save in progress */
     public isFormSaveInProgress: boolean = false;
+    /** Stores the voucher API version of current company */
+    public voucherApiVersion: 1 | 2;
     /** List of discounts */
     public discountsList: any[] = [];
     /** Stores the current active entry */
     public activeEntry: any;
     /** This will hold true if creating new account */
     private isCreatingNewAccount: boolean = false;
+    /** Decimal places from company settings */
+    public giddhBalanceDecimalPlaces: number = 2;
 
     constructor(
         private store: Store<AppState>,
@@ -547,6 +549,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                     this.getUpdatedStateCodes(profile.countryV2.alpha2CountryCode, true);
                 }
 
+                this.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
                 this.changeDetection.detectChanges();
             } else {
                 this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
@@ -1366,6 +1369,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         transaction.quantity = null;
         transaction.isStockTxn = false;
         transaction.stockUnit = null;
+        transaction.stockUnitCode = null;
         transaction.stockDetails = null;
         transaction.stockList = [];
         transaction.rate = null;
@@ -1467,7 +1471,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     public prepareUnitArr(unitArr): any {
         let unitArray = [];
         _.forEach(unitArr, (item) => {
-            unitArray.push({ id: item.stockUnitCode, text: item.stockUnitCode, rate: item.rate });
+            unitArray.push({ id: item.stockUnitUniqueName, text: item.stockUnitCode, rate: item.rate });
         });
         return unitArray;
     }
@@ -1520,9 +1524,9 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     public calculateConvertedAmount(transaction: SalesTransactionItemClass): void {
         if (this.isMulticurrencyAccount) {
             if (transaction.isStockTxn) {
-                transaction.convertedAmount = giddhRoundOff(transaction.quantity * ((transaction.rate * this.exchangeRate) ? transaction.rate * this.exchangeRate : 0), 2);
+                transaction.convertedAmount = giddhRoundOff(transaction.quantity * ((transaction.rate * this.exchangeRate) ? transaction.rate * this.exchangeRate : 0), this.highPrecisionRate);
             } else {
-                transaction.convertedAmount = giddhRoundOff(transaction.amount * this.exchangeRate, 2);
+                transaction.convertedAmount = giddhRoundOff(transaction.amount * this.exchangeRate, this.highPrecisionRate);
             }
         }
     }
@@ -1582,8 +1586,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             }
         });
 
-        entry.taxSum = giddhRoundOff(((taxPercentage * (trx.amount - entry.discountSum)) / 100), 2);
-        entry.cessSum = giddhRoundOff(((cessPercentage * (trx.amount - entry.discountSum)) / 100), 2);
+        entry.taxSum = giddhRoundOff(((taxPercentage * (trx.amount - entry.discountSum)) / 100), this.highPrecisionRate);
+        entry.cessSum = giddhRoundOff(((cessPercentage * (trx.amount - entry.discountSum)) / 100), this.highPrecisionRate);
 
         if (isNaN(entry.taxSum)) {
             entry.taxSum = 0;
@@ -1649,9 +1653,9 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
 
         // Calculate amount with inclusive tax
         transaction.amount = giddhRoundOff(((Number(transaction.total) + fixedDiscountTotal + 0.01 * fixedDiscountTotal * Number(taxTotal)) /
-            (1 - 0.01 * percentageDiscountTotal + 0.01 * Number(taxTotal) - 0.0001 * percentageDiscountTotal * Number(taxTotal))), 2);
-        let perFromAmount = giddhRoundOff(((percentageDiscountTotal * transaction.amount) / 100), 2);
-        entry.discountSum = giddhRoundOff(perFromAmount + fixedDiscountTotal, 2);
+            (1 - 0.01 * percentageDiscountTotal + 0.01 * Number(taxTotal) - 0.0001 * percentageDiscountTotal * Number(taxTotal))), this.highPrecisionRate);
+        let perFromAmount = giddhRoundOff(((percentageDiscountTotal * transaction.amount) / 100), this.highPrecisionRate);
+        entry.discountSum = giddhRoundOff(perFromAmount + fixedDiscountTotal, this.highPrecisionRate);
         if (isNaN(entry.discountSum)) {
             entry.discountSum = 0;
         }
@@ -1659,8 +1663,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         if (isNaN(transaction.taxableValue)) {
             transaction.taxableValue = 0;
         }
-        entry.taxSum = giddhRoundOff(((taxPercentage * (transaction.amount - entry.discountSum)) / 100), 2);
-        entry.cessSum = giddhRoundOff(((cessPercentage * (transaction.amount - entry.discountSum)) / 100), 2);
+        entry.taxSum = giddhRoundOff(((taxPercentage * (transaction.amount - entry.discountSum)) / 100), this.highPrecisionRate);
+        entry.cessSum = giddhRoundOff(((cessPercentage * (transaction.amount - entry.discountSum)) / 100), this.highPrecisionRate);
         if (isNaN(entry.taxSum)) {
             entry.taxSum = 0;
         }
@@ -1772,17 +1776,17 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         //Save the Grand Total for Edit
         if (calculatedGrandTotal > 0) {
             if (this.applyRoundOff) {
-                this.calculatedRoundOff = Number((Math.round(calculatedGrandTotal) - calculatedGrandTotal).toFixed(2));
+                this.calculatedRoundOff = Number((Math.round(calculatedGrandTotal) - calculatedGrandTotal).toFixed(this.giddhBalanceDecimalPlaces));
             } else {
-                this.calculatedRoundOff = Number((calculatedGrandTotal - calculatedGrandTotal).toFixed(2));
+                this.calculatedRoundOff = Number((calculatedGrandTotal - calculatedGrandTotal).toFixed(this.giddhBalanceDecimalPlaces));
             }
 
-            calculatedGrandTotal = Number((calculatedGrandTotal + this.calculatedRoundOff).toFixed(2));
+            calculatedGrandTotal = Number((calculatedGrandTotal + this.calculatedRoundOff).toFixed(this.giddhBalanceDecimalPlaces));
         } else if (calculatedGrandTotal === 0) {
             this.calculatedRoundOff = 0;
         }
         this.purchaseOrder.voucherDetails.grandTotal = calculatedGrandTotal;
-        this.grandTotalMulDum = giddhRoundOff(calculatedGrandTotal * this.exchangeRate, 2);
+        this.grandTotalMulDum = giddhRoundOff(calculatedGrandTotal * this.exchangeRate, this.highPrecisionRate);
     }
 
     /**
@@ -1830,7 +1834,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                 totalTaxes += tax.taxDetail[0].taxValue;
             }
 
-            entry.otherTaxSum = giddhRoundOff(((taxableValue * totalTaxes) / 100), 2);
+            entry.otherTaxSum = giddhRoundOff(((taxableValue * totalTaxes) / 100), this.highPrecisionRate);
             entry.otherTaxModal = modal;
         } else {
             entry.otherTaxSum = 0;
@@ -2120,7 +2124,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         if (data.entries && data.entries.length > 0) {
             _.forEach(data.entries, (entry) => {
                 _.forEach(entry.transactions, (txn: SalesTransactionItemClass) => {
-                    txn.convertedAmount = this.fetchedConvertedRate > 0 ? giddhRoundOff((Number(txn.amount) * this.fetchedConvertedRate), 2) : 0;
+                    txn.convertedAmount = this.fetchedConvertedRate > 0 ? giddhRoundOff((Number(txn.amount) * this.fetchedConvertedRate), this.highPrecisionRate) : 0;
 
                     // will get errors of string and if not error then true boolean
                     if (!txn.isValid()) {
@@ -2260,7 +2264,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                     salesAddBulkStockItems.rate.amountForAccount = transaction.rate;
                     salesAddBulkStockItems.sku = transaction.stockDetails.skuCode;
                     salesAddBulkStockItems.stockUnit = new CodeStockMulticurrency();
-                    salesAddBulkStockItems.stockUnit.code = transaction.stockUnit;
+                    salesAddBulkStockItems.stockUnit.uniqueName = transaction.stockUnit;
+                    salesAddBulkStockItems.stockUnit.code = transaction.stockUnitCode;
 
                     transactionClassMul.stock = salesAddBulkStockItems;
                 }
@@ -2375,11 +2380,9 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
      * @memberof CreatePurchaseOrderComponent
      */
     public onChangeUnit(transaction: any, selectedUnit: any): void {
-        if (!event) {
-            return;
-        }
-        _.find(transaction.stockList, (txn) => {
+        find(transaction.stockList, (txn) => {
             if (txn.id === selectedUnit) {
+                transaction.stockUnitCode = txn.text;
                 return transaction.rate = txn.rate;
             }
         });
@@ -2684,7 +2687,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                     salesTransactionItemClass.quantity = transaction.stock.quantity;
                     salesTransactionItemClass.rate = transaction.stock.rate.amountForAccount;
                     salesTransactionItemClass.stockDetails.skuCode = transaction.stock.sku;
-                    salesTransactionItemClass.stockUnit = transaction.stock.stockUnit.code;
+                    salesTransactionItemClass.stockUnit = transaction.stock.stockUnit.uniqueName;
+                    salesTransactionItemClass.stockUnitCode = transaction.stock.stockUnit.code;
                     salesTransactionItemClass.fakeAccForSelect2 = transaction.account?.uniqueName + '#' + transaction.stock.uniqueName;
 
                     let stock = salesTransactionItemClass.stockDetails;
@@ -2712,10 +2716,9 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                         salesTransactionItemClass.sku_and_customfields = description.join(', ');
                     }
                     stock.unitRates = stock.unitRates || [];
-                    const unitRate = stock.unitRates.find(rate => rate.code === stock.stockUnit.code);
                     let stockUnit: IStockUnit = {
-                        id: stock.stockUnit.code,
-                        text: unitRate ? unitRate.stockUnitName : ''
+                        id: salesTransactionItemClass.stockDetails?.stockUnit?.uniqueName,
+                        text: salesTransactionItemClass.stockDetails?.stockUnit?.code
                     };
                     salesTransactionItemClass.stockList = [];
                     if (stock.unitRates && stock.unitRates.length) {
@@ -3342,23 +3345,26 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             // set rate auto
             transaction.rate = null;
             let obj: IStockUnit = {
-                id: additional.stock.stockUnitCode,
-                text: additional.stock.stockUnitName
+                id: additional.stock.stockUnit?.uniqueName,
+                text: additional.stock.stockUnit?.code
             };
             transaction.stockList = [];
             if (additional.stock && additional.stock.unitRates && additional.stock.unitRates.length) {
                 transaction.stockList = this.prepareUnitArr(additional.stock.unitRates);
                 transaction.stockUnit = transaction.stockList[0].id;
+                transaction.stockUnitCode = transaction.stockList[0].text;
                 transaction.rate = Number((transaction.stockList[0].rate / this.exchangeRate).toFixed(this.highPrecisionRate));
             } else {
+                transaction.stockUnit = additional.stock.stockUnit.uniqueName;
+                transaction.stockUnitCode = additional.stock.stockUnit.code;
                 transaction.stockList.push(obj);
-                transaction.stockUnit = additional.stock.stockUnit.code;
             }
             transaction.stockDetails = _.omit(additional.stock, ['accountStockDetails', 'stockUnit']);
             transaction.isStockTxn = true;
         } else {
             transaction.isStockTxn = false;
             transaction.stockUnit = null;
+            transaction.stockUnitCode = null;
             transaction.stockDetails = null;
             transaction.stockList = [];
             // reset fields
@@ -3555,35 +3561,6 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     }
 
     /**
-     * Checks for auto fill shipping address for account and company shipping address
-     *
-     * @private
-     * @param {string} sectionName Section name: company/account
-     * @memberof CreatePurchaseOrderComponent
-     */
-    private checkForAutoFillShippingAddress(sectionName: string): void {
-        if (sectionName === 'account') {
-            if (this.purchaseOrder?.account?.billingDetails?.address[0] === this.purchaseOrder?.account?.shippingDetails?.address[0] &&
-                this.purchaseOrder?.account?.billingDetails?.stateCode === this.purchaseOrder?.account?.shippingDetails?.stateCode &&
-                this.purchaseOrder?.account?.billingDetails?.gstNumber === this.purchaseOrder?.account?.shippingDetails?.gstNumber &&
-                this.purchaseOrder?.account?.billingDetails?.pincode === this.purchaseOrder?.account?.shippingDetails?.pincode) {
-                this.autoFillVendorShipping = true;
-            } else {
-                this.autoFillVendorShipping = false;
-            }
-        } else if (sectionName === 'company') {
-            if (this.purchaseOrder?.company?.billingDetails?.address[0] === this.purchaseOrder?.company?.shippingDetails?.address[0] &&
-                this.purchaseOrder?.company?.billingDetails?.stateCode === this.purchaseOrder?.company?.shippingDetails?.stateCode &&
-                this.purchaseOrder?.company?.billingDetails?.gstNumber === this.purchaseOrder?.company?.shippingDetails?.gstNumber &&
-                this.purchaseOrder?.company?.billingDetails?.pincode === this.purchaseOrder?.company?.shippingDetails?.pincode) {
-                this.autoFillCompanyShipping = true;
-            } else {
-                this.autoFillCompanyShipping = false;
-            }
-        }
-    }
-
-    /**
      * Callback for translation response complete
      *
      * @param {*} event
@@ -3772,18 +3749,47 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
      */
     private calculateConvertedTotal(entry: SalesEntryClass, transaction: SalesTransactionItemClass): void {
         if (this.excludeTax) {
-            transaction.total = giddhRoundOff((transaction.amount - entry.discountSum), 2);
+            transaction.total = giddhRoundOff((transaction.amount - entry.discountSum), this.highPrecisionRate);
             if (transaction.isStockTxn) {
-                transaction.convertedTotal = giddhRoundOff((transaction.quantity * transaction.rate * this.exchangeRate) - entry.discountSum, 2);
+                transaction.convertedTotal = giddhRoundOff((transaction.quantity * transaction.rate * this.exchangeRate) - entry.discountSum, this.highPrecisionRate);
             } else {
-                transaction.convertedTotal = giddhRoundOff(transaction.total * this.exchangeRate, 2);
+                transaction.convertedTotal = giddhRoundOff(transaction.total * this.exchangeRate, this.highPrecisionRate);
             }
         } else {
-            transaction.total = giddhRoundOff((transaction.amount - entry.discountSum) + (entry.taxSum + entry.cessSum), 2);
+            transaction.total = giddhRoundOff((transaction.amount - entry.discountSum) + (entry.taxSum + entry.cessSum), this.highPrecisionRate);
             if (transaction.isStockTxn) {
-                transaction.convertedTotal = giddhRoundOff(((transaction.quantity * transaction.rate * this.exchangeRate) - entry.discountSum) + (entry.taxSum + entry.cessSum), 2);
+                transaction.convertedTotal = giddhRoundOff(((transaction.quantity * transaction.rate * this.exchangeRate) - entry.discountSum) + (entry.taxSum + entry.cessSum), this.highPrecisionRate);
             } else {
-                transaction.convertedTotal = giddhRoundOff(transaction.total * this.exchangeRate, 2);
+                transaction.convertedTotal = giddhRoundOff(transaction.total * this.exchangeRate, this.highPrecisionRate);
+            }
+        }
+    }
+
+    /**
+     * Checks for auto fill shipping address for account and company shipping address
+     *
+     * @private
+     * @param {string} sectionName Section name: company/account
+     * @memberof CreatePurchaseOrderComponent
+     */
+    private checkForAutoFillShippingAddress(sectionName: string): void {
+        if (sectionName === 'account') {
+            if (this.purchaseOrder?.account?.billingDetails?.address[0] === this.purchaseOrder?.account?.shippingDetails?.address[0] &&
+                this.purchaseOrder?.account?.billingDetails?.stateCode === this.purchaseOrder?.account?.shippingDetails?.stateCode &&
+                this.purchaseOrder?.account?.billingDetails?.gstNumber === this.purchaseOrder?.account?.shippingDetails?.gstNumber &&
+                this.purchaseOrder?.account?.billingDetails?.pincode === this.purchaseOrder?.account?.shippingDetails?.pincode) {
+                this.autoFillVendorShipping = true;
+            } else {
+                this.autoFillVendorShipping = false;
+            }
+        } else if (sectionName === 'company') {
+            if (this.purchaseOrder?.company?.billingDetails?.address[0] === this.purchaseOrder?.company?.shippingDetails?.address[0] &&
+                this.purchaseOrder?.company?.billingDetails?.stateCode === this.purchaseOrder?.company?.shippingDetails?.stateCode &&
+                this.purchaseOrder?.company?.billingDetails?.gstNumber === this.purchaseOrder?.company?.shippingDetails?.gstNumber &&
+                this.purchaseOrder?.company?.billingDetails?.pincode === this.purchaseOrder?.company?.shippingDetails?.pincode) {
+                this.autoFillCompanyShipping = true;
+            } else {
+                this.autoFillCompanyShipping = false;
             }
         }
     }

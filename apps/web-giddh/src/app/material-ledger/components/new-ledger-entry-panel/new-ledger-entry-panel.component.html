@@ -46,11 +46,15 @@
                                                 class="form-control"
                                                 [disabled]="shouldShowAdvanceReceiptMandatoryFields ? 'disabled' : null"
                                                 (selectionChange)="unitChanged($event?.value)"
-                                                [value]="currentTxn?.inventory?.unit?.code"
+                                                [value]="
+                                                    currentTxn?.inventory?.unit?.stockUnitUniqueName ||
+                                                    currentTxn?.inventory?.unit?.uniqueName
+                                                "
                                             >
                                                 <mat-option
                                                     *ngFor="let item of currentTxn?.unitRate"
-                                                    [value]="item?.code"
+                                                    [value]="item?.stockUnitUniqueName"
+                                                    (click)="$event.stopPropagation()"
                                                 >
                                                     {{ item?.stockUnitCode }}
                                                 </mat-option>
@@ -180,6 +184,7 @@
                                 [ledgerAmount]="currentTxn.amount"
                                 [discountsList]="discountsList"
                                 [commonLocaleData]="commonLocaleData"
+                                [giddhBalanceDecimalPlaces]="giddhBalanceDecimalPlaces"
                                 (hideOtherPopups)="hideTax()"
                                 (discountTotalUpdated)="calculateDiscount($event)"
                             >

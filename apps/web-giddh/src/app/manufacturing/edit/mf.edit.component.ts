@@ -119,10 +119,10 @@ export class MfEditComponent implements OnInit, OnDestroy {
         private store: Store<AppState>,
         private manufacturingActions: ManufacturingActions,
         private inventoryAction: InventoryAction,
+        private router: Router,
         private _location: Location,
         private _inventoryService: InventoryService,
         private generalAction: GeneralActions,
-        private router: Router,
         private generalService: GeneralService,
         private _toasty: ToasterService,
         private searchService: SearchService,
@@ -291,8 +291,10 @@ export class MfEditComponent implements OnInit, OnDestroy {
 
             if (this.isUpdateCase) {
                 val.stockUnitCode = data.manufacturingUnit;
+                val.stockUnitUniqueName = data.stockUnitUniqueName;
             } else {
                 val.stockUnitCode = data.stockUnitCode;
+                val.stockUnitUniqueName = data.stockUnitUniqueName;
             }
 
             let manufacturingObj = cloneDeep(this.manufacturingDetails);
@@ -347,7 +349,6 @@ export class MfEditComponent implements OnInit, OnDestroy {
             } else {
                 manufacturingObj.otherExpenses = [objToPush];
             }
-            
             this.manufacturingDetails = manufacturingObj;
 
             this.otherExpenses = {};
@@ -482,11 +483,13 @@ export class MfEditComponent implements OnInit, OnDestroy {
                         quantity: itemQuantity,
                         stockUnitCode: unitCode,
                         rate: null,
-                        amount: null
+                        amount: null,
+                        stockUnitUniqueName: res.body?.stockUnit?.uniqueName
                     };
 
                     this.linkedStocks.manufacturingUnit = unitCode;
                     this.linkedStocks.stockUnitCode = unitCode;
+                    this.linkedStocks.stockUnitUniqueName = res.body?.stockUnit?.uniqueName;
 
                     this._inventoryService.GetRateForStoke(selectedItem, data).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
                         if (response?.status === 'success') {
@@ -501,6 +504,7 @@ export class MfEditComponent implements OnInit, OnDestroy {
         } else {
             this.linkedStocks.manufacturingUnit = null;
             this.linkedStocks.stockUnitCode = null;
+            this.linkedStocks.stockUnitUniqueName = null;
             this.linkedStocks.rate = null;
         }
     }
@@ -517,7 +521,7 @@ export class MfEditComponent implements OnInit, OnDestroy {
     public clearDate() {
         this.manufacturingDetails.date = '';
     }
-    
+
     /**
      * To toggle add expense entry block
      *
@@ -739,16 +743,6 @@ export class MfEditComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Releases memory
-     *
-     * @memberof MfEditComponent
-     */
-    public ngOnDestroy(): void {
-        this.destroyed$.next(true);
-        this.destroyed$.complete();
-    }
-
-    /**
      * Intializes the warehouse
      *
      * @private
@@ -765,5 +759,15 @@ export class MfEditComponent implements OnInit, OnDestroy {
                 });
             }
         });
+    }
+
+    /**
+     * Releases memory
+     *
+     * @memberof MfEditComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 }

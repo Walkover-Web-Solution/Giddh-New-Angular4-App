@@ -97,10 +97,10 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
     public currentBranch: any = { name: '', uniqueName: '' };
     /** Stores the current company */
     public activeCompany: any;
-    /** Stores the current organization type */
-    public currentOrganizationType: OrganizationType;
     /** True if api call in progress */
     public isLoading: boolean = false;
+    /** Stores the current organization type */
+    public currentOrganizationType: OrganizationType;
     /** Advance search model to initialize the advance search fields */
     private advanceSearchModel: ReceiptAdvanceSearchModel = {
         adjustmentVoucherDetails: {
@@ -167,6 +167,8 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
     public hoveredReceiptTable: boolean = false;
     /** Holds currency */
     public baseCurrency: string = '';
+    /** Decimal places from company settings */
+    public giddhBalanceDecimalPlaces: number = 2;
 
     /** @ignore */
     constructor(
@@ -194,6 +196,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
         this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$)).subscribe(profile => {
             if (profile) {
                 this.baseCurrency = profile.baseCurrency;
+                this.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
             }
         });
     }
@@ -639,7 +642,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
                     if(isSeleted) {
                         receipt.isSelected = true;
                     }
-                    receipt = this.generalService.addToolTipText("receipt", this.baseCurrency, receipt, this.localeData, this.commonLocaleData);
+                    receipt = this.generalService.addToolTipText("receipt", this.baseCurrency, receipt, this.localeData, this.commonLocaleData, this.giddhBalanceDecimalPlaces);
                 });
 
                 this.changeDetectorRef.detectChanges();
@@ -773,9 +776,9 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
      * @memberof AdvanceReceiptReportComponent
      */
     public previewVoucher(receipt: any): void {
-        // if (this.voucherApiVersion === 2) {
-        //     this.router.navigate(['/pages/voucher/receipt/preview/' + receipt.uniqueName + '/' + receipt.account?.uniqueName]);
-        // }
+        if (this.voucherApiVersion === 2) {
+            this.router.navigate(['/pages/voucher/receipt/preview/' + receipt.uniqueName + '/' + receipt.account?.uniqueName]);
+        }
     }
 
     /**

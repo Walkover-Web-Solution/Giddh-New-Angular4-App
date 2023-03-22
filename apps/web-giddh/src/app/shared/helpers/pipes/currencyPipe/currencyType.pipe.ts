@@ -5,6 +5,7 @@ import { OnDestroy, Pipe, PipeTransform } from '@angular/core';
 import { GeneralService } from './../../../../services/general.service';
 import { distinctUntilKeyChanged, takeUntil } from 'rxjs/operators';
 import { REMOVE_TRAILING_ZERO_REGEX } from 'apps/web-giddh/src/app/app.constant';
+import { giddhRoundOff } from '../../helperFunctions';
 
 @Pipe({ name: 'giddhCurrency', pure: true })
 
@@ -63,7 +64,8 @@ export class GiddhCurrencyPipe implements OnDestroy, PipeTransform {
                 if (result?.length > 1) {
                     if (digitAfterDecimal !== 0) {
                         result[1] = (result[1]?.length < 4) ? result[1] + '0000' : result[1];
-                        op += '.' + result[1].substring(0, digitAfterDecimal);
+                        op += '.' + result[1];
+                        op = String(giddhRoundOff(op, digitAfterDecimal));
                     }
                 } else {
                     if (digitAfterDecimal === 2) {
@@ -74,13 +76,14 @@ export class GiddhCurrencyPipe implements OnDestroy, PipeTransform {
                     }
                 }
 
-                return shouldRemoveTrailingZeros ? op?.replace(REMOVE_TRAILING_ZERO_REGEX, '$1$2$3') : op;;
+                return shouldRemoveTrailingZeros ? op?.replace(REMOVE_TRAILING_ZERO_REGEX, '$1$2$3') : op;
             } else {
                 let op = '-' + result[0].substring(1);
                 if (result?.length > 1) {
                     if (digitAfterDecimal !== 0) {
                         result[1] = (result[1]?.length < 4) ? result[1] + '0000' : result[1];
-                        op += '.' + result[1].substring(0, digitAfterDecimal);
+                        op += '.' + result[1];
+                        op = String(giddhRoundOff(op, digitAfterDecimal));
                     }
                 } else {
                     if (digitAfterDecimal === 2) {
@@ -91,14 +94,17 @@ export class GiddhCurrencyPipe implements OnDestroy, PipeTransform {
                     }
                 }
 
-                return shouldRemoveTrailingZeros ? op?.replace(REMOVE_TRAILING_ZERO_REGEX, '$1$2$3') : op;;
+                return shouldRemoveTrailingZeros ? op?.replace(REMOVE_TRAILING_ZERO_REGEX, '$1$2$3') : op;
             }
         } else {
             lastThree = result[0].substring(result[0]?.length - 3);
             if (result?.length > 1) {
                 if (digitAfterDecimal !== 0) {
                     result[1] = (result[1]?.length < 4) ? result[1] + '0000' : result[1];
-                    afterdecDigit = result[1].substring(0, digitAfterDecimal);
+                    let dummyNumber = '1.' + result[1];
+                    dummyNumber = String(giddhRoundOff(dummyNumber, digitAfterDecimal));
+                    let tempResult = dummyNumber?.split('.');
+                    afterdecDigit = tempResult[1];
                 }
             } else {
                 if (digitAfterDecimal === 2) {
@@ -178,6 +184,5 @@ export class GiddhCurrencyPipe implements OnDestroy, PipeTransform {
                 break;
         }
         return shouldRemoveTrailingZeros ? finaloutput?.replace(REMOVE_TRAILING_ZERO_REGEX, '$1$2$3') : finaloutput;
-
     }
 }

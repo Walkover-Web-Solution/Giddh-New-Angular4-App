@@ -32,7 +32,7 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
     public activeGroupUniqueName$: Observable<string>;
     public stockUnit$: Observable<StockUnitRequest[]>;
     public editMode: boolean;
-    public editCode: string;
+    public stockUnitUniqueName: string;
     public customUnitObj: StockUnitRequest;
     public createCustomStockInProcess$: Observable<boolean>;
     public updateCustomStockInProcess$: Observable<boolean>;
@@ -130,7 +130,7 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
 
         this.stockMappedUnits$.subscribe(res => {
             this.stockUnitsList = [...StockUnits];
-            this.allStockMappedUnits = [...StockUnits];
+            this.allStockMappedUnits = [];
             res?.forEach((mapped: any) => {
                 let unitsList = this.stockUnitsList?.filter(unit => unit?.value === mapped?.stockUnitX?.code);
                 let mappedUnits = this.allStockMappedUnits?.filter(unit => unit?.value === mapped?.stockUnitX?.code);
@@ -138,22 +138,24 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
                 if (!mappedUnits?.length) {
                     this.allStockMappedUnits?.push({
                         label: mapped?.stockUnitX?.name,
-                        value: mapped?.stockUnitX?.code
+                        value: mapped?.stockUnitX?.code,
+                        uniqueName: mapped?.stockUnitX?.uniqueName
                     });
                 }
                 if (!unitsList?.length) {
                     this.stockUnitsList?.push({
                         label: mapped?.stockUnitX?.name,
-                        value: mapped?.stockUnitX?.code
+                        value: mapped?.stockUnitX?.code,
+                        uniqueName: mapped?.stockUnitX?.uniqueName
                     });
                 }
             });
         });
 
         this.stockMappedUnitsWithCode$.subscribe((res: any) => {
-            if (res?.code) {
+            if (res?.uniqueName) {
                 this.selectedUnitName = res?.name;
-                this.editCode = res?.code;
+                this.stockUnitUniqueName = res?.uniqueName;
                 this.editMode = true;
                 this.customUnitObj.name = res?.name;
                 this.customUnitObj.code = res?.code;
@@ -214,13 +216,13 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
             }
             this.store.dispatch(this.customStockActions.CreateStockUnit(cloneDeep(customMapping)));
         } else {
-            this.store.dispatch(this.customStockActions.UpdateStockUnit(cloneDeep(customMapping), this.editCode));
+            this.store.dispatch(this.customStockActions.UpdateStockUnit(cloneDeep(customMapping), this.stockUnitUniqueName));
             customMapping.name = null;
         }
     }
 
-    public deleteUnit(code): any {
-        this.store.dispatch(this.customStockActions.DeleteStockUnit(code));
+    public deleteUnit(uniqueName: any): any {
+        this.store.dispatch(this.customStockActions.DeleteStockUnit(uniqueName));
     }
 
     /**
@@ -230,7 +232,7 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
      * @memberof InventoryCustomStockComponent
      */
     public editUnit(item: any) {
-        this.store.dispatch(this.customStockActions.getStockMappedUnitByCode(item.stockUnitX.code));
+        this.store.dispatch(this.customStockActions.getStockMappedUnitByUniqueName(item.stockUnitX.uniqueName));
     }
 
     /**
@@ -242,7 +244,7 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
         this.customUnitObj = new StockUnitRequest();
         this.forceClear$ = observableOf({ status: true });
         this.editMode = false;
-        this.editCode = '';
+        this.stockUnitUniqueName = '';
     }
 
 
@@ -257,6 +259,7 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
         if (unit !== undefined && unit?.length > 0) {
             this.customUnitObj.code = unit[0]?.value;
             this.customUnitObj.name = unit[0]?.value;
+            this.customUnitObj.uniqueName = unit[0]?.uniqueName;
             this.selectedUnitName = unit[0].label;
         }
         this.addDefaultMapping();
@@ -389,13 +392,15 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
             if (!uniqueMappedUnit?.length) {
                 this.allStockMappedUnits.push({
                     label: this.customUnitObj.name,
-                    value: this.customUnitObj.code?.toLowerCase()
+                    value: this.customUnitObj.code?.toLowerCase(),
+                    uniqueName: this.customUnitObj.uniqueName
                 });
             }
             if (!uniqueUnitList?.length) {
                 this.stockUnitsList.push({
                     label: this.customUnitObj.name,
-                    value: this.customUnitObj.code?.toLowerCase()
+                    value: this.customUnitObj.code?.toLowerCase(),
+                    uniqueName: this.customUnitObj.uniqueName
                 });
             }
         }

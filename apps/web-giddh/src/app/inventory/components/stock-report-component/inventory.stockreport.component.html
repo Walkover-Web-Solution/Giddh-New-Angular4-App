@@ -475,7 +475,7 @@
                                 {{ txn.quantity | giddhCurrency }}
                             </span>
                             <span *ngIf="txn.type == 'dr'" class="unit-badge">
-                                {{ txn.stockUnit }}
+                                {{ txn.stockUnit?.code }}
                             </span>
                             <span *ngIf="txn.type == 'cr'">-</span>
                         </td>
@@ -485,7 +485,7 @@
                                 {{ txn.quantity | giddhCurrency }}
                             </span>
                             <span *ngIf="txn.type == 'cr'" class="unit-badge">
-                                {{ txn.stockUnit }}
+                                {{ txn.stockUnit?.code }}
                             </span>
                             <span *ngIf="txn.type == 'dr'">-</span>
                         </td>

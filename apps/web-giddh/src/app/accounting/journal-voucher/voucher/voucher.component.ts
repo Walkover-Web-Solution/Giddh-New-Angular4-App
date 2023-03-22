@@ -248,6 +248,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     public searchedAccountQuery: Subject<any> = new Subject();
     /** True if api call in progress */
     public isLoading: boolean = false;
+    /** Decimal places from company settings */
+    public giddhBalanceDecimalPlaces: number = 2;
 
     constructor(
         private _ledgerActions: LedgerActions,
@@ -278,6 +280,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this.store.pipe(select(profileStore => profileStore.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
             this.baseCurrencySymbol = profile.baseCurrencySymbol;
             this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
+            this.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
         });
         this.bsConfig.dateInputFormat = GIDDH_DATE_FORMAT;
 
@@ -361,8 +364,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             }
         });
 
-        this.store.pipe(select(state => state?.ledger?.ledgerCreateInProcess), takeUntil(this.destroyed$)).subscribe((response:boolean) => {
-                this.isLoading = (response) ? true : false;
+        this.store.pipe(select(state => state?.ledger?.ledgerCreateInProcess), takeUntil(this.destroyed$)).subscribe((response: boolean) => {
+            this.isLoading = (response) ? true : false;
         });
 
         this.store.pipe(select(p => p?.ledger?.ledgerCreateSuccess), takeUntil(this.destroyed$)).subscribe((s: boolean) => {
@@ -1120,14 +1123,14 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     public changePrice(idx, val) {
         let i = this.selectedIdx;
         this.requestObj.transactions[i].inventory[idx].unit.rate = !Number.isNaN(val) ? Number(cloneDeep(val)) : 0;
-        this.requestObj.transactions[i].inventory[idx].amount = Number((this.requestObj.transactions[i].inventory[idx].unit.rate * this.requestObj.transactions[i].inventory[idx].quantity).toFixed(2));
+        this.requestObj.transactions[i].inventory[idx].amount = Number((this.requestObj.transactions[i].inventory[idx].unit.rate * this.requestObj.transactions[i].inventory[idx].quantity).toFixed(this.giddhBalanceDecimalPlaces));
         this.amountChanged(idx);
     }
 
     public amountChanged(invIdx) {
         let i = this.selectedIdx;
         if (this.requestObj.transactions && this.requestObj.transactions[i].inventory[invIdx].stock && this.requestObj.transactions[i].inventory[invIdx].quantity) {
-            this.requestObj.transactions[i].inventory[invIdx].unit.rate = Number((this.requestObj.transactions[i].inventory[invIdx].amount / this.requestObj.transactions[i].inventory[invIdx].quantity).toFixed(2));
+            this.requestObj.transactions[i].inventory[invIdx].unit.rate = Number((this.requestObj.transactions[i].inventory[invIdx].amount / this.requestObj.transactions[i].inventory[invIdx].quantity).toFixed(this.giddhBalanceDecimalPlaces));
         }
         let total = this.calculateTransactionTotal(this.requestObj.transactions[i].inventory);
         this.requestObj.transactions[i].total = total;
@@ -1148,7 +1151,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     public changeQuantity(idx, val) {
         let i = this.selectedIdx;
         this.requestObj.transactions[i].inventory[idx].quantity = Number(val);
-        this.requestObj.transactions[i].inventory[idx].amount = Number((this.requestObj.transactions[i].inventory[idx].unit.rate * this.requestObj.transactions[i].inventory[idx].quantity).toFixed(2));
+        this.requestObj.transactions[i].inventory[idx].amount = Number((this.requestObj.transactions[i].inventory[idx].unit.rate * this.requestObj.transactions[i].inventory[idx].quantity).toFixed(this.giddhBalanceDecimalPlaces));
         this.amountChanged(idx);
     }
 

@@ -147,6 +147,8 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
     public hoveredPaymentTable: boolean = false;
     /** Holds currency */
     public baseCurrency: string = '';
+    /** Decimal places from company settings */
+    public giddhBalanceDecimalPlaces: number = 2;
 
     /** @ignore */
     constructor(
@@ -174,6 +176,7 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
         this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$)).subscribe(profile => {
             if (profile) {
                 this.baseCurrency = profile.baseCurrency;
+                this.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
             }
         });
     }
@@ -557,7 +560,7 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
                     if (isSeleted) {
                         payment.isSelected = true;
                     }
-                    payment = this.generalService.addToolTipText("payment", this.baseCurrency, payment, this.localeData, this.commonLocaleData);
+                    payment = this.generalService.addToolTipText("payment", this.baseCurrency, payment, this.localeData, this.commonLocaleData, this.giddhBalanceDecimalPlaces);
                 });
 
                 this.changeDetectorRef.detectChanges();
@@ -673,9 +676,9 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
      * @memberof PaymentReportComponent
      */
     public previewVoucher(payment: any): void {
-        // if (this.voucherApiVersion === 2) {
-        //     this.router.navigate(['/pages/voucher/payment/preview/' + payment.uniqueName + '/' + payment.account?.uniqueName]);
-        // }
+        if (this.voucherApiVersion === 2) {
+            this.router.navigate(['/pages/voucher/payment/preview/' + payment.uniqueName + '/' + payment.account?.uniqueName]);
+        }
     }
 
     /**

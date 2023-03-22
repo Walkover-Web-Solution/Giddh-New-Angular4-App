@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef, TemplateRef, OnDestroy, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, ViewChild, ElementRef, TemplateRef, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal'
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { BreakpointObserver } from '@angular/cdk/layout';
@@ -26,7 +26,7 @@ import { cloneDeep } from '../../lodash-optimized';
     styleUrls: ['./purchase-order.component.scss']
 })
 
-export class PurchaseOrderComponent implements OnInit, OnDestroy {
+export class PurchaseOrderComponent implements OnDestroy {
     /* Datepicker component */
     @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
     /* Input element for column search */
@@ -136,6 +136,8 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
     public translationLoaded: boolean = false;
     /** Stores the voucher API version of current company */
     public voucherApiVersion: 1 | 2;
+    /** Decimal places from company settings */
+    public giddhBalanceDecimalPlaces: number = 2;
 
     constructor(private modalService: BsModalService, private generalService: GeneralService, private breakPointObservar: BreakpointObserver, public purchaseOrderService: PurchaseOrderService, private store: Store<AppState>, private toaster: ToasterService, public route: ActivatedRoute, private router: Router, public purchaseOrderActions: PurchaseOrderActions, private settingsUtilityService: SettingsUtilityService, private warehouseActions: WarehouseActions) {
         this.activeCompanyUniqueName$ = this.store.pipe(select(state => state.session.companyUniqueName), (takeUntil(this.destroyed$)));
@@ -151,6 +153,12 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
             }
         });
 
+        this.store.pipe(select(state => state.settings.profile), takeUntil(this.destroyed$)).subscribe(profile => {
+            if (profile) {
+                this.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
+            }
+        });
+
         this.initBulkUpdateFields();
         this.voucherApiVersion = this.generalService.voucherApiVersion;
     }
@@ -160,7 +168,7 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
      *
      * @memberof PurchaseOrderComponent
      */
-    public ngOnInit(): void {
+    public initPurchaseOrders(): void {
         this.breakPointObservar.observe([
             '(max-width: 767px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
@@ -309,9 +317,11 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
                                 grandTotalAmountForAccount = Number(item?.grandTotal?.amountForAccount) || 0;
 
                                 if (grandTotalAmountForCompany && grandTotalAmountForAccount) {
-                                    grandTotalConversionRate = +((grandTotalAmountForCompany / grandTotalAmountForAccount) || 0).toFixed(2);
+                                    grandTotalConversionRate = +((grandTotalAmountForCompany / grandTotalAmountForAccount) || 0).toFixed(this.giddhBalanceDecimalPlaces);
                                 }
-                                item.grandTotalTooltipText = `In ${item.grandTotal?.currencyForCompany?.code}: ${grandTotalAmountForCompany}<br />(Conversion Rate: ${grandTotalConversionRate})`;
+                                let currencyConversion = this.localeData?.currency_conversion;
+                                currencyConversion = currencyConversion?.replace("[BASE_CURRENCY]", item.grandTotal?.currencyForCompany?.code)?.replace("[AMOUNT]", grandTotalAmountForCompany)?.replace("[CONVERSION_RATE]", grandTotalConversionRate);
+                                item.grandTotalTooltipText = currencyConversion;
                                 return item;
                             });
                         }
@@ -778,12 +788,12 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
     public translationComplete(event: any): void {
         if (event) {
             this.translationLoaded = true;
-
             this.bulkUpdateFields = [
                 { label: this.localeData?.order_date, value: BULK_UPDATE_FIELDS.purchasedate },
                 { label: this.localeData?.expected_delivery_date, value: BULK_UPDATE_FIELDS.duedate },
                 { label: this.commonLocaleData?.app_warehouse, value: BULK_UPDATE_FIELDS.warehouse }
             ];
+            this.initPurchaseOrders();
         }
     }
 

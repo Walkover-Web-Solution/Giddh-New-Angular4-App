@@ -50,6 +50,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         name: null,
         uniqueName: null,
         stockUnitCode: null,
+        stockUnitUniqueName: null,
         hsnNumber: null,
         sacNumber: null,
         taxes: null,
@@ -67,7 +68,8 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 {
                     rate: null,
                     stockUnitCode: null,
-                    stockUnitName: null
+                    stockUnitName: null,
+                    stockUnitUniqueName: null
                 }
             ]
         },
@@ -77,7 +79,8 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 {
                     rate: null,
                     stockUnitCode: null,
-                    stockUnitName: null
+                    stockUnitName: null,
+                    stockUnitUniqueName: null
                 }
             ]
         },
@@ -249,7 +252,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
             if (response?.status === "success") {
                 this.stockUnits = response?.body?.map(result => {
                     return {
-                        value: result.code,
+                        value: result.uniqueName,
                         label: `${result.name} (${result.code})`,
                         additional: result
                     };
@@ -428,7 +431,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                         },
                         stockUnit: {
                             name: this.stockUnitName,
-                            code: this.stockForm.stockUnitCode
+                            code: this.stockForm.stockUnitUniqueName
                         },
                         openingQuantity: 0,
                         openingAmount: 0
@@ -448,7 +451,8 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     public addNewPurchaseUnitPrice(): void {
         this.stockForm.purchaseAccountDetails.unitRates.push({
             rate: null,
-            stockUnitCode: null
+            stockUnitCode: null,
+            stockUnitUniqueName: null
         });
     }
 
@@ -475,7 +479,8 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     public addNewSalesUnitPrice(): void {
         this.stockForm.salesAccountDetails.unitRates.push({
             rate: null,
-            stockUnitCode: null
+            stockUnitCode: null,
+            stockUnitUniqueName: null
         });
     }
 
@@ -560,7 +565,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         if (this.isPurchaseInformationEnabled) {
             if (this.validateStock(this.stockForm.purchaseAccountDetails?.unitRates)) {
                 this.stockForm.purchaseAccountDetails.unitRates = this.stockForm.purchaseAccountDetails.unitRates.filter((unitRate) => {
-                    return unitRate.stockUnitCode || unitRate.rate;
+                    return unitRate.stockUnitUniqueName || unitRate.rate;
                 });
             } else {
                 this.toaster.showSnackBar("error", INVALID_STOCK_ERROR_MESSAGE);
@@ -570,7 +575,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         if (this.isSalesInformationEnabled) {
             if (this.validateStock(this.stockForm.salesAccountDetails?.unitRates)) {
                 this.stockForm.salesAccountDetails.unitRates = this.stockForm.salesAccountDetails.unitRates?.filter((unitRate) => {
-                    return unitRate.stockUnitCode || unitRate.rate;
+                    return unitRate.stockUnitUniqueName || unitRate.rate;
                 });
             } else {
                 this.toaster.showSnackBar("error", INVALID_STOCK_ERROR_MESSAGE);
@@ -639,6 +644,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 this.stockForm.name = response.body.name;
                 this.stockForm.uniqueName = response.body.uniqueName;
                 this.stockForm.stockUnitCode = response.body.stockUnit?.code;
+                this.stockForm.stockUnitUniqueName = response.body?.stockUnit?.uniqueName;
                 this.stockForm.hsnNumber = response.body.hsnNumber;
                 this.stockForm.sacNumber = response.body.sacNumber;
                 this.stockForm.taxes = response.body.taxes;
@@ -663,7 +669,8 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 if (!this.stockForm.purchaseAccountDetails?.unitRates?.length) {
                     this.stockForm.purchaseAccountDetails.unitRates.push({
                         rate: null,
-                        stockUnitCode: null
+                        stockUnitCode: null,
+                        stockUnitUniqueName: null
                     });
                 }
                 if (response.body.salesAccountDetails) {
@@ -672,7 +679,8 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 if (!this.stockForm.salesAccountDetails?.unitRates?.length) {
                     this.stockForm.salesAccountDetails.unitRates.push({
                         rate: null,
-                        stockUnitCode: null
+                        stockUnitCode: null,
+                        stockUnitUniqueName: null
                     });
                 }
                 this.stockGroupUniqueName = response.body.stockGroup?.uniqueName;
@@ -761,7 +769,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     private validateStock(unitRates: Array<any>): boolean {
         if (unitRates) {
             const formEntries = unitRates.filter((unitRate) => {
-                return (unitRate.stockUnitCode && !unitRate.rate) || (!unitRate.stockUnitCode && unitRate.rate);
+                return (unitRate.stockUnitUniqueName && !unitRate.rate) || (!unitRate.stockUnitUniqueName && unitRate.rate);
             });
             return formEntries?.length === 0;
         }
@@ -945,6 +953,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
             name: null,
             uniqueName: null,
             stockUnitCode: null,
+            stockUnitUniqueName: null,
             hsnNumber: null,
             sacNumber: null,
             taxes: null,
@@ -962,7 +971,8 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                     {
                         rate: null,
                         stockUnitCode: null,
-                        stockUnitName: null
+                        stockUnitName: null,
+                        stockUnitUniqueName: null
                     }
                 ]
             },
@@ -972,7 +982,8 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                     {
                         rate: null,
                         stockUnitCode: null,
-                        stockUnitName: null
+                        stockUnitName: null,
+                        stockUnitUniqueName: null
                     }
                 ]
             },
@@ -1025,7 +1036,8 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                     {
                         rate: null,
                         stockUnitCode: null,
-                        stockUnitName: null
+                        stockUnitName: null,
+                        stockUnitUniqueName: null
                     }
                 ]
             }
@@ -1047,7 +1059,8 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                     {
                         rate: null,
                         stockUnitCode: null,
-                        stockUnitName: null
+                        stockUnitName: null,
+                        stockUnitUniqueName: null
                     }
                 ]
             }

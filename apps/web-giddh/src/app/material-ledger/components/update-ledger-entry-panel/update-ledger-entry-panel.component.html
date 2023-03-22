@@ -835,12 +835,12 @@
                                             branches?.length > 1
                                         "
                                         class="form-control text-right"
-                                        [(ngModel)]="vm.stockTrxEntry.inventory.unit.code"
+                                        [(ngModel)]="vm.stockTrxEntry.inventory.unit.uniqueName"
                                         (selectionChange)="vm.unitChanged($event?.value)"
                                     >
                                         <mat-option
                                             *ngFor="let item of vm.stockTrxEntry?.unitRate"
-                                            [value]="item?.code"
+                                            [value]="item?.stockUnitUniqueName"
                                         >
                                             {{ item?.stockUnitCode }}
                                         </mat-option>
@@ -991,11 +991,12 @@
                                             branches?.length > 1
                                         "
                                         [discountAccountsDetails]="vm.discountArray"
-                                        [ledgerAmount]="vm.selectedLedger.actualAmount"
+                                        [ledgerAmount]="vm.totalAmount"
                                         [prefixInput]="vm.selectedPrefixForCurrency"
                                         [maskInput]="vm.inputMaskFormat"
                                         [suffixInput]="vm.selectedSuffixForCurrency"
                                         [commonLocaleData]="commonLocaleData"
+                                        [giddhBalanceDecimalPlaces]="vm.giddhBalanceDecimalPlaces"
                                         (discountTotalUpdated)="vm.handleDiscountEntry($event); vm.generateGrandTotal()"
                                         (hideOtherPopups)="hideTax()"
                                     >
@@ -1075,6 +1076,7 @@
                                         [allowedSelectionOfAType]="allowedSelectionOfAType"
                                         [applicableTaxes]="vm.selectedLedger.taxes"
                                         [commonLocaleData]="commonLocaleData"
+                                        [giddhBalanceDecimalPlaces]="vm.giddhBalanceDecimalPlaces"
                                         (hideOtherPopups)="hideDiscount()"
                                         (selectedTaxEvent)="vm.taxTrxUpdated($event)"
                                         (taxAmountSumEvent)="calculateTax()"
@@ -1537,7 +1539,6 @@
                                                     <input
                                                         matInput
                                                         *ngIf="vm.selectedLedger?.voucher?.shortCode !== 'sal'"
-                                                        [disabled]=""
                                                         id="update-ledger-invoice-number"
                                                         type="text"
                                                         [placeholder]="
@@ -1735,8 +1736,8 @@
                                             <td
                                                 *ngIf="
                                                     voucherApiVersion === 2 &&
-                                                    (vm.selectedLedger.voucher?.shortCode === 'credit note' ||
-                                                        vm.selectedLedger.voucher?.shortCode === 'debit note')
+                                                    (vm.selectedLedger?.voucher?.shortCode === 'credit note' ||
+                                                        vm.selectedLedger?.voucher?.shortCode === 'debit note')
                                                 "
                                                 class="pd-r1 pb-1"
                                             >

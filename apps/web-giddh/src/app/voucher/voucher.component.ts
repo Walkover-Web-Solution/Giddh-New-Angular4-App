@@ -370,7 +370,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public depositAccountUniqueName: string;
     public dropdownisOpen: boolean = false;
     public fileUploadOptions: UploaderOptions;
-
     public uploadInput: EventEmitter<UploadInput>;
     public sessionKey$: Observable<string>;
     public companyName$: Observable<string>;
@@ -477,7 +476,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public originalReverseExchangeRate: number;
     /** to check is tourist scheme applicable(Note true if voucher type will be sales invoice)  */
     public isTouristScheme: boolean = false;
-
     public isValidGstinNumber: boolean = false;
     /** Allowed taxes list contains the unique name of all
      * tax types within a company and count upto which they are allowed
@@ -749,6 +747,10 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public isShowLoader: boolean = false;
     /** This will hold true if creating new account */
     private isCreatingNewAccount: boolean = false;
+    /** Decimal places from company settings */
+    public giddhBalanceDecimalPlaces: number = 2;
+    /** Giddh round off method to use in html */
+    public giddhRoundOff: any = giddhRoundOff;
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -947,6 +949,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     this.invoiceType = decodeURI(params['invoiceType']) as VoucherTypeEnum;
                     this.prepareInvoiceTypeFlags();
                     this.resetInvoiceForm(this.invoiceForm);
+                    this.getInventorySettings();
 
                     // reset customer company when invoice type changes, re-check for company currency and country
                     this.store.pipe(select(s => s.settings.profile), take(1)).subscribe(profile => {
@@ -1973,7 +1976,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                         if (this.voucherApiVersion === 2) {
                             const selectedInvoice = this.invFormData.voucherDetails.referenceVoucher;
                             if (selectedInvoice) {
-                                selectedInvoice['voucherDate'] = selectedInvoice['invoiceDate'] || selectedInvoice['date'] ;
+                                selectedInvoice['voucherDate'] = selectedInvoice['invoiceDate'] || selectedInvoice['date'];
                                 invoiceSelected = {
                                     label: selectedInvoice.number ? selectedInvoice.number : this.commonLocaleData?.app_not_available,
                                     value: selectedInvoice.uniqueName,
@@ -2243,7 +2246,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             }
         } else {
             statesEle.readonly = false;
-
         }
         this.checkGstNumValidation(gstVal);
     }
@@ -2516,7 +2518,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                             // convert date object
                             // txn.date = this.convertDateForAPI(txn.date);
                             entry.entryDate = dayjs(this.convertDateForAPI(entry?.entryDate), GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
-                            txn.convertedAmount = this.fetchedConvertedRate > 0 ? giddhRoundOff((Number(txn.amount) * this.fetchedConvertedRate), 2) : 0;
+                            txn.convertedAmount = this.fetchedConvertedRate > 0 ? giddhRoundOff((Number(txn.amount) * this.fetchedConvertedRate), this.highPrecisionRate) : 0;
 
                             // we need to remove # from account uniqueName because we are appending # to stock for uniqueNess (allowing for pending type voucher)
                             if (this.isLastInvoiceCopied || this.isPendingVoucherType) {
@@ -2968,8 +2970,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             }
         });
 
-        entry.taxSum = giddhRoundOff(((taxPercentage * (trx.amount - entry.discountSum)) / 100), 2);
-        entry.cessSum = giddhRoundOff(((cessPercentage * (trx.amount - entry.discountSum)) / 100), 2);
+        entry.taxSum = giddhRoundOff(((taxPercentage * (trx.amount - entry.discountSum)) / 100), this.giddhBalanceDecimalPlaces);
+        entry.cessSum = giddhRoundOff(((cessPercentage * (trx.amount - entry.discountSum)) / 100), this.giddhBalanceDecimalPlaces);
 
         if (isNaN(entry.taxSum)) {
             entry.taxSum = 0;
@@ -2985,7 +2987,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     }
 
     public calculateStockEntryAmount(trx: SalesTransactionItemClass) {
-        trx.amount = Number(trx.quantity) * Number(trx.rate);
+        const qtyRate = Number(trx.quantity) * Number(trx.rate);
+        trx.amount = giddhRoundOff(qtyRate, this.giddhBalanceDecimalPlaces);
         trx.highPrecisionAmount = trx.amount;
     }
 
@@ -3001,7 +3004,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
     public calculateWhenTrxAltered(entry: SalesEntryClass, trx: SalesTransactionItemClass, fromTransactionField: boolean = false, event?: any) {
         if (trx?.accountName || trx?.accountUniqueName) {
-            if (fromTransactionField) {
+            if (fromTransactionField === true) {
                 trx.highPrecisionAmount = trx.amount;
                 if (this.transactionAmount === trx.amount) {
                     this.transactionAmount = 0;
@@ -3104,11 +3107,11 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
         // Calculate amount with inclusive tax
         transaction.amount = giddhRoundOff(((Number(transaction.total) + fixedDiscountTotal + 0.01 * fixedDiscountTotal * Number(taxTotal)) /
-            (1 - 0.01 * percentageDiscountTotal + 0.01 * Number(taxTotal) - 0.0001 * percentageDiscountTotal * Number(taxTotal))), 2);
+            (1 - 0.01 * percentageDiscountTotal + 0.01 * Number(taxTotal) - 0.0001 * percentageDiscountTotal * Number(taxTotal))), this.highPrecisionRate);
         transaction.highPrecisionAmount = giddhRoundOff(((Number(transaction.total) + fixedDiscountTotal + 0.01 * fixedDiscountTotal * Number(taxTotal)) /
             (1 - 0.01 * percentageDiscountTotal + 0.01 * Number(taxTotal) - 0.0001 * percentageDiscountTotal * Number(taxTotal))), this.highPrecisionRate);
-        let perFromAmount = giddhRoundOff(((percentageDiscountTotal * transaction.amount) / 100), 2);
-        entry.discountSum = giddhRoundOff(perFromAmount + fixedDiscountTotal, 2);
+        let perFromAmount = giddhRoundOff(((percentageDiscountTotal * transaction.amount) / 100), this.highPrecisionRate);
+        entry.discountSum = giddhRoundOff(perFromAmount + fixedDiscountTotal, this.highPrecisionRate);
         if (isNaN(entry.discountSum)) {
             entry.discountSum = 0;
         }
@@ -3116,8 +3119,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         if (isNaN(transaction.taxableValue)) {
             transaction.taxableValue = 0;
         }
-        entry.taxSum = giddhRoundOff(((taxPercentage * (transaction.amount - entry.discountSum)) / 100), 2);
-        entry.cessSum = giddhRoundOff(((cessPercentage * (transaction.amount - entry.discountSum)) / 100), 2);
+        entry.taxSum = giddhRoundOff(((taxPercentage * (transaction.amount - entry.discountSum)) / 100), this.highPrecisionRate);
+        entry.cessSum = giddhRoundOff(((cessPercentage * (transaction.amount - entry.discountSum)) / 100), this.highPrecisionRate);
         if (isNaN(entry.taxSum)) {
             entry.taxSum = 0;
         }
@@ -3129,7 +3132,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         if (transaction.isStockTxn) {
             transaction.rate = Number((transaction.amount / transaction.quantity).toFixed(this.highPrecisionRate));
         }
-        transaction.convertedTotal = giddhRoundOff(transaction.total * this.exchangeRate, 2);
+        transaction.convertedTotal = giddhRoundOff(transaction.total * this.exchangeRate, this.giddhBalanceDecimalPlaces);
         this.calculateSubTotal();
         this.calculateTotalDiscount();
         this.calculateTotalTaxSum();
@@ -3214,12 +3217,12 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             this.adjustPaymentBalanceDueData = 0;
         }
         this.invFormData.voucherDetails.balanceDue =
-            giddhRoundOff((((count + this.invFormData.voucherDetails.tcsTotal + this.calculatedRoundOff) - this.invFormData.voucherDetails.tdsTotal) - depositAmount - Number(this.depositAmountAfterUpdate) - this.totalAdvanceReceiptsAdjustedAmount), 2);
+            giddhRoundOff((((count + this.invFormData.voucherDetails.tcsTotal + this.calculatedRoundOff) - this.invFormData.voucherDetails.tdsTotal) - depositAmount - Number(this.depositAmountAfterUpdate) - this.totalAdvanceReceiptsAdjustedAmount), this.giddhBalanceDecimalPlaces);
         if (this.isUpdateMode && this.isInvoiceAdjustedWithAdvanceReceipts && !this.adjustPaymentData.totalAdjustedAmount) {
             this.invFormData.voucherDetails.balanceDue =
-                giddhRoundOff((((count + this.invFormData.voucherDetails.tcsTotal + this.calculatedRoundOff) - this.invFormData.voucherDetails.tdsTotal) - Number(this.depositAmountAfterUpdate) - this.totalAdvanceReceiptsAdjustedAmount), 2);
+                giddhRoundOff((((count + this.invFormData.voucherDetails.tcsTotal + this.calculatedRoundOff) - this.invFormData.voucherDetails.tdsTotal) - Number(this.depositAmountAfterUpdate) - this.totalAdvanceReceiptsAdjustedAmount), this.giddhBalanceDecimalPlaces);
         }
-        this.invFormData.voucherDetails.convertedBalanceDue = giddhRoundOff(this.invFormData.voucherDetails.balanceDue * this.exchangeRate, 2);
+        this.invFormData.voucherDetails.convertedBalanceDue = giddhRoundOff(this.invFormData.voucherDetails.balanceDue * this.exchangeRate, this.giddhBalanceDecimalPlaces);
     }
 
     /**
@@ -3231,7 +3234,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      */
     public getConvertedBalanceDue(returnModValue?: boolean): number {
         const convertedBalanceDue = parseFloat(Number(
-            this.grandTotalMulDum - this.adjustPaymentData.convertedTotalAdjustedAmount - Number((this.depositAmountAfterUpdate * this.exchangeRate).toFixed(2)) - this.invFormData.voucherDetails.tdsTotal).toFixed(2));
+            this.grandTotalMulDum - this.adjustPaymentData.convertedTotalAdjustedAmount - Number((this.depositAmountAfterUpdate * this.exchangeRate).toFixed(this.giddhBalanceDecimalPlaces)) - this.invFormData.voucherDetails.tdsTotal).toFixed(this.giddhBalanceDecimalPlaces));
         return returnModValue ? Math.abs(convertedBalanceDue) : convertedBalanceDue;
     }
 
@@ -3310,17 +3313,17 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         //Save the Grand Total for Edit
         if (calculatedGrandTotal > 0) {
             if (this.applyRoundOff) {
-                this.calculatedRoundOff = Number((Math.round(calculatedGrandTotal) - calculatedGrandTotal).toFixed(2));
+                this.calculatedRoundOff = Number((Math.round(calculatedGrandTotal) - calculatedGrandTotal).toFixed(this.giddhBalanceDecimalPlaces));
             } else {
-                this.calculatedRoundOff = Number((calculatedGrandTotal - calculatedGrandTotal).toFixed(2));
+                this.calculatedRoundOff = Number((calculatedGrandTotal - calculatedGrandTotal).toFixed(this.giddhBalanceDecimalPlaces));
             }
 
-            calculatedGrandTotal = Number((calculatedGrandTotal + this.calculatedRoundOff).toFixed(2));
+            calculatedGrandTotal = Number((calculatedGrandTotal + this.calculatedRoundOff).toFixed(this.giddhBalanceDecimalPlaces));
         } else if (calculatedGrandTotal === 0) {
             this.calculatedRoundOff = 0;
         }
         this.invFormData.voucherDetails.grandTotal = calculatedGrandTotal;
-        this.grandTotalMulDum = giddhRoundOff(calculatedGrandTotal * this.exchangeRate, 2);
+        this.grandTotalMulDum = giddhRoundOff(calculatedGrandTotal * this.exchangeRate, this.giddhBalanceDecimalPlaces);
     }
 
     /**
@@ -3560,17 +3563,19 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             // set rate auto
             transaction.rate = null;
             let obj: IStockUnit = {
-                id: o.stock.stockUnitCode,
+                id: o.stock.stockUnitUniqueName,
                 text: o.stock.stockUnitName
             };
             transaction.stockList = [];
             if (o.stock && o.stock.unitRates && o.stock.unitRates.length) {
                 transaction.stockList = this.prepareUnitArr(o.stock.unitRates);
                 transaction.stockUnit = transaction.stockList[0].id;
+                transaction.stockUnitCode = transaction.stockList[0].text;
                 transaction.rate = Number((transaction.stockList[0].rate / this.exchangeRate).toFixed(this.highPrecisionRate));
             } else {
                 transaction.stockList.push(obj);
-                transaction.stockUnit = o.stock.stockUnit.code;
+                transaction.stockUnit = o.stock.stockUnit.uniqueName;
+                transaction.stockUnitCode = o.stock.stockUnit.code;
             }
             transaction.stockDetails = omit(o.stock, ['accountStockDetails', 'stockUnit']);
             transaction.isStockTxn = true;
@@ -3583,6 +3588,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         } else {
             transaction.isStockTxn = false;
             transaction.stockUnit = null;
+            transaction.stockUnitCode = null;
             transaction.stockDetails = null;
             transaction.stockList = [];
             // reset fields
@@ -3680,6 +3686,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         txn.quantity = null;
         txn.isStockTxn = false;
         txn.stockUnit = null;
+        txn.stockUnitCode = null;
         txn.stockDetails = null;
         txn.stockList = [];
         txn.rate = null;
@@ -3701,7 +3708,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.intl?.setNumber("");
         this.typeaheadNoResultsOfCustomer = false;
         this.referenceVouchersCurrentPage = 1;
-        if (item &&item?.value) {
+        if (item && item?.value) {
             this.invFormData.voucherDetails.customerName = item.label;
             this.invFormData.voucherDetails.customerUniquename = item.value;
             this.getAccountDetails(item.value);
@@ -4042,17 +4049,15 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public prepareUnitArr(unitArr) {
         let unitArray = [];
         forEach(unitArr, (item) => {
-            unitArray.push({ id: item.stockUnitCode, text: item.stockUnitCode, rate: item.rate });
+            unitArray.push({ id: item.stockUnitUniqueName, text: item.stockUnitCode, rate: item.rate });
         });
         return unitArray;
     }
 
     public onChangeUnit(txn, selectedUnit) {
-        if (!event) {
-            return;
-        }
         find(txn.stockList, (o) => {
-            if (o.id === selectedUnit) {
+            if (o.id === selectedUnit?.value) {
+                txn.stockUnitCode = o.text;
                 return txn.rate = o.rate;
             }
         });
@@ -4251,7 +4256,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                         salesAddBulkStockItems.rate.amountForAccount = tr.rate;
                         salesAddBulkStockItems.sku = tr.stockDetails.skuCode;
                         salesAddBulkStockItems.stockUnit = new CodeStockMulticurrency();
-                        salesAddBulkStockItems.stockUnit.code = tr.stockUnit;
+                        salesAddBulkStockItems.stockUnitCode = tr.stockUnitCode;
+                        salesAddBulkStockItems.stockUnit.uniqueName = tr.stockUnit;
 
                         transactionClassMul.stock = salesAddBulkStockItems;
                     }
@@ -4749,7 +4755,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
             totalTaxes += tax?.taxDetail[0]?.taxValue;
 
-            entry.otherTaxSum = giddhRoundOff(((taxableValue * totalTaxes) / 100), 2);
+            entry.otherTaxSum = giddhRoundOff(((taxableValue * totalTaxes) / 100), this.highPrecisionRate);
             entry.otherTaxModal = modal;
         } else {
             entry.otherTaxType = undefined;
@@ -4955,9 +4961,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                         stock.unitRates = stock.unitRates || [];
                         const unitRate = stock.unitRates.find(rate => rate.code === stock.stockUnit.code);
 
-                        let stockUnit: IStockUnit = {
-                            id: stock.stockUnit.code,
-                            text: unitRate ? unitRate.stockUnitName : ''
+                        let stockUnit: IStockUnit = {	
+                            id: stock.stockUnit.uniqueName,	
+                            text: unitRate ? unitRate.stockUnitName : stock.stockUnit.code	
                         };
 
                         newTrxObj.stockList = [];
@@ -4971,6 +4977,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     newTrxObj.quantity = trx.quantity;
                     newTrxObj.rate = trx.rate;
                     newTrxObj.stockUnit = trx.stockUnit;
+                    newTrxObj.stockUnitCode = trx.stockUnitCode;
 
                     if (trx.maxQuantity) {
                         newTrxObj.maxQuantity = trx.maxQuantity;
@@ -5001,7 +5008,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                         taxableValue = (rawAmount + entry.taxSum + entry.cessSum);
                     }
 
-                    entry.otherTaxSum = giddhRoundOff(((taxableValue * tax.taxDetail[0].taxValue) / 100), 2);
+                    entry.otherTaxSum = giddhRoundOff(((taxableValue * tax.taxDetail[0].taxValue) / 100), this.highPrecisionRate);
                 }
             } else if (entry.tdsTaxList && entry.tdsTaxList.length) {
                 // tds tax calculation
@@ -5019,7 +5026,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                         taxableValue = (rawAmount + entry.taxSum + entry.cessSum);
                     }
 
-                    entry.otherTaxSum = giddhRoundOff(((taxableValue * tax.taxDetail[0].taxValue) / 100), 2);
+                    entry.otherTaxSum = giddhRoundOff(((taxableValue * tax.taxDetail[0].taxValue) / 100), this.highPrecisionRate);
                 }
             }
             entry.taxes = [];
@@ -5139,7 +5146,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     saalesAddBulkStockItems.rate.amountForAccount = tr.rate;
                     saalesAddBulkStockItems.sku = tr.stockDetails.skuCode;
                     saalesAddBulkStockItems.stockUnit = new CodeStockMulticurrency();
-                    saalesAddBulkStockItems.stockUnit.code = tr.stockUnit;
+                    saalesAddBulkStockItems.stockUnit.uniqueName = tr.stockUnit;
+                    saalesAddBulkStockItems.stockUnit.code = tr.stockUnitCode;
 
                     transactionClassMul.stock = saalesAddBulkStockItems;
                 }
@@ -5249,13 +5257,15 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     salesTransactionItemClass.stockDetails.customField1 = t.stock.customField1;
                     salesTransactionItemClass.stockDetails.customField2 = t.stock.customField2;
                     salesTransactionItemClass.stockDetails.stockUnit = t.stock.stockUnit;
+                    salesTransactionItemClass.stockDetails.stockUnitCode = t.stock.stockUnitCode;
                     salesTransactionItemClass.stockDetails.unitRates = t.stock.unitRates;
                     salesTransactionItemClass.stockDetails.uniqueName = t.stock.uniqueName;
                     salesTransactionItemClass.stockDetails.skuCodeHeading = t.stock.skuCodeHeading;
                     salesTransactionItemClass.quantity = t.stock.quantity;
                     salesTransactionItemClass.rate = t.stock.rate?.amountForAccount ?? t.stock.rate?.rateForAccount;
                     salesTransactionItemClass.stockDetails.skuCode = t.stock.sku;
-                    salesTransactionItemClass.stockUnit = t.stock.stockUnit.code;
+                    salesTransactionItemClass.stockUnit = t.stock.stockUnit.uniqueName;
+                    salesTransactionItemClass.stockUnitCode = t.stock.stockUnit.code;
                     salesTransactionItemClass.fakeAccForSelect2 = t.account.uniqueName + '#' + t.stock.uniqueName;
                 }
 
@@ -5370,7 +5380,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         if (this.isPendingVoucherType) {
             result.balanceTotal = result.grandTotal;
         } else {
-            voucherDetails.balanceDue = giddhRoundOff(result.balanceTotal?.amountForAccount ?? 0, 2);
+            voucherDetails.balanceDue = giddhRoundOff(result.balanceTotal?.amountForAccount ?? 0, this.giddhBalanceDecimalPlaces);
         }
 
         voucherDetails.deposit = result.deposit ? result.deposit.amountForAccount : 0;
@@ -6177,11 +6187,29 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      */
     public getInventorySettings(): void {
         this.store.pipe(select((s: AppState) => s.invoice.settings), takeUntil(this.destroyed$)).subscribe((settings: InvoiceSetting) => {
-            if (settings && settings.companyInventorySettings) {
-                this.inventorySettings = settings.companyInventorySettings;
-            }
-            if (settings?.invoiceSettings) {
-                this.useCustomInvoiceNumber = settings.invoiceSettings.useCustomInvoiceNumber;
+            if (settings) {
+                if (settings.companyInventorySettings) {
+                    this.inventorySettings = settings.companyInventorySettings;
+                }
+                if (settings?.invoiceSettings) {
+                    this.useCustomInvoiceNumber = settings.invoiceSettings.useCustomInvoiceNumber;
+                }
+
+                if (this.voucherApiVersion === 2) {
+                    if (this.invoiceType === VoucherTypeEnum.sales || this.invoiceType === VoucherTypeEnum.cash) {
+                        this.applyRoundOff = settings.invoiceSettings.salesRoundOff;
+                    } else if (this.invoiceType === VoucherTypeEnum.purchase) {
+                        this.applyRoundOff = settings.invoiceSettings.purchaseRoundOff;
+                    } else if (this.invoiceType === VoucherTypeEnum.debitNote) {
+                        this.applyRoundOff = settings.invoiceSettings.debitNoteRoundOff;
+                    } else if (this.invoiceType === VoucherTypeEnum.creditNote) {
+                        this.applyRoundOff = settings.invoiceSettings.creditNoteRoundOff;
+                    } else if (this.invoiceType === VoucherTypeEnum.estimate || this.invoiceType === VoucherTypeEnum.generateEstimate || this.invoiceType === VoucherTypeEnum.proforma || this.invoiceType === VoucherTypeEnum.generateProforma) {
+                        this.applyRoundOff = true;
+                    }
+                } else {
+                    this.applyRoundOff = true;
+                }
             }
         });
     }
@@ -6353,7 +6381,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @memberof VoucherComponent
      */
     public getCalculatedBalanceDueAfterAdvanceReceiptsAdjustment(): number {
-        return parseFloat(Number(this.invFormData.voucherDetails.grandTotal + this.invFormData.voucherDetails.tcsTotal - this.adjustPaymentData.totalAdjustedAmount - this.depositAmount - this.invFormData.voucherDetails.tdsTotal).toFixed(2));
+        return parseFloat(Number(this.invFormData.voucherDetails.grandTotal + this.invFormData.voucherDetails.tcsTotal - this.adjustPaymentData.totalAdjustedAmount - this.depositAmount - this.invFormData.voucherDetails.tdsTotal).toFixed(this.giddhBalanceDecimalPlaces));
     }
 
     /**
@@ -7684,18 +7712,18 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      */
     private calculateConvertedTotal(entry: SalesEntryClass, transaction: SalesTransactionItemClass): void {
         if (this.excludeTax || this.isRcmEntry) {
-            transaction.total = giddhRoundOff((transaction.amount - entry.discountSum), 2);
+            transaction.total = giddhRoundOff((transaction.amount - entry.discountSum), this.giddhBalanceDecimalPlaces);
             if (transaction.isStockTxn) {
-                transaction.convertedTotal = giddhRoundOff((transaction.quantity * transaction.rate * this.exchangeRate) - (entry.discountSum * this.exchangeRate), 2);
+                transaction.convertedTotal = giddhRoundOff((transaction.quantity * transaction.rate * this.exchangeRate) - (entry.discountSum * this.exchangeRate), this.giddhBalanceDecimalPlaces);
             } else {
-                transaction.convertedTotal = giddhRoundOff(transaction.total * this.exchangeRate, 2);
+                transaction.convertedTotal = giddhRoundOff(transaction.total * this.exchangeRate, this.giddhBalanceDecimalPlaces);
             }
         } else {
-            transaction.total = giddhRoundOff((transaction.amount - entry.discountSum) + (entry.taxSum + entry.cessSum), 2);
+            transaction.total = giddhRoundOff((transaction.amount - entry.discountSum) + (entry.taxSum + entry.cessSum), this.giddhBalanceDecimalPlaces);
             if (transaction.isStockTxn) {
-                transaction.convertedTotal = giddhRoundOff(((transaction.quantity * transaction.rate * this.exchangeRate) - (entry.discountSum * this.exchangeRate)) + ((entry.taxSum * this.exchangeRate) + (entry.cessSum * this.exchangeRate)), 2);
+                transaction.convertedTotal = giddhRoundOff(((transaction.quantity * transaction.rate * this.exchangeRate) - (entry.discountSum * this.exchangeRate)) + ((entry.taxSum * this.exchangeRate) + (entry.cessSum * this.exchangeRate)), this.giddhBalanceDecimalPlaces);
             } else {
-                transaction.convertedTotal = giddhRoundOff(transaction.total * this.exchangeRate, 2);
+                transaction.convertedTotal = giddhRoundOff(transaction.total * this.exchangeRate, this.giddhBalanceDecimalPlaces);
             }
         }
         this._cdr.detectChanges();
@@ -7932,9 +7960,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public calculateConvertedAmount(transaction: SalesTransactionItemClass): void {
         if (this.isMulticurrencyAccount) {
             if (transaction.isStockTxn) {
-                transaction.convertedAmount = giddhRoundOff(transaction.quantity * ((transaction.rate * this.exchangeRate) ? transaction.rate * this.exchangeRate : 0), 2);
+                transaction.convertedAmount = giddhRoundOff(transaction.quantity * ((transaction.rate * this.exchangeRate) ? transaction.rate * this.exchangeRate : 0), this.giddhBalanceDecimalPlaces);
             } else {
-                transaction.convertedAmount = giddhRoundOff(transaction.amount * this.exchangeRate, 2);
+                transaction.convertedAmount = giddhRoundOff(transaction.amount * this.exchangeRate, this.giddhBalanceDecimalPlaces);
             }
         }
     }
@@ -8103,6 +8131,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.store.pipe(select(state => state.settings.profile), takeUntil(this.destroyed$)).subscribe(async (profile) => {
             if (profile) {
                 this.companyCountryName = profile.country;
+                this.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
                 await this.prepareCompanyCountryAndCurrencyFromProfile(profile);
             }
         });
@@ -8342,10 +8371,10 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     }
 
     /**
-     * This will use for delete attachment confirmation
-     *
-     * @memberof VoucherComponent
-     */
+    * This will use for delete attachment confirmation
+    *
+    * @memberof VoucherComponent
+    */
     public deleteAttachementConfirmation(): void {
         this.attachmentDeleteConfiguration = this.generalService.getAttachmentDeleteConfiguration(this.localeData, this.commonLocaleData);
         let dialogRef = this.dialog.open(this.attachmentDeleteConfirmationModel, {

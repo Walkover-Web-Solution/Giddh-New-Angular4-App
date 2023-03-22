@@ -64,7 +64,7 @@
                                                     [placeholder]="'Select Unit'"
                                                     [options]="stockUnits"
                                                     (selectedOption)="
-                                                        stockForm.stockUnitCode = $event?.value;
+                                                        stockForm.stockUnitUniqueName = $event?.value;
                                                         stockUnitName = $event.label
                                                     "
                                                     [defaultValue]="stockUnitName"
@@ -399,7 +399,8 @@
                                                                                     (selectedOption)="
                                                                                         stockForm.purchaseAccountDetails.unitRates[
                                                                                             i
-                                                                                        ].stockUnitCode = $event?.value
+                                                                                        ].stockUnitUniqueName =
+                                                                                            $event?.value
                                                                                     "
                                                                                     [readonly]="
                                                                                         !isPurchaseInformationEnabled
@@ -529,7 +530,8 @@
                                                                                     (selectedOption)="
                                                                                         stockForm.salesAccountDetails.unitRates[
                                                                                             i
-                                                                                        ].stockUnitCode = $event?.value
+                                                                                        ].stockUnitUniqueName =
+                                                                                            $event?.value
                                                                                     "
                                                                                     [readonly]="
                                                                                         !isSalesInformationEnabled
@@ -4203,7 +4205,7 @@
                             mat-flat-button
                             class="create-inventory-btn"
                             (click)="createStock(stockCreateEditForm)"
-                            [disabled]="stockCreateEditForm.invalid || !stockForm.stockUnitCode"
+                            [disabled]="stockCreateEditForm.invalid || !stockForm.stockUnitUniqueName"
                         >
                             Create Inventory
                         </button>
@@ -4228,7 +4230,7 @@
                             mat-raised-button
                             class="btn-success min-width-100"
                             (click)="updateStock(stockCreateEditForm)"
-                            [disabled]="stockCreateEditForm.invalid || !stockForm.stockUnitCode"
+                            [disabled]="stockCreateEditForm.invalid || !stockForm.stockUnitUniqueName"
                         >
                             Update
                         </button>

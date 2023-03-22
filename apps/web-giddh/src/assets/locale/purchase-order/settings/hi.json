@@ -21,5 +21,7 @@
     "show_narration_ledger": "बही खाता के लिए कथन दिखाएँ",
     "invalid_email": "अमान्य ईमेल पता.",
     "gmail_account_added": "जी मेल खाता सफलतापूर्वक जोड़ा गया.",
-    "enable_voucher_download": "वाउचर डाउनलोड सक्षम करें"
+    "enable_voucher_download": "वाउचर डाउनलोड सक्षम करें",
+    "apply_purchase_round_off": "खरीद वाउचर पर राउंड ऑफ लागू करें",
+    "apply_debit_note_round_off": "डेबिट नोट वाउचर पर राउंड ऑफ लागू करें"
 }
