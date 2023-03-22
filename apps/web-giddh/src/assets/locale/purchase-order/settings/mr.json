@@ -21,5 +21,7 @@
     "show_narration_ledger": "लेजरला कथन दर्शवा",
     "invalid_email": "अवैध ई - मेल पत्ता.",
     "gmail_account_added": "जी मेल खाते यशस्वीरित्या जोडले.",
-    "enable_voucher_download": "व्हाउचर डाउनलोड सक्षम करा"
+    "enable_voucher_download": "व्हाउचर डाउनलोड सक्षम करा",
+    "apply_purchase_round_off": "खरेदी व्हाउचरवर राउंड ऑफ लागू करा",
+    "apply_debit_note_round_off": "डेबिट नोट व्हाउचरवर राउंड ऑफ लागू करा"
 }

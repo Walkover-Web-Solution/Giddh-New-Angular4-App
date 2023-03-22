@@ -12,7 +12,7 @@ import { AccountResponse } from '../../../models/api-models/Account';
 import { ICurrencyResponse, TaxResponse } from '../../../models/api-models/Company';
 import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal } from '../../../models/api-models/Sales';
 import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
-import { RATE_FIELD_PRECISION } from '../../../app.constant';
+import { HIGH_RATE_FIELD_PRECISION, RATE_FIELD_PRECISION } from '../../../app.constant';
 import { take } from 'rxjs/operators';
 import { GeneralService } from '../../../services/general.service';
 import { LedgerUtilityService } from '../../services/ledger-utility.service';
@@ -89,6 +89,8 @@ export class UpdateLedgerVm {
     private initialLoad: boolean = true;
     /** Stores the voucher API version of current company */
     public voucherApiVersion: 1 | 2;
+    /* Amount should have precision up to 16 digits for better calculation */
+    public highPrecisionRate = HIGH_RATE_FIELD_PRECISION;
 
     constructor(
         private generalService: GeneralService,
@@ -390,7 +392,7 @@ export class UpdateLedgerVm {
         if (this.isAdvanceReceipt || this.generalService.isReceiptPaymentEntry(ledgerAccount, particularAccount, this.selectedLedger.voucher.shortCode)) {
             this.taxTrxTotal = giddhRoundOff(this.getInclusiveTax(), this.giddhBalanceDecimalPlaces);
             this.advanceReceiptAmount = giddhRoundOff(this.totalAmount - this.taxTrxTotal, this.giddhBalanceDecimalPlaces);
-            this.grandTotal = giddhRoundOff(this.advanceReceiptAmount + (!isExportValid ? this.taxTrxTotal : 0), this.giddhBalanceDecimalPlaces);
+            this.grandTotal = giddhRoundOff((this.advanceReceiptAmount + (!isExportValid ? this.taxTrxTotal : 0)), this.giddhBalanceDecimalPlaces);
         } else {
             if (this.isRcmEntry) {
                 taxTotal = 0;

@@ -20,6 +20,7 @@ import { GeneralService } from '../../../services/general.service';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 import { TlPlService } from '../../../services/tl-pl.service';
 import { cloneDeep } from '../../../lodash-optimized';
+import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
 
 @Component({
     selector: 'profit-loss',
@@ -70,9 +71,17 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
     /* this will store active company data */
     public activeCompany: any = {};
+    /** Decimal places from company settings */
+    public giddhBalanceDecimalPlaces: number = 2;
 
     constructor(private store: Store<AppState>, public tlPlActions: TBPlBsActions, public currencyPipe: GiddhCurrencyPipe, private cdRef: ChangeDetectorRef, private modalService: BsModalService, private generalService: GeneralService, private tlPlService: TlPlService) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
+
+        this.store.pipe(select(p => p.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
+            if (profile) {
+                this.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
+            }
+        });
     }
 
     public ngOnInit() {
@@ -276,7 +285,7 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
 
                 if (data && data.incomeStatment && data.incomeStatment.revenue) {
                     revenue = cloneDeep(data.incomeStatment.revenue) as GetRevenueResponse;
-                    this.totalIncome = revenue.amount;
+                    this.totalIncome = giddhRoundOff(revenue.amount, this.giddhBalanceDecimalPlaces);
                     this.totalIncomeType = (revenue.type === "CREDIT") ? "Cr." : "Dr.";
                 } else {
                     this.totalIncome = 0;
@@ -285,7 +294,7 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
 
                 if (data && data.incomeStatment && data.incomeStatment.totalExpenses) {
                     expense = cloneDeep(data.incomeStatment.totalExpenses) as GetTotalExpenseResponse;
-                    this.totalExpense = expense.amount;
+                    this.totalExpense = giddhRoundOff(expense.amount, this.giddhBalanceDecimalPlaces);
                     this.totalExpenseType = (expense.type === "CREDIT") ? "Cr." : "Dr.";
                 } else {
                     this.totalExpense = 0;
@@ -295,7 +304,7 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
                 if (data && data.incomeStatment && data.incomeStatment.incomeBeforeTaxes) {
                     npl = cloneDeep(data.incomeStatment.incomeBeforeTaxes) as GetIncomeBeforeTaxes;
                     this.netProfitLossType = (npl.type === "CREDIT") ? "+" : "-";
-                    this.netProfitLoss = npl.amount;
+                    this.netProfitLoss = giddhRoundOff(npl.amount, this.giddhBalanceDecimalPlaces);
                 } else {
                     this.netProfitLossType = '';
                     this.netProfitLoss = 0;
