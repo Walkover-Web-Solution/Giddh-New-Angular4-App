@@ -222,8 +222,8 @@ export class TrialBalanceExportPdfComponent implements OnInit, OnDestroy {
         pdf.text(footerX, lastY + 20, 'Total');
         pdf.text(footerX + 210, lastY + 20, total.ob?.toString());
         pdf.text(footerX + 280, lastY + 20, total.dr?.toString());
-        pdf.text(footerX + 360, lastY + 20, total.cr.toFixed(2));
-        pdf.text(footerX + 450, lastY + 20, total.cb.toFixed(2));
+        pdf.text(footerX + 360, lastY + 20, total.cr.toFixed(this.giddhDecimalPlaces));
+        pdf.text(footerX + 450, lastY + 20, total.cb.toFixed(this.giddhDecimalPlaces));
         // Save the PDF
         pdf.save('PdfGroupWise.pdf');
     }

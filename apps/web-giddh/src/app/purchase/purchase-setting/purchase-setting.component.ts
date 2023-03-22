@@ -22,7 +22,7 @@ import { AppState } from '../../store';
 
 export class PurchaseSettingComponent implements OnInit, OnDestroy {
     /* This will hold the invoice settings */
-    public invoiceSettings: any = { purchaseBillSettings: {sendThroughGmail: false,changePOStatusOnExpiry: false,useCustomPONumber:false,enableNarration:false, enableVoucherDownload: false } };
+    public invoiceSettings: any = { purchaseBillSettings: { sendThroughGmail: false, changePOStatusOnExpiry: false, useCustomPONumber: false, enableNarration: false, enableVoucherDownload: false }, invoiceSettings: { purchaseRoundOff: false, debitNoteRoundOff: false } };
     /* This will hold the PB lock date */
     public lockDate: Date = new Date();
     /* This will hold if email updated */
@@ -103,6 +103,14 @@ export class PurchaseSettingComponent implements OnInit, OnDestroy {
 
                 if (!this.invoiceSettings.purchaseBillSettings.enableVoucherDownload) {
                     this.invoiceSettings.purchaseBillSettings.enableVoucherDownload = false;
+                }
+
+                if (!this.invoiceSettings.invoiceSettings.purchaseRoundOff) {
+                    this.invoiceSettings.invoiceSettings.purchaseRoundOff = false;
+                }
+
+                if (!this.invoiceSettings.invoiceSettings.debitNoteRoundOff) {
+                    this.invoiceSettings.invoiceSettings.debitNoteRoundOff = false;
                 }
 
                 this.originalEmail = _.cloneDeep(this.invoiceSettings.purchaseBillSettings.email);
