@@ -171,7 +171,7 @@ export class ReportsComponent implements OnInit {
             this.reportUniqueName = response?.uniqueName;
             this.reportType = (response?.reportType)?.toUpperCase();
 
-            if (this.storeFilters[this.currentUrl]) {
+            if (this.isReportLoaded && this.storeFilters && this.storeFilters[this.currentUrl]) {
                 this.showContent = false;
                 this.changeDetection.detectChanges();
 
@@ -202,7 +202,7 @@ export class ReportsComponent implements OnInit {
             };
 
             this.customiseColumns = cloneDeep(INVENTORY_COMMON_COLUMNS);
-            if (this.reportType === InventoryReportType.group.toUpperCase()) {
+            if (this.reportType === InventoryReportType.group) {
                 this.customiseColumns.splice(0, 0, {
                     "value": "group_name",
                     "label": "Group Name",
@@ -210,7 +210,7 @@ export class ReportsComponent implements OnInit {
                 });
                 this.moduleName = InventoryModuleName.group;
             }
-            if (this.reportType === InventoryReportType.stock.toUpperCase()) {
+            if (this.reportType === InventoryReportType.stock) {
                 this.customiseColumns.splice(0, 0,
                     {
                         "value": "group_name",
@@ -225,7 +225,7 @@ export class ReportsComponent implements OnInit {
                 this.moduleName = InventoryModuleName.stock;
 
             }
-            if (this.reportType === InventoryReportType.variant.toUpperCase()) {
+            if (this.reportType === InventoryReportType.variant) {
                 this.customiseColumns.splice(0, 0,
                     {
                         "value": "group_name",
