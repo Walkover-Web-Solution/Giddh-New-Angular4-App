@@ -385,7 +385,7 @@
                                             : '-'
                                     "
                                 >
-                                    <span class="d-inline-flex">
+                                    <span class="d-inline-flex" *ngIf="element?.opening?.quantity">
                                         <amount-field
                                             [amount]="element?.opening?.quantity ? element?.opening?.quantity : '-'"
                                             [currencySymbol]="false"
@@ -393,6 +393,7 @@
                                         >
                                         </amount-field>
                                     </span>
+                                    <span *ngIf="!element?.opening?.quantity">-</span>
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="opening_amount">
@@ -435,7 +436,7 @@
                                     [matTooltipPosition]="'above'"
                                     [matTooltip]="giddhRoundOff(element?.inwards?.quantity, giddhBalanceDecimalPlaces)"
                                 >
-                                    <span class="d-inline-flex">
+                                    <span class="d-inline-flex" *ngIf="element?.inwards?.quantity">
                                         <amount-field
                                             [amount]="element?.inwards?.quantity ? element?.inwards?.quantity : '-'"
                                             [currencySymbol]="false"
@@ -443,6 +444,7 @@
                                         >
                                         </amount-field>
                                     </span>
+                                    <span *ngIf="!element?.inwards?.quantity">-</span>
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="inward_amount">
@@ -485,7 +487,7 @@
                                     [matTooltipPosition]="'above'"
                                     [matTooltip]="giddhRoundOff(element?.outwards?.quantity, giddhBalanceDecimalPlaces)"
                                 >
-                                    <span class="d-inline-flex">
+                                    <span class="d-inline-flex" *ngIf="element?.outwards?.quantity">
                                         <amount-field
                                             [amount]="element?.outwards?.quantity ? element?.outwards?.quantity : '-'"
                                             [currencySymbol]="false"
@@ -493,6 +495,7 @@
                                         >
                                         </amount-field>
                                     </span>
+                                    <span *ngIf="!element?.outwards?.quantity">-</span>
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="outward_amount">
@@ -535,7 +538,7 @@
                                     [matTooltipPosition]="'above'"
                                     [matTooltip]="giddhRoundOff(element?.closing?.quantity, giddhBalanceDecimalPlaces)"
                                 >
-                                    <span class="d-inline-flex">
+                                    <span class="d-inline-flex" *ngIf="element?.closing?.quantity">
                                         <amount-field
                                             [amount]="element?.closing?.quantity ? element?.closing?.quantity : '-'"
                                             [currencySymbol]="false"
@@ -543,6 +546,7 @@
                                         >
                                         </amount-field>
                                     </span>
+                                    <span *ngIf="!element?.closing?.quantity">-</span>
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="closing_amount">
