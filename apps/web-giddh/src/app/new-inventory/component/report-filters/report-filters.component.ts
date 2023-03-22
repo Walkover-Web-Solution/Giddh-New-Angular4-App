@@ -177,6 +177,8 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
                         }, 100);
                     });
                 } else {
+                    this.selectedBranch = this.stockReportRequest?.branchUniqueNames || [];
+                    this.selectedWarehouse = this.stockReportRequest?.warehouseUniqueNames || [];
                     this.stockReportRequest.page = 1;
                     setTimeout(() => {
                         this.emitFilters();
@@ -477,10 +479,6 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ReportFiltersComponent
      */
     public getBranches(apiCall: boolean = true): void {
-        if (!this.pullUniversalDate) {
-            this.selectedBranch = this.stockReportRequest?.branchUniqueNames || [];
-            this.selectedWarehouse = this.stockReportRequest?.warehouseUniqueNames || [];
-        }
         this.allWarehouses = [];
         if (!this.isCompany) {
             let currentBranch = this.allBranches?.filter(branch => branch?.uniqueName === this.generalService.currentBranchUniqueName);
