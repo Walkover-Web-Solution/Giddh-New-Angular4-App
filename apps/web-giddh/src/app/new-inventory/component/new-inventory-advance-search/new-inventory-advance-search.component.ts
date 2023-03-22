@@ -87,6 +87,12 @@ export class NewInventoryAdvanceSearch implements OnInit {
     ];
     /** Instance of advance search form*/
     public advanceSearchFormObj: any = {};
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
+    /** True if translations loaded */
+    public translationLoaded: boolean = false;
 
     constructor(
         private _breakPointObservar: BreakpointObserver,
@@ -289,6 +295,18 @@ export class NewInventoryAdvanceSearch implements OnInit {
             this.datepickerTemplate,
             Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
         );
+    }
+
+    /**
+     * This will use for translation complete
+     *
+     * @param {*} event
+     * @memberof NewInventoryAdvanceSearch
+     */
+    public translationComplete(event: any): void {
+        if (event) {
+            this.translationLoaded = true;
+        }
     }
 
     /**

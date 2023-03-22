@@ -17,6 +17,7 @@ import { ToasterService } from "../../../services/toaster.service";
 import { cloneDeep } from "../../../lodash-optimized";
 import { AppState } from "../../../store";
 import { select, Store } from "@ngrx/store";
+import { Location } from '@angular/common';
 
 @Component({
     selector: "report-filters",
@@ -27,7 +28,6 @@ import { select, Store } from "@ngrx/store";
 export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     /** Instance of datepicker */
     @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
-
     /* This will hold local JSON data */
     @Input() public localeData: any = {};
     /* This will hold common JSON data */
@@ -44,7 +44,12 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public balanceStockReportRequest: BalanceStockTransactionReportRequest = new BalanceStockTransactionReportRequest();
     /** Holds report type */
     @Input() public searchPage: string = "";
-
+    /** Hold advance search modal response */
+    @Input() public advanceSearchModalResponse: any = null;
+    /** False if pull unitversal date  */
+    @Input() public pullUniversalDate: boolean = true;
+    /** Holds module name for customised columns */
+    @Input() public reportUniqueName: string = "";
     /** Emits the selected filters */
     @Output() public filters: EventEmitter<any> = new EventEmitter();
     /** Emits true if filters are reset */
@@ -53,7 +58,6 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     @Output() public isLoading: EventEmitter<boolean> = new EventEmitter();
     /** Emits the selected filters */
     @Output() public selectedColumns: EventEmitter<any> = new EventEmitter();
-
     /** True if show advance search model*/
     public showAdvanceSearchModal: boolean = false;
     /** This will use for instance of warehouses Dropdown */
@@ -68,8 +72,6 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Stock Transactional Object */
     public searchRequest: SearchStockTransactionReportRequest = new SearchStockTransactionReportRequest();
-    /** Hold advance search modal response */
-    public advanceSearchModalResponse: object = null;
     /** This will store universalDate */
     public universalDate: any;
     /** Universal date observer */
@@ -129,6 +131,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
 
     constructor(
         public dialog: MatDialog,
+        private location: Location,
         public modalService: BsModalService,
         private changeDetection: ChangeDetectorRef,
         private inventoryService: InventoryService,
@@ -145,39 +148,46 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ReportFiltersComponent
      */
     public ngOnInit(): void {
-
         this.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe(dateObj => {
             if (dateObj) {
-                let universalDate = _.cloneDeep(dateObj);
-                this.store.pipe(select(state => state.session.todaySelected), take(1)).subscribe(response => {
-                    this.todaySelected = response;
-                    if (universalDate && !this.todaySelected) {
-                        this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
-                        this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-                        this.fromDate = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);
-                        this.toDate = dayjs(universalDate[1]).format(GIDDH_DATE_FORMAT);
-                        this.stockReportRequest.from = this.fromDate;
-                        this.stockReportRequest.to = this.toDate;
-                        this.balanceStockReportRequest.from = this.fromDate;
-                        this.balanceStockReportRequest.to = this.toDate;
-                    } else if (this.todaySelected) {
-                        this.selectedDateRange = { startDate: dayjs(), endDate: dayjs() };
-                        this.selectedDateRangeUi = dayjs().format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs().format(GIDDH_NEW_DATE_FORMAT_UI);
-                        this.stockReportRequest.from = "";
-                        this.stockReportRequest.to = "";
-                        this.balanceStockReportRequest.from = "";
-                        this.balanceStockReportRequest.to = "";
-                    }
+                this.universalDate = _.cloneDeep(dateObj);
+                if (this.pullUniversalDate) {
+                    this.store.pipe(select(state => state.session.todaySelected), take(1)).subscribe(response => {
+                        this.todaySelected = response;
+                        if (this.universalDate && !this.todaySelected) {
+                            this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
+                            this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                            this.fromDate = dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
+                            this.toDate = dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
+                            this.stockReportRequest.from = this.fromDate;
+                            this.stockReportRequest.to = this.toDate;
+                            this.balanceStockReportRequest.from = this.fromDate;
+                            this.balanceStockReportRequest.to = this.toDate;
+                        } else if (this.todaySelected) {
+                            this.selectedDateRange = { startDate: dayjs(), endDate: dayjs() };
+                            this.selectedDateRangeUi = dayjs().format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs().format(GIDDH_NEW_DATE_FORMAT_UI);
+                            this.stockReportRequest.from = "";
+                            this.stockReportRequest.to = "";
+                            this.balanceStockReportRequest.from = "";
+                            this.balanceStockReportRequest.to = "";
+                        }
+                        this.stockReportRequest.page = 1;
+                        setTimeout(() => {
+                            this.emitFilters();
+                        }, 100);
+                    });
+                } else {
+                    this.selectedBranch = this.stockReportRequest?.branchUniqueNames || [];
+                    this.selectedWarehouse = this.stockReportRequest?.warehouseUniqueNames || [];
                     this.stockReportRequest.page = 1;
                     setTimeout(() => {
                         this.emitFilters();
                     }, 100);
-                });
+                }
             }
         });
 
         this.getBranchWiseWarehouse();
-        this.getReportColumns();
 
         this.branchesDropdown.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(search => {
             let branchesClone = cloneDeep(this.allBranches);
@@ -205,8 +215,6 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
                 this.searchInventory();
             }
         });
-
-        this.searchInventory();
     }
 
     /**
@@ -216,7 +224,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ReportFiltersComponent
      */
     public ngOnChanges(changes: SimpleChanges): void {
-        if (changes?.fromToDate?.currentValue) {
+        if (changes?.fromToDate?.currentValue?.from) {
             this.selectedDateRange = { startDate: dayjs(changes?.fromToDate?.currentValue?.from, GIDDH_DATE_FORMAT), endDate: dayjs(changes?.fromToDate?.currentValue?.to, GIDDH_DATE_FORMAT) };
             this.selectedDateRangeUi = dayjs(changes?.fromToDate?.currentValue?.from, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(changes?.fromToDate?.currentValue?.to, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
             this.fromDate = dayjs(changes?.fromToDate?.currentValue?.from, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
@@ -226,7 +234,28 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
             this.balanceStockReportRequest.from = this.fromDate;
             this.balanceStockReportRequest.to = this.toDate;
         }
+        if (changes?.searchPage) {
+            this.getReportColumns();
+        }
+        if (changes?.stockReportRequest?.currentValue) {
+            if (changes?.stockReportRequest?.currentValue?.stockGroups) {
+                changes?.stockReportRequest?.currentValue?.stockGroups?.forEach(group => {
+                    this.filtersChipList.push(group);
+                });
+            }
+            if (changes?.stockReportRequest?.currentValue?.stocks) {
+                changes?.stockReportRequest?.currentValue?.stocks?.forEach(stock => {
+                    this.filtersChipList.push(stock);
+                });
+            }
+            if (changes?.stockReportRequest?.currentValue?.variants) {
+                changes?.stockReportRequest?.currentValue?.variants?.forEach(variant => {
+                    this.filtersChipList.push(variant);
+                });
+            }
+        }
         this.isFilterActive();
+        this.searchInventory();
     }
 
     /**
@@ -296,22 +325,14 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
-     * This hook will use for on destroyed component
-     *
-     * @memberof ReportFiltersComponent
-     */
-    public ngOnDestroy() {
-        this.destroyed$.next(true);
-        this.destroyed$.complete();
-    }
-
-    /**
      * Opens the advance search modal
      *
      * @memberof ReportFiltersComponent
      */
     public openModal(): void {
         this.showAdvanceSearchModal = true;
+        this.stockReportRequest.from = this.selectedDateRange.startDate;
+        this.stockReportRequest.to = this.selectedDateRange.endDate;
         let dialogRef = this.dialog?.open(NewInventoryAdvanceSearch, {
             panelClass: 'advance-search-container',
             data: {
@@ -348,7 +369,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ReportFiltersComponent
      */
     private emitFilters(): void {
-        this.filters.emit({ stockReportRequest: this.stockReportRequest, balanceStockReportRequest: this.balanceStockReportRequest, displayedColumns: this.displayedColumns, todaySelected: this.todaySelected, showClearFilter: this.showClearFilter });
+        this.filters.emit({ stockReportRequest: this.stockReportRequest, balanceStockReportRequest: this.balanceStockReportRequest, displayedColumns: this.displayedColumns, todaySelected: this.todaySelected, showClearFilter: this.showClearFilter, advanceSearchModalResponse: this.advanceSearchModalResponse });
     }
 
     /**
@@ -357,7 +378,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ReportFiltersComponent
      */
     public isFilterActive(): void {
-        if (this.selectedBranch?.length || this.selectedWarehouse?.length || this.filtersChipList?.length || this.advanceSearchModalResponse || this.stockReportRequest?.voucherTypes?.length || this.stockReportRequest.accountName?.length) {
+        if ((this.isCompany && this.selectedBranch?.length) || this.selectedWarehouse?.length || this.filtersChipList?.length || this.advanceSearchModalResponse || this.stockReportRequest?.voucherTypes?.length || this.stockReportRequest.accountName?.length) {
             this.showClearFilter = true;
         } else {
             this.showClearFilter = false;
@@ -375,9 +396,9 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
         this.advanceSearchModalResponse = null;
         this.stockReportRequest = new StockTransactionReportRequest();
         this.balanceStockReportRequest = new BalanceStockTransactionReportRequest();
-        this.searchInventory();
         this.filtersChipList = [];
         this.selectedBranch = [];
+        this.selectedWarehouse = [];
         this.getBranches(false);
         //Reset Date with universal date
         this.universalDate$.subscribe(res => {
@@ -458,7 +479,6 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ReportFiltersComponent
      */
     public getBranches(apiCall: boolean = true): void {
-        this.selectedWarehouse = [];
         this.allWarehouses = [];
         if (!this.isCompany) {
             let currentBranch = this.allBranches?.filter(branch => branch?.uniqueName === this.generalService.currentBranchUniqueName);
@@ -468,7 +488,6 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
                 this.allWarehouses = this.allWarehouses?.concat(branches?.warehouses);
             });
         }
-
         if (this.selectedBranch?.length === 0) {
             this.warehouses = this.allWarehouses;
         } else {
@@ -567,6 +586,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
         const selectOptionValue = option?.option?.value;
         if (option?.option?.value?.type === 'STOCK GROUP') {
             this.stockReportRequest.stockGroupUniqueNames = [option?.option?.value?.uniqueName];
+            this.stockReportRequest.stockGroups = [option?.option?.value];
         } else if (option?.option?.value?.type === 'STOCK') {
             const findStockColumnCheck = this.customiseColumns?.find(value => value?.value === "stockName");
             if (this.stockReportRequest.stockUniqueNames?.length === 0 && findStockColumnCheck?.checked) {
@@ -577,6 +597,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
                 this.filteredDisplayColumns();
             }
             this.stockReportRequest.stockUniqueNames?.push(option?.option?.value?.uniqueName);
+            this.stockReportRequest.stocks = [option?.option?.value];
         } else {
             const findVariantColumnCheck = this.customiseColumns?.find(value => value?.value === "variantName");
             if (this.stockReportRequest.variantUniqueNames?.length === 0 && findVariantColumnCheck?.checked) {
@@ -587,14 +608,15 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
                 this.filteredDisplayColumns();
             }
             this.stockReportRequest.variantUniqueNames?.push(option?.option?.value?.uniqueName);
+            this.stockReportRequest.variants = [option?.option?.value];
         }
         this.balanceStockReportRequest.stockGroupUniqueNames = this.stockReportRequest.stockGroupUniqueNames;
         this.balanceStockReportRequest.stockUniqueNames = this.stockReportRequest.stockUniqueNames;
         this.balanceStockReportRequest.variantUniqueNames = this.stockReportRequest.variantUniqueNames;
         this.filtersChipList?.push(selectOptionValue);
-        this.isFilterActive();
         this.searchRequest.q = "";
         this.searchInventory();
+        this.isFilterActive();
         this.emitFilters();
     }
 
@@ -610,9 +632,11 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
         if (selectOptionValue) {
             if (selectOptionValue.type === "STOCK GROUP") {
                 this.stockReportRequest.stockGroupUniqueNames = this.stockReportRequest.stockGroupUniqueNames?.filter(value => value != selectOptionValue.uniqueName);
+                this.stockReportRequest.stockGroups = this.stockReportRequest.stockGroups?.filter(value => value?.uniqueName != selectOptionValue.uniqueName);
             }
             if (selectOptionValue.type === "STOCK") {
                 this.stockReportRequest.stockUniqueNames = this.stockReportRequest.stockUniqueNames.filter(value => value != selectOptionValue.uniqueName);
+                this.stockReportRequest.stocks = this.stockReportRequest.stocks?.filter(value => value?.uniqueName != selectOptionValue.uniqueName);
                 if (this.stockReportRequest.stockUniqueNames.length <= 1) {
                     this.customiseColumns.find(value => value?.value === "stockName").checked = (this.stockReportRequest.stockUniqueNames?.length === 1 ? false : true);
                     this.filteredDisplayColumns();
@@ -620,6 +644,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
             }
             if (selectOptionValue.type === "VARIANT") {
                 this.stockReportRequest.variantUniqueNames = this.stockReportRequest.variantUniqueNames?.filter(value => value != selectOptionValue.uniqueName);
+                this.stockReportRequest.variants = this.stockReportRequest.variants?.filter(value => value?.uniqueName != selectOptionValue.uniqueName);
                 if (this.stockReportRequest.variantUniqueNames?.length <= 1) {
                     this.customiseColumns.find(value => value?.value === "variantName").checked = (this.stockReportRequest.variantUniqueNames.length === 1 ? false : true);
                     this.filteredDisplayColumns();
@@ -629,8 +654,8 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
             this.balanceStockReportRequest.stockUniqueNames = this.stockReportRequest.stockUniqueNames;
             this.balanceStockReportRequest.variantUniqueNames = this.stockReportRequest.variantUniqueNames;
             this.searchInventory();
-            this.emitFilters();
             this.isFilterActive();
+            this.emitFilters();
         }
     }
 
@@ -641,12 +666,12 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ReportFiltersComponent
      */
     public searchInventory(loadMore?: boolean): void {
-        this.searchRequest.stockGroupUniqueNames = this.stockReportRequest.stockGroupUniqueNames ? this.stockReportRequest.stockGroupUniqueNames : [];
-        this.searchRequest.stockUniqueNames = this.stockReportRequest.stockUniqueNames ? this.stockReportRequest.stockUniqueNames : [];
-        this.searchRequest.variantUniqueNames = this.stockReportRequest.variantUniqueNames ? this.stockReportRequest.variantUniqueNames : [];
-        this.balanceStockReportRequest.stockGroupUniqueNames = this.stockReportRequest.stockGroupUniqueNames ? this.stockReportRequest.stockGroupUniqueNames : [];
-        this.balanceStockReportRequest.stockUniqueNames = this.stockReportRequest.stockUniqueNames ? this.stockReportRequest.stockUniqueNames : [];
-        this.balanceStockReportRequest.variantUniqueNames = this.stockReportRequest.variantUniqueNames ? this.stockReportRequest.variantUniqueNames : [];
+        this.searchRequest.stockGroupUniqueNames = this.stockReportRequest.stockGroupUniqueNames;
+        this.searchRequest.stockUniqueNames = this.stockReportRequest.stockUniqueNames;
+        this.searchRequest.variantUniqueNames = this.stockReportRequest.variantUniqueNames;
+        this.balanceStockReportRequest.stockGroupUniqueNames = this.stockReportRequest.stockGroupUniqueNames;
+        this.balanceStockReportRequest.stockUniqueNames = this.stockReportRequest.stockUniqueNames;
+        this.balanceStockReportRequest.variantUniqueNames = this.stockReportRequest.variantUniqueNames;
         if (loadMore) {
             this.searchRequest.page++;
         } else {
@@ -673,5 +698,24 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
                 this.changeDetection.detectChanges();
             });
         }
+    }
+
+    /**
+     * This will use for back to previous page
+     *
+     * @memberof ReportFiltersComponent
+     */
+    public backToPreviousPage(): void {
+        this.location.back();
+    }
+
+    /**
+    * This hook will use for on destroyed component
+    *
+    * @memberof ReportFiltersComponent
+    */
+    public ngOnDestroy() {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 }

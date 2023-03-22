@@ -30,6 +30,7 @@ export class CommonActions {
     public static SET_ACTIVE_LOCALE = 'SetActiveLocale';
     public static SET_ACTIVE_FINANCIAL_YEAR = 'SetActiveFinancialYear';
     public static SET_ACTIVE_THEME = 'SetActiveTheme';
+    public static SET_FILTERS = 'SetFilters';
     public static SET_IMPORT_BANK_TRANSACTIONS_RESPONSE = 'SetImportBankTransactionsResponse';
 
     public getCountry$: Observable<Action> = createEffect(() => this.action$
@@ -238,10 +239,23 @@ export class CommonActions {
     }
 
     /**
-     * This will set the bank transactions import response data
+     * Set filters in store
      *
      * @param {*} data
      * @returns {CustomActions}
+     * @memberof CommonActions
+     */
+    public setFilters(data: any): CustomActions {
+        return {
+            type: CommonActions.SET_FILTERS,
+        }
+    }
+
+    /**
+     ** This will set the bank transactions import response data
+     *
+     * @param {*} data
+     * @return {*}  {CustomActions}
      * @memberof CommonActions
      */
     public setImportBankTransactionsResponse(data: any): CustomActions {

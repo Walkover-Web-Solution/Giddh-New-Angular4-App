@@ -13,7 +13,9 @@ import {
     StockUnitResponse,
     InventoryDownloadRequest,
     StockMappedUnitResponse,
-    StockTransactionReportRequest
+    StockTransactionReportRequest,
+    InventoryReportRequest,
+    InventoryReportResponse
 } from '../models/api-models/Inventory';
 import { Inject, Injectable, Optional } from '@angular/core';
 import { HttpWrapperService } from './httpWrapper.service';
@@ -1037,7 +1039,7 @@ export class InventoryService {
      */
     public getStockTransactionReportColumns(module: string): Observable<BaseResponse<any, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.get(this.config.apiUrl + INVENTORY_API.TRANSACTIONAL_STOCK_REPORT_COLUMNS?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':module', module)).pipe(map((res) => {
+        return this.http.get(this.config.apiUrl + INVENTORY_API.TRANSACTION_STOCK_REPORT_COLUMNS?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':module', module)).pipe(map((res) => {
             let data: BaseResponse<any, string> = res;
             data.request = '';
             data.queryString = {};
@@ -1054,7 +1056,7 @@ export class InventoryService {
      */
     public saveStockTransactionReportColumns(model: any): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        let url = this.config.apiUrl + INVENTORY_API.TRANSACTIONAL_STOCK_REPORT_COLUMNS;
+        let url = this.config.apiUrl + INVENTORY_API.TRANSACTION_STOCK_REPORT_COLUMNS;
         url = url?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':module', model.module);
         return this.http.post(url, model).pipe(map((res) => {
             let data: BaseResponse<any, any> = res;
@@ -1093,7 +1095,7 @@ export class InventoryService {
         let updatedStockTransactionRequest = cloneDeep(stockReportRequest);
         delete updatedStockTransactionRequest.from;
         delete updatedStockTransactionRequest.to;
-        return this.http.post(this.config.apiUrl + INVENTORY_API.TRANSACTIONAL_STOCK_REPORT_V2?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+        return this.http.post(this.config.apiUrl + INVENTORY_API.TRANSACTION_STOCK_REPORT_V2?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             ?.replace(':stockGroupUniqueName', encodeURIComponent(<any>stockReportRequest.stockGroupUniqueNames))
             ?.replace(':stockUniqueName', encodeURIComponent(<any>stockReportRequest.stockUniqueNames))
             ?.replace(':transactionType', encodeURIComponent(stockReportRequest.transactionType ? stockReportRequest.transactionType?.toString() : 'all'))
@@ -1138,7 +1140,7 @@ export class InventoryService {
         let updatedBalanceRequest = cloneDeep(stockReportRequest);
         delete updatedBalanceRequest.from;
         delete updatedBalanceRequest.to;
-        return this.http.post(this.config.apiUrl + INVENTORY_API.TRANSACTIONAL_STOCK_REPORT_BALANCE_V2?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+        return this.http.post(this.config.apiUrl + INVENTORY_API.TRANSACTION_STOCK_REPORT_BALANCE_V2?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             ?.replace(':stockGroupUniqueName', encodeURIComponent(<any>stockReportRequest.stockGroupUniqueNames))
             ?.replace(':stockUniqueName', encodeURIComponent(<any>stockReportRequest.stockUniqueNames))
             ?.replace(':from', encodeURIComponent(stockReportRequest.from))
@@ -1162,4 +1164,118 @@ export class InventoryService {
                 })));
     }
 
+
+    /**
+     * This will use for get inventory gorup report
+     *
+     * @param {InventoryReportRequest} stockReportRequest
+     * @return {*}  {Observable<BaseResponse<InventoryReportResponse, InventoryReportRequest>>}
+     * @memberof InventoryService
+     */
+    public getGroupWiseReport(stockReportRequest: InventoryReportRequest): Observable<BaseResponse<InventoryReportResponse, InventoryReportRequest>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        let updatedReportRequest = cloneDeep(stockReportRequest);
+        delete updatedReportRequest.from;
+        delete updatedReportRequest.to;
+        return this.http.post(this.config.apiUrl + INVENTORY_API.INVENTORY_GROUP_WISE_REPORT?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':from', encodeURIComponent(stockReportRequest.from))
+            ?.replace(':to', encodeURIComponent(stockReportRequest.to))
+            ?.replace(':count', encodeURIComponent(stockReportRequest.count?.toString()))
+            ?.replace(':page', encodeURIComponent(stockReportRequest.page?.toString()))
+            ?.replace(':sort', encodeURIComponent(stockReportRequest.sort ? stockReportRequest.sort?.toString() : ''))
+            ?.replace(':sortBy', encodeURIComponent(stockReportRequest.sortBy ? stockReportRequest.sortBy?.toString() : ''))
+            , updatedReportRequest).pipe(
+                map((res) => {
+                    let data: BaseResponse<InventoryReportResponse, InventoryReportRequest> = res;
+                    data.request = updatedReportRequest;
+                    data.queryString = {
+                        from: stockReportRequest.from,
+                        to: stockReportRequest.to,
+                        count: stockReportRequest.count,
+                        page: stockReportRequest.page
+                    };
+                    return data;
+                }), catchError((e) => this.errorHandler.HandleCatch<InventoryReportResponse, InventoryReportRequest>(e, stockReportRequest, {
+                    from: stockReportRequest.from,
+                    to: stockReportRequest.to,
+                    count: stockReportRequest.count,
+                    page: stockReportRequest.page
+                })));
+    }
+
+    /**
+     *This will use for get inventory stock  report
+     *
+     * @param {InventoryReportRequest} stockReportRequest
+     * @return {*}  {Observable<BaseResponse<InventoryReportResponse, InventoryReportRequest>>}
+     * @memberof InventoryService
+     */
+    public getItemWiseReport(stockReportRequest: InventoryReportRequest): Observable<BaseResponse<InventoryReportResponse, InventoryReportRequest>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        let updatedReportRequest = cloneDeep(stockReportRequest);
+        delete updatedReportRequest.from;
+        delete updatedReportRequest.to;
+        return this.http.post(this.config.apiUrl + INVENTORY_API.INVENTORY_ITEM_WISE_REPORT?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':from', encodeURIComponent(stockReportRequest.from))
+            ?.replace(':to', encodeURIComponent(stockReportRequest.to))
+            ?.replace(':count', encodeURIComponent(stockReportRequest.count?.toString()))
+            ?.replace(':page', encodeURIComponent(stockReportRequest.page?.toString()))
+            ?.replace(':sort', encodeURIComponent(stockReportRequest.sort ? stockReportRequest.sort?.toString() : ''))
+            ?.replace(':sortBy', encodeURIComponent(stockReportRequest.sortBy ? stockReportRequest.sortBy?.toString() : ''))
+            , updatedReportRequest).pipe(
+                map((res) => {
+                    let data: BaseResponse<InventoryReportResponse, InventoryReportRequest> = res;
+                    data.request = updatedReportRequest;
+                    data.queryString = {
+                        from: stockReportRequest.from,
+                        to: stockReportRequest.to,
+                        count: stockReportRequest.count,
+                        page: stockReportRequest.page
+                    };
+                    return data;
+                }), catchError((e) => this.errorHandler.HandleCatch<InventoryReportResponse, InventoryReportRequest>(e, stockReportRequest, {
+                    from: stockReportRequest.from,
+                    to: stockReportRequest.to,
+                    count: stockReportRequest.count,
+                    page: stockReportRequest.page
+                })));
+    }
+
+    /**
+     *This will use for get inventory variant report
+     *
+     * @param {InventoryReportRequest} stockReportRequest
+     * @return {*}  {Observable<BaseResponse<InventoryReportResponse, InventoryReportRequest>>}
+     * @memberof InventoryService
+     */
+    public getVariantWiseReport(stockReportRequest: InventoryReportRequest): Observable<BaseResponse<InventoryReportResponse, InventoryReportRequest>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        let updatedReportRequest = cloneDeep(stockReportRequest);
+        delete updatedReportRequest.from;
+        delete updatedReportRequest.to;
+        return this.http.post(this.config.apiUrl + INVENTORY_API.INVENTORY_VARIANT_WISE_REPORT?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':from', encodeURIComponent(stockReportRequest.from))
+            ?.replace(':to', encodeURIComponent(stockReportRequest.to))
+            ?.replace(':count', encodeURIComponent(stockReportRequest.count?.toString()))
+            ?.replace(':page', encodeURIComponent(stockReportRequest.page?.toString()))
+            ?.replace(':sort', encodeURIComponent(stockReportRequest.sort ? stockReportRequest.sort?.toString() : ''))
+            ?.replace(':sortBy', encodeURIComponent(stockReportRequest.sortBy ? stockReportRequest.sortBy?.toString() : ''))
+            , updatedReportRequest).pipe(
+                map((res) => {
+                    let data: BaseResponse<InventoryReportResponse, InventoryReportRequest> = res;
+                    data.request = updatedReportRequest;
+                    data.queryString = {
+                        from: stockReportRequest.from,
+                        to: stockReportRequest.to,
+                        count: stockReportRequest.count,
+                        page: stockReportRequest.page
+                    };
+                    return data;
+                }), catchError((e) => this.errorHandler.HandleCatch<InventoryReportResponse, InventoryReportRequest>(e, stockReportRequest, {
+                    from: stockReportRequest.from,
+                    to: stockReportRequest.to,
+                    count: stockReportRequest.count,
+                    page: stockReportRequest.page
+                })));
+    }
 }

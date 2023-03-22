@@ -40,7 +40,21 @@
 .filter-dropdown-branch {
     max-width: 250px;
 }
-
+.back-btnn {
+    float: left;
+    width: 84px !important;
+}
+.report-back-button {
+    background-color: var(--color-sidebar-anchor-text-hover) !important;
+    color: var(--color-white) !important;
+    font-family: "opensans-semibold" !important;
+    height: 37px;
+    margin-right: 0px !important;
+    :hover {
+        background-color: var(--color-sidebar-anchor-text-hover) !important;
+        color: var(--color-white) !important;
+    }
+}
 .filter-dropdown-warehouse {
     max-width: 250px;
     margin-left: 5px;

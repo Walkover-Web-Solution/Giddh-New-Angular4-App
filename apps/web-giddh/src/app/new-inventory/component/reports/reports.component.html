@@ -1,12 +1,12 @@
 <!--new inventory header-->
+
 <ng-container
     appTranslate
     [file]="'inventory'"
     (commonLocaleData)="commonLocaleData = $event"
     (localeData)="localeData = $event"
     (translationComplete)="translationComplete($event)"
->
-    <div class="transaction-report-wrapper">
+    ><div class="transaction-report-wrapper" *ngIf="showContent">
         <report-filters
             [localeData]="localeData"
             [commonLocaleData]="commonLocaleData"
@@ -16,20 +16,16 @@
             [fromToDate]="fromToDate"
             [stockReportRequest]="stockReportRequest"
             [balanceStockReportRequest]="balanceStockReportRequest"
-            [searchPage]="reportType"
+            [advanceSearchModalResponse]="advanceSearchModalResponse"
+            [pullUniversalDate]="pullUniversalDate"
             (filters)="getSelectedFilters($event)"
             (resetFilters)="resetFilter()"
+            [searchPage]="reportType"
             (isLoading)="isLoading = $event"
-            (selectedColumns)="displayedColumns = $event"
+            (selectedColumns)="getCustomiseHeaderColumns($event)"
         ></report-filters>
         <div class="inventory-transaction-list" *ngIf="!isLoading">
-            <div
-                *ngIf="
-                    isDataAvailable ||
-                    stockReportRequest?.voucherTypes?.length ||
-                    stockReportRequest?.accountName?.length
-                "
-            >
+            <div *ngIf="isDataAvailable">
                 <div class="row">
                     <div class="col-12">
                         <div class="top-content">
@@ -319,14 +315,7 @@
                     </div>
                 </div>
             </div>
-            <div
-                class="row"
-                *ngIf="
-                    isDataAvailable ||
-                    stockReportRequest?.voucherTypes?.length ||
-                    stockReportRequest?.accountName?.length
-                "
-            >
+            <div class="row" *ngIf="isDataAvailable">
                 <div class="col-12 horizontal-padding">
                     <div class="table-responsive inventory-report-table" *ngIf="displayedColumns?.length">
                         <table
@@ -338,201 +327,96 @@
                             [matSortDirection]="stockReportRequest?.sort"
                             class="table giddh-table on-mobile-view"
                         >
-                            <ng-container matColumnDef="entry_date">
-                                <th class="date-column" mat-header-cell *matHeaderCellDef mat-sort-header>
-                                    {{ localeData?.reports?.date }}
-                                </th>
-                                <td data-title="Date" mat-cell *matCellDef="let element">
-                                    {{ element?.entryDate ?? "-" }}
-                                </td>
-                            </ng-container>
-
-                            <ng-container matColumnDef="voucherType">
-                                <th mat-header-cell *matHeaderCellDef [matMenuTriggerFor]="voucherTypesMenu">
-                                    {{ localeData?.reports?.voucher_type }}
-                                    <i
-                                        class="fa fa-ellipsis-v ml-1 text-light-2 mt-1 cursor-pointer"
-                                        aria-hidden="true"
-                                    ></i>
-                                    <mat-menu
-                                        #voucherTypesMenu="matMenu"
-                                        class="columns-wrapper"
-                                        (closed)="filterByVoucherTypes()"
-                                    >
-                                        <ng-container *ngFor="let item of voucherTypes; let idx = index">
-                                            <button
-                                                class="menu-buttons"
-                                                mat-menu-item
-                                                (click)="$event?.stopPropagation()"
-                                                (keydown.enter)="item.checked = !item?.checked"
-                                            >
-                                                <mat-checkbox
-                                                    class="inventory-checkbox"
-                                                    color="primary"
-                                                    name="{{ item?.value }}"
-                                                    [(ngModel)]="item.checked"
-                                                    (click)="$event?.stopPropagation()"
-                                                >
-                                                    {{ item?.label }}</mat-checkbox
-                                                >
-                                            </button>
-                                        </ng-container>
-                                    </mat-menu>
-                                </th>
-                                <td date-title="Voucher Type" mat-cell *matCellDef="let element">
-                                    {{ element?.voucherType }}
-                                </td>
-                            </ng-container>
-                            <ng-container matColumnDef="accountName">
-                                <th
-                                    class="td-search-box text-left"
-                                    mat-header-cell
-                                    #searchCustomerContainer
-                                    *matHeaderCellDef
-                                    (clickOutside)="handleClickOutside($event, searchCustomerContainer, 'name')"
-                                >
-                                    <ng-container
-                                        *ngTemplateOutlet="
-                                            searchTemplate;
-                                            context: {
-                                                $implicit: showAccountSearchInput,
-                                                fieldName: 'name',
-                                                formControl: searchAccountName,
-                                                title: localeData?.reports?.account_name
-                                            }
-                                        "
-                                    ></ng-container>
+                            <ng-container matColumnDef="group_name">
+                                <th class="group-column" mat-header-cell *matHeaderCellDef>
+                                    {{ localeData?.reports?.group_name }}
                                 </th>
                                 <td
-                                    data-title="Account Name"
-                                    class="text-left account-name-column"
+                                    data-title="Date"
+                                    class="text-left word-wrap cursor-pointer"
                                     mat-cell
                                     *matCellDef="let element"
+                                    (click)="getReportsByReportType($event, element)"
                                 >
-                                    {{ element?.account?.name ?? "-" }}
+                                    {{ element?.stockGroup?.name ?? "-" }}
                                 </td>
                             </ng-container>
-                            <ng-container matColumnDef="stockName">
-                                <th width="17%" class="text-left" mat-header-cell *matHeaderCellDef>
+                            <ng-container matColumnDef="stock_name">
+                                <th class="stock-column" mat-header-cell *matHeaderCellDef>
                                     {{ localeData?.reports?.stock_name }}
                                 </th>
-                                <td data-title="Stock Name" class="text-left" mat-cell *matCellDef="let element">
+                                <td
+                                    data-title="Date"
+                                    class="text-left word-wrap cursor-pointer"
+                                    mat-cell
+                                    *matCellDef="let element"
+                                    (click)="getReportsByReportType($event, element)"
+                                >
                                     {{ element?.stock?.name ?? "-" }}
                                 </td>
                             </ng-container>
-                            <ng-container matColumnDef="variantName">
-                                <th width="17%" class="text-left" mat-header-cell *matHeaderCellDef>
+                            <ng-container matColumnDef="variant_name">
+                                <th class="variant-column" mat-header-cell *matHeaderCellDef>
                                     {{ localeData?.reports?.variant_name }}
                                 </th>
-                                <td data-title="Variant Name" class="text-left" mat-cell *matCellDef="let element">
+                                <td
+                                    data-title="Date"
+                                    class="text-left word-wrap cursor-pointer"
+                                    mat-cell
+                                    *matCellDef="let element"
+                                    (click)="getReportsByReportType($event, element)"
+                                >
                                     {{ element?.variant?.name ?? "-" }}
                                 </td>
                             </ng-container>
-                            <ng-container matColumnDef="inward_quantity">
-                                <th class="text-right" mat-header-cell *matHeaderCellDef mat-sort-header>
-                                    {{ localeData?.reports?.inwards }}
+                            <ng-container matColumnDef="opening_quantity">
+                                <th class="group-column text-right" mat-header-cell *matHeaderCellDef mat-sort-header>
+                                    {{ localeData?.reports?.qty }}
                                 </th>
                                 <td
-                                    data-title="Inwards"
                                     class="text-right"
+                                    data-title="Opening Quantity"
                                     mat-cell
                                     *matCellDef="let element"
                                     [matTooltipPosition]="'above'"
                                     [matTooltip]="
-                                        element?.type === 'dr'
-                                            ? giddhRoundOff(element?.quantity, giddhBalanceDecimalPlaces)
-                                            : ''
+                                        element?.opening?.quantity
+                                            ? giddhRoundOff(element?.opening?.quantity, giddhBalanceDecimalPlaces)
+                                            : '-'
                                     "
                                 >
-                                    <span class="d-inline-flex" *ngIf="element?.type === 'dr'">
+                                    <span class="d-inline-flex" *ngIf="element?.opening?.quantity">
                                         <amount-field
-                                            [amount]="element?.quantity ? element?.quantity : '-'"
+                                            [amount]="element?.opening?.quantity ? element?.opening?.quantity : '-'"
                                             [currencySymbol]="false"
                                             [currencyCode]="false"
                                         >
                                         </amount-field>
-                                        <span class="ml-1 unit-badge"> {{ element?.stockUnit?.code }}</span>
                                     </span>
-                                    <span *ngIf="element?.type === 'cr'">-</span>
+                                    <span *ngIf="!element?.opening?.quantity">-</span>
                                 </td>
                             </ng-container>
-                            <ng-container matColumnDef="outward_quantity">
-                                <th class="text-right" mat-header-cell *matHeaderCellDef mat-sort-header>
-                                    {{ localeData?.reports?.outwards }}
-                                </th>
-                                <td
-                                    data-title="Outwards"
-                                    class="text-right"
-                                    mat-cell
-                                    *matCellDef="let element"
-                                    [matTooltipPosition]="'above'"
-                                    [matTooltip]="
-                                        element?.type === 'cr'
-                                            ? giddhRoundOff(element?.quantity, giddhBalanceDecimalPlaces)
-                                            : ''
-                                    "
-                                >
-                                    <span class="d-inline-flex" *ngIf="element.type === 'cr'">
-                                        <amount-field
-                                            [amount]="element?.quantity ? element?.quantity : '-'"
-                                            [currencySymbol]="false"
-                                            [currencyCode]="false"
-                                        >
-                                        </amount-field>
-                                        <span class="ml-1 unit-badge"> {{ element?.stockUnit?.code }}</span>
-                                    </span>
-                                    <span *ngIf="element?.type === 'dr'">-</span>
-                                </td>
-                            </ng-container>
-                            <ng-container matColumnDef="rate">
-                                <th class="text-right" mat-header-cell *matHeaderCellDef mat-sort-header>
-                                    {{ localeData?.reports?.rate }}
-                                </th>
-                                <td
-                                    data-title="Rate"
-                                    class="text-right"
-                                    mat-cell
-                                    *matCellDef="let element"
-                                    [matTooltipPosition]="'above'"
-                                    [matTooltip]="
-                                        element?.rate
-                                            ? activeCompany.baseCurrencySymbol +
-                                              ' ' +
-                                              giddhRoundOff(element?.rate, giddhBalanceDecimalPlaces)
-                                            : activeCompany.baseCurrencySymbol + ' ' + 0
-                                    "
-                                >
-                                    <span class="d-inline-flex">
-                                        <amount-field
-                                            [amount]="element?.rate ? element?.rate : 0"
-                                            [currencySymbol]="activeCompany.baseCurrencySymbol"
-                                            [currencyCode]="activeCompany?.baseCurrency"
-                                        >
-                                        </amount-field>
-                                    </span>
-                                </td>
-                            </ng-container>
-                            <ng-container matColumnDef="transaction_val">
-                                <th class="text-right" mat-header-cell *matHeaderCellDef mat-sort-header>
+                            <ng-container matColumnDef="opening_amount">
+                                <th class="group-column text-right" mat-header-cell *matHeaderCellDef mat-sort-header>
                                     {{ localeData?.reports?.value }}
                                 </th>
                                 <td
-                                    data-title="Value"
+                                    data-title="Opening Amount"
                                     class="text-right"
                                     mat-cell
                                     *matCellDef="let element"
                                     [matTooltipPosition]="'above'"
                                     [matTooltip]="
-                                        element?.amount
+                                        element?.opening?.amount
                                             ? activeCompany.baseCurrencySymbol +
                                               ' ' +
-                                              giddhRoundOff(element?.amount, giddhBalanceDecimalPlaces)
+                                              giddhRoundOff(element?.opening?.amount, giddhBalanceDecimalPlaces)
                                             : activeCompany.baseCurrencySymbol + ' ' + 0
                                     "
                                 >
                                     <span class="d-inline-flex">
                                         <amount-field
-                                            [amount]="element?.amount ? element?.amount : 0"
+                                            [amount]="element?.opening?.amount ? element?.opening?.amount : 0"
                                             [currencySymbol]="activeCompany.baseCurrencySymbol"
                                             [currencyCode]="activeCompany?.baseCurrency"
                                         >
@@ -540,12 +424,191 @@
                                     </span>
                                 </td>
                             </ng-container>
-                            <!-- <ng-container matColumnDef="qty">
-                        <th class="text-right" mat-header-cell *matHeaderCellDef>qty</th>
-                        <td data-title="Qty" class="text-right" mat-cell *matCellDef="let element">
-                            {{ element.qty }}
-                        </td>
-                    </ng-container> -->
+                            <ng-container matColumnDef="inward_quantity">
+                                <th class="inward-column text-right" mat-header-cell *matHeaderCellDef mat-sort-header>
+                                    {{ localeData?.reports?.qty }}
+                                </th>
+                                <td
+                                    class="text-right"
+                                    data-title="Inwards Quantity"
+                                    mat-cell
+                                    *matCellDef="let element"
+                                    [matTooltipPosition]="'above'"
+                                    [matTooltip]="giddhRoundOff(element?.inwards?.quantity, giddhBalanceDecimalPlaces)"
+                                >
+                                    <span class="d-inline-flex" *ngIf="element?.inwards?.quantity">
+                                        <amount-field
+                                            [amount]="element?.inwards?.quantity ? element?.inwards?.quantity : '-'"
+                                            [currencySymbol]="false"
+                                            [currencyCode]="false"
+                                        >
+                                        </amount-field>
+                                    </span>
+                                    <span *ngIf="!element?.inwards?.quantity">-</span>
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="inward_amount">
+                                <th class="group-column text-right" mat-header-cell *matHeaderCellDef mat-sort-header>
+                                    {{ localeData?.reports?.value }}
+                                </th>
+                                <td
+                                    data-title="Inwards Amount"
+                                    class="text-right"
+                                    mat-cell
+                                    *matCellDef="let element"
+                                    [matTooltipPosition]="'above'"
+                                    [matTooltip]="
+                                        element?.inwards?.amount
+                                            ? activeCompany.baseCurrencySymbol +
+                                              ' ' +
+                                              giddhRoundOff(element?.inwards?.amount, giddhBalanceDecimalPlaces)
+                                            : activeCompany.baseCurrencySymbol + ' ' + 0
+                                    "
+                                >
+                                    <span class="d-inline-flex">
+                                        <amount-field
+                                            [amount]="element?.inwards?.amount ? element?.inwards?.amount : 0"
+                                            [currencySymbol]="activeCompany.baseCurrencySymbol"
+                                            [currencyCode]="activeCompany?.baseCurrency"
+                                        >
+                                        </amount-field>
+                                    </span>
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="outward_quantity">
+                                <th class="group-column text-right" mat-header-cell *matHeaderCellDef mat-sort-header>
+                                    {{ localeData?.reports?.qty }}
+                                </th>
+                                <td
+                                    class="text-right"
+                                    data-title="Outwards Quantity"
+                                    mat-cell
+                                    *matCellDef="let element"
+                                    [matTooltipPosition]="'above'"
+                                    [matTooltip]="giddhRoundOff(element?.outwards?.quantity, giddhBalanceDecimalPlaces)"
+                                >
+                                    <span class="d-inline-flex" *ngIf="element?.outwards?.quantity">
+                                        <amount-field
+                                            [amount]="element?.outwards?.quantity ? element?.outwards?.quantity : '-'"
+                                            [currencySymbol]="false"
+                                            [currencyCode]="false"
+                                        >
+                                        </amount-field>
+                                    </span>
+                                    <span *ngIf="!element?.outwards?.quantity">-</span>
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="outward_amount">
+                                <th class="group-column text-right" mat-header-cell *matHeaderCellDef mat-sort-header>
+                                    {{ localeData?.reports?.value }}
+                                </th>
+                                <td
+                                    data-title="Outwards Amount"
+                                    class="text-right"
+                                    mat-cell
+                                    *matCellDef="let element"
+                                    [matTooltipPosition]="'above'"
+                                    [matTooltip]="
+                                        element?.outwards?.amount
+                                            ? activeCompany.baseCurrencySymbol +
+                                              ' ' +
+                                              giddhRoundOff(element?.outwards?.amount, giddhBalanceDecimalPlaces)
+                                            : activeCompany.baseCurrencySymbol + ' ' + 0
+                                    "
+                                >
+                                    <span class="d-inline-flex">
+                                        <amount-field
+                                            [amount]="element?.outwards?.amount ? element?.outwards?.amount : 0"
+                                            [currencySymbol]="activeCompany.baseCurrencySymbol"
+                                            [currencyCode]="activeCompany?.baseCurrency"
+                                        >
+                                        </amount-field>
+                                    </span>
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="closing_quantity">
+                                <th class="group-column text-right" mat-header-cell *matHeaderCellDef mat-sort-header>
+                                    {{ localeData?.reports?.qty }}
+                                </th>
+                                <td
+                                    class="text-right"
+                                    data-title="Closing Quantity"
+                                    mat-cell
+                                    *matCellDef="let element"
+                                    [matTooltipPosition]="'above'"
+                                    [matTooltip]="giddhRoundOff(element?.closing?.quantity, giddhBalanceDecimalPlaces)"
+                                >
+                                    <span class="d-inline-flex" *ngIf="element?.closing?.quantity">
+                                        <amount-field
+                                            [amount]="element?.closing?.quantity ? element?.closing?.quantity : '-'"
+                                            [currencySymbol]="false"
+                                            [currencyCode]="false"
+                                        >
+                                        </amount-field>
+                                    </span>
+                                    <span *ngIf="!element?.closing?.quantity">-</span>
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="closing_amount">
+                                <th class="group-column text-right" mat-header-cell *matHeaderCellDef mat-sort-header>
+                                    {{ localeData?.reports?.value }}
+                                </th>
+                                <td
+                                    data-title="Closing Amount"
+                                    class="text-right"
+                                    mat-cell
+                                    *matCellDef="let element"
+                                    [matTooltipPosition]="'above'"
+                                    [matTooltip]="
+                                        element?.closing?.amount
+                                            ? activeCompany.baseCurrencySymbol +
+                                              ' ' +
+                                              giddhRoundOff(element?.closing?.amount, giddhBalanceDecimalPlaces)
+                                            : activeCompany.baseCurrencySymbol + ' ' + 0
+                                    "
+                                >
+                                    <span class="d-inline-flex">
+                                        <amount-field
+                                            [amount]="element?.closing?.amount ? element?.closing?.amount : 0"
+                                            [currencySymbol]="activeCompany.baseCurrencySymbol"
+                                            [currencyCode]="activeCompany?.baseCurrency"
+                                        >
+                                        </amount-field>
+                                    </span>
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="entity_group_name">
+                                <th class="text-right" mat-header-cell *matHeaderCellDef [attr.colspan]="1"></th>
+                            </ng-container>
+                            <!-- Opening Stock group -->
+                            <ng-container matColumnDef="opening_stock">
+                                <th class="text-right" mat-header-cell *matHeaderCellDef [attr.colspan]="2">
+                                    {{ localeData?.reports?.opening_stock }}
+                                </th>
+                            </ng-container>
+
+                            <!-- Inwards group -->
+                            <ng-container matColumnDef="inwards">
+                                <th class="text-right" mat-header-cell *matHeaderCellDef [attr.colspan]="2">
+                                    {{ localeData?.reports?.inwards }}
+                                </th>
+                            </ng-container>
+
+                            <!-- Outwards group -->
+                            <ng-container matColumnDef="outwards">
+                                <th class="text-right" mat-header-cell *matHeaderCellDef [attr.colspan]="2">
+                                    {{ localeData?.reports?.outwards }}
+                                </th>
+                            </ng-container>
+
+                            <!-- Closing Stock group -->
+                            <ng-container matColumnDef="closing_stock">
+                                <th class="text-right" mat-header-cell *matHeaderCellDef [attr.colspan]="2">
+                                    {{ localeData?.reports?.closing_stock }}
+                                </th>
+                            </ng-container>
+                            <tr mat-header-row *matHeaderRowDef="tableHeaderColumns"></tr>
                             <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
                             <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                         </table>
@@ -584,29 +647,5 @@
         <div class="no-data" *ngIf="isLoading">
             <giddh-page-loader></giddh-page-loader>
         </div>
-        <ng-template
-            #searchTemplate
-            let-show
-            let-title="title"
-            let-placeholder="placeholder"
-            let-fieldName="fieldName"
-            let-formControl="formControl"
-        >
-            <div class="align-items-center d-flex" [hidden]="show">
-                <span>{{ title }}</span>
-                <button mat-icon-button (click)="toggleSearch(fieldName)">
-                    <span class="icon-search"></span>
-                </button>
-            </div>
-            <div [hidden]="!show">
-                <text-field
-                    [type]="'text'"
-                    [placeholder]="getSearchFieldText(fieldName)"
-                    [cssClass]="'form-control search-table mat-field-border'"
-                    [formControl]="formControl"
-                    [autoFocus]="show"
-                ></text-field>
-            </div>
-        </ng-template>
     </div>
 </ng-container>
