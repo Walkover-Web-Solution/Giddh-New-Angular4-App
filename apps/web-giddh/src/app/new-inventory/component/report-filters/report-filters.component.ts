@@ -702,8 +702,12 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
         }
     }
 
+    /**
+     * This will use for back to previous page
+     *
+     * @memberof ReportFiltersComponent
+     */
     public backToPreviousPage(): void {
-
         this.location.back();
     }
 

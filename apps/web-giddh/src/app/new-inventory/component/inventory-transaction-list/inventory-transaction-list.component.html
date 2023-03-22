@@ -575,8 +575,8 @@
             </div>
         </div>
         <div class="no-data-inventory" *ngIf="!isLoading && !dataSource?.length">
-            <h1>{{ localeData?.reports?.no_result_found_1 }}</h1>
-            <h1>{{ localeData?.reports?.no_result_found_2 }}</h1>
+            <h1>{{ localeData?.reports?.no_entries_found_1 }}</h1>
+            <h1>{{ localeData?.reports?.no_entries_found_2 }}</h1>
         </div>
         <div class="no-data-inventory" *ngIf="!isLoading && dataSource?.length && !displayedColumns?.length">
             <h1>{{ localeData?.reports?.no_columns_found }}</h1>

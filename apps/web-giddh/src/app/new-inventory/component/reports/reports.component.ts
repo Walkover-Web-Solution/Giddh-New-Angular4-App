@@ -106,8 +106,11 @@ export class ReportsComponent implements OnInit {
     private storeFilters: any;
     /** Hold advance search modal response */
     public advanceSearchModalResponse: any = null;
+    /** Hold current url */
     private currentUrl: string = "";
+    /** Hold show content */
     public showContent: boolean = true;
+    /** Hold  universal date by store */
     public pullUniversalDate: boolean = true;
 
     constructor(
@@ -363,7 +366,6 @@ export class ReportsComponent implements OnInit {
                 this.stockReportRequest.stockUniqueNames = [this.reportUniqueName];
                 this.balanceStockReportRequest.stockUniqueNames = [this.reportUniqueName];
             }
-
 
             let stockReportRequest = this.getStockReportRequestObject();
             this.inventoryService.getVariantWiseReport(cloneDeep(stockReportRequest)).pipe(takeUntil(this.destroyed$)).subscribe(response => {
