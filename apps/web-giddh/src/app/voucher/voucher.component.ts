@@ -3564,7 +3564,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             transaction.rate = null;
             let obj: IStockUnit = {
                 id: o.stock.stockUnitUniqueName,
-                text: o.stock.stockUnitName
+                text: o.stock.stockUnitCode
             };
             transaction.stockList = [];
             if (o.stock && o.stock.unitRates && o.stock.unitRates.length) {
@@ -4959,11 +4959,11 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                         }
 
                         stock.unitRates = stock.unitRates || [];
-                        const unitRate = stock.unitRates.find(rate => rate.code === stock.stockUnit.code);
+                        const unitRate = stock.unitRates.find(rate => rate.stockUnitCode === stock.stockUnit.code);
 
-                        let stockUnit: IStockUnit = {	
-                            id: stock.stockUnit.uniqueName,	
-                            text: unitRate ? unitRate.stockUnitName : stock.stockUnit.code	
+                        let stockUnit: IStockUnit = {
+                            id: stock.stockUnit.uniqueName,
+                            text: unitRate ? unitRate.stockUnitCode : stock.stockUnit.code
                         };
 
                         newTrxObj.stockList = [];
@@ -5251,6 +5251,13 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     }
                 });
                 if (t.stock) {
+                    if (!t.stock.stockUnit?.uniqueName && t.stock.stockUnit?.code) {
+                        const unitFound = t.stock?.unitRates?.filter(unit => unit?.stockUnitCode === t.stock.stockUnit?.code);
+                        if (unitFound?.length) {
+                            t.stock.stockUnit.uniqueName = unitFound[0]?.stockUnitUniqueName;
+                        }
+                    }
+
                     salesTransactionItemClass.isStockTxn = true;
                     salesTransactionItemClass.stockDetails = {};
                     salesTransactionItemClass.stockDetails.name = t.stock.name;

@@ -2674,6 +2674,13 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                 });
 
                 if (transaction.stock) {
+                    if (!transaction.stock.stockUnit?.uniqueName && transaction.stock.stockUnit?.code) {
+                        const unitFound = transaction.stock?.unitRates?.filter(unit => unit?.stockUnitCode === transaction.stock.stockUnit?.code);
+                        if (unitFound?.length) {
+                            transaction.stock.stockUnit.uniqueName = unitFound[0]?.stockUnitUniqueName;
+                        }
+                    }
+
                     salesTransactionItemClass.isStockTxn = true;
                     salesTransactionItemClass.stockDetails = {};
                     salesTransactionItemClass.stockDetails.name = transaction.stock.name;
@@ -2716,9 +2723,10 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                         salesTransactionItemClass.sku_and_customfields = description.join(', ');
                     }
                     stock.unitRates = stock.unitRates || [];
+                    const unitRate = stock.unitRates.find(rate => rate.code === stock.stockUnit.code);
                     let stockUnit: IStockUnit = {
-                        id: salesTransactionItemClass.stockDetails?.stockUnit?.uniqueName,
-                        text: salesTransactionItemClass.stockDetails?.stockUnit?.code
+                        id: stock.stockUnit.uniqueName,
+                        text: unitRate ? unitRate.stockUnitCode : stock.stockUnit.code
                     };
                     salesTransactionItemClass.stockList = [];
                     if (stock.unitRates && stock.unitRates.length) {
@@ -3345,8 +3353,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             // set rate auto
             transaction.rate = null;
             let obj: IStockUnit = {
-                id: additional.stock.stockUnit?.uniqueName,
-                text: additional.stock.stockUnit?.code
+                id: additional.stock.stockUnitUniqueName,
+                text: additional.stock.stockUnitCode
             };
             transaction.stockList = [];
             if (additional.stock && additional.stock.unitRates && additional.stock.unitRates.length) {
