@@ -28,7 +28,6 @@ import { Location } from '@angular/common';
 export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     /** Instance of datepicker */
     @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
-
     /* This will hold local JSON data */
     @Input() public localeData: any = {};
     /* This will hold common JSON data */
@@ -129,8 +128,6 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     public todaySelected$: Observable<boolean> = observableOf(false);
     /** This will use for stock report displayed columns */
     public displayedColumns: string[] = [];
-    // True if  only single group in search API
-    public singleGroup: boolean = false;
 
     constructor(
         public dialog: MatDialog,
@@ -333,7 +330,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     public openModal(): void {
         this.showAdvanceSearchModal = true;
         this.stockReportRequest.from = this.selectedDateRange.startDate;
-        this.stockReportRequest.to = this.selectedDateRange.startDate;
+        this.stockReportRequest.to = this.selectedDateRange.endDate;
         let dialogRef = this.dialog?.open(NewInventoryAdvanceSearch, {
             panelClass: 'advance-search-container',
             data: {
@@ -399,6 +396,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
         this.balanceStockReportRequest = new BalanceStockTransactionReportRequest();
         this.filtersChipList = [];
         this.selectedBranch = [];
+        this.selectedWarehouse = [];
         this.getBranches(false);
         //Reset Date with universal date
         this.universalDate$.subscribe(res => {
@@ -618,9 +616,9 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
         this.balanceStockReportRequest.stockUniqueNames = this.stockReportRequest.stockUniqueNames;
         this.balanceStockReportRequest.variantUniqueNames = this.stockReportRequest.variantUniqueNames;
         this.filtersChipList?.push(selectOptionValue);
-        this.isFilterActive();
         this.searchRequest.q = "";
         this.searchInventory();
+        this.isFilterActive();
         this.emitFilters();
     }
 
@@ -658,8 +656,8 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
             this.balanceStockReportRequest.stockUniqueNames = this.stockReportRequest.stockUniqueNames;
             this.balanceStockReportRequest.variantUniqueNames = this.stockReportRequest.variantUniqueNames;
             this.searchInventory();
-            this.emitFilters();
             this.isFilterActive();
+            this.emitFilters();
         }
     }
 
@@ -690,16 +688,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
                     if (loadMore) {
                         this.fieldFilteredOptions = this.fieldFilteredOptions.concat(response.body.results);
                     } else {
-                        if (response?.body?.results?.length < 1) {
-                            this.singleGroup = true;
-                            response?.body?.results?.forEach(result => {
-                                this.stockReportRequest.stockGroupUniqueNames = [result?.uniqueName];
-                            });
-                            this.emitFilters();
-                        } else {
-                            this.fieldFilteredOptions = response.body.results;
-                        }
-
+                        this.fieldFilteredOptions = response.body.results;
                     }
                     this.searchRequest.totalItems = response.body.totalItems;
                     this.searchRequest.totalPages = response.body.totalPages;

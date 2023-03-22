@@ -199,6 +199,8 @@ export class InventoryTransactionListComponent implements OnInit {
     public reportUniqueName: string = '';
     /** True  if report is loaded */
     public isReportLoaded: boolean = false;
+    /** True if translations loaded */
+    public translationLoaded: boolean = false;
 
     constructor(
         private generalService: GeneralService,
@@ -452,5 +454,17 @@ export class InventoryTransactionListComponent implements OnInit {
         this.todaySelected = event?.todaySelected;
         this.showClearFilter = event?.showClearFilter;
         this.getStockTransactionalReport();
+    }
+
+    /**
+     * This will use for translation complete
+     *
+     * @param {*} event
+     * @memberof InventoryTransactionListComponent
+     */
+    public translationComplete(event: any): void {
+        if (event) {
+            this.translationLoaded = true;
+        }
     }
 }

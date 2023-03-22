@@ -77,6 +77,7 @@ export class InventorySidebarComponent implements OnDestroy {
     public dataList: any[] = TREE_DATA;
     /** Holds images folder path */
     public imgPath: string = "";
+    /** Holds transformer data */
     public transformer = (node: SidebarNode, level: number) => {
         return {
             expandable: !!node.children && node.children.length > 0,
@@ -86,17 +87,22 @@ export class InventorySidebarComponent implements OnDestroy {
             link: node.link
         };
     };
+    /** Holds treeControl data */
     public treeControl = new FlatTreeControl<SidebarFlatNode>(
         node => node.level,
         node => node.expandable,
     );
+    /** Holds treeFlattener data */
     public treeFlattener = new MatTreeFlattener(
         this.transformer,
         node => node.level,
         node => node.expandable,
         node => node.children,
     );
+    /** Holds dataSource data */
     public dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
+    /** Holds tree data has child */
+    public hasChild = (_: number, node: SidebarFlatNode) => node.expandable;
 
     constructor(
         private router: Router,
@@ -109,8 +115,6 @@ export class InventorySidebarComponent implements OnDestroy {
         });
         this.dataSource.data = TREE_DATA;
     }
-
-    public hasChild = (_: number, node: SidebarFlatNode) => node.expandable;
 
     /**
      * Initializes the component
@@ -188,6 +192,39 @@ export class InventorySidebarComponent implements OnDestroy {
     public translationComplete(event: any): void {
         if (event) {
             this.translationLoaded = true;
+            this.dataList = [
+                {
+                    name: this.localeData?.sidebar?.stock,
+                    icons: 'stock.svg',
+                    children: [
+                        { name: this.localeData?.sidebar?.create_new, icons: 'create-new.svg', link: '/pages/new-inventory/stock/product/create' },
+                        { name: this.localeData?.sidebar?.item_wise, icons: 'item-wise.svg', link: '/pages/new-inventory/reports/stock' },
+                        { name: this.localeData?.sidebar?.group_wise, icons: 'group-wise.svg', link: '/pages/new-inventory/reports/group' },
+                        { name: this.localeData?.sidebar?.variant_wise, icons: 'varient-wise.svg', link: '/pages/new-inventory/reports/variant' },
+                        { name: this.localeData?.sidebar?.transactions, icons: 'transactions.svg', link: '/pages/new-inventory/reports/transaction' }],
+                },
+                {
+                    name: this.localeData?.sidebar?.services,
+                    icons: 'service.svg'
+                },
+                {
+                    name: this.localeData?.sidebar?.fixed_assets,
+                    icons: 'fixed-assets.svg'
+                },
+                {
+                    name: this.localeData?.sidebar?.branch_transfer,
+                    icons: 'branch-transfer.svg'
+                },
+                {
+                    name: this.localeData?.sidebar?.manufacturing,
+                    icons: 'manufacturing.svg'
+                },
+                {
+                    name: this.localeData?.sidebar?.warehouse_balance,
+                    link: '/pages/new-inventory/stock-balance',
+                    icons: 'warehouse-opening-balance.svg'
+                },
+            ];
         }
     }
 

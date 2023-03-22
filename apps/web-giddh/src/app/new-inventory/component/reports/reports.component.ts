@@ -46,6 +46,8 @@ export class ReportsComponent implements OnInit {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** True if translations loaded */
+    public translationLoaded: boolean = false;
     /* This will hold active company data */
     public activeCompany: any = {};
     /** Image path variable */
@@ -511,6 +513,18 @@ export class ReportsComponent implements OnInit {
             this.router.navigate(['/pages', 'new-inventory', 'reports', 'variant', element?.stock?.uniqueName]);
         } else if (this.reportType === InventoryReportType.variant) {
             this.router.navigate(['/pages', 'new-inventory', 'reports', 'transaction', element?.variant?.uniqueName]);
+        }
+    }
+
+    /**
+     * This will use for translation complete
+     *
+     * @param {*} event
+     * @memberof ReportsComponent
+     */
+    public translationComplete(event: any): void {
+        if (event) {
+            this.translationLoaded = true;
         }
     }
 

@@ -1,6 +1,8 @@
 <div class="inventory-filter-bar top-main-bar">
     <div class="back-btnn" *ngIf="reportUniqueName">
-        <button mat-button class="report-back-button" (click)="backToPreviousPage()">Back</button>
+        <button mat-button class="report-back-button" (click)="backToPreviousPage()">
+            {{ commonLocaleData?.app_back }}
+        </button>
     </div>
     <div class="custom-datepicker-wrapper">
         <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
@@ -19,13 +21,13 @@
             [multiple]="true"
             [(ngModel)]="selectedBranch"
             class="stock-mat-salect"
-            [placeholder]="'Select Branch'"
+            [placeholder]="localeData?.header?.select_branch"
         >
             <mat-option class="balance-options">
                 <ngx-mat-select-search
-                    [noEntriesFoundLabel]="'No Result Found'"
+                    [noEntriesFoundLabel]="localeData?.header?.no_result_found"
                     [formControl]="branchesDropdown"
-                    [placeholderLabel]="'Select Branch'"
+                    [placeholderLabel]="localeData?.header?.select_branch"
                     class="mat-select-search-inventory"
                 >
                     <i class="icon-cross" ngxMatSelectSearchClear></i>
@@ -48,13 +50,13 @@
             [multiple]="true"
             [(ngModel)]="selectedWarehouse"
             class="stock-mat-salect"
-            [placeholder]="'Select Warehouse'"
+            [placeholder]="localeData?.header?.select_warehouse"
         >
             <mat-option class="balance-options">
                 <ngx-mat-select-search
-                    noEntriesFoundLabel="No Result Found"
+                    [noEntriesFoundLabel]="localeData?.header?.no_result_found"
                     [formControl]="warehousesDropdown"
-                    [placeholderLabel]="'Select Warehouse'"
+                    [placeholderLabel]="localeData?.header?.select_warehouse"
                     class="mat-select-search-inventory"
                 >
                     <i class="icon-cross" ngxMatSelectSearchClear></i>
@@ -72,7 +74,7 @@
     </div>
     <div class="clear-filter d-flex" *ngIf="showClearFilter">
         <button mat-raised-button class="create-btn-inventory ml-3 mr-0" color="primary" (click)="resetFilter()">
-            <span class="icon-cross"></span> Clear
+            <span class="icon-cross"></span> {{ commonLocaleData?.app_clear_filter }}
         </button>
     </div>
 </div>
@@ -98,7 +100,7 @@
                     type="text"
                     matInput
                     [formControl]="searchFilters"
-                    [placeholder]="'Search stock group, stock, variant'"
+                    [placeholder]="localeData?.header?.search_bar"
                     [matAutocomplete]="auto"
                     [matChipInputFor]="matChipList"
                     #trigger="matAutocompleteTrigger"
@@ -118,7 +120,9 @@
                     <mat-option *ngFor="let option of fieldFilteredOptions" [value]="option">
                         {{ option?.name }} ( {{ option?.type }} )
                     </mat-option>
-                    <mat-option disabled *ngIf="fieldFilteredOptions?.length === 0">No results found</mat-option>
+                    <mat-option disabled *ngIf="fieldFilteredOptions?.length === 0"
+                        >localeData?.header?.no_result_found</mat-option
+                    >
                 </ng-container>
                 <ng-template #searchedData>
                     <app-cdk-scroll (fetchNextPage)="searchInventory(true)" [scrollableElementId]="'stock-transaction'">
@@ -134,9 +138,9 @@
                             >
                                 {{ option?.name }} ( {{ option?.type }} )
                             </mat-option>
-                            <mat-option class="item-height" disabled *ngIf="fieldFilteredOptions?.length === 0"
-                                >No results found</mat-option
-                            >
+                            <mat-option class="item-height" disabled *ngIf="fieldFilteredOptions?.length === 0">{{
+                                localeData?.header?.no_result_found
+                            }}</mat-option>
                         </cdk-virtual-scroll-viewport>
                     </app-cdk-scroll>
                 </ng-template>
@@ -145,11 +149,11 @@
         <div class="menu-btn-control">
             <button mat-button (click)="openModal()" class="advance-filter-button">
                 <i class="icon-advance-filter mr-2"></i>
-                Advance Filter
+                {{ localeData?.header?.advance_filter }}
             </button>
             <button mat-button [matMenuTriggerFor]="customise" aria-label="Customise" class="customise-filter-button">
                 <i class="icon-options mr-2"> </i>
-                Customise
+                {{ localeData?.header?.customise }}
             </button>
             <mat-menu #customise="matMenu" class="columns-wrapper">
                 <button
@@ -170,7 +174,7 @@
                         (change)="selectAllColumns($event?.checked)"
                         [checked]="displayedColumns?.length === customiseColumns?.length"
                     >
-                        Select All
+                        {{ localeData?.header?.select_all }}
                     </mat-checkbox>
                 </button>
                 <ng-container *ngFor="let item of customiseColumns">
