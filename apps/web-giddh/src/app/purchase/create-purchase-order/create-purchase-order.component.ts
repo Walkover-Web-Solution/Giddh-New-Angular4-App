@@ -2674,6 +2674,13 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                 });
 
                 if (transaction.stock) {
+                    if (!transaction.stock.stockUnit?.uniqueName && transaction.stock.stockUnit?.code) {
+                        const unitFound = transaction.stock?.unitRates?.filter(unit => unit?.stockUnitCode === transaction.stock.stockUnit?.code);
+                        if (unitFound?.length) {
+                            transaction.stock.stockUnit.uniqueName = unitFound[0]?.stockUnitUniqueName;
+                        }
+                    }
+
                     salesTransactionItemClass.isStockTxn = true;
                     salesTransactionItemClass.stockDetails = {};
                     salesTransactionItemClass.stockDetails.name = transaction.stock.name;
@@ -2719,7 +2726,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                     const unitRate = stock.unitRates.find(rate => rate.code === stock.stockUnit.code);
                     let stockUnit: IStockUnit = {
                         id: stock.stockUnit.uniqueName,
-                        text: unitRate ? unitRate.stockUnitName : stock.stockUnit.code
+                        text: unitRate ? unitRate.stockUnitCode : stock.stockUnit.code
                     };
 
                     salesTransactionItemClass.stockList = [];
@@ -3348,7 +3355,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             transaction.rate = null;
             let obj: IStockUnit = {
                 id: additional.stock.stockUnitUniqueName,
-                text: additional.stock.stockUnitName
+                text: additional.stock.stockUnitCode
             };
             transaction.stockList = [];
             if (additional.stock && additional.stock.unitRates && additional.stock.unitRates.length) {
