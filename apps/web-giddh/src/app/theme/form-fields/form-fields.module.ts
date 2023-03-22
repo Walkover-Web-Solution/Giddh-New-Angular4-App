@@ -52,7 +52,10 @@ import { SelectMultipleFieldsComponent } from "./select-multiple-fields/select-m
         TextFieldComponent,
         SelectFieldComponent,
         SelectMultipleFieldsComponent,
-        MatFormFieldModule
+        MatFormFieldModule,
+        CdkScrollComponent,
+        CdkScrollModule,
+        ScrollingModule
     ]
 })
 

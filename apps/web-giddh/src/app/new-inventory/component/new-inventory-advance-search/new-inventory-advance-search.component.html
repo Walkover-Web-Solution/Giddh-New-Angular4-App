@@ -1,7 +1,7 @@
 <div class="inventory-advance-search">
     <div class="modal-header">
         <h4 class="modal-title pull-left">Advance Search</h4>
-        <button type="button" class="close pull-right" (click)="modalRef?.hide()" aria-label="Close">
+        <button type="button" class="close pull-right" (click)="advanceSearchAction('cancel')" aria-label="Close">
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
@@ -12,16 +12,16 @@
                     <label>Date</label>
                 </div>
                 <div class="col-lg-8">
-                    <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
-                        <i class="icon-calender calendar-addon"></i>
-                        <input
-                            type="text"
-                            id="select-date"
-                            name="selectedDateRange"
-                            [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
-                            class="giddh-datepicker date-range-picker border-radius-2"
-                            placeholder="Enter Date"
-                        />
+                    <div class="custom-datepicker-wrapper">
+                        <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
+                            <i class="icon-calender calendar-addon"></i>
+                            <input
+                                type="text"
+                                name="selectedDateRange"
+                                [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                                class="giddh-datepicker date-range-picker"
+                            />
+                        </div>
                     </div>
                 </div>
             </div>
@@ -32,10 +32,26 @@
                 <div class="col-lg-8">
                     <div class="row">
                         <div class="col-lg-6 col-sm-6 col-12 mr-b15">
-                            <sh-select id="select-category" placeholder="Select Category"></sh-select>
+                            <select-field
+                                [cssClass]="'form-control mat-field-border'"
+                                [placeholder]="'Select Category'"
+                                [options]="advanceSearchCatergory"
+                                (selectedOption)="selectCategory($event?.value)"
+                                [defaultValue]="advanceSearchFormObj.param1"
+                                [allowValueReset]="true"
+                                (onClear)="advanceSearchFormObj.param1 = ''"
+                            ></select-field>
                         </div>
                         <div class="col-lg-6 col-sm-6 col-12 mr-b15">
-                            <sh-select id="select-type" placeholder="Select Type"></sh-select>
+                            <select-field
+                                [cssClass]="'form-control mat-field-border'"
+                                [placeholder]="'Select Type'"
+                                [options]="advanceSearchCatergoryOptions"
+                                (selectedOption)="selectCategoryOptions($event?.value)"
+                                [defaultValue]="advanceSearchFormObj.param2"
+                                [allowValueReset]="true"
+                                (onClear)="advanceSearchFormObj.param2 = ''"
+                            ></select-field>
                         </div>
                     </div>
                 </div>
@@ -47,10 +63,28 @@
                 <div class="col-lg-8">
                     <div class="row">
                         <div class="col-lg-6 col-sm-6 col-12 mr-b15">
-                            <sh-select id="select-value-type" placeholder="Select Value Type"></sh-select>
+                            <select-field
+                                [cssClass]="'form-control mat-field-border'"
+                                [placeholder]="'Select Type'"
+                                [options]="advanceSearchValue"
+                                (selectedOption)="selectValueType($event?.value)"
+                                [defaultValue]="advanceSearchFormObj.expression"
+                                [allowValueReset]="true"
+                                (onClear)="advanceSearchFormObj.expression = ''"
+                            ></select-field>
                         </div>
                         <div class="col-lg-6 col-sm-6 col-12 mr-b15">
-                            <input id="amount-value" type="text" class="form-control" placeholder="Amount" />
+                            <text-field
+                                [type]="'number'"
+                                [cssClass]="'form-control mat-field-border'"
+                                [placeholder]="'Amount'"
+                                [name]="'amount'"
+                                [(ngModel)]="advanceSearchFormObj.val"
+                                [allowDigitsOnly]="true"
+                                (onClear)="advanceSearchFormObj.val = ''"
+                                [autocomplete]="'off'"
+                            >
+                            </text-field>
                         </div>
                     </div>
                 </div>
@@ -74,15 +108,29 @@
             <div class="row mr-b15">
                 <div class="col-sm-12">
                     <div class="button-group d-flex justify-content-end">
-                        <button id="search-btn" class="btn btn-success">Search</button>
-                        <button id="clear-btn" class="btn btn-danger mr-0">Clear</button>
+                        <button
+                            id="search-btn"
+                            mat-raised-button
+                            class="btn btn-success"
+                            (click)="advanceSearchAction('search')"
+                            [disabled]="
+                                !advanceSearchFormObj.param1 ||
+                                !advanceSearchFormObj.param2 ||
+                                !advanceSearchFormObj.expression ||
+                                !advanceSearchFormObj.val
+                            "
+                        >
+                            Search
+                        </button>
+                        <button id="clear-btn" class="btn btn-danger mr-0" (click)="advanceSearchAction('clear')">
+                            Reset
+                        </button>
                     </div>
                 </div>
             </div>
         </form>
     </div>
 </div>
-<!-- datepicker template -->
 <ng-template #datepickerTemplate>
     <div class="datepicker-modal">
         <div class="modal-body">
@@ -90,13 +138,14 @@
                 [inputStartDate]="selectedDateRange?.startDate"
                 [inputEndDate]="selectedDateRange?.endDate"
                 [alwaysShowCalendars]="true"
-                [ranges]="datePickerOption"
+                [ranges]="datePickerOptions"
                 [selectedRangeLabel]="selectedRangeLabel"
                 [showCustomRangeLabel]="true"
                 [showClearButton]="false"
                 [showCancel]="true"
                 [linkedCalendars]="true"
                 [showDropdowns]="true"
+                [locale]="{ applyLabel: commonLocaleData?.app_done }"
                 (rangeClicked)="dateSelectedCallback($event)"
                 (datesUpdated)="dateSelectedCallback($event)"
                 [keepCalendarOpeningWithRange]="false"

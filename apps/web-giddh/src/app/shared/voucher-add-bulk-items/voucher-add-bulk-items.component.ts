@@ -4,7 +4,7 @@ import { debounceTime, distinctUntilChanged, map, takeUntil } from 'rxjs/operato
 import { SalesAddBulkStockItems, VoucherTypeEnum } from '../../models/api-models/Sales';
 import { SearchService } from '../../services/search.service';
 import { ToasterService } from '../../services/toaster.service';
-import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
+
 @Component({
     selector: 'voucher-add-bulk-items-component',
     templateUrl: './voucher-add-bulk-items.component.html',
@@ -121,29 +121,7 @@ export class VoucherAddBulkItemsComponent implements OnDestroy {
         return requestObject;
     }
 
-    parseDataToDisplay(data: IOption[]) {
-        let arr: SalesAddBulkStockItems[] = [];
-
-        data
-            ?.filter(f => f.additional && f.additional.stock)
-            .forEach(option => {
-                let item = new SalesAddBulkStockItems();
-                item.name = option.label;
-                item.uniqueName = option?.value;
-                item.rate = 0;
-
-                if (option.additional.stock.accountStockDetails.unitRates && option.additional.stock.accountStockDetails.unitRates.length) {
-                    item.rate = option.additional.stock.accountStockDetails.unitRates[0].rate;
-                    item.stockUnitCode = option.additional.stock.accountStockDetails.unitRates[0].stockUnitCode;
-                }
-                arr.push(item);
-            });
-
-        this.normalData = arr;
-        this.filteredData = arr;
-    }
-
-    addItemToSelectedArr(item: SalesAddBulkStockItems) {
+    public addItemToSelectedArr(item: SalesAddBulkStockItems) {
         let index = this.selectedItems?.findIndex(f => f?.uniqueName === item?.uniqueName);
         if (index > -1) {
             this.toaster.warningToast(this.localeData?.item_selected);
@@ -183,11 +161,11 @@ export class VoucherAddBulkItemsComponent implements OnDestroy {
         }, () => { });
     }
 
-    removeSelectedItem(uniqueName: string) {
+    public removeSelectedItem(uniqueName: string) {
         this.selectedItems = this.selectedItems?.filter(f => f?.uniqueName !== uniqueName);
     }
 
-    alterQuantity(item: SalesAddBulkStockItems, mode: 'plus' | 'minus' = 'plus') {
+    public alterQuantity(item: SalesAddBulkStockItems, mode: 'plus' | 'minus' = 'plus') {
         if (mode === 'plus') {
             item.quantity++;
         } else {
@@ -203,13 +181,13 @@ export class VoucherAddBulkItemsComponent implements OnDestroy {
      *
      * @memberof VoucherAddBulkItemsComponent
      */
-    onScrollEnd(): void {
+    public onScrollEnd(): void {
         if (this.searchResultsPaginationData.page < this.searchResultsPaginationData.totalPages) {
             this.onSearchQueryChanged(this.searchResultsPaginationData.query, this.searchResultsPaginationData.page + 1);
         }
     }
 
-    ngOnDestroy(): void {
+    public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }

@@ -1,234 +1,585 @@
-<div class="inventory-transaction-list">
-    <div class="p-3">
-        <div class="row">
-            <div class="col-12">
-                <div class="top-content">
-                    <div class="d-flex w-100 justify-content-between overflow-x-auto">
-                        <div class="total-details-box mr-r05 count-box">
-                            <h5>
-                                Transaction Count
-                                <div class="mt-2">
-                                    <span class="d-inline-flex number-total"> 1.00 </span>
-                                </div>
-                            </h5>
-                        </div>
-                        <div class="total-details-box mr-r05 border-none opening-box">
-                            <h5>
-                                Profit/Loss
-                                <div class="mt-2">
-                                    <span class="d-inline-flex number-total"> 1,02,377.50 </span>
-                                </div>
-                            </h5>
-                        </div>
-                        <div class="total-details-box mr-r05 border-none sales-purchase">
-                            <h5>
-                                Opening
-                                <div class="mt-2">
-                                    <span class="d-inline-flex number-total"> 432.00 </span>
-                                </div>
-                            </h5>
-                        </div>
-                        <div class="total-details-box mr-r05 border-none payment-receipt">
-                            <h5>
-                                Inward
-                                <div class="mt-2">
-                                    <span class="d-inline-flex number-total"> 432.00 </span>
-                                </div>
-                            </h5>
-                        </div>
-                        <div class="total-details-box mr-r05 border-none due-box">
-                            <h5>
-                                Outward
-                                <div class="mt-2">
-                                    <span class="d-inline-flex number-total"> 1,02,378.50 </span>
-                                </div>
-                            </h5>
-                        </div>
-                        <div class="total-details-box border-none closing-box">
-                            <h5>
-                                Closing
-                                <div class="mt-2">
-                                    <span class="d-inline-flex number-total"> 432.00 </span>
-                                </div>
-                            </h5>
+<!--new inventory header-->
+<div class="transaction-report-wrapper">
+    <report-filters
+        [localeData]="localeData"
+        [commonLocaleData]="commonLocaleData"
+        [moduleName]="'INVENTORY_TRANSACTION_REPORT'"
+        [customiseColumns]="customiseColumns"
+        [fromToDate]="fromToDate"
+        [stockReportRequest]="stockReportRequest"
+        [balanceStockReportRequest]="balanceStockReportRequest"
+        [searchPage]="'TRANSACTION'"
+        (filters)="getSelectedFilters($event)"
+        (resetFilters)="resetFilter()"
+        (isLoading)="isLoading = $event"
+        (selectedColumns)="displayedColumns = $event"
+    ></report-filters>
+    <div class="inventory-transaction-list" *ngIf="!isLoading">
+        <div
+            *ngIf="
+                isDataAvailable || stockReportRequest?.voucherTypes?.length || stockReportRequest?.accountName?.length
+            "
+        >
+            <div class="row">
+                <div class="col-12">
+                    <div class="top-content">
+                        <div class="d-flex w-100 justify-content-between overflow-x-auto">
+                            <div class="total-details-box mr-r05 count-box">
+                                <h5>
+                                    Transaction Count
+                                    <div class="mt-2">
+                                        <span class="d-inline-flex number-total"
+                                            >{{ stockReportRequest?.totalItems ?? "-" }}
+                                        </span>
+                                    </div>
+                                </h5>
+                            </div>
+                            <div class="total-details-box mr-r05 border-none opening-box">
+                                <h5 class="float-left">
+                                    Profit/Loss
+                                    <div class="mt-2">
+                                        <span
+                                            class="d-inline-flex number-total"
+                                            [matTooltipPosition]="'above'"
+                                            [matTooltip]="
+                                                stockTransactionReportBalance?.profit
+                                                    ? activeCompany.baseCurrencySymbol +
+                                                      ' ' +
+                                                      giddhRoundOff(
+                                                          stockTransactionReportBalance?.profit,
+                                                          giddhBalanceDecimalPlaces
+                                                      )
+                                                    : activeCompany.baseCurrencySymbol + 0
+                                            "
+                                        >
+                                            <amount-field
+                                                [amount]="
+                                                    stockTransactionReportBalance?.profit
+                                                        ? stockTransactionReportBalance?.profit
+                                                        : 0
+                                                "
+                                                [currencySymbol]="activeCompany.baseCurrencySymbol"
+                                                [currencyCode]="activeCompany?.baseCurrency"
+                                            >
+                                            </amount-field>
+                                        </span>
+                                        <br />
+                                        <span class="d-inline-flex mt-1"> ({{ selectedDateRangeUi }}) </span>
+                                    </div>
+                                </h5>
+                            </div>
+                            <div class="total-details-box mr-r05 border-none sales-purchase">
+                                <h5 class="float-left">
+                                    Opening
+                                    <div class="mt-2">
+                                        <span
+                                            class="d-inline-flex number-total"
+                                            [matTooltipPosition]="'above'"
+                                            [matTooltip]="
+                                                activeCompany.baseCurrencySymbol +
+                                                ' ' +
+                                                stockTransactionReportBalance?.opening?.amount
+                                                    ? giddhRoundOff(
+                                                          stockTransactionReportBalance?.opening?.amount,
+                                                          giddhBalanceDecimalPlaces
+                                                      )
+                                                    : activeCompany.baseCurrencySymbol + ' ' + 0
+                                            "
+                                        >
+                                            <amount-field
+                                                [amount]="
+                                                    stockTransactionReportBalance?.opening?.amount
+                                                        ? stockTransactionReportBalance?.opening?.amount
+                                                        : 0
+                                                "
+                                                [currencySymbol]="activeCompany.baseCurrencySymbol"
+                                                [currencyCode]="activeCompany?.baseCurrency"
+                                            >
+                                            </amount-field>
+                                        </span>
+                                        <br />
+                                        <span
+                                            class="d-inline-flex mt-1"
+                                            *ngIf="stockTransactionReportBalance?.opening?.quantity"
+                                            [matTooltipPosition]="'above'"
+                                            [matTooltip]="
+                                                stockTransactionReportBalance?.opening?.quantity
+                                                    ? giddhRoundOff(
+                                                          stockTransactionReportBalance?.opening?.quantity,
+                                                          giddhBalanceDecimalPlaces
+                                                      )
+                                                    : '-'
+                                            "
+                                        >
+                                            (
+                                            <amount-field
+                                                [amount]="
+                                                    stockTransactionReportBalance?.opening?.quantity
+                                                        ? stockTransactionReportBalance?.opening?.quantity
+                                                        : '-'
+                                                "
+                                                [currencySymbol]="false"
+                                                [currencyCode]="false"
+                                            >
+                                            </amount-field
+                                            >)
+                                        </span>
+                                    </div>
+                                </h5>
+                            </div>
+                            <div class="total-details-box mr-r05 border-none payment-receipt">
+                                <h5 class="float-left">
+                                    Inward
+                                    <div class="mt-2">
+                                        <span
+                                            class="d-inline-flex number-total"
+                                            [matTooltipPosition]="'above'"
+                                            [matTooltip]="
+                                                stockTransactionReportBalance?.inwards?.amount
+                                                    ? activeCompany.baseCurrencySymbol +
+                                                      ' ' +
+                                                      giddhRoundOff(
+                                                          stockTransactionReportBalance?.inwards?.amount,
+                                                          giddhBalanceDecimalPlaces
+                                                      )
+                                                    : activeCompany.baseCurrencySymbol + ' ' + 0
+                                            "
+                                        >
+                                            <amount-field
+                                                [amount]="
+                                                    stockTransactionReportBalance?.inwards?.amount
+                                                        ? stockTransactionReportBalance?.inwards?.amount
+                                                        : 0
+                                                "
+                                                [currencySymbol]="activeCompany.baseCurrencySymbol"
+                                                [currencyCode]="activeCompany?.baseCurrency"
+                                            >
+                                            </amount-field>
+                                        </span>
+                                        <br />
+                                        <span
+                                            class="d-inline-flex mt-1"
+                                            *ngIf="stockTransactionReportBalance?.inwards?.quantity"
+                                            [matTooltipPosition]="'above'"
+                                            [matTooltip]="
+                                                stockTransactionReportBalance?.inwards?.quantity
+                                                    ? giddhRoundOff(
+                                                          stockTransactionReportBalance?.inwards?.quantity,
+                                                          giddhBalanceDecimalPlaces
+                                                      )
+                                                    : '-'
+                                            "
+                                        >
+                                            (
+                                            <amount-field
+                                                [amount]="
+                                                    stockTransactionReportBalance?.inwards?.quantity
+                                                        ? stockTransactionReportBalance?.inwards?.quantity
+                                                        : '-'
+                                                "
+                                                [currencySymbol]="false"
+                                                [currencyCode]="false"
+                                            >
+                                            </amount-field
+                                            >)
+                                        </span>
+                                    </div>
+                                </h5>
+                            </div>
+                            <div class="total-details-box mr-r05 border-none due-box">
+                                <h5 class="float-left">
+                                    Outward
+                                    <div class="mt-2">
+                                        <span
+                                            class="d-inline-flex number-total"
+                                            [matTooltipPosition]="'above'"
+                                            [matTooltip]="
+                                                stockTransactionReportBalance?.outwards?.amount
+                                                    ? activeCompany.baseCurrencySymbol +
+                                                      ' ' +
+                                                      giddhRoundOff(
+                                                          stockTransactionReportBalance?.outwards?.amount,
+                                                          giddhBalanceDecimalPlaces
+                                                      )
+                                                    : activeCompany.baseCurrencySymbol + ' ' + 0
+                                            "
+                                        >
+                                            <amount-field
+                                                [amount]="
+                                                    stockTransactionReportBalance?.outwards?.amount
+                                                        ? stockTransactionReportBalance?.outwards?.amount
+                                                        : 0
+                                                "
+                                                [currencySymbol]="activeCompany.baseCurrencySymbol"
+                                                [currencyCode]="activeCompany?.baseCurrency"
+                                            >
+                                            </amount-field>
+                                        </span>
+                                        <br />
+                                        <span
+                                            class="d-inline-flex mt-1"
+                                            *ngIf="stockTransactionReportBalance?.outwards?.quantity"
+                                            [matTooltipPosition]="'above'"
+                                            [matTooltip]="
+                                                stockTransactionReportBalance?.outwards?.quantity
+                                                    ? giddhRoundOff(
+                                                          stockTransactionReportBalance?.outwards?.quantity,
+                                                          giddhBalanceDecimalPlaces
+                                                      )
+                                                    : '-'
+                                            "
+                                        >
+                                            (
+                                            <amount-field
+                                                [amount]="
+                                                    stockTransactionReportBalance?.outwards?.quantity
+                                                        ? stockTransactionReportBalance?.outwards?.quantity
+                                                        : '-'
+                                                "
+                                                [currencySymbol]="false"
+                                                [currencyCode]="false"
+                                            >
+                                            </amount-field
+                                            >)
+                                        </span>
+                                    </div>
+                                </h5>
+                            </div>
+                            <div class="total-details-box border-none closing-box">
+                                <h5 class="float-left">
+                                    Closing
+                                    <div class="mt-2">
+                                        <span
+                                            class="d-inline-flex number-total"
+                                            [matTooltipPosition]="'above'"
+                                            [matTooltip]="
+                                                stockTransactionReportBalance?.closing?.amount
+                                                    ? activeCompany.baseCurrencySymbol +
+                                                      ' ' +
+                                                      giddhRoundOff(
+                                                          stockTransactionReportBalance?.closing?.amount,
+                                                          giddhBalanceDecimalPlaces
+                                                      )
+                                                    : activeCompany.baseCurrencySymbol + ' ' + 0
+                                            "
+                                        >
+                                            <amount-field
+                                                [amount]="
+                                                    stockTransactionReportBalance?.closing?.amount
+                                                        ? stockTransactionReportBalance?.closing?.amount
+                                                        : 0
+                                                "
+                                                [currencySymbol]="activeCompany.baseCurrencySymbol"
+                                                [currencyCode]="activeCompany?.baseCurrency"
+                                            >
+                                            </amount-field>
+                                        </span>
+                                        <br />
+                                        <span
+                                            class="d-inline-flex mt-1"
+                                            *ngIf="stockTransactionReportBalance?.closing?.quantity"
+                                            [matTooltipPosition]="'above'"
+                                            [matTooltip]="
+                                                stockTransactionReportBalance?.closing?.quantity
+                                                    ? giddhRoundOff(
+                                                          stockTransactionReportBalance?.closing?.quantity,
+                                                          giddhBalanceDecimalPlaces
+                                                      )
+                                                    : '-'
+                                            "
+                                        >
+                                            (
+                                            <amount-field
+                                                [amount]="
+                                                    stockTransactionReportBalance?.closing?.quantity
+                                                        ? stockTransactionReportBalance?.closing?.quantity
+                                                        : '-'
+                                                "
+                                                [currencySymbol]="false"
+                                                [currencyCode]="false"
+                                            >
+                                            </amount-field
+                                            >)
+                                        </span>
+                                    </div>
+                                </h5>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-12 horizontal-padding">
-            <div class="table-responsive">
-                <!--                <table class="table giddh-table on-mobile-view">-->
-                <!--                    <thead>-->
-                <!--                        <tr>-->
-                <!--                            <th colspan="3">-->
-                <!--                                <div class="custom-datepicker">-->
-                <!--                                    <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">-->
-                <!--                                        <i class="icon-calender calendar-addon bdr-radius-50"></i>-->
-                <!--                                        <input-->
-                <!--                                            type="text"-->
-                <!--                                            id="select-date"-->
-                <!--                                            name="selectedDateRange"-->
-                <!--                                            [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"-->
-                <!--                                            class="giddh-datepicker date-range-picker bdr-radius-50"-->
-                <!--                                            placeholder="Enter Date"-->
-                <!--                                        />-->
-                <!--                                    </div>-->
-                <!--                                </div>-->
-                <!--                            </th>-->
-                <!--                            <th class="text-center" colspan="4">Transaction</th>-->
-                <!--                            <th colspan="1">Closing Stock</th>-->
-                <!--                        </tr>-->
-                <!--                        <tr>-->
-                <!--                            <th>Date</th>-->
-                <!--                            <th>Voucher Type</th>-->
-                <!--                            <th>Account Name</th>-->
-                <!--                            <th class="text-right">Inwards</th>-->
-                <!--                            <th class="text-right">Outwards</th>-->
-                <!--                            <th class="text-right">Rate</th>-->
-                <!--                            <th class="text-right">Value</th>-->
-                <!--                            <th class="text-right">Qty</th>-->
-                <!--                        </tr>-->
-                <!--                    </thead>-->
-                <!--                    <tbody>-->
-                <!--                        <tr>-->
-                <!--                            <td data-title="Date">09-10-2020</td>-->
-                <!--                            <td date-title="Voucher Type">SALES</td>-->
-                <!--                            <td data-title="Account Name">USD Account</td>-->
-                <!--                            <td data-title="Inwards" class="text-right">-</td>-->
-                <!--                            <td data-title="Outwards" class="text-right">1.00 Box</td>-->
-                <!--                            <td data-title="Rate" class="text-right">1,02,378.60</td>-->
-                <!--                            <td data-title="Value" class="text-right">1,02,378.60</td>-->
-                <!--                            <td data-title="Qty" class="text-right">432.00box</td>-->
-                <!--                        </tr>-->
-                <!--                    </tbody>-->
-                <!--                </table>-->
+        <div
+            class="row"
+            *ngIf="
+                isDataAvailable || stockReportRequest?.voucherTypes?.length || stockReportRequest?.accountName?.length
+            "
+        >
+            <div class="col-12 horizontal-padding">
+                <div class="table-responsive inventory-report-table" *ngIf="displayedColumns?.length">
+                    <table
+                        mat-table
+                        [dataSource]="dataSource"
+                        matSort
+                        (matSortChange)="sortChange($event)"
+                        [matSortActive]="stockReportRequest?.sortBy"
+                        [matSortDirection]="stockReportRequest?.sort"
+                        class="table giddh-table on-mobile-view"
+                    >
+                        <ng-container matColumnDef="entry_date">
+                            <th class="date-column" mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
+                            <td data-title="Date" mat-cell *matCellDef="let element">
+                                {{ element?.entryDate ?? "-" }}
+                            </td>
+                        </ng-container>
 
-                <table mat-table [dataSource]="dataSource" class="table giddh-table on-mobile-view">
-                    <ng-container matColumnDef="date">
-                        <th mat-header-cell *matHeaderCellDef>Date</th>
-                        <td data-title="Date" mat-cell *matCellDef="let element">{{ element.date }}</td>
-                    </ng-container>
-
-                    <ng-container matColumnDef="voucherType">
-                        <th mat-header-cell *matHeaderCellDef>Voucher Type</th>
-                        <td date-title="Voucher Type" mat-cell *matCellDef="let element">{{ element.voucherType }}</td>
-                    </ng-container>
-
-                    <ng-container matColumnDef="accountName">
-                        <th class="text-right" mat-header-cell *matHeaderCellDef>Account Name</th>
-                        <td data-title="Account Name" class="text-right" mat-cell *matCellDef="let element">
-                            {{ element.accountName }}
-                        </td>
-                    </ng-container>
-
-                    <ng-container matColumnDef="inwards">
-                        <th class="text-right" mat-header-cell *matHeaderCellDef>Inwards</th>
-                        <td data-title="Inwards" class="text-right" mat-cell *matCellDef="let element">
-                            {{ element.inwards }}
-                        </td>
-                    </ng-container>
-
-                    <ng-container matColumnDef="outwards">
-                        <th class="text-right" mat-header-cell *matHeaderCellDef>Outwards</th>
-                        <td data-title="Outwards" class="text-right" mat-cell *matCellDef="let element">
-                            {{ element.outwards }}
-                        </td>
-                    </ng-container>
-
-                    <ng-container matColumnDef="rate">
-                        <th class="text-right" mat-header-cell *matHeaderCellDef>Rate</th>
-                        <td data-title="Rate" class="text-right" mat-cell *matCellDef="let element">
-                            {{ element.rate }}
-                        </td>
-                    </ng-container>
-
-                    <ng-container matColumnDef="value">
-                        <th class="text-right" mat-header-cell *matHeaderCellDef>Value</th>
-                        <td data-title="Value" class="text-right" mat-cell *matCellDef="let element">
-                            {{ element?.value }}
-                        </td>
-                    </ng-container>
-
-                    <ng-container matColumnDef="qty">
+                        <ng-container matColumnDef="voucherType">
+                            <th mat-header-cell *matHeaderCellDef [matMenuTriggerFor]="voucherTypesMenu">
+                                Voucher Type
+                                <i
+                                    class="fa fa-ellipsis-v ml-1 text-light-2 mt-1 cursor-pointer"
+                                    aria-hidden="true"
+                                ></i>
+                                <mat-menu
+                                    #voucherTypesMenu="matMenu"
+                                    class="columns-wrapper"
+                                    (closed)="filterByVoucherTypes()"
+                                >
+                                    <ng-container *ngFor="let item of voucherTypes; let idx = index">
+                                        <button
+                                            class="menu-buttons"
+                                            mat-menu-item
+                                            (click)="$event?.stopPropagation()"
+                                            (keydown.enter)="item.checked = !item?.checked"
+                                        >
+                                            <mat-checkbox
+                                                class="inventory-checkbox"
+                                                color="primary"
+                                                name="{{ item?.value }}"
+                                                [(ngModel)]="item.checked"
+                                                (click)="$event?.stopPropagation()"
+                                            >
+                                                {{ item?.label }}</mat-checkbox
+                                            >
+                                        </button>
+                                    </ng-container>
+                                </mat-menu>
+                            </th>
+                            <td date-title="Voucher Type" mat-cell *matCellDef="let element">
+                                {{ element?.voucherType }}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="accountName">
+                            <th
+                                class="td-search-box text-left"
+                                mat-header-cell
+                                #searchCustomerContainer
+                                *matHeaderCellDef
+                                (clickOutside)="handleClickOutside($event, searchCustomerContainer, 'name')"
+                            >
+                                <ng-container
+                                    *ngTemplateOutlet="
+                                        searchTemplate;
+                                        context: {
+                                            $implicit: showAccountSearchInput,
+                                            fieldName: 'name',
+                                            formControl: searchAccountName,
+                                            title: 'Account Name'
+                                        }
+                                    "
+                                ></ng-container>
+                            </th>
+                            <td
+                                data-title="Account Name"
+                                class="text-left account-name-column"
+                                mat-cell
+                                *matCellDef="let element"
+                            >
+                                {{ element?.account?.name ?? "-" }}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="stockName">
+                            <th width="17%" class="text-left" mat-header-cell *matHeaderCellDef>Stock Name</th>
+                            <td data-title="Stock Name" class="text-left" mat-cell *matCellDef="let element">
+                                {{ element?.stock?.name ?? "-" }}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="variantName">
+                            <th width="17%" class="text-left" mat-header-cell *matHeaderCellDef>Variant Name</th>
+                            <td data-title="Variant Name" class="text-left" mat-cell *matCellDef="let element">
+                                {{ element?.variant?.name ?? "-" }}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="inward_quantity">
+                            <th class="text-right" mat-header-cell *matHeaderCellDef mat-sort-header>Inwards</th>
+                            <td
+                                data-title="Inwards"
+                                class="text-right"
+                                mat-cell
+                                *matCellDef="let element"
+                                [matTooltipPosition]="'above'"
+                                [matTooltip]="
+                                    element?.type === 'dr'
+                                        ? giddhRoundOff(element?.quantity, giddhBalanceDecimalPlaces)
+                                        : ''
+                                "
+                            >
+                                <span class="d-inline-flex" *ngIf="element?.type === 'dr'">
+                                    <amount-field
+                                        [amount]="element?.quantity ? element?.quantity : '-'"
+                                        [currencySymbol]="false"
+                                        [currencyCode]="false"
+                                    >
+                                    </amount-field>
+                                    <span class="ml-1 unit-badge"> {{ element?.stockUnit?.code }}</span>
+                                </span>
+                                <span *ngIf="element?.type === 'cr'">-</span>
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="outward_quantity">
+                            <th class="text-right" mat-header-cell *matHeaderCellDef mat-sort-header>Outwards</th>
+                            <td
+                                data-title="Outwards"
+                                class="text-right"
+                                mat-cell
+                                *matCellDef="let element"
+                                [matTooltipPosition]="'above'"
+                                [matTooltip]="
+                                    element?.type === 'cr'
+                                        ? giddhRoundOff(element?.quantity, giddhBalanceDecimalPlaces)
+                                        : ''
+                                "
+                            >
+                                <span class="d-inline-flex" *ngIf="element.type === 'cr'">
+                                    <amount-field
+                                        [amount]="element?.quantity ? element?.quantity : '-'"
+                                        [currencySymbol]="false"
+                                        [currencyCode]="false"
+                                    >
+                                    </amount-field>
+                                    <span class="ml-1 unit-badge"> {{ element?.stockUnit?.code }}</span>
+                                </span>
+                                <span *ngIf="element?.type === 'dr'">-</span>
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="rate">
+                            <th class="text-right" mat-header-cell *matHeaderCellDef mat-sort-header>Rate</th>
+                            <td
+                                data-title="Rate"
+                                class="text-right"
+                                mat-cell
+                                *matCellDef="let element"
+                                [matTooltipPosition]="'above'"
+                                [matTooltip]="
+                                    element?.rate
+                                        ? activeCompany.baseCurrencySymbol +
+                                          ' ' +
+                                          giddhRoundOff(element?.rate, giddhBalanceDecimalPlaces)
+                                        : activeCompany.baseCurrencySymbol + ' ' + 0
+                                "
+                            >
+                                <span class="d-inline-flex">
+                                    <amount-field
+                                        [amount]="element?.rate ? element?.rate : 0"
+                                        [currencySymbol]="activeCompany.baseCurrencySymbol"
+                                        [currencyCode]="activeCompany?.baseCurrency"
+                                    >
+                                    </amount-field>
+                                </span>
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="transaction_val">
+                            <th class="text-right" mat-header-cell *matHeaderCellDef mat-sort-header>Value</th>
+                            <td
+                                data-title="Value"
+                                class="text-right"
+                                mat-cell
+                                *matCellDef="let element"
+                                [matTooltipPosition]="'above'"
+                                [matTooltip]="
+                                    element?.amount
+                                        ? activeCompany.baseCurrencySymbol +
+                                          ' ' +
+                                          giddhRoundOff(element?.amount, giddhBalanceDecimalPlaces)
+                                        : activeCompany.baseCurrencySymbol + ' ' + 0
+                                "
+                            >
+                                <span class="d-inline-flex">
+                                    <amount-field
+                                        [amount]="element?.amount ? element?.amount : 0"
+                                        [currencySymbol]="activeCompany.baseCurrencySymbol"
+                                        [currencyCode]="activeCompany?.baseCurrency"
+                                    >
+                                    </amount-field>
+                                </span>
+                            </td>
+                        </ng-container>
+                        <!-- <ng-container matColumnDef="qty">
                         <th class="text-right" mat-header-cell *matHeaderCellDef>qty</th>
                         <td data-title="Qty" class="text-right" mat-cell *matCellDef="let element">
                             {{ element.qty }}
                         </td>
-                    </ng-container>
-
-                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-                </table>
-            </div>
-        </div>
-    </div>
-</div>
-<div *ngIf="false" class="sticky-footer stock-group-footer">
-    <div class="footer-wrapper">
-        <div class="row">
-            <div class="col-lg-3 col-md-6 col-12">
-                <div class="text-left pd-l15">
-                    <label class="text-gray font-14">Profit/Loss</label>
-                    <p class="text-purple">1,02,377.50 <span class="by-date">(Apr 1, 2018 - Dec 11, 2020)</span></p>
+                    </ng-container> -->
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                    </table>
                 </div>
-            </div>
-            <div class="col-lg-2 col-md-6 col-12">
-                <label class="text-gray font-14"
-                    >Transaction Count : <span class="total-transction text-purple">1.00</span></label
-                >
-                <p>Inward: <span class="total-inward">0.00</span></p>
-                <p>Outward: <span class="total-outward">0.00</span></p>
-            </div>
-            <div class="col-lg-7 col-md-12">
-                <div class="d-flex justify-content-end stock-value">
-                    <div class="total-stock-value">
-                        <label class="text-gray font-14">Opening</label>
-                        <p class="font-16">432.00</p>
-                        <p class="font-14">(433.00 box)</p>
-                    </div>
-                    <div class="total-stock-value">
-                        <label class="text-gray font-14">Inward</label>
-                        <p class="font-16">432.00</p>
-                        <p class="font-14">(433.00 box)</p>
-                    </div>
-                    <div class="total-stock-value">
-                        <label class="text-gray font-14">Outward</label>
-                        <p class="font-16">1,02,378.50</p>
-                        <p class="font-14">(433.00 box)</p>
-                    </div>
-                    <div class="total-stock-value">
-                        <label class="text-gray font-14">Closing Stock</label>
-                        <p class="font-16 text-purple">432.00</p>
-                        <p class="font-14">(433.00 box)</p>
-                    </div>
+                <div class="pagination-wrapper">
+                    <pagination
+                        *ngIf="
+                            stockReportRequest?.totalItems > stockReportRequest?.count &&
+                            !isLoading &&
+                            displayedColumns?.length
+                        "
+                        [totalItems]="stockReportRequest?.totalItems"
+                        [(ngModel)]="stockReportRequest.page"
+                        [maxSize]="5"
+                        class="pagination-sm"
+                        [boundaryLinks]="true"
+                        [itemsPerPage]="stockReportRequest?.count"
+                        [rotate]="false"
+                        (pageChanged)="pageChanged($event)"
+                        [firstText]="commonLocaleData?.app_first"
+                        [previousText]="commonLocaleData?.app_previous"
+                        [nextText]="commonLocaleData?.app_next"
+                        [lastText]="commonLocaleData?.app_last"
+                    ></pagination>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<ng-template #datepickerTemplate>
-    <div class="datepicker-modal">
-        <div class="modal-body">
-            <app-datepicker-wrapper
-                [inputStartDate]="selectedDateRange?.startDate"
-                [inputEndDate]="selectedDateRange?.endDate"
-                [alwaysShowCalendars]="true"
-                [ranges]="datePickerOption"
-                [selectedRangeLabel]="selectedRangeLabel"
-                [showCustomRangeLabel]="true"
-                [showClearButton]="false"
-                [showCancel]="true"
-                [linkedCalendars]="true"
-                [showDropdowns]="true"
-                (rangeClicked)="dateSelectedCallback($event)"
-                (datesUpdated)="dateSelectedCallback($event)"
-                [keepCalendarOpeningWithRange]="false"
-                [showRangeLabelOnInput]="false"
-                [dateFieldPosition]="dateFieldPosition"
-            ></app-datepicker-wrapper>
-        </div>
+    <div class="no-data-inventory" *ngIf="!isLoading && !dataSource?.length">
+        <h1>No entries found within given criteria.</h1>
+        <h1>Do search with some other dates</h1>
     </div>
-</ng-template>
+    <div class="no-data-inventory" *ngIf="!isLoading && dataSource?.length && !displayedColumns?.length">
+        <h1>No columns are selected from customise filter.</h1>
+    </div>
+    <div class="no-data" *ngIf="isLoading">
+        <giddh-page-loader></giddh-page-loader>
+    </div>
+    <ng-template
+        #searchTemplate
+        let-show
+        let-title="title"
+        let-placeholder="placeholder"
+        let-fieldName="fieldName"
+        let-formControl="formControl"
+    >
+        <div class="align-items-center d-flex" [hidden]="show">
+            <span>{{ title }}</span>
+            <button mat-icon-button (click)="toggleSearch(fieldName)">
+                <span class="icon-search"></span>
+            </button>
+        </div>
+        <div [hidden]="!show">
+            <text-field
+                [type]="'text'"
+                [placeholder]="getSearchFieldText(fieldName)"
+                [cssClass]="'form-control search-table mat-field-border'"
+                [formControl]="formControl"
+                [autoFocus]="show"
+            ></text-field>
+        </div>
+    </ng-template>
+</div>

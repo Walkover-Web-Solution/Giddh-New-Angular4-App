@@ -1,5 +1,6 @@
 import { Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
+import { HIGH_RATE_FIELD_PRECISION } from '../../../app.constant';
 import { LedgerDiscountClass } from '../../../models/api-models/SettingsDiscount';
 import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
 
@@ -36,12 +37,9 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** List of discounts */
     @Input() private discountsList: any[] = [];
-
-    constructor(
-
-    ) {
-
-    }
+    @Input() public giddhBalanceDecimalPlaces: number = 2;
+    /* Amount should have precision up to 16 digits for better calculation */
+    public highPrecisionRate = HIGH_RATE_FIELD_PRECISION;
 
     public onFocusLastDiv(el) {
         el.stopPropagation();
@@ -151,7 +149,7 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
      * on change of discount amount
      */
     public change(event?: any, discount?: any) {
-        this.discountTotal = giddhRoundOff(this.generateTotal(), 2);
+        this.discountTotal = giddhRoundOff(this.generateTotal(), this.giddhBalanceDecimalPlaces);
         this.discountTotalUpdated.emit({ discountTotal: this.discountTotal, isActive: event, discount: discount });
     }
 

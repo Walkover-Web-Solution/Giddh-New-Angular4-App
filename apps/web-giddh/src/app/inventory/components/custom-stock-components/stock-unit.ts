@@ -1,186 +1,232 @@
 export const StockUnits = [
     {
         label: 'Bags',
-        value: 'bag'
+        value: 'bag',
+        uniqueName: ''
     },
     {
         label: 'Bale',
-        value: 'bal'
+        value: 'bal',
+        uniqueName: ''
     },
     {
         label: 'Bundles',
-        value: 'bdl'
+        value: 'bdl',
+        uniqueName: ''
     },
     {
         label: 'Buckles',
-        value: 'bkl'
+        value: 'bkl',
+        uniqueName: ''
     },
     {
         label: 'Billion of units',
-        value: 'bou'
+        value: 'bou',
+        uniqueName: ''
     },
     {
         label: 'Box',
-        value: 'box'
+        value: 'box',
+        uniqueName: ''
     },
     {
         label: 'Bottles',
-        value: 'btl'
+        value: 'btl',
+        uniqueName: ''
     },
     {
         label: 'Bunches',
-        value: 'bun'
+        value: 'bun',
+        uniqueName: ''
     },
     {
         label: 'Cans',
-        value: 'can'
+        value: 'can',
+        uniqueName: ''
     },
     {
         label: 'Cubic meters',
-        value: 'cbm'
+        value: 'cbm',
+        uniqueName: ''
     },
     {
         label: 'Cubic Centimeters',
-        value: 'ccm'
+        value: 'ccm',
+        uniqueName: ''
     },
     {
         label: 'Centimeters',
-        value: 'cms'
+        value: 'cms',
+        uniqueName: ''
     },
     {
         label: 'Cartons',
-        value: 'ctn'
+        value: 'ctn',
+        uniqueName: ''
     },
     {
         label: 'Dozens',
-        value: 'doz'
+        value: 'doz',
+        uniqueName: ''
     },
     {
         label: 'Drums',
-        value: 'drm'
+        value: 'drm',
+        uniqueName: ''
     },
     {
         label: 'Great Gross',
-        value: 'ggk'
+        value: 'ggk',
+        uniqueName: ''
     },
     {
         label: 'Grammes',
-        value: 'gms'
+        value: 'gms',
+        uniqueName: ''
     },
     {
         label: 'Gross',
-        value: 'grs'
+        value: 'grs',
+        uniqueName: ''
     },
     {
         label: 'Gross Yards',
-        value: 'gyd'
+        value: 'gyd',
+        uniqueName: ''
     },
     {
         label: 'Hour',
-        value: 'hr'
+        value: 'hr',
+        uniqueName: ''
     },
     {
         label: 'Kilogram',
-        value: 'kg'
+        value: 'kg',
+        uniqueName: ''
     },
     {
         label: 'Kilolitre',
-        value: 'klr'
+        value: 'klr',
+        uniqueName: ''
     },
     {
         label: 'Kilometre',
-        value: 'kme'
+        value: 'kme',
+        uniqueName: ''
     },
     {
         label: "Litre",
-        value: "l"
+        value: "l",
+        uniqueName: ''
     },
     {
         label: 'Mililitre',
-        value: 'mlt'
+        value: 'mlt',
+        uniqueName: ''
     },
     {
         label: 'Meter',
-        value: 'm'
+        value: 'm',
+        uniqueName: ''
     },
     {
         label: 'Metric Ton',
-        value: 'mts'
+        value: 'mts',
+        uniqueName: ''
     },
     {
         label: 'Number',
-        value: 'nos'
+        value: 'nos',
+        uniqueName: ''
     },
     {
         label: 'Packs',
-        value: 'pac'
+        value: 'pac',
+        uniqueName: ''
     },
     {
         label: 'pcs',
-        value: 'pcs'
+        value: 'pcs',
+        uniqueName: ''
     },
     {
         label: 'Pairs',
-        value: 'prs'
+        value: 'prs',
+        uniqueName: ''
     },
     {
         label: 'Quintal',
-        value: 'qtl'
+        value: 'qtl',
+        uniqueName: ''
     },
     {
         label: 'Rolls',
-        value: 'rol'
+        value: 'rol',
+        uniqueName: ''
     },
     {
         label: 'Sets',
-        value: 'set'
+        value: 'set',
+        uniqueName: ''
     },
     {
         label: 'Square Feet',
-        value: 'sqf'
+        value: 'sqf',
+        uniqueName: ''
     },
     {
         label: 'Square Meters',
-        value: 'sqm'
+        value: 'sqm',
+        uniqueName: ''
     },
     {
         label: 'Square Yards',
-        value: 'sqy'
+        value: 'sqy',
+        uniqueName: ''
     },
     {
         label: 'Tablets',
-        value: 'tbs'
+        value: 'tbs',
+        uniqueName: ''
     },
     {
         label: 'Ten Gross',
-        value: 'tgm'
+        value: 'tgm',
+        uniqueName: ''
     },
     {
         label: 'Thousands',
-        value: 'thd'
+        value: 'thd',
+        uniqueName: ''
     },
     {
         label: 'Tonnes',
-        value: 'ton'
+        value: 'ton',
+        uniqueName: ''
     },
     {
         label: 'Tubes',
-        value: 'tub'
+        value: 'tub',
+        uniqueName: ''
     },
     {
         label: 'US Gallons',
-        value: 'ugs'
+        value: 'ugs',
+        uniqueName: ''
     },
     {
         label: 'Units',
-        value: 'unt'
+        value: 'unt',
+        uniqueName: ''
     },
     {
         label: 'Yards',
-        value: 'yds'
+        value: 'yds',
+        uniqueName: ''
     },
     {
         label: 'Others',
-        value: 'oth'
+        value: 'oth',
+        uniqueName: ''
     }
 ];

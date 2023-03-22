@@ -21,6 +21,7 @@
         *ngIf="!allowDecimalDigitsOnly && !allowDigitsOnly && !useMask"
         #textField
         (keydown.enter)="$event.preventDefault()"
+        [autocomplete]="autocomplete"
     />
     <input
         matInput
@@ -43,6 +44,7 @@
         decimalDigitsDirective
         #textField
         (keydown.enter)="$event.preventDefault()"
+        [autocomplete]="autocomplete"
     />
     <input
         matInput
@@ -65,6 +67,7 @@
         digitsOnlyDirective
         #textField
         (keydown.enter)="$event.preventDefault()"
+        [autocomplete]="autocomplete"
     />
     <input
         matInput
@@ -86,6 +89,7 @@
         *ngIf="!allowDigitsOnly && useMask"
         #textField
         (keydown.enter)="$event.preventDefault()"
+        [autocomplete]="autocomplete"
     />
     <input
         matInput
@@ -109,5 +113,6 @@
         digitsOnlyDirective
         #textField
         (keydown.enter)="$event.preventDefault()"
+        [autocomplete]="autocomplete"
     />
 </div>

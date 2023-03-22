@@ -149,6 +149,8 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     public branchTransferInfoText: string = '';
     /** True if it's default load */
     private isDefaultLoad: boolean = false;
+    /** Decimal places from company settings */
+    public giddhBalanceDecimalPlaces: number = 2;
 
     constructor(private _router: Router, private store: Store<AppState>, private _generalService: GeneralService, private _inventoryAction: InventoryAction, private commonActions: CommonActions, private inventoryAction: InventoryAction, private _toasty: ToasterService, private _warehouseService: SettingsWarehouseService, private invoiceActions: InvoiceActions, private inventoryService: InventoryService, private _cdRef: ChangeDetectorRef, public bsConfig: BsDatepickerConfig) {
         this.bsConfig.dateInputFormat = GIDDH_DATE_FORMAT;
@@ -169,6 +171,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                 this.activeCompany = companyInfo;
                 this.inputMaskFormat = this.activeCompany.balanceDisplayFormat ? this.activeCompany.balanceDisplayFormat.toLowerCase() : '';
                 this.getOnboardingForm(companyInfo?.countryV2?.alpha2CountryCode);
+                this.giddhBalanceDecimalPlaces = o.balanceDecimalPlaces;
             }
         });
 
@@ -253,6 +256,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                     taxNumber: null,
                     address: null,
                     stockDetails: {
+                        stockUnitUniqueName: null,
                         stockUnit: null,
                         amount: null,
                         rate: null,
@@ -269,6 +273,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                     taxNumber: null,
                     address: null,
                     stockDetails: {
+                        stockUnitUniqueName: null,
                         stockUnit: null,
                         amount: null,
                         rate: null,
@@ -284,6 +289,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                 skuCode: null,
                 uniqueName: null,
                 stockDetails: {
+                    stockUnitUniqueName: null,
                     stockUnit: null,
                     amount: null,
                     rate: null,
@@ -328,6 +334,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                         this.branchTransfer.sources[index].warehouse.address = "";
                         if (!this.branchTransfer.sources[index].warehouse.stockDetails) {
                             this.branchTransfer.sources[index].warehouse.stockDetails = {
+                                stockUnitUniqueName: null,
                                 stockUnit: null,
                                 amount: null,
                                 rate: null,
@@ -350,6 +357,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
 
                         if (!this.branchTransfer.destinations[index].warehouse.stockDetails) {
                             this.branchTransfer.destinations[index].warehouse.stockDetails = {
+                                stockUnitUniqueName: null,
                                 stockUnit: null,
                                 amount: null,
                                 rate: null,
@@ -416,6 +424,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                 taxNumber: null,
                 address: null,
                 stockDetails: {
+                    stockUnitUniqueName: (this.branchTransfer.products[0].stockDetails.stockUnitUniqueName) ? this.branchTransfer.products[0].stockDetails.stockUnitUniqueName : null,
                     stockUnit: (this.branchTransfer.products[0].stockDetails.stockUnit) ? this.branchTransfer.products[0].stockDetails.stockUnit : null,
                     amount: null,
                     rate: null,
@@ -438,6 +447,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                 taxNumber: null,
                 address: null,
                 stockDetails: {
+                    stockUnitUniqueName: (this.branchTransfer.products[0].stockDetails.stockUnitUniqueName) ? this.branchTransfer.products[0].stockDetails.stockUnitUniqueName : null,
                     stockUnit: (this.branchTransfer.products[0].stockDetails.stockUnit) ? this.branchTransfer.products[0].stockDetails.stockUnit : null,
                     amount: null,
                     rate: null,
@@ -459,6 +469,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
             skuCode: null,
             uniqueName: null,
             stockDetails: {
+                stockUnitUniqueName: null,
                 stockUnit: null,
                 amount: null,
                 rate: null,
@@ -579,14 +590,17 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
         if (event && event.additional) {
             product.name = event.additional.name;
             product.stockDetails.stockUnit = event.additional.stockUnit.code;
+            product.stockDetails.stockUnitUniqueName = event.additional.stockUnit.uniqueName;
             product.stockDetails.rate = 0;
 
             this.inventoryService.GetStockDetails(event.additional.stockGroup?.uniqueName, event.value).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
                 if (response?.status === 'success') {
                     product.stockDetails.rate = response?.body?.purchaseAccountDetails?.unitRates[0]?.rate;
                     if (!response?.body?.purchaseAccountDetails) {
+                        product.stockDetails.stockUnitUniqueName = response?.body?.stockUnit?.uniqueName;
                         product.stockDetails.stockUnit = response?.body?.stockUnit?.code;
                     } else {
+                        product.stockDetails.stockUnitUniqueName = response?.body?.purchaseAccountDetails?.unitRates[0]?.stockUnitUniqueName;
                         product.stockDetails.stockUnit = response?.body?.purchaseAccountDetails?.unitRates[0]?.stockUnitCode;
                     }
                     this.calculateRowTotal(product);
@@ -622,7 +636,9 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
 
             if (this.transferType === 'senders') {
                 this.branchTransfer.destinations[0].warehouse.stockDetails.stockUnit = event.additional.stockUnit.code;
+                this.branchTransfer.destinations[0].warehouse.stockDetails.stockUnitUniqueName = event.additional.stockUnit.uniqueName;
                 this.branchTransfer.sources[0].warehouse.stockDetails.stockUnit = event.additional.stockUnit.code;
+                this.branchTransfer.sources[0].warehouse.stockDetails.stockUnitUniqueName = event.additional.stockUnit.uniqueName;
 
                 this.focusDefaultSource();
             }
@@ -968,7 +984,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
             if (isNaN(parseFloat(product.stockDetails.amount))) {
                 product.stockDetails.amount = 0;
             } else {
-                product.stockDetails.amount = Number(this._generalService.convertExponentialToNumber(parseFloat(product.stockDetails.amount).toFixed(2)));
+                product.stockDetails.amount = Number(this._generalService.convertExponentialToNumber(parseFloat(product.stockDetails.amount).toFixed(this.giddhBalanceDecimalPlaces)));
             }
         } else {
             if (isNaN(parseFloat(product.stockDetails.rate))) {

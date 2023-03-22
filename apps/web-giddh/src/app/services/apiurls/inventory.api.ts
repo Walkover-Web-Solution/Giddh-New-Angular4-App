@@ -32,9 +32,9 @@ export const INVENTORY_API = {
     CREATE_STOCK: 'company/:companyUniqueName/stock-group/:stockGroupUniqueName/stock', // post call
     CREATE_STOCK_UNIT: 'company/:companyUniqueName/stock-unit', // post call
     DELETE_STOCK: 'company/:companyUniqueName/stock-group/:stockGroupUniqueName/stock/:stockUniqueName', // DELETE call
-    DELETE_STOCK_UNIT: 'company/:companyUniqueName/stock-unit/:uName', // DELETE call
+    DELETE_STOCK_UNIT: 'company/:companyUniqueName/stock-unit/:uniqueName', // DELETE call
     UPDATE_STOCK: 'company/:companyUniqueName/stock-group/:stockGroupUniqueName/stock/:stockUniqueName', // PUT call
-    UPDATE_STOCK_UNIT: 'company/:companyUniqueName/stock-unit/:uName', // PUT call
+    UPDATE_STOCK_UNIT: 'company/:companyUniqueName/stock-unit/:uniqueName', // PUT call
     GET_RATE_FOR_STOCK: 'company/:companyUniqueName/stock/:stockUniqueName/rate-for-stock', // Get call
     GET_STOCK_WITH_UNIQUENAME: 'company/:companyUniqueName/stock/:stockUniqueName', // GET call
     GET_STOCK_UNIT_WITH_NAME: 'company/:companyUniqueName/stock-unit/:uName', // GET call
@@ -75,5 +75,10 @@ export const INVENTORY_API = {
         CREATE: 'company/:companyUniqueName/stock-group/:stockGroupUniqueName/stock',
         GET: 'company/:companyUniqueName/stock/:stockUniqueName',
         UPDATE: 'company/:companyUniqueName/stock-group/:stockGroupUniqueName/stock/:stockUniqueName'
-    }
+    },
+
+    TRANSACTIONAL_STOCK_REPORT_V2: 'company/:companyUniqueName/inventory/transaction-report?from=:from&to=:to&count=:count&page=:page&sort=:sort&sortBy=:sortBy&transaction_type=:transactionType', // post for filter rest all get
+    TRANSACTIONAL_STOCK_REPORT_BALANCE_V2: 'company/:companyUniqueName/inventory/balance?from=:from&to=:to',
+    TRANSACTIONAL_STOCK_REPORT_COLUMNS: 'company/:companyUniqueName/report-filters?module=:module',
+    SEARCH_STOCK_TRANSACTION_FILTERS: 'company/:companyUniqueName/inventory-search'
 };
