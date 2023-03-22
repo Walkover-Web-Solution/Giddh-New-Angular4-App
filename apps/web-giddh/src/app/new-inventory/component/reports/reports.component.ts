@@ -169,85 +169,84 @@ export class ReportsComponent implements OnInit {
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.currentUrl = this.router.url;
             this.reportUniqueName = response?.uniqueName;
-            if (this.reportType && (response?.reportType)?.toUpperCase() !== this.reportType) {
-                this.reportType = (response?.reportType)?.toUpperCase();
+            this.reportType = (response?.reportType)?.toUpperCase();
+
+            if (this.storeFilters[this.currentUrl]) {
                 this.showContent = false;
                 this.changeDetection.detectChanges();
 
                 this.stockReportRequest = new StockReportRequest();
                 this.balanceStockReportRequest = new BalanceStockTransactionReportRequest();
 
-                if (this.storeFilters[this.currentUrl]) {
-                    this.pullUniversalDate = false;
-                    this.initialLoad = true;
-                    this.stockReportRequest = cloneDeep(this.storeFilters[this.currentUrl]?.stockReportRequest);
-                    this.balanceStockReportRequest = cloneDeep(this.storeFilters[this.currentUrl]?.balanceStockReportRequest);
-                    this.todaySelected = cloneDeep(this.storeFilters[this.currentUrl]?.todaySelected);
-                    this.showClearFilter = cloneDeep(this.storeFilters[this.currentUrl]?.showClearFilter);
-                    this.advanceSearchModalResponse = cloneDeep(this.storeFilters[this.currentUrl]?.advanceSearchModalResponse);
-                    this.fromDate = dayjs(this.stockReportRequest?.from, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
-                    this.toDate = dayjs(this.stockReportRequest?.to, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
-                    this.stockReportRequest.from = this.fromDate;
-                    this.stockReportRequest.to = this.toDate;
-                    this.balanceStockReportRequest.from = this.fromDate;
-                    this.balanceStockReportRequest.to = this.toDate;
+                this.pullUniversalDate = false;
+                this.initialLoad = true;
+                this.stockReportRequest = cloneDeep(this.storeFilters[this.currentUrl]?.stockReportRequest);
+                this.balanceStockReportRequest = cloneDeep(this.storeFilters[this.currentUrl]?.balanceStockReportRequest);
+                this.todaySelected = cloneDeep(this.storeFilters[this.currentUrl]?.todaySelected);
+                this.showClearFilter = cloneDeep(this.storeFilters[this.currentUrl]?.showClearFilter);
+                this.advanceSearchModalResponse = cloneDeep(this.storeFilters[this.currentUrl]?.advanceSearchModalResponse);
+                this.fromDate = dayjs(this.stockReportRequest?.from, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                this.toDate = dayjs(this.stockReportRequest?.to, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                this.stockReportRequest.from = this.fromDate;
+                this.stockReportRequest.to = this.toDate;
+                this.balanceStockReportRequest.from = this.fromDate;
+                this.balanceStockReportRequest.to = this.toDate;
 
-                    this.fromToDate = { from: this.fromDate, to: this.toDate };
-                }
+                this.fromToDate = { from: this.fromDate, to: this.toDate };
+                this.changeDetection.detectChanges();
 
                 setTimeout(() => {
                     this.showContent = true;
                     this.changeDetection.detectChanges();
+                }, 100);
+            };
+
+            this.customiseColumns = cloneDeep(INVENTORY_COMMON_COLUMNS);
+            if (this.reportType === InventoryReportType.group.toUpperCase()) {
+                this.customiseColumns.splice(0, 0, {
+                    "value": "group_name",
+                    "label": "Group Name",
+                    "checked": true
                 });
-            } else {
-                this.reportType = (response?.reportType)?.toUpperCase();
-                this.customiseColumns = cloneDeep(INVENTORY_COMMON_COLUMNS);
-                if (this.reportType === InventoryReportType.group.toUpperCase()) {
-                    this.customiseColumns.splice(0, 0, {
+                this.moduleName = InventoryModuleName.group;
+            }
+            if (this.reportType === InventoryReportType.stock.toUpperCase()) {
+                this.customiseColumns.splice(0, 0,
+                    {
                         "value": "group_name",
                         "label": "Group Name",
                         "checked": true
-                    });
-                    this.moduleName = InventoryModuleName.group;
-                }
-                if (this.reportType === InventoryReportType.stock.toUpperCase()) {
-                    this.customiseColumns.splice(0, 0,
-                        {
-                            "value": "group_name",
-                            "label": "Group Name",
-                            "checked": true
-                        },
-                        {
-                            "value": "stock_name",
-                            "label": "Stock Name",
-                            "checked": true
-                        })
-                    this.moduleName = InventoryModuleName.stock;
+                    },
+                    {
+                        "value": "stock_name",
+                        "label": "Stock Name",
+                        "checked": true
+                    })
+                this.moduleName = InventoryModuleName.stock;
 
-                }
-                if (this.reportType === InventoryReportType.variant.toUpperCase()) {
-                    this.customiseColumns.splice(0, 0,
-                        {
-                            "value": "group_name",
-                            "label": "Group Name",
-                            "checked": true
-                        },
-                        {
-                            "value": "stock_name",
-                            "label": "Stock Name",
-                            "checked": true
-                        },
-                        {
-                            "value": "variant_name",
-                            "label": "Variant Name",
-                            "checked": true
-                        })
-                    this.moduleName = InventoryModuleName.variant;
-                }
+            }
+            if (this.reportType === InventoryReportType.variant.toUpperCase()) {
+                this.customiseColumns.splice(0, 0,
+                    {
+                        "value": "group_name",
+                        "label": "Group Name",
+                        "checked": true
+                    },
+                    {
+                        "value": "stock_name",
+                        "label": "Stock Name",
+                        "checked": true
+                    },
+                    {
+                        "value": "variant_name",
+                        "label": "Variant Name",
+                        "checked": true
+                    })
+                this.moduleName = InventoryModuleName.variant;
+            }
 
-                if (this.isReportLoaded) {
-                    this.getReport(true);
-                }
+            if (this.isReportLoaded) {
+                this.getReport(true);
             }
         });
     }
