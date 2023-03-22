@@ -192,9 +192,9 @@ export class InventoryTransactionListComponent implements OnInit {
     /** Holds from/to date */
     public fromToDate: any = {};
     /** Holds module name */
-    public moduleName = '';
+    public moduleName = InventoryModuleName.transaction;
     /** Holds report type */
-    public reportType: string = '';
+    public reportType: string = InventoryReportType.transaction;
     /** Holds report unique name */
     public reportUniqueName: string = '';
     /** True  if report is loaded */
@@ -247,15 +247,11 @@ export class InventoryTransactionListComponent implements OnInit {
 
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                this.reportType = 'TRANSACTION';
-                if (this.reportType === InventoryReportType.transaction.toUpperCase()) {
-                    this.moduleName = InventoryModuleName.transaction;
                     this.reportUniqueName = response?.uniqueName;
                     if (this.isReportLoaded) {
                         this.getStockTransactionalReport(true);
                     }
                 }
-            }
         });
     }
 
