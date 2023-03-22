@@ -23,6 +23,7 @@ export interface IStocksItem extends INameUniqueName {
 export interface IStockItem {
     name: string;
     code: string;
+    uniqueName: string;
 }
 
 export interface IStockReportItem {
@@ -51,8 +52,10 @@ export interface IStockReport extends IPagination {
 }
 
 export interface IUnitRateItem {
+    stockUnit?: any;
+    stockUnitUniqueName?: any;
     rate: number;
-    stockUnitCode: string;
+    stockUnitCode?: any;
 }
 
 export interface IAccountDetails {
@@ -64,12 +67,14 @@ export class IStockItemDetail {
     public stockUniqueName: string;
     public quantity: number;
     public stockUnitCode: string;
+    public stockUnitUniqueName?: string;
     public rate?: number;
     public amount?: number;
     public manufacturingUnit?: string;
 }
 
 export interface IManufacturingDetails {
+    manufacturingUnitUniqueName?: any;
     manufacturingQuantity: number;
     manufacturingUnitCode: string;
     linkedStocks: IStockItemDetail[];

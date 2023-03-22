@@ -291,8 +291,10 @@ export class MfEditComponent implements OnInit, OnDestroy {
 
             if (this.isUpdateCase) {
                 val.stockUnitCode = data.manufacturingUnit;
+                val.stockUnitUniqueName = data.stockUnitUniqueName;
             } else {
                 val.stockUnitCode = data.stockUnitCode;
+                val.stockUnitUniqueName = data.stockUnitUniqueName;
             }
 
             let manufacturingObj = cloneDeep(this.manufacturingDetails);
@@ -482,11 +484,13 @@ export class MfEditComponent implements OnInit, OnDestroy {
                         quantity: itemQuantity,
                         stockUnitCode: unitCode,
                         rate: null,
-                        amount: null
+                        amount: null,
+                        stockUnitUniqueName: res.body?.stockUnit?.uniqueName
                     };
 
                     this.linkedStocks.manufacturingUnit = unitCode;
                     this.linkedStocks.stockUnitCode = unitCode;
+                    this.linkedStocks.stockUnitUniqueName = res.body?.stockUnit?.uniqueName;
 
                     this._inventoryService.GetRateForStoke(selectedItem, data).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
                         if (response?.status === 'success') {
@@ -501,6 +505,7 @@ export class MfEditComponent implements OnInit, OnDestroy {
         } else {
             this.linkedStocks.manufacturingUnit = null;
             this.linkedStocks.stockUnitCode = null;
+            this.linkedStocks.stockUnitUniqueName = null;
             this.linkedStocks.rate = null;
         }
     }

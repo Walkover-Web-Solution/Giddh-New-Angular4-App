@@ -74,6 +74,7 @@ export interface ILinkedStockForCreate extends IStockItem {
     stockUnitCode?: string;
     manufacturingUnit?: string;
     manufacturingQuantity: number;
+    stockUnitUniqueName?: string;
 }
 
 export interface Transaction extends IOnlyAmount {

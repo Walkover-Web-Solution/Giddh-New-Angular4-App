@@ -166,6 +166,7 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
                     });
                     stock.stock.stockUnitCode = response?.body?.stockUnit?.code;
                     stock.stock.stockUnitName = response?.body?.stockUnit?.name;
+                    stock.stock.stockUnitUniqueName = response?.body?.stockUnit?.uniqueName;
                 } else {
                     this.toaster.showSnackBar("error", response?.message);
                 }
@@ -302,6 +303,7 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
     public stockUpdate(stock: any, warehouse: any): void {
         stock.stock.stockUnitCode = stock?.stock?.stockUnit?.code;
         stock.stock.stockUnitName = stock?.stock?.stockUnit?.name;
+        stock.stock.stockUnitUniqueName = stock?.stock?.stockUnit?.uniqueName;
         setTimeout(() => {
             this.inventoryService.updateStock(stock?.stock, stock?.stock?.stockGroup?.uniqueName, stock?.stockUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response && response?.status === "success") {
@@ -326,7 +328,7 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
             if (response && response?.status === "success") {
                 this.stockUnits = response?.body?.map(result => {
                     return {
-                        value: result?.code,
+                        value: result?.uniqueName,
                         label: result?.name + ` (${result?.code})`,
                         additional: result
                     };

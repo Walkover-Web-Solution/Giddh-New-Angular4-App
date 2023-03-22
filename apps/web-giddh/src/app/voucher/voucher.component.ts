@@ -3564,17 +3564,19 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             // set rate auto
             transaction.rate = null;
             let obj: IStockUnit = {
-                id: o.stock.stockUnitCode,
+                id: o.stock.stockUnitUniqueName,
                 text: o.stock.stockUnitName
             };
             transaction.stockList = [];
             if (o.stock && o.stock.unitRates && o.stock.unitRates.length) {
                 transaction.stockList = this.prepareUnitArr(o.stock.unitRates);
                 transaction.stockUnit = transaction.stockList[0].id;
+                transaction.stockUnitCode = transaction.stockList[0].text;
                 transaction.rate = Number((transaction.stockList[0].rate / this.exchangeRate).toFixed(this.highPrecisionRate));
             } else {
                 transaction.stockList.push(obj);
-                transaction.stockUnit = o.stock.stockUnit.code;
+                transaction.stockUnit = o.stock.stockUnit.uniqueName;
+                transaction.stockUnitCode = o.stock.stockUnit.code;
             }
             transaction.stockDetails = omit(o.stock, ['accountStockDetails', 'stockUnit']);
             transaction.isStockTxn = true;
@@ -3587,6 +3589,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         } else {
             transaction.isStockTxn = false;
             transaction.stockUnit = null;
+            transaction.stockUnitCode = null;
             transaction.stockDetails = null;
             transaction.stockList = [];
             // reset fields
@@ -3684,6 +3687,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         txn.quantity = null;
         txn.isStockTxn = false;
         txn.stockUnit = null;
+        txn.stockUnitCode = null;
         txn.stockDetails = null;
         txn.stockList = [];
         txn.rate = null;
@@ -4046,17 +4050,15 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public prepareUnitArr(unitArr) {
         let unitArray = [];
         forEach(unitArr, (item) => {
-            unitArray.push({ id: item.stockUnitCode, text: item.stockUnitCode, rate: item.rate });
+            unitArray.push({ id: item.stockUnitUniqueName, text: item.stockUnitCode, rate: item.rate });
         });
         return unitArray;
     }
 
     public onChangeUnit(txn, selectedUnit) {
-        if (!event) {
-            return;
-        }
         find(txn.stockList, (o) => {
-            if (o.id === selectedUnit) {
+            if (o.id === selectedUnit?.value) {
+                txn.stockUnitCode = o.text;
                 return txn.rate = o.rate;
             }
         });
@@ -4255,7 +4257,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                         salesAddBulkStockItems.rate.amountForAccount = tr.rate;
                         salesAddBulkStockItems.sku = tr.stockDetails.skuCode;
                         salesAddBulkStockItems.stockUnit = new CodeStockMulticurrency();
-                        salesAddBulkStockItems.stockUnit.code = tr.stockUnit;
+                        salesAddBulkStockItems.stockUnitCode = tr.stockUnitCode;
+                        salesAddBulkStockItems.stockUnit.uniqueName = tr.stockUnit;
 
                         transactionClassMul.stock = salesAddBulkStockItems;
                     }
@@ -4960,8 +4963,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                         const unitRate = stock.unitRates.find(rate => rate.code === stock.stockUnit.code);
 
                         let stockUnit: IStockUnit = {
-                            id: stock.stockUnit.code,
-                            text: unitRate ?  unitRate?.stockUnitName:stock.stockUnit.code
+                            id: stock.stockUnit.uniqueName,
+                            text: unitRate ? unitRate.stockUnitName : stock.stockUnit.code
                         };
                         newTrxObj.stockList = [];
                         if (stock.unitRates && stock.unitRates.length) {
@@ -4974,6 +4977,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     newTrxObj.quantity = trx.quantity;
                     newTrxObj.rate = trx.rate;
                     newTrxObj.stockUnit = trx.stockUnit;
+                    newTrxObj.stockUnitCode = trx.stockUnitCode;
 
                     if (trx.maxQuantity) {
                         newTrxObj.maxQuantity = trx.maxQuantity;
@@ -5142,7 +5146,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     saalesAddBulkStockItems.rate.amountForAccount = tr.rate;
                     saalesAddBulkStockItems.sku = tr.stockDetails.skuCode;
                     saalesAddBulkStockItems.stockUnit = new CodeStockMulticurrency();
-                    saalesAddBulkStockItems.stockUnit.code = tr.stockUnit;
+                    saalesAddBulkStockItems.stockUnit.uniqueName = tr.stockUnit;
+                    saalesAddBulkStockItems.stockUnit.code = tr.stockUnitCode;
 
                     transactionClassMul.stock = saalesAddBulkStockItems;
                 }
@@ -5252,13 +5257,15 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     salesTransactionItemClass.stockDetails.customField1 = t.stock.customField1;
                     salesTransactionItemClass.stockDetails.customField2 = t.stock.customField2;
                     salesTransactionItemClass.stockDetails.stockUnit = t.stock.stockUnit;
+                    salesTransactionItemClass.stockDetails.stockUnitCode = t.stock.stockUnitCode;
                     salesTransactionItemClass.stockDetails.unitRates = t.stock.unitRates;
                     salesTransactionItemClass.stockDetails.uniqueName = t.stock.uniqueName;
                     salesTransactionItemClass.stockDetails.skuCodeHeading = t.stock.skuCodeHeading;
                     salesTransactionItemClass.quantity = t.stock.quantity;
                     salesTransactionItemClass.rate = t.stock.rate?.amountForAccount ?? t.stock.rate?.rateForAccount;
                     salesTransactionItemClass.stockDetails.skuCode = t.stock.sku;
-                    salesTransactionItemClass.stockUnit = t.stock.stockUnit.code;
+                    salesTransactionItemClass.stockUnit = t.stock.stockUnit.uniqueName;
+                    salesTransactionItemClass.stockUnitCode = t.stock.stockUnit.code;
                     salesTransactionItemClass.fakeAccForSelect2 = t.account.uniqueName + '#' + t.stock.uniqueName;
                 }
 
