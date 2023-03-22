@@ -378,7 +378,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ReportFiltersComponent
      */
     public isFilterActive(): void {
-        if (this.selectedBranch?.length || this.selectedWarehouse?.length || this.filtersChipList?.length || this.advanceSearchModalResponse || this.stockReportRequest?.voucherTypes?.length || this.stockReportRequest.accountName?.length) {
+        if ((this.isCompany && this.selectedBranch?.length) || this.selectedWarehouse?.length || this.filtersChipList?.length || this.advanceSearchModalResponse || this.stockReportRequest?.voucherTypes?.length || this.stockReportRequest.accountName?.length) {
             this.showClearFilter = true;
         } else {
             this.showClearFilter = false;
