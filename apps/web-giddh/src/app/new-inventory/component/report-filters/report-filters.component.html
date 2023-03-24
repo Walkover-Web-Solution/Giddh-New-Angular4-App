@@ -101,7 +101,7 @@
                         type="text"
                         matInput
                         [formControl]="searchFilters"
-                        [placeholder]="'Search stock group, stock, variant'"
+                        [placeholder]="localeData?.header?.search_bar"
                         [matAutocomplete]="auto"
                         [matChipInputFor]="matChipList"
                         #trigger="matAutocompleteTrigger"
@@ -121,7 +121,9 @@
                         <mat-option *ngFor="let option of fieldFilteredOptions" [value]="option">
                             {{ option?.name }} ( {{ option?.type }} )
                         </mat-option>
-                        <mat-option disabled *ngIf="fieldFilteredOptions?.length === 0">No results found</mat-option>
+                        <mat-option disabled *ngIf="fieldFilteredOptions?.length === 0"
+                            >localeData?.header?.no_result_found</mat-option
+                        >
                     </ng-container>
                     <ng-template #searchedData>
                         <app-cdk-scroll
