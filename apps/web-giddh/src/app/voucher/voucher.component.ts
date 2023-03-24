@@ -3005,7 +3005,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
     public calculateWhenTrxAltered(entry: SalesEntryClass, trx: SalesTransactionItemClass, fromTransactionField: boolean = false, event?: any) {
         if (trx?.accountName || trx?.accountUniqueName) {
-            if (fromTransactionField === true) {
+            if (fromTransactionField) {
                 trx.highPrecisionAmount = trx.amount;
                 if (this.transactionAmount === trx.amount) {
                     this.transactionAmount = 0;
@@ -3053,7 +3053,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 trx.amount = 0;
             }
 
-            if (trx.isStockTxn) {
+            if (trx.isStockTxn && fromTransactionField) {
                 trx.rate = Number(((trx.highPrecisionAmount ?? 0) / trx.quantity).toFixed(this.highPrecisionRate));
             }
 
