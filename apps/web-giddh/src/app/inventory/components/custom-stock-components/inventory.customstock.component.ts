@@ -63,7 +63,8 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
     public updateCustomStockSuccess$: Observable<boolean>;
     /* Hold all stock pre define units */
     public stockUnitsList = [...StockUnits];
-
+    /** Holds list of create units */
+    public stockMappedUnits: any;
 
     constructor(
         private store: Store<AppState>,
@@ -129,27 +130,8 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
         this.store.dispatch(this.customStockActions.getStockMappedUnits());
 
         this.stockMappedUnits$.subscribe(res => {
-            this.stockUnitsList = [...StockUnits];
-            this.allStockMappedUnits = [];
-            res?.forEach((mapped: any) => {
-                let unitsList = this.stockUnitsList?.filter(unit => unit?.value === mapped?.stockUnitX?.code);
-                let mappedUnits = this.allStockMappedUnits?.filter(unit => unit?.value === mapped?.stockUnitX?.code);
-
-                if (!mappedUnits?.length) {
-                    this.allStockMappedUnits?.push({
-                        label: mapped?.stockUnitX?.name,
-                        value: mapped?.stockUnitX?.code,
-                        uniqueName: mapped?.stockUnitX?.uniqueName
-                    });
-                }
-                if (!unitsList?.length) {
-                    this.stockUnitsList?.push({
-                        label: mapped?.stockUnitX?.name,
-                        value: mapped?.stockUnitX?.code,
-                        uniqueName: mapped?.stockUnitX?.uniqueName
-                    });
-                }
-            });
+            this.stockMappedUnits = res;
+            this.createUnitMappings();
         });
 
         this.stockMappedUnitsWithCode$.subscribe((res: any) => {
@@ -258,7 +240,7 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
         let unit = this.stockUnitsList?.filter((obj) => obj?.value === name || obj.label === name);
         if (unit !== undefined && unit?.length > 0) {
             this.customUnitObj.code = unit[0]?.value;
-            this.customUnitObj.name = unit[0]?.value;
+            this.customUnitObj.name = unit[0]?.label;
             this.customUnitObj.uniqueName = unit[0]?.uniqueName;
             this.selectedUnitName = unit[0].label;
         }
@@ -336,6 +318,9 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
     public handleUnitCodeValidation(isInvalid: boolean): void {
         if (isInvalid) {
             this.toasterService.errorToast('Only numbers and lower case alphabets without spaces are allowed!', 'Invalid Unit Code');
+        } else {
+            this.createUnitMappings();
+            this.unitChange();
         }
     }
 
@@ -415,5 +400,35 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
         this.destroyed$.next(true);
         this.destroyed$.complete();
         this.store.dispatch(this.customStockActions.resetStockUnitResponse());
+    }
+
+    /**
+     * Creates unit list of saved units
+     *
+     * @private
+     * @memberof InventoryCustomStockComponent
+     */
+    private createUnitMappings(): void {
+        this.stockUnitsList = [...StockUnits];
+        this.allStockMappedUnits = [];
+        this.stockMappedUnits?.forEach((mapped: any) => {
+            let unitsList = this.stockUnitsList?.filter(unit => unit?.value === mapped?.stockUnitX?.code);
+            let mappedUnits = this.allStockMappedUnits?.filter(unit => unit?.value === mapped?.stockUnitX?.code);
+
+            if (!mappedUnits?.length) {
+                this.allStockMappedUnits?.push({
+                    label: mapped?.stockUnitX?.name,
+                    value: mapped?.stockUnitX?.code,
+                    uniqueName: mapped?.stockUnitX?.uniqueName
+                });
+            }
+            if (!unitsList?.length) {
+                this.stockUnitsList?.push({
+                    label: mapped?.stockUnitX?.name,
+                    value: mapped?.stockUnitX?.code,
+                    uniqueName: mapped?.stockUnitX?.uniqueName
+                });
+            }
+        });
     }
 }
