@@ -120,9 +120,9 @@
                     <mat-option *ngFor="let option of fieldFilteredOptions" [value]="option">
                         {{ option?.name }} ( {{ option?.type }} )
                     </mat-option>
-                    <mat-option disabled *ngIf="fieldFilteredOptions?.length === 0"
-                        >localeData?.header?.no_result_found</mat-option
-                    >
+                    <mat-option disabled *ngIf="fieldFilteredOptions?.length === 0">{{
+                        localeData?.header?.no_result_found
+                    }}</mat-option>
                 </ng-container>
                 <ng-template #searchedData>
                     <app-cdk-scroll (fetchNextPage)="searchInventory(true)" [scrollableElementId]="'stock-transaction'">
