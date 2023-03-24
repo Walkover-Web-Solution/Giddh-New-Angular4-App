@@ -13165,31 +13165,41 @@ hamburger-menu {
     padding-right: 0px;
 
     .search-control {
-        display: flex;
         border: 1px solid var(--color-gray);
         border-radius: 53px;
-        flex: 1;
+        float: left;
+        width: 100%;
+        display: inherit !important;
+
+        .icon-input {
+            float: left;
+            width: 80%;
+        }
+
         .search-icon {
             line-height: 44px;
             margin-left: 10px;
         }
+
         input.form-control {
             border: none !important;
         }
+
         .mat-form-field-underline {
             display: none;
         }
 
         .menu-btn-control {
-            overflow: hidden;
             border-top-right-radius: 20px;
             border-bottom-right-radius: 20px;
-            display: flex;
+            height: 100%;
+            width: 20%;
             .advance-filter-button {
                 border-left: 1px solid var(--color-gray);
                 border-radius: 0;
                 margin-right: 0 !important;
                 height: 100%;
+                width: 50%;
                 &:hover {
                     background: var(--color-white-secondary);
                     color: var(--color-giddh-blue) !important;
@@ -13201,7 +13211,8 @@ hamburger-menu {
                 border-radius: 0;
                 margin-right: 0 !important;
                 height: 100%;
-                padding-right: 22px !important;
+                padding-right: 15px !important;
+                width: 50%;
                 &:hover {
                     background: var(--color-white-secondary);
                     color: var(--color-giddh-blue) !important;
