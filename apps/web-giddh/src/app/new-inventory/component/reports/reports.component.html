@@ -32,7 +32,18 @@
                             <div class="d-flex w-100 justify-content-between overflow-x-auto">
                                 <div class="total-details-box mr-r05 count-box">
                                     <h5>
-                                        {{ localeData?.reports?.transaction_count }}
+                                        <span *ngIf="reportType === 'GROUP'">
+                                            {{ localeData?.reports?.total_groups }}</span
+                                        >
+                                        <span *ngIf="reportType === 'STOCK'">
+                                            {{ localeData?.reports?.total_stocks }}</span
+                                        >
+                                        <span *ngIf="reportType === 'VARIANT'">
+                                            {{ localeData?.reports?.total_variants }}</span
+                                        >
+                                        <span *ngIf="reportType === 'TRANSACTION'">
+                                            {{ localeData?.reports?.transaction_count }}</span
+                                        >
                                         <div class="mt-2">
                                             <span class="d-inline-flex number-total"
                                                 >{{ stockReportRequest?.totalItems ?? "-" }}
@@ -106,7 +117,6 @@
                                             <br />
                                             <span
                                                 class="d-inline-flex mt-1"
-                                                *ngIf="stockTransactionReportBalance?.opening?.quantity"
                                                 [matTooltipPosition]="'above'"
                                                 [matTooltip]="
                                                     stockTransactionReportBalance?.opening?.quantity
@@ -114,7 +124,7 @@
                                                               stockTransactionReportBalance?.opening?.quantity,
                                                               giddhBalanceDecimalPlaces
                                                           )
-                                                        : '-'
+                                                        : 0
                                                 "
                                             >
                                                 (
@@ -122,7 +132,7 @@
                                                     [amount]="
                                                         stockTransactionReportBalance?.opening?.quantity
                                                             ? stockTransactionReportBalance?.opening?.quantity
-                                                            : '-'
+                                                            : 0
                                                     "
                                                     [currencySymbol]="false"
                                                     [currencyCode]="false"
@@ -165,7 +175,6 @@
                                             <br />
                                             <span
                                                 class="d-inline-flex mt-1"
-                                                *ngIf="stockTransactionReportBalance?.inwards?.quantity"
                                                 [matTooltipPosition]="'above'"
                                                 [matTooltip]="
                                                     stockTransactionReportBalance?.inwards?.quantity
@@ -173,7 +182,7 @@
                                                               stockTransactionReportBalance?.inwards?.quantity,
                                                               giddhBalanceDecimalPlaces
                                                           )
-                                                        : '-'
+                                                        : 0
                                                 "
                                             >
                                                 (
@@ -181,7 +190,7 @@
                                                     [amount]="
                                                         stockTransactionReportBalance?.inwards?.quantity
                                                             ? stockTransactionReportBalance?.inwards?.quantity
-                                                            : '-'
+                                                            : 0
                                                     "
                                                     [currencySymbol]="false"
                                                     [currencyCode]="false"
@@ -224,7 +233,6 @@
                                             <br />
                                             <span
                                                 class="d-inline-flex mt-1"
-                                                *ngIf="stockTransactionReportBalance?.outwards?.quantity"
                                                 [matTooltipPosition]="'above'"
                                                 [matTooltip]="
                                                     stockTransactionReportBalance?.outwards?.quantity
@@ -232,7 +240,7 @@
                                                               stockTransactionReportBalance?.outwards?.quantity,
                                                               giddhBalanceDecimalPlaces
                                                           )
-                                                        : '-'
+                                                        : 0
                                                 "
                                             >
                                                 (
@@ -240,7 +248,7 @@
                                                     [amount]="
                                                         stockTransactionReportBalance?.outwards?.quantity
                                                             ? stockTransactionReportBalance?.outwards?.quantity
-                                                            : '-'
+                                                            : 0
                                                     "
                                                     [currencySymbol]="false"
                                                     [currencyCode]="false"
@@ -291,7 +299,7 @@
                                                               stockTransactionReportBalance?.closing?.quantity,
                                                               giddhBalanceDecimalPlaces
                                                           )
-                                                        : '-'
+                                                        : 0
                                                 "
                                             >
                                                 (
@@ -299,7 +307,7 @@
                                                     [amount]="
                                                         stockTransactionReportBalance?.closing?.quantity
                                                             ? stockTransactionReportBalance?.closing?.quantity
-                                                            : '-'
+                                                            : 0
                                                     "
                                                     [currencySymbol]="false"
                                                     [currencyCode]="false"
@@ -382,18 +390,17 @@
                                     [matTooltip]="
                                         element?.opening?.quantity
                                             ? giddhRoundOff(element?.opening?.quantity, giddhBalanceDecimalPlaces)
-                                            : '-'
+                                            : 0
                                     "
                                 >
-                                    <span class="d-inline-flex" *ngIf="element?.opening?.quantity">
+                                    <span class="d-inline-flex">
                                         <amount-field
-                                            [amount]="element?.opening?.quantity ? element?.opening?.quantity : '-'"
+                                            [amount]="element?.opening?.quantity ? element?.opening?.quantity : 0"
                                             [currencySymbol]="false"
                                             [currencyCode]="false"
                                         >
                                         </amount-field>
                                     </span>
-                                    <span *ngIf="!element?.opening?.quantity">-</span>
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="opening_amount">
@@ -436,15 +443,14 @@
                                     [matTooltipPosition]="'above'"
                                     [matTooltip]="giddhRoundOff(element?.inwards?.quantity, giddhBalanceDecimalPlaces)"
                                 >
-                                    <span class="d-inline-flex" *ngIf="element?.inwards?.quantity">
+                                    <span class="d-inline-flex">
                                         <amount-field
-                                            [amount]="element?.inwards?.quantity ? element?.inwards?.quantity : '-'"
+                                            [amount]="element?.inwards?.quantity ? element?.inwards?.quantity : 0"
                                             [currencySymbol]="false"
                                             [currencyCode]="false"
                                         >
                                         </amount-field>
                                     </span>
-                                    <span *ngIf="!element?.inwards?.quantity">-</span>
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="inward_amount">
@@ -487,15 +493,14 @@
                                     [matTooltipPosition]="'above'"
                                     [matTooltip]="giddhRoundOff(element?.outwards?.quantity, giddhBalanceDecimalPlaces)"
                                 >
-                                    <span class="d-inline-flex" *ngIf="element?.outwards?.quantity">
+                                    <span class="d-inline-flex">
                                         <amount-field
-                                            [amount]="element?.outwards?.quantity ? element?.outwards?.quantity : '-'"
+                                            [amount]="element?.outwards?.quantity ? element?.outwards?.quantity : 0"
                                             [currencySymbol]="false"
                                             [currencyCode]="false"
                                         >
                                         </amount-field>
                                     </span>
-                                    <span *ngIf="!element?.outwards?.quantity">-</span>
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="outward_amount">
@@ -538,15 +543,14 @@
                                     [matTooltipPosition]="'above'"
                                     [matTooltip]="giddhRoundOff(element?.closing?.quantity, giddhBalanceDecimalPlaces)"
                                 >
-                                    <span class="d-inline-flex" *ngIf="element?.closing?.quantity">
+                                    <span class="d-inline-flex">
                                         <amount-field
-                                            [amount]="element?.closing?.quantity ? element?.closing?.quantity : '-'"
+                                            [amount]="element?.closing?.quantity ? element?.closing?.quantity : 0"
                                             [currencySymbol]="false"
                                             [currencyCode]="false"
                                         >
                                         </amount-field>
                                     </span>
-                                    <span *ngIf="!element?.closing?.quantity">-</span>
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="closing_amount">
