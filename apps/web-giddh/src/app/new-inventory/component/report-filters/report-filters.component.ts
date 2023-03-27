@@ -333,17 +333,16 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
         this.showAdvanceSearchModal = true;
         this.stockReportRequest.from = dayjs( this.selectedDateRange.startDate).format(GIDDH_DATE_FORMAT);
         this.stockReportRequest.to = dayjs( this.selectedDateRange.endDate).format(GIDDH_DATE_FORMAT);
-        this.stockReportRequest.reportTypeAdvance = this.searchPage;
         let dialogRef = this.dialog?.open(NewInventoryAdvanceSearch, {
             panelClass: 'advance-search-container',
             data: {
                 stockReportRequest: this.stockReportRequest,
-                advanceSearchResponse: this.advanceSearchModalResponse
+                advanceSearchResponse: this.advanceSearchModalResponse,
+                reportType:this.searchPage
             }
         });
         dialogRef.afterClosed().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                delete this.stockReportRequest.reportTypeAdvance;
                 this.advanceSearchModalResponse = response;
                 this.stockReportRequest.param = response.stockReportRequest?.param;
                 this.stockReportRequest.expression = response.stockReportRequest?.expression;

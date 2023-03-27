@@ -43,7 +43,7 @@
                                     <select-field
                                         [cssClass]="'form-control mat-field-border'"
                                         [placeholder]="localeData?.advance_search_filter?.select_category"
-                                        [options]="advanceSearchCatergoryTransaction"
+                                        [options]="advanceSearchCategoryTransaction"
                                         (selectedOption)="selectCategory($event?.value)"
                                         [defaultValue]="advanceSearchFormObj.param1"
                                         [allowValueReset]="true"
@@ -54,7 +54,7 @@
                                     <select-field
                                         [cssClass]="'form-control mat-field-border'"
                                         [placeholder]="localeData?.advance_search_filter?.select_category"
-                                        [options]="advanceSearchCatergory"
+                                        [options]="advanceSearchCategory"
                                         (selectedOption)="selectCategory($event?.value)"
                                         [defaultValue]="advanceSearchFormObj.param1"
                                         [allowValueReset]="true"
@@ -66,7 +66,7 @@
                                 <select-field
                                     [cssClass]="'form-control mat-field-border'"
                                     [placeholder]="localeData?.advance_search_filter?.select_type"
-                                    [options]="advanceSearchCatergoryOptions"
+                                    [options]="advanceSearchCategoryOptions"
                                     (selectedOption)="selectCategoryOptions($event?.value)"
                                     [defaultValue]="advanceSearchFormObj.param2"
                                     [allowValueReset]="true"
