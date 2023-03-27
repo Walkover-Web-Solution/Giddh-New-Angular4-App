@@ -13219,6 +13219,10 @@ hamburger-menu {
                     color: var(--color-giddh-blue) !important;
                     border-radius: 0px 45px 45px 0px;
                 }
+                &:focus {
+                    border-top-right-radius: 24px;
+                    border-bottom-right-radius: 24px;
+                }
             }
         }
     }
