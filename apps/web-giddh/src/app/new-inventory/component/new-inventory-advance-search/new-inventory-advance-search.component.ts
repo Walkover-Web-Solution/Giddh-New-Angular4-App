@@ -2,7 +2,7 @@ import { Component, OnInit, ElementRef, ViewChild, Inject, ChangeDetectionStrate
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { GeneralService } from '../../../services/general.service';
 import { take, takeUntil } from 'rxjs/operators';
-import { from, Observable, ReplaySubject } from 'rxjs';
+import { Observable, ReplaySubject } from 'rxjs';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 import * as dayjs from 'dayjs';
@@ -11,7 +11,6 @@ import { select, Store } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { cloneDeep } from '../../../lodash-optimized';
-
 
 @Component({
     selector: 'new-inventory-advance-search',
@@ -44,8 +43,8 @@ export class NewInventoryAdvanceSearch implements OnInit {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* dayjs object */
     public dayjs = dayjs;
-    /* Hold advance search category*/
-    public advanceSearchCatergory: any[] = [
+    /* Show on transaction report and hold advance search category*/
+    public advanceSearchCategoryTransaction: any[] = [
         {
             value: "Inward",
             label: "Inwards"
@@ -55,8 +54,27 @@ export class NewInventoryAdvanceSearch implements OnInit {
             label: "Outwards"
         }
     ];
+    /* Hold advance search category   */
+    public advanceSearchCategory: any[] = [
+        {
+            value: "Inward",
+            label: "Inwards"
+        },
+        {
+            value: "Outward",
+            label: "Outwards"
+        },
+        {
+            value: "Opening Stock",
+            label: "Opening Stock"
+        },
+        {
+            value: "Closing Stock",
+            label: "Closing Stock"
+        }
+    ];
     /* Hold advance search category options*/
-    public advanceSearchCatergoryOptions: any[] = [
+    public advanceSearchCategoryOptions: any[] = [
         {
             value: "Amount",
             label: "Amount"
@@ -93,6 +111,8 @@ export class NewInventoryAdvanceSearch implements OnInit {
     public commonLocaleData: any = {};
     /** True if translations loaded */
     public translationLoaded: boolean = false;
+    /** Holds report type for modules */
+    public reportType: string = '';
 
     constructor(
         private _breakPointObservar: BreakpointObserver,
@@ -115,6 +135,7 @@ export class NewInventoryAdvanceSearch implements OnInit {
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.isMobileScreen = result.matches;
         });
+        this.reportType = this.inputData?.reportType;
         if (this.inputData?.stockReportRequest) {
             if (this.inputData?.advanceSearchResponse) {
                 this.advanceSearchFormObj = cloneDeep(this.inputData.advanceSearchResponse?.stockReportRequest);
@@ -126,6 +147,12 @@ export class NewInventoryAdvanceSearch implements OnInit {
                     this.advanceSearchFormObj.expression = "Less than";
                 } else if (this.advanceSearchFormObj.expression === "GREATER_THAN") {
                     this.advanceSearchFormObj.expression = "Greater than";
+                }
+                if (this.advanceSearchFormObj.param === "OPENING_AMOUNT" || this.advanceSearchFormObj.param === "OPENING_QUANTITY") {
+                    this.advanceSearchFormObj.param1 = "Opening Stock";
+                }
+                if (this.advanceSearchFormObj.param === "CLOSING_AMOUNT" || this.advanceSearchFormObj.param === "CLOSING_QUANTITY") {
+                    this.advanceSearchFormObj.param1 = "Closing Stock";
                 }
             }
             let from = this.inputData?.stockReportRequest.from;
@@ -210,6 +237,11 @@ export class NewInventoryAdvanceSearch implements OnInit {
      */
     public advanceSearchAction(type?: string): void {
         if (this.advanceSearchFormObj.param1 && this.advanceSearchFormObj.param2) {
+            if (this.advanceSearchFormObj.param1 === 'Opening Stock') {
+                this.advanceSearchFormObj.param1 = "OPENING";
+            } else if (this.advanceSearchFormObj.param1 === 'Closing Stock') {
+                this.advanceSearchFormObj.param1 = "CLOSING";
+            }
             this.advanceSearchFormObj.param = this.advanceSearchFormObj.param1?.toUpperCase() + '_' + this.advanceSearchFormObj.param2?.toUpperCase();
         }
         if (this.advanceSearchFormObj.expression === 'Equals') {
