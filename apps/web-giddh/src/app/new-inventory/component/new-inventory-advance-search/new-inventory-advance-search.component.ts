@@ -111,7 +111,7 @@ export class NewInventoryAdvanceSearch implements OnInit {
     public commonLocaleData: any = {};
     /** True if translations loaded */
     public translationLoaded: boolean = false;
-    /** Holds report type */
+    /** Holds report type for modules */
     public reportType: string = '';
 
     constructor(
