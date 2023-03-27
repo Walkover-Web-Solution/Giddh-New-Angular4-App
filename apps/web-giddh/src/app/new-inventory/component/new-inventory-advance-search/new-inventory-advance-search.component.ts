@@ -43,7 +43,7 @@ export class NewInventoryAdvanceSearch implements OnInit {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* dayjs object */
     public dayjs = dayjs;
-    /* Hold advance search category*/
+    /* Show on transaction report and hold advance search category*/
     public advanceSearchCategoryTransaction: any[] = [
         {
             value: "Inward",
@@ -54,7 +54,7 @@ export class NewInventoryAdvanceSearch implements OnInit {
             label: "Outwards"
         }
     ];
-    /* Show on transaction report and hold advance search category  */
+    /* Hold advance search category   */
     public advanceSearchCategory: any[] = [
         {
             value: "Inward",
@@ -277,7 +277,7 @@ export class NewInventoryAdvanceSearch implements OnInit {
         this.dialogRef.close({
             stockReportRequest: this.advanceSearchFormObj
         });
-         this.advanceSearchFormObj.searching = true;
+        this.advanceSearchFormObj.searching = true;
     }
 
     /**
