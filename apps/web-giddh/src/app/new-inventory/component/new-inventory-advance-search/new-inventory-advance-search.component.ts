@@ -66,7 +66,7 @@ export class NewInventoryAdvanceSearch implements OnInit {
         },
         {
             value: "Opening Stock",
-            label: "Opeining Stock"
+            label: "Opening Stock"
         },
         {
             value: "Closing Stock",
