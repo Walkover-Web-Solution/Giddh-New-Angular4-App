@@ -331,8 +331,9 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
      */
     public openModal(): void {
         this.showAdvanceSearchModal = true;
-        this.stockReportRequest.from = this.selectedDateRange.startDate;
-        this.stockReportRequest.to = this.selectedDateRange.endDate;
+        this.stockReportRequest.from = dayjs( this.selectedDateRange.startDate).format(GIDDH_DATE_FORMAT);
+        this.stockReportRequest.to = dayjs( this.selectedDateRange.endDate).format(GIDDH_DATE_FORMAT);
+        this.stockReportRequest.reportTypeAdvance = this.searchPage;
         let dialogRef = this.dialog?.open(NewInventoryAdvanceSearch, {
             panelClass: 'advance-search-container',
             data: {
@@ -342,6 +343,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
         });
         dialogRef.afterClosed().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
+                delete this.stockReportRequest.reportTypeAdvance;
                 this.advanceSearchModalResponse = response;
                 this.stockReportRequest.param = response.stockReportRequest?.param;
                 this.stockReportRequest.expression = response.stockReportRequest?.expression;
@@ -583,15 +585,16 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ReportFiltersComponent
      */
     public selectChiplistValue(option: any): void {
+        this.stockReportRequest.page = 1;
         const selectOptionValue = option?.option?.value;
         if (option?.option?.value?.type === 'STOCK GROUP') {
             this.stockReportRequest.stockGroupUniqueNames = [option?.option?.value?.uniqueName];
             this.stockReportRequest.stockGroups = [option?.option?.value];
         } else if (option?.option?.value?.type === 'STOCK') {
-            const findStockColumnCheck = this.customiseColumns?.find(value => value?.value === "stockName");
+            const findStockColumnCheck = this.customiseColumns?.find(value => value?.value === "stock_name");
             if (this.stockReportRequest.stockUniqueNames?.length === 0 && findStockColumnCheck?.checked) {
                 findStockColumnCheck.checked = false;
-                this.displayedColumns = this.displayedColumns?.filter(value => value !== "stockName");
+                this.displayedColumns = this.displayedColumns?.filter(value => value !== "stock_name");
             } else if (this.stockReportRequest.stockUniqueNames?.length > 0 && !findStockColumnCheck?.checked) {
                 findStockColumnCheck.checked = true;
                 this.filteredDisplayColumns();
@@ -599,10 +602,10 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
             this.stockReportRequest.stockUniqueNames?.push(option?.option?.value?.uniqueName);
             this.stockReportRequest.stocks = [option?.option?.value];
         } else {
-            const findVariantColumnCheck = this.customiseColumns?.find(value => value?.value === "variantName");
+            const findVariantColumnCheck = this.customiseColumns?.find(value => value?.value === "variant_name");
             if (this.stockReportRequest.variantUniqueNames?.length === 0 && findVariantColumnCheck?.checked) {
                 findVariantColumnCheck.checked = false;
-                this.displayedColumns = this.displayedColumns.filter(value => value !== "variantName");
+                this.displayedColumns = this.displayedColumns.filter(value => value !== "variant_name");
             } else if (this.stockReportRequest.variantUniqueNames?.length > 0 && !findVariantColumnCheck?.checked) {
                 findVariantColumnCheck.checked = true;
                 this.filteredDisplayColumns();
@@ -628,6 +631,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ReportFiltersComponent
      */
     public removeOption(selectOptionValue: any, index: number): void {
+        this.stockReportRequest.page = 1;
         this.filtersChipList?.splice(index, 1);
         if (selectOptionValue) {
             if (selectOptionValue.type === "STOCK GROUP") {
@@ -638,7 +642,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
                 this.stockReportRequest.stockUniqueNames = this.stockReportRequest.stockUniqueNames.filter(value => value != selectOptionValue.uniqueName);
                 this.stockReportRequest.stocks = this.stockReportRequest.stocks?.filter(value => value?.uniqueName != selectOptionValue.uniqueName);
                 if (this.stockReportRequest.stockUniqueNames.length <= 1) {
-                    this.customiseColumns.find(value => value?.value === "stockName").checked = (this.stockReportRequest.stockUniqueNames?.length === 1 ? false : true);
+                    this.customiseColumns.find(value => value?.value === "stock_name").checked = (this.stockReportRequest.stockUniqueNames?.length === 1 ? false : true);
                     this.filteredDisplayColumns();
                 }
             }
@@ -646,7 +650,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
                 this.stockReportRequest.variantUniqueNames = this.stockReportRequest.variantUniqueNames?.filter(value => value != selectOptionValue.uniqueName);
                 this.stockReportRequest.variants = this.stockReportRequest.variants?.filter(value => value?.uniqueName != selectOptionValue.uniqueName);
                 if (this.stockReportRequest.variantUniqueNames?.length <= 1) {
-                    this.customiseColumns.find(value => value?.value === "variantName").checked = (this.stockReportRequest.variantUniqueNames.length === 1 ? false : true);
+                    this.customiseColumns.find(value => value?.value === "variant_name").checked = (this.stockReportRequest.variantUniqueNames.length === 1 ? false : true);
                     this.filteredDisplayColumns();
                 }
             }

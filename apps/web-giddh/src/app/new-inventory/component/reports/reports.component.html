@@ -33,13 +33,13 @@
                                 <div class="total-details-box mr-r05 count-box">
                                     <h5>
                                         <span *ngIf="reportType === 'GROUP'">
-                                            {{ localeData?.reports?.total_groups }}</span
+                                            {{ localeData?.reports?.group_count }}</span
                                         >
                                         <span *ngIf="reportType === 'STOCK'">
-                                            {{ localeData?.reports?.total_stocks }}</span
+                                            {{ localeData?.reports?.stock_count }}</span
                                         >
                                         <span *ngIf="reportType === 'VARIANT'">
-                                            {{ localeData?.reports?.total_variants }}</span
+                                            {{ localeData?.reports?.variant_count }}</span
                                         >
                                         <span *ngIf="reportType === 'TRANSACTION'">
                                             {{ localeData?.reports?.transaction_count }}</span

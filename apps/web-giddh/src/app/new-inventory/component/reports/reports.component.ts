@@ -1,6 +1,5 @@
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, OnChanges, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, OnInit, Output, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { select, Store } from '@ngrx/store';
 import { ReplaySubject } from 'rxjs';
@@ -83,7 +82,7 @@ export class ReportsComponent implements OnInit {
     /** True if search account name */
     public showAccountSearchInput: boolean = false;
     /** True if data available */
-    public isDataAvailable: boolean = false;
+    public isDataAvailable: boolean = null;
     /** This will use for round off value */
     public giddhRoundOff: any = giddhRoundOff;
     /** Decimal places from company settings */
@@ -114,7 +113,6 @@ export class ReportsComponent implements OnInit {
     public pullUniversalDate: boolean = true;
 
     constructor(
-        public dialog: MatDialog,
         public route: ActivatedRoute,
         public router: Router,
         private changeDetection: ChangeDetectorRef,
@@ -213,35 +211,35 @@ export class ReportsComponent implements OnInit {
             if (this.reportType === InventoryReportType.stock) {
                 this.customiseColumns.splice(0, 0,
                     {
-                        "value": "group_name",
-                        "label": "Group Name",
-                        "checked": true
-                    },
-                    {
                         "value": "stock_name",
                         "label": "Stock Name",
                         "checked": true
-                    })
+                    }, {
+                        "value": "group_name",
+                        "label": "Group Name",
+                        "checked": true
+                    }
+                  )
                 this.moduleName = InventoryModuleName.stock;
 
             }
             if (this.reportType === InventoryReportType.variant) {
                 this.customiseColumns.splice(0, 0,
                     {
-                        "value": "group_name",
-                        "label": "Group Name",
+                        "value": "variant_name",
+                        "label": "Variant Name",
                         "checked": true
                     },
                     {
                         "value": "stock_name",
                         "label": "Stock Name",
                         "checked": true
-                    },
-                    {
-                        "value": "variant_name",
-                        "label": "Variant Name",
+                    }, {
+                        "value": "group_name",
+                        "label": "Group Name",
                         "checked": true
-                    })
+                    }
+               )
                 this.moduleName = InventoryModuleName.variant;
             }
 
@@ -291,7 +289,7 @@ export class ReportsComponent implements OnInit {
             this.inventoryService.getGroupWiseReport(cloneDeep(stockReportRequest)).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 this.isLoading = false;
                 if (response && response.body && response.status === 'success') {
-                    this.isDataAvailable = (response.body.results?.length) ? true : this.showClearFilter;
+                   this.isDataAvailable = (response.body.results?.length) ? true : false;
                     this.dataSource = response.body.results;
                     this.stockReportRequest.page = response.body.page;
                     this.stockReportRequest.totalItems = response.body.totalItems;
@@ -332,7 +330,7 @@ export class ReportsComponent implements OnInit {
             this.inventoryService.getItemWiseReport(cloneDeep(stockReportRequest)).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 this.isLoading = false;
                 if (response && response.body && response.status === 'success') {
-                    this.isDataAvailable = (response.body.results?.length) ? true : this.showClearFilter;
+                    this.isDataAvailable = (response.body.results?.length) ? true : false;
                     this.dataSource = response.body.results;
                     this.stockReportRequest.page = response.body.page;
                     this.stockReportRequest.totalItems = response.body.totalItems;
@@ -370,7 +368,7 @@ export class ReportsComponent implements OnInit {
             this.inventoryService.getVariantWiseReport(cloneDeep(stockReportRequest)).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 this.isLoading = false;
                 if (response && response.body && response.status === 'success') {
-                    this.isDataAvailable = (response.body.results?.length) ? true : this.showClearFilter;
+                    this.isDataAvailable = (response.body.results?.length) ? true : false;
                     this.dataSource = response.body.results;
                     this.stockReportRequest.page = response.body.page;
                     this.stockReportRequest.totalItems = response.body.totalItems;
@@ -492,7 +490,7 @@ export class ReportsComponent implements OnInit {
             this.tableHeaderColumns = this.tableHeaderColumns.filter(value => value !== 'outwards');
         }
         if (!this.displayedColumns.includes('closing_quantity') && !this.displayedColumns.includes('closing_amount')) {
-            this.tableHeaderColumns = this.tableHeaderColumns.filter(value => value !== 'closing');
+            this.tableHeaderColumns = this.tableHeaderColumns.filter(value => value !== 'closing_stock');
         }
     }
 

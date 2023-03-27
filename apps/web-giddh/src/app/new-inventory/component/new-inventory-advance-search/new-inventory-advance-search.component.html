@@ -39,15 +39,28 @@
                     <div class="col-lg-8">
                         <div class="row">
                             <div class="col-lg-6 col-sm-6 col-12 mr-b15">
-                                <select-field
-                                    [cssClass]="'form-control mat-field-border'"
-                                    [placeholder]="localeData?.advance_search_filter?.select_category"
-                                    [options]="advanceSearchCatergory"
-                                    (selectedOption)="selectCategory($event?.value)"
-                                    [defaultValue]="advanceSearchFormObj.param1"
-                                    [allowValueReset]="true"
-                                    (onClear)="advanceSearchFormObj.param1 = ''"
-                                ></select-field>
+                                <ng-container *ngIf="reportType === 'TRANSACTION'">
+                                    <select-field
+                                        [cssClass]="'form-control mat-field-border'"
+                                        [placeholder]="localeData?.advance_search_filter?.select_category"
+                                        [options]="advanceSearchCatergoryTransaction"
+                                        (selectedOption)="selectCategory($event?.value)"
+                                        [defaultValue]="advanceSearchFormObj.param1"
+                                        [allowValueReset]="true"
+                                        (onClear)="advanceSearchFormObj.param1 = ''"
+                                    ></select-field>
+                                </ng-container>
+                                <ng-container *ngIf="reportType !== 'TRANSACTION'">
+                                    <select-field
+                                        [cssClass]="'form-control mat-field-border'"
+                                        [placeholder]="localeData?.advance_search_filter?.select_category"
+                                        [options]="advanceSearchCatergory"
+                                        (selectedOption)="selectCategory($event?.value)"
+                                        [defaultValue]="advanceSearchFormObj.param1"
+                                        [allowValueReset]="true"
+                                        (onClear)="advanceSearchFormObj.param1 = ''"
+                                    ></select-field>
+                                </ng-container>
                             </div>
                             <div class="col-lg-6 col-sm-6 col-12 mr-b15">
                                 <select-field

@@ -167,6 +167,7 @@ export class StockTransactionReportRequest {
     public stockGroups?: any[];
     public stocks?: any[];
     public variants?: any[];
+    public reportTypeAdvance?: string= '';
     constructor() {
         this.count = PAGINATION_LIMIT;
         this.page = 1;
