@@ -22,6 +22,7 @@
             [(ngModel)]="selectedBranch"
             class="stock-mat-salect"
             [placeholder]="localeData?.header?.select_branch"
+            (ngModelChange)="getBranches()"
         >
             <mat-option class="balance-options">
                 <ngx-mat-select-search
@@ -34,12 +35,7 @@
                 </ngx-mat-select-search>
             </mat-option>
 
-            <mat-option
-                class="balance-options"
-                *ngFor="let branch of branches"
-                (click)="getBranches()"
-                [value]="branch?.uniqueName"
-            >
+            <mat-option class="balance-options" *ngFor="let branch of branches" [value]="branch?.uniqueName">
                 {{ branch?.alias ?? "-" }}
             </mat-option>
         </mat-select>
@@ -51,6 +47,7 @@
             [(ngModel)]="selectedWarehouse"
             class="stock-mat-salect"
             [placeholder]="localeData?.header?.select_warehouse"
+            (ngModelChange)="getWarehouses()"
         >
             <mat-option class="balance-options">
                 <ngx-mat-select-search
@@ -62,12 +59,7 @@
                     <i class="icon-cross" ngxMatSelectSearchClear></i>
                 </ngx-mat-select-search>
             </mat-option>
-            <mat-option
-                class="balance-options"
-                *ngFor="let warehouse of warehouses"
-                [value]="warehouse?.uniqueName"
-                (click)="getWarehouses()"
-            >
+            <mat-option class="balance-options" *ngFor="let warehouse of warehouses" [value]="warehouse?.uniqueName">
                 {{ warehouse?.name ?? "-" }}
             </mat-option>
         </mat-select>

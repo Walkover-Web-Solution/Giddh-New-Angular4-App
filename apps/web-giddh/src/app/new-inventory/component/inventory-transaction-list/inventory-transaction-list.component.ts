@@ -129,19 +129,19 @@ export class InventoryTransactionListComponent implements OnInit {
             "checked": true
         },
         {
-            "value": "accountName",
+            "value": "account_name",
             "label": "Account Name",
             "checked": true
 
         },
         {
-            "value": "stockName",
+            "value": "stock_name",
             "label": "Stock Name",
             "checked": true
 
         },
         {
-            "value": "variantName",
+            "value": "variant_name",
             "label": "Variant Name",
             "checked": true
 
