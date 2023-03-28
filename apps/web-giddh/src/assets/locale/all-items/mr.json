@@ -307,7 +307,7 @@
             "icon": "icon-other",
             "items": [
                 {
-                    "label": "ऑडिट नोंदी नवीन",
+                    "label": "तपासणीचे सूत्र",
                     "link": "/pages/audit-logs/new",
                     "icon": "icon-audit-log",
                     "description": "प्रविष्टींचा कालक्रमानुसार डेटा",
@@ -316,7 +316,7 @@
                     }
                 },
                 {
-                    "label": "क्रियाकलाप नोंदी",
+                    "label": "तपासणीचे सूत्र",
                     "link": "/pages/activity-logs",
                     "icon": "icon-audit-log",
                     "description": "प्रविष्टींचा कालक्रमानुसार डेटा",
