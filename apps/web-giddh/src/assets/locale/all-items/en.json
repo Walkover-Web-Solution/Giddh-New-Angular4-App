@@ -311,7 +311,7 @@
             "icon": "icon-other",
             "items": [
                 {
-                    "label": "Audit Logs New",
+                    "label": "Audit Trial",
                     "link": "/pages/audit-logs/new",
                     "icon": "icon-audit-log",
                     "description": "Chronological data of entries",
