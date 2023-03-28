@@ -155,7 +155,7 @@ export class ReportsComponent implements OnInit {
     /**
      * This hook will use  on component initialization
      *
-     * @memberof InventoryTransactionListComponent
+     * @memberof ReportsComponent
      */
     public ngOnInit(): void {
         this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
@@ -168,7 +168,6 @@ export class ReportsComponent implements OnInit {
             this.currentUrl = this.router.url;
             this.reportUniqueName = response?.uniqueName;
             this.reportType = (response?.reportType)?.toUpperCase();
-
             if (this.isReportLoaded && this.storeFilters && this.storeFilters[this.currentUrl]) {
                 this.showContent = false;
                 this.changeDetection.detectChanges();
@@ -269,7 +268,7 @@ export class ReportsComponent implements OnInit {
      * @param {boolean} [apiCall=true]
      * @param {boolean} [type]
      * @return {*}  {void}
-     * @memberof InventoryTransactionListComponent
+     * @memberof ReportsComponent
      */
     public getReport(fetchBalance: boolean = true): void {
         if (!this.reportType) {
@@ -412,7 +411,7 @@ export class ReportsComponent implements OnInit {
     * This function will change the page of activity logs
     *
     * @param {*} event
-    * @memberof InventoryTransactionListComponent
+    * @memberof ReportsComponent
     */
     public pageChanged(event: any): void {
         if (this.stockReportRequest.page !== event?.page) {
@@ -425,7 +424,7 @@ export class ReportsComponent implements OnInit {
      * This will use for sorting filters
      *
      * @param {*} event
-     * @memberof InventoryTransactionListComponent
+     * @memberof ReportsComponent
      */
     public sortChange(event: any): void {
         this.stockReportRequest.sort = event?.direction ? event?.direction : 'asc';
@@ -437,7 +436,7 @@ export class ReportsComponent implements OnInit {
     /**
      * This will use for reset filters
      *
-     * @memberof InventoryTransactionListComponent
+     * @memberof ReportsComponent
      */
     public resetFilter(): void {
         this.showAccountSearchInput = false;
@@ -448,7 +447,7 @@ export class ReportsComponent implements OnInit {
      * Gets the data output by report filters
      *
      * @param {*} event
-     * @memberof InventoryTransactionListComponent
+     * @memberof ReportsComponent
      */
     public getSelectedFilters(event: any): void {
         if (!this.initialLoad) {
@@ -530,7 +529,7 @@ export class ReportsComponent implements OnInit {
     /**
     * This hook will use for on destroyed component
     *
-    * @memberof InventoryTransactionListComponent
+    * @memberof ReportsComponent
     */
     public ngOnDestroy() {
         this.destroyed$.next(true);

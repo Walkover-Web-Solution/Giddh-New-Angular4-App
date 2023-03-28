@@ -1179,6 +1179,7 @@ export class InventoryService {
         delete updatedReportRequest.to;
         return this.http.post(this.config.apiUrl + INVENTORY_API.INVENTORY_GROUP_WISE_REPORT?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             ?.replace(':from', encodeURIComponent(stockReportRequest.from))
+            ?.replace(':stockGroupUniqueName', encodeURIComponent(stockReportRequest.stockGroupUniqueNames?.toString()))
             ?.replace(':to', encodeURIComponent(stockReportRequest.to))
             ?.replace(':count', encodeURIComponent(stockReportRequest.count?.toString()))
             ?.replace(':page', encodeURIComponent(stockReportRequest.page?.toString()))
