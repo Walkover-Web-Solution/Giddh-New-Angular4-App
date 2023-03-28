@@ -111,6 +111,16 @@ export class ReportsComponent implements OnInit {
     public showContent: boolean = true;
     /** Hold  universal date by store */
     public pullUniversalDate: boolean = true;
+    /** Hold name report col span */
+    public nameColSpan: number;
+    /** Hold opening stock report col span */
+    public openingColSpan: number;
+    /**Hold inwards report col span*/
+    public inwardsColSpan: number;
+    /** Hold outwards report col span */
+    public outwardsColSpan: number;
+    /** Hold  closing  report  col span */
+    public closingColSpan: number;
 
     constructor(
         public route: ActivatedRoute,
@@ -214,11 +224,11 @@ export class ReportsComponent implements OnInit {
                         "label": "Stock Name",
                         "checked": true
                     }, {
-                        "value": "group_name",
-                        "label": "Group Name",
-                        "checked": true
-                    }
-                  )
+                    "value": "group_name",
+                    "label": "Group Name",
+                    "checked": true
+                }
+                )
                 this.moduleName = InventoryModuleName.stock;
 
             }
@@ -234,11 +244,11 @@ export class ReportsComponent implements OnInit {
                         "label": "Stock Name",
                         "checked": true
                     }, {
-                        "value": "group_name",
-                        "label": "Group Name",
-                        "checked": true
-                    }
-               )
+                    "value": "group_name",
+                    "label": "Group Name",
+                    "checked": true
+                }
+                )
                 this.moduleName = InventoryModuleName.variant;
             }
 
@@ -288,7 +298,7 @@ export class ReportsComponent implements OnInit {
             this.inventoryService.getGroupWiseReport(cloneDeep(stockReportRequest)).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 this.isLoading = false;
                 if (response && response.body && response.status === 'success') {
-                   this.isDataAvailable = (response.body.results?.length) ? true : false;
+                    this.isDataAvailable = (response.body.results?.length) ? true : false;
                     this.dataSource = response.body.results;
                     this.stockReportRequest.page = response.body.page;
                     this.stockReportRequest.totalItems = response.body.totalItems;
@@ -476,7 +486,56 @@ export class ReportsComponent implements OnInit {
     public getCustomiseHeaderColumns(event: any): void {
         this.displayedColumns = event;
         this.tableHeaderColumns = cloneDeep(this.displayHeaderColumns);
-        if (!this.displayedColumns.includes("group_name")) {
+        if (this.displayedColumns.includes("opening_amount") || this.displayedColumns.includes("opening_quantity")) {
+            this.openingColSpan = 1;
+        }
+        if (this.displayedColumns.includes("opening_amount") && this.displayedColumns.includes("opening_quantity")) {
+            this.openingColSpan = 2;
+        }
+        if (this.displayedColumns.includes("closing_amount") || this.displayedColumns.includes("closing_quantity")) {
+            this.closingColSpan = 1;
+        }
+        if (this.displayedColumns.includes("closing_amount") && this.displayedColumns.includes("closing_quantity")) {
+            this.closingColSpan = 2;
+        }
+        if (this.displayedColumns.includes("inward_amount") || this.displayedColumns.includes("inward_quantity")) {
+            this.inwardsColSpan = 1;
+        }
+        if (this.displayedColumns.includes("inward_amount") && this.displayedColumns.includes("inward_quantity")) {
+            this.inwardsColSpan = 2;
+        }
+        if (this.displayedColumns.includes("outward_amount") || this.displayedColumns.includes("outward_quantity")) {
+            this.outwardsColSpan = 1;
+        }
+        if (this.displayedColumns.includes("outward_amount") && this.displayedColumns.includes("outward_quantity")) {
+            this.outwardsColSpan = 2;
+        }
+        if (this.displayedColumns.includes("stock_name") && this.displayedColumns.includes("variant_name") && this.displayedColumns.includes("group_name")) {
+            this.nameColSpan = 3;
+        }
+        if (this.displayedColumns.includes("stock_name") || this.displayedColumns.includes("variant_name") || this.displayedColumns.includes("group_name")) {
+            this.nameColSpan = 1;
+        }
+        if (this.displayedColumns.includes("stock_name") && this.displayedColumns.includes("group_name")) {
+            this.nameColSpan = 3;
+        }
+        if (this.displayedColumns.includes("stock_name") && this.displayedColumns.includes("variant_name")) {
+            this.nameColSpan = 3;
+        }
+        if (this.displayedColumns.includes("variant_name") && this.displayedColumns.includes("stock_name")) {
+            this.nameColSpan = 3;
+        }
+        if (this.displayedColumns.includes("variant_name") && this.displayedColumns.includes("group_name")) {
+            this.nameColSpan = 3;
+        }
+        if (this.displayedColumns.includes("group_name") && this.displayedColumns.includes("stock_name")) {
+            this.nameColSpan = 3;
+        }
+        if (this.displayedColumns.includes("group_name") && this.displayedColumns.includes("variant_name")) {
+            this.nameColSpan = 3;
+        }
+
+        if (!this.displayedColumns.includes("group_name") && !this.displayedColumns.includes("stock_name") && !this.displayedColumns.includes("variant_name")) {
             this.tableHeaderColumns = this.tableHeaderColumns.filter(value => value !== 'entity_group_name');
         }
         if (!this.displayedColumns.includes('opening_quantity') && !this.displayedColumns.includes('opening_amount')) {
