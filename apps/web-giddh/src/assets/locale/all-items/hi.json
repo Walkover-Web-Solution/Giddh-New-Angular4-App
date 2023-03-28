@@ -307,7 +307,7 @@
             "icon": "icon-other",
             "items": [
                 {
-                    "label": "ऑडिट लॉग नया",
+                    "label": "लेखापरीक्षा",
                     "link": "/pages/audit-logs/new",
                     "icon": "icon-audit-log",
                     "description": "प्रविष्टियों का कालानुक्रमिक डेटा",
@@ -316,7 +316,7 @@
                     }
                 },
                 {
-                    "label": "गतिविधि लॉग",
+                    "label": "लेखापरीक्षा",
                     "link": "/pages/activity-logs",
                     "icon": "icon-audit-log",
                     "description": "प्रविष्टियों का कालानुक्रमिक डेटा",
