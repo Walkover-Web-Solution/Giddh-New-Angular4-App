@@ -81,7 +81,7 @@ export const INVENTORY_API = {
     TRANSACTION_STOCK_REPORT_BALANCE_V2: 'company/:companyUniqueName/inventory/balance?from=:from&to=:to',
     TRANSACTION_STOCK_REPORT_COLUMNS: 'company/:companyUniqueName/report-filters?module=:module',
     SEARCH_STOCK_TRANSACTION_FILTERS: 'company/:companyUniqueName/inventory-search',
-    INVENTORY_GROUP_WISE_REPORT: 'company/:companyUniqueName/inventory/balance-report/group-wise?from=:from&to=:to&count=:count&page=:page&sort=:sort&sortBy=:sortBy',
+    INVENTORY_GROUP_WISE_REPORT: 'company/:companyUniqueName/inventory/balance-report/group-wise?stockGroupUniqueName=:stockGroupUniqueName&from=:from&to=:to&count=:count&page=:page&sort=:sort&sortBy=:sortBy',
     INVENTORY_ITEM_WISE_REPORT: 'company/:companyUniqueName/inventory/balance-report/item-wise?from=:from&to=:to&count=:count&page=:page&sort=:sort&sortBy=:sortBy',
     INVENTORY_VARIANT_WISE_REPORT: 'company/:companyUniqueName/inventory/balance-report/variant-wise?from=:from&to=:to&count=:count&page=:page&sort=:sort&sortBy=:sortBy',
 };
