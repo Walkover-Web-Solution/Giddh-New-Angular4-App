@@ -15,9 +15,9 @@
     },
     "reports":{
         "transaction_count":"Transaction Count",
-        "group_count":"Groups Count",
+        "group_count":"Group Count",
         "stock_count":"Product Count",
-        "variant_count":"Variants Count",
+        "variant_count":"Variant Count",
         "profit_loss":"Profit/Loss",
         "opening":"Opening",
         "inward":"Inward",

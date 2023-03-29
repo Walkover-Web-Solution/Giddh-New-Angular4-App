@@ -1172,34 +1172,32 @@ export class InventoryService {
      * @return {*}  {Observable<BaseResponse<InventoryReportResponse, InventoryReportRequest>>}
      * @memberof InventoryService
      */
-    public getGroupWiseReport(stockReportRequest: InventoryReportRequest): Observable<BaseResponse<InventoryReportResponse, InventoryReportRequest>> {
+    public getGroupWiseReport(queryParams: any, stockReportRequest: InventoryReportRequest): Observable<BaseResponse<InventoryReportResponse, InventoryReportRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        let updatedReportRequest = cloneDeep(stockReportRequest);
-        delete updatedReportRequest.from;
-        delete updatedReportRequest.to;
         return this.http.post(this.config.apiUrl + INVENTORY_API.INVENTORY_GROUP_WISE_REPORT?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            ?.replace(':from', encodeURIComponent(stockReportRequest.from))
-            ?.replace(':to', encodeURIComponent(stockReportRequest.to))
-            ?.replace(':count', encodeURIComponent(stockReportRequest.count?.toString()))
-            ?.replace(':page', encodeURIComponent(stockReportRequest.page?.toString()))
-            ?.replace(':sort', encodeURIComponent(stockReportRequest.sort ? stockReportRequest.sort?.toString() : ''))
-            ?.replace(':sortBy', encodeURIComponent(stockReportRequest.sortBy ? stockReportRequest.sortBy?.toString() : ''))
-            , updatedReportRequest).pipe(
+            ?.replace(':from', encodeURIComponent(queryParams.from))
+            ?.replace(':stockGroupUniqueName', queryParams?.stockGroupUniqueName)
+            ?.replace(':to', encodeURIComponent(queryParams.to))
+            ?.replace(':count', encodeURIComponent(queryParams.count?.toString()))
+            ?.replace(':page', encodeURIComponent(queryParams.page?.toString()))
+            ?.replace(':sort', encodeURIComponent(queryParams.sort ? queryParams.sort?.toString() : ''))
+            ?.replace(':sortBy', encodeURIComponent(queryParams.sortBy ? queryParams.sortBy?.toString() : ''))
+            , stockReportRequest).pipe(
                 map((res) => {
                     let data: BaseResponse<InventoryReportResponse, InventoryReportRequest> = res;
-                    data.request = updatedReportRequest;
+                    data.request = queryParams;
                     data.queryString = {
-                        from: stockReportRequest.from,
-                        to: stockReportRequest.to,
-                        count: stockReportRequest.count,
-                        page: stockReportRequest.page
+                        from: queryParams.from,
+                        to: queryParams.to,
+                        count: queryParams.count,
+                        page: queryParams.page
                     };
                     return data;
                 }), catchError((e) => this.errorHandler.HandleCatch<InventoryReportResponse, InventoryReportRequest>(e, stockReportRequest, {
-                    from: stockReportRequest.from,
-                    to: stockReportRequest.to,
-                    count: stockReportRequest.count,
-                    page: stockReportRequest.page
+                    from: queryParams.from,
+                    to: queryParams.to,
+                    count: queryParams.count,
+                    page: queryParams.page
                 })));
     }
 
