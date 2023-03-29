@@ -128,6 +128,8 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     public todaySelected$: Observable<boolean> = observableOf(false);
     /** This will use for stock report displayed columns */
     public displayedColumns: string[] = [];
+    /** This will auto select the option which is coming from url */
+    public autoSelectSearchOption: boolean = false;
 
     constructor(
         public dialog: MatDialog,
@@ -148,6 +150,11 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ReportFiltersComponent
      */
     public ngOnInit(): void {
+        if (this.reportUniqueName && this.searchPage !== "GROUP") {
+            this.autoSelectSearchOption = true;
+            this.searchRequest.q = this.reportUniqueName;
+        }
+
         this.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe(dateObj => {
             if (dateObj) {
                 this.universalDate = _.cloneDeep(dateObj);
@@ -172,17 +179,21 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
                             this.balanceStockReportRequest.to = "";
                         }
                         this.stockReportRequest.page = 1;
-                        setTimeout(() => {
-                            this.emitFilters();
-                        }, 100);
+                        if (!this.autoSelectSearchOption) {
+                            setTimeout(() => {
+                                this.emitFilters();
+                            }, 100);
+                        }
                     });
                 } else {
                     this.selectedBranch = this.stockReportRequest?.branchUniqueNames || [];
                     this.selectedWarehouse = this.stockReportRequest?.warehouseUniqueNames || [];
                     this.stockReportRequest.page = 1;
-                    setTimeout(() => {
-                        this.emitFilters();
-                    }, 100);
+                    if (!this.autoSelectSearchOption) {
+                        setTimeout(() => {
+                            this.emitFilters();
+                        }, 100);
+                    }
                 }
             }
         });
@@ -215,6 +226,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
                 this.searchInventory();
             }
         });
+        this.searchInventory();
     }
 
     /**
@@ -245,17 +257,27 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
             }
             if (changes?.stockReportRequest?.currentValue?.stocks) {
                 changes?.stockReportRequest?.currentValue?.stocks?.forEach(stock => {
-                    this.filtersChipList.push(stock);
+                    if (stock?.uniqueName !== this.reportUniqueName) {
+                        this.filtersChipList.push(stock);
+                    }
                 });
             }
             if (changes?.stockReportRequest?.currentValue?.variants) {
                 changes?.stockReportRequest?.currentValue?.variants?.forEach(variant => {
-                    this.filtersChipList.push(variant);
+                    if (variant?.uniqueName !== this.reportUniqueName) {
+                        this.filtersChipList.push(variant);
+                    }
                 });
+            }
+
+            if (changes?.stockReportRequest?.currentValue?.branchUniqueNames) {
+                this.selectedBranch = this.stockReportRequest?.branchUniqueNames;
+            }
+            if (changes?.stockReportRequest?.currentValue?.warehouseUniqueNames) {
+                this.selectedWarehouse = this.stockReportRequest?.warehouseUniqueNames;
             }
         }
         this.isFilterActive();
-        this.searchInventory();
     }
 
     /**
@@ -693,10 +715,24 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
                     }
                     this.searchRequest.totalItems = response.body.totalItems;
                     this.searchRequest.totalPages = response.body.totalPages;
+
+                    if (this.autoSelectSearchOption) {
+                        let selectedOption = this.fieldFilteredOptions?.filter(option => option?.uniqueName === this.reportUniqueName);
+                        if (selectedOption?.length) {
+                            this.selectChiplistValue({ option: { value: selectedOption[0] } });
+                        } else {
+                            this.emitFilters();
+                        }
+                    }
+                    this.autoSelectSearchOption = false;
                 } else {
                     this.fieldFilteredOptions = [];
                     this.searchRequest.totalItems = 0;
                     this.toaster.showSnackBar("warning", response?.body);
+                    if (this.autoSelectSearchOption) {
+                        this.emitFilters();
+                    }
+                    this.autoSelectSearchOption = false;
                 }
                 this.changeDetection.detectChanges();
             });

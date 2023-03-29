@@ -16,6 +16,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { INVENTORY_COMMON_COLUMNS, InventoryReportType, InventoryModuleName } from '../../inventory.enum';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
 import { CommonActions } from '../../../actions/common.actions';
+import { PAGINATION_LIMIT } from '../../../app.constant';
 
 @Component({
     selector: 'app-reports',
@@ -87,8 +88,6 @@ export class ReportsComponent implements OnInit {
     public reportType: string = '';
     /** Holds report unique name */
     public reportUniqueName: string = '';
-    /** True  if report is loaded */
-    public isReportLoaded: boolean = false;
     /** Holds module name */
     public moduleName = '';
     /** True if initial load */
@@ -180,32 +179,37 @@ export class ReportsComponent implements OnInit {
             }
         });
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            let lastReportType = cloneDeep(this.reportType);
             this.currentUrl = this.router.url;
             this.reportUniqueName = response?.uniqueName;
             this.reportType = (response?.reportType)?.toUpperCase();
-            if (this.isReportLoaded && this.storeFilters && this.storeFilters[this.currentUrl]) {
+            if (lastReportType) {
                 this.showContent = false;
                 this.changeDetection.detectChanges();
 
                 this.stockReportRequest = new StockReportRequest();
                 this.balanceStockReportRequest = new BalanceStockTransactionReportRequest();
 
-                this.pullUniversalDate = false;
-                this.initialLoad = true;
-                this.stockReportRequest = cloneDeep(this.storeFilters[this.currentUrl]?.stockReportRequest);
-                this.balanceStockReportRequest = cloneDeep(this.storeFilters[this.currentUrl]?.balanceStockReportRequest);
-                this.todaySelected = cloneDeep(this.storeFilters[this.currentUrl]?.todaySelected);
-                this.showClearFilter = cloneDeep(this.storeFilters[this.currentUrl]?.showClearFilter);
-                this.advanceSearchModalResponse = cloneDeep(this.storeFilters[this.currentUrl]?.advanceSearchModalResponse);
-                this.fromDate = dayjs(this.stockReportRequest?.from, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
-                this.toDate = dayjs(this.stockReportRequest?.to, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
-                this.stockReportRequest.from = this.fromDate;
-                this.stockReportRequest.to = this.toDate;
-                this.balanceStockReportRequest.from = this.fromDate;
-                this.balanceStockReportRequest.to = this.toDate;
+                if(this.storeFilters && this.storeFilters[this.currentUrl]) {
+                    this.pullUniversalDate = false;
+                    this.initialLoad = true;
+                    this.stockReportRequest = cloneDeep(this.storeFilters[this.currentUrl]?.stockReportRequest);
+                    this.balanceStockReportRequest = cloneDeep(this.storeFilters[this.currentUrl]?.balanceStockReportRequest);
+                    this.todaySelected = cloneDeep(this.storeFilters[this.currentUrl]?.todaySelected);
+                    this.showClearFilter = cloneDeep(this.storeFilters[this.currentUrl]?.showClearFilter);
+                    this.advanceSearchModalResponse = cloneDeep(this.storeFilters[this.currentUrl]?.advanceSearchModalResponse);
+                    this.fromDate = dayjs(this.stockReportRequest?.from, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                    this.toDate = dayjs(this.stockReportRequest?.to, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                    this.stockReportRequest.from = this.fromDate;
+                    this.stockReportRequest.to = this.toDate;
+                    this.balanceStockReportRequest.from = this.fromDate;
+                    this.balanceStockReportRequest.to = this.toDate;
 
-                this.fromToDate = { from: this.fromDate, to: this.toDate };
-                this.changeDetection.detectChanges();
+                    this.fromToDate = { from: this.fromDate, to: this.toDate };
+                    this.changeDetection.detectChanges();
+                } else {
+                    this.initialLoad = false;
+                }
 
                 setTimeout(() => {
                     this.showContent = true;
@@ -228,11 +232,12 @@ export class ReportsComponent implements OnInit {
                         "value": "stock_name",
                         "label": "Stock Name",
                         "checked": true
-                    }, {
-                    "value": "group_name",
-                    "label": "Group Name",
-                    "checked": true
-                }
+                    },
+                    {
+                        "value": "group_name",
+                        "label": "Group Name",
+                        "checked": true
+                    }
                 )
                 this.moduleName = InventoryModuleName.stock;
 
@@ -248,17 +253,14 @@ export class ReportsComponent implements OnInit {
                         "value": "stock_name",
                         "label": "Stock Name",
                         "checked": true
-                    }, {
-                    "value": "group_name",
-                    "label": "Group Name",
-                    "checked": true
-                }
+                    },
+                    {
+                        "value": "group_name",
+                        "label": "Group Name",
+                        "checked": true
+                    }
                 )
                 this.moduleName = InventoryModuleName.variant;
-            }
-
-            if (this.isReportLoaded) {
-                this.getReport(true, true);
             }
         });
     }
@@ -285,22 +287,34 @@ export class ReportsComponent implements OnInit {
      * @return {*}  {void}
      * @memberof ReportsComponent
      */
-    public getReport(fetchBalance: boolean = true, removeUniqueNameFromBody?: boolean): void {
+    public getReport(fetchBalance: boolean = true): void {
         if (!this.reportType) {
             return;
         }
         this.dataSource = [];
         this.isLoading = true;
-        this.isReportLoaded = true;
         if (this.reportType === InventoryReportType.group) {
-            if (this.reportUniqueName) {
-                this.stockReportRequest.stockGroupUniqueNames = [this.reportUniqueName];
-                this.balanceStockReportRequest.stockGroupUniqueNames = [this.reportUniqueName];
-            }
-
             let stockReportRequest = this.getStockReportRequestObject();
+            let queryParams = {
+                from: stockReportRequest.from ?? '',
+                to: stockReportRequest.to ?? '',
+                count: stockReportRequest.count ?? PAGINATION_LIMIT,
+                page: stockReportRequest.page ?? 1,
+                sort: stockReportRequest.sort ?? '',
+                sortBy: stockReportRequest.sortBy ?? '',
+                stockGroupUniqueName: this.reportUniqueName ?? ''
+            };
 
-            this.inventoryService.getGroupWiseReport(cloneDeep(stockReportRequest), removeUniqueNameFromBody).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            stockReportRequest.from = undefined;
+            stockReportRequest.to = undefined;
+            stockReportRequest.count = undefined;
+            stockReportRequest.page = undefined;
+            stockReportRequest.sort = undefined;
+            stockReportRequest.sortBy = undefined;
+            stockReportRequest.totalItems = undefined;
+            stockReportRequest.totalPages = undefined;
+
+            this.inventoryService.getGroupWiseReport(queryParams, stockReportRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 this.isLoading = false;
                 if (response && response.body && response.status === 'success') {
                     this.isDataAvailable = (response.body.results?.length) ? true : false;
@@ -479,7 +493,7 @@ export class ReportsComponent implements OnInit {
             this.initialLoad = false;
         }
         this.pullUniversalDate = true;
-        this.getReport(true, this.storeFilters[this.currentUrl].stockReportRequest.stockGroupUniqueNames.length === 0);
+        this.getReport(true);
     }
 
     /**
