@@ -17,6 +17,8 @@ import { INVENTORY_COMMON_COLUMNS, InventoryReportType, InventoryModuleName } fr
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
 import { CommonActions } from '../../../actions/common.actions';
 import { PAGINATION_LIMIT } from '../../../app.constant';
+import { GeneralService } from '../../../services/general.service';
+import { OrganizationType } from '../../../models/user-login-state';
 
 @Component({
     selector: 'app-reports',
@@ -125,6 +127,8 @@ export class ReportsComponent implements OnInit {
             colSpan: 0
         },
     }
+    /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
+    public isCompany: boolean;
 
     constructor(
         public route: ActivatedRoute,
@@ -132,6 +136,7 @@ export class ReportsComponent implements OnInit {
         private changeDetection: ChangeDetectorRef,
         private inventoryService: InventoryService,
         private toaster: ToasterService,
+        private generalService: GeneralService,
         private store: Store<AppState>,
         private commonAction: CommonActions) {
         this.store.pipe(select(state => state.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
@@ -172,6 +177,7 @@ export class ReportsComponent implements OnInit {
      * @memberof ReportsComponent
      */
     public ngOnInit(): void {
+        this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch;
         this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
@@ -190,7 +196,11 @@ export class ReportsComponent implements OnInit {
                 this.stockReportRequest = new StockReportRequest();
                 this.balanceStockReportRequest = new BalanceStockTransactionReportRequest();
 
-                if(this.storeFilters && this.storeFilters[this.currentUrl]) {
+                if (!this.isCompany) {
+                    this.stockReportRequest.branchUniqueNames = [this.generalService.currentBranchUniqueName];
+                    this.balanceStockReportRequest.branchUniqueNames = [this.generalService.currentBranchUniqueName];
+                }
+                if (this.storeFilters && this.storeFilters[this.currentUrl]) {
                     this.pullUniversalDate = false;
                     this.initialLoad = true;
                     this.stockReportRequest = cloneDeep(this.storeFilters[this.currentUrl]?.stockReportRequest);
