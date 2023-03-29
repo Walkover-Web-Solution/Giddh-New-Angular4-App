@@ -271,7 +271,12 @@ export class InventoryTransactionListComponent implements OnInit {
             this.stockReportRequest.variantUniqueNames = [this.reportUniqueName];
             this.balanceStockReportRequest.variantUniqueNames = [this.reportUniqueName];
         }
-        this.inventoryService.getStockTransactionReport(cloneDeep(this.stockReportRequest)).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        let stockReportRequest = cloneDeep(this.stockReportRequest);
+        stockReportRequest.stockGroups = undefined;
+        stockReportRequest.stocks = undefined;
+        stockReportRequest.variants = undefined;
+
+        this.inventoryService.getStockTransactionReport(stockReportRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.isLoading = false;
             if (response && response.body && response.status === 'success') {
                 this.isDataAvailable = (response.body.transactions?.length) ? true : false;
