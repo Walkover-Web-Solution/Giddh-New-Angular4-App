@@ -587,7 +587,7 @@
                                     class="text-right"
                                     mat-header-cell
                                     *matHeaderCellDef
-                                    [attr.colspan]="nameColSpan"
+                                    [attr.colspan]="headerColumns['entity_group_name'].colSpan"
                                 ></th>
                             </ng-container>
                             <!-- Opening Stock group -->
@@ -596,7 +596,7 @@
                                     class="text-right"
                                     mat-header-cell
                                     *matHeaderCellDef
-                                    [attr.colspan]="openingColSpan"
+                                    [attr.colspan]="headerColumns['opening_stock'].colSpan"
                                 >
                                     {{ localeData?.reports?.opening_stock }}
                                 </th>
@@ -608,7 +608,7 @@
                                     class="text-right"
                                     mat-header-cell
                                     *matHeaderCellDef
-                                    [attr.colspan]="inwardsColSpan"
+                                    [attr.colspan]="headerColumns['inwards'].colSpan"
                                 >
                                     {{ localeData?.reports?.inwards }}
                                 </th>
@@ -620,7 +620,7 @@
                                     class="text-right"
                                     mat-header-cell
                                     *matHeaderCellDef
-                                    [attr.colspan]="outwardsColSpan"
+                                    [attr.colspan]="headerColumns['outwards'].colSpan"
                                 >
                                     {{ localeData?.reports?.outwards }}
                                 </th>
@@ -632,7 +632,7 @@
                                     class="text-right"
                                     mat-header-cell
                                     *matHeaderCellDef
-                                    [attr.colspan]="closingColSpan"
+                                    [attr.colspan]="headerColumns['closing_stock'].colSpan"
                                 >
                                     {{ localeData?.reports?.closing_stock }}
                                 </th>

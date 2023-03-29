@@ -59,14 +59,6 @@ export class ReportsComponent implements OnInit {
     public dataSource = [];
     /** This will use for stock report displayed columns */
     public displayedColumns: any[] = [];
-    /** This will use for  table report header displayed all columns */
-    public displayHeaderColumns: any[] = [
-        'entity_group_name',
-        'opening_stock',
-        'inwards',
-        'outwards',
-        'closing_stock'
-    ];
     /** This will use for  table report header columns */
     public tableHeaderColumns: any[] = [];
     /** This will use for stock report voucher types column check values */
@@ -111,16 +103,29 @@ export class ReportsComponent implements OnInit {
     public showContent: boolean = true;
     /** Hold  universal date by store */
     public pullUniversalDate: boolean = true;
-    /** Hold name report col span */
-    public nameColSpan: number;
-    /** Hold opening stock report col span */
-    public openingColSpan: number;
-    /**Hold inwards report col span*/
-    public inwardsColSpan: number;
-    /** Hold outwards report col span */
-    public outwardsColSpan: number;
-    /** Hold  closing  report  col span */
-    public closingColSpan: number;
+    /** This will use for  table report header displayed all columns */
+    public headerColumns = {
+        entity_group_name: {
+            search: 'name',
+            colSpan: 0
+        },
+        opening_stock: {
+            search: 'opening',
+            colSpan: 0
+        },
+        inwards: {
+            search: 'inward',
+            colSpan: 0
+        },
+        outwards: {
+            search: 'outward',
+            colSpan: 0
+        },
+        closing_stock: {
+            search: 'closing',
+            colSpan: 0
+        },
+    }
 
     constructor(
         public route: ActivatedRoute,
@@ -253,7 +258,7 @@ export class ReportsComponent implements OnInit {
             }
 
             if (this.isReportLoaded) {
-                this.getReport(true);
+                this.getReport(true, true);
             }
         });
     }
@@ -280,7 +285,7 @@ export class ReportsComponent implements OnInit {
      * @return {*}  {void}
      * @memberof ReportsComponent
      */
-    public getReport(fetchBalance: boolean = true): void {
+    public getReport(fetchBalance: boolean = true, removeUniqueNameFromBody?: boolean): void {
         if (!this.reportType) {
             return;
         }
@@ -295,7 +300,7 @@ export class ReportsComponent implements OnInit {
 
             let stockReportRequest = this.getStockReportRequestObject();
 
-            this.inventoryService.getGroupWiseReport(cloneDeep(stockReportRequest)).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            this.inventoryService.getGroupWiseReport(cloneDeep(stockReportRequest), removeUniqueNameFromBody).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 this.isLoading = false;
                 if (response && response.body && response.status === 'success') {
                     this.isDataAvailable = (response.body.results?.length) ? true : false;
@@ -474,7 +479,7 @@ export class ReportsComponent implements OnInit {
             this.initialLoad = false;
         }
         this.pullUniversalDate = true;
-        this.getReport(true);
+        this.getReport(true, this.storeFilters[this.currentUrl].stockReportRequest.stockGroupUniqueNames.length === 0);
     }
 
     /**
@@ -485,72 +490,27 @@ export class ReportsComponent implements OnInit {
      */
     public getCustomiseHeaderColumns(event: any): void {
         this.displayedColumns = event;
-        this.tableHeaderColumns = cloneDeep(this.displayHeaderColumns);
-        if (this.displayedColumns.includes("opening_amount") || this.displayedColumns.includes("opening_quantity")) {
-            this.openingColSpan = 1;
-        }
-        if (this.displayedColumns.includes("opening_amount") && this.displayedColumns.includes("opening_quantity")) {
-            this.openingColSpan = 2;
-        }
-        if (this.displayedColumns.includes("closing_amount") || this.displayedColumns.includes("closing_quantity")) {
-            this.closingColSpan = 1;
-        }
-        if (this.displayedColumns.includes("closing_amount") && this.displayedColumns.includes("closing_quantity")) {
-            this.closingColSpan = 2;
-        }
-        if (this.displayedColumns.includes("inward_amount") || this.displayedColumns.includes("inward_quantity")) {
-            this.inwardsColSpan = 1;
-        }
-        if (this.displayedColumns.includes("inward_amount") && this.displayedColumns.includes("inward_quantity")) {
-            this.inwardsColSpan = 2;
-        }
-        if (this.displayedColumns.includes("outward_amount") || this.displayedColumns.includes("outward_quantity")) {
-            this.outwardsColSpan = 1;
-        }
-        if (this.displayedColumns.includes("outward_amount") && this.displayedColumns.includes("outward_quantity")) {
-            this.outwardsColSpan = 2;
-        }
-        if (this.displayedColumns.includes("stock_name") && this.displayedColumns.includes("variant_name") && this.displayedColumns.includes("group_name")) {
-            this.nameColSpan = 3;
-        }
-        if (this.displayedColumns.includes("stock_name") || this.displayedColumns.includes("variant_name") || this.displayedColumns.includes("group_name")) {
-            this.nameColSpan = 1;
-        }
-        if (this.displayedColumns.includes("stock_name") && this.displayedColumns.includes("group_name")) {
-            this.nameColSpan = 3;
-        }
-        if (this.displayedColumns.includes("stock_name") && this.displayedColumns.includes("variant_name")) {
-            this.nameColSpan = 3;
-        }
-        if (this.displayedColumns.includes("variant_name") && this.displayedColumns.includes("stock_name")) {
-            this.nameColSpan = 3;
-        }
-        if (this.displayedColumns.includes("variant_name") && this.displayedColumns.includes("group_name")) {
-            this.nameColSpan = 3;
-        }
-        if (this.displayedColumns.includes("group_name") && this.displayedColumns.includes("stock_name")) {
-            this.nameColSpan = 3;
-        }
-        if (this.displayedColumns.includes("group_name") && this.displayedColumns.includes("variant_name")) {
-            this.nameColSpan = 3;
-        }
-
-        if (!this.displayedColumns.includes("group_name") && !this.displayedColumns.includes("stock_name") && !this.displayedColumns.includes("variant_name")) {
-            this.tableHeaderColumns = this.tableHeaderColumns.filter(value => value !== 'entity_group_name');
-        }
-        if (!this.displayedColumns.includes('opening_quantity') && !this.displayedColumns.includes('opening_amount')) {
-            this.tableHeaderColumns = this.tableHeaderColumns.filter(value => value !== 'opening_stock');
-        }
-        if (!this.displayedColumns.includes('inward_quantity') && !this.displayedColumns.includes('inward_amount')) {
-            this.tableHeaderColumns = this.tableHeaderColumns.filter(value => value !== 'inwards');
-        }
-        if (!this.displayedColumns.includes('outward_quantity') && !this.displayedColumns.includes('outward_amount')) {
-            this.tableHeaderColumns = this.tableHeaderColumns.filter(value => value !== 'outwards');
-        }
-        if (!this.displayedColumns.includes('closing_quantity') && !this.displayedColumns.includes('closing_amount')) {
-            this.tableHeaderColumns = this.tableHeaderColumns.filter(value => value !== 'closing_stock');
-        }
+        this.tableHeaderColumns = [];
+        Object.keys(this.headerColumns).forEach(key => {
+            const colSpan = this.calculateColSpan(this.headerColumns[key].search);
+            if (colSpan !== 0) {
+                this.tableHeaderColumns.push(key);
+                this.headerColumns[key].colSpan = colSpan;
+            }
+        });
     }
+
+    /**
+     *This will use for calculating the col span
+     *
+     * @param {string} column
+     * @return {*}  {number}
+     * @memberof ReportsComponent
+     */
+    public calculateColSpan(column: string): number {
+        return this.displayedColumns.filter(value => value.includes(column)).length;
+    }
+
 
     /**
       * This will use for get reports by unqiue name
