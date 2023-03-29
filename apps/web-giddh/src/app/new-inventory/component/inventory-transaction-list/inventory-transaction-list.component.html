@@ -385,7 +385,7 @@
                             </ng-container>
                             <ng-container matColumnDef="account_name">
                                 <th
-                                    class="td-search-box text-left"
+                                    class="td-search-box text-left report-column"
                                     mat-header-cell
                                     #searchCustomerContainer
                                     *matHeaderCellDef
@@ -405,7 +405,7 @@
                                 </th>
                                 <td
                                     data-title="Account Name"
-                                    class="text-left account-name-column"
+                                    class="text-left account-name-column report-td-column"
                                     mat-cell
                                     *matCellDef="let element"
                                 >
@@ -413,18 +413,28 @@
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="stock_name">
-                                <th width="17%" class="text-left" mat-header-cell *matHeaderCellDef>
+                                <th class="text-left report-column" mat-header-cell *matHeaderCellDef>
                                     {{ localeData?.reports?.stock_name }}
                                 </th>
-                                <td data-title="Stock Name" class="text-left" mat-cell *matCellDef="let element">
+                                <td
+                                    data-title="Stock Name"
+                                    class="text-left report-td-column"
+                                    mat-cell
+                                    *matCellDef="let element"
+                                >
                                     {{ element?.stock?.name ?? "-" }}
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="variant_name">
-                                <th width="17%" class="text-left" mat-header-cell *matHeaderCellDef>
+                                <th class="text-left report-column" mat-header-cell *matHeaderCellDef>
                                     {{ localeData?.reports?.variant_name }}
                                 </th>
-                                <td data-title="Variant Name" class="text-left" mat-cell *matCellDef="let element">
+                                <td
+                                    data-title="Variant Name"
+                                    class="text-left report-td-column"
+                                    mat-cell
+                                    *matCellDef="let element"
+                                >
                                     {{ element?.variant?.name ?? "-" }}
                                 </td>
                             </ng-container>

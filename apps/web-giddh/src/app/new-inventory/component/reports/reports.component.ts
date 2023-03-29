@@ -247,6 +247,11 @@ export class ReportsComponent implements OnInit {
                         "value": "group_name",
                         "label": "Group Name",
                         "checked": true
+                    },
+                    {
+                        "value": "unit_name",
+                        "label": "Units",
+                        "checked": true
                     }
                 )
                 this.moduleName = InventoryModuleName.stock;
@@ -267,6 +272,11 @@ export class ReportsComponent implements OnInit {
                     {
                         "value": "group_name",
                         "label": "Group Name",
+                        "checked": true
+                    },
+                    {
+                        "value": "unit_name",
+                        "label": "Units",
                         "checked": true
                     }
                 )

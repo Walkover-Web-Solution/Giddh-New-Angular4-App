@@ -19,7 +19,12 @@
         }
     }
 }
-
+.report-quantity {
+    float: left;
+    width: 100%;
+    text-align: right;
+    text-transform: lowercase;
+}
 .virtual-group-list {
     height: 193px;
 }

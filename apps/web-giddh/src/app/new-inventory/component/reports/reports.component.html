@@ -336,12 +336,12 @@
                             class="table giddh-table on-mobile-view"
                         >
                             <ng-container matColumnDef="group_name">
-                                <th class="group-column" mat-header-cell *matHeaderCellDef>
+                                <th class="report-th-column" mat-header-cell *matHeaderCellDef>
                                     {{ localeData?.reports?.group_name }}
                                 </th>
                                 <td
                                     data-title="Date"
-                                    class="text-left word-wrap cursor-pointer"
+                                    class="text-left word-wrap cursor-pointer report-td-column"
                                     mat-cell
                                     *matCellDef="let element"
                                     (click)="getReportsByReportType($event, element)"
@@ -350,12 +350,12 @@
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="stock_name">
-                                <th class="stock-column" mat-header-cell *matHeaderCellDef>
+                                <th class="report-th-column" mat-header-cell *matHeaderCellDef>
                                     {{ localeData?.reports?.stock_name }}
                                 </th>
                                 <td
                                     data-title="Date"
-                                    class="text-left word-wrap cursor-pointer"
+                                    class="text-left word-wrap cursor-pointer report-td-column"
                                     mat-cell
                                     *matCellDef="let element"
                                     (click)="getReportsByReportType($event, element)"
@@ -364,17 +364,30 @@
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="variant_name">
-                                <th class="variant-column" mat-header-cell *matHeaderCellDef>
+                                <th class="report-th-column" mat-header-cell *matHeaderCellDef>
                                     {{ localeData?.reports?.variant_name }}
                                 </th>
                                 <td
                                     data-title="Date"
-                                    class="text-left word-wrap cursor-pointer"
+                                    class="text-left word-wrap cursor-pointer report-td-column"
                                     mat-cell
                                     *matCellDef="let element"
                                     (click)="getReportsByReportType($event, element)"
                                 >
                                     {{ element?.variant?.name ?? "-" }}
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="unit_name">
+                                <th class="group-column" mat-header-cell *matHeaderCellDef>
+                                    {{ localeData?.reports?.unit_name }}
+                                </th>
+                                <td
+                                    data-title="unit"
+                                    class="text-left word-wrap cursor-pointer"
+                                    mat-cell
+                                    *matCellDef="let element"
+                                >
+                                    <span class="report-quantity"> {{ element?.stockUnit?.code ?? "-" }}</span>
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="opening_quantity">
