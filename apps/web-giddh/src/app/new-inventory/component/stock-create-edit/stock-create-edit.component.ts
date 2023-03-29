@@ -63,33 +63,56 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         customField2Heading: "Custom Field 2",
         customField2Value: null,
         purchaseAccountDetails: {
-            accountUniqueName: null,
-            unitRates: [
-                {
-                    rate: null,
-                    stockUnitCode: null,
-                    stockUnitName: null,
-                    stockUnitUniqueName: null
-                }
-            ]
+            accountUniqueName: null
         },
         salesAccountDetails: {
-            accountUniqueName: null,
-            unitRates: [
-                {
-                    rate: null,
-                    stockUnitCode: null,
-                    stockUnitName: null,
-                    stockUnitUniqueName: null
-                }
-            ]
+            accountUniqueName: null
         },
         isFsStock: null,
         manufacturingDetails: null,
         accountGroup: null,
         lowStockAlertCount: 0,
         outOfStockSelling: true,
-        variants: [],
+        variants: [
+            {
+                name: "",
+                archive: false,
+                uniqueName: undefined,
+                skuCode: undefined,
+                salesInformation: [
+                    {
+                        rate: undefined,
+                        stockUnitCode: undefined,
+                        stockUnitName: undefined,
+                        stockUnitUniqueName: undefined,
+                        accountUniqueName: ""
+                    }
+                ],
+                purchaseInformation: [
+                    {
+                        rate: undefined,
+                        stockUnitCode: undefined,
+                        stockUnitName: undefined,
+                        stockUnitUniqueName: undefined,
+                        accountUniqueName: ""
+                    }
+                ],
+                warehouseBalance: [
+                    {
+                        warehouse: {
+                            name: undefined,
+                            uniqueName: undefined
+                        },
+                        stockUnit: {
+                            name: "",
+                            code: ""
+                        },
+                        openingQuantity: 0,
+                        openingAmount: 0
+                    }
+                ]
+            }
+        ],
         options: [],
         customFields: []
     };
@@ -190,6 +213,8 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 }
             }
         });
+
+        console.log(this.stockForm);
     }
 
     /**
@@ -414,7 +439,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
 
         const existingVariants = cloneDeep(this.stockForm.variants);
 
-        this.stockForm.variants = [];
+        let stockVariants = [];
         variants?.forEach(variant => {
             let variantExists = existingVariants?.filter(existingVariant => existingVariant?.name === variant);
 
@@ -457,8 +482,9 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 ]
             };
 
-            this.stockForm.variants.push(variantObj);
+            stockVariants.push(variantObj);
         });
+        this.stockForm.variants = stockVariants;
     }
 
     /**
@@ -984,33 +1010,56 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
             customField2Heading: "Custom Field 2",
             customField2Value: null,
             purchaseAccountDetails: {
-                accountUniqueName: null,
-                unitRates: [
-                    {
-                        rate: null,
-                        stockUnitCode: null,
-                        stockUnitName: null,
-                        stockUnitUniqueName: null
-                    }
-                ]
+                accountUniqueName: null
             },
             salesAccountDetails: {
-                accountUniqueName: null,
-                unitRates: [
-                    {
-                        rate: null,
-                        stockUnitCode: null,
-                        stockUnitName: null,
-                        stockUnitUniqueName: null
-                    }
-                ]
+                accountUniqueName: null
             },
             isFsStock: null,
             manufacturingDetails: null,
             accountGroup: null,
             lowStockAlertCount: 0,
             outOfStockSelling: true,
-            variants: [],
+            variants: [
+                {
+                    name: "",
+                    archive: false,
+                    uniqueName: undefined,
+                    skuCode: undefined,
+                    salesInformation: [
+                        {
+                            rate: undefined,
+                            stockUnitCode: undefined,
+                            stockUnitName: undefined,
+                            stockUnitUniqueName: undefined,
+                            accountUniqueName: ""
+                        }
+                    ],
+                    purchaseInformation: [
+                        {
+                            rate: undefined,
+                            stockUnitCode: undefined,
+                            stockUnitName: undefined,
+                            stockUnitUniqueName: undefined,
+                            accountUniqueName: ""
+                        }
+                    ],
+                    warehouseBalance: [
+                        {
+                            warehouse: {
+                                name: undefined,
+                                uniqueName: undefined
+                            },
+                            stockUnit: {
+                                name: "",
+                                code: ""
+                            },
+                            openingQuantity: 0,
+                            openingAmount: 0
+                        }
+                    ]
+                }
+            ],
             options: [],
             customFields: []
         };
