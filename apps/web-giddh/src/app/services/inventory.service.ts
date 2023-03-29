@@ -1172,14 +1172,17 @@ export class InventoryService {
      * @return {*}  {Observable<BaseResponse<InventoryReportResponse, InventoryReportRequest>>}
      * @memberof InventoryService
      */
-    public getGroupWiseReport(stockReportRequest: InventoryReportRequest): Observable<BaseResponse<InventoryReportResponse, InventoryReportRequest>> {
+    public getGroupWiseReport(stockReportRequest: InventoryReportRequest, removeUniqueNameFromBody?: boolean): Observable<BaseResponse<InventoryReportResponse, InventoryReportRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let updatedReportRequest = cloneDeep(stockReportRequest);
         delete updatedReportRequest.from;
         delete updatedReportRequest.to;
+        if (removeUniqueNameFromBody) {
+            updatedReportRequest.stockGroupUniqueNames = [];
+        }
         return this.http.post(this.config.apiUrl + INVENTORY_API.INVENTORY_GROUP_WISE_REPORT?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             ?.replace(':from', encodeURIComponent(stockReportRequest.from))
-            ?.replace(':stockGroupUniqueName', encodeURIComponent(stockReportRequest.stockGroupUniqueNames?.toString()))
+            ?.replace(':stockGroupUniqueName', removeUniqueNameFromBody ? encodeURIComponent(stockReportRequest.stockGroupUniqueNames?.toString()) : '')
             ?.replace(':to', encodeURIComponent(stockReportRequest.to))
             ?.replace(':count', encodeURIComponent(stockReportRequest.count?.toString()))
             ?.replace(':page', encodeURIComponent(stockReportRequest.page?.toString()))
