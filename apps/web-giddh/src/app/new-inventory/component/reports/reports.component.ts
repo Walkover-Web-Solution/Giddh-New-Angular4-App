@@ -195,11 +195,6 @@ export class ReportsComponent implements OnInit {
 
                 this.stockReportRequest = new StockReportRequest();
                 this.balanceStockReportRequest = new BalanceStockTransactionReportRequest();
-
-                if (!this.isCompany) {
-                    this.stockReportRequest.branchUniqueNames = [this.generalService.currentBranchUniqueName];
-                    this.balanceStockReportRequest.branchUniqueNames = [this.generalService.currentBranchUniqueName];
-                }
                 if (this.storeFilters && this.storeFilters[this.currentUrl]) {
                     this.pullUniversalDate = false;
                     this.initialLoad = true;
@@ -216,8 +211,16 @@ export class ReportsComponent implements OnInit {
                     this.balanceStockReportRequest.to = this.toDate;
 
                     this.fromToDate = { from: this.fromDate, to: this.toDate };
+                    if (!this.isCompany) {
+                        this.stockReportRequest.branchUniqueNames = [this.generalService.currentBranchUniqueName];
+                        this.balanceStockReportRequest.branchUniqueNames = [this.generalService.currentBranchUniqueName];
+                    }
                     this.changeDetection.detectChanges();
                 } else {
+                    if (!this.isCompany) {
+                        this.stockReportRequest.branchUniqueNames = [this.generalService.currentBranchUniqueName];
+                        this.balanceStockReportRequest.branchUniqueNames = [this.generalService.currentBranchUniqueName];
+                    }
                     this.initialLoad = false;
                 }
 
@@ -247,6 +250,11 @@ export class ReportsComponent implements OnInit {
                         "value": "group_name",
                         "label": "Group Name",
                         "checked": true
+                    },
+                    {
+                        "value": "unit_name",
+                        "label": "Units",
+                        "checked": true
                     }
                 )
                 this.moduleName = InventoryModuleName.stock;
@@ -267,6 +275,11 @@ export class ReportsComponent implements OnInit {
                     {
                         "value": "group_name",
                         "label": "Group Name",
+                        "checked": true
+                    },
+                    {
+                        "value": "unit_name",
+                        "label": "Units",
                         "checked": true
                     }
                 )

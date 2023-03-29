@@ -24,6 +24,7 @@
         "outward":"Outward",
         "closing":"Closing",
         "group_name":"Group Name",
+        "unit_name":"Unit",
         "value":"Value",
         "qty":"Qty",
         "opening_stock":"Opening Stock",
