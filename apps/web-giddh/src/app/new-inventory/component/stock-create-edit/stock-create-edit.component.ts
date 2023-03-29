@@ -423,6 +423,24 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 archive: false,
                 uniqueName: undefined,
                 skuCode: undefined,
+                salesInformation: [
+                    {
+                        rate: undefined,
+                        stockUnitCode: undefined,
+                        stockUnitName: undefined,
+                        stockUnitUniqueName: undefined,
+                        accountUniqueName: this.stockForm.salesAccountDetails?.accountUniqueName
+                    }
+                ],
+                purchaseInformation: [
+                    {
+                        rate: undefined,
+                        stockUnitCode: undefined,
+                        stockUnitName: undefined,
+                        stockUnitUniqueName: undefined,
+                        accountUniqueName: this.stockForm.purchaseAccountDetails?.accountUniqueName
+                    }
+                ],
                 warehouseBalance: [
                     {
                         warehouse: {
@@ -1118,5 +1136,77 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 this.toaster.showSnackBar("error", response?.message);
             }
         });
+    }
+
+    /**
+     * Set unit in variant
+     *
+     * @param {*} variantSalesUnitRate
+     * @param {*} event
+     * @memberof StockCreateEditComponent
+     */
+    public selectVariantSalesPurchaseUnit(variantSalesUnitRate: any, event: any): void {
+        variantSalesUnitRate.stockUnitName = event.label;
+        variantSalesUnitRate.stockUnitUniqueName = event?.value;
+    }
+
+    /**
+     * Add new purchase unit section
+     *
+     * @memberof StockCreateEditComponent
+     */
+    public addNewVariantPurchaseUnitPrice(variant: any): void {
+        variant.purchaseInformation.push({
+            rate: null,
+            stockUnitCode: null,
+            stockUnitUniqueName: null,
+            stockUnitName: null,
+            accountUniqueName: this.stockForm.purchaseAccountDetails?.accountUniqueName
+        });
+    }
+
+    /**
+     * Delete purchase unit section
+     *
+     * @param {number} unitRateIndex
+     * @memberof StockCreateEditComponent
+     */
+    public deleteVariantPurchaseUnitPrice(variant: any, unitRateIndex: number): void {
+        let unitRates = variant.purchaseInformation?.filter((data, index) => index !== unitRateIndex).map(data => { return data });
+        variant.purchaseInformation = unitRates;
+
+        if (unitRates?.length === 0) {
+            this.addNewVariantPurchaseUnitPrice(variant);
+        }
+    }
+
+    /**
+     * Add new sales unit section
+     *
+     * @memberof StockCreateEditComponent
+     */
+     public addNewVariantSalesUnitPrice(variant: any): void {
+        variant.salesInformation.push({
+            rate: null,
+            stockUnitCode: null,
+            stockUnitUniqueName: null,
+            stockUnitName: null,
+            accountUniqueName: this.stockForm.salesAccountDetails?.accountUniqueName
+        });
+    }
+
+    /**
+     * Delete sales unit section
+     *
+     * @param {number} unitRateIndex
+     * @memberof StockCreateEditComponent
+     */
+    public deleteVariantSalesUnitPrice(variant: any, unitRateIndex: number): void {
+        let unitRates = variant.salesInformation?.filter((data, index) => index !== unitRateIndex).map(data => { return data });
+        variant.salesInformation = unitRates;
+
+        if (unitRates?.length === 0) {
+            this.addNewVariantSalesUnitPrice(variant);
+        }
     }
 }

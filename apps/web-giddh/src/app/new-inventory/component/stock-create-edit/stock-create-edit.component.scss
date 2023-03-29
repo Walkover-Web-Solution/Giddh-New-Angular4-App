@@ -305,13 +305,41 @@
     }
 }
 
-::ng-deep table.stock-table td input {
-    border: none;
+table.stock-table {
+    table-layout: fixed;
+    width: 100%;
+
+    tr {
+        display: flex;
+
+        td,
+        th {
+            padding: 7px 15px;
+            max-width: 180px;
+            min-width: 180px;
+            display: inline-block;
+
+            &.archive {
+                max-width: 80px;
+                min-width: 80px;
+            }
+
+            &.sales-purchase-info {
+                max-width: 320px;
+                min-width: 320px;
+
+                select-field,
+                text-field {
+                    width: 150px;
+                    display: table-cell;
+                }
+            }
+        }
+    }
 }
 
-table.stock-table td,
-table.stock-table th {
-    padding: 7px 15px;
+table.stock-table td input {
+    border: none;
 }
 
 .combo-table.table,
@@ -345,7 +373,6 @@ table.stock-table th {
     }
 }
 
-.stock-table td,
 .combo-table tr,
 .combo-table th,
 .combo-table td,
@@ -365,7 +392,6 @@ table.stock-table th {
 }
 
 .combo-table th:first-child,
-.stock-table th:first-child,
 .bulk-create-table td:first-child {
     min-width: auto !important;
 }
