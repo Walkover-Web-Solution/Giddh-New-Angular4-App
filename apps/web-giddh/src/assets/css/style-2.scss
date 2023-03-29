@@ -614,6 +614,17 @@ $custom-typography: mat-typography-config(
 .icon-calender {
     cursor: pointer;
 }
+.sales-purchase-info {
+    .unit-rates {
+        max-width: 130px !important;
+        min-width: 120px !important;
+    }
+
+    .unit-amount {
+        max-width: 120px !important;
+        min-width: 120px !important;
+    }
+}
 
 @media screen and (max-width: 1366px) and (orientation: portrait) {
     .subscription-form-select {
