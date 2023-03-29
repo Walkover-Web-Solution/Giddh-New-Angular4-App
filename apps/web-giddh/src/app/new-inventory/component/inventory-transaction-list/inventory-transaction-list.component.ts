@@ -18,6 +18,7 @@ import { giddhRoundOff } from "../../../shared/helpers/helperFunctions";
 import { ReportFiltersComponent } from "../report-filters/report-filters.component";
 import { ActivatedRoute } from "@angular/router";
 import { InventoryModuleName, InventoryReportType } from "../../inventory.enum";
+import { OrganizationType } from "../../../models/user-login-state";
 
 @Component({
     selector: "inventory-transaction-list",
@@ -201,6 +202,8 @@ export class InventoryTransactionListComponent implements OnInit {
     public isReportLoaded: boolean = false;
     /** True if translations loaded */
     public translationLoaded: boolean = false;
+    /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
+    public isCompany: boolean;
 
     constructor(
         private generalService: GeneralService,
@@ -223,6 +226,8 @@ export class InventoryTransactionListComponent implements OnInit {
      * @memberof InventoryTransactionListComponent
      */
     public ngOnInit(): void {
+        this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch;
+
         this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
 
         this.searchAccountName.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(search => {
@@ -247,11 +252,11 @@ export class InventoryTransactionListComponent implements OnInit {
 
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                    this.reportUniqueName = response?.uniqueName;
-                    if (this.isReportLoaded) {
-                        this.getStockTransactionalReport(true);
-                    }
+                this.reportUniqueName = response?.uniqueName;
+                if (this.isReportLoaded) {
+                    this.getStockTransactionalReport(true);
                 }
+            }
         });
     }
 
@@ -271,11 +276,14 @@ export class InventoryTransactionListComponent implements OnInit {
             this.stockReportRequest.variantUniqueNames = [this.reportUniqueName];
             this.balanceStockReportRequest.variantUniqueNames = [this.reportUniqueName];
         }
+        if (!this.isCompany) {
+            this.stockReportRequest.branchUniqueNames = [this.generalService.currentBranchUniqueName];
+            this.balanceStockReportRequest.branchUniqueNames = [this.generalService.currentBranchUniqueName];
+        }
         let stockReportRequest = cloneDeep(this.stockReportRequest);
         stockReportRequest.stockGroups = undefined;
         stockReportRequest.stocks = undefined;
         stockReportRequest.variants = undefined;
-
         this.inventoryService.getStockTransactionReport(stockReportRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.isLoading = false;
             if (response && response.body && response.status === 'success') {
@@ -301,6 +309,10 @@ export class InventoryTransactionListComponent implements OnInit {
                 this.toaster.errorToast(response?.message);
                 this.dataSource = [];
                 this.stockReportRequest.totalItems = 0;
+                if (!this.isCompany) {
+                    this.stockReportRequest.branchUniqueNames = [this.generalService.currentBranchUniqueName];
+                    this.balanceStockReportRequest.branchUniqueNames = [this.generalService.currentBranchUniqueName];
+                }
             }
             this.changeDetection.detectChanges();
         });
