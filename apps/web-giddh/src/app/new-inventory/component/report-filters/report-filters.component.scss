@@ -51,14 +51,31 @@
 }
 
 @media (max-width: 1440px) {
-    .select-multiple-chiplist-inventory {
-        width: 77%;
+    .inventory-filter-bar {
+        .search-control {
+            .icon-input {
+                float: left;
+                width: 70%;
+            }
+
+            .menu-btn-control {
+                width: 30%;
+            }
+        }
     }
 }
 
 @media (max-width: 1024px) {
-    .select-multiple-chiplist-inventory {
-        width: 60%;
+    .inventory-filter-bar {
+        .search-control {
+            .icon-input {
+                float: left;
+                width: 60%;
+            }
+            .menu-btn-control {
+                width: 40%;
+            }
+        }
     }
 
     .stock-mat-salect {
