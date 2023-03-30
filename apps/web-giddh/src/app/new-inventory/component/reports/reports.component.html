@@ -344,7 +344,7 @@
                                     class="text-left word-wrap cursor-pointer report-td-column"
                                     mat-cell
                                     *matCellDef="let element"
-                                    (click)="getReportsByReportType($event, element)"
+                                    (click)="getReportsByReportType(element)"
                                 >
                                     {{ element?.stockGroup?.name ?? "-" }}
                                 </td>
@@ -358,7 +358,7 @@
                                     class="text-left word-wrap cursor-pointer report-td-column"
                                     mat-cell
                                     *matCellDef="let element"
-                                    (click)="getReportsByReportType($event, element)"
+                                    (click)="getReportsByReportType(element)"
                                 >
                                     {{ element?.stock?.name ?? "-" }}
                                 </td>
@@ -372,7 +372,7 @@
                                     class="text-left word-wrap cursor-pointer report-td-column"
                                     mat-cell
                                     *matCellDef="let element"
-                                    (click)="getReportsByReportType($event, element)"
+                                    (click)="getReportsByReportType(element)"
                                 >
                                     {{ element?.variant?.name ?? "-" }}
                                 </td>
