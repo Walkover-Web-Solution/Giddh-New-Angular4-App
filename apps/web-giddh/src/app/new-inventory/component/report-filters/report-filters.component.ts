@@ -709,7 +709,11 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
         if (this.searchRequest.page === 1 || this.searchRequest.page <= this.searchRequest.totalPages) {
             delete this.searchRequest.totalItems;
             delete this.searchRequest.totalPages;
-            this.inventoryService.searchStockTransactionReport(this.searchRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            let searchRequest = cloneDeep(this.searchRequest);
+            if (this.autoSelectSearchOption) {
+                searchRequest.searchPage = searchRequest.searchPage === 'STOCK' ? 'GROUP' : searchRequest.searchPage === 'VARIANT' ? 'STOCK' : 'GROUP';
+            }
+            this.inventoryService.searchStockTransactionReport(searchRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response && response.body && response.status === 'success') {
                     if (loadMore) {
                         this.fieldFilteredOptions = this.fieldFilteredOptions.concat(response.body.results);
