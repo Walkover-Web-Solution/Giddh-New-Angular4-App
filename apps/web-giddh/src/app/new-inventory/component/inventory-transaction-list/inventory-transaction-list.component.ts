@@ -272,10 +272,6 @@ export class InventoryTransactionListComponent implements OnInit {
         this.dataSource = [];
         this.isLoading = true;
         this.isReportLoaded = true;
-        if (this.reportUniqueName) {
-            this.stockReportRequest.variantUniqueNames = [this.reportUniqueName];
-            this.balanceStockReportRequest.variantUniqueNames = [this.reportUniqueName];
-        }
         if (!this.isCompany) {
             this.stockReportRequest.branchUniqueNames = [this.generalService.currentBranchUniqueName];
             this.balanceStockReportRequest.branchUniqueNames = [this.generalService.currentBranchUniqueName];
