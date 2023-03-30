@@ -185,50 +185,48 @@ export class ReportsComponent implements OnInit {
             }
         });
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            let lastReportType = cloneDeep(this.reportType);
             this.currentUrl = this.router.url;
             this.reportUniqueName = response?.uniqueName;
             this.reportType = (response?.reportType)?.toUpperCase();
-            if (lastReportType) {
+
+            if (this.storeFilters && this.storeFilters[this.currentUrl]) {
                 this.showContent = false;
                 this.changeDetection.detectChanges();
 
                 this.stockReportRequest = new StockReportRequest();
                 this.balanceStockReportRequest = new BalanceStockTransactionReportRequest();
-                if (this.storeFilters && this.storeFilters[this.currentUrl]) {
-                    this.pullUniversalDate = false;
-                    this.initialLoad = true;
-                    this.stockReportRequest = cloneDeep(this.storeFilters[this.currentUrl]?.stockReportRequest);
-                    this.balanceStockReportRequest = cloneDeep(this.storeFilters[this.currentUrl]?.balanceStockReportRequest);
-                    this.todaySelected = cloneDeep(this.storeFilters[this.currentUrl]?.todaySelected);
-                    this.showClearFilter = cloneDeep(this.storeFilters[this.currentUrl]?.showClearFilter);
-                    this.advanceSearchModalResponse = cloneDeep(this.storeFilters[this.currentUrl]?.advanceSearchModalResponse);
-                    this.fromDate = dayjs(this.stockReportRequest?.from, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
-                    this.toDate = dayjs(this.stockReportRequest?.to, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
-                    this.stockReportRequest.from = this.fromDate;
-                    this.stockReportRequest.to = this.toDate;
-                    this.balanceStockReportRequest.from = this.fromDate;
-                    this.balanceStockReportRequest.to = this.toDate;
+                
+                this.pullUniversalDate = false;
+                this.initialLoad = true;
+                this.stockReportRequest = cloneDeep(this.storeFilters[this.currentUrl]?.stockReportRequest);
+                this.balanceStockReportRequest = cloneDeep(this.storeFilters[this.currentUrl]?.balanceStockReportRequest);
+                this.todaySelected = cloneDeep(this.storeFilters[this.currentUrl]?.todaySelected);
+                this.showClearFilter = cloneDeep(this.storeFilters[this.currentUrl]?.showClearFilter);
+                this.advanceSearchModalResponse = cloneDeep(this.storeFilters[this.currentUrl]?.advanceSearchModalResponse);
+                this.fromDate = dayjs(this.stockReportRequest?.from, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                this.toDate = dayjs(this.stockReportRequest?.to, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                this.stockReportRequest.from = this.fromDate;
+                this.stockReportRequest.to = this.toDate;
+                this.balanceStockReportRequest.from = this.fromDate;
+                this.balanceStockReportRequest.to = this.toDate;
+                this.fromToDate = { from: this.fromDate, to: this.toDate };
 
-                    this.fromToDate = { from: this.fromDate, to: this.toDate };
-                    if (!this.isCompany) {
-                        this.stockReportRequest.branchUniqueNames = [this.generalService.currentBranchUniqueName];
-                        this.balanceStockReportRequest.branchUniqueNames = [this.generalService.currentBranchUniqueName];
-                    }
-                    this.changeDetection.detectChanges();
-                } else {
-                    if (!this.isCompany) {
-                        this.stockReportRequest.branchUniqueNames = [this.generalService.currentBranchUniqueName];
-                        this.balanceStockReportRequest.branchUniqueNames = [this.generalService.currentBranchUniqueName];
-                    }
-                    this.initialLoad = false;
+                if (!this.isCompany) {
+                    this.stockReportRequest.branchUniqueNames = [this.generalService.currentBranchUniqueName];
+                    this.balanceStockReportRequest.branchUniqueNames = [this.generalService.currentBranchUniqueName];
                 }
-
+                
                 setTimeout(() => {
                     this.showContent = true;
                     this.changeDetection.detectChanges();
                 }, 100);
-            };
+            } else {
+                if (!this.isCompany) {
+                    this.stockReportRequest.branchUniqueNames = [this.generalService.currentBranchUniqueName];
+                    this.balanceStockReportRequest.branchUniqueNames = [this.generalService.currentBranchUniqueName];
+                }
+                this.initialLoad = false;
+            }
 
             this.customiseColumns = cloneDeep(INVENTORY_COMMON_COLUMNS);
             if (this.reportType === InventoryReportType.group) {
@@ -541,34 +539,51 @@ export class ReportsComponent implements OnInit {
 
 
     /**
-      * This will use for get reports by unqiue name
+     * This will use for get reports by unqiue name
      *
-     * @param {*} event
      * @param {*} element
      * @memberof ReportsComponent
      */
-    public getReportsByReportType(event: any, element: any): void {
+    public getReportsByReportType(element: any): void {
         let currentUrl = '';
+        let stockReportRequest = cloneDeep(this.stockReportRequest);
+        let balanceStockReportRequest = cloneDeep(this.balanceStockReportRequest);
+
+        stockReportRequest.stockGroupUniqueNames = undefined;
+        stockReportRequest.stockUniqueNames = undefined;
+        stockReportRequest.variantUniqueNames = undefined;
+        stockReportRequest.stockGroups = undefined;
+        stockReportRequest.stocks = undefined;
+        stockReportRequest.variants = undefined;
+
+        balanceStockReportRequest.stockGroupUniqueNames = undefined;
+        balanceStockReportRequest.stockUniqueNames = undefined;
+        balanceStockReportRequest.variantUniqueNames = undefined;
+        stockReportRequest.stockGroups = undefined;
+        stockReportRequest.stocks = undefined;
+        stockReportRequest.variants = undefined;
+
+
         if (this.reportType === InventoryReportType.group) {
             if (element?.stockGroupHasChild) {
                 currentUrl = '/pages/new-inventory/reports/group/' + element?.stockGroup?.uniqueName;
-                this.storeFilters[currentUrl] = { stockReportRequest: this.stockReportRequest, balanceStockReportRequest: this.balanceStockReportRequest, todaySelected: this.todaySelected, showClearFilter: this.showClearFilter };
+                this.storeFilters[currentUrl] = { stockReportRequest: stockReportRequest, balanceStockReportRequest: balanceStockReportRequest, todaySelected: this.todaySelected, showClearFilter: this.showClearFilter };
                 this.store.dispatch(this.commonAction.setFilters(this.storeFilters));
                 this.router.navigate(['/pages', 'new-inventory', 'reports', 'group', element?.stockGroup?.uniqueName]);
             } else {
                 currentUrl = '/pages/new-inventory/reports/stock/' + element?.stockGroup?.uniqueName;
-                this.storeFilters[currentUrl] = { stockReportRequest: this.stockReportRequest, balanceStockReportRequest: this.balanceStockReportRequest, todaySelected: this.todaySelected, showClearFilter: this.showClearFilter };
+                this.storeFilters[currentUrl] = { stockReportRequest: stockReportRequest, balanceStockReportRequest: balanceStockReportRequest, todaySelected: this.todaySelected, showClearFilter: this.showClearFilter };
                 this.store.dispatch(this.commonAction.setFilters(this.storeFilters));
                 this.router.navigate(['/pages', 'new-inventory', 'reports', 'stock', element?.stockGroup?.uniqueName]);
             }
         } else if (this.reportType === InventoryReportType.stock) {
             currentUrl = '/pages/new-inventory/reports/variant/' + element?.stock?.uniqueName;
-            this.storeFilters[currentUrl] = { stockReportRequest: this.stockReportRequest, balanceStockReportRequest: this.balanceStockReportRequest, todaySelected: this.todaySelected, showClearFilter: this.showClearFilter };
+            this.storeFilters[currentUrl] = { stockReportRequest: stockReportRequest, balanceStockReportRequest: balanceStockReportRequest, todaySelected: this.todaySelected, showClearFilter: this.showClearFilter };
             this.store.dispatch(this.commonAction.setFilters(this.storeFilters));
             this.router.navigate(['/pages', 'new-inventory', 'reports', 'variant', element?.stock?.uniqueName]);
         } else if (this.reportType === InventoryReportType.variant) {
             currentUrl = '/pages/new-inventory/reports/transaction/' + element?.variant?.uniqueName;
-            this.storeFilters[currentUrl] = { stockReportRequest: this.stockReportRequest, balanceStockReportRequest: this.balanceStockReportRequest, todaySelected: this.todaySelected, showClearFilter: this.showClearFilter };
+            this.storeFilters[currentUrl] = { stockReportRequest: stockReportRequest, balanceStockReportRequest: balanceStockReportRequest, todaySelected: this.todaySelected, showClearFilter: this.showClearFilter };
             this.store.dispatch(this.commonAction.setFilters(this.storeFilters));
             this.router.navigate(['/pages', 'new-inventory', 'reports', 'transaction', element?.variant?.uniqueName]);
         }

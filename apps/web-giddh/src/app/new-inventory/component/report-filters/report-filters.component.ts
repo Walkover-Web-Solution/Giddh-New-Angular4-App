@@ -270,11 +270,15 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
                 });
             }
 
-            if (changes?.stockReportRequest?.currentValue?.branchUniqueNames) {
-                this.selectedBranch = this.stockReportRequest?.branchUniqueNames;
+            if (changes?.stockReportRequest?.currentValue?.branchUniqueNames?.length) {
+                this.selectedBranch = changes?.stockReportRequest?.currentValue?.branchUniqueNames;
+                this.stockReportRequest.branchUniqueNames = this.selectedBranch;
+                this.balanceStockReportRequest.branchUniqueNames = this.selectedBranch;
             }
-            if (changes?.stockReportRequest?.currentValue?.warehouseUniqueNames) {
-                this.selectedWarehouse = this.stockReportRequest?.warehouseUniqueNames;
+            if (changes?.stockReportRequest?.currentValue?.warehouseUniqueNames?.length) {
+                this.selectedWarehouse = changes?.stockReportRequest?.currentValue?.warehouseUniqueNames;
+                this.stockReportRequest.warehouseUniqueNames = this.selectedWarehouse;
+                this.balanceStockReportRequest.warehouseUniqueNames = this.selectedWarehouse;
             }
         }
         this.isFilterActive();
@@ -528,7 +532,6 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
             this.stockReportRequest.branchUniqueNames = this.generalService.currentBranchUniqueName ? [this.generalService.currentBranchUniqueName] : [];
             this.balanceStockReportRequest.branchUniqueNames = this.generalService.currentBranchUniqueName ? [this.generalService.currentBranchUniqueName] : [];
         }
-        this.stockReportRequest.warehouseUniqueNames = [];
         this.balanceStockReportRequest.branchUniqueNames = cloneDeep(this.stockReportRequest.branchUniqueNames);
         this.balanceStockReportRequest.warehouseUniqueNames = cloneDeep(this.stockReportRequest.warehouseUniqueNames);
         this.stockReportRequest.page = 1;
@@ -756,5 +759,14 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+    }
+
+    /**
+     * Resets warehouses
+     *
+     * @memberof ReportFiltersComponent
+     */
+    public resetWarehouse(): void {
+        this.stockReportRequest.warehouseUniqueNames = [];
     }
 }

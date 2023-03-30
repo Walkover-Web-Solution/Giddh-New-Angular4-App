@@ -22,7 +22,7 @@
             [(ngModel)]="selectedBranch"
             class="stock-mat-salect"
             [placeholder]="localeData?.header?.select_branch"
-            (ngModelChange)="getBranches()"
+            (ngModelChange)="resetWarehouse(); getBranches()"
         >
             <mat-option class="balance-options">
                 <ngx-mat-select-search
