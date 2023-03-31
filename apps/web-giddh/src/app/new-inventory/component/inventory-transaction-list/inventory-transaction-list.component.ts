@@ -16,7 +16,7 @@ import { ToasterService } from "../../../services/toaster.service";
 import { CdkVirtualScrollViewport } from "@angular/cdk/scrolling";
 import { giddhRoundOff } from "../../../shared/helpers/helperFunctions";
 import { ReportFiltersComponent } from "../report-filters/report-filters.component";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { InventoryModuleName, InventoryReportType } from "../../inventory.enum";
 import { OrganizationType } from "../../../models/user-login-state";
 
@@ -204,6 +204,16 @@ export class InventoryTransactionListComponent implements OnInit {
     public translationLoaded: boolean = false;
     /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
     public isCompany: boolean;
+    /** Hold  universal date by store */
+    public pullUniversalDate: boolean = true;
+    /** Hold current url */
+    private currentUrl: string = "";
+    /** Holds filters in store */
+    private storeFilters: any;
+    /** Hold advance search modal response */
+    public advanceSearchModalResponse: any = null;
+    /** Hold show content */
+    public showContent: boolean = true;
 
     constructor(
         private generalService: GeneralService,
@@ -211,11 +221,36 @@ export class InventoryTransactionListComponent implements OnInit {
         private changeDetection: ChangeDetectorRef,
         private inventoryService: InventoryService,
         public route: ActivatedRoute,
+        public router: Router,
         private toaster: ToasterService,
         private store: Store<AppState>) {
         this.store.pipe(select(state => state.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
             if (profile) {
                 this.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
+            }
+        });
+        this.currentUrl = this.router.url;
+
+        this.store.pipe(select(state => state.session?.filters), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.storeFilters = response;
+                if (this.storeFilters[this.currentUrl]) {
+                    this.stockReportRequest = cloneDeep(this.storeFilters[this.currentUrl]?.stockReportRequest);
+                    this.balanceStockReportRequest = cloneDeep(this.storeFilters[this.currentUrl]?.balanceStockReportRequest);
+                    this.todaySelected = cloneDeep(this.storeFilters[this.currentUrl]?.todaySelected);
+                    this.showClearFilter = cloneDeep(this.storeFilters[this.currentUrl]?.showClearFilter);
+                    this.advanceSearchModalResponse = cloneDeep(this.storeFilters[this.currentUrl]?.advanceSearchModalResponse);
+
+                    this.fromDate = dayjs(this.stockReportRequest?.from, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                    this.toDate = dayjs(this.stockReportRequest?.to, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                    this.stockReportRequest.from = this.fromDate;
+                    this.stockReportRequest.to = this.toDate;
+                    this.balanceStockReportRequest.from = this.fromDate;
+                    this.balanceStockReportRequest.to = this.toDate;
+
+                    this.fromToDate = { from: this.fromDate, to: this.toDate };
+                    this.pullUniversalDate = false;
+                }
             }
         });
     }

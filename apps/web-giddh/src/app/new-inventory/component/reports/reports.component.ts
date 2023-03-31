@@ -147,7 +147,7 @@ export class ReportsComponent implements OnInit {
 
         this.currentUrl = this.router.url;
 
-        this.store.pipe(select(state => state.session.filters), takeUntil(this.destroyed$)).subscribe(response => {
+        this.store.pipe(select(state => state.session?.filters), takeUntil(this.destroyed$)).subscribe(response => {
             if (response && !this.storeFilters?.length) {
                 this.storeFilters = response;
                 if (this.storeFilters[this.currentUrl]) {
@@ -167,6 +167,8 @@ export class ReportsComponent implements OnInit {
 
                     this.fromToDate = { from: this.fromDate, to: this.toDate };
                 }
+            } else {
+                this.storeFilters = response;
             }
         });
     }
@@ -185,17 +187,17 @@ export class ReportsComponent implements OnInit {
             }
         });
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            let lastReportType =  this.reportType;
             this.currentUrl = this.router.url;
             this.reportUniqueName = response?.uniqueName;
             this.reportType = (response?.reportType)?.toUpperCase();
-
             if (this.storeFilters && this.storeFilters[this.currentUrl]) {
                 this.showContent = false;
                 this.changeDetection.detectChanges();
 
                 this.stockReportRequest = new StockReportRequest();
                 this.balanceStockReportRequest = new BalanceStockTransactionReportRequest();
-                
+
                 this.pullUniversalDate = false;
                 this.initialLoad = true;
                 this.stockReportRequest = cloneDeep(this.storeFilters[this.currentUrl]?.stockReportRequest);
@@ -215,7 +217,7 @@ export class ReportsComponent implements OnInit {
                     this.stockReportRequest.branchUniqueNames = [this.generalService.currentBranchUniqueName];
                     this.balanceStockReportRequest.branchUniqueNames = [this.generalService.currentBranchUniqueName];
                 }
-                
+
                 setTimeout(() => {
                     this.showContent = true;
                     this.changeDetection.detectChanges();
@@ -226,6 +228,15 @@ export class ReportsComponent implements OnInit {
                     this.balanceStockReportRequest.branchUniqueNames = [this.generalService.currentBranchUniqueName];
                 }
                 this.initialLoad = false;
+
+                if(lastReportType){
+                    this.showContent = false;
+                    this.changeDetection.detectChanges();
+                    setTimeout(() => {
+                        this.showContent = true;
+                        this.changeDetection.detectChanges();
+                    }, 100);
+                }
             }
 
             this.customiseColumns = cloneDeep(INVENTORY_COMMON_COLUMNS);
@@ -334,7 +345,6 @@ export class ReportsComponent implements OnInit {
             stockReportRequest.sortBy = undefined;
             stockReportRequest.totalItems = undefined;
             stockReportRequest.totalPages = undefined;
-
             this.inventoryService.getGroupWiseReport(queryParams, stockReportRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 this.isLoading = false;
                 if (response && response.body && response.status === 'success') {
@@ -534,7 +544,7 @@ export class ReportsComponent implements OnInit {
      * @memberof ReportsComponent
      */
     public calculateColSpan(column: string): number {
-        return this.displayedColumns.filter(value => value.includes(column)).length;
+        return this.displayedColumns?.filter(value => value?.includes(column))?.length;
     }
 
 
@@ -562,7 +572,6 @@ export class ReportsComponent implements OnInit {
         stockReportRequest.stockGroups = undefined;
         stockReportRequest.stocks = undefined;
         stockReportRequest.variants = undefined;
-
 
         if (this.reportType === InventoryReportType.group) {
             if (element?.stockGroupHasChild) {
