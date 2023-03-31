@@ -4965,7 +4965,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                             id: stock.stockUnit.uniqueName,
                             text: unitRate ? unitRate.stockUnitCode : stock.stockUnit.code
                         };
-
                         newTrxObj.stockList = [];
                         if (stock.unitRates && stock.unitRates.length) {
                             newTrxObj.stockList = this.prepareUnitArr(stock.unitRates);

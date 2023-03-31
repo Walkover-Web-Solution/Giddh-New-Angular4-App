@@ -181,8 +181,8 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
         private generalService: GeneralService,
         private settingsBranchAction: SettingsBranchActions,
         private modalService: BsModalService,
-        private router: Router,
         private route: ActivatedRoute,
+        private router: Router,
         private invoiceBulkUpdateService: InvoiceBulkUpdateService
     ) {
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {

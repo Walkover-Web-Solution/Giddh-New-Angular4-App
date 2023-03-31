@@ -248,6 +248,7 @@ export class CommonActions {
     public setFilters(data: any): CustomActions {
         return {
             type: CommonActions.SET_FILTERS,
+            payload: data
         }
     }
 
@@ -264,4 +265,5 @@ export class CommonActions {
             payload: data
         }
     }
+
 }
