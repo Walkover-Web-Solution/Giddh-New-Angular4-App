@@ -331,4 +331,3 @@ Just like files, functions also follow the single responsibility princinple. Def
 
 
 Implement the lifecycle hook interfaces. Don't just use methods without implementing the Lifecycle Hook Interfaces.
-

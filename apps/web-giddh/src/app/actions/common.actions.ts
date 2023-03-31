@@ -248,21 +248,21 @@ export class CommonActions {
     public setFilters(data: any): CustomActions {
         return {
             type: CommonActions.SET_FILTERS,
-            payload: data
         }
     }
 
     /**
- * This will set the bank transactions import response data
- *
- * @param {*} data
- * @returns {CustomActions}
- * @memberof CommonActions
- */
+     ** This will set the bank transactions import response data
+     *
+     * @param {*} data
+     * @return {*}  {CustomActions}
+     * @memberof CommonActions
+     */
     public setImportBankTransactionsResponse(data: any): CustomActions {
         return {
             type: CommonActions.SET_IMPORT_BANK_TRANSACTIONS_RESPONSE,
             payload: data
         }
     }
+
 }
