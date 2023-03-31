@@ -473,6 +473,8 @@ export interface IInventory {
 }
 
 export interface IInventoryUnit {
+    stockUnitUniqueName?: any;
+    uniqueName?: any;
     stockUnitCode: string;
     code: string;
     rate: number;

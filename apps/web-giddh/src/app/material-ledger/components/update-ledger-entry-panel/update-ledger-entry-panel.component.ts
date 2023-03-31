@@ -672,6 +672,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                             let unitCode = '';
                             let stockName = '';
                             let stockUniqueName = '';
+                            let stockUnitUniqueName = '';
                             if (txn.selectedAccount && txn.selectedAccount.stock) {
                                 let defaultUnit = {
                                     stockUnitCode: txn.selectedAccount.stock.stockUnitCode,
@@ -684,6 +685,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                                 rate = defaultUnit.rate;
                                 stockUniqueName = txn.selectedAccount.stock?.uniqueName;
                                 unitCode = defaultUnit.code;
+                                stockUnitUniqueName = txn.selectedAccount.stock.stockUnitUniqueName;
                             }
 
                             if (stockName && stockUniqueName) {
@@ -696,7 +698,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                                     unit: {
                                         stockUnitCode: unitCode,
                                         code: unitCode,
-                                        rate
+                                        rate: rate,
+                                        stockUnitUniqueName: stockUnitUniqueName
                                     },
                                     amount: 0,
                                     rate
@@ -2320,7 +2323,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     t.unitRate = [{
                         code: t.inventory.unit?.code,
                         rate: t.inventory.rate,
-                        stockUnitCode: t.inventory.unit?.code
+                        stockUnitCode: t.inventory.unit?.code,
+                        stockUnitUniqueName: t.inventory.unit?.stockUnitUniqueName
                     }];
                 }
                 initialAccounts.push({

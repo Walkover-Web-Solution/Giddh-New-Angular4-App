@@ -423,6 +423,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
         this.advanceSearchModalResponse = null;
         this.stockReportRequest = new StockTransactionReportRequest();
         this.balanceStockReportRequest = new BalanceStockTransactionReportRequest();
+        this.searchInventory();
         this.filtersChipList = [];
         this.selectedBranch = [];
         this.selectedWarehouse = [];
@@ -694,12 +695,12 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ReportFiltersComponent
      */
     public searchInventory(loadMore?: boolean): void {
-        this.searchRequest.stockGroupUniqueNames = this.stockReportRequest.stockGroupUniqueNames;
-        this.searchRequest.stockUniqueNames = this.stockReportRequest.stockUniqueNames;
-        this.searchRequest.variantUniqueNames = this.stockReportRequest.variantUniqueNames;
-        this.balanceStockReportRequest.stockGroupUniqueNames = this.stockReportRequest.stockGroupUniqueNames;
-        this.balanceStockReportRequest.stockUniqueNames = this.stockReportRequest.stockUniqueNames;
-        this.balanceStockReportRequest.variantUniqueNames = this.stockReportRequest.variantUniqueNames;
+        this.searchRequest.stockGroupUniqueNames = this.stockReportRequest.stockGroupUniqueNames ? this.stockReportRequest.stockGroupUniqueNames : [];
+        this.searchRequest.stockUniqueNames = this.stockReportRequest.stockUniqueNames ? this.stockReportRequest.stockUniqueNames : [];
+        this.searchRequest.variantUniqueNames = this.stockReportRequest.variantUniqueNames ? this.stockReportRequest.variantUniqueNames : [];
+        this.balanceStockReportRequest.stockGroupUniqueNames = this.stockReportRequest.stockGroupUniqueNames ? this.stockReportRequest.stockGroupUniqueNames : [];
+        this.balanceStockReportRequest.stockUniqueNames = this.stockReportRequest.stockUniqueNames ? this.stockReportRequest.stockUniqueNames : [];
+        this.balanceStockReportRequest.variantUniqueNames = this.stockReportRequest.variantUniqueNames ? this.stockReportRequest.variantUniqueNames : [];
         if (loadMore) {
             this.searchRequest.page++;
         } else {

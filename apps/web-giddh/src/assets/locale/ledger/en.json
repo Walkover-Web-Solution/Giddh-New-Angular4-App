@@ -80,11 +80,13 @@
     "add_account": "Add Account",
     "add_stock": "Add Stock",
     "upload": "Upload",
-    "import_error": "Only PDF files are supported for Import",
+    "import_error": "Only PDF/CSV/EXCEL files are supported for Import",
     "import_success": "File has been uploaded successfully.",
-    "import_page_heading": "Import Statement (PDF only)",
+    "import_page_heading": "Import Statement (PDF/CSV/EXCEL only)",
     "file": "File",
     "password": "Password",
+    "header_provided": "Is Header Provided ?",
+    "same_debit_credit_column": "Have same column for debit/credit amount?",
     "type_filter": "Type to filter..",
     "c_f": "C/F",
     "total_amount": "Total Amt.",
@@ -204,5 +206,7 @@
     "confirm_proceed": "Are you sure you want to proceed?",
     "remove_advance_receipt": "If you change the type of this receipt, all the related advance receipt adjustments in invoices will be removed.",
     "autopaid_title": "Autopaid",
-    "autopaid_confirmation":"Autopaid will run for Sales and Purchase voucher only and will be adjusted as per FIFO method. Are you sure you want to continue?"
+    "autopaid_confirmation":"Autopaid will run for Sales and Purchase voucher only and will be adjusted as per FIFO method. Are you sure you want to continue?",
+    "download_sample_xls": "Download a sample Excel file",
+    "download_sample_csv": "Download a sample CSV file"
 }

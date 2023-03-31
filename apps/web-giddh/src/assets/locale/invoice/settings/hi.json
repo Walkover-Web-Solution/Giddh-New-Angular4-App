@@ -44,5 +44,7 @@
     "e_invoice_password_label": "कुंजिका",
     "e_invoice_gstin_label": "जीएसटीआईएन",
     "e_invoice_fields_required_error_message": "ई-चालान प्रमाणीकरण के लिए सभी क्षेत्रों की आवश्यकता है",
-    "e_invoice_invalid_gstin_error_message": "कृपया एक मान्य जीएसटीआईएन प्रदान करें"
+    "e_invoice_invalid_gstin_error_message": "कृपया एक मान्य जीएसटीआईएन प्रदान करें",
+    "apply_sales_round_off": "बिक्री/नकद वाउचर पर राउंड ऑफ लागू करें",
+    "apply_credit_note_round_off": "क्रेडिट नोट वाउचर पर राउंड ऑफ अप्लाई करें"
 }

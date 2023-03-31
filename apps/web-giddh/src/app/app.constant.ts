@@ -448,7 +448,7 @@ export const GIDDH_VOUCHER_FORM = [
         attachmentAllowed: false
     }
 ];
-export const CALENDLY_URL = "https://calendly.com/d/cg6-6kx-924/schedule-demo";
+export const CALENDLY_URL = "https://calendly.com/falcon-3/15min";
 export const JOURNAL_VOUCHER_ALLOWED_DOMAINS = [
     'giddh.com',
     'walkover.in',
@@ -475,3 +475,4 @@ export const MOBILE_NUMBER_ADDRESS_JSON_URL = 'https://ipinfo.io/';
 export const OTP_PROVIDER_URL = 'https://control.msg91.com/app/assets/otp-provider/otp-provider.js';
 
 export const RESTRICTED_VOUCHERS_FOR_DOWNLOAD = ['journal'];
+export const SAMPLE_FILES_URL = 'https://giddh-app-builds.s3.ap-south-1.amazonaws.com/sample-file-';
