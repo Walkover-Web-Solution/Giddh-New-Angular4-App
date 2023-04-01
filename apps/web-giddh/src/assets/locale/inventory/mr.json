@@ -47,7 +47,17 @@
         "voucher_type":"व्हाउचर प्रकार",
         "rate":"दर",
         "date":"तारीख",
-        "account_name":"खात्याचे नाव"
+        "account_name":"खात्याचे नाव",
+        "sales":"विक्री",
+        "purchase":"खरेदी",
+        "sales_credit_note":"विक्री क्रेडिट नोट",
+        "sales_debit_note":"विक्री डेबिट नोट",
+        "purchase_debit_note":"डेबिट नोट खरेदी करा",
+        "purchase_credit_note":"क्रेडिट नोट खरेदी करा",
+        "delivery_challan":"डिलिव्हरी चालान",
+        "receipt_note":"पावतीची नोंद",
+        "manufactured":"उत्पादित",
+        "raw_material":"कच्चा माल"
     },
     "header":{
         "select_branch":"शाखा निवडा",
@@ -64,6 +74,11 @@
         "select_category":"श्रेणी निवडा",
         "value":"मूल्य",
         "select_type":"प्रकार निवडा",
-        "amount":"रक्कम"
+        "amount":"रक्कम",
+        "quantity":"प्रमाण",
+        "equals":"बरोबरी",
+        "greater_than":"या पेक्षा मोठे",
+        "less_than":"च्या पेक्षा कमी",
+        "excluded":"वगळलेले"
     }
 }

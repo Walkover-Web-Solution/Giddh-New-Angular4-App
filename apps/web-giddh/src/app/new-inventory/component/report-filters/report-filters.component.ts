@@ -698,6 +698,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
             this.balanceStockReportRequest.stockGroupUniqueNames = this.stockReportRequest.stockGroupUniqueNames;
             this.balanceStockReportRequest.stockUniqueNames = this.stockReportRequest.stockUniqueNames;
             this.balanceStockReportRequest.variantUniqueNames = this.stockReportRequest.variantUniqueNames;
+            this.searchRequest.q = "";
             this.searchInventory();
             this.isFilterActive();
             this.emitFilters();
@@ -710,7 +711,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
      * @param {boolean} [loadMore]
      * @memberof ReportFiltersComponent
      */
-    public searchInventory(loadMore?: boolean): void {
+    public searchInventory(autoSelectSearchOption?:boolean,loadMore?: boolean): void {
         this.searchRequest.stockGroupUniqueNames = this.stockReportRequest.stockGroupUniqueNames ? this.stockReportRequest.stockGroupUniqueNames : [];
         this.searchRequest.stockUniqueNames = this.stockReportRequest.stockUniqueNames ? this.stockReportRequest.stockUniqueNames : [];
         this.searchRequest.variantUniqueNames = this.stockReportRequest.variantUniqueNames ? this.stockReportRequest.variantUniqueNames : [];
@@ -731,7 +732,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
                 searchRequest.searchPage = searchRequest.searchPage === 'STOCK' ? 'GROUP' : searchRequest.searchPage === 'VARIANT' ? 'STOCK' : searchRequest.searchPage === 'TRANSACTION' ? 'VARIANT' : 'GROUP';
             }
             this.inventoryService.searchStockTransactionReport(searchRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                if (response && response.body && response.status === 'success') {
+                if (response && response.body && response.status === 'success' && response.body.results.length) {
                     if (loadMore) {
                         this.fieldFilteredOptions = this.fieldFilteredOptions.concat(response.body.results);
                     } else {
@@ -747,16 +748,20 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
                         } else {
                             this.emitFilters();
                         }
+                    }else if (autoSelectSearchOption){
+                        this.emitFilters();
                     }
                     this.autoSelectSearchOption = false;
                 } else {
                     this.fieldFilteredOptions = [];
                     this.searchRequest.totalItems = 0;
-                    this.toaster.showSnackBar("warning", response?.body);
                     if (this.autoSelectSearchOption) {
-                        this.emitFilters();
+                        this.autoSelectSearchOption = false;
+                        this.searchRequest.q = '';
+                        this.searchInventory(true);
+                    } else {
+                    this.toaster.showSnackBar("warning", response?.body);
                     }
-                    this.autoSelectSearchOption = false;
                 }
                 this.changeDetection.detectChanges();
             });

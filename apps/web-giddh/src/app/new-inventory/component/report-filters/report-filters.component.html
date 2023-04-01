@@ -1,6 +1,6 @@
 <div class="inventory-filter-bar top-main-bar">
     <div class="back-btnn" *ngIf="reportUniqueName">
-        <button mat-button class="report-back-button" (click)="backToPreviousPage()">
+        <button mat-raised-button mat-button class="report-back-button" color="primary" (click)="backToPreviousPage()">
             {{ commonLocaleData?.app_back }}
         </button>
     </div>
@@ -119,7 +119,7 @@
                     </ng-container>
                     <ng-template #searchedData>
                         <app-cdk-scroll
-                            (fetchNextPage)="searchInventory(true)"
+                            (fetchNextPage)="searchInventory(false, true)"
                             [scrollableElementId]="'stock-transaction'"
                         >
                             <cdk-virtual-scroll-viewport
