@@ -629,7 +629,11 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
             } else {
                 this.stockReportRequest.stockUniqueNames = [option?.option?.value?.uniqueName];
             }
-            this.stockReportRequest.stocks = [option?.option?.value];
+            if (this.stockReportRequest.stocks?.length) {
+                this.stockReportRequest.stocks.push(option?.option?.value);
+            } else {
+                this.stockReportRequest.stocks = [option?.option?.value];
+            }
         } else {
             const findVariantColumnCheck = this.customiseColumns?.find(value => value?.value === "variant_name");
             if (this.stockReportRequest.variantUniqueNames?.length === 0 && findVariantColumnCheck?.checked) {
@@ -639,13 +643,16 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
                 findVariantColumnCheck.checked = true;
                 this.filteredDisplayColumns();
             }
-
             if (this.stockReportRequest.variantUniqueNames?.length) {
                 this.stockReportRequest.variantUniqueNames.push(option?.option?.value?.uniqueName);
             } else {
                 this.stockReportRequest.variantUniqueNames = [option?.option?.value?.uniqueName];
             }
-            this.stockReportRequest.variants = [option?.option?.value];
+            if (this.stockReportRequest.variants?.length) {
+                this.stockReportRequest.variants.push(option?.option?.value);
+            } else {
+                this.stockReportRequest.variants = [option?.option?.value];
+            }
         }
         this.balanceStockReportRequest.stockGroupUniqueNames = this.stockReportRequest.stockGroupUniqueNames;
         this.balanceStockReportRequest.stockUniqueNames = this.stockReportRequest.stockUniqueNames;
