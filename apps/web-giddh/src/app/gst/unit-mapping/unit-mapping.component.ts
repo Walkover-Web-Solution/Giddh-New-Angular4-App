@@ -87,6 +87,7 @@ export class UnitMappingComponent implements OnInit, OnDestroy {
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+        document.querySelector('body').classList.remove('gst-sidebar-open');
         document.querySelector('body').classList.remove('unit-mapping-page');
         this.asideGstSidebarMenuState = 'out';
     }
