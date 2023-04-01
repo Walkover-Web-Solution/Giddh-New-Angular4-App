@@ -420,7 +420,7 @@
                                     {{ localeData?.reports?.stock_name }}
                                 </th>
                                 <td
-                                    data-title="Stock Name"
+                                    [data-title]="localeData?.reports?.stock_name"
                                     class="text-left report-td-column"
                                     mat-cell
                                     *matCellDef="let element"
@@ -435,7 +435,7 @@
                                     {{ localeData?.reports?.variant_name }}
                                 </th>
                                 <td
-                                    data-title="Variant Name"
+                                    [data-title]="localeData?.reports?.variant_name"
                                     class="text-left report-td-column"
                                     mat-cell
                                     *matCellDef="let element"
@@ -450,7 +450,7 @@
                                     {{ localeData?.reports?.inwards }}
                                 </th>
                                 <td
-                                    data-title="Inwards"
+                                    [data-title]="localeData?.reports?.inwards"
                                     class="text-right"
                                     mat-cell
                                     *matCellDef="let element"
@@ -478,7 +478,7 @@
                                     {{ localeData?.reports?.outwards }}
                                 </th>
                                 <td
-                                    data-title="Outwards"
+                                    [data-title]="localeData?.reports?.outwards"
                                     class="text-right"
                                     mat-cell
                                     *matCellDef="let element"
@@ -506,7 +506,7 @@
                                     {{ localeData?.reports?.rate }}
                                 </th>
                                 <td
-                                    data-title="Rate"
+                                    [data-title]="localeData?.reports?.rate"
                                     class="text-right"
                                     mat-cell
                                     *matCellDef="let element"
@@ -534,7 +534,7 @@
                                     {{ localeData?.reports?.value }}
                                 </th>
                                 <td
-                                    data-title="Value"
+                                    [data-title]="localeData?.reports?.value"
                                     class="text-right"
                                     mat-cell
                                     *matCellDef="let element"

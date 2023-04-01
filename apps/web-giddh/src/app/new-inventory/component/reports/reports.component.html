@@ -341,7 +341,7 @@
                                     {{ localeData?.reports?.group_name }}
                                 </th>
                                 <td
-                                    data-title="Date"
+                                    [data-title]="localeData?.reports?.group_name"
                                     class="text-left word-wrap cursor-pointer report-td-column"
                                     mat-cell
                                     *matCellDef="let element"
@@ -357,7 +357,7 @@
                                     {{ localeData?.reports?.stock_name }}
                                 </th>
                                 <td
-                                    data-title="Date"
+                                    [data-title]="localeData?.reports?.stock_name"
                                     class="text-left word-wrap cursor-pointer report-td-column"
                                     mat-cell
                                     *matCellDef="let element"
@@ -373,7 +373,7 @@
                                     {{ localeData?.reports?.variant_name }}
                                 </th>
                                 <td
-                                    data-title="Date"
+                                    [data-title]="localeData?.reports?.variant_name"
                                     class="text-left word-wrap cursor-pointer report-td-column"
                                     mat-cell
                                     *matCellDef="let element"
@@ -389,7 +389,7 @@
                                     {{ localeData?.reports?.unit_name }}
                                 </th>
                                 <td
-                                    data-title="unit"
+                                    [data-title]="localeData?.reports?.unit_name"
                                     class="text-left word-wrap cursor-pointer"
                                     mat-cell
                                     *matCellDef="let element"
@@ -403,7 +403,7 @@
                                 </th>
                                 <td
                                     class="text-right"
-                                    data-title="Opening Quantity"
+                                    [data-title]="localeData?.reports?.qty"
                                     mat-cell
                                     *matCellDef="let element"
                                     [matTooltipPosition]="'above'"
@@ -428,7 +428,7 @@
                                     {{ localeData?.reports?.value }}
                                 </th>
                                 <td
-                                    data-title="Opening Amount"
+                                    [data-title]="localeData?.reports?.value"
                                     class="text-right"
                                     mat-cell
                                     *matCellDef="let element"
@@ -457,7 +457,7 @@
                                 </th>
                                 <td
                                     class="text-right"
-                                    data-title="Inwards Quantity"
+                                    [data-title]="localeData?.reports?.qty"
                                     mat-cell
                                     *matCellDef="let element"
                                     [matTooltipPosition]="'above'"
@@ -478,7 +478,7 @@
                                     {{ localeData?.reports?.value }}
                                 </th>
                                 <td
-                                    data-title="Inwards Amount"
+                                    [data-title]="localeData?.reports?.value"
                                     class="text-right"
                                     mat-cell
                                     *matCellDef="let element"
@@ -507,7 +507,7 @@
                                 </th>
                                 <td
                                     class="text-right"
-                                    data-title="Outwards Quantity"
+                                    [data-title]="localeData?.reports?.qty"
                                     mat-cell
                                     *matCellDef="let element"
                                     [matTooltipPosition]="'above'"
@@ -528,7 +528,7 @@
                                     {{ localeData?.reports?.value }}
                                 </th>
                                 <td
-                                    data-title="Outwards Amount"
+                                    [data-title]="localeData?.reports?.value"
                                     class="text-right"
                                     mat-cell
                                     *matCellDef="let element"
@@ -557,7 +557,7 @@
                                 </th>
                                 <td
                                     class="text-right"
-                                    data-title="Closing Quantity"
+                                    [data-title]="localeData?.reports?.qty"
                                     mat-cell
                                     *matCellDef="let element"
                                     [matTooltipPosition]="'above'"
@@ -578,7 +578,7 @@
                                     {{ localeData?.reports?.value }}
                                 </th>
                                 <td
-                                    data-title="Closing Amount"
+                                    [data-title]="localeData?.reports?.value"
                                     class="text-right"
                                     mat-cell
                                     *matCellDef="let element"
