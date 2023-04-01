@@ -204,7 +204,7 @@ export class InventoryTransactionListComponent implements OnInit {
     public translationLoaded: boolean = false;
     /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
     public isCompany: boolean;
-    /** Hold  universal date by store */
+    /** False if pull unitversal date  */
     public pullUniversalDate: boolean = true;
     /** Hold current url */
     private currentUrl: string = "";
@@ -212,8 +212,6 @@ export class InventoryTransactionListComponent implements OnInit {
     private storeFilters: any;
     /** Hold advance search modal response */
     public advanceSearchModalResponse: any = null;
-    /** Hold show content */
-    public showContent: boolean = true;
 
     constructor(
         private generalService: GeneralService,

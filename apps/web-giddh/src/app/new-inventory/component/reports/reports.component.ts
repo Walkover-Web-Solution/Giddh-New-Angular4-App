@@ -102,7 +102,7 @@ export class ReportsComponent implements OnInit {
     private currentUrl: string = "";
     /** Hold show content */
     public showContent: boolean = true;
-    /** Hold  universal date by store */
+    /** False if pull unitversal date  */
     public pullUniversalDate: boolean = true;
     /** This will use for  table report header displayed all columns */
     public headerColumns = {
