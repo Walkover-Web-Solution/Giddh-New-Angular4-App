@@ -32,13 +32,14 @@
         "inwards":"अंदर की ओर",
         "outwards":"के बाहर",
         "closing_stock":"आखरी बचा हुआ माल",
+        "opening_quantity":"ओपनिंग स्टॉक मात्रा",
         "opening_stock_value":"ओपनिंग स्टॉक वैल्यू",
         "inward_quantity":"आवक मात्रा",
-        "inward_value":"आवक मूल्य",
+        "inward_amount":"आवक मूल्य",
         "outward_quantity":"बाहरी मात्रा",
-        "outward_value":"बाहरी मूल्य",
+        "outward_amount":"बाहरी मूल्य",
         "closing_quantity":"समापन मात्रा",
-        "closing_value":"समापन मूल्य",
+        "closing_amount":"समापन मूल्य",
         "stock_name":"स्टॉक का नाम",
         "variant_name":"वेरिएंट का नाम",
         "no_entries_found_1":"दिए गए मानदंडों के भीतर कोई प्रविष्टि नहीं मिली।",
@@ -47,7 +48,17 @@
         "voucher_type":"वाउचर प्रकार",
         "rate":"दर",
         "date":"तारीख",
-        "account_name":"खाता नाम"
+        "account_name":"खाता नाम",
+        "sales":"बिक्री",
+        "purchase":"खरीदना",
+        "sales_credit_note":"बिक्री क्रेडिट नोट",
+        "sales_debit_note":"बिक्री डेबिट नोट",
+        "purchase_debit_note":"डेबिट नोट खरीदें",
+        "purchase_credit_note":"क्रेडिट नोट खरीदें",
+        "delivery_challan":"डिलीवरी चालान",
+        "receipt_note":"रसीद नोट",
+        "manufactured":"निर्मित",
+        "raw_material":"कच्चा माल"
     },
     "header":{
         "select_branch":"शाखा का चयन करें",
@@ -64,6 +75,11 @@
         "select_category":"श्रेणी चुनना",
         "value":"कीमत",
         "select_type":"प्रकार चुनें",
-        "amount":"मात्रा"
+        "amount":"मात्रा",
+        "quantity":"मात्रा",
+        "equals":"बराबर",
+        "greater_than":"से अधिक",
+        "less_than":"से कम",
+        "excluded":"छोड़ा गया"
     }
 }

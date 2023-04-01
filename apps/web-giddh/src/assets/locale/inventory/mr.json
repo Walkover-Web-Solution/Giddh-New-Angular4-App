@@ -32,13 +32,14 @@
         "inwards":"आतील बाजूस",
         "outwards":"बाहेरच्या दिशेने",
         "closing_stock":"स्टॉक बंद",
+        "opening_quantity":"उघडणे स्टॉक प्रमाण",
         "opening_stock_value":"स्टॉक मूल्य उघडणे",
         "inward_quantity":"आवक प्रमाण",
-        "inward_value":"आवक मूल्य",
+        "inward_amount":"आवक मूल्य",
         "outward_quantity":"जावक प्रमाण",
-        "outward_value":"बाह्य मूल्य",
+        "outward_amount":"बाह्य मूल्य",
         "closing_quantity":"बंद होणारी मात्रा",
-        "closing_value":"बंद मूल्य",
+        "closing_amount":"बंद मूल्य",
         "stock_name":"स्टॉकचे नाव",
         "variant_name":"भिन्न नाव",
         "no_entries_found_1":"दिलेल्या निकषांमध्ये कोणत्याही नोंदी आढळल्या नाहीत.",
@@ -47,7 +48,17 @@
         "voucher_type":"व्हाउचर प्रकार",
         "rate":"दर",
         "date":"तारीख",
-        "account_name":"खात्याचे नाव"
+        "account_name":"खात्याचे नाव",
+        "sales":"विक्री",
+        "purchase":"खरेदी",
+        "sales_credit_note":"विक्री क्रेडिट नोट",
+        "sales_debit_note":"विक्री डेबिट नोट",
+        "purchase_debit_note":"डेबिट नोट खरेदी करा",
+        "purchase_credit_note":"क्रेडिट नोट खरेदी करा",
+        "delivery_challan":"डिलिव्हरी चालान",
+        "receipt_note":"पावतीची नोंद",
+        "manufactured":"उत्पादित",
+        "raw_material":"कच्चा माल"
     },
     "header":{
         "select_branch":"शाखा निवडा",
@@ -64,6 +75,11 @@
         "select_category":"श्रेणी निवडा",
         "value":"मूल्य",
         "select_type":"प्रकार निवडा",
-        "amount":"रक्कम"
+        "amount":"रक्कम",
+        "quantity":"प्रमाण",
+        "equals":"बरोबरी",
+        "greater_than":"या पेक्षा मोठे",
+        "less_than":"च्या पेक्षा कमी",
+        "excluded":"वगळलेले"
     }
 }

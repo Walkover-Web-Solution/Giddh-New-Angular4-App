@@ -44,65 +44,13 @@ export class NewInventoryAdvanceSearch implements OnInit {
     /* dayjs object */
     public dayjs = dayjs;
     /* Show on transaction report and hold advance search category*/
-    public advanceSearchCategoryTransaction: any[] = [
-        {
-            value: "Inward",
-            label: "Inwards"
-        },
-        {
-            value: "Outward",
-            label: "Outwards"
-        }
-    ];
+    public advanceSearchCategoryTransaction: any[] = [];
     /* Hold advance search category   */
-    public advanceSearchCategory: any[] = [
-        {
-            value: "Inward",
-            label: "Inwards"
-        },
-        {
-            value: "Outward",
-            label: "Outwards"
-        },
-        {
-            value: "Opening Stock",
-            label: "Opening Stock"
-        },
-        {
-            value: "Closing Stock",
-            label: "Closing Stock"
-        }
-    ];
+    public advanceSearchCategory: any[] = [];
     /* Hold advance search category options*/
-    public advanceSearchCategoryOptions: any[] = [
-        {
-            value: "Amount",
-            label: "Amount"
-        },
-        {
-            value: "Quantity",
-            label: "Quantity",
-        }
-    ];
+    public advanceSearchCategoryOptions: any[] = [];
     /* Hold advance search vslue*/
-    public advanceSearchValue: any[] = [
-        {
-            value: "Equals",
-            label: "Equals"
-        },
-        {
-            value: "Greater than",
-            label: "Greater than"
-        },
-        {
-            value: "Less than",
-            label: "Less than"
-        },
-        {
-            value: "Excluded",
-            label: "Excluded"
-        }
-    ];
+    public advanceSearchValue: any[] = [];
     /** Instance of advance search form*/
     public advanceSearchFormObj: any = {};
     /* This will hold local JSON data */
@@ -338,6 +286,62 @@ export class NewInventoryAdvanceSearch implements OnInit {
     public translationComplete(event: any): void {
         if (event) {
             this.translationLoaded = true;
+            this.advanceSearchCategoryTransaction= [
+                {
+                    value: "Inward",
+                    label: this.localeData?.reports?.inwards,
+                },
+                {
+                    value: "Outward",
+                    label: this.localeData?.reports?.outwards,
+                }
+            ];
+            this.advanceSearchCategory= [
+                {
+                    value: "Inward",
+                    label: this.localeData?.reports?.inwards,
+                },
+                {
+                    value: "Outward",
+                    label: this.localeData?.reports?.outwards,
+                },
+                {
+                    value: "Opening Stock",
+                    label: this.localeData?.reports?.opening_stock,
+                },
+                {
+                    value: "Closing Stock",
+                    label: this.localeData?.reports?.closing_stock,
+                }
+            ];
+            this.advanceSearchCategoryOptions= [
+                {
+                    value: "Amount",
+                    label: this.localeData?.advance_search_filter?.amount,
+                },
+                {
+                    value: "Quantity",
+                    label: this.localeData?.advance_search_filter?.quantity,
+                }
+            ];
+            this.advanceSearchValue = [
+                {
+                    value: "Equals",
+                    label: this.localeData?.advance_search_filter?.equals,
+                },
+                {
+                    value: "Greater than",
+                    label: this.localeData?.advance_search_filter?.greater_than,
+                },
+                {
+                    value: "Less than",
+                    label: this.localeData?.advance_search_filter?.less_than,
+                },
+                {
+                    value: "Excluded",
+                    label: this.localeData?.advance_search_filter?.excluded,
+                }
+            ];
         }
     }
 

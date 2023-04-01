@@ -405,7 +405,7 @@
                                     ></ng-container>
                                 </th>
                                 <td
-                                    data-title="Account Name"
+                                    [data-title]="localeData?.reports?.account_name"
                                     class="text-left account-name-column report-td-column"
                                     mat-cell
                                     *matCellDef="let element"

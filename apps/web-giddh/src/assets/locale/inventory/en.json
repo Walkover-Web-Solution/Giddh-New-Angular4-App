@@ -33,12 +33,13 @@
         "outwards":"Outwards",
         "closing_stock":"Closing Stock",
         "opening_stock_value":"Opening Stock Value",
+        "opening_quantity":"Opening Stock Qty",
         "inward_quantity":"Inward Quantity",
-        "inward_value":"Inward Value",
+        "inward_amount":"Inward Value",
         "outward_quantity":"Outward Quantity",
-        "outward_value":"Outward Value",
+        "outward_amount":"Outward Value",
         "closing_quantity":"Closing Quantity",
-        "closing_value":"Closing Value",
+        "closing_amount":"Closing Value",
         "stock_name":"Stock Name",
         "variant_name":"Variant Name",
         "no_entries_found_1":"No entries found within given criteria.",
@@ -47,7 +48,18 @@
         "voucher_type":"Voucher Type",
         "rate":"Rate",
         "date":"Date",
-        "account_name":"Account Name"
+        "account_name":"Account Name",
+        "sales":"Sales",
+        "purchase":"Purchase",
+        "sales_credit_note":"Sales credit note",
+        "sales_debit_note":"Sales debit note",
+        "purchase_debit_note":"Purchase debit note",
+        "purchase_credit_note":"Purchase credit note",
+        "delivery_challan":"Delivery challan",
+        "receipt_note":"Receipt note",
+        "manufactured":"Manufactured",
+        "raw_material":"Raw material"
+
     },
     "header":{
         "select_branch":"Select Branch",
@@ -64,6 +76,11 @@
         "select_category":"Select Category",
         "value":"Value",
         "select_type":"Select Type",
-        "amount":"Amount"
+        "amount":"Amount",
+        "quantity":"Quantity",
+        "equals":"Equals",
+        "greater_than":"Greater than",
+        "less_than":"Less than",
+        "excluded":"Excluded"
     }
 }

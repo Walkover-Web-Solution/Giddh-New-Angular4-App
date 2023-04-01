@@ -187,7 +187,7 @@ export class ReportsComponent implements OnInit {
             }
         });
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            let lastReportType =  this.reportType;
+            let lastReportType = this.reportType;
             this.currentUrl = this.router.url;
             this.reportUniqueName = response?.uniqueName;
             this.reportType = (response?.reportType)?.toUpperCase();
@@ -229,7 +229,7 @@ export class ReportsComponent implements OnInit {
                 }
                 this.initialLoad = false;
 
-                if(lastReportType){
+                if (lastReportType) {
                     this.showContent = false;
                     this.changeDetection.detectChanges();
                     setTimeout(() => {
@@ -607,6 +607,18 @@ export class ReportsComponent implements OnInit {
     public translationComplete(event: any): void {
         if (event) {
             this.translationLoaded = true;
+            this.customiseColumns = this.customiseColumns.map(column => {
+                switch (column.value) {
+                    case 'opening_amount':
+                        column.label = this.localeData?.reports.opening_stock_value;
+                        break;
+                    default:
+                        column.label = this.localeData?.reports[column.value];
+                        break;
+                }
+                return column;
+            });
+
         }
     }
 
