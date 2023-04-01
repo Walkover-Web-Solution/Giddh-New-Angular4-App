@@ -249,14 +249,16 @@
                             width="17%"
                             *ngIf="GroupStockReportRequest.branchDetails != 'allEntity'"
                         >
-                            <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
-                                <i class="icon-calender calendar-addon"></i>
-                                <input
-                                    type="text"
-                                    name="selectedDateRange"
-                                    [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
-                                    class="giddh-datepicker date-range-picker"
-                                />
+                            <div class="custom-datepicker-wrapper-group">
+                                <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
+                                    <i class="icon-calender calendar-addon"></i>
+                                    <input
+                                        type="text"
+                                        name="selectedDateRange"
+                                        [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                                        class="giddh-datepicker date-range-picker"
+                                    />
+                                </div>
                             </div>
                         </th>
                         <ng-container *ngIf="groupStockReport?.count">
