@@ -16,6 +16,7 @@
             [fromToDate]="fromToDate"
             [stockReportRequest]="stockReportRequest"
             [balanceStockReportRequest]="balanceStockReportRequest"
+            [pullUniversalDate]="pullUniversalDate"
             [searchPage]="reportType"
             (filters)="getSelectedFilters($event)"
             (resetFilters)="resetFilter()"
@@ -408,6 +409,8 @@
                                     class="text-left account-name-column report-td-column"
                                     mat-cell
                                     *matCellDef="let element"
+                                    [matTooltipPosition]="'above'"
+                                    [matTooltip]="element?.account?.name ? element?.account?.name : ''"
                                 >
                                     {{ element?.account?.name ?? "-" }}
                                 </td>
@@ -421,6 +424,8 @@
                                     class="text-left report-td-column"
                                     mat-cell
                                     *matCellDef="let element"
+                                    [matTooltipPosition]="'above'"
+                                    [matTooltip]="element?.stock?.name ? element?.stock?.name : ''"
                                 >
                                     {{ element?.stock?.name ?? "-" }}
                                 </td>
@@ -434,6 +439,8 @@
                                     class="text-left report-td-column"
                                     mat-cell
                                     *matCellDef="let element"
+                                    [matTooltipPosition]="'above'"
+                                    [matTooltip]="element?.variant?.name ? element?.variant?.name : ''"
                                 >
                                     {{ element?.variant?.name ?? "-" }}
                                 </td>

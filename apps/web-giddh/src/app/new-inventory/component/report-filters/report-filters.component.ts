@@ -624,7 +624,11 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
                 findStockColumnCheck.checked = true;
                 this.filteredDisplayColumns();
             }
-            this.stockReportRequest.stockUniqueNames?.push(option?.option?.value?.uniqueName);
+            if (this.stockReportRequest.stockUniqueNames?.length) {
+                this.stockReportRequest.stockUniqueNames.push(option?.option?.value?.uniqueName);
+            } else {
+                this.stockReportRequest.stockUniqueNames = [option?.option?.value?.uniqueName];
+            }
             this.stockReportRequest.stocks = [option?.option?.value];
         } else {
             const findVariantColumnCheck = this.customiseColumns?.find(value => value?.value === "variant_name");
@@ -635,7 +639,12 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
                 findVariantColumnCheck.checked = true;
                 this.filteredDisplayColumns();
             }
-            this.stockReportRequest.variantUniqueNames?.push(option?.option?.value?.uniqueName);
+
+            if (this.stockReportRequest.variantUniqueNames?.length) {
+                this.stockReportRequest.variantUniqueNames.push(option?.option?.value?.uniqueName);
+            } else {
+                this.stockReportRequest.variantUniqueNames = [option?.option?.value?.uniqueName];
+            }
             this.stockReportRequest.variants = [option?.option?.value];
         }
         this.balanceStockReportRequest.stockGroupUniqueNames = this.stockReportRequest.stockGroupUniqueNames;
@@ -712,7 +721,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
             delete this.searchRequest.totalPages;
             let searchRequest = cloneDeep(this.searchRequest);
             if (this.autoSelectSearchOption) {
-                searchRequest.searchPage = searchRequest.searchPage === 'STOCK' ? 'GROUP' : searchRequest.searchPage === 'VARIANT' ? 'STOCK' : 'GROUP';
+                searchRequest.searchPage = searchRequest.searchPage === 'STOCK' ? 'GROUP' : searchRequest.searchPage === 'VARIANT' ? 'STOCK' : searchRequest.searchPage === 'TRANSACTION' ? 'VARIANT' : 'GROUP';
             }
             this.inventoryService.searchStockTransactionReport(searchRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response && response.body && response.status === 'success') {
@@ -723,8 +732,8 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
                     }
                     this.searchRequest.totalItems = response.body.totalItems;
                     this.searchRequest.totalPages = response.body.totalPages;
-
                     if (this.autoSelectSearchOption) {
+                        this.autoSelectSearchOption = false;
                         let selectedOption = this.fieldFilteredOptions?.filter(option => option?.uniqueName === this.reportUniqueName);
                         if (selectedOption?.length) {
                             this.selectChiplistValue({ option: { value: selectedOption[0] } });

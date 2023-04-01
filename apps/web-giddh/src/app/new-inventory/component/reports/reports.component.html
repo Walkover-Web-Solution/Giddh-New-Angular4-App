@@ -6,7 +6,8 @@
     (commonLocaleData)="commonLocaleData = $event"
     (localeData)="localeData = $event"
     (translationComplete)="translationComplete($event)"
-    ><div class="transaction-report-wrapper" *ngIf="showContent">
+>
+    <div class="transaction-report-wrapper" *ngIf="showContent">
         <report-filters
             [localeData]="localeData"
             [commonLocaleData]="commonLocaleData"
@@ -345,6 +346,8 @@
                                     mat-cell
                                     *matCellDef="let element"
                                     (click)="getReportsByReportType(element)"
+                                    [matTooltipPosition]="'above'"
+                                    [matTooltip]="element?.stockGroup?.name ? element?.stockGroup?.name : ''"
                                 >
                                     {{ element?.stockGroup?.name ?? "-" }}
                                 </td>
@@ -359,6 +362,8 @@
                                     mat-cell
                                     *matCellDef="let element"
                                     (click)="getReportsByReportType(element)"
+                                    [matTooltipPosition]="'above'"
+                                    [matTooltip]="element?.stock?.name ? element?.stock?.name : ''"
                                 >
                                     {{ element?.stock?.name ?? "-" }}
                                 </td>
@@ -373,6 +378,8 @@
                                     mat-cell
                                     *matCellDef="let element"
                                     (click)="getReportsByReportType(element)"
+                                    [matTooltipPosition]="'above'"
+                                    [matTooltip]="element?.variant?.name ? element?.variant?.name : ''"
                                 >
                                     {{ element?.variant?.name ?? "-" }}
                                 </td>
