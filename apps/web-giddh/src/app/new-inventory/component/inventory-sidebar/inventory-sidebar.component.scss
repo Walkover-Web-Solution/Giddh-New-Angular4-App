@@ -220,6 +220,17 @@
         }
     }
 }
+.active {
+    background-color: var(--color-sidebar-anchor-text-hover) !important;
+    color: var(--color-white) !important;
+    .sidebar-menu-icons {
+        filter: invert(1) !important;
+    }
+    :hover {
+        background-color: var(--color-sidebar-anchor-text-hover) !important;
+        color: var(--color-white) !important;
+    }
+}
 
 @media (max-width: 767px) {
     :host.inventory-sidebar {

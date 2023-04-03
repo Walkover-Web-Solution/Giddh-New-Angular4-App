@@ -6,6 +6,7 @@ import { InventorySidebarComponent } from "./inventory-sidebar.component";
 import { MatTreeModule } from '@angular/material/tree';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from "@angular/material/button";
+import { TranslateDirectiveModule } from "../../../theme/translate/translate.directive.module";
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import { MatButtonModule } from "@angular/material/button";
         RouterModule,
         MatTreeModule,
         MatIconModule,
-        MatButtonModule
+        MatButtonModule,
+        TranslateDirectiveModule
     ],
     exports: [
         InventorySidebarComponent
