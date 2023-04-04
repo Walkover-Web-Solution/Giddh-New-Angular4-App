@@ -1,108 +1,178 @@
-<div class="inventory-advance-search">
-    <div class="modal-header">
-        <h4 class="modal-title pull-left">Advance Search</h4>
-        <button type="button" class="close pull-right" (click)="modalRef?.hide()" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-    <div class="modal-body">
-        <form>
-            <div class="row mr-b15">
-                <div class="col-lg-4">
-                    <label>Date</label>
-                </div>
-                <div class="col-lg-8">
-                    <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
-                        <i class="icon-calender calendar-addon"></i>
-                        <input
-                            type="text"
-                            id="select-date"
-                            name="selectedDateRange"
-                            [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
-                            class="giddh-datepicker date-range-picker border-radius-2"
-                            placeholder="Enter Date"
-                        />
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-4">
-                    <label>Select Category</label>
-                </div>
-                <div class="col-lg-8">
-                    <div class="row">
-                        <div class="col-lg-6 col-sm-6 col-12 mr-b15">
-                            <sh-select id="select-category" placeholder="Select Category"></sh-select>
-                        </div>
-                        <div class="col-lg-6 col-sm-6 col-12 mr-b15">
-                            <sh-select id="select-type" placeholder="Select Type"></sh-select>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-4">
-                    <label>Value</label>
-                </div>
-                <div class="col-lg-8">
-                    <div class="row">
-                        <div class="col-lg-6 col-sm-6 col-12 mr-b15">
-                            <sh-select id="select-value-type" placeholder="Select Value Type"></sh-select>
-                        </div>
-                        <div class="col-lg-6 col-sm-6 col-12 mr-b15">
-                            <input id="amount-value" type="text" class="form-control" placeholder="Amount" />
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row mr-b15" *ngIf="isMobileScreen">
-                <div class="col-lg-4">
-                    <label>Search Group</label>
-                </div>
-                <div class="col-lg-8">
-                    <input type="text" class="form-control" id="search-group" placeholder="Amount" />
-                </div>
-            </div>
-            <div class="row mr-b15" *ngIf="isMobileScreen">
-                <div class="col-lg-4">
-                    <label>Select Branch</label>
-                </div>
-                <div class="col-lg-8">
-                    <sh-select placeholder="Search Branch Alice" id="Select Branch"></sh-select>
-                </div>
-            </div>
-            <div class="row mr-b15">
-                <div class="col-sm-12">
-                    <div class="button-group d-flex justify-content-end">
-                        <button id="search-btn" class="btn btn-success">Search</button>
-                        <button id="clear-btn" class="btn btn-danger mr-0">Clear</button>
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>
-</div>
-<!-- datepicker template -->
-<ng-template #datepickerTemplate>
-    <div class="datepicker-modal">
+<ng-container
+    appTranslate
+    [file]="'inventory'"
+    (commonLocaleData)="commonLocaleData = $event"
+    (localeData)="localeData = $event"
+    (translationComplete)="translationComplete($event)"
+>
+    <div class="inventory-advance-search">
+        <div class="modal-header">
+            <h4 class="modal-title pull-left">{{ localeData?.advance_search_filter?.advance_search }}</h4>
+            <button type="button" class="close pull-right" (click)="advanceSearchAction('cancel')" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
         <div class="modal-body">
-            <app-datepicker-wrapper
-                [inputStartDate]="selectedDateRange?.startDate"
-                [inputEndDate]="selectedDateRange?.endDate"
-                [alwaysShowCalendars]="true"
-                [ranges]="datePickerOption"
-                [selectedRangeLabel]="selectedRangeLabel"
-                [showCustomRangeLabel]="true"
-                [showClearButton]="false"
-                [showCancel]="true"
-                [linkedCalendars]="true"
-                [showDropdowns]="true"
-                (rangeClicked)="dateSelectedCallback($event)"
-                (datesUpdated)="dateSelectedCallback($event)"
-                [keepCalendarOpeningWithRange]="false"
-                [showRangeLabelOnInput]="false"
-                [dateFieldPosition]="dateFieldPosition"
-            ></app-datepicker-wrapper>
+            <form>
+                <div class="row mr-b15">
+                    <div class="col-lg-4">
+                        <label> {{ localeData?.advance_search_filter?.date }}</label>
+                    </div>
+                    <div class="col-lg-8">
+                        <div class="custom-datepicker-wrapper">
+                            <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
+                                <i class="icon-calender calendar-addon"></i>
+                                <input
+                                    type="text"
+                                    name="selectedDateRange"
+                                    [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                                    class="giddh-datepicker date-range-picker"
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4">
+                        <label> {{ localeData?.advance_search_filter?.select_category }}</label>
+                    </div>
+                    <div class="col-lg-8">
+                        <div class="row">
+                            <div class="col-lg-6 col-sm-6 col-12 mr-b15">
+                                <ng-container *ngIf="reportType === 'TRANSACTION'">
+                                    <select-field
+                                        [cssClass]="'form-control mat-field-border'"
+                                        [placeholder]="localeData?.advance_search_filter?.select_category"
+                                        [options]="advanceSearchCategoryTransaction"
+                                        (selectedOption)="selectCategory($event?.value)"
+                                        [defaultValue]="advanceSearchFormObj.param1"
+                                        [allowValueReset]="true"
+                                        (onClear)="advanceSearchFormObj.param1 = ''"
+                                    ></select-field>
+                                </ng-container>
+                                <ng-container *ngIf="reportType !== 'TRANSACTION'">
+                                    <select-field
+                                        [cssClass]="'form-control mat-field-border'"
+                                        [placeholder]="localeData?.advance_search_filter?.select_category"
+                                        [options]="advanceSearchCategory"
+                                        (selectedOption)="selectCategory($event?.value)"
+                                        [defaultValue]="advanceSearchFormObj.param1"
+                                        [allowValueReset]="true"
+                                        (onClear)="advanceSearchFormObj.param1 = ''"
+                                    ></select-field>
+                                </ng-container>
+                            </div>
+                            <div class="col-lg-6 col-sm-6 col-12 mr-b15">
+                                <select-field
+                                    [cssClass]="'form-control mat-field-border'"
+                                    [placeholder]="localeData?.advance_search_filter?.select_type"
+                                    [options]="advanceSearchCategoryOptions"
+                                    (selectedOption)="selectCategoryOptions($event?.value)"
+                                    [defaultValue]="advanceSearchFormObj.param2"
+                                    [allowValueReset]="true"
+                                    (onClear)="advanceSearchFormObj.param2 = ''"
+                                ></select-field>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4">
+                        <label> {{ localeData?.advance_search_filter?.value }}</label>
+                    </div>
+                    <div class="col-lg-8">
+                        <div class="row">
+                            <div class="col-lg-6 col-sm-6 col-12 mr-b15">
+                                <select-field
+                                    [cssClass]="'form-control mat-field-border'"
+                                    [placeholder]="localeData?.advance_search_filter?.select_type"
+                                    [options]="advanceSearchValue"
+                                    (selectedOption)="selectValueType($event?.value)"
+                                    [defaultValue]="advanceSearchFormObj.expression"
+                                    [allowValueReset]="true"
+                                    (onClear)="advanceSearchFormObj.expression = ''"
+                                ></select-field>
+                            </div>
+                            <div class="col-lg-6 col-sm-6 col-12 mr-b15">
+                                <text-field
+                                    [type]="'number'"
+                                    [cssClass]="'form-control mat-field-border'"
+                                    [placeholder]="localeData?.advance_search_filter?.amount"
+                                    [name]="'amount'"
+                                    [(ngModel)]="advanceSearchFormObj.val"
+                                    [allowDigitsOnly]="true"
+                                    (onClear)="advanceSearchFormObj.val = ''"
+                                    [autocomplete]="'off'"
+                                >
+                                </text-field>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mr-b15" *ngIf="isMobileScreen">
+                    <div class="col-lg-4">
+                        <label>Search Group</label>
+                    </div>
+                    <div class="col-lg-8">
+                        <input type="text" class="form-control" id="search-group" placeholder="Amount" />
+                    </div>
+                </div>
+                <div class="row mr-b15" *ngIf="isMobileScreen">
+                    <div class="col-lg-4">
+                        <label>Select Branch</label>
+                    </div>
+                    <div class="col-lg-8">
+                        <sh-select placeholder="Search Branch Alice" id="Select Branch"></sh-select>
+                    </div>
+                </div>
+                <div class="row mr-b15">
+                    <div class="col-sm-12">
+                        <div class="button-group d-flex justify-content-end">
+                            <button
+                                id="search-btn"
+                                mat-raised-button
+                                class="btn btn-success"
+                                (click)="advanceSearchAction('search')"
+                                [disabled]="
+                                    !advanceSearchFormObj.param1 ||
+                                    !advanceSearchFormObj.param2 ||
+                                    !advanceSearchFormObj.expression ||
+                                    !advanceSearchFormObj.val
+                                "
+                            >
+                                {{ commonLocaleData?.app_search }}
+                            </button>
+                            <button id="clear-btn" class="btn btn-danger mr-0" (click)="advanceSearchAction('clear')">
+                                {{ commonLocaleData?.app_reset }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
-</ng-template>
+    <ng-template #datepickerTemplate>
+        <div class="datepicker-modal">
+            <div class="modal-body">
+                <app-datepicker-wrapper
+                    [inputStartDate]="selectedDateRange?.startDate"
+                    [inputEndDate]="selectedDateRange?.endDate"
+                    [alwaysShowCalendars]="true"
+                    [ranges]="datePickerOptions"
+                    [selectedRangeLabel]="selectedRangeLabel"
+                    [showCustomRangeLabel]="true"
+                    [showClearButton]="false"
+                    [showCancel]="true"
+                    [linkedCalendars]="true"
+                    [showDropdowns]="true"
+                    [locale]="{ applyLabel: commonLocaleData?.app_done }"
+                    (rangeClicked)="dateSelectedCallback($event)"
+                    (datesUpdated)="dateSelectedCallback($event)"
+                    [keepCalendarOpeningWithRange]="false"
+                    [showRangeLabelOnInput]="false"
+                    [dateFieldPosition]="dateFieldPosition"
+                ></app-datepicker-wrapper>
+            </div>
+        </div>
+    </ng-template>
+</ng-container>

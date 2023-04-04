@@ -2195,7 +2195,7 @@
                                         *ngIf="!currentVoucherFormDetails || currentVoucherFormDetails?.quantityAllowed"
                                     >
                                         <div class="wrap-td-data">
-                                            {{ transaction.quantity | giddhCurrency }} {{ transaction.stockUnit }}
+                                            {{ transaction.quantity | giddhCurrency }} {{ transaction.stockUnitCode }}
                                         </div>
                                     </td>
                                     <td
@@ -2328,7 +2328,12 @@
                                                 <div class="wrap-td-data">
                                                     <span class="d-flex justify-content-end">
                                                         <amount-field
-                                                            [amount]="entry.taxSum + entry.cessSum"
+                                                            [amount]="
+                                                                giddhRoundOff(
+                                                                    entry.taxSum + entry.cessSum,
+                                                                    giddhBalanceDecimalPlaces
+                                                                )
+                                                            "
                                                             [currencySymbol]="
                                                                 isMulticurrencyAccount
                                                                     ? invFormData.accountDetails?.currencySymbol
@@ -3768,7 +3773,7 @@
                                                     <label class="card-label">{{
                                                         commonLocaleData?.app_quantity_unit
                                                     }}</label>
-                                                    <p>{{ transaction.quantity }} {{ transaction.stockUnit }}</p>
+                                                    <p>{{ transaction.quantity }} {{ transaction.stockUnitCode }}</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -3901,7 +3906,12 @@
                                                     </p>
                                                     <div class="differ-currency" *ngIf="isMulticurrencyAccount">
                                                         <amount-field
-                                                            [amount]="(entry.taxSum + entry.cessSum) * exchangeRate"
+                                                            [amount]="
+                                                                giddhRoundOff(
+                                                                    (entry.taxSum + entry.cessSum) * exchangeRate,
+                                                                    giddhBalanceDecimalPlaces
+                                                                )
+                                                            "
                                                             [currencySymbol]="baseCurrencySymbol"
                                                             [currencyCode]="companyCurrency"
                                                         >
@@ -4272,7 +4282,6 @@
                                                                 commonLocaleData?.app_unit
                                                             }}</label>
                                                             <mat-select
-                                                                name="transaction.stockUnit_'+entryIdx"
                                                                 class="form-control"
                                                                 [disabled]="!transaction.isStockTxn"
                                                                 (selectionChange)="
@@ -4474,7 +4483,12 @@
                                                     </div>
                                                     <div class="differ-currency" *ngIf="isMulticurrencyAccount">
                                                         <amount-field
-                                                            [amount]="(entry.taxSum + entry.cessSum) * exchangeRate"
+                                                            [amount]="
+                                                                giddhRoundOff(
+                                                                    (entry.taxSum + entry.cessSum) * exchangeRate,
+                                                                    giddhBalanceDecimalPlaces
+                                                                )
+                                                            "
                                                             [currencySymbol]="baseCurrencySymbol"
                                                             [currencyCode]="companyCurrency"
                                                         >

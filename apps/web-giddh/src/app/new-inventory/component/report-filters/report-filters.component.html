@@ -1,0 +1,241 @@
+<div class="inventory-filter-bar top-main-bar">
+    <div class="back-btnn" *ngIf="reportUniqueName">
+        <button mat-raised-button mat-button class="report-back-button" color="primary" (click)="backToPreviousPage()">
+            {{ commonLocaleData?.app_back }}
+        </button>
+    </div>
+    <div class="custom-datepicker-wrapper">
+        <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
+            <i class="icon-calender calendar-addon"></i>
+            <input
+                type="text"
+                name="selectedDateRange"
+                [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                class="giddh-datepicker date-range-picker"
+            />
+        </div>
+    </div>
+    <div class="pl-1 filter-dropdown-branch" *ngIf="isCompany && allBranches?.length > 1">
+        <mat-select
+            name="selectedBranch"
+            [multiple]="true"
+            [(ngModel)]="selectedBranch"
+            class="stock-mat-salect"
+            [placeholder]="localeData?.header?.select_branch"
+            (ngModelChange)="resetWarehouse(); getBranches()"
+        >
+            <mat-option class="balance-options">
+                <ngx-mat-select-search
+                    [noEntriesFoundLabel]="localeData?.header?.no_result_found"
+                    [formControl]="branchesDropdown"
+                    [placeholderLabel]="localeData?.header?.select_branch"
+                    class="mat-select-search-inventory"
+                >
+                    <i class="icon-cross" ngxMatSelectSearchClear></i>
+                </ngx-mat-select-search>
+            </mat-option>
+
+            <mat-option class="balance-options" *ngFor="let branch of branches" [value]="branch?.uniqueName">
+                {{ branch?.alias ?? "-" }}
+            </mat-option>
+        </mat-select>
+    </div>
+    <div class="pl-1 filter-dropdown-warehouse" *ngIf="currentWarehouses?.length > 1">
+        <mat-select
+            name="selectedWarehouse"
+            [multiple]="true"
+            [(ngModel)]="selectedWarehouse"
+            class="stock-mat-salect"
+            [placeholder]="localeData?.header?.select_warehouse"
+            (ngModelChange)="getWarehouses()"
+        >
+            <mat-option class="balance-options">
+                <ngx-mat-select-search
+                    [noEntriesFoundLabel]="localeData?.header?.no_result_found"
+                    [formControl]="warehousesDropdown"
+                    [placeholderLabel]="localeData?.header?.select_warehouse"
+                    class="mat-select-search-inventory"
+                >
+                    <i class="icon-cross" ngxMatSelectSearchClear></i>
+                </ngx-mat-select-search>
+            </mat-option>
+            <mat-option class="balance-options" *ngFor="let warehouse of warehouses" [value]="warehouse?.uniqueName">
+                {{ warehouse?.name ?? "-" }}
+            </mat-option>
+        </mat-select>
+    </div>
+    <div class="clear-filter d-flex" *ngIf="showClearFilter">
+        <button mat-raised-button class="create-btn-inventory ml-3 mr-0" color="primary" (click)="resetFilter()">
+            <span class="icon-cross"></span> {{ commonLocaleData?.app_clear_filter }}
+        </button>
+    </div>
+</div>
+<div class="inventory-filter-bar">
+    <div class="search-control">
+        <div class="icon-input">
+            <i class="icon-search search-icon" *ngIf="!filtersChipList?.length"></i>
+            <mat-form-field
+                floatLabel="never"
+                class="select-multiple-chiplist-inventory"
+                [ngClass]="{ 'searching-bar-chiplist': filtersChipList?.length }"
+            >
+                <mat-chip-list #matChipList>
+                    <mat-chip
+                        *ngFor="let chip of filtersChipList; let indx = index"
+                        [selectable]="true"
+                        [removable]="true"
+                        (removed)="removeOption(chip, indx)"
+                    >
+                        {{ chip?.name }}
+                        <i class="icon-cross" matChipRemove></i>
+                    </mat-chip>
+                    <input
+                        type="text"
+                        matInput
+                        [formControl]="searchFilters"
+                        [placeholder]="'Search stock group, stock, variant'"
+                        [matAutocomplete]="auto"
+                        [matChipInputFor]="matChipList"
+                        #trigger="matAutocompleteTrigger"
+                        [name]="'q'"
+                        #selectField
+                        autocomplete="off"
+                        matAutocompletePosition="auto"
+                        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                    />
+                </mat-chip-list>
+                <mat-autocomplete
+                    class="inventory-autocomplete"
+                    #auto="matAutocomplete"
+                    (optionSelected)="selectChiplistValue($event); selectField.value = ''"
+                >
+                    <ng-container *ngIf="fieldFilteredOptions?.length <= 5; else searchedData">
+                        <mat-option *ngFor="let option of fieldFilteredOptions" [value]="option">
+                            {{ option?.name }} ( {{ option?.type }} )
+                        </mat-option>
+                        <mat-option disabled *ngIf="fieldFilteredOptions?.length === 0">{{
+                            localeData?.header?.no_result_found
+                        }}</mat-option>
+                    </ng-container>
+                    <ng-template #searchedData>
+                        <app-cdk-scroll
+                            (fetchNextPage)="searchInventory(false, true)"
+                            [scrollableElementId]="'stock-transaction'"
+                        >
+                            <cdk-virtual-scroll-viewport
+                                class="virtual-group-list overflow-x-hidden"
+                                [itemSize]="33"
+                                [id]="'stock-transaction'"
+                            >
+                                <mat-option
+                                    class="item-height"
+                                    *ngFor="let option of fieldFilteredOptions"
+                                    [value]="option"
+                                >
+                                    {{ option?.name }} ( {{ option?.type }} )
+                                </mat-option>
+                                <mat-option class="item-height" disabled *ngIf="fieldFilteredOptions?.length === 0">{{
+                                    localeData?.header?.no_result_found
+                                }}</mat-option>
+                            </cdk-virtual-scroll-viewport>
+                        </app-cdk-scroll>
+                    </ng-template>
+                </mat-autocomplete>
+            </mat-form-field>
+        </div>
+        <div class="menu-btn-control">
+            <button mat-button (click)="openModal()" class="advance-filter-button">
+                <i class="icon-advance-filter mr-2"></i>
+                {{ localeData?.header?.advance_filter }}
+            </button>
+            <button mat-button [matMenuTriggerFor]="customise" aria-label="Customise" class="customise-filter-button">
+                <i class="icon-options mr-2"> </i>
+                {{ localeData?.header?.customise }}
+            </button>
+            <mat-menu #customise="matMenu" class="columns-wrapper">
+                <button
+                    class="menu-buttons"
+                    mat-menu-item
+                    (click)="$event?.stopPropagation()"
+                    (keydown.enter)="
+                        $event?.stopPropagation();
+                        selectAllCheckbox.checked = !selectAllCheckbox?.checked;
+                        selectAllColumns(selectAllCheckbox?.checked)
+                    "
+                >
+                    <mat-checkbox
+                        class="inventory-checkbox"
+                        #selectAllCheckbox
+                        color="primary"
+                        name="selectAll"
+                        (change)="selectAllColumns($event?.checked)"
+                        [checked]="displayedColumns?.length === customiseColumns?.length"
+                    >
+                        {{ localeData?.header?.select_all }}
+                    </mat-checkbox>
+                </button>
+                <ng-container *ngFor="let item of customiseColumns">
+                    <button
+                        class="menu-buttons"
+                        mat-menu-item
+                        (click)="$event?.stopPropagation()"
+                        (keydown.enter)="$event?.stopPropagation(); item.checked = !item?.checked; saveColumns()"
+                    >
+                        <mat-checkbox
+                            class="inventory-checkbox"
+                            color="primary"
+                            name="{{ item?.value }}"
+                            (ngModelChange)="saveColumns()"
+                            [(ngModel)]="item.checked"
+                            (click)="$event?.stopPropagation()"
+                        >
+                            {{ item?.label }}</mat-checkbox
+                        >
+                    </button>
+                </ng-container>
+            </mat-menu>
+        </div>
+    </div>
+    <!-- <div class="d-flex transactional-filter-section">
+        <button
+        mat-mini-fab
+        class="transactional-wise-common-btn d-flex align-items-center justify-content-center mr-l1"  [matMenuTriggerFor]="importExport" aria-label="Customise"
+    >
+        <span class="icon-download-circle strong"></span>
+    </button>
+    <mat-menu #importExport="matMenu">
+        <div class="menu-selector">
+            <button mat-menu-item>
+                <span>CSV</span>
+            </button>
+            <button mat-menu-item>
+                <span>XLS</span>
+            </button>
+        </div>
+    </mat-menu>
+</div> -->
+</div>
+<ng-template #datepickerTemplate>
+    <div class="datepicker-modal">
+        <div class="modal-body">
+            <app-datepicker-wrapper
+                [inputStartDate]="selectedDateRange?.startDate"
+                [inputEndDate]="selectedDateRange?.endDate"
+                [alwaysShowCalendars]="true"
+                [ranges]="datePickerOptions"
+                [selectedRangeLabel]="selectedRangeLabel"
+                [showCustomRangeLabel]="true"
+                [showClearButton]="false"
+                [showCancel]="true"
+                [linkedCalendars]="true"
+                [showDropdowns]="true"
+                [locale]="{ applyLabel: commonLocaleData?.app_done }"
+                (rangeClicked)="dateSelectedCallback($event)"
+                (datesUpdated)="dateSelectedCallback($event)"
+                [keepCalendarOpeningWithRange]="false"
+                [showRangeLabelOnInput]="false"
+                [dateFieldPosition]="dateFieldPosition"
+            ></app-datepicker-wrapper>
+        </div>
+    </div>
+</ng-template>

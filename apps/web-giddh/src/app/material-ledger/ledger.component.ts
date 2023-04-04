@@ -48,6 +48,7 @@ import { GenerateVoucherConfirmationModalComponent } from './components/generate
 import { CommonService } from '../services/common.service';
 import { AdjustmentUtilityService } from '../shared/advance-receipt-adjustment/services/adjustment-utility.service';
 import { InvoiceActions } from '../actions/invoice/invoice.actions';
+import { CommonActions } from '../actions/common.actions';
 
 @Component({
     selector: 'ledger',
@@ -284,7 +285,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
         public dialog: MatDialog,
         private commonService: CommonService,
         private adjustmentUtilityService: AdjustmentUtilityService,
-        private invoiceAction: InvoiceActions
+        private invoiceAction: InvoiceActions,
+        private commonAction: CommonActions
     ) {
 
         this.lc = new LedgerVM();
@@ -304,6 +306,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.companyName$ = this.store.pipe(select(p => p.session.companyUniqueName), takeUntil(this.destroyed$));
         this.isCompanyCreated$ = this.store.pipe(select(s => s.session.isCompanyCreated), takeUntil(this.destroyed$));
         this.failedBulkEntries$ = this.store.pipe(select(p => p.ledger.ledgerBulkActionFailedEntries), takeUntil(this.destroyed$));
+        this.store.dispatch(this.commonAction.setImportBankTransactionsResponse(null));
     }
 
     public toggleShow() {
@@ -436,6 +439,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 let unitCode = '';
                 let stockName = '';
                 let stockUniqueName = '';
+                let stockUnitUniqueName = '';
 
                 //#region unit rates logic
                 if (txn.selectedAccount && txn.selectedAccount.stock) {
@@ -450,6 +454,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     rate = defaultUnit.rate;
                     stockUniqueName = txn.selectedAccount.stock?.uniqueName;
                     unitCode = defaultUnit.code;
+                    stockUnitUniqueName = txn.selectedAccount.stock.stockUnitUniqueName;
                 }
                 if (stockName && stockUniqueName) {
                     txn.inventory = {
@@ -461,7 +466,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
                         unit: {
                             stockUnitCode: unitCode,
                             code: unitCode,
-                            rate
+                            rate: rate,
+                            stockUnitUniqueName: stockUnitUniqueName
                         }
                     };
                 } else {

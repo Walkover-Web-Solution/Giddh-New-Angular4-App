@@ -59,7 +59,12 @@
                                 >
                                     <span class="d-inline-flex">
                                         <amount-field
-                                            [amount]="account.latestBillAmount.amount"
+                                            [amount]="
+                                                giddhRoundOff(
+                                                    account.latestBillAmount.amount,
+                                                    giddhBalanceDecimalPlaces
+                                                )
+                                            "
                                             [currencySymbol]="account.latestBillAmount.symbol"
                                             [currencyCode]="activeCompany?.baseCurrency"
                                         >
@@ -76,7 +81,9 @@
                                 <td [attr.data-title]="commonLocaleData?.app_due_as_on" class="text-right">
                                     <span class="d-inline-flex">
                                         <amount-field
-                                            [amount]="account.closingBalance.amount"
+                                            [amount]="
+                                                giddhRoundOff(account.closingBalance.amount, giddhBalanceDecimalPlaces)
+                                            "
                                             [currencySymbol]="activeCompany.baseCurrencySymbol"
                                             [currencyCode]="activeCompany?.baseCurrency"
                                         >
@@ -129,7 +136,12 @@
                                 >
                                     <span class="d-inline-flex">
                                         <amount-field
-                                            [amount]="account.latestBillAmount.amount"
+                                            [amount]="
+                                                giddhRoundOff(
+                                                    account.latestBillAmount.amount,
+                                                    giddhBalanceDecimalPlaces
+                                                )
+                                            "
                                             [currencySymbol]="account.latestBillAmount.symbol"
                                             [currencyCode]="activeCompany?.baseCurrency"
                                         >
@@ -146,7 +158,9 @@
                                 <td [attr.data-title]="commonLocaleData?.app_due_as_on" class="text-right">
                                     <span class="d-inline-flex">
                                         <amount-field
-                                            [amount]="account.closingBalance.amount"
+                                            [amount]="
+                                                giddhRoundOff(account.closingBalance.amount, giddhBalanceDecimalPlaces)
+                                            "
                                             [currencySymbol]="activeCompany.baseCurrencySymbol"
                                             [currencyCode]="activeCompany?.baseCurrency"
                                         >

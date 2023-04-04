@@ -7,6 +7,7 @@ import { TaxControlData } from '../../theme/tax-control/tax-control.component';
 import * as dayjs from 'dayjs';
 import { VoucherAdjustments } from './AdvanceReceiptsAdjust';
 import { ReferenceVoucher } from '../../material-ledger/ledger.vm';
+import { HIGH_RATE_FIELD_PRECISION } from '../../app.constant';
 
 export enum VoucherTypeEnum {
     'sales' = 'sales',
@@ -228,6 +229,7 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
     public description: string;
     public quantity: number;
     public stockUnit: string;
+    public stockUnitCode?: string;
     public rate: number;
     public date: any;
     public taxableValue: number;
@@ -245,6 +247,8 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
     public purchaseOrderItemMapping?: { uniqueName: string; entryUniqueName: any; };
     public showCodeType: string;
     public highPrecisionAmount?: number;
+    /* Amount should have precision up to 16 digits for better calculation */
+    public highPrecisionRate = HIGH_RATE_FIELD_PRECISION;
 
     constructor() {
         super();
@@ -293,7 +297,7 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
         } else {
             count = cloneDeep(this.getTaxableValue(entry));
         }
-        return giddhRoundOff(count, 2);
+        return giddhRoundOff(count, this.highPrecisionRate);
     }
 
     /**
@@ -613,6 +617,7 @@ export class SalesAddBulkStockItems {
 
 export class CodeStockMulticurrency {
     code: string;
+    uniqueName: any;
 }
 
 export class Currency {

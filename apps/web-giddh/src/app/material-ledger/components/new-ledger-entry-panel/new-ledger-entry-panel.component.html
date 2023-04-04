@@ -42,11 +42,15 @@
                                         <td [style.width.px]="79" *ngIf="currentTxn?.unitRate" class="text-right">
                                             <label class="font-12">{{ commonLocaleData?.app_unit }}</label>
                                             <mat-select
+                                                (openedChange)="unitState($event)"
                                                 id="ledger-unit"
                                                 class="form-control"
                                                 [disabled]="shouldShowAdvanceReceiptMandatoryFields ? 'disabled' : null"
                                                 (selectionChange)="unitChanged($event?.value)"
-                                                [value]="currentTxn?.inventory?.unit?.code"
+                                                [value]="
+                                                    currentTxn?.inventory?.unit?.stockUnitUniqueName ||
+                                                    currentTxn?.inventory?.unit?.uniqueName
+                                                "
                                             >
                                                 <mat-option
                                                     *ngFor="let item of currentTxn?.unitRate"
@@ -181,6 +185,7 @@
                                 [ledgerAmount]="currentTxn.amount"
                                 [discountsList]="discountsList"
                                 [commonLocaleData]="commonLocaleData"
+                                [giddhBalanceDecimalPlaces]="giddhBalanceDecimalPlaces"
                                 (hideOtherPopups)="hideTax()"
                                 (discountTotalUpdated)="calculateDiscount($event)"
                             >
