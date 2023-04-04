@@ -63,7 +63,7 @@ export class InventoryTransactionListComponent implements OnInit {
     /** Holds stock transaction report data */
     public dataSource = [];
     /** This will use for stock report voucher types column check values */
-    public voucherTypes: any[] =[];
+    public voucherTypes: any[] = [];
     /** This will use for stock report displayed columns */
     public displayedColumns: string[] = [];
     /** This will use for stock report voucher types column check values */
@@ -242,7 +242,24 @@ export class InventoryTransactionListComponent implements OnInit {
             this.changeDetection.detectChanges();
         });
         if (fetchBalance) {
-            this.inventoryService.getStockTransactionReportBalance(cloneDeep(this.balanceStockReportRequest)).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            let balanceReportRequest = cloneDeep(this.balanceStockReportRequest);
+            let queryParams = {}
+            if (this.reportType === InventoryReportType.group) {
+                queryParams = {
+                    from: balanceReportRequest.from ?? '',
+                    to: balanceReportRequest.to ?? '',
+                    stockGroupUniqueName: this.reportUniqueName ? this.reportUniqueName : ''
+                };
+            } else {
+                queryParams = {
+                    from: balanceReportRequest.from ?? '',
+                    to: balanceReportRequest.to ?? '',
+                    stockGroupUniqueName: ''
+                };
+            }
+            balanceReportRequest.from = undefined;
+            balanceReportRequest.to = undefined;
+            this.inventoryService.getStockTransactionReportBalance(queryParams, balanceReportRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response && response.body && response.status === 'success') {
                     this.stockTransactionReportBalance = response.body;
                 } else {
@@ -300,7 +317,7 @@ export class InventoryTransactionListComponent implements OnInit {
      */
     public getSearchFieldText(fieldName: string): string {
         if (fieldName === "name") {
-            return "Account Name";
+            return this.localeData?.reports?.account_name;
         }
         return "";
     }
@@ -403,7 +420,7 @@ export class InventoryTransactionListComponent implements OnInit {
     public translationComplete(event: any): void {
         if (event) {
             this.translationLoaded = true;
-            this.voucherTypes =  [
+            this.voucherTypes = [
                 {
                     value: "SALES",
                     label: this.localeData?.reports?.sales,

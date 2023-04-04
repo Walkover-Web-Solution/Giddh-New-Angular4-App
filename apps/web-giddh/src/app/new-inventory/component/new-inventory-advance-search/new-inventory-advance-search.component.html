@@ -114,7 +114,12 @@
                         <label>Search Group</label>
                     </div>
                     <div class="col-lg-8">
-                        <input type="text" class="form-control" id="search-group" placeholder="Amount" />
+                        <input
+                            type="text"
+                            class="form-control"
+                            id="search-group"
+                            [placeholder]="localeData?.advance_search_filter?.amount"
+                        />
                     </div>
                 </div>
                 <div class="row mr-b15" *ngIf="isMobileScreen">

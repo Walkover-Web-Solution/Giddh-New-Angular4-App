@@ -242,7 +242,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     /** Stores the voucher API version of current company */
     public voucherApiVersion: 1 | 2;
     /** True if user itself checked the generate voucher  */
-    public manualGenerateVoucherChecked: boolean = false;
+    public manualGenerateVoucherChecked: boolean = true;
     /** Holds input to get invoice list request params */
     public invoiceListRequestParams: any = {};
     /** Round off amount */
@@ -1443,7 +1443,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         if (this.isAdjustReceiptSelected || this.isAdjustAdvanceReceiptSelected || this.isAdjustVoucherSelected) {
             this.prepareAdjustVoucherConfiguration();
             this.openAdjustPaymentModal();
-            this.blankLedger.generateInvoice = true;
         } else {
             this.removeAdjustment();
         }

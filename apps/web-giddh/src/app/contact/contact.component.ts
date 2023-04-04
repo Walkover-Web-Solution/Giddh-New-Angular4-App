@@ -205,12 +205,12 @@ export class ContactComponent implements OnInit, OnDestroy {
     public openingBalance: any;
     /** This will hold closing balance amount */
     public closingBalance: number = 0;
-    /** Stores the current organization type */
-    public currentOrganizationType: OrganizationType;
     /** This will hold local JSON data */
     public localeData: any = {};
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** Stores the current organization type */
+    public currentOrganizationType: OrganizationType;
     /** Listens for Master open/close event, required to load the data once master is closed */
     public isAddAndManageOpenedFromOutside$: Observable<boolean>;
     /** This will store screen size */
@@ -256,11 +256,31 @@ export class ContactComponent implements OnInit, OnDestroy {
     /** True if it's default load */
     public defaultLoad: boolean = true;
 
-    constructor(public dialog: MatDialog, private store: Store<AppState>, private router: Router, private companyServices: CompanyService, private commonActions: CommonActions, private toaster: ToasterService,
-        private contactService: ContactService, private settingsIntegrationActions: SettingsIntegrationActions, private companyActions: CompanyActions, private componentFactoryResolver: ComponentFactoryResolver, private cdRef: ChangeDetectorRef, private generalService: GeneralService, private route: ActivatedRoute, private generalAction: GeneralActions,
-        private breakPointObservar: BreakpointObserver, private modalService: BsModalService, private settingsProfileActions: SettingsProfileActions,
-        private settingsBranchAction: SettingsBranchActions, public currencyPipe: GiddhCurrencyPipe, private lightbox: Lightbox, private renderer: Renderer2, private customFieldsService: CustomFieldsService) {
-        this.searchLoader$ = this.store.pipe(select(p => p.search.searchLoader), takeUntil(this.destroyed$));
+    constructor(
+        public dialog: MatDialog,
+        private store: Store<AppState>,
+        private router: Router,
+        private companyServices: CompanyService,
+        private commonActions: CommonActions,
+        private toaster: ToasterService,
+        private contactService: ContactService,
+        private settingsIntegrationActions: SettingsIntegrationActions,
+        private companyActions: CompanyActions,
+        private componentFactoryResolver: ComponentFactoryResolver,
+        private cdRef: ChangeDetectorRef,
+        private generalService: GeneralService,
+        private route: ActivatedRoute,
+        private generalAction: GeneralActions,
+        private breakPointObservar: BreakpointObserver,
+        private modalService: BsModalService,
+        private settingsProfileActions: SettingsProfileActions,
+        private settingsBranchAction: SettingsBranchActions,
+        public currencyPipe: GiddhCurrencyPipe,
+        private lightbox: Lightbox,
+        private renderer: Renderer2,
+        private customFieldsService: CustomFieldsService) {
+
+        this.searchLoader$ = this.store.pipe(select(state => state.search.searchLoader), takeUntil(this.destroyed$));
         this.dueAmountReportRequest = new DueAmountReportQueryRequest();
         this.createAccountIsSuccess$ = this.store.pipe(select(state => state.groupwithaccounts.createAccountIsSuccess), takeUntil(this.destroyed$));
 
@@ -286,7 +306,7 @@ export class ContactComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         this.renderer.addClass(document.body, 'contact-body');
-        this.imgPath = isElectron ? "assets/images/" : AppUrl + APP_FOLDER + "assets/images/";
+        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         this.store.dispatch(this.companyActions.getAllRegistrations());
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.isAddAndManageOpenedFromOutside$ = this.store.pipe(select(appStore => appStore.groupwithaccounts.isAddAndManageOpenedFromOutside), takeUntil(this.destroyed$));

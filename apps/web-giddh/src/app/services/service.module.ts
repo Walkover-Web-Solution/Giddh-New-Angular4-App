@@ -57,13 +57,13 @@ import { EcommerceService } from './ecommerce.service';
 import { ReverseChargeService } from './reversecharge.service';
 import { CashFlowStatementService } from './cashflowstatement.service';
 import { PurchaseOrderService } from './purchase-order.service';
-import { BulkVoucherExportService } from './bulkvoucherexport.service';
 import { LocaleService } from './locale.service';
-import { PrinterFormatService } from "./printer.format.service";
+import { BulkVoucherExportService } from './bulkvoucherexport.service';
+import { CustomFieldsService } from "./custom-fields.service";
 import { ThermalService } from "./thermal.service";
+import { PrinterFormatService } from "./printer.format.service";
 import { ActivityLogsService } from "./activity-logs.service";
 import { DownloadsService } from "./downloads.service";
-import { CustomFieldsService } from "./custom-fields.service";
 import { ImportsService } from "./imports.service";
 import { CampaignIntegrationService } from "./campaign.integraion.service";
 
@@ -139,10 +139,10 @@ export class ServiceModule {
                 PurchaseOrderService,
                 BulkVoucherExportService,
                 LocaleService,
-                DownloadsService,
-                PrinterFormatService,
-                ThermalService,
                 CustomFieldsService,
+                ThermalService,
+                PrinterFormatService,
+                DownloadsService,
                 ImportsService
             ]
         };
