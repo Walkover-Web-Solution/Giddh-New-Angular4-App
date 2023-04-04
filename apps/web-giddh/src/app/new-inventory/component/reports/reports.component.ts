@@ -187,6 +187,10 @@ export class ReportsComponent implements OnInit {
             }
         });
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            setTimeout(() => {
+                this.translationComplete(true);
+                this.changeDetection.detectChanges();
+            }, 100);
             let lastReportType = this.reportType;
             this.currentUrl = this.router.url;
             this.reportUniqueName = response?.uniqueName;
@@ -572,6 +576,9 @@ export class ReportsComponent implements OnInit {
         stockReportRequest.stockGroups = undefined;
         stockReportRequest.stocks = undefined;
         stockReportRequest.variants = undefined;
+        stockReportRequest.expression = undefined;
+        stockReportRequest.param = undefined;
+        stockReportRequest.val = undefined;
 
         if (this.reportType === InventoryReportType.group) {
             if (element?.stockGroupHasChild) {
@@ -607,18 +614,19 @@ export class ReportsComponent implements OnInit {
     public translationComplete(event: any): void {
         if (event) {
             this.translationLoaded = true;
-            this.customiseColumns = this.customiseColumns.map(column => {
-                switch (column.value) {
-                    case 'opening_amount':
-                        column.label = this.localeData?.reports.opening_stock_value;
-                        break;
-                    default:
-                        column.label = this.localeData?.reports[column.value];
-                        break;
-                }
-                return column;
-            });
-
+            setTimeout(() => {
+                this.customiseColumns = this.customiseColumns?.map(column => {
+                    switch (column.value) {
+                        case 'opening_amount':
+                            column.label = this.localeData?.reports.opening_stock_value;
+                            break;
+                        default:
+                            column.label = this.localeData?.reports[column.value];
+                            break;
+                    }
+                    return column;
+                });
+            }, 100);
         }
     }
 

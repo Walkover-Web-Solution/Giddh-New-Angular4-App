@@ -732,7 +732,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
                 searchRequest.searchPage = searchRequest.searchPage === 'STOCK' ? 'GROUP' : searchRequest.searchPage === 'VARIANT' ? 'STOCK' : searchRequest.searchPage === 'TRANSACTION' ? 'VARIANT' : 'GROUP';
             }
             this.inventoryService.searchStockTransactionReport(searchRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                if (response && response.body && response.status === 'success' && response.body.results.length) {
+                if (response && response.body && response.status === 'success') {
                     if (loadMore) {
                         this.fieldFilteredOptions = this.fieldFilteredOptions.concat(response.body.results);
                     } else {
@@ -760,7 +760,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
                         this.searchRequest.q = '';
                         this.searchInventory(true);
                     } else {
-                    this.toaster.showSnackBar("warning", response?.body);
+                        this.toaster.showSnackBar("warning", response?.body);
                     }
                 }
                 this.changeDetection.detectChanges();

@@ -300,7 +300,7 @@ export class InventoryTransactionListComponent implements OnInit {
      */
     public getSearchFieldText(fieldName: string): string {
         if (fieldName === "name") {
-            return "Account Name";
+            return this.localeData?.reports?.account_name;
         }
         return "";
     }
