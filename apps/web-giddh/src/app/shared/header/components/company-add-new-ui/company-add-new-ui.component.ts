@@ -277,7 +277,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy, AfterViewIni
             country: this.company.country
         };
 
-        this._companyService.sendNewUserInfo(newUserInfo).pipe(takeUntil(this.destroyed$)).subscribe(response => { });
+        this._companyService.sendNewUserInfo(newUserInfo).pipe(take(1)).subscribe(response => { });
     }
 
     public closeModal() {
