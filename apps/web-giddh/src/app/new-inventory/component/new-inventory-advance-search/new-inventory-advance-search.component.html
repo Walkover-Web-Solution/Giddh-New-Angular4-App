@@ -109,27 +109,29 @@
                         </div>
                     </div>
                 </div>
-                <div class="row mr-b15" *ngIf="isMobileScreen">
+                <!-- <div class="row mr-b15" *ngIf="isMobileScreen">
                     <div class="col-lg-4">
                         <label>Search Group</label>
                     </div>
                     <div class="col-lg-8">
-                        <input
-                            type="text"
-                            class="form-control"
-                            id="search-group"
-                            [placeholder]="localeData?.advance_search_filter?.amount"
-                        />
+                        <text-field
+                        [type]="'text'"
+                        [cssClass]="'form-control mat-field-border'"
+                        [placeholder]="localeData?.advance_search_filter?.amount"
+                        [name]="'amount'"
+                        id="search-group"
+                    >
+                    </text-field>
                     </div>
-                </div>
-                <div class="row mr-b15" *ngIf="isMobileScreen">
+                </div> -->
+                <!-- <div class="row mr-b15" *ngIf="isMobileScreen">
                     <div class="col-lg-4">
                         <label>Select Branch</label>
                     </div>
                     <div class="col-lg-8">
                         <sh-select placeholder="Search Branch Alice" id="Select Branch"></sh-select>
                     </div>
-                </div>
+                </div> -->
                 <div class="row mr-b15">
                     <div class="col-sm-12">
                         <div class="button-group d-flex justify-content-end">
