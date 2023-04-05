@@ -187,10 +187,6 @@ export class ReportsComponent implements OnInit {
             }
         });
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            setTimeout(() => {
-                this.translationComplete(true);
-                this.changeDetection.detectChanges();
-            }, 300);
             let lastReportType = this.reportType;
             this.currentUrl = this.router.url;
             this.reportUniqueName = response?.uniqueName;
@@ -297,6 +293,9 @@ export class ReportsComponent implements OnInit {
                     }
                 )
                 this.moduleName = InventoryModuleName.variant;
+            }
+            if (lastReportType) {
+                this.translationComplete(true);
             }
         });
     }
@@ -633,19 +632,18 @@ export class ReportsComponent implements OnInit {
     public translationComplete(event: any): void {
         if (event) {
             this.translationLoaded = true;
-            setTimeout(() => {
-                this.customiseColumns = this.customiseColumns?.map(column => {
-                    switch (column.value) {
-                        case 'opening_amount':
-                            column.label = this.localeData?.reports.opening_stock_value;
-                            break;
-                        default:
-                            column.label = this.localeData?.reports[column.value];
-                            break;
-                    }
-                    return column;
-                });
-            }, 200);
+            this.customiseColumns = this.customiseColumns?.map(column => {
+                switch (column.value) {
+                    case 'opening_amount':
+                        column.label = this.localeData?.reports.opening_stock_value;
+                        break;
+                    default:
+                        column.label = this.localeData?.reports[column.value];
+                        break;
+                }
+                return column;
+            });
+            this.changeDetection.detectChanges();
         }
     }
 
