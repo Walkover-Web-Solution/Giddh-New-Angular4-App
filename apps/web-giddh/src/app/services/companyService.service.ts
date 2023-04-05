@@ -469,4 +469,19 @@ export class CompanyService {
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<string, any>(e, '')));
     }
+
+    /**
+     * Sends new user info
+     *
+     * @param {*} model
+     * @returns {Observable<BaseResponse<string, any>>}
+     * @memberof CompanyService
+     */
+    public sendNewUserInfo(model: any): Observable<BaseResponse<string, any>> {
+        return this.http.post(this.config.apiUrl + COMPANY_API.SEND_NEW_USER_INFO, model).pipe(map((res) => {
+            let data: BaseResponse<string, StateDetailsRequest> = res;
+            data.request = model;
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<string, StateDetailsRequest>(e, model)));
+    }
 }
