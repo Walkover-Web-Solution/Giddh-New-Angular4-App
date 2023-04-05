@@ -1569,7 +1569,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     }
                 }
 
-                if (this.invFormData.voucherDetails.customerUniquename && this.invFormData.voucherDetails.voucherDate && !this.isLastInvoiceCopied) {
+                if (this.invFormData.voucherDetails.customerUniquename && this.invFormData.voucherDetails.voucherDate && !this.isLastInvoiceCopied && !(this.isProformaInvoice || this.isEstimateInvoice)) {
                     this.getAllAdvanceReceipts(this.invFormData.voucherDetails.customerUniquename, this.invFormData.voucherDetails.voucherDate)
                 }
 
