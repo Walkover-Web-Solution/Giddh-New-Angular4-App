@@ -69,7 +69,6 @@ import { AdjustmentUtilityService } from '../../../shared/advance-receipt-adjust
 import { SettingsDiscountService } from '../../../services/settings.discount.service';
 import { LedgerUtilityService } from '../../services/ledger-utility.service';
 import { InvoiceSetting } from '../../../models/interfaces/invoice.setting.interface';
-
 /** New ledger entries */
 const NEW_LEDGER_ENTRIES = [
     ['amount', 'convertedAmount'],
@@ -264,6 +263,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public isRcmPopupOpen = false;
     /** Holds invoice settings */
     public invoiceSettings: any = {};
+    /** True if unit dropdown  is open */
+    public isUnitOpen: boolean = false;
 
     constructor(private store: Store<AppState>,
         private cdRef: ChangeDetectorRef,
@@ -1032,7 +1033,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
 
     public clickedOutside(event: any): void {
-        if (this.isDatepickerOpen || this.isAdjustmentPopupOpen || this.isRcmPopupOpen) {
+        if (this.isDatepickerOpen || this.isAdjustmentPopupOpen || this.isRcmPopupOpen || this.isUnitOpen) {
             return;
         }
 
