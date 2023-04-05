@@ -243,20 +243,11 @@ export class InventoryTransactionListComponent implements OnInit {
         });
         if (fetchBalance) {
             let balanceReportRequest = cloneDeep(this.balanceStockReportRequest);
-            let queryParams = {}
-            if (this.reportType === InventoryReportType.group) {
-                queryParams = {
-                    from: balanceReportRequest.from ?? '',
-                    to: balanceReportRequest.to ?? '',
-                    stockGroupUniqueName: this.reportUniqueName ? this.reportUniqueName : ''
-                };
-            } else {
-                queryParams = {
-                    from: balanceReportRequest.from ?? '',
-                    to: balanceReportRequest.to ?? '',
-                    stockGroupUniqueName: ''
-                };
-            }
+            let queryParams = {
+                from: balanceReportRequest.from ?? '',
+                to: balanceReportRequest.to ?? '',
+                stockGroupUniqueName: ''
+            };
             balanceReportRequest.from = undefined;
             balanceReportRequest.to = undefined;
             this.inventoryService.getStockTransactionReportBalance(queryParams, balanceReportRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
