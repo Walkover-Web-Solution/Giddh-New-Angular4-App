@@ -479,9 +479,9 @@ export class CompanyService {
      */
     public sendNewUserInfo(model: any): Observable<BaseResponse<string, any>> {
         return this.http.post(this.config.apiUrl + COMPANY_API.SEND_NEW_USER_INFO, model).pipe(map((res) => {
-            let data: BaseResponse<string, StateDetailsRequest> = res;
+            let data: BaseResponse<string, any> = res;
             data.request = model;
             return data;
-        }), catchError((e) => this.errorHandler.HandleCatch<string, StateDetailsRequest>(e, model)));
+        }), catchError((e) => this.errorHandler.HandleCatch<string, any>(e, model)));
     }
 }
