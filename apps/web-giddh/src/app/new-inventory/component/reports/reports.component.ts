@@ -294,6 +294,9 @@ export class ReportsComponent implements OnInit {
                 )
                 this.moduleName = InventoryModuleName.variant;
             }
+            if (lastReportType) {
+                this.translationComplete(true);
+            }
         });
     }
 
@@ -311,6 +314,7 @@ export class ReportsComponent implements OnInit {
         stockReportRequest.variants = undefined;
         return stockReportRequest;
     }
+
     /**
      * This will use for get stock transactions report data
      *
@@ -345,6 +349,7 @@ export class ReportsComponent implements OnInit {
             stockReportRequest.sortBy = undefined;
             stockReportRequest.totalItems = undefined;
             stockReportRequest.totalPages = undefined;
+
             this.inventoryService.getGroupWiseReport(queryParams, stockReportRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 this.isLoading = false;
                 if (response && response.body && response.status === 'success') {
@@ -447,7 +452,24 @@ export class ReportsComponent implements OnInit {
             });
         }
         if (fetchBalance) {
-            this.inventoryService.getStockTransactionReportBalance(cloneDeep(this.balanceStockReportRequest)).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            let balanceReportRequest = cloneDeep(this.balanceStockReportRequest);
+            let queryParams = {}
+            if (this.reportType === InventoryReportType.group) {
+                queryParams = {
+                    from: balanceReportRequest.from ?? '',
+                    to: balanceReportRequest.to ?? '',
+                    stockGroupUniqueName: this.reportUniqueName ? this.reportUniqueName : ''
+                };
+            } else {
+                queryParams = {
+                    from: balanceReportRequest.from ?? '',
+                    to: balanceReportRequest.to ?? '',
+                    stockGroupUniqueName: ''
+                };
+            }
+            balanceReportRequest.from = undefined;
+            balanceReportRequest.to = undefined;
+            this.inventoryService.getStockTransactionReportBalance(queryParams, balanceReportRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response && response.body && response.status === 'success') {
                     this.stockTransactionReportBalance = response.body;
                 } else {
@@ -572,6 +594,9 @@ export class ReportsComponent implements OnInit {
         stockReportRequest.stockGroups = undefined;
         stockReportRequest.stocks = undefined;
         stockReportRequest.variants = undefined;
+        stockReportRequest.expression = undefined;
+        stockReportRequest.param = undefined;
+        stockReportRequest.val = undefined;
 
         if (this.reportType === InventoryReportType.group) {
             if (element?.stockGroupHasChild) {
@@ -607,7 +632,7 @@ export class ReportsComponent implements OnInit {
     public translationComplete(event: any): void {
         if (event) {
             this.translationLoaded = true;
-            this.customiseColumns = this.customiseColumns.map(column => {
+            this.customiseColumns = this.customiseColumns?.map(column => {
                 switch (column.value) {
                     case 'opening_amount':
                         column.label = this.localeData?.reports.opening_stock_value;
@@ -618,7 +643,7 @@ export class ReportsComponent implements OnInit {
                 }
                 return column;
             });
-
+            this.changeDetection.detectChanges();
         }
     }
 
