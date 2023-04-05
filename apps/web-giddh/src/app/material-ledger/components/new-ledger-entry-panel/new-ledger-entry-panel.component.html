@@ -42,7 +42,7 @@
                                         <td [style.width.px]="79" *ngIf="currentTxn?.unitRate" class="text-right">
                                             <label class="font-12">{{ commonLocaleData?.app_unit }}</label>
                                             <mat-select
-                                                (openedChange)="unitState($event)"
+                                                (openedChange)="isUnitOpen = $event"
                                                 id="ledger-unit"
                                                 class="form-control"
                                                 [disabled]="shouldShowAdvanceReceiptMandatoryFields ? 'disabled' : null"
