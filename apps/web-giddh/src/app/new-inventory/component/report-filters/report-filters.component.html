@@ -1,4 +1,9 @@
 <div class="inventory-filter-bar top-main-bar">
+    <div class="back-btnn" *ngIf="reportUniqueName">
+        <button mat-raised-button mat-button class="report-back-button" color="primary" (click)="backToPreviousPage()">
+            {{ commonLocaleData?.app_back }}
+        </button>
+    </div>
     <div class="custom-datepicker-wrapper">
         <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
             <i class="icon-calender calendar-addon"></i>
@@ -16,60 +21,52 @@
             [multiple]="true"
             [(ngModel)]="selectedBranch"
             class="stock-mat-salect"
-            [placeholder]="'Select Branch'"
+            [placeholder]="localeData?.header?.select_branch"
+            (ngModelChange)="resetWarehouse(); getBranches()"
         >
             <mat-option class="balance-options">
                 <ngx-mat-select-search
-                    [noEntriesFoundLabel]="'No Result Found'"
+                    [noEntriesFoundLabel]="localeData?.header?.no_result_found"
                     [formControl]="branchesDropdown"
-                    [placeholderLabel]="'Select Branch'"
+                    [placeholderLabel]="localeData?.header?.select_branch"
                     class="mat-select-search-inventory"
                 >
                     <i class="icon-cross" ngxMatSelectSearchClear></i>
                 </ngx-mat-select-search>
             </mat-option>
 
-            <mat-option
-                class="balance-options"
-                *ngFor="let branch of branches"
-                (click)="getBranches()"
-                [value]="branch?.uniqueName"
-            >
+            <mat-option class="balance-options" *ngFor="let branch of branches" [value]="branch?.uniqueName">
                 {{ branch?.alias ?? "-" }}
             </mat-option>
         </mat-select>
     </div>
-    <div class="pl-1 filter-dropdown-warehouse" *ngIf="allWarehouses?.length > 1">
+    <div class="pl-1 filter-dropdown-warehouse" *ngIf="currentWarehouses?.length > 1">
         <mat-select
             name="selectedWarehouse"
             [multiple]="true"
             [(ngModel)]="selectedWarehouse"
             class="stock-mat-salect"
-            [placeholder]="'Select Warehouse'"
+            [placeholder]="localeData?.header?.select_warehouse"
+            (ngModelChange)="getWarehouses()"
         >
             <mat-option class="balance-options">
                 <ngx-mat-select-search
-                    noEntriesFoundLabel="No Result Found"
+                    [noEntriesFoundLabel]="localeData?.header?.no_result_found"
                     [formControl]="warehousesDropdown"
-                    [placeholderLabel]="'Select Warehouse'"
+                    [placeholderLabel]="localeData?.header?.select_warehouse"
                     class="mat-select-search-inventory"
                 >
                     <i class="icon-cross" ngxMatSelectSearchClear></i>
                 </ngx-mat-select-search>
             </mat-option>
-            <mat-option
-                class="balance-options"
-                *ngFor="let warehouse of warehouses"
-                [value]="warehouse?.uniqueName"
-                (click)="getWarehouses()"
-            >
+            <mat-option class="balance-options" *ngFor="let warehouse of warehouses" [value]="warehouse?.uniqueName">
                 {{ warehouse?.name ?? "-" }}
             </mat-option>
         </mat-select>
     </div>
     <div class="clear-filter d-flex" *ngIf="showClearFilter">
         <button mat-raised-button class="create-btn-inventory ml-3 mr-0" color="primary" (click)="resetFilter()">
-            <span class="icon-cross"></span> Clear
+            <span class="icon-cross"></span> {{ commonLocaleData?.app_clear_filter }}
         </button>
     </div>
 </div>
@@ -116,11 +113,13 @@
                         <mat-option *ngFor="let option of fieldFilteredOptions" [value]="option">
                             {{ option?.name }} ( {{ option?.type }} )
                         </mat-option>
-                        <mat-option disabled *ngIf="fieldFilteredOptions?.length === 0">No results found</mat-option>
+                        <mat-option disabled *ngIf="fieldFilteredOptions?.length === 0">{{
+                            localeData?.header?.no_result_found
+                        }}</mat-option>
                     </ng-container>
                     <ng-template #searchedData>
                         <app-cdk-scroll
-                            (fetchNextPage)="searchInventory(true)"
+                            (fetchNextPage)="searchInventory(false, true)"
                             [scrollableElementId]="'stock-transaction'"
                         >
                             <cdk-virtual-scroll-viewport
@@ -135,9 +134,9 @@
                                 >
                                     {{ option?.name }} ( {{ option?.type }} )
                                 </mat-option>
-                                <mat-option class="item-height" disabled *ngIf="fieldFilteredOptions?.length === 0"
-                                    >No results found</mat-option
-                                >
+                                <mat-option class="item-height" disabled *ngIf="fieldFilteredOptions?.length === 0">{{
+                                    localeData?.header?.no_result_found
+                                }}</mat-option>
                             </cdk-virtual-scroll-viewport>
                         </app-cdk-scroll>
                     </ng-template>
@@ -147,11 +146,11 @@
         <div class="menu-btn-control">
             <button mat-button (click)="openModal()" class="advance-filter-button">
                 <i class="icon-advance-filter mr-2"></i>
-                Advance Filter
+                {{ localeData?.header?.advance_filter }}
             </button>
             <button mat-button [matMenuTriggerFor]="customise" aria-label="Customise" class="customise-filter-button">
                 <i class="icon-options mr-2"> </i>
-                Customise
+                {{ localeData?.header?.customise }}
             </button>
             <mat-menu #customise="matMenu" class="columns-wrapper">
                 <button
@@ -172,7 +171,7 @@
                         (change)="selectAllColumns($event?.checked)"
                         [checked]="displayedColumns?.length === customiseColumns?.length"
                     >
-                        Select All
+                        {{ localeData?.header?.select_all }}
                     </mat-checkbox>
                 </button>
                 <ng-container *ngFor="let item of customiseColumns">
