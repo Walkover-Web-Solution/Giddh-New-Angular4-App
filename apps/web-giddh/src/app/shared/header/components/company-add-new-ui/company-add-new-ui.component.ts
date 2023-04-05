@@ -226,6 +226,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy, AfterViewIni
                 this.store.dispatch(this.companyActions.userStoreCreateCompany(this.company));
                 if (this.isProdMode && companies) {
                     if (companies?.length === 0) {
+                        this.sendNewUserInfo();
                         this.fireSocketCompanyCreateRequest();
                     } else {
                         this.closeCompanyModal.emit();
@@ -256,6 +257,27 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy, AfterViewIni
         });
 
         this._generalService.removeUtmParameters();
+    }
+
+    /**
+     * Sends new user info to 3rd party
+     *
+     * @memberof CompanyAddNewUiComponent
+     */
+    public sendNewUserInfo(): void {
+        let newUserInfo = {
+            name: this.company.name,
+            currency: this.company.baseCurrency,
+            contactNo: this.company.phoneCode + "" + this.company.contactNo,
+            source: this._generalService.getUtmParameter('utm_source'),
+            medium: this._generalService.getUtmParameter('utm_medium'),
+            campaign: this._generalService.getUtmParameter('utm_campaign'),
+            term: this._generalService.getUtmParameter('utm_term'),
+            content: this._generalService.getUtmParameter('utm_content'),
+            country: this.company.country
+        };
+
+        this._companyService.sendNewUserInfo(newUserInfo).pipe(takeUntil(this.destroyed$)).subscribe(response => { });
     }
 
     public closeModal() {
