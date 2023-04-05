@@ -294,9 +294,9 @@ export class ReportsComponent implements OnInit {
                 )
                 this.moduleName = InventoryModuleName.variant;
             }
-            setTimeout(() => {
+            if (lastReportType) {
                 this.translationComplete(true);
-            }, 500);
+            }
         });
     }
 
