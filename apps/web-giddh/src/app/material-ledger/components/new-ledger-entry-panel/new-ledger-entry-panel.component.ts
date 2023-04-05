@@ -1027,16 +1027,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.isDatepickerOpen = event;
     }
 
-    /**
-     * This will use for unit dropdown open state
-     *
-     * @param {boolean} event
-     * @memberof NewLedgerEntryPanelComponent
-     */
-    public unitState(event: boolean): void {
-        this.isUnitOpen = event;
-    }
-
     @HostListener('window:click', ['$event'])
     public clickedOutsideOfComponent(event) {
         this.clickedOutside(event);
