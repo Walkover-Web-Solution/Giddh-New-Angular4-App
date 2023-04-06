@@ -199,7 +199,7 @@ export class UpdateLedgerDiscountComponent implements OnInit, OnChanges, OnDestr
             return;
         }
         let focussableElements = '.entrypanel input[type=text]:not([disabled]),.entrypanel [tabindex]:not([disabled]):not([tabindex="-1"])';
-        let focussable = Array.prototype.filter.call(document.querySelectorAll(focussableElements),
+        let focussable = Array.prototype?.filter.call(document.querySelectorAll(focussableElements),
             (element) => {
                 // check for visibility while always include the current activeElement
                 return element.offsetWidth > 0 || element.offsetHeight > 0 || element === document.activeElement;

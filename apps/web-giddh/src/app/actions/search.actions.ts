@@ -52,7 +52,7 @@ export class SearchActions {
             }
             return errorAction;
         } else {
-            if (showToast && typeof response.body === 'string') {
+            if (showToast && typeof response?.body === 'string') {
                 this._toasty.successToast(response.message);
             }
         }

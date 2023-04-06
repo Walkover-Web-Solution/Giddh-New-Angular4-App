@@ -113,7 +113,7 @@ export class DiscountComponent implements OnInit, OnDestroy {
 
     public showDeleteDiscountModal(uniqueName: string) {
         this.deleteRequest = uniqueName;
-        this.discountConfirmationModel.show();
+        this.discountConfirmationModel?.show();
     }
 
     public hideDeleteDiscountModal() {

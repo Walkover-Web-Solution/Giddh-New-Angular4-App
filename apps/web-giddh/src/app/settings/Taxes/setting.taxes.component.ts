@@ -108,7 +108,7 @@ export class SettingTaxesComponent implements OnInit, OnDestroy {
         message = message?.replace("[TAX_NAME]", this.selectedTax.name);
         this.confirmationMessage = message;
         this.confirmationFor = 'delete';
-        this.taxConfirmationModel.show();
+        this.taxConfirmationModel?.show();
     }
 
     public updateTax(taxIndex: number) {
@@ -118,7 +118,7 @@ export class SettingTaxesComponent implements OnInit, OnDestroy {
         message = message?.replace("[TAX_NAME]", this.selectedTax.name);
         this.confirmationMessage = message;
         this.confirmationFor = 'edit';
-        this.taxConfirmationModel.show();
+        this.taxConfirmationModel?.show();
     }
 
     public onCancel() {
