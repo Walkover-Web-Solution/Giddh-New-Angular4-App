@@ -108,6 +108,8 @@ export class InventoryTransactionListComponent implements OnInit {
     private storeFilters: any;
     /** Hold advance search modal response */
     public advanceSearchModalResponse: any = null;
+    /** Observable to cancel api on route change */
+    private cancelApi: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(
         private generalService: GeneralService,
@@ -180,6 +182,10 @@ export class InventoryTransactionListComponent implements OnInit {
         });
 
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            this.cancelApi.next();
+            setTimeout(() => {
+                this.cancelApi = new ReplaySubject(1);
+            });
             if (response) {
                 this.reportUniqueName = response?.uniqueName;
                 if (this.isReportLoaded) {
@@ -209,7 +215,7 @@ export class InventoryTransactionListComponent implements OnInit {
         stockReportRequest.stockGroups = undefined;
         stockReportRequest.stocks = undefined;
         stockReportRequest.variants = undefined;
-        this.inventoryService.getStockTransactionReport(stockReportRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.inventoryService.getStockTransactionReport(stockReportRequest).pipe(takeUntil(this.cancelApi)).subscribe(response => {
             this.isLoading = false;
             if (response && response.body && response.status === 'success') {
                 this.isDataAvailable = (response.body.transactions?.length) ? true : false;
@@ -250,7 +256,7 @@ export class InventoryTransactionListComponent implements OnInit {
             };
             balanceReportRequest.from = undefined;
             balanceReportRequest.to = undefined;
-            this.inventoryService.getStockTransactionReportBalance(queryParams, balanceReportRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            this.inventoryService.getStockTransactionReportBalance(queryParams, balanceReportRequest).pipe(takeUntil(this.cancelApi)).subscribe(response => {
                 if (response && response.body && response.status === 'success') {
                     this.stockTransactionReportBalance = response.body;
                 } else {
@@ -385,6 +391,8 @@ export class InventoryTransactionListComponent implements OnInit {
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+        this.cancelApi.next(true);
+        this.cancelApi.complete();
     }
 
     /**
