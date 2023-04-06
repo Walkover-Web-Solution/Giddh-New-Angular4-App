@@ -119,7 +119,7 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
     public showModalForEdit(user?: any) {
         this.selectedUser = user ? user : '';
         this.showEditUserModal = true;
-        setTimeout(() => this.editUserModal.show(), 700);
+        setTimeout(() => this.editUserModal?.show(), 700);
     }
 
     public closeEditUserModal() {

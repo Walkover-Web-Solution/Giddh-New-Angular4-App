@@ -558,7 +558,7 @@ export class PurchaseOrderComponent implements OnDestroy {
     public confirmDelete(item: any): void {
         this.deleteModule = 'purchaseorder';
         this.selectedItem = item?.uniqueName;
-        this.poConfirmationModel.show();
+        this.poConfirmationModel?.show();
     }
 
     /**
@@ -671,7 +671,7 @@ export class PurchaseOrderComponent implements OnDestroy {
         let purchaseNumbers = this.getSelectedItems();
         if (purchaseNumbers?.length > 0) {
             this.deleteModule = 'purchaseorderlist';
-            this.poConfirmationModel.show();
+            this.poConfirmationModel?.show();
         } else {
             this.toaster.errorToast(this.localeData?.po_selection_error);
         }

@@ -395,7 +395,7 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
     }
 
     public openChequeDetailForm() {
-        this.chequeEntryModal.show();
+        this.chequeEntryModal?.show();
         setTimeout(() => {
             this.chequeNumberInput?.nativeElement.focus();
         }, 200);
@@ -900,7 +900,7 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
         } else {
             this.inventoryService.GetStocks().pipe(takeUntil(this.destroyed$)).subscribe(data => {
                 if (data?.status === 'success') {
-                    this.allStocks = cloneDeep(data.body.results);
+                    this.allStocks = cloneDeep(data?.body.results);
                     this.sortStockItems(this.allStocks);
                     if (needToFocusStockInputField) {
                         this.selectedStockInputField.value = '';
@@ -961,7 +961,7 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
         // this.selectedAccountInputField = selectedField;
         if (this.selectedField === 'account') {
             this.loadQuickAccountComponent();
-            this.quickAccountModal.show();
+            this.quickAccountModal?.show();
         } else if (this.selectedField === 'stock') {
             this.asideMenuStateForProductService = 'in';
             this.autoFocusStockGroupField = true;
@@ -1089,7 +1089,7 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
             if (a && a !== '') {
                 this._accountService.getFlattenAccounts('', '', '').pipe(takeUntil(this.destroyed$)).subscribe(data => {
                     if (data?.status === 'success') {
-                        this._tallyModuleService.setFlattenAccounts(data.body.results);
+                        this._tallyModuleService.setFlattenAccounts(data?.body.results);
                         if (needToFocusAccountInputField) {
                             this.selectedAccountInputField.value = '';
                             this.selectedAccountInputField.focus();

@@ -1725,7 +1725,7 @@
                                                         <span
                                                             *ngIf="
                                                                 (!shDebit.isOpen && txn.particular) ||
-                                                                (shDebit.isOpen && shDebit.filter)
+                                                                (shDebit.isOpen && shDebit?.filter)
                                                             "
                                                             >{{ localeData?.to }}
                                                         </span>
@@ -2149,7 +2149,7 @@
                                                         <span
                                                             *ngIf="
                                                                 (!shCredit.isOpen && txn.particular) ||
-                                                                (shCredit.isOpen && shCredit.filter)
+                                                                (shCredit.isOpen && shCredit?.filter)
                                                             "
                                                             >{{ localeData?.by }}</span
                                                         >

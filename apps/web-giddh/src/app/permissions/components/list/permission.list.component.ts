@@ -120,7 +120,7 @@ export class PermissionListComponent implements OnInit, AfterViewInit, OnDestroy
 
     public deleteRole(role: IRoleCommonResponseAndRequest) {
         this.selectedRoleForDelete = role;
-        this.permissionConfirmationModel.show();
+        this.permissionConfirmationModel?.show();
     }
 
     public deleteConfirmedRole() {
@@ -133,7 +133,7 @@ export class PermissionListComponent implements OnInit, AfterViewInit, OnDestroy
     }
 
     public openPermissionModal() {
-        this.permissionModel.show();
+        this.permissionModel?.show();
     }
 
     public hidePermissionModel() {
