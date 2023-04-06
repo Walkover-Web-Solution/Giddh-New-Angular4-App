@@ -130,7 +130,7 @@ export class ReportsComponent implements OnInit {
     /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
     public isCompany: boolean;
     /** Observable to cancel api on route change */
-    private cancelApi: ReplaySubject<boolean> = new ReplaySubject(1);
+    private cancelApi$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(
         public route: ActivatedRoute,
@@ -189,9 +189,9 @@ export class ReportsComponent implements OnInit {
             }
         });
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            this.cancelApi.next();
+            this.cancelApi$.next();
             setTimeout(() => {
-                this.cancelApi = new ReplaySubject(1);
+                this.cancelApi$ = new ReplaySubject(1);
             });
             let lastReportType = this.reportType;
             this.currentUrl = this.router.url;
@@ -355,7 +355,7 @@ export class ReportsComponent implements OnInit {
             stockReportRequest.totalItems = undefined;
             stockReportRequest.totalPages = undefined;
 
-            this.inventoryService.getGroupWiseReport(queryParams, stockReportRequest).pipe(takeUntil(this.cancelApi)).subscribe(response => {
+            this.inventoryService.getGroupWiseReport(queryParams, stockReportRequest).pipe(takeUntil(this.cancelApi$)).subscribe(response => {
                 this.isLoading = false;
                 if (response && response.body && response.status === 'success') {
                     this.isDataAvailable = (response.body.results?.length) ? true : false;
@@ -391,7 +391,7 @@ export class ReportsComponent implements OnInit {
 
             let stockReportRequest = this.getStockReportRequestObject();
 
-            this.inventoryService.getItemWiseReport(cloneDeep(stockReportRequest)).pipe(takeUntil(this.cancelApi)).subscribe(response => {
+            this.inventoryService.getItemWiseReport(cloneDeep(stockReportRequest)).pipe(takeUntil(this.cancelApi$)).subscribe(response => {
                 this.isLoading = false;
                 if (response && response.body && response.status === 'success') {
                     this.isDataAvailable = (response.body.results?.length) ? true : false;
@@ -425,7 +425,7 @@ export class ReportsComponent implements OnInit {
         if (this.reportType === InventoryReportType.variant) {
 
             let stockReportRequest = this.getStockReportRequestObject();
-            this.inventoryService.getVariantWiseReport(cloneDeep(stockReportRequest)).pipe(takeUntil(this.cancelApi)).subscribe(response => {
+            this.inventoryService.getVariantWiseReport(cloneDeep(stockReportRequest)).pipe(takeUntil(this.cancelApi$)).subscribe(response => {
                 this.isLoading = false;
                 if (response && response.body && response.status === 'success') {
                     this.isDataAvailable = (response.body.results?.length) ? true : false;
@@ -474,7 +474,7 @@ export class ReportsComponent implements OnInit {
             }
             balanceReportRequest.from = undefined;
             balanceReportRequest.to = undefined;
-            this.inventoryService.getStockTransactionReportBalance(queryParams, balanceReportRequest).pipe(takeUntil(this.cancelApi)).subscribe(response => {
+            this.inventoryService.getStockTransactionReportBalance(queryParams, balanceReportRequest).pipe(takeUntil(this.cancelApi$)).subscribe(response => {
                 if (response && response.body && response.status === 'success') {
                     this.stockTransactionReportBalance = response.body;
                 } else {
@@ -660,7 +660,7 @@ export class ReportsComponent implements OnInit {
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
-        this.cancelApi.next(true);
-        this.cancelApi.complete();
+        this.cancelApi$.next(true);
+        this.cancelApi$.complete();
     }
 }
