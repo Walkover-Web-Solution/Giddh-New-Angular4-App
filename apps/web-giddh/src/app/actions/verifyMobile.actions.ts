@@ -38,10 +38,10 @@ export class VerifyMobileActions {
     public verifyNumberCode$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(VerifyMobileActions.VERIFY_MOBILE_CODE_REQUEST),
-            switchMap((action: CustomActions) => this._authService.VerifyNumberOTP(action.payload)),
+            switchMap((action: CustomActions) => this._authService.VerifyNumberOTP(action?.payload)),
             map(response => {
                 if (response?.status === 'success') {
-                    this._toasty.successToast(response.body);
+                    this._toasty.successToast(response?.body);
                     let no: string = null;
                     this.store.pipe(
                         take(1))

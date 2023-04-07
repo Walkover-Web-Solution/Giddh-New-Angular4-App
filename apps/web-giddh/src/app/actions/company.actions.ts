@@ -222,7 +222,7 @@ export class CompanyActions {
         .pipe(
             ofType(CompanyActions.REFRESH_COMPANIES_RESPONSE),
             map((action: CustomActions) => {
-                let response: BaseResponse<CompanyResponse[], string> = action.payload;
+                let response: BaseResponse<CompanyResponse[], string> = action?.payload;
                 if (response?.status === 'error') {
                     this._toasty.errorToast(response.message, response.code);
                     return { type: 'EmptyAction' };

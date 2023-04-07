@@ -201,7 +201,7 @@ export class SignupComponent implements OnInit, OnDestroy {
     }
 
     public showEmailModal() {
-        this.emailVerifyModal.show();
+        this.emailVerifyModal?.show();
         this.emailVerifyModal.onShow.pipe(takeUntil(this.destroyed$)).subscribe(() => {
             this.isSubmited = false;
         });
@@ -247,7 +247,7 @@ export class SignupComponent implements OnInit, OnDestroy {
     }
 
     public showMobileModal() {
-        this.mobileVerifyModal.show();
+        this.mobileVerifyModal?.show();
     }
 
     public hideMobileModal() {

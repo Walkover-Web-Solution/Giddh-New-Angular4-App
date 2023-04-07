@@ -719,7 +719,7 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
 
     public onOpenAdvanceSearch() {
         this.advanceSearchModalShow = true;
-        this.advanceSearchModel.show();
+        this.advanceSearchModel?.show();
     }
 
     public advanceSearchAction(type?: string) {

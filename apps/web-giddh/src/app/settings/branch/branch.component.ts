@@ -223,7 +223,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     public openCreateCompanyModal(isUpdateMode?: boolean): void {
         this.loadAddCompanyComponent(isUpdateMode);
         this.hideAddBranchModal();
-        this.addCompanyModal.show();
+        this.addCompanyModal?.show();
     }
 
     /**
@@ -327,7 +327,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         let message = this.localeData?.remove_branch;
         message = message?.replace("[COMPANY_NAME]", companyName);
         this.confirmationMessage = message;
-        this.confirmationModal.show();
+        this.confirmationModal?.show();
     }
 
     public onUserConfirmation(yesOrNo) {

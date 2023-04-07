@@ -420,7 +420,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         if ('openDatePicker' in c && c.openDatePicker.currentValue !== c.openDatePicker.previousValue) {
             this.showFromDatePicker = c.openDatePicker.currentValue;
             if (this.bsDatePickers) {
-                this.bsDatePickers.first.show();
+                this.bsDatePickers.first?.show();
             }
         }
         if ('openCreateAccountPopup' in c && c.openCreateAccountPopup.currentValue !== c.openCreateAccountPopup.previousValue) {
@@ -579,7 +579,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     }
 
     public openChequeDetailForm() {
-        this.chequeEntryModal.show();
+        this.chequeEntryModal?.show();
         setTimeout(() => {
             this.chequeNumberInput?.nativeElement?.focus();
         }, 200);
@@ -1239,7 +1239,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         } else {
             this.inventoryService.GetStocks().pipe(takeUntil(this.destroyed$)).subscribe(data => {
                 if (data?.status === 'success') {
-                    this.allStocks = cloneDeep(data.body.results);
+                    this.allStocks = cloneDeep(data?.body.results);
                     this.sortStockItems(this.allStocks);
                     if (needToFocusStockInputField) {
                         this.selectedStockInputField.value = '';
@@ -1294,7 +1294,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         // this.selectedAccountInputField = selectedField;
         if (this.selectedField === 'account') {
             this.loadQuickAccountComponent();
-            this.quickAccountModal.show();
+            this.quickAccountModal?.show();
         } else if (this.selectedField === 'stock') {
             this.asideMenuStateForProductService = 'in';
             this.autoFocusStockGroupField = true;
@@ -1329,7 +1329,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             }
             return setTimeout(() => {
                 if (fieldType === 'chqNumber') {
-                    datePickerField.show();
+                    datePickerField?.show();
                     this.chequeClearanceInputField?.nativeElement?.focus();
                 } else if (fieldType === 'chqDate') {
                     datePickerField.hide();

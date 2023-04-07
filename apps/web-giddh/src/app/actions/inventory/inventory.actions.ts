@@ -42,7 +42,7 @@ export class InventoryAction {
     public updateGroup$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(InventoryActionsConst.UpdateGroup),
-            switchMap((action: CustomActions) => this._inventoryService.UpdateStockGroup(action.payload.body, action.payload.stockGroupUniquename)),
+            switchMap((action: CustomActions) => this._inventoryService.UpdateStockGroup(action.payload?.body, action.payload.stockGroupUniquename)),
             map(response => this.updateGroupResponse(response))));
 
 
@@ -76,7 +76,7 @@ export class InventoryAction {
                 if (data?.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 } else {
-                    this._toasty.successToast(data.body, '');
+                    this._toasty.successToast(data?.body, '');
                     return this.resetActiveGroup();
                 }
                 return { type: 'EmptyAction' };
@@ -171,10 +171,10 @@ export class InventoryAction {
                 } else {
                     this._toasty.successToast('Stock Created Successfully');
                     this.store.dispatch(this._salesActions.createStockAcSuccess({
-                        name: data.body.name,
-                        uniqueName: data.body?.uniqueName,
-                        linkedAc: data.body.salesAccountDetails ? data.body.salesAccountDetails.accountUniqueName :
-                            data.body.purchaseAccountDetails ? data.body.purchaseAccountDetails.accountUniqueName : ''
+                        name: data?.body.name,
+                        uniqueName: data?.body?.uniqueName,
+                        linkedAc: data?.body.salesAccountDetails ? data?.body.salesAccountDetails.accountUniqueName :
+                            data?.body.purchaseAccountDetails ? data?.body.purchaseAccountDetails.accountUniqueName : ''
                     }));
                     return this.resetActiveStock();
                 }
@@ -219,7 +219,7 @@ export class InventoryAction {
                 if (data?.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 } else {
-                    this._toasty.successToast(data.body, '');
+                    this._toasty.successToast(data?.body, '');
                     this.router.navigateByUrl('/pages/inventory/group' + data.queryString.stockGroupUniqueName + '/report', { skipLocationChange: true }).then(() => {
                         this.router.navigate(['/pages', 'inventory', 'group', data.queryString.stockGroupUniqueName, 'report']);
                     })
@@ -257,7 +257,7 @@ export class InventoryAction {
                 }
                 return {
                     type: INVENTORY_BRANCH_TRANSFER.CREATE_TRANSFER_RESPONSE,
-                    payload: res?.status === 'success' ? res.body : null
+                    payload: res?.status === 'success' ? res?.body : null
                 } as CustomActions;
             })));
 
@@ -272,7 +272,7 @@ export class InventoryAction {
 
                 return {
                     type: INVENTORY_LINKED_STOCKS.GET_LINKED_STOCKS_RESPONSE,
-                    payload: res?.status === 'success' ? res.body : null
+                    payload: res?.status === 'success' ? res?.body : null
                 };
             })));
 
@@ -294,7 +294,7 @@ export class InventoryAction {
                 if (data?.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 } else {
-                    this._toasty.successToast(data.body, '');
+                    this._toasty.successToast(data?.body, '');
                     this.OpenInventoryAsidePane(false);
                     let objToSend = { isOpen: false, isGroup: false, isUpdate: false };
                     this.store.dispatch(this.ManageInventoryAside(objToSend));

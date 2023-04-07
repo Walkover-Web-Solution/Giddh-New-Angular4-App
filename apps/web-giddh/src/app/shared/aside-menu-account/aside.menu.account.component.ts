@@ -133,7 +133,7 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
     }
 
     public showDeleteAccountModal() {
-        this.deleteAccountModal.show();
+        this.deleteAccountModal?.show();
     }
 
     public hideDeleteAccountModal() {

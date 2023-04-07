@@ -23,13 +23,13 @@ export class StockReportActions {
                         if (response) {
                             return this.validateResponse<StockReportResponse, StockReportRequest>(response, {
                                 type: STOCKS_REPORT_ACTIONS.GET_STOCKS_REPORT_RESPONSE,
-                                payload: response.body
+                                payload: response?.body
                             }, !isStockNotFound, {
                                 type: STOCKS_REPORT_ACTIONS.GET_STOCKS_REPORT_RESPONSE,
                                 payload: (isStockNotFound) ? {
                                     isStockNotFound,
                                     message: response.message
-                                } : response.body
+                                } : response?.body
                             });
                         } else {
                             return { type: 'EmptyAction' };
@@ -46,13 +46,13 @@ export class StockReportActions {
                         const isGroupNotFound = response && response?.status === 'error' && response.code === 'STOCK_GROUP_NOT_FOUND';
                         return this.validateResponse<GroupStockReportResponse, GroupStockReportRequest>(response, {
                             type: STOCKS_REPORT_ACTIONS.GET_GROUP_STOCKS_REPORT_RESPONSE,
-                            payload: response.body
+                            payload: response?.body
                         }, !isGroupNotFound, {
                             type: STOCKS_REPORT_ACTIONS.GET_GROUP_STOCKS_REPORT_RESPONSE,
                             payload: (isGroupNotFound) ? {
                                 isGroupNotFound,
                                 message: response.message
-                            } : response.body
+                            } : response?.body
                         });
                     }));
             })));

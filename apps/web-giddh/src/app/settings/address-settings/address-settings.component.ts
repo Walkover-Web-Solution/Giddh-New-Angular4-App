@@ -460,7 +460,7 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
      */
     public showConfirmationModal(address: any): void {
         this.selectedAddress = address;
-        this.deleteAddressConfirmationModal.show();
+        this.deleteAddressConfirmationModal?.show();
     }
 
     /**

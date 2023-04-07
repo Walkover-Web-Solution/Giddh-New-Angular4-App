@@ -50,7 +50,7 @@ export class LedgerActions {
     public DownloadInvoiceFile$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(LEDGER.DOWNLOAD_LEDGER_INVOICE),
-            switchMap((action: CustomActions) => this.ledgerService.DownloadInvoice(action.payload.body, action.payload.accountUniqueName)),
+            switchMap((action: CustomActions) => this.ledgerService.DownloadInvoice(action.payload?.body, action.payload.accountUniqueName)),
             map(res => this.validateResponse<string, DownloadLedgerRequest>(res, {
                 type: LEDGER.DOWNLOAD_LEDGER_INVOICE_RESPONSE,
                 payload: res
@@ -97,7 +97,7 @@ export class LedgerActions {
             ofType(LEDGER.LEDGER_SHARE_ACCOUNT),
             switchMap((action: CustomActions) =>
                 this.accountService.AccountShare(
-                    action.payload.body,
+                    action.payload?.body,
                     action.payload.accountUniqueName
                 )
             ),
@@ -116,7 +116,7 @@ export class LedgerActions {
                     };
                 } else {
                     let data: BaseResponse<string, ShareAccountRequest> = action.payload;
-                    this.toaster.showSnackBar("show", action.payload.body);
+                    this.toaster.showSnackBar("show", action.payload?.body);
                     return this.sharedAccountWith(data.queryString.accountUniqueName);
                 }
             })));
@@ -172,7 +172,7 @@ export class LedgerActions {
                         this.store.dispatch(this.refreshLedger(true));
                     }
 
-                    if (this.generalService.voucherApiVersion !== 2 && response.request.generateInvoice && !response.body.voucherGenerated) {
+                    if (this.generalService.voucherApiVersion !== 2 && response.request.generateInvoice && !response?.body.voucherGenerated) {
                         let invoiceGenModel: GenerateBulkInvoiceRequest[] = [];
                         let entryUniqueName = response.queryString.entryUniqueName.split('?')[0];
                         invoiceGenModel.push({
@@ -233,12 +233,12 @@ export class LedgerActions {
             switchMap((action: CustomActions) => this.invoiceServices.GenerateBulkInvoice({ combined: false }, action.payload)),
             map(response => {
                 if (response?.status === 'success') {
-                    if (typeof response.body === 'string') {
-                        this.toaster.showSnackBar("success", response.body);
+                    if (typeof response?.body === 'string') {
+                        this.toaster.showSnackBar("success", response?.body);
                         this.store.dispatch(this.setTxnForEdit(''));
                         return this.setTxnForEdit(response.request[0].entries[0]);
-                    } else if (Array.isArray(response.body) && 'reason' in response.body[0]) {
-                        this.toaster.showSnackBar("error", response.body[0].reason);
+                    } else if (Array.isArray(response?.body) && 'reason' in response?.body[0]) {
+                        this.toaster.showSnackBar("error", response?.body[0].reason);
                     }
                 } else {
                     this.toaster.showSnackBar("error", response.message, response.code);
@@ -268,7 +268,7 @@ export class LedgerActions {
                 return this.ledgerService.GetReconciliation(req, req.accountUniqueName);
             }), map(response => {
                 if (response?.status === 'success') {
-                    this.toaster.showSnackBar("info", response.body.message);
+                    this.toaster.showSnackBar("info", response?.body.message);
                 } else {
                     this.toaster.showSnackBar("error", response.message, response.code);
                 }
@@ -290,9 +290,9 @@ export class LedgerActions {
             map((action: CustomActions) => {
                 let res: any = action.payload as BaseResponse<any, string>;
                 if (res?.status === 'success') {
-                    if (Array.isArray(res.body)) {
-                        let errorMessage = res.body[0].reason;
-                        let failedEntries = res.body[0].failedEntries;
+                    if (Array.isArray(res?.body)) {
+                        let errorMessage = res?.body[0].reason;
+                        let failedEntries = res?.body[0].failedEntries;
                         if (errorMessage) {
                             this.toaster.showSnackBar("error", errorMessage, this.localeService.translate("app_error"));
                         }
@@ -313,7 +313,7 @@ export class LedgerActions {
     public GenerateBulkLedgerInvoice$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(LEDGER.GENERATE_BULK_LEDGER_INVOICE),
-            switchMap((action: CustomActions) => this.invoiceServices.GenerateBulkInvoice(action.payload.reqObj, action.payload.body, action.payload.requestedFrom)),
+            switchMap((action: CustomActions) => this.invoiceServices.GenerateBulkInvoice(action.payload.reqObj, action.payload?.body, action.payload.requestedFrom)),
             map(response => {
                 return this.GenerateBulkLedgerInvoiceResponse(response);
             })));
@@ -322,7 +322,7 @@ export class LedgerActions {
         .pipe(
             ofType(LEDGER.GENERATE_BULK_LEDGER_INVOICE_RESPONSE),
             map((response: CustomActions) => {
-                let data: BaseResponse<any, GenerateBulkInvoiceRequest[]> = response.payload;
+                let data: BaseResponse<any, GenerateBulkInvoiceRequest[]> = response?.payload;
                 if (data?.status === 'error') {
                     this.toaster.showSnackBar("error", data.message, data.code);
                 } else {
