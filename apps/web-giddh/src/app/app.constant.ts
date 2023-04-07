@@ -475,4 +475,4 @@ export const MOBILE_NUMBER_ADDRESS_JSON_URL = 'https://ipinfo.io/';
 export const OTP_PROVIDER_URL = 'https://control.msg91.com/app/assets/otp-provider/otp-provider.js';
 
 export const RESTRICTED_VOUCHERS_FOR_DOWNLOAD = ['journal'];
-export const SAMPLE_FILES_URL = 'https://giddh-app-builds.s3.ap-south-1.amazonaws.com/sample-file-';
+export const SAMPLE_FILES_URL = 'https://giddh-import-sample-files.s3.ap-south-1.amazonaws.com/sample-file-';

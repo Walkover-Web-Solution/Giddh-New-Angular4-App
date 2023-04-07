@@ -10,12 +10,15 @@ import { FormControl } from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
 import { MatSort } from "@angular/material/sort";
 import { cloneDeep } from "../../../lodash-optimized";
-import { BalanceStockTransactionReportRequest, StockTransactionReportRequest, TransactionStockReportResponse } from "../../../models/api-models/Inventory";
+import { BalanceStockTransactionReportRequest, InventoryReportBalanceResponse, StockTransactionReportRequest } from "../../../models/api-models/Inventory";
 import { InventoryService } from "../../../services/inventory.service";
 import { ToasterService } from "../../../services/toaster.service";
 import { CdkVirtualScrollViewport } from "@angular/cdk/scrolling";
 import { giddhRoundOff } from "../../../shared/helpers/helperFunctions";
 import { ReportFiltersComponent } from "../report-filters/report-filters.component";
+import { ActivatedRoute, Router } from "@angular/router";
+import { InventoryModuleName, InventoryReportType } from "../../inventory.enum";
+import { OrganizationType } from "../../../models/user-login-state";
 
 @Component({
     selector: "inventory-transaction-list",
@@ -44,7 +47,7 @@ export class InventoryTransactionListComponent implements OnInit {
     /** Stock Transactional Object */
     public balanceStockReportRequest: BalanceStockTransactionReportRequest = new BalanceStockTransactionReportRequest();
     /** Stock Transactional Report Balance Response */
-    public stockTransactionReportBalance: TransactionStockReportResponse;
+    public stockTransactionReportBalance: InventoryReportBalanceResponse;
     /* This will hold local JSON data */
     public localeData: any = {};
     /* This will hold common JSON data */
@@ -60,115 +63,11 @@ export class InventoryTransactionListComponent implements OnInit {
     /** Holds stock transaction report data */
     public dataSource = [];
     /** This will use for stock report voucher types column check values */
-    public voucherTypes: any[] = [
-        {
-            "value": "SALES",
-            "label": "Sales",
-            "checked": false
-        },
-        {
-            "value": "PURCHASE",
-            "label": "Purchase",
-            "checked": false
-        },
-        {
-            "value": "SALES_CREDIT_NOTE",
-            "label": "Sales credit note",
-            "checked": false
-        },
-        {
-            "value": "SALES_DEBIT_NOTE",
-            "label": "Sales debit note",
-            "checked": false
-        },
-        {
-            "value": "PURCHASE_DEBIT_NOTE",
-            "label": "Purchase debit note",
-            "checked": false
-        },
-        {
-            "value": "PURCHASE_CREDIT_NOTE",
-            "label": "Purchase credit note",
-            "checked": false
-        },
-        {
-            "value": "DELIVERY_NOTE",
-            "label": "Delivery challan",
-            "checked": false
-        },
-        {
-            "value": "RECEIPT_NOTE",
-            "label": "Receipt note",
-            "checked": false
-        },
-        {
-            "value": "MANUFACTURED",
-            "label": "Manufactured",
-            "checked": false
-        },
-        {
-            "value": "RAW_MATERIAL",
-            "label": "Raw material",
-            "checked": false
-        },
-    ];
+    public voucherTypes: any[] = [];
     /** This will use for stock report displayed columns */
     public displayedColumns: string[] = [];
     /** This will use for stock report voucher types column check values */
-    public customiseColumns = [
-        {
-            "value": "entry_date",
-            "label": "Date",
-            "checked": true
-        },
-        {
-            "value": "voucherType",
-            "label": "Voucher Type",
-            "checked": true
-        },
-        {
-            "value": "accountName",
-            "label": "Account Name",
-            "checked": true
-
-        },
-        {
-            "value": "stockName",
-            "label": "Stock Name",
-            "checked": true
-
-        },
-        {
-            "value": "variantName",
-            "label": "Variant Name",
-            "checked": true
-
-        },
-        {
-            "value": "inward_quantity",
-            "label": "Inwards",
-            "checked": true
-
-        },
-        {
-            "value": "outward_quantity",
-            "label": "Outwards",
-            "checked": true
-
-        },
-        {
-            "value": "rate",
-            "label": "Rate",
-            "checked": true
-
-        },
-        {
-            "value": "transaction_val",
-            "label": "Value",
-            "checked": true
-
-        }
-    ];
+    public customiseColumns = [];
     /** Hold From Date*/
     public toDate: string;
     /** Hold To Date*/
@@ -189,17 +88,63 @@ export class InventoryTransactionListComponent implements OnInit {
     public todaySelected: boolean = false;
     /** Holds from/to date */
     public fromToDate: any = {};
+    /** Holds module name */
+    public moduleName = InventoryModuleName.transaction;
+    /** Holds report type */
+    public reportType: string = InventoryReportType.transaction;
+    /** Holds report unique name */
+    public reportUniqueName: string = '';
+    /** True  if report is loaded */
+    public isReportLoaded: boolean = false;
+    /** True if translations loaded */
+    public translationLoaded: boolean = false;
+    /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
+    public isCompany: boolean;
+    /** False if pull unitversal date  */
+    public pullUniversalDate: boolean = true;
+    /** Hold current url */
+    private currentUrl: string = "";
+    /** Holds filters in store */
+    private storeFilters: any;
+    /** Hold advance search modal response */
+    public advanceSearchModalResponse: any = null;
 
     constructor(
         private generalService: GeneralService,
         public dialog: MatDialog,
         private changeDetection: ChangeDetectorRef,
         private inventoryService: InventoryService,
+        public route: ActivatedRoute,
+        public router: Router,
         private toaster: ToasterService,
         private store: Store<AppState>) {
         this.store.pipe(select(state => state.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
             if (profile) {
                 this.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
+            }
+        });
+        this.currentUrl = this.router.url;
+
+        this.store.pipe(select(state => state.session?.filters), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.storeFilters = response;
+                if (this.storeFilters[this.currentUrl]) {
+                    this.stockReportRequest = cloneDeep(this.storeFilters[this.currentUrl]?.stockReportRequest);
+                    this.balanceStockReportRequest = cloneDeep(this.storeFilters[this.currentUrl]?.balanceStockReportRequest);
+                    this.todaySelected = cloneDeep(this.storeFilters[this.currentUrl]?.todaySelected);
+                    this.showClearFilter = cloneDeep(this.storeFilters[this.currentUrl]?.showClearFilter);
+                    this.advanceSearchModalResponse = cloneDeep(this.storeFilters[this.currentUrl]?.advanceSearchModalResponse);
+
+                    this.fromDate = dayjs(this.stockReportRequest?.from, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                    this.toDate = dayjs(this.stockReportRequest?.to, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                    this.stockReportRequest.from = this.fromDate;
+                    this.stockReportRequest.to = this.toDate;
+                    this.balanceStockReportRequest.from = this.fromDate;
+                    this.balanceStockReportRequest.to = this.toDate;
+
+                    this.fromToDate = { from: this.fromDate, to: this.toDate };
+                    this.pullUniversalDate = false;
+                }
             }
         });
     }
@@ -210,6 +155,8 @@ export class InventoryTransactionListComponent implements OnInit {
      * @memberof InventoryTransactionListComponent
      */
     public ngOnInit(): void {
+        this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch;
+
         this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
 
         this.searchAccountName.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(search => {
@@ -231,6 +178,15 @@ export class InventoryTransactionListComponent implements OnInit {
                 this.activeCompany = activeCompany;
             }
         });
+
+        this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.reportUniqueName = response?.uniqueName;
+                if (this.isReportLoaded) {
+                    this.getStockTransactionalReport(true);
+                }
+            }
+        });
     }
 
     /**
@@ -244,8 +200,16 @@ export class InventoryTransactionListComponent implements OnInit {
     public getStockTransactionalReport(fetchBalance: boolean = true): void {
         this.dataSource = [];
         this.isLoading = true;
-
-        this.inventoryService.getStockTransactionReport(cloneDeep(this.stockReportRequest)).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.isReportLoaded = true;
+        if (!this.isCompany) {
+            this.stockReportRequest.branchUniqueNames = [this.generalService.currentBranchUniqueName];
+            this.balanceStockReportRequest.branchUniqueNames = [this.generalService.currentBranchUniqueName];
+        }
+        let stockReportRequest = cloneDeep(this.stockReportRequest);
+        stockReportRequest.stockGroups = undefined;
+        stockReportRequest.stocks = undefined;
+        stockReportRequest.variants = undefined;
+        this.inventoryService.getStockTransactionReport(stockReportRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.isLoading = false;
             if (response && response.body && response.status === 'success') {
                 this.isDataAvailable = (response.body.transactions?.length) ? true : false;
@@ -270,11 +234,23 @@ export class InventoryTransactionListComponent implements OnInit {
                 this.toaster.errorToast(response?.message);
                 this.dataSource = [];
                 this.stockReportRequest.totalItems = 0;
+                if (!this.isCompany) {
+                    this.stockReportRequest.branchUniqueNames = [this.generalService.currentBranchUniqueName];
+                    this.balanceStockReportRequest.branchUniqueNames = [this.generalService.currentBranchUniqueName];
+                }
             }
             this.changeDetection.detectChanges();
         });
         if (fetchBalance) {
-            this.inventoryService.getStockTransactionReportBalance(cloneDeep(this.balanceStockReportRequest)).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            let balanceReportRequest = cloneDeep(this.balanceStockReportRequest);
+            let queryParams = {
+                from: balanceReportRequest.from ?? '',
+                to: balanceReportRequest.to ?? '',
+                stockGroupUniqueName: ''
+            };
+            balanceReportRequest.from = undefined;
+            balanceReportRequest.to = undefined;
+            this.inventoryService.getStockTransactionReportBalance(queryParams, balanceReportRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response && response.body && response.status === 'success') {
                     this.stockTransactionReportBalance = response.body;
                 } else {
@@ -332,7 +308,7 @@ export class InventoryTransactionListComponent implements OnInit {
      */
     public getSearchFieldText(fieldName: string): string {
         if (fieldName === "name") {
-            return "Account Name";
+            return this.localeData?.reports?.account_name;
         }
         return "";
     }
@@ -424,5 +400,123 @@ export class InventoryTransactionListComponent implements OnInit {
         this.todaySelected = event?.todaySelected;
         this.showClearFilter = event?.showClearFilter;
         this.getStockTransactionalReport();
+    }
+
+    /**
+     * This will use for translation complete
+     *
+     * @param {*} event
+     * @memberof InventoryTransactionListComponent
+     */
+    public translationComplete(event: any): void {
+        if (event) {
+            this.translationLoaded = true;
+            this.voucherTypes = [
+                {
+                    value: "SALES",
+                    label: this.localeData?.reports?.sales,
+                    checked: false
+                },
+                {
+                    value: "PURCHASE",
+                    label: this.localeData?.reports?.purchase,
+                    checked: false
+                },
+                {
+                    value: "SALES_CREDIT_NOTE",
+                    label: this.localeData?.reports?.sales_credit_note,
+                    checked: false
+                },
+                {
+                    value: "SALES_DEBIT_NOTE",
+                    label: this.localeData?.reports?.sales_debit_note,
+                    checked: false
+                },
+                {
+                    value: "PURCHASE_DEBIT_NOTE",
+                    label: this.localeData?.reports?.purchase_debit_note,
+                    checked: false
+                },
+                {
+                    value: "PURCHASE_CREDIT_NOTE",
+                    label: this.localeData?.reports?.purchase_credit_note,
+                    checked: false
+                },
+                {
+                    value: "DELIVERY_NOTE",
+                    label: this.localeData?.reports?.delivery_challan,
+                    checked: false
+                },
+                {
+                    value: "RECEIPT_NOTE",
+                    label: this.localeData?.reports?.receipt_note,
+                    checked: false
+                },
+                {
+                    value: "MANUFACTURED",
+                    label: this.localeData?.reports?.manufactured,
+                    checked: false
+                },
+                {
+                    value: "RAW_MATERIAL",
+                    label: this.localeData?.reports?.raw_material,
+                    checked: false
+                },
+            ];
+            this.customiseColumns = [
+                {
+                    value: "entry_date",
+                    label: this.localeData?.reports?.date,
+                    checked: true
+                },
+                {
+                    value: "voucherType",
+                    label: this.localeData?.reports?.voucher_type,
+                    checked: true
+                },
+                {
+                    value: "account_name",
+                    label: this.localeData?.reports?.account_name,
+                    checked: true
+
+                },
+                {
+                    value: "stock_name",
+                    label: this.localeData?.reports?.stock_name,
+                    checked: true
+
+                },
+                {
+                    value: "variant_name",
+                    label: this.localeData?.reports?.variant_name,
+                    checked: true
+
+                },
+                {
+                    value: "inward_quantity",
+                    label: this.localeData?.reports?.inwards,
+                    checked: true
+
+                },
+                {
+                    value: "outward_quantity",
+                    label: this.localeData?.reports?.outwards,
+                    checked: true
+
+                },
+                {
+                    value: "rate",
+                    label: this.localeData?.reports?.rate,
+                    checked: true
+
+                },
+                {
+                    value: "transaction_val",
+                    label: this.localeData?.reports?.value,
+                    checked: true
+                }
+            ];
+            this.changeDetection.detectChanges();
+        }
     }
 }

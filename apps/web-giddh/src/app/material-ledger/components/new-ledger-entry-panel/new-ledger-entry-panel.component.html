@@ -42,6 +42,7 @@
                                         <td [style.width.px]="79" *ngIf="currentTxn?.unitRate" class="text-right">
                                             <label class="font-12">{{ commonLocaleData?.app_unit }}</label>
                                             <mat-select
+                                                (openedChange)="isUnitOpen = $event"
                                                 id="ledger-unit"
                                                 class="form-control"
                                                 [disabled]="shouldShowAdvanceReceiptMandatoryFields ? 'disabled' : null"
@@ -54,6 +55,7 @@
                                                 <mat-option
                                                     *ngFor="let item of currentTxn?.unitRate"
                                                     [value]="item?.stockUnitUniqueName"
+                                                    (click)="$event.stopPropagation()"
                                                 >
                                                     {{ item?.stockUnitCode }}
                                                 </mat-option>

@@ -2,7 +2,7 @@ import { Component, OnInit, ElementRef, ViewChild, Inject, ChangeDetectionStrate
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { GeneralService } from '../../../services/general.service';
 import { take, takeUntil } from 'rxjs/operators';
-import { from, Observable, ReplaySubject } from 'rxjs';
+import { Observable, ReplaySubject } from 'rxjs';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 import * as dayjs from 'dayjs';
@@ -11,7 +11,6 @@ import { select, Store } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { cloneDeep } from '../../../lodash-optimized';
-
 
 @Component({
     selector: 'new-inventory-advance-search',
@@ -44,49 +43,24 @@ export class NewInventoryAdvanceSearch implements OnInit {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* dayjs object */
     public dayjs = dayjs;
-    /* Hold advance search category*/
-    public advanceSearchCatergory: any[] = [
-        {
-            value: "Inward",
-            label: "Inwards"
-        },
-        {
-            value: "Outward",
-            label: "Outwards"
-        }
-    ];
+    /* Show on transaction report and hold advance search category*/
+    public advanceSearchCategoryTransaction: any[] = [];
+    /* Hold advance search category   */
+    public advanceSearchCategory: any[] = [];
     /* Hold advance search category options*/
-    public advanceSearchCatergoryOptions: any[] = [
-        {
-            value: "Amount",
-            label: "Amount"
-        },
-        {
-            value: "Quantity",
-            label: "Quantity",
-        }
-    ];
+    public advanceSearchCategoryOptions: any[] = [];
     /* Hold advance search vslue*/
-    public advanceSearchValue: any[] = [
-        {
-            value: "Equals",
-            label: "Equals"
-        },
-        {
-            value: "Greater than",
-            label: "Greater than"
-        },
-        {
-            value: "Less than",
-            label: "Less than"
-        },
-        {
-            value: "Excluded",
-            label: "Excluded"
-        }
-    ];
+    public advanceSearchValue: any[] = [];
     /** Instance of advance search form*/
     public advanceSearchFormObj: any = {};
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
+    /** True if translations loaded */
+    public translationLoaded: boolean = false;
+    /** Holds report type for modules */
+    public reportType: string = '';
 
     constructor(
         private _breakPointObservar: BreakpointObserver,
@@ -109,6 +83,7 @@ export class NewInventoryAdvanceSearch implements OnInit {
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.isMobileScreen = result.matches;
         });
+        this.reportType = this.inputData?.reportType;
         if (this.inputData?.stockReportRequest) {
             if (this.inputData?.advanceSearchResponse) {
                 this.advanceSearchFormObj = cloneDeep(this.inputData.advanceSearchResponse?.stockReportRequest);
@@ -120,6 +95,12 @@ export class NewInventoryAdvanceSearch implements OnInit {
                     this.advanceSearchFormObj.expression = "Less than";
                 } else if (this.advanceSearchFormObj.expression === "GREATER_THAN") {
                     this.advanceSearchFormObj.expression = "Greater than";
+                }
+                if (this.advanceSearchFormObj.param === "OPENING_AMOUNT" || this.advanceSearchFormObj.param === "OPENING_QUANTITY") {
+                    this.advanceSearchFormObj.param1 = "Opening Stock";
+                }
+                if (this.advanceSearchFormObj.param === "CLOSING_AMOUNT" || this.advanceSearchFormObj.param === "CLOSING_QUANTITY") {
+                    this.advanceSearchFormObj.param1 = "Closing Stock";
                 }
             }
             let from = this.inputData?.stockReportRequest.from;
@@ -204,6 +185,11 @@ export class NewInventoryAdvanceSearch implements OnInit {
      */
     public advanceSearchAction(type?: string): void {
         if (this.advanceSearchFormObj.param1 && this.advanceSearchFormObj.param2) {
+            if (this.advanceSearchFormObj.param1 === 'Opening Stock') {
+                this.advanceSearchFormObj.param1 = "OPENING";
+            } else if (this.advanceSearchFormObj.param1 === 'Closing Stock') {
+                this.advanceSearchFormObj.param1 = "CLOSING";
+            }
             this.advanceSearchFormObj.param = this.advanceSearchFormObj.param1?.toUpperCase() + '_' + this.advanceSearchFormObj.param2?.toUpperCase();
         }
         if (this.advanceSearchFormObj.expression === 'Equals') {
@@ -289,6 +275,74 @@ export class NewInventoryAdvanceSearch implements OnInit {
             this.datepickerTemplate,
             Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
         );
+    }
+
+    /**
+     * This will use for translation complete
+     *
+     * @param {*} event
+     * @memberof NewInventoryAdvanceSearch
+     */
+    public translationComplete(event: any): void {
+        if (event) {
+            this.translationLoaded = true;
+            this.advanceSearchCategoryTransaction= [
+                {
+                    value: "Inward",
+                    label: this.localeData?.reports?.inwards,
+                },
+                {
+                    value: "Outward",
+                    label: this.localeData?.reports?.outwards,
+                }
+            ];
+            this.advanceSearchCategory= [
+                {
+                    value: "Inward",
+                    label: this.localeData?.reports?.inwards,
+                },
+                {
+                    value: "Outward",
+                    label: this.localeData?.reports?.outwards,
+                },
+                {
+                    value: "Opening Stock",
+                    label: this.localeData?.reports?.opening_stock,
+                },
+                {
+                    value: "Closing Stock",
+                    label: this.localeData?.reports?.closing_stock,
+                }
+            ];
+            this.advanceSearchCategoryOptions= [
+                {
+                    value: "Amount",
+                    label: this.localeData?.advance_search_filter?.amount,
+                },
+                {
+                    value: "Quantity",
+                    label: this.localeData?.advance_search_filter?.quantity,
+                }
+            ];
+            this.advanceSearchValue = [
+                {
+                    value: "Equals",
+                    label: this.localeData?.advance_search_filter?.equals,
+                },
+                {
+                    value: "Greater than",
+                    label: this.localeData?.advance_search_filter?.greater_than,
+                },
+                {
+                    value: "Less than",
+                    label: this.localeData?.advance_search_filter?.less_than,
+                },
+                {
+                    value: "Excluded",
+                    label: this.localeData?.advance_search_filter?.excluded,
+                }
+            ];
+        }
     }
 
     /**
