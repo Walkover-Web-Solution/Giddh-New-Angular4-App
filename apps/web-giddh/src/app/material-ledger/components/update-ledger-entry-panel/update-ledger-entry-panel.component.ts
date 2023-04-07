@@ -2336,8 +2336,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     additional: {
                         stock: {
                             name: t.inventory.stock?.name,
+                            uniqueName: t.inventory.stock?.uniqueName
                         },
-                        uniqueName: t.inventory.stock?.uniqueName
+                        uniqueName: t.particular?.uniqueName
                     }
                 });
                 t.particular.uniqueName = `${t.particular?.uniqueName}#${t.inventory.stock?.uniqueName}`;
