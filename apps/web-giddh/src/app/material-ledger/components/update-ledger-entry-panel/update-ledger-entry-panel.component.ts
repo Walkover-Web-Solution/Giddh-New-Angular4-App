@@ -2415,6 +2415,11 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             this.vm.generateCompoundTotal();
         }
         this.vm.generatePanelAmount();
+        if (this.isAdvanceReceipt) {
+            setTimeout(() => {
+                this.handleAdvanceReceiptChange();
+            }, 100);
+        }
         this.activeAccountSubject.next(this.activeAccount);
         this.changeDetectorRef.detectChanges();
     }
