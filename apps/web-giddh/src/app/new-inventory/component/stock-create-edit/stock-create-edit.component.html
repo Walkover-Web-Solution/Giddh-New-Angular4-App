@@ -877,6 +877,9 @@
                                                             >
                                                                 Sales Unit Rates
                                                             </th>
+                                                            <th class="text-center unit-name table-heading-color">
+                                                                Is Rate Tax Inclusive?
+                                                            </th>
                                                             <th class="text-center archive table-heading-color">
                                                                 Archive
                                                             </th>
@@ -1073,6 +1076,23 @@
                                                                         </button>
                                                                     </div>
                                                                 </ng-container>
+                                                            </td>
+                                                            <td class="text-center unit-name">
+                                                                <mat-checkbox
+                                                                    color="primary"
+                                                                    name="variantSalesTaxInclusive{{ i }}"
+                                                                    [(ngModel)]="variant.salesTaxInclusive"
+                                                                    [matTooltip]="'Is Sales Rate Tax Inclusive?'"
+                                                                    matTooltipPosition="above"
+                                                                ></mat-checkbox>
+                                                                <mat-checkbox
+                                                                    class="mr-l2"
+                                                                    color="primary"
+                                                                    name="variantPurchaseTaxInclusive{{ i }}"
+                                                                    [(ngModel)]="variant.purchaseTaxInclusive"
+                                                                    [matTooltip]="'Is Purchase Rate Tax Inclusive?'"
+                                                                    matTooltipPosition="above"
+                                                                ></mat-checkbox>
                                                             </td>
                                                             <td class="text-center archive">
                                                                 <mat-checkbox

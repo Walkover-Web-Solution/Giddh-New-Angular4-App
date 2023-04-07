@@ -213,8 +213,6 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 }
             }
         });
-
-        console.log(this.stockForm);
     }
 
     /**
