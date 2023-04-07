@@ -180,7 +180,7 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
             this.toaster.errorToast(this.localeData?.validations?.scope, this.localeData?.validation);
             return;
         }
-        if (!dataToSave.filter) {
+        if (!dataToSave?.filter) {
             this.toaster.errorToast(this.localeData?.validations?.filter, this.localeData?.validation);
             return;
         }
@@ -211,7 +211,7 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
         message = message?.replace("[SELECTED_TAX]", this.selectedTax);
         this.confirmationMessage = message;
         this.confirmationFor = 'delete';
-        this.triggerConfirmationModel.show();
+        this.triggerConfirmationModel?.show();
     }
 
     public updateTrigger(taxIndex: number) {
@@ -221,7 +221,7 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
         message = message?.replace("[TRIGGER_NAME]", selectedTrigger.name);
         this.confirmationMessage = message;
         this.confirmationFor = 'edit';
-        this.triggerConfirmationModel.show();
+        this.triggerConfirmationModel?.show();
     }
 
     public onCancel() {
@@ -273,7 +273,7 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
         }
         if (event?.value === 'closing balance') {
             this.onSelectClosingBalance();
-            if ((this.newTriggerObj.filter === 'amountGreaterThan') || (this.newTriggerObj.filter === 'amountSmallerThan')) {
+            if ((this.newTriggerObj?.filter === 'amountGreaterThan') || (this.newTriggerObj?.filter === 'amountSmallerThan')) {
                 return;
             } else {
                 this.newTriggerObj.filter = null;

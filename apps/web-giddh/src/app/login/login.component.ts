@@ -283,7 +283,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
 
     public showMobileModal() {
-        this.mobileVerifyModal.show();
+        this.mobileVerifyModal?.show();
     }
 
     public hideMobileModal() {

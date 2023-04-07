@@ -43,7 +43,7 @@ export class InvoiceActions {
     public GetAllLedgersForInvoice$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(INVOICE_ACTIONS.GET_ALL_LEDGERS_FOR_INVOICE),
-            switchMap((action: CustomActions) => this._invoiceService.GetAllLedgersForInvoice(action.payload.model, action.payload.body)),
+            switchMap((action: CustomActions) => this._invoiceService.GetAllLedgersForInvoice(action.payload.model, action.payload?.body)),
             map(res => this.validateResponse<GetAllLedgersForInvoiceResponse, CommonPaginatedRequest>(res, {
                 type: INVOICE_ACTIONS.GET_ALL_LEDGERS_FOR_INVOICE_RESPONSE,
                 payload: res
@@ -57,7 +57,7 @@ export class InvoiceActions {
     public PreviewInvoice$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(INVOICE_ACTIONS.PREVIEW_INVOICE),
-            switchMap((action: CustomActions) => this._invoiceService.PreviewInvoice(action.payload.accountUniqueName, action.payload.body)),
+            switchMap((action: CustomActions) => this._invoiceService.PreviewInvoice(action.payload.accountUniqueName, action.payload?.body)),
             map(res => this.validateResponse<PreviewInvoiceResponseClass, PreviewInvoiceRequest>(res, {
                 type: INVOICE_ACTIONS.PREVIEW_INVOICE_RESPONSE,
                 payload: res
@@ -85,7 +85,7 @@ export class InvoiceActions {
     public UpdateGeneratedInvoice$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(INVOICE_ACTIONS.UPDATE_GENERATED_INVOICE),
-            switchMap((action: CustomActions) => this._invoiceService.UpdateGeneratedInvoice(action.payload.accountUniqueName, action.payload.body)),
+            switchMap((action: CustomActions) => this._invoiceService.UpdateGeneratedInvoice(action.payload.accountUniqueName, action.payload?.body)),
             map(res => this.validateResponse<string, GenerateInvoiceRequestClass>(res, {
                 type: INVOICE_ACTIONS.UPDATE_GENERATED_INVOICE_RESPONSE,
                 payload: res
@@ -99,7 +99,7 @@ export class InvoiceActions {
     public GenerateInvoice$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(INVOICE_ACTIONS.GENERATE_INVOICE),
-            switchMap((action: CustomActions) => this._invoiceService.GenerateInvoice(action.payload.accountUniqueName, action.payload.body)),
+            switchMap((action: CustomActions) => this._invoiceService.GenerateInvoice(action.payload.accountUniqueName, action.payload?.body)),
             map(res => this.validateResponse<GenerateInvoiceRequestClass, string>(res, {
                 type: INVOICE_ACTIONS.GENERATE_INVOICE_RESPONSE,
                 payload: res
@@ -111,7 +111,7 @@ export class InvoiceActions {
     public GenerateBulkInvoice$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(INVOICE_ACTIONS.GENERATE_BULK_INVOICE),
-            switchMap((action: CustomActions) => this._invoiceService.GenerateBulkInvoice(action.payload.reqObj, action.payload.body, action.payload.requestedFrom)),
+            switchMap((action: CustomActions) => this._invoiceService.GenerateBulkInvoice(action.payload.reqObj, action.payload?.body, action.payload.requestedFrom)),
             map(response => {
                 return this.GenerateBulkInvoiceResponse(response);
             })));
@@ -124,10 +124,10 @@ export class InvoiceActions {
                 if (data?.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 } else {
-                    if (typeof data.body === 'string') {
-                        this._toasty.successToast(data.body);
-                    } else if (_.isArray(data.body) && data.body?.length > 0) {
-                        _.forEach(data.body, (item: IBulkInvoiceGenerationFalingError) => {
+                    if (typeof data?.body === 'string') {
+                        this._toasty.successToast(data?.body);
+                    } else if (_.isArray(data?.body) && data?.body?.length > 0) {
+                        _.forEach(data?.body, (item: IBulkInvoiceGenerationFalingError) => {
                             this._toasty.warningToast(item.reason);
                         });
                     }
@@ -375,7 +375,7 @@ export class InvoiceActions {
                         type = 'zip';
                     }
                     let fileName = req?.voucherNumber[0];
-                    this.downloadFile(data.body, type, fileName);
+                    this.downloadFile(data?.body, type, fileName);
                 }
                 return { type: 'EmptyAction' };
             })));
@@ -404,7 +404,7 @@ export class InvoiceActions {
                 if (data?.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 } else {
-                    this._toasty.successToast(data.body);
+                    this._toasty.successToast(data?.body);
                 }
                 return { type: 'EmptyAction' };
             })));
@@ -425,7 +425,7 @@ export class InvoiceActions {
                 if (data?.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 } else {
-                    this._toasty.successToast(data.body);
+                    this._toasty.successToast(data?.body);
                 }
                 return { type: 'EmptyAction' };
             })));
@@ -498,7 +498,7 @@ export class InvoiceActions {
                 if (data?.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 } else {
-                    this._toasty.successToast(data.body);
+                    this._toasty.successToast(data?.body);
                 }
                 return { type: 'EmptyAction' };
             })));
@@ -541,7 +541,7 @@ export class InvoiceActions {
                     this._toasty.errorToast(data.message, data.code);
                 } else {
                     let text = this.localeService.translate("app_messages.eway_bill_generated");
-                    text = text?.replace("[EWAY_BILL_NO]", data.body.ewayBillNo);
+                    text = text?.replace("[EWAY_BILL_NO]", data?.body.ewayBillNo);
                     this._toasty.successToast(text);
                     this._router.navigate(['/pages/invoice/ewaybill']);
                 }
@@ -568,7 +568,7 @@ export class InvoiceActions {
                     this._toasty.errorToast(data.message, data.code);
                 } else {
                     if (data?.status === 'success') {
-                        this._toasty.successToast(data.body);
+                        this._toasty.successToast(data?.body);
                     }
                 }
                 return { type: 'EmptyAction' };
@@ -583,7 +583,7 @@ export class InvoiceActions {
                     this._toasty.errorToast(data.message, data.code);
                 } else {
                     let text = this.localeService.translate("app_messages.vehicle_data_updated");
-                    text = text?.replace("[VEHICLE_UPDATE_DATE]", data.body.vehUpdDate)?.replace("[VALID_UPTO]", data.body.validUpto);
+                    text = text?.replace("[VEHICLE_UPDATE_DATE]", data?.body.vehUpdDate)?.replace("[VALID_UPTO]", data?.body.validUpto);
                     this._toasty.successToast(text);
                 }
                 return { type: 'EmptyAction' };
@@ -614,7 +614,7 @@ export class InvoiceActions {
                 if (data && data.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 }
-                if (data && data.status === 'success' && data.body.results.length === 0) {
+                if (data && data.status === 'success' && data?.body.results.length === 0) {
                     this._toasty.errorToast(this.localeService.translate("app_no_entries_found"));
                 }
                 return { type: 'EmptyAction' };
@@ -663,7 +663,7 @@ export class InvoiceActions {
                 if (data?.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 } else {
-                    this._toasty.successToast(data.body);
+                    this._toasty.successToast(data?.body);
                 }
                 return { type: 'EmptyAction' };
             })));
@@ -671,7 +671,7 @@ export class InvoiceActions {
     public GetAllEwayfilterRequest$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(EWAYBILL_ACTIONS.GET_All_FILTERED_LIST_EWAYBILLS),
-            switchMap((action: CustomActions) => this._invoiceService.getAllEwaybillsfilterList(action.payload.body)),
+            switchMap((action: CustomActions) => this._invoiceService.getAllEwaybillsfilterList(action.payload?.body)),
             map((response: BaseResponse<IEwayBillAllList, IEwayBillfilter>) => {
                 return this.GetAllEwayfilterResponse(response);
             })));
@@ -769,7 +769,7 @@ export class InvoiceActions {
         .pipe(
             ofType(INVOICE.RECURRING.GET_RECURRING_INVOICE_DATA),
             switchMap((action: CustomActions) => this._recurringService.getRecurringVouchers(action.payload)),
-            map(res => this.validateResponse<RecurringInvoice[], string>(res, this.GetAllRecurringInvoicesResponse(res.body), true, this.noPermissionsRecurringInvoice()))));
+            map(res => this.validateResponse<RecurringInvoice[], string>(res, this.GetAllRecurringInvoicesResponse(res?.body), true, this.noPermissionsRecurringInvoice()))));
     /**
      * SAVE Recurring Voucher
      */
@@ -778,7 +778,7 @@ export class InvoiceActions {
         .pipe(
             ofType(INVOICE.RECURRING.CREATE_RECURRING_INVOICE),
             switchMap((action: CustomActions) => this._recurringService.createRecurringVouchers(action.payload)),
-            map(res => this.validateResponse<RecurringInvoice, string>(res, this.createRecurringInvoiceResponse(res.body), true, this.createRecurringInvoiceResponse(res.body), this.localeService.translate("app_messages.recurring_invoice_created")))));
+            map(res => this.validateResponse<RecurringInvoice, string>(res, this.createRecurringInvoiceResponse(res?.body), true, this.createRecurringInvoiceResponse(res?.body), this.localeService.translate("app_messages.recurring_invoice_created")))));
 
     /**
      * UPDATE Recurring Vouchers
@@ -788,7 +788,7 @@ export class InvoiceActions {
         .pipe(
             ofType(INVOICE.RECURRING.UPDATE_RECURRING_INVOICE),
             switchMap((action: CustomActions) => this._recurringService.updateRecurringVouchers(action.payload)),
-            map(res => this.validateResponse<RecurringInvoice, string>(res, this.updateRecurringInvoiceResponse(res.body), true,
+            map(res => this.validateResponse<RecurringInvoice, string>(res, this.updateRecurringInvoiceResponse(res?.body), true,
                 this.updateRecurringInvoiceResponse(null), this.localeService.translate("app_messages.recurring_invoice_updated")))));
 
     public GenerateBulkEInvoice$: Observable<Action> = createEffect(() => this.action$
@@ -1349,8 +1349,8 @@ export class InvoiceActions {
             }
             return errorAction;
         } else {
-            if (showToast && typeof response.body === 'string') {
-                this._toasty.successToast(response.body);
+            if (showToast && typeof response?.body === 'string') {
+                this._toasty.successToast(response?.body);
             } else if (message) {
                 this._toasty.successToast(message);
             }

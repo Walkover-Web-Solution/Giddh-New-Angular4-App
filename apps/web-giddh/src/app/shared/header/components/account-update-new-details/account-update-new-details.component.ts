@@ -1077,7 +1077,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         this.moveMergedAccountModalBody = this.localeData?.move_merged_account_content;
         this.moveMergedAccountModalBody = this.moveMergedAccountModalBody?.replace("[SOURCE_ACCOUNT]", this.setAccountForMove);
         this.moveMergedAccountModalBody = this.moveMergedAccountModalBody?.replace("[DESTINATION_ACCOUNT]", this.selectedAccountForMove);
-        this.moveMergedAccountModal.show();
+        this.moveMergedAccountModal?.show();
     }
 
     public hideMoveMergedAccountModal() {

@@ -106,7 +106,7 @@ export class LoginActions {
         .pipe(
             ofType(LoginActions.SIGNUP_WITH_GOOGLE_RESPONSE),
             map((action: CustomActions) => {
-                let response: BaseResponse<VerifyEmailResponseModel, string> = action.payload;
+                let response: BaseResponse<VerifyEmailResponseModel, string> = action?.payload;
                 if (response) {
                     if (response.status === 'error') {
                         this._toaster.errorToast(action.payload.message, action.payload.code);
@@ -157,7 +157,7 @@ export class LoginActions {
         .pipe(
             ofType(LoginActions.VerifyEmailResponce),
             map((action: CustomActions) => {
-                let response: BaseResponse<VerifyEmailResponseModel, VerifyEmailModel> = action.payload;
+                let response: BaseResponse<VerifyEmailResponseModel, VerifyEmailModel> = action?.payload;
                 if (response?.status === 'error') {
                     this._toaster.errorToast(action.payload.message, action.payload.code);
                     return { type: 'EmptyAction' };
@@ -341,7 +341,7 @@ export class LoginActions {
         .pipe(
             ofType(LoginActions.VerifyMobileResponce),
             map((action: CustomActions) => {
-                let response: BaseResponse<VerifyMobileResponseModel, VerifyMobileModel> = action.payload;
+                let response: BaseResponse<VerifyMobileResponseModel, VerifyMobileModel> = action?.payload;
                 if (response?.status === 'error') {
                     this._toaster.errorToast(action.payload.message, action.payload.code);
                     return { type: 'EmptyAction' };
@@ -361,7 +361,7 @@ export class LoginActions {
         .pipe(
             ofType(LoginActions.VerifyTwoWayAuthResponse),
             map((action: CustomActions) => {
-                let response: BaseResponse<VerifyMobileResponseModel, VerifyMobileModel> = action.payload;
+                let response: BaseResponse<VerifyMobileResponseModel, VerifyMobileModel> = action?.payload;
                 if (response?.status === 'error') {
                     this._toaster.errorToast(response.message, response.code);
                     return { type: 'EmptyAction' };
@@ -395,7 +395,7 @@ export class LoginActions {
                     return this.ChangeCompanyResponse(dummyResponse);
                 }
                 if (response.body.companyUniqueName) {
-                    this._generalService.currentBranchUniqueName = response.body.branchUniqueName || '';
+                    this._generalService.currentBranchUniqueName = response?.body.branchUniqueName || '';
                     if (response.body.branchUniqueName) {
                         const details = {
                             branchDetails: {
@@ -481,7 +481,7 @@ export class LoginActions {
         .pipe(
             ofType(LoginActions.VerifyAddNewMobileNoResponse),
             map((action: CustomActions) => {
-                let response: BaseResponse<string, VerifyMobileModel> = action.payload;
+                let response: BaseResponse<string, VerifyMobileModel> = action?.payload;
                 if (response?.status === 'error') {
                     this._toaster.errorToast(response.message, response.code);
                     return { type: 'EmptyAction' };
@@ -953,9 +953,9 @@ export class LoginActions {
     private doSameStuffs(companies, isSocialLogin?: boolean) {
         let respState = new BaseResponse<StateDetailsResponse, string>();
         respState.body = new StateDetailsResponse();
-        companies.body = sortBy(companies.body, ['name']);
+        companies.body = sortBy(companies?.body, ['name']);
         // now take first company from the companies
-        let cArr = companies.body.sort((a, b) => a?.name?.length - b?.name?.length);
+        let cArr = companies?.body.sort((a, b) => a?.name?.length - b?.name?.length);
         let company = cArr[0];
         if (company) {
             respState.body.companyUniqueName = company?.uniqueName;
@@ -990,7 +990,7 @@ export class LoginActions {
 
     private finalThingTodo(stateDetail: any, companies: any, isSocialLogin?: boolean) {
         this.store.pipe(select(state => state.session.user), take(1)).subscribe(response => {
-            let request = { userUniqueName: response.user?.uniqueName, companyUniqueName: stateDetail.body.companyUniqueName };
+            let request = { userUniqueName: response.user?.uniqueName, companyUniqueName: stateDetail?.body.companyUniqueName };
             this.store.dispatch(this.companyActions.getCompanyUser(request));
         });
         this.store.dispatch(this.companyActions.GetStateDetailsResponse(stateDetail));

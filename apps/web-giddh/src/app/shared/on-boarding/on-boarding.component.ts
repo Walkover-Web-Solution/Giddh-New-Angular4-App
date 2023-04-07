@@ -191,11 +191,11 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
     }
 
     public showLogoutModal() {
-        this.logoutModal.show();
+        this.logoutModal?.show();
     }
 
     public hideLogoutModal() {
-        this.logoutModal.hide();
+        this.logoutModal?.hide();
     }
 
     public logoutUser() {

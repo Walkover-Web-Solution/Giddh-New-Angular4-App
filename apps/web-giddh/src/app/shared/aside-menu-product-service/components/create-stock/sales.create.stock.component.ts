@@ -990,7 +990,7 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
             }
         }
         if (s.autoFocusInChild && s.autoFocusInChild.currentValue) {
-            this.groupDDList.show('');
+            this.groupDDList?.show('');
         }
     }
 
@@ -1096,25 +1096,25 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
 
     public focusInPurchaseAccountField() {
         setTimeout(() => {
-            this.purchaseAccountUniqueName.show('');
+            this.purchaseAccountUniqueName?.show('');
         }, 200);
     }
 
     public onSelectPurchaseAccount() {
         setTimeout(() => {
-            this.purchaseStockUnitCode.show('');
+            this.purchaseStockUnitCode?.show('');
         }, 200);
     }
 
     public focusInSalesAccountField() {
         setTimeout(() => {
-            this.salesAccountUniqueName.show('');
+            this.salesAccountUniqueName?.show('');
         }, 200);
     }
 
     public onSelectSalesAccount() {
         setTimeout(() => {
-            this.salesStockUnitCode.show('');
+            this.salesStockUnitCode?.show('');
         }, 200);
     }
 
@@ -1140,13 +1140,13 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
 
     public onSelectManufacturingStockUnitCode() {
         setTimeout(() => {
-            this.manufacturingStockUniqueName.show();
+            this.manufacturingStockUniqueName?.show();
         }, 200);
     }
 
     public onSelectManufacturingStockQuantity() {
         setTimeout(() => {
-            this.manufacturingStockUnitCode.show();
+            this.manufacturingStockUnitCode?.show();
         }, 200);
     }
 

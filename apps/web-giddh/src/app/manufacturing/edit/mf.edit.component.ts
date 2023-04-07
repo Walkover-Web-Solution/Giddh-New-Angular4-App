@@ -389,7 +389,7 @@ export class MfEditComponent implements OnInit, OnDestroy {
     }
 
     public deleteEntry() {
-        this.manufacturingConfirmationModal.show();
+        this.manufacturingConfirmationModal?.show();
     }
 
     public getTotal(from, field) {

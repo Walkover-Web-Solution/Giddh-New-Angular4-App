@@ -96,7 +96,7 @@ export class GeneralActions {
         .pipe(
             ofType(GENERAL_ACTIONS.GET_SIDE_MENU_ITEMS),
             switchMap(() => this._companyService.getMenuItems()),
-            map(resp => this.saveSideMenuItems(resp.body))));
+            map(resp => this.saveSideMenuItems(resp?.body))));
 
     constructor(private action$: Actions, private _groupService: GroupService, private _companyService: CompanyService, private _dbService: DbService, private route: Router) {
 

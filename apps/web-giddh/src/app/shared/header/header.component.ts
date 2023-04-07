@@ -601,7 +601,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.isAddAndManageOpenedFromOutside$.subscribe(s => {
             if (s) {
                 this.loadAddManageComponent();
-                this.manageGroupsAccountsModal.show();
+                this.manageGroupsAccountsModal?.show();
             } else {
                 this.manageGroupsAccountsModal?.hide();
             }
@@ -995,16 +995,16 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     public showAddCompanyModal() {
         this.loadAddCompanyNewUiComponent();
-        this.addCompanyNewModal.show();
+        this.addCompanyNewModal?.show();
     }
 
     public hideAddCompanyModal() {
-        this.addCompanyNewModal.hide();
+        this.addCompanyNewModal?.hide();
     }
 
     public hideCompanyModalAndShowAddAndManage() {
         this.addCompanyModal.hide();
-        this.manageGroupsAccountsModal.show();
+        this.manageGroupsAccountsModal?.show();
     }
 
     public onHide() {
