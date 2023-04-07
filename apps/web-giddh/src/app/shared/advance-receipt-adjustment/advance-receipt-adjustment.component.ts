@@ -959,7 +959,9 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
             // Find if the item is present in already adjusted voucher which means the item is already partially adjusted
             const itemPresentInExistingAdjustment = this.advanceReceiptAdjustmentUpdatedData.adjustments.find(adjustment => adjustment?.uniqueName === item?.uniqueName);
             if (itemPresentInExistingAdjustment && item.balanceDue?.amountForAccount) {
-                item.balanceDue.amountForAccount += itemPresentInExistingAdjustment?.adjustmentAmount?.amountForAccount;
+                if (this.voucherApiVersion !== 2) {
+                    item.balanceDue.amountForAccount += itemPresentInExistingAdjustment?.balanceDue?.amountForAccount;
+                }
                 item.adjustmentAmount.amountForAccount += itemPresentInExistingAdjustment?.adjustmentAmount?.amountForAccount;
             }
         }
@@ -1156,8 +1158,6 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
                 this.allAdvanceReceiptResponse = results?.map(result => ({ ...result, adjustmentAmount: { amountForAccount: result.balanceDue?.amountForAccount, amountForCompany: result.balanceDue?.amountForCompany } }));
                 if (response.body.page === 1) {
                     this.adjustVoucherOptions = [];
-                    // Fill the suggestions with already adjusted vouchers
-                    this.pushExistingAdjustments();
                 }
 
                 if (this.allAdvanceReceiptResponse && this.allAdvanceReceiptResponse.length) {
@@ -1181,6 +1181,11 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
                             this.toaster.warningToast(this.commonLocaleData?.app_voucher_unavailable);
                         }
                     }
+                }
+
+                if (response.body.page === 1) {
+                    // Fill the suggestions with already adjusted vouchers
+                    this.pushExistingAdjustments();
                 }
 
                 this.adjustVoucherOptions$ = of(this.adjustVoucherOptions);

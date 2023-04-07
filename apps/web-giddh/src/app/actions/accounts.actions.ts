@@ -84,7 +84,7 @@ export class AccountsAction {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
                     return { type: 'EmptyAction' };
                 }
-                this._toasty.successToast(action.payload.body, action.payload?.status);
+                this._toasty.successToast(action.payload?.body, action.payload?.status);
                 this.store.pipe(take(1)).subscribe((s) => {
                     if (s.groupwithaccounts && s.groupwithaccounts.activeGroup) {
                         return this.getAccountDetails(s.groupwithaccounts.activeAccount?.uniqueName);
@@ -193,13 +193,13 @@ export class AccountsAction {
                     this.store.dispatch(this.commonActions.accountUpdated(true));
                     this.store.dispatch(this.groupWithAccountsAction.hideEditAccountForm());
                     const updateIndexDb: IUpdateDbRequest = {
-                        newUniqueName: response.body?.uniqueName,
+                        newUniqueName: response?.body?.uniqueName,
                         oldUniqueName: response.queryString.accountUniqueName,
                         latestName: response.request.name,
                         uniqueName: this._generalServices.companyUniqueName,
                         type: "accounts",
                         isActive: false,
-                        name: response.body.name
+                        name: response?.body.name
                     }
                     this.store.dispatch(this._generalActions.updateIndexDb(updateIndexDb));
                 }
@@ -210,7 +210,7 @@ export class AccountsAction {
         .pipe(
             ofType(AccountsAction.UPDATE_ACCOUNT_RESPONSEV2),
             map((action: CustomActions) => {
-                let resData: BaseResponse<AccountResponseV2, AccountRequestV2> = action.payload;
+                let resData: BaseResponse<AccountResponseV2, AccountRequestV2> = action?.payload;
                 if (action.payload?.status === 'error') {
                     this._toasty.clearAllToaster();
                     this._toasty.errorToast(action.payload.message, action.payload.code);
@@ -255,7 +255,7 @@ export class AccountsAction {
             ofType(AccountsAction.SHARE_ENTITY),
             switchMap((action: CustomActions) =>
                 this._accountService.Share(
-                    action.payload.body,
+                    action.payload?.body,
                     action.payload.accountUniqueName
                 )
             ),
@@ -308,7 +308,7 @@ export class AccountsAction {
                     };
                 } else {
                     let data: BaseResponse<string, ShareAccountRequest> = action.payload;
-                    this._toasty.successToast(action.payload.body, '');
+                    this._toasty.successToast(action.payload?.body, '');
                     if (data.queryString.entity === 'account') {
                         return this.sharedAccountWith(data.queryString.entityUniqueName);
                     } else if (data.queryString.entity === 'group') {
@@ -371,7 +371,7 @@ export class AccountsAction {
                         type: 'EmptyAction'
                     };
                 } else {
-                    this._toasty.successToast(action.payload.body, '');
+                    this._toasty.successToast(action.payload?.body, '');
                 }
                 let accountUniqueName = null;
                 this.store.pipe(take(1)).subscribe(s => {
@@ -405,7 +405,7 @@ export class AccountsAction {
             ofType(AccountsAction.MOVE_ACCOUNT),
             switchMap((action: CustomActions) =>
                 this._accountService.AccountMove(
-                    action.payload.body,
+                    action.payload?.body,
                     action.payload.accountUniqueName,
                     action.payload.activeGroupUniqueName
                 )
@@ -450,7 +450,7 @@ export class AccountsAction {
                 if (action.payload?.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
                 } else {
-                    this._toasty.successToast(action.payload.body, '');
+                    this._toasty.successToast(action.payload?.body, '');
                     let data: BaseResponse<string, AccountMergeRequest[]> = action.payload;
                     this._generalServices.eventHandler.next({ name: eventsConst.accountMerged, payload: data });
                     if (data.request && data.request.length) {
@@ -492,7 +492,7 @@ export class AccountsAction {
                 if (action.payload?.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
                 } else {
-                    this._toasty.successToast(action.payload.body, '');
+                    this._toasty.successToast(action.payload?.body, '');
                     let data: BaseResponse<string, AccountUnMergeRequest> = action.payload;
                     return this.getAccountDetails(data.queryString.accountUniqueName);
                 }
@@ -527,7 +527,7 @@ export class AccountsAction {
                         isActive: false
                     }
                     this.store.dispatch(this._generalActions.deleteEntryFromIndexDb(request));
-                    this._toasty.successToast(action.payload.body, '');
+                    this._toasty.successToast(action.payload?.body, '');
                 }
                 return {
                     type: 'EmptyAction'

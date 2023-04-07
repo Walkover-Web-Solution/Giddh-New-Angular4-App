@@ -751,7 +751,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
         this._invoiceUiDataService.setLogoPath('');
         this._invoiceUiDataService.initCustomTemplate(companyUniqueName, companies, defaultTemplate);
         this.showtemplateModal = true;
-        this.templateModal.show();
+        this.templateModal?.show();
     }
 
     /**

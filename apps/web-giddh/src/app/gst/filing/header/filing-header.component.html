@@ -223,7 +223,7 @@
     [@slideInOut]="GstAsidePaneState"
     (closeAsideEvent)="toggleSettingAsidePane($event)"
     (fileGst)="fileGstReturnV2()"
-    (cancelConfirmationEvent)="cancelConfirmationModel.show()"
+    (cancelConfirmationEvent)="cancelConfirmationModel?.show()"
     (fileGstComplete)="closeAsidePane()"
     [localeData]="localeData"
     [commonLocaleData]="commonLocaleData"

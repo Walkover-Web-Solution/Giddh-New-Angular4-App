@@ -305,11 +305,11 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     public showLogoutModal() {
-        this.logoutModal.show();
+        this.logoutModal?.show();
     }
 
     public hideLogoutModal() {
-        this.logoutModal.hide();
+        this.logoutModal?.hide();
     }
 
     public logoutUser() {
