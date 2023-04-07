@@ -184,7 +184,7 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
     public openCreateWarehouseModal(): void {
         this.startOnBoarding();
         this.createNewWarehouseModal();
-        this.warehouseOnBoardingModal.show();
+        this.warehouseOnBoardingModal?.show();
     }
 
     /**

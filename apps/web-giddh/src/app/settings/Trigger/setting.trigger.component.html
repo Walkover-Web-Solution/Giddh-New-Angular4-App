@@ -189,7 +189,7 @@
                                     />
                                 </td>
                                 <td [attr.data-title]="commonLocaleData?.app_filter">
-                                    <span *ngIf="!triggerToEdit[i]">{{ trigger.filter }}</span>
+                                    <span *ngIf="!triggerToEdit[i]">{{ trigger?.filter }}</span>
                                     <input
                                         *ngIf="triggerToEdit[i]"
                                         class="form-control"

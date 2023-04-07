@@ -26,7 +26,7 @@ export class GstReconcileActions {
                     .pipe(
                         map((response: BaseResponse<string, string>) => {
                             if (response?.status === 'success') {
-                                this._toasty.successToast(response.body);
+                                this._toasty.successToast(response?.body);
                             } else {
                                 this._toasty.errorToast(response.message);
                             }
@@ -43,7 +43,7 @@ export class GstReconcileActions {
                     .pipe(
                         map((response: BaseResponse<string, VerifyOtpRequest>) => {
                             if (response?.status === 'success') {
-                                this._toasty.successToast(response.body);
+                                this._toasty.successToast(response?.body);
                             } else {
                                 this._toasty.errorToast(response.message);
                             }
@@ -193,7 +193,7 @@ export class GstReconcileActions {
                 if (data?.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 } else {
-                    this._toasty.successToast(data.body);
+                    this._toasty.successToast(data?.body);
                 }
                 return { type: 'EmptyAction' };
             })));
@@ -216,7 +216,7 @@ export class GstReconcileActions {
                 if (data?.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 } else {
-                    this._toasty.successToast(data.body);
+                    this._toasty.successToast(data?.body);
                 }
                 return { type: 'EmptyAction' };
             })));
@@ -230,7 +230,7 @@ export class GstReconcileActions {
                     .pipe(
                         map((response: BaseResponse<string, FileGstr1Request>) => {
                             if (response?.status === 'success') {
-                                this._toasty.successToast(response.body);
+                                this._toasty.successToast(response?.body);
                             } else {
                                 this._toasty.errorToast(response.message);
                             }
@@ -393,7 +393,7 @@ export class GstReconcileActions {
     }
 
     public downloadFile(data: BaseResponse<any, GstrSheetDownloadRequest>) {
-        let blob = this.generalService.base64ToBlob(data.body, 'application/xls', 512);
+        let blob = this.generalService.base64ToBlob(data?.body, 'application/xls', 512);
         return saveAs(blob, `${data.queryString.sheetType}-${data.queryString.from}-${data.queryString.to}-${data.queryString.gstin}.xlsx`);
     }
 

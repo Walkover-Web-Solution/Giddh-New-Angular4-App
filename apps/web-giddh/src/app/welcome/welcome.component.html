@@ -251,9 +251,9 @@
                                         (blur)="dropdown.hide()"
                                     >
                                         <button
-                                            (focus)="dropdown.show()"
-                                            (click)="dropdown.show()"
-                                            (clickOutside)="dropdown.hide()"
+                                            (focus)="dropdown?.show()"
+                                            (click)="dropdown?.show()"
+                                            (clickOutside)="dropdown?.hide()"
                                             type="button"
                                             class="form-control text-left btn-block dropdown-toggle applicable-tax-btn"
                                             [ngClass]="{ 'select-tax-placeholder': !selectedTaxes?.length }"

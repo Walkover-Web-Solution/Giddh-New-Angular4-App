@@ -161,7 +161,7 @@ export class AccountDetailModalComponent implements OnChanges, OnDestroy {
         this.messageBody.type = 'Email';
         this.messageBody.btn.set = this.messageBody.btn.email;
         this.messageBody.header.set = this.messageBody.header.email;
-        this.mailModal.show();
+        this.mailModal?.show();
     }
 
     // Open Modal for SMS
@@ -170,7 +170,7 @@ export class AccountDetailModalComponent implements OnChanges, OnDestroy {
         this.messageBody.type = 'sms';
         this.messageBody.btn.set = this.messageBody.btn.sms;
         this.messageBody.header.set = this.messageBody.header.sms;
-        this.mailModal.show();
+        this.mailModal?.show();
     }
 
     // Add Selected Value to Message Body

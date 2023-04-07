@@ -523,21 +523,21 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     }
 
     public showShareGroupModal() {
-        this.shareGroupModal.show();
+        this.shareGroupModal?.show();
         this.shareGroupModalComp.getGroupSharedWith();
     }
 
     public hideShareGroupModal() {
-        this.shareGroupModal.hide();
+        this.shareGroupModal?.hide();
     }
 
     public showShareAccountModal() {
-        this.shareAccountModal.show();
+        this.shareAccountModal?.show();
         this.shareAccountModalComp.getAccountSharedWith();
     }
 
     public hideShareAccountModal() {
-        this.shareAccountModal.hide();
+        this.shareAccountModal?.hide();
     }
 
     public showAddGroupForm() {
@@ -609,11 +609,11 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         this.moveMergedAccountModalBody = this.localeData?.move_merged_account_content
             ?.replace("[SOURCE_ACCOUNT]", this.setAccountForMove)
             ?.replace("[DESTINATION_ACCOUNT]", this.selectedAccountForMove);
-        this.moveMergedAccountModal.show();
+        this.moveMergedAccountModal?.show();
     }
 
     public hideMoveMergedAccountModal() {
-        this.moveMergedAccountModal.hide();
+        this.moveMergedAccountModal?.hide();
     }
 
     public moveMergeAccountTo() {
@@ -638,11 +638,11 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     }
 
     public showDeleteAccountModal() {
-        this.deleteAccountModal.show();
+        this.deleteAccountModal?.show();
     }
 
     public hideDeleteAccountModal() {
-        this.deleteAccountModal.hide();
+        this.deleteAccountModal?.hide();
     }
 
     public deleteAccount() {
@@ -659,7 +659,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     }
 
     public exportGroupLedger() {
-        this.groupExportLedgerModal.show();
+        this.groupExportLedgerModal?.show();
     }
 
     /**

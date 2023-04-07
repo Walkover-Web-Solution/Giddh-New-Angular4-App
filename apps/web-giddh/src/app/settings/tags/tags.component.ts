@@ -76,7 +76,7 @@ export class SettingsTagsComponent implements OnInit, OnDestroy {
         let message = this.localeData?.remove_tag;
         message = message?.replace("[TAG_NAME]", tag.name);
         this.confirmationMessage = message;
-        this.confirmationModal.show();
+        this.confirmationModal?.show();
     }
 
     public setUpdateIndex(indx: number) {

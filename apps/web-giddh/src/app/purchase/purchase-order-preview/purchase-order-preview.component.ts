@@ -360,7 +360,7 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
      * @memberof PurchaseOrderPreviewComponent
      */
     public confirmDelete(): void {
-        this.poConfirmationModel.show();
+        this.poConfirmationModel?.show();
     }
 
     /**

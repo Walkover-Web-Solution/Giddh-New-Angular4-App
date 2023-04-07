@@ -189,7 +189,7 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
                 }
 
                 this.loadDownloadOrSendMailComponent();
-                this.downloadOrSendMailModel.show();
+                this.downloadOrSendMailModel?.show();
             }
         }
     }
@@ -313,7 +313,7 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
                         this.toasty.errorToast(this.commonLocaleData?.app_something_went_wrong);
                     }
                 });
-        }        
+        }
     }
 
     /**

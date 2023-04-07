@@ -108,7 +108,7 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
 
         this.store.pipe(select(p => p.settings.linkedAccounts.iframeSource), takeUntil(this.destroyed$)).subscribe((source) => {
             if (source) {
-                this.connectBankModel.show();
+                this.connectBankModel?.show();
                 this.connectBankModel.config.ignoreBackdropClick = true;
             }
         });
@@ -133,7 +133,7 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
             this.isRefreshWithCredentials = false;
             this.providerAccountId = providerAccountId;
         }
-        this.connectBankModel.show();
+        this.connectBankModel?.show();
         this.connectBankModel.config.ignoreBackdropClick = true;
     }
 
@@ -153,7 +153,7 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
                         extraParams: ['callback=' + this.config.appUrl + 'app/yodlee-success.html?companyUniqueName=' + this.companyUniqueName]
                     });
                     this.yodleeFormHTML?.nativeElement.submit();
-                    this.connectBankModel.show();
+                    this.connectBankModel?.show();
                 }
             }
         });
@@ -219,7 +219,7 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
             message = message?.replace("[BANK]", bankName);
             this.confirmationMessage = message;
             this.actionToPerform = 'DeleteAddedBank';
-            this.confirmationModal.show();
+            this.confirmationModal?.show();
         }
     }
 
@@ -250,7 +250,7 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
             message = message?.replace("[ACCOUNT]", data.value);
             this.confirmationMessage = message;
             this.actionToPerform = 'LinkAccount';
-            this.confirmationModal.show();
+            this.confirmationModal?.show();
         }
     }
 
@@ -260,7 +260,7 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
         message = message?.replace("[ACCOUNT]", account.giddhAccount.name);
         this.confirmationMessage = message;
         this.actionToPerform = 'UnlinkAccount';
-        this.confirmationModal.show();
+        this.confirmationModal?.show();
     }
 
     public onUpdateDate(date, account) {
@@ -270,7 +270,7 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
         message = message?.replace("[DATE]", this.dateToUpdate);
         this.confirmationMessage = message;
         this.actionToPerform = 'UpdateDate';
-        this.confirmationModal.show();
+        this.confirmationModal?.show();
     }
 
     public ngOnDestroy(): void {

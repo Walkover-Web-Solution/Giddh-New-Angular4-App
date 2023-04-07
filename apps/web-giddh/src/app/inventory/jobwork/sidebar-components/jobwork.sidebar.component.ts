@@ -92,7 +92,7 @@ export class JobworkSidebarComponent implements OnInit, OnDestroy, AfterViewInit
                         this.stocksList = res;
                     });
                     if (val) {
-                        this.stocksList = Object.assign([], this.stocksList).filter(
+                        this.stocksList = Object.assign([], this.stocksList)?.filter(
                             item => item.name?.toLowerCase()?.indexOf(val?.toLowerCase()) > -1
                         )
                     }
@@ -101,7 +101,7 @@ export class JobworkSidebarComponent implements OnInit, OnDestroy, AfterViewInit
                         this.inventoryUsers = res;
                     });
                     if (val) {
-                        this.inventoryUsers = Object.assign([], this.inventoryUsers).filter(
+                        this.inventoryUsers = Object.assign([], this.inventoryUsers)?.filter(
                             item => item.name?.toLowerCase()?.indexOf(val?.toLowerCase()) > -1
                         )
                     }
