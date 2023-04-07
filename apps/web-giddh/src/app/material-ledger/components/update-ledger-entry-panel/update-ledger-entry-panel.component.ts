@@ -617,6 +617,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     }
                 });
             }
+            if (e.label) {
+                txn.particular.name = e.label;
+            }
             // if ther's stock entry
             if (e.additional.stock) {
                 // check if we aleready have stock entry
@@ -735,12 +738,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                             data.body.stock?.groupTaxes ?? [],
                             data.body.taxes ?? [],
                             data.body.groupTaxes ?? []);
+
                         txn.selectedAccount = {
                             ...e.additional,
                             label: e.label,
                             value: e?.value,
                             isHilighted: true,
-
                             applicableTaxes: taxes,
                             currency: data.body.currency,
                             currencySymbol: data.body.currencySymbol,
@@ -750,7 +753,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                             mobileNo: data.body.mobileNo,
                             nameStr: e.additional && e.additional.parentGroups ? e.additional.parentGroups.map(parent => parent?.name).join(', ') : '',
                             stocks: [],
-                            uNameStr: e.additional && e.additional.parentGroups ? e.additional.parentGroups.map(parent => parent?.uniqueName).join(', ') : '',
+                            uNameStr: e.additional && e.additional.parentGroups ? e.additional.parentGroups.map(parent => parent?.uniqueName).join(', ') : ''
                         };
                         delete txn.inventory;
                         // Non stock item got selected, search if there is any stock item along with non-stock item
@@ -895,7 +898,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             requestObj.subVoucher = (this.isRcmEntry) ? SubVoucher.ReverseCharge : (this.isAdvanceReceipt) ? SubVoucher.AdvanceReceipt : '';
             requestObj.transactions = requestObj.transactions?.filter(f => !f.isDiscount);
         }
-        if (!this.taxOnlyTransactions && (requestObj.voucherType !== "jr" || (requestObj.voucherType === "jr" && requestObj.transactions?.length > 1))) {
+        if (!this.taxOnlyTransactions && requestObj.voucherType !== "jr") {
             requestObj.transactions = requestObj.transactions?.filter(tx => !tx.isTax);
         }
         if (this.voucherApiVersion === 2 && (requestObj.voucherGenerated || requestObj.generateInvoice) && requestObj.voucherType !== "jr") {
