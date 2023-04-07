@@ -1908,6 +1908,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }
         this.asideMenuState = this.asideMenuState === 'out' ? 'in' : 'out';
         this.toggleBodyClass();
+        this.cdRf.detectChanges();
     }
 
     public toggleOtherTaxesAsidePane(updateLedgerModalVm: any): void {
