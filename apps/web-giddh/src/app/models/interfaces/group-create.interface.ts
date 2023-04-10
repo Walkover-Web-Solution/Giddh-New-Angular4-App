@@ -1,4 +1,4 @@
-import { IUserInfo } from './/user-info.interface';
+import { IUserInfo } from './user-info.interface';
 import { INameUniqueName } from '../api-models/Inventory';
 import { IGroup } from './group.interface';
 
