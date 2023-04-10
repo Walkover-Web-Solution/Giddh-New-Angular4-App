@@ -1,9 +1,9 @@
-import { GetAllPermissionResponse } from './../../permissions/permission.utility';
+import { GetAllPermissionResponse } from '../../permissions/permission.utility';
 import { IRoleCommonResponseAndRequest } from '../../models/api-models/Permission';
 import { PERMISSION_ACTIONS } from '../../actions/permission/permission.const';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { AccountsAction } from '../../actions/accounts.actions';
-import { CustomActions } from '../customActions';
+import { CustomActions } from '../custom-actions';
 import { COMMON_ACTIONS } from '../../actions/common.const';
 import { cloneDeep, sortBy } from '../../lodash-optimized';
 

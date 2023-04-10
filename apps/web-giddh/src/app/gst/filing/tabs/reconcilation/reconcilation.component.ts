@@ -1,13 +1,13 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { ReconcileActionState } from '../../../../store/GstReconcile/GstReconcile.reducer';
+import { ReconcileActionState } from '../../../../store/gst-reconcile/GstReconcile.reducer';
 import { AlertConfig } from 'ngx-bootstrap/alert';
 import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
 import { GstReconcileActionsEnum, GstReconcileInvoiceDetails, GstReconcileInvoiceRequest } from '../../../../models/api-models/GstReconcile';
 import { AppState } from '../../../../store';
 import { publishReplay, refCount, take, takeUntil } from 'rxjs/operators';
-import { GstReconcileActions } from '../../../../actions/gst-reconcile/GstReconcile.actions';
+import { GstReconcileActions } from '../../../../actions/gst-reconcile/gst-reconcile.actions';
 import { Observable, ReplaySubject } from 'rxjs';
 
 @Component({

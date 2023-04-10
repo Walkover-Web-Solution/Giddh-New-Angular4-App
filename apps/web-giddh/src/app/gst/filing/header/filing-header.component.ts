@@ -11,11 +11,11 @@ import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Observable, of, ReplaySubject } from 'rxjs';
 import { AppState } from '../../../store';
 import { takeUntil } from 'rxjs/operators';
-import { GstReconcileActions } from '../../../actions/gst-reconcile/GstReconcile.actions';
+import { GstReconcileActions } from '../../../actions/gst-reconcile/gst-reconcile.actions';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 import { GstReport } from '../../constants/gst.constant';
-import { GstReconcileService } from '../../../services/GstReconcile.service';
+import { GstReconcileService } from '../../../services/gst-reconcile.service';
 import { GeneralService } from '../../../services/general.service';
 
 @Component({

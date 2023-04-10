@@ -9,7 +9,7 @@ import { ReplaySubject, Observable } from 'rxjs';
 import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
 import { FormControl } from '@angular/forms';
 import { PAGINATION_LIMIT } from '../../../app.constant';
-import { CurrentCompanyState } from '../../../store/Company/company.reducer';
+import { CurrentCompanyState } from '../../../store/company/company.reducer';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { GeneralService } from '../../../services/general.service';
 import { ExportBodyRequest } from '../../../models/api-models/DaybookRequest';

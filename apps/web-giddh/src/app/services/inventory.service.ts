@@ -18,7 +18,7 @@ import {
     InventoryReportResponse
 } from '../models/api-models/Inventory';
 import { Inject, Injectable, Optional } from '@angular/core';
-import { HttpWrapperService } from './httpWrapper.service';
+import { HttpWrapperService } from './http-wrapper.service';
 import { INVENTORY_API } from './apiurls/inventory.api';
 import { GroupsWithStocksFlatten, GroupsWithStocksHierarchyMin } from '../models/api-models/GroupsWithStocks';
 import { Observable } from 'rxjs';
@@ -27,7 +27,7 @@ import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { InventoryEntry, InventoryFilter, InventoryReport, InventoryUser } from '../models/api-models/Inventory-in-out';
-import { IPaginatedResponse } from '../models/interfaces/paginatedResponse.interface';
+import { IPaginatedResponse } from '../models/interfaces/paginated-response.interface';
 import {
     BranchTransferResponse,
     LinkedStocksResponse,

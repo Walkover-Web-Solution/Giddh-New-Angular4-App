@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { IStocksItem } from '../../../models/interfaces/stocksItem.interface';
+import { IStocksItem } from '../../../models/interfaces/stocks-item.interface';
 
 @Component({
     selector: 'inout-stock-list',

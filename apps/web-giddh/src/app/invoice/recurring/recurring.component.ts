@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { IOption } from '../../theme/ng-select/ng-select';
 import { FormControl } from '@angular/forms';
-import { RecurringInvoice, RecurringInvoices } from '../../models/interfaces/RecurringInvoice';
+import { RecurringInvoice, RecurringInvoices } from '../../models/interfaces/recurring-invoice';
 import { Observable, ReplaySubject } from 'rxjs';
 import { AppState } from '../../store';
 import { select, Store } from '@ngrx/store';

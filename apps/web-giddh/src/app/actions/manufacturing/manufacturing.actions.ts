@@ -9,7 +9,7 @@ import { MANUFACTURING_ACTIONS } from './manufacturing.const';
 import { ICommonResponseOfManufactureItem, IMfStockSearchRequest } from '../../models/interfaces/manufacturing.interface';
 import { ToasterService } from '../../services/toaster.service';
 import { Router } from '@angular/router';
-import { CustomActions } from '../../store/customActions';
+import { CustomActions } from '../../store/custom-actions';
 
 @Injectable()
 export class ManufacturingActions {

@@ -3,7 +3,7 @@ import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { RouterModule } from "@angular/router";
 import { LaddaModule } from "angular2-ladda";
-import { ConfirmationModalModule } from "apps/web-giddh/src/app/common/confirmation-modal/confirmation-modal.module";
+import { ConfirmationModalModule } from "apps/web-giddh/src/app/theme/confirmation-modal/confirmation-modal.module";
 import { ConfirmModalModule } from "apps/web-giddh/src/app/theme";
 import { SelectModule } from "apps/web-giddh/src/app/theme/ng-select/ng-select";
 import { ShSelectModule } from "apps/web-giddh/src/app/theme/ng-virtual-select/sh-select.module";

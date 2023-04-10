@@ -5,12 +5,12 @@ import { Store, select } from '@ngrx/store';
 import { Observable, ReplaySubject } from 'rxjs';
 import { InventoryAction } from '../../../actions/inventory/inventory.actions';
 import { InventoryUsersActions } from '../../../actions/inventory/inventory.users.actions';
-import { IStocksItem } from '../../../models/interfaces/stocksItem.interface';
+import { IStocksItem } from '../../../models/interfaces/stocks-item.interface';
 import { InventoryEntry, InventoryUser } from '../../../models/api-models/Inventory-in-out';
 import { InventoryEntryActions } from '../../../actions/inventory/inventory.entry.actions';
 import { GeneralService } from '../../../services/general.service';
 import { StockUnitRequest } from '../../../models/api-models/Inventory';
-import { CustomStockUnitAction } from '../../../actions/inventory/customStockUnit.actions';
+import { CustomStockUnitAction } from '../../../actions/inventory/custom-stock-unit.actions';
 
 @Component({
     selector: 'aside-transfer-pane',

@@ -8,7 +8,7 @@ import { BankAccountsResponse } from '../../models/api-models/Dashboard';
 import { SETTINGS_LINKED_ACCOUNTS_ACTIONS } from '../../actions/settings/linked-accounts/settings.linked.accounts.const';
 import { SETTINGS_FINANCIAL_YEAR_ACTIONS } from '../../actions/settings/financial-year/financial-year.const';
 import { IFinancialYearResponse, ILockFinancialYearRequest } from '../../services/settings.financial-year.service';
-import { CustomActions } from '../customActions';
+import { CustomActions } from '../custom-actions';
 import { SETTINGS_BRANCH_ACTIONS } from '../../actions/settings/branch/settings.branch.const';
 import { IDiscountList } from '../../models/api-models/SettingsDiscount';
 import { COMMON_ACTIONS } from '../../actions/common.const';

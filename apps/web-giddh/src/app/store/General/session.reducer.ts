@@ -1,4 +1,4 @@
-import { CustomActions } from '../customActions';
+import { CustomActions } from '../custom-actions';
 import { SessionActions } from '../../actions/session.action';
 
 /**

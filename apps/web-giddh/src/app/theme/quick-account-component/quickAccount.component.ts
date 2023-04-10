@@ -11,7 +11,7 @@ import { LedgerActions } from 'apps/web-giddh/src/app/actions/ledger/ledger.acti
 import { States } from 'apps/web-giddh/src/app/models/api-models/Company';
 import { ShSelectComponent } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-select.component';
 import { IOption } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-options.interface';
-import { IFlattenGroupsAccountsDetail } from 'apps/web-giddh/src/app/models/interfaces/flattenGroupsAccountsDetail.interface';
+import { IFlattenGroupsAccountsDetail } from 'apps/web-giddh/src/app/models/interfaces/flatten-groups-accounts-detail.interface';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
 import { cloneDeep } from '../../lodash-optimized';
 

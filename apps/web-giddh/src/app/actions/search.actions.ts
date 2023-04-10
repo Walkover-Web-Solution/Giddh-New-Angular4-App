@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 import { SearchService } from '../services/search.service';
 import { SearchRequest } from '../models/api-models/Search';
 import { BaseResponse } from '../models/api-models/BaseResponse';
-import { CustomActions } from '../store/customActions';
+import { CustomActions } from '../store/custom-actions';
 
 @Injectable()
 export class SearchActions {
