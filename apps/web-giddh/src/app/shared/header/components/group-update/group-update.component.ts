@@ -350,11 +350,11 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
 
 
     public showDeleteGroupModal() {
-        this.deleteGroupModal.show();
+        this.deleteGroupModal?.show();
     }
 
     public hideDeleteGroupModal() {
-        this.deleteGroupModal.hide();
+        this.deleteGroupModal?.hide();
     }
 
     public flattenGroup(rawList: any[], parents: any[] = []) {

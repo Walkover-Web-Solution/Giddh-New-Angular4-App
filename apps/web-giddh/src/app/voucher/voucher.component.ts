@@ -2083,7 +2083,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         // if sales,cash,estimate,proforma invoice then apply 'GST' taxes remove 'InputGST'
         if (this.isSalesInvoice || this.isCashInvoice || this.isProformaInvoice || this.isEstimateInvoice) {
             this.exceptTaxTypes.push('InputGST');
-            this.exceptTaxTypes = this.exceptTaxTypes.filter(ele => {
+            this.exceptTaxTypes = this.exceptTaxTypes?.filter(ele => {
                 return ele !== 'GST';
             });
         }
@@ -2091,7 +2091,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         // if purchase invoice then apply 'InputGST' taxes remove 'GST'
         if (this.isPurchaseInvoice) {
             this.exceptTaxTypes.push('GST');
-            this.exceptTaxTypes = this.exceptTaxTypes.filter(ele => {
+            this.exceptTaxTypes = this.exceptTaxTypes?.filter(ele => {
                 return ele !== 'InputGST';
             });
         }
@@ -7424,7 +7424,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 this.prdSerAcListForDeb = this.searchResults;
             }
         } else if (searchType === SEARCH_TYPE.BANK) {
-            const searchResultsOfSameCurrency = this.searchResults ? this.searchResults.filter(result =>
+            const searchResultsOfSameCurrency = this.searchResults ? this.searchResults?.filter(result =>
                 !result.additional.currency || result.additional.currency === this.customerCurrencyCode || result.additional.currency === this.companyCurrency
             ) : [];
             this.bankAccounts$ = observableOf(orderBy(searchResultsOfSameCurrency, 'label'));

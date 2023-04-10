@@ -158,7 +158,7 @@
                                                     <span
                                                         *ngIf="
                                                             (!dbtSelect.isOpen && txn?.particular?.uniqueName) ||
-                                                            (dbtSelect.isOpen && dbtSelect.filter)
+                                                            (dbtSelect.isOpen && dbtSelect?.filter)
                                                         "
                                                         >{{ localeData?.to }}</span
                                                     >
@@ -491,7 +491,7 @@
                                                     <span
                                                         *ngIf="
                                                             (!crdSelect.isOpen && txn?.particular?.uniqueName) ||
-                                                            (crdSelect.isOpen && crdSelect.filter)
+                                                            (crdSelect.isOpen && crdSelect?.filter)
                                                         "
                                                         >{{ localeData?.by }}</span
                                                     >

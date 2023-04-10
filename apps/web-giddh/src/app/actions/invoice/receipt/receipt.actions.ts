@@ -31,7 +31,7 @@ export class InvoiceReceiptActions {
     public GET_ALL_INVOICE_RECEIPT$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(INVOICE_RECEIPT_ACTIONS.GET_ALL_INVOICE_RECEIPT),
-            switchMap((action: CustomActions) => this._receiptService.GetAllReceipt(action.payload.body, action.payload.type)),
+            switchMap((action: CustomActions) => this._receiptService.GetAllReceipt(action.payload?.body, action.payload.type)),
             map((response: BaseResponse<ReciptResponse, InvoiceReceiptFilter>) => {
                 if (response?.status !== 'success') {
                     this.showToaster(response.message, 'error');
@@ -69,7 +69,7 @@ export class InvoiceReceiptActions {
             switchMap((action: CustomActions) => this._receiptService.DeleteReceipt(action.payload.accountUniqueName, action.payload.model)),
             map((response: BaseResponse<string, ReciptDeleteRequest>) => {
                 if (response?.status === 'success') {
-                    this.showToaster(response.body);
+                    this.showToaster(response?.body);
                 } else {
                     this.showToaster(response.message, 'error');
                 }

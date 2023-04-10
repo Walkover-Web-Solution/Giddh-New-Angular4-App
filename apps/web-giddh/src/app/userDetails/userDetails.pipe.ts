@@ -10,7 +10,7 @@ export class UserDetailsPipe implements PipeTransform {
         if (!searchText) return items;
 
         searchText = searchText?.toLowerCase();
-        return items.filter(it => {
+        return items?.filter(it => {
             return it.name?.toLowerCase().includes(searchText);
         });
     }

@@ -185,7 +185,7 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
             }
         }
         this.loadDownloadOrSendMailComponent();
-        this.downloadOrSendMailModel.show();
+        this.downloadOrSendMailModel?.show();
     }
 
     public loadDownloadOrSendMailComponent() {
