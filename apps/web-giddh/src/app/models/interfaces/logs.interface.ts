@@ -1,4 +1,4 @@
-import { IUserInfo } from './/user-info.interface';
+import { IUserInfo } from './user-info.interface';
 import { ILedgerTransactionItem } from './ledger.interface';
 
 /**
