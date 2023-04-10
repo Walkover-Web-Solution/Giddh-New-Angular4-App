@@ -1,4 +1,4 @@
-import { CustomActions } from '../../customActions';
+import { CustomActions } from '../../custom-actions';
 import { INVOICE_RECEIPT_ACTIONS } from '../../../actions/invoice/receipt/receipt.const';
 import { InvoiceReceiptFilter, ReciptDeleteRequest, ReciptRequest, ReciptResponse, Voucher } from '../../../models/api-models/recipt';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';

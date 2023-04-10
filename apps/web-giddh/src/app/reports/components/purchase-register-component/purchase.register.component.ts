@@ -3,7 +3,7 @@ import { Router, NavigationStart, ActivatedRoute } from "@angular/router";
 import { select, Store } from "@ngrx/store";
 import { AppState } from "../../../store";
 import { CompanyActions } from "../../../actions/company.actions";
-import { CompanyService } from "../../../services/companyService.service";
+import { CompanyService } from "../../../services/company.service";
 import { PurchaseReportsModel, ReportsRequestModel } from "../../../models/api-models/Reports";
 import { ToasterService } from "../../../services/toaster.service";
 import { createSelector } from "reselect";

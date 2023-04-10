@@ -67,7 +67,7 @@ export const ROUTES: Routes = [
             { path: 'activity-logs', loadChildren: () => import('./activity-logs/activity-logs.module').then(module => module.ActivityLogsModule) },
             {
                 path: 'ledger/:accountUniqueName',
-                loadChildren: () => import('./material-ledger/ledger.module').then(module => module.LedgerModule),
+                loadChildren: () => import('./ledger/ledger.module').then(module => module.LedgerModule),
                 data: { preload: true }
             },
             { path: 'permissions', loadChildren: () => import('./permissions/permission.module').then(module => module.PermissionModule) },
@@ -82,7 +82,7 @@ export const ROUTES: Routes = [
                 loadChildren: () => import('./accounting/accounting.module').then(module => module.AccountingModule),
                 data: { preload: true }
             },
-            { path: 'user-details', loadChildren: () => import('./userDetails/userDetails.module').then(module => module.UserDetailsModule) },
+            { path: 'user-details', loadChildren: () => import('./user-details/user-details.module').then(module => module.UserDetailsModule) },
             { path: 'contact', loadChildren: () => import('./contact/contact.module').then(module => module.ContactModule) },
             {
                 path: 'new-vs-old-invoices',
@@ -93,7 +93,7 @@ export const ROUTES: Routes = [
             { path: 'gstfiling', loadChildren: () => import('./gst/gst.module').then(module => module.GstModule) },
             {
                 path: 'company-import-export',
-                loadChildren: () => import('./companyImportExport/companyImportExport.module').then(module => module.CompanyImportExportModule)
+                loadChildren: () => import('./company-import-export/company-import-export.module').then(module => module.CompanyImportExportModule)
             },
             { path: 'reports', loadChildren: () => import('./reports/reports.module').then(module => module.ReportsModule) },
             { path: 'purchase-management', loadChildren: () => import('./purchase/purchase.module').then(module => module.PurchaseModule) },

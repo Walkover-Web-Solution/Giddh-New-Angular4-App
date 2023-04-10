@@ -18,7 +18,7 @@ import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { IForceClear } from 'apps/web-giddh/src/app/models/api-models/Sales';
 import { ModalOptions, ModalDirective } from 'ngx-bootstrap/modal';
-import { CustomTemplateState } from 'apps/web-giddh/src/app/store/Invoice/invoice.template.reducer';
+import { CustomTemplateState } from 'apps/web-giddh/src/app/store/invoice/invoice.template.reducer';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 
 @Component({

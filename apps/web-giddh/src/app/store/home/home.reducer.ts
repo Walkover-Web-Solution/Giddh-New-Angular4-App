@@ -1,7 +1,7 @@
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { HOME } from '../../actions/home/home.const';
 import { GraphTypesResponse } from '../../models/api-models/Dashboard';
-import { CustomActions } from '../customActions';
+import { CustomActions } from '../custom-actions';
 import { COMMON_ACTIONS } from '../../actions/common.const';
 
 export interface HomeState {

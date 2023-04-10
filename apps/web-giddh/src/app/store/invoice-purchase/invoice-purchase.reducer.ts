@@ -1,7 +1,7 @@
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { ITaxResponse } from '../../services/purchase-invoice.service';
 import { PURCHASE_INVOICE_ACTIONS } from '../../actions/purchase-invoice/purchase-invoice.const';
-import { CustomActions } from '../customActions';
+import { CustomActions } from '../custom-actions';
 import { cloneDeep } from '../../lodash-optimized';
 
 export interface InvoicePurchaseState {

@@ -38,8 +38,8 @@ import {
 } from "../models/api-models/Contact";
 import { BulkEmailRequest } from "../models/api-models/Search";
 import { CashfreeClass } from "../models/api-models/SettingsIntegraion";
-import { IFlattenAccountsResultItem } from "../models/interfaces/flattenAccountsResultItem.interface";
-import { CompanyService } from "../services/companyService.service";
+import { IFlattenAccountsResultItem } from "../models/interfaces/flatten-accounts-result-item.interface";
+import { CompanyService } from "../services/company.service";
 import { ContactService } from "../services/contact.service";
 import { GeneralService } from "../services/general.service";
 import { ToasterService } from "../services/toaster.service";

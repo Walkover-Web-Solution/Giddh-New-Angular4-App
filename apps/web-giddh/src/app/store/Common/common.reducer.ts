@@ -1,7 +1,7 @@
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { CountryResponse, CurrencyResponse, CallingCodesResponse, OnboardingFormResponse } from '../../models/api-models/Common';
 import { CommonActions } from '../../actions/common.actions';
-import { CustomActions } from '../customActions';
+import { CustomActions } from '../custom-actions';
 import { IOption } from '../../theme/ng-select/ng-select';
 
 /**

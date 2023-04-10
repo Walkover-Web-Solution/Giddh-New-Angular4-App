@@ -69,7 +69,7 @@ import { FormControl, NgForm } from '@angular/forms';
 import { DiscountListComponent } from '../sales/discount-list/discountList.component';
 import { IContentCommon, InvoicePreviewDetailsVm } from '../models/api-models/Invoice';
 import { TaxResponse } from '../models/api-models/Company';
-import { INameUniqueName } from '../models/interfaces/nameUniqueName.interface';
+import { INameUniqueName } from '../models/interfaces/name-unique-name.interface';
 import { AccountResponseV2, AddAccountRequest, UpdateAccountRequest } from '../models/api-models/Account';
 import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
 import * as dayjs from 'dayjs';
@@ -91,8 +91,8 @@ import { LedgerResponseDiscountClass } from "../models/api-models/Ledger";
 import { OnboardingFormRequest } from '../models/api-models/Common';
 import { WarehouseActions } from '../settings/warehouse/action/warehouse.action';
 import { SettingsUtilityService } from '../settings/services/settings-utility.service';
-import { WarehouseDetails } from '../material-ledger/ledger.vm';
-import { ConfirmationModalConfiguration } from '../common/confirmation-modal/confirmation-modal.interface';
+import { WarehouseDetails } from '../ledger/ledger.vm';
+import { ConfirmationModalConfiguration } from '../theme/confirmation-modal/confirmation-modal.interface';
 import { GeneralService } from '../services/general.service';
 import { VoucherUtilityService } from './services/voucher-utility.service';
 import { PurchaseRecordService } from '../services/purchase-record.service';
@@ -100,8 +100,8 @@ import { CommonActions } from '../actions/common.actions';
 import { PurchaseRecordActions } from '../actions/purchase-record/purchase-record.action';
 import { AdvanceReceiptAdjustmentComponent } from '../shared/advance-receipt-adjustment/advance-receipt-adjustment.component';
 import { VoucherAdjustments, AdjustAdvancePaymentModal, Adjustment } from '../models/api-models/AdvanceReceiptsAdjust';
-import { CurrentCompanyState } from '../store/Company/company.reducer';
-import { CustomTemplateState } from '../store/Invoice/invoice.template.reducer';
+import { CurrentCompanyState } from '../store/company/company.reducer';
+import { CustomTemplateState } from '../store/invoice/invoice.template.reducer';
 import { PurchaseOrderService } from '../services/purchase-order.service';
 import { SearchService } from '../services/search.service';
 import { PURCHASE_ORDER_STATUS } from '../shared/helpers/purchaseOrderStatus';
@@ -112,7 +112,7 @@ import { VoucherTypeToNamePipe } from '../shared/header/pipe/voucherTypeToNamePi
 import { Location, TitleCasePipe } from '@angular/common';
 import { VoucherForm } from '../models/api-models/Voucher';
 import { AdjustmentUtilityService } from '../shared/advance-receipt-adjustment/services/adjustment-utility.service';
-import { GstReconcileActions } from '../actions/gst-reconcile/GstReconcile.actions';
+import { GstReconcileActions } from '../actions/gst-reconcile/gst-reconcile.actions';
 import { SettingsDiscountService } from '../services/settings.discount.service';
 import { MatDialog } from '@angular/material/dialog';
 import { HttpClient } from '@angular/common/http';
@@ -1512,7 +1512,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                         this.customerCountryName = tempSelectedAcc.country.countryName;
                         this.customerCountryCode = tempSelectedAcc?.country?.countryCode || 'IN';
                         this.checkIfNeedToExcludeTax(tempSelectedAcc);
-                        this.getUpdatedStateCodes(tempSelectedAcc.country.countryCode).then(() => {
+                        this.getUpdatedStateCodes(tempSelectedAcc.country?.countryCode).then(() => {
                             this.invFormData.accountDetails = new AccountDetailsClass(tempSelectedAcc);
                         });
 
@@ -5189,7 +5189,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         let voucherClassConversion = new VoucherClass();
         let voucherDetails = new VoucherDetailsClass();
         if (!this.isLastInvoiceCopied && shouldLoadState) {
-            await this.getUpdatedStateCodes(result.account.billingDetails.countryCode);
+            await this.getUpdatedStateCodes(result.account.billingDetails?.countryCode);
         }
         voucherClassConversion.entries = [];
         result.entries.forEach(entry => {
@@ -5350,11 +5350,11 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         voucherClassConversion.accountDetails.billingDetails = new GstDetailsClass();
         voucherClassConversion.accountDetails.billingDetails.panNumber = result?.account?.billingDetails?.panNumber;
 
-        voucherClassConversion.accountDetails.billingDetails.pincode = result.account.billingDetails.pincode;
+        voucherClassConversion.accountDetails.billingDetails.pincode = result.account.billingDetails?.pincode;
         voucherClassConversion.accountDetails.billingDetails.address = cloneDeep(result?.account?.billingDetails?.address);
-        voucherClassConversion.accountDetails.billingDetails.gstNumber = result.account.billingDetails.gstNumber ?? result?.account?.billingDetails?.taxNumber;
-        voucherClassConversion.accountDetails.billingDetails.state.code = this.getNewStateCode(result.account.billingDetails.stateCode ?? result?.account?.billingDetails?.state?.code);
-        voucherClassConversion.accountDetails.billingDetails.state.name = result.account.billingDetails.stateName ?? result?.account?.billingDetails?.state?.name;
+        voucherClassConversion.accountDetails.billingDetails.gstNumber = result.account.billingDetails?.gstNumber ?? result?.account?.billingDetails?.taxNumber;
+        voucherClassConversion.accountDetails.billingDetails.state.code = this.getNewStateCode(result.account.billingDetails?.stateCode ?? result?.account?.billingDetails?.state?.code);
+        voucherClassConversion.accountDetails.billingDetails.state.name = result.account.billingDetails?.stateName ?? result?.account?.billingDetails?.state?.name;
         let selectedCustomerNumber = result?.account?.mobileNumber ? "+" + result?.account?.mobileNumber : '';
         this.intl?.setNumber(selectedCustomerNumber);
         voucherClassConversion.accountDetails.mobileNumber = result.account.mobileNumber;
@@ -5417,7 +5417,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             if (!this.isPurchaseInvoice) {
                 this.isMulticurrencyAccount = result.multiCurrency;
             }
-            this.customerCountryName = result.account.billingDetails.countryName ?? result?.account?.billingDetails?.country?.name;
+            this.customerCountryName = result.account.billingDetails?.countryName ?? result?.account?.billingDetails?.country?.name;
             this.customerCountryCode = result?.account?.billingDetails?.countryCode ?? result?.account?.billingDetails?.country?.code ?? 'IN';
         }
 
@@ -5684,10 +5684,14 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     private updateAddressShippingBilling(obj) {
         if (obj) {
             let shippigAddress = '';
-            obj.address.forEach(res => {
-                shippigAddress = shippigAddress + res + '\n';
-            });
-            obj.address[0] = shippigAddress;
+            if (obj.address) {
+                obj.address.forEach(res => {
+                    shippigAddress = shippigAddress + res + '\n';
+                });
+                obj.address[0] = shippigAddress;
+            } else {
+                obj.address = [shippigAddress];
+            }
         }
         return obj;
     }

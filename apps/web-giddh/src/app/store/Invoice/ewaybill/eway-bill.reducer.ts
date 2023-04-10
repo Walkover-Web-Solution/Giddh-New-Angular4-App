@@ -1,7 +1,7 @@
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
 import { EWAYBILL_ACTIONS } from '../../../actions/invoice/invoice.const';
 import { IAllTransporterDetails, IEwayBillAllList, IEwayBillGenerateResponse, IEwayBillTransporter, UpdateEwayVehicle } from '../../../models/api-models/Invoice';
-import { CustomActions } from '../../customActions';
+import { CustomActions } from '../../custom-actions';
 
 export interface EwayBillState {
     EwayBillGenerateResponse: IEwayBillGenerateResponse;

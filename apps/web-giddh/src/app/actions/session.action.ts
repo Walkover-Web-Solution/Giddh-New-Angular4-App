@@ -4,7 +4,7 @@ import { Action } from '@ngrx/store';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
-import { CustomActions } from '../store/customActions';
+import { CustomActions } from '../store/custom-actions';
 import { AuthenticationService } from '../services/authentication.service';
 import { ToasterService } from '../services/toaster.service';
 

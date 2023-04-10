@@ -7,7 +7,7 @@ import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
 import { PermissionActions } from '../../../actions/permission/permission.action';
 import { INewRoleFormObj, IPage, IPageStr, NewRoleFormClass } from '../../permission.utility';
 import { INameUniqueName } from '../../../models/api-models/Inventory';
-import { PermissionState } from 'apps/web-giddh/src/app/store/Permission/permission.reducer';
+import { PermissionState } from 'apps/web-giddh/src/app/store/permission/permission.reducer';
 import { IRoleCommonResponseAndRequest } from 'apps/web-giddh/src/app/models/api-models/Permission';
 import { forEach, omit } from '../../../lodash-optimized';
 

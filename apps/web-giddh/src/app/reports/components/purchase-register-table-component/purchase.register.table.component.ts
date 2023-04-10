@@ -3,7 +3,7 @@ import { PurchaseReportsModel } from "../../../models/api-models/Reports";
 import { Store, select } from "@ngrx/store";
 import { AppState } from "../../../store";
 import { Router } from '@angular/router';
-import { CurrentCompanyState } from '../../../store/Company/company.reducer';
+import { CurrentCompanyState } from '../../../store/company/company.reducer';
 import { takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
 

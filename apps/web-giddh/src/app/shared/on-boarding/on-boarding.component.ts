@@ -11,7 +11,7 @@ import { distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 import { CommonActions } from '../../actions/common.actions';
 import { CompanyActions } from '../../actions/company.actions';
 import { LoginActions } from '../../actions/login.action';
-import { VerifyMobileActions } from '../../actions/verifyMobile.actions';
+import { VerifyMobileActions } from '../../actions/verify-mobile.actions';
 import { CountryRequest } from '../../models/api-models/Common';
 import { CompanyCreateRequest, CompanyResponse } from '../../models/api-models/Company';
 import { userLoginStateEnum } from '../../models/user-login-state';

@@ -6,7 +6,7 @@ import { AccountFlat, BulkEmailRequest, SearchDataSet, SearchRequest } from '../
 import { AppState } from '../../../store';
 import { saveAs } from 'file-saver';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { CompanyService } from '../../../services/companyService.service';
+import { CompanyService } from '../../../services/company.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { map, take, takeUntil } from 'rxjs/operators';
 import { GeneralService } from '../../../services/general.service';

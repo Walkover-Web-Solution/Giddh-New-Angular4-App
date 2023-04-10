@@ -5,7 +5,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { HttpWrapperService } from '../httpWrapper.service';
+import { HttpWrapperService } from '../http-wrapper.service';
 import { IServiceConfigArgs, ServiceConfig } from '../service.config';
 import { ERROR_LOG_API } from '../apiurls/exception-log.api';
 import { take } from 'rxjs/operators';
