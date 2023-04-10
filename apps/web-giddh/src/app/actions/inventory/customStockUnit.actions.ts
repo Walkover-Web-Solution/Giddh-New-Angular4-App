@@ -36,7 +36,7 @@ export class CustomStockUnitAction {
                 return this._inventoryService.GetStockUnit().pipe(
                     map((r) => this.validateResponse(r, {
                         type: CUSTOM_STOCK_UNIT_ACTIONS.GET_STOCK_UNIT_RESPONSE,
-                        payload: r.body
+                        payload: r?.body
                     })));
             })));
 
@@ -47,7 +47,7 @@ export class CustomStockUnitAction {
                 return this._inventoryService.UpdateStockUnit(action.payload.unit, action.payload.uniqueName).pipe(
                     map((data: BaseResponse<StockUnitResponse, StockUnitRequest>) => this.validateResponse(data, {
                         type: CUSTOM_STOCK_UNIT_ACTIONS.UPDATE_STOCK_UNIT_RESPONSE,
-                        payload: data.body
+                        payload: data?.body
                     }, true, 'Unit has been updated successfully')));
             })));
 
@@ -64,7 +64,7 @@ export class CustomStockUnitAction {
                 return this._inventoryService.getStockMappedUnit().pipe(
                     map((r) => this.validateResponse(r, {
                         type: CUSTOM_STOCK_UNIT_ACTIONS.GET_STOCK_MAPPED_UNITS_RESPONSE,
-                        payload: r.body
+                        payload: r?.body
                     })));
             })));
 
@@ -81,7 +81,7 @@ export class CustomStockUnitAction {
                 return this._inventoryService.getStockMappedUnitByUniqueName(action.payload.uniqueName).pipe(
                     map((r) => this.validateResponse(r, {
                         type: CUSTOM_STOCK_UNIT_ACTIONS.GET_STOCK_MAPPED_UNIT_UNIQUE_NAME_RESPONSE,
-                        payload: r.body
+                        payload: r?.body
                     })));
             })));
 
@@ -94,7 +94,7 @@ export class CustomStockUnitAction {
                     map((r) => this.validateResponse(r, {
                         type: CUSTOM_STOCK_UNIT_ACTIONS.DELETE_STOCK_UNIT_RESPONSE,
                         payload: r
-                    }, true, r.body, {
+                    }, true, r?.body, {
                         type: CUSTOM_STOCK_UNIT_ACTIONS.DELETE_STOCK_UNIT_RESPONSE,
                         payload: r
                     })));

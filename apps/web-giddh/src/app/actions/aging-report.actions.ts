@@ -78,7 +78,7 @@ export class AgingReportActions {
                 return this._agingReportService.GetDueAmountReport(action.payload.model, action.payload.queryRequest, action.payload.branchUniqueName).pipe(
                     map((r) => this.validateResponse<DueAmountReportResponse, DueAmountReportRequest>(r, {
                         type: AgingReportActions.GET_DUE_DAY_REPORT_RESPONSE,
-                        payload: r.body
+                        payload: r?.body
                     }, true, {
                         type: AgingReportActions.GET_DUE_DAY_REPORT_RESPONSE,
                         payload: null

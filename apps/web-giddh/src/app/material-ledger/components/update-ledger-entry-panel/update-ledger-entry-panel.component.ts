@@ -2336,8 +2336,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     additional: {
                         stock: {
                             name: t.inventory.stock?.name,
+                            uniqueName: t.inventory.stock?.uniqueName
                         },
-                        uniqueName: t.inventory.stock?.uniqueName
+                        uniqueName: t.particular?.uniqueName
                     }
                 });
                 t.particular.uniqueName = `${t.particular?.uniqueName}#${t.inventory.stock?.uniqueName}`;
@@ -2413,6 +2414,11 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             this.vm.generateCompoundTotal();
         }
         this.vm.generatePanelAmount();
+        if (this.isAdvanceReceipt) {
+            setTimeout(() => {
+                this.handleAdvanceReceiptChange();
+            }, 100);
+        }
         this.activeAccountSubject.next(this.activeAccount);
         this.changeDetectorRef.detectChanges();
     }
