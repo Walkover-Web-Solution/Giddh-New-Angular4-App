@@ -3,7 +3,7 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { ToasterService } from '../../services/toaster.service';
 import { Action } from '@ngrx/store';
 import { ProformaService } from '../../services/proforma.service';
-import { CustomActions } from '../../store/customActions';
+import { CustomActions } from '../../store/custom-actions';
 import { PROFORMA_ACTIONS } from './proforma.const';
 import { ActionTypeAfterVoucherGenerateOrUpdate, VoucherClass } from '../../models/api-models/Sales';
 import { Observable } from 'rxjs';

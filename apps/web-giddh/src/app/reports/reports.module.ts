@@ -25,7 +25,7 @@ import { ReportsDashboardComponent } from './components/report-dashboard/reports
 import { ReportsDetailsComponent } from './components/report-details-components/report.details.component';
 import { ReportsTableComponent } from './components/report-table-components/report.table.component';
 import { ReverseChargeReport } from './components/reverse-charge-report-component/reverse-charge-report.component';
-import { SalesRegisterExpandComponent } from './components/salesRegister-expand-component/sales.register.expand.component';
+import { SalesRegisterExpandComponent } from './components/sales-register-expand-component/sales.register.expand.component';
 import { ReportsComponent } from './reports.component';
 import { ReportsRoutingModule } from './reports.routing.module';
 import { TaxSidebarModule } from '../shared/tax-sidebar/tax-sidebar.module';

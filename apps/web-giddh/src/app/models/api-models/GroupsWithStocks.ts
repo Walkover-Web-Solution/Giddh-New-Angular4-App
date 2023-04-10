@@ -1,5 +1,5 @@
-import { IPaginatedResponse } from '../interfaces/paginatedResponse.interface';
-import { IGroupsWithStocksFlattenItem, IGroupsWithStocksHierarchyMinItem } from '../interfaces/groupsWithStocks.interface';
+import { IPaginatedResponse } from '../interfaces/paginated-response.interface';
+import { IGroupsWithStocksFlattenItem, IGroupsWithStocksHierarchyMinItem } from '../interfaces/groups-with-stocks.interface';
 
 /*
  * Model for groups-with-stocks-flatten api response

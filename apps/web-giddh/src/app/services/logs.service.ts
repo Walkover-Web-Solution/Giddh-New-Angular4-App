@@ -1,6 +1,6 @@
 import { catchError, map } from 'rxjs/operators';
 import { Inject, Injectable, Optional } from '@angular/core';
-import { HttpWrapperService } from './httpWrapper.service';
+import { HttpWrapperService } from './http-wrapper.service';
 import { Observable } from 'rxjs';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { GiddhErrorHandler } from './catchManager/catchmanger';

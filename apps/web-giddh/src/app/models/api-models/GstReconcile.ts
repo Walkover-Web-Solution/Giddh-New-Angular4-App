@@ -1,5 +1,5 @@
 // tslint:disable:variable-name
-import { INameUniqueName } from '../interfaces/nameUniqueName.interface';
+import { INameUniqueName } from '../interfaces/name-unique-name.interface';
 
 export class VerifyOtpRequest {
     public otp: string;

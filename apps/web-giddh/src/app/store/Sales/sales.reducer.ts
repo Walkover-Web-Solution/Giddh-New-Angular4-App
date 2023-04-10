@@ -1,7 +1,7 @@
 import { SALES_ACTIONS } from '../../actions/sales/sales.const';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { AccountResponseV2 } from '../../models/api-models/Account';
-import { CustomActions } from '../customActions';
+import { CustomActions } from '../custom-actions';
 import { COMMON_ACTIONS } from '../../actions/common.const';
 
 export interface SalesState {

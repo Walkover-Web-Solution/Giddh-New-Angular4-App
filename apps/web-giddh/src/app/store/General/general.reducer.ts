@@ -8,7 +8,7 @@ import {
     AccountResponse,
     AccountResponseV2
 } from '../../models/api-models/Account';
-import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccountsResultItem.interface';
+import { IFlattenAccountsResultItem } from '../../models/interfaces/flatten-accounts-result-item.interface';
 import { States } from '../../models/api-models/Company';
 import {
     GroupCreateRequest,
@@ -19,10 +19,10 @@ import {
 } from '../../models/api-models/Group';
 import { cloneDeep } from '../../lodash-optimized';
 import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
-import { IGroupsWithAccounts } from '../../models/interfaces/groupsWithAccounts.interface';
+import { IGroupsWithAccounts } from '../../models/interfaces/groups-with-accounts.interface';
 import { AccountsAction } from '../../actions/accounts.actions';
-import { IAccountsInfo } from '../../models/interfaces/accountInfo.interface';
-import { CustomActions } from '../customActions';
+import { IAccountsInfo } from '../../models/interfaces/account-info.interface';
+import { CustomActions } from '../custom-actions';
 import { COMMON_ACTIONS } from '../../actions/common.const';
 import { INameUniqueName } from '../../models/api-models/Inventory';
 import { SALES_ACTIONS } from '../../actions/sales/sales.const';

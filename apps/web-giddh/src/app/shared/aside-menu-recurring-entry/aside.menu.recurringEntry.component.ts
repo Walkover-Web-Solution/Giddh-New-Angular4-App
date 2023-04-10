@@ -3,7 +3,7 @@ import { IOption } from '../../theme/ng-select/ng-select';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
-import { RecurringInvoice } from '../../models/interfaces/RecurringInvoice';
+import { RecurringInvoice } from '../../models/interfaces/recurring-invoice';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as dayjs from 'dayjs';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';

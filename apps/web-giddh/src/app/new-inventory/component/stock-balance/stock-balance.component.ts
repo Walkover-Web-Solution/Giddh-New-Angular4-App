@@ -8,7 +8,7 @@ import { AppState } from "../../../store";
 import { IOption } from "../../../theme/ng-virtual-select/sh-options.interface";
 import { WarehouseActions } from "../../../settings/warehouse/action/warehouse.action";
 import { cloneDeep } from "../../../lodash-optimized";
-import { IGroupsWithStocksHierarchyMinItem } from "../../../models/interfaces/groupsWithStocks.interface";
+import { IGroupsWithStocksHierarchyMinItem } from "../../../models/interfaces/groups-with-stocks.interface";
 import { GroupStockReportRequest } from "../../../models/api-models/Inventory";
 import { SettingsFinancialYearActions } from "../../../actions/settings/financial-year/financial-year.action";
 import { GeneralService } from "../../../services/general.service";

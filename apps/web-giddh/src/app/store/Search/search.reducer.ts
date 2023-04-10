@@ -1,7 +1,7 @@
 import { AccountFlat, SearchDataSet, SearchRequest } from '../../models/api-models/Search';
 import { SearchActions } from '../../actions/search.actions';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
-import { CustomActions } from '../customActions';
+import { CustomActions } from '../custom-actions';
 import { COMMON_ACTIONS } from '../../actions/common.const';
 import { each } from '../../lodash-optimized';
 

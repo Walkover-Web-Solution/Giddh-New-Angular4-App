@@ -8,7 +8,7 @@ import { VersionCheckService } from './version-check.service';
 import { ReplaySubject } from 'rxjs';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { DbService } from './services/db.service';
-import { reassignNavigationalArray } from './models/defaultMenus'
+import { reassignNavigationalArray } from './models/default-menus'
 import { Configuration } from "./app.constant";
 import { filter, take, takeUntil } from 'rxjs/operators';
 import { LoaderService } from './loader/loader.service';

@@ -1,7 +1,7 @@
 import { catchError, map } from 'rxjs/operators';
 import { Inject, Injectable, Optional } from '@angular/core';
 import { Observable } from 'rxjs';
-import { HttpWrapperService } from './httpWrapper.service';
+import { HttpWrapperService } from './http-wrapper.service';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { DASHBOARD_API } from './apiurls/dashboard.api';

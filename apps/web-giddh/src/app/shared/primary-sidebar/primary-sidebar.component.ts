@@ -14,7 +14,7 @@ import { CompanyResponse, Organization } from '../../models/api-models/Company';
 import { SalesActions } from '../../actions/sales/sales.action';
 import { AccountResponse, AddAccountRequest } from '../../models/api-models/Account';
 import { CompAidataModel } from '../../models/db';
-import { DEFAULT_AC } from '../../models/defaultMenus';
+import { DEFAULT_AC } from '../../models/default-menus';
 import { ICompAidata, IUlist } from '../../models/interfaces/ulist.interface';
 import { OrganizationType } from '../../models/user-login-state';
 import { DbService } from '../../services/db.service';

@@ -31,7 +31,7 @@ import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { LedgerActions } from '../../../actions/ledger/ledger.actions';
 import { SalesActions } from '../../../actions/sales/sales.action';
 import { AccountResponse, AddAccountRequest, UpdateAccountRequest } from '../../../models/api-models/Account';
-import { IFlattenAccountsResultItem } from '../../../models/interfaces/flattenAccountsResultItem.interface';
+import { IFlattenAccountsResultItem } from '../../../models/interfaces/flatten-accounts-result-item.interface';
 import { ToasterService } from '../../../services/toaster.service';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 import { ElementViewContainerRef } from '../../../shared/helpers/directives/elementViewChild/element.viewchild.directive';

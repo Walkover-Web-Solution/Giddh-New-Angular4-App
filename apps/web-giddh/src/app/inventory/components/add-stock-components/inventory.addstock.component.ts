@@ -9,13 +9,13 @@ import { decimalDigits, digitsOnly, stockManufacturingDetailsValidator } from '.
 import { CreateStockRequest, StockDetailResponse, StockGroupResponse } from '../../../models/api-models/Inventory';
 import { InventoryAction } from '../../../actions/inventory/inventory.actions';
 import * as  _ from '../../../lodash-optimized';
-import { CustomStockUnitAction } from '../../../actions/inventory/customStockUnit.actions';
-import { IUnitRateItem } from '../../../models/interfaces/stocksItem.interface';
+import { CustomStockUnitAction } from '../../../actions/inventory/custom-stock-unit.actions';
+import { IUnitRateItem } from '../../../models/interfaces/stocks-item.interface';
 import { uniqueNameInvalidStringReplace } from '../../../shared/helpers/helperFunctions';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { ToasterService } from '../../../services/toaster.service';
 import { InventoryService } from '../../../services/inventory.service';
-import { IGroupsWithStocksHierarchyMinItem } from '../../../models/interfaces/groupsWithStocks.interface';
+import { IGroupsWithStocksHierarchyMinItem } from '../../../models/interfaces/groups-with-stocks.interface';
 import { IForceClear } from '../../../models/api-models/Sales';
 import { TaxResponse } from '../../../models/api-models/Company';
 import { InvViewService } from '../../inv.view.service';

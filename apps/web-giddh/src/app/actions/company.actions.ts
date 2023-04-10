@@ -18,10 +18,10 @@ import {
 } from '../models/api-models/Company';
 import { IRegistration } from '../models/interfaces/registration.interface';
 import { OrganizationType } from '../models/user-login-state';
-import { CompanyService } from '../services/companyService.service';
+import { CompanyService } from '../services/company.service';
 import { LocaleService } from '../services/locale.service';
 import { ToasterService } from '../services/toaster.service';
-import { CustomActions } from '../store/customActions';
+import { CustomActions } from '../store/custom-actions';
 import { AppState } from '../store/roots';
 import { COMMON_ACTIONS } from './common.const';
 

@@ -10,7 +10,7 @@ import { Observable } from 'rxjs';
 import { ToasterService } from '../../services/toaster.service';
 import { INVENTORY_BRANCH_TRANSFER, INVENTORY_LINKED_STOCKS, InventoryActionsConst } from './inventory.const';
 import { Router } from '@angular/router';
-import { CustomActions } from '../../store/customActions';
+import { CustomActions } from '../../store/custom-actions';
 import { BranchTransferResponse, LinkedStocksResponse, TransferDestinationRequest, TransferProductsRequest } from '../../models/api-models/BranchTransfer';
 import { SalesActions } from '../sales/sales.action';
 

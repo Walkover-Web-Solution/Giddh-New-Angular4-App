@@ -11,7 +11,7 @@ import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ToasterService } from '../../services/toaster.service';
-import { GstReconcileActions } from '../../actions/gst-reconcile/GstReconcile.actions';
+import { GstReconcileActions } from '../../actions/gst-reconcile/gst-reconcile.actions';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { InvoicePurchaseActions } from '../../actions/purchase-invoice/purchase-invoice.action';
 import { GstReport } from '../constants/gst.constant';

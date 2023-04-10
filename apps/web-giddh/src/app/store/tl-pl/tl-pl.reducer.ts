@@ -1,7 +1,7 @@
 import { TBPlBsActions } from '../../actions/tl-pl.actions';
 import { AccountDetails, BalanceSheetData, GetCogsResponse, ProfitLossData } from '../../models/api-models/tb-pl-bs';
 import { ChildGroup } from '../../models/api-models/Search';
-import { CustomActions } from '../customActions';
+import { CustomActions } from '../custom-actions';
 import { COMMON_ACTIONS } from '../../actions/common.const';
 import { cloneDeep, each, reject } from '../../lodash-optimized';
 

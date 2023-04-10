@@ -2,8 +2,8 @@ import { MANUFACTURING_ACTIONS } from '../../actions/manufacturing/manufacturing
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { StockDetailResponse, StocksResponse } from '../../models/api-models/Inventory';
 import { IMfStockSearchRequest, ManufacturingItemRequest } from '../../models/interfaces/manufacturing.interface';
-import { IStocksItem } from '../../models/interfaces/stocksItem.interface';
-import { CustomActions } from '../customActions';
+import { IStocksItem } from '../../models/interfaces/stocks-item.interface';
+import { CustomActions } from '../custom-actions';
 import { COMMON_ACTIONS } from '../../actions/common.const';
 import { cloneDeep, orderBy } from '../../lodash-optimized';
 

@@ -1,5 +1,5 @@
 import { cloneDeep } from '../../../lodash-optimized';
-import { CustomActions } from '../../../store/customActions';
+import { CustomActions } from '../../../store/custom-actions';
 import { WarehouseActions } from '../action/warehouse.action';
 
 /**

@@ -8,15 +8,15 @@ import { INVALID_STOCK_ERROR_MESSAGE } from 'apps/web-giddh/src/app/app.constant
 import { SalesService } from 'apps/web-giddh/src/app/services/sales.service';
 import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service';
 import { CompanyActions } from 'apps/web-giddh/src/app/actions/company.actions';
-import { CustomStockUnitAction } from 'apps/web-giddh/src/app/actions/inventory/customStockUnit.actions';
+import { CustomStockUnitAction } from 'apps/web-giddh/src/app/actions/inventory/custom-stock-unit.actions';
 import { InventoryAction } from 'apps/web-giddh/src/app/actions/inventory/inventory.actions';
 import { SidebarAction } from 'apps/web-giddh/src/app/actions/inventory/sidebar.actions';
 import { InvViewService } from 'apps/web-giddh/src/app/inventory/inv.view.service';
 import { TaxResponse } from 'apps/web-giddh/src/app/models/api-models/Company';
 import { StockGroupResponse, StockDetailResponse, CreateStockRequest } from 'apps/web-giddh/src/app/models/api-models/Inventory';
 import { IForceClear } from 'apps/web-giddh/src/app/models/api-models/Sales';
-import { IGroupsWithStocksHierarchyMinItem } from 'apps/web-giddh/src/app/models/interfaces/groupsWithStocks.interface';
-import { IUnitRateItem } from 'apps/web-giddh/src/app/models/interfaces/stocksItem.interface';
+import { IGroupsWithStocksHierarchyMinItem } from 'apps/web-giddh/src/app/models/interfaces/groups-with-stocks.interface';
+import { IUnitRateItem } from 'apps/web-giddh/src/app/models/interfaces/stocks-item.interface';
 import { InventoryService } from 'apps/web-giddh/src/app/services/inventory.service';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
 import { AppState } from 'apps/web-giddh/src/app/store';

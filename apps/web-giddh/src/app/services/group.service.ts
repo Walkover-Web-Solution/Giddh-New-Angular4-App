@@ -2,7 +2,7 @@ import { empty as observableEmpty, Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { GroupUpateRequest, MoveGroupResponse } from './../models/api-models/Group';
 import { Inject, Injectable, Optional } from '@angular/core';
-import { HttpWrapperService } from './httpWrapper.service';
+import { HttpWrapperService } from './http-wrapper.service';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { FlattenGroupsAccountsResponse, GroupCreateRequest, GroupResponse, GroupSharedWithResponse, GroupsTaxHierarchyResponse, MoveGroupRequest } from '../models/api-models/Group';

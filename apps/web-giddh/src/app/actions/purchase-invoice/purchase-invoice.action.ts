@@ -5,7 +5,7 @@ import { Action } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { GST_RETURN_ACTIONS, PURCHASE_INVOICE_ACTIONS } from './purchase-invoice.const';
 import { saveAs } from 'file-saver';
-import { CustomActions } from '../../store/customActions';
+import { CustomActions } from '../../store/custom-actions';
 import { PurchaseInvoiceService } from '../../services/purchase-invoice.service';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { ToasterService } from '../../services/toaster.service';

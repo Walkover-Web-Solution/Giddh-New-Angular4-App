@@ -2,7 +2,7 @@ import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { TaxResponse } from '../../models/api-models/Company';
 import { CompanyActions } from '../../actions/company.actions';
 import { SETTINGS_TAXES_ACTIONS } from '../../actions/settings/taxes/settings.taxes.const';
-import { CustomActions } from '../customActions';
+import { CustomActions } from '../custom-actions';
 import * as dayjs from 'dayjs';
 import { IntegratedBankList, IRegistration } from "../../models/interfaces/registration.interface";
 import { DEFAULT_DATE_RANGE_PICKER_RANGES, UNAUTHORISED } from '../../app.constant';

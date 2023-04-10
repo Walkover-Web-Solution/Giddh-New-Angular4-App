@@ -1,5 +1,5 @@
 import { StocksResponse } from '../../models/api-models/Inventory';
-import { CustomActions } from '../customActions';
+import { CustomActions } from '../custom-actions';
 import { InventoryReport, InventoryUser } from '../../models/api-models/Inventory-in-out';
 import { INVENTORY_ENTRY_ACTIONS, INVENTORY_REPORT_ACTIONS, INVENTORY_USER_ACTIONS } from '../../actions/inventory/inventory.const';
 

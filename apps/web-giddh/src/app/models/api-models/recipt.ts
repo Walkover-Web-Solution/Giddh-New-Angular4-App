@@ -1,4 +1,4 @@
-import { ReferenceVoucher } from '../../material-ledger/ledger.vm';
+import { ReferenceVoucher } from '../../ledger/ledger.vm';
 import { InvoiceFilterClassForInvoicePreview } from './Invoice';
 import { AmountClassMulticurrency, IInvoiceLinkingRequest } from "./Sales";
 

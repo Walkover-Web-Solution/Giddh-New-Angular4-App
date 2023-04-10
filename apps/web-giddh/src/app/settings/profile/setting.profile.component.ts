@@ -19,7 +19,7 @@ import { OrganizationProfile, SettingsAsideConfiguration, SettingsAsideFormType 
 import { SettingsProfileService } from '../../services/settings.profile.service';
 import { SettingsUtilityService } from '../services/settings-utility.service';
 import { CommonService } from '../../services/common.service';
-import { CompanyService } from '../../services/companyService.service';
+import { CompanyService } from '../../services/company.service';
 import { GeneralService } from '../../services/general.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { LocaleService } from '../../services/locale.service';

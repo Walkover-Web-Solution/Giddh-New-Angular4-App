@@ -4,7 +4,7 @@ import { Store, select } from "@ngrx/store";
 import { AppState } from "../../../store";
 import { Router } from '@angular/router';
 import { takeUntil } from 'rxjs/operators';
-import { CurrentCompanyState } from '../../../store/Company/company.reducer';
+import { CurrentCompanyState } from '../../../store/company/company.reducer';
 import { ReplaySubject } from 'rxjs';
 
 @Component({

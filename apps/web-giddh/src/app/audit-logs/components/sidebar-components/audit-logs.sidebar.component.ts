@@ -7,7 +7,7 @@ import { map as lodashMap } from '../../../lodash-optimized';
 import { AuditLogsActions } from '../../../actions/audit-logs/audit-logs.actions';
 import { flatten, omit, union } from '../../../lodash-optimized';
 import { LogsRequest } from '../../../models/api-models/Logs';
-import { CompanyService } from '../../../services/companyService.service';
+import { CompanyService } from '../../../services/company.service';
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
 import { AppState } from '../../../store';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
