@@ -214,7 +214,6 @@ export class ReportsComponent implements OnInit {
                 this.balanceStockReportRequest.from = this.fromDate;
                 this.balanceStockReportRequest.to = this.toDate;
                 this.fromToDate = { from: this.fromDate, to: this.toDate };
-
                 if (!this.isCompany) {
                     this.stockReportRequest.branchUniqueNames = [this.generalService.currentBranchUniqueName];
                     this.balanceStockReportRequest.branchUniqueNames = [this.generalService.currentBranchUniqueName];
@@ -325,6 +324,12 @@ export class ReportsComponent implements OnInit {
      * @memberof ReportsComponent
      */
     public getReport(fetchBalance: boolean = true): void {
+        if (this.todaySelected) {
+            this.stockReportRequest.from = '';
+            this.stockReportRequest.to = '';
+            this.balanceStockReportRequest.from = '';
+            this.balanceStockReportRequest.to = '';
+        }
         if (!this.reportType) {
             return;
         }

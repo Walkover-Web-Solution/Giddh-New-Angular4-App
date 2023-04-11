@@ -249,19 +249,6 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
         if (changes?.searchPage) {
             this.getReportColumns();
         }
-        if (changes?.stockReportRequest?.currentValue?.from && changes?.stockReportRequest?.currentValue?.to && !this.todaySelected) {
-            this.fromDate = dayjs(changes?.fromToDate?.currentValue?.from, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
-            this.toDate = dayjs(changes?.fromToDate?.currentValue?.to, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
-            this.stockReportRequest.from = this.fromDate;
-            this.stockReportRequest.to = this.toDate;
-            this.balanceStockReportRequest.from = this.fromDate;
-            this.balanceStockReportRequest.to = this.toDate;
-        } else {
-            this.stockReportRequest.from = '';
-            this.stockReportRequest.to = '';
-            this.balanceStockReportRequest.from = '';
-            this.balanceStockReportRequest.to = '';
-        }
         if (changes?.stockReportRequest?.currentValue) {
             if (changes?.stockReportRequest?.currentValue?.stockGroups) {
                 changes?.stockReportRequest?.currentValue?.stockGroups?.forEach(group => {
