@@ -1,6 +1,6 @@
 import { ICreateGroup } from '../interfaces/group-create.interface';
 import { INameUniqueName } from './Inventory';
-import { IUserInfo } from '../interfaces//user-info.interface';
+import { IUserInfo } from '../interfaces/user-info.interface';
 import { IGroup } from '../interfaces/group.interface';
 import { IAccountsInfo } from '../interfaces/account-info.interface';
 import { IFlattenGroupsAccountsDetail } from '../interfaces/flatten-groups-accounts-detail.interface';
