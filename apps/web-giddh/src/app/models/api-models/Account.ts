@@ -1,6 +1,6 @@
 import { IAccount, IAccountCreate, ICountryClass } from '../interfaces/account-create.interface';
 import { IGstDetailListItem } from '../interfaces/gst-detail-list-item.interface';
-import { IUserInfo } from '../interfaces//user-info.interface';
+import { IUserInfo } from '../interfaces/user-info.interface';
 import { INameUniqueName } from './Inventory';
 import { IFlattenAccountsResultItem } from '../interfaces/flatten-accounts-result-item.interface';
 import { IInheritedTaxes } from '../interfaces/inherited-taxes.interface';
