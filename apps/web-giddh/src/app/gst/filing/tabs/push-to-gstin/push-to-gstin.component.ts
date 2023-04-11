@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { GstReconcileActions } from '../../../../actions/gst-reconcile/GstReconcile.actions';
+import { GstReconcileActions } from '../../../../actions/gst-reconcile/gst-reconcile.actions';
 import { select, Store } from '@ngrx/store';
 import { GstDatePeriod, Gstr1SummaryRequest, Gstr1SummaryResponse } from '../../../../models/api-models/GstReconcile';
 import { ReplaySubject } from 'rxjs';

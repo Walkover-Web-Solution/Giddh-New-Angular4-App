@@ -8,7 +8,7 @@ import { API_COUNT_LIMIT } from '../../../app.constant';
 import { cloneDeep, flatten, map, omit, union } from '../../../lodash-optimized';
 import { GetAuditLogsRequest } from '../../../models/api-models/Logs';
 import { IForceClear } from '../../../models/api-models/Sales';
-import { CompanyService } from '../../../services/companyService.service';
+import { CompanyService } from '../../../services/company.service';
 import { GroupService } from '../../../services/group.service';
 import { LogsService } from '../../../services/logs.service';
 import { SearchService } from '../../../services/search.service';

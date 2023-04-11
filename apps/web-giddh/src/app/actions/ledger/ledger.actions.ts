@@ -1,4 +1,4 @@
-import { CustomActions } from './../../store/customActions';
+import { CustomActions } from './../../store/custom-actions';
 import { map, switchMap } from 'rxjs/operators';
 import { DownloadLedgerRequest, ILedgerAdvanceSearchRequest, ILedgerAdvanceSearchResponse, LedgerResponse, LedgerUpdateRequest, TransactionsRequest, TransactionsResponse } from '../../models/api-models/Ledger';
 import { AccountRequestV2, AccountResponseV2, AccountSharedWithResponse, ShareAccountRequest } from '../../models/api-models/Account';
@@ -12,7 +12,7 @@ import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { AppState } from '../../store/roots';
 import { LEDGER } from './ledger.const';
 import { LedgerService } from '../../services/ledger.service';
-import { BlankLedgerVM } from '../../material-ledger/ledger.vm';
+import { BlankLedgerVM } from '../../ledger/ledger.vm';
 import { GenerateBulkInvoiceRequest, IBulkInvoiceGenerationFalingError } from '../../models/api-models/Invoice';
 import { InvoiceService } from '../../services/invoice.service';
 import { LocaleService } from '../../services/locale.service';

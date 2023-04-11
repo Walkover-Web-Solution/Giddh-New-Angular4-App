@@ -4,7 +4,7 @@ import { BaseResponse } from '../models/api-models/BaseResponse';
 import { COMMON_API } from './apiurls/common.api';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { CountryRequest, CountryResponse, CallingCodesResponse, OnboardingFormRequest, OnboardingFormResponse } from '../models/api-models/Common';
-import { HttpWrapperService } from "./httpWrapper.service";
+import { HttpWrapperService } from "./http-wrapper.service";
 import { Observable } from "rxjs";
 import { GeneralService } from './general.service';
 import { GiddhErrorHandler } from './catchManager/catchmanger';

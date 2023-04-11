@@ -6,7 +6,7 @@ import { BaseResponse } from '../models/api-models/BaseResponse';
 import { EXCEPTION_API } from './apiurls/exception-log.api';
 import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { GeneralService } from './general.service';
-import { HttpWrapperService } from './httpWrapper.service';
+import { HttpWrapperService } from './http-wrapper.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 
 @Injectable()

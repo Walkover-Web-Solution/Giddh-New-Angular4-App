@@ -25,11 +25,11 @@ import {
     PURCHASE_RECORD_GRAND_TOTAL_OPERATION,
     PurchaseRecordAdvanceSearch,
 } from '../purchase/purchase-record/constants/purchase-record.interface';
-import { COMPANY_API } from './apiurls/comapny.api';
-import { RECEIPT_API } from './apiurls/recipt.api';
+import { COMPANY_API } from './apiurls/company.api';
+import { RECEIPT_API } from './apiurls/receipt.api';
 import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { GeneralService } from './general.service';
-import { HttpWrapperService } from './httpWrapper.service';
+import { HttpWrapperService } from './http-wrapper.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 
 @Injectable()

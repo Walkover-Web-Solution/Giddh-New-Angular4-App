@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { TlPlService } from '../services/tl-pl.service';
 import { AccountDetails, BalanceSheetRequest, GetCogsRequest, GetCogsResponse, ProfitLossRequest, TrialBalanceExportExcelRequest, TrialBalanceRequest } from '../models/api-models/tb-pl-bs';
-import { CustomActions } from '../store/customActions';
+import { CustomActions } from '../store/custom-actions';
 
 @Injectable()
 export class TBPlBsActions {

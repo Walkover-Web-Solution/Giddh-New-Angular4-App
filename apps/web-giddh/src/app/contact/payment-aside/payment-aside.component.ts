@@ -7,7 +7,7 @@ import { takeUntil, take } from 'rxjs/operators';
 import { Observable, ReplaySubject, of } from "rxjs";
 import { VerifyEmailResponseModel } from "../../models/api-models/loginModels";
 import { AccountResponseV2 } from "../../models/api-models/Account";
-import { CompanyService } from "../../services/companyService.service";
+import { CompanyService } from "../../services/company.service";
 import { IRegistration, IntegratedBankList, BankTransactionForOTP, GetOTPRequest, BulkPaymentConfirmRequest } from "../../models/interfaces/registration.interface";
 import { ToasterService } from "../../services/toaster.service";
 import { IOption } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-options.interface';

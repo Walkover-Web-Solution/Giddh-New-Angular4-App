@@ -23,7 +23,7 @@ import { OnBoardingType } from '../app.constant';
 import { CountryRequest, OnboardingFormRequest } from '../models/api-models/Common';
 import { Addresses, CompanyCreateRequest, StatesRequest, CreateCompanyUsersPlan, SubscriptionRequest } from '../models/api-models/Company';
 import { IForceClear } from '../models/api-models/Sales';
-import { CompanyService } from '../services/companyService.service';
+import { CompanyService } from '../services/company.service';
 import { GeneralService } from '../services/general.service';
 import { ToasterService } from '../services/toaster.service';
 import { AppState } from '../store';

@@ -23,7 +23,7 @@ import {
     StateDetailsRequest,
     StateDetailsResponse
 } from '../../models/api-models/Company';
-import { CustomActions } from '../customActions';
+import { CustomActions } from '../custom-actions';
 import * as dayjs from 'dayjs';
 import * as customParseFormat from 'dayjs/plugin/customParseFormat';
 dayjs.extend(customParseFormat);

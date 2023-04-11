@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Observable } from 'rxjs';
 import { SETTINGS_FINANCIAL_YEAR_ACTIONS } from './financial-year.const';
-import { CustomActions } from '../../../store/customActions';
+import { CustomActions } from '../../../store/custom-actions';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
 import { IFinancialYearResponse, ILockFinancialYearRequest, SettingsFinancialYearService } from '../../../services/settings.financial-year.service';
 import { Action } from '@ngrx/store';

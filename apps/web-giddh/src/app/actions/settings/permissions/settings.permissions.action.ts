@@ -7,7 +7,7 @@ import { ToasterService } from '../../../services/toaster.service';
 import { Action } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
-import { CustomActions } from '../../../store/customActions';
+import { CustomActions } from '../../../store/custom-actions';
 
 @Injectable()
 export class SettingsPermissionActions {

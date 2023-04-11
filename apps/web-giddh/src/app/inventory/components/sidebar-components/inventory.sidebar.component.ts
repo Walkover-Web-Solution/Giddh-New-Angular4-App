@@ -4,7 +4,7 @@ import { fromEvent as observableFromEvent, Observable, ReplaySubject } from 'rxj
 import { debounceTime, distinctUntilChanged, map, takeUntil } from 'rxjs/operators';
 import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
 import { InventoryDownloadRequest } from '../../../models/api-models/Inventory';
-import { IGroupsWithStocksHierarchyMinItem } from '../../../models/interfaces/groupsWithStocks.interface';
+import { IGroupsWithStocksHierarchyMinItem } from '../../../models/interfaces/groups-with-stocks.interface';
 import { OrganizationType } from '../../../models/user-login-state';
 import { GeneralService } from '../../../services/general.service';
 import { InventoryService } from '../../../services/inventory.service';

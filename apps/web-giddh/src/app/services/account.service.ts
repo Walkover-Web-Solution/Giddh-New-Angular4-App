@@ -2,17 +2,17 @@ import { empty as observableEmpty, Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { ShareRequestForm } from '../models/api-models/Permission';
 import { AccountMergeRequest, AccountMoveRequest, AccountRequest, AccountRequestV2, AccountResponse, AccountResponseV2, AccountSharedWithResponse, AccountsTaxHierarchyResponse, AccountUnMergeRequest, FlattenAccountsResponse, ShareAccountRequest, ShareEntityRequest } from '../models/api-models/Account';
-import { HttpWrapperService } from './httpWrapper.service';
+import { HttpWrapperService } from './http-wrapper.service';
 import { Inject, Injectable, Optional } from '@angular/core';
 import { ACCOUNTS_API, ACCOUNTS_API_V2 } from './apiurls/account.api';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { GiddhErrorHandler } from './catchManager/catchmanger';
-import { APPLY_TAX_API } from './apiurls/applyTax.api';
+import { APPLY_TAX_API } from './apiurls/apply-tax.api';
 import { ApplyTaxRequest } from '../models/api-models/ApplyTax';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { AssignDiscountRequestForAccount, ApplyDiscountRequestV2 } from '../models/api-models/ApplyDiscount';
-import { APPLY_DISCOUNT_API } from './apiurls/applyDiscount';
+import { APPLY_DISCOUNT_API } from './apiurls/apply-discount.api';
 
 @Injectable()
 export class AccountService {

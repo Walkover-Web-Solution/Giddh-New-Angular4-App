@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, NgZone, OnChanges, OnInit, Output, Simp
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { InventoryEntry, InventoryUser } from '../../../../models/api-models/Inventory-in-out';
-import { IStocksItem } from '../../../../models/interfaces/stocksItem.interface';
+import { IStocksItem } from '../../../../models/interfaces/stocks-item.interface';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
 import * as dayjs from 'dayjs';
 import { StockUnitRequest } from '../../../../models/api-models/Inventory';

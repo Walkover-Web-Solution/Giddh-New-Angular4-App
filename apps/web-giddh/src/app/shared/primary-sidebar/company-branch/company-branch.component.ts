@@ -10,7 +10,7 @@ import { LoginActions } from '../../../actions/login.action';
 import { orderBy } from '../../../lodash-optimized';
 import { BranchFilterRequest, CompanyResponse, Organization, OrganizationDetails } from '../../../models/api-models/Company';
 import { OrganizationType } from '../../../models/user-login-state';
-import { CompanyService } from '../../../services/companyService.service';
+import { CompanyService } from '../../../services/company.service';
 import { GeneralService } from '../../../services/general.service';
 import { SettingsBranchService } from '../../../services/settings.branch.service';
 import { AppState } from '../../../store';

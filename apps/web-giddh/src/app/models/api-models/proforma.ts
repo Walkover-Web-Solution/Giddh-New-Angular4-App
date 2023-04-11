@@ -1,6 +1,6 @@
 import { CommonPaginatedResponse } from './BaseResponse';
 import { InvoiceReceiptFilter } from './recipt';
-import { INameUniqueName } from '../interfaces/nameUniqueName.interface';
+import { INameUniqueName } from '../interfaces/name-unique-name.interface';
 import { CommonPaginatedRequest } from './Invoice';
 
 export class ProformaFilter extends InvoiceReceiptFilter {
