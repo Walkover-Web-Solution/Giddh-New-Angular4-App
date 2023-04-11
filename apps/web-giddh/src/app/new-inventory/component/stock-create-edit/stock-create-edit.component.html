@@ -386,16 +386,13 @@
                                                                             pl-0
                                                                             mr-b15
                                                                         "
-                                                                        *ngIf="
-                                                                            !isVariantAvailable &&
-                                                                            stockForm.variants?.length
-                                                                        "
+                                                                        *ngIf="!isVariantAvailable"
                                                                     >
                                                                         <div
                                                                             class="row add-new-field mr-b15"
                                                                             *ngFor="
                                                                                 let variantPurchaseUnitRate of stockForm
-                                                                                    .variants[0].purchaseInformation;
+                                                                                    ?.variants[0]?.purchaseInformation;
                                                                                 let j = index
                                                                             "
                                                                         >
@@ -539,16 +536,13 @@
                                                                             pl-0
                                                                             mr-b15
                                                                         "
-                                                                        *ngIf="
-                                                                            !isVariantAvailable &&
-                                                                            stockForm.variants?.length
-                                                                        "
+                                                                        *ngIf="!isVariantAvailable"
                                                                     >
                                                                         <div
                                                                             class="row add-new-field mr-b15"
                                                                             *ngFor="
                                                                                 let variantSalesUnitRate of stockForm
-                                                                                    .variants[0].salesInformation;
+                                                                                    ?.variants[0]?.salesInformation;
                                                                                 let j = index
                                                                             "
                                                                         >
@@ -940,7 +934,7 @@
                                                             >
                                                                 <ng-container
                                                                     *ngFor="
-                                                                        let variantPurchaseUnitRate of variant.purchaseInformation;
+                                                                        let variantPurchaseUnitRate of variant?.purchaseInformation;
                                                                         let j = index
                                                                     "
                                                                 >
@@ -1014,7 +1008,7 @@
                                                             >
                                                                 <ng-container
                                                                     *ngFor="
-                                                                        let variantSalesUnitRate of variant.salesInformation;
+                                                                        let variantSalesUnitRate of variant?.salesInformation;
                                                                         let j = index
                                                                     "
                                                                 >
