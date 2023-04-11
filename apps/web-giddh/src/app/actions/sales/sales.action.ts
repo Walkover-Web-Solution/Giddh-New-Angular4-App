@@ -9,7 +9,7 @@ import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { SALES_ACTIONS } from './sales.const';
 import { AccountRequestV2, AccountResponseV2, AddAccountRequest, UpdateAccountRequest } from '../../models/api-models/Account';
 import { AccountService } from '../../services/account.service';
-import { CustomActions } from '../../store/customActions';
+import { CustomActions } from '../../store/custom-actions';
 import { IUpdateDbRequest } from "../../models/interfaces/ulist.interface";
 import { GeneralActions } from "../general/general.actions";
 import { GeneralService } from "../../services/general.service";

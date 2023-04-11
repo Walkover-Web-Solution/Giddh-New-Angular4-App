@@ -8,7 +8,7 @@ import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { PermissionService } from '../../services/permission.service';
 import { PERMISSION_ACTIONS } from './permission.const';
 import { CreateNewRoleRequest, CreateNewRoleResponse, IRoleCommonResponseAndRequest } from '../../models/api-models/Permission';
-import { CustomActions } from '../../store/customActions';
+import { CustomActions } from '../../store/custom-actions';
 import { LocaleService } from '../../services/locale.service';
 
 @Injectable()

@@ -14,7 +14,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { Observable, ReplaySubject } from 'rxjs';
 import { InvViewService } from '../inv.view.service';
 import { ShSelectComponent } from '../../theme/ng-virtual-select/sh-select.component';
-import { IStocksItem } from "../../models/interfaces/stocksItem.interface";
+import { IStocksItem } from "../../models/interfaces/stocks-item.interface";
 import { DaterangePickerComponent } from '../../theme/ng2-daterangepicker/daterangepicker.component';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 

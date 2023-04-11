@@ -5,9 +5,9 @@ import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { VoucherTypeEnum } from '../../models/api-models/Sales';
 import { BulkEmailRequest } from '../../models/api-models/Search';
-import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccountsResultItem.interface';
+import { IFlattenAccountsResultItem } from '../../models/interfaces/flatten-accounts-result-item.interface';
 import { AccountService } from '../../services/account.service';
-import { CompanyService } from '../../services/companyService.service';
+import { CompanyService } from '../../services/company.service';
 import { ToasterService } from '../../services/toaster.service';
 
 @Component({

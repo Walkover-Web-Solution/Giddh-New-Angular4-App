@@ -17,7 +17,7 @@ import {
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
-import { BlankLedgerVM } from 'apps/web-giddh/src/app/material-ledger/ledger.vm';
+import { BlankLedgerVM } from 'apps/web-giddh/src/app/ledger/ledger.vm';
 import { cloneDeep, forEach, isEqual, sumBy, concat, find, without, orderBy } from 'apps/web-giddh/src/app/lodash-optimized';
 import { TaxResponse } from 'apps/web-giddh/src/app/models/api-models/Company';
 import * as dayjs from 'dayjs';
@@ -29,7 +29,7 @@ import { InventoryAction } from '../../../actions/inventory/inventory.actions';
 import { InvoiceActions } from '../../../actions/invoice/invoice.actions';
 import { LedgerActions } from '../../../actions/ledger/ledger.actions';
 import { AccountResponse } from '../../../models/api-models/Account';
-import { IFlattenAccountsResultItem } from '../../../models/interfaces/flattenAccountsResultItem.interface';
+import { IFlattenAccountsResultItem } from '../../../models/interfaces/flatten-accounts-result-item.interface';
 import { AccountService } from '../../../services/account.service';
 import { InventoryService } from '../../../services/inventory.service';
 import { ToasterService } from '../../../services/toaster.service';

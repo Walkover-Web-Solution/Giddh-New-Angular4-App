@@ -3,11 +3,11 @@ import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angu
 import { select, Store } from '@ngrx/store';
 import { Router } from '@angular/router';
 import { Observable, of, ReplaySubject } from 'rxjs';
-import { ReconcileActionState } from '../../../../../store/GstReconcile/GstReconcile.reducer';
+import { ReconcileActionState } from '../../../../../store/gst-reconcile/GstReconcile.reducer';
 import { AppState } from '../../../../../store';
 import { takeUntil } from 'rxjs/operators';
 import { GstReport } from '../../../../constants/gst.constant';
-import { GstReconcileActions } from 'apps/web-giddh/src/app/actions/gst-reconcile/GstReconcile.actions';
+import { GstReconcileActions } from 'apps/web-giddh/src/app/actions/gst-reconcile/gst-reconcile.actions';
 
 interface SequenceConfig {
     name: string;

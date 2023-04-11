@@ -5,7 +5,7 @@ import { REVERSECHARGE_API } from './apiurls/reversecharge.api';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { ReverseChargeReportGetRequest, ReverseChargeReportPostRequest } from '../models/api-models/ReverseCharge';
 import { GiddhErrorHandler } from "./catchManager/catchmanger";
-import { HttpWrapperService } from "./httpWrapper.service";
+import { HttpWrapperService } from "./http-wrapper.service";
 import { Observable } from "rxjs";
 
 @Injectable()

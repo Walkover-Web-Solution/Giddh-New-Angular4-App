@@ -5,7 +5,7 @@ import { BaseResponse } from '../models/api-models/BaseResponse';
 import { WAREHOUSE_API } from '../settings/warehouse/constants/warehouse.constant';
 import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { GeneralService } from './general.service';
-import { HttpWrapperService } from './httpWrapper.service';
+import { HttpWrapperService } from './http-wrapper.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { WareHouseResponse } from '../models/api-models/Warehouse';
 

@@ -3,7 +3,7 @@ import { CustomTemplateResponse } from '../models/api-models/Invoice';
 import { Observable } from 'rxjs';
 import { Inject, Injectable, Optional } from '@angular/core';
 import { INVOICE_API } from './apiurls/invoice';
-import { HttpWrapperService } from './httpWrapper.service';
+import { HttpWrapperService } from './http-wrapper.service';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { GeneralService } from './general.service';

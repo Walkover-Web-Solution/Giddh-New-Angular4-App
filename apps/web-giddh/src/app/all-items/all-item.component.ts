@@ -18,7 +18,7 @@ import { GroupWithAccountsAction } from '../actions/groupwithaccounts.actions';
 import { GstReport } from '../gst/constants/gst.constant';
 import { OrganizationType } from '../models/user-login-state';
 import { GeneralService } from '../services/general.service';
-import { GstReconcileService } from '../services/GstReconcile.service';
+import { GstReconcileService } from '../services/gst-reconcile.service';
 import { AllItem } from '../shared/helpers/allItems';
 import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
 import { AppState } from '../store';

@@ -108,6 +108,8 @@ export class InventoryTransactionListComponent implements OnInit {
     private storeFilters: any;
     /** Hold advance search modal response */
     public advanceSearchModalResponse: any = null;
+    /** Observable to cancel api on reports api call */
+    private cancelApi$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(
         private generalService: GeneralService,
@@ -201,64 +203,68 @@ export class InventoryTransactionListComponent implements OnInit {
         this.dataSource = [];
         this.isLoading = true;
         this.isReportLoaded = true;
-        if (!this.isCompany) {
-            this.stockReportRequest.branchUniqueNames = [this.generalService.currentBranchUniqueName];
-            this.balanceStockReportRequest.branchUniqueNames = [this.generalService.currentBranchUniqueName];
-        }
-        let stockReportRequest = cloneDeep(this.stockReportRequest);
-        stockReportRequest.stockGroups = undefined;
-        stockReportRequest.stocks = undefined;
-        stockReportRequest.variants = undefined;
-        this.inventoryService.getStockTransactionReport(stockReportRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            this.isLoading = false;
-            if (response && response.body && response.status === 'success') {
-                this.isDataAvailable = (response.body.transactions?.length) ? true : false;
-                this.dataSource = response.body.transactions;
-                this.stockReportRequest.page = response.body.page;
-                this.stockReportRequest.totalItems = response.body.totalItems;
-                this.stockReportRequest.totalPages = response.body.totalPages;
-                this.stockReportRequest.count = response.body.count;
-                this.stockReportRequest.from = dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
-                this.stockReportRequest.to = dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
-                this.fromDate = dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
-                this.toDate = dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
-                this.selectedDateRange = { startDate: dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT), endDate: dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT) };
-                this.selectedDateRangeUi = dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
-
-                if (this.todaySelected) {
-                    this.fromToDate = { from: response?.body?.fromDate, to: response?.body?.toDate };
-                } else {
-                    this.fromToDate = null;
-                }
-            } else {
-                this.toaster.errorToast(response?.message);
-                this.dataSource = [];
-                this.stockReportRequest.totalItems = 0;
-                if (!this.isCompany) {
-                    this.stockReportRequest.branchUniqueNames = [this.generalService.currentBranchUniqueName];
-                    this.balanceStockReportRequest.branchUniqueNames = [this.generalService.currentBranchUniqueName];
-                }
+        this.cancelApi$.next();
+        setTimeout(() => {
+            this.cancelApi$ = new ReplaySubject(1);
+            if (!this.isCompany) {
+                this.stockReportRequest.branchUniqueNames = [this.generalService.currentBranchUniqueName];
+                this.balanceStockReportRequest.branchUniqueNames = [this.generalService.currentBranchUniqueName];
             }
-            this.changeDetection.detectChanges();
-        });
-        if (fetchBalance) {
-            let balanceReportRequest = cloneDeep(this.balanceStockReportRequest);
-            let queryParams = {
-                from: balanceReportRequest.from ?? '',
-                to: balanceReportRequest.to ?? '',
-                stockGroupUniqueName: ''
-            };
-            balanceReportRequest.from = undefined;
-            balanceReportRequest.to = undefined;
-            this.inventoryService.getStockTransactionReportBalance(queryParams, balanceReportRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            let stockReportRequest = cloneDeep(this.stockReportRequest);
+            stockReportRequest.stockGroups = undefined;
+            stockReportRequest.stocks = undefined;
+            stockReportRequest.variants = undefined;
+            this.inventoryService.getStockTransactionReport(stockReportRequest).pipe(takeUntil(this.cancelApi$)).subscribe(response => {
+                this.isLoading = false;
                 if (response && response.body && response.status === 'success') {
-                    this.stockTransactionReportBalance = response.body;
+                    this.isDataAvailable = (response.body.transactions?.length) ? true : false;
+                    this.dataSource = response.body.transactions;
+                    this.stockReportRequest.page = response.body.page;
+                    this.stockReportRequest.totalItems = response.body.totalItems;
+                    this.stockReportRequest.totalPages = response.body.totalPages;
+                    this.stockReportRequest.count = response.body.count;
+                    this.stockReportRequest.from = dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                    this.stockReportRequest.to = dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                    this.fromDate = dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                    this.toDate = dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                    this.selectedDateRange = { startDate: dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT), endDate: dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT) };
+                    this.selectedDateRangeUi = dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
+
+                    if (this.todaySelected) {
+                        this.fromToDate = { from: response?.body?.fromDate, to: response?.body?.toDate };
+                    } else {
+                        this.fromToDate = null;
+                    }
                 } else {
-                    this.stockTransactionReportBalance = null;
+                    this.toaster.errorToast(response?.message);
+                    this.dataSource = [];
+                    this.stockReportRequest.totalItems = 0;
+                    if (!this.isCompany) {
+                        this.stockReportRequest.branchUniqueNames = [this.generalService.currentBranchUniqueName];
+                        this.balanceStockReportRequest.branchUniqueNames = [this.generalService.currentBranchUniqueName];
+                    }
                 }
                 this.changeDetection.detectChanges();
             });
-        }
+            if (fetchBalance) {
+                let balanceReportRequest = cloneDeep(this.balanceStockReportRequest);
+                let queryParams = {
+                    from: balanceReportRequest.from ?? '',
+                    to: balanceReportRequest.to ?? '',
+                    stockGroupUniqueName: ''
+                };
+                balanceReportRequest.from = undefined;
+                balanceReportRequest.to = undefined;
+                this.inventoryService.getStockTransactionReportBalance(queryParams, balanceReportRequest).pipe(takeUntil(this.cancelApi$)).subscribe(response => {
+                    if (response && response.body && response.status === 'success') {
+                        this.stockTransactionReportBalance = response.body;
+                    } else {
+                        this.stockTransactionReportBalance = null;
+                    }
+                    this.changeDetection.detectChanges();
+                });
+            }
+        });
     }
 
     /**
@@ -385,6 +391,8 @@ export class InventoryTransactionListComponent implements OnInit {
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+        this.cancelApi$.next(true);
+        this.cancelApi$.complete();
     }
 
     /**

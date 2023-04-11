@@ -6,7 +6,7 @@ import { CountryRequest, CountryResponse, CurrencyResponse, CallingCodesResponse
 import { Injectable } from '@angular/core';
 import { Action } from '@ngrx/store';
 import { BaseResponse } from '../models/api-models/BaseResponse';
-import { CustomActions } from '../store/customActions';
+import { CustomActions } from '../store/custom-actions';
 import { LocaleService } from '../services/locale.service';
 
 @Injectable()

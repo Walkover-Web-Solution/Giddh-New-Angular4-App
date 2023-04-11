@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, OnChanges, V
 import { select, Store } from '@ngrx/store';
 import { Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
-import { CustomStockUnitAction } from '../../../actions/inventory/customStockUnit.actions';
+import { CustomStockUnitAction } from '../../../actions/inventory/custom-stock-unit.actions';
 import { InventoryAction } from '../../../actions/inventory/inventory.actions';
 import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
 import { StockMappedUnitResponse, StockUnitRequest } from '../../../models/api-models/Inventory';

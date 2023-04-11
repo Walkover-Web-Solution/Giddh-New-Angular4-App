@@ -5,7 +5,7 @@ import { COMMA, ENTER } from "@angular/cdk/keycodes";
 import { MatChipInputEvent } from "@angular/material/chips";
 import { InventoryService } from "../../../services/inventory.service";
 import { IOption } from "../../../theme/ng-virtual-select/sh-options.interface";
-import { IGroupsWithStocksHierarchyMinItem } from "../../../models/interfaces/groupsWithStocks.interface";
+import { IGroupsWithStocksHierarchyMinItem } from "../../../models/interfaces/groups-with-stocks.interface";
 import { SalesService } from "../../../services/sales.service";
 import { ToasterService } from "../../../services/toaster.service";
 import { select, Store } from "@ngrx/store";

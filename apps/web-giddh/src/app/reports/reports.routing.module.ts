@@ -3,7 +3,7 @@ import { RouterModule } from '@angular/router';
 import { ReportsComponent } from './reports.component';
 import { NeedsAuthentication } from '../decorators/needsAuthentication';
 import { ReportsDetailsComponent } from './components/report-details-components/report.details.component';
-import { SalesRegisterExpandComponent } from './components/salesRegister-expand-component/sales.register.expand.component';
+import { SalesRegisterExpandComponent } from './components/sales-register-expand-component/sales.register.expand.component';
 import { ReportsDashboardComponent } from "./components/report-dashboard/reports.dashboard.component";
 import { PurchaseRegisterComponent } from './components/purchase-register-component/purchase.register.component';
 import { PurchaseRegisterExpandComponent } from './components/purchase-register-expand-component/purchase.register.expand.component';

@@ -5,7 +5,7 @@ import { BaseResponse } from '../../../models/api-models/BaseResponse';
 import { LocaleService } from '../../../services/locale.service';
 import { SettingsWarehouseService } from '../../../services/settings.warehouse.service';
 import { ToasterService } from '../../../services/toaster.service';
-import { CustomActions } from '../../../store/customActions';
+import { CustomActions } from '../../../store/custom-actions';
 
 /**
  * Warehouse actions

@@ -1,7 +1,7 @@
 import { takeUntil } from 'rxjs/operators';
 import { StockDetailResponse, StockGroupResponse } from '../../../models/api-models/Inventory';
 import { AppState } from '../../../store/roots';
-import { IGroupsWithStocksHierarchyMinItem } from '../../../models/interfaces/groupsWithStocks.interface';
+import { IGroupsWithStocksHierarchyMinItem } from '../../../models/interfaces/groups-with-stocks.interface';
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
 import { Store, select } from '@ngrx/store';

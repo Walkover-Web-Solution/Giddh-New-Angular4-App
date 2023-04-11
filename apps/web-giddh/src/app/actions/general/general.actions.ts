@@ -9,10 +9,10 @@ import { CurrentPage } from '../../models/api-models/Common';
 import { States, StatesRequest } from '../../models/api-models/Company';
 import { GroupsWithAccountsResponse } from '../../models/api-models/GroupsWithAccounts';
 import { IUpdateDbRequest } from '../../models/interfaces/ulist.interface';
-import { CompanyService } from '../../services/companyService.service';
+import { CompanyService } from '../../services/company.service';
 import { DbService } from '../../services/db.service';
 import { GroupService } from '../../services/group.service';
-import { CustomActions } from '../../store/customActions';
+import { CustomActions } from '../../store/custom-actions';
 import { GENERAL_ACTIONS } from './general.const';
 
 @Injectable()

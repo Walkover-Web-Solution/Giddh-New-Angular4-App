@@ -6,7 +6,7 @@
  */
 
 import { ILedgerTransactionItem, ITotalItem } from '../interfaces/ledger.interface';
-import { IPagination } from '../interfaces/paginatedResponse.interface';
+import { IPagination } from '../interfaces/paginated-response.interface';
 import { AmountClassMulticurrency, OtherSalesItemClass, VoucherTypeEnum } from './Sales';
 import { INameUniqueName } from './Inventory';
 

@@ -6,7 +6,7 @@ import { Action } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
 import { SETTINGS_BRANCH_ACTIONS } from './settings.branch.const';
-import { CustomActions } from '../../../store/customActions';
+import { CustomActions } from '../../../store/custom-actions';
 import { SettingsBranchService } from '../../../services/settings.branch.service';
 import { BranchFilterRequest } from '../../../models/api-models/Company';
 

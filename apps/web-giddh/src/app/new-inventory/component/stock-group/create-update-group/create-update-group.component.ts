@@ -7,7 +7,7 @@ import { Observable, ReplaySubject, of as observableOf } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { Configuration } from '../../../../app.constant';
 import { IForceClear } from '../../../../models/api-models/Sales';
-import { IGroupsWithStocksHierarchyMinItem } from '../../../../models/interfaces/groupsWithStocks.interface';
+import { IGroupsWithStocksHierarchyMinItem } from '../../../../models/interfaces/groups-with-stocks.interface';
 import { LEDGER_API } from '../../../../services/apiurls/ledger.api';
 import { InventoryService } from '../../../../services/inventory.service';
 import { ToasterService } from '../../../../services/toaster.service';
