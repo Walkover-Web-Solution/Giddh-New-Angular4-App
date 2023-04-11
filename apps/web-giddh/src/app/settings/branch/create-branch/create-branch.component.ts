@@ -10,7 +10,7 @@ import { SettingsBranchActions } from '../../../actions/settings/branch/settings
 import { OnboardingFormRequest } from '../../../models/api-models/Common';
 import { BranchFilterRequest } from '../../../models/api-models/Company';
 import { CommonService } from '../../../services/common.service';
-import { CompanyService } from '../../../services/companyService.service';
+import { CompanyService } from '../../../services/company.service';
 import { GeneralService } from '../../../services/general.service';
 import { SettingsProfileService } from '../../../services/settings.profile.service';
 import { ToasterService } from '../../../services/toaster.service';

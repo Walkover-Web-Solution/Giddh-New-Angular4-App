@@ -8,7 +8,7 @@ import { Action } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { InventoryService } from '../../services/inventory.service';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
-import { CustomActions } from '../../store/customActions';
+import { CustomActions } from '../../store/custom-actions';
 
 @Injectable()
 export class StockReportActions {

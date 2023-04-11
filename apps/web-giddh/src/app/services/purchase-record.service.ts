@@ -6,7 +6,7 @@ import { PurchaseRecordRequest } from '../models/api-models/Sales';
 import { PURCHASE_RECORD_API } from './apiurls/purchase-record.api';
 import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { GeneralService } from './general.service';
-import { HttpWrapperService } from './httpWrapper.service';
+import { HttpWrapperService } from './http-wrapper.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { PurchaseRecordAttachmentResponse } from '../models/api-models/PurchaseRecord';
 

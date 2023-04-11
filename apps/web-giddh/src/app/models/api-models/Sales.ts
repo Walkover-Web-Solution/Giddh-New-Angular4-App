@@ -2,11 +2,11 @@ import { cloneDeep, forEach, isNull, pick } from '../../lodash-optimized';
 import { LedgerDiscountClass } from './SettingsDiscount';
 import { LedgerResponseDiscountClass } from './Ledger';
 import { giddhRoundOff } from '../../shared/helpers/helperFunctions';
-import { INameUniqueName } from '../interfaces/nameUniqueName.interface';
+import { INameUniqueName } from '../interfaces/name-unique-name.interface';
 import { TaxControlData } from '../../theme/tax-control/tax-control.component';
 import * as dayjs from 'dayjs';
 import { VoucherAdjustments } from './AdvanceReceiptsAdjust';
-import { ReferenceVoucher } from '../../material-ledger/ledger.vm';
+import { ReferenceVoucher } from '../../ledger/ledger.vm';
 import { HIGH_RATE_FIELD_PRECISION } from '../../app.constant';
 
 export enum VoucherTypeEnum {

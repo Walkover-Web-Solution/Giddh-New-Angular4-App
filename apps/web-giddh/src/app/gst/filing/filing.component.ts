@@ -4,7 +4,7 @@ import { select, Store } from '@ngrx/store';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { Observable, of, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
-import { GstReconcileActions } from '../../actions/gst-reconcile/GstReconcile.actions';
+import { GstReconcileActions } from '../../actions/gst-reconcile/gst-reconcile.actions';
 import { GstDatePeriod, GstOverViewRequest } from '../../models/api-models/GstReconcile';
 import { OrganizationType } from '../../models/user-login-state';
 import { GeneralService } from '../../services/general.service';

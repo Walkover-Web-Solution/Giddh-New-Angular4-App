@@ -1,7 +1,7 @@
 import { take, takeUntil, distinctUntilChanged } from 'rxjs/operators';
 import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { VerifyMobileActions } from '../../../../actions/verifyMobile.actions';
+import { VerifyMobileActions } from '../../../../actions/verify-mobile.actions';
 import { CompanyActions } from '../../../../actions/company.actions';
 import { GeneralActions } from '../../../../actions/general/general.actions';
 import { LoginActions } from '../../../../actions/login.action';
@@ -18,7 +18,7 @@ import {
 } from '../../../../models/api-models/Company';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
-import { CompanyService } from '../../../../services/companyService.service';
+import { CompanyService } from '../../../../services/company.service';
 import { ToasterService } from '../../../../services/toaster.service';
 import { userLoginStateEnum } from '../../../../models/user-login-state';
 import { UserDetails } from 'apps/web-giddh/src/app/models/api-models/loginModels';

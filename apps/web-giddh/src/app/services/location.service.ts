@@ -1,8 +1,8 @@
 import { map } from 'rxjs/operators';
 import { Inject, Injectable, Optional } from '@angular/core';
-import { GeoLocationSearch } from '../models/other-models/GeoLocationSearch';
+import { GeoLocationSearch } from '../models/other-models/geo-location-search';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
-import { HttpWrapperService } from './httpWrapper.service';
+import { HttpWrapperService } from './http-wrapper.service';
 
 declare var _: any;
 

@@ -7,7 +7,7 @@ import { take, takeUntil } from 'rxjs/operators';
 import { CompanyActions } from '../../actions/company.actions';
 import { Organization, OrganizationDetails } from '../../models/api-models/Company';
 import { OrganizationType } from '../../models/user-login-state';
-import { CompanyService } from '../../services/companyService.service';
+import { CompanyService } from '../../services/company.service';
 import { GeneralService } from '../../services/general.service';
 import { AppState } from '../../store';
 

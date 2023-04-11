@@ -1,7 +1,7 @@
 import { catchError, map } from 'rxjs/operators';
 import { Inject, Injectable, Optional } from '@angular/core';
 import { GiddhErrorHandler } from './catchManager/catchmanger';
-import { HttpWrapperService } from './httpWrapper.service';
+import { HttpWrapperService } from './http-wrapper.service';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { NEWVSOLDINVOICE_API } from './apiurls/new-vs-old-invocies.api';

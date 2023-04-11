@@ -7,7 +7,7 @@ import { BaseResponse } from '../../../models/api-models/BaseResponse';
 import { LocaleService } from '../../../services/locale.service';
 import { SettingsTaxesService } from '../../../services/settings.taxes.service';
 import { ToasterService } from '../../../services/toaster.service';
-import { CustomActions } from '../../../store/customActions';
+import { CustomActions } from '../../../store/custom-actions';
 import { AppState } from '../../../store/roots';
 import { GeneralActions } from '../../general/general.actions';
 import { SETTINGS_TAXES_ACTIONS } from './settings.taxes.const';

@@ -6,7 +6,7 @@ import { CommonService } from "../../services/common.service";
 import { StockUnitRequest } from "../../models/api-models/Inventory";
 import { select, Store } from "@ngrx/store";
 import { AppState } from "../../store";
-import { CustomStockUnitAction } from "../../actions/inventory/customStockUnit.actions";
+import { CustomStockUnitAction } from "../../actions/inventory/custom-stock-unit.actions";
 import { Router } from "@angular/router";
 import { cloneDeep } from "../../lodash-optimized";
 import { ToasterService } from "../../services/toaster.service";

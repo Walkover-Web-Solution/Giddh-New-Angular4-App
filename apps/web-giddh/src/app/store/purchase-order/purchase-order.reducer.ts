@@ -1,4 +1,4 @@
-import { CustomActions } from '../customActions';
+import { CustomActions } from '../custom-actions';
 import { PURCHASE_ORDER_ACTIONS } from '../../actions/purchase-order/purchase-order.const';
 
 export interface PurchaseOrderState {

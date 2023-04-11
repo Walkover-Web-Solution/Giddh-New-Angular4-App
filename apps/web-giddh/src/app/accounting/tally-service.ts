@@ -1,10 +1,10 @@
 import { Inject, Injectable, Optional } from '@angular/core';
-import { IFlattenAccountsResultItem } from 'apps/web-giddh/src/app/models/interfaces/flattenAccountsResultItem.interface';
+import { IFlattenAccountsResultItem } from 'apps/web-giddh/src/app/models/interfaces/flatten-accounts-result-item.interface';
 import { BehaviorSubject, Observable } from 'rxjs';
 
-import { HttpWrapperService } from '../services/httpWrapper.service';
+import { HttpWrapperService } from '../services/http-wrapper.service';
 import { IServiceConfigArgs, ServiceConfig } from '../services/service.config';
-import { BlankLedgerVM } from './../material-ledger/ledger.vm';
+import { BlankLedgerVM } from './../ledger/ledger.vm';
 import { LEDGER_API } from '../services/apiurls/ledger.api';
 import { VOUCHERS } from './constants/accounting.constant';
 import { GeneralService } from '../services/general.service';

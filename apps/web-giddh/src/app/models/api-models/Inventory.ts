@@ -1,6 +1,6 @@
 import { API_COUNT_LIMIT, PAGINATION_LIMIT } from '../../app.constant';
-import { IPaginatedResponse } from '../interfaces/paginatedResponse.interface';
-import { IAccountDetails, IManufacturingDetails, IStockDetail, IStockItem, IStockReport, IStockReportItem, IStocksItem, IStockTransaction, IStockUnit, IStockUnitItem, IStockUnitResponse } from '../interfaces/stocksItem.interface';
+import { IPaginatedResponse } from '../interfaces/paginated-response.interface';
+import { IAccountDetails, IManufacturingDetails, IStockDetail, IStockItem, IStockReport, IStockReportItem, IStocksItem, IStockTransaction, IStockUnit, IStockUnitItem, IStockUnitResponse } from '../interfaces/stocks-item.interface';
 
 export interface INameUniqueName {
     email?: any;

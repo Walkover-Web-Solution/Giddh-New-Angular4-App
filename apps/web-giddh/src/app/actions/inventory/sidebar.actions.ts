@@ -10,7 +10,7 @@ import { Action, Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
 import { Observable } from 'rxjs';
 import { InventoryService } from '../../services/inventory.service';
-import { CustomActions } from '../../store/customActions';
+import { CustomActions } from '../../store/custom-actions';
 
 @Injectable()
 export class SidebarAction {

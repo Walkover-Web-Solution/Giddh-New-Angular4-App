@@ -2,7 +2,7 @@ import { map, catchError } from 'rxjs/operators';
 import { Inject, Injectable, Optional } from '@angular/core';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
-import { HttpWrapperService } from "./httpWrapper.service";
+import { HttpWrapperService } from "./http-wrapper.service";
 import { Observable } from "rxjs";
 import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { CUSTOM_FIELDS } from './apiurls/custom-fields.api';

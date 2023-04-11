@@ -10,7 +10,7 @@ import { AppState } from '../../../../../store';
 import { Configuration } from '../../../../../app.constant';
 import { humanizeBytes, UploaderOptions, UploadFile, UploadInput, UploadOutput } from 'ngx-uploader';
 import { INVOICE_API } from 'apps/web-giddh/src/app/services/apiurls/invoice';
-import { CurrentCompanyState } from 'apps/web-giddh/src/app/store/Company/company.reducer';
+import { CurrentCompanyState } from 'apps/web-giddh/src/app/store/company/company.reducer';
 import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service';
 import { NgForm } from '@angular/forms';
 import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';

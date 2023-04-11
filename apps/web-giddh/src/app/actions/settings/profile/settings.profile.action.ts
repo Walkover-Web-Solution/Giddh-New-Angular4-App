@@ -10,7 +10,7 @@ import { Observable } from 'rxjs';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
 import { SETTINGS_PROFILE_ACTIONS } from './settings.profile.const';
 import { SettingsProfileService } from '../../../services/settings.profile.service';
-import { CustomActions } from '../../../store/customActions';
+import { CustomActions } from '../../../store/custom-actions';
 import { LocaleService } from '../../../services/locale.service';
 
 @Injectable()

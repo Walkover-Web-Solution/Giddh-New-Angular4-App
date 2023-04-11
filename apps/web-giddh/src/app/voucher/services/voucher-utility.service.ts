@@ -3,7 +3,7 @@ import { GIDDH_VOUCHER_FORM } from '../../app.constant';
 import {
     ConfirmationModalButton,
     ConfirmationModalConfiguration,
-} from '../../common/confirmation-modal/confirmation-modal.interface';
+} from '../../theme/confirmation-modal/confirmation-modal.interface';
 import { VoucherTypeEnum } from '../../models/api-models/Sales';
 import { VoucherForm } from '../../models/api-models/Voucher';
 import * as cleaner from 'fast-clean';

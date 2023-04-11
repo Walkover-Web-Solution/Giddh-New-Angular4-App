@@ -1,4 +1,4 @@
-import { IApplyTax } from '../interfaces/applyTax.interface';
+import { IApplyTax } from '../interfaces/apply-tax.interface';
 
 /**
  * Model for apply tax api request

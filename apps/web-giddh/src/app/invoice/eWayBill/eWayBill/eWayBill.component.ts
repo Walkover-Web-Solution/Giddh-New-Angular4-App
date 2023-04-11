@@ -23,7 +23,7 @@ import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { Router } from '@angular/router';
 import { OrganizationType } from '../../../models/user-login-state';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
-import { GstReconcileService } from '../../../services/GstReconcile.service';
+import { GstReconcileService } from '../../../services/gst-reconcile.service';
 
 @Component({
     // tslint:disable-next-line:component-selector

@@ -11,7 +11,7 @@ import { GeneralService } from '../services/general.service';
 import { Router } from '@angular/router';
 import { IOption } from '../theme/ng-virtual-select/sh-options.interface';
 import { LogsService } from '../services/logs.service';
-import { CompanyService } from '../services/companyService.service';
+import { CompanyService } from '../services/company.service';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../store';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';

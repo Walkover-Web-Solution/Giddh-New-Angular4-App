@@ -1,5 +1,5 @@
-import { VerifyMobileActions } from '../../actions/verifyMobile.actions';
-import { CustomActions } from '../customActions';
+import { VerifyMobileActions } from '../../actions/verify-mobile.actions';
+import { CustomActions } from '../custom-actions';
 
 /**
  * Keeping Track of the AuthenticationState
