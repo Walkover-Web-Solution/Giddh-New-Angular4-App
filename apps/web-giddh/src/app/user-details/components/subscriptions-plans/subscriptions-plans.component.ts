@@ -177,6 +177,7 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
      * @memberof SubscriptionsPlansComponent
      */
     public backClicked() {
+        this.isShowPlans = false;
         this.isSubscriptionPlanShow.emit(true);
         this.router.navigate(['/pages', 'user-details', 'subscription']);
     }
