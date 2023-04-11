@@ -1,5 +1,5 @@
 import { IAccountsInfo } from './account-info.interface';
-import { IUserInfo } from './/user-info.interface';
+import { IUserInfo } from './user-info.interface';
 import { INameUniqueName } from '../api-models/Inventory';
 import { IGstDetailListItem } from './gst-detail-list-item.interface';
 
