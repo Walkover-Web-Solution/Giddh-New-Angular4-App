@@ -145,7 +145,7 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
                 this.isShowPlans = true;
             }
 
-            if ((!val || val.showPlans !== "true") && this.isShowPlans && this.selectNewPlan) {
+            if ((!val || val.showPlans !== "true") && this.isShowPlans) {
                 this.backClicked();
                 this.isShowPlans = false;
                 this.selectNewPlan = false;
@@ -177,6 +177,7 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
      * @memberof SubscriptionsPlansComponent
      */
     public backClicked() {
+        this.isShowPlans = false;
         this.isSubscriptionPlanShow.emit(true);
         this.router.navigate(['/pages', 'user-details', 'subscription']);
     }
