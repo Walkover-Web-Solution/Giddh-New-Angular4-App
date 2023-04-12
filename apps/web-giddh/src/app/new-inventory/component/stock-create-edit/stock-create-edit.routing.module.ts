@@ -5,7 +5,7 @@ import { StockCreateEditComponent } from "./stock-create-edit.component";
 
 const routes: Routes = [
     {
-        path: "", 
+        path: "",
         component: MainComponent,
         children: [
             {

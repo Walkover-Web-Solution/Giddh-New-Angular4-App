@@ -185,7 +185,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 this.queryParams = params;
                 this.getStockDetails();
             } else {
-                if (!["PRODUCT", "SERVICE"].includes(params?.type?.toUpperCase())) {
+                if (!["PRODUCT", "SERVICE", "FIXEDASSETS"].includes(params?.type?.toUpperCase())) {
                     this.router.navigate(['/pages/inventory']);
                 }
             }

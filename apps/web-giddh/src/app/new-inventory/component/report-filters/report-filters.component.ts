@@ -50,6 +50,8 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public pullUniversalDate: boolean = true;
     /** Holds module name for customised columns */
     @Input() public reportUniqueName: string = "";
+    /** Holds module type for reports */
+    @Input() public moduleType: string = "";
     /** Emits the selected filters */
     @Output() public filters: EventEmitter<any> = new EventEmitter();
     /** Emits true if filters are reset */
@@ -150,6 +152,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ReportFiltersComponent
      */
     public ngOnInit(): void {
+        this.searchRequest.type = this.moduleType.toUpperCase();
         if (this.reportUniqueName && this.searchPage !== "GROUP") {
             this.autoSelectSearchOption = true;
             this.searchRequest.q = this.reportUniqueName;

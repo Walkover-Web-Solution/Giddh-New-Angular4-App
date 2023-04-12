@@ -1073,14 +1073,22 @@ export class InventoryService {
      * @memberof InventoryService
      */
     public searchStockTransactionReport(model: any): Observable<BaseResponse<any, any>> {
+        let updatedModel = cloneDeep(model);
+        delete updatedModel.type;
         this.companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + INVENTORY_API.SEARCH_STOCK_TRANSACTION_FILTERS;
-        url = url?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
-        return this.http.post(url, model).pipe(map((res) => {
+        url = url?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':type', encodeURIComponent(<any>model.type));
+        return this.http.post(url, updatedModel).pipe(map((res) => {
             let data: BaseResponse<any, any> = res;
-            data.request = model;
+            data.request = updatedModel;
+            data.queryString = {
+                type: model.type,
+            }
             return data;
-        }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
+        }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model, {
+            type: model.type,
+        })));
     }
 
     /**
@@ -1105,6 +1113,8 @@ export class InventoryService {
             ?.replace(':page', encodeURIComponent(stockReportRequest.page?.toString()))
             ?.replace(':sort', encodeURIComponent(stockReportRequest.sort ? stockReportRequest.sort?.toString() : ''))
             ?.replace(':sortBy', encodeURIComponent(stockReportRequest.sortBy ? stockReportRequest.sortBy?.toString() : ''))
+            ?.replace(':type', encodeURIComponent(<any>stockReportRequest.type))
+
             , updatedStockTransactionRequest).pipe(
                 map((res) => {
                     let data: BaseResponse<StockReportResponse, StockTransactionReportRequest> = res;
@@ -1115,7 +1125,8 @@ export class InventoryService {
                         from: stockReportRequest.from,
                         to: stockReportRequest.to,
                         count: stockReportRequest.count,
-                        page: stockReportRequest.page
+                        page: stockReportRequest.page,
+                        type: stockReportRequest.type,
                     };
                     return data;
                 }), catchError((e) => this.errorHandler.HandleCatch<StockReportResponse, StockTransactionReportRequest>(e, stockReportRequest, {
@@ -1124,7 +1135,8 @@ export class InventoryService {
                     from: stockReportRequest.from,
                     to: stockReportRequest.to,
                     count: stockReportRequest.count,
-                    page: stockReportRequest.page
+                    page: stockReportRequest.page,
+                    type: stockReportRequest.type,
                 })));
     }
 
@@ -1142,6 +1154,7 @@ export class InventoryService {
             ?.replace(':stockUniqueName', encodeURIComponent(<any>queryParams.stockUniqueNames))
             ?.replace(':from', encodeURIComponent(queryParams.from))
             ?.replace(':to', encodeURIComponent(queryParams.to))
+            ?.replace(':type', encodeURIComponent(<any>queryParams.type))
             , stockReportRequest).pipe(
                 map((res) => {
                     let data: BaseResponse<StockReportResponse, StockTransactionReportRequest> = res;
@@ -1151,6 +1164,7 @@ export class InventoryService {
                         stockUniqueName: queryParams.stockUniqueNames,
                         from: queryParams.from,
                         to: queryParams.to,
+                        type: queryParams.type
                     };
                     return data;
                 }), catchError((e) => this.errorHandler.HandleCatch<StockReportResponse, StockTransactionReportRequest>(e, stockReportRequest, {
@@ -1158,6 +1172,7 @@ export class InventoryService {
                     stockUniqueName: queryParams.stockUniqueNames,
                     from: queryParams.from,
                     to: queryParams.to,
+                    type: queryParams.type
                 })));
     }
 
@@ -1179,6 +1194,8 @@ export class InventoryService {
             ?.replace(':page', encodeURIComponent(queryParams.page?.toString()))
             ?.replace(':sort', encodeURIComponent(queryParams.sort ? queryParams.sort?.toString() : ''))
             ?.replace(':sortBy', encodeURIComponent(queryParams.sortBy ? queryParams.sortBy?.toString() : ''))
+            ?.replace(':type', encodeURIComponent(<any>queryParams.type))
+
             , stockReportRequest).pipe(
                 map((res) => {
                     let data: BaseResponse<InventoryReportResponse, InventoryReportRequest> = res;
@@ -1187,14 +1204,16 @@ export class InventoryService {
                         from: queryParams.from,
                         to: queryParams.to,
                         count: queryParams.count,
-                        page: queryParams.page
+                        page: queryParams.page,
+                        type: queryParams.type,
                     };
                     return data;
                 }), catchError((e) => this.errorHandler.HandleCatch<InventoryReportResponse, InventoryReportRequest>(e, stockReportRequest, {
                     from: queryParams.from,
                     to: queryParams.to,
                     count: queryParams.count,
-                    page: queryParams.page
+                    page: queryParams.page,
+                    type: queryParams.type,
                 })));
     }
 
@@ -1205,34 +1224,34 @@ export class InventoryService {
      * @return {*}  {Observable<BaseResponse<InventoryReportResponse, InventoryReportRequest>>}
      * @memberof InventoryService
      */
-    public getItemWiseReport(stockReportRequest: InventoryReportRequest): Observable<BaseResponse<InventoryReportResponse, InventoryReportRequest>> {
+    public getItemWiseReport(queryParams: any, stockReportRequest: InventoryReportRequest): Observable<BaseResponse<InventoryReportResponse, InventoryReportRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        let updatedReportRequest = cloneDeep(stockReportRequest);
-        delete updatedReportRequest.from;
-        delete updatedReportRequest.to;
         return this.http.post(this.config.apiUrl + INVENTORY_API.INVENTORY_ITEM_WISE_REPORT?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            ?.replace(':from', encodeURIComponent(stockReportRequest.from))
-            ?.replace(':to', encodeURIComponent(stockReportRequest.to))
-            ?.replace(':count', encodeURIComponent(stockReportRequest.count?.toString()))
-            ?.replace(':page', encodeURIComponent(stockReportRequest.page?.toString()))
-            ?.replace(':sort', encodeURIComponent(stockReportRequest.sort ? stockReportRequest.sort?.toString() : ''))
-            ?.replace(':sortBy', encodeURIComponent(stockReportRequest.sortBy ? stockReportRequest.sortBy?.toString() : ''))
-            , updatedReportRequest).pipe(
+            ?.replace(':from', encodeURIComponent(queryParams.from))
+            ?.replace(':to', encodeURIComponent(queryParams.to))
+            ?.replace(':count', encodeURIComponent(queryParams.count?.toString()))
+            ?.replace(':page', encodeURIComponent(queryParams.page?.toString()))
+            ?.replace(':sort', encodeURIComponent(queryParams.sort ? queryParams.sort?.toString() : ''))
+            ?.replace(':sortBy', encodeURIComponent(queryParams.sortBy ? queryParams.sortBy?.toString() : ''))
+            ?.replace(':type', encodeURIComponent(<any>queryParams.type))
+            , stockReportRequest).pipe(
                 map((res) => {
                     let data: BaseResponse<InventoryReportResponse, InventoryReportRequest> = res;
-                    data.request = updatedReportRequest;
+                    data.request = queryParams;
                     data.queryString = {
-                        from: stockReportRequest.from,
-                        to: stockReportRequest.to,
-                        count: stockReportRequest.count,
-                        page: stockReportRequest.page
+                        from: queryParams.from,
+                        to: queryParams.to,
+                        count: queryParams.count,
+                        page: queryParams.page,
+                        type: queryParams.type,
                     };
                     return data;
                 }), catchError((e) => this.errorHandler.HandleCatch<InventoryReportResponse, InventoryReportRequest>(e, stockReportRequest, {
-                    from: stockReportRequest.from,
-                    to: stockReportRequest.to,
-                    count: stockReportRequest.count,
-                    page: stockReportRequest.page
+                    from: queryParams.from,
+                    to: queryParams.to,
+                    count: queryParams.count,
+                    page: queryParams.page,
+                    type: queryParams.type,
                 })));
     }
 
@@ -1243,34 +1262,34 @@ export class InventoryService {
      * @return {*}  {Observable<BaseResponse<InventoryReportResponse, InventoryReportRequest>>}
      * @memberof InventoryService
      */
-    public getVariantWiseReport(stockReportRequest: InventoryReportRequest): Observable<BaseResponse<InventoryReportResponse, InventoryReportRequest>> {
+    public getVariantWiseReport(queryParams: any, stockReportRequest: InventoryReportRequest): Observable<BaseResponse<InventoryReportResponse, InventoryReportRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        let updatedReportRequest = cloneDeep(stockReportRequest);
-        delete updatedReportRequest.from;
-        delete updatedReportRequest.to;
         return this.http.post(this.config.apiUrl + INVENTORY_API.INVENTORY_VARIANT_WISE_REPORT?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            ?.replace(':from', encodeURIComponent(stockReportRequest.from))
-            ?.replace(':to', encodeURIComponent(stockReportRequest.to))
-            ?.replace(':count', encodeURIComponent(stockReportRequest.count?.toString()))
+            ?.replace(':from', encodeURIComponent(queryParams.from))
+            ?.replace(':to', encodeURIComponent(queryParams.to))
+            ?.replace(':count', encodeURIComponent(queryParams.count?.toString()))
             ?.replace(':page', encodeURIComponent(stockReportRequest.page?.toString()))
-            ?.replace(':sort', encodeURIComponent(stockReportRequest.sort ? stockReportRequest.sort?.toString() : ''))
-            ?.replace(':sortBy', encodeURIComponent(stockReportRequest.sortBy ? stockReportRequest.sortBy?.toString() : ''))
-            , updatedReportRequest).pipe(
+            ?.replace(':sort', encodeURIComponent(queryParams.sort ? queryParams.sort?.toString() : ''))
+            ?.replace(':sortBy', encodeURIComponent(queryParams.sortBy ? queryParams.sortBy?.toString() : ''))
+            ?.replace(':type', encodeURIComponent(<any>queryParams.type))
+            , stockReportRequest).pipe(
                 map((res) => {
                     let data: BaseResponse<InventoryReportResponse, InventoryReportRequest> = res;
-                    data.request = updatedReportRequest;
+                    data.request = queryParams;
                     data.queryString = {
-                        from: stockReportRequest.from,
-                        to: stockReportRequest.to,
-                        count: stockReportRequest.count,
-                        page: stockReportRequest.page
+                        from: queryParams.from,
+                        to: queryParams.to,
+                        count: queryParams.count,
+                        page: queryParams.page,
+                        type: queryParams.type,
                     };
                     return data;
                 }), catchError((e) => this.errorHandler.HandleCatch<InventoryReportResponse, InventoryReportRequest>(e, stockReportRequest, {
-                    from: stockReportRequest.from,
-                    to: stockReportRequest.to,
-                    count: stockReportRequest.count,
-                    page: stockReportRequest.page
+                    from: queryParams.from,
+                    to: queryParams.to,
+                    count: queryParams.count,
+                    page: queryParams.page,
+                    type: queryParams.type,
                 })));
     }
 }
