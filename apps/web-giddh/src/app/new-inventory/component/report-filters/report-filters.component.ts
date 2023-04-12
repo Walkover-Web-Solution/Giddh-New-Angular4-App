@@ -711,7 +711,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
      * @param {boolean} [loadMore]
      * @memberof ReportFiltersComponent
      */
-    public searchInventory(autoSelectSearchOption?:boolean,loadMore?: boolean): void {
+    public searchInventory(autoSelectSearchOption?: boolean, loadMore?: boolean): void {
         this.searchRequest.stockGroupUniqueNames = this.stockReportRequest.stockGroupUniqueNames ? this.stockReportRequest.stockGroupUniqueNames : [];
         this.searchRequest.stockUniqueNames = this.stockReportRequest.stockUniqueNames ? this.stockReportRequest.stockUniqueNames : [];
         this.searchRequest.variantUniqueNames = this.stockReportRequest.variantUniqueNames ? this.stockReportRequest.variantUniqueNames : [];
@@ -748,7 +748,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
                         } else {
                             this.emitFilters();
                         }
-                    }else if (autoSelectSearchOption){
+                    } else if (autoSelectSearchOption) {
                         this.emitFilters();
                     }
                     this.autoSelectSearchOption = false;
