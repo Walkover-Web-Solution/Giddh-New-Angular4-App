@@ -127,6 +127,25 @@ export class InventoryService {
             }), catchError((e) => this.errorHandler.HandleCatch<GroupsWithStocksHierarchyMin, string>(e, '', {})));
     }
 
+    public GetGroupsWithStocksFlattenV2(moduleType?: string): Observable<BaseResponse<GroupsWithStocksHierarchyMin, string>> {
+        console.log(moduleType);
+
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.get(this.config.apiUrl + INVENTORY_API.GROUPS_WITH_STOCKS
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':type', encodeURIComponent(<any>moduleType))
+        ).pipe(map((res) => {
+            let data: BaseResponse<GroupsWithStocksHierarchyMin, string> = res;
+            data.request = '';
+            data.queryString = {
+                type: moduleType
+            };
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<GroupsWithStocksHierarchyMin, string>(e, '', {
+            type: moduleType
+        })));
+    }
+
     /**
      * get Stocks
      */
