@@ -120,35 +120,11 @@ export class InventoryService {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.get(this.config.apiUrl + INVENTORY_API.GROUPS_WITH_STOCKS
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            ?.replace(':type', encodeURIComponent(moduleType))).pipe(map((res) => {
+            ?.replace(':type', encodeURIComponent(<any>moduleType))).pipe(map((res) => {
                 let data: BaseResponse<GroupsWithStocksHierarchyMin, string> = res;
                 data.request = '';
                 return data;
             }), catchError((e) => this.errorHandler.HandleCatch<GroupsWithStocksHierarchyMin, string>(e, '', {})));
-    }
-
-    /**
-     * Get stock group by inventory type
-     *
-     * @param {string} [moduleType]
-     * @return {*}  {Observable<BaseResponse<GroupsWithStocksHierarchyMin, string>>}
-     * @memberof InventoryService
-     */
-    public GetGroupsWithStocksFlattenV2(moduleType?: string): Observable<BaseResponse<GroupsWithStocksHierarchyMin, string>> {
-        this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.get(this.config.apiUrl + INVENTORY_API.GROUPS_WITH_STOCKS
-            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            ?.replace(':type', encodeURIComponent(<any>moduleType))
-        ).pipe(map((res) => {
-            let data: BaseResponse<GroupsWithStocksHierarchyMin, string> = res;
-            data.request = '';
-            data.queryString = {
-                type: moduleType
-            };
-            return data;
-        }), catchError((e) => this.errorHandler.HandleCatch<GroupsWithStocksHierarchyMin, string>(e, '', {
-            type: moduleType
-        })));
     }
 
     /**
