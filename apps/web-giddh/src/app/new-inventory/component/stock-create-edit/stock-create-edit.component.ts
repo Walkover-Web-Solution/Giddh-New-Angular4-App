@@ -168,7 +168,6 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
 
         this.getTaxes();
         this.getStockUnits();
-        this.getStockGroups();
         this.getPurchaseAccounts();
         this.getSalesAccounts();
         this.getWarehouses();
@@ -179,6 +178,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 this.stockForm.type = params?.type?.toUpperCase();
                 this.stockType = params?.type?.toUpperCase();
                 this.resetForm(this.stockCreateEditForm);
+                this.getStockGroups();
                 this.changeDetection.detectChanges();
             }
             if (params?.stockUniqueName) {
@@ -270,8 +270,6 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         if (this.stockType === 'FIXEDASSETS') {
             this.stockType = 'FIXED_ASSETS';
         }
-        console.log(this.stockType);
-
         this.inventoryService.GetGroupsWithStocksFlattenV2(this.stockType).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
                 let stockGroups: IOption[] = [];
