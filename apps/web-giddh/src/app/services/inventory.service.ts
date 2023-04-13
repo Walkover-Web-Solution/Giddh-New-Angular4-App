@@ -109,37 +109,22 @@ export class InventoryService {
         }), catchError((e) => this.errorHandler.HandleCatch<GroupsWithStocksFlatten, string>(e, '', { q, page, count })));
     }
 
-    public GetGroupsWithStocksFlatten(): Observable<BaseResponse<GroupsWithStocksHierarchyMin, string>> {
-        this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.get(this.config.apiUrl + INVENTORY_API.GROUPS_WITH_STOCKS?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
-            let data: BaseResponse<GroupsWithStocksHierarchyMin, string> = res;
-            data.request = '';
-            return data;
-        }), catchError((e) => this.errorHandler.HandleCatch<GroupsWithStocksHierarchyMin, string>(e, '', {})));
-    }
-
     /**
-     * Get stock group by inventory type
+     *  Get stock group by inventory type
      *
-     * @param {string} [moduleType]
+     * @param {string} [moduleType='']
      * @return {*}  {Observable<BaseResponse<GroupsWithStocksHierarchyMin, string>>}
      * @memberof InventoryService
      */
-    public GetGroupsWithStocksFlattenV2(moduleType?: string): Observable<BaseResponse<GroupsWithStocksHierarchyMin, string>> {
+    public GetGroupsWithStocksFlatten(moduleType: string = ''): Observable<BaseResponse<GroupsWithStocksHierarchyMin, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.get(this.config.apiUrl + INVENTORY_API.GROUPS_WITH_STOCKS_V2
+        return this.http.get(this.config.apiUrl + INVENTORY_API.GROUPS_WITH_STOCKS
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            ?.replace(':type', encodeURIComponent(<any>moduleType))
-        ).pipe(map((res) => {
-            let data: BaseResponse<GroupsWithStocksHierarchyMin, string> = res;
-            data.request = '';
-            data.queryString = {
-                type: moduleType
-            };
-            return data;
-        }), catchError((e) => this.errorHandler.HandleCatch<GroupsWithStocksHierarchyMin, string>(e, '', {
-            type: moduleType
-        })));
+            ?.replace(':type', encodeURIComponent(<any>moduleType))).pipe(map((res) => {
+                let data: BaseResponse<GroupsWithStocksHierarchyMin, string> = res;
+                data.request = '';
+                return data;
+            }), catchError((e) => this.errorHandler.HandleCatch<GroupsWithStocksHierarchyMin, string>(e, '', {})));
     }
 
     /**

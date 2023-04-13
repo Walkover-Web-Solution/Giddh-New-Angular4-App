@@ -270,7 +270,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         if (this.stockType === 'FIXEDASSETS') {
             this.stockType = 'FIXED_ASSETS';
         }
-        this.inventoryService.GetGroupsWithStocksFlattenV2(this.stockType).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.inventoryService.GetGroupsWithStocksFlatten(this.stockType).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
                 let stockGroups: IOption[] = [];
                 this.arrangeStockGroups(response.body?.results, stockGroups);

@@ -152,7 +152,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ReportFiltersComponent
      */
     public ngOnInit(): void {
-        this.searchRequest.type = this.moduleType.toUpperCase();
+        this.searchRequest.type = this.moduleType;
         if (this.reportUniqueName && this.searchPage !== "GROUP") {
             this.autoSelectSearchOption = true;
             this.searchRequest.q = this.reportUniqueName;
