@@ -369,7 +369,7 @@
                             </th>
                             <th>
                                 <div class="d-flex">
-                                    <div class="">{{ localeData?.last_invoice_date }}</div>
+                                    <div>{{ localeData?.last_invoice_date }}</div>
                                     <div class="icon-pointer">
                                         <ng-container
                                             *ngTemplateOutlet="sortTemplate; context: { column: 'lastinvoicedate' }"
@@ -380,7 +380,7 @@
                             </th>
                             <th>
                                 <div class="d-flex">
-                                    <div class="">{{ localeData?.next_invoice_date }}</div>
+                                    <div>{{ localeData?.next_invoice_date }}</div>
                                     <div class="icon-pointer">
                                         <ng-container
                                             *ngTemplateOutlet="sortTemplate; context: { column: 'nextcrondate' }"
@@ -391,7 +391,7 @@
                             </th>
                             <th>
                                 <div class="d-flex">
-                                    <div class="">{{ commonLocaleData?.app_status }}</div>
+                                    <div>{{ commonLocaleData?.app_status }}</div>
                                     <div class="icon-pointer">
                                         <ng-container *ngTemplateOutlet="sortTemplate; context: { column: 'status' }">
                                         </ng-container>

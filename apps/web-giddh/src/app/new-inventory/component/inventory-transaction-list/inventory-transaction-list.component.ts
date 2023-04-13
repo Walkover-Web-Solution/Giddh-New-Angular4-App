@@ -222,7 +222,6 @@ export class InventoryTransactionListComponent implements OnInit {
             stockReportRequest.stockGroups = undefined;
             stockReportRequest.stocks = undefined;
             stockReportRequest.variants = undefined;
-
             this.inventoryService.getStockTransactionReport(stockReportRequest).pipe(takeUntil(this.cancelApi$)).subscribe(response => {
                 this.isLoading = false;
                 if (response && response.body && response.status === 'success') {

@@ -502,17 +502,15 @@ export class ReportsComponent implements OnInit {
                         type: this.moduleType ? this.moduleType : ''
                     };
                 }
-                balanceReportRequest.from = undefined;
-                balanceReportRequest.to = undefined;
-                this.inventoryService.getStockTransactionReportBalance(queryParams, balanceReportRequest).pipe(takeUntil(this.cancelApi$)).subscribe(response => {
-                    if (response && response.body && response.status === 'success') {
-                        this.stockTransactionReportBalance = response.body;
-                    } else {
-                        this.stockTransactionReportBalance = null;
-                    }
-                    this.changeDetection.detectChanges();
-                });
-            }
+                    this.inventoryService.getStockTransactionReportBalance(queryParams, balanceReportRequest).pipe(takeUntil(this.cancelApi$)).subscribe(response => {
+                        if (response && response.body && response.status === 'success') {
+                            this.stockTransactionReportBalance = response.body;
+                        } else {
+                            this.stockTransactionReportBalance = null;
+                        }
+                        this.changeDetection.detectChanges();
+                    });
+                }
         });
     }
 
