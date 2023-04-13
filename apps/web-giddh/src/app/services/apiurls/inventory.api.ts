@@ -23,7 +23,7 @@ export const INVENTORY_API = {
     CREATE_NEW_MANUFACTURING_STOCKS: 'company/:companyUniqueName/stocks?isManufactured=true', // get call
     GROUPS_STOCKS: 'company/:companyUniqueName/stock-group/:stockGroupUniqueName', // get call
     GROUPS_WITH_STOCKS_FLATTEN: 'company/:companyUniqueName/flatten-stock-groups-with-stocks?count=:count&page=:page&q=:q', // get call
-    GROUPS_WITH_STOCKS: 'company/:companyUniqueName/hierarchical-stock-groups', // get call
+    GROUPS_WITH_STOCKS: 'company/:companyUniqueName/hierarchical-stock-groups?type=:type', // get call
     GROUPS_WITH_STOCKS_HIERARCHY: 'company/:companyUniqueName/hierarchical-stock-groups?q=:q&page=:page&count=:count', // get call
     STOCK_UNIT: 'company/:companyUniqueName/stock-unit', // get call
     STOCK_REPORT: 'company/:companyUniqueName/stock-group/:stockGroupUniqueName/stock/:stockUniqueName/report-v2?from=:from&to=:to&count=:count&page=:page', // get call
@@ -77,11 +77,11 @@ export const INVENTORY_API = {
         UPDATE: 'company/:companyUniqueName/stock-group/:stockGroupUniqueName/stock/:stockUniqueName'
     },
 
-    TRANSACTION_STOCK_REPORT_V2: 'company/:companyUniqueName/inventory/transaction-report?from=:from&to=:to&count=:count&page=:page&sort=:sort&sortBy=:sortBy&transaction_type=:transactionType', // post for filter rest all get
-    TRANSACTION_STOCK_REPORT_BALANCE_V2: 'company/:companyUniqueName/inventory/balance?stockGroupUniqueName=:stockGroupUniqueName&from=:from&to=:to',
+    TRANSACTION_STOCK_REPORT_V2: 'company/:companyUniqueName/inventory/transaction-report?from=:from&to=:to&count=:count&page=:page&sort=:sort&sortBy=:sortBy&transaction_type=:transactionType&type=:type', // post for filter rest all get
+    TRANSACTION_STOCK_REPORT_BALANCE_V2: 'company/:companyUniqueName/inventory/balance?stockGroupUniqueName=:stockGroupUniqueName&from=:from&to=:to&type=:type',
     TRANSACTION_STOCK_REPORT_COLUMNS: 'company/:companyUniqueName/report-filters?module=:module',
-    SEARCH_STOCK_TRANSACTION_FILTERS: 'company/:companyUniqueName/inventory-search',
-    INVENTORY_GROUP_WISE_REPORT: 'company/:companyUniqueName/inventory/balance-report/group-wise?stockGroupUniqueName=:stockGroupUniqueName&from=:from&to=:to&count=:count&page=:page&sort=:sort&sortBy=:sortBy',
-    INVENTORY_ITEM_WISE_REPORT: 'company/:companyUniqueName/inventory/balance-report/item-wise?from=:from&to=:to&count=:count&page=:page&sort=:sort&sortBy=:sortBy',
-    INVENTORY_VARIANT_WISE_REPORT: 'company/:companyUniqueName/inventory/balance-report/variant-wise?from=:from&to=:to&count=:count&page=:page&sort=:sort&sortBy=:sortBy',
+    SEARCH_STOCK_TRANSACTION_FILTERS: 'company/:companyUniqueName/inventory-search?type=:type',
+    INVENTORY_GROUP_WISE_REPORT: 'company/:companyUniqueName/inventory/balance-report/group-wise?stockGroupUniqueName=:stockGroupUniqueName&from=:from&to=:to&count=:count&page=:page&sort=:sort&sortBy=:sortBy&type=:type',
+    INVENTORY_ITEM_WISE_REPORT: 'company/:companyUniqueName/inventory/balance-report/item-wise?from=:from&to=:to&count=:count&page=:page&sort=:sort&sortBy=:sortBy&type=:type',
+    INVENTORY_VARIANT_WISE_REPORT: 'company/:companyUniqueName/inventory/balance-report/variant-wise?from=:from&to=:to&count=:count&page=:page&sort=:sort&sortBy=:sortBy&type=:type',
 };

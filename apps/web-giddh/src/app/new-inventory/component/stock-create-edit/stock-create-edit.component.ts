@@ -168,7 +168,6 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
 
         this.getTaxes();
         this.getStockUnits();
-        this.getStockGroups();
         this.getPurchaseAccounts();
         this.getSalesAccounts();
         this.getWarehouses();
@@ -179,13 +178,14 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 this.stockForm.type = params?.type?.toUpperCase();
                 this.stockType = params?.type?.toUpperCase();
                 this.resetForm(this.stockCreateEditForm);
+                this.getStockGroups();
                 this.changeDetection.detectChanges();
             }
             if (params?.stockUniqueName) {
                 this.queryParams = params;
                 this.getStockDetails();
             } else {
-                if (!["PRODUCT", "SERVICE"].includes(params?.type?.toUpperCase())) {
+                if (!["PRODUCT", "SERVICE", "FIXEDASSETS"].includes(params?.type?.toUpperCase())) {
                     this.router.navigate(['/pages/inventory']);
                 }
             }
@@ -267,7 +267,10 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
      * @memberof StockCreateEditComponent
      */
     public getStockGroups(): void {
-        this.inventoryService.GetGroupsWithStocksFlatten().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        if (this.stockType === 'FIXEDASSETS') {
+            this.stockType = 'FIXED_ASSETS';
+        }
+        this.inventoryService.GetGroupsWithStocksFlatten(this.stockType).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
                 let stockGroups: IOption[] = [];
                 this.arrangeStockGroups(response.body?.results, stockGroups);

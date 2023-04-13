@@ -110,6 +110,8 @@ export class InventoryTransactionListComponent implements OnInit {
     public advanceSearchModalResponse: any = null;
     /** Observable to cancel api on reports api call */
     private cancelApi$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Holds module type for reports */
+    public moduleType: string = '';
 
     constructor(
         private generalService: GeneralService,
@@ -184,6 +186,11 @@ export class InventoryTransactionListComponent implements OnInit {
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.reportUniqueName = response?.uniqueName;
+                if (response?.type?.toUpperCase() === 'FIXEDASSETS') {
+                    this.moduleType = 'FIXED_ASSETS';
+                } else {
+                    this.moduleType = response?.type?.toUpperCase();
+                }
                 if (this.isReportLoaded) {
                     this.getStockTransactionalReport(true);
                 }
@@ -210,6 +217,7 @@ export class InventoryTransactionListComponent implements OnInit {
                 this.stockReportRequest.branchUniqueNames = [this.generalService.currentBranchUniqueName];
                 this.balanceStockReportRequest.branchUniqueNames = [this.generalService.currentBranchUniqueName];
             }
+            this.stockReportRequest.type = this.moduleType;
             let stockReportRequest = cloneDeep(this.stockReportRequest);
             stockReportRequest.stockGroups = undefined;
             stockReportRequest.stocks = undefined;
@@ -251,6 +259,7 @@ export class InventoryTransactionListComponent implements OnInit {
                 let queryParams = {
                     from: balanceReportRequest.from ?? '',
                     to: balanceReportRequest.to ?? '',
+                    type: this.moduleType ?? '',
                     stockGroupUniqueName: ''
                 };
                 balanceReportRequest.from = undefined;

@@ -41,27 +41,27 @@ const routes: Routes = [
                 component: InventoryComboListComponent,
             },
             {
-                path: "reports/transaction",
-                component: InventoryTransactionListComponent,
-            },
-            {
-                path: "reports/transaction/:uniqueName",
-                component: InventoryTransactionListComponent,
-            },
-            {
                 path: "inventory-custom-field",
                 component: InventoryCustomFieldComponent,
             },
             {
-                path: "reports",
+                path: "reports/:type/transaction",
+                component: InventoryTransactionListComponent,
+            },
+            {
+                path: "reports/:type/transaction/:uniqueName",
+                component: InventoryTransactionListComponent,
+            },
+            {
+                path: "reports/:type",
                 component: ReportsComponent,
             },
             {
-                path: "reports/:reportType",
+                path: "reports/:type/:reportType",
                 component: ReportsComponent,
             },
             {
-                path: "reports/:reportType/:uniqueName",
+                path: "reports/:type/:reportType/:uniqueName",
                 component: ReportsComponent,
             },
         ],

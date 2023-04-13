@@ -22,18 +22,30 @@ const TREE_DATA: SidebarNode[] = [
         icons: 'stock.svg',
         children: [
             { name: 'Create New', icons: 'create-new.svg', link: '/pages/new-inventory/stock/product/create' },
-            { name: 'Item-wise', icons: 'item-wise.svg', link: '/pages/new-inventory/reports/stock' },
-            { name: 'Group-wise', icons: 'group-wise.svg', link: '/pages/new-inventory/reports/group' },
-            { name: 'Variant-wise', icons: 'varient-wise.svg', link: '/pages/new-inventory/reports/variant' },
-            { name: 'Transactions', icons: 'transactions.svg', link: '/pages/new-inventory/reports/transaction' }],
+            { name: 'Item-wise', icons: 'item-wise.svg', link: '/pages/new-inventory/reports/product/stock' },
+            { name: 'Group-wise', icons: 'group-wise.svg', link: '/pages/new-inventory/reports/product/group' },
+            { name: 'Variant-wise', icons: 'varient-wise.svg', link: '/pages/new-inventory/reports/product/variant' },
+            { name: 'Transactions', icons: 'transactions.svg', link: '/pages/new-inventory/reports/product/transaction' }],
     },
     {
         name: 'Services',
-        icons: 'service.svg'
+        icons: 'service.svg',
+        children: [
+            { name: 'Create New', icons: 'create-new.svg', link: '/pages/new-inventory/stock/service/create' },
+            { name: 'Item-wise', icons: 'item-wise.svg', link: '/pages/new-inventory/reports/service/stock' },
+            { name: 'Group-wise', icons: 'group-wise.svg', link: '/pages/new-inventory/reports/service/group' },
+            { name: 'Variant-wise', icons: 'varient-wise.svg', link: '/pages/new-inventory/reports/service/variant' },
+            { name: 'Transactions', icons: 'transactions.svg', link: '/pages/new-inventory/reports/service/transaction' }],
     },
     {
         name: 'Fixed Assets',
-        icons: 'fixed-assets.svg'
+        icons: 'fixed-assets.svg',
+        children: [
+            { name: 'Create New', icons: 'create-new.svg', link: '/pages/new-inventory/stock/fixedassets/create' },
+            { name: 'Item-wise', icons: 'item-wise.svg', link: '/pages/new-inventory/reports/fixedassets/stock' },
+            { name: 'Group-wise', icons: 'group-wise.svg', link: '/pages/new-inventory/reports/fixedassets/group' },
+            { name: 'Variant-wise', icons: 'varient-wise.svg', link: '/pages/new-inventory/reports/fixedassets/variant' },
+            { name: 'Transactions', icons: 'transactions.svg', link: '/pages/new-inventory/reports/fixedassets/transaction' }],
     },
     {
         name: 'Branch Transfer',

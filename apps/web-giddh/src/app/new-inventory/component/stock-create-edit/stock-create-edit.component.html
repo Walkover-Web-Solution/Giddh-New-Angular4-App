@@ -25,17 +25,25 @@
                     <!--product content start-->
                     <div
                         class="product-detail-content px-3 mt-2"
-                        *ngIf="stockForm.type === 'PRODUCT' || stockForm.type === 'SERVICE'"
+                        *ngIf="
+                            stockForm.type === 'PRODUCT' ||
+                            stockForm.type === 'SERVICE' ||
+                            stockForm.type === 'FIXEDASSETS'
+                        "
                     >
                         <div class="row flex-column-reverse flex-md-row upper-common-form-container">
                             <div class="col-xl-8 col-lg-12">
                                 <div class="row flex-column-reverse flex-md-row">
                                     <div class="col-md-8 col-lg-8 col-xl-6 col-12 upper-common-form-label-field">
                                         <div class="row mr-b1">
-                                            <div class="col-sm-6 col-lg-3">
+                                            <div class="col-sm-6 col-lg-4">
                                                 <label class="product-name-label"
-                                                    >{{ stockForm.type | titlecase }} Name
-                                                    <span class="red-text product-name-star">*</span></label
+                                                    >{{
+                                                        stockForm.type === "FIXEDASSETS"
+                                                            ? "Fixed Assets"
+                                                            : (stockForm.type | titlecase)
+                                                    }}
+                                                    Name <span class="red-text product-name-star">*</span></label
                                                 >
                                             </div>
                                             <div class="col-sm-6 col-lg-6 ml-lg-2">
@@ -51,10 +59,14 @@
                                             </div>
                                         </div>
                                         <div class="row mr-b1">
-                                            <div class="col-sm-6 col-lg-3">
+                                            <div class="col-sm-6 col-lg-4">
                                                 <label
-                                                    >{{ stockForm.type | titlecase }} Unit
-                                                    <span class="red-text">*</span></label
+                                                    >{{
+                                                        stockForm.type === "FIXEDASSETS"
+                                                            ? "Fixed Assets"
+                                                            : (stockForm.type | titlecase)
+                                                    }}
+                                                    Unit <span class="red-text">*</span></label
                                                 >
                                             </div>
                                             <div class="col-sm-6 col-lg-6 ml-lg-2">
@@ -72,7 +84,7 @@
                                             </div>
                                         </div>
                                         <div class="row mr-b1">
-                                            <div class="col-sm-6 col-lg-3">
+                                            <div class="col-sm-6 col-lg-4">
                                                 <label>Under Group</label>
                                             </div>
                                             <div class="col-sm-6 col-lg-6 ml-lg-2 under-group-field-button-wrapper">
@@ -99,7 +111,7 @@
                                             </div>
                                         </div>
                                         <div class="row mr-b1">
-                                            <div class="col-sm-6 col-lg-3">
+                                            <div class="col-sm-6 col-lg-4">
                                                 <label
                                                     >Unique Name
                                                     <!-- <i class="icon-info text-gray"></i> -->
@@ -116,7 +128,7 @@
                                             </div>
                                         </div>
                                         <div class="row mr-b1">
-                                            <div class="col-sm-6 col-lg-3">
+                                            <div class="col-sm-6 col-lg-4">
                                                 <label>Applicable Tax</label>
                                             </div>
                                             <div class="col-sm-6 col-lg-6 ml-lg-2">

@@ -90,6 +90,8 @@ export class ReportsComponent implements OnInit {
     public reportType: string = '';
     /** Holds report unique name */
     public reportUniqueName: string = '';
+    /** Holds module type for reports */
+    public moduleType: string = '';
     /** Holds module name */
     public moduleName = '';
     /** True if initial load */
@@ -193,6 +195,11 @@ export class ReportsComponent implements OnInit {
             this.currentUrl = this.router.url;
             this.reportUniqueName = response?.uniqueName;
             this.reportType = (response?.reportType)?.toUpperCase();
+            if (response?.type?.toUpperCase() === 'FIXEDASSETS') {
+                this.moduleType = 'FIXED_ASSETS';
+            } else {
+                this.moduleType = response?.type?.toUpperCase();
+            }
             if (this.storeFilters && this.storeFilters[this.currentUrl]) {
                 this.showContent = false;
                 this.changeDetection.detectChanges();
@@ -347,7 +354,8 @@ export class ReportsComponent implements OnInit {
                     page: stockReportRequest.page ?? 1,
                     sort: stockReportRequest.sort ?? '',
                     sortBy: stockReportRequest.sortBy ?? '',
-                    stockGroupUniqueName: this.reportUniqueName ?? ''
+                    stockGroupUniqueName: this.reportUniqueName ?? '',
+                    type: this.moduleType ?? ''
                 };
 
                 stockReportRequest.from = undefined;
@@ -394,8 +402,16 @@ export class ReportsComponent implements OnInit {
             if (this.reportType === InventoryReportType.stock) {
 
                 let stockReportRequest = this.getStockReportRequestObject();
-
-                this.inventoryService.getItemWiseReport(cloneDeep(stockReportRequest)).pipe(takeUntil(this.cancelApi$)).subscribe(response => {
+                let queryParams = {
+                    from: stockReportRequest.from ?? '',
+                    to: stockReportRequest.to ?? '',
+                    count: stockReportRequest.count ?? PAGINATION_LIMIT,
+                    page: stockReportRequest.page ?? 1,
+                    sort: stockReportRequest.sort ?? '',
+                    sortBy: stockReportRequest.sortBy ?? '',
+                    type: this.moduleType ?? ''
+                };
+                this.inventoryService.getItemWiseReport(queryParams, stockReportRequest).pipe(takeUntil(this.cancelApi$)).subscribe(response => {
                     this.isLoading = false;
                     if (response && response.body && response.status === 'success') {
                         this.isDataAvailable = (response.body.results?.length) ? true : false;
@@ -427,9 +443,17 @@ export class ReportsComponent implements OnInit {
             }
 
             if (this.reportType === InventoryReportType.variant) {
-
                 let stockReportRequest = this.getStockReportRequestObject();
-                this.inventoryService.getVariantWiseReport(cloneDeep(stockReportRequest)).pipe(takeUntil(this.cancelApi$)).subscribe(response => {
+                let queryParams = {
+                    from: stockReportRequest.from ?? '',
+                    to: stockReportRequest.to ?? '',
+                    count: stockReportRequest.count ?? PAGINATION_LIMIT,
+                    page: stockReportRequest.page ?? 1,
+                    sort: stockReportRequest.sort ?? '',
+                    sortBy: stockReportRequest.sortBy ?? '',
+                    type: this.moduleType ?? ''
+                };
+                this.inventoryService.getVariantWiseReport(queryParams, stockReportRequest).pipe(takeUntil(this.cancelApi$)).subscribe(response => {
                     this.isLoading = false;
                     if (response && response.body && response.status === 'success') {
                         this.isDataAvailable = (response.body.results?.length) ? true : false;
@@ -467,26 +491,26 @@ export class ReportsComponent implements OnInit {
                     queryParams = {
                         from: balanceReportRequest.from ?? '',
                         to: balanceReportRequest.to ?? '',
-                        stockGroupUniqueName: this.reportUniqueName ? this.reportUniqueName : ''
+                        stockGroupUniqueName: this.reportUniqueName ? this.reportUniqueName : '',
+                        type: this.moduleType ? this.moduleType : ''
                     };
                 } else {
                     queryParams = {
                         from: balanceReportRequest.from ?? '',
                         to: balanceReportRequest.to ?? '',
-                        stockGroupUniqueName: ''
+                        stockGroupUniqueName: '',
+                        type: this.moduleType ? this.moduleType : ''
                     };
                 }
-                balanceReportRequest.from = undefined;
-                balanceReportRequest.to = undefined;
-                this.inventoryService.getStockTransactionReportBalance(queryParams, balanceReportRequest).pipe(takeUntil(this.cancelApi$)).subscribe(response => {
-                    if (response && response.body && response.status === 'success') {
-                        this.stockTransactionReportBalance = response.body;
-                    } else {
-                        this.stockTransactionReportBalance = null;
-                    }
-                    this.changeDetection.detectChanges();
-                });
-            }
+                    this.inventoryService.getStockTransactionReportBalance(queryParams, balanceReportRequest).pipe(takeUntil(this.cancelApi$)).subscribe(response => {
+                        if (response && response.body && response.status === 'success') {
+                            this.stockTransactionReportBalance = response.body;
+                        } else {
+                            this.stockTransactionReportBalance = null;
+                        }
+                        this.changeDetection.detectChanges();
+                    });
+                }
         });
     }
 
