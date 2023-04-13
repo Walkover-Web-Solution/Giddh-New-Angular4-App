@@ -120,7 +120,7 @@ export class InventoryService {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.get(this.config.apiUrl + INVENTORY_API.GROUPS_WITH_STOCKS
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            ?.replace(':type', encodeURIComponent(<any>moduleType))).pipe(map((res) => {
+            ?.replace(':type', encodeURIComponent(moduleType))).pipe(map((res) => {
                 let data: BaseResponse<GroupsWithStocksHierarchyMin, string> = res;
                 data.request = '';
                 return data;
@@ -1087,16 +1087,16 @@ export class InventoryService {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + INVENTORY_API.SEARCH_STOCK_TRANSACTION_FILTERS;
         url = url?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            ?.replace(':type', encodeURIComponent(<any>model.type));
+            ?.replace(':type', encodeURIComponent(model.type));
         return this.http.post(url, updatedModel).pipe(map((res) => {
             let data: BaseResponse<any, any> = res;
             data.request = updatedModel;
             data.queryString = {
-                type: model.type,
+                type: model.type
             }
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model, {
-            type: model.type,
+            type: model.type
         })));
     }
 
@@ -1122,7 +1122,7 @@ export class InventoryService {
             ?.replace(':page', encodeURIComponent(stockReportRequest.page?.toString()))
             ?.replace(':sort', encodeURIComponent(stockReportRequest.sort ? stockReportRequest.sort?.toString() : ''))
             ?.replace(':sortBy', encodeURIComponent(stockReportRequest.sortBy ? stockReportRequest.sortBy?.toString() : ''))
-            ?.replace(':type', encodeURIComponent(<any>stockReportRequest.type))
+            ?.replace(':type', encodeURIComponent(stockReportRequest.type))
 
             , updatedStockTransactionRequest).pipe(
                 map((res) => {
@@ -1135,7 +1135,7 @@ export class InventoryService {
                         to: stockReportRequest.to,
                         count: stockReportRequest.count,
                         page: stockReportRequest.page,
-                        type: stockReportRequest.type,
+                        type: stockReportRequest.type
                     };
                     return data;
                 }), catchError((e) => this.errorHandler.HandleCatch<StockReportResponse, StockTransactionReportRequest>(e, stockReportRequest, {
@@ -1145,7 +1145,7 @@ export class InventoryService {
                     to: stockReportRequest.to,
                     count: stockReportRequest.count,
                     page: stockReportRequest.page,
-                    type: stockReportRequest.type,
+                    type: stockReportRequest.type
                 })));
     }
 
@@ -1163,7 +1163,7 @@ export class InventoryService {
             ?.replace(':stockUniqueName', encodeURIComponent(<any>queryParams.stockUniqueNames))
             ?.replace(':from', encodeURIComponent(queryParams.from))
             ?.replace(':to', encodeURIComponent(queryParams.to))
-            ?.replace(':type', encodeURIComponent(<any>queryParams.type))
+            ?.replace(':type', encodeURIComponent(queryParams.type))
             , stockReportRequest).pipe(
                 map((res) => {
                     let data: BaseResponse<StockReportResponse, StockTransactionReportRequest> = res;
@@ -1203,7 +1203,7 @@ export class InventoryService {
             ?.replace(':page', encodeURIComponent(queryParams.page?.toString()))
             ?.replace(':sort', encodeURIComponent(queryParams.sort ? queryParams.sort?.toString() : ''))
             ?.replace(':sortBy', encodeURIComponent(queryParams.sortBy ? queryParams.sortBy?.toString() : ''))
-            ?.replace(':type', encodeURIComponent(<any>queryParams.type))
+            ?.replace(':type', encodeURIComponent(queryParams.type))
 
             , stockReportRequest).pipe(
                 map((res) => {
@@ -1214,7 +1214,7 @@ export class InventoryService {
                         to: queryParams.to,
                         count: queryParams.count,
                         page: queryParams.page,
-                        type: queryParams.type,
+                        type: queryParams.type
                     };
                     return data;
                 }), catchError((e) => this.errorHandler.HandleCatch<InventoryReportResponse, InventoryReportRequest>(e, stockReportRequest, {
@@ -1222,7 +1222,7 @@ export class InventoryService {
                     to: queryParams.to,
                     count: queryParams.count,
                     page: queryParams.page,
-                    type: queryParams.type,
+                    type: queryParams.type
                 })));
     }
 
@@ -1242,7 +1242,7 @@ export class InventoryService {
             ?.replace(':page', encodeURIComponent(queryParams.page?.toString()))
             ?.replace(':sort', encodeURIComponent(queryParams.sort ? queryParams.sort?.toString() : ''))
             ?.replace(':sortBy', encodeURIComponent(queryParams.sortBy ? queryParams.sortBy?.toString() : ''))
-            ?.replace(':type', encodeURIComponent(<any>queryParams.type))
+            ?.replace(':type', encodeURIComponent(queryParams.type))
             , stockReportRequest).pipe(
                 map((res) => {
                     let data: BaseResponse<InventoryReportResponse, InventoryReportRequest> = res;
@@ -1252,7 +1252,7 @@ export class InventoryService {
                         to: queryParams.to,
                         count: queryParams.count,
                         page: queryParams.page,
-                        type: queryParams.type,
+                        type: queryParams.type
                     };
                     return data;
                 }), catchError((e) => this.errorHandler.HandleCatch<InventoryReportResponse, InventoryReportRequest>(e, stockReportRequest, {
@@ -1260,7 +1260,7 @@ export class InventoryService {
                     to: queryParams.to,
                     count: queryParams.count,
                     page: queryParams.page,
-                    type: queryParams.type,
+                    type: queryParams.type
                 })));
     }
 
@@ -1280,7 +1280,7 @@ export class InventoryService {
             ?.replace(':page', encodeURIComponent(stockReportRequest.page?.toString()))
             ?.replace(':sort', encodeURIComponent(queryParams.sort ? queryParams.sort?.toString() : ''))
             ?.replace(':sortBy', encodeURIComponent(queryParams.sortBy ? queryParams.sortBy?.toString() : ''))
-            ?.replace(':type', encodeURIComponent(<any>queryParams.type))
+            ?.replace(':type', encodeURIComponent(queryParams.type))
             , stockReportRequest).pipe(
                 map((res) => {
                     let data: BaseResponse<InventoryReportResponse, InventoryReportRequest> = res;
@@ -1290,7 +1290,7 @@ export class InventoryService {
                         to: queryParams.to,
                         count: queryParams.count,
                         page: queryParams.page,
-                        type: queryParams.type,
+                        type: queryParams.type
                     };
                     return data;
                 }), catchError((e) => this.errorHandler.HandleCatch<InventoryReportResponse, InventoryReportRequest>(e, stockReportRequest, {
@@ -1298,7 +1298,7 @@ export class InventoryService {
                     to: queryParams.to,
                     count: queryParams.count,
                     page: queryParams.page,
-                    type: queryParams.type,
+                    type: queryParams.type
                 })));
     }
 }
