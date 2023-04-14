@@ -217,7 +217,7 @@ export class InventoryTransactionListComponent implements OnInit {
                 this.stockReportRequest.branchUniqueNames = [this.generalService.currentBranchUniqueName];
                 this.balanceStockReportRequest.branchUniqueNames = [this.generalService.currentBranchUniqueName];
             }
-            this.stockReportRequest.type = this.moduleType;
+            this.stockReportRequest.inventoryType = this.moduleType;
             let stockReportRequest = cloneDeep(this.stockReportRequest);
             stockReportRequest.stockGroups = undefined;
             stockReportRequest.stocks = undefined;

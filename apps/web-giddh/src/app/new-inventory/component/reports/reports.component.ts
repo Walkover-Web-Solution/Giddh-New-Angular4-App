@@ -355,7 +355,6 @@ export class ReportsComponent implements OnInit {
                     sort: stockReportRequest.sort ?? '',
                     sortBy: stockReportRequest.sortBy ?? '',
                     stockGroupUniqueName: this.reportUniqueName ?? '',
-                    type: this.moduleType ?? ''
                 };
 
                 stockReportRequest.from = undefined;
@@ -366,7 +365,7 @@ export class ReportsComponent implements OnInit {
                 stockReportRequest.sortBy = undefined;
                 stockReportRequest.totalItems = undefined;
                 stockReportRequest.totalPages = undefined;
-
+                stockReportRequest.inventoryType = this.moduleType;
                 this.inventoryService.getGroupWiseReport(queryParams, stockReportRequest).pipe(takeUntil(this.cancelApi$)).subscribe(response => {
                     this.isLoading = false;
                     if (response && response.body && response.status === 'success') {
@@ -408,9 +407,9 @@ export class ReportsComponent implements OnInit {
                     count: stockReportRequest.count ?? PAGINATION_LIMIT,
                     page: stockReportRequest.page ?? 1,
                     sort: stockReportRequest.sort ?? '',
-                    sortBy: stockReportRequest.sortBy ?? '',
-                    type: this.moduleType ?? ''
+                    sortBy: stockReportRequest.sortBy ?? ''
                 };
+                stockReportRequest.inventoryType = this.moduleType;
                 this.inventoryService.getItemWiseReport(queryParams, stockReportRequest).pipe(takeUntil(this.cancelApi$)).subscribe(response => {
                     this.isLoading = false;
                     if (response && response.body && response.status === 'success') {
@@ -450,9 +449,9 @@ export class ReportsComponent implements OnInit {
                     count: stockReportRequest.count ?? PAGINATION_LIMIT,
                     page: stockReportRequest.page ?? 1,
                     sort: stockReportRequest.sort ?? '',
-                    sortBy: stockReportRequest.sortBy ?? '',
-                    type: this.moduleType ?? ''
+                    sortBy: stockReportRequest.sortBy ?? ''
                 };
+                stockReportRequest.inventoryType = this.moduleType;
                 this.inventoryService.getVariantWiseReport(queryParams, stockReportRequest).pipe(takeUntil(this.cancelApi$)).subscribe(response => {
                     this.isLoading = false;
                     if (response && response.body && response.status === 'success') {
@@ -491,26 +490,27 @@ export class ReportsComponent implements OnInit {
                     queryParams = {
                         from: balanceReportRequest.from ?? '',
                         to: balanceReportRequest.to ?? '',
-                        stockGroupUniqueName: this.reportUniqueName ? this.reportUniqueName : '',
-                        type: this.moduleType ? this.moduleType : ''
+                        stockGroupUniqueName: this.reportUniqueName ? this.reportUniqueName : ''
                     };
                 } else {
                     queryParams = {
                         from: balanceReportRequest.from ?? '',
                         to: balanceReportRequest.to ?? '',
-                        stockGroupUniqueName: '',
-                        type: this.moduleType ? this.moduleType : ''
+                        stockGroupUniqueName: ''
                     };
                 }
-                    this.inventoryService.getStockTransactionReportBalance(queryParams, balanceReportRequest).pipe(takeUntil(this.cancelApi$)).subscribe(response => {
-                        if (response && response.body && response.status === 'success') {
-                            this.stockTransactionReportBalance = response.body;
-                        } else {
-                            this.stockTransactionReportBalance = null;
-                        }
-                        this.changeDetection.detectChanges();
-                    });
-                }
+                balanceReportRequest.from = undefined;
+                balanceReportRequest.to = undefined;
+                balanceReportRequest.inventoryType = this.moduleType;
+                this.inventoryService.getStockTransactionReportBalance(queryParams, balanceReportRequest).pipe(takeUntil(this.cancelApi$)).subscribe(response => {
+                    if (response && response.body && response.status === 'success') {
+                        this.stockTransactionReportBalance = response.body;
+                    } else {
+                        this.stockTransactionReportBalance = null;
+                    }
+                    this.changeDetection.detectChanges();
+                });
+            }
         });
     }
 
