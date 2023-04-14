@@ -8,11 +8,7 @@ const routes: Routes = [
         path: "",
         component: MainComponent,
         children: [
-            {
-                path: "",
-                redirectTo: "product/create",
-                pathMatch: "full"
-            },
+
             {
                 path: ":type/create",
                 component: StockCreateEditComponent

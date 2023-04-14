@@ -5,6 +5,7 @@ import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { FlatTreeControl } from '@angular/cdk/tree';
 import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 
 /**
  * Food data with nested structure.
@@ -14,6 +15,8 @@ interface SidebarNode {
     icons?: string;
     name: string;
     link?: string;
+    moduleType?: string;
+    openActiveMenu?: boolean;
     children?: SidebarNode[];
 }
 const TREE_DATA: SidebarNode[] = [
@@ -21,7 +24,7 @@ const TREE_DATA: SidebarNode[] = [
         name: 'Stock',
         icons: 'stock.svg',
         children: [
-            { name: 'Create New', icons: 'create-new.svg', link: '/pages/new-inventory/stock/product/create' },
+            { name: 'Create New', icons: 'create-new.svg', openActiveMenu: true, moduleType: 'product' },
             { name: 'Item-wise', icons: 'item-wise.svg', link: '/pages/new-inventory/reports/product/stock' },
             { name: 'Group-wise', icons: 'group-wise.svg', link: '/pages/new-inventory/reports/product/group' },
             { name: 'Variant-wise', icons: 'varient-wise.svg', link: '/pages/new-inventory/reports/product/variant' },
@@ -31,7 +34,7 @@ const TREE_DATA: SidebarNode[] = [
         name: 'Services',
         icons: 'service.svg',
         children: [
-            { name: 'Create New', icons: 'create-new.svg', link: '/pages/new-inventory/stock/service/create' },
+            { name: 'Create New', icons: 'create-new.svg', openActiveMenu: true, moduleType: 'service' },
             { name: 'Item-wise', icons: 'item-wise.svg', link: '/pages/new-inventory/reports/service/stock' },
             { name: 'Group-wise', icons: 'group-wise.svg', link: '/pages/new-inventory/reports/service/group' },
             { name: 'Variant-wise', icons: 'varient-wise.svg', link: '/pages/new-inventory/reports/service/variant' },
@@ -41,7 +44,7 @@ const TREE_DATA: SidebarNode[] = [
         name: 'Fixed Assets',
         icons: 'fixed-assets.svg',
         children: [
-            { name: 'Create New', icons: 'create-new.svg', link: '/pages/new-inventory/stock/fixedassets/create' },
+            { name: 'Create New', icons: 'create-new.svg', openActiveMenu: true, moduleType: 'fixedassets' },
             { name: 'Item-wise', icons: 'item-wise.svg', link: '/pages/new-inventory/reports/fixedassets/stock' },
             { name: 'Group-wise', icons: 'group-wise.svg', link: '/pages/new-inventory/reports/fixedassets/group' },
             { name: 'Variant-wise', icons: 'varient-wise.svg', link: '/pages/new-inventory/reports/fixedassets/variant' },
@@ -71,6 +74,18 @@ interface SidebarFlatNode {
     selector: 'inventory-sidebar',
     templateUrl: './inventory-sidebar.component.html',
     styleUrls: [`./inventory-sidebar.component.scss`],
+    animations: [
+        trigger('slideInOut', [
+            state('in', style({
+                transform: 'translate3d(0, 0, 0)'
+            })),
+            state('out', style({
+                transform: 'translate3d(100%, 0, 0)'
+            })),
+            transition('in => out', animate('400ms ease-in-out')),
+            transition('out => in', animate('400ms ease-in-out'))
+        ]),
+    ]
 })
 export class InventorySidebarComponent implements OnDestroy {
     /** This will hold local JSON data */
@@ -96,7 +111,9 @@ export class InventorySidebarComponent implements OnDestroy {
             name: node.name,
             level: level,
             icons: node.icons,
-            link: node.link
+            link: node.link,
+            openActiveMenu: node?.openActiveMenu,
+            moduleType: node?.moduleType,
         };
     };
     /** Holds treeControl data */
@@ -115,6 +132,10 @@ export class InventorySidebarComponent implements OnDestroy {
     public dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
     /** Holds tree data has child */
     public hasChild = (_: number, node: SidebarFlatNode) => node.expandable;
+    /* Aside pane state*/
+    public asideMenuState: string = 'out';
+    /* Hold module type */
+    public moduleType: string = '';
 
     constructor(
         private router: Router,
@@ -250,5 +271,33 @@ export class InventorySidebarComponent implements OnDestroy {
         this.destroyed$.complete();
     }
 
+    /* Aside pane toggle fixed class */
+    public toggleBodyClass(): void {
+        if (this.asideMenuState === 'in') {
+            document.querySelector('body').classList.add('fixed');
+        } else {
+            document.querySelector('body').classList.remove('fixed');
+        }
+    }
+
+    /* Aside pane open function */
+    public toggleAsidePane(event?: any, node?: any): void {
+        this.moduleType = node?.moduleType;
+        if (node?.openActiveMenu) {
+            if (event) {
+                event.preventDefault();
+            }
+            this.asideMenuState = this.asideMenuState === 'out' ? 'in' : 'out';
+            this.toggleBodyClass();
+        }
+    }
+
+    public closeAsideMenu(event?: any): void {
+        if (event) {
+            event.preventDefault();
+        }
+        this.asideMenuState = 'out';
+        this.toggleBodyClass();
+    }
 }
 

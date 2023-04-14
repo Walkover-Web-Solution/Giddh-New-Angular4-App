@@ -5,7 +5,6 @@ import { NewInventoryRoutingModule } from "./new-inventory.routing.module";
 import { SharedModule } from "../shared/shared.module";
 import { TabsModule } from "ngx-bootstrap/tabs";
 import { BsDropdownModule } from "ngx-bootstrap/dropdown";
-import { CreateNewInventoryAsideComponent } from "./component/create-new-inventory-aside-pane/create-new-inventory-aside.component";
 import { InventoryCreateUpdateGroupComponent } from "./component/stock-group/create-update-group/create-update-group.component";
 import { CreateNewGroupComponent } from "./component/create-new-group/create-new-group.component";
 import { CreateNewItemComponent } from "./component/create-new-item/create-new-item.component";
@@ -72,7 +71,6 @@ import { ReportsComponent } from "./component/reports/reports.component";
 @NgModule({
     declarations: [
         NewInventoryComponent,
-        CreateNewInventoryAsideComponent,
         InventoryCreateUpdateGroupComponent,
         CreateNewGroupComponent,
         CreateNewItemComponent,
@@ -146,7 +144,6 @@ import { ReportsComponent } from "./component/reports/reports.component";
     exports: [
         NewInventoryComponent,
         ListGroupComponent,
-        CreateNewInventoryAsideComponent,
         InventoryCreateUpdateGroupComponent,
         CreateNewGroupComponent,
         CreateNewItemComponent,
