@@ -217,12 +217,11 @@ export class InventoryTransactionListComponent implements OnInit {
                 this.stockReportRequest.branchUniqueNames = [this.generalService.currentBranchUniqueName];
                 this.balanceStockReportRequest.branchUniqueNames = [this.generalService.currentBranchUniqueName];
             }
-            this.stockReportRequest.inventoryType = this.moduleType;
             let stockReportRequest = cloneDeep(this.stockReportRequest);
             stockReportRequest.stockGroups = undefined;
             stockReportRequest.stocks = undefined;
             stockReportRequest.variants = undefined;
-
+            stockReportRequest.inventoryType = this.moduleType;
             this.inventoryService.getStockTransactionReport(stockReportRequest).pipe(takeUntil(this.cancelApi$)).subscribe(response => {
                 this.isLoading = false;
                 if (response && response.body && response.status === 'success') {
@@ -260,11 +259,11 @@ export class InventoryTransactionListComponent implements OnInit {
                 let queryParams = {
                     from: balanceReportRequest.from ?? '',
                     to: balanceReportRequest.to ?? '',
-                    type: this.moduleType ?? '',
                     stockGroupUniqueName: ''
                 };
                 balanceReportRequest.from = undefined;
                 balanceReportRequest.to = undefined;
+                balanceReportRequest.inventoryType = this.moduleType;
                 this.inventoryService.getStockTransactionReportBalance(queryParams, balanceReportRequest).pipe(takeUntil(this.cancelApi$)).subscribe(response => {
                     if (response && response.body && response.status === 'success') {
                         this.stockTransactionReportBalance = response.body;
