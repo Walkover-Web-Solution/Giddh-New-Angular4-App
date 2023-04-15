@@ -19,23 +19,40 @@ import { Router } from '@angular/router';
         ]),
     ]
 })
-
 export class CreateNewInventoryAsideComponent implements OnInit {
+    /* Close aside menu panel*/
+    @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
+    /** Holds inventory type module  */
+    @Input() public moduleType;
     /* Aside pane state*/
     public asideMenuState: string = 'out';
-    /* Hold module type*/
-    @Input() public moduleType;
-    @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
 
     constructor(private router: Router) { }
 
-    public ngOnInit() {
+    /**
+     * This hook will use for intialization component
+     *
+     * @memberof CreateNewInventoryAsideComponent
+     */
+    public ngOnInit(): void {
     }
 
+    /**
+     * This will use for close aside menu panel
+     *
+     * @param {*} [event]
+     * @memberof CreateNewInventoryAsideComponent
+     */
     public closeAsidePane(event?: any) {
         this.closeAsideEvent.emit(event);
     }
-    /* Create group aside pane open function */
+
+    /**
+     * Create group aside pane open function
+     *
+     * @param {*} [event]
+     * @memberof CreateNewInventoryAsideComponent
+     */
     public createGroupToggleAsidePane(event?: any): void {
         if (event) {
             event.preventDefault();
@@ -45,9 +62,13 @@ export class CreateNewInventoryAsideComponent implements OnInit {
         this.toggleBodyClass();
         this.closeAsidePane();
     }
-    /* Aside pane toggle fixed class */
+
+    /**
+     *Aside pane toggle fixed class
+     *
+     * @memberof CreateNewInventoryAsideComponent
+     */
     public toggleBodyClass(): void {
-        console.log(this.asideMenuState);
         if (this.asideMenuState === 'in') {
             document.querySelector('body').classList.add('fixed');
         } else {
