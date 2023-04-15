@@ -134,7 +134,7 @@ export class InventorySidebarComponent implements OnDestroy {
     public hasChild = (_: number, node: SidebarFlatNode) => node.expandable;
     /* Aside pane state*/
     public asideMenuState: string = 'out';
-    /* Hold module type */
+    /** Holds inventory type module  */
     public moduleType: string = '';
 
     constructor(
@@ -217,11 +217,11 @@ export class InventorySidebarComponent implements OnDestroy {
     }
 
     /**
- * Callback for translation response complete
- *
- * @param {*} event
- * @memberof ActivityLogsComponent
- */
+     * Callback for translation response complete
+     *
+     * @param {*} event
+     * @memberof ActivityLogsComponent
+     */
     public translationComplete(event: any): void {
         if (event) {
             this.translationLoaded = true;
@@ -230,19 +230,31 @@ export class InventorySidebarComponent implements OnDestroy {
                     name: this.localeData?.sidebar?.stock,
                     icons: 'stock.svg',
                     children: [
-                        { name: this.localeData?.sidebar?.create_new, icons: 'create-new.svg', link: '/pages/new-inventory/stock/product/create' },
-                        { name: this.localeData?.sidebar?.item_wise, icons: 'item-wise.svg', link: '/pages/new-inventory/reports/stock' },
-                        { name: this.localeData?.sidebar?.group_wise, icons: 'group-wise.svg', link: '/pages/new-inventory/reports/group' },
-                        { name: this.localeData?.sidebar?.variant_wise, icons: 'varient-wise.svg', link: '/pages/new-inventory/reports/variant' },
-                        { name: this.localeData?.sidebar?.transactions, icons: 'transactions.svg', link: '/pages/new-inventory/reports/transaction' }],
+                        { name: this.localeData?.sidebar?.create_new, icons: 'create-new.svg', openActiveMenu: true, moduleType: 'product' },
+                        { name: this.localeData?.sidebar?.item_wise, icons: 'item-wise.svg', link: '/pages/new-inventory/reports/product/stock' },
+                        { name: this.localeData?.sidebar?.group_wise, icons: 'group-wise.svg', link: '/pages/new-inventory/reports/product/group' },
+                        { name: this.localeData?.sidebar?.variant_wise, icons: 'varient-wise.svg', link: '/pages/new-inventory/reports/product/variant' },
+                        { name: this.localeData?.sidebar?.transactions, icons: 'transactions.svg', link: '/pages/new-inventory/reports/product/transaction' }],
                 },
                 {
                     name: this.localeData?.sidebar?.services,
-                    icons: 'service.svg'
+                    icons: 'service.svg',
+                    children: [
+                        { name: this.localeData?.sidebar?.create_new, icons: 'create-new.svg', openActiveMenu: true, moduleType: 'service' },
+                        { name: this.localeData?.sidebar?.item_wise, icons: 'item-wise.svg', link: '/pages/new-inventory/reports/service/stock' },
+                        { name: this.localeData?.sidebar?.group_wise, icons: 'group-wise.svg', link: '/pages/new-inventory/reports/service/group' },
+                        { name: this.localeData?.sidebar?.variant_wise, icons: 'varient-wise.svg', link: '/pages/new-inventory/reports/service/variant' },
+                        { name: this.localeData?.sidebar?.transactions, icons: 'transactions.svg', link: '/pages/new-inventory/reports/service/transaction' }],
                 },
                 {
-                    name: this.localeData?.sidebar?.fixed_assets,
-                    icons: 'fixed-assets.svg'
+                    name: this.localeData?.sidebar?.create_new.sidebar?.fixed_assets,
+                    icons: 'fixed-assets.svg',
+                    children: [
+                        { name: this.localeData?.sidebar?.create_new, icons: 'create-new.svg', openActiveMenu: true, moduleType: 'fixedassets' },
+                        { name: this.localeData?.sidebar?.item_wise, icons: 'item-wise.svg', link: '/pages/new-inventory/reports/fixedassets/stock' },
+                        { name: this.localeData?.sidebar?.group_wise, icons: 'group-wise.svg', link: '/pages/new-inventory/reports/fixedassets/group' },
+                        { name: this.localeData?.sidebar?.variant_wise, icons: 'varient-wise.svg', link: '/pages/new-inventory/reports/fixedassets/variant' },
+                        { name: this.localeData?.sidebar?.transactions, icons: 'transactions.svg', link: '/pages/new-inventory/reports/fixedassets/transaction' }],
                 },
                 {
                     name: this.localeData?.sidebar?.branch_transfer,
@@ -262,16 +274,10 @@ export class InventorySidebarComponent implements OnDestroy {
     }
 
     /**
-    * Releases the memory
-    *
-    * @memberof InventorySidebarComponent
-    */
-    public ngOnDestroy(): void {
-        this.destroyed$.next(true);
-        this.destroyed$.complete();
-    }
-
-    /* Aside pane toggle fixed class */
+     *Aside pane toggle fixed class
+     *
+     * @memberof InventorySidebarComponent
+     */
     public toggleBodyClass(): void {
         if (this.asideMenuState === 'in') {
             document.querySelector('body').classList.add('fixed');
@@ -280,7 +286,13 @@ export class InventorySidebarComponent implements OnDestroy {
         }
     }
 
-    /* Aside pane open function */
+    /**
+     *Aside pane open function
+     *
+     * @param {*} [event]
+     * @param {*} [node]
+     * @memberof InventorySidebarComponent
+     */
     public toggleAsidePane(event?: any, node?: any): void {
         this.moduleType = node?.moduleType;
         if (node?.openActiveMenu) {
@@ -292,12 +304,28 @@ export class InventorySidebarComponent implements OnDestroy {
         }
     }
 
+    /**
+     * This will use for close aside menu
+     *
+     * @param {*} [event]
+     * @memberof InventorySidebarComponent
+     */
     public closeAsideMenu(event?: any): void {
         if (event) {
             event.preventDefault();
         }
         this.asideMenuState = 'out';
         this.toggleBodyClass();
+    }
+
+    /**
+    * Releases the memory
+    *
+    * @memberof InventorySidebarComponent
+    */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 }
 

@@ -110,7 +110,7 @@ export class InventoryTransactionListComponent implements OnInit {
     public advanceSearchModalResponse: any = null;
     /** Observable to cancel api on reports api call */
     private cancelApi$: ReplaySubject<boolean> = new ReplaySubject(1);
-    /** Holds module type for reports */
+    /** Holds inventory type module  */
     public moduleType: string = '';
 
     constructor(

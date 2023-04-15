@@ -90,7 +90,7 @@ export class ReportsComponent implements OnInit {
     public reportType: string = '';
     /** Holds report unique name */
     public reportUniqueName: string = '';
-    /** Holds module type for reports */
+    /** Holds inventory type module  */
     public moduleType: string = '';
     /** Holds module name */
     public moduleName = '';

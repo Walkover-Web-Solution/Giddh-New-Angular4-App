@@ -50,7 +50,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public pullUniversalDate: boolean = true;
     /** Holds module name for customised columns */
     @Input() public reportUniqueName: string = "";
-    /** Holds module type for reports */
+    /** Holds inventory type module  */
     @Input() public moduleType: string = "";
     /** Emits the selected filters */
     @Output() public filters: EventEmitter<any> = new EventEmitter();
