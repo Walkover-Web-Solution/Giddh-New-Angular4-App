@@ -92,8 +92,6 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
     public sanitizedPdfFileUrl: any = '';
     /** PDF src */
     public pdfFileURL: any = '';
-    /** Stores the voucher API version of current company */
-    public voucherApiVersion: 1 | 2;
     /** True if left sidebar is expanded */
     private isSidebarExpanded: boolean = false;
 
@@ -109,7 +107,7 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
         private domSanitizer: DomSanitizer,
         private generalService: GeneralService
     ) {
-        this.voucherApiVersion = this.generalService.voucherApiVersion;
+        
     }
 
     /**

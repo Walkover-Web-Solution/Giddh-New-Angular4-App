@@ -762,7 +762,7 @@
                                 <th
                                     [attr.data-title]="localeData?.po_number"
                                     width="12%"
-                                    *ngIf="voucherApiVersion !== 2 && selectedVoucher === 'purchase'"
+                                    *ngIf="selectedVoucher === 'purchase'"
                                     class="td-search-box"
                                     #searchPurchaseOrderContainer
                                     (clickOutside)="
@@ -1064,7 +1064,7 @@
                                 <td [attr.data-title]="commonLocaleData?.app_date">{{ item.voucherDate }}</td>
                                 <td
                                     [attr.data-title]="localeData?.linked_voucher"
-                                    *ngIf="voucherApiVersion !== 2 && selectedVoucher === 'purchase'"
+                                    *ngIf="selectedVoucher === 'purchase'"
                                 >
                                     {{ item.purchaseOrderNumbers }}
                                 </td>
