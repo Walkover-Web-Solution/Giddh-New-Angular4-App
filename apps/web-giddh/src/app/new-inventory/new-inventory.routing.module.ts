@@ -21,6 +21,7 @@ import { StockBalanceComponent } from "./component/stock-balance/stock-balance.c
 import { ItemWiseComponent } from "./component/stock-group/item-wise/item-wise.component";
 import { VariantWiseComponent } from "./component/variant-wise/variant-wise.component";
 import { ReportsComponent } from "./component/reports/reports.component";
+import { GroupCreateEditModule } from "./component/create-update-group/create-update-group.module";
 
 const routes: Routes = [
     {
@@ -76,14 +77,6 @@ const routes: Routes = [
         component: VariantWiseComponent,
     },
     {
-        path: "stock-group/create",
-        component: InventoryCreateUpdateGroupComponent,
-    },
-    {
-        path: "stock-group/edit/:groupUniqueName",
-        component: InventoryCreateUpdateGroupComponent,
-    },
-    {
         path: "about-group-detail",
         component: AboutGroupDetailComponent,
 
@@ -121,6 +114,10 @@ const routes: Routes = [
         loadChildren: () => import('./component/stock-create-edit/stock-create-edit.module').then(module => module.StockCreateEditModule)
     },
     {
+        path: "group",
+        loadChildren: () => import('./component/create-update-group/create-update-group.module').then(module => module.GroupCreateEditModule)
+    },
+    {
         path: "inventory-dashboard",
         component: InventoryDashboardComponent,
     },
@@ -137,7 +134,7 @@ const routes: Routes = [
 
 @NgModule({
     declarations: [],
-    imports: [RouterModule.forChild(routes), StockCreateEditModule],
+    imports: [RouterModule.forChild(routes), StockCreateEditModule, GroupCreateEditModule],
     exports: [RouterModule],
 })
 export class NewInventoryRoutingModule {

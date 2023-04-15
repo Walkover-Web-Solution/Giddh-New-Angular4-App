@@ -1,0 +1,68 @@
+.create-group-page {
+    margin-top: 20px;
+
+    .image-group {
+        padding-top: 35px;
+
+        .group-vector {
+            position: absolute;
+            right: 15px;
+            top: 15px;
+        }
+    }
+}
+
+.new-inventory-page-header {
+    padding: 0 15px 15px;
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--color-gray);
+    align-items: center;
+
+    .inventory-header-right {
+        display: flex;
+    }
+}
+
+:host::ng-deep .nav.nav-tabs {
+    position: static !important;
+    padding-left: 0 !important;
+    margin-bottom: 15px;
+}
+
+.create-group-footer {
+    background-color: var(--color-dark-fog);
+    height: 60px;
+    text-align: left;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    position: static;
+    margin-top: 20px;
+
+    .footer-wrapper {
+        padding: 15px;
+    }
+}
+
+.page-title-inventory {
+    font-weight: bold;
+    color: var(--color-giddh-blue);
+    font-size: 16px;
+}
+
+.add-image button img {
+    height: 87px;
+    width: 87px;
+    object-fit: contain;
+    transform: scale(1.2);
+}
+
+.add-image button {
+    padding: 0;
+    margin: 0 !important;
+    height: auto;
+    border: 2px dashed var(--color-gray);
+    overflow: hidden;
+}
