@@ -50,7 +50,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public pullUniversalDate: boolean = true;
     /** Holds module name for customised columns */
     @Input() public reportUniqueName: string = "";
-    /** Holds module type for reports */
+    /** Holds inventory type module  */
     @Input() public moduleType: string = "";
     /** Emits the selected filters */
     @Output() public filters: EventEmitter<any> = new EventEmitter();
@@ -152,7 +152,6 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ReportFiltersComponent
      */
     public ngOnInit(): void {
-        this.searchRequest.type = this.moduleType;
         if (this.reportUniqueName && this.searchPage !== "GROUP") {
             this.autoSelectSearchOption = true;
             this.searchRequest.q = this.reportUniqueName;
@@ -229,7 +228,6 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
                 this.searchInventory();
             }
         });
-        this.searchInventory();
     }
 
     /**
@@ -249,7 +247,8 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
             this.balanceStockReportRequest.from = this.fromDate;
             this.balanceStockReportRequest.to = this.toDate;
         }
-        if (changes?.searchPage) {
+        if (changes?.searchPage || changes?.moduleType) {
+            this.searchInventory();
             this.getReportColumns();
         }
         if (changes?.stockReportRequest?.currentValue) {
@@ -715,6 +714,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ReportFiltersComponent
      */
     public searchInventory(autoSelectSearchOption?: boolean, loadMore?: boolean): void {
+        this.searchRequest.inventoryType = this.moduleType;
         this.searchRequest.stockGroupUniqueNames = this.stockReportRequest.stockGroupUniqueNames ? this.stockReportRequest.stockGroupUniqueNames : [];
         this.searchRequest.stockUniqueNames = this.stockReportRequest.stockUniqueNames ? this.stockReportRequest.stockUniqueNames : [];
         this.searchRequest.variantUniqueNames = this.stockReportRequest.variantUniqueNames ? this.stockReportRequest.variantUniqueNames : [];

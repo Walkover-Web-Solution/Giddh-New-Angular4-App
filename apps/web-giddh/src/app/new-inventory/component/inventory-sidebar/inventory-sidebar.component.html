@@ -24,8 +24,10 @@
                         [routerLink]="node?.link"
                         routerLinkActive="active"
                     >
-                        <img src="{{ imgPath }}{{ node.icons }}" class="sidebar-menu-icons" alt="" />
-                        <h5>{{ node.name }}</h5>
+                        <span class="w-100 d-inline-flex" (click)="toggleAsidePane($event, node)">
+                            <img src="{{ imgPath }}{{ node.icons }}" class="sidebar-menu-icons" alt="" />
+                            <h5>{{ node.name }}</h5>
+                        </span>
                     </mat-tree-node>
                     <mat-tree-node
                         *matTreeNodeDef="let node; when: hasChild"
@@ -50,3 +52,11 @@
         </div>
     </div>
 </ng-container>
+<div class="aside-overlay" *ngIf="asideMenuState === 'in'"></div>
+<aside-create-new-inventory
+    *ngIf="asideMenuState === 'in'"
+    [@slideInOut]="asideMenuState"
+    (closeAsideEvent)="closeAsideMenu()"
+    [class]="asideMenuState"
+    [moduleType]="moduleType"
+></aside-create-new-inventory>

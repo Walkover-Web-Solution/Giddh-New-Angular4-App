@@ -1082,15 +1082,12 @@ export class InventoryService {
      * @memberof InventoryService
      */
     public searchStockTransactionReport(model: any): Observable<BaseResponse<any, any>> {
-        let updatedModel = cloneDeep(model);
-        delete updatedModel.type;
         this.companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + INVENTORY_API.SEARCH_STOCK_TRANSACTION_FILTERS;
         url = url?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            ?.replace(':type', encodeURIComponent(model.type));
-        return this.http.post(url, updatedModel).pipe(map((res) => {
+        return this.http.post(url, model).pipe(map((res) => {
             let data: BaseResponse<any, any> = res;
-            data.request = updatedModel;
+            data.request = model;
             data.queryString = {
                 type: model.type
             }
@@ -1122,8 +1119,6 @@ export class InventoryService {
             ?.replace(':page', encodeURIComponent(stockReportRequest.page?.toString()))
             ?.replace(':sort', encodeURIComponent(stockReportRequest.sort ? stockReportRequest.sort?.toString() : ''))
             ?.replace(':sortBy', encodeURIComponent(stockReportRequest.sortBy ? stockReportRequest.sortBy?.toString() : ''))
-            ?.replace(':type', encodeURIComponent(stockReportRequest.type))
-
             , updatedStockTransactionRequest).pipe(
                 map((res) => {
                     let data: BaseResponse<StockReportResponse, StockTransactionReportRequest> = res;
@@ -1134,8 +1129,7 @@ export class InventoryService {
                         from: stockReportRequest.from,
                         to: stockReportRequest.to,
                         count: stockReportRequest.count,
-                        page: stockReportRequest.page,
-                        type: stockReportRequest.type
+                        page: stockReportRequest.page
                     };
                     return data;
                 }), catchError((e) => this.errorHandler.HandleCatch<StockReportResponse, StockTransactionReportRequest>(e, stockReportRequest, {
@@ -1144,8 +1138,7 @@ export class InventoryService {
                     from: stockReportRequest.from,
                     to: stockReportRequest.to,
                     count: stockReportRequest.count,
-                    page: stockReportRequest.page,
-                    type: stockReportRequest.type
+                    page: stockReportRequest.page
                 })));
     }
 
@@ -1163,7 +1156,6 @@ export class InventoryService {
             ?.replace(':stockUniqueName', encodeURIComponent(<any>queryParams.stockUniqueNames))
             ?.replace(':from', encodeURIComponent(queryParams.from))
             ?.replace(':to', encodeURIComponent(queryParams.to))
-            ?.replace(':type', encodeURIComponent(queryParams.type))
             , stockReportRequest).pipe(
                 map((res) => {
                     let data: BaseResponse<StockReportResponse, StockTransactionReportRequest> = res;
@@ -1172,16 +1164,14 @@ export class InventoryService {
                         stockGroupUniqueName: queryParams.stockGroupUniqueName,
                         stockUniqueName: queryParams.stockUniqueNames,
                         from: queryParams.from,
-                        to: queryParams.to,
-                        type: queryParams.type
+                        to: queryParams.to
                     };
                     return data;
                 }), catchError((e) => this.errorHandler.HandleCatch<StockReportResponse, StockTransactionReportRequest>(e, stockReportRequest, {
                     stockGroupUniqueName: queryParams.stockGroupUniqueName,
                     stockUniqueName: queryParams.stockUniqueNames,
                     from: queryParams.from,
-                    to: queryParams.to,
-                    type: queryParams.type
+                    to: queryParams.to
                 })));
     }
 
@@ -1203,7 +1193,6 @@ export class InventoryService {
             ?.replace(':page', encodeURIComponent(queryParams.page?.toString()))
             ?.replace(':sort', encodeURIComponent(queryParams.sort ? queryParams.sort?.toString() : ''))
             ?.replace(':sortBy', encodeURIComponent(queryParams.sortBy ? queryParams.sortBy?.toString() : ''))
-            ?.replace(':type', encodeURIComponent(queryParams.type))
 
             , stockReportRequest).pipe(
                 map((res) => {
@@ -1280,11 +1269,9 @@ export class InventoryService {
             ?.replace(':page', encodeURIComponent(stockReportRequest.page?.toString()))
             ?.replace(':sort', encodeURIComponent(queryParams.sort ? queryParams.sort?.toString() : ''))
             ?.replace(':sortBy', encodeURIComponent(queryParams.sortBy ? queryParams.sortBy?.toString() : ''))
-            ?.replace(':type', encodeURIComponent(queryParams.type))
             , stockReportRequest).pipe(
                 map((res) => {
                     let data: BaseResponse<InventoryReportResponse, InventoryReportRequest> = res;
-                    data.request = queryParams;
                     data.queryString = {
                         from: queryParams.from,
                         to: queryParams.to,
