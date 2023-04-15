@@ -1,5 +1,5 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { Component, EventEmitter, Output, OnDestroy } from '@angular/core';
+import { Component, EventEmitter, Output, OnDestroy, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -85,7 +85,8 @@ interface SidebarFlatNode {
             transition('in => out', animate('400ms ease-in-out')),
             transition('out => in', animate('400ms ease-in-out'))
         ]),
-    ]
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class InventorySidebarComponent implements OnDestroy {
     /** This will hold local JSON data */
@@ -101,7 +102,7 @@ export class InventorySidebarComponent implements OnDestroy {
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Holding data in SidebarNode Array */
-    public dataList: any[] = TREE_DATA;
+    public dataList: SidebarNode[] = [];
     /** Holds images folder path */
     public imgPath: string = "";
     /** Holds transformer data */
@@ -139,7 +140,8 @@ export class InventorySidebarComponent implements OnDestroy {
 
     constructor(
         private router: Router,
-        private breakPointObserver: BreakpointObserver
+        private breakPointObserver: BreakpointObserver,
+        private changeDetection: ChangeDetectorRef,
     ) {
         this.breakPointObserver.observe([
             '(max-width: 767px)'
@@ -270,6 +272,7 @@ export class InventorySidebarComponent implements OnDestroy {
                     icons: 'warehouse-opening-balance.svg'
                 },
             ];
+            this.changeDetection.detectChanges();
         }
     }
 

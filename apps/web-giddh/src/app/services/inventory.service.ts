@@ -120,7 +120,7 @@ export class InventoryService {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.get(this.config.apiUrl + INVENTORY_API.GROUPS_WITH_STOCKS
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            ?.replace(':type', encodeURIComponent(<any>moduleType))).pipe(map((res) => {
+            ?.replace(':type', encodeURIComponent(moduleType))).pipe(map((res) => {
                 let data: BaseResponse<GroupsWithStocksHierarchyMin, string> = res;
                 data.request = '';
                 return data;
@@ -1193,7 +1193,6 @@ export class InventoryService {
             ?.replace(':page', encodeURIComponent(queryParams.page?.toString()))
             ?.replace(':sort', encodeURIComponent(queryParams.sort ? queryParams.sort?.toString() : ''))
             ?.replace(':sortBy', encodeURIComponent(queryParams.sortBy ? queryParams.sortBy?.toString() : ''))
-            ?.replace(':type', encodeURIComponent(queryParams.type))
 
             , stockReportRequest).pipe(
                 map((res) => {
@@ -1270,11 +1269,9 @@ export class InventoryService {
             ?.replace(':page', encodeURIComponent(stockReportRequest.page?.toString()))
             ?.replace(':sort', encodeURIComponent(queryParams.sort ? queryParams.sort?.toString() : ''))
             ?.replace(':sortBy', encodeURIComponent(queryParams.sortBy ? queryParams.sortBy?.toString() : ''))
-            ?.replace(':type', encodeURIComponent(queryParams.type))
             , stockReportRequest).pipe(
                 map((res) => {
                     let data: BaseResponse<InventoryReportResponse, InventoryReportRequest> = res;
-                    data.request = queryParams;
                     data.queryString = {
                         from: queryParams.from,
                         to: queryParams.to,
