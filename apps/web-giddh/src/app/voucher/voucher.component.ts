@@ -2684,7 +2684,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             let purchaseOrders = [];
             if (this.selectedPoItems && this.selectedPoItems.length > 0) {
                 this.selectedPoItems.forEach(order => {
-                    purchaseOrders.push({ name: this.linkedPoNumbers[order].voucherNumber, uniqueName: order });
+                    purchaseOrders.push({ name: this.linkedPoNumbers[order]?.voucherNumber, uniqueName: order });
                 });
             }
             requestObject = {
@@ -4409,7 +4409,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
                 if (this.selectedPoItems && this.selectedPoItems.length > 0) {
                     this.selectedPoItems.forEach(order => {
-                        purchaseOrders.push({ name: this.linkedPoNumbers[order].voucherNumber, uniqueName: order });
+                        purchaseOrders.push({ name: this.linkedPoNumbers[order]?.voucherNumber, uniqueName: order });
                     });
                 }
 
@@ -5451,13 +5451,13 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     this.selectedPoItems.push(order?.uniqueName);
 
                     if (!this.linkedPoNumbers[order?.uniqueName]) {
-                        this.purchaseOrders.push({ label: order.number, value: order?.uniqueName, additional: { amount: order.grandTotal?.amountForAccount } });
+                        this.purchaseOrders.push({ label: order?.number, value: order?.uniqueName, additional: { amount: order?.grandTotal?.amountForAccount, totalPending: order?.entries?.length } });
                         this.filterPurchaseOrder('');
                     }
 
                     this.linkedPoNumbers[order?.uniqueName] = [];
-                    this.linkedPoNumbers[order?.uniqueName]['voucherNumber'] = order.number;
-                    this.linkedPoNumbers[order?.uniqueName]['items'] = order.entries;
+                    this.linkedPoNumbers[order?.uniqueName]['voucherNumber'] = order?.number;
+                    this.linkedPoNumbers[order?.uniqueName]['items'] = order?.entries;
                 });
             }
 
@@ -6878,7 +6878,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                                 this.purchaseOrders.push({ label: item.number, value: item?.uniqueName, additional: { grandTotal: item.pendingDetails.grandTotal, pending: pending.join(", "), totalPending: totalPending } });
                                 this.filterPurchaseOrder('');
                                 this.linkedPoNumbers[item?.uniqueName] = [];
-                                this.linkedPoNumbers[item?.uniqueName]['voucherNumber'] = item.voucherNumber;
+                                this.linkedPoNumbers[item?.uniqueName]['voucherNumber'] = item.number;
                                 this.linkedPoNumbers[item?.uniqueName]['items'] = [];
                             });
                         }
