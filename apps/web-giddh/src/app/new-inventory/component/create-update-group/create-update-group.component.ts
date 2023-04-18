@@ -1,16 +1,14 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, OnDestroy, OnInit } from "@angular/core";
-import { FormGroup, FormBuilder, Validators } from "@angular/forms";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import { FormBuilder, FormControl, FormGroup, NgForm, Validators } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
 import { Store, select } from "@ngrx/store";
 import { UploadInput, UploaderOptions, UploadOutput } from "ngx-uploader";
 import { Observable, ReplaySubject, of as observableOf } from "rxjs";
-import { takeUntil, take, distinctUntilChanged } from "rxjs/operators";
+import { takeUntil, distinctUntilChanged } from "rxjs/operators";
 import { CompanyActions } from "../../../actions/company.actions";
-import { Configuration } from "../../../app.constant";
-import { findIndex, forEach } from "../../../lodash-optimized";
+import { cloneDeep, findIndex, forEach } from "../../../lodash-optimized";
 import { IForceClear } from "../../../models/api-models/Sales";
 import { IGroupsWithStocksHierarchyMinItem } from "../../../models/interfaces/groups-with-stocks.interface";
-import { LEDGER_API } from "../../../services/apiurls/ledger.api";
 import { InventoryService } from "../../../services/inventory.service";
 import { ToasterService } from "../../../services/toaster.service";
 import { uniqueNameInvalidStringReplace } from "../../../shared/helpers/helperFunctions";
@@ -25,10 +23,10 @@ import { IOption } from "../../../theme/ng-virtual-select/sh-options.interface";
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
+    /** Instance of stock create/edit form */
+    @ViewChild('groupCreateEditForm', { static: false }) public groupCreateEditForm: NgForm;
     /* This will store image path */
     public imgPath: string = '';
-    /** Form Group for group form */
-    public groupForm: FormGroup;
     /** Observable to hold stock groups */
     public groups$: Observable<IOption[]>;
     /* This will clear the select value in sh-select */
@@ -47,37 +45,65 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
     /** Options for file upload */
     public fileUploadOptions: UploaderOptions = { concurrency: 0 };
-    /** Holds group unique name if updating group  */
-    public groupUniqueName: string = "";
     /* Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Object of group form */
+    // public groupForm: any = {
+    //     name: null,
+    //     uniqueName: null,
+    //     showCodeType: 'hsn',
+    //     hsnNumber: null,
+    //     sacNumber: null,
+    //     isSubGroup: null,
+    //     parentStockGroupUniqueName: null,
+    //     taxes: null,
+    // };
+    /** Stock groups list */
+    public stockGroups: IOption[] = [];
+    /** Holds stock type from url */
+    private stockType: string = "";
+    /** Holds stock group unique name */
+    public stockGroupUniqueName: string = "";
+    /** Holds stock group name */
+    public stockGroupName: string = "";
     /** Taxes list */
     public taxes: any[] = [];
     /** Holds list of selected taxes */
     private selectedTaxes: any[] = [];
     /** Holds temporarily list of taxes */
     public taxTempArray: any[] = [];
+    /** Holds group unique name if updating group  */
+    public groupUniqueName: string = "";
+    /** Form Group for group form */
+    public groupForm: FormGroup;
+
 
     constructor(
         private store: Store<AppState>,
-        private formBuilder: FormBuilder,
         private inventoryService: InventoryService,
+        private companyAction: CompanyActions,
+        private formBuilder: FormBuilder,
         private toaster: ToasterService,
         private route: ActivatedRoute,
-        private companyAction: CompanyActions,
+        private changeDetection: ChangeDetectorRef,
     ) {
         this.sessionId$ = this.store.pipe(select(state => state.session.user.session.id), takeUntil(this.destroyed$));
         this.companyUniqueName$ = this.store.pipe(select(state => state.session.companyUniqueName), takeUntil(this.destroyed$));
         this.initGroupForm();
 
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
-            if (params && params['groupUniqueName']) {
-                this.groupUniqueName = params['groupUniqueName'];
+            this.stockType = params?.type?.toUpperCase();
+            if (params.groupUniqueName) {
+                this.stockGroupUniqueName = params.groupUniqueName;
+                this.groupUniqueName = params.groupUniqueName;
                 this.getGroupDetails();
             } else {
-                this.groupUniqueName = "";
+                this.stockGroupUniqueName = "";
             }
         });
+        this.getStockGroups();
+        this.getTaxes();
+
     }
 
     /**
@@ -87,54 +113,8 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
-        this.getParentGroups();
-    }
+        // this.resetForm(this.groupCreateEditForm);
 
-    /**
-     * Hook for component destroy
-     *
-     * @memberof InventoryCreateUpdateGroupComponent
-     */
-    public ngOnDestroy(): void {
-        this.destroyed$.next(true);
-        this.destroyed$.complete();
-    }
-
-    /**
-     * Initializing the group form
-     *
-     * @private
-     * @memberof InventoryCreateUpdateGroupComponent
-     */
-    private initGroupForm(): void {
-        this.groupForm = this.formBuilder.group({
-            name: ['', Validators.required],
-            uniqueName: ['', Validators.required],
-            showCodeType: ['hsn'],
-            hsnNumber: [''],
-            sacNumber: [''],
-            taxes: null,
-            parentStockGroupUniqueName: [''],
-            isSubGroup: [false],
-            outOfStockSelling: [false],
-            image: this.formBuilder.group({
-                uniqueName: [''],
-                name: ['']
-            })
-        });
-    }
-
-    /**
-     * Callback for change code type
-     *
-     * @memberof InventoryCreateUpdateGroupComponent
-     */
-    public changeCodeType(): void {
-        if (this.groupForm.get('showCodeType')?.value === 'hsn') {
-            this.groupForm?.patchValue({ sacNumber: "" });
-        } else if (this.groupForm.get('showCodeType')?.value === 'sac') {
-            this.groupForm?.patchValue({ hsnNumber: "" });
-        }
     }
 
     /**
@@ -161,198 +141,20 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
     private checkSelectedTaxes(): void {
         if (this.taxes?.length > 0) {
             this.taxes?.forEach(tax => {
-                // if (this.groupForm?.taxes?.includes(tax?.uniqueName))
-                {
+                if (this.groupForm.get('taxes')?.value?.includes(tax?.uniqueName)) {
                     this.selectTax(tax);
                 }
             });
         }
     }
 
+
     /**
-     * Creates/updates the group
+     * Select tax
      *
-     * @memberof InventoryCreateUpdateGroupComponent
+     * @param {*} taxSelected
+     * @memberof StockCreateEditComponent
      */
-    public saveGroup(): void {
-        if (!this.groupForm?.get("image")?.get("uniqueName")?.value) {
-            this.groupForm?.removeControl("image");
-        }
-        if (this.groupUniqueName) {
-            this.inventoryService.updateStockGroup(this.groupForm?.value, this.groupUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                if (response?.status === "success") {
-                    this.toaster.clearAllToaster();
-                    this.toaster.successToast("Stock group updated successfully.");
-                } else {
-                    this.toaster.clearAllToaster();
-                    this.toaster.errorToast(response?.message);
-                }
-            });
-        } else {
-            this.inventoryService.createStockGroup(this.groupForm?.value).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                if (response?.status === "success") {
-                    this.resetGroupForm();
-                    this.groupForm.addControl("image", this.formBuilder.group({
-                        uniqueName: [''],
-                        name: ['']
-                    }));
-
-                    this.toaster.clearAllToaster();
-                    this.toaster.successToast("Stock group created successfully.");
-                } else {
-                    this.toaster.clearAllToaster();
-                    this.toaster.errorToast(response?.message);
-                }
-            });
-        }
-    }
-
-    /**
-     * Gets the parent groups
-     *
-     * @private
-     * @memberof InventoryCreateUpdateGroupComponent
-     */
-    private getParentGroups(): void {
-        this.inventoryService.GetGroupsWithStocksFlatten().pipe(takeUntil(this.destroyed$)).subscribe(data => {
-            if (data?.status === 'success') {
-                let groups: IOption[] = [];
-                this.arrangeGroups(data.body?.results, groups);
-                this.groups$ = observableOf(groups);
-            }
-        });
-    }
-
-    /**
-     * Rearranges stock groups
-     *
-     * @private
-     * @param {IGroupsWithStocksHierarchyMinItem[]} rawList
-     * @param {IOption[]} [parents=[]]
-     * @memberof InventoryCreateUpdateGroupComponent
-     */
-    private arrangeGroups(rawList: IGroupsWithStocksHierarchyMinItem[], parents: IOption[] = []): void {
-        rawList.map(group => {
-            if (group) {
-                let newOption: IOption = { label: '', value: '' };
-                newOption.label = group?.name;
-                newOption.value = group?.uniqueName;
-                parents.push(newOption);
-                if (group?.childStockGroups && group?.childStockGroups.length > 0) {
-                    this.arrangeGroups(group?.childStockGroups, parents);
-                }
-            }
-        });
-    }
-
-    /**
-     * Resets the group form
-     *
-     * @memberof InventoryCreateUpdateGroupComponent
-     */
-    public resetGroupForm(): void {
-        this.groupForm.reset();
-        this.groupForm?.patchValue({ showCodeType: "hsn" });
-        this.forceClear$ = observableOf({ status: true });
-    }
-
-    /**
-     * Generates the unique name based on name
-     *
-     * @memberof InventoryCreateUpdateGroupComponent
-     */
-    public generateUniqueName(): void {
-        let val: string = this.groupForm.controls['name']?.value;
-        val = uniqueNameInvalidStringReplace(val);
-
-        if (val) {
-            this.groupForm?.patchValue({ uniqueName: val });
-        } else {
-            this.groupForm?.patchValue({ uniqueName: '' });
-        }
-    }
-
-    /**
-     * Validates the unique name
-     *
-     * @memberof InventoryCreateUpdateGroupComponent
-     */
-    public validateUniqueName(): void {
-        if (this.groupForm.get('uniqueName')?.value) {
-            let value = uniqueNameInvalidStringReplace(this.groupForm.get('uniqueName')?.value);
-            this.groupForm?.patchValue({ uniqueName: value });
-        }
-    }
-
-    /**
-     * Uploads the file
-     *
-     * @param {UploadOutput} output
-     * @memberof InventoryCreateUpdateGroupComponent
-     */
-    public onUploadOutput(output: UploadOutput): void {
-        if (output.type === 'allAddedToQueue') {
-            let sessionKey = null;
-            let companyUniqueName = null;
-            this.sessionId$.pipe(take(1)).subscribe(a => sessionKey = a);
-            this.companyUniqueName$.pipe(take(1)).subscribe(a => companyUniqueName = a);
-            const event: UploadInput = {
-                type: 'uploadAll',
-                url: Configuration.ApiUrl + LEDGER_API.UPLOAD_FILE?.replace(':companyUniqueName', companyUniqueName),
-                method: 'POST',
-                fieldName: 'file',
-                data: { company: companyUniqueName },
-                headers: { 'Session-Id': sessionKey },
-            };
-            this.uploadInput.emit(event);
-        } else if (output.type === 'start') {
-            this.isFileUploading = true;
-        } else if (output.type === 'done') {
-            if (output.file.response?.status === 'success') {
-                this.isFileUploading = false;
-                this.groupForm?.get("image")?.patchValue({ uniqueName: output.file.response.body?.uniqueName, name: output.file.response.body?.name });
-                this.toaster.successToast(this.commonLocaleData?.app_messages?.file_uploaded);
-            } else {
-                this.isFileUploading = false;
-                this.groupForm?.get("image")?.patchValue({ uniqueName: "", name: "" });
-                this.toaster.errorToast(output.file.response?.message);
-            }
-        }
-    }
-
-    /**
-     * Gets the group details
-     *
-     * @private
-     * @memberof InventoryCreateUpdateGroupComponent
-     */
-    private getGroupDetails(): void {
-        this.inventoryService.getStockGroup(this.groupUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response?.status === "success" && response?.body) {
-                this.groupForm?.patchValue({
-                    name: response.body.name,
-                    uniqueName: response.body.uniqueName,
-                    showCodeType: response.body.hsnNumber ? "hsn" : "sac",
-                    hsnNumber: response.body.hsnNumber,
-                    sacNumber: response.body.sacNumber,
-                    parentStockGroupUniqueName: response.body.parentStockGroup?.uniqueName,
-                    isSubGroup: [(response.body.parentStockGroup?.uniqueName) ? true : false],
-                    outOfStockSelling: response.body.outOfStockSelling,
-                    image: this.formBuilder.group({
-                        uniqueName: response.body.image?.uniqueName,
-                        name: response.body.image?.name
-                    })
-                });
-            }
-        });
-    }
-
-    /**
-  * Select tax
-  *
-  * @param {*} taxSelected
-  * @memberof StockCreateEditComponent
-  */
     public selectTax(taxSelected: any): void {
         let isSelected = this.selectedTaxes?.filter(selectedTax => selectedTax === taxSelected?.uniqueName);
 
@@ -420,4 +222,196 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
         }
         this.selectedTaxes = this.taxTempArray.map(tax => tax?.uniqueName);
     }
+
+    /**
+ * Initializing the group form
+ *
+ * @private
+ * @memberof InventoryCreateUpdateGroupComponent
+ */
+    private initGroupForm(): void {
+        this.groupForm = this.formBuilder.group({
+            name: ['', Validators.required],
+            uniqueName: ['', Validators.required],
+            showCodeType: ['hsn'],
+            hsnNumber: [''],
+            sacNumber: [''],
+            parentStockGroupUniqueName: [''],
+            isSubGroup: [false],
+            taxes: null
+        });
+    }
+
+    /**
+     * Creates/updates the group
+     *
+     * @memberof InventoryCreateUpdateGroupComponent
+     */
+    public saveGroup(): void {
+        console.log(this.stockGroupUniqueName);
+        this.groupForm.get('parentStockGroupUniqueName').patchValue(this.stockGroupUniqueName);
+        console.log(this.groupForm);
+
+        if (this.groupUniqueName) {
+            this.inventoryService.updateStockGroup(this.groupForm?.value, this.stockGroupUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                if (response?.status === "success") {
+                    this.toaster.clearAllToaster();
+                    this.toaster.successToast("Stock group updated successfully.");
+                } else {
+                    this.toaster.clearAllToaster();
+                    this.toaster.errorToast(response?.message);
+                }
+            });
+        } else {
+            this.inventoryService.createStockGroup(this.groupForm?.value).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                if (response?.status === "success") {
+                    this.resetGroupForm();
+                    this.toaster.clearAllToaster();
+                    this.toaster.successToast("Stock group created successfully.");
+                } else {
+                    this.toaster.clearAllToaster();
+                    this.toaster.errorToast(response?.message);
+                }
+            });
+        }
+    }
+
+
+    /**
+ * Get stock groups
+ *
+ * @memberof StockCreateEditComponent
+ */
+    public getStockGroups(): void {
+        if (this.stockType === 'FIXEDASSETS') {
+            this.stockType = 'FIXED_ASSETS';
+        }
+        this.inventoryService.GetGroupsWithStocksFlatten(this.stockType).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === "success") {
+                let stockGroups: IOption[] = [];
+                this.arrangeStockGroups(response.body?.results, stockGroups);
+                this.stockGroups = stockGroups;
+            }
+        });
+    }
+
+    /**
+ * Arrange stock groups
+ *
+ * @private
+ * @param {IGroupsWithStocksHierarchyMinItem[]} groups
+ * @param {IOption[]} [parents=[]]
+ * @memberof StockCreateEditComponent
+ */
+    private arrangeStockGroups(groups: IGroupsWithStocksHierarchyMinItem[], parents: IOption[] = []): void {
+        groups.map(group => {
+            if (group) {
+                let newOption: IOption = { label: '', value: '', additional: {} };
+                newOption.label = group?.name;
+                newOption.value = group?.uniqueName;
+                newOption.additional = group;
+                parents.push(newOption);
+                if (group?.childStockGroups?.length > 0) {
+                    this.arrangeStockGroups(group?.childStockGroups, parents);
+                }
+            }
+        });
+    }
+
+    /**
+     * Generates the unique name based on name
+     *
+     * @memberof InventoryCreateUpdateGroupComponent
+     */
+    public generateUniqueName(): void {
+        let val: string = this.groupForm.controls['name']?.value;
+        val = uniqueNameInvalidStringReplace(val);
+
+        if (val) {
+            this.groupForm?.patchValue({ uniqueName: val });
+        } else {
+            this.groupForm?.patchValue({ uniqueName: '' });
+        }
+    }
+
+    /**
+ * Resets the group form
+ *
+ * @memberof InventoryCreateUpdateGroupComponent
+ */
+    public resetGroupForm(): void {
+        this.groupForm.reset();
+        this.groupForm?.patchValue({ showCodeType: "hsn" });
+        this.groupForm?.patchValue({ parentStockGroupUniqueName: "" });
+        this.changeDetection.detectChanges();
+
+    }
+
+    /**
+    * This will use for set hsn/sac value default
+    *
+    * @param {*} transaction
+    * @memberof VoucherComponent
+    */
+    public onChangeHsnSacType(): void {
+        console.log(this.groupForm.get['showCodeType']?.value);
+        console.log(this.groupForm.get('showCodeType')?.value);
+
+        setTimeout(() => {
+            if (this.groupForm.get('showCodeType')?.value === 'hsn') {
+                this.groupForm.controls['hsnNumber'].patchValue(cloneDeep(this.groupForm.get('sacNumber').value));
+                this.groupForm.controls['hsnNumber'].patchValue(null);
+                this.groupForm.get['sacNumber'].value = null;
+            } else {
+                this.groupForm.get['sacNumber'].value = cloneDeep(this.groupForm.get('hsnNumber').value);;
+                this.groupForm.get['showCodeType'].value = null;
+            }
+            this.changeDetection.detectChanges();
+        }, 100);
+    }
+
+    /**
+ * Validates the unique name
+ *
+ * @memberof InventoryCreateUpdateGroupComponent
+ */
+    public validateUniqueName(): void {
+        if (this.groupForm.get('uniqueName')?.value) {
+            let value = uniqueNameInvalidStringReplace(this.groupForm.get('uniqueName')?.value);
+            this.groupForm?.patchValue({ uniqueName: value });
+        }
+    }
+
+    /**
+     * Hook for component destroy
+     *
+     * @memberof InventoryCreateUpdateGroupComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
+    }
+
+    /**
+   * Gets the group details
+   *
+   * @private
+   * @memberof InventoryCreateUpdateGroupComponent
+   */
+    private getGroupDetails(): void {
+        this.inventoryService.getStockGroup(this.groupUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === "success" && response?.body) {
+                this.groupForm?.patchValue({
+                    name: response.body.name,
+                    uniqueName: response.body.uniqueName,
+                    showCodeType: response.body.hsnNumber ? "hsn" : "sac",
+                    hsnNumber: response.body.hsnNumber,
+                    sacNumber: response.body.sacNumber,
+                    parentStockGroupUniqueName: response.body.parentStockGroup?.uniqueName,
+                    isSubGroup: [(response.body.parentStockGroup?.uniqueName) ? true : false],
+                });
+            }
+        });
+    }
 }
+
