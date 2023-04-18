@@ -1,7 +1,7 @@
 <div
     class="relative"
     appTranslate
-    [file]="'inventory'"
+    [file]="'inventory/stock-group'"
     (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
 >
@@ -10,21 +10,25 @@
         <label class="page-title-inventory"> Create Stock group </label>
 
         <div class="inventory-header-right">
-            <button mat-icon-button class="ml-3" style="font-size: 25px" >
+            <button mat-icon-button class="ml-3" style="font-size: 25px" [routerLink]="['stock-group/list-group']">
+                ×
             </button>
         </div>
     </div> -->
+    <!-- <form class="form-body" #groupCreateEditForm="ngForm" novalidate autocomplete="off"> -->
 
-    <form autocomplete="off" novalidate name="groupForm" [formGroup]="groupForm" (ngSubmit)="saveGroup()">
+    <form
+        autocomplete="off"
+        novalidate
+        name="groupForm"
+        [formGroup]="groupForm"
+        class="new-account-form"
+        (ngSubmit)="saveGroup()"
+    >
         <div class="container-fluid">
             <div class="create-group-page">
                 <div class="row">
                     <div class="col-xl-4 col-lg-6 col-md-6">
-                        <div class="create-group-form">
-                            <!-- <p class="mr-b15 text-gray font-14">
-                                Lorem Ipsum dummy text will come here about create stock.
-                            </p> -->
-                        </div>
                         <div class="row mr-b15">
                             <div class="col-sm-6">
                                 <label>Group Name <span class="red-text">*</span></label>
@@ -32,12 +36,14 @@
                             <div class="col-sm-6">
                                 <text-field
                                     [cssClass]="'form-control'"
-                                    name="name"
-                                    id="name"
-                                    placeholder="Enter Group Name"
+                                    [name]="'productName'"
+                                    [placeholder]="'Enter Group Name'"
+                                    [type]="'text'"
                                     formControlName="name"
+                                    [required]="true"
                                     (change)="generateUniqueName()"
-                                ></text-field>
+                                >
+                                </text-field>
                             </div>
                         </div>
                         <div class="row mr-b15">
@@ -47,80 +53,65 @@
                             <div class="col-sm-6">
                                 <text-field
                                     [cssClass]="'form-control'"
-                                    name="unique-name"
-                                    id="unique-name"
-                                    placeholder="Unique Name"
+                                    [name]="'uniqueName'"
+                                    [placeholder]="'Unique Name'"
                                     formControlName="uniqueName"
-                                    (blur)="validateUniqueName()"
-                                ></text-field>
+                                    [type]="'text'"
+                                >
+                                </text-field>
                             </div>
                         </div>
 
                         <div class="row mr-b15">
                             <div class="col-sm-6">
                                 <mat-radio-group
-                                    aria-label="Select an option"
-                                    class="d-flex"
+                                    color="primary"
+                                    name="groupForm.showCodeType"
                                     formControlName="showCodeType"
+                                    (change)="onChangeHsnSacType()"
                                 >
-                                    <mat-radio-button
-                                        color="primary"
-                                        name="showCodeType"
-                                        id="hsnCodeType"
-                                        value="hsn"
-                                        (change)="changeCodeType()"
-                                        class="font-size-14 mr-3"
-                                        >HSN Code
-                                    </mat-radio-button>
-                                    <mat-radio-button
-                                        color="primary"
-                                        name="showCodeType"
-                                        id="sacCodeType"
-                                        value="sac"
-                                        class="font-size-14"
-                                        (change)="changeCodeType()"
-                                        >SAC Code
-                                    </mat-radio-button>
+                                    <mat-radio-button id="hsn" [value]="'hsn'">HSN Code</mat-radio-button>
+                                    <mat-radio-button id="sac" [value]="'sac'">SAC Code</mat-radio-button>
                                 </mat-radio-group>
                             </div>
                             <div class="col-sm-6">
                                 <div *ngIf="groupForm.get('showCodeType')?.value === 'hsn'">
                                     <text-field
                                         [cssClass]="'form-control'"
-                                        name="hsn-code"
-                                        id="hsn-code"
-                                        placeholder="Enter HSN Code"
+                                        [name]="'hsnCode'"
+                                        [placeholder]="'Enter HSN Code'"
+                                        [type]="'number'"
                                         formControlName="hsnNumber"
-                                        decimalDigitsDirective
-                                        maxlength="10"
-                                    ></text-field>
+                                        [max]="10"
+                                        [allowDecimalDigitsOnly]="true"
+                                    >
+                                    </text-field>
                                 </div>
                                 <div *ngIf="groupForm.get('showCodeType')?.value === 'sac'">
                                     <text-field
                                         [cssClass]="'form-control'"
-                                        name="sac-code"
-                                        id="sac-code"
-                                        placeholder="Enter SAC Code"
+                                        [name]="'sacCode'"
+                                        [placeholder]="'Enter SAC Code'"
+                                        [type]="'number'"
                                         formControlName="sacNumber"
-                                        decimalDigitsDirective
-                                        maxlength="10"
-                                    ></text-field>
+                                        [max]="10"
+                                        [allowDecimalDigitsOnly]="true"
+                                    >
+                                    </text-field>
                                 </div>
                             </div>
                         </div>
 
                         <div class="row mr-t15">
                             <div class="col-sm-6">
-                                <label>&nbsp;</label>
+                                <label>Is it a sub group?:</label>
                             </div>
                             <div class="col-sm-6">
-                                <mat-checkbox
-                                    color="primary"
-                                    formControlName="isSubGroup"
-                                    name="sub-group"
-                                    id="sub-group"
-                                    >Is it Sub-group?
-                                </mat-checkbox>
+                                <mat-slide-toggle color="primary" name="isSubGroup" formControlName="isSubGroup">
+                                    <span class="pull-left">{{
+                                        groupForm.get("isSubGroup").value ? "On" : "Off"
+                                    }}</span>
+                                </mat-slide-toggle>
                             </div>
                         </div>
                         <div class="row mr-t15">
@@ -128,16 +119,17 @@
                                 <label>Parent Group</label>
                             </div>
                             <div class="col-sm-6">
-                                <sh-select
-                                    [options]="groups$ | async"
-                                    formControlName="parentStockGroupUniqueName"
-                                    [disabled]="!groupForm.get('isSubGroup')?.value"
-                                    [placeholder]="'Select Parent Group'"
-                                    [multiple]="false"
-                                    [ItemHeight]="33"
-                                    [forceClearReactive]="forceClear$ | async"
-                                    [isRequired]="true"
-                                ></sh-select>
+                                <select-field
+                                    [cssClass]="'form-control'"
+                                    [readonly]="!groupForm.get('isSubGroup')?.value"
+                                    [name]="'parentStockGroupUniqueName'"
+                                    [placeholder]="'Select Group'"
+                                    [options]="stockGroups"
+                                    (selectedOption)="
+                                        stockGroupUniqueName = $event?.value; stockGroupName = $event.label
+                                    "
+                                    [defaultValue]="stockGroupName"
+                                ></select-field>
                             </div>
                         </div>
                         <div class="row mr-t15">
@@ -145,8 +137,13 @@
                                 <label>Tax</label>
                             </div>
                             <div class="col-sm-6">
-                                <!-- [(value)]="groupForm.get('taxes').taxes" -->
-                                <mat-select name="taxes" class="form-control" placeholder="Select Tax" multiple>
+                                <mat-select
+                                    name="taxes"
+                                    class="form-control"
+                                    placeholder="Select Tax"
+                                    formControlName="taxes"
+                                    multiple
+                                >
                                     <mat-option
                                         *ngFor="let tax of taxes"
                                         [value]="tax?.uniqueName"
@@ -172,33 +169,27 @@
         <div class="create-group-footer sticky-footer">
             <div class="footer-wrapper">
                 <div class="button-group">
-                    <button
-                        *ngIf="!groupUniqueName"
-                        id="clear-btn"
-                        type="button"
-                        mat-raised-button
-                        class="btn-primary btn-left-right-round min-width-100"
-                        (click)="resetGroupForm()"
-                    >
+                    <button *ngIf="!groupUniqueName" mat-flat-button class="clear-btn" (click)="resetGroupForm()">
                         Clear
+                    </button>
+                    <button mat-flat-button class="create-inventory-btn" [disabled]="groupForm.invalid">
+                        {{ groupUniqueName ? "Update Group" : "Create Group" }}
                     </button>
                     <button
                         *ngIf="groupUniqueName"
-                        id="clear-btn"
                         mat-raised-button
-                        type="button"
-                        class="btn-primary btn-left-right-round min-width-100"
-                        [routerLink]="'/pages/new-inventory/stock-group/list'"
+                        class="btn-primary min-width-100"
+                        (click)="cancelEdit()"
                     >
                         Cancel
                     </button>
                     <button
+                        *ngIf="groupUniqueName"
                         mat-raised-button
-                        id="create-group-btn"
-                        [disabled]="groupForm?.invalid || isFileUploading"
-                        class="btn-success btn-left-right-round"
+                        class="btn-danger min-width-100"
+                        (click)="deleteGroup()"
                     >
-                        {{ groupUniqueName ? "Update Group" : "Create Group" }}
+                        Delete
                     </button>
                 </div>
             </div>

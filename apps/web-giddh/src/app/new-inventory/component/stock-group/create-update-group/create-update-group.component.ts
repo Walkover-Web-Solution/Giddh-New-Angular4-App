@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ChangeDetectionStrategy, Component, EventEmitter, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
@@ -22,10 +22,10 @@ import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interfac
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class InventoryCreateUpdateGroupComponent implements OnInit, OnDestroy {
+    /** Instance of stock create/edit form */
+    @ViewChild('groupCreateEditForm', { static: false }) public groupCreateEditForm: NgForm;
     /* This will store image path */
     public imgPath: string = '';
-    /** Form Group for group form */
-    public groupForm: FormGroup;
     /** Observable to hold stock groups */
     public groups$: Observable<IOption[]>;
     /* This will clear the select value in sh-select */
@@ -48,6 +48,25 @@ export class InventoryCreateUpdateGroupComponent implements OnInit, OnDestroy {
     public groupUniqueName: string = "";
     /* Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Object of group form */
+    public groupForm: any = {
+        name: null,
+        uniqueName: null,
+        showCodeType: 'hsn',
+        hsnNumber: null,
+        sacNumber: null,
+        isSubGroup: null,
+        parentStockGroupUniqueName: null,
+        taxes: null,
+    };
+    /** Stock groups list */
+    public stockGroups: IOption[] = [];
+    /** Holds stock type from url */
+    private stockType: string = "";
+    /** Holds stock group unique name */
+    public stockGroupUniqueName: string = "";
+    /** Holds stock group name */
+    public stockGroupName: string = "";
 
     constructor(
         private store: Store<AppState>,
@@ -58,11 +77,11 @@ export class InventoryCreateUpdateGroupComponent implements OnInit, OnDestroy {
     ) {
         this.sessionId$ = this.store.pipe(select(state => state.session.user.session.id), takeUntil(this.destroyed$));
         this.companyUniqueName$ = this.store.pipe(select(state => state.session.companyUniqueName), takeUntil(this.destroyed$));
-        this.initGroupForm();
 
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             if (params && params['groupUniqueName']) {
                 this.groupUniqueName = params['groupUniqueName'];
+                this.stockType = params?.type?.toUpperCase();
                 this.getGroupDetails();
             } else {
                 this.groupUniqueName = "";
@@ -77,7 +96,7 @@ export class InventoryCreateUpdateGroupComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
-        this.getParentGroups();
+        this.getStockGroups();
     }
 
     /**
@@ -90,41 +109,19 @@ export class InventoryCreateUpdateGroupComponent implements OnInit, OnDestroy {
         this.destroyed$.complete();
     }
 
-    /**
-     * Initializing the group form
-     *
-     * @private
-     * @memberof InventoryCreateUpdateGroupComponent
-     */
-    private initGroupForm(): void {
-        this.groupForm = this.formBuilder.group({
-            name: ['', Validators.required],
-            uniqueName: ['', Validators.required],
-            showCodeType: ['hsn'],
-            hsnNumber: [''],
-            sacNumber: [''],
-            parentStockGroupUniqueName: [''],
-            isSubGroup: [false],
-            outOfStockSelling: [false],
-            image: this.formBuilder.group({
-                uniqueName: [''],
-                name: ['']
-            })
-        });
-    }
 
-    /**
-     * Callback for change code type
-     *
-     * @memberof InventoryCreateUpdateGroupComponent
-     */
-    public changeCodeType(): void {
-        if (this.groupForm.get('showCodeType')?.value === 'hsn') {
-            this.groupForm?.patchValue({ sacNumber: "" });
-        } else if (this.groupForm.get('showCodeType')?.value === 'sac') {
-            this.groupForm?.patchValue({ hsnNumber: "" });
-        }
-    }
+    // /**
+    //  * Callback for change code type
+    //  *
+    //  * @memberof InventoryCreateUpdateGroupComponent
+    //  */
+    // public changeCodeType(): void {
+    //     if (this.groupForm.get('showCodeType')?.value === 'hsn') {
+    //         this.groupForm?.patchValue({ sacNumber: "" });
+    //     } else if (this.groupForm.get('showCodeType')?.value === 'sac') {
+    //         this.groupForm?.patchValue({ hsnNumber: "" });
+    //     }
+    // }
 
     /**
      * Creates/updates the group
@@ -164,18 +161,58 @@ export class InventoryCreateUpdateGroupComponent implements OnInit, OnDestroy {
         }
     }
 
+    // /**
+    //  * Gets the parent groups
+    //  *
+    //  * @private
+    //  * @memberof InventoryCreateUpdateGroupComponent
+    //  */
+    // private getParentGroups(): void {
+    //     this.inventoryService.GetGroupsWithStocksFlatten().pipe(takeUntil(this.destroyed$)).subscribe(data => {
+    //         if (data?.status === 'success') {
+    //             let groups: IOption[] = [];
+    //             this.arrangeGroups(data.body?.results, groups);
+    //             this.groups$ = observableOf(groups);
+    //         }
+    //     });
+    // }
     /**
-     * Gets the parent groups
-     *
-     * @private
-     * @memberof InventoryCreateUpdateGroupComponent
-     */
-    private getParentGroups(): void {
-        this.inventoryService.GetGroupsWithStocksFlatten().pipe(takeUntil(this.destroyed$)).subscribe(data => {
-            if (data?.status === 'success') {
-                let groups: IOption[] = [];
-                this.arrangeGroups(data.body?.results, groups);
-                this.groups$ = observableOf(groups);
+ * Get stock groups
+ *
+ * @memberof StockCreateEditComponent
+ */
+    public getStockGroups(): void {
+        if (this.stockType === 'FIXEDASSETS') {
+            this.stockType = 'FIXED_ASSETS';
+        }
+        this.inventoryService.GetGroupsWithStocksFlatten(this.stockType).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === "success") {
+                let stockGroups: IOption[] = [];
+                this.arrangeStockGroups(response.body?.results, stockGroups);
+                this.stockGroups = stockGroups;
+            }
+        });
+    }
+
+    /**
+ * Arrange stock groups
+ *
+ * @private
+ * @param {IGroupsWithStocksHierarchyMinItem[]} groups
+ * @param {IOption[]} [parents=[]]
+ * @memberof StockCreateEditComponent
+ */
+    private arrangeStockGroups(groups: IGroupsWithStocksHierarchyMinItem[], parents: IOption[] = []): void {
+        groups.map(group => {
+            if (group) {
+                let newOption: IOption = { label: '', value: '', additional: {} };
+                newOption.label = group?.name;
+                newOption.value = group?.uniqueName;
+                newOption.additional = group;
+                parents.push(newOption);
+                if (group?.childStockGroups?.length > 0) {
+                    this.arrangeStockGroups(group?.childStockGroups, parents);
+                }
             }
         });
     }
