@@ -743,8 +743,12 @@
                                                                             currentCompanyBranches?.length > 2
                                                                         "
                                                                         [enableDynamicSearch]="true"
-                                                                        (selected)="selectAccount($event, txn)"
-                                                                        (onClear)="selectAccount($event, txn, true)"
+                                                                        (selected)="
+                                                                            selectAccount($event, txn, false, true)
+                                                                        "
+                                                                        (onClear)="
+                                                                            selectAccount($event, txn, true, true)
+                                                                        "
                                                                         [placeholder]="
                                                                             commonLocaleData?.app_select_accounts
                                                                         "
@@ -845,7 +849,7 @@
                                                                 }}"
                                                                 *ngIf="
                                                                     lc.showBankLedgerPanel &&
-                                                                    lc.currentBlankTxn?.id === txn.id &&
+                                                                    lc.selectedBankTxnUniqueName === txn.id &&
                                                                     txn.type === 'DEBIT'
                                                                 "
                                                             >
@@ -1014,8 +1018,12 @@
                                                                             currentOrganizationType === 'COMPANY' &&
                                                                             currentCompanyBranches?.length > 2
                                                                         "
-                                                                        (selected)="selectAccount($event, txn)"
-                                                                        (onClear)="selectAccount($event, txn, true)"
+                                                                        (selected)="
+                                                                            selectAccount($event, txn, false, true)
+                                                                        "
+                                                                        (onClear)="
+                                                                            selectAccount($event, txn, true, true)
+                                                                        "
                                                                         [isPaginationEnabled]="true"
                                                                         (scrollEnd)="handleScrollEnd()"
                                                                         (dynamicSearchedQuery)="
@@ -1131,7 +1139,7 @@
                                                                 }}"
                                                                 *ngIf="
                                                                     lc.showBankLedgerPanel &&
-                                                                    lc.currentBlankTxn?.id === txn.id &&
+                                                                    lc.selectedBankTxnUniqueName === txn.id &&
                                                                     txn.type === 'CREDIT'
                                                                 "
                                                             >
