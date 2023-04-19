@@ -105,10 +105,10 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
         if (this.permissionDataService.getData && this.permissionDataService.getData.length > 0) {
             this.permissionDataService.getData.forEach(f => {
                 if (f.name === 'LEDGER') {
-                    let isAdmin = some(f.permissions, (prm) => prm.code === 'UPDT');
-                    this.emailTypeSelected = isAdmin ? 'admin-detailed' : 'view-detailed';
-                    this.emailTypeMini = isAdmin ? 'admin-condensed' : 'view-condensed';
-                    this.emailTypeDetail = isAdmin ? 'admin-detailed' : 'view-detailed';
+                    let isAdmin = f.permissions?.filter((prm) => prm.code === 'UPDT');
+                    this.emailTypeSelected = isAdmin?.length ? 'admin-detailed' : 'view-detailed';
+                    this.emailTypeMini = isAdmin?.length ? 'admin-condensed' : 'view-condensed';
+                    this.emailTypeDetail = isAdmin?.length ? 'admin-detailed' : 'view-detailed';
                     this.emailTypeColumnar = 'columnar';
                     this.emailTypeBillToBill = 'billToBill';
                 }

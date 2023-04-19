@@ -324,11 +324,6 @@ Just like files, functions also follow the single responsibility princinple. Def
 
 10. Make data services responsible for XHR calls, local storage, stashing in memory, or any other data operations.
 
-
-
 ## Lifecycle Hooks
 
-
-
 Implement the lifecycle hook interfaces. Don't just use methods without implementing the Lifecycle Hook Interfaces.
-
