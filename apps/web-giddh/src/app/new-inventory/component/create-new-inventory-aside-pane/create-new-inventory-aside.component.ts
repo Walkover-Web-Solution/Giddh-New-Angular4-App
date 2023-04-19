@@ -53,11 +53,10 @@ export class CreateNewInventoryAsideComponent implements OnInit {
      * @param {*} [event]
      * @memberof CreateNewInventoryAsideComponent
      */
-    public createGroupToggleAsidePane(event?: any): void {
-        if (event) {
-            event.preventDefault();
+    public createNewByAsidePanel(type?: any): void {
+        if (type) {
+            this.router.navigate(['/pages', 'new-inventory', type, this.moduleType, 'create']);
         }
-        this.router.navigate(['/pages', 'new-inventory', this.moduleType, 'create']);
         this.asideMenuState = this.asideMenuState === 'out' ? 'in' : 'out';
         this.toggleBodyClass();
         this.closeAsidePane();

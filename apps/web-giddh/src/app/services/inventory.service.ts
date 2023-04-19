@@ -943,11 +943,11 @@ export class InventoryService {
      * @returns {Observable<BaseResponse<any, any>>}
      * @memberof InventoryService
      */
-    public createStockGroup(model: any): Observable<BaseResponse<any, any>> {
+    public createStockGroup(model: any, moduleType: string = ''): Observable<BaseResponse<any, any>> {
         const companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + INVENTORY_API.V5.CREATE_STOCK_GROUP;
-        url = url?.replace(":companyUniqueName", companyUniqueName);
-
+        url = url?.replace(":companyUniqueName", companyUniqueName)
+            ?.replace(':type', encodeURIComponent(moduleType));
         return this.http.post(url, model)
             .pipe(map((res) => {
                 let data: BaseResponse<any, any> = res;

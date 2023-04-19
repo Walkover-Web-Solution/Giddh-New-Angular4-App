@@ -1,4 +1,6 @@
 .create-group-page {
+    margin-top: 20px;
+
     .image-group {
         padding-top: 35px;
 
@@ -9,7 +11,29 @@
         }
     }
 }
+.delete-button {
+    color: var(--color-danger) !important;
+    border-color: var(--color-dark-fog) !important;
+}
 
+.clear-btn {
+    width: 89px;
+    height: 36px;
+    color: var(--color-primary-button-text);
+    margin-right: 15px;
+    border: 1px solid var(--color-secondary-button-border);
+}
+
+.create-inventory-btn {
+    width: 198px;
+    height: 36px;
+    color: var(--color-nonary-button-text);
+    background-color: var(--color-nonary-button-background);
+    margin-right: 15px;
+    &:disabled {
+        background-color: var(--color-success-disable);
+    }
+}
 .new-inventory-page-header {
     padding: 0 15px 15px;
     margin-bottom: 15px;
@@ -36,6 +60,8 @@
     display: flex;
     justify-content: flex-start;
     align-items: center;
+    position: static;
+    margin-top: 20px;
 
     .footer-wrapper {
         padding: 15px;
