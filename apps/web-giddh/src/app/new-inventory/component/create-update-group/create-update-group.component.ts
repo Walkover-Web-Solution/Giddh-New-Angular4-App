@@ -319,7 +319,7 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
     * This will use for set hsn/sac value default
     *
     * @param {*} transaction
-    * @memberof VoucherComponent
+    * @memberof CreateUpdateGroupComponent
     */
     public onChangeHsnSacType(): void {
         setTimeout(() => {
