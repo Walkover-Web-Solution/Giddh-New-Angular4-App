@@ -53,10 +53,9 @@ export class CreateNewInventoryAsideComponent implements OnInit {
      * @param {*} [event]
      * @memberof CreateNewInventoryAsideComponent
      */
-    public createNewByAsidePanel(event?: any): void {
-        let createType = event;
-        if (createType) {
-            this.router.navigate(['/pages', 'new-inventory', createType, this.moduleType, 'create']);
+    public createNewByAsidePanel(type?: any): void {
+        if (type) {
+            this.router.navigate(['/pages', 'new-inventory', type, this.moduleType, 'create']);
         }
         this.asideMenuState = this.asideMenuState === 'out' ? 'in' : 'out';
         this.toggleBodyClass();
