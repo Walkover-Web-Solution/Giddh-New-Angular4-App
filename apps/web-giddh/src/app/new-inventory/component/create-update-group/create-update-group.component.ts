@@ -124,11 +124,11 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
     }
 
     /**
- * Prefill selected taxes
- *
- * @private
- * @memberof CreateUpdateGroupComponent
- */
+    * Prefill selected taxes
+    *
+    * @private
+    * @memberof CreateUpdateGroupComponent
+    */
     private checkSelectedTaxes(): void {
         if (this.taxes?.length > 0) {
             this.taxes?.forEach(tax => {
@@ -136,16 +136,17 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
                     this.selectTax(tax);
                 }
             });
+            this.changeDetection.detectChanges();
         }
     }
 
 
     /**
-     * Select tax
-     *
-     * @param {*} taxSelected
-     * @memberof CreateUpdateGroupComponent
-     */
+    * Select tax
+    *
+    * @param {*} taxSelected
+    * @memberof CreateUpdateGroupComponent
+    */
     public selectTax(taxSelected: any): void {
         let isSelected = this.selectedTaxes?.filter(selectedTax => selectedTax === taxSelected?.uniqueName);
 
@@ -221,19 +222,23 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
      */
     public saveGroup(): void {
         this.groupForm.controls['parentStockGroupUniqueName'].setValue(this.stockGroupUniqueName);
+        this.toggleLoader(true);
         if (this.groupUniqueName) {
             this.inventoryService.updateStockGroup(this.groupForm?.value, this.groupUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response?.status === "success") {
+                    this.toggleLoader(false);
                     this.toaster.clearAllToaster();
                     this.toaster.successToast("Stock group updated successfully.");
                 } else {
                     this.toaster.clearAllToaster();
                     this.toaster.errorToast(response?.message);
                 }
+                this.changeDetection.detectChanges();
             });
         } else {
-            this.inventoryService.createStockGroup(this.groupForm?.value).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            this.inventoryService.createStockGroup(this.groupForm?.value, this.stockType).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response?.status === "success") {
+                    this.toggleLoader(false);
                     this.resetGroupForm();
                     this.toaster.clearAllToaster();
                     this.toaster.successToast("Stock group created successfully.");
@@ -241,6 +246,7 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
                     this.toaster.clearAllToaster();
                     this.toaster.errorToast(response?.message);
                 }
+                this.changeDetection.detectChanges();
             });
         }
     }
@@ -353,8 +359,10 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
    * @memberof CreateUpdateGroupComponent
    */
     private getGroupDetails(): void {
+        this.toggleLoader(true);
         this.inventoryService.getStockGroup(this.groupUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success" && response?.body) {
+                this.toggleLoader(false);
                 this.stockGroupName = response.body.parentStockGroupNames;
                 this.groupForm?.patchValue({
                     name: response.body.name,
@@ -366,9 +374,7 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
                     isSubGroup: [(response.body.parentStockGroup?.uniqueName) ? true : false],
                     taxes: response.body.taxes
                 });
-                setTimeout(() => {
-                    this.changeDetection.detectChanges();
-                }, 100);
+                this.checkSelectedTaxes();
             }
         });
     }
@@ -424,7 +430,6 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
      */
     private toggleLoader(showLoader: boolean): void {
         this.showLoader = showLoader;
-        this.changeDetection.detectChanges();
     }
 
     /**

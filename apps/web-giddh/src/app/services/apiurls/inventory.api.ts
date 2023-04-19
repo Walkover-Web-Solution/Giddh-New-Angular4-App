@@ -67,7 +67,7 @@ export const INVENTORY_API = {
     DOWNLOAD_NEW_BRANCH_TRANSFER: 'company/:companyUniqueName/branch-transfer/download?fileType=base64',
     GET_UNIT_CODE_REGEX: 'ui/forms?formName=:formName&country=:country',
     V5: {
-        CREATE_STOCK_GROUP: COMMON_V5 + '/stock-group',
+        CREATE_STOCK_GROUP: COMMON_V5 + '/stock-group?type=:type',
         GET_STOCK_GROUP: COMMON_V5 + '/stock-group/:groupUniqueName',
         UPDATE_STOCK_GROUP: COMMON_V5 + '/stock-group/:groupUniqueName'
     },

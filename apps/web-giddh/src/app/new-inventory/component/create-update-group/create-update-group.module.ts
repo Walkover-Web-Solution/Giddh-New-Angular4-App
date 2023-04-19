@@ -7,6 +7,7 @@ import { MatRadioModule } from "@angular/material/radio";
 import { MatSelectModule } from "@angular/material/select";
 import { MatSlideToggleModule } from "@angular/material/slide-toggle";
 import { MatTabsModule } from "@angular/material/tabs";
+import { GiddhPageLoaderModule } from "../../../shared/giddh-page-loader/giddh-page-loader.module";
 import { HamburgerMenuModule } from "../../../shared/header/components/hamburger-menu/hamburger-menu.module";
 import { FormFieldsModule } from "../../../theme/form-fields/form-fields.module";
 import { ShSelectModule } from "../../../theme/ng-virtual-select/sh-select.module";
@@ -37,7 +38,8 @@ import { MainGroupComponent } from "./main-group.component";
         HamburgerMenuModule,
         MatButtonModule,
         ShSelectModule,
-        MatSlideToggleModule
+        MatSlideToggleModule,
+        GiddhPageLoaderModule
     ],
     exports: [
         CreateUpdateGroupComponent
