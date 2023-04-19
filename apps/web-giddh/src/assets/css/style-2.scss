@@ -616,6 +616,17 @@ $custom-typography: mat-typography-config(
     cursor: pointer;
 }
 
+.sales-purchase-info {
+    .unit-rates {
+        max-width: 130px !important;
+        min-width: 120px !important;
+    }
+
+    .unit-amount {
+        max-width: 120px !important;
+        min-width: 120px !important;
+    }
+}
 .report-th-column {
     max-width: 170px;
     min-width: 170px;
@@ -10066,13 +10077,11 @@ giddh-datepicker {
                 text-field,
                 select-field {
                     input {
-                        width: 320px;
                         border-radius: 2px !important;
                     }
                 }
 
                 mat-select {
-                    width: 320px;
                     border-radius: 2px !important;
                 }
 

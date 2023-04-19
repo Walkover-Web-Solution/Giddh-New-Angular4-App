@@ -305,13 +305,75 @@
     }
 }
 
-::ng-deep table.stock-table td input {
-    border: none;
-}
+table.stock-table {
+    table-layout: fixed;
 
-table.stock-table td,
-table.stock-table th {
-    padding: 7px 15px;
+    .table-heading-color {
+        color: var(--color-ledger-heading);
+    }
+
+    tr {
+        display: flex;
+
+        td,
+        th {
+            padding: 7px 10px;
+            display: inline-block;
+            border: 1px solid var(--color-secondary-input-bar-border);
+
+            &.archive {
+                max-width: 70px;
+                min-width: 70px;
+            }
+
+            &.sales-purchase-info {
+                max-width: 332px;
+                min-width: 332px;
+
+                select-field,
+                text-field {
+                    display: table-cell;
+                }
+            }
+
+            .icon-button-remove-sales {
+                width: 20px !important;
+            }
+
+            .icon-button-add-sales {
+                width: 40px !important;
+            }
+
+            &.variant-name-column {
+                max-width: 180px;
+                min-width: 180px;
+            }
+
+            &.unit-name {
+                max-width: 140px;
+                min-width: 140px;
+            }
+
+            &.opening-qty {
+                max-width: 140px;
+                min-width: 140px;
+            }
+
+            &.opening-amount {
+                max-width: 140px;
+                min-width: 140px;
+            }
+
+            &.sku-code {
+                max-width: 130px;
+                min-width: 130px;
+            }
+        }
+    }
+
+    table.stock-table td input {
+        border: none;
+    }
 }
 
 .combo-table.table,
@@ -345,7 +407,6 @@ table.stock-table th {
     }
 }
 
-.stock-table td,
 .combo-table tr,
 .combo-table th,
 .combo-table td,
@@ -365,7 +426,6 @@ table.stock-table th {
 }
 
 .combo-table th:first-child,
-.stock-table th:first-child,
 .bulk-create-table td:first-child {
     min-width: auto !important;
 }

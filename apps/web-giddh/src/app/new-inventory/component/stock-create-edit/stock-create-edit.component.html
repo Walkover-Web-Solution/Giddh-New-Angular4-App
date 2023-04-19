@@ -378,13 +378,19 @@
                                                                             [options]="purchaseAccounts"
                                                                             (selectedOption)="
                                                                                 stockForm.purchaseAccountDetails.accountUniqueName =
+                                                                                    $event?.value;
+                                                                                stockForm.variants[0].purchaseInformation.accountUniqueName =
                                                                                     $event?.value
                                                                             "
                                                                             [readonly]="!isPurchaseInformationEnabled"
                                                                             [defaultValue]="purchaseAccountName"
                                                                         ></select-field>
                                                                     </div>
-                                                                    <div class="col-sm-6 col-lg-5">
+                                                                    {{ isVariantAvailable }}
+                                                                    <div
+                                                                        class="col-sm-6 col-lg-5"
+                                                                        *ngIf="!isVariantAvailable"
+                                                                    >
                                                                         <label>Unit & Price </label>
                                                                     </div>
                                                                     <div
@@ -393,44 +399,52 @@
                                                                             pl-0
                                                                             mr-b15
                                                                         "
+                                                                        *ngIf="!isVariantAvailable"
                                                                     >
+                                                                        {{ stockForm | json }}
                                                                         <div
                                                                             class="row add-new-field mr-b15"
                                                                             *ngFor="
-                                                                                let purchaseUnitRates of stockForm
-                                                                                    ?.purchaseAccountDetails?.unitRates;
-                                                                                let i = index
+                                                                                let variantPurchaseUnitRate of stockForm
+                                                                                    ?.variants[0]?.purchaseInformation;
+                                                                                let j = index
                                                                             "
                                                                         >
                                                                             <div class="col-sm-6 col-6">
                                                                                 <select-field
-                                                                                    [cssClass]="'form-control'"
-                                                                                    [name]="'purchaseStockUnitCode' + i"
+                                                                                    [cssClass]="
+                                                                                        'form-control unit-rates'
+                                                                                    "
+                                                                                    [name]="'variantPurchaseUnit' + j"
                                                                                     [placeholder]="'Unit'"
                                                                                     [options]="stockUnits"
                                                                                     (selectedOption)="
-                                                                                        stockForm.purchaseAccountDetails.unitRates[
-                                                                                            i
-                                                                                        ].stockUnitUniqueName =
-                                                                                            $event?.value
+                                                                                        selectVariantSalesPurchaseUnit(
+                                                                                            variantPurchaseUnitRate,
+                                                                                            $event
+                                                                                        )
                                                                                     "
                                                                                     [readonly]="
                                                                                         !isPurchaseInformationEnabled
                                                                                     "
                                                                                     [defaultValue]="
-                                                                                        purchaseUnitRates.stockUnitName
+                                                                                        variantPurchaseUnitRate?.stockUnitName
                                                                                     "
                                                                                 ></select-field>
                                                                             </div>
                                                                             <div class="col-sm-6 col-6">
                                                                                 <text-field
-                                                                                    [cssClass]="'form-control'"
-                                                                                    [type]="'text'"
-                                                                                    [name]="'purchaseStockRate' + i"
+                                                                                    [cssClass]="
+                                                                                        'form-control text-right unit-amount'
+                                                                                    "
+                                                                                    [placeholder]="'0.00'"
+                                                                                    [name]="
+                                                                                        'variantPurchaseUnitRate' + j
+                                                                                    "
+                                                                                    [type]="'number'"
                                                                                     [placeholder]="'Rate'"
                                                                                     [(ngModel)]="
-                                                                                        stockForm.purchaseAccountDetails
-                                                                                            .unitRates[i].rate
+                                                                                        variantPurchaseUnitRate.rate
                                                                                     "
                                                                                     [readonly]="
                                                                                         !isPurchaseInformationEnabled
@@ -443,10 +457,15 @@
                                                                                 role="button"
                                                                                 class="icon-button-remove"
                                                                                 type="button"
-                                                                                (click)="deletePurchaseUnitPrice(i)"
+                                                                                (click)="
+                                                                                    deleteVariantPurchaseUnitPrice(
+                                                                                        stockForm.variants[0],
+                                                                                        j
+                                                                                    )
+                                                                                "
                                                                                 *ngIf="
-                                                                                    stockForm.purchaseAccountDetails
-                                                                                        .unitRates?.length > 1
+                                                                                    stockForm.variants[0]
+                                                                                        .purchaseInformation?.length > 1
                                                                                 "
                                                                                 [disabled]="
                                                                                     !isPurchaseInformationEnabled
@@ -460,11 +479,15 @@
                                                                                 role="button"
                                                                                 type="button"
                                                                                 disableRipple
-                                                                                (click)="addNewPurchaseUnitPrice()"
+                                                                                (click)="
+                                                                                    addNewVariantPurchaseUnitPrice(
+                                                                                        stockForm.variants[0]
+                                                                                    )
+                                                                                "
                                                                                 *ngIf="
-                                                                                    i ===
-                                                                                    stockForm.purchaseAccountDetails
-                                                                                        .unitRates?.length -
+                                                                                    j ===
+                                                                                    stockForm.variants[0]
+                                                                                        .purchaseInformation?.length -
                                                                                         1
                                                                                 "
                                                                                 [disabled]="
@@ -509,13 +532,19 @@
                                                                             [options]="salesAccounts"
                                                                             (selectedOption)="
                                                                                 stockForm.salesAccountDetails.accountUniqueName =
+                                                                                    $event?.value;
+                                                                                stockForm.variants[0].salesInformation.accountUniqueName =
                                                                                     $event?.value
                                                                             "
                                                                             [readonly]="!isSalesInformationEnabled"
                                                                             [defaultValue]="salesAccountName"
                                                                         ></select-field>
                                                                     </div>
-                                                                    <div class="col-sm-6 col-lg-5">
+                                                                    {{ isVariantAvailable }}
+                                                                    <div
+                                                                        class="col-sm-6 col-lg-5"
+                                                                        *ngIf="!isVariantAvailable"
+                                                                    >
                                                                         <label>Unit & Price </label>
                                                                     </div>
                                                                     <div
@@ -524,32 +553,33 @@
                                                                             pl-0
                                                                             mr-b15
                                                                         "
+                                                                        *ngIf="!isVariantAvailable"
                                                                     >
                                                                         <div
                                                                             class="row add-new-field mr-b15"
                                                                             *ngFor="
-                                                                                let salesUnitRates of stockForm
-                                                                                    ?.salesAccountDetails?.unitRates;
-                                                                                let i = index
+                                                                                let variantSalesUnitRate of stockForm
+                                                                                    ?.variants[0]?.salesInformation;
+                                                                                let j = index
                                                                             "
                                                                         >
                                                                             <div class="col-sm-6 col-6">
                                                                                 <select-field
                                                                                     [cssClass]="'form-control'"
-                                                                                    [name]="'salesStockUnitCode' + i"
+                                                                                    [name]="'variantSalesUnit' + j"
                                                                                     [placeholder]="'Unit'"
                                                                                     [options]="stockUnits"
                                                                                     (selectedOption)="
-                                                                                        stockForm.salesAccountDetails.unitRates[
-                                                                                            i
-                                                                                        ].stockUnitUniqueName =
-                                                                                            $event?.value
+                                                                                        selectVariantSalesPurchaseUnit(
+                                                                                            variantSalesUnitRate,
+                                                                                            $event
+                                                                                        )
                                                                                     "
                                                                                     [readonly]="
                                                                                         !isSalesInformationEnabled
                                                                                     "
                                                                                     [defaultValue]="
-                                                                                        salesUnitRates.stockUnitName
+                                                                                        variantSalesUnitRate?.stockUnitName
                                                                                     "
                                                                                 ></select-field>
                                                                             </div>
@@ -557,11 +587,11 @@
                                                                                 <text-field
                                                                                     [cssClass]="'form-control'"
                                                                                     [type]="'text'"
-                                                                                    [name]="'salesStockRate' + i"
+                                                                                    [name]="'variantSalesUnitRate' + j"
+                                                                                    [type]="'number'"
                                                                                     [placeholder]="'Rate'"
                                                                                     [(ngModel)]="
-                                                                                        stockForm.salesAccountDetails
-                                                                                            .unitRates[i].rate
+                                                                                        variantSalesUnitRate.rate
                                                                                     "
                                                                                     [readonly]="
                                                                                         !isSalesInformationEnabled
@@ -574,10 +604,15 @@
                                                                                 role="button"
                                                                                 class="icon-button-remove"
                                                                                 type="button"
-                                                                                (click)="deleteSalesUnitPrice(i)"
+                                                                                (click)="
+                                                                                    deleteVariantSalesUnitPrice(
+                                                                                        stockForm.variants[0],
+                                                                                        j
+                                                                                    )
+                                                                                "
                                                                                 *ngIf="
-                                                                                    stockForm.salesAccountDetails
-                                                                                        .unitRates?.length > 1
+                                                                                    stockForm.variants[0]
+                                                                                        .salesInformation?.length > 1
                                                                                 "
                                                                                 [disabled]="!isSalesInformationEnabled"
                                                                             >
@@ -589,11 +624,15 @@
                                                                                 role="button"
                                                                                 type="button"
                                                                                 disableRipple
-                                                                                (click)="addNewSalesUnitPrice()"
+                                                                                (click)="
+                                                                                    addNewVariantSalesUnitPrice(
+                                                                                        stockForm.variants[0]
+                                                                                    )
+                                                                                "
                                                                                 *ngIf="
-                                                                                    i ===
-                                                                                    stockForm.salesAccountDetails
-                                                                                        .unitRates?.length -
+                                                                                    j ===
+                                                                                    stockForm.variants[0]
+                                                                                        .salesInformation?.length -
                                                                                         1
                                                                                 "
                                                                                 [disabled]="!isSalesInformationEnabled"
@@ -827,16 +866,42 @@
                                                 <div class="table-responsive" *ngIf="stockForm.variants?.length > 0">
                                                     <table class="stock-table font-14" style="margin-left: 2px">
                                                         <tr>
-                                                            <th>Variant Name<span class="red-text">*</span></th>
-                                                            <th>Unit</th>
-                                                            <th class="text-right">Opening Quantity</th>
-                                                            <th class="text-right">Opening Amount</th>
-                                                            <th class="text-right">SKU Code</th>
-                                                            <th class="text-center">Archive</th>
+                                                            <th class="variant-name-column table-heading-color">
+                                                                Variant Name<span class="red-text">*</span>
+                                                            </th>
+                                                            <th class="unit-name table-heading-color">Unit</th>
+                                                            <th class="text-right opening-qty table-heading-color">
+                                                                Opening Quantity
+                                                            </th>
+                                                            <th class="text-right opening-amount table-heading-color">
+                                                                Opening Amount
+                                                            </th>
+                                                            <th class="sku-code table-heading-color">SKU Code</th>
+                                                            <th
+                                                                class="sales-purchase-info table-heading-color"
+                                                                *ngIf="isPurchaseInformationEnabled"
+                                                            >
+                                                                Purchase Unit Rates
+                                                            </th>
+                                                            <th
+                                                                class="sales-purchase-info table-heading-color"
+                                                                *ngIf="isSalesInformationEnabled"
+                                                            >
+                                                                Sales Unit Rates
+                                                            </th>
+                                                            <th class="text-center unit-name table-heading-color">
+                                                                Is Rate Tax Inclusive?
+                                                            </th>
+                                                            <th class="text-center archive table-heading-color">
+                                                                Archive
+                                                            </th>
                                                         </tr>
-                                                        <tr *ngFor="let variant of stockForm.variants; let i = index">
-                                                            <td>{{ variant.name }}</td>
-                                                            <td>
+                                                        <tr
+                                                            class="variant-row"
+                                                            *ngFor="let variant of stockForm.variants; let i = index"
+                                                        >
+                                                            <td class="variant-name-column">{{ variant.name }}</td>
+                                                            <td class="unit-name">
                                                                 <select-field
                                                                     [cssClass]="'form-control'"
                                                                     [name]="'variantUnit' + i"
@@ -850,7 +915,7 @@
                                                                     "
                                                                 ></select-field>
                                                             </td>
-                                                            <td>
+                                                            <td class="opening-qty">
                                                                 <text-field
                                                                     [cssClass]="'form-control text-right'"
                                                                     [placeholder]="'0.00'"
@@ -861,7 +926,7 @@
                                                                     [type]="'number'"
                                                                 ></text-field>
                                                             </td>
-                                                            <td>
+                                                            <td class="opening-amount">
                                                                 <text-field
                                                                     [cssClass]="'form-control text-right'"
                                                                     [placeholder]="'0.00'"
@@ -872,7 +937,7 @@
                                                                     [type]="'number'"
                                                                 ></text-field>
                                                             </td>
-                                                            <td>
+                                                            <td class="sku-code">
                                                                 <text-field
                                                                     [cssClass]="'form-control text-right'"
                                                                     [placeholder]="'-'"
@@ -881,7 +946,167 @@
                                                                     [type]="'text'"
                                                                 ></text-field>
                                                             </td>
-                                                            <td class="text-center">
+                                                            <td
+                                                                class="sales-purchase-info"
+                                                                *ngIf="isPurchaseInformationEnabled"
+                                                            >
+                                                                <ng-container
+                                                                    *ngFor="
+                                                                        let variantPurchaseUnitRate of variant?.purchaseInformation;
+                                                                        let j = index
+                                                                    "
+                                                                >
+                                                                    <div class="sales-purchase-wrapper d-flex">
+                                                                        <select-field
+                                                                            [cssClass]="'form-control unit-rates'"
+                                                                            [name]="'variantPurchaseUnit' + j"
+                                                                            [placeholder]="'Unit'"
+                                                                            [options]="stockUnits"
+                                                                            (selectedOption)="
+                                                                                selectVariantSalesPurchaseUnit(
+                                                                                    variantPurchaseUnitRate,
+                                                                                    $event
+                                                                                )
+                                                                            "
+                                                                            [defaultValue]="
+                                                                                variantPurchaseUnitRate?.stockUnitName
+                                                                            "
+                                                                        ></select-field>
+                                                                        <text-field
+                                                                            [cssClass]="
+                                                                                'form-control text-right unit-amount'
+                                                                            "
+                                                                            [placeholder]="'0.00'"
+                                                                            [name]="'variantPurchaseUnitRate' + j"
+                                                                            [(ngModel)]="variantPurchaseUnitRate.rate"
+                                                                            [type]="'number'"
+                                                                        ></text-field>
+                                                                        <button
+                                                                            mat-icon-button
+                                                                            role="button"
+                                                                            class="icon-button-remove-sales"
+                                                                            type="button"
+                                                                            (click)="
+                                                                                deleteVariantPurchaseUnitPrice(
+                                                                                    variant,
+                                                                                    j
+                                                                                )
+                                                                            "
+                                                                            *ngIf="
+                                                                                variant.purchaseInformation?.length > 1
+                                                                            "
+                                                                        >
+                                                                            <i class="icon-trash"></i>
+                                                                        </button>
+
+                                                                        <button
+                                                                            mat-icon-button
+                                                                            class="icon-button-add-sales"
+                                                                            role="button"
+                                                                            type="button"
+                                                                            disableRipple
+                                                                            (click)="
+                                                                                addNewVariantPurchaseUnitPrice(variant)
+                                                                            "
+                                                                            *ngIf="
+                                                                                j ===
+                                                                                variant.purchaseInformation?.length - 1
+                                                                            "
+                                                                        >
+                                                                            <span class="add-new-text-container">
+                                                                                <i class="icon-plus"></i>
+                                                                            </span>
+                                                                        </button>
+                                                                    </div>
+                                                                </ng-container>
+                                                            </td>
+                                                            <td
+                                                                class="sales-purchase-info"
+                                                                *ngIf="isSalesInformationEnabled"
+                                                            >
+                                                                <ng-container
+                                                                    *ngFor="
+                                                                        let variantSalesUnitRate of variant?.salesInformation;
+                                                                        let j = index
+                                                                    "
+                                                                >
+                                                                    <div class="sales-purchase-wrapper d-flex">
+                                                                        <select-field
+                                                                            [cssClass]="'form-control unit-rates'"
+                                                                            [name]="'variantSalesUnit' + j"
+                                                                            [placeholder]="'Unit'"
+                                                                            [options]="stockUnits"
+                                                                            (selectedOption)="
+                                                                                selectVariantSalesPurchaseUnit(
+                                                                                    variantSalesUnitRate,
+                                                                                    $event
+                                                                                )
+                                                                            "
+                                                                            [defaultValue]="
+                                                                                variantSalesUnitRate?.stockUnitName
+                                                                            "
+                                                                        ></select-field>
+                                                                        <text-field
+                                                                            [cssClass]="
+                                                                                'form-control text-right unit-amount'
+                                                                            "
+                                                                            [placeholder]="'0.00'"
+                                                                            [name]="'variantSalesUnitRate' + j"
+                                                                            [(ngModel)]="variantSalesUnitRate.rate"
+                                                                            [type]="'number'"
+                                                                        ></text-field>
+                                                                        <button
+                                                                            mat-icon-button
+                                                                            role="button"
+                                                                            class="icon-button-remove-sales"
+                                                                            type="button"
+                                                                            (click)="
+                                                                                deleteVariantSalesUnitPrice(variant, j)
+                                                                            "
+                                                                            *ngIf="variant.salesInformation?.length > 1"
+                                                                        >
+                                                                            <i class="icon-trash"></i>
+                                                                        </button>
+
+                                                                        <button
+                                                                            mat-icon-button
+                                                                            class="icon-button-add-sales"
+                                                                            role="button"
+                                                                            type="button"
+                                                                            disableRipple
+                                                                            (click)="
+                                                                                addNewVariantSalesUnitPrice(variant)
+                                                                            "
+                                                                            *ngIf="
+                                                                                j ===
+                                                                                variant.salesInformation?.length - 1
+                                                                            "
+                                                                        >
+                                                                            <span class="add-new-text-container">
+                                                                                <i class="icon-plus"></i>
+                                                                            </span>
+                                                                        </button>
+                                                                    </div>
+                                                                </ng-container>
+                                                            </td>
+                                                            <td class="text-center unit-name">
+                                                                <mat-checkbox
+                                                                    color="primary"
+                                                                    name="variantSalesTaxInclusive{{ i }}"
+                                                                    [(ngModel)]="variant.salesTaxInclusive"
+                                                                    [matTooltip]="'Is Sales Rate Tax Inclusive?'"
+                                                                    matTooltipPosition="above"
+                                                                ></mat-checkbox>
+                                                                <mat-checkbox
+                                                                    class="mr-l2"
+                                                                    color="primary"
+                                                                    name="variantPurchaseTaxInclusive{{ i }}"
+                                                                    [(ngModel)]="variant.purchaseTaxInclusive"
+                                                                    [matTooltip]="'Is Purchase Rate Tax Inclusive?'"
+                                                                    matTooltipPosition="above"
+                                                                ></mat-checkbox>
+                                                            </td>
+                                                            <td class="text-center archive">
                                                                 <mat-checkbox
                                                                     color="primary"
                                                                     name="variantArchive{{ i }}"
