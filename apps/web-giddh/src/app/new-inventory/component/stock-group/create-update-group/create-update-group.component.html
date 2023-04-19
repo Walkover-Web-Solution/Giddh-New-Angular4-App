@@ -15,8 +15,8 @@
             </button>
         </div>
     </div>
-    <form class="form-body" #groupCreateEditForm="ngForm" novalidate autocomplete="off">
-        <!-- <form autocomplete="off" novalidate name="groupForm" [formGroup]="groupForm" (ngSubmit)="saveGroup()"> -->
+
+    <form autocomplete="off" novalidate name="groupForm" [formGroup]="groupForm" (ngSubmit)="saveGroup()">
         <div class="container-fluid">
             <div class="create-group-page">
                 <div class="row">
@@ -33,13 +33,12 @@
                             <div class="col-sm-6">
                                 <text-field
                                     [cssClass]="'form-control'"
-                                    [name]="'productName'"
-                                    [placeholder]="'Enter Group Name'"
-                                    [type]="'text'"
-                                    [(ngModel)]="groupForm.name"
-                                    [required]="true"
-                                >
-                                </text-field>
+                                    name="name"
+                                    id="name"
+                                    placeholder="Enter Group Name"
+                                    formControlName="name"
+                                    (change)="generateUniqueName()"
+                                ></text-field>
                             </div>
                         </div>
                         <div class="row mr-b15">
@@ -49,42 +48,63 @@
                             <div class="col-sm-6">
                                 <text-field
                                     [cssClass]="'form-control'"
-                                    [name]="'uniqueName'"
-                                    [placeholder]="'Unique Name'"
-                                    [type]="'text'"
-                                    [(ngModel)]="groupForm.uniqueName"
+                                    name="unique-name"
+                                    id="unique-name"
+                                    placeholder="Unique Name"
+                                    formControlName="uniqueName"
+                                    (blur)="validateUniqueName()"
                                 ></text-field>
                             </div>
                         </div>
 
                         <div class="row mr-b15">
                             <div class="col-sm-6">
-                                <mat-radio-group color="primary" name="fileType" [(ngModel)]="groupForm.showCodeType">
-                                    <mat-radio-button id="hsn" [value]="'hsn'">HSN Code</mat-radio-button>
-                                    <mat-radio-button id="sac" [value]="'sac'">SAC Code</mat-radio-button>
+                                <mat-radio-group
+                                    aria-label="Select an option"
+                                    class="d-flex"
+                                    formControlName="showCodeType"
+                                >
+                                    <mat-radio-button
+                                        color="primary"
+                                        name="showCodeType"
+                                        id="hsnCodeType"
+                                        value="hsn"
+                                        (change)="changeCodeType()"
+                                        class="font-size-14 mr-3"
+                                        >HSN Code
+                                    </mat-radio-button>
+                                    <mat-radio-button
+                                        color="primary"
+                                        name="showCodeType"
+                                        id="sacCodeType"
+                                        value="sac"
+                                        class="font-size-14"
+                                        (change)="changeCodeType()"
+                                        >SAC Code
+                                    </mat-radio-button>
                                 </mat-radio-group>
                             </div>
                             <div class="col-sm-6">
-                                <div *ngIf="groupForm.showCodeType === 'hsn'">
+                                <div *ngIf="groupForm.get('showCodeType')?.value === 'hsn'">
                                     <text-field
                                         [cssClass]="'form-control'"
-                                        [name]="'hsnCode'"
-                                        [placeholder]="'Enter HSN Code'"
-                                        [type]="'number'"
-                                        [(ngModel)]="groupForm.hsnNumber"
-                                        maxlength="10"
+                                        name="hsn-code"
+                                        id="hsn-code"
+                                        placeholder="Enter HSN Code"
+                                        formControlName="hsnNumber"
                                         decimalDigitsDirective
+                                        maxlength="10"
                                     ></text-field>
                                 </div>
-                                <div *ngIf="groupForm.showCodeType === 'sac'">
+                                <div *ngIf="groupForm.get('showCodeType')?.value === 'sac'">
                                     <text-field
                                         [cssClass]="'form-control'"
-                                        [name]="'sacCode'"
-                                        [placeholder]="'Enter SAC Code'"
-                                        [type]="'number'"
-                                        [(ngModel)]="groupForm.sacNumber"
-                                        [max]="10"
-                                        [allowDecimalDigitsOnly]="true"
+                                        name="sac-code"
+                                        id="sac-code"
+                                        placeholder="Enter SAC Code"
+                                        formControlName="sacNumber"
+                                        decimalDigitsDirective
+                                        maxlength="10"
                                     ></text-field>
                                 </div>
                             </div>
@@ -95,18 +115,13 @@
                                 <label>&nbsp;</label>
                             </div>
                             <div class="col-sm-6">
-                                <div class="pd-b2 clearfix">
-                                    <label class="w125">Is it a sub group?:</label>
-                                    <label class="radio-inline p-0">
-                                        <mat-slide-toggle
-                                            color="primary"
-                                            name="sort"
-                                            [(ngModel)]="groupForm.isSubGroup"
-                                        >
-                                            <span class="pull-left">{{ groupForm.isSubGroup ? "On" : "Off" }}</span>
-                                        </mat-slide-toggle>
-                                    </label>
-                                </div>
+                                <mat-checkbox
+                                    color="primary"
+                                    formControlName="isSubGroup"
+                                    name="sub-group"
+                                    id="sub-group"
+                                    >Is it Sub-group?
+                                </mat-checkbox>
                             </div>
                         </div>
                         <div class="row mr-t15">
@@ -114,16 +129,16 @@
                                 <label>Parent Group</label>
                             </div>
                             <div class="col-sm-6">
-                                <select-field
-                                    [cssClass]="'form-control'"
-                                    [name]="'stockGroup'"
-                                    [placeholder]="'Select Group'"
-                                    [options]="stockGroups"
-                                    (selectedOption)="
-                                        stockGroupUniqueName = $event?.value; stockGroupName = $event.label
-                                    "
-                                    [defaultValue]="stockGroupName"
-                                ></select-field>
+                                <sh-select
+                                    [options]="groups$ | async"
+                                    formControlName="parentStockGroupUniqueName"
+                                    [disabled]="!groupForm.get('isSubGroup')?.value"
+                                    [placeholder]="'Select Parent Group'"
+                                    [multiple]="false"
+                                    [ItemHeight]="33"
+                                    [forceClearReactive]="forceClear$ | async"
+                                    [isRequired]="true"
+                                ></sh-select>
                             </div>
                         </div>
                         <div class="row mr-t15">
