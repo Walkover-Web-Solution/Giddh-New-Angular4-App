@@ -54,8 +54,6 @@ export class CreateNewInventoryAsideComponent implements OnInit {
      * @memberof CreateNewInventoryAsideComponent
      */
     public createNewByAsidePanel(event?: any): void {
-        console.log(event);
-
         let createType = event;
         if (createType) {
             this.router.navigate(['/pages', 'new-inventory', createType, this.moduleType, 'create']);
