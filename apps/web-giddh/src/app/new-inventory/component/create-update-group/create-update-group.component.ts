@@ -1,18 +1,18 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, OnDestroy, OnInit, ViewChild } from "@angular/core";
-import { FormBuilder, FormControl, FormGroup, NgForm, Validators } from "@angular/forms";
-import { ActivatedRoute } from "@angular/router";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { MatDialog } from "@angular/material/dialog";
+import { ActivatedRoute, Router } from "@angular/router";
 import { Store, select } from "@ngrx/store";
-import { UploadInput, UploaderOptions, UploadOutput } from "ngx-uploader";
-import { Observable, ReplaySubject, of as observableOf } from "rxjs";
-import { takeUntil, distinctUntilChanged } from "rxjs/operators";
+import { Observable, ReplaySubject } from "rxjs";
+import { takeUntil, distinctUntilChanged, take } from "rxjs/operators";
 import { CompanyActions } from "../../../actions/company.actions";
 import { cloneDeep, findIndex, forEach } from "../../../lodash-optimized";
-import { IForceClear } from "../../../models/api-models/Sales";
 import { IGroupsWithStocksHierarchyMinItem } from "../../../models/interfaces/groups-with-stocks.interface";
 import { InventoryService } from "../../../services/inventory.service";
 import { ToasterService } from "../../../services/toaster.service";
 import { uniqueNameInvalidStringReplace } from "../../../shared/helpers/helperFunctions";
 import { AppState } from "../../../store";
+import { ConfirmModalComponent } from "../../../theme/new-confirm-modal/confirm-modal.component";
 import { IOption } from "../../../theme/ng-virtual-select/sh-options.interface";
 
 
@@ -23,41 +23,16 @@ import { IOption } from "../../../theme/ng-virtual-select/sh-options.interface";
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
-    /** Instance of stock create/edit form */
-    @ViewChild('groupCreateEditForm', { static: false }) public groupCreateEditForm: NgForm;
     /* This will store image path */
     public imgPath: string = '';
-    /** Observable to hold stock groups */
-    public groups$: Observable<IOption[]>;
-    /* This will clear the select value in sh-select */
-    public forceClear$: Observable<IForceClear> = observableOf({ status: false });
-    /** Holds input for file upload */
-    public uploadInput: EventEmitter<UploadInput> = new EventEmitter<UploadInput>();
-    /** True if file upload is in progress */
-    public isFileUploading: boolean = false;
-    /** This holds session id */
-    public sessionId$: Observable<string>;
     /** This holds company  */
     public companyUniqueName$: Observable<string>;
     /* This will hold local JSON data */
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
-    /** Options for file upload */
-    public fileUploadOptions: UploaderOptions = { concurrency: 0 };
     /* Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    /** Object of group form */
-    // public groupForm: any = {
-    //     name: null,
-    //     uniqueName: null,
-    //     showCodeType: 'hsn',
-    //     hsnNumber: null,
-    //     sacNumber: null,
-    //     isSubGroup: null,
-    //     parentStockGroupUniqueName: null,
-    //     taxes: null,
-    // };
     /** Stock groups list */
     public stockGroups: IOption[] = [];
     /** Holds stock type from url */
@@ -76,7 +51,8 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
     public groupUniqueName: string = "";
     /** Form Group for group form */
     public groupForm: FormGroup;
-
+    /** True if loader is visible */
+    public showLoader: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -86,42 +62,57 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
         private toaster: ToasterService,
         private route: ActivatedRoute,
         private changeDetection: ChangeDetectorRef,
+        private router: Router,
+        private dialog: MatDialog
     ) {
-        this.sessionId$ = this.store.pipe(select(state => state.session.user.session.id), takeUntil(this.destroyed$));
         this.companyUniqueName$ = this.store.pipe(select(state => state.session.companyUniqueName), takeUntil(this.destroyed$));
         this.initGroupForm();
-
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             this.stockType = params?.type?.toUpperCase();
             if (params.groupUniqueName) {
-                this.stockGroupUniqueName = params.groupUniqueName;
                 this.groupUniqueName = params.groupUniqueName;
                 this.getGroupDetails();
             } else {
                 this.stockGroupUniqueName = "";
             }
         });
-        this.getStockGroups();
-        this.getTaxes();
-
     }
 
     /**
      * Hook for component initialization
      *
-     * @memberof InventoryCreateUpdateGroupComponent
+     * @memberof CreateUpdateGroupComponent
      */
     public ngOnInit(): void {
         this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
-        // this.resetForm(this.groupCreateEditForm);
-
+        this.getStockGroups();
+        this.getTaxes();
     }
 
     /**
- * Get taxes
- *
- * @memberof StockCreateEditComponent
- */
+    * Initializing the group form
+    *
+    * @private
+    * @memberof CreateUpdateGroupComponent
+    */
+    private initGroupForm(): void {
+        this.groupForm = this.formBuilder.group({
+            name: ['', Validators.required],
+            uniqueName: ['', Validators.required],
+            showCodeType: ['hsn'],
+            hsnNumber: [''],
+            sacNumber: [''],
+            parentStockGroupUniqueName: [''],
+            isSubGroup: [false],
+            taxes: null
+        });
+    }
+
+    /**
+    * Get taxes
+    *
+    * @memberof CreateUpdateGroupComponent
+    */
     public getTaxes(): void {
         this.store.dispatch(this.companyAction.getTax());
         this.store.pipe(select(state => state?.company?.taxes), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(response => {
@@ -136,7 +127,7 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
  * Prefill selected taxes
  *
  * @private
- * @memberof StockCreateEditComponent
+ * @memberof CreateUpdateGroupComponent
  */
     private checkSelectedTaxes(): void {
         if (this.taxes?.length > 0) {
@@ -153,7 +144,7 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
      * Select tax
      *
      * @param {*} taxSelected
-     * @memberof StockCreateEditComponent
+     * @memberof CreateUpdateGroupComponent
      */
     public selectTax(taxSelected: any): void {
         let isSelected = this.selectedTaxes?.filter(selectedTax => selectedTax === taxSelected?.uniqueName);
@@ -224,36 +215,14 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
     }
 
     /**
- * Initializing the group form
- *
- * @private
- * @memberof InventoryCreateUpdateGroupComponent
- */
-    private initGroupForm(): void {
-        this.groupForm = this.formBuilder.group({
-            name: ['', Validators.required],
-            uniqueName: ['', Validators.required],
-            showCodeType: ['hsn'],
-            hsnNumber: [''],
-            sacNumber: [''],
-            parentStockGroupUniqueName: [''],
-            isSubGroup: [false],
-            taxes: null
-        });
-    }
-
-    /**
      * Creates/updates the group
      *
-     * @memberof InventoryCreateUpdateGroupComponent
+     * @memberof CreateUpdateGroupComponent
      */
     public saveGroup(): void {
-        console.log(this.stockGroupUniqueName);
-        this.groupForm.get('parentStockGroupUniqueName').patchValue(this.stockGroupUniqueName);
-        console.log(this.groupForm);
-
+        this.groupForm.controls['parentStockGroupUniqueName'].setValue(this.stockGroupUniqueName);
         if (this.groupUniqueName) {
-            this.inventoryService.updateStockGroup(this.groupForm?.value, this.stockGroupUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            this.inventoryService.updateStockGroup(this.groupForm?.value, this.groupUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response?.status === "success") {
                     this.toaster.clearAllToaster();
                     this.toaster.successToast("Stock group updated successfully.");
@@ -276,12 +245,11 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
         }
     }
 
-
     /**
- * Get stock groups
- *
- * @memberof StockCreateEditComponent
- */
+    * Get stock groups
+    *
+    * @memberof CreateUpdateGroupComponent
+    */
     public getStockGroups(): void {
         if (this.stockType === 'FIXEDASSETS') {
             this.stockType = 'FIXED_ASSETS';
@@ -296,13 +264,13 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
     }
 
     /**
- * Arrange stock groups
- *
- * @private
- * @param {IGroupsWithStocksHierarchyMinItem[]} groups
- * @param {IOption[]} [parents=[]]
- * @memberof StockCreateEditComponent
- */
+     * Arrange stock groups
+     *
+     * @private
+     * @param {IGroupsWithStocksHierarchyMinItem[]} groups
+     * @param {IOption[]} [parents=[]]
+     * @memberof CreateUpdateGroupComponent
+     */
     private arrangeStockGroups(groups: IGroupsWithStocksHierarchyMinItem[], parents: IOption[] = []): void {
         groups.map(group => {
             if (group) {
@@ -321,7 +289,7 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
     /**
      * Generates the unique name based on name
      *
-     * @memberof InventoryCreateUpdateGroupComponent
+     * @memberof CreateUpdateGroupComponent
      */
     public generateUniqueName(): void {
         let val: string = this.groupForm.controls['name']?.value;
@@ -335,16 +303,16 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
     }
 
     /**
- * Resets the group form
- *
- * @memberof InventoryCreateUpdateGroupComponent
- */
+     * Resets the group form
+     *
+     * @memberof CreateUpdateGroupComponent
+     */
     public resetGroupForm(): void {
         this.groupForm.reset();
         this.groupForm?.patchValue({ showCodeType: "hsn" });
-        this.groupForm?.patchValue({ parentStockGroupUniqueName: "" });
+        this.stockGroupName = '';
+        this.stockGroupUniqueName = '';
         this.changeDetection.detectChanges();
-
     }
 
     /**
@@ -354,27 +322,23 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
     * @memberof VoucherComponent
     */
     public onChangeHsnSacType(): void {
-        console.log(this.groupForm.get['showCodeType']?.value);
-        console.log(this.groupForm.get('showCodeType')?.value);
-
         setTimeout(() => {
             if (this.groupForm.get('showCodeType')?.value === 'hsn') {
-                this.groupForm.controls['hsnNumber'].patchValue(cloneDeep(this.groupForm.get('sacNumber').value));
-                this.groupForm.controls['hsnNumber'].patchValue(null);
-                this.groupForm.get['sacNumber'].value = null;
+                this.groupForm.controls['hsnNumber'].setValue(cloneDeep(this.groupForm.get('sacNumber').value));
+                this.groupForm.controls['sacNumber'].setValue(null);
             } else {
-                this.groupForm.get['sacNumber'].value = cloneDeep(this.groupForm.get('hsnNumber').value);;
-                this.groupForm.get['showCodeType'].value = null;
+                this.groupForm.controls['sacNumber'].setValue(cloneDeep(this.groupForm.get('hsnNumber').value));
+                this.groupForm.controls['hsnNumber'].setValue(null);
             }
             this.changeDetection.detectChanges();
         }, 100);
     }
 
     /**
- * Validates the unique name
- *
- * @memberof InventoryCreateUpdateGroupComponent
- */
+     * Validates the unique name
+     *
+     * @memberof CreateUpdateGroupComponent
+     */
     public validateUniqueName(): void {
         if (this.groupForm.get('uniqueName')?.value) {
             let value = uniqueNameInvalidStringReplace(this.groupForm.get('uniqueName')?.value);
@@ -383,35 +347,94 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Hook for component destroy
-     *
-     * @memberof InventoryCreateUpdateGroupComponent
-     */
-    public ngOnDestroy(): void {
-        this.destroyed$.next(true);
-        this.destroyed$.complete();
-    }
-
-    /**
    * Gets the group details
    *
    * @private
-   * @memberof InventoryCreateUpdateGroupComponent
+   * @memberof CreateUpdateGroupComponent
    */
     private getGroupDetails(): void {
         this.inventoryService.getStockGroup(this.groupUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success" && response?.body) {
+                this.stockGroupName = response.body.parentStockGroupNames;
                 this.groupForm?.patchValue({
                     name: response.body.name,
                     uniqueName: response.body.uniqueName,
                     showCodeType: response.body.hsnNumber ? "hsn" : "sac",
                     hsnNumber: response.body.hsnNumber,
                     sacNumber: response.body.sacNumber,
-                    parentStockGroupUniqueName: response.body.parentStockGroup?.uniqueName,
+                    parentStockGroupUniqueName: response.body.parentStockGroupNames,
                     isSubGroup: [(response.body.parentStockGroup?.uniqueName) ? true : false],
+                    taxes: response.body.taxes
+                });
+                setTimeout(() => {
+                    this.changeDetection.detectChanges();
+                }, 100);
+            }
+        });
+    }
+
+    /**
+     *This will redirect to inventory list page
+     *
+     * @memberof CreateUpdateGroupComponent
+     */
+    public cancelEdit(): void {
+        this.router.navigate(['/pages/inventory']);
+    }
+
+    /**
+     *This will delete the stock group
+     *
+     * @memberof CreateUpdateGroupComponent
+     */
+    public deleteGroup(): void {
+        let dialogRef = this.dialog.open(ConfirmModalComponent, {
+            width: '40%',
+            data: {
+                title: this.commonLocaleData?.app_delete,
+                body: "Deleting this group will delete & un-link all the stocks under it. Are you sure you want to delete the group?",
+                permanentlyDeleteMessage: "It will be deleted permanently and will no longer be accessible from any other module.",
+                ok: this.commonLocaleData?.app_yes,
+                cancel: this.commonLocaleData?.app_no
+            }
+        });
+
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            if (response) {
+                this.toggleLoader(true);
+                this.inventoryService.DeleteStockGroup(this.groupUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                    this.toggleLoader(false);
+                    if (response?.status === "success") {
+                        this.toaster.showSnackBar("success", "Group deleted successfully.");
+                        this.cancelEdit();
+                    } else {
+                        this.toaster.showSnackBar("error", response?.message);
+                    }
                 });
             }
         });
+    }
+
+    /**
+     *Toggle loader
+     *
+     * @private
+     * @param {boolean} showLoader
+     * @memberof CreateUpdateGroupComponent
+     */
+    private toggleLoader(showLoader: boolean): void {
+        this.showLoader = showLoader;
+        this.changeDetection.detectChanges();
+    }
+
+    /**
+     * Hook for component destroy
+     *
+     * @memberof CreateUpdateGroupComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 }
 

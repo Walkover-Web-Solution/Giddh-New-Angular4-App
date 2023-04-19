@@ -11,6 +11,10 @@
         }
     }
 }
+.delete-button {
+    color: var(--color-danger) !important;
+    border-color: var(--color-dark-fog) !important;
+}
 
 .clear-btn {
     width: 89px;
@@ -25,7 +29,7 @@
     height: 36px;
     color: var(--color-nonary-button-text);
     background-color: var(--color-nonary-button-background);
-
+    margin-right: 15px;
     &:disabled {
         background-color: var(--color-success-disable);
     }

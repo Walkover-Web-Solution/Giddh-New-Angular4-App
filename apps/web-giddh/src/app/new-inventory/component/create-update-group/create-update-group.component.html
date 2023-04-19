@@ -1,7 +1,7 @@
 <div
     class="relative"
     appTranslate
-    [file]="'inventory/stock-group'"
+    [file]="'inventory'"
     (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
 >
@@ -17,14 +17,7 @@
     </div> -->
     <!-- <form class="form-body" #groupCreateEditForm="ngForm" novalidate autocomplete="off"> -->
 
-    <form
-        autocomplete="off"
-        novalidate
-        name="groupForm"
-        [formGroup]="groupForm"
-        class="new-account-form"
-        (ngSubmit)="saveGroup()"
-    >
+    <form autocomplete="off" novalidate name="groupForm" [formGroup]="groupForm" class="new-account-form">
         <div class="container-fluid">
             <div class="create-group-page">
                 <div class="row">
@@ -152,6 +145,7 @@
                                         (onSelectionChange)="!tax.isDisabled ? selectTax(tax) : ''"
                                         >{{ tax.name }}</mat-option
                                     >
+                                    <mat-option [disabled]="!taxes?.length">No Tax Found</mat-option>
                                 </mat-select>
                             </div>
                         </div>
@@ -172,7 +166,12 @@
                     <button *ngIf="!groupUniqueName" mat-flat-button class="clear-btn" (click)="resetGroupForm()">
                         Clear
                     </button>
-                    <button mat-flat-button class="create-inventory-btn" [disabled]="groupForm.invalid">
+                    <button
+                        mat-flat-button
+                        class="create-inventory-btn"
+                        [disabled]="groupForm.invalid"
+                        (click)="saveGroup()"
+                    >
                         {{ groupUniqueName ? "Update Group" : "Create Group" }}
                     </button>
                     <button
@@ -186,7 +185,7 @@
                     <button
                         *ngIf="groupUniqueName"
                         mat-raised-button
-                        class="btn-danger min-width-100"
+                        class="delete-button min-width-100"
                         (click)="deleteGroup()"
                     >
                         Delete
