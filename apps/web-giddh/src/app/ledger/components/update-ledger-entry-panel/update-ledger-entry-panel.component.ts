@@ -2391,7 +2391,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         } else {
             // now check if we transactions array have any income/expense/fixed assets entry
             let incomeExpenseEntryLength = this.vm.isThereIncomeOrExpenseEntry();
-            this.vm.showNewEntryPanel = incomeExpenseEntryLength === 1;
+            this.vm.showNewEntryPanel = incomeExpenseEntryLength > 0;
         }
 
         this.vm.reInitilizeDiscount(resp[0]);
