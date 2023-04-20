@@ -46,7 +46,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     public taxes: any[] = [];
     /** Object of stock form */
     public stockForm: any = {
-        type: 'PRODUCT',
+        type: null,
         name: null,
         uniqueName: null,
         stockUnitCode: null,
@@ -62,12 +62,8 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         customField1Value: null,
         customField2Heading: "Custom Field 2",
         customField2Value: null,
-        purchaseAccountDetails: {
-            accountUniqueName: null
-        },
-        salesAccountDetails: {
-            accountUniqueName: null
-        },
+        purchaseAccountUniqueNames: [],
+        salesAccountUniqueNames: [],
         isFsStock: null,
         manufacturingDetails: null,
         accountGroup: null,
@@ -200,6 +196,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
             if (params?.type) {
                 this.stockForm.type = params?.type?.toUpperCase();
                 this.stockType = params?.type?.toUpperCase();
+                this.stockForm.type = this.stockType;
                 this.resetForm(this.stockCreateEditForm);
                 this.getStockGroups();
                 this.changeDetection.detectChanges();
@@ -215,17 +212,6 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         });
     }
 
-    /**
-     * Lifecycle hook for destroy
-     *
-     * @memberof StockCreateEditComponent
-     */
-    public ngOnDestroy(): void {
-        this.destroyed$.next(true);
-        this.destroyed$.complete();
-        /** remove parent class from body after exiting new-inventory page */
-        document.querySelector("body").classList.remove("stock-create-edit");
-    }
 
     /**
      * Adds new option value
@@ -438,7 +424,6 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
             defaultWarehouse = this.warehouses?.filter(warehouse => warehouse.isDefault);
         }
         const existingVariants = cloneDeep(this.stockForm.variants);
-
         let stockVariants = [];
         variants?.forEach(variant => {
             let variantExists = existingVariants?.filter(existingVariant => existingVariant?.name === variant);
@@ -448,13 +433,14 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 archive: false,
                 uniqueName: undefined,
                 skuCode: undefined,
+
                 salesInformation: [
                     {
                         rate: undefined,
                         stockUnitCode: undefined,
                         stockUnitName: undefined,
                         stockUnitUniqueName: undefined,
-                        accountUniqueName: this.stockForm.salesAccountDetails?.accountUniqueName
+                        accountUniqueName: this.stockForm.salesAccountUniqueNames[0]
                     }
                 ],
                 purchaseInformation: [
@@ -463,7 +449,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                         stockUnitCode: undefined,
                         stockUnitName: undefined,
                         stockUnitUniqueName: undefined,
-                        accountUniqueName: this.stockForm.purchaseAccountDetails?.accountUniqueName
+                        accountUniqueName: this.stockForm.purchaseAccountUniqueNames[0]
                     }
                 ],
                 warehouseBalance: [
@@ -483,8 +469,6 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
             };
             stockVariants.push(variantObj);
         });
-        console.log(stockVariants);
-
         this.stockForm.variants = stockVariants;
     }
 
@@ -494,7 +478,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
      * @memberof StockCreateEditComponent
      */
     public addNewPurchaseUnitPrice(): void {
-        this.stockForm.purchaseAccountDetails.unitRates.push({
+        this.stockForm.purchaseAccountUniqueNames[0].unitRates.push({
             rate: null,
             stockUnitCode: null,
             stockUnitUniqueName: null
@@ -508,8 +492,8 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
      * @memberof StockCreateEditComponent
      */
     public deletePurchaseUnitPrice(unitRateIndex: number): void {
-        let unitRates = this.stockForm.purchaseAccountDetails.unitRates?.filter((data, index) => index !== unitRateIndex).map(data => { return data });
-        this.stockForm.purchaseAccountDetails.unitRates = unitRates;
+        let unitRates = this.stockForm.purchaseAccountUniqueNames[0].unitRates?.filter((data, index) => index !== unitRateIndex).map(data => { return data });
+        this.stockForm.purchaseAccountUniqueNames[0].unitRates = unitRates;
 
         if (unitRates?.length === 0) {
             this.addNewPurchaseUnitPrice();
@@ -522,7 +506,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
      * @memberof StockCreateEditComponent
      */
     public addNewSalesUnitPrice(): void {
-        this.stockForm.salesAccountDetails.unitRates.push({
+        this.stockForm.salesAccountUniqueNames[0].unitRates.push({
             rate: null,
             stockUnitCode: null,
             stockUnitUniqueName: null
@@ -536,8 +520,8 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
      * @memberof StockCreateEditComponent
      */
     public deleteSalesUnitPrice(unitRateIndex: number): void {
-        let unitRates = this.stockForm.salesAccountDetails.unitRates?.filter((data, index) => index !== unitRateIndex).map(data => { return data });
-        this.stockForm.salesAccountDetails.unitRates = unitRates;
+        let unitRates = this.stockForm.salesAccountUniqueNames[0].unitRates?.filter((data, index) => index !== unitRateIndex).map(data => { return data });
+        this.stockForm.salesAccountUniqueNames[0].unitRates = unitRates;
 
         if (unitRates?.length === 0) {
             this.addNewSalesUnitPrice();
@@ -606,20 +590,22 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         if (stockCreateEditForm.invalid) {
             return;
         }
-
         if (this.isPurchaseInformationEnabled) {
-            if (this.validateStock(this.stockForm.purchaseAccountDetails?.unitRates)) {
-                this.stockForm.purchaseAccountDetails.unitRates = this.stockForm.purchaseAccountDetails?.unitRates?.filter((unitRate) => {
+            this.generateVariants();
+            if (this.validateStock(this.stockForm.purchaseAccountUniqueNames?.unitRates)) {
+                this.stockForm.purchaseAccountUniqueNames.unitRates = this.stockForm.purchaseAccountUniqueNames?.unitRates?.filter((unitRate) => {
                     return unitRate.stockUnitUniqueName || unitRate.rate;
                 });
             } else {
                 this.toaster.showSnackBar("error", INVALID_STOCK_ERROR_MESSAGE);
                 return;
             }
+
         }
         if (this.isSalesInformationEnabled) {
-            if (this.validateStock(this.stockForm.salesAccountDetails?.unitRates)) {
-                this.stockForm.salesAccountDetails.unitRates = this.stockForm.salesAccountDetails?.unitRates?.filter((unitRate) => {
+            this.generateVariants();
+            if (this.validateStock(this.stockForm.salesAccountUniqueNames?.unitRates)) {
+                this.stockForm.salesAccountUniqueNames.unitRates = this.stockForm.salesAccountUniqueNames?.unitRates?.filter((unitRate) => {
                     return unitRate.stockUnitUniqueName || unitRate.rate;
                 });
             } else {
@@ -642,7 +628,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                     hsnNumber: '',
                     sacNumber: ''
                 };
-                this.inventoryService.createStock(stockRequest, this.stockGroupUniqueName, this.stockType).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                this.inventoryService.CreateStockGroup(stockRequest, this.stockType).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     if (response?.status === "success") {
                         this.stockGroupUniqueName = "maingroup";
                         this.saveStock();
@@ -665,7 +651,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     private saveStock(): void {
         this.toggleLoader(true);
         const request = this.formatRequest();
-        this.inventoryService.createStock(request, this.stockGroupUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.inventoryService.createStock(request, this.stockGroupUniqueName, this.stockType).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.toggleLoader(false);
             if (response?.status === "success") {
                 this.toaster.showSnackBar("success", "Stock created successfully");
@@ -708,21 +694,21 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 this.stockForm.outOfStockSelling = response.body.outOfStockSelling;
                 this.stockForm.variants = response.body.variants;
                 this.stockForm.options = response.body.options;
-                if (response.body.purchaseAccountDetails) {
-                    this.stockForm.purchaseAccountDetails = response.body.purchaseAccountDetails;
+                if (response.body.purchaseAccountUniqueNames?.length) {
+                    this.stockForm.purchaseAccountUniqueNames = [response.body.purchaseAccountUniqueNames];
                 }
-                if (!this.stockForm.purchaseAccountDetails?.unitRates?.length) {
-                    this.stockForm.purchaseAccountDetails.unitRates.push({
+                if (!this.stockForm.purchaseAccountUniqueNames[0]?.unitRates?.length) {
+                    this.stockForm.purchaseAccountUniqueNames[0].unitRates.push({
                         rate: null,
                         stockUnitCode: null,
                         stockUnitUniqueName: null
                     });
                 }
-                if (response.body.salesAccountDetails) {
-                    this.stockForm.salesAccountDetails = response.body.salesAccountDetails;
+                if (response.body.salesAccountUniqueNames?.length) {
+                    this.stockForm.salesAccountUniqueNames = [response.body.salesAccountUniqueNames];
                 }
-                if (!this.stockForm.salesAccountDetails?.unitRates?.length) {
-                    this.stockForm.salesAccountDetails.unitRates.push({
+                if (!this.stockForm.salesAccountUniqueNames[0]?.unitRates?.length) {
+                    this.stockForm.salesAccountUniqueNames[0].unitRates.push({
                         rate: null,
                         stockUnitCode: null,
                         stockUnitUniqueName: null
@@ -730,8 +716,8 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 }
                 this.stockGroupUniqueName = response.body.stockGroup?.uniqueName;
                 this.defaultStockGroupUniqueName = response.body.stockGroup?.uniqueName;
-                this.isPurchaseInformationEnabled = this.stockForm?.purchaseAccountDetails?.accountUniqueName;
-                this.isSalesInformationEnabled = this.stockForm?.salesAccountDetails?.accountUniqueName;
+                this.isPurchaseInformationEnabled = this.stockForm?.purchaseAccountUniqueNames[0];
+                this.isSalesInformationEnabled = this.stockForm?.salesAccountUniqueNames[0];
                 this.isVariantAvailable = (this.stockForm?.variants?.length) ? true : false;
                 this.stockUnitName = response.body?.stockUnit?.name;
                 this.stockGroupName = response.body?.stockGroup?.name;
@@ -755,7 +741,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
      * @memberof StockCreateEditComponent
      */
     private findPurchaseAccountName(): void {
-        let purchaseAccountName = this.purchaseAccounts?.filter(purchaseAccount => purchaseAccount?.value === this.stockForm?.purchaseAccountDetails?.accountUniqueName);
+        let purchaseAccountName = this.purchaseAccounts?.filter(purchaseAccount => purchaseAccount?.value === this.stockForm?.purchaseAccountUniqueNames[0]);
         if (purchaseAccountName?.length > 0) {
             this.purchaseAccountName = purchaseAccountName[0]?.label;
         }
@@ -768,7 +754,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
      * @memberof StockCreateEditComponent
      */
     private findSalesAccountName(): void {
-        let salesAccountName = this.salesAccounts?.filter(salesAccount => salesAccount?.value === this.stockForm?.salesAccountDetails?.accountUniqueName);
+        let salesAccountName = this.salesAccounts?.filter(salesAccount => salesAccount?.value === this.stockForm?.salesAccountUniqueNames[0]);
         if (salesAccountName?.length > 0) {
             this.salesAccountName = salesAccountName[0]?.label;
         }
@@ -940,10 +926,10 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         stockForm.taxes = this.taxTempArray.map(tax => tax?.uniqueName);
 
         if (!this.isPurchaseInformationEnabled) {
-            stockForm.purchaseAccountDetails = null;
+            stockForm.purchaseAccountUniqueNames[0] = null;
         }
         if (!this.isSalesInformationEnabled) {
-            stockForm.salesAccountDetails = null;
+            stockForm.salesAccountUniqueNames[0] = null;
         }
 
         stockForm.customFields = stockForm.customFields?.map(customField => {
@@ -952,7 +938,6 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 value: customField?.value
             }
         });
-
         return stockForm;
     }
 
@@ -1010,12 +995,10 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
             customField1Value: null,
             customField2Heading: "Custom Field 2",
             customField2Value: null,
-            purchaseAccountDetails: {
-                accountUniqueName: null
-            },
-            salesAccountDetails: {
-                accountUniqueName: null
-            },
+            purchaseAccountUniqueNames: [
+            ],
+            salesAccountUniqueNames: [
+            ],
             isFsStock: null,
             manufacturingDetails: null,
             accountGroup: null,
@@ -1098,7 +1081,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     public togglePurchaseInformation(): void {
         if (!this.isPurchaseInformationEnabled) {
             this.purchaseAccountName = "";
-            this.stockForm.purchaseAccountDetails = {
+            this.stockForm.purchaseAccountUniqueNames[0] = {
                 accountUniqueName: null,
                 unitRates: [
                     {
@@ -1108,7 +1091,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                         stockUnitUniqueName: null
                     }
                 ]
-            }
+            };
             this.changeDetection.detectChanges();
         }
     }
@@ -1121,7 +1104,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     public toggleSalesInformation(): void {
         if (!this.isSalesInformationEnabled) {
             this.salesAccountName = "";
-            this.stockForm.salesAccountDetails = {
+            this.stockForm.salesAccountUniqueNames[0] = {
                 accountUniqueName: null,
                 unitRates: [
                     {
@@ -1131,7 +1114,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                         stockUnitUniqueName: null
                     }
                 ]
-            }
+            };
             this.changeDetection.detectChanges();
         }
     }
@@ -1211,7 +1194,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
             stockUnitCode: null,
             stockUnitUniqueName: null,
             stockUnitName: null,
-            accountUniqueName: this.stockForm.purchaseAccountDetails?.accountUniqueName
+            accountUniqueName: this.stockForm.purchaseAccountUniqueNames[0]
         });
     }
 
@@ -1241,7 +1224,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
             stockUnitCode: null,
             stockUnitUniqueName: null,
             stockUnitName: null,
-            accountUniqueName: this.stockForm.salesAccountDetails?.accountUniqueName
+            accountUniqueName: this.stockForm.salesAccountUniqueNames[0]
         });
     }
 
@@ -1258,5 +1241,17 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         if (unitRates?.length === 0) {
             this.addNewVariantSalesUnitPrice(variant);
         }
+    }
+
+    /**
+ * Lifecycle hook for destroy
+ *
+ * @memberof StockCreateEditComponent
+ */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
+        /** remove parent class from body after exiting new-inventory page */
+        document.querySelector("body").classList.remove("stock-create-edit");
     }
 }

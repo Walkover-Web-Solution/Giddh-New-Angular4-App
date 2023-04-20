@@ -377,7 +377,7 @@
                                                                             [placeholder]="'Linked Accounts'"
                                                                             [options]="purchaseAccounts"
                                                                             (selectedOption)="
-                                                                                stockForm.purchaseAccountDetails.accountUniqueName =
+                                                                                stockForm.purchaseAccountUniqueNames[0] =
                                                                                     $event?.value;
                                                                                 stockForm.variants[0].purchaseInformation.accountUniqueName =
                                                                                     $event?.value
@@ -529,7 +529,7 @@
                                                                             [placeholder]="'Linked Accounts'"
                                                                             [options]="salesAccounts"
                                                                             (selectedOption)="
-                                                                                stockForm.salesAccountDetails.accountUniqueName =
+                                                                                stockForm.salesAccountUniqueNames[0] =
                                                                                     $event?.value;
                                                                                 stockForm.variants[0].salesInformation.accountUniqueName =
                                                                                     $event?.value
