@@ -16,6 +16,11 @@
     border-color: var(--color-dark-fog) !important;
 }
 
+::ng-deep {
+    .mat-pseudo-checkbox-checked {
+        background: var(--color-giddh-blue) !important;
+    }
+}
 .clear-btn {
     width: 89px;
     height: 36px;

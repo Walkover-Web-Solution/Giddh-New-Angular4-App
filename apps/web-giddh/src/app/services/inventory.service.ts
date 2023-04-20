@@ -51,8 +51,9 @@ export class InventoryService {
         _ = config._;
     }
 
-    public CreateStockGroup(model: StockGroupRequest): Observable<BaseResponse<StockGroupResponse, StockGroupRequest>> {
+    public CreateStockGroup(model: StockGroupRequest, moduleType: string = ''): Observable<BaseResponse<StockGroupResponse, StockGroupRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
+        model.type = moduleType;
         return this.http.post(this.config.apiUrl + INVENTORY_API.CREATE_STOCK_GROUP?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(map((res) => {
             let data: BaseResponse<StockGroupResponse, StockGroupRequest> = res;
             data.request = model;
@@ -63,8 +64,9 @@ export class InventoryService {
     /**
      * Update StockGroup
      */
-    public UpdateStockGroup(model: StockGroupRequest, stockGroupUniquename: string): Observable<BaseResponse<StockGroupResponse, StockGroupRequest>> {
+    public UpdateStockGroup(model: StockGroupRequest, stockGroupUniquename: string, moduleType: string = ''): Observable<BaseResponse<StockGroupResponse, StockGroupRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
+        model.type = moduleType;
         return this.http.put(this.config.apiUrl + INVENTORY_API.UPDATE_STOCK_GROUP?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':stockGroupUniqueName', encodeURIComponent(stockGroupUniquename)), model).pipe(map((res) => {
             let data: BaseResponse<StockGroupResponse, StockGroupRequest> = res;
             data.request = model;
@@ -964,17 +966,17 @@ export class InventoryService {
      * @returns {Observable<BaseResponse<any, any>>}
      * @memberof InventoryService
      */
-    public getStockGroup(groupUniqueName: string): Observable<BaseResponse<any, any>> {
+    public getStockGroup(stockGroupUniqueName: string): Observable<BaseResponse<any, any>> {
         const companyUniqueName = this.generalService.companyUniqueName;
-        let url = this.config.apiUrl + INVENTORY_API.V5.GET_STOCK_GROUP;
+        let url = this.config.apiUrl + INVENTORY_API.GET_STOCK_GROUP;
         url = url?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName));
-        url = url?.replace(':groupUniqueName', encodeURIComponent(groupUniqueName));
+        url = url?.replace(':stockGroupUniqueName', encodeURIComponent(stockGroupUniqueName));
 
         return this.http.get(url).pipe(map((res) => {
             let data: BaseResponse<NewBranchTransferResponse, string> = res;
-            data.request = groupUniqueName;
+            data.request = stockGroupUniqueName;
             return data;
-        }), catchError((e) => this.errorHandler.HandleCatch<NewBranchTransferResponse, string>(e, groupUniqueName)));
+        }), catchError((e) => this.errorHandler.HandleCatch<NewBranchTransferResponse, string>(e, stockGroupUniqueName)));
     }
 
     /**
