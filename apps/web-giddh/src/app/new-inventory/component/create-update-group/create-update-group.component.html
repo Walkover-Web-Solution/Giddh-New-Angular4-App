@@ -18,7 +18,7 @@
                                 </div>
                                 <div class="col-sm-6">
                                     <text-field
-                                        [cssClass]="'form-control'"
+                                        [cssClass]="'form-control mat-field-border'"
                                         [name]="'productName'"
                                         [placeholder]="'Enter Group Name'"
                                         [type]="'text'"
@@ -35,7 +35,7 @@
                                 </div>
                                 <div class="col-sm-6">
                                     <text-field
-                                        [cssClass]="'form-control'"
+                                        [cssClass]="'form-control  mat-field-border'"
                                         [name]="'uniqueName'"
                                         [placeholder]="'Unique Name'"
                                         formControlName="uniqueName"
@@ -60,7 +60,7 @@
                                 <div class="col-sm-6">
                                     <div *ngIf="groupForm.get('showCodeType')?.value === 'hsn'">
                                         <text-field
-                                            [cssClass]="'form-control'"
+                                            [cssClass]="'form-control  mat-field-border'"
                                             [name]="'hsnCode'"
                                             [placeholder]="'Enter HSN Code'"
                                             [type]="'number'"
@@ -72,7 +72,7 @@
                                     </div>
                                     <div *ngIf="groupForm.get('showCodeType')?.value === 'sac'">
                                         <text-field
-                                            [cssClass]="'form-control'"
+                                            [cssClass]="'form-control  mat-field-border'"
                                             [name]="'sacCode'"
                                             [placeholder]="'Enter SAC Code'"
                                             [type]="'number'"
@@ -103,7 +103,7 @@
                                 </div>
                                 <div class="col-sm-6">
                                     <select-field
-                                        [cssClass]="'form-control'"
+                                        [cssClass]="'form-control  mat-field-border'"
                                         [readonly]="!groupForm.get('isSubGroup')?.value"
                                         [name]="'parentStockGroupUniqueName'"
                                         [placeholder]="'Select Group'"

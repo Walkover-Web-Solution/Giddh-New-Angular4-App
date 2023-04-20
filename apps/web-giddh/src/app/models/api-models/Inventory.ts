@@ -27,6 +27,7 @@ export class StockGroupRequest implements INameUniqueName {
     public parentStockGroupUniqueName?: string;
     public isSubGroup?: boolean;
     public taxes?: any;
+    public type?: any;
 }
 
 /**
