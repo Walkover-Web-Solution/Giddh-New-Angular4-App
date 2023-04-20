@@ -16,6 +16,7 @@ export const INVENTORY_API = {
     },
     REPORT: 'company/:companyUniqueName/stock/:stockUniqueName/inventory-report?from=:from&to=:to&page=:page&count=:count',
     CREATE_STOCK_GROUP: 'company/:companyUniqueName/stock-group', // post call
+    GET_STOCK_GROUP: 'company/:companyUniqueName/stock-group/:stockGroupUniqueName', // getcall
     UPDATE_STOCK_GROUP: 'company/:companyUniqueName/stock-group/:stockGroupUniqueName', // put call
     DELETE_STOCK_GROUP: 'company/:companyUniqueName/stock-group/:stockGroupUniqueName', // DELETE call
     STOCKS: 'company/:companyUniqueName/stocks', // get call
