@@ -51,9 +51,10 @@ export class InventoryService {
         _ = config._;
     }
 
-    public CreateStockGroup(model: StockGroupRequest): Observable<BaseResponse<StockGroupResponse, StockGroupRequest>> {
+    public CreateStockGroup(model: StockGroupRequest, moduleType: string = ''): Observable<BaseResponse<StockGroupResponse, StockGroupRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.post(this.config.apiUrl + INVENTORY_API.CREATE_STOCK_GROUP?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(map((res) => {
+        return this.http.post(this.config.apiUrl + INVENTORY_API.CREATE_STOCK_GROUP?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':type', encodeURIComponent(moduleType)), model).pipe(map((res) => {
             let data: BaseResponse<StockGroupResponse, StockGroupRequest> = res;
             data.request = model;
             return data;
@@ -1000,11 +1001,12 @@ export class InventoryService {
             }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, companyUniqueName)));
     }
 
-    public createStock(model: any, stockGroupUniqueName: any): Observable<BaseResponse<any, any>> {
+    public createStock(model: any, stockGroupUniqueName: any, moduleType: string = ''): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        let url = this.config.apiUrl + INVENTORY_API.NEW.CREATE;
+        let url = this.config.apiUrl + INVENTORY_API.CREATE_STOCK_V2;
         url = url?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
         url = url?.replace(':stockGroupUniqueName', encodeURIComponent(stockGroupUniqueName));
+        url = url?.replace(':type', encodeURIComponent(moduleType));
         return this.http.post(url, model).pipe(map((res) => {
             let data: BaseResponse<any, any> = res;
             data.request = model;

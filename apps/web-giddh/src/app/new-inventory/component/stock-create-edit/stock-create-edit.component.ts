@@ -437,7 +437,6 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         if (this.warehouses?.length > 0) {
             defaultWarehouse = this.warehouses?.filter(warehouse => warehouse.isDefault);
         }
-
         const existingVariants = cloneDeep(this.stockForm.variants);
 
         let stockVariants = [];
@@ -610,7 +609,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
 
         if (this.isPurchaseInformationEnabled) {
             if (this.validateStock(this.stockForm.purchaseAccountDetails?.unitRates)) {
-                this.stockForm.purchaseAccountDetails.unitRates = this.stockForm.purchaseAccountDetails.unitRates.filter((unitRate) => {
+                this.stockForm.purchaseAccountDetails.unitRates = this.stockForm.purchaseAccountDetails?.unitRates?.filter((unitRate) => {
                     return unitRate.stockUnitUniqueName || unitRate.rate;
                 });
             } else {
@@ -620,7 +619,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         }
         if (this.isSalesInformationEnabled) {
             if (this.validateStock(this.stockForm.salesAccountDetails?.unitRates)) {
-                this.stockForm.salesAccountDetails.unitRates = this.stockForm.salesAccountDetails.unitRates?.filter((unitRate) => {
+                this.stockForm.salesAccountDetails.unitRates = this.stockForm.salesAccountDetails?.unitRates?.filter((unitRate) => {
                     return unitRate.stockUnitUniqueName || unitRate.rate;
                 });
             } else {
@@ -643,7 +642,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                     hsnNumber: '',
                     sacNumber: ''
                 };
-                this.inventoryService.CreateStockGroup(stockRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                this.inventoryService.createStock(stockRequest, this.stockGroupUniqueName, this.stockType).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     if (response?.status === "success") {
                         this.stockGroupUniqueName = "maingroup";
                         this.saveStock();
@@ -1012,33 +1011,56 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
             customField2Heading: "Custom Field 2",
             customField2Value: null,
             purchaseAccountDetails: {
-                accountUniqueName: null,
-                unitRates: [
-                    {
-                        rate: null,
-                        stockUnitCode: null,
-                        stockUnitName: null,
-                        stockUnitUniqueName: null
-                    }
-                ]
+                accountUniqueName: null
             },
             salesAccountDetails: {
-                accountUniqueName: null,
-                unitRates: [
-                    {
-                        rate: null,
-                        stockUnitCode: null,
-                        stockUnitName: null,
-                        stockUnitUniqueName: null
-                    }
-                ]
+                accountUniqueName: null
             },
             isFsStock: null,
             manufacturingDetails: null,
             accountGroup: null,
             lowStockAlertCount: 0,
             outOfStockSelling: true,
-            variants: [],
+            variants: [
+                {
+                    name: "",
+                    archive: false,
+                    uniqueName: undefined,
+                    skuCode: undefined,
+                    salesInformation: [
+                        {
+                            rate: undefined,
+                            stockUnitCode: undefined,
+                            stockUnitName: undefined,
+                            stockUnitUniqueName: undefined,
+                            accountUniqueName: ""
+                        }
+                    ],
+                    purchaseInformation: [
+                        {
+                            rate: undefined,
+                            stockUnitCode: undefined,
+                            stockUnitName: undefined,
+                            stockUnitUniqueName: undefined,
+                            accountUniqueName: ""
+                        }
+                    ],
+                    warehouseBalance: [
+                        {
+                            warehouse: {
+                                name: undefined,
+                                uniqueName: undefined
+                            },
+                            stockUnit: {
+                                name: "",
+                                code: ""
+                            },
+                            openingQuantity: 0,
+                            openingAmount: 0
+                        }
+                    ]
+                }
+            ],
             options: [],
             customFields: []
         };

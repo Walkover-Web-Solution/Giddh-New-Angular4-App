@@ -386,7 +386,6 @@
                                                                             [defaultValue]="purchaseAccountName"
                                                                         ></select-field>
                                                                     </div>
-                                                                    {{ isVariantAvailable }}
                                                                     <div
                                                                         class="col-sm-6 col-lg-5"
                                                                         *ngIf="!isVariantAvailable"
@@ -401,7 +400,6 @@
                                                                         "
                                                                         *ngIf="!isVariantAvailable"
                                                                     >
-                                                                        {{ stockForm | json }}
                                                                         <div
                                                                             class="row add-new-field mr-b15"
                                                                             *ngFor="
@@ -540,7 +538,6 @@
                                                                             [defaultValue]="salesAccountName"
                                                                         ></select-field>
                                                                     </div>
-                                                                    {{ isVariantAvailable }}
                                                                     <div
                                                                         class="col-sm-6 col-lg-5"
                                                                         *ngIf="!isVariantAvailable"
