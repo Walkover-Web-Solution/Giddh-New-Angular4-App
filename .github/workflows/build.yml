@@ -38,7 +38,7 @@ jobs:
       - name: Install Node.js & NPM
         uses: actions/setup-node@v3
         with:
-          node-version: "16.16.0"
+          node-version: "16.13.2"
 
 #       Runs npm i
       - uses: bahmutov/npm-install@v1
