@@ -79,16 +79,14 @@
                                 </div>
                             </div>
                             <div class="pd-b1" [hidden]="defaultGrpActive">
-                                <label for="isSelfParentUpdt">
-                                    <mat-slide-toggle
-                                        formControlName="isSubGroup"
-                                        id="isSelfParentUpdt"
-                                        name="parentStockGroup"
-                                        color="primary"
-                                    >
-                                    </mat-slide-toggle>
-                                    Is it a sub group?</label
+                                <mat-slide-toggle
+                                    formControlName="isSubGroup"
+                                    id="isSelfParentUpdt"
+                                    name="parentStockGroup"
+                                    color="primary"
                                 >
+                                </mat-slide-toggle>
+                                <label class="is-subgroup-label" for="isSelfParentUpdt">Is it a sub group?</label>
                             </div>
                             <div class="row">
                                 <div class="col-xs-6 col-sm-6">

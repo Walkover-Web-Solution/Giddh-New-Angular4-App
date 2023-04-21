@@ -178,7 +178,9 @@
                                     (change)="changeTwoWayAuth()"
                                 >
                                 </mat-slide-toggle>
-                                {{ localeData?.mobile_number?.two_way_auth_label }}
+                                <label class="two-way-auth-label">{{
+                                    localeData?.mobile_number?.two_way_auth_label
+                                }}</label>
                             </h1>
                             <p class="grey" *ngIf="twoWayAuth">{{ localeData?.mobile_number?.two_way_auth_content }}</p>
                         </div>

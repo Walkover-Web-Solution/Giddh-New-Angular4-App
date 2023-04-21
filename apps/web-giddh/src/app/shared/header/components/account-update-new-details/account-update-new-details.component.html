@@ -246,12 +246,13 @@
                                         <div class="add-address-default">
                                             <h3>{{ commonLocaleData?.app_address }} {{ i + 1 }}</h3>
                                             <div class="inputRadio">
-                                                <span [tooltip]="localeData?.address_tooltip" placement="left">
+                                                <span
+                                                    [tooltip]="localeData?.address_tooltip"
+                                                    class="pull-right is-default-address"
+                                                    placement="left"
+                                                >
                                                     <mat-slide-toggle
-                                                        [(ngModel)]="
-                                                            addAccountForm.get('addresses').controls[i].get('isDefault')
-                                                                .value
-                                                        "
+                                                        formControlName="isDefault"
                                                         name="defaultGst_{{ i }}"
                                                         color="primary"
                                                         (change)="

@@ -79,12 +79,18 @@ export class GiddhErrorHandler {
             }
         }
 
-        if(typeof data === "string") {
+        if (typeof data === "string") {
             data = {
                 statusCode: r?.status
             };
         } else {
-            data.statusCode = r?.status;
+            if (data) {
+                data.statusCode = r?.status;
+            } else {
+                data = {
+                    statusCode: r?.status
+                };
+            }
         }
 
         return new Observable<BaseResponse<TResponce, TRequest>>((o) => {
