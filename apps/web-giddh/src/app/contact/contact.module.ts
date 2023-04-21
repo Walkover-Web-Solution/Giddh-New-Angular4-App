@@ -18,7 +18,6 @@ import { ClickOutsideModule } from 'ng-click-outside';
 import { DigitsOnlyModule } from '../shared/helpers/directives/digitsOnly/digitsOnly.module';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
-import { Ng2OrderModule } from 'ng2-order-pipe';
 import { ContactAdvanceSearchComponent } from './advanceSearch/contactAdvanceSearch.component';
 import { AgingReportComponent } from './aging-report/aging-report.component';
 import { AgingDropdownComponent } from './aging-dropdown/aging.dropdown.component'; // importing the module for table column sort
@@ -82,7 +81,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         ElementViewChildModule,
         CurrencyModule,
         Daterangepicker,
-        Ng2OrderModule,
         PerfectScrollbarModule,
         NgxDaterangepickerMd.forRoot(),
         TextMaskModule,
