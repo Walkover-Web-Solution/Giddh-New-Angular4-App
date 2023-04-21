@@ -80,18 +80,13 @@
                             </div>
                             <div class="pd-b1" [hidden]="defaultGrpActive">
                                 <label for="isSelfParentUpdt">
-                                    <ngx-switch
-                                        [status]="addGroupForm.get('isSubGroup')?.value ? true : false"
+                                    <mat-slide-toggle
+                                        formControlName="isSubGroup"
                                         id="isSelfParentUpdt"
                                         name="parentStockGroup"
-                                        [onText]="'On'"
-                                        [offText]="'Off'"
-                                        [onColor]="bootstrapToggleSwitch?.On"
-                                        [offColor]="bootstrapToggleSwitch?.Off"
-                                        [size]="bootstrapToggleSwitch?.Size"
-                                        (statusChange)="addGroupForm.get('isSubGroup').setValue($event)"
+                                        color="primary"
                                     >
-                                    </ngx-switch>
+                                    </mat-slide-toggle>
                                     Is it a sub group?</label
                                 >
                             </div>

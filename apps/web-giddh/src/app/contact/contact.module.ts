@@ -9,7 +9,7 @@ import { ContactComponent } from './contact.component';
 import { ContactRoutingModule } from './contact.routing.module';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
-import { PaginationComponent, PaginationModule } from 'ngx-bootstrap/pagination';
+import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { SharedModule } from '../shared/shared.module';

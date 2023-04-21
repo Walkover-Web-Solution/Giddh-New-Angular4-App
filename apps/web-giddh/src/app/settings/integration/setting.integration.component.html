@@ -199,15 +199,12 @@
                                 <div class="form-group col-lg-4 col-md-6 col-xs-12 mr-t1 empty-label" id="inlnImg">
                                     <label>&nbsp;</label>
                                     <br />
-                                    <ngx-switch
-                                        [(status)]="razorPayObj.autoCapturePayment"
-                                        [onText]="commonLocaleData?.app_on"
-                                        [offText]="commonLocaleData?.app_off"
-                                        [onColor]="bootstrapToggleSwitch?.On"
-                                        [offColor]="bootstrapToggleSwitch?.Off"
-                                        [size]="bootstrapToggleSwitch?.Size"
+                                    <mat-slide-toggle
+                                        [(ngModel)]="razorPayObj.autoCapturePayment"
+                                        name="autoCapturePayment"
+                                        color="primary"
                                     >
-                                    </ngx-switch>
+                                    </mat-slide-toggle>
 
                                     {{ localeData?.collection?.automatic_capture_on_payment }}
                                 </div>
@@ -588,7 +585,7 @@
         <div class="modal-dialog modal-md" *ngIf="confirmationModal?.isShown">
             <div class="modal-content">
                 <confirm-modal
-                    [body]="localeData?.payment?.delete_login | replace: '[LOGIN_ID]':activeBankAccount?.loginId"
+                    [body]="localeData?.payment?.delete_login | replace : '[LOGIN_ID]' : activeBankAccount?.loginId"
                     (cancelCallBack)="confirmationModal?.hide()"
                     (successCallBack)="deleteBankAccountLogin(true)"
                 >

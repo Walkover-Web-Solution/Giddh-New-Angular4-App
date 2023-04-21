@@ -64,32 +64,24 @@
             </div>
             <div class="row">
                 <div class="col-xl-3 col-md-8 col-sm-12 col-12 mr-b15 clear-both">
-                    <ngx-switch
-                        [(status)]="exportRequest.showHideOpeningClosingBalance"
+                    <mat-slide-toggle
+                        [(ngModel)]="exportRequest.showHideOpeningClosingBalance"
                         name="showHideOpeningClosingBalance"
                         id="showHideOpeningClosingBalance"
-                        [onText]="commonLocaleData?.app_on"
-                        [offText]="commonLocaleData?.app_off"
-                        [onColor]="bootstrapToggleSwitch?.On"
-                        [offColor]="bootstrapToggleSwitch?.Off"
-                        [size]="bootstrapToggleSwitch?.Size"
-                    ></ngx-switch>
+                        color="primary"
+                    ></mat-slide-toggle>
                     &nbsp;<label for="showHideOpeningClosingBalance">{{ localeData?.opening_closing_balance }}</label>
                 </div>
             </div>
             <div class="row">
                 <div class="col-xl-3 col-md-8 col-sm-12 col-12 mr-b15 clear-both">
-                    <ngx-switch
-                        [(status)]="exportRequest.balanceTypeAsSign"
+                    <mat-slide-toggle
+                        [(ngModel)]="exportRequest.balanceTypeAsSign"
                         name="balanceTypeAsSign"
                         id="balanceTypeAsSign"
-                        [onText]="commonLocaleData?.app_on"
-                        [offText]="commonLocaleData?.app_off"
-                        [onColor]="bootstrapToggleSwitch?.On"
-                        [offColor]="bootstrapToggleSwitch?.Off"
-                        [size]="bootstrapToggleSwitch?.Size"
-                        (statusChange)="onBalanceTypeAsSignChanged($event)"
-                    ></ngx-switch>
+                        color="primary"
+                        (change)="onBalanceTypeAsSignChanged($event)"
+                    ></mat-slide-toggle>
                     &nbsp;<label for="balanceTypeAsSign">{{ localeData?.cr_dr }}</label>
                 </div>
             </div>

@@ -11,7 +11,6 @@ import { MatRadioModule } from "@angular/material/radio";
 import { MatSelectModule } from "@angular/material/select";
 import { MatTableModule } from "@angular/material/table";
 import { LaddaModule } from "angular2-ladda";
-import { NgxBootstrapSwitchModule } from "ngx-bootstrap-switch";
 import { CollapseModule } from "ngx-bootstrap/collapse";
 import { BsDropdownModule } from "ngx-bootstrap/dropdown";
 import { ModalModule } from "ngx-bootstrap/modal";
@@ -71,7 +70,6 @@ import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
         AdvanceReceiptAdjustmentModule,
         HasFocusDirectiveModule,
         ReplacePipeModule,
-        NgxBootstrapSwitchModule.forRoot(),
         VoucherAddBulkItemsModule,
         AsideMenuOtherTaxesModule,
         AsideMenuProductServiceModule,
