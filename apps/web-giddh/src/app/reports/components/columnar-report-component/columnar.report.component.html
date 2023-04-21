@@ -70,7 +70,9 @@
                         id="showHideOpeningClosingBalance"
                         color="primary"
                     ></mat-slide-toggle>
-                    &nbsp;<label for="showHideOpeningClosingBalance">{{ localeData?.opening_closing_balance }}</label>
+                    &nbsp;<label class="custom-mat-label" for="showHideOpeningClosingBalance">{{
+                        localeData?.opening_closing_balance
+                    }}</label>
                 </div>
             </div>
             <div class="row">
@@ -82,7 +84,7 @@
                         color="primary"
                         (change)="onBalanceTypeAsSignChanged($event)"
                     ></mat-slide-toggle>
-                    &nbsp;<label for="balanceTypeAsSign">{{ localeData?.cr_dr }}</label>
+                    &nbsp;<label class="custom-mat-label" for="balanceTypeAsSign">{{ localeData?.cr_dr }}</label>
                 </div>
             </div>
             <div class="row">
