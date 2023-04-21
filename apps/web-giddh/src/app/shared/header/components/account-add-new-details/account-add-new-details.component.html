@@ -241,7 +241,8 @@
                         <div class="gstin-form" formArrayName="addresses">
                             <ng-container
                                 *ngFor="
-                                    let gst of addAccountForm.get('addresses')['controls'] | slice: 0:gstDetailsLength;
+                                    let gst of addAccountForm.get('addresses')['controls']
+                                        | slice : 0 : gstDetailsLength;
                                     let i = index;
                                     let f = first;
                                     let l = last
@@ -253,7 +254,7 @@
                                         <div class="add-address-default">
                                             <h3>{{ commonLocaleData?.app_address }} {{ i + 1 }}</h3>
                                             <div class="remove-radio-btn">
-                                                <span>
+                                                <span class="pull-left">
                                                     <a
                                                         href="javascript:void(0);"
                                                         *ngIf="!f"
@@ -263,23 +264,20 @@
                                                         <i class="icon-cross"> </i> {{ commonLocaleData?.app_remove }}
                                                     </a>
                                                 </span>
-                                                <span [tooltip]="localeData?.address_tooltip" placement="left">
-                                                    <ngx-switch
-                                                        [(status)]="
-                                                            addAccountForm.get('addresses').controls[i].get('isDefault')
-                                                                .value
-                                                        "
+                                                <span
+                                                    [tooltip]="localeData?.address_tooltip"
+                                                    class="pull-right is-default-address"
+                                                    placement="left"
+                                                >
+                                                    <mat-slide-toggle
+                                                        formControlName="isDefault"
                                                         name="defaultGst_{{ i }}"
-                                                        [onText]="commonLocaleData?.app_on"
-                                                        [offText]="commonLocaleData?.app_off"
-                                                        [onColor]="bootstrapToggleSwitch?.On"
-                                                        [offColor]="bootstrapToggleSwitch?.Off"
-                                                        [size]="bootstrapToggleSwitch?.Size"
-                                                        (statusChange)="
+                                                        color="primary"
+                                                        (change)="
                                                             isDefaultAddressSelected(gst.get('isDefault')?.value, i)
                                                         "
                                                     >
-                                                    </ngx-switch>
+                                                    </mat-slide-toggle>
                                                 </span>
                                             </div>
                                         </div>

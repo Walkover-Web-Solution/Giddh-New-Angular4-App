@@ -185,7 +185,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public profileObj: any;
     public keydownClassAdded: boolean = false;
     public tcsOrTds: 'tcs' | 'tds' = 'tcs';
-    public totalTdElementWidth: number = 0;
     public multiCurrencyAccDetails: any = null;
     /** Amount of invoice select for credit note */
     public selectedInvoiceAmount: number = 0;
@@ -574,10 +573,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 this.toaster.showSnackBar("error", output.file.response.message);
             }
         }
-    }
-
-    public onResized(event: ResizedEvent) {
-        this.totalTdElementWidth = event.newWidth + 10;
     }
 
     public selectAccount(e: IOption, txn: ILedgerTransactionItem, selectCmp: ShSelectComponent, clearAccount?: boolean) {
