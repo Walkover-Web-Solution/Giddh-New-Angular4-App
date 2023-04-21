@@ -80,7 +80,7 @@ export class PersonalInformationComponent implements OnInit, OnDestroy {
      */
     public profileUpdated(keyName: string): void {
         this.updatedData[keyName] = this.profileData[keyName];
-        this.saveProfileSubject.next();
+        this.saveProfileSubject.next(true);
     }
 
 }

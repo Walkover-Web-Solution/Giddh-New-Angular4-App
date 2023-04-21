@@ -49,7 +49,6 @@ import { ValidateSectionPermissionDirectiveModule } from './validate-section-per
 import { HamburgerMenuModule } from './header/components/hamburger-menu/hamburger-menu.module';
 import { GiddhPageLoaderModule } from './giddh-page-loader/giddh-page-loader.module';
 import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicker.module';
-import { NgxBootstrapSwitchModule } from 'ngx-bootstrap-switch';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MasterComponent } from './header/components/master/master.component';
 import { CheckPermissionModule } from '../permissions/check-permission.module';
@@ -131,7 +130,7 @@ export function provideConfig() {
         ValidateSectionPermissionDirectiveModule,
         GiddhPageLoaderModule,
         GiddhDatepickerModule,
-        NgxBootstrapSwitchModule.forRoot(),
+        MatSlideToggleModule,
         MatSlideToggleModule,
         CheckPermissionModule,
         AccountUpdateNewDetailsModule,
