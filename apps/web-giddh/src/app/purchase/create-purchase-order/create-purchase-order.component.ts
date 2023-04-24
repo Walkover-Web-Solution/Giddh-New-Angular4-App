@@ -2916,7 +2916,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     public getVendorPurchaseOrders(vendorName: any): void {
         if (this.selectedCompany) {
             let purchaseOrderGetRequest = { companyUniqueName: this.selectedCompany.uniqueName, accountUniqueName: vendorName, page: 1, count: 10, sort: '', sortBy: '' };
-            let purchaseOrderPostRequest = { statuses: [PURCHASE_ORDER_STATUS.open, PURCHASE_ORDER_STATUS.partiallyReceived, PURCHASE_ORDER_STATUS.expired, PURCHASE_ORDER_STATUS.cancelled] };
+            let purchaseOrderPostRequest = { statuses: [PURCHASE_ORDER_STATUS.open, PURCHASE_ORDER_STATUS.partiallyConverted, PURCHASE_ORDER_STATUS.expired, PURCHASE_ORDER_STATUS.cancelled] };
 
             if (purchaseOrderGetRequest.companyUniqueName && vendorName) {
                 this.purchaseOrders = [];
