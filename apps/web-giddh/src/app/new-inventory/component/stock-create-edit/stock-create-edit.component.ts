@@ -575,13 +575,14 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
      */
     public getWarehouses(): void {
         this.store.pipe(select(state => state.warehouse.warehouses), takeUntil(this.destroyed$)).subscribe((warehouses: any) => {
-            if (warehouses) {
-                this.warehouses = warehouses.results;
-            } else {
+            if (!warehouses?.results?.length) {
                 this.store.dispatch(this.warehouseAction.fetchAllWarehouses({ page: 1, count: 0 }));
+            } else {
+                this.warehouses = warehouses?.results;
             }
         });
     }
+
 
     /**
      * Create stock
@@ -653,9 +654,6 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     private saveStock(): void {
         this.toggleLoader(true);
         const request = this.formatRequest();
-        console.log(request);
-
-        return;
         this.inventoryService.createStock(request, this.stockGroupUniqueName, this.stockType).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.toggleLoader(false);
             if (response?.status === "success") {
@@ -668,13 +666,85 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     }
 
     /**
+ * Formats request before sending
+ *
+ * @returns {*}
+ * @memberof StockCreateEditComponent
+ */
+    public formatRequest(): any {
+        let stockForm = cloneDeep(this.stockForm);
+
+        stockForm.taxes = this.taxTempArray.map(tax => tax?.uniqueName);
+
+        if (!this.isPurchaseInformationEnabled) {
+            stockForm.purchaseAccountDetails = null;
+        }
+        if (!this.isSalesInformationEnabled) {
+            stockForm.salesAccountDetails = null;
+        }
+
+        stockForm.customFields = stockForm.customFields?.map(customField => {
+            return {
+                uniqueName: customField?.uniqueName,
+                value: customField?.value
+            }
+        });
+        let defaultWarehouse = null;
+        if (this.warehouses?.length > 0) {
+            defaultWarehouse = this.warehouses?.filter(warehouse => warehouse.isDefault);
+        }
+        stockForm.variants = stockForm.variants?.map(variant => {
+
+            if (!this.isVariantAvailable) {
+                const salesUnitRate = variant?.salesInformation.map(unitRate => {
+                    unitRate.accountUniqueName = stockForm.salesAccountDetails.accountUniqueName;
+                    return unitRate;
+                });
+                const purchaseUnitRate = variant?.purchaseInformation.map(unitRate => {
+                    unitRate.accountUniqueName = stockForm.purchaseAccountDetails.accountUniqueName;
+                    return unitRate;
+                });
+                variant.name = stockForm.name;
+                variant['unitRates'] = salesUnitRate.concat(purchaseUnitRate);
+
+                variant.warehouseBalance = [
+                    {
+                        warehouse: {
+                            name: (defaultWarehouse) ? defaultWarehouse[0]?.name : undefined,
+                            uniqueName: (defaultWarehouse) ? defaultWarehouse[0]?.uniqueName : undefined
+                        },
+                        stockUnit: {
+                            name: this.stockUnitName,
+                            code: this.stockForm.stockUnitUniqueName
+                        },
+                        openingQuantity: 0,
+                        openingAmount: 0
+                    }
+                ]
+            } else {
+                variant['unitRates'] = variant.salesInformation.concat(variant.purchaseInformation);
+            }
+            delete variant.salesInformation;
+            delete variant.purchaseInformation;
+            return variant;
+        });
+        stockForm['purchaseAccountUniqueNames'] = [stockForm.purchaseAccountDetails.accountUniqueName];
+        stockForm['salesAccountUniqueNames'] = [stockForm.salesAccountDetails.accountUniqueName];
+        delete stockForm.purchaseAccountDetails;
+        delete stockForm.salesAccountDetails;
+
+        debugger;
+        return stockForm;
+    }
+
+    /**
      * Get stock details
      *
      * @memberof StockCreateEditComponent
      */
     public getStockDetails(): void {
         this.toggleLoader(true);
-        this.inventoryService.getStock(this.queryParams?.stockUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.inventoryService.getStockV2(this.queryParams?.stockUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success" && response.body) {
                 this.stockForm.type = response.body.type ?? "PRODUCT";
                 this.stockForm.name = response.body.name;
@@ -699,31 +769,92 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 this.stockForm.outOfStockSelling = response.body.outOfStockSelling;
                 this.stockForm.variants = response.body.variants;
                 this.stockForm.options = response.body.options;
-                if (response.body.purchaseAccountDetails) {
-                    this.stockForm.purchaseAccountDetails = response.body.purchaseAccountDetails;
-                }
-                if (!this.stockForm.purchaseAccountDetails?.unitRates?.length) {
-                    this.stockForm.purchaseAccountDetails.unitRates.push({
-                        rate: null,
-                        stockUnitCode: null,
-                        stockUnitUniqueName: null
+                this.isVariantAvailable = (this.stockForm?.variants?.length > 1) ? true : false;
+                response?.body?.variants.forEach(variant => {
+                    console.log(variant);
+
+                    if (variant.purchaseAccountDetails) {
+                        this.stockForm.purchaseAccountDetails = variant.purchaseAccountDetails.accountUniqueName;
+                    }
+                    if (variant.salesAccountDetails) {
+                        this.stockForm.salesAccountDetails = variant.salesAccountDetails.accountUniqueName;
+                    }
+                    // if (!this.stockForm.purchaseAccountDetails?.unitRates?.length) {
+                    //     this.stockForm.purchaseAccountDetails.unitRates.push({
+                    //         rate: null,
+                    //         stockUnitCode: null,
+                    //         stockUnitUniqueName: null
+                    //     });
+                    // }
+                    // if (!this.stockForm.salesAccountDetails?.unitRates?.length) {
+                    //     this.stockForm.salesAccountDetails.unitRates.push({
+                    //         rate: null,
+                    //         stockUnitCode: null,
+                    //         stockUnitUniqueName: null
+                    //     });
+                    // }
+                    let variants = response?.body?.variants;
+                    let defaultWarehouse = null;
+                    if (this.warehouses?.length > 0) {
+                        defaultWarehouse = this.warehouses?.filter(warehouse => warehouse.isDefault);
+                    }
+                    const existingVariants = cloneDeep(response?.body.variants);
+                    let stockVariants = [];
+                    variants?.forEach(variant => {
+                        let variantExists = existingVariants?.filter(existingVariant => existingVariant?.name === variant);
+
+                        let variantObj = (variantExists?.length > 0) ? variantExists[0] : {
+                            name: variant,
+                            archive: false,
+                            uniqueName: undefined,
+                            skuCode: undefined,
+
+                            salesInformation: [
+                                {
+                                    rate: undefined,
+                                    stockUnitCode: undefined,
+                                    stockUnitName: undefined,
+                                    stockUnitUniqueName: undefined,
+                                    accountUniqueName: this.stockForm.salesAccountDetails?.accountUniqueName
+                                }
+                            ],
+                            purchaseInformation: [
+                                {
+                                    rate: undefined,
+                                    stockUnitCode: undefined,
+                                    stockUnitName: undefined,
+                                    stockUnitUniqueName: undefined,
+                                    accountUniqueName: this.stockForm.purchaseAccountDetails?.accountUniqueName
+                                }
+                            ],
+                            warehouseBalance: [
+                                {
+                                    warehouse: {
+                                        name: (defaultWarehouse) ? defaultWarehouse[0]?.name : undefined,
+                                        uniqueName: (defaultWarehouse) ? defaultWarehouse[0]?.uniqueName : undefined
+                                    },
+                                    stockUnit: {
+                                        name: this.stockUnitName,
+                                        code: this.stockForm.stockUnitUniqueName
+                                    },
+                                    openingQuantity: 0,
+                                    openingAmount: 0
+                                }
+                            ]
+                        };
+                        // console.log(variantObj);
+
+                        stockVariants.push(variantObj);
                     });
-                }
-                if (response.body.salesAccountDetails) {
-                    this.stockForm.salesAccountDetails = response.body.salesAccountDetails;
-                }
-                if (!this.stockForm.salesAccountDetails?.unitRates?.length) {
-                    this.stockForm.salesAccountDetails.unitRates.push({
-                        rate: null,
-                        stockUnitCode: null,
-                        stockUnitUniqueName: null
-                    });
-                }
+                    this.stockForm.variants = stockVariants;
+                });
+
+
                 this.stockGroupUniqueName = response.body.stockGroup?.uniqueName;
                 this.defaultStockGroupUniqueName = response.body.stockGroup?.uniqueName;
                 this.isPurchaseInformationEnabled = this.stockForm?.purchaseAccountDetails?.accountUniqueName;
                 this.isSalesInformationEnabled = this.stockForm?.salesAccountDetails?.accountUniqueName;
-                this.isVariantAvailable = (this.stockForm?.variants?.length) ? true : false;
+
                 this.stockUnitName = response.body?.stockUnit?.name;
                 this.stockGroupName = response.body?.stockGroup?.name;
                 this.customFieldsData = response.body?.customFields;
@@ -733,6 +864,8 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 this.checkSelectedTaxes();
                 this.toggleLoader(false);
                 this.changeDetection.detectChanges();
+                // console.log(this.stockForm);
+
             } else {
                 this.toaster.showSnackBar("error", response?.message);
             }
@@ -919,32 +1052,6 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         });
     }
 
-    /**
-     * Formats request before sending
-     *
-     * @returns {*}
-     * @memberof StockCreateEditComponent
-     */
-    public formatRequest(): any {
-        let stockForm = cloneDeep(this.stockForm);
-
-        stockForm.taxes = this.taxTempArray.map(tax => tax?.uniqueName);
-
-        if (!this.isPurchaseInformationEnabled) {
-            stockForm.purchaseAccountDetails = null;
-        }
-        if (!this.isSalesInformationEnabled) {
-            stockForm.salesAccountDetails = null;
-        }
-
-        stockForm.customFields = stockForm.customFields?.map(customField => {
-            return {
-                uniqueName: customField?.uniqueName,
-                value: customField?.value
-            }
-        });
-        return stockForm;
-    }
 
     /**
      * Maps the custom field data in object

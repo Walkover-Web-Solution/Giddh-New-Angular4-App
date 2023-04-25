@@ -55,10 +55,10 @@ export class InventoryService {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.post(this.config.apiUrl + INVENTORY_API.CREATE_STOCK_GROUP?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             ?.replace(':type', encodeURIComponent(moduleType)), model).pipe(map((res) => {
-            let data: BaseResponse<StockGroupResponse, StockGroupRequest> = res;
-            data.request = model;
-            return data;
-        }), catchError((e) => this.errorHandler.HandleCatch<StockGroupResponse, StockGroupRequest>(e, model)));
+                let data: BaseResponse<StockGroupResponse, StockGroupRequest> = res;
+                data.request = model;
+                return data;
+            }), catchError((e) => this.errorHandler.HandleCatch<StockGroupResponse, StockGroupRequest>(e, model)));
     }
 
     /**
@@ -1012,6 +1012,19 @@ export class InventoryService {
             data.request = model;
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
+    }
+
+    public getStockV2(stockUniqueName: string): Observable<BaseResponse<any, any>> {
+        const companyUniqueName = this.generalService.companyUniqueName;
+        let url = this.config.apiUrl + INVENTORY_API.GET_STOCK_V2;
+        url = url?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName));
+        url = url?.replace(':stockUniqueName', encodeURIComponent(stockUniqueName));
+
+        return this.http.get(url).pipe(map((res) => {
+            let data: BaseResponse<any, string> = res;
+            data.request = stockUniqueName;
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e, stockUniqueName)));
     }
 
     public getStock(stockUniqueName: string): Observable<BaseResponse<any, any>> {

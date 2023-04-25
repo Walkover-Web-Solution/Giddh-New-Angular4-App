@@ -400,6 +400,19 @@
                                                                         "
                                                                         *ngIf="!isVariantAvailable"
                                                                     >
+                                                                        <mat-checkbox
+                                                                            name="purchaseTaxInclusive"
+                                                                            class="mr-l2"
+                                                                            color="primary"
+                                                                            [(ngModel)]="
+                                                                                stockForm.variants[0]
+                                                                                    .purchaseTaxInclusive
+                                                                            "
+                                                                            [matTooltip]="
+                                                                                'Is Purchase Rate Tax Inclusive?'
+                                                                            "
+                                                                            matTooltipPosition="above"
+                                                                        ></mat-checkbox>
                                                                         <div
                                                                             class="row add-new-field mr-b15"
                                                                             *ngFor="
@@ -552,6 +565,17 @@
                                                                         "
                                                                         *ngIf="!isVariantAvailable"
                                                                     >
+                                                                        <mat-checkbox
+                                                                            color="primary"
+                                                                            name="salesTaxInclusive"
+                                                                            [(ngModel)]="
+                                                                                stockForm?.variants[0].salesTaxInclusive
+                                                                            "
+                                                                            [matTooltip]="
+                                                                                'Is Sales Rate Tax Inclusive?'
+                                                                            "
+                                                                            matTooltipPosition="above"
+                                                                        ></mat-checkbox>
                                                                         <div
                                                                             class="row add-new-field mr-b15"
                                                                             *ngFor="
