@@ -51,10 +51,10 @@ export function auditLogsReducer(state = initialState, action: CustomActions): A
                 newState.currentPage = 1;
                 newState.currentLogsRequest = data.request;
                 newState.getLogInProcess = false;
-                newState.logs = data.body.logs;
-                newState.size = data.body.size;
-                newState.totalElements = data.body.totalElements;
-                newState.totalPages = data.body.totalPages;
+                newState.logs = data.body?.logs;
+                newState.size = data.body?.size;
+                newState.totalElements = data.body?.totalElements;
+                newState.totalPages = data.body?.totalPages;
                 return newState;
             }
             return Object.assign({}, state, { getLogInProcess: false });
@@ -72,10 +72,10 @@ export function auditLogsReducer(state = initialState, action: CustomActions): A
                 newState.getLogInProcess = false;
                 newState.LoadMoreInProcess = false;
                 newState.currentLogsRequest = data.request;
-                newState.logs.push(...data.body.logs);
-                newState.size = data.body.size;
-                newState.totalElements = data.body.totalElements;
-                newState.totalPages = data.body.totalPages;
+                newState.logs.push(...data.body?.logs);
+                newState.size = data.body?.size;
+                newState.totalElements = data.body?.totalElements;
+                newState.totalPages = data.body?.totalPages;
                 return newState;
             }
             return Object.assign({}, state, { getLogInProcess: false });
@@ -93,12 +93,12 @@ export function auditLogsReducer(state = initialState, action: CustomActions): A
             auditLogsData = action.payload as BaseResponse<AuditLogsResponse, GetAuditLogsRequest>;
             if (auditLogsData?.status === 'success') {
                 newState = _.cloneDeep(state);
-                newState.currentPage = auditLogsData.body.page;
+                newState.currentPage = auditLogsData.body?.page;
                 newState.auditLogsRequest = auditLogsData.request;
-                newState.auditLogs = auditLogsData.body.results;
+                newState.auditLogs = auditLogsData.body?.results;
                 newState.getLogInProcess = false;
-                newState.totalElements = auditLogsData.body.totalItems;
-                newState.totalPages = auditLogsData.body.totalPages;
+                newState.totalElements = auditLogsData.body?.totalItems;
+                newState.totalPages = auditLogsData.body?.totalPages;
                 return newState;
             }
             return Object.assign({}, state, { getLogInProcess: false });

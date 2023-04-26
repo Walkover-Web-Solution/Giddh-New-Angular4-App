@@ -261,7 +261,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
     public regenerateKey() {
         this.loginService.RegenerateAuthKey().pipe(takeUntil(this.destroyed$)).subscribe(a => {
             if (a?.status === 'success') {
-                this.userAuthKey = a.body.authKey;
+                this.userAuthKey = a.body?.authKey;
             } else {
                 this.toasty.errorToast(a?.message, a?.status);
             }

@@ -295,7 +295,7 @@ export class LedgerService {
     public ExportLedger(model: ExportLedgerRequest, accountUniqueName: string, body: any, exportByInvoiceNumber?: boolean): Observable<BaseResponse<any, ExportLedgerRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let api;
-        if (body.type === 'columnar') {
+        if (body?.type === 'columnar') {
             api = exportByInvoiceNumber ? this.config.apiUrl + LEDGER_API.EXPORT_LEDGER_WITH_INVOICE_NUMBER : this.config.apiUrl + LEDGER_API.EXPORT_LEDGER;
         } else {
             api = this.config.apiUrl + LEDGER_API.EXPORT;
@@ -303,7 +303,7 @@ export class LedgerService {
         let url = api?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             ?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName))
             ?.replace(':from', model.from)?.replace(':to', model.to)?.replace(':type', encodeURIComponent(model.type))?.replace(':format', encodeURIComponent(model.format))?.replace(':sort', encodeURIComponent(model.sort));
-        if (body.type === 'columnar') {
+        if (body?.type === 'columnar') {
             if (model.branchUniqueName) {
                 url = url.concat(`&branchUniqueName=${model.branchUniqueName !== this.companyUniqueName ? encodeURIComponent(model.branchUniqueName) : ''}`);
             }

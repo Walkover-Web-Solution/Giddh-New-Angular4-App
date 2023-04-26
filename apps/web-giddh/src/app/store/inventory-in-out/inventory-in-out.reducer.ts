@@ -27,7 +27,7 @@ const initialState: InventoryInOutState = {
 export function InventoryInOutReducer(state: InventoryInOutState = initialState, action: CustomActions): InventoryInOutState {
     switch (action.type) {
         case INVENTORY_USER_ACTIONS.GET_ALL_USERS_RESPONSE: {
-            return { ...state, inventoryUsers: action.payload.body.results };
+            return { ...state, inventoryUsers: action.payload.body?.results };
         }
         case INVENTORY_REPORT_ACTIONS.GENERATE_REPORT_RESPONSE: {
             return { ...state, inventoryReport: action.payload.body };

@@ -172,7 +172,7 @@ export class LedgerActions {
                         this.store.dispatch(this.refreshLedger(true));
                     }
 
-                    if (this.generalService.voucherApiVersion !== 2 && response.request.generateInvoice && !response?.body.voucherGenerated) {
+                    if (this.generalService.voucherApiVersion !== 2 && response.request.generateInvoice && !response?.body?.voucherGenerated) {
                         let invoiceGenModel: GenerateBulkInvoiceRequest[] = [];
                         let entryUniqueName = response.queryString.entryUniqueName.split('?')[0];
                         invoiceGenModel.push({
@@ -268,7 +268,7 @@ export class LedgerActions {
                 return this.ledgerService.GetReconciliation(req, req.accountUniqueName);
             }), map(response => {
                 if (response?.status === 'success') {
-                    this.toaster.showSnackBar("info", response?.body.message);
+                    this.toaster.showSnackBar("info", response?.body?.message);
                 } else {
                     this.toaster.showSnackBar("error", response.message, response.code);
                 }
@@ -335,7 +335,7 @@ export class LedgerActions {
                                 if (item.failedEntries) {
                                     this.toaster.showSnackBar("warning", item.reason);
                                 }
-                                if (data.request && data.request.length > 0 && data.request[0].entries && data.request[0].entries.length > data.body.length) {
+                                if (data.request && data.request.length > 0 && data.request[0].entries && data.request[0].entries.length > data.body?.length) {
                                     this.toaster.showSnackBar("success", this.localeService.translate("app_messages.vouchers_generated"));
                                 }
                             });

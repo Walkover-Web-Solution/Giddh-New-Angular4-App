@@ -96,63 +96,63 @@ export function GstReconcileReducer(state: GstReconcileState = initialState, act
                     switch (response.queryString.action) {
                         case GstReconcileActionsEnum.notfoundongiddh:
                             newState.gstReconcileData.notFoundOnGiddh = {
-                                count: response.body.notFoundOnGiddh,
-                                data: response.body.not_found_on_giddh
+                                count: response.body?.notFoundOnGiddh,
+                                data: response.body?.not_found_on_giddh
                             };
 
-                            newState.gstReconcileData.notFoundOnPortal.count = response.body.notFoundOnPortal;
-                            newState.gstReconcileData.matched.count = response.body.matchedCount;
-                            newState.gstReconcileData.partiallyMatched.count = response.body.partiallyMatched;
+                            newState.gstReconcileData.notFoundOnPortal.count = response.body?.notFoundOnPortal;
+                            newState.gstReconcileData.matched.count = response.body?.matchedCount;
+                            newState.gstReconcileData.partiallyMatched.count = response.body?.partiallyMatched;
                             break;
                         case GstReconcileActionsEnum.notfoundonportal:
                             newState.gstReconcileData.notFoundOnPortal = {
-                                count: response.body.notFoundOnPortal,
-                                data: response.body.not_found_on_portal
+                                count: response.body?.notFoundOnPortal,
+                                data: response.body?.not_found_on_portal
                             };
 
-                            newState.gstReconcileData.notFoundOnGiddh.count = response.body.notFoundOnGiddh;
-                            newState.gstReconcileData.matched.count = response.body.matchedCount;
-                            newState.gstReconcileData.partiallyMatched.count = response.body.partiallyMatched;
+                            newState.gstReconcileData.notFoundOnGiddh.count = response.body?.notFoundOnGiddh;
+                            newState.gstReconcileData.matched.count = response.body?.matchedCount;
+                            newState.gstReconcileData.partiallyMatched.count = response.body?.partiallyMatched;
                             break;
                         case GstReconcileActionsEnum.matched:
                             newState.gstReconcileData.matched = {
-                                count: response.body.matchedCount,
-                                data: response.body.matched
+                                count: response.body?.matchedCount,
+                                data: response.body?.matched
                             };
 
-                            newState.gstReconcileData.notFoundOnPortal.count = response.body.notFoundOnPortal;
-                            newState.gstReconcileData.notFoundOnGiddh.count = response.body.notFoundOnGiddh;
-                            newState.gstReconcileData.partiallyMatched.count = response.body.partiallyMatched;
+                            newState.gstReconcileData.notFoundOnPortal.count = response.body?.notFoundOnPortal;
+                            newState.gstReconcileData.notFoundOnGiddh.count = response.body?.notFoundOnGiddh;
+                            newState.gstReconcileData.partiallyMatched.count = response.body?.partiallyMatched;
                             break;
                         case GstReconcileActionsEnum.partiallymatched:
                             newState.gstReconcileData.partiallyMatched = {
-                                count: response.body.partiallyMatched,
-                                data: response.body.partially_matched
+                                count: response.body?.partiallyMatched,
+                                data: response.body?.partially_matched
                             };
 
-                            newState.gstReconcileData.notFoundOnPortal.count = response.body.notFoundOnPortal;
-                            newState.gstReconcileData.matched.count = response.body.matchedCount;
-                            newState.gstReconcileData.notFoundOnGiddh.count = response.body.notFoundOnGiddh;
+                            newState.gstReconcileData.notFoundOnPortal.count = response.body?.notFoundOnPortal;
+                            newState.gstReconcileData.matched.count = response.body?.matchedCount;
+                            newState.gstReconcileData.notFoundOnGiddh.count = response.body?.notFoundOnGiddh;
                             break;
                     }
                 } else {
                     // if multiple actions data is required
                     newState.gstReconcileData = {
                         notFoundOnGiddh: {
-                            count: response.body.notFoundOnGiddh,
-                            data: response.body.not_found_on_giddh
+                            count: response.body?.notFoundOnGiddh,
+                            data: response.body?.not_found_on_giddh
                         },
                         notFoundOnPortal: {
-                            count: response.body.notFoundOnPortal,
-                            data: response.body.not_found_on_portal
+                            count: response.body?.notFoundOnPortal,
+                            data: response.body?.not_found_on_portal
                         },
                         matched: {
-                            count: response.body.matchedCount,
-                            data: response.body.matched
+                            count: response.body?.matchedCount,
+                            data: response.body?.matched
                         },
                         partiallyMatched: {
-                            count: response.body.partiallyMatched,
-                            data: response.body.partially_matched
+                            count: response.body?.partiallyMatched,
+                            data: response.body?.partially_matched
                         }
                     };
                 }

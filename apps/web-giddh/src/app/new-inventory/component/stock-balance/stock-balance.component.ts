@@ -210,10 +210,10 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
                     this.allSelectedWarehouse.forEach(warehouse => {
                         this.calculationWarehouse(warehouse);
                     });
-                    this.GroupStockReportRequest.page = response.body.page;
-                    this.GroupStockReportRequest.totalItems = response.body.totalItems;
-                    this.GroupStockReportRequest.totalPages = response.body.totalPages;
-                    this.GroupStockReportRequest.count = response.body.count;
+                    this.GroupStockReportRequest.page = response.body?.page;
+                    this.GroupStockReportRequest.totalItems = response.body?.totalItems;
+                    this.GroupStockReportRequest.totalPages = response.body?.totalPages;
+                    this.GroupStockReportRequest.count = response.body?.count;
                 } else {
                     groupStockReportRequest.totalItems = 0;
                     this.toaster.showSnackBar("error", response?.message);
