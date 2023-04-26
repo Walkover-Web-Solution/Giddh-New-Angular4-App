@@ -441,7 +441,11 @@
 .payor-duration {
     margin-top: 2px;
 }
-
+.mat-autocapture-payment {
+    margin-left: 10px;
+    vertical-align: top;
+    margin-top: -4px;
+}
 @media (max-width: 1600px) and (min-width: 1200px) {
     .account-wrapper {
         width: 80% !important;

@@ -42,7 +42,7 @@ import { NewConfirmModalModule } from '../theme/new-confirm-modal';
 import { MatDialogModule } from '@angular/material/dialog';
 import { SendEmailModule } from '../shared/send-email/send-email.module';
 import { ConfirmModalModule } from '../theme/confirm-modal/confirm-modal.module';
-import { NgxBootstrapSwitchModule } from 'ngx-bootstrap-switch';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 @NgModule({
     declarations: [
@@ -100,7 +100,7 @@ import { NgxBootstrapSwitchModule } from 'ngx-bootstrap-switch';
         MatDialogModule,
         SendEmailModule,
         ConfirmModalModule,
-        NgxBootstrapSwitchModule.forRoot(),
+        MatSlideToggleModule
     ]
 })
 

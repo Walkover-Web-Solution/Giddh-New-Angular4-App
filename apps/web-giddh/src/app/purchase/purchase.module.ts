@@ -24,7 +24,6 @@ import { PurchaseRecordComponent } from './purchase-record/component/purchase-re
 import { PurchaseSettingComponent } from './purchase-setting/purchase-setting.component';
 import { PurchaseComponent } from './purchase.component';
 import { PurchaseRoutingModule } from './purchase.routing.module';
-import { NgxBootstrapSwitchModule } from 'ngx-bootstrap-switch';
 import { VoucherAddBulkItemsModule } from '../shared/voucher-add-bulk-items/voucher-add-bulk-items.module';
 import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
 import { KeyboardShortutModule } from '../shared/helpers/directives/keyboardShortcut/keyboardShortut.module';
@@ -43,6 +42,7 @@ import { InvoiceModule } from '../invoice/invoice.module';
 import { GenericAsideMenuAccountModule } from '../shared/generic-aside-menu-account/generic.aside.menu.account.module';
 import { AsideMenuOtherTaxesModule } from '../shared/aside-menu-other-taxes/aside-menu-other-taxes.module';
 import { AsideMenuProductServiceModule } from '../shared/aside-menu-product-service/aside-menu-product-service.module';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 
 @NgModule({
@@ -77,7 +77,7 @@ import { AsideMenuProductServiceModule } from '../shared/aside-menu-product-serv
         TaxControlModule,
         DiscountControlModule,
         NoDataModule,
-        NgxBootstrapSwitchModule.forRoot(),
+        MatSlideToggleModule,
         VoucherAddBulkItemsModule,
         TranslateDirectiveModule,
         KeyboardShortutModule,

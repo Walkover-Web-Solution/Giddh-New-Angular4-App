@@ -1190,13 +1190,13 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
         this.isUpdateMode = true;
         this.inventoryService.getNewBranchTransfer(this.editBranchTransferUniqueName).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response?.status === "success") {
-                this.branchTransfer.dateOfSupply = response.body.dateOfSupply;
-                this.branchTransfer.challanNo = response.body.challanNo;
-                this.branchTransfer.note = response.body.note;
+                this.branchTransfer.dateOfSupply = response.body?.dateOfSupply;
+                this.branchTransfer.challanNo = response.body?.challanNo;
+                this.branchTransfer.note = response.body?.note;
                 this.branchTransfer.uniqueName = response?.body?.uniqueName;
-                this.branchTransfer.sources = response.body.sources;
-                this.branchTransfer.destinations = response.body.destinations;
-                this.branchTransfer.products = response.body.products;
+                this.branchTransfer.sources = response.body?.sources;
+                this.branchTransfer.destinations = response.body?.destinations;
+                this.branchTransfer.products = response.body?.products;
 
                 let allWarehouses = [];
                 if (Object.keys(this.allWarehouses)?.length > 0) {
@@ -1256,9 +1256,9 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                 this.branches = cloneDeep(tempBranches);
                 this.branches$ = observableOf(this.branches);
 
-                this.branchTransfer.entity = response.body.entity;
+                this.branchTransfer.entity = response.body?.entity;
                 this.branchTransfer.transferType = "products"; // MULTIPLE PRODUCTS VIEW SHOULD SHOW IN CASE OF EDIT
-                this.branchTransfer.transporterDetails = response.body.transporterDetails;
+                this.branchTransfer.transporterDetails = response.body?.transporterDetails;
                 if (this.branches) {
                     const destinationBranch = this.branches.find(branch => branch.value === this.branchTransfer.destinations[0]?.uniqueName);
                     this.destinationBranchAlias = destinationBranch && destinationBranch.additional ? destinationBranch.additional.alias : '';
@@ -1275,11 +1275,11 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                     };
                 }
 
-                if (response.body.dateOfSupply) {
-                    this.tempDateParams.dateOfSupply = new Date(response.body.dateOfSupply.split("-").reverse().join("-"));
+                if (response.body?.dateOfSupply) {
+                    this.tempDateParams.dateOfSupply = new Date(response.body?.dateOfSupply?.split("-")?.reverse()?.join("-"));
                 }
-                if (response.body.transporterDetails && response.body.transporterDetails.dispatchedDate) {
-                    this.tempDateParams.dispatchedDate = new Date(response.body.transporterDetails.dispatchedDate.split("-").reverse().join("-"));
+                if (response.body?.transporterDetails && response.body?.transporterDetails.dispatchedDate) {
+                    this.tempDateParams.dispatchedDate = new Date(response.body?.transporterDetails.dispatchedDate.split("-").reverse().join("-"));
                 }
 
                 this.calculateOverallTotal();

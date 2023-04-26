@@ -5624,9 +5624,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     this.salesService.getStateCode(countryCode).pipe(takeUntil(this.destroyed$)).subscribe(resp => {
                         this.startLoader(false);
                         if (!isCompanyStates) {
-                            this.statesSource = this.modifyStateResp((resp.body) ? resp.body.stateList : [], countryCode);
+                            this.statesSource = this.modifyStateResp((resp.body) ? resp.body?.stateList : [], countryCode);
                         } else {
-                            this.companyStatesSource = this.modifyStateResp((resp.body) ? resp.body.stateList : [], countryCode);
+                            this.companyStatesSource = this.modifyStateResp((resp.body) ? resp.body?.stateList : [], countryCode);
                         }
                         resolve();
                     }, () => {
@@ -6115,13 +6115,13 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             this.newVoucherUniqueName = response?.body?.uniqueName;
 
             if (response.body?.account) {
-                this.voucherNumber = response.body.number;
+                this.voucherNumber = response.body?.number;
                 this.invoiceNo = this.voucherNumber;
-                this.accountUniqueName = response.body.account?.uniqueName;
+                this.accountUniqueName = response.body?.account?.uniqueName;
             } else {
-                this.voucherNumber = response.body.voucherDetails.voucherNumber;
+                this.voucherNumber = response.body?.voucherDetails.voucherNumber;
                 this.invoiceNo = this.voucherNumber;
-                this.accountUniqueName = response.body.accountDetails?.uniqueName;
+                this.accountUniqueName = response.body?.accountDetails?.uniqueName;
             }
 
             if (this.isPurchaseInvoice) {

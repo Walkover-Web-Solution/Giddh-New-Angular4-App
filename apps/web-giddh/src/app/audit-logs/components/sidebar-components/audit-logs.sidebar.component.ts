@@ -109,7 +109,7 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
         this.companyService.getComapnyUsers().pipe(takeUntil(this.destroyed$)).subscribe(data => {
             if (data?.status === 'success') {
                 let users: IOption[] = [];
-                data.body.map((d) => {
+                data.body?.map((d) => {
                     users.push({ label: d.userName, value: d.userUniqueName, additional: d });
                 });
                 this.vm.canManageCompany = true;

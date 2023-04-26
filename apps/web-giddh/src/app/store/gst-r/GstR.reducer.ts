@@ -99,7 +99,7 @@ export function GstRReducer(state: GstRReducerState = initialState, action: Cust
             let newState = _.cloneDeep(state);
 
             if (response?.status === 'success') {
-                newState.gstR1TotalTransactions = response.body.count;
+                newState.gstR1TotalTransactions = response.body?.count;
                 newState.gstr1OverViewData = response.body;
                 newState.gstr1OverViewDataFetchedSuccessfully = true;
                 newState.gstr1OverViewDataInProgress = false;
@@ -167,7 +167,7 @@ export function GstRReducer(state: GstRReducerState = initialState, action: Cust
             let newState = _.cloneDeep(state);
 
             if (response?.status === 'success') {
-                newState.gstR2TotalTransactions = response.body.count;
+                newState.gstR2TotalTransactions = response.body?.count;
                 newState.gstr2OverViewData = response.body;
                 newState.gstr2OverViewDataFetchedSuccessfully = true;
                 newState.gstr2OverViewDataInProgress = false;

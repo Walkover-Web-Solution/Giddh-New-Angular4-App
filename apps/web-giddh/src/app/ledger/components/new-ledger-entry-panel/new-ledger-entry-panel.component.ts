@@ -544,7 +544,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
     public calculateTax() {
         let totalPercentage: number;
-        totalPercentage = this.currentTxn.taxesVm.reduce((pv, cv) => {
+        totalPercentage = this.currentTxn.taxesVm?.reduce((pv, cv) => {
             return cv.isChecked ? pv + cv.amount : pv;
         }, 0);
         if (this.generalService.isReceiptPaymentEntry(this.activeAccount, this.currentTxn.selectedAccount, this.blankLedger.voucherType) && !this.isAdvanceReceiptWithTds) {

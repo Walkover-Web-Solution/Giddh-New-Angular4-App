@@ -900,7 +900,7 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
         } else {
             this.inventoryService.GetStocks().pipe(takeUntil(this.destroyed$)).subscribe(data => {
                 if (data?.status === 'success') {
-                    this.allStocks = cloneDeep(data?.body.results);
+                    this.allStocks = cloneDeep(data?.body?.results);
                     this.sortStockItems(this.allStocks);
                     if (needToFocusStockInputField) {
                         this.selectedStockInputField.value = '';
@@ -1089,7 +1089,7 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
             if (a && a !== '') {
                 this._accountService.getFlattenAccounts('', '', '').pipe(takeUntil(this.destroyed$)).subscribe(data => {
                     if (data?.status === 'success') {
-                        this._tallyModuleService.setFlattenAccounts(data?.body.results);
+                        this._tallyModuleService.setFlattenAccounts(data?.body?.results);
                         if (needToFocusAccountInputField) {
                             this.selectedAccountInputField.value = '';
                             this.selectedAccountInputField.focus();

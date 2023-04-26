@@ -207,11 +207,11 @@ export class ImportsComponent implements OnInit, OnDestroy {
                         result.expireAt = this.localeData?.expired;
                     }
                 });
-                this.dataSource = response.body.items;
-                this.importRequest.page = response.body.page;
-                this.importRequest.totalItems = response.body.totalItems;
-                this.importRequest.totalPages = response.body.totalPages;
-                this.importRequest.count = response.body.count;
+                this.dataSource = response.body?.items;
+                this.importRequest.page = response.body?.page;
+                this.importRequest.totalItems = response.body?.totalItems;
+                this.importRequest.totalPages = response.body?.totalPages;
+                this.importRequest.count = response.body?.count;
             } else {
                 this.dataSource = [];
                 this.importRequest.totalItems = 0;

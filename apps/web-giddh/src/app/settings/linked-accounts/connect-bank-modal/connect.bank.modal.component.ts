@@ -276,7 +276,7 @@ export class ConnectBankModalComponent implements OnChanges, OnInit, OnDestroy {
         this.loginForm.reset();
         this._settingsLinkedAccountsService.GetLoginForm(providerId).pipe(takeUntil(this.destroyed$)).subscribe(a => {
             if (a && a.status === 'success') {
-                let response = _.cloneDeep(a.body.loginForm[0]);
+                let response = _.cloneDeep(a.body?.loginForm[0]);
                 this.createLoginForm(response);
                 this.step = 2;
             }

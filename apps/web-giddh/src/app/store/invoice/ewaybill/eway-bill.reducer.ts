@@ -214,7 +214,7 @@ export function EwayBillreducer(state: EwayBillState = initialState, action: Cus
             let res: BaseResponse<IAllTransporterDetails, any> = action.payload;
             if (res?.status === 'success') {
                 newState.TransporterListDetails = res.body;
-                newState.TransporterList = res.body.results;
+                newState.TransporterList = res.body?.results;
             }
             return Object.assign({}, state, newState);
         }
