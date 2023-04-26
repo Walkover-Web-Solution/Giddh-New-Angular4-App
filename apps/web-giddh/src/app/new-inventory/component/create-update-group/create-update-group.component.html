@@ -1,6 +1,6 @@
 <ng-container
     appTranslate
-    [file]="'inventory'"
+    [file]="'inventory/group'"
     (commonLocaleData)="commonLocaleData = $event"
     (localeData)="localeData = $event"
     (translationComplete)="translationComplete($event)"
@@ -25,7 +25,7 @@
                                             [type]="'text'"
                                             formControlName="name"
                                             [required]="true"
-                                            (change)="generateUniqueName()"
+                                            (change)="!groupUniqueName ? generateUniqueName() : ''"
                                         >
                                         </text-field>
                                     </div>
@@ -168,15 +168,7 @@
                             >
                                 Clear
                             </button>
-                            <button
-                                *ngIf="!groupUniqueName"
-                                mat-flat-button
-                                class="create-inventory-btn"
-                                [disabled]="groupForm.invalid"
-                                (click)="saveGroup()"
-                            >
-                                Create Group
-                            </button>
+
                             <button
                                 *ngIf="groupUniqueName"
                                 mat-raised-button
@@ -194,13 +186,12 @@
                                 Delete
                             </button>
                             <button
-                                *ngIf="groupUniqueName"
                                 mat-flat-button
                                 class="create-inventory-btn"
                                 [disabled]="groupForm.invalid"
                                 (click)="saveGroup()"
                             >
-                                Update Group
+                                {{ groupUniqueName ? "Update Group" : "Create Group" }}
                             </button>
                         </div>
                     </div>

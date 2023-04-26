@@ -1129,11 +1129,11 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     }
 
     /**
-* This will use for translation complete
-*
-* @param {*} event
-* @memberof CreateUpdateGroupComponent
-*/
+   * This will use for translation complete
+   *
+   * @param {*} event
+   * @memberof CreateUpdateGroupComponent
+   */
     public translationComplete(event: any): void {
         if (event) {
             this.translationLoaded = true;
