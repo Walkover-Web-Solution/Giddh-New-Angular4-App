@@ -333,7 +333,7 @@ export class ReportsComponent implements OnInit {
         if (!this.reportType) {
             return;
         }
-        this.cancelApi$.next();
+        this.cancelApi$.next(false);
         setTimeout(() => {
             this.cancelApi$ = new ReplaySubject(1);
             this.dataSource = [];

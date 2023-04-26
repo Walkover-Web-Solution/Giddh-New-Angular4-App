@@ -258,7 +258,7 @@ export class SettingCampaignComponent implements OnInit {
                     });
                 } else {
                     if (response.body?.page > 1) {
-                        this.triggerObj.page = response.body.page - 1;
+                        this.triggerObj.page = response.body?.page - 1;
                         this.getTriggers();
                     }
                 }

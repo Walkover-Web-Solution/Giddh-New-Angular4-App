@@ -351,7 +351,7 @@ export class GstComponent implements OnInit, OnDestroy {
         this.isTaxApiInProgress = true;
         this.gstReconcileService.getTaxDetails().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.body) {
-                this.taxes = response.body.map(tax => ({
+                this.taxes = response.body?.map(tax => ({
                     label: tax,
                     value: tax
                 }));

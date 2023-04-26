@@ -21,7 +21,7 @@ export class LocationService {
         return this.http.get(url?.replace(':q', location.QueryString)).pipe(
             map((res) => {
                 let r = res as any;
-                let data = r?.status === 'success' ? r.body.items : [];
+                let data = r?.status === 'success' ? r.body?.items : [];
                 return data;
             }));
     }

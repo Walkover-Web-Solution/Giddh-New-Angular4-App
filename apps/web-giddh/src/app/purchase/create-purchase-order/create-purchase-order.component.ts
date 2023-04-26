@@ -942,9 +942,9 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                 this.salesService.getStateCode(countryCode).pipe(takeUntil(this.destroyed$)).subscribe(resp => {
                     this.startLoader(false);
                     if (!isCompanyStates) {
-                        this.statesSource = this.modifyStateResp((resp.body) ? resp.body.stateList : []);
+                        this.statesSource = this.modifyStateResp((resp.body) ? resp.body?.stateList : []);
                     } else {
-                        this.companyStatesSource = this.modifyStateResp((resp.body) ? resp.body.stateList : []);
+                        this.companyStatesSource = this.modifyStateResp((resp.body) ? resp.body?.stateList : []);
                     }
                     resolve();
                 }, () => {
@@ -2202,7 +2202,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                     this.resetForm();
 
                     let poCreated = this.localeData?.po_created;
-                    poCreated = poCreated?.replace("[PO_NUMBER]", response.body.number);
+                    poCreated = poCreated?.replace("[PO_NUMBER]", response.body?.number);
                     this.toaster.successToast(poCreated);
                 } else {
                     this.toaster.errorToast(response.message);

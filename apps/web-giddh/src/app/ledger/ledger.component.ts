@@ -1198,8 +1198,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
         e.stopPropagation();
         this.ledgerService.DownloadAttachement(fileName).pipe(takeUntil(this.destroyed$)).subscribe(d => {
             if (d?.status === 'success') {
-                let blob = this.generalService.base64ToBlob(d.body.uploadedFile, `image/${d.body.fileType}`, 512);
-                download(d.body.name, blob, `image/${d.body.fileType}`)
+                let blob = this.generalService.base64ToBlob(d.body?.uploadedFile, `image/${d.body?.fileType}`, 512);
+                download(d.body?.name, blob, `image/${d.body?.fileType}`)
             } else {
                 this.toaster.showSnackBar("error", d.message);
             }
@@ -1996,7 +1996,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public getInvoiceLists(request) {
         this.invoiceList = [];
         this.ledgerService.GetInvoiceList(request).pipe(takeUntil(this.destroyed$)).subscribe((res: any) => {
-            _.map(res.body.invoiceList, (o) => {
+            _.map(res?.body?.invoiceList, (o) => {
                 this.invoiceList.push({ label: o.invoiceNumber, value: o.invoiceNumber, isSelected: false });
             });
             _.uniqBy(this.invoiceList, 'value');

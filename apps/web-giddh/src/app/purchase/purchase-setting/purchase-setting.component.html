@@ -110,33 +110,25 @@
                             <div class="clearfix pd-t1">
                                 <div class="row">
                                     <div class="col-sm-12 col-md-12 col-lg-3">
-                                        <ngx-switch
-                                            [(status)]="invoiceSettings.purchaseBillSettings.sendThroughGmail"
+                                        <mat-slide-toggle
+                                            [(ngModel)]="invoiceSettings.purchaseBillSettings.sendThroughGmail"
                                             class="show-on-mobile"
                                             name="sendThroughGmail"
-                                            [onText]="commonLocaleData?.app_on"
-                                            [offText]="commonLocaleData?.app_off"
-                                            [onColor]="bootstrapToggleSwitch?.On"
-                                            [offColor]="bootstrapToggleSwitch?.Off"
-                                            [size]="bootstrapToggleSwitch?.Size"
+                                            color="primary"
                                             [disabled]="!isGmailIntegrated"
                                         >
-                                        </ngx-switch>
+                                        </mat-slide-toggle>
                                         <label>{{ localeData?.send_email_gmail }}</label>
                                     </div>
                                     <div class="col-sm-12 col-md-12 col-lg-9 form-group d-flex align-items-center">
-                                        <ngx-switch
-                                            [(status)]="invoiceSettings.purchaseBillSettings.sendThroughGmail"
+                                        <mat-slide-toggle
+                                            [(ngModel)]="invoiceSettings.purchaseBillSettings.sendThroughGmail"
                                             class="hide-on-mobile"
                                             name="sendThroughGmail"
-                                            [onText]="commonLocaleData?.app_on"
-                                            [offText]="commonLocaleData?.app_off"
-                                            [onColor]="bootstrapToggleSwitch?.On"
-                                            [offColor]="bootstrapToggleSwitch?.Off"
-                                            [size]="bootstrapToggleSwitch?.Size"
+                                            color="primary"
                                             [disabled]="!isGmailIntegrated"
                                         >
-                                        </ngx-switch>
+                                        </mat-slide-toggle>
                                         <span class="ml-1 integrated-email" *ngIf="!isGmailIntegrated">
                                             <a [href]="gmailAuthCodeUrl$ | async">{{ localeData?.integrate_gmail }}</a>
                                         </span>
@@ -185,31 +177,27 @@
                                 <div class="clearfix pd-t1">
                                     <div class="row">
                                         <div class="col-sm-12 col-md-12 col-lg-3">
-                                            <ngx-switch
-                                                [(status)]="invoiceSettings.purchaseBillSettings.changePOStatusOnExpiry"
+                                            <mat-slide-toggle
+                                                [(ngModel)]="
+                                                    invoiceSettings.purchaseBillSettings.changePOStatusOnExpiry
+                                                "
                                                 class="show-on-mobile"
                                                 name="changePOStatusOnExpiry"
-                                                [onText]="commonLocaleData?.app_on"
-                                                [offText]="commonLocaleData?.app_off"
-                                                [onColor]="bootstrapToggleSwitch?.On"
-                                                [offColor]="bootstrapToggleSwitch?.Off"
-                                                [size]="bootstrapToggleSwitch?.Size"
+                                                color="primary"
                                             >
-                                            </ngx-switch>
+                                            </mat-slide-toggle>
                                             <label>{{ localeData?.auto_change_status }}</label>
                                         </div>
                                         <div class="col-sm-12 col-md-12 col-lg-9 form-group">
-                                            <ngx-switch
-                                                [(status)]="invoiceSettings.purchaseBillSettings.changePOStatusOnExpiry"
+                                            <mat-slide-toggle
+                                                [(ngModel)]="
+                                                    invoiceSettings.purchaseBillSettings.changePOStatusOnExpiry
+                                                "
                                                 class="hide-on-mobile"
                                                 name="changePOStatusOnExpiry"
-                                                [onText]="commonLocaleData?.app_on"
-                                                [offText]="commonLocaleData?.app_off"
-                                                [onColor]="bootstrapToggleSwitch?.On"
-                                                [offColor]="bootstrapToggleSwitch?.Off"
-                                                [size]="bootstrapToggleSwitch?.Size"
+                                                color="primary"
                                             >
-                                            </ngx-switch>
+                                            </mat-slide-toggle>
                                         </div>
                                     </div>
                                 </div>
@@ -239,32 +227,24 @@
                                 <div class="clearfix pd-t1">
                                     <div class="row">
                                         <div class="col-sm-12 col-md-12 col-lg-3">
-                                            <ngx-switch
-                                                [(status)]="invoiceSettings.purchaseBillSettings.useCustomPONumber"
+                                            <mat-slide-toggle
+                                                [(ngModel)]="invoiceSettings.purchaseBillSettings.useCustomPONumber"
                                                 class="show-on-mobile"
                                                 name="useCustomPONumber"
-                                                [onText]="commonLocaleData?.app_on"
-                                                [offText]="commonLocaleData?.app_off"
-                                                [onColor]="bootstrapToggleSwitch?.On"
-                                                [offColor]="bootstrapToggleSwitch?.Off"
-                                                [size]="bootstrapToggleSwitch?.Size"
+                                                color="primary"
                                             >
-                                            </ngx-switch>
+                                            </mat-slide-toggle>
                                             <label>{{ localeData?.custom_po_number }}</label>
                                         </div>
                                         <div class="col-sm-12 col-md-12 col-lg-9 custom-purchase-order-input-fields">
                                             <div class="form-group clearfix">
-                                                <ngx-switch
-                                                    [(status)]="invoiceSettings.purchaseBillSettings.useCustomPONumber"
+                                                <mat-slide-toggle
+                                                    [(ngModel)]="invoiceSettings.purchaseBillSettings.useCustomPONumber"
                                                     class="hide-on-mobile"
                                                     name="useCustomPONumber"
-                                                    [onText]="commonLocaleData?.app_on"
-                                                    [offText]="commonLocaleData?.app_off"
-                                                    [onColor]="bootstrapToggleSwitch?.On"
-                                                    [offColor]="bootstrapToggleSwitch?.Off"
-                                                    [size]="bootstrapToggleSwitch?.Size"
+                                                    color="primary"
                                                 >
-                                                </ngx-switch>
+                                                </mat-slide-toggle>
                                                 <div
                                                     class="d-inline-flex custom-estimation"
                                                     *ngIf="invoiceSettings.purchaseBillSettings.useCustomPONumber"
@@ -337,31 +317,23 @@
                                 <div class="clearfix pd-t1">
                                     <div class="row">
                                         <div class="col-sm-12 col-md-12 col-lg-3">
-                                            <ngx-switch
-                                                [(status)]="invoiceSettings.purchaseBillSettings.enableNarration"
+                                            <mat-slide-toggle
+                                                [(ngModel)]="invoiceSettings.purchaseBillSettings.enableNarration"
                                                 class="show-on-mobile"
                                                 name="enableNarration"
-                                                [onText]="commonLocaleData?.app_on"
-                                                [offText]="commonLocaleData?.app_off"
-                                                [onColor]="bootstrapToggleSwitch?.On"
-                                                [offColor]="bootstrapToggleSwitch?.Off"
-                                                [size]="bootstrapToggleSwitch?.Size"
+                                                color="primary"
                                             >
-                                            </ngx-switch>
+                                            </mat-slide-toggle>
                                             <label>{{ localeData?.show_narration_ledger }}</label>
                                         </div>
                                         <div class="col-sm-12 col-md-12 col-lg-9 form-group">
-                                            <ngx-switch
-                                                [(status)]="invoiceSettings.purchaseBillSettings.enableNarration"
+                                            <mat-slide-toggle
+                                                [(ngModel)]="invoiceSettings.purchaseBillSettings.enableNarration"
                                                 class="hide-on-mobile"
                                                 name="enableNarration"
-                                                [onText]="commonLocaleData?.app_on"
-                                                [offText]="commonLocaleData?.app_off"
-                                                [onColor]="bootstrapToggleSwitch?.On"
-                                                [offColor]="bootstrapToggleSwitch?.Off"
-                                                [size]="bootstrapToggleSwitch?.Size"
+                                                color="primary"
                                             >
-                                            </ngx-switch>
+                                            </mat-slide-toggle>
                                         </div>
                                     </div>
                                 </div>
@@ -369,31 +341,23 @@
                                 <div class="clearfix pd-t1" *ngIf="voucherApiVersion === 2">
                                     <div class="row">
                                         <div class="col-sm-12 col-md-12 col-lg-3">
-                                            <ngx-switch
-                                                [(status)]="invoiceSettings.purchaseBillSettings.enableVoucherDownload"
+                                            <mat-slide-toggle
+                                                [(ngModel)]="invoiceSettings.purchaseBillSettings.enableVoucherDownload"
                                                 class="show-on-mobile"
                                                 name="enableVoucherDownload"
-                                                [onText]="commonLocaleData?.app_on"
-                                                [offText]="commonLocaleData?.app_off"
-                                                [onColor]="bootstrapToggleSwitch?.On"
-                                                [offColor]="bootstrapToggleSwitch?.Off"
-                                                [size]="bootstrapToggleSwitch?.Size"
+                                                color="primary"
                                             >
-                                            </ngx-switch>
+                                            </mat-slide-toggle>
                                             <label>{{ localeData?.enable_voucher_download }}</label>
                                         </div>
                                         <div class="col-sm-12 col-md-12 col-lg-9 form-group">
-                                            <ngx-switch
-                                                [(status)]="invoiceSettings.purchaseBillSettings.enableVoucherDownload"
+                                            <mat-slide-toggle
+                                                [(ngModel)]="invoiceSettings.purchaseBillSettings.enableVoucherDownload"
                                                 class="hide-on-mobile"
                                                 name="enableVoucherDownload"
-                                                [onText]="commonLocaleData?.app_on"
-                                                [offText]="commonLocaleData?.app_off"
-                                                [onColor]="bootstrapToggleSwitch?.On"
-                                                [offColor]="bootstrapToggleSwitch?.Off"
-                                                [size]="bootstrapToggleSwitch?.Size"
+                                                color="primary"
                                             >
-                                            </ngx-switch>
+                                            </mat-slide-toggle>
                                         </div>
                                     </div>
                                 </div>
@@ -401,62 +365,46 @@
                                 <div class="clearfix pd-t1" *ngIf="voucherApiVersion === 2">
                                     <div class="row">
                                         <div class="col-sm-12 col-md-12 col-lg-3 flex-container">
-                                            <ngx-switch
-                                                [(status)]="invoiceSettings.invoiceSettings.purchaseRoundOff"
+                                            <mat-slide-toggle
+                                                [(ngModel)]="invoiceSettings.invoiceSettings.purchaseRoundOff"
                                                 name="purchaseRoundOff"
                                                 class="show-on-mobile"
-                                                [onText]="commonLocaleData?.app_on"
-                                                [offText]="commonLocaleData?.app_off"
-                                                [onColor]="bootstrapToggleSwitch?.On"
-                                                [offColor]="bootstrapToggleSwitch?.Off"
-                                                [size]="bootstrapToggleSwitch?.Size"
+                                                color="primary"
                                             >
-                                            </ngx-switch>
+                                            </mat-slide-toggle>
                                             <label>{{ localeData?.apply_purchase_round_off }}</label>
                                         </div>
                                         <div class="col-sm-12 col-md-9 form-group">
-                                            <ngx-switch
-                                                [(status)]="invoiceSettings.invoiceSettings.purchaseRoundOff"
+                                            <mat-slide-toggle
+                                                [(ngModel)]="invoiceSettings.invoiceSettings.purchaseRoundOff"
                                                 name="purchaseRoundOff"
                                                 class="hide-on-mobile"
-                                                [onText]="commonLocaleData?.app_on"
-                                                [offText]="commonLocaleData?.app_off"
-                                                [onColor]="bootstrapToggleSwitch?.On"
-                                                [offColor]="bootstrapToggleSwitch?.Off"
-                                                [size]="bootstrapToggleSwitch?.Size"
+                                                color="primary"
                                             >
-                                            </ngx-switch>
+                                            </mat-slide-toggle>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="clearfix pd-t1" *ngIf="voucherApiVersion === 2">
                                     <div class="row">
                                         <div class="col-sm-12 col-md-12 col-lg-3 flex-container">
-                                            <ngx-switch
-                                                [(status)]="invoiceSettings.invoiceSettings.debitNoteRoundOff"
+                                            <mat-slide-toggle
+                                                [(ngModel)]="invoiceSettings.invoiceSettings.debitNoteRoundOff"
                                                 name="debitNoteRoundOff"
                                                 class="show-on-mobile"
-                                                [onText]="commonLocaleData?.app_on"
-                                                [offText]="commonLocaleData?.app_off"
-                                                [onColor]="bootstrapToggleSwitch?.On"
-                                                [offColor]="bootstrapToggleSwitch?.Off"
-                                                [size]="bootstrapToggleSwitch?.Size"
+                                                color="primary"
                                             >
-                                            </ngx-switch>
+                                            </mat-slide-toggle>
                                             <label>{{ localeData?.apply_debit_note_round_off }}</label>
                                         </div>
                                         <div class="col-sm-12 col-md-9 form-group">
-                                            <ngx-switch
-                                                [(status)]="invoiceSettings.invoiceSettings.debitNoteRoundOff"
+                                            <mat-slide-toggle
+                                                [(ngModel)]="invoiceSettings.invoiceSettings.debitNoteRoundOff"
                                                 name="debitNoteRoundOff"
                                                 class="hide-on-mobile"
-                                                [onText]="commonLocaleData?.app_on"
-                                                [offText]="commonLocaleData?.app_off"
-                                                [onColor]="bootstrapToggleSwitch?.On"
-                                                [offColor]="bootstrapToggleSwitch?.Off"
-                                                [size]="bootstrapToggleSwitch?.Size"
+                                                color="primary"
                                             >
-                                            </ngx-switch>
+                                            </mat-slide-toggle>
                                         </div>
                                     </div>
                                 </div>

@@ -108,7 +108,7 @@ export class UnitMappingComponent implements OnInit, OnDestroy {
      */
     public getStockUnits(): void {
         this.commonService.getStockUnits().pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            this.units = response.body.map((result: any) => {
+            this.units = response.body?.map((result: any) => {
                 return {
                     value: result.code,
                     label: `${result.code}-${result.name}`

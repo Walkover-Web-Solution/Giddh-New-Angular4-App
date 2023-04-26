@@ -136,11 +136,11 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
                     vouchers: {
                         ...vouchers,
                         items: vouchers?.items.map(m => {
-                            if (result.body.type !== VoucherTypeEnum.purchase && (m.voucherNumber === result.body.number) ||
-                                result.body.type === VoucherTypeEnum.purchase && (m?.uniqueName === result.body?.uniqueName)) {
-                                m.grandTotal.amountForAccount = result.body.grandTotal.amountForAccount;
-                            } else if (result.body.voucherDetails && m.voucherNumber === result.body.voucherDetails.voucherNumber) {
-                                m.grandTotal.amountForAccount = result.body.voucherDetails.grandTotal;
+                            if (result.body?.type !== VoucherTypeEnum.purchase && (m.voucherNumber === result.body?.number) ||
+                                result.body?.type === VoucherTypeEnum.purchase && (m?.uniqueName === result.body?.uniqueName)) {
+                                m.grandTotal.amountForAccount = result.body?.grandTotal.amountForAccount;
+                            } else if (result.body?.voucherDetails && m.voucherNumber === result.body?.voucherDetails.voucherNumber) {
+                                m.grandTotal.amountForAccount = result.body?.voucherDetails.grandTotal;
                             }
 
                             if (result && result.body && (result.body.type === VoucherTypeEnum.sales || result.body.type === VoucherTypeEnum.cash || result.body.type === VoucherTypeEnum.creditNote || result.body.type === VoucherTypeEnum.debitNote) && result.body.number == m.voucherNumber) {

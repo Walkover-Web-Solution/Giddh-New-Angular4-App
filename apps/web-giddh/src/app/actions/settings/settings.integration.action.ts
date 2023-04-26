@@ -111,7 +111,7 @@ export class SettingsIntegrationActions {
                     this.toasty.errorToast(data.message, data.code);
                 } else {
                     this.store.dispatch(this._companyAction.getAllRegistrations());
-                    this.toasty.successToast(data.body.message);
+                    this.toasty.successToast(data.body?.message);
                 }
                 return { type: 'EmptyAction' };
             })));
