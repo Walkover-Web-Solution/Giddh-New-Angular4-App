@@ -1,4 +1,10 @@
-<ng-container appTranslate (commonLocaleData)="commonLocaleData = $event">
+<ng-container
+    appTranslate
+    [file]="'inventory'"
+    (commonLocaleData)="commonLocaleData = $event"
+    (localeData)="localeData = $event"
+    (translationComplete)="translationComplete($event)"
+>
     <giddh-page-loader *ngIf="showLoader"></giddh-page-loader>
     <ng-container *ngIf="!showLoader">
         <div class="relative create-new-inventory-page static-tabs-on-page">
