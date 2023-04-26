@@ -203,7 +203,7 @@ export class InventoryTransactionListComponent implements OnInit {
         this.dataSource = [];
         this.isLoading = true;
         this.isReportLoaded = true;
-        this.cancelApi$.next();
+        this.cancelApi$.next(false);
         setTimeout(() => {
             this.cancelApi$ = new ReplaySubject(1);
             if (!this.isCompany) {

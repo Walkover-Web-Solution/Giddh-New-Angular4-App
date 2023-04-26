@@ -14,7 +14,6 @@ import {
     ViewChild
 } from '@angular/core';
 import { select, Store } from '@ngrx/store';
-import { ResizedEvent } from 'angular-resize-event';
 import { Configuration, SubVoucher, RATE_FIELD_PRECISION, SearchResultText, RESTRICTED_VOUCHERS_FOR_DOWNLOAD, AdjustedVoucherType } from 'apps/web-giddh/src/app/app.constant';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { saveAs } from 'file-saver';
@@ -185,7 +184,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public profileObj: any;
     public keydownClassAdded: boolean = false;
     public tcsOrTds: 'tcs' | 'tds' = 'tcs';
-    public totalTdElementWidth: number = 0;
     public multiCurrencyAccDetails: any = null;
     /** Amount of invoice select for credit note */
     public selectedInvoiceAmount: number = 0;
@@ -574,10 +572,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 this.toaster.showSnackBar("error", output.file.response.message);
             }
         }
-    }
-
-    public onResized(event: ResizedEvent) {
-        this.totalTdElementWidth = event.newWidth + 10;
     }
 
     public selectAccount(e: IOption, txn: ILedgerTransactionItem, selectCmp: ShSelectComponent, clearAccount?: boolean) {
