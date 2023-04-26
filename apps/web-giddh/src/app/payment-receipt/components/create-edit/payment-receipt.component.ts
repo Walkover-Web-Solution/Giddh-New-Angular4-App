@@ -1075,7 +1075,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
                     resolve();
                 } else {
                     this.salesService.getStateCode(countryCode).pipe(takeUntil(this.destroyed$)).subscribe(resp => {
-                        this.statesSource = this.modifyStateResponse((resp.body) ? resp.body.stateList : [], countryCode);
+                        this.statesSource = this.modifyStateResponse((resp.body) ? resp.body?.stateList : [], countryCode);
                         this.filteredBillingStates = cloneDeep(this.statesSource);
                         this.filteredShippingStates = cloneDeep(this.statesSource);
                         resolve();

@@ -484,16 +484,16 @@ export class InvoiceService {
     public getAllEwaybillsfilterList(body: IEwayBillfilter): Observable<BaseResponse<IEwayBillAllList, IEwayBillfilter>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let url = this.createQueryStringForEway(this.config.apiUrl + EWAYBILL_API.GENERATE_EWAYBILL, {
-            page: body.page, count: body.count, fromDate: body.fromDate, toDate: body.toDate, sort: body.sort, sortBy: body.sortBy, searchTerm: body.searchTerm, searchOn: body.searchOn, gstin: body.gstin
+            page: body?.page, count: body?.count, fromDate: body?.fromDate, toDate: body?.toDate, sort: body?.sort, sortBy: body?.sortBy, searchTerm: body?.searchTerm, searchOn: body?.searchOn, gstin: body?.gstin
         });
-        if (body.branchUniqueName) {
-            body.branchUniqueName = body.branchUniqueName !== this.companyUniqueName ? body.branchUniqueName : '';
-            url = url.concat(`&branchUniqueName=${body.branchUniqueName}`);
+        if (body?.branchUniqueName) {
+            body.branchUniqueName = body?.branchUniqueName !== this.companyUniqueName ? body?.branchUniqueName : '';
+            url = url.concat(`&branchUniqueName=${body?.branchUniqueName}`);
         }
         return this.http.get(url?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(
             map((res) => {
                 let data: BaseResponse<IEwayBillAllList, IEwayBillfilter> = res;
-                data.queryString = { sort: body.sort, sortBy: body.sortBy, searchTerm: body.searchTerm, searchOn: body.searchOn, gstin: body.gstin };
+                data.queryString = { sort: body?.sort, sortBy: body?.sortBy, searchTerm: body?.searchTerm, searchOn: body?.searchOn, gstin: body?.gstin };
                 return data;
             }),
             catchError((e) => this.errorHandler.HandleCatch<IEwayBillAllList, IEwayBillfilter>(e)));
@@ -584,12 +584,12 @@ export class InvoiceService {
         this.companyUniqueName = this.generalService.companyUniqueName;
 
         let url = this.createQueryStringForEway(this.config.apiUrl + EWAYBILL_API.ADD_TRANSPORTER, {
-            page: body.page, count: body.count, sort: body.sort, sortBy: body.sortBy
+            page: body?.page, count: body?.count, sort: body?.sort, sortBy: body?.sortBy
         });
         return this.http.get(url?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(
             map((res) => {
                 let data: BaseResponse<any, any> = res;
-                data.queryString = { sort: body.sort, sortBy: body.sortBy };
+                data.queryString = { sort: body?.sort, sortBy: body?.sortBy };
                 return data;
             }),
             catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));

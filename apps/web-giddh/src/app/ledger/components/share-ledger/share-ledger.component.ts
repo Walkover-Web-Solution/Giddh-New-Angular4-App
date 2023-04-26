@@ -61,7 +61,7 @@ export class ShareLedgerComponent implements OnInit, OnDestroy {
         magicLinkRequest.branchUniqueName = this.inputData?.advanceSearchRequest.branchUniqueName || '';
         this.ledgerService.GenerateMagicLink(magicLinkRequest, this.inputData?.accountUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(resp => {
             if (resp?.status === 'success') {
-                this.magicLink = resp.body.magicLink;
+                this.magicLink = resp.body?.magicLink;
             } else {
                 this.magicLink = '';
             }

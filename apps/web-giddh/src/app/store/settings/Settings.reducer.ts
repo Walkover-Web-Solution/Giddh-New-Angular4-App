@@ -379,7 +379,7 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
         case SETTINGS_LINKED_ACCOUNTS_ACTIONS.RECONNECT_ACCOUNT_RESPONSE: {
             let response: BaseResponse<any, string> = action.payload;
             if (response?.status === 'success') {
-                newState.linkedAccounts.iframeSource = response.body.connectUrl;
+                newState.linkedAccounts.iframeSource = response.body?.connectUrl;
                 return Object.assign({}, state, newState);
             }
             return state;
@@ -504,7 +504,7 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
             let AmazonSellerRes: BaseResponse<any, any> = action.payload;
             if (AmazonSellerRes?.status === 'success') {
                 // debugger;
-                let seller = state.integration.amazonSeller?.findIndex(p => p.sellerId === AmazonSellerRes.body.sellerId);
+                let seller = state.integration.amazonSeller?.findIndex(p => p.sellerId === AmazonSellerRes.body?.sellerId);
                 newState.integration.amazonSeller[seller] = cloneDeep(AmazonSellerRes.body);
                 newState.amazonState.isSellerUpdated = true;
                 return Object.assign({}, state, newState);

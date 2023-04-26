@@ -191,7 +191,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
             this.vatService.getVatReport(vatReportRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                 if (res) {
                     if (res.status === 'success') {
-                        this.vatReport = res.body.sections;
+                        this.vatReport = res.body?.sections;
                         this.cdRef.detectChanges();
                     } else {
                         this.toasty.errorToast(res.message);

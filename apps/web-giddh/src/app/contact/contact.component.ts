@@ -798,7 +798,7 @@ export class ContactComponent implements OnInit, OnDestroy {
             this.contactService.addComment(account?.comment, account?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(res => {
                 if (res?.status === 'success') {
                     this.updateCommentIdx = null;
-                    account.comment = cloneDeep(res.body.description);
+                    account.comment = cloneDeep(res.body?.description);
                 }
             });
         }, 500);

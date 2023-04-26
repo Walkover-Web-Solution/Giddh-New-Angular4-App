@@ -19,7 +19,7 @@ export class InventoryGroupListSidebar implements OnInit {
     }
     @HostListener('window:scroll', [])
     onWindowScroll() {
-        if (document.body.scrollTop > 10 ||
+        if (document.body?.scrollTop > 10 ||
             document.documentElement.scrollTop > 10) {
             document.getElementById('inventory-sub-sidebar').classList.add('fixed-sidebar-top');
         }
