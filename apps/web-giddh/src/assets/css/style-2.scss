@@ -625,6 +625,11 @@ $custom-typography: mat-typography-config(
     overflow: hidden !important;
 }
 
+.create-update-no-data {
+    .mat-pseudo-checkbox-disabled {
+        display: none !important;
+    }
+}
 @media screen and (max-width: 1366px) and (orientation: portrait) {
     .subscription-form-select {
         float: left !important;

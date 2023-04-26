@@ -13,7 +13,7 @@ import { AppState } from "../../../store";
 import { WarehouseActions } from "../../../settings/warehouse/action/warehouse.action";
 import { ActivatedRoute, Router } from "@angular/router";
 import { cloneDeep, findIndex, forEach } from "../../../lodash-optimized";
-import { FormControl, NgForm } from "@angular/forms";
+import { NgForm } from "@angular/forms";
 import { INVALID_STOCK_ERROR_MESSAGE } from "../../../app.constant";
 import { CustomFieldsService } from "../../../services/custom-fields.service";
 import { CompanyActions } from "../../../actions/company.actions";
@@ -139,6 +139,11 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /** True if translations loaded */
+    public translationLoaded: boolean = false;
+
 
     constructor(
         private inventoryService: InventoryService,
@@ -1121,5 +1126,17 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 this.toaster.showSnackBar("error", response?.message);
             }
         });
+    }
+
+    /**
+   * This will use for translation complete
+   *
+   * @param {*} event
+   * @memberof CreateUpdateGroupComponent
+   */
+    public translationComplete(event: any): void {
+        if (event) {
+            this.translationLoaded = true;
+        }
     }
 }
