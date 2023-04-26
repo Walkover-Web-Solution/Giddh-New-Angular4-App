@@ -143,10 +143,10 @@ export class ExportsComponent implements OnInit, OnDestroy {
                         result.expireAt = this.localeData?.expired;
                     }
                 });
-                this.dataSource = response.body.items;
-                this.downloadRequest.totalItems = response.body.totalItems;
-                this.downloadRequest.totalPages = response.body.totalPages;
-                this.downloadRequest.count = response.body.count;
+                this.dataSource = response.body?.items;
+                this.downloadRequest.totalItems = response.body?.totalItems;
+                this.downloadRequest.totalPages = response.body?.totalPages;
+                this.downloadRequest.count = response.body?.count;
             } else {
                 this.dataSource = [];
                 this.downloadRequest.totalItems = 0;

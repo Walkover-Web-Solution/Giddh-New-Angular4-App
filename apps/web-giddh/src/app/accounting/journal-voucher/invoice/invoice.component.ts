@@ -816,8 +816,8 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
         } else {
             this.inventoryService.GetStocks().pipe(takeUntil(this.destroyed$)).subscribe(data => {
                 if (data?.status === 'success') {
-                    this.sortStockItems(data?.body.results);
-                    this.allStocks = cloneDeep(data?.body.results);
+                    this.sortStockItems(data?.body?.results);
+                    this.allStocks = cloneDeep(data?.body?.results);
                     if (focusTargetElement) {
                         this.selectedStockInputField.focus();
                     }
@@ -868,7 +868,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
             let taxIndex = this.taxesToRemember?.findIndex((i) => i.stockUniqueName === stockUniqueName);
             if (taxIndex === -1) {
                 this.inventoryService.GetStockUniqueNameWithDetail(stockUniqueName).pipe(takeUntil(this.destroyed$)).subscribe((stockFullDetails) => {
-                    if (stockFullDetails && stockFullDetails.body.taxes && stockFullDetails.body.taxes.length) {
+                    if (stockFullDetails && stockFullDetails.body && stockFullDetails.body.taxes && stockFullDetails.body.taxes.length) {
                         this.companyTaxesList$.pipe(take(1)).subscribe((taxes: TaxResponse[]) => {
                             stockFullDetails.body.taxes.forEach((tax: string) => {
                                 let selectedTax = taxes.find((t) => t?.uniqueName === tax);
@@ -1041,13 +1041,13 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
             if (a && a !== '') {
                 this._accountService.getFlattenAccounts('', '', '').pipe(takeUntil(this.destroyed$)).subscribe(data => {
                     if (data?.status === 'success') {
-                        this.allFlattenAccounts = cloneDeep(data?.body.results);
+                        this.allFlattenAccounts = cloneDeep(data?.body?.results);
                         if (groupUniqueName) {
-                            const filteredAccounts: IFlattenAccountsResultItem[] = data?.body.results?.filter((acc) => acc?.parentGroups?.findIndex((g) => g?.uniqueName === groupUniqueName) > -1);
+                            const filteredAccounts: IFlattenAccountsResultItem[] = data?.body?.results?.filter((acc) => acc?.parentGroups?.findIndex((g) => g?.uniqueName === groupUniqueName) > -1);
                             this._tallyModuleService.setFlattenAccounts(filteredAccounts);
                             this.isAccountListFiltered = true;
                         } else {
-                            this._tallyModuleService.setFlattenAccounts(data?.body.results);
+                            this._tallyModuleService.setFlattenAccounts(data?.body?.results);
                             this.isAccountListFiltered = false;
                         }
                         if (needToFocusSelectedInputField) {

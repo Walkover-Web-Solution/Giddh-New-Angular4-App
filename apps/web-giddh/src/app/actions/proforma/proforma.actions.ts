@@ -24,13 +24,13 @@ export class ProformaActions {
                     let no: string;
                     switch (response.request.voucherDetails.voucherType) {
                         case 'proformas':
-                            no = response?.body.number;
+                            no = response?.body?.number;
                             break;
                         case 'estimates':
-                            no = response?.body.number;
+                            no = response?.body?.number;
                             break;
                         default:
-                            no = response?.body.voucherDetails.voucherNumber;
+                            no = response?.body?.voucherDetails?.voucherNumber;
                     }
 
                     let text = this.localeService.translate("app_messages.entry_created_with_voucher");
