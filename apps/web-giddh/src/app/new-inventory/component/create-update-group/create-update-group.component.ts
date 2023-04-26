@@ -91,13 +91,12 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
-        this.groupForm.controls['isSubGroup'].valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(s => {
-            if (s) {
+        this.groupForm.controls['isSubGroup'].valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
                 this.groupForm.controls['parentStockGroupUniqueName'].enable();
             } else {
                 this.groupForm.controls['parentStockGroupUniqueName'].reset();
                 this.groupForm.controls['parentStockGroupUniqueName'].disable();
-                this.groupForm.setErrors({ groupNameInvalid: true });
                 this.stockGroupName = '';
             }
         });
@@ -314,10 +313,6 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
      * @memberof CreateUpdateGroupComponent
      */
     public generateUniqueName(): void {
-        // if updating group don't generate uniqueName
-        if (this.groupUniqueName) {
-            return;
-        }
         let val: string = this.groupForm.controls['name']?.value;
         val = uniqueNameInvalidStringReplace(val);
 
@@ -455,11 +450,11 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
     }
 
     /**
- * This will use for translation complete
- *
- * @param {*} event
- * @memberof CreateUpdateGroupComponent
- */
+     * This will use for translation complete
+     *
+     * @param {*} event
+     * @memberof CreateUpdateGroupComponent
+     */
     public translationComplete(event: any): void {
         if (event) {
             this.translationLoaded = true;
