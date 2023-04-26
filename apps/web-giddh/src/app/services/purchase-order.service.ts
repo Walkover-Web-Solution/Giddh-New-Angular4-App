@@ -247,4 +247,12 @@ export class PurchaseOrderService {
             }),
             catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
     }
+
+    public convertPurchaseOrderToBill(getRequestObject: any, postRequestObject: any): Observable<BaseResponse<any, any>> {
+        let url: string = this.config.apiUrl + PURCHASE_ORDER_API.GET_ALL_VERSIONS;
+        url = url?.replace(':companyUniqueName', getRequestObject.companyUniqueName);
+        url = url?.replace(':accountUniqueName', encodeURIComponent(getRequestObject.accountUniqueName));
+
+        return this.http.post(url, postRequestObject).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e, getRequestObject)));
+    }
 }

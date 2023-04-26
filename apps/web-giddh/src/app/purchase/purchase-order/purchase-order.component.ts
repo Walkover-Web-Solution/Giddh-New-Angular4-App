@@ -311,7 +311,7 @@ export class PurchaseOrderComponent implements OnDestroy {
 
                         if (purchaseOrders && purchaseOrders.items && purchaseOrders.items.length > 0) {
                             purchaseOrders.items.map(item => {
-                                item.isSelected = this.generalService.checkIfValueExistsInArray(this.selectedPo, item?.uniqueName);
+                                item.isSelected = this.generalService.checkIfObjectExistsInArray(this.selectedPo, { poUniqueName: item?.uniqueName, vendorUniqueName: item?.vendor?.uniqueName });
                                 let grandTotalConversionRate = 0, grandTotalAmountForCompany, grandTotalAmountForAccount;
                                 grandTotalAmountForCompany = Number(item?.grandTotal?.amountForCompany) || 0;
                                 grandTotalAmountForAccount = Number(item?.grandTotal?.amountForAccount) || 0;
@@ -525,9 +525,9 @@ export class PurchaseOrderComponent implements OnDestroy {
             item.isSelected = type;
 
             if (this.allItemsSelected) {
-                this.selectedPo = this.generalService.addValueInArray(this.selectedPo, item?.uniqueName);
+                this.selectedPo = this.generalService.addObjectInArray(this.selectedPo, { poUniqueName: item?.uniqueName, vendorUniqueName: item?.vendor?.uniqueName });
             } else {
-                this.selectedPo = this.generalService.removeValueFromArray(this.selectedPo, item?.uniqueName);
+                this.selectedPo = this.generalService.removeObjectFromArray(this.selectedPo, { poUniqueName: item?.uniqueName, vendorUniqueName: item?.vendor?.uniqueName });
             }
         });
     }
@@ -542,9 +542,9 @@ export class PurchaseOrderComponent implements OnDestroy {
     public toggleItem(item: any, action: boolean): void {
         item.isSelected = action;
         if (action) {
-            this.selectedPo = this.generalService.addValueInArray(this.selectedPo, item?.uniqueName);
+            this.selectedPo = this.generalService.addObjectInArray(this.selectedPo, { poUniqueName: item?.uniqueName, vendorUniqueName: item?.vendor?.uniqueName });
         } else {
-            this.selectedPo = this.generalService.removeValueFromArray(this.selectedPo, item?.uniqueName);
+            this.selectedPo = this.generalService.removeObjectFromArray(this.selectedPo, { poUniqueName: item?.uniqueName, vendorUniqueName: item?.vendor?.uniqueName });
             this.allItemsSelected = false;
         }
     }
@@ -807,8 +807,8 @@ export class PurchaseOrderComponent implements OnDestroy {
     public getDeliveryDaysText(dueDays: number): string {
         let text = "";
 
-        if(dueDays > 0) {
-            if(dueDays === 1) {
+        if (dueDays > 0) {
+            if (dueDays === 1) {
                 text = this.localeData?.delivery_in_day;
             } else {
                 text = this.localeData?.delivery_in_days;
@@ -820,5 +820,33 @@ export class PurchaseOrderComponent implements OnDestroy {
         }
 
         return text;
+    }
+
+    /**
+     * Opens the bulk convert popup
+     *
+     * @param {TemplateRef<any>} template
+     * @memberof PurchaseOrderComponent
+     */
+    public openBulkConvert(template: TemplateRef<any>): void {
+        if (this.selectedPo?.length > 0) {
+            let selectedPoVendors = [];
+            this.selectedPo.forEach(po => {
+                if (!selectedPoVendors.includes(po.vendorUniqueName)) {
+                    selectedPoVendors.push(po.vendorUniqueName);
+                }
+            });
+
+            if (selectedPoVendors?.length > 1) {
+                this.toaster.errorToast(this.localeData?.po_selection_vendor_error);
+            } else {
+                this.modalRef = this.modalService.show(
+                    template,
+                    Object.assign({}, { class: 'modal-sm' })
+                );
+            }
+        } else {
+            this.toaster.errorToast(this.localeData?.po_selection_error);
+        }
     }
 }

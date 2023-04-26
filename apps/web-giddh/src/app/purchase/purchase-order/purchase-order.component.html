@@ -71,7 +71,7 @@
                                 <a
                                     class="dropdown-item cp"
                                     href="javascript:void(0)"
-                                    (click)="bulkUpdate('create_purchase_bill')"
+                                    (click)="openBulkConvert(purchaseBulkConvert)"
                                 >
                                     {{ localeData?.convert_tobill }}</a
                                 >
@@ -134,7 +134,7 @@
                             <a
                                 class="dropdown-item cp"
                                 href="javascript:void(0)"
-                                (click)="bulkUpdate('create_purchase_bill')"
+                                (click)="openBulkConvert(purchaseBulkConvert)"
                             >
                                 {{ localeData?.convert_tobill }}</a
                             >
@@ -383,7 +383,7 @@
                                 <a
                                     [tooltip]="localeData?.convert_tobill"
                                     *ngIf="item?.status === 'open' && !isCompany"
-                                    (click)="bulkUpdate('create_purchase_bill', item.voucherNumber)"
+                                    (click)="toggleItem(item, true); openBulkConvert(purchaseBulkConvert)"
                                 >
                                     <span class="icon-tick font-12"></span>
                                 </a>
@@ -617,5 +617,14 @@
             [sendEmailRequest]="sendEmailRequest"
             (closeModelEvent)="closeSendMailPopup($event)"
         ></purchase-send-email-modal>
+    </ng-template>
+    <ng-template #purchaseBulkConvert>
+        <bulk-convert
+            [localeData]="localeData"
+            [commonLocaleData]="commonLocaleData"
+            [selectedPo]="selectedPo"
+            (closeModelEvent)="modalRef?.hide()"
+        >
+        </bulk-convert>
     </ng-template>
 </ng-container>
