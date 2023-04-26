@@ -1206,4 +1206,78 @@ export class GeneralService {
         }
         return found;
     }
+
+    /**
+     * This will add object in array if doesn't exists
+     *
+     * @param {any[]} array
+     * @param {*} value
+     * @returns {Array<string>}
+     * @memberof GeneralService
+     */
+    public addObjectInArray(array: any[], value: any): Array<string> {
+        let exists = false;
+        if (array && array.length > 0) {
+            array.forEach(item => {
+                if (item?.poUniqueName === value?.poUniqueName) {
+                    exists = true;
+                }
+            });
+        }
+
+        if (!exists) {
+            array.push(value);
+        }
+
+        return array;
+    }
+
+    /**
+     * This will check if object exists in array
+     *
+     * @param {any[]} array
+     * @param {*} value
+     * @returns {boolean}
+     * @memberof GeneralService
+     */
+    public checkIfObjectExistsInArray(array: any[], value: any): boolean {
+        let exists = false;
+
+        if (array && array.length > 0) {
+            array.forEach(item => {
+                if (item?.poUniqueName === value?.poUniqueName) {
+                    exists = true;
+                }
+            });
+        }
+
+        return exists;
+    }
+
+    /**
+     * This will remove object from array
+     *
+     * @param {any[]} array
+     * @param {*} value
+     * @returns {Array<string>}
+     * @memberof GeneralService
+     */
+    public removeObjectFromArray(array: any[], value: any): Array<string> {
+        let index = -1;
+        if (array && array.length > 0) {
+            let loop = 0;
+            array.forEach(item => {
+                if (item?.poUniqueName === value?.poUniqueName) {
+                    index = loop;
+                }
+                loop++;
+            });
+        }
+
+        if (index > -1) {
+            array.splice(index, 1);
+        }
+
+        return array;
+    }
 }

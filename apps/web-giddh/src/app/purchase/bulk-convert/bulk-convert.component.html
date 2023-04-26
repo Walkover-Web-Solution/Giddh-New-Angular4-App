@@ -1,0 +1,32 @@
+<div>
+    <div class="modal-header theme-bg pd-2 pl-2 pr-2 clearfix">
+        <h3 class="modal-title bg" id="modal-title">{{ localeData?.convert_bill_popup_heading }}</h3>
+        <i class="icon-cross text-right close-modal" (click)="onCancel()"></i>
+    </div>
+    <div class="modal-body pd-l2 pd-r2 clearfix">
+        <form name="purchaseOrderBulkConvert" novalidate autocomplete="off">
+            <div class="modal-wrap mr-b2">
+                <div class="row">
+                    <div class="col-sm-4 col-12">
+                        <label>{{ localeData?.purchase_bill_number }}</label>
+                    </div>
+                    <div class="col-sm-8 col-12 mr-b15">
+                        <div>
+                            <div>
+                                <input type="text" class="form-control" name="purchaseBillNumber" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pull-right">
+                <button type="submit" class="btn btn-md btn-success mr-r1" (click)="convertPoToBill()">
+                    {{ commonLocaleData?.app_save }}
+                </button>
+                <button type="submit" class="btn btn-md btn-cancel" (click)="onCancel()">
+                    {{ commonLocaleData?.app_cancel }}
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
