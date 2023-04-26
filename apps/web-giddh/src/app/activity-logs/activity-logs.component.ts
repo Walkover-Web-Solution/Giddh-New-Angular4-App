@@ -167,7 +167,7 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         this.companyService.getComapnyUsers().pipe(takeUntil(this.destroyed$)).subscribe(data => {
             if (data?.status === 'success') {
                 let users: IOption[] = [];
-                data.body.map((item) => {
+                data.body?.map((item) => {
                     users.push({ label: item.userName, value: item.userUniqueName, additional: item });
                 });
                 this.users = users;
@@ -274,11 +274,11 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
                         result.time = dayjs(result.time, GIDDH_DATE_FORMAT + " HH:mm:ss").format(GIDDH_DATE_FORMAT);
                     }
                 });
-                this.activityObj.page = response.body.page;
-                this.activityObj.totalItems = response.body.totalItems;
-                this.activityObj.totalPages = response.body.totalPages;
-                this.activityObj.count = response.body.count;
-                this.dataSource = response.body.results;
+                this.activityObj.page = response.body?.page;
+                this.activityObj.totalItems = response.body?.totalItems;
+                this.activityObj.totalPages = response.body?.totalPages;
+                this.activityObj.count = response.body?.count;
+                this.dataSource = response.body?.results;
             } else {
                 this.dataSource = [];
                 this.activityObj.totalItems = 0;
@@ -325,7 +325,7 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         this.ActivityLogsService.getAuditLogFormFilters().pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response && response.status === 'success') {
                 this.entities = [];
-                response.body.forEach(res => {
+                response.body?.forEach(res => {
                     this.entities.push(res.entity);
                 });
             }

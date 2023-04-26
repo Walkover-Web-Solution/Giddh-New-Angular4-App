@@ -79,7 +79,7 @@ export function CommonReducer(state: CurrentCommonState = initialState, action: 
             let partyTypeRes: BaseResponse<any, string> = action.payload;
             if (partyTypeRes?.status === 'success') {
                 return Object.assign({}, state, {
-                    partyTypes: partyTypeRes.body.partyTypes
+                    partyTypes: partyTypeRes.body?.partyTypes
                 });
             }
             return Object.assign({}, state, {});

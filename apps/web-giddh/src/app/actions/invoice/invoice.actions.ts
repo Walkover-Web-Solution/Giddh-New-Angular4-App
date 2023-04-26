@@ -541,7 +541,7 @@ export class InvoiceActions {
                     this._toasty.errorToast(data.message, data.code);
                 } else {
                     let text = this.localeService.translate("app_messages.eway_bill_generated");
-                    text = text?.replace("[EWAY_BILL_NO]", data?.body.ewayBillNo);
+                    text = text?.replace("[EWAY_BILL_NO]", data?.body?.ewayBillNo);
                     this._toasty.successToast(text);
                     this._router.navigate(['/pages/invoice/ewaybill']);
                 }
@@ -583,7 +583,7 @@ export class InvoiceActions {
                     this._toasty.errorToast(data.message, data.code);
                 } else {
                     let text = this.localeService.translate("app_messages.vehicle_data_updated");
-                    text = text?.replace("[VEHICLE_UPDATE_DATE]", data?.body.vehUpdDate)?.replace("[VALID_UPTO]", data?.body.validUpto);
+                    text = text?.replace("[VEHICLE_UPDATE_DATE]", data?.body?.vehUpdDate)?.replace("[VALID_UPTO]", data?.body?.validUpto);
                     this._toasty.successToast(text);
                 }
                 return { type: 'EmptyAction' };
@@ -614,7 +614,7 @@ export class InvoiceActions {
                 if (data && data.status === 'error') {
                     this._toasty.errorToast(data.message, data.code);
                 }
-                if (data && data.status === 'success' && data?.body.results.length === 0) {
+                if (data && data.status === 'success' && data?.body?.results?.length === 0) {
                     this._toasty.errorToast(this.localeService.translate("app_no_entries_found"));
                 }
                 return { type: 'EmptyAction' };

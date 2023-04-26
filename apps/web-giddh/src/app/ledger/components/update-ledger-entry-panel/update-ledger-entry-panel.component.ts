@@ -984,8 +984,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         e.stopPropagation();
         this.ledgerService.DownloadAttachement(fileName).pipe(takeUntil(this.destroyed$)).subscribe(d => {
             if (d?.status === 'success') {
-                let blob = this.generalService.base64ToBlob(d.body.uploadedFile, `image/${d.body.fileType}`, 512);
-                return saveAs(blob, d.body.name);
+                let blob = this.generalService.base64ToBlob(d.body?.uploadedFile, `image/${d.body?.fileType}`, 512);
+                return saveAs(blob, d.body?.name);
             } else {
                 this.toaster.showSnackBar("error", d.message);
             }

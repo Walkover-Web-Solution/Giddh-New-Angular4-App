@@ -76,13 +76,13 @@ export function ProformaReducer(state: ProformaState = initialState, action: Cus
                 let no: string;
                 switch (response.request.voucherDetails.voucherType) {
                     case 'proformas':
-                        no = response.body.number;
+                        no = response.body?.number;
                         break;
                     case 'estimates':
-                        no = response.body.number;
+                        no = response.body?.number;
                         break;
                     default:
-                        no = response.body.voucherDetails.voucherNumber;
+                        no = response.body?.voucherDetails.voucherNumber;
                 }
                 return cloneDeep({
                     ...state,
@@ -157,8 +157,8 @@ export function ProformaReducer(state: ProformaState = initialState, action: Cus
                     vouchers: {
                         ...vouchers,
                         results: vouchers.results.map(m => {
-                            if (m.estimateNumber === result.body.number) {
-                                m.grandTotal = result.body.grandTotal;
+                            if (m.estimateNumber === result.body?.number) {
+                                m.grandTotal = result.body?.grandTotal;
                             }
                             return m;
                         })
@@ -220,7 +220,7 @@ export function ProformaReducer(state: ProformaState = initialState, action: Cus
             let res: BaseResponse<ProformaGetAllVersionsResponse, ProformaGetRequest> = action.payload;
             return {
                 ...state,
-                activeVoucherVersions: res?.status === 'success' ? res.body.results : [],
+                activeVoucherVersions: res?.status === 'success' ? res.body?.results : [],
                 isGetVoucherVersionInProcess: true
             }
         }

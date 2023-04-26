@@ -383,8 +383,8 @@ const AddAndActiveGroupFunc = (groups: IGroupsWithAccounts[], gData: BaseRespons
             newData.category = grp.category;
             newData.groups = [];
             newData.isActive = false;
-            newData.name = gData.body.name;
-            newData.synonyms = gData.body.synonyms;
+            newData.name = gData.body?.name;
+            newData.synonyms = gData.body?.synonyms;
             newData.uniqueName = gData.body?.uniqueName;
             grp.isOpen = true;
             grp.groups.push(newData);

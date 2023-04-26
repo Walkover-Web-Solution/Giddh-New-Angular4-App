@@ -155,7 +155,7 @@ export class AccountsAction {
                         uniqueName: this._generalServices.companyUniqueName,
                         type: "accounts",
                         isActive: false,
-                        name: response.body.name
+                        name: response.body?.name
                     }
                     this.store.dispatch(this._generalActions.updateIndexDb(updateIndexDb));
                 }
@@ -199,7 +199,7 @@ export class AccountsAction {
                         uniqueName: this._generalServices.companyUniqueName,
                         type: "accounts",
                         isActive: false,
-                        name: response?.body.name
+                        name: response?.body?.name
                     }
                     this.store.dispatch(this._generalActions.updateIndexDb(updateIndexDb));
                 }
