@@ -39,7 +39,7 @@ export function ManufacturingReducer(state = initialState, action: CustomActions
             let res: BaseResponse<StocksResponse, IMfStockSearchRequest> = action.payload;
             if (res?.status === 'success') {
                 let response = cloneDeep(res.body);
-                response.results = orderBy(res.body.results, [(o) => o.voucherNumber], 'desc');
+                response.results = orderBy(res.body?.results, [(o) => o.voucherNumber], 'desc');
                 newState.reportData = response;
                 return Object.assign({}, state, newState);
             }
