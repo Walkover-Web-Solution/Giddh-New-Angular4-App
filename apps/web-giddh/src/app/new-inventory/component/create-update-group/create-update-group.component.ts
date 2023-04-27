@@ -144,13 +144,6 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
     * @memberof CreateUpdateGroupComponent
     */
     private checkSelectedTaxes(): void {
-        if (this.taxes?.length > 0) {
-            this.taxes?.forEach(tax => {
-                if (this.groupForm.get('taxes')?.value?.includes(tax?.uniqueName)) {
-                    this.selectTax(tax);
-                }
-            });
-        }
         setTimeout(() => {
             this.changeDetection.detectChanges();
         });
@@ -227,6 +220,7 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
                 taxSelected.isChecked = false;
             }
         }
+        // this.groupForm.get('taxes')?.patchValue(this.taxTempArray?.map(taxTemp => taxTemp?.uniqueName));
         this.selectedTaxes = this.taxTempArray.map(tax => tax?.uniqueName);
     }
 
@@ -243,6 +237,7 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
                 if (response?.status === "success") {
                     this.toggleLoader(false);
                     this.getStockGroups();
+                    this.getTaxes();
                     this.toaster.clearAllToaster();
                     this.toaster.successToast("Stock group updated successfully.");
                 } else {
@@ -257,6 +252,7 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
                 if (response?.status === "success") {
                     this.toggleLoader(false);
                     this.getStockGroups();
+                    this.getTaxes();
                     this.resetGroupForm();
                     this.toaster.clearAllToaster();
                     this.toaster.successToast("Stock group created successfully.");
@@ -396,8 +392,8 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
                 });
                 this.checkSelectedTaxes();
                 this.groupForm.updateValueAndValidity();
+                this.changeDetection.detectChanges();
             }
-            this.changeDetection.detectChanges();
         });
     }
 
@@ -419,7 +415,7 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
         let dialogRef = this.dialog.open(ConfirmModalComponent, {
             width: '40%',
             data: {
-                title: this.commonLocaleData?.app_delete,
+                title: 'Confirmation',
                 body: "Deleting this group will delete & un-link all the stocks under it. Are you sure you want to delete the group?",
                 permanentlyDeleteMessage: "It will be deleted permanently and will no longer be accessible from any other module.",
                 ok: this.commonLocaleData?.app_yes,
