@@ -1,0 +1,18 @@
+{
+    "group_name": "Group Name",
+    "enter_group": "Enter Group Name",
+    "unique_name": "Unique Name",
+    "enter_uniquename": "Enter Unique Name",
+    "hsn_code": "HSN Code",
+    "sac_code": "SAC Code",
+    "enter_hsn": "Enter HSN Code",
+    "enter_sac": "Enter SAC Code",
+    "is_it_subgroup": "Is it a sub group?:",
+    "parent_group": "Parent Group",
+    "select_group": "Select Group",
+    "tax": "Tax",
+    "select_tax": "Select Tax",
+    "no_tax_found": "No Tax Found",
+    "create_group": "Create Group",
+    "update_group": "Update Group"
+}

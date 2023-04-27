@@ -46,17 +46,18 @@
                                                 <label class="product-name-label"
                                                     >{{
                                                         stockForm.type === "FIXEDASSETS"
-                                                            ? "Fixed Assets"
+                                                            ? localeData?.fixed_assets
                                                             : (stockForm.type | titlecase)
                                                     }}
-                                                    Name <span class="red-text product-name-star">*</span></label
+                                                    {{ localeData?.name }}
+                                                    <span class="red-text product-name-star">*</span></label
                                                 >
                                             </div>
                                             <div class="col-sm-6 col-lg-6 ml-lg-2">
                                                 <text-field
                                                     [cssClass]="'form-control'"
                                                     [name]="'productName'"
-                                                    [placeholder]="'Enter Product'"
+                                                    [placeholder]="localeData?.enter_product"
                                                     [type]="'text'"
                                                     [(ngModel)]="stockForm.name"
                                                     [required]="true"
@@ -69,17 +70,17 @@
                                                 <label
                                                     >{{
                                                         stockForm.type === "FIXEDASSETS"
-                                                            ? "Fixed Assets"
+                                                            ? localeData?.fixed_assets
                                                             : (stockForm.type | titlecase)
                                                     }}
-                                                    Unit <span class="red-text">*</span></label
+                                                    {{ localeData?.unit }} <span class="red-text">*</span></label
                                                 >
                                             </div>
                                             <div class="col-sm-6 col-lg-6 ml-lg-2">
                                                 <select-field
                                                     [cssClass]="'form-control'"
                                                     [name]="'stockUnitCode'"
-                                                    [placeholder]="'Select Unit'"
+                                                    [placeholder]="localeData?.unit"
                                                     [options]="stockUnits"
                                                     (selectedOption)="
                                                         stockForm.stockUnitUniqueName = $event?.value;
@@ -91,13 +92,13 @@
                                         </div>
                                         <div class="row mr-b1">
                                             <div class="col-sm-6 col-lg-4">
-                                                <label>Under Group</label>
+                                                <label> {{ localeData?.under_group }}</label>
                                             </div>
                                             <div class="col-sm-6 col-lg-6 ml-lg-2 under-group-field-button-wrapper">
                                                 <select-field
                                                     [cssClass]="'form-control'"
                                                     [name]="'stockGroup'"
-                                                    [placeholder]="'Select Group'"
+                                                    [placeholder]="localeData?.select_group"
                                                     [options]="stockGroups"
                                                     (selectedOption)="
                                                         stockGroupUniqueName = $event?.value;
@@ -112,14 +113,14 @@
                                                     (click)="moveStock()"
                                                     [disabled]="defaultStockGroupUniqueName === stockGroupUniqueName"
                                                 >
-                                                    Move
+                                                    {{ localeData?.move }}
                                                 </button>
                                             </div>
                                         </div>
                                         <div class="row mr-b1">
                                             <div class="col-sm-6 col-lg-4">
                                                 <label
-                                                    >Unique Name
+                                                    >{{ localeData?.uniquename }}
                                                     <!-- <i class="icon-info text-gray"></i> -->
                                                 </label>
                                             </div>
@@ -127,7 +128,7 @@
                                                 <text-field
                                                     [cssClass]="'form-control'"
                                                     [name]="'uniqueName'"
-                                                    [placeholder]="'Unique Name'"
+                                                    [placeholder]="localeData?.uniquename"
                                                     [type]="'text'"
                                                     [(ngModel)]="stockForm.uniqueName"
                                                 ></text-field>
@@ -141,7 +142,7 @@
                                                 <mat-select
                                                     name="taxes"
                                                     class="form-control"
-                                                    placeholder="Select Tax"
+                                                    [placeholder]="localeData?.select_tax"
                                                     multiple
                                                     [(value)]="stockForm.taxes"
                                                 >
@@ -380,7 +381,7 @@
                                                                         <select-field
                                                                             [cssClass]="'form-control'"
                                                                             [name]="'purchaseAccount'"
-                                                                            [placeholder]="'Linked Accounts'"
+                                                                            [placeholder]="localeData?.linked_accounts"
                                                                             [options]="purchaseAccounts"
                                                                             (selectedOption)="
                                                                                 stockForm.purchaseAccountDetails.accountUniqueName =
@@ -412,7 +413,7 @@
                                                                                 <select-field
                                                                                     [cssClass]="'form-control'"
                                                                                     [name]="'purchaseStockUnitCode' + i"
-                                                                                    [placeholder]="'Unit'"
+                                                                                    [placeholder]="localeData?.unit"
                                                                                     [options]="stockUnits"
                                                                                     (selectedOption)="
                                                                                         stockForm.purchaseAccountDetails.unitRates[
@@ -433,7 +434,7 @@
                                                                                     [cssClass]="'form-control'"
                                                                                     [type]="'text'"
                                                                                     [name]="'purchaseStockRate' + i"
-                                                                                    [placeholder]="'Rate'"
+                                                                                    [placeholder]="localeData?.rate"
                                                                                     [(ngModel)]="
                                                                                         stockForm.purchaseAccountDetails
                                                                                             .unitRates[i].rate
@@ -4233,7 +4234,7 @@
                             class="btn-primary min-width-100"
                             (click)="cancelEdit()"
                         >
-                            Cancel
+                            {{ commonLocaleData?.app_cancel }}
                         </button>
                         <button
                             *ngIf="queryParams?.stockUniqueName"
@@ -4241,7 +4242,7 @@
                             class="btn-danger min-width-100"
                             (click)="deleteStock()"
                         >
-                            Delete
+                            {{ commonLocaleData?.app_delete }}
                         </button>
                         <button
                             *ngIf="queryParams?.stockUniqueName"
@@ -4250,7 +4251,7 @@
                             (click)="updateStock(stockCreateEditForm)"
                             [disabled]="stockCreateEditForm.invalid || !stockForm.stockUnitUniqueName"
                         >
-                            Update
+                            {{ commonLocaleData?.app_update }}
                         </button>
                     </div>
                 </div>
