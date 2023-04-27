@@ -71,7 +71,7 @@ export class BulkConvertComponent implements OnInit, OnDestroy {
         this.purchaseOrderService.bulkUpdate({ companyUniqueName: this.generalService.companyUniqueName, action: 'create_purchase_bill' }, { purchaseOrders: this.selectedPo }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
                 this.toaster.successToast(response?.body);
-                this.onCancel();
+                this.closeModelEvent.emit(true);
             } else {
                 this.toaster.errorToast(response?.message);
             }
