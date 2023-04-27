@@ -100,6 +100,7 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
                 this.stockGroupName = '';
             }
         });
+        document.querySelector("body").classList.add("group-create-update");
     }
 
     /**
@@ -150,6 +151,9 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
                 }
             });
         }
+        setTimeout(() => {
+            this.changeDetection.detectChanges();
+        });
     }
 
 
@@ -391,6 +395,7 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
                     taxes: response.body.taxes
                 });
                 this.checkSelectedTaxes();
+                this.groupForm.updateValueAndValidity();
             }
             this.changeDetection.detectChanges();
         });
@@ -469,6 +474,8 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+        document.querySelector("body").classList.remove("group-create-update");
+
     }
 }
 

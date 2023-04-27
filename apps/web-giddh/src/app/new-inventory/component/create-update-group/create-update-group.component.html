@@ -14,10 +14,10 @@
                         <div class="row">
                             <div class="col-xl-6 col-lg-6 col-md-6">
                                 <div class="row mr-b15">
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-6">
                                         <label>Group Name <span class="red-text">*</span></label>
                                     </div>
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-6">
                                         <text-field
                                             [cssClass]="'form-control mat-field-border'"
                                             [name]="'productName'"
@@ -31,10 +31,10 @@
                                     </div>
                                 </div>
                                 <div class="row mr-b15">
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-6">
                                         <label>Unique Name <span class="red-text">*</span></label>
                                     </div>
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-6">
                                         <text-field
                                             [cssClass]="'form-control  mat-field-border'"
                                             [name]="'uniqueName'"
@@ -47,7 +47,7 @@
                                 </div>
 
                                 <div class="row mr-b15">
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-6">
                                         <mat-radio-group
                                             color="primary"
                                             name="groupForm.showCodeType"
@@ -58,7 +58,7 @@
                                             <mat-radio-button id="sac" [value]="'sac'">SAC Code</mat-radio-button>
                                         </mat-radio-group>
                                     </div>
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-6">
                                         <div *ngIf="groupForm.get('showCodeType')?.value === 'hsn'">
                                             <text-field
                                                 [cssClass]="'form-control  mat-field-border'"
@@ -87,10 +87,10 @@
                                 </div>
 
                                 <div class="row mr-t15">
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-6">
                                         <label>Is it a sub group?:</label>
                                     </div>
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-6">
                                         <mat-slide-toggle
                                             color="primary"
                                             name="isSubGroup"
@@ -103,10 +103,10 @@
                                     </div>
                                 </div>
                                 <div class="row mr-t15">
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-6">
                                         <label>Parent Group</label>
                                     </div>
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-6">
                                         <select-field
                                             [cssClass]="'form-control  mat-field-border'"
                                             [readonly]="!groupForm.get('isSubGroup')?.value"
@@ -121,10 +121,10 @@
                                     </div>
                                 </div>
                                 <div class="row mr-t15">
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-6">
                                         <label>Tax</label>
                                     </div>
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-6">
                                         <mat-select
                                             name="taxes"
                                             class="form-control"
