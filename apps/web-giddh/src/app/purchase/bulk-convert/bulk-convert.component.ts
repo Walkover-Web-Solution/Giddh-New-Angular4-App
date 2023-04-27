@@ -1,7 +1,9 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from "@angular/core";
 import { ReplaySubject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
+import { GeneralService } from "../../services/general.service";
 import { PurchaseOrderService } from "../../services/purchase-order.service";
+import { ToasterService } from "../../services/toaster.service";
 
 @Component({
     selector: "bulk-convert",
@@ -22,7 +24,9 @@ export class BulkConvertComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(
-        public purchaseOrderService: PurchaseOrderService
+        public purchaseOrderService: PurchaseOrderService,
+        private generalService: GeneralService,
+        private toaster: ToasterService
     ) {
 
     }
@@ -50,19 +54,27 @@ export class BulkConvertComponent implements OnInit, OnDestroy {
         this.destroyed$.complete();
     }
 
+    /**
+     * This will call api to bulk convert po to pb
+     *
+     * @memberof BulkConvertComponent
+     */
     public convertPoToBill(): void {
-        const vendorUniqueName = this.selectedPo[0]?.vendorUniqueName;
-
         let selectedPo = [];
 
         selectedPo = this.selectedPo?.map(po => {
-            return po.poUniqueName;
+            po.vendorUniqueName = undefined;
+            po.poUniqueName = undefined;
+            return po;
         });
 
-        console.log(selectedPo);
-
-        // this.purchaseOrderService.convertPurchaseOrderToBill({ accountUniqueName: vendorUniqueName }, this.selectedPo).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-
-        // });
+        this.purchaseOrderService.bulkUpdate({ companyUniqueName: this.generalService.companyUniqueName, action: 'create_purchase_bill' }, { purchaseOrders: this.selectedPo }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === "success") {
+                this.toaster.successToast(response?.body);
+                this.onCancel();
+            } else {
+                this.toaster.errorToast(response?.message);
+            }
+        });
     }
 }

@@ -138,6 +138,8 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
     public voucherApiVersion: 1 | 2;
     /** Decimal places from company settings */
     public giddhBalanceDecimalPlaces: number = 2;
+    /** This will hold po for bulk convert */
+    public selectedPurchaseOrders: any[] = [];
 
     constructor(private modalService: BsModalService, private generalService: GeneralService, private breakPointObservar: BreakpointObserver, public purchaseOrderService: PurchaseOrderService, private store: Store<AppState>, private toaster: ToasterService, public route: ActivatedRoute, private router: Router, public purchaseOrderActions: PurchaseOrderActions, private settingsUtilityService: SettingsUtilityService, private warehouseActions: WarehouseActions) {
         this.activeCompanyUniqueName$ = this.store.pipe(select(state => state.session.companyUniqueName), (takeUntil(this.destroyed$)));
@@ -311,7 +313,7 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
 
                         if (purchaseOrders && purchaseOrders.items && purchaseOrders.items.length > 0) {
                             purchaseOrders.items.map(item => {
-                                item.isSelected = this.generalService.checkIfObjectExistsInArray(this.selectedPo, { poUniqueName: item?.uniqueName, vendorUniqueName: item?.vendor?.uniqueName });
+                                item.isSelected = this.generalService.checkIfObjectExistsInArray(this.selectedPo, { poUniqueName: item?.uniqueName, vendorUniqueName: item?.vendor?.uniqueName, orderNumber: item?.voucherNumber });
                                 let grandTotalConversionRate = 0, grandTotalAmountForCompany, grandTotalAmountForAccount;
                                 grandTotalAmountForCompany = Number(item?.grandTotal?.amountForCompany) || 0;
                                 grandTotalAmountForAccount = Number(item?.grandTotal?.amountForAccount) || 0;
@@ -523,9 +525,9 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
             item.isSelected = type;
 
             if (this.allItemsSelected) {
-                this.selectedPo = this.generalService.addObjectInArray(this.selectedPo, { poUniqueName: item?.uniqueName, vendorUniqueName: item?.vendor?.uniqueName });
+                this.selectedPo = this.generalService.addObjectInArray(this.selectedPo, { poUniqueName: item?.uniqueName, vendorUniqueName: item?.vendor?.uniqueName, orderNumber: item?.voucherNumber });
             } else {
-                this.selectedPo = this.generalService.removeObjectFromArray(this.selectedPo, { poUniqueName: item?.uniqueName, vendorUniqueName: item?.vendor?.uniqueName });
+                this.selectedPo = this.generalService.removeObjectFromArray(this.selectedPo, { poUniqueName: item?.uniqueName, vendorUniqueName: item?.vendor?.uniqueName, orderNumber: item?.voucherNumber });
             }
         });
     }
@@ -540,9 +542,9 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
     public toggleItem(item: any, action: boolean): void {
         item.isSelected = action;
         if (action) {
-            this.selectedPo = this.generalService.addObjectInArray(this.selectedPo, { poUniqueName: item?.uniqueName, vendorUniqueName: item?.vendor?.uniqueName });
+            this.selectedPo = this.generalService.addObjectInArray(this.selectedPo, { poUniqueName: item?.uniqueName, vendorUniqueName: item?.vendor?.uniqueName, orderNumber: item?.voucherNumber });
         } else {
-            this.selectedPo = this.generalService.removeObjectFromArray(this.selectedPo, { poUniqueName: item?.uniqueName, vendorUniqueName: item?.vendor?.uniqueName });
+            this.selectedPo = this.generalService.removeObjectFromArray(this.selectedPo, { poUniqueName: item?.uniqueName, vendorUniqueName: item?.vendor?.uniqueName, orderNumber: item?.voucherNumber });
             this.allItemsSelected = false;
         }
     }
@@ -824,24 +826,35 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
      * Opens the bulk convert popup
      *
      * @param {TemplateRef<any>} template
+     * @param {*} [purchaseOrder]
      * @memberof PurchaseOrderComponent
      */
-    public openBulkConvert(template: TemplateRef<any>): void {
-        if (this.selectedPo?.length > 0) {
-            let selectedPoVendors = [];
-            this.selectedPo.forEach(po => {
-                if (!selectedPoVendors.includes(po.vendorUniqueName)) {
-                    selectedPoVendors.push(po.vendorUniqueName);
-                }
-            });
+    public openBulkConvert(template: TemplateRef<any>, purchaseOrder?: any): void {
+        if (this.selectedPo?.length > 0 || purchaseOrder) {
+            if (purchaseOrder) {
+                this.selectedPurchaseOrders = [{ poUniqueName: purchaseOrder?.uniqueName, vendorUniqueName: purchaseOrder?.vendor?.uniqueName, orderNumber: purchaseOrder?.voucherNumber }];
 
-            if (selectedPoVendors?.length > 1) {
-                this.toaster.errorToast(this.localeData?.po_selection_vendor_error);
-            } else {
                 this.modalRef = this.modalService.show(
                     template,
                     Object.assign({}, { class: 'modal-sm' })
                 );
+            } else {
+                let selectedPoVendors = [];
+                this.selectedPo.forEach(po => {
+                    if (!selectedPoVendors.includes(po.vendorUniqueName)) {
+                        selectedPoVendors.push(po.vendorUniqueName);
+                    }
+                });
+
+                if (selectedPoVendors?.length > 1) {
+                    this.toaster.errorToast(this.localeData?.po_selection_vendor_error);
+                } else {
+                    this.selectedPurchaseOrders = cloneDeep(this.selectedPo);
+                    this.modalRef = this.modalService.show(
+                        template,
+                        Object.assign({}, { class: 'modal-sm' })
+                    );
+                }
             }
         } else {
             this.toaster.errorToast(this.localeData?.po_selection_error);
