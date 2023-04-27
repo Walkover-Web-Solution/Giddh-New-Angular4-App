@@ -6,18 +6,26 @@
     <div class="modal-body pd-l2 pd-r2 clearfix">
         <form name="purchaseOrderBulkConvert" novalidate autocomplete="off">
             <div class="modal-wrap mr-b2">
-                <div class="row">
-                    <div class="col-sm-4 col-12">
-                        <label>{{ localeData?.purchase_bill_number }}</label>
-                    </div>
-                    <div class="col-sm-8 col-12 mr-b15">
-                        <div>
+                <ng-container *ngFor="let po of selectedPo">
+                    <div class="row">
+                        <div class="col-sm-4 col-12">
+                            <label>{{ localeData?.purchase_bill_number }}</label>
+                        </div>
+                        <div class="col-sm-8 col-12 mr-b15">
                             <div>
-                                <input type="text" class="form-control" name="purchaseBillNumber" />
+                                <div>
+                                    <input
+                                        type="text"
+                                        class="form-control"
+                                        name="purchaseBillNumber"
+                                        [(ngModel)]="po.purchaseNumber"
+                                    />
+                                    <small *ngIf="selectedPo?.length > 0">{{ po.orderNumber }}</small>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                </ng-container>
             </div>
             <div class="pull-right">
                 <button type="submit" class="btn btn-md btn-success mr-r1" (click)="convertPoToBill()">

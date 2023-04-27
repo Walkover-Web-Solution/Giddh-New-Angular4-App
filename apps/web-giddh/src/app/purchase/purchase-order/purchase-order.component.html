@@ -383,7 +383,7 @@
                                 <a
                                     [tooltip]="localeData?.convert_tobill"
                                     *ngIf="item?.status === 'open' && !isCompany"
-                                    (click)="toggleItem(item, true); openBulkConvert(purchaseBulkConvert)"
+                                    (click)="openBulkConvert(purchaseBulkConvert, item)"
                                 >
                                     <span class="icon-tick font-12"></span>
                                 </a>
@@ -622,7 +622,7 @@
         <bulk-convert
             [localeData]="localeData"
             [commonLocaleData]="commonLocaleData"
-            [selectedPo]="selectedPo"
+            [selectedPo]="selectedPurchaseOrders"
             (closeModelEvent)="modalRef?.hide()"
         >
         </bulk-convert>
