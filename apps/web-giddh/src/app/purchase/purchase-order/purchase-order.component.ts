@@ -860,4 +860,17 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
             this.toaster.errorToast(this.localeData?.po_selection_error);
         }
     }
+
+    /**
+     * Closes the bulk convert popup and refreshes po list if found true in event
+     *
+     * @param {*} event
+     * @memberof PurchaseOrderComponent
+     */
+    public closeBulkConvertPopup(event: any): void {
+        this.modalRef?.hide();
+        if (event) {
+            this.getAllPurchaseOrders(true);
+        }
+    }
 }

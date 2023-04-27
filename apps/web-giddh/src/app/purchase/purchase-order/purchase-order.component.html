@@ -623,7 +623,7 @@
             [localeData]="localeData"
             [commonLocaleData]="commonLocaleData"
             [selectedPo]="selectedPurchaseOrders"
-            (closeModelEvent)="modalRef?.hide()"
+            (closeModelEvent)="closeBulkConvertPopup($event)"
         >
         </bulk-convert>
     </ng-template>
