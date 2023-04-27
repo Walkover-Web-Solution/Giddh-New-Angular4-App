@@ -96,3 +96,8 @@
     border: 2px dashed var(--color-gray);
     overflow: hidden;
 }
+@media (max-width: 1440px) {
+    .hsnsac-field {
+        margin-top: 20px;
+    }
+}
