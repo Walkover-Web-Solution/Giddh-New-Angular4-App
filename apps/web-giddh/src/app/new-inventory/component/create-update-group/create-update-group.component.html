@@ -146,8 +146,10 @@
                                                 (onSelectionChange)="!tax.isDisabled ? selectTax(tax) : ''"
                                                 >{{ tax.name }}</mat-option
                                             >
-                                            <mat-option class="create-update-no-data" *ngIf="!taxes?.length"
-                                                >No Tax Found</mat-option
+                                            <mat-option
+                                                [ngClass]="{ 'create-update-no-data': !taxes?.length }"
+                                                *ngIf="!taxes?.length"
+                                                >{{ localeData?.no_tax_found }}</mat-option
                                             >
                                         </mat-select>
                                     </div>
