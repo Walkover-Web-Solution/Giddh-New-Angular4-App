@@ -370,12 +370,14 @@
                                                                         name="isPurchaseInformationEnabled"
                                                                         [(ngModel)]="isPurchaseInformationEnabled"
                                                                         (ngModelChange)="togglePurchaseInformation()"
-                                                                        >Purchase Information
+                                                                        >{{ localeData?.purchase_information }}
                                                                     </mat-checkbox>
                                                                 </div>
                                                                 <div class="row">
                                                                     <div class="col-sm-6 col-lg-5">
-                                                                        <label>Linked Account/s</label>
+                                                                        <label>{{
+                                                                            localeData?.linked_account_s
+                                                                        }}</label>
                                                                     </div>
                                                                     <div class="col-sm-6 col-lg-7 pl-0 mr-b15">
                                                                         <select-field
@@ -392,7 +394,7 @@
                                                                         ></select-field>
                                                                     </div>
                                                                     <div class="col-sm-6 col-lg-5">
-                                                                        <label>Unit & Price </label>
+                                                                        <label>{{ localeData?.unit_price }} </label>
                                                                     </div>
                                                                     <div
                                                                         class="
@@ -482,7 +484,7 @@
                                                                                     *ngIf="isPurchaseInformationEnabled"
                                                                                     class="add-new-text-container"
                                                                                 >
-                                                                                    + Add New
+                                                                                    {{ localeData?.add_new }}
                                                                                 </span>
                                                                             </button>
                                                                         </div>
@@ -500,19 +502,21 @@
                                                                         name="isSalesInformationEnabled"
                                                                         [(ngModel)]="isSalesInformationEnabled"
                                                                         (ngModelChange)="toggleSalesInformation()"
-                                                                        >Sales Information
+                                                                        >{{ localeData?.sales_information }}
                                                                     </mat-checkbox>
                                                                 </div>
                                                                 <!-- input field will disabled if sales info unchecked -->
                                                                 <div class="row">
                                                                     <div class="col-sm-6 col-lg-5">
-                                                                        <label>Linked Account/s </label>
+                                                                        <label>{{
+                                                                            localeData?.linked_account_s
+                                                                        }}</label>
                                                                     </div>
                                                                     <div class="col-sm-6 col-lg-7 pl-0 mr-b15">
                                                                         <select-field
                                                                             [cssClass]="'form-control'"
                                                                             [name]="'salesAccount'"
-                                                                            [placeholder]="'Linked Accounts'"
+                                                                            [placeholder]="localeData?.linked_accounts"
                                                                             [options]="salesAccounts"
                                                                             (selectedOption)="
                                                                                 stockForm.salesAccountDetails.accountUniqueName =
@@ -523,7 +527,7 @@
                                                                         ></select-field>
                                                                     </div>
                                                                     <div class="col-sm-6 col-lg-5">
-                                                                        <label>Unit & Price </label>
+                                                                        <label>{{ localeData?.unit_price }} </label>
                                                                     </div>
                                                                     <div
                                                                         class="
@@ -544,7 +548,7 @@
                                                                                 <select-field
                                                                                     [cssClass]="'form-control'"
                                                                                     [name]="'salesStockUnitCode' + i"
-                                                                                    [placeholder]="'Unit'"
+                                                                                    [placeholder]="localeData?.unit"
                                                                                     [options]="stockUnits"
                                                                                     (selectedOption)="
                                                                                         stockForm.salesAccountDetails.unitRates[
@@ -565,7 +569,7 @@
                                                                                     [cssClass]="'form-control'"
                                                                                     [type]="'text'"
                                                                                     [name]="'salesStockRate' + i"
-                                                                                    [placeholder]="'Rate'"
+                                                                                    [placeholder]="localeData?.rate"
                                                                                     [(ngModel)]="
                                                                                         stockForm.salesAccountDetails
                                                                                             .unitRates[i].rate
@@ -609,7 +613,7 @@
                                                                                     *ngIf="isSalesInformationEnabled"
                                                                                     class="add-new-text-container"
                                                                                 >
-                                                                                    + Add New
+                                                                                    {{ localeData?.add_new }}
                                                                                 </span>
                                                                             </button>
                                                                         </div>
@@ -743,8 +747,8 @@
                                                     [(ngModel)]="isVariantAvailable"
                                                     (ngModelChange)="addVariantOption()"
                                                 >
-                                                    Variant? This {{ stockForm.type | lowercase }} has multiple options
-                                                    like size or colours etc..
+                                                    {{ localeData?.variant_this }} {{ stockForm.type | lowercase }}
+                                                    {{ localeData?.has_multiples }}
                                                 </mat-checkbox>
                                             </span>
                                         </p>
@@ -758,17 +762,19 @@
                                                             *ngFor="let option of stockForm.options; let i = index"
                                                         >
                                                             <div class="col-sm-6 col-lg-4">
-                                                                <label>Option {{ i + 1 }}</label>
+                                                                <label> {{ localeData?.option }} {{ i + 1 }}</label>
                                                                 <text-field
                                                                     [cssClass]="'form-control'"
-                                                                    [placeholder]="'Ex: Size , Color'"
+                                                                    [placeholder]="localeData?.ex_size_color"
                                                                     [name]="'option-' + i"
                                                                     [(ngModel)]="option.name"
                                                                     [type]="'text'"
                                                                 ></text-field>
                                                             </div>
                                                             <div class="col-sm-6 col-lg-8">
-                                                                <label class="category-label">Category</label>
+                                                                <label class="category-label">{{
+                                                                    localeData?.category
+                                                                }}</label>
                                                                 <div class="multi-select-input">
                                                                     <mat-chip-list #chipList>
                                                                         <mat-chip
@@ -798,7 +804,7 @@
                                                                                 addOption($event, i)
                                                                             "
                                                                             class="inventory-category-field-input"
-                                                                            placeholder="Separate options with a comma"
+                                                                            [placeholder]="localeData?.seperate_options"
                                                                         />
                                                                     </mat-chip-list>
                                                                 </div>
@@ -824,7 +830,7 @@
                                                     *ngIf="stockForm.options?.length < 3"
                                                     (click)="addVariantOption()"
                                                 >
-                                                    + Another option
+                                                    {{ localeData?.another_option }}
                                                 </button>
                                                 <!-- <div class="mt-3 mb-3">
                                                     <button mat-stroked-button class="bdr-radius-50">
@@ -834,12 +840,17 @@
                                                 <div class="table-responsive" *ngIf="stockForm.variants?.length > 0">
                                                     <table class="stock-table font-14" style="margin-left: 2px">
                                                         <tr>
-                                                            <th>Variant Name<span class="red-text">*</span></th>
-                                                            <th>Unit</th>
-                                                            <th class="text-right">Opening Quantity</th>
-                                                            <th class="text-right">Opening Amount</th>
-                                                            <th class="text-right">SKU Code</th>
-                                                            <th class="text-center">Archive</th>
+                                                            <th>
+                                                                {{ localeData?.variant_name
+                                                                }}<span class="red-text">*</span>
+                                                            </th>
+                                                            <th>{{ localeData?.unit }}</th>
+                                                            <th class="text-right">
+                                                                {{ localeData?.opening_quantity }}
+                                                            </th>
+                                                            <th class="text-right">{{ localeData?.opening_amount }}</th>
+                                                            <th class="text-right">{{ localeData?.sku_code }}</th>
+                                                            <th class="text-center">{{ localeData?.archive }}</th>
                                                         </tr>
                                                         <tr *ngFor="let variant of stockForm.variants; let i = index">
                                                             <td>{{ variant.name }}</td>
