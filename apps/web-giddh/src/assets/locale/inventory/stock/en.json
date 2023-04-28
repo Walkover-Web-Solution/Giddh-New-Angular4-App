@@ -8,6 +8,7 @@
     "select_group": "Select Group",
     "move": "Move",
     "uniquename": "Unique Name",
+    "enter_code": "Enter Code",
     "applicable_tax": "Applicable Tax",
     "select_tax": "Select Tax",
     "account": "Account",
@@ -48,6 +49,8 @@
     "variant_name_linked":"Variant Name (linked)",
     "final_product_1":"Final Product 1 ",
     "final_product_2":"Final Product 2 ",
+    "product_1":"Product 1 ",
+    "product_2":"Product 2 ",
     "output_qty":"Output Qty ",
     "output_unit":"Output Unit",
     "attribute":"Attribute",
@@ -60,5 +63,14 @@
     "amount":"Amount",
     "add_more_recipe":"+ Add more recipe",
     "combo_name":"Combo Name",
-    "enter_name":"Enter Name"
+    "enter_name":"Enter Name",
+    "enter_uniquename":"Enter Unique Name",
+    "enter_hsn_code":"Enter HSN Code",
+    "enter_sku_code":"Enter SKU Code",
+    "product_service":"Product Name/Service",
+    "all_accounts":"All Accounts Selected",
+    "stock_name":"Stock Name",
+    "create_inventory":"Create Inventory",
+    "hsn_code":"HSN Code"
     }
+
