@@ -51,6 +51,8 @@ export class TaxControlData {
 })
 
 export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
+    /** True if field is readonly */
+    @Input() public readonly: boolean = false;
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
     @Input() public date: string;

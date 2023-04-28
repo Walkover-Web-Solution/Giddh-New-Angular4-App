@@ -3572,6 +3572,10 @@ a.btn.btn-xs.btn-link.pull-right {
     background-repeat: no-repeat !important;
     background-color: var(--color-white) !important;
     padding-right: 24px !important;
+
+    &.field-disabled {
+        background-color: var(--color-primary-input-bar-background) !important;
+    }
 }
 
 .aside-pane.sales-aside-tax-pane .multi-select input.form-control {
@@ -3587,6 +3591,10 @@ a.btn.btn-xs.btn-link.pull-right {
     background-image: var(--color-caret-image) !important;
     background-color: var(--color-white) !important;
     background-position: 96% !important;
+
+    &.field-disabled {
+        background-color: var(--color-primary-input-bar-background) !important;
+    }
 }
 
 .item-padding .multi-select input.form-control {
@@ -13595,4 +13603,8 @@ body.hide-scroll-body.master-page {
     line-height: 16px !important;
     height: 16px !important;
     padding: 0 0px !important;
+}
+.mat-checkbox-disabled,
+.mat-checkbox-disabled * {
+    cursor: not-allowed !important;
 }
