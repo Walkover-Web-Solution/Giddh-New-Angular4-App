@@ -1,4 +1,4 @@
-import { NavigationEnd, NavigationStart, Router, RouteConfigLoadEnd, RouteConfigLoadStart, ActivatedRoute } from '@angular/router';
+import { NavigationEnd, NavigationStart, Router, RouteConfigLoadEnd, RouteConfigLoadStart } from '@angular/router';
 import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { AppState } from './store/roots';
@@ -17,8 +17,6 @@ import { OrganizationType } from './models/user-login-state';
 import { CommonActions } from './actions/common.actions';
 import { MatDialog } from '@angular/material/dialog';
 import { BsModalService } from 'ngx-bootstrap/modal';
-import { Organization } from './models/api-models/Company';
-import { LoginActions } from './actions/login.action';
 
 /**
  * App Component
@@ -54,9 +52,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         private companyActions: CompanyActions,
         private commonActions: CommonActions,
         public dialog: MatDialog,
-        private modalService: BsModalService,
-        private route: ActivatedRoute,
-        private loginAction: LoginActions
+        private modalService: BsModalService
     ) {
         this.isProdMode = PRODUCTION_ENV;
         this.isElectron = isElectron;
