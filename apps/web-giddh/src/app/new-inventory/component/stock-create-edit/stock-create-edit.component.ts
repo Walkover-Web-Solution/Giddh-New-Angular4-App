@@ -693,21 +693,21 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         });
         let defaultWarehouse = null;
         if (this.warehouses?.length > 0) {
-            defaultWarehouse = this.warehouses?.filter(warehouse => warehouse.isDefault);
+            defaultWarehouse = this.warehouses?.filter(warehouse => warehouse?.isDefault);
         }
         stockForm.variants = stockForm.variants?.map(variant => {
 
             if (!this.isVariantAvailable) {
                 const salesUnitRate = variant?.salesInformation.map(unitRate => {
-                    unitRate.accountUniqueName = stockForm.salesAccountDetails.accountUniqueName;
+                    unitRate.accountUniqueName = stockForm.salesAccountDetails?.accountUniqueName;
                     return unitRate;
                 });
                 const purchaseUnitRate = variant?.purchaseInformation.map(unitRate => {
-                    unitRate.accountUniqueName = stockForm.purchaseAccountDetails.accountUniqueName;
+                    unitRate.accountUniqueName = stockForm.purchaseAccountDetails?.accountUniqueName;
                     return unitRate;
                 });
                 variant.name = stockForm.name;
-                variant['unitRates'] = salesUnitRate.concat(purchaseUnitRate);
+                variant['unitRates'] = salesUnitRate?.concat(purchaseUnitRate);
 
                 variant.warehouseBalance = [
                     {
@@ -724,14 +724,14 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                     }
                 ]
             } else {
-                variant['unitRates'] = variant.salesInformation.concat(variant.purchaseInformation);
+                variant['unitRates'] = variant.salesInformation?.concat(variant?.purchaseInformation);
             }
             delete variant.salesInformation;
             delete variant.purchaseInformation;
             return variant;
         });
-        stockForm['purchaseAccountUniqueNames'] = [stockForm.purchaseAccountDetails.accountUniqueName];
-        stockForm['salesAccountUniqueNames'] = [stockForm.salesAccountDetails.accountUniqueName];
+        stockForm['purchaseAccountUniqueNames'] = [stockForm.purchaseAccountDetails?.accountUniqueName];
+        stockForm['salesAccountUniqueNames'] = [stockForm.salesAccountDetails?.accountUniqueName];
         delete stockForm.purchaseAccountDetails;
         delete stockForm.salesAccountDetails;
         return stockForm;
@@ -783,8 +783,6 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 this.isPurchaseInformationEnabled = this.stockForm?.purchaseAccountDetails?.accountUniqueName;
                 this.isSalesInformationEnabled = this.stockForm?.salesAccountDetails?.accountUniqueName;
                 this.stockForm.variants = this.stockForm.variants?.map(variant => {
-                    console.log(variant);
-
                     variant['purchaseInformation'] = variant?.purchaseAccountDetails?.unitRates;
                     variant['salesInformation'] = variant?.salesAccountDetails?.unitRates;
                     return variant;
@@ -1137,7 +1135,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
      * @memberof StockCreateEditComponent
      */
     public cancelEdit(): void {
-        this.router.navigate(['/pages/inventory']);
+        this.backClicked();
     }
 
     /**

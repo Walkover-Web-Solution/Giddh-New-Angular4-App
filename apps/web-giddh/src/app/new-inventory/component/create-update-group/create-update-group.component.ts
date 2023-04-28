@@ -131,14 +131,9 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
     * @memberof CreateUpdateGroupComponent
     */
     private checkSelectedTaxes(): void {
-        if (this.taxes?.length > 0) {
-            this.taxes?.forEach(tax => {
-                if (this.groupForm.get('taxes')?.value?.includes(tax?.uniqueName)) {
-                    this.selectTax(tax);
-                }
-            });
+        setTimeout(() => {
             this.changeDetection.detectChanges();
-        }
+            });
     }
 
     /**
@@ -386,6 +381,7 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
                 });
                 this.checkSelectedTaxes();
             }
+            this.changeDetection.detectChanges();
         });
     }
 
