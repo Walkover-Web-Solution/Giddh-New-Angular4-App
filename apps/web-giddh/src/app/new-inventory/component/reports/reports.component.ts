@@ -683,6 +683,34 @@ export class ReportsComponent implements OnInit {
     }
 
     /**
+     * This will use for redirect to edit group by reports
+     *
+     * @param {*} element
+     * @memberof ReportsComponent
+     */
+    public editGroup(element: any): void {
+        this.router.navigate(['/pages', 'new-inventory', this.reportType?.toLowerCase(), this.moduleType?.toLowerCase(), 'edit', element?.stockGroup?.uniqueName]);
+    }
+    /**
+     *This will use for redirect to edit stock by reports
+     *
+     * @param {*} element
+     * @memberof ReportsComponent
+     */
+    public editStock(element: any): void {
+        this.router.navigate(['/pages', 'new-inventory', this.reportType?.toLowerCase(), this.moduleType?.toLowerCase(), 'edit', element?.stock?.uniqueName]);
+    }
+    /**
+     * This will use for redirect to edit variant by reports
+     *
+     * @param {*} element
+     * @memberof ReportsComponent
+     */
+    public editVariant(element: any): void {
+        this.router.navigate(['/pages', 'new-inventory', this.reportType?.toLowerCase(), this.moduleType?.toLowerCase(), 'edit', element?.variant?.uniqueName]);
+    }
+
+    /**
     * This hook will use for on destroyed component
     *
     * @memberof ReportsComponent

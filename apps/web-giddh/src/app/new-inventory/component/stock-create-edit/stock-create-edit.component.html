@@ -21,7 +21,17 @@
                             </div>
                         </div>
                     </div> -->
-
+                    <div class="col-md-1 col-sm-1" *ngIf="!showLoader">
+                        <button
+                            *ngIf="queryParams?.stockUniqueName"
+                            (click)="backClicked()"
+                            class="btn-sky-blue mt-2"
+                            mat-button
+                        >
+                            <i class="icon-left back-left"></i>
+                            {{ commonLocaleData?.app_back }}
+                        </button>
+                    </div>
                     <!--product content start-->
                     <div
                         class="product-detail-content px-3 mt-2"
@@ -390,7 +400,7 @@
                                                                         class="col-sm-6 col-lg-5"
                                                                         *ngIf="!isVariantAvailable"
                                                                     >
-                                                                        <label>Unit & Price </label>
+                                                                        <label>Is Purchase Rate Tax Inclusive? </label>
                                                                     </div>
                                                                     <div
                                                                         class="
@@ -402,17 +412,28 @@
                                                                     >
                                                                         <mat-checkbox
                                                                             name="purchaseTaxInclusive"
-                                                                            class="mr-l2"
                                                                             color="primary"
                                                                             [(ngModel)]="
-                                                                                stockForm.variants[0]
-                                                                                    .purchaseTaxInclusive
+                                                                                stockForm.variants[0][
+                                                                                    'purchaseTaxInclusive'
+                                                                                ]
                                                                             "
-                                                                            [matTooltip]="
-                                                                                'Is Purchase Rate Tax Inclusive?'
-                                                                            "
-                                                                            matTooltipPosition="above"
                                                                         ></mat-checkbox>
+                                                                    </div>
+                                                                    <div
+                                                                        class="col-sm-6 col-lg-5"
+                                                                        *ngIf="!isVariantAvailable"
+                                                                    >
+                                                                        <label>Unit & Price </label>
+                                                                    </div>
+                                                                    <div
+                                                                        class="
+                                                                            col-xl-6 col-lg-5 col-sm-5 col-11
+                                                                            pl-0
+                                                                            mr-b15
+                                                                        "
+                                                                        *ngIf="!isVariantAvailable"
+                                                                    >
                                                                         <div
                                                                             class="row add-new-field mr-b15"
                                                                             *ngFor="
@@ -555,7 +576,7 @@
                                                                         class="col-sm-6 col-lg-5"
                                                                         *ngIf="!isVariantAvailable"
                                                                     >
-                                                                        <label>Unit & Price </label>
+                                                                        <label>Is Sales Rate Tax Inclusive?</label>
                                                                     </div>
                                                                     <div
                                                                         class="
@@ -569,13 +590,26 @@
                                                                             color="primary"
                                                                             name="salesTaxInclusive"
                                                                             [(ngModel)]="
-                                                                                stockForm?.variants[0].salesTaxInclusive
+                                                                                stockForm?.variants[0][
+                                                                                    'salesTaxInclusive'
+                                                                                ]
                                                                             "
-                                                                            [matTooltip]="
-                                                                                'Is Sales Rate Tax Inclusive?'
-                                                                            "
-                                                                            matTooltipPosition="above"
                                                                         ></mat-checkbox>
+                                                                    </div>
+                                                                    <div
+                                                                        class="col-sm-6 col-lg-5"
+                                                                        *ngIf="!isVariantAvailable"
+                                                                    >
+                                                                        <label>Unit & Price </label>
+                                                                    </div>
+                                                                    <div
+                                                                        class="
+                                                                            col-xl-6 col-lg-5 col-sm-5 col-11
+                                                                            pl-0
+                                                                            mr-b15
+                                                                        "
+                                                                        *ngIf="!isVariantAvailable"
+                                                                    >
                                                                         <div
                                                                             class="row add-new-field mr-b15"
                                                                             *ngFor="

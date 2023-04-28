@@ -1001,6 +1001,21 @@ export class InventoryService {
             }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, companyUniqueName)));
     }
 
+    /**
+     * Delete Stock
+     */
+    public deleteStock(stockGroupUniqueName: string, stockUniqueName: string): Observable<BaseResponse<string, string>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.delete(this.config.apiUrl + INVENTORY_API.DELETE_STOCK_V2?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':stockGroupUniqueName', encodeURIComponent(stockGroupUniqueName))?.replace(':stockUniqueName', encodeURIComponent(stockUniqueName))).pipe(map((res) => {
+            let data: BaseResponse<string, string> = res;
+            data.request = '';
+            data.queryString = { stockGroupUniqueName, stockUniqueName };
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, '', {
+            stockGroupUniqueName,
+            stockUniqueName
+        })));
+    }
     public createStock(model: any, stockGroupUniqueName: any, moduleType: string = ''): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + INVENTORY_API.CREATE_STOCK_V2;

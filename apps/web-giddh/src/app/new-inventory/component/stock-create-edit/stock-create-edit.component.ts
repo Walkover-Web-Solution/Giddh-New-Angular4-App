@@ -13,13 +13,14 @@ import { AppState } from "../../../store";
 import { WarehouseActions } from "../../../settings/warehouse/action/warehouse.action";
 import { ActivatedRoute, Router } from "@angular/router";
 import { cloneDeep, findIndex, forEach } from "../../../lodash-optimized";
-import { FormControl, NgForm } from "@angular/forms";
+import { NgForm } from "@angular/forms";
 import { INVALID_STOCK_ERROR_MESSAGE } from "../../../app.constant";
 import { CustomFieldsService } from "../../../services/custom-fields.service";
 import { CompanyActions } from "../../../actions/company.actions";
 import { MatDialog } from "@angular/material/dialog";
 import { ConfirmModalComponent } from "../../../theme/new-confirm-modal/confirm-modal.component";
 import { FieldTypes } from "../../../custom-fields/custom-fields.constant";
+import { Location } from '@angular/common';
 
 @Component({
     selector: "stock-create-edit",
@@ -174,7 +175,8 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         private router: Router,
         private changeDetection: ChangeDetectorRef,
         private customFieldsService: CustomFieldsService,
-        private dialog: MatDialog
+        private dialog: MatDialog,
+        private location: Location,
     ) {
     }
 
@@ -665,7 +667,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         });
     }
 
-    /**
+/**
  * Formats request before sending
  *
  * @returns {*}
@@ -732,8 +734,6 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         stockForm['salesAccountUniqueNames'] = [stockForm.salesAccountDetails.accountUniqueName];
         delete stockForm.purchaseAccountDetails;
         delete stockForm.salesAccountDetails;
-
-        debugger;
         return stockForm;
     }
 
@@ -769,87 +769,26 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 this.stockForm.outOfStockSelling = response.body.outOfStockSelling;
                 this.stockForm.variants = response.body.variants;
                 this.stockForm.options = response.body.options;
-                this.isVariantAvailable = (this.stockForm?.variants?.length > 1) ? true : false;
-                response?.body?.variants.forEach(variant => {
+                this.isVariantAvailable = (this.stockForm?.variants?.length > 0) ? true : false;
+                this.stockGroupUniqueName = response.body.stockGroup?.uniqueName;
+                this.defaultStockGroupUniqueName = response.body.stockGroup?.uniqueName;
+
+
+                this.stockForm['purchaseAccountDetails'] = {
+                    accountUniqueName: this.stockForm.variants[0].purchaseAccountDetails?.accountUniqueName
+                }
+                this.stockForm['salesAccountDetails'] = {
+                    accountUniqueName: this.stockForm.variants[0].salesAccountDetails?.accountUniqueName
+                }
+                this.isPurchaseInformationEnabled = this.stockForm?.purchaseAccountDetails?.accountUniqueName;
+                this.isSalesInformationEnabled = this.stockForm?.salesAccountDetails?.accountUniqueName;
+                this.stockForm.variants = this.stockForm.variants?.map(variant => {
                     console.log(variant);
 
-                    if (variant.purchaseAccountDetails) {
-                        this.stockForm.purchaseAccountDetails = variant.purchaseAccountDetails.accountUniqueName;
-                    }
-                    if (variant.salesAccountDetails) {
-                        this.stockForm.salesAccountDetails = variant.salesAccountDetails.accountUniqueName;
-                    }
-                    // if (!this.stockForm.purchaseAccountDetails?.unitRates?.length) {
-                    //     this.stockForm.purchaseAccountDetails.unitRates.push({
-                    //         rate: null,
-                    //         stockUnitCode: null,
-                    //         stockUnitUniqueName: null
-                    //     });
-                    // }
-                    // if (!this.stockForm.salesAccountDetails?.unitRates?.length) {
-                    //     this.stockForm.salesAccountDetails.unitRates.push({
-                    //         rate: null,
-                    //         stockUnitCode: null,
-                    //         stockUnitUniqueName: null
-                    //     });
-                    // }
-                    let variants = response?.body?.variants;
-                    let defaultWarehouse = null;
-                    if (this.warehouses?.length > 0) {
-                        defaultWarehouse = this.warehouses?.filter(warehouse => warehouse.isDefault);
-                    }
-                    const existingVariants = cloneDeep(response?.body.variants);
-                    let stockVariants = [];
-                    variants?.forEach(variant => {
-                        let variantExists = existingVariants?.filter(existingVariant => existingVariant?.name === variant);
-
-                        let variantObj = (variantExists?.length > 0) ? variantExists[0] : {
-                            name: variant,
-                            archive: false,
-                            uniqueName: undefined,
-                            skuCode: undefined,
-
-                            salesInformation: [
-                                {
-                                    rate: undefined,
-                                    stockUnitCode: undefined,
-                                    stockUnitName: undefined,
-                                    stockUnitUniqueName: undefined,
-                                    accountUniqueName: this.stockForm.salesAccountDetails?.accountUniqueName
-                                }
-                            ],
-                            purchaseInformation: [
-                                {
-                                    rate: undefined,
-                                    stockUnitCode: undefined,
-                                    stockUnitName: undefined,
-                                    stockUnitUniqueName: undefined,
-                                    accountUniqueName: this.stockForm.purchaseAccountDetails?.accountUniqueName
-                                }
-                            ],
-                            warehouseBalance: [
-                                {
-                                    warehouse: {
-                                        name: (defaultWarehouse) ? defaultWarehouse[0]?.name : undefined,
-                                        uniqueName: (defaultWarehouse) ? defaultWarehouse[0]?.uniqueName : undefined
-                                    },
-                                    stockUnit: {
-                                        name: this.stockUnitName,
-                                        code: this.stockForm.stockUnitUniqueName
-                                    },
-                                    openingQuantity: 0,
-                                    openingAmount: 0
-                                }
-                            ]
-                        };
-                        // console.log(variantObj);
-
-                        stockVariants.push(variantObj);
-                    });
-                    this.stockForm.variants = stockVariants;
+                    variant['purchaseInformation'] = variant?.purchaseAccountDetails?.unitRates;
+                    variant['salesInformation'] = variant?.salesAccountDetails?.unitRates;
+                    return variant;
                 });
-
-
                 this.stockGroupUniqueName = response.body.stockGroup?.uniqueName;
                 this.defaultStockGroupUniqueName = response.body.stockGroup?.uniqueName;
                 this.isPurchaseInformationEnabled = this.stockForm?.purchaseAccountDetails?.accountUniqueName;
@@ -864,8 +803,6 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 this.checkSelectedTaxes();
                 this.toggleLoader(false);
                 this.changeDetection.detectChanges();
-                // console.log(this.stockForm);
-
             } else {
                 this.toaster.showSnackBar("error", response?.message);
             }
@@ -917,7 +854,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
             this.toggleLoader(false);
             if (response?.status === "success") {
                 this.toaster.showSnackBar("success", "Stock updated successfully");
-                this.router.navigate(['/pages/inventory']);
+                this.backClicked();
             } else {
                 this.toaster.showSnackBar("error", response?.message);
             }
@@ -1258,7 +1195,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         let dialogRef = this.dialog.open(ConfirmModalComponent, {
             width: '40%',
             data: {
-                title: this.commonLocaleData?.app_delete,
+                title: 'Confirmation',
                 body: "Deleting this stock will un-link & delete it forever. Are you sure you want to delete the stock?",
                 permanentlyDeleteMessage: "It will be deleted permanently and will no longer be accessible from any other module.",
                 ok: this.commonLocaleData?.app_yes,
@@ -1269,7 +1206,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response) {
                 this.toggleLoader(true);
-                this.inventoryService.DeleteStock(this.defaultStockGroupUniqueName, this.queryParams?.stockUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                this.inventoryService.deleteStock(this.defaultStockGroupUniqueName, this.queryParams?.stockUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     this.toggleLoader(false);
                     if (response?.status === "success") {
                         this.toaster.showSnackBar("success", "Stock deleted successfully.");
@@ -1374,10 +1311,19 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     }
 
     /**
- * Lifecycle hook for destroy
+ * This will take the user back to last page
  *
  * @memberof StockCreateEditComponent
  */
+    public backClicked() {
+        this.location.back();
+    }
+
+    /**
+     * Lifecycle hook for destroy
+     *
+     * @memberof StockCreateEditComponent
+     */
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
