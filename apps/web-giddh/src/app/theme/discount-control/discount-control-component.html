@@ -9,8 +9,9 @@
                 type="text"
                 decimalDigitsDirective
                 name="discountSum"
+                [ngClass]="{'field-disabled': readonly}"
                 class="form-control text-right cursor-pointer pd-r2"
-                (focus)="discountMenu = true;hideOtherPopups.emit(true)"
+                (focus)="!readonly ? showDiscountMenu() : ''"
                 [(ngModel)]="discountSum"
                 [mask]="inputMaskFormat"
                 [prefix]="prefixInput"
