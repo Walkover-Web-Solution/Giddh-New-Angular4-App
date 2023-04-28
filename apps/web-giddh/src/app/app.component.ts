@@ -1,4 +1,4 @@
-import { NavigationEnd, NavigationStart, Router, RouteConfigLoadEnd, RouteConfigLoadStart } from '@angular/router';
+import { NavigationEnd, NavigationStart, Router, RouteConfigLoadEnd, RouteConfigLoadStart, ActivatedRoute } from '@angular/router';
 import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { AppState } from './store/roots';
@@ -17,6 +17,8 @@ import { OrganizationType } from './models/user-login-state';
 import { CommonActions } from './actions/common.actions';
 import { MatDialog } from '@angular/material/dialog';
 import { BsModalService } from 'ngx-bootstrap/modal';
+import { Organization } from './models/api-models/Company';
+import { LoginActions } from './actions/login.action';
 
 /**
  * App Component
@@ -52,7 +54,9 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         private companyActions: CompanyActions,
         private commonActions: CommonActions,
         public dialog: MatDialog,
-        private modalService: BsModalService
+        private modalService: BsModalService,
+        private route: ActivatedRoute,
+        private loginAction: LoginActions
     ) {
         this.isProdMode = PRODUCTION_ENV;
         this.isElectron = isElectron;
@@ -71,6 +75,13 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             }
             this._generalService.companyUniqueName = ss.companyUniqueName;
         });
+
+        if (this._generalService.getUrlParameter("companyUniqueName")) {
+            this._generalService.setParameterInLocalStorage("companyUniqueName", this._generalService.getUrlParameter("companyUniqueName"));
+        }
+        if (this._generalService.getUrlParameter("version")) {
+            this._generalService.setParameterInLocalStorage("voucherApiVersion", this._generalService.getUrlParameter("version"));
+        }
 
         if (!(this._generalService.user && this._generalService.sessionId)) {
             if (!window.location.href.includes('login') && !window.location.href.includes('token-verify') && !window.location.href.includes('download')) {
