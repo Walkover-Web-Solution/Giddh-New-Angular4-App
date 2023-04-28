@@ -405,8 +405,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     data.body.stock?.groupTaxes ?? [],
                     data.body.taxes ?? [],
                     data.body.groupTaxes ?? []);
-                if (txn.taxesVm) {
-                    txn.taxesVm.forEach(tax => {
+                if (txn?.taxesVm) {
+                    txn?.taxesVm.forEach(tax => {
                         tax.isChecked = false;
                         tax.isDisabled = false;
                     });

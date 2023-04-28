@@ -136,7 +136,7 @@ export class LedgerVM {
             bl.particular = bl.selectedAccount ? bl.selectedAccount?.uniqueName : bl.particular;
             bl.isInclusiveTax = false;
             // filter taxes uniqueNames
-            bl.taxes = [...bl.taxesVm?.filter(p => p.isChecked).map(p => p?.uniqueName)];
+            bl.taxes = [...bl?.taxesVm?.filter(p => p.isChecked).map(p => p?.uniqueName)];
             // filter discount
             bl.discounts = bl.discounts?.filter(p => p.amount && p.isActive);
             // delete local id
@@ -297,7 +297,7 @@ export class LedgerVM {
             // set transaction.particular to selectedAccount uniqueName
             bl.particular = bl.selectedAccount ? bl.selectedAccount.uniqueName : bl.particular;
             // filter taxes uniqueNames
-            bl.taxes = [...bl.taxesVm?.filter(p => p.isChecked).map(p => p?.uniqueName)];
+            bl.taxes = [...bl?.taxesVm?.filter(p => p.isChecked).map(p => p?.uniqueName)];
             // filter discount
             bl.discounts = bl.discounts?.filter(p => p.amount && p.isActive);
             // delete local id

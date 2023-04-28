@@ -544,7 +544,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
     public calculateTax() {
         let totalPercentage: number;
-        totalPercentage = this.currentTxn.taxesVm?.reduce((pv, cv) => {
+        totalPercentage = this.currentTxn?.taxesVm?.reduce((pv, cv) => {
             return cv.isChecked ? pv + cv.amount : pv;
         }, 0);
         if (this.generalService.isReceiptPaymentEntry(this.activeAccount, this.currentTxn.selectedAccount, this.blankLedger.voucherType) && !this.isAdvanceReceiptWithTds) {
@@ -1223,7 +1223,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             }
 
             if (this.generalService.isReceiptPaymentEntry(this.activeAccount, this.currentTxn.selectedAccount, this.blankLedger.voucherType)) {
-                let mainTaxPercentage = this.currentTxn.taxesVm?.filter(p => p.isChecked)?.reduce((sum, current) => sum + current.amount, 0);
+                let mainTaxPercentage = this.currentTxn?.taxesVm?.filter(p => p.isChecked)?.reduce((sum, current) => sum + current.amount, 0);
                 let tdsTaxPercentage = null;
                 let tcsTaxPercentage = null;
                 let totalAmount = Number(this.blankLedger.compoundTotal);
@@ -1565,7 +1565,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      * @memberof NewLedgerEntryPanelComponent
      */
     private validateTaxes(): boolean {
-        const taxes = [...this.currentTxn.taxesVm?.filter(p => p.isChecked)?.map(p => p?.uniqueName)];
+        const taxes = [...this.currentTxn?.taxesVm?.filter(p => p.isChecked)?.map(p => p?.uniqueName)];
         return taxes && taxes.length > 0;
     }
 
