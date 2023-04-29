@@ -13608,3 +13608,10 @@ body.hide-scroll-body.master-page {
 .mat-checkbox-disabled * {
     cursor: not-allowed !important;
 }
+.ledger-main {
+    input {
+        &:disabled {
+            background-color: var(--color-white) !important;
+        }
+    }
+}
