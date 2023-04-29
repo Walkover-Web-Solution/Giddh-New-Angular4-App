@@ -71,7 +71,11 @@
                                 <a
                                     class="dropdown-item cp"
                                     href="javascript:void(0)"
-                                    (click)="openBulkConvert(purchaseBulkConvert)"
+                                    (click)="
+                                        voucherApiVersion === 2
+                                            ? openBulkConvert(purchaseBulkConvert)
+                                            : bulkUpdate('create_purchase_bill')
+                                    "
                                 >
                                     {{ localeData?.convert_tobill }}</a
                                 >
@@ -134,7 +138,11 @@
                             <a
                                 class="dropdown-item cp"
                                 href="javascript:void(0)"
-                                (click)="openBulkConvert(purchaseBulkConvert)"
+                                (click)="
+                                    voucherApiVersion === 2
+                                        ? openBulkConvert(purchaseBulkConvert)
+                                        : bulkUpdate('create_purchase_bill')
+                                "
                             >
                                 {{ localeData?.convert_tobill }}</a
                             >
@@ -383,7 +391,11 @@
                                 <a
                                     [tooltip]="localeData?.convert_tobill"
                                     *ngIf="item?.status === 'open' && !isCompany"
-                                    (click)="openBulkConvert(purchaseBulkConvert, item)"
+                                    (click)="
+                                        voucherApiVersion === 2
+                                            ? openBulkConvert(purchaseBulkConvert, item)
+                                            : bulkUpdate('create_purchase_bill', item.voucherNumber)
+                                    "
                                 >
                                     <span class="icon-tick font-12"></span>
                                 </a>

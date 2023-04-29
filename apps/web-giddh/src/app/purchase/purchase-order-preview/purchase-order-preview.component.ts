@@ -94,6 +94,10 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
     public pdfFileURL: any = '';
     /** True if left sidebar is expanded */
     private isSidebarExpanded: boolean = false;
+    /** This will hold po for bulk convert */
+    public selectedPurchaseOrders: any[] = [];
+    /** Stores the voucher API version of current company */
+    public voucherApiVersion: 1 | 2;
 
     constructor(
         private store: Store<AppState>,
@@ -107,7 +111,7 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
         private domSanitizer: DomSanitizer,
         private generalService: GeneralService
     ) {
-        
+
     }
 
     /**
@@ -116,7 +120,8 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
      * @memberof PurchaseOrderPreviewComponent
      */
     public ngOnInit(): void {
-        if(document.getElementsByClassName("sidebar-collapse")?.length > 0) {
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
+        if (document.getElementsByClassName("sidebar-collapse")?.length > 0) {
             this.isSidebarExpanded = false;
         } else {
             this.isSidebarExpanded = true;
@@ -241,6 +246,8 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
             if (response) {
                 if (response.status === "success") {
                     this.purchaseOrder = response.body;
+
+                    this.selectedPurchaseOrders = [{ poUniqueName: this.purchaseOrder?.uniqueName, vendorUniqueName: this.purchaseOrder?.account?.uniqueName, orderNumber: this.purchaseOrder?.number }];
 
                     this.getPdf();
 
@@ -406,7 +413,7 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
      * @memberof PurchaseOrderPreviewComponent
      */
     public ngOnDestroy() {
-        if(this.isSidebarExpanded) {
+        if (this.isSidebarExpanded) {
             this.isSidebarExpanded = false;
             this.generalService.expandSidebar();
         }
@@ -566,5 +573,31 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
         setTimeout(() => {
             this.perfectScrollbar?.directiveRef?.scrollToElement(".single-invoice-detail.activeItem");
         }, 200);
+    }
+
+    /**
+     * Opens the bulk convert popup
+     *
+     * @param {TemplateRef<any>} template
+     * @memberof PurchaseOrderPreviewComponent
+     */
+    public openBulkConvert(template: TemplateRef<any>): void {
+        this.modalRef = this.modalService.show(
+            template,
+            Object.assign({}, { class: 'modal-sm' })
+        );
+    }
+
+    /**
+     * Closes the bulk convert popup and refreshes po list if found true in event
+     *
+     * @param {*} event
+     * @memberof PurchaseOrderPreviewComponent
+     */
+    public closeBulkConvertPopup(event: any): void {
+        this.modalRef?.hide();
+        if (event) {
+            this.getPurchaseOrder();
+        }
     }
 }
