@@ -1277,7 +1277,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                         obj.voucherDetails.voucherDate = cloneDeep(voucherDate);
                         obj.voucherDetails.dueDate = cloneDeep(dueDate);
                     } else {
-                        this.isEinvoiceGenerated = results[0].isEInvoiceGenerated;
+                        this.isEinvoiceGenerated = results[0].einvoiceGenerated;
                         this.previousDeposit = results[0]?.deposit;
                         if (this.isMultiCurrencyModule()) {
                             // parse normal response to multi currency response

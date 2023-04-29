@@ -278,6 +278,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public invoiceList$: Observable<any[]>;
     /** Holds restricted voucher types for download */
     public restrictedVouchersForDownload: any[] = RESTRICTED_VOUCHERS_FOR_DOWNLOAD;
+    /** True if einvoice is generated for the voucher */
+    public isEinvoiceGenerated: boolean = false;
 
     constructor(
         private accountService: AccountService,
@@ -2143,6 +2145,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         if (this.voucherApiVersion === 2) {
             resp[0] = this.adjustmentUtilityService.getVoucherAdjustmentObject(resp[0], this.vm.selectedLedger.voucherGeneratedType);
         }
+
+        this.isEinvoiceGenerated = resp[0].einvoiceGenerated;
 
         if (updateBaseAccountParticular) {
             resp[0].particular = {
