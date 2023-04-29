@@ -757,12 +757,33 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 if (isElectron) {
                     this.router.navigate(['/login']);
                 } else {
-                    window.location.href = (environment.production) ? `https://giddh.com/login/?action=logout` : `https://test.giddh.com/login/?action=logout`;
+                    window.location.href = (environment.production) ? `https://giddh.com/login` : `https://test.giddh.com/login`;
                 }
             } else if (s === userLoginStateEnum.newUserLoggedIn) {
                 this.zone.run(() => {
                     this.router.navigate(['/new-user']);
                 });
+            } else if (s === userLoginStateEnum.userLoggedIn) {
+                if (this.generalService.getUtmParameter("companyUniqueName")) {
+                    this.store.dispatch(this.companyActions.resetActiveCompanyData());
+                    this.generalService.companyUniqueName = this.generalService.getUtmParameter("companyUniqueName");
+                    this.generalService.voucherApiVersion = Number(this.generalService.getUtmParameter("voucherApiVersion")) === 1 ? 1 : 2;
+                    const branchDetails = {
+                        branchDetails: {
+                            uniqueName: ""
+                        }
+                    };
+                    const type = OrganizationType.Company;
+                    const organization: Organization = {
+                        type,
+                        uniqueName: this.generalService.getUtmParameter("companyUniqueName"),
+                        details: branchDetails
+                    };
+                    this.store.dispatch(this.companyActions.setCompanyBranch(organization));
+                    this.store.dispatch(this.loginAction.ChangeCompany(this.generalService.getUtmParameter("companyUniqueName"), true));
+                    this.generalService.removeLocalStorageParameter("companyUniqueName");
+                    this.generalService.removeLocalStorageParameter("voucherApiVersion");
+                }
             }
         });
         if (this.router.url === '/new-user') {
