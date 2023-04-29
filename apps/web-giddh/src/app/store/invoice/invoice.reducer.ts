@@ -90,8 +90,8 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
             let res: BaseResponse<GetAllLedgersOfInvoicesResponse, CommonPaginatedRequest> = action.payload;
             if (res?.status === 'success') {
                 let body = _.cloneDeep(res.body);
-                if (body.results?.length > 0) {
-                    body.results.map((item: ILedgersInvoiceResult) => {
+                if (body?.results?.length > 0) {
+                    body?.results.map((item: ILedgersInvoiceResult) => {
                         item.isSelected = (item.isSelected) ? true : false;
                         item.hasGenerationErr = false;
                     });

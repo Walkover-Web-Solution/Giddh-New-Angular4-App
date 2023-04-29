@@ -103,18 +103,18 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
             transaction = action.payload as BaseResponse<TransactionsResponse, TransactionsRequest>;
             if (transaction?.status === 'success') {
                 let ledgerTransactionsBalance = {
-                    closingBalance: transaction.body.closingBalance,
-                    convertedClosingBalance: transaction.body.convertedClosingBalance,
-                    creditTotal: transaction.body.creditTotal,
-                    convertedCreditTotal: transaction.body.convertedCreditTotal,
-                    debitTotal: transaction.body.debitTotal,
-                    convertedDebitTotal: transaction.body.convertedDebitTotal,
-                    forwardedBalance: transaction.body.forwardedBalance,
-                    convertedForwardedBalance: transaction.body.convertedForwardedBalance,
-                    currencySymbol: transaction.body.currencySymbol,
-                    currencyCode: transaction.body.currencyCode,
-                    convertedCurrencySymbol: transaction.body.convertedCurrencySymbol,
-                    convertedCurrencyCode: transaction.body.convertedCurrencyCode
+                    closingBalance: transaction.body?.closingBalance,
+                    convertedClosingBalance: transaction.body?.convertedClosingBalance,
+                    creditTotal: transaction.body?.creditTotal,
+                    convertedCreditTotal: transaction.body?.convertedCreditTotal,
+                    debitTotal: transaction.body?.debitTotal,
+                    convertedDebitTotal: transaction.body?.convertedDebitTotal,
+                    forwardedBalance: transaction.body?.forwardedBalance,
+                    convertedForwardedBalance: transaction.body?.convertedForwardedBalance,
+                    currencySymbol: transaction.body?.currencySymbol,
+                    currencyCode: transaction.body?.currencyCode,
+                    convertedCurrencySymbol: transaction.body?.convertedCurrencySymbol,
+                    convertedCurrencyCode: transaction.body?.convertedCurrencyCode
                 };
                 return Object.assign({}, state, {
                     transactionInprogress: false,

@@ -14,7 +14,6 @@ import {
     ViewChild
 } from '@angular/core';
 import { select, Store } from '@ngrx/store';
-import { ResizedEvent } from 'angular-resize-event';
 import { Configuration, SubVoucher, RATE_FIELD_PRECISION, SearchResultText, RESTRICTED_VOUCHERS_FOR_DOWNLOAD, AdjustedVoucherType } from 'apps/web-giddh/src/app/app.constant';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { saveAs } from 'file-saver';
@@ -185,7 +184,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public profileObj: any;
     public keydownClassAdded: boolean = false;
     public tcsOrTds: 'tcs' | 'tds' = 'tcs';
-    public totalTdElementWidth: number = 0;
     public multiCurrencyAccDetails: any = null;
     /** Amount of invoice select for credit note */
     public selectedInvoiceAmount: number = 0;
@@ -574,10 +572,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 this.toaster.showSnackBar("error", output.file.response.message);
             }
         }
-    }
-
-    public onResized(event: ResizedEvent) {
-        this.totalTdElementWidth = event.newWidth + 10;
     }
 
     public selectAccount(e: IOption, txn: ILedgerTransactionItem, selectCmp: ShSelectComponent, clearAccount?: boolean) {
@@ -990,8 +984,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         e.stopPropagation();
         this.ledgerService.DownloadAttachement(fileName).pipe(takeUntil(this.destroyed$)).subscribe(d => {
             if (d?.status === 'success') {
-                let blob = this.generalService.base64ToBlob(d.body.uploadedFile, `image/${d.body.fileType}`, 512);
-                return saveAs(blob, d.body.name);
+                let blob = this.generalService.base64ToBlob(d.body?.uploadedFile, `image/${d.body?.fileType}`, 512);
+                return saveAs(blob, d.body?.name);
             } else {
                 this.toaster.showSnackBar("error", d.message);
             }
@@ -2391,7 +2385,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         } else {
             // now check if we transactions array have any income/expense/fixed assets entry
             let incomeExpenseEntryLength = this.vm.isThereIncomeOrExpenseEntry();
-            this.vm.showNewEntryPanel = incomeExpenseEntryLength === 1;
+            this.vm.showNewEntryPanel = incomeExpenseEntryLength > 0;
         }
 
         this.vm.reInitilizeDiscount(resp[0]);
@@ -2419,6 +2413,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 this.handleAdvanceReceiptChange();
             }, 100);
         }
+
+        /** Since we are not showing amount bar in case of journal voucher, calculation is not working automatically so we are calculating here */
+        if (this.vm.selectedLedger.voucher.shortCode === 'jr') {
+            this.vm.inventoryAmountChanged();
+        }
+
         this.activeAccountSubject.next(this.activeAccount);
         this.changeDetectorRef.detectChanges();
     }

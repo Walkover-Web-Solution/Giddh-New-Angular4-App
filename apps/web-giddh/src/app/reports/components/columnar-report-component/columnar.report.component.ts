@@ -203,8 +203,8 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
      * @memberof ColumnarReportComponent
      */
     public onBalanceTypeAsSignChanged(event): void {
-        this.isBalanceTypeAsSign = event;
-        this.exportRequest.balanceTypeAsSig = event;
+        this.isBalanceTypeAsSign = event ? true : false;
+        this.exportRequest.balanceTypeAsSig = event ? true : false;
     }
 
     /**

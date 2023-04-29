@@ -383,7 +383,7 @@ export class LoginActions {
             ofType(CompanyActions.CHANGE_COMPANY),
             switchMap((action: CustomActions) => this._companyService.getStateDetails(action.payload.cmpUniqueName, action.payload.fetchLastState)),
             map(response => {
-                if ((response?.status === 'error' || ROUTES.findIndex(p => p.path.split('/')[0] === response.body.lastState.split('/')[0]) === -1) || (response?.status === 'error' || response.code === 'NOT_FOUND')) {
+                if ((response?.status === 'error' || ROUTES.findIndex(p => p.path.split('/')[0] === response.body?.lastState.split('/')[0]) === -1) || (response?.status === 'error' || response.code === 'NOT_FOUND')) {
                     let dummyResponse = new BaseResponse<StateDetailsResponse, string>();
                     dummyResponse.body = new StateDetailsResponse();
                     dummyResponse.body.companyUniqueName = response.request;
@@ -394,9 +394,9 @@ export class LoginActions {
                     });
                     return this.ChangeCompanyResponse(dummyResponse);
                 }
-                if (response.body.companyUniqueName) {
-                    this._generalService.currentBranchUniqueName = response?.body.branchUniqueName || '';
-                    if (response.body.branchUniqueName) {
+                if (response.body?.companyUniqueName) {
+                    this._generalService.currentBranchUniqueName = response?.body?.branchUniqueName || '';
+                    if (response.body?.branchUniqueName) {
                         const details = {
                             branchDetails: {
                                 uniqueName: this._generalService.currentBranchUniqueName
@@ -409,9 +409,9 @@ export class LoginActions {
                         };
                         this.store.dispatch(this.companyActions.setCompanyBranch(organization));
                     }
-                    if (response.body.lastState && ROUTES.findIndex(p => p.path.split('/')[0] === response.body.lastState.split('/')[0]) !== -1) {
+                    if (response.body?.lastState && ROUTES.findIndex(p => p.path.split('/')[0] === response.body?.lastState.split('/')[0]) !== -1) {
                         this._router.navigateByUrl('/dummy', { skipLocationChange: true }).then(() => {
-                            this.finalNavigate(response.body.lastState);
+                            this.finalNavigate(response.body?.lastState);
                         });
                     } else {
                         if (this.activatedRoute.children && this.activatedRoute.children.length > 0) {
@@ -543,11 +543,11 @@ export class LoginActions {
             ofType(LoginActions.LoginWithPasswdResponse),
             map((action: CustomActions) => {
                 if (action.payload?.status === 'success') {
-                    if (action.payload.body.statusCode === "AUTHENTICATE_TWO_WAY") {
-                        if (action.payload.body.text) {
-                            this._toaster.successToast(action.payload.body.text, action.payload.code);
+                    if (action.payload.body?.statusCode === "AUTHENTICATE_TWO_WAY") {
+                        if (action.payload.body?.text) {
+                            this._toaster.successToast(action.payload.body?.text, action.payload.code);
                         }
-                    } else if (action.payload.body.user.isVerified) {
+                    } else if (action.payload.body?.user?.isVerified) {
                         return this.LoginSuccess();
                     }
                 } else {
@@ -955,7 +955,7 @@ export class LoginActions {
         respState.body = new StateDetailsResponse();
         companies.body = sortBy(companies?.body, ['name']);
         // now take first company from the companies
-        let cArr = companies?.body.sort((a, b) => a?.name?.length - b?.name?.length);
+        let cArr = companies?.body?.sort((a, b) => a?.name?.length - b?.name?.length);
         let company = cArr[0];
         if (company) {
             respState.body.companyUniqueName = company?.uniqueName;
@@ -996,7 +996,7 @@ export class LoginActions {
         this.store.dispatch(this.companyActions.GetStateDetailsResponse(stateDetail));
         this.store.dispatch(this.companyActions.RefreshCompaniesResponse(companies));
         this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.userLoggedIn));
-        this.finalNavigate(stateDetail.body.lastState, false, isSocialLogin);
+        this.finalNavigate(stateDetail.body?.lastState, false, isSocialLogin);
         return { type: 'EmptyAction' };
     }
 

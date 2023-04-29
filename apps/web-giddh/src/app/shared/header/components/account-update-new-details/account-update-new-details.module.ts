@@ -8,11 +8,12 @@ import { ConfirmModalModule } from "apps/web-giddh/src/app/theme";
 import { SelectModule } from "apps/web-giddh/src/app/theme/ng-select/ng-select";
 import { ShSelectModule } from "apps/web-giddh/src/app/theme/ng-virtual-select/sh-select.module";
 import { TranslateDirectiveModule } from "apps/web-giddh/src/app/theme/translate/translate.directive.module";
-import { NgxBootstrapSwitchModule } from "ngx-bootstrap-switch";
 import { ModalModule } from "ngx-bootstrap/modal";
 import { PopoverModule } from "ngx-bootstrap/popover";
 import { TabsModule } from "ngx-bootstrap/tabs";
 import { AccountUpdateNewDetailsComponent } from "./account-update-new-details.component";
+import { MatSlideToggleModule } from "@angular/material/slide-toggle";
+
 @NgModule({
     declarations: [
         AccountUpdateNewDetailsComponent
@@ -25,7 +26,7 @@ import { AccountUpdateNewDetailsComponent } from "./account-update-new-details.c
         SelectModule,
         ShSelectModule,
         TabsModule.forRoot(),
-        NgxBootstrapSwitchModule.forRoot(),
+        MatSlideToggleModule,
         RouterModule,
         ModalModule,
         ConfirmModalModule,

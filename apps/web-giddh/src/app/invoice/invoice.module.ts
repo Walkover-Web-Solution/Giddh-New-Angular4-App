@@ -32,7 +32,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LaddaModule } from 'angular2-ladda';
 import { TextMaskModule } from 'angular2-text-mask';
 import { ClickOutsideModule } from 'ng-click-outside';
-import { NgxBootstrapSwitchModule } from 'ngx-bootstrap-switch';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { DatepickerModule, BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
@@ -78,6 +77,7 @@ import { TranslateDirectiveModule } from '../theme/translate/translate.directive
 import { DeleteTemplateConfirmationModalModule } from './templates/edit-template/modals/confirmation-modal/confirmation.modal.module';
 import { InvoiceTemplatesModule } from './templates/invoice.templates.module';
 import { VoucherModule } from '../voucher/voucher.module';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 const DEFAULT_FONT_PICKER_CONFIG: FontPickerConfigInterface = {
     // Change this to your Google API key
@@ -158,7 +158,7 @@ const DEFAULT_FONT_PICKER_CONFIG: FontPickerConfigInterface = {
         TaxSidebarModule,
         NoDataModule,
         NgxMaskModule.forRoot(),
-        NgxBootstrapSwitchModule.forRoot(),
+        MatSlideToggleModule,
         ValidateSubscriptionDirectiveModule,
         DeleteVoucherConfirmationModalModule,
         PurchaseSendEmailModule,

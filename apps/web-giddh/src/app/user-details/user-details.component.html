@@ -171,17 +171,16 @@
                         <div class="mr-t2">
                             <!--two way auth-->
                             <h1 class="section-head">
-                                <ngx-switch
-                                    [(status)]="twoWayAuth"
-                                    [onText]="commonLocaleData?.app_on"
-                                    [offText]="commonLocaleData?.app_off"
-                                    [onColor]="bootstrapToggleSwitch?.On"
-                                    [offColor]="bootstrapToggleSwitch?.Off"
-                                    [size]="bootstrapToggleSwitch?.Size"
-                                    (statusChange)="changeTwoWayAuth()"
+                                <mat-slide-toggle
+                                    [(ngModel)]="twoWayAuth"
+                                    name="twoWayAuth"
+                                    color="primary"
+                                    (change)="changeTwoWayAuth()"
                                 >
-                                </ngx-switch>
-                                {{ localeData?.mobile_number?.two_way_auth_label }}
+                                </mat-slide-toggle>
+                                <label class="two-way-auth-label">{{
+                                    localeData?.mobile_number?.two_way_auth_label
+                                }}</label>
                             </h1>
                             <p class="grey" *ngIf="twoWayAuth">{{ localeData?.mobile_number?.two_way_auth_content }}</p>
                         </div>
