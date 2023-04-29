@@ -18,6 +18,7 @@ import { cloneDeep } from "../../../lodash-optimized";
 import { AppState } from "../../../store";
 import { select, Store } from "@ngrx/store";
 import { Location } from '@angular/common';
+import { InventoryModuleName, InventoryReportType } from "../../inventory.enum";
 
 @Component({
     selector: "report-filters",
@@ -228,6 +229,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
                 this.searchInventory();
             }
         });
+        this.searchInventory();
     }
 
     /**
