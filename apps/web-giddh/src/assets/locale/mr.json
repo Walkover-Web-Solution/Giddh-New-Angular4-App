@@ -681,5 +681,6 @@
     "app_invalid_contact_too_short": "खुप लहान",
     "app_invalid_contact_too_long": "खूप लांब",
     "app_attachment_not_allowed": "संलग्नक अपलोड करण्यासाठी, शाखेत जा",
-    "app_entry_no": "प्रवेश क्र."
+    "app_entry_no": "प्रवेश क्र.",
+    "app_special_note": "टीप: इन्व्हॉइसचे काही तपशील अपडेट केले जाऊ शकत नाहीत कारण त्यासाठी ई-इनव्हॉइस तयार केले जाते."
 }

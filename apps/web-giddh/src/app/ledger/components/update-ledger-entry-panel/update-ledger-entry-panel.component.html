@@ -65,6 +65,7 @@
 
         <!-- region main body -->
         <div class="modal-body" [hidden]="isChangeAcc">
+            <span class="font-13" *ngIf="isEinvoiceGenerated">{{ commonLocaleData?.app_special_note }}</span>
             <!-- region transactions -->
             <div class="ledg-head entry-popup">
                 <table class="w-100 ledger-head mr-t1 hidden-xs">

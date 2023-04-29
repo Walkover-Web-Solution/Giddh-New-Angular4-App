@@ -109,6 +109,5 @@
     "enter_amount": "Please enter deposit amount",
     "voucher_number_required": "Voucher number is mandatory.",
     "invalid_contact_number": "Invalid Contact number",
-    "account":"Account",
-    "special_note": "Note: Some details of the Invoice can’t be updated as E-invoice is generated for the same."
+    "account":"Account"
 }

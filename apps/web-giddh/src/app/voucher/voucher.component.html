@@ -77,7 +77,7 @@
             [hidden]="(isUpdateMode && isUpdateDataInProcess) || (isLastInvoiceCopied && isUpdateDataInProcess)"
             id="button-focus-proforma"
         >
-            <span class="special-note" *ngIf="isEinvoiceGenerated">{{ localeData?.special_note }}</span>
+            <span class="font-13 mr-l1" *ngIf="isEinvoiceGenerated">{{ commonLocaleData?.app_special_note }}</span>
             <form
                 #invoiceForm="ngForm"
                 novalidate
