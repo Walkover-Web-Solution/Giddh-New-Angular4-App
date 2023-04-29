@@ -2413,6 +2413,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 this.handleAdvanceReceiptChange();
             }, 100);
         }
+
+        /** Since we are not showing amount bar in case of journal voucher, calculation is not working automatically so we are calculating here */
+        if (this.vm.selectedLedger.voucher.shortCode === 'jr') {
+            this.vm.inventoryAmountChanged();
+        }
+
         this.activeAccountSubject.next(this.activeAccount);
         this.changeDetectorRef.detectChanges();
     }
