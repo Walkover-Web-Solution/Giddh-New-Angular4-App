@@ -63,7 +63,6 @@ export class BulkConvertComponent implements OnInit, OnDestroy {
         let selectedPo = [];
 
         selectedPo = this.selectedPo?.map(po => {
-            po.vendorUniqueName = undefined;
             po.poUniqueName = undefined;
             return po;
         });

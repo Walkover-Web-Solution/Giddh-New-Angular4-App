@@ -3737,6 +3737,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         if (this.isPurchaseInvoice) {
             this.fieldFilteredOptions = [];
             this.linkedPo = [];
+            this.removePoItem();
         }
     }
 
@@ -7056,7 +7057,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 let selectedPoItems = [];
                 this.selectedPoItems.forEach(order => {
                     if (!this.linkedPo.includes(order)) {
-                        let entries = this.linkedPoNumbers[order]['items'];
+                        let entries = (this.linkedPoNumbers[order]) ? this.linkedPoNumbers[order]['items'] : [];
 
                         if (entries && entries.length > 0 && this.invFormData.entries && this.invFormData.entries.length > 0) {
                             entries.forEach(entry => {

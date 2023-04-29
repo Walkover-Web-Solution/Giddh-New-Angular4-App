@@ -96,9 +96,15 @@
                                                 aria-labelledby="button-basic"
                                             >
                                                 <li class="cp" role="menuitem" *ngIf="purchaseOrder?.status === 'OPEN'">
-                                                    <a class="dropdown-item" (click)="convertToBill()">{{
-                                                        localeData?.convert_tobill
-                                                    }}</a>
+                                                    <a
+                                                        class="dropdown-item"
+                                                        (click)="
+                                                            voucherApiVersion === 2
+                                                                ? openBulkConvert(purchaseBulkConvert)
+                                                                : convertToBill()
+                                                        "
+                                                        >{{ localeData?.convert_tobill }}</a
+                                                    >
                                                 </li>
                                                 <li class="cp" role="menuitem">
                                                     <a
@@ -268,3 +274,12 @@
         </div>
     </div>
 </div>
+<ng-template #purchaseBulkConvert>
+    <bulk-convert
+        [localeData]="localeData"
+        [commonLocaleData]="commonLocaleData"
+        [selectedPo]="selectedPurchaseOrders"
+        (closeModelEvent)="closeBulkConvertPopup($event)"
+    >
+    </bulk-convert>
+</ng-template>
