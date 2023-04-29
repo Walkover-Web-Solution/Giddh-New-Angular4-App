@@ -247,7 +247,7 @@
                                 #tax
                                 [taxes]="companyTaxesList$ | async"
                                 [date]="blankLedger?.entryDate"
-                                [taxRenderData]="currentTxn.taxesVm"
+                                [taxRenderData]="currentTxn?.taxesVm"
                                 [totalForTax]="totalForTax"
                                 [customHeading]="
                                     shouldShowAdvanceReceiptMandatoryFields

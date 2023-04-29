@@ -72,6 +72,13 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             this._generalService.companyUniqueName = ss.companyUniqueName;
         });
 
+        if (this._generalService.getUrlParameter("companyUniqueName")) {
+            this._generalService.setParameterInLocalStorage("companyUniqueName", this._generalService.getUrlParameter("companyUniqueName"));
+        }
+        if (this._generalService.getUrlParameter("version")) {
+            this._generalService.setParameterInLocalStorage("voucherApiVersion", this._generalService.getUrlParameter("version"));
+        }
+
         if (!(this._generalService.user && this._generalService.sessionId)) {
             if (!window.location.href.includes('login') && !window.location.href.includes('token-verify') && !window.location.href.includes('download')) {
                 if (PRODUCTION_ENV && !isElectron) {
