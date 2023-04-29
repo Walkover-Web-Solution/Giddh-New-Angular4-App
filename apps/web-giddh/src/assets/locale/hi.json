@@ -680,5 +680,6 @@
     "app_invalid_contact_too_short": "बहुत छोटा",
     "app_invalid_contact_too_long": "बहुत लंबा",
     "app_attachment_not_allowed": "अटैचमेंट अपलोड करने के लिए ब्रांच में जाएं",
-    "app_entry_no": "प्रवेश संख्या"
+    "app_entry_no": "प्रवेश संख्या",
+    "app_special_note": "नोट: चालान के कुछ विवरणों को अपडेट नहीं किया जा सकता है क्योंकि उसी के लिए ई-चालान तैयार किया गया है।"
 }
