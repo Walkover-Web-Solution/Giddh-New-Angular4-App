@@ -144,7 +144,14 @@
                                                 'other-account-entry':
                                                     isPettyCash && txn?.particular?.uniqueName === 'others'
                                             }"
-                                            class="col-5 position-relative select2-parent select2-ledger d-flex align-items-center justify-content-between"
+                                            class="
+                                                col-5
+                                                position-relative
+                                                select2-parent select2-ledger
+                                                d-flex
+                                                align-items-center
+                                                justify-content-between
+                                            "
                                         >
                                             <ng-template [ngIf]="!txn.isDiscount">
                                                 <div class="d-flex update-ledger-account">
@@ -466,7 +473,14 @@
                                         <td
                                             [attr.data-title]="commonLocaleData?.app_particular"
                                             [id]="'credit-id-' + i"
-                                            class="position-relative col-5 select2-parent select2-ledger d-flex align-items-center justify-content-between"
+                                            class="
+                                                position-relative
+                                                col-5
+                                                select2-parent select2-ledger
+                                                d-flex
+                                                align-items-center
+                                                justify-content-between
+                                            "
                                             [ngClass]="{
                                                 'other-account-entry':
                                                     isPettyCash && txn?.particular?.uniqueName === 'others'
@@ -780,7 +794,12 @@
                 <!--        tourist scheme template end-->
                 <!-- region amount and discount container -->
                 <div class="clearfix">
-                    <ng-container *ngIf="vm.showNewEntryPanel || shouldShowAdvanceReceiptMandatoryFields">
+                    <ng-container
+                        *ngIf="
+                            (vm.showNewEntryPanel || shouldShowAdvanceReceiptMandatoryFields) &&
+                            vm.selectedLedger.voucher.shortCode !== 'jr'
+                        "
+                    >
                         <div
                             class="width-100 total-detail-table"
                             [ngClass]="{ 'add-multicurrency': vm.isMultiCurrencyAvailable }"
@@ -1321,7 +1340,7 @@
                                         <p class="info-text">
                                             {{
                                                 localeData?.adjustment_notes
-                                                    | replace : "[VOUCHER_NUMBER]" : vm.selectedLedger?.voucherNumber
+                                                    | replace: "[VOUCHER_NUMBER]":vm.selectedLedger?.voucherNumber
                                             }}
                                         </p>
                                     </div>
@@ -1759,7 +1778,7 @@
                                                     (change)="handleVoucherAdjustment()"
                                                     >{{
                                                         localeData?.adjust_voucher
-                                                            | replace : "[VOUCHER_TYPE]" : currentVoucherLabel
+                                                            | replace: "[VOUCHER_TYPE]":currentVoucherLabel
                                                     }}</mat-checkbox
                                                 >
                                             </td>
@@ -1891,7 +1910,7 @@
                                             <span class="primary-color">
                                                 {{
                                                     localeData?.total_in_currency
-                                                        | replace : "[CURRENCY]" : vm.baseCurrencyDetails?.code
+                                                        | replace: "[CURRENCY]":vm.baseCurrencyDetails?.code
                                                 }}:
                                                 <span class="d-inline-flex">
                                                     <amount-field
@@ -1959,7 +1978,7 @@
                                         <span *ngIf="vm.isMultiCurrencyAvailable" class="primary-color">
                                             {{
                                                 localeData?.total_in_currency
-                                                    | replace : "[CURRENCY]" : vm.foreignCurrencyDetails?.code
+                                                    | replace: "[CURRENCY]":vm.foreignCurrencyDetails?.code
                                             }}:
 
                                             <span class="d-inline-flex">
