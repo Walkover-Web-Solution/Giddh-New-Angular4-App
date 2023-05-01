@@ -225,10 +225,10 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Creates/updates the group
-     *
-     * @memberof CreateUpdateGroupComponent
-     */
+    * Creates/updates the group
+    *
+    * @memberof CreateUpdateGroupComponent
+    */
     public saveGroup(): void {
         this.groupForm.controls['parentStockGroupUniqueName'].setValue(this.stockGroupUniqueName);
         this.toggleLoader(true);
