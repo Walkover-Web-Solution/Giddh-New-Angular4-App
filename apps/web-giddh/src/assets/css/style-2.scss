@@ -629,8 +629,12 @@ $custom-typography: mat-typography-config(
 }
 
 .create-update-no-data {
+    cursor: default !important;
     .mat-pseudo-checkbox {
         display: none !important;
+    }
+    .mat-option-text {
+        color: var(--color-black) !important;
     }
 }
 @media screen and (max-width: 1366px) and (orientation: portrait) {
