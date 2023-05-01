@@ -46,7 +46,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     public taxes: any[] = [];
     /** Object of stock form */
     public stockForm: any = {
-        type: 'PRODUCT',
+        type: null,
         name: null,
         uniqueName: null,
         stockUnitCode: null,
@@ -133,8 +133,6 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     private selectedTaxes: any[] = [];
     /** Holds custom fields data */
     private customFieldsData: any[] = [];
-    /** Holds stock type from url */
-    private stockType: string = "";
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
@@ -181,7 +179,6 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             if (params?.type) {
                 this.stockForm.type = params?.type?.toUpperCase();
-                this.stockType = params?.type?.toUpperCase();
                 this.resetForm(this.stockCreateEditForm);
                 this.getStockGroups();
                 this.changeDetection.detectChanges();
@@ -272,10 +269,10 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
      * @memberof StockCreateEditComponent
      */
     public getStockGroups(): void {
-        if (this.stockType === 'FIXEDASSETS') {
-            this.stockType = 'FIXED_ASSETS';
+        if (this.stockForm.type === 'FIXEDASSETS') {
+            this.stockForm.type = 'FIXED_ASSETS';
         }
-        this.inventoryService.GetGroupsWithStocksFlatten(this.stockType).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.inventoryService.GetGroupsWithStocksFlatten(this.stockForm.type).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
                 let stockGroups: IOption[] = [];
                 this.arrangeStockGroups(response.body?.results, stockGroups);
@@ -648,7 +645,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         this.toggleLoader(true);
         this.inventoryService.getStock(this.queryParams?.stockUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success" && response.body) {
-                this.stockForm.type = response.body.type ?? "PRODUCT";
+                this.stockForm.type = response.body.type;
                 this.stockForm.name = response.body.name;
                 this.stockForm.uniqueName = response.body.uniqueName;
                 this.stockForm.stockUnitCode = response.body.stockUnit?.code;
@@ -955,9 +952,8 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
      */
     public resetForm(stockCreateEditForm: NgForm): void {
         stockCreateEditForm?.form?.reset();
-
         this.stockForm = {
-            type: this.stockType,
+            type: this.stockForm.type,
             name: null,
             uniqueName: null,
             stockUnitCode: null,
