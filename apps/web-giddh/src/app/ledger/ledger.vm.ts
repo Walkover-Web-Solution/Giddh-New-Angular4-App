@@ -295,7 +295,7 @@ export class LedgerVM {
         // map over transactions array
         requestObj.transactions.map((bl: any) => {
             // set transaction.particular to selectedAccount uniqueName
-            bl.particular = bl?.selectedAccount ? bl.selectedAccount.uniqueName : bl.particular;
+            bl.particular = bl?.selectedAccount ? bl.selectedAccount.uniqueName : bl?.particular;
             // filter taxes uniqueNames
             bl.taxes = [...bl?.taxesVm?.filter(p => p.isChecked).map(p => p?.uniqueName)];
             // filter discount
