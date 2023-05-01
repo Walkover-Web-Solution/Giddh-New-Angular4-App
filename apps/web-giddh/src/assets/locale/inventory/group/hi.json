@@ -1,18 +1,8 @@
 {
     "group_name": "समूह नाम",
     "enter_group": "समूह का नाम दर्ज करें",
-    "unique_name": "अनूठा नाम",
-    "enter_uniquename": "अद्वितीय नाम दर्ज करें",
-    "hsn_code": "एचएसएन कोड",
-    "sac_code": "सैक कोड",
     "enter_hsn": "एचएसएन कोड दर्ज करें",
     "enter_sac": "सैक कोड दर्ज करें",
     "is_it_subgroup": "क्या यह एक उप समूह है ?:",
-    "parent_group": "जनक समूह",
-    "select_group": "समूह का चयन करें",
-    "tax": "कर",
-    "select_tax": "कर का चयन करें",
-    "no_tax_found": "कोई कर नहीं मिला",
-    "create_group": "समूह बनाना",
-    "update_group": "अद्यतन समूह"
+    "no_tax_found": "कोई कर नहीं मिला"
 }

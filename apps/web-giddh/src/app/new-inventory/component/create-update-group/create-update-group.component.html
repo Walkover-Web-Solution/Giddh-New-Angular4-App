@@ -32,13 +32,16 @@
                                 </div>
                                 <div class="row mr-b15">
                                     <div class="col-sm-6 col-lg-4">
-                                        <label>{{ localeData?.unique_name }}<span class="red-text">*</span></label>
+                                        <label
+                                            >{{ commonLocaleData?.app_unique_name
+                                            }}<span class="red-text">*</span></label
+                                        >
                                     </div>
                                     <div class="col-sm-6 col-lg-6 ml-lg-2">
                                         <text-field
                                             [cssClass]="'form-control  mat-field-border'"
                                             [name]="'uniqueName'"
-                                            [placeholder]="localeData?.enter_uniquename"
+                                            [placeholder]="commonLocaleData?.app_unique_name_placeholder"
                                             formControlName="uniqueName"
                                             [type]="'text'"
                                         >
@@ -55,10 +58,10 @@
                                             (change)="onChangeHsnSacType()"
                                         >
                                             <mat-radio-button id="hsn" [value]="'hsn'">{{
-                                                localeData?.hsn_code
+                                                commonLocaleData?.app_hsn_code
                                             }}</mat-radio-button>
                                             <mat-radio-button id="sac" [value]="'sac'">{{
-                                                localeData?.sac_code
+                                                commonLocaleData?.app_sac_code
                                             }}</mat-radio-button>
                                         </mat-radio-group>
                                     </div>
@@ -116,14 +119,14 @@
                                 </div>
                                 <div class="row mr-t15">
                                     <div class="col-sm-6 col-lg-4">
-                                        <label>{{ localeData?.parent_group }}</label>
+                                        <label>{{ commonLocaleData?.app_parent_group }}</label>
                                     </div>
                                     <div class="col-sm-6 col-lg-6 ml-lg-2">
                                         <select-field
                                             [cssClass]="'form-control  mat-field-border'"
                                             [readonly]="!groupForm.get('isSubGroup')?.value"
                                             [name]="'parentStockGroupUniqueName'"
-                                            [placeholder]="localeData?.select_group"
+                                            [placeholder]="commonLocaleData?.app_select_group"
                                             [options]="stockGroups"
                                             (selectedOption)="
                                                 stockGroupUniqueName = $event?.value; stockGroupName = $event.label
@@ -134,13 +137,13 @@
                                 </div>
                                 <div class="row mr-t15">
                                     <div class="col-sm-6 col-lg-4">
-                                        <label>{{ localeData?.tax }}</label>
+                                        <label>{{ commonLocaleData?.app_tax }}</label>
                                     </div>
                                     <div class="col-sm-6 col-lg-6 ml-lg-2">
                                         <mat-select
                                             name="taxes"
                                             class="form-control"
-                                            [placeholder]="localeData?.select_tax"
+                                            [placeholder]="commonLocaleData?.app_select_tax"
                                             formControlName="taxes"
                                             multiple
                                         >
@@ -203,7 +206,11 @@
                                 [disabled]="groupForm.invalid"
                                 (click)="saveGroup()"
                             >
-                                {{ groupUniqueName ? localeData?.update_group : localeData?.create_group }}
+                                {{
+                                    groupUniqueName
+                                        ? commonLocaleData?.app_update_group
+                                        : commonLocaleData?.app_update_group
+                                }}
                             </button>
                         </div>
                     </div>

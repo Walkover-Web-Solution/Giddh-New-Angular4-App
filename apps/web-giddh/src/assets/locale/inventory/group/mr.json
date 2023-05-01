@@ -1,18 +1,8 @@
 {
     "group_name": "गटाचे नाव",
     "enter_group": "गटाचे नाव प्रविष्ट करा",
-    "unique_name": "अद्वितीय नाव",
-    "enter_uniquename": "अद्वितीय नाव प्रविष्ट करा",
-    "hsn_code": "HSN कोड",
-    "sac_code": "SAC कोड",
-    "enter_hsn": "HSN कोड प्रविष्ट करा",
-    "enter_sac": "SAC कोड प्रविष्ट करा",
     "is_it_subgroup": "हा उपगट आहे का?:",
-    "parent_group": "पालक गट",
-    "select_group": "गट निवडा",
-    "tax": "कर",
-    "select_tax": "कर निवडा",
     "no_tax_found": "कोणताही कर आढळला नाही",
-    "create_group": "गट तयार करा",
-    "update_group": "गट अद्यतनित करा"
+    "enter_hsn": "HSN कोड प्रविष्ट करा",
+    "enter_sac": "SAC कोड प्रविष्ट करा"
 }
