@@ -33,7 +33,9 @@
                         *ngIf="
                             stockForm.type === 'PRODUCT' ||
                             stockForm.type === 'SERVICE' ||
-                            stockForm.type === 'FIXEDASSETS'
+                            stockForm.type === 'FIXED_ASSETS'
+                                ? 'FIXEDASSETS'
+                                : ''
                         "
                     >
                         <div class="row flex-column-reverse flex-md-row upper-common-form-container">
