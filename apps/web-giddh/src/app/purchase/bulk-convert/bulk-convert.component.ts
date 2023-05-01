@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from "@angular/core";
 import { ReplaySubject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { GeneralService } from "../../services/general.service";
@@ -28,7 +28,8 @@ export class BulkConvertComponent implements OnInit, OnDestroy {
     constructor(
         public purchaseOrderService: PurchaseOrderService,
         private generalService: GeneralService,
-        private toaster: ToasterService
+        private toaster: ToasterService,
+        private changeDetection: ChangeDetectorRef
     ) {
 
     }
@@ -79,6 +80,7 @@ export class BulkConvertComponent implements OnInit, OnDestroy {
                 this.toaster.errorToast(response?.message);
             }
             this.isLoading = false;
+            this.changeDetection.detectChanges();
         });
     }
 }
