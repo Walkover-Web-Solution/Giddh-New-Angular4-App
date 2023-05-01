@@ -952,9 +952,6 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
      */
     public resetForm(stockCreateEditForm: NgForm): void {
         stockCreateEditForm?.form?.reset();
-        if (this.stockForm.type === 'FIXEDASSETS') {
-            this.stockForm.type = 'FIXED_ASSETS';
-        }
         this.stockForm = {
             type: this.stockForm.type,
             name: null,
