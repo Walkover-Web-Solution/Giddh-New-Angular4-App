@@ -249,7 +249,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
             this.balanceStockReportRequest.from = this.fromDate;
             this.balanceStockReportRequest.to = this.toDate;
         }
-        if (this.moduleName !== InventoryModuleName.transaction) {
+        if (this.moduleName !== InventoryModuleName.transaction && changes?.moduleName?.currentValue !== this.moduleName) {
             if (changes?.searchPage?.currentValue || changes?.moduleType?.currentValue) {
                 this.searchInventory();
                 this.getReportColumns();
