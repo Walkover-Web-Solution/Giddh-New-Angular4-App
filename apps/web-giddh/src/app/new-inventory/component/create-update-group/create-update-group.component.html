@@ -15,13 +15,13 @@
                             <div class="col-xl-6 col-lg-6 col-md-6">
                                 <div class="row mr-b15">
                                     <div class="col-sm-6 col-lg-4">
-                                        <label>Group Name <span class="red-text">*</span></label>
+                                        <label>{{ localeData?.group_name }} <span class="red-text">*</span></label>
                                     </div>
                                     <div class="col-sm-6 col-lg-6 ml-lg-2">
                                         <text-field
                                             [cssClass]="'form-control mat-field-border'"
                                             [name]="'productName'"
-                                            [placeholder]="'Enter Group Name'"
+                                            [placeholder]="localeData?.enter_group"
                                             [type]="'text'"
                                             formControlName="name"
                                             [required]="true"
@@ -32,13 +32,13 @@
                                 </div>
                                 <div class="row mr-b15">
                                     <div class="col-sm-6 col-lg-4">
-                                        <label>Unique Name <span class="red-text">*</span></label>
+                                        <label>{{ localeData?.unique_name }}<span class="red-text">*</span></label>
                                     </div>
                                     <div class="col-sm-6 col-lg-6 ml-lg-2">
                                         <text-field
                                             [cssClass]="'form-control  mat-field-border'"
                                             [name]="'uniqueName'"
-                                            [placeholder]="'Unique Name'"
+                                            [placeholder]="localeData?.enter_uniquename"
                                             formControlName="uniqueName"
                                             [type]="'text'"
                                         >
@@ -54,8 +54,12 @@
                                             formControlName="showCodeType"
                                             (change)="onChangeHsnSacType()"
                                         >
-                                            <mat-radio-button id="hsn" [value]="'hsn'">HSN Code</mat-radio-button>
-                                            <mat-radio-button id="sac" [value]="'sac'">SAC Code</mat-radio-button>
+                                            <mat-radio-button id="hsn" [value]="'hsn'">{{
+                                                localeData?.hsn_code
+                                            }}</mat-radio-button>
+                                            <mat-radio-button id="sac" [value]="'sac'">{{
+                                                localeData?.sac_code
+                                            }}</mat-radio-button>
                                         </mat-radio-group>
                                     </div>
                                     <div class="col-sm-6 col-lg-6 ml-lg-2">
@@ -66,7 +70,7 @@
                                             <text-field
                                                 [cssClass]="'form-control  mat-field-border '"
                                                 [name]="'hsnCode'"
-                                                [placeholder]="'Enter HSN Code'"
+                                                [placeholder]="localeData?.enter_hsn"
                                                 [type]="'number'"
                                                 formControlName="hsnNumber"
                                                 [max]="10"
@@ -81,7 +85,7 @@
                                             <text-field
                                                 [cssClass]="'form-control  mat-field-border'"
                                                 [name]="'sacCode'"
-                                                [placeholder]="'Enter SAC Code'"
+                                                [placeholder]="localeData?.enter_sac"
                                                 [type]="'number'"
                                                 formControlName="sacNumber"
                                                 [max]="10"
@@ -94,7 +98,7 @@
 
                                 <div class="row mr-t15">
                                     <div class="col-sm-6 col-lg-4">
-                                        <label>Is it a sub group?:</label>
+                                        <label>{{ localeData?.is_it_subgroup }}</label>
                                     </div>
                                     <div class="col-sm-6 col-lg-6 ml-lg-2">
                                         <mat-slide-toggle
@@ -103,21 +107,23 @@
                                             formControlName="isSubGroup"
                                         >
                                             <span class="pull-left">{{
-                                                groupForm.get("isSubGroup").value ? "On" : "Off"
+                                                groupForm.get("isSubGroup").value
+                                                    ? commonLocaleData?.app_on
+                                                    : commonLocaleData?.app_off
                                             }}</span>
                                         </mat-slide-toggle>
                                     </div>
                                 </div>
                                 <div class="row mr-t15">
                                     <div class="col-sm-6 col-lg-4">
-                                        <label>Parent Group</label>
+                                        <label>{{ localeData?.parent_group }}</label>
                                     </div>
                                     <div class="col-sm-6 col-lg-6 ml-lg-2">
                                         <select-field
                                             [cssClass]="'form-control  mat-field-border'"
                                             [readonly]="!groupForm.get('isSubGroup')?.value"
                                             [name]="'parentStockGroupUniqueName'"
-                                            [placeholder]="'Select Group'"
+                                            [placeholder]="localeData?.select_group"
                                             [options]="stockGroups"
                                             (selectedOption)="
                                                 stockGroupUniqueName = $event?.value; stockGroupName = $event.label
@@ -128,13 +134,13 @@
                                 </div>
                                 <div class="row mr-t15">
                                     <div class="col-sm-6 col-lg-4">
-                                        <label>Tax</label>
+                                        <label>{{ localeData?.tax }}</label>
                                     </div>
                                     <div class="col-sm-6 col-lg-6 ml-lg-2">
                                         <mat-select
                                             name="taxes"
                                             class="form-control"
-                                            placeholder="Select Tax"
+                                            [placeholder]="localeData?.select_tax"
                                             formControlName="taxes"
                                             multiple
                                         >
@@ -172,7 +178,7 @@
                                 class="clear-btn"
                                 (click)="resetGroupForm()"
                             >
-                                Clear
+                                {{ commonLocaleData?.app_clear }}
                             </button>
 
                             <button
@@ -181,7 +187,7 @@
                                 class="btn-primary min-width-100"
                                 (click)="cancelEdit()"
                             >
-                                Cancel
+                                {{ commonLocaleData?.app_close }}
                             </button>
                             <button
                                 *ngIf="groupUniqueName"
@@ -189,7 +195,7 @@
                                 class="delete-button min-width-100"
                                 (click)="deleteGroup()"
                             >
-                                Delete
+                                {{ commonLocaleData?.app_delete }}
                             </button>
                             <button
                                 mat-flat-button
@@ -197,7 +203,7 @@
                                 [disabled]="groupForm.invalid"
                                 (click)="saveGroup()"
                             >
-                                {{ groupUniqueName ? "Update Group" : "Create Group" }}
+                                {{ groupUniqueName ? localeData?.update_group : localeData?.create_group }}
                             </button>
                         </div>
                     </div>
