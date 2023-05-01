@@ -4,7 +4,8 @@
         <i class="icon-cross text-right close-modal" (click)="onCancel()"></i>
     </div>
     <div class="modal-body pd-l2 pd-r2 clearfix">
-        <form name="purchaseOrderBulkConvert" novalidate autocomplete="off">
+        <giddh-page-loader *ngIf="isLoading"></giddh-page-loader>
+        <form name="purchaseOrderBulkConvert" novalidate autocomplete="off" *ngIf="!isLoading">
             <div class="modal-wrap mr-b2">
                 <ng-container *ngFor="let po of selectedPo">
                     <div class="row">

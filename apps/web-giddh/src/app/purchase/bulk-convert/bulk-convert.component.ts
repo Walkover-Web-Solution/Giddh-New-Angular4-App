@@ -22,6 +22,8 @@ export class BulkConvertComponent implements OnInit, OnDestroy {
     @Output() public closeModelEvent: EventEmitter<any> = new EventEmitter();
     /* Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** True if api call in progress */
+    public isLoading: boolean = false;
 
     constructor(
         public purchaseOrderService: PurchaseOrderService,
@@ -67,6 +69,8 @@ export class BulkConvertComponent implements OnInit, OnDestroy {
             return po;
         });
 
+        this.isLoading = true;
+
         this.purchaseOrderService.bulkUpdate({ companyUniqueName: this.generalService.companyUniqueName, action: 'create_purchase_bill' }, { purchaseOrders: this.selectedPo }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
                 this.toaster.successToast(response?.body);
@@ -74,6 +78,7 @@ export class BulkConvertComponent implements OnInit, OnDestroy {
             } else {
                 this.toaster.errorToast(response?.message);
             }
+            this.isLoading = false;
         });
     }
 }
