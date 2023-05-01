@@ -1,0 +1,8 @@
+ {
+    "group_name": "Group Name",
+    "enter_group": "Enter Group Name",
+    "is_it_subgroup": "Is it a sub group?:",
+    "no_tax_found": "No Tax Found",
+    "enter_hsn": "Enter HSN Code",
+    "enter_sac": "Enter SAC Code"
+ }

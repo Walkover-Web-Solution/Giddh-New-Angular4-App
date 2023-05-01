@@ -18,6 +18,7 @@ import { cloneDeep } from "../../../lodash-optimized";
 import { AppState } from "../../../store";
 import { select, Store } from "@ngrx/store";
 import { Location } from '@angular/common';
+import { InventoryModuleName, InventoryReportType } from "../../inventory.enum";
 
 @Component({
     selector: "report-filters",
@@ -228,6 +229,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
                 this.searchInventory();
             }
         });
+        this.searchInventory();
     }
 
     /**
@@ -247,9 +249,11 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
             this.balanceStockReportRequest.from = this.fromDate;
             this.balanceStockReportRequest.to = this.toDate;
         }
-        if (changes?.searchPage || changes?.moduleType) {
-            this.searchInventory();
-            this.getReportColumns();
+        if (this.moduleName !== InventoryModuleName.transaction && changes?.moduleName?.currentValue !== this.moduleName) {
+            if (changes?.searchPage?.currentValue || changes?.moduleType?.currentValue) {
+                this.searchInventory();
+                this.getReportColumns();
+            }
         }
         if (changes?.stockReportRequest?.currentValue) {
             if (changes?.stockReportRequest?.currentValue?.stockGroups) {
