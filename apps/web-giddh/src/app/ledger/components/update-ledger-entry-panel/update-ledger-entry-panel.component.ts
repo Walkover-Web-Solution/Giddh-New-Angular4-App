@@ -2336,7 +2336,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     }
                 });
                 t.particular.uniqueName = `${t.particular?.uniqueName}#${t.inventory.stock?.uniqueName}`;
-                t.particular.name = t.particular?.name + ' ( ' + t.inventory.stock?.name + ' ) ';
+                t.particular.name = t.particular?.name + '(' + t.inventory.stock?.name + ')';
                 // Show warehouse dropdown only for stock items
                 const warehouseDetails = t.inventory.warehouse;
                 if (warehouseDetails) {
