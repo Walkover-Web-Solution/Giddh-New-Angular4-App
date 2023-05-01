@@ -1,7 +1,6 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 import { NewInventoryComponent } from "./new-inventory.component";
-import { InventoryCreateUpdateGroupComponent } from "./component/stock-group/create-update-group/create-update-group.component";
 import { AboutGroupDetailComponent } from "./component/about-group-detail/about-group-detail.component";
 import { AboutProductServiceDetailComponent } from "./component/about-product-service-detail/about-product-service-detail.component";
 import { InventoryComboListComponent } from "./component/combo-list/inventory-combo-list.component";

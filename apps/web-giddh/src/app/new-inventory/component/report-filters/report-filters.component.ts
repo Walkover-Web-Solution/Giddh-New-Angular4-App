@@ -813,10 +813,10 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
         let type = this.holdSearchChiplist?.option?.value?.type;
         let uniqueName = this.holdSearchChiplist?.option?.value?.uniqueName
         if (type === 'STOCK GROUP') {
-            this.router.navigate(['/pages', 'new-inventory', 'group', this.moduleType?.toLowerCase(), 'edit', uniqueName]);
+            this.router.navigate(['/pages', 'inventory/v2', 'group', this.moduleType?.toLowerCase(), 'edit', uniqueName]);
         }
         if (type === 'STOCK') {
-            this.router.navigate(['/pages', 'new-inventory', 'stock', this.moduleType?.toLowerCase(), 'edit', uniqueName]);
+            this.router.navigate(['/pages', 'inventory/v2', 'stock', this.moduleType?.toLowerCase(), 'edit', uniqueName]);
         }
     }
 }
