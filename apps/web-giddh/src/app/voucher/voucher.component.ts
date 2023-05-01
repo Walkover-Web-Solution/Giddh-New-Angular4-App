@@ -3739,6 +3739,10 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             this.fieldFilteredOptions = [];
             this.linkedPo = [];
             this.removePoItem();
+
+            this.invFormData.entries?.forEach(entry => {
+                entry.purchaseOrderItemMapping = null;
+            });
         }
     }
 
