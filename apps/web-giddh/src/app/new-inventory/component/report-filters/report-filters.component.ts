@@ -18,6 +18,7 @@ import { cloneDeep } from "../../../lodash-optimized";
 import { AppState } from "../../../store";
 import { select, Store } from "@ngrx/store";
 import { Location } from '@angular/common';
+import { InventoryModuleName, InventoryReportType } from "../../inventory.enum";
 
 @Component({
     selector: "report-filters",
@@ -50,6 +51,8 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public pullUniversalDate: boolean = true;
     /** Holds module name for customised columns */
     @Input() public reportUniqueName: string = "";
+    /** Holds inventory type module  */
+    @Input() public moduleType: string = "";
     /** Emits the selected filters */
     @Output() public filters: EventEmitter<any> = new EventEmitter();
     /** Emits true if filters are reset */
@@ -227,6 +230,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
             }
         });
         this.searchInventory();
+        this.getReportColumns();
     }
 
     /**
@@ -246,8 +250,11 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
             this.balanceStockReportRequest.from = this.fromDate;
             this.balanceStockReportRequest.to = this.toDate;
         }
-        if (changes?.searchPage) {
-            this.getReportColumns();
+        if (this.moduleName !== InventoryModuleName.transaction && changes?.moduleName?.currentValue !== this.moduleName) {
+            if (changes?.searchPage?.currentValue || changes?.moduleType?.currentValue) {
+                this.searchInventory();
+                this.getReportColumns();
+            }
         }
         if (changes?.stockReportRequest?.currentValue) {
             if (changes?.stockReportRequest?.currentValue?.stockGroups) {
@@ -299,6 +306,8 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
                         }
                     });
                 }
+            } else {
+                this.toaster.showSnackBar("warning", response?.message);
             }
             this.filteredDisplayColumns();
         });
@@ -712,6 +721,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ReportFiltersComponent
      */
     public searchInventory(autoSelectSearchOption?: boolean, loadMore?: boolean): void {
+        this.searchRequest.inventoryType = this.moduleType;
         this.searchRequest.stockGroupUniqueNames = this.stockReportRequest.stockGroupUniqueNames ? this.stockReportRequest.stockGroupUniqueNames : [];
         this.searchRequest.stockUniqueNames = this.stockReportRequest.stockUniqueNames ? this.stockReportRequest.stockUniqueNames : [];
         this.searchRequest.variantUniqueNames = this.stockReportRequest.variantUniqueNames ? this.stockReportRequest.variantUniqueNames : [];
@@ -760,7 +770,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
                         this.searchRequest.q = '';
                         this.searchInventory(true);
                     } else {
-                        this.toaster.showSnackBar("warning", response?.body);
+                        this.toaster.showSnackBar("warning", response?.message);
                     }
                 }
                 this.changeDetection.detectChanges();
