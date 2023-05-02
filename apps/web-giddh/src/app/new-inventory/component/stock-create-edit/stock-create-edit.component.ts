@@ -703,6 +703,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 this.toggleLoader(false);
                 this.changeDetection.detectChanges();
             } else {
+                this.toggleLoader(false);
                 this.toaster.showSnackBar("error", response?.message);
             }
         });

@@ -17,12 +17,6 @@
     border-color: var(--color-dark-fog) !important;
 }
 
-::ng-deep {
-    .mat-pseudo-checkbox-checked {
-        background: var(--color-giddh-blue) !important;
-    }
-}
-
 .clear-btn {
     width: 89px;
     height: 36px;
@@ -55,12 +49,6 @@
     }
 }
 
-:host::ng-deep .nav.nav-tabs {
-    position: static !important;
-    padding-left: 0 !important;
-    margin-bottom: 15px;
-}
-
 .create-group-footer {
     background-color: var(--color-dark-fog);
     height: 60px;
@@ -82,20 +70,6 @@
     font-size: 16px;
 }
 
-.add-image button img {
-    height: 87px;
-    width: 87px;
-    object-fit: contain;
-    transform: scale(1.2);
-}
-
-.add-image button {
-    padding: 0;
-    margin: 0 !important;
-    height: auto;
-    border: 2px dashed var(--color-gray);
-    overflow: hidden;
-}
 @media (max-width: 1440px) {
     .hsnsac-field {
         margin-top: 20px;

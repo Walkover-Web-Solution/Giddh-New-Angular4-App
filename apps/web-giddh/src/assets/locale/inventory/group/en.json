@@ -1,8 +1,13 @@
  {
     "group_name": "Group Name",
     "enter_group": "Enter Group Name",
-    "is_it_subgroup": "Is it a sub group?:",
+    "is_it_subgroup": "Is it a sub group?",
     "no_tax_found": "No Tax Found",
     "enter_hsn": "Enter HSN Code",
-    "enter_sac": "Enter SAC Code"
+    "enter_sac": "Enter SAC Code",
+    "stock_group_update":"Stock group updated successfully.",
+    "stock_group_create":"Stock group created successfully.",
+    "delete_message":"Deleting this group will delete & un-link all the stocks under it. Are you sure you want to delete the group? ",
+    "delete_message1:":"It will be deleted permanently and will no longer be accessible from any other module.",
+    "group_delete":"Group deleted successfully."
  }

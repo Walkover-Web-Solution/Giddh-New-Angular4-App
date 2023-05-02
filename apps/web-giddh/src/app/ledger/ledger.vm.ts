@@ -132,15 +132,16 @@ export class LedgerVM {
 
         // map over transactions array
         requestObj.transactions.map((bl) => {
-            // set transaction.particular to selectedAccount uniqueName
-            bl.particular = bl?.selectedAccount ? bl.selectedAccount?.uniqueName : bl.particular;
-            bl.isInclusiveTax = false;
-            // filter taxes uniqueNames
-            bl.taxes = [...bl?.taxesVm?.filter(p => p.isChecked).map(p => p?.uniqueName)];
-            // filter discount
-            bl.discounts = bl.discounts?.filter(p => p.amount && p.isActive);
-            // delete local id
-            delete bl['id'];
+            if (bl) {
+                // set transaction.particular to selectedAccount uniqueName
+                bl.particular = bl.selectedAccount ? bl.selectedAccount?.uniqueName : bl.particular;
+                bl.isInclusiveTax = false;
+                // filter taxes uniqueNames
+                bl.taxes = [...bl.taxesVm?.filter(p => p.isChecked).map(p => p?.uniqueName)];
+                // filter discount
+                bl.discounts = bl.discounts?.filter(p => p.amount && p.isActive);
+                // delete local id
+                delete bl['id'];
 
             if (requestObj.isOtherTaxesApplicable && requestObj.otherTaxModal.appliedOtherTax) {
                 bl.taxes.push(requestObj.otherTaxModal.appliedOtherTax?.uniqueName);
@@ -294,14 +295,16 @@ export class LedgerVM {
 
         // map over transactions array
         requestObj.transactions.map((bl: any) => {
-            // set transaction.particular to selectedAccount uniqueName
-            bl.particular = bl?.selectedAccount ? bl.selectedAccount.uniqueName : bl?.particular;
-            // filter taxes uniqueNames
-            bl.taxes = [...bl?.taxesVm?.filter(p => p.isChecked).map(p => p?.uniqueName)];
-            // filter discount
-            bl.discounts = bl.discounts?.filter(p => p.amount && p.isActive);
-            // delete local id
-            delete bl['id'];
+            if (bl) {
+                // set transaction.particular to selectedAccount uniqueName
+                bl.particular = bl.selectedAccount ? bl.selectedAccount.uniqueName : bl.particular;
+                // filter taxes uniqueNames
+                bl.taxes = [...bl.taxesVm?.filter(p => p.isChecked).map(p => p?.uniqueName)];
+                // filter discount
+                bl.discounts = bl.discounts?.filter(p => p.amount && p.isActive);
+                // delete local id
+                delete bl['id'];
+            }
         });
         if (requestObj.voucherType === 'advance-receipt') {
             /** Voucher type in case of advance receipt should be 'rcpt' but to differentiate the drop down values 'advance-receipt' is used */
