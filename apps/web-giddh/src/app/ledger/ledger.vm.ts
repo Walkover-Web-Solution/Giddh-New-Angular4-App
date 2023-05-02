@@ -142,9 +142,9 @@ export class LedgerVM {
                 bl.discounts = bl.discounts?.filter(p => p.amount && p.isActive);
                 // delete local id
                 delete bl['id'];
-
-            if (requestObj.isOtherTaxesApplicable && requestObj.otherTaxModal.appliedOtherTax) {
-                bl.taxes.push(requestObj.otherTaxModal.appliedOtherTax?.uniqueName);
+                if (requestObj.isOtherTaxesApplicable && requestObj.otherTaxModal.appliedOtherTax) {
+                    bl.taxes.push(requestObj.otherTaxModal.appliedOtherTax?.uniqueName);
+                }
             }
         });
         if (requestObj.voucherType === 'advance-receipt') {
