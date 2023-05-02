@@ -284,7 +284,7 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
                 if (response?.status !== "error") {
                     if (dataToSend.copyTypes?.length > 1 || this.isAttachment) {
                         if (fileType === "base64") {
-                            saveAs((this.generalService.base64ToBlob(response.body.attachments[0].encodedData, '', 512)), response.body.attachments[0].name);
+                            saveAs((this.generalService.base64ToBlob(response.body?.attachments[0]?.encodedData, '', 512)), response.body?.attachments[0]?.name);
                         } else {
                             saveAs(response, `${this.selectedVoucher?.voucherNumber}.` + 'zip');
                         }

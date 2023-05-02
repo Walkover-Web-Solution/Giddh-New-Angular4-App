@@ -5,6 +5,4 @@ import { Component } from "@angular/core";
     templateUrl: './main-group.component.html'
 })
 export class MainGroupComponent {
-    /* This will hold the value out/in to open/close setting sidebar popup */
-    public asideInventorySidebarMenuState: string = 'in';
 }

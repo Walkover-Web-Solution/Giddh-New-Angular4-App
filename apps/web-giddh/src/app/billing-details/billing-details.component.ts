@@ -744,9 +744,9 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
                 } else {
                     this.salesService.getStateCode(countryCode).pipe(takeUntil(this.destroyed$)).subscribe(resp => {
                         if (!isCompanyStates) {
-                            this.statesSource = this.modifyStateResp((resp.body) ? resp.body.stateList : [], countryCode);
+                            this.statesSource = this.modifyStateResp((resp.body) ? resp.body?.stateList : [], countryCode);
                         } else {
-                            this.companyStatesSource = this.modifyStateResp((resp.body) ? resp.body.stateList : [], countryCode);
+                            this.companyStatesSource = this.modifyStateResp((resp.body) ? resp.body?.stateList : [], countryCode);
                         }
                         resolve();
                     }, () => {

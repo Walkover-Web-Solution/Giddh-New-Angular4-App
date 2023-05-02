@@ -58,7 +58,7 @@ export class QuickAccountComponent implements OnInit, AfterViewInit, OnDestroy {
         this._groupService.GetFlattenGroupsAccounts('', 1, 5000, 'true').pipe(takeUntil(this.destroyed$)).subscribe(result => {
             if (result?.status === 'success') {
                 let groupsListArray: IOption[] = [];
-                result.body.results = this.removeFixedGroupsFromArr(result.body.results);
+                result.body.results = this.removeFixedGroupsFromArr(result.body?.results);
                 result.body.results.forEach(a => {
                     groupsListArray.push({ label: a.groupName, value: a.groupUniqueName });
                 });

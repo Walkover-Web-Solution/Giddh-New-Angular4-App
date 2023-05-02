@@ -1206,4 +1206,61 @@ export class GeneralService {
         }
         return found;
     }
+
+    /**
+     * Set parameter in local storage
+     *
+     * @param {*} key
+     * @param {*} value
+     * @memberof GeneralService
+     */
+    public setParameterInLocalStorage(key: any, value: any): void {
+        localStorage.setItem(key, value);
+    }
+
+    /**
+     * Removes parameter from local storage
+     *
+     * @param {*} key
+     * @memberof GeneralService
+     */
+    public removeLocalStorageParameter(key: any): void {
+        localStorage.removeItem(key);
+    }
+
+    /**
+     * Gets parameter from url
+     *
+     * @param {*} sParam
+     * @returns {*}
+     * @memberof GeneralService
+     */
+    public getUrlParameter(sParam: any): any {
+        let sPageURL = window.location.search.substring(1),
+            sURLVariables = sPageURL.split('&'),
+            sParameterName,
+            i;
+
+        for (i = 0; i < sURLVariables.length; i++) {
+            sParameterName = sURLVariables[i].split('=');
+
+            if (sParameterName[0] === sParam) {
+                return sParameterName[1] === undefined ? true : this.removeProtocol(decodeURIComponent(sParameterName[1]));
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Removes protocol from url
+     *
+     * @param {string} url
+     * @returns {string}
+     * @memberof GeneralService
+     */
+    public removeProtocol(url: string): string {
+        url = url.replace("https://", "");
+        url = url.replace("http://", "");
+        return url;
+    }
 }

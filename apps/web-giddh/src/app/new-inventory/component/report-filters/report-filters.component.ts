@@ -19,6 +19,7 @@ import { AppState } from "../../../store";
 import { select, Store } from "@ngrx/store";
 import { Location } from '@angular/common';
 import { Router } from "@angular/router";
+import { InventoryModuleName } from "../../inventory.enum";
 
 @Component({
     selector: "report-filters",
@@ -232,6 +233,8 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
                 this.searchInventory();
             }
         });
+        this.searchInventory();
+        this.getReportColumns();
     }
 
     /**
@@ -251,9 +254,11 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
             this.balanceStockReportRequest.from = this.fromDate;
             this.balanceStockReportRequest.to = this.toDate;
         }
-        if (changes?.searchPage || changes?.moduleType) {
-            this.searchInventory();
-            this.getReportColumns();
+        if (this.moduleName !== InventoryModuleName.transaction && changes?.moduleName?.currentValue !== this.moduleName) {
+            if (changes?.searchPage?.currentValue || changes?.moduleType?.currentValue) {
+                this.searchInventory();
+                this.getReportColumns();
+            }
         }
         if (changes?.stockReportRequest?.currentValue) {
             if (changes?.stockReportRequest?.currentValue?.stockGroups) {
@@ -305,6 +310,8 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
                         }
                     });
                 }
+            } else {
+                this.toaster.showSnackBar("warning", response?.message);
             }
             this.filteredDisplayColumns();
         });
@@ -768,7 +775,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
                         this.searchRequest.q = '';
                         this.searchInventory(true);
                     } else {
-                        this.toaster.showSnackBar("warning", response?.body);
+                        this.toaster.showSnackBar("warning", response?.message);
                     }
                 }
                 this.changeDetection.detectChanges();

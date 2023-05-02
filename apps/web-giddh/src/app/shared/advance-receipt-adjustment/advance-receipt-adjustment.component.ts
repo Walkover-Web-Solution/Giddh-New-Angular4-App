@@ -346,7 +346,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
                             }
                         });
                     }
-                    this.allAdvanceReceiptResponse = (res.body.items?.length) ? res.body.items : (res.body.results?.length) ? res.body.results : res.body;
+                    this.allAdvanceReceiptResponse = (res.body?.items?.length) ? res.body?.items : (res.body?.results?.length) ? res.body?.results : res.body;
 
                     if (this.voucherApiVersion === 2) {
                         this.allAdvanceReceiptResponse = this.adjustmentUtilityService.formatAdjustmentsObject(this.allAdvanceReceiptResponse);

@@ -53,6 +53,8 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
     public groupForm: FormGroup;
     /** True if loader is visible */
     public showLoader: boolean = false;
+    /** True if translations loaded */
+    public translationLoaded: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -70,6 +72,7 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
         this.initGroupForm();
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             this.stockType = params?.type?.toUpperCase();
+
             if (params.groupUniqueName) {
                 this.groupUniqueName = params.groupUniqueName;
                 this.getGroupDetails();
@@ -86,8 +89,21 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
-        this.getStockGroups();
-        this.getTaxes();
+        this.groupForm.controls['isSubGroup'].valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.groupForm.controls['parentStockGroupUniqueName'].enable();
+            } else {
+                this.groupForm.controls['parentStockGroupUniqueName'].reset();
+                this.groupForm.controls['parentStockGroupUniqueName'].disable();
+                this.stockGroupName = '';
+                this.stockGroupUniqueName = '';
+            }
+        });
+        if (this.stockType) {
+            this.getStockGroups();
+            this.getTaxes();
+        }
+        document.querySelector("body").classList.add("group-create-update");
     }
 
     /**
@@ -105,7 +121,8 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
             sacNumber: [''],
             parentStockGroupUniqueName: [''],
             isSubGroup: [false],
-            taxes: null
+            taxes: null,
+            type: null
         });
     }
 
@@ -119,21 +136,9 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
         this.store.pipe(select(state => state?.company?.taxes), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.length > 0) {
                 this.taxes = response || [];
-                this.checkSelectedTaxes();
             }
         });
-    }
-
-    /**
-    * Prefill selected taxes
-    *
-    * @private
-    * @memberof CreateUpdateGroupComponent
-    */
-    private checkSelectedTaxes(): void {
-        setTimeout(() => {
-            this.changeDetection.detectChanges();
-            });
+        this.changeDetection.detectChanges();
     }
 
     /**
@@ -152,8 +157,10 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
     * @memberof CreateUpdateGroupComponent
     */
     public selectTax(taxSelected: any): void {
-        let isSelected = this.selectedTaxes?.filter(selectedTax => selectedTax === taxSelected?.uniqueName);
-
+        if (!taxSelected) {
+            return;
+        }
+        let isSelected = this.selectedTaxes?.filter(selectedTax => selectedTax === taxSelected.uniqueName);
         if (taxSelected.taxType !== 'gstcess') {
             let index = findIndex(this.taxTempArray, (taxTemp) => taxTemp.taxType === taxSelected.taxType);
             if (index > -1 && !isSelected?.length) {
@@ -180,7 +187,7 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
                         tax.isChecked = false;
                         tax.isDisabled = true;
                     }
-                    if (tax?.uniqueName === taxSelected?.uniqueName) {
+                    if (tax?.uniqueName === taxSelected.uniqueName) {
                         taxSelected.isChecked = true;
                         taxSelected.isDisabled = false;
                         this.taxTempArray.push(taxSelected);
@@ -194,7 +201,7 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
                 });
                 this.taxTempArray.push(taxSelected);
             } else {
-                let idx = findIndex(this.taxTempArray, (taxTemp) => taxTemp?.uniqueName === taxSelected?.uniqueName);
+                let idx = findIndex(this.taxTempArray, (taxTemp) => taxTemp?.uniqueName === taxSelected.uniqueName);
                 this.taxTempArray.splice(idx, 1);
                 taxSelected.isChecked = false;
                 forEach(this.taxes, (tax) => {
@@ -211,7 +218,7 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
                 this.taxTempArray.push(taxSelected);
                 taxSelected.isChecked = true;
             } else {
-                let idx = findIndex(this.taxTempArray, (taxTemp) => taxTemp?.uniqueName === taxSelected?.uniqueName);
+                let idx = findIndex(this.taxTempArray, (taxTemp) => taxTemp?.uniqueName === taxSelected.uniqueName);
                 this.taxTempArray.splice(idx, 1);
                 taxSelected.isChecked = false;
             }
@@ -220,38 +227,42 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Creates/updates the group
-     *
-     * @memberof CreateUpdateGroupComponent
-     */
+    * Creates/updates the group
+    *
+    * @memberof CreateUpdateGroupComponent
+    */
     public saveGroup(): void {
         this.groupForm.controls['parentStockGroupUniqueName'].setValue(this.stockGroupUniqueName);
         this.toggleLoader(true);
         if (this.groupUniqueName) {
-            this.inventoryService.updateStockGroup(this.groupForm?.value, this.groupUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            this.groupForm.controls['type'].setValue(this.stockType);
+            this.inventoryService.UpdateStockGroup(this.groupForm?.value, this.groupUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response?.status === "success") {
                     this.toggleLoader(false);
+                    this.getStockGroups();
                     this.toaster.clearAllToaster();
-                    this.toaster.successToast("Stock group updated successfully.");
+                    this.toaster.successToast(this.localeData?.stock_group_update);
                     this.backClicked();
                 } else {
                     this.toaster.clearAllToaster();
+                    this.toggleLoader(false);
                     this.toaster.errorToast(response?.message);
                 }
-                this.changeDetection.detectChanges();
             });
         } else {
-            this.inventoryService.createStockGroup(this.groupForm?.value, this.stockType).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            this.groupForm.controls['type'].setValue(this.stockType);
+            this.inventoryService.CreateStockGroup(this.groupForm?.value).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response?.status === "success") {
                     this.toggleLoader(false);
+                    this.getStockGroups();
                     this.resetGroupForm();
                     this.toaster.clearAllToaster();
-                    this.toaster.successToast("Stock group created successfully.");
+                    this.toaster.successToast(this.localeData?.stock_group_create);
                 } else {
                     this.toaster.clearAllToaster();
+                    this.toggleLoader(false);
                     this.toaster.errorToast(response?.message);
                 }
-                this.changeDetection.detectChanges();
             });
         }
     }
@@ -268,7 +279,9 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
         this.inventoryService.GetGroupsWithStocksFlatten(this.stockType).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
                 let stockGroups: IOption[] = [];
-                this.arrangeStockGroups(response.body?.results, stockGroups);
+                if (response.body?.results?.length > 0) {
+                    this.arrangeStockGroups(response.body?.results, stockGroups);
+                }
                 this.stockGroups = stockGroups;
             }
         });
@@ -323,6 +336,7 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
         this.groupForm?.patchValue({ showCodeType: "hsn" });
         this.stockGroupName = '';
         this.stockGroupUniqueName = '';
+        this.selectedTaxes = [];
         this.changeDetection.detectChanges();
     }
 
@@ -336,10 +350,10 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
         setTimeout(() => {
             if (this.groupForm.get('showCodeType')?.value === 'hsn') {
                 this.groupForm.controls['hsnNumber'].setValue(cloneDeep(this.groupForm.get('sacNumber').value));
-                this.groupForm.controls['sacNumber'].setValue(null);
+                this.groupForm.controls['sacNumber'].setValue('');
             } else {
                 this.groupForm.controls['sacNumber'].setValue(cloneDeep(this.groupForm.get('hsnNumber').value));
-                this.groupForm.controls['hsnNumber'].setValue(null);
+                this.groupForm.controls['hsnNumber'].setValue('');
             }
             this.changeDetection.detectChanges();
         }, 100);
@@ -376,20 +390,24 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
                     hsnNumber: response.body.hsnNumber,
                     sacNumber: response.body.sacNumber,
                     parentStockGroupUniqueName: response.body.parentStockGroupNames,
-                    isSubGroup: [(response.body.parentStockGroup?.uniqueName) ? true : false],
+                    isSubGroup: (response.body.parentStockGroup?.uniqueName) ? true : false,
                     taxes: response.body.taxes
                 });
-                this.checkSelectedTaxes();
+                this.groupForm.updateValueAndValidity();
+                this.changeDetection.detectChanges();
+            } else {
+                this.toggleLoader(false);
+                this.toaster.showSnackBar("error", response?.message);
             }
             this.changeDetection.detectChanges();
         });
     }
 
     /**
-     *This will redirect to inventory list page
-     *
-     * @memberof CreateUpdateGroupComponent
-     */
+    *This will redirect to inventory list page
+    *
+    * @memberof CreateUpdateGroupComponent
+    */
     public cancelEdit(): void {
         this.router.navigate(['/pages/inventory']);
     }
@@ -403,9 +421,9 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
         let dialogRef = this.dialog.open(ConfirmModalComponent, {
             width: '40%',
             data: {
-                title: this.commonLocaleData?.app_delete,
-                body: "Deleting this group will delete & un-link all the stocks under it. Are you sure you want to delete the group?",
-                permanentlyDeleteMessage: "It will be deleted permanently and will no longer be accessible from any other module.",
+                title: this.commonLocaleData?.app_confirmation,
+                body: this.localeData?.delete_message,
+                permanentlyDeleteMessage: this.localeData?.delete_message1,
                 ok: this.commonLocaleData?.app_yes,
                 cancel: this.commonLocaleData?.app_no
             }
@@ -417,7 +435,7 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
                 this.inventoryService.DeleteStockGroup(this.groupUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     this.toggleLoader(false);
                     if (response?.status === "success") {
-                        this.toaster.showSnackBar("success", "Group deleted successfully.");
+                        this.toaster.showSnackBar("success", this.localeData?.group_delete);
                         this.cancelEdit();
                     } else {
                         this.toaster.showSnackBar("error", response?.message);
@@ -439,6 +457,18 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * This will use for translation complete
+     *
+     * @param {*} event
+     * @memberof CreateUpdateGroupComponent
+     */
+    public translationComplete(event: any): void {
+        if (event) {
+            this.translationLoaded = true;
+        }
+    }
+
+    /**
      * Hook for component destroy
      *
      * @memberof CreateUpdateGroupComponent
@@ -446,6 +476,7 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+        document.querySelector("body").classList.remove("group-create-update");
     }
 }
 

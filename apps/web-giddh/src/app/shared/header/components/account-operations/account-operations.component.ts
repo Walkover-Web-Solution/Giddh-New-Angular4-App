@@ -672,16 +672,16 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         this.groupExportLedgerModal.hide();
         this.activeGroupUniqueName$.pipe(take(1)).subscribe((grpUniqueName: string) => {
             if (response !== 'close') {
-                this.groupExportLedgerBodyRequest.from = response.body.from;
-                this.groupExportLedgerBodyRequest.to = response.body.to;
-                this.groupExportLedgerBodyRequest.showVoucherNumber = response.body.showVoucherNumber;
-                this.groupExportLedgerBodyRequest.showVoucherTotal = response.body.showVoucherTotal;
-                this.groupExportLedgerBodyRequest.showEntryVoucher = response.body.showEntryVoucher;
-                this.groupExportLedgerBodyRequest.showDescription = response.body.showDescription;
-                this.groupExportLedgerBodyRequest.exportType = response.body.exportType;
-                this.groupExportLedgerBodyRequest.showEntryVoucherNo = response.body.showEntryVoucherNo;
+                this.groupExportLedgerBodyRequest.from = response.body?.from;
+                this.groupExportLedgerBodyRequest.to = response.body?.to;
+                this.groupExportLedgerBodyRequest.showVoucherNumber = response.body?.showVoucherNumber;
+                this.groupExportLedgerBodyRequest.showVoucherTotal = response.body?.showVoucherTotal;
+                this.groupExportLedgerBodyRequest.showEntryVoucher = response.body?.showEntryVoucher;
+                this.groupExportLedgerBodyRequest.showDescription = response.body?.showDescription;
+                this.groupExportLedgerBodyRequest.exportType = response.body?.exportType;
+                this.groupExportLedgerBodyRequest.showEntryVoucherNo = response.body?.showEntryVoucherNo;
                 this.groupExportLedgerBodyRequest.groupUniqueName = grpUniqueName;
-                this.groupExportLedgerBodyRequest.sort = response.body.sort ? 'ASC' : 'DESC';
+                this.groupExportLedgerBodyRequest.sort = response.body?.sort ? 'ASC' : 'DESC';
                 this.groupExportLedgerBodyRequest.fileType = response.fileType;
                 this.ledgerService.exportData(this.groupExportLedgerBodyRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     if (response?.status === 'success') {

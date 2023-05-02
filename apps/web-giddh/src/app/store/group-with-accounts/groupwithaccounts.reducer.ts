@@ -529,7 +529,7 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
             let accountData: BaseResponse<AccountResponseV2, AccountRequestV2> = action.payload;
             if (accountData?.status === 'success') {
                 let o: INameUniqueName = {
-                    name: accountData.body.name,
+                    name: accountData.body?.name,
                     uniqueName: accountData.body?.uniqueName
                 };
                 let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
@@ -551,7 +551,7 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
             let accountData: BaseResponse<AccountResponse, AccountRequest> = action.payload;
             if (accountData?.status === 'success') {
                 let o: INameUniqueName = {
-                    name: accountData.body.name,
+                    name: accountData.body?.name,
                     uniqueName: accountData.body?.uniqueName
                 };
                 let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
@@ -648,8 +648,8 @@ const AddAndActiveGroupFunc = (groups: IGroupsWithAccounts[], gData: BaseRespons
                 newData.category = grp.category;
                 newData.groups = [];
                 newData.isActive = false;
-                newData.name = gData.body.name;
-                newData.synonyms = gData.body.synonyms;
+                newData.name = gData.body?.name;
+                newData.synonyms = gData.body?.synonyms;
                 newData.uniqueName = gData.body?.uniqueName;
                 grp.isOpen = true;
                 grp.groups.push(newData);

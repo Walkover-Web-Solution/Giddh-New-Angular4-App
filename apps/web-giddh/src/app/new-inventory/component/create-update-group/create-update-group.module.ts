@@ -6,12 +6,9 @@ import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatRadioModule } from "@angular/material/radio";
 import { MatSelectModule } from "@angular/material/select";
 import { MatSlideToggleModule } from "@angular/material/slide-toggle";
-import { MatTabsModule } from "@angular/material/tabs";
 import { GiddhPageLoaderModule } from "../../../shared/giddh-page-loader/giddh-page-loader.module";
 import { HamburgerMenuModule } from "../../../shared/header/components/hamburger-menu/hamburger-menu.module";
 import { FormFieldsModule } from "../../../theme/form-fields/form-fields.module";
-import { ShSelectModule } from "../../../theme/ng-virtual-select/sh-select.module";
-
 import { TranslateDirectiveModule } from "../../../theme/translate/translate.directive.module";
 import { InventorySidebarModule } from "../inventory-sidebar/inventory-sidebar.module";
 import { CreateUpdateGroupComponent } from "./create-update-group.component";
@@ -34,10 +31,8 @@ import { MainGroupComponent } from "./main-group.component";
         MatRadioModule,
         MatSelectModule,
         MatCheckboxModule,
-        MatTabsModule,
         HamburgerMenuModule,
         MatButtonModule,
-        ShSelectModule,
         MatSlideToggleModule,
         GiddhPageLoaderModule
     ],

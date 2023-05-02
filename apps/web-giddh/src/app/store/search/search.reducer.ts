@@ -50,12 +50,12 @@ export function searchReducer(state = initialState, action: CustomActions): Sear
             if (searchResp?.status === 'success') {
                 return Object.assign({}, state, {
                     searchPaginationInfo: {
-                        totalPages: searchResp.body.totalPages,
-                        totalItems: searchResp.body.totalItems,
-                        page: searchResp.body.page,
-                        count: searchResp.body.count,
+                        totalPages: searchResp.body?.totalPages,
+                        totalItems: searchResp.body?.totalItems,
+                        page: searchResp.body?.page,
+                        count: searchResp.body?.count,
                     },
-                    value: flattenSearchGroupsAndAccounts(searchResp.body.results, searchResp.body.groupName),
+                    value: flattenSearchGroupsAndAccounts(searchResp.body?.results, searchResp.body?.groupName),
                     searchLoader: false,
                     search: true
                 });

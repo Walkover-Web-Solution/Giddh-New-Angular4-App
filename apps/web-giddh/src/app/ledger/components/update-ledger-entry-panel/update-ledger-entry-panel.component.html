@@ -794,7 +794,12 @@
                 <!--        tourist scheme template end-->
                 <!-- region amount and discount container -->
                 <div class="clearfix">
-                    <ng-container *ngIf="vm.showNewEntryPanel || shouldShowAdvanceReceiptMandatoryFields">
+                    <ng-container
+                        *ngIf="
+                            (vm.showNewEntryPanel || shouldShowAdvanceReceiptMandatoryFields) &&
+                            vm.selectedLedger.voucher.shortCode !== 'jr'
+                        "
+                    >
                         <div
                             class="width-100 total-detail-table"
                             [ngClass]="{ 'add-multicurrency': vm.isMultiCurrencyAvailable }"
@@ -1111,7 +1116,6 @@
                             <div
                                 *ngIf="vm.showNewEntryPanel || shouldShowAdvanceReceiptMandatoryFields"
                                 class="text-right table-amount mr-l1"
-                                (resized)="onResized($event)"
                             >
                                 <label class="font-12">{{ localeData?.total_amount }}</label>
                                 <input

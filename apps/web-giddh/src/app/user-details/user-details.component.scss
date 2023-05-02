@@ -10,7 +10,10 @@
     line-height: 1.7;
     text-align: center;
 }
-
+.two-way-auth-label {
+    margin-left: 5px;
+    vertical-align: top;
+}
 @media (max-width: 575px) {
     .wrap-tab-content-pd-15 {
         form {

@@ -19,51 +19,7 @@ interface SidebarNode {
     openActiveMenu?: boolean;
     children?: SidebarNode[];
 }
-const TREE_DATA: SidebarNode[] = [
-    {
-        name: 'Stock',
-        icons: 'stock.svg',
-        children: [
-            { name: 'Create New', icons: 'create-new.svg', openActiveMenu: true, moduleType: 'product' },
-            { name: 'Item-wise', icons: 'item-wise.svg', link: '/pages/inventory/v2/reports/product/stock' },
-            { name: 'Group-wise', icons: 'group-wise.svg', link: '/pages/inventory/v2/reports/product/group' },
-            { name: 'Variant-wise', icons: 'varient-wise.svg', link: '/pages/inventory/v2/reports/product/variant' },
-            { name: 'Transactions', icons: 'transactions.svg', link: '/pages/inventory/v2/reports/product/transaction' }],
-    },
-    {
-        name: 'Services',
-        icons: 'service.svg',
-        children: [
-            { name: 'Create New', icons: 'create-new.svg', openActiveMenu: true, moduleType: 'service' },
-            { name: 'Item-wise', icons: 'item-wise.svg', link: '/pages/inventory/v2/reports/service/stock' },
-            { name: 'Group-wise', icons: 'group-wise.svg', link: '/pages/inventory/v2/reports/service/group' },
-            { name: 'Variant-wise', icons: 'varient-wise.svg', link: '/pages/inventory/v2/reports/service/variant' },
-            { name: 'Transactions', icons: 'transactions.svg', link: '/pages/inventory/v2/reports/service/transaction' }],
-    },
-    {
-        name: 'Fixed Assets',
-        icons: 'fixed-assets.svg',
-        children: [
-            { name: 'Create New', icons: 'create-new.svg', openActiveMenu: true, moduleType: 'fixedassets' },
-            { name: 'Item-wise', icons: 'item-wise.svg', link: '/pages/inventory/v2/reports/fixedassets/stock' },
-            { name: 'Group-wise', icons: 'group-wise.svg', link: '/pages/inventory/v2/reports/fixedassets/group' },
-            { name: 'Variant-wise', icons: 'varient-wise.svg', link: '/pages/inventory/v2/reports/fixedassets/variant' },
-            { name: 'Transactions', icons: 'transactions.svg', link: '/pages/inventory/v2/reports/fixedassets/transaction' }],
-    },
-    {
-        name: 'Branch Transfer',
-        icons: 'branch-transfer.svg'
-    },
-    {
-        name: 'Manufacturing',
-        icons: 'manufacturing.svg'
-    },
-    {
-        name: 'Warehouse Opening Balance',
-        link: '/pages/inventory/v2/stock-balance',
-        icons: 'warehouse-opening-balance.svg'
-    },
-];
+const TREE_DATA: SidebarNode[] = [];
 /** Flat node with expandable and level information */
 interface SidebarFlatNode {
     expandable: boolean;
@@ -148,7 +104,6 @@ export class InventorySidebarComponent implements OnDestroy {
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.isMobileScreen = result.matches;
         });
-        this.dataSource.data = TREE_DATA;
     }
 
     /**
@@ -249,7 +204,7 @@ export class InventorySidebarComponent implements OnDestroy {
                         { name: this.localeData?.sidebar?.transactions, icons: 'transactions.svg', link: '/pages/inventory/v2/reports/service/transaction' }],
                 },
                 {
-                    name: this.localeData?.sidebar?.create_new.sidebar?.fixed_assets,
+                    name: this.localeData?.sidebar?.fixed_assets,
                     icons: 'fixed-assets.svg',
                     children: [
                         { name: this.localeData?.sidebar?.create_new, icons: 'create-new.svg', openActiveMenu: true, moduleType: 'fixedassets' },
@@ -272,15 +227,16 @@ export class InventorySidebarComponent implements OnDestroy {
                     icons: 'warehouse-opening-balance.svg'
                 },
             ];
+            this.dataSource.data = this.dataList;
             this.changeDetection.detectChanges();
         }
     }
 
     /**
-     *Aside pane toggle fixed class
-     *
-     * @memberof InventorySidebarComponent
-     */
+    *Aside pane toggle fixed class
+    *
+    * @memberof InventorySidebarComponent
+    */
     public toggleBodyClass(): void {
         if (this.asideMenuState === 'in') {
             document.querySelector('body').classList.add('fixed');

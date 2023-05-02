@@ -11,6 +11,7 @@
         }
     }
 }
+
 .delete-button {
     color: var(--color-danger) !important;
     border-color: var(--color-dark-fog) !important;
@@ -25,15 +26,16 @@
 }
 
 .create-inventory-btn {
-    width: 198px;
     height: 36px;
     color: var(--color-nonary-button-text);
     background-color: var(--color-nonary-button-background);
     margin-right: 15px;
+
     &:disabled {
         background-color: var(--color-success-disable);
     }
 }
+
 .new-inventory-page-header {
     padding: 0 15px 15px;
     margin-bottom: 15px;
@@ -45,12 +47,6 @@
     .inventory-header-right {
         display: flex;
     }
-}
-
-:host::ng-deep .nav.nav-tabs {
-    position: static !important;
-    padding-left: 0 !important;
-    margin-bottom: 15px;
 }
 
 .create-group-footer {
@@ -74,17 +70,8 @@
     font-size: 16px;
 }
 
-.add-image button img {
-    height: 87px;
-    width: 87px;
-    object-fit: contain;
-    transform: scale(1.2);
-}
-
-.add-image button {
-    padding: 0;
-    margin: 0 !important;
-    height: auto;
-    border: 2px dashed var(--color-gray);
-    overflow: hidden;
+@media (max-width: 1440px) {
+    .hsnsac-field {
+        margin-top: 20px;
+    }
 }

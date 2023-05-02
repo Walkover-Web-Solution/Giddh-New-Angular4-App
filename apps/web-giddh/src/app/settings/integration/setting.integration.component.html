@@ -199,17 +199,15 @@
                                 <div class="form-group col-lg-4 col-md-6 col-xs-12 mr-t1 empty-label" id="inlnImg">
                                     <label>&nbsp;</label>
                                     <br />
-                                    <ngx-switch
-                                        [(status)]="razorPayObj.autoCapturePayment"
-                                        [onText]="commonLocaleData?.app_on"
-                                        [offText]="commonLocaleData?.app_off"
-                                        [onColor]="bootstrapToggleSwitch?.On"
-                                        [offColor]="bootstrapToggleSwitch?.Off"
-                                        [size]="bootstrapToggleSwitch?.Size"
+                                    <mat-slide-toggle
+                                        [(ngModel)]="razorPayObj.autoCapturePayment"
+                                        name="autoCapturePayment"
+                                        color="primary"
                                     >
-                                    </ngx-switch>
-
-                                    {{ localeData?.collection?.automatic_capture_on_payment }}
+                                    </mat-slide-toggle>
+                                    <label class="mat-autocapture-payment">{{
+                                        localeData?.collection?.automatic_capture_on_payment
+                                    }}</label>
                                 </div>
                             </div>
                         </div>

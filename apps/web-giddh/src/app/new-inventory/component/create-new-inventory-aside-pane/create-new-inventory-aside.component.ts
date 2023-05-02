@@ -43,7 +43,7 @@ export class CreateNewInventoryAsideComponent implements OnInit {
      * @param {*} [event]
      * @memberof CreateNewInventoryAsideComponent
      */
-    public closeAsidePane(event?: any) {
+    public closeAsidePane(event?: any): void {
         this.closeAsideEvent.emit(event);
     }
 

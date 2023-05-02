@@ -23,9 +23,9 @@ export class InvViewService {
 
     public clearMessage(type?: string) {
         if (type === 'stock_group') {
-            this.viewSubject.next();
+            this.viewSubject.next(false);
         } else if (type === 'jobwork') {
-            this.viewJobworkSubject.next();
+            this.viewJobworkSubject.next(false);
         }
     }
 

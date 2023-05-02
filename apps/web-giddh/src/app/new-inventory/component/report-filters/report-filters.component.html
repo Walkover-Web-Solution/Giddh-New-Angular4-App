@@ -106,7 +106,7 @@
                         type="text"
                         matInput
                         [formControl]="searchFilters"
-                        [placeholder]="'Search stock group, stock, variant'"
+                        [placeholder]="localeData?.header?.search_bar"
                         [matAutocomplete]="auto"
                         [matChipInputFor]="matChipList"
                         #trigger="matAutocompleteTrigger"
