@@ -432,7 +432,6 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
                 });
             }
         });
-        this.changeDetection.detectChanges();
     }
 
     /**
