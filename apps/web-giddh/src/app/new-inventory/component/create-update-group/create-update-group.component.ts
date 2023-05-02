@@ -220,7 +220,6 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
                 taxSelected.isChecked = false;
             }
         }
-        // this.groupForm.get('taxes')?.patchValue(this.taxTempArray?.map(taxTemp => taxTemp?.uniqueName));
         this.selectedTaxes = this.taxTempArray.map(tax => tax?.uniqueName);
     }
 
@@ -398,10 +397,10 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
     }
 
     /**
-     *This will redirect to inventory list page
-     *
-     * @memberof CreateUpdateGroupComponent
-     */
+    *This will redirect to inventory list page
+    *
+    * @memberof CreateUpdateGroupComponent
+    */
     public cancelEdit(): void {
         this.router.navigate(['/pages/inventory']);
     }

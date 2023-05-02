@@ -277,10 +277,10 @@ export class InventorySidebarComponent implements OnDestroy {
     }
 
     /**
-     *Aside pane toggle fixed class
-     *
-     * @memberof InventorySidebarComponent
-     */
+    *Aside pane toggle fixed class
+    *
+    * @memberof InventorySidebarComponent
+    */
     public toggleBodyClass(): void {
         if (this.asideMenuState === 'in') {
             document.querySelector('body').classList.add('fixed');
