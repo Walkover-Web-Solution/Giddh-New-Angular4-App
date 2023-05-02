@@ -231,6 +231,7 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
                 if (response?.status === "success") {
                     this.toggleLoader(false);
                     this.getStockGroups();
+                    this.getTaxes();
                     this.toaster.clearAllToaster();
                     this.toaster.successToast(this.localeData?.stock_group_update);
                 } else {
@@ -245,6 +246,7 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
                 if (response?.status === "success") {
                     this.toggleLoader(false);
                     this.getStockGroups();
+                    this.getTaxes();
                     this.resetGroupForm();
                     this.toaster.clearAllToaster();
                     this.toaster.successToast(this.localeData?.stock_group_create);
@@ -384,11 +386,11 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
                     taxes: response.body.taxes
                 });
                 this.groupForm.updateValueAndValidity();
-                this.changeDetection.detectChanges();
             } else {
                 this.toggleLoader(false);
                 this.toaster.showSnackBar("error", response?.message);
             }
+            this.changeDetection.detectChanges();
         });
     }
 
