@@ -41,6 +41,8 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     public stockGroups: IOption[] = [];
     /** Purchase accounts list */
     public purchaseAccounts: IOption[] = [];
+    /** Purchase accounts list */
+    public fixedAssetsAccounts: IOption[] = [];
     /** Sales accounts list */
     public salesAccounts: IOption[] = [];
     /** Taxes list */
@@ -197,6 +199,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         this.getTaxes();
         this.getStockUnits();
         this.getPurchaseAccounts();
+        this.getFixedAssetsAccounts();
         this.getSalesAccounts();
         this.getWarehouses();
         this.getCustomFields();
@@ -335,6 +338,24 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
 
                 if (this.queryParams?.stockUniqueName) {
                     this.findPurchaseAccountName();
+                }
+            }
+        });
+    }
+
+    public getFixedAssetsAccounts(): void {
+        this.salesService.getAccountsWithCurrency('fixedassets').pipe(takeUntil(this.destroyed$)).subscribe(data => {
+            console.log(data);
+            if (data?.status === 'success') {
+                let fixedAssetsAccounts: IOption[] = [];
+                data.body?.results.map(account => {
+                    fixedAssetsAccounts.push({ label: `${account.name} (${account?.uniqueName})`, value: account?.uniqueName, additional: account });
+                });
+
+                this.fixedAssetsAccounts = fixedAssetsAccounts;
+
+                if (this.queryParams?.stockUniqueName) {
+                    this.findSalesAccountName();
                 }
             }
         });
@@ -819,6 +840,19 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         let purchaseAccountName = this.purchaseAccounts?.filter(purchaseAccount => purchaseAccount?.value === this.stockForm?.purchaseAccountDetails?.accountUniqueName);
         if (purchaseAccountName?.length > 0) {
             this.purchaseAccountName = purchaseAccountName[0]?.label;
+        }
+    }
+
+    /**
+ * Finds purchase account name
+ *
+ * @private
+ * @memberof StockCreateEditComponent
+ */
+    private findFixedAssetsAccountName(): void {
+        let fixedAssetsAccountName = this.fixedAssetsAccounts?.filter(purchaseAccount => purchaseAccount?.value === this.stockForm?.purchaseAccountDetails?.accountUniqueName);
+        if (fixedAssetsAccountName?.length > 0) {
+            this.purchaseAccountName = fixedAssetsAccountName[0]?.label;
         }
     }
 
