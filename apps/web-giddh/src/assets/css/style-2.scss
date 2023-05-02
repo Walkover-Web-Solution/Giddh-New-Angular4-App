@@ -10010,6 +10010,9 @@ giddh-datepicker {
 }
 
 .stock-create-edit {
+    .mat-pseudo-checkbox-checked {
+        background: var(--color-giddh-blue) !important;
+    }
     #main {
         #content-wrapper {
             background-color: var(--color-common-septenary-background-for-all-components);
