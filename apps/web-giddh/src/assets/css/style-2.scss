@@ -10109,6 +10109,9 @@ giddh-datepicker {
     }
 }
 .group-create-update {
+    .mat-pseudo-checkbox-checked {
+        background: var(--color-giddh-blue) !important;
+    }
     .cdk-overlay-connected-position-bounding-box {
         .mat-select-panel {
             .mat-option-disabled {

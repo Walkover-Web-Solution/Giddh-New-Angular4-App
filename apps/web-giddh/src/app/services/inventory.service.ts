@@ -51,9 +51,8 @@ export class InventoryService {
         _ = config._;
     }
 
-    public CreateStockGroup(model: StockGroupRequest, moduleType: string = ''): Observable<BaseResponse<StockGroupResponse, StockGroupRequest>> {
+    public CreateStockGroup(model: StockGroupRequest): Observable<BaseResponse<StockGroupResponse, StockGroupRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        model.type = moduleType;
         return this.http.post(this.config.apiUrl + INVENTORY_API.CREATE_STOCK_GROUP?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(map((res) => {
             let data: BaseResponse<StockGroupResponse, StockGroupRequest> = res;
             data.request = model;
@@ -64,9 +63,8 @@ export class InventoryService {
     /**
      * Update StockGroup
      */
-    public UpdateStockGroup(model: StockGroupRequest, stockGroupUniquename: string, moduleType: string = ''): Observable<BaseResponse<StockGroupResponse, StockGroupRequest>> {
+    public UpdateStockGroup(model: StockGroupRequest, stockGroupUniquename: string): Observable<BaseResponse<StockGroupResponse, StockGroupRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        model.type = moduleType;
         return this.http.put(this.config.apiUrl + INVENTORY_API.UPDATE_STOCK_GROUP?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':stockGroupUniqueName', encodeURIComponent(stockGroupUniquename)), model).pipe(map((res) => {
             let data: BaseResponse<StockGroupResponse, StockGroupRequest> = res;
             data.request = model;

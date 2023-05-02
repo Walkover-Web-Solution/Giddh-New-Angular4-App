@@ -1,4 +1,4 @@
-    {
+{
     "fixed_assets": "Fixed Assets",
     "name": "Name",
     "enter_product": "Enter Product",
@@ -62,5 +62,5 @@
     "all_accounts":"All Accounts Selected",
     "stock_name":"Stock Name",
     "create_inventory":"Create Inventory"
-    }
+}
 
