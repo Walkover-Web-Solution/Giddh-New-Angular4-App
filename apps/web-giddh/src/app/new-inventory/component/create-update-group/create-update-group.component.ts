@@ -350,6 +350,11 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
         this.changeDetection.detectChanges();
     }
 
+    /**
+     * This will use for select group tax on update
+     *
+     * @memberof CreateUpdateGroupComponent
+     */
     public selectedGroupTaxes(): void {
         this.taxes.forEach(tax => {
             if (tax?.isChecked) {
