@@ -68,6 +68,9 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         purchaseAccountDetails: {
             accountUniqueName: null,
         },
+        fixedAssetsAccountDetails: {
+            accountUniqueName: null,
+        },
         salesAccountDetails: {
             accountUniqueName: null,
         },
@@ -92,6 +95,15 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                     }
                 ],
                 purchaseInformation: [
+                    {
+                        rate: undefined,
+                        stockUnitCode: undefined,
+                        stockUnitName: undefined,
+                        stockUnitUniqueName: undefined,
+                        accountUniqueName: ""
+                    }
+                ],
+                fixedAssetsInformation: [
                     {
                         rate: undefined,
                         stockUnitCode: undefined,
@@ -127,6 +139,8 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     public isPurchaseInformationEnabled: boolean = false;
     /** True if sales information is enabled */
     public isSalesInformationEnabled: boolean = false;
+    /** True if purchase information is enabled */
+    public isFixedAssetsInformationEnabled: boolean = false;
     /** True if variant is available */
     public isVariantAvailable: boolean = false;
     /** Holds index of currently editing custom field */
@@ -141,6 +155,8 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     public purchaseAccountName: string = "";
     /** Holds sales account name */
     public salesAccountName: string = "";
+    /** Holds fixed assets account name */
+    public fixedAssetsAccountName: string = "";
     /** Holds query params */
     public queryParams: any = {};
     /** Holds temporarily list of taxes */
@@ -355,7 +371,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 this.fixedAssetsAccounts = fixedAssetsAccounts;
 
                 if (this.queryParams?.stockUniqueName) {
-                    this.findSalesAccountName();
+                    this.findFixedAssetsAccountName();
                 }
             }
         });
@@ -480,6 +496,15 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                         accountUniqueName: this.stockForm.purchaseAccountDetails?.accountUniqueName
                     }
                 ],
+                fixedAssetsInformation: [
+                    {
+                        rate: undefined,
+                        stockUnitCode: undefined,
+                        stockUnitName: undefined,
+                        stockUnitUniqueName: undefined,
+                        accountUniqueName: this.stockForm.fixedAssetsAccountDetails?.accountUniqueName
+                    }
+                ],
                 warehouseBalance: [
                     {
                         warehouse: {
@@ -511,6 +536,35 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
             stockUnitCode: null,
             stockUnitUniqueName: null
         });
+    }
+
+
+    /**
+     * Add new fixed assets unit section
+     *
+     * @memberof StockCreateEditComponent
+     */
+    public addNewFixedAssetsUnitPrice(): void {
+        this.stockForm.fixedAssetsAccountDetails.unitRates.push({
+            rate: null,
+            stockUnitCode: null,
+            stockUnitUniqueName: null
+        });
+    }
+
+    /**
+    * Delete fixed assets unit section
+    *
+    * @param {number} unitRateIndex
+    * @memberof StockCreateEditComponent
+    */
+    public deleteFixedAssetsUnitPrice(unitRateIndex: number): void {
+        let unitRates = this.stockForm.fixedAssetsAccountDetails.unitRates?.filter((data, index) => index !== unitRateIndex).map(data => { return data });
+        this.stockForm.fixedAssetsAccountDetails.unitRates = unitRates;
+
+        if (unitRates?.length === 0) {
+            this.addNewFixedAssetsUnitPrice();
+        }
     }
 
     /**
@@ -639,7 +693,16 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 return;
             }
         }
-
+        if (this.isFixedAssetsInformationEnabled) {
+            if (this.validateStock(this.stockForm.fixedAssetsAccountDetails?.unitRates)) {
+                this.stockForm.fixedAssetsAccountDetails.unitRates = this.stockForm.fixedAssetsAccountDetails.unitRates.filter((unitRate) => {
+                    return unitRate.stockUnitUniqueName || unitRate.rate;
+                });
+            } else {
+                this.toaster.showSnackBar("error", INVALID_STOCK_ERROR_MESSAGE);
+                return;
+            }
+        }
 
         if (!this.stockGroupUniqueName) {
             let mainGroupExists = this.stockGroups?.filter(group => {
@@ -678,6 +741,8 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     private saveStock(): void {
         this.toggleLoader(true);
         const request = this.formatRequest();
+        console.log(request, this.isFixedAssetsInformationEnabled,);
+
         this.inventoryService.createStock(request, this.stockGroupUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.toggleLoader(false);
             if (response?.status === "success") {
@@ -707,6 +772,9 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
             stockForm.salesAccountDetails = null;
         }
 
+        if (!this.isFixedAssetsInformationEnabled) {
+            stockForm.fixedAssetsAccountDetails = null;
+        }
         stockForm.customFields = stockForm.customFields?.map(customField => {
             return {
                 uniqueName: customField?.uniqueName,
@@ -718,7 +786,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
             defaultWarehouse = this.warehouses?.filter(warehouse => warehouse?.isDefault);
         }
         stockForm.variants = stockForm.variants?.map(variant => {
-
+            console.log(variant);
             if (!this.isVariantAvailable) {
                 const salesUnitRate = variant?.salesInformation.map(unitRate => {
                     unitRate.accountUniqueName = stockForm.salesAccountDetails?.accountUniqueName;
@@ -728,8 +796,18 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                     unitRate.accountUniqueName = stockForm.purchaseAccountDetails?.accountUniqueName;
                     return unitRate;
                 });
+
+                const fixedAssetsUnitRate = variant?.fixedAssetsInformation.map(unitRate => {
+                    unitRate.accountUniqueName = stockForm.fixedAssetsAccountDetails?.accountUniqueName;
+                    return unitRate;
+                });
                 variant.name = stockForm.name;
-                variant['unitRates'] = salesUnitRate?.concat(purchaseUnitRate);
+                if (this.stockForm.type === 'FIXED_ASSETS') {
+                    variant['unitRates'] = fixedAssetsUnitRate;
+                } else {
+                    variant['unitRates'] = salesUnitRate?.concat(purchaseUnitRate);
+                }
+                console.log(defaultWarehouse, this.stockUnitName, this.stockForm.stockUnitUniqueName);
 
                 variant.warehouseBalance = [
                     {
@@ -746,16 +824,32 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                     }
                 ]
             } else {
-                variant['unitRates'] = variant.salesInformation?.concat(variant?.purchaseInformation);
+                if (this.stockForm.type === 'FIXED_ASSETS') {
+                    variant['unitRates'] = variant.fixedAssetsUnitRate;
+                } else {
+                    variant['unitRates'] = variant.salesInformation?.concat(variant?.purchaseInformation);
+                }
             }
             delete variant.salesInformation;
             delete variant.purchaseInformation;
+            delete variant.fixedAssetsInformation;
             return variant;
         });
-        stockForm['purchaseAccountUniqueNames'] = [stockForm.purchaseAccountDetails?.accountUniqueName];
-        stockForm['salesAccountUniqueNames'] = [stockForm.salesAccountDetails?.accountUniqueName];
+        if (this.stockForm.type === 'FIXED_ASSETS') {
+            stockForm['purchaseAccountUniqueNames'] = [stockForm.purchaseAccountDetails?.accountUniqueName];
+            stockForm['salesAccountUniqueNames'] = [stockForm.salesAccountDetails?.accountUniqueName];
+        } else {
+            stockForm['fixedAssetsAccountUniqueNames'] = [stockForm.fixedAssetsAccountDetails?.accountUniqueName];
+        }
         delete stockForm.purchaseAccountDetails;
         delete stockForm.salesAccountDetails;
+        delete stockForm.fixedAssetsAccountDetails;
+        if (this.stockForm.type === 'FIXED_ASSETS') {
+            delete stockForm.purchaseAccountUniqueNames;
+            delete stockForm.salesAccountUniqueNames;
+        } else {
+            delete stockForm.fixedAssetsAccountUniqueNames;
+        }
         return stockForm;
     }
 
@@ -802,17 +896,22 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 this.stockForm['salesAccountDetails'] = {
                     accountUniqueName: this.stockForm.variants[0].salesAccountDetails?.accountUniqueName
                 }
+                this.stockForm['fixedAssetsAccountDetails'] = {
+                    accountUniqueName: this.stockForm.variants[0].fixedAssetsAccountDetails?.accountUniqueName
+                }
                 this.isPurchaseInformationEnabled = this.stockForm?.purchaseAccountDetails?.accountUniqueName;
                 this.isSalesInformationEnabled = this.stockForm?.salesAccountDetails?.accountUniqueName;
+                this.isFixedAssetsInformationEnabled = this.stockForm?.fixedAssetsAccountDetails?.accountUniqueName
                 this.stockForm.variants = this.stockForm.variants?.map(variant => {
                     variant['purchaseInformation'] = variant?.purchaseAccountDetails?.unitRates;
                     variant['salesInformation'] = variant?.salesAccountDetails?.unitRates;
+                    variant['fixedAssetsInformation'] = variant?.fixedAssetsAccountDetails?.unitRates;
                     return variant;
                 });
-                this.stockGroupUniqueName = response.body.stockGroup?.uniqueName;
-                this.defaultStockGroupUniqueName = response.body.stockGroup?.uniqueName;
-                this.isPurchaseInformationEnabled = this.stockForm?.purchaseAccountDetails?.accountUniqueName;
-                this.isSalesInformationEnabled = this.stockForm?.salesAccountDetails?.accountUniqueName;
+                // this.stockGroupUniqueName = response.body.stockGroup?.uniqueName;
+                // this.defaultStockGroupUniqueName = response.body.stockGroup?.uniqueName;
+                // this.isPurchaseInformationEnabled = this.stockForm?.purchaseAccountDetails?.accountUniqueName;
+                // this.isSalesInformationEnabled = this.stockForm?.salesAccountDetails?.accountUniqueName;
 
                 this.stockUnitName = response.body?.stockUnit?.name;
                 this.stockGroupName = response.body?.stockGroup?.name;
@@ -820,6 +919,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 this.mapCustomFieldsData();
                 this.findPurchaseAccountName();
                 this.findSalesAccountName();
+                this.findFixedAssetsAccountName();
                 this.checkSelectedTaxes();
                 this.toggleLoader(false);
                 this.changeDetection.detectChanges();
@@ -844,13 +944,13 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     }
 
     /**
- * Finds purchase account name
- *
- * @private
- * @memberof StockCreateEditComponent
- */
+     * Finds fixed assets account name
+     *
+     * @private
+     * @memberof StockCreateEditComponent
+     */
     private findFixedAssetsAccountName(): void {
-        let fixedAssetsAccountName = this.fixedAssetsAccounts?.filter(purchaseAccount => purchaseAccount?.value === this.stockForm?.purchaseAccountDetails?.accountUniqueName);
+        let fixedAssetsAccountName = this.fixedAssetsAccounts?.filter(fixedAssetsAccount => fixedAssetsAccount?.value === this.stockForm?.fixedAssetsAccountDetails?.accountUniqueName);
         if (fixedAssetsAccountName?.length > 0) {
             this.purchaseAccountName = fixedAssetsAccountName[0]?.label;
         }
@@ -1099,6 +1199,17 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                     }
                 ]
             },
+            fixedAssetsAccountDetails: {
+                accountUniqueName: null,
+                unitRates: [
+                    {
+                        rate: null,
+                        stockUnitCode: null,
+                        stockUnitName: null,
+                        stockUnitUniqueName: null
+                    }
+                ]
+            },
             isFsStock: null,
             manufacturingDetails: null,
             accountGroup: null,
@@ -1120,6 +1231,15 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                         }
                     ],
                     purchaseInformation: [
+                        {
+                            rate: undefined,
+                            stockUnitCode: undefined,
+                            stockUnitName: undefined,
+                            stockUnitUniqueName: undefined,
+                            accountUniqueName: ""
+                        }
+                    ],
+                    fixedAssetsInformation: [
                         {
                             rate: undefined,
                             stockUnitCode: undefined,
@@ -1151,6 +1271,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         this.stockGroupUniqueName = "";
         this.isPurchaseInformationEnabled = false;
         this.isSalesInformationEnabled = false;
+        this.isFixedAssetsInformationEnabled = false;
         this.isVariantAvailable = false;
         this.stockUnitName = "";
         this.stockGroupName = "";
@@ -1196,6 +1317,28 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Resets the fixed assets information
+     *
+     * @memberof StockCreateEditComponent
+     */
+    public toggleFixedAssetsInformation(): void {
+        if (!this.isFixedAssetsInformationEnabled) {
+            this.fixedAssetsAccountName = "";
+            this.stockForm.fixedAssetsAccountDetails = {
+                accountUniqueName: null,
+                unitRates: [
+                    {
+                        rate: null,
+                        stockUnitCode: null,
+                        stockUnitName: null,
+                        stockUnitUniqueName: null
+                    }
+                ]
+            };
+            this.changeDetection.detectChanges();
+        }
+    }
     /**
      * Resets the sales information
      *
@@ -1281,6 +1424,48 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     public selectVariantSalesPurchaseUnit(variantSalesUnitRate: any, event: any): void {
         variantSalesUnitRate.stockUnitName = event.label;
         variantSalesUnitRate.stockUnitUniqueName = event?.value;
+    }
+
+    /**
+    * Set unit in variant fixed assets
+    *
+    * @param {*} variantFixedAssetsUnitRate
+    * @param {*} event
+    * @memberof StockCreateEditComponent
+    */
+    public selectVariantFixedAssetsUnit(variantFixedAssetsUnitRate: any, event: any): void {
+        variantFixedAssetsUnitRate.stockUnitName = event.label;
+        variantFixedAssetsUnitRate.stockUnitUniqueName = event?.value;
+    }
+
+    /**
+     * Add new fixed assets unit section
+     *
+     * @memberof StockCreateEditComponent
+     */
+    public addNewVariantFixedAssetsUnitPrice(variant: any): void {
+        variant.fixedAssetsInformation.push({
+            rate: null,
+            stockUnitCode: null,
+            stockUnitUniqueName: null,
+            stockUnitName: null,
+            accountUniqueName: this.stockForm.fixedAssetsAccountDetails?.accountUniqueName
+        });
+    }
+
+    /**
+    * Delete fixed assets unit section
+    *
+    * @param {number} unitRateIndex
+    * @memberof StockCreateEditComponent
+    */
+    public deleteVariantFixedAssetsUnitPrice(variant: any, unitRateIndex: number): void {
+        let unitRates = variant.fixedAssetsInformation?.filter((data, index) => index !== unitRateIndex).map(data => { return data });
+        variant.fixedAssetsInformation = unitRates;
+
+        if (unitRates?.length === 0) {
+            this.addNewVariantFixedAssetsUnitPrice(variant);
+        }
     }
 
     /**

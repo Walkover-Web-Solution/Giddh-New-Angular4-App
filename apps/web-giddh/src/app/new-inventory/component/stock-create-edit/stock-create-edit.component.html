@@ -371,17 +371,24 @@
                                             <div class="row">
                                                 <div class="col-12 col-lg-11">
                                                     <div class="row">
-                                                        <div class="col-xl-6 col-12">
-                                                            <div class="purchase-information">
+                                                        <div class="col-xl-6 col-12 pl-4">
+                                                            <div
+                                                                classs="purchase-informqegaegegtion"
+                                                                *ngIf="
+                                                                    stockForm.type === 'FIXED_ASSETS'
+                                                                        ? 'FIXEDASSETS'
+                                                                        : ''
+                                                                "
+                                                            >
                                                                 <div class="select-puchase-info mr-b15">
                                                                     <mat-checkbox
                                                                         color="primary"
                                                                         id="purchase-info-check"
                                                                         type="checkbox"
-                                                                        name="isPurchaseInformationEnabled"
-                                                                        [(ngModel)]="isPurchaseInformationEnabled"
-                                                                        (ngModelChange)="togglePurchaseInformation()"
-                                                                        >{{ localeData?.purchase_information }}
+                                                                        name="isFixedAssetsInformationEnabled"
+                                                                        [(ngModel)]="isFixedAssetsInformationEnabled"
+                                                                        (ngModelChange)="toggleFixedAssetsInformation()"
+                                                                        >Fixed Assets Information
                                                                     </mat-checkbox>
                                                                 </div>
                                                                 <div class="row">
@@ -393,22 +400,26 @@
                                                                             [cssClass]="'form-control'"
                                                                             [name]="'purchaseAccount'"
                                                                             [placeholder]="localeData?.linked_accounts"
-                                                                            [options]="purchaseAccounts"
+                                                                            [options]="fixedAssetsAccounts"
                                                                             (selectedOption)="
-                                                                                stockForm.purchaseAccountDetails.accountUniqueName =
+                                                                                stockForm.fixedAssetsAccountDetails.accountUniqueName =
                                                                                     $event?.value;
-                                                                                stockForm.variants[0].purchaseInformation.accountUniqueName =
+                                                                                stockForm.variants[0].fixedAssetsInformation.accountUniqueName =
                                                                                     $event?.value
                                                                             "
-                                                                            [readonly]="!isPurchaseInformationEnabled"
-                                                                            [defaultValue]="purchaseAccountName"
+                                                                            [readonly]="
+                                                                                !isFixedAssetsInformationEnabled
+                                                                            "
+                                                                            [defaultValue]="fixedAssetsAccountName"
                                                                         ></select-field>
                                                                     </div>
                                                                     <div
                                                                         class="col-sm-6 col-lg-5"
                                                                         *ngIf="!isVariantAvailable"
                                                                     >
-                                                                        <label>Is Purchase Rate Tax Inclusive? </label>
+                                                                        <label
+                                                                            >Is Fixed Assets Rate Tax Inclusive?
+                                                                        </label>
                                                                     </div>
                                                                     <div
                                                                         class="
@@ -419,11 +430,11 @@
                                                                         *ngIf="!isVariantAvailable"
                                                                     >
                                                                         <mat-checkbox
-                                                                            name="purchaseTaxInclusive"
+                                                                            name="fixedAssetsTaxInclusive"
                                                                             color="primary"
                                                                             [(ngModel)]="
                                                                                 stockForm.variants[0][
-                                                                                    'purchaseTaxInclusive'
+                                                                                    'fixedAssetsTaxInclusive'
                                                                                 ]
                                                                             "
                                                                         ></mat-checkbox>
@@ -445,8 +456,9 @@
                                                                         <div
                                                                             class="row add-new-field mr-b15"
                                                                             *ngFor="
-                                                                                let variantPurchaseUnitRate of stockForm
-                                                                                    ?.variants[0]?.purchaseInformation;
+                                                                                let variantFixedAssetsUnitRate of stockForm
+                                                                                    ?.variants[0]
+                                                                                    ?.fixedAssetsInformation;
                                                                                 let j = index
                                                                             "
                                                                         >
@@ -455,20 +467,22 @@
                                                                                     [cssClass]="
                                                                                         'form-control unit-rates'
                                                                                     "
-                                                                                    [name]="'variantPurchaseUnit' + j"
+                                                                                    [name]="
+                                                                                        'variantFixedAssetsUnitRate' + j
+                                                                                    "
                                                                                     [placeholder]="'Unit'"
                                                                                     [options]="stockUnits"
                                                                                     (selectedOption)="
-                                                                                        selectVariantSalesPurchaseUnit(
-                                                                                            variantPurchaseUnitRate,
+                                                                                        selectVariantFixedAssetsUnit(
+                                                                                            variantFixedAssetsUnitRate,
                                                                                             $event
                                                                                         )
                                                                                     "
                                                                                     [readonly]="
-                                                                                        !isPurchaseInformationEnabled
+                                                                                        !isFixedAssetsInformationEnabled
                                                                                     "
                                                                                     [defaultValue]="
-                                                                                        variantPurchaseUnitRate?.stockUnitName
+                                                                                        variantFixedAssetsUnitRate?.stockUnitName
                                                                                     "
                                                                                 ></select-field>
                                                                             </div>
@@ -479,239 +493,455 @@
                                                                                     "
                                                                                     [placeholder]="'0.00'"
                                                                                     [name]="
-                                                                                        'variantPurchaseUnitRate' + j
+                                                                                        'variantFixedAssetsUnitRate' + j
                                                                                     "
                                                                                     [type]="'number'"
                                                                                     [placeholder]="'Rate'"
                                                                                     [(ngModel)]="
-                                                                                        variantPurchaseUnitRate.rate
+                                                                                        variantFixedAssetsUnitRate.rate
                                                                                     "
                                                                                     [readonly]="
+                                                                                        !isFixedAssetsInformationEnabled
+                                                                                    "
+                                                                                >
+                                                                                </text-field>
+                                                                            </div>
+                                                                            <button
+                                                                                mat-icon-button
+                                                                                role="button"
+                                                                                class="icon-button-remove"
+                                                                                type="button"
+                                                                                (click)="
+                                                                                    deleteVariantFixedAssetsUnitPrice(
+                                                                                        stockForm.variants[0],
+                                                                                        j
+                                                                                    )
+                                                                                "
+                                                                                *ngIf="
+                                                                                    stockForm.variants[0]
+                                                                                        .fixedAssetsInformation
+                                                                                        ?.length > 1
+                                                                                "
+                                                                                [disabled]="
+                                                                                    !isFixedAssetsInformationEnabled
+                                                                                "
+                                                                            >
+                                                                                <i class="icon-trash"></i>
+                                                                            </button>
+                                                                            <button
+                                                                                mat-icon-button
+                                                                                class="icon-button-add"
+                                                                                role="button"
+                                                                                type="button"
+                                                                                disableRipple
+                                                                                (click)="
+                                                                                    addNewVariantFixedAssetsUnitPrice(
+                                                                                        stockForm.variants[0]
+                                                                                    )
+                                                                                "
+                                                                                *ngIf="
+                                                                                    j ===
+                                                                                    stockForm.variants[0]
+                                                                                        .fixedAssetsInformation
+                                                                                        ?.length -
+                                                                                        1
+                                                                                "
+                                                                                [disabled]="
+                                                                                    !isFixedAssetsInformationEnabled
+                                                                                "
+                                                                            >
+                                                                                <span
+                                                                                    *ngIf="
+                                                                                        isFixedAssetsInformationEnabled
+                                                                                    "
+                                                                                    class="add-new-text-container"
+                                                                                >
+                                                                                    {{ localeData?.add_new }}
+                                                                                </span>
+                                                                            </button>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <ng-container
+                                                            *ngIf="
+                                                                stockForm.type !== 'FIXED_ASSETS' ? 'FIXEDASSETS' : ''
+                                                            "
+                                                        >
+                                                            <div class="col-xl-6 col-12">
+                                                                <div class="purchase-information">
+                                                                    <div class="select-puchase-info mr-b15">
+                                                                        <mat-checkbox
+                                                                            color="primary"
+                                                                            id="purchase-info-check"
+                                                                            type="checkbox"
+                                                                            name="isPurchaseInformationEnabled"
+                                                                            [(ngModel)]="isPurchaseInformationEnabled"
+                                                                            (ngModelChange)="
+                                                                                togglePurchaseInformation()
+                                                                            "
+                                                                            >{{ localeData?.purchase_information }}
+                                                                        </mat-checkbox>
+                                                                    </div>
+                                                                    <div class="row">
+                                                                        <div class="col-sm-6 col-lg-5">
+                                                                            <label>{{
+                                                                                localeData?.linked_accounts
+                                                                            }}</label>
+                                                                        </div>
+                                                                        <div class="col-sm-6 col-lg-7 pl-0 mr-b15">
+                                                                            <select-field
+                                                                                [cssClass]="'form-control'"
+                                                                                [name]="'purchaseAccount'"
+                                                                                [placeholder]="
+                                                                                    localeData?.linked_accounts
+                                                                                "
+                                                                                [options]="purchaseAccounts"
+                                                                                (selectedOption)="
+                                                                                    stockForm.purchaseAccountDetails.accountUniqueName =
+                                                                                        $event?.value;
+                                                                                    stockForm.variants[0].purchaseInformation.accountUniqueName =
+                                                                                        $event?.value
+                                                                                "
+                                                                                [readonly]="
+                                                                                    !isPurchaseInformationEnabled
+                                                                                "
+                                                                                [defaultValue]="purchaseAccountName"
+                                                                            ></select-field>
+                                                                        </div>
+                                                                        <div
+                                                                            class="col-sm-6 col-lg-5"
+                                                                            *ngIf="!isVariantAvailable"
+                                                                        >
+                                                                            <label
+                                                                                >Is Purchase Rate Tax Inclusive?
+                                                                            </label>
+                                                                        </div>
+                                                                        <div
+                                                                            class="
+                                                                                col-xl-6 col-lg-5 col-sm-5 col-11
+                                                                                pl-0
+                                                                                mr-b15
+                                                                            "
+                                                                            *ngIf="!isVariantAvailable"
+                                                                        >
+                                                                            <mat-checkbox
+                                                                                name="purchaseTaxInclusive"
+                                                                                color="primary"
+                                                                                [(ngModel)]="
+                                                                                    stockForm.variants[0][
+                                                                                        'purchaseTaxInclusive'
+                                                                                    ]
+                                                                                "
+                                                                            ></mat-checkbox>
+                                                                        </div>
+                                                                        <div
+                                                                            class="col-sm-6 col-lg-5"
+                                                                            *ngIf="!isVariantAvailable"
+                                                                        >
+                                                                            <label>{{ localeData?.unit_price }}</label>
+                                                                        </div>
+                                                                        <div
+                                                                            class="
+                                                                                col-xl-6 col-lg-5 col-sm-5 col-11
+                                                                                pl-0
+                                                                                mr-b15
+                                                                            "
+                                                                            *ngIf="!isVariantAvailable"
+                                                                        >
+                                                                            <div
+                                                                                class="row add-new-field mr-b15"
+                                                                                *ngFor="
+                                                                                    let variantPurchaseUnitRate of stockForm
+                                                                                        ?.variants[0]
+                                                                                        ?.purchaseInformation;
+                                                                                    let j = index
+                                                                                "
+                                                                            >
+                                                                                <div class="col-sm-6 col-6">
+                                                                                    <select-field
+                                                                                        [cssClass]="
+                                                                                            'form-control unit-rates'
+                                                                                        "
+                                                                                        [name]="
+                                                                                            'variantPurchaseUnit' + j
+                                                                                        "
+                                                                                        [placeholder]="'Unit'"
+                                                                                        [options]="stockUnits"
+                                                                                        (selectedOption)="
+                                                                                            selectVariantSalesPurchaseUnit(
+                                                                                                variantPurchaseUnitRate,
+                                                                                                $event
+                                                                                            )
+                                                                                        "
+                                                                                        [readonly]="
+                                                                                            !isPurchaseInformationEnabled
+                                                                                        "
+                                                                                        [defaultValue]="
+                                                                                            variantPurchaseUnitRate?.stockUnitName
+                                                                                        "
+                                                                                    ></select-field>
+                                                                                </div>
+                                                                                <div class="col-sm-6 col-6">
+                                                                                    <text-field
+                                                                                        [cssClass]="
+                                                                                            'form-control text-right unit-amount'
+                                                                                        "
+                                                                                        [placeholder]="'0.00'"
+                                                                                        [name]="
+                                                                                            'variantPurchaseUnitRate' +
+                                                                                            j
+                                                                                        "
+                                                                                        [type]="'number'"
+                                                                                        [placeholder]="'Rate'"
+                                                                                        [(ngModel)]="
+                                                                                            variantPurchaseUnitRate.rate
+                                                                                        "
+                                                                                        [readonly]="
+                                                                                            !isPurchaseInformationEnabled
+                                                                                        "
+                                                                                    >
+                                                                                    </text-field>
+                                                                                </div>
+                                                                                <button
+                                                                                    mat-icon-button
+                                                                                    role="button"
+                                                                                    class="icon-button-remove"
+                                                                                    type="button"
+                                                                                    (click)="
+                                                                                        deleteVariantPurchaseUnitPrice(
+                                                                                            stockForm.variants[0],
+                                                                                            j
+                                                                                        )
+                                                                                    "
+                                                                                    *ngIf="
+                                                                                        stockForm.variants[0]
+                                                                                            .purchaseInformation
+                                                                                            ?.length > 1
+                                                                                    "
+                                                                                    [disabled]="
                                                                                         !isPurchaseInformationEnabled
                                                                                     "
                                                                                 >
-                                                                                </text-field>
-                                                                            </div>
-                                                                            <button
-                                                                                mat-icon-button
-                                                                                role="button"
-                                                                                class="icon-button-remove"
-                                                                                type="button"
-                                                                                (click)="
-                                                                                    deleteVariantPurchaseUnitPrice(
-                                                                                        stockForm.variants[0],
-                                                                                        j
-                                                                                    )
-                                                                                "
-                                                                                *ngIf="
-                                                                                    stockForm.variants[0]
-                                                                                        .purchaseInformation?.length > 1
-                                                                                "
-                                                                                [disabled]="
-                                                                                    !isPurchaseInformationEnabled
-                                                                                "
-                                                                            >
-                                                                                <i class="icon-trash"></i>
-                                                                            </button>
-                                                                            <button
-                                                                                mat-icon-button
-                                                                                class="icon-button-add"
-                                                                                role="button"
-                                                                                type="button"
-                                                                                disableRipple
-                                                                                (click)="
-                                                                                    addNewVariantPurchaseUnitPrice(
-                                                                                        stockForm.variants[0]
-                                                                                    )
-                                                                                "
-                                                                                *ngIf="
-                                                                                    j ===
-                                                                                    stockForm.variants[0]
-                                                                                        .purchaseInformation?.length -
-                                                                                        1
-                                                                                "
-                                                                                [disabled]="
-                                                                                    !isPurchaseInformationEnabled
-                                                                                "
-                                                                            >
-                                                                                <span
-                                                                                    *ngIf="isPurchaseInformationEnabled"
-                                                                                    class="add-new-text-container"
-                                                                                >
-                                                                                    {{ localeData?.add_new }}
-                                                                                </span>
-                                                                            </button>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-xl-6 col-12 pl-4">
-                                                            <div class="sales-information">
-                                                                <div class="select-puchase-info mr-b15">
-                                                                    <mat-checkbox
-                                                                        color="primary"
-                                                                        id="sales-info-check"
-                                                                        type="checkbox"
-                                                                        name="isSalesInformationEnabled"
-                                                                        [(ngModel)]="isSalesInformationEnabled"
-                                                                        (ngModelChange)="toggleSalesInformation()"
-                                                                        >{{ localeData?.sales_information }}
-                                                                    </mat-checkbox>
-                                                                </div>
-                                                                <!-- input field will disabled if sales info unchecked -->
-                                                                <div class="row">
-                                                                    <div class="col-sm-6 col-lg-5">
-                                                                        <label>{{ localeData?.linked_accounts }}</label>
-                                                                    </div>
-                                                                    <div class="col-sm-6 col-lg-7 pl-0 mr-b15">
-                                                                        <select-field
-                                                                            [cssClass]="'form-control'"
-                                                                            [name]="'salesAccount'"
-                                                                            [placeholder]="localeData?.linked_accounts"
-                                                                            [options]="salesAccounts"
-                                                                            (selectedOption)="
-                                                                                stockForm.salesAccountDetails.accountUniqueName =
-                                                                                    $event?.value;
-                                                                                stockForm.variants[0].salesInformation.accountUniqueName =
-                                                                                    $event?.value
-                                                                            "
-                                                                            [readonly]="!isSalesInformationEnabled"
-                                                                            [defaultValue]="salesAccountName"
-                                                                        ></select-field>
-                                                                    </div>
-                                                                    <div
-                                                                        class="col-sm-6 col-lg-5"
-                                                                        *ngIf="!isVariantAvailable"
-                                                                    >
-                                                                        <label>Is Sales Rate Tax Inclusive?</label>
-                                                                    </div>
-                                                                    <div
-                                                                        class="
-                                                                            col-xl-6 col-lg-5 col-sm-5 col-11
-                                                                            pl-0
-                                                                            mr-b15
-                                                                        "
-                                                                        *ngIf="!isVariantAvailable"
-                                                                    >
-                                                                        <mat-checkbox
-                                                                            color="primary"
-                                                                            name="salesTaxInclusive"
-                                                                            [(ngModel)]="
-                                                                                stockForm?.variants[0][
-                                                                                    'salesTaxInclusive'
-                                                                                ]
-                                                                            "
-                                                                        ></mat-checkbox>
-                                                                    </div>
-                                                                    <div
-                                                                        class="col-sm-6 col-lg-5"
-                                                                        *ngIf="!isVariantAvailable"
-                                                                    >
-                                                                        <label>{{ localeData?.unit_price }} </label>
-                                                                    </div>
-                                                                    <div
-                                                                        class="
-                                                                            col-xl-6 col-lg-5 col-sm-5 col-11
-                                                                            pl-0
-                                                                            mr-b15
-                                                                        "
-                                                                        *ngIf="!isVariantAvailable"
-                                                                    >
-                                                                        <div
-                                                                            class="row add-new-field mr-b15"
-                                                                            *ngFor="
-                                                                                let variantSalesUnitRate of stockForm
-                                                                                    ?.variants[0]?.salesInformation;
-                                                                                let j = index
-                                                                            "
-                                                                        >
-                                                                            <div class="col-sm-6 col-6">
-                                                                                <select-field
-                                                                                    [cssClass]="'form-control'"
-                                                                                    [name]="'variantSalesUnit' + j"
-                                                                                    [placeholder]="'Unit'"
-                                                                                    [options]="stockUnits"
-                                                                                    (selectedOption)="
-                                                                                        selectVariantSalesPurchaseUnit(
-                                                                                            variantSalesUnitRate,
-                                                                                            $event
+                                                                                    <i class="icon-trash"></i>
+                                                                                </button>
+                                                                                <button
+                                                                                    mat-icon-button
+                                                                                    class="icon-button-add"
+                                                                                    role="button"
+                                                                                    type="button"
+                                                                                    disableRipple
+                                                                                    (click)="
+                                                                                        addNewVariantPurchaseUnitPrice(
+                                                                                            stockForm.variants[0]
                                                                                         )
                                                                                     "
-                                                                                    [readonly]="
-                                                                                        !isSalesInformationEnabled
-                                                                                    "
-                                                                                    [defaultValue]="
-                                                                                        variantSalesUnitRate?.stockUnitName
-                                                                                    "
-                                                                                ></select-field>
-                                                                            </div>
-                                                                            <div class="col-sm-6 col-6">
-                                                                                <text-field
-                                                                                    [cssClass]="'form-control'"
-                                                                                    [type]="'text'"
-                                                                                    [name]="'variantSalesUnitRate' + j"
-                                                                                    [type]="'number'"
-                                                                                    [placeholder]="'Rate'"
-                                                                                    [(ngModel)]="
-                                                                                        variantSalesUnitRate.rate
-                                                                                    "
-                                                                                    [readonly]="
-                                                                                        !isSalesInformationEnabled
-                                                                                    "
-                                                                                >
-                                                                                </text-field>
-                                                                            </div>
-                                                                            <button
-                                                                                mat-icon-button
-                                                                                role="button"
-                                                                                class="icon-button-remove"
-                                                                                type="button"
-                                                                                (click)="
-                                                                                    deleteVariantSalesUnitPrice(
-                                                                                        stockForm.variants[0],
-                                                                                        j
-                                                                                    )
-                                                                                "
-                                                                                *ngIf="
-                                                                                    stockForm.variants[0]
-                                                                                        .salesInformation?.length > 1
-                                                                                "
-                                                                                [disabled]="!isSalesInformationEnabled"
-                                                                            >
-                                                                                <i class="icon-trash"></i>
-                                                                            </button>
-                                                                            <button
-                                                                                mat-icon-button
-                                                                                class="icon-button-add"
-                                                                                role="button"
-                                                                                type="button"
-                                                                                disableRipple
-                                                                                (click)="
-                                                                                    addNewVariantSalesUnitPrice(
+                                                                                    *ngIf="
+                                                                                        j ===
                                                                                         stockForm.variants[0]
-                                                                                    )
-                                                                                "
-                                                                                *ngIf="
-                                                                                    j ===
-                                                                                    stockForm.variants[0]
-                                                                                        .salesInformation?.length -
-                                                                                        1
-                                                                                "
-                                                                                [disabled]="!isSalesInformationEnabled"
-                                                                            >
-                                                                                <span
-                                                                                    *ngIf="isSalesInformationEnabled"
-                                                                                    class="add-new-text-container"
+                                                                                            .purchaseInformation
+                                                                                            ?.length -
+                                                                                            1
+                                                                                    "
+                                                                                    [disabled]="
+                                                                                        !isPurchaseInformationEnabled
+                                                                                    "
                                                                                 >
-                                                                                    {{ localeData?.add_new }}
-                                                                                </span>
-                                                                            </button>
+                                                                                    <span
+                                                                                        *ngIf="
+                                                                                            isPurchaseInformationEnabled
+                                                                                        "
+                                                                                        class="add-new-text-container"
+                                                                                    >
+                                                                                        {{ localeData?.add_new }}
+                                                                                    </span>
+                                                                                </button>
+                                                                            </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
+                                                            <div class="col-xl-6 col-12 pl-4">
+                                                                <div class="sales-information">
+                                                                    <div class="select-puchase-info mr-b15">
+                                                                        <mat-checkbox
+                                                                            color="primary"
+                                                                            id="sales-info-check"
+                                                                            type="checkbox"
+                                                                            name="isSalesInformationEnabled"
+                                                                            [(ngModel)]="isSalesInformationEnabled"
+                                                                            (ngModelChange)="toggleSalesInformation()"
+                                                                            >{{ localeData?.sales_information }}
+                                                                        </mat-checkbox>
+                                                                    </div>
+                                                                    <!-- input field will disabled if sales info unchecked -->
+                                                                    <div class="row">
+                                                                        <div class="col-sm-6 col-lg-5">
+                                                                            <label>{{
+                                                                                localeData?.linked_accounts
+                                                                            }}</label>
+                                                                        </div>
+                                                                        <div class="col-sm-6 col-lg-7 pl-0 mr-b15">
+                                                                            <select-field
+                                                                                [cssClass]="'form-control'"
+                                                                                [name]="'salesAccount'"
+                                                                                [placeholder]="
+                                                                                    localeData?.linked_accounts
+                                                                                "
+                                                                                [options]="salesAccounts"
+                                                                                (selectedOption)="
+                                                                                    stockForm.salesAccountDetails.accountUniqueName =
+                                                                                        $event?.value;
+                                                                                    stockForm.variants[0].salesInformation.accountUniqueName =
+                                                                                        $event?.value
+                                                                                "
+                                                                                [readonly]="!isSalesInformationEnabled"
+                                                                                [defaultValue]="salesAccountName"
+                                                                            ></select-field>
+                                                                        </div>
+                                                                        <div
+                                                                            class="col-sm-6 col-lg-5"
+                                                                            *ngIf="!isVariantAvailable"
+                                                                        >
+                                                                            <label>Is Sales Rate Tax Inclusive?</label>
+                                                                        </div>
+                                                                        <div
+                                                                            class="
+                                                                                col-xl-6 col-lg-5 col-sm-5 col-11
+                                                                                pl-0
+                                                                                mr-b15
+                                                                            "
+                                                                            *ngIf="!isVariantAvailable"
+                                                                        >
+                                                                            <mat-checkbox
+                                                                                color="primary"
+                                                                                name="salesTaxInclusive"
+                                                                                [(ngModel)]="
+                                                                                    stockForm?.variants[0][
+                                                                                        'salesTaxInclusive'
+                                                                                    ]
+                                                                                "
+                                                                            ></mat-checkbox>
+                                                                        </div>
+                                                                        <div
+                                                                            class="col-sm-6 col-lg-5"
+                                                                            *ngIf="!isVariantAvailable"
+                                                                        >
+                                                                            <label>{{ localeData?.unit_price }} </label>
+                                                                        </div>
+                                                                        <div
+                                                                            class="
+                                                                                col-xl-6 col-lg-5 col-sm-5 col-11
+                                                                                pl-0
+                                                                                mr-b15
+                                                                            "
+                                                                            *ngIf="!isVariantAvailable"
+                                                                        >
+                                                                            <div
+                                                                                class="row add-new-field mr-b15"
+                                                                                *ngFor="
+                                                                                    let variantSalesUnitRate of stockForm
+                                                                                        ?.variants[0]?.salesInformation;
+                                                                                    let j = index
+                                                                                "
+                                                                            >
+                                                                                <div class="col-sm-6 col-6">
+                                                                                    <select-field
+                                                                                        [cssClass]="'form-control'"
+                                                                                        [name]="'variantSalesUnit' + j"
+                                                                                        [placeholder]="'Unit'"
+                                                                                        [options]="stockUnits"
+                                                                                        (selectedOption)="
+                                                                                            selectVariantSalesPurchaseUnit(
+                                                                                                variantSalesUnitRate,
+                                                                                                $event
+                                                                                            )
+                                                                                        "
+                                                                                        [readonly]="
+                                                                                            !isSalesInformationEnabled
+                                                                                        "
+                                                                                        [defaultValue]="
+                                                                                            variantSalesUnitRate?.stockUnitName
+                                                                                        "
+                                                                                    ></select-field>
+                                                                                </div>
+                                                                                <div class="col-sm-6 col-6">
+                                                                                    <text-field
+                                                                                        [cssClass]="'form-control'"
+                                                                                        [type]="'text'"
+                                                                                        [name]="
+                                                                                            'variantSalesUnitRate' + j
+                                                                                        "
+                                                                                        [type]="'number'"
+                                                                                        [placeholder]="'Rate'"
+                                                                                        [(ngModel)]="
+                                                                                            variantSalesUnitRate.rate
+                                                                                        "
+                                                                                        [readonly]="
+                                                                                            !isSalesInformationEnabled
+                                                                                        "
+                                                                                    >
+                                                                                    </text-field>
+                                                                                </div>
+                                                                                <button
+                                                                                    mat-icon-button
+                                                                                    role="button"
+                                                                                    class="icon-button-remove"
+                                                                                    type="button"
+                                                                                    (click)="
+                                                                                        deleteVariantSalesUnitPrice(
+                                                                                            stockForm.variants[0],
+                                                                                            j
+                                                                                        )
+                                                                                    "
+                                                                                    *ngIf="
+                                                                                        stockForm.variants[0]
+                                                                                            .salesInformation?.length >
+                                                                                        1
+                                                                                    "
+                                                                                    [disabled]="
+                                                                                        !isSalesInformationEnabled
+                                                                                    "
+                                                                                >
+                                                                                    <i class="icon-trash"></i>
+                                                                                </button>
+                                                                                <button
+                                                                                    mat-icon-button
+                                                                                    class="icon-button-add"
+                                                                                    role="button"
+                                                                                    type="button"
+                                                                                    disableRipple
+                                                                                    (click)="
+                                                                                        addNewVariantSalesUnitPrice(
+                                                                                            stockForm.variants[0]
+                                                                                        )
+                                                                                    "
+                                                                                    *ngIf="
+                                                                                        j ===
+                                                                                        stockForm.variants[0]
+                                                                                            .salesInformation?.length -
+                                                                                            1
+                                                                                    "
+                                                                                    [disabled]="
+                                                                                        !isSalesInformationEnabled
+                                                                                    "
+                                                                                >
+                                                                                    <span
+                                                                                        *ngIf="
+                                                                                            isSalesInformationEnabled
+                                                                                        "
+                                                                                        class="add-new-text-container"
+                                                                                    >
+                                                                                        {{ localeData?.add_new }}
+                                                                                    </span>
+                                                                                </button>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </ng-container>
                                                     </div>
                                                 </div>
                                             </div>
