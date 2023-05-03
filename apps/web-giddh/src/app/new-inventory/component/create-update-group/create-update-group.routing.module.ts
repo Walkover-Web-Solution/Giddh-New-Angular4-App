@@ -1,21 +1,21 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
-import { MainComponent } from "./main.component";
-import { StockCreateEditComponent } from "./stock-create-edit.component";
+import { CreateUpdateGroupComponent } from "./create-update-group.component";
+import { MainGroupComponent } from "./main-group.component";
 
 const routes: Routes = [
     {
         path: "",
-        component: MainComponent,
+        component: MainGroupComponent,
         children: [
 
             {
                 path: ":type/create",
-                component: StockCreateEditComponent
+                component: CreateUpdateGroupComponent
             },
             {
-                path: ":type/edit/:stockUniqueName",
-                component: StockCreateEditComponent
+                path: ":type/edit/:groupUniqueName",
+                component: CreateUpdateGroupComponent
             }
         ]
     }
@@ -26,5 +26,5 @@ const routes: Routes = [
     imports: [RouterModule.forChild(routes)],
     exports: [RouterModule],
 })
-export class StockCreateEditRoutingModule {
+export class GroupCreateEditRoutingModule {
 }

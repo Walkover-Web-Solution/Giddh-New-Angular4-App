@@ -1,4 +1,6 @@
 .create-group-page {
+    margin-top: 20px;
+
     .image-group {
         padding-top: 35px;
 
@@ -7,6 +9,30 @@
             right: 15px;
             top: 15px;
         }
+    }
+}
+
+.delete-button {
+    color: var(--color-danger) !important;
+    border-color: var(--color-dark-fog) !important;
+}
+
+.clear-btn {
+    width: 89px;
+    height: 36px;
+    color: var(--color-primary-button-text);
+    margin-right: 15px;
+    border: 1px solid var(--color-secondary-button-border);
+}
+
+.create-inventory-btn {
+    height: 36px;
+    color: var(--color-nonary-button-text);
+    background-color: var(--color-nonary-button-background);
+    margin-right: 15px;
+
+    &:disabled {
+        background-color: var(--color-success-disable);
     }
 }
 
@@ -23,12 +49,6 @@
     }
 }
 
-:host::ng-deep .nav.nav-tabs {
-    position: static !important;
-    padding-left: 0 !important;
-    margin-bottom: 15px;
-}
-
 .create-group-footer {
     background-color: var(--color-dark-fog);
     height: 60px;
@@ -36,6 +56,8 @@
     display: flex;
     justify-content: flex-start;
     align-items: center;
+    position: static;
+    margin-top: 20px;
 
     .footer-wrapper {
         padding: 15px;
@@ -48,17 +70,8 @@
     font-size: 16px;
 }
 
-.add-image button img {
-    height: 87px;
-    width: 87px;
-    object-fit: contain;
-    transform: scale(1.2);
-}
-
-.add-image button {
-    padding: 0;
-    margin: 0 !important;
-    height: auto;
-    border: 2px dashed var(--color-gray);
-    overflow: hidden;
+@media (max-width: 1440px) {
+    .hsnsac-field {
+        margin-top: 20px;
+    }
 }

@@ -628,6 +628,15 @@ $custom-typography: mat-typography-config(
     overflow: hidden !important;
 }
 
+.create-update-no-data {
+    cursor: default !important;
+    .mat-pseudo-checkbox {
+        display: none !important;
+    }
+    .mat-option-text {
+        color: var(--color-black) !important;
+    }
+}
 @media screen and (max-width: 1366px) and (orientation: portrait) {
     .subscription-form-select {
         float: left !important;
@@ -10009,6 +10018,9 @@ giddh-datepicker {
 }
 
 .stock-create-edit {
+    .mat-pseudo-checkbox-checked {
+        background: var(--color-giddh-blue) !important;
+    }
     #main {
         #content-wrapper {
             background-color: var(--color-common-septenary-background-for-all-components);
@@ -10093,6 +10105,24 @@ giddh-datepicker {
         }
     }
 
+    .cdk-overlay-connected-position-bounding-box {
+        .mat-select-panel {
+            .mat-option-disabled {
+                cursor: not-allowed;
+                color: var(--color-common-primary-disabled) !important;
+
+                .mat-pseudo-checkbox {
+                    cursor: not-allowed;
+                    color: var(--color-common-primary-disabled) !important;
+                }
+            }
+        }
+    }
+}
+.group-create-update {
+    .mat-pseudo-checkbox-checked {
+        background: var(--color-giddh-blue) !important;
+    }
     .cdk-overlay-connected-position-bounding-box {
         .mat-select-panel {
             .mat-option-disabled {

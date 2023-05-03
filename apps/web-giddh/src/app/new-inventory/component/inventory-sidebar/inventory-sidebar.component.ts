@@ -1,10 +1,11 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { Component, EventEmitter, Output, OnDestroy } from '@angular/core';
+import { Component, EventEmitter, Output, OnDestroy, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { FlatTreeControl } from '@angular/cdk/tree';
 import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 
 /**
  * Food data with nested structure.
@@ -14,41 +15,11 @@ interface SidebarNode {
     icons?: string;
     name: string;
     link?: string;
+    moduleType?: string;
+    openActiveMenu?: boolean;
     children?: SidebarNode[];
 }
-const TREE_DATA: SidebarNode[] = [
-    {
-        name: 'Stock',
-        icons: 'stock.svg',
-        children: [
-            { name: 'Create New', icons: 'create-new.svg', link: '/pages/new-inventory/stock/product/create' },
-            { name: 'Item-wise', icons: 'item-wise.svg', link: '/pages/new-inventory/reports/stock' },
-            { name: 'Group-wise', icons: 'group-wise.svg', link: '/pages/new-inventory/reports/group' },
-            { name: 'Variant-wise', icons: 'varient-wise.svg', link: '/pages/new-inventory/reports/variant' },
-            { name: 'Transactions', icons: 'transactions.svg', link: '/pages/new-inventory/reports/transaction' }],
-    },
-    {
-        name: 'Services',
-        icons: 'service.svg'
-    },
-    {
-        name: 'Fixed Assets',
-        icons: 'fixed-assets.svg'
-    },
-    {
-        name: 'Branch Transfer',
-        icons: 'branch-transfer.svg'
-    },
-    {
-        name: 'Manufacturing',
-        icons: 'manufacturing.svg'
-    },
-    {
-        name: 'Warehouse Opening Balance',
-        link: '/pages/new-inventory/stock-balance',
-        icons: 'warehouse-opening-balance.svg'
-    },
-];
+const TREE_DATA: SidebarNode[] = [];
 /** Flat node with expandable and level information */
 interface SidebarFlatNode {
     expandable: boolean;
@@ -59,6 +30,19 @@ interface SidebarFlatNode {
     selector: 'inventory-sidebar',
     templateUrl: './inventory-sidebar.component.html',
     styleUrls: [`./inventory-sidebar.component.scss`],
+    animations: [
+        trigger('slideInOut', [
+            state('in', style({
+                transform: 'translate3d(0, 0, 0)'
+            })),
+            state('out', style({
+                transform: 'translate3d(100%, 0, 0)'
+            })),
+            transition('in => out', animate('400ms ease-in-out')),
+            transition('out => in', animate('400ms ease-in-out'))
+        ]),
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class InventorySidebarComponent implements OnDestroy {
     /** This will hold local JSON data */
@@ -74,7 +58,7 @@ export class InventorySidebarComponent implements OnDestroy {
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Holding data in SidebarNode Array */
-    public dataList: any[] = TREE_DATA;
+    public dataList: SidebarNode[] = [];
     /** Holds images folder path */
     public imgPath: string = "";
     /** Holds transformer data */
@@ -84,7 +68,9 @@ export class InventorySidebarComponent implements OnDestroy {
             name: node.name,
             level: level,
             icons: node.icons,
-            link: node.link
+            link: node.link,
+            openActiveMenu: node?.openActiveMenu,
+            moduleType: node?.moduleType,
         };
     };
     /** Holds treeControl data */
@@ -103,17 +89,21 @@ export class InventorySidebarComponent implements OnDestroy {
     public dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
     /** Holds tree data has child */
     public hasChild = (_: number, node: SidebarFlatNode) => node.expandable;
+    /* Aside pane state*/
+    public asideMenuState: string = 'out';
+    /** Holds inventory type module  */
+    public moduleType: string = '';
 
     constructor(
         private router: Router,
-        private breakPointObserver: BreakpointObserver
+        private breakPointObserver: BreakpointObserver,
+        private changeDetection: ChangeDetectorRef,
     ) {
         this.breakPointObserver.observe([
             '(max-width: 767px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.isMobileScreen = result.matches;
         });
-        this.dataSource.data = TREE_DATA;
     }
 
     /**
@@ -184,11 +174,11 @@ export class InventorySidebarComponent implements OnDestroy {
     }
 
     /**
- * Callback for translation response complete
- *
- * @param {*} event
- * @memberof ActivityLogsComponent
- */
+     * Callback for translation response complete
+     *
+     * @param {*} event
+     * @memberof ActivityLogsComponent
+     */
     public translationComplete(event: any): void {
         if (event) {
             this.translationLoaded = true;
@@ -197,19 +187,31 @@ export class InventorySidebarComponent implements OnDestroy {
                     name: this.localeData?.sidebar?.stock,
                     icons: 'stock.svg',
                     children: [
-                        { name: this.localeData?.sidebar?.create_new, icons: 'create-new.svg', link: '/pages/new-inventory/stock/product/create' },
-                        { name: this.localeData?.sidebar?.item_wise, icons: 'item-wise.svg', link: '/pages/new-inventory/reports/stock' },
-                        { name: this.localeData?.sidebar?.group_wise, icons: 'group-wise.svg', link: '/pages/new-inventory/reports/group' },
-                        { name: this.localeData?.sidebar?.variant_wise, icons: 'varient-wise.svg', link: '/pages/new-inventory/reports/variant' },
-                        { name: this.localeData?.sidebar?.transactions, icons: 'transactions.svg', link: '/pages/new-inventory/reports/transaction' }],
+                        { name: this.localeData?.sidebar?.create_new, icons: 'create-new.svg', openActiveMenu: true, moduleType: 'product' },
+                        { name: this.localeData?.sidebar?.item_wise, icons: 'item-wise.svg', link: '/pages/new-inventory/reports/product/stock' },
+                        { name: this.localeData?.sidebar?.group_wise, icons: 'group-wise.svg', link: '/pages/new-inventory/reports/product/group' },
+                        { name: this.localeData?.sidebar?.variant_wise, icons: 'varient-wise.svg', link: '/pages/new-inventory/reports/product/variant' },
+                        { name: this.localeData?.sidebar?.transactions, icons: 'transactions.svg', link: '/pages/new-inventory/reports/product/transaction' }],
                 },
                 {
                     name: this.localeData?.sidebar?.services,
-                    icons: 'service.svg'
+                    icons: 'service.svg',
+                    children: [
+                        { name: this.localeData?.sidebar?.create_new, icons: 'create-new.svg', openActiveMenu: true, moduleType: 'service' },
+                        { name: this.localeData?.sidebar?.item_wise, icons: 'item-wise.svg', link: '/pages/new-inventory/reports/service/stock' },
+                        { name: this.localeData?.sidebar?.group_wise, icons: 'group-wise.svg', link: '/pages/new-inventory/reports/service/group' },
+                        { name: this.localeData?.sidebar?.variant_wise, icons: 'varient-wise.svg', link: '/pages/new-inventory/reports/service/variant' },
+                        { name: this.localeData?.sidebar?.transactions, icons: 'transactions.svg', link: '/pages/new-inventory/reports/service/transaction' }],
                 },
                 {
                     name: this.localeData?.sidebar?.fixed_assets,
-                    icons: 'fixed-assets.svg'
+                    icons: 'fixed-assets.svg',
+                    children: [
+                        { name: this.localeData?.sidebar?.create_new, icons: 'create-new.svg', openActiveMenu: true, moduleType: 'fixedassets' },
+                        { name: this.localeData?.sidebar?.item_wise, icons: 'item-wise.svg', link: '/pages/new-inventory/reports/fixedassets/stock' },
+                        { name: this.localeData?.sidebar?.group_wise, icons: 'group-wise.svg', link: '/pages/new-inventory/reports/fixedassets/group' },
+                        { name: this.localeData?.sidebar?.variant_wise, icons: 'varient-wise.svg', link: '/pages/new-inventory/reports/fixedassets/variant' },
+                        { name: this.localeData?.sidebar?.transactions, icons: 'transactions.svg', link: '/pages/new-inventory/reports/fixedassets/transaction' }],
                 },
                 {
                     name: this.localeData?.sidebar?.branch_transfer,
@@ -225,7 +227,54 @@ export class InventorySidebarComponent implements OnDestroy {
                     icons: 'warehouse-opening-balance.svg'
                 },
             ];
+            this.dataSource.data = this.dataList;
+            this.changeDetection.detectChanges();
         }
+    }
+
+    /**
+    *Aside pane toggle fixed class
+    *
+    * @memberof InventorySidebarComponent
+    */
+    public toggleBodyClass(): void {
+        if (this.asideMenuState === 'in') {
+            document.querySelector('body').classList.add('fixed');
+        } else {
+            document.querySelector('body').classList.remove('fixed');
+        }
+    }
+
+    /**
+     *Aside pane open function
+     *
+     * @param {*} [event]
+     * @param {*} [node]
+     * @memberof InventorySidebarComponent
+     */
+    public toggleAsidePane(event?: any, node?: any): void {
+        this.moduleType = node?.moduleType;
+        if (node?.openActiveMenu) {
+            if (event) {
+                event.preventDefault();
+            }
+            this.asideMenuState = this.asideMenuState === 'out' ? 'in' : 'out';
+            this.toggleBodyClass();
+        }
+    }
+
+    /**
+     * This will use for close aside menu
+     *
+     * @param {*} [event]
+     * @memberof InventorySidebarComponent
+     */
+    public closeAsideMenu(event?: any): void {
+        if (event) {
+            event.preventDefault();
+        }
+        this.asideMenuState = 'out';
+        this.toggleBodyClass();
     }
 
     /**
@@ -237,6 +286,5 @@ export class InventorySidebarComponent implements OnDestroy {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
-
 }
 
