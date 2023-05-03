@@ -27,6 +27,7 @@ export class StockGroupRequest implements INameUniqueName {
     public parentStockGroupUniqueName?: string;
     public isSubGroup?: boolean;
     public taxes?: any;
+    public type?: any;
 }
 
 /**
@@ -167,6 +168,7 @@ export class StockTransactionReportRequest {
     public stockGroups?: any[];
     public stocks?: any[];
     public variants?: any[];
+    public inventoryType?: string;
     constructor() {
         this.count = PAGINATION_LIMIT;
         this.page = 1;
@@ -194,6 +196,7 @@ export class SearchStockTransactionReportRequest {
     public totalItems?: number;
     public totalPages?: number;
     public searchPage?: string;
+    public inventoryType?: string;
     constructor() {
         this.count = API_COUNT_LIMIT;
         this.page = 1;

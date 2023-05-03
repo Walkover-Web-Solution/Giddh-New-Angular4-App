@@ -90,6 +90,8 @@ export class ReportsComponent implements OnInit {
     public reportType: string = '';
     /** Holds report unique name */
     public reportUniqueName: string = '';
+    /** Holds inventory type module  */
+    public moduleType: string = '';
     /** Holds module name */
     public moduleName = '';
     /** True if initial load */
@@ -193,6 +195,11 @@ export class ReportsComponent implements OnInit {
             this.currentUrl = this.router.url;
             this.reportUniqueName = response?.uniqueName;
             this.reportType = (response?.reportType)?.toUpperCase();
+            if (response?.type?.toUpperCase() === 'FIXEDASSETS') {
+                this.moduleType = 'FIXED_ASSETS';
+            } else {
+                this.moduleType = response?.type?.toUpperCase();
+            }
             if (this.storeFilters && this.storeFilters[this.currentUrl]) {
                 this.showContent = false;
                 this.changeDetection.detectChanges();
@@ -347,7 +354,7 @@ export class ReportsComponent implements OnInit {
                     page: stockReportRequest.page ?? 1,
                     sort: stockReportRequest.sort ?? '',
                     sortBy: stockReportRequest.sortBy ?? '',
-                    stockGroupUniqueName: this.reportUniqueName ?? ''
+                    stockGroupUniqueName: this.reportUniqueName ?? '',
                 };
 
                 stockReportRequest.from = undefined;
@@ -358,7 +365,7 @@ export class ReportsComponent implements OnInit {
                 stockReportRequest.sortBy = undefined;
                 stockReportRequest.totalItems = undefined;
                 stockReportRequest.totalPages = undefined;
-
+                stockReportRequest.inventoryType = this.moduleType;
                 this.inventoryService.getGroupWiseReport(queryParams, stockReportRequest).pipe(takeUntil(this.cancelApi$)).subscribe(response => {
                     this.isLoading = false;
                     if (response && response.body && response.status === 'success') {
@@ -394,8 +401,16 @@ export class ReportsComponent implements OnInit {
             if (this.reportType === InventoryReportType.stock) {
 
                 let stockReportRequest = this.getStockReportRequestObject();
-
-                this.inventoryService.getItemWiseReport(cloneDeep(stockReportRequest)).pipe(takeUntil(this.cancelApi$)).subscribe(response => {
+                let queryParams = {
+                    from: stockReportRequest.from ?? '',
+                    to: stockReportRequest.to ?? '',
+                    count: stockReportRequest.count ?? PAGINATION_LIMIT,
+                    page: stockReportRequest.page ?? 1,
+                    sort: stockReportRequest.sort ?? '',
+                    sortBy: stockReportRequest.sortBy ?? ''
+                };
+                stockReportRequest.inventoryType = this.moduleType;
+                this.inventoryService.getItemWiseReport(queryParams, stockReportRequest).pipe(takeUntil(this.cancelApi$)).subscribe(response => {
                     this.isLoading = false;
                     if (response && response.body && response.status === 'success') {
                         this.isDataAvailable = (response.body.results?.length) ? true : false;
@@ -427,9 +442,17 @@ export class ReportsComponent implements OnInit {
             }
 
             if (this.reportType === InventoryReportType.variant) {
-
                 let stockReportRequest = this.getStockReportRequestObject();
-                this.inventoryService.getVariantWiseReport(cloneDeep(stockReportRequest)).pipe(takeUntil(this.cancelApi$)).subscribe(response => {
+                let queryParams = {
+                    from: stockReportRequest.from ?? '',
+                    to: stockReportRequest.to ?? '',
+                    count: stockReportRequest.count ?? PAGINATION_LIMIT,
+                    page: stockReportRequest.page ?? 1,
+                    sort: stockReportRequest.sort ?? '',
+                    sortBy: stockReportRequest.sortBy ?? ''
+                };
+                stockReportRequest.inventoryType = this.moduleType;
+                this.inventoryService.getVariantWiseReport(queryParams, stockReportRequest).pipe(takeUntil(this.cancelApi$)).subscribe(response => {
                     this.isLoading = false;
                     if (response && response.body && response.status === 'success') {
                         this.isDataAvailable = (response.body.results?.length) ? true : false;
@@ -478,6 +501,7 @@ export class ReportsComponent implements OnInit {
                 }
                 balanceReportRequest.from = undefined;
                 balanceReportRequest.to = undefined;
+                balanceReportRequest.inventoryType = this.moduleType;
                 this.inventoryService.getStockTransactionReportBalance(queryParams, balanceReportRequest).pipe(takeUntil(this.cancelApi$)).subscribe(response => {
                     if (response && response.body && response.status === 'success') {
                         this.stockTransactionReportBalance = response.body;
@@ -611,26 +635,26 @@ export class ReportsComponent implements OnInit {
 
         if (this.reportType === InventoryReportType.group) {
             if (element?.stockGroupHasChild) {
-                currentUrl = '/pages/new-inventory/reports/group/' + element?.stockGroup?.uniqueName;
+                currentUrl = '/pages/new-inventory/reports/' + this.moduleType?.toLowerCase() + '/group/' + element?.stockGroup?.uniqueName;
                 this.storeFilters[currentUrl] = { stockReportRequest: stockReportRequest, balanceStockReportRequest: balanceStockReportRequest, todaySelected: this.todaySelected, showClearFilter: this.showClearFilter };
                 this.store.dispatch(this.commonAction.setFilters(this.storeFilters));
-                this.router.navigate(['/pages', 'new-inventory', 'reports', 'group', element?.stockGroup?.uniqueName]);
+                this.router.navigate(['/pages', 'new-inventory', 'reports', this.moduleType?.toLowerCase(), 'group', element?.stockGroup?.uniqueName]);
             } else {
-                currentUrl = '/pages/new-inventory/reports/stock/' + element?.stockGroup?.uniqueName;
+                currentUrl = '/pages/new-inventory/reports/' + this.moduleType?.toLowerCase() + '/stock/' + element?.stockGroup?.uniqueName;
                 this.storeFilters[currentUrl] = { stockReportRequest: stockReportRequest, balanceStockReportRequest: balanceStockReportRequest, todaySelected: this.todaySelected, showClearFilter: this.showClearFilter };
                 this.store.dispatch(this.commonAction.setFilters(this.storeFilters));
-                this.router.navigate(['/pages', 'new-inventory', 'reports', 'stock', element?.stockGroup?.uniqueName]);
+                this.router.navigate(['/pages', 'new-inventory', 'reports', this.moduleType?.toLowerCase(), 'stock', element?.stockGroup?.uniqueName]);
             }
         } else if (this.reportType === InventoryReportType.stock) {
-            currentUrl = '/pages/new-inventory/reports/variant/' + element?.stock?.uniqueName;
+            currentUrl = '/pages/new-inventory/reports/' + this.moduleType?.toLowerCase() + '/variant/' + element?.stock?.uniqueName;
             this.storeFilters[currentUrl] = { stockReportRequest: stockReportRequest, balanceStockReportRequest: balanceStockReportRequest, todaySelected: this.todaySelected, showClearFilter: this.showClearFilter };
             this.store.dispatch(this.commonAction.setFilters(this.storeFilters));
-            this.router.navigate(['/pages', 'new-inventory', 'reports', 'variant', element?.stock?.uniqueName]);
+            this.router.navigate(['/pages', 'new-inventory', 'reports', this.moduleType?.toLowerCase(), 'variant', element?.stock?.uniqueName]);
         } else if (this.reportType === InventoryReportType.variant) {
-            currentUrl = '/pages/new-inventory/reports/transaction/' + element?.variant?.uniqueName;
+            currentUrl = '/pages/new-inventory/reports/' + this.moduleType?.toLowerCase() + '/transaction/' + element?.variant?.uniqueName;
             this.storeFilters[currentUrl] = { stockReportRequest: stockReportRequest, balanceStockReportRequest: balanceStockReportRequest, todaySelected: this.todaySelected, showClearFilter: this.showClearFilter };
             this.store.dispatch(this.commonAction.setFilters(this.storeFilters));
-            this.router.navigate(['/pages', 'new-inventory', 'reports', 'transaction', element?.variant?.uniqueName]);
+            this.router.navigate(['/pages', 'new-inventory', 'reports', this.moduleType?.toLowerCase(), 'transaction', element?.variant?.uniqueName]);
         }
     }
 

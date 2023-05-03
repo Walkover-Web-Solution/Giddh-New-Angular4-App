@@ -16,6 +16,7 @@ export const INVENTORY_API = {
     },
     REPORT: 'company/:companyUniqueName/stock/:stockUniqueName/inventory-report?from=:from&to=:to&page=:page&count=:count',
     CREATE_STOCK_GROUP: 'company/:companyUniqueName/stock-group', // post call
+    GET_STOCK_GROUP: 'company/:companyUniqueName/stock-group/:stockGroupUniqueName', // getcall
     UPDATE_STOCK_GROUP: 'company/:companyUniqueName/stock-group/:stockGroupUniqueName', // put call
     DELETE_STOCK_GROUP: 'company/:companyUniqueName/stock-group/:stockGroupUniqueName', // DELETE call
     STOCKS: 'company/:companyUniqueName/stocks', // get call
@@ -23,7 +24,7 @@ export const INVENTORY_API = {
     CREATE_NEW_MANUFACTURING_STOCKS: 'company/:companyUniqueName/stocks?isManufactured=true', // get call
     GROUPS_STOCKS: 'company/:companyUniqueName/stock-group/:stockGroupUniqueName', // get call
     GROUPS_WITH_STOCKS_FLATTEN: 'company/:companyUniqueName/flatten-stock-groups-with-stocks?count=:count&page=:page&q=:q', // get call
-    GROUPS_WITH_STOCKS: 'company/:companyUniqueName/hierarchical-stock-groups', // get call
+    GROUPS_WITH_STOCKS: 'company/:companyUniqueName/hierarchical-stock-groups?type=:type', // get call
     GROUPS_WITH_STOCKS_HIERARCHY: 'company/:companyUniqueName/hierarchical-stock-groups?q=:q&page=:page&count=:count', // get call
     STOCK_UNIT: 'company/:companyUniqueName/stock-unit', // get call
     STOCK_REPORT: 'company/:companyUniqueName/stock-group/:stockGroupUniqueName/stock/:stockUniqueName/report-v2?from=:from&to=:to&count=:count&page=:page', // get call
@@ -67,7 +68,7 @@ export const INVENTORY_API = {
     DOWNLOAD_NEW_BRANCH_TRANSFER: 'company/:companyUniqueName/branch-transfer/download?fileType=base64',
     GET_UNIT_CODE_REGEX: 'ui/forms?formName=:formName&country=:country',
     V5: {
-        CREATE_STOCK_GROUP: COMMON_V5 + '/stock-group',
+        CREATE_STOCK_GROUP: COMMON_V5 + '/stock-group?type=:type',
         GET_STOCK_GROUP: COMMON_V5 + '/stock-group/:groupUniqueName',
         UPDATE_STOCK_GROUP: COMMON_V5 + '/stock-group/:groupUniqueName'
     },

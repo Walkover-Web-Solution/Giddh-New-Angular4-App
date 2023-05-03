@@ -5,8 +5,6 @@ import { NewInventoryRoutingModule } from "./new-inventory.routing.module";
 import { SharedModule } from "../shared/shared.module";
 import { TabsModule } from "ngx-bootstrap/tabs";
 import { BsDropdownModule } from "ngx-bootstrap/dropdown";
-import { CreateNewInventoryAsideComponent } from "./component/create-new-inventory-aside-pane/create-new-inventory-aside.component";
-import { InventoryCreateUpdateGroupComponent } from "./component/stock-group/create-update-group/create-update-group.component";
 import { CreateNewGroupComponent } from "./component/create-new-group/create-new-group.component";
 import { CreateNewItemComponent } from "./component/create-new-item/create-new-item.component";
 import { CreateNewUnitComponent } from "./component/create-unit/create-unit.component";
@@ -68,12 +66,12 @@ import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { ReportFiltersComponent } from "./component/report-filters/report-filters.component";
 import { ReportsComponent } from "./component/reports/reports.component";
+import { GroupCreateEditModule } from "./component/create-update-group/create-update-group.module";
+import { InventoryCreateUpdateGroupComponent } from "./component/stock-group/create-update-group/create-update-group.component";
 
 @NgModule({
     declarations: [
         NewInventoryComponent,
-        CreateNewInventoryAsideComponent,
-        InventoryCreateUpdateGroupComponent,
         CreateNewGroupComponent,
         CreateNewItemComponent,
         CreateNewUnitComponent,
@@ -94,6 +92,7 @@ import { ReportsComponent } from "./component/reports/reports.component";
         AdjustProductServiceComponent,
         InventoryAdjustmentReasonAside,
         InventoryAdjustmentBulkEntryComponent,
+        InventoryCreateUpdateGroupComponent,
         CreateNewInventoryComponent,
         NewInventoryAdvanceSearch,
         InventoryDashboardComponent,
@@ -135,6 +134,7 @@ import { ReportsComponent } from "./component/reports/reports.component";
         MatInputModule,
         MatSelectModule,
         InventorySidebarModule,
+        GroupCreateEditModule,
         StockCreateEditModule,
         NgxMatSelectSearchModule,
         GiddhPageLoaderModule,
@@ -146,8 +146,6 @@ import { ReportsComponent } from "./component/reports/reports.component";
     exports: [
         NewInventoryComponent,
         ListGroupComponent,
-        CreateNewInventoryAsideComponent,
-        InventoryCreateUpdateGroupComponent,
         CreateNewGroupComponent,
         CreateNewItemComponent,
         CreateNewUnitComponent,
