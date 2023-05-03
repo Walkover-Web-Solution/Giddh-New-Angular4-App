@@ -306,8 +306,6 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
                         }
                     });
                 }
-            } else {
-                this.toaster.showSnackBar("warning", response?.message);
             }
             this.filteredDisplayColumns();
         });
