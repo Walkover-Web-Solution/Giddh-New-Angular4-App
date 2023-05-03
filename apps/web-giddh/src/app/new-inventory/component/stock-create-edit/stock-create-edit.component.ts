@@ -645,7 +645,6 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         this.toggleLoader(true);
         this.inventoryService.getStock(this.queryParams?.stockUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success" && response.body) {
-                this.stockForm.type = response.body.type;
                 this.stockForm.name = response.body.name;
                 this.stockForm.uniqueName = response.body.uniqueName;
                 this.stockForm.stockUnitCode = response.body.stockUnit?.code;
