@@ -1667,7 +1667,11 @@
                                                 </ng-container>
                                             </div>
                                             <div
-                                                *ngIf="(isCreditNote || isDebitNote) && selectedInvoice"
+                                                *ngIf="
+                                                    (isCreditNote || isDebitNote) &&
+                                                    selectedInvoice &&
+                                                    !isEinvoiceGenerated
+                                                "
                                                 class="cp for-mobile-screen remove-invoice"
                                                 (click)="removeSelectedInvoice()"
                                             >
@@ -1683,7 +1687,11 @@
                                         >
                                             <div class="form-inline flex-row flex-nowrap">
                                                 <div
-                                                    *ngIf="(isCreditNote || isDebitNote) && selectedInvoice"
+                                                    *ngIf="
+                                                        (isCreditNote || isDebitNote) &&
+                                                        selectedInvoice &&
+                                                        !isEinvoiceGenerated
+                                                    "
                                                     class="cp remove-invoice"
                                                     (click)="removeSelectedInvoice()"
                                                 >

@@ -1689,9 +1689,10 @@
                                                         (selected)="creditNoteInvoiceSelected($event)"
                                                         [multiple]="false"
                                                         [disabled]="
-                                                            !isPettyCash &&
-                                                            currentOrganizationType === 'COMPANY' &&
-                                                            branches?.length > 1
+                                                            isEinvoiceGenerated ||
+                                                            (!isPettyCash &&
+                                                                currentOrganizationType === 'COMPANY' &&
+                                                                branches?.length > 1)
                                                         "
                                                         [ItemHeight]="67"
                                                         [showClear]="false"
@@ -1741,7 +1742,8 @@
                                                 *ngIf="
                                                     (vm.selectedLedger?.voucher?.shortCode === 'credit note' ||
                                                         vm.selectedLedger?.voucher?.shortCode === 'debit note') &&
-                                                    selectedInvoice
+                                                    selectedInvoice &&
+                                                    !isEinvoiceGenerated
                                                 "
                                                 class="cp remove-invoice pd-r2 hidden-xs"
                                                 (click)="removeSelectedInvoice()"
