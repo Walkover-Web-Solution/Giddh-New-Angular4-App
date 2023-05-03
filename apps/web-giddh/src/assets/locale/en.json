@@ -684,5 +684,5 @@
     "app_invalid_contact_too_long": "Too long",
     "app_attachment_not_allowed": "To upload attachment, go to branch",
     "app_entry_no": "Entry No.",
-    "app_special_note": "Note: Some details of the Invoice can’t be updated as E-invoice is generated for the same."
+    "app_special_note": "Note: Some details of the Voucher can’t be updated as E-invoice is generated for the same."
 }
