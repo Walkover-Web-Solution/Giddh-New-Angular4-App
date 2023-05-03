@@ -1615,9 +1615,10 @@
                                                         (selected)="creditNoteInvoiceSelected($event)"
                                                         [multiple]="false"
                                                         [disabled]="
-                                                            !isPettyCash &&
-                                                            currentOrganizationType === 'COMPANY' &&
-                                                            branches?.length > 1
+                                                            isEinvoiceGenerated ||
+                                                            (!isPettyCash &&
+                                                                currentOrganizationType === 'COMPANY' &&
+                                                                branches?.length > 1)
                                                         "
                                                         [ItemHeight]="67"
                                                         [showClear]="false"

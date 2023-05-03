@@ -1600,6 +1600,7 @@
                                                                 : ''
                                                         "
                                                         [scrollableElementId]="'referenceVoucher'"
+                                                        [readonly]="isEinvoiceGenerated"
                                                     >
                                                         <ng-template #optionTemplate let-option="option">
                                                             <a
@@ -1635,6 +1636,7 @@
                                                         (selectedOption)="creditNoteInvoiceSelected($event)"
                                                         [defaultValue]="invoiceSelectedLabel"
                                                         [hasMoreValue]="true"
+                                                        [readonly]="isEinvoiceGenerated"
                                                     >
                                                         <ng-template #optionTemplate let-option="option">
                                                             <a
