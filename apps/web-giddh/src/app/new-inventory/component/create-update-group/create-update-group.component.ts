@@ -343,7 +343,7 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
      * @memberof CreateUpdateGroupComponent
      */
     public resetTaxes(): void {
-        this.taxes.forEach(tax => {
+        this.taxes?.forEach(tax => {
             tax.isChecked = false;
             tax.isDisabled = false;
             return tax;
@@ -357,7 +357,7 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
      * @memberof CreateUpdateGroupComponent
      */
     public selectedGroupTaxes(): void {
-        this.taxes.forEach(tax => {
+        this.taxes?.forEach(tax => {
             if (tax?.isChecked) {
                 this.selectTax(tax);
             }
