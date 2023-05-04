@@ -14,6 +14,7 @@
                 [rawInputValue]="discountTotal"
                 [(ngModel)]="discountTotal"
                 readonly
+                [ngClass]="{ 'field-disabled': readonly }"
                 (focus)="discountMenu = true; hideOtherPopups.emit(true)"
             />
             <span class="caret"></span>

@@ -751,6 +751,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public giddhBalanceDecimalPlaces: number = 2;
     /** Giddh round off method to use in html */
     public giddhRoundOff: any = giddhRoundOff;
+    /** True if einvoice is generated for the voucher */
+    public isEinvoiceGenerated: boolean = false;
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -1275,6 +1277,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                         obj.voucherDetails.voucherDate = cloneDeep(voucherDate);
                         obj.voucherDetails.dueDate = cloneDeep(dueDate);
                     } else {
+                        this.isEinvoiceGenerated = results[0].einvoiceGenerated;
                         this.previousDeposit = results[0]?.deposit;
                         if (this.isMultiCurrencyModule()) {
                             // parse normal response to multi currency response
@@ -1484,8 +1487,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                         this.invFormData.voucherDetails.voucherUniqueName = (results[0] as any)?.uniqueName;
                     }
                 }
-                if (this.invFormData.accountDetails.billingDetails?.gstNumber && this.purchaseBillCompany.billingDetails
-                    .gstNumber) {
+                if (this.isEinvoiceGenerated || (this.invFormData.accountDetails.billingDetails?.gstNumber && this.purchaseBillCompany.billingDetails
+                    .gstNumber)) {
                     this.statesBilling.readonly = true;
                 } else {
                     this.statesBilling.readonly = false;
@@ -1523,8 +1526,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                         } else {
                             this.invFormData.accountDetails = new AccountDetailsClass(tempSelectedAcc);
                         }
-                        if (this.invFormData.accountDetails.billingDetails?.gstNumber && this.purchaseBillCompany.billingDetails
-                            .gstNumbe) {
+                        if (this.isEinvoiceGenerated || (this.invFormData.accountDetails.billingDetails?.gstNumber && this.purchaseBillCompany.billingDetails.gstNumber)) {
                             this.statesBilling.readonly = true;
                         } else {
                             this.statesBilling.readonly = false;
@@ -2242,10 +2244,10 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     this.invFormData.accountDetails[type].state.code = null;
                     this.invFormData.accountDetails[type].state.name = null;
                 }
-                statesEle.readonly = false;
+                statesEle.readonly = this.isEinvoiceGenerated ? true : false;
             }
         } else {
-            statesEle.readonly = false;
+            statesEle.readonly = this.isEinvoiceGenerated ? true : false;
 
         }
         this.checkGstNumValidation(gstVal);
@@ -7689,7 +7691,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @memberof VoucherComponent
      */
     public openProductDropdown(): void {
-        if (this.invFormData?.voucherDetails?.customerUniquename || this.invFormData?.voucherDetails?.customerName) {
+        if ((this.invFormData?.voucherDetails?.customerUniquename || this.invFormData?.voucherDetails?.customerName) && !this.isEinvoiceGenerated) {
             setTimeout(() => {
                 const salesSelect: any = !this.isMobileScreen ? this.selectAccount?.first : this.selectAccount?.last;
                 if (salesSelect) {
@@ -8103,13 +8105,13 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 this.getStateCode('billingDetails', this.statesBilling);
                 this.autoFillShippingDetails();
             } else {
-                this.statesBilling.readonly = false;
+                this.statesBilling.readonly = (this.isEinvoiceGenerated) ? true : false;
                 this._cdr.detectChanges();
             }
             if (this.invFormData.accountDetails.shippingDetails?.gstNumber) {
                 this.getStateCode('shippingDetails', this.statesShipping);
             } else {
-                this.statesShipping.readonly = false;
+                this.statesShipping.readonly = (this.isEinvoiceGenerated) ? true : false;
                 this._cdr.detectChanges();
             }
 
@@ -8459,12 +8461,14 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @memberof VoucherComponent
      */
     public openFirstEntry(): void {
-        this.setActiveIndx(0);
+        if (!this.isEinvoiceGenerated) {
+            this.setActiveIndx(0);
 
-        setTimeout(() => {
-            const firstEntry: any = this.selectAccount?.first;
-            firstEntry?.openDropdownPanel();
-        });
+            setTimeout(() => {
+                const firstEntry: any = this.selectAccount?.first;
+                firstEntry?.openDropdownPanel();
+            });
+        }
     }
 
     // CMD + G functionality
