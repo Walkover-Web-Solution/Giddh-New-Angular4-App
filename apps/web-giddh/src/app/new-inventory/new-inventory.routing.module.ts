@@ -1,7 +1,6 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 import { NewInventoryComponent } from "./new-inventory.component";
-import { InventoryCreateUpdateGroupComponent } from "./component/stock-group/create-update-group/create-update-group.component";
 import { AboutGroupDetailComponent } from "./component/about-group-detail/about-group-detail.component";
 import { AboutProductServiceDetailComponent } from "./component/about-product-service-detail/about-product-service-detail.component";
 import { InventoryComboListComponent } from "./component/combo-list/inventory-combo-list.component";
@@ -14,7 +13,6 @@ import { InventoryDashboardComponent } from "./component/inventory-dashboard/inv
 import { DashboardSellingReport } from "./component/inventory-dashboard/dashboard-selling-report/dashboard-selling-report.component";
 import { ProductServiceListComponent } from "./component/inventory-product-service-list/inventory-product-service-list.component";
 import { InventoryTransactionListComponent } from "./component/inventory-transaction-list/inventory-transaction-list.component";
-import { InventoryCustomFieldComponent } from "./component/inventory-custom-field/inventory-custom-field.component";
 import { ListGroupComponent } from "./component/stock-group/list-group/list-group.component";
 import { StockCreateEditModule } from "./component/stock-create-edit/stock-create-edit.module";
 import { StockBalanceComponent } from "./component/stock-balance/stock-balance.component";
@@ -40,10 +38,6 @@ const routes: Routes = [
             {
                 path: "inventory-combo-list",
                 component: InventoryComboListComponent,
-            },
-            {
-                path: "inventory-custom-field",
-                component: InventoryCustomFieldComponent,
             },
             {
                 path: "reports/:type/transaction",

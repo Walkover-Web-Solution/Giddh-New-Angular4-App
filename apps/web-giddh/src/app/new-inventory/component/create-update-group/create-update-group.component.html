@@ -7,6 +7,12 @@
 >
     <div class="relative">
         <giddh-page-loader *ngIf="showLoader"></giddh-page-loader>
+        <div class="col-md-1 col-sm-1" *ngIf="!showLoader">
+            <button *ngIf="groupUniqueName" (click)="backClicked()" class="btn-sky-blue mt-2" mat-button>
+                <i class="icon-left back-left"></i>
+                {{ commonLocaleData?.app_back }}
+            </button>
+        </div>
         <ng-container *ngIf="!showLoader">
             <form autocomplete="off" novalidate name="groupForm" [formGroup]="groupForm" class="new-account-form">
                 <div class="container-fluid">
@@ -129,7 +135,7 @@
                                             [placeholder]="commonLocaleData?.app_select_group"
                                             [options]="stockGroups"
                                             (selectedOption)="
-                                                stockGroupUniqueName = $event?.value; stockGroupName = $event.label
+                                                stockGroupUniqueName = $event?.value; stockGroupName = $event?.label
                                             "
                                             [defaultValue]="stockGroupName"
                                         ></select-field>
@@ -150,10 +156,10 @@
                                             <mat-option
                                                 *ngFor="let tax of taxes"
                                                 [value]="tax?.uniqueName"
-                                                [disabled]="tax.isDisabled"
-                                                [selected]="tax.isChecked"
-                                                (onSelectionChange)="!tax.isDisabled ? selectTax(tax) : ''"
-                                                >{{ tax.name }}</mat-option
+                                                [disabled]="tax?.isDisabled"
+                                                [selected]="tax?.isChecked"
+                                                (onSelectionChange)="!tax?.isDisabled ? selectTax(tax) : ''"
+                                                >{{ tax?.name }}</mat-option
                                             >
                                             <mat-option
                                                 class="create-update-no-data"

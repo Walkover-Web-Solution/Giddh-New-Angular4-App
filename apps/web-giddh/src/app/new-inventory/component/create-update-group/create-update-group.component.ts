@@ -14,7 +14,7 @@ import { uniqueNameInvalidStringReplace } from "../../../shared/helpers/helperFu
 import { AppState } from "../../../store";
 import { ConfirmModalComponent } from "../../../theme/new-confirm-modal/confirm-modal.component";
 import { IOption } from "../../../theme/ng-virtual-select/sh-options.interface";
-
+import { Location } from '@angular/common';
 
 @Component({
     selector: 'create-update-group',
@@ -65,7 +65,8 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
         private route: ActivatedRoute,
         private changeDetection: ChangeDetectorRef,
         private router: Router,
-        private dialog: MatDialog
+        private dialog: MatDialog,
+        private location: Location,
     ) {
         this.companyUniqueName$ = this.store.pipe(select(state => state.session.companyUniqueName), takeUntil(this.destroyed$));
         this.initGroupForm();
@@ -136,10 +137,18 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
             if (response?.length > 0) {
                 this.taxes = response || [];
             }
-            this.changeDetection.detectChanges();
         });
+        this.changeDetection.detectChanges();
     }
 
+    /**
+    * This will take the user back to last page
+    *
+    * @memberof CreateUpdateGroupComponent
+    */
+    public backClicked(): void {
+        this.location.back();
+    }
 
     /**
     * Select tax
@@ -214,21 +223,19 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
                 taxSelected.isChecked = false;
             }
         }
-        // this.groupForm.get('taxes')?.patchValue(this.taxTempArray?.map(taxTemp => taxTemp?.uniqueName));
         this.selectedTaxes = this.taxTempArray.map(tax => tax?.uniqueName);
-        this.changeDetection.detectChanges();
     }
 
     /**
-     * Creates/updates the group
-     *
-     * @memberof CreateUpdateGroupComponent
-     */
+    * Creates/updates the group
+    *
+    * @memberof CreateUpdateGroupComponent
+    */
     public saveGroup(): void {
         this.groupForm.controls['parentStockGroupUniqueName'].setValue(this.stockGroupUniqueName);
-        this.groupForm.controls['type'].setValue(this.stockType);
+        this.toggleLoader(true);
         if (this.groupUniqueName) {
-            this.toggleLoader(true);
+            this.groupForm.controls['type'].setValue(this.stockType);
             this.inventoryService.UpdateStockGroup(this.groupForm?.value, this.groupUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response?.status === "success") {
                     this.toggleLoader(false);
@@ -236,16 +243,15 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
                     this.selectedGroupTaxes();
                     this.toaster.clearAllToaster();
                     this.toaster.successToast(this.localeData?.stock_group_update);
+                    this.backClicked();
                 } else {
-                    this.toggleLoader(false);
                     this.toaster.clearAllToaster();
+                    this.toggleLoader(false);
                     this.toaster.errorToast(response?.message);
                 }
-                this.changeDetection.detectChanges();
             });
-
         } else {
-            this.toggleLoader(true);
+            this.groupForm.controls['type'].setValue(this.stockType);
             this.inventoryService.CreateStockGroup(this.groupForm?.value).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response?.status === "success") {
                     this.toggleLoader(false);
@@ -424,16 +430,16 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
             } else {
                 this.toggleLoader(false);
                 this.toaster.showSnackBar("error", response?.message);
-                this.changeDetection.detectChanges();
             }
+            this.changeDetection.detectChanges();
         });
     }
 
     /**
-     *This will redirect to inventory list page
-     *
-     * @memberof CreateUpdateGroupComponent
-     */
+    *This will redirect to inventory list page
+    *
+    * @memberof CreateUpdateGroupComponent
+    */
     public cancelEdit(): void {
         this.router.navigate(['/pages/inventory']);
     }

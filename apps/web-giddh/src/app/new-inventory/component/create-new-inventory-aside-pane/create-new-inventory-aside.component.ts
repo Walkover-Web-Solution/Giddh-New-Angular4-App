@@ -43,7 +43,7 @@ export class CreateNewInventoryAsideComponent implements OnInit {
      * @param {*} [event]
      * @memberof CreateNewInventoryAsideComponent
      */
-    public closeAsidePane(event?: any) {
+    public closeAsidePane(event?: any): void {
         this.closeAsideEvent.emit(event);
     }
 
@@ -55,7 +55,7 @@ export class CreateNewInventoryAsideComponent implements OnInit {
      */
     public createNewByAsidePanel(type?: any): void {
         if (type) {
-            this.router.navigate(['/pages', 'new-inventory', type, this.moduleType, 'create']);
+            this.router.navigate(['/pages', 'inventory', 'v2', type, this.moduleType, 'create']);
         }
         this.asideMenuState = this.asideMenuState === 'out' ? 'in' : 'out';
         this.toggleBodyClass();

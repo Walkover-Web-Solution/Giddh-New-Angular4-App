@@ -2,6 +2,25 @@
     padding-bottom: 20px !important;
 }
 
+.edit-icon {
+    display: none;
+}
+
+tr {
+    &:hover {
+        .edit-icon {
+            display: inline-block !important;
+            z-index: 9999;
+        }
+    }
+}
+
+td {
+    .edit-icon {
+        width: 66px;
+        float: right;
+    }
+}
 .stock-group-footer {
     background-color: var(--color-white);
     z-index: 3;

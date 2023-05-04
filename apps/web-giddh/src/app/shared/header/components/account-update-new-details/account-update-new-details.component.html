@@ -233,8 +233,7 @@
                         <div class="gstin-form" formArrayName="addresses">
                             <ng-container
                                 *ngFor="
-                                    let gst of addAccountForm.get('addresses')['controls']
-                                        | slice : 0 : gstDetailsLength;
+                                    let gst of addAccountForm.get('addresses')['controls'] | slice: 0:gstDetailsLength;
                                     let i = index;
                                     let f = first;
                                     let l = last

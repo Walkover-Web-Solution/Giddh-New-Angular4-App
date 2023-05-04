@@ -77,7 +77,9 @@ export const INVENTORY_API = {
         GET: 'company/:companyUniqueName/stock/:stockUniqueName',
         UPDATE: 'company/:companyUniqueName/stock-group/:stockGroupUniqueName/stock/:stockUniqueName'
     },
-
+    CREATE_STOCK_V2: 'v2/company/:companyUniqueName/stock-group/:stockGroupUniqueName/stock',
+    GET_STOCK_V2: 'v2/company/:companyUniqueName/stock/:stockUniqueName',
+    DELETE_STOCK_V2: 'v2/company/:companyUniqueName/stock-group/:stockGroupUniqueName/stock/:stockUniqueName', // DELETE call
     TRANSACTION_STOCK_REPORT_V2: 'company/:companyUniqueName/inventory/transaction-report?from=:from&to=:to&count=:count&page=:page&sort=:sort&sortBy=:sortBy&transaction_type=:transactionType', // post for filter rest all get
     TRANSACTION_STOCK_REPORT_BALANCE_V2: 'company/:companyUniqueName/inventory/balance?stockGroupUniqueName=:stockGroupUniqueName&from=:from&to=:to',
     TRANSACTION_STOCK_REPORT_COLUMNS: 'company/:companyUniqueName/report-filters?module=:module',
