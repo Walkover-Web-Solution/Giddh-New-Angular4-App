@@ -75,6 +75,7 @@
                 align-items: center;
                 overflow: hidden;
                 font-family: "opensans-regular" !important;
+
                 .add-new-text-container {
                     font-family: "opensans-regular";
                     position: relative;
@@ -167,6 +168,7 @@
                 font-size: 14px;
                 color: var(--color-common-primary-input-placeholder);
             }
+
             .s-chip {
                 background-color: var(--color-chips-primary-background) !important;
             }
@@ -200,6 +202,7 @@
 
     .combo-detail-content {
         min-height: 63vh;
+
         .table-responsive {
             .table.combo-table {
                 thead {
@@ -207,22 +210,27 @@
                         min-width: 235px;
                     }
                 }
+
                 td {
                     min-width: 87px;
                 }
             }
         }
     }
+
     .select-physical-product {
         .product-detail-content {
             .upper-common-form-container {
                 background-color: var(--color-common-septenary-background-for-all-components);
+
                 .upper-common-form-label-field {
                     margin-left: 5px;
                     margin-top: 10px;
+
                     .under-group-field-button-wrapper {
                         display: flex;
                         align-items: center;
+
                         .move-stock {
                             margin-left: 10px;
                             display: flex;
@@ -230,14 +238,17 @@
                             justify-content: center;
                         }
                     }
+
                     .product-name-label {
                         position: relative;
+
                         .product-name-star {
                             position: absolute;
                         }
                     }
                 }
             }
+
             .other-group {
                 position: relative;
                 width: 84.5vw;
@@ -245,6 +256,7 @@
             }
         }
     }
+
     .icon-plus {
         color: var(--color-blue);
     }
@@ -280,6 +292,7 @@
     position: static;
     width: 100%;
     padding-left: 15px;
+
     .inner-content-footer {
         .clear-btn {
             width: 89px;
@@ -288,15 +301,18 @@
             margin-right: 15px;
             border: 1px solid var(--color-secondary-button-border);
         }
+
         .create-inventory-btn {
             width: 198px;
             height: 36px;
             color: var(--color-nonary-button-text);
             background-color: var(--color-nonary-button-background);
+
             &:disabled {
                 background-color: var(--color-success-disable);
             }
         }
+
         .button-group {
             .btn-danger {
                 background-color: var(--color-primary-button-background) !important;
@@ -371,8 +387,14 @@ table.stock-table {
         }
     }
 
-    table.stock-table td input {
-        border: none;
+    table {
+        .stock-table {
+            td {
+                input {
+                    border: none;
+                }
+            }
+        }
     }
 }
 
@@ -584,6 +606,7 @@ table.stock-table {
     .pl-5 {
         padding-left: 15px !important;
     }
+
     .create-new-inventory-page {
         .sales-purchase-details {
             .mt-5 {
@@ -629,9 +652,11 @@ table.stock-table {
             margin-bottom: 15px;
         }
     }
+
     .d-none-mobile {
         display: none;
     }
+
     .final-product-recipe {
         input {
             margin-bottom: 15px;
@@ -750,6 +775,7 @@ table.stock-table {
             padding-bottom: 10px;
         }
     }
+
     .checkbox-custom-label,
     .radio-custom-label {
         display: inline-block !important;
@@ -785,6 +811,7 @@ table.stock-table {
             display: none;
         }
     }
+
     .final-product-recipe {
         .width-30-percent {
             min-width: 100%;

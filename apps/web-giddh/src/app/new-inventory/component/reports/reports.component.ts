@@ -690,8 +690,9 @@ export class ReportsComponent implements OnInit {
      * @memberof ReportsComponent
      */
     public editGroup(element: any): void {
-        this.router.navigate(['/pages/inventory/v2', this.reportType?.toLowerCase(), this.moduleType?.toLowerCase(), 'edit', element?.stockGroup?.uniqueName]);
+        this.router.navigate(['/pages/inventory/v2', 'group', this.moduleType?.toLowerCase(), 'edit', element?.stockGroup?.uniqueName]);
     }
+
     /**
      *This will use for redirect to edit stock by reports
      *
@@ -699,8 +700,9 @@ export class ReportsComponent implements OnInit {
      * @memberof ReportsComponent
      */
     public editStock(element: any): void {
-        this.router.navigate(['/pages/inventory/v2', this.reportType?.toLowerCase(), this.moduleType?.toLowerCase(), 'edit', element?.stock?.uniqueName]);
+        this.router.navigate(['/pages/inventory/v2', 'stock', this.moduleType?.toLowerCase(), 'edit', element?.stock?.uniqueName]);
     }
+
     /**
      * This will use for redirect to edit variant by reports
      *

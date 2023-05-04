@@ -1258,7 +1258,7 @@
                                                                     <div class="sales-purchase-wrapper d-flex">
                                                                         <select-field
                                                                             [cssClass]="'form-control unit-rates'"
-                                                                            [name]="'variantPurchaseUnit' + j"
+                                                                            [name]="'variantPurchaseUnit' + i + '_' + j"
                                                                             [placeholder]="'Unit'"
                                                                             [options]="stockUnits"
                                                                             (selectedOption)="
@@ -1276,7 +1276,9 @@
                                                                                 'form-control text-right unit-amount'
                                                                             "
                                                                             [placeholder]="'0.00'"
-                                                                            [name]="'variantPurchaseUnitRate' + j"
+                                                                            [name]="
+                                                                                'variantPurchaseUnitRate' + i + '_' + j
+                                                                            "
                                                                             [(ngModel)]="variantPurchaseUnitRate.rate"
                                                                             [type]="'number'"
                                                                         ></text-field>
@@ -1332,7 +1334,7 @@
                                                                     <div class="sales-purchase-wrapper d-flex">
                                                                         <select-field
                                                                             [cssClass]="'form-control unit-rates'"
-                                                                            [name]="'variantSalesUnit' + j"
+                                                                            [name]="'variantSalesUnit' + i + '_' + j"
                                                                             [placeholder]="'Unit'"
                                                                             [options]="stockUnits"
                                                                             (selectedOption)="
@@ -1350,7 +1352,9 @@
                                                                                 'form-control text-right unit-amount'
                                                                             "
                                                                             [placeholder]="'0.00'"
-                                                                            [name]="'variantSalesUnitRate' + j"
+                                                                            [name]="
+                                                                                'variantSalesUnitRate' + i + '_' + j
+                                                                            "
                                                                             [(ngModel)]="variantSalesUnitRate.rate"
                                                                             [type]="'number'"
                                                                         ></text-field>

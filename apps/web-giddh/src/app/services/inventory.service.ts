@@ -1016,6 +1016,16 @@ export class InventoryService {
             stockUniqueName
         })));
     }
+
+    /**
+     * This will use for create stock in inventory v2
+     *
+     * @param {*} model
+     * @param {*} stockGroupUniqueName
+     * @param {string} [moduleType='']
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof InventoryService
+     */
     public createStock(model: any, stockGroupUniqueName: any, moduleType: string = ''): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + INVENTORY_API.CREATE_STOCK_V2;
@@ -1029,6 +1039,13 @@ export class InventoryService {
         }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
     }
 
+    /**
+     * This wil use for get stock in inventory v2
+     *
+     * @param {string} stockUniqueName
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof InventoryService
+     */
     public getStockV2(stockUniqueName: string): Observable<BaseResponse<any, any>> {
         const companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + INVENTORY_API.GET_STOCK_V2;
