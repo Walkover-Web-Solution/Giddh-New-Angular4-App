@@ -234,7 +234,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
             }
         });
 
-        if (this.stockForm.type === 'PRODUCT' || 'SERVICE') {
+        if (this.stockForm.type === 'PRODUCT' || this.stockForm.type === 'SERVICE') {
             this.getPurchaseAccounts();
             this.getSalesAccounts();
         }
