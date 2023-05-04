@@ -135,7 +135,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     /** This will auto select the option which is coming from url */
     public autoSelectSearchOption: boolean = false;
     /** This will hold if any chiplist selected on search bar */
-    public holdSearchChiplist: any;
+    public holdSearchChiplistValue: any;
 
     constructor(
         public dialog: MatDialog,
@@ -621,7 +621,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ReportFiltersComponent
      */
     public selectChiplistValue(option: any): void {
-        this.holdSearchChiplist = option;
+        this.holdSearchChiplistValue = option;
         this.stockReportRequest.page = 1;
         const selectOptionValue = option?.option?.value;
         if (option?.option?.value?.type === 'STOCK GROUP') {
@@ -815,8 +815,8 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ReportFiltersComponent
      */
     public editTransaction(): void {
-        let type = this.holdSearchChiplist?.option?.value?.type;
-        let uniqueName = this.holdSearchChiplist?.option?.value?.uniqueName
+        let type = this.holdSearchChiplistValue?.option?.value?.type;
+        let uniqueName = this.holdSearchChiplistValue?.option?.value?.uniqueName
         if (type === 'STOCK GROUP') {
             this.router.navigate(['/pages', 'inventory/v2', 'group', this.moduleType?.toLowerCase(), 'edit', uniqueName]);
         }

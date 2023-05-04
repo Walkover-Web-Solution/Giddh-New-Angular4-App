@@ -146,7 +146,7 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
     *
     * @memberof CreateUpdateGroupComponent
     */
-    public backClicked() {
+    public backClicked(): void {
         this.location.back();
     }
 

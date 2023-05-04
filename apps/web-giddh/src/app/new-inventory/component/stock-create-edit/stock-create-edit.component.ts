@@ -628,7 +628,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
      * @memberof StockCreateEditComponent
      */
     public deletePurchaseUnitPrice(unitRateIndex: number): void {
-        let unitRates = this.stockForm.purchaseAccountDetail.unitRates?.filter((data, index) => index !== unitRateIndex).map(data => { return data });
+        let unitRates = this.stockForm.purchaseAccountDetails.unitRates?.filter((data, index) => index !== unitRateIndex).map(data => { return data });
         this.stockForm.purchaseAccountDetails.unitRates = unitRates;
 
         if (unitRates?.length === 0) {
