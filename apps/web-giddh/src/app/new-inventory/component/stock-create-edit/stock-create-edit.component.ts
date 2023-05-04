@@ -525,6 +525,57 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
             };
             stockVariants.push(variantObj);
         });
+
+        if (!stockVariants?.length) {
+            stockVariants.push({
+                name: "",
+                archive: false,
+                uniqueName: undefined,
+                skuCode: undefined,
+                salesInformation: [
+                    {
+                        rate: undefined,
+                        stockUnitCode: undefined,
+                        stockUnitName: undefined,
+                        stockUnitUniqueName: undefined,
+                        accountUniqueName: ""
+                    }
+                ],
+                purchaseInformation: [
+                    {
+                        rate: undefined,
+                        stockUnitCode: undefined,
+                        stockUnitName: undefined,
+                        stockUnitUniqueName: undefined,
+                        accountUniqueName: ""
+                    }
+                ],
+                fixedAssetsInformation: [
+                    {
+                        rate: undefined,
+                        stockUnitCode: undefined,
+                        stockUnitName: undefined,
+                        stockUnitUniqueName: undefined,
+                        accountUniqueName: ""
+                    }
+                ],
+                warehouseBalance: [
+                    {
+                        warehouse: {
+                            name: undefined,
+                            uniqueName: undefined
+                        },
+                        stockUnit: {
+                            name: "",
+                            code: ""
+                        },
+                        openingQuantity: 0,
+                        openingAmount: 0
+                    }
+                ]
+            });
+        }
+
         this.stockForm.variants = stockVariants;
     }
 
