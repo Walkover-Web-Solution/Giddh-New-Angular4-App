@@ -46,14 +46,15 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
     public currentBranch: any = { name: '', uniqueName: '' };
     /** Stores the current company */
     public activeCompany: any;
-    /** Stores the current organization type */
-    public currentOrganizationType: OrganizationType;
     /* This will hold local JSON data */
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** Stores the current organization type */
+    public currentOrganizationType: OrganizationType;
     /* This will hold if it's mobile screen or not */
     public isMobileScreen: boolean = false;
+
     constructor(
         private router: Router,
         private activeRoute: ActivatedRoute,
@@ -253,6 +254,7 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
                 }
                 this.currentBranch.uniqueName = currentBranchUniqueName ? currentBranchUniqueName : (this.currentBranch ? this.currentBranch.uniqueName : "");
                 this.selectedType = currentTimeFilter ? currentTimeFilter.toLowerCase() : this.selectedType;
+                this.activeFinacialYr = activeFinancialYear;
                 this.populateRecords(this.selectedType, this.selectedMonth);
                 this.salesRegisterTotal.particular = this.activeFinacialYr?.uniqueName;
             }
@@ -396,16 +398,6 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Releases memory
-     *
-     * @memberof PurchaseRegisterExpandComponent
-     */
-    public ngOnDestroy(): void {
-        this.destroyed$.next(true);
-        this.destroyed$.complete();
-    }
-
-    /*
      * Callback for translation response complete
      *
      * @param {boolean} event
@@ -417,6 +409,16 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
             this.setCurrentFY();
             this.getSelectedDuration();
         }
+    }
+
+    /**
+     * Releases memory
+     *
+     * @memberof PurchaseRegisterExpandComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 
     /**

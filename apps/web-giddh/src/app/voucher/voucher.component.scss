@@ -573,6 +573,13 @@ textarea:focus {
     inset: 0;
     width: 100%;
 }
+.delete-image {
+    width: 3%;
+    position: absolute;
+    right: 25%;
+    top: 55px;
+    cursor: pointer;
+}
 
 .delete-image {
     width: 3%;
@@ -2171,9 +2178,6 @@ span.eligible-ITC {
             background: var(--color-dropdown-list-hover-background) !important;
         }
     }
-}
-
-.bottom-dropdown-menu {
 }
 
 @media (max-width: 320px) {

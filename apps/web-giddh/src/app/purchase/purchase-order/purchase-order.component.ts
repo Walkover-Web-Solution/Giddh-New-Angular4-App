@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef, TemplateRef, OnDestroy, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, ViewChild, ElementRef, TemplateRef, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal'
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { BreakpointObserver } from '@angular/cdk/layout';
@@ -26,7 +26,7 @@ import { cloneDeep } from '../../lodash-optimized';
     styleUrls: ['./purchase-order.component.scss']
 })
 
-export class PurchaseOrderComponent implements OnInit, OnDestroy {
+export class PurchaseOrderComponent implements OnDestroy {
     /* Datepicker component */
     @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
     /* Input element for column search */
@@ -138,6 +138,8 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
     public voucherApiVersion: 1 | 2;
     /** Decimal places from company settings */
     public giddhBalanceDecimalPlaces: number = 2;
+    /** This will hold po for bulk convert */
+    public selectedPurchaseOrders: any[] = [];
 
     constructor(private modalService: BsModalService, private generalService: GeneralService, private breakPointObservar: BreakpointObserver, public purchaseOrderService: PurchaseOrderService, private store: Store<AppState>, private toaster: ToasterService, public route: ActivatedRoute, private router: Router, public purchaseOrderActions: PurchaseOrderActions, private settingsUtilityService: SettingsUtilityService, private warehouseActions: WarehouseActions) {
         this.activeCompanyUniqueName$ = this.store.pipe(select(state => state.session.companyUniqueName), (takeUntil(this.destroyed$)));
@@ -168,7 +170,7 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
      *
      * @memberof PurchaseOrderComponent
      */
-    public ngOnInit(): void {
+    public initPurchaseOrders(): void {
         this.breakPointObservar.observe([
             '(max-width: 767px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
@@ -311,7 +313,7 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
 
                         if (purchaseOrders && purchaseOrders.items && purchaseOrders.items.length > 0) {
                             purchaseOrders.items.map(item => {
-                                item.isSelected = this.generalService.checkIfValueExistsInArray(this.selectedPo, item?.uniqueName);
+                                item.isSelected = this.generalService.checkIfObjectExistsInArray(this.selectedPo, { poUniqueName: item?.uniqueName, orderNumber: item?.voucherNumber });
                                 let grandTotalConversionRate = 0, grandTotalAmountForCompany, grandTotalAmountForAccount;
                                 grandTotalAmountForCompany = Number(item?.grandTotal?.amountForCompany) || 0;
                                 grandTotalAmountForAccount = Number(item?.grandTotal?.amountForAccount) || 0;
@@ -319,7 +321,9 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
                                 if (grandTotalAmountForCompany && grandTotalAmountForAccount) {
                                     grandTotalConversionRate = +((grandTotalAmountForCompany / grandTotalAmountForAccount) || 0).toFixed(this.giddhBalanceDecimalPlaces);
                                 }
-                                item.grandTotalTooltipText = `In ${item.grandTotal?.currencyForCompany?.code}: ${grandTotalAmountForCompany}<br />(Conversion Rate: ${grandTotalConversionRate})`;
+                                let currencyConversion = this.localeData?.currency_conversion;
+                                currencyConversion = currencyConversion?.replace("[BASE_CURRENCY]", item.grandTotal?.currencyForCompany?.code)?.replace("[AMOUNT]", grandTotalAmountForCompany)?.replace("[CONVERSION_RATE]", grandTotalConversionRate);
+                                item.grandTotalTooltipText = currencyConversion;
                                 return item;
                             });
                         }
@@ -523,9 +527,9 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
             item.isSelected = type;
 
             if (this.allItemsSelected) {
-                this.selectedPo = this.generalService.addValueInArray(this.selectedPo, item?.uniqueName);
+                this.selectedPo = this.generalService.addObjectInArray(this.selectedPo, { poUniqueName: item?.uniqueName, orderNumber: item?.voucherNumber });
             } else {
-                this.selectedPo = this.generalService.removeValueFromArray(this.selectedPo, item?.uniqueName);
+                this.selectedPo = this.generalService.removeObjectFromArray(this.selectedPo, { poUniqueName: item?.uniqueName, orderNumber: item?.voucherNumber });
             }
         });
     }
@@ -540,9 +544,9 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
     public toggleItem(item: any, action: boolean): void {
         item.isSelected = action;
         if (action) {
-            this.selectedPo = this.generalService.addValueInArray(this.selectedPo, item?.uniqueName);
+            this.selectedPo = this.generalService.addObjectInArray(this.selectedPo, { poUniqueName: item?.uniqueName, orderNumber: item?.voucherNumber });
         } else {
-            this.selectedPo = this.generalService.removeValueFromArray(this.selectedPo, item?.uniqueName);
+            this.selectedPo = this.generalService.removeObjectFromArray(this.selectedPo, { poUniqueName: item?.uniqueName, orderNumber: item?.voucherNumber });
             this.allItemsSelected = false;
         }
     }
@@ -786,12 +790,12 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
     public translationComplete(event: any): void {
         if (event) {
             this.translationLoaded = true;
-
             this.bulkUpdateFields = [
                 { label: this.localeData?.order_date, value: BULK_UPDATE_FIELDS.purchasedate },
                 { label: this.localeData?.expected_delivery_date, value: BULK_UPDATE_FIELDS.duedate },
                 { label: this.commonLocaleData?.app_warehouse, value: BULK_UPDATE_FIELDS.warehouse }
             ];
+            this.initPurchaseOrders();
         }
     }
 
@@ -805,8 +809,8 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
     public getDeliveryDaysText(dueDays: number): string {
         let text = "";
 
-        if(dueDays > 0) {
-            if(dueDays === 1) {
+        if (dueDays > 0) {
+            if (dueDays === 1) {
                 text = this.localeData?.delivery_in_day;
             } else {
                 text = this.localeData?.delivery_in_days;
@@ -818,5 +822,45 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
         }
 
         return text;
+    }
+
+    /**
+     * Opens the bulk convert popup
+     *
+     * @param {TemplateRef<any>} template
+     * @param {*} [purchaseOrder]
+     * @memberof PurchaseOrderComponent
+     */
+    public openBulkConvert(template: TemplateRef<any>, purchaseOrder?: any): void {
+        if (this.selectedPo?.length > 0 || purchaseOrder) {
+            if (purchaseOrder) {
+                this.selectedPurchaseOrders = [{ poUniqueName: purchaseOrder?.uniqueName, orderNumber: purchaseOrder?.voucherNumber }];
+                this.modalRef = this.modalService.show(
+                    template,
+                    Object.assign({}, { class: 'modal-sm' })
+                );
+            } else {
+                this.selectedPurchaseOrders = cloneDeep(this.selectedPo);
+                this.modalRef = this.modalService.show(
+                    template,
+                    Object.assign({}, { class: 'modal-sm' })
+                );
+            }
+        } else {
+            this.toaster.errorToast(this.localeData?.po_selection_error);
+        }
+    }
+
+    /**
+     * Closes the bulk convert popup and refreshes po list if found true in event
+     *
+     * @param {*} event
+     * @memberof PurchaseOrderComponent
+     */
+    public closeBulkConvertPopup(event: any): void {
+        this.modalRef?.hide();
+        if (event) {
+            this.getAllPurchaseOrders(true);
+        }
     }
 }

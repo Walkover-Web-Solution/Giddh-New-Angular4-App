@@ -10,7 +10,6 @@ import { GIDDH_NEW_DATE_FORMAT_UI, GIDDH_DATE_FORMAT } from '../../shared/helper
 import { purchaseOrderStatus } from "../../shared/helpers/purchaseOrderStatus";
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
 
-
 @Component({
     selector: 'purchase-advance-search',
     templateUrl: './purchase-advance-search.component.html',

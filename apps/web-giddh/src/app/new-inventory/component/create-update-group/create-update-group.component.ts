@@ -240,6 +240,7 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
                 if (response?.status === "success") {
                     this.toggleLoader(false);
                     this.getStockGroups();
+                    this.selectedGroupTaxes();
                     this.toaster.clearAllToaster();
                     this.toaster.successToast(this.localeData?.stock_group_update);
                     this.backClicked();
@@ -255,14 +256,16 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
                 if (response?.status === "success") {
                     this.toggleLoader(false);
                     this.getStockGroups();
+                    this.resetTaxes();
                     this.resetGroupForm();
                     this.toaster.clearAllToaster();
                     this.toaster.successToast(this.localeData?.stock_group_create);
                 } else {
-                    this.toaster.clearAllToaster();
                     this.toggleLoader(false);
+                    this.toaster.clearAllToaster();
                     this.toaster.errorToast(response?.message);
                 }
+                this.changeDetection.detectChanges();
             });
         }
     }
@@ -337,6 +340,35 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
         this.stockGroupName = '';
         this.stockGroupUniqueName = '';
         this.selectedTaxes = [];
+        this.changeDetection.detectChanges();
+    }
+
+    /**
+     * This will reset the taxes list
+     *
+     * @memberof CreateUpdateGroupComponent
+     */
+    public resetTaxes(): void {
+        this.taxes?.forEach(tax => {
+            tax.isChecked = false;
+            tax.isDisabled = false;
+            return tax;
+        });
+        this.changeDetection.detectChanges();
+    }
+
+    /**
+     * This will use for select group tax on update
+     *
+     * @memberof CreateUpdateGroupComponent
+     */
+    public selectedGroupTaxes(): void {
+        this.taxes?.forEach(tax => {
+            if (tax?.isChecked) {
+                this.selectTax(tax);
+            }
+            return tax;
+        });
         this.changeDetection.detectChanges();
     }
 

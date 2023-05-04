@@ -457,6 +457,7 @@ export interface GenericRequestForGenerateSCD extends GenericRequest {
     voucherAdjustments?: VoucherAdjustments;
     attachedFileName?: string;
     attachedFiles?: Array<string>;
+    einvoiceGenerated?: boolean;
 }
 
 /**
@@ -584,6 +585,7 @@ export class VoucherClass {
     public purchaseOrderDetails?: any;
     public deposit?: any;
     public exchangeRate?: number;
+    public einvoiceGenerated?: boolean;
 
     constructor() {
         this.accountDetails = new AccountDetailsClass();
