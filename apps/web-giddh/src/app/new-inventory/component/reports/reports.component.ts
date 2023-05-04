@@ -635,27 +635,28 @@ export class ReportsComponent implements OnInit {
 
         if (this.reportType === InventoryReportType.group) {
             if (element?.stockGroupHasChild) {
-                currentUrl = '/pages/inventory/v2/reports/group/' + element?.stockGroup?.uniqueName;
+                currentUrl = '/pages/inventory/v2/reports/' + this.moduleType?.toLowerCase() + '/group/' + element?.stockGroup?.uniqueName;
                 this.storeFilters[currentUrl] = { stockReportRequest: stockReportRequest, balanceStockReportRequest: balanceStockReportRequest, todaySelected: this.todaySelected, showClearFilter: this.showClearFilter };
                 this.store.dispatch(this.commonAction.setFilters(this.storeFilters));
-                this.router.navigate(['/pages', 'inventory/v2', 'reports', this.moduleType?.toLowerCase(), 'group', element?.stockGroup?.uniqueName]);
+                this.router.navigate(['/pages/inventory/v2/reports/', this.moduleType?.toLowerCase(), 'group', element?.stockGroup?.uniqueName]);
             } else {
-                currentUrl = '/pages/inventory/v2/reports/stock/' + element?.stockGroup?.uniqueName;
+                currentUrl = '/pages/inventory/v2/reports/' + this.moduleType?.toLowerCase() + '/stock/' + element?.stockGroup?.uniqueName;
                 this.storeFilters[currentUrl] = { stockReportRequest: stockReportRequest, balanceStockReportRequest: balanceStockReportRequest, todaySelected: this.todaySelected, showClearFilter: this.showClearFilter };
                 this.store.dispatch(this.commonAction.setFilters(this.storeFilters));
-                this.router.navigate(['/pages', 'inventory/v2', 'reports', this.moduleType?.toLowerCase(), 'stock', element?.stockGroup?.uniqueName]);
+                this.router.navigate(['/pages/inventory/v2/reports/', this.moduleType?.toLowerCase(), 'stock', element?.stockGroup?.uniqueName]);
             }
         } else if (this.reportType === InventoryReportType.stock) {
-            currentUrl = '/pages/inventory/v2/reports/variant/' + element?.stock?.uniqueName;
+            currentUrl = '/pages/inventory/v2/reports/' + this.moduleType?.toLowerCase() + '/variant/' + element?.stock?.uniqueName;
             this.storeFilters[currentUrl] = { stockReportRequest: stockReportRequest, balanceStockReportRequest: balanceStockReportRequest, todaySelected: this.todaySelected, showClearFilter: this.showClearFilter };
             this.store.dispatch(this.commonAction.setFilters(this.storeFilters));
-            this.router.navigate(['/pages', 'inventory/v2', 'reports', this.moduleType?.toLowerCase(), 'variant', element?.stock?.uniqueName]);
+            this.router.navigate(['/pages/inventory/v2/reports/', this.moduleType?.toLowerCase(), 'variant', element?.stock?.uniqueName]);
         } else if (this.reportType === InventoryReportType.variant) {
-            currentUrl = '/pages/inventory/v2/reports/transaction/' + element?.variant?.uniqueName;
+            currentUrl = '/pages/inventory/v2/reports/' + this.moduleType?.toLowerCase() + '/transaction/' + element?.variant?.uniqueName;
             this.storeFilters[currentUrl] = { stockReportRequest: stockReportRequest, balanceStockReportRequest: balanceStockReportRequest, todaySelected: this.todaySelected, showClearFilter: this.showClearFilter };
             this.store.dispatch(this.commonAction.setFilters(this.storeFilters));
-            this.router.navigate(['/pages', 'inventory/v2', 'reports', this.moduleType?.toLowerCase(), 'transaction', element?.variant?.uniqueName]);
+            this.router.navigate(['/pages/inventory/v2/reports/', this.moduleType?.toLowerCase(), 'transaction', element?.variant?.uniqueName]);
         }
+
     }
 
     /**
@@ -689,7 +690,7 @@ export class ReportsComponent implements OnInit {
      * @memberof ReportsComponent
      */
     public editGroup(element: any): void {
-        this.router.navigate(['/pages', 'inventory/v2', this.reportType?.toLowerCase(), this.moduleType?.toLowerCase(), 'edit', element?.stockGroup?.uniqueName]);
+        this.router.navigate(['/pages/inventory/v2', this.reportType?.toLowerCase(), this.moduleType?.toLowerCase(), 'edit', element?.stockGroup?.uniqueName]);
     }
     /**
      *This will use for redirect to edit stock by reports
@@ -698,7 +699,7 @@ export class ReportsComponent implements OnInit {
      * @memberof ReportsComponent
      */
     public editStock(element: any): void {
-        this.router.navigate(['/pages', 'inventory/v2', this.reportType?.toLowerCase(), this.moduleType?.toLowerCase(), 'edit', element?.stock?.uniqueName]);
+        this.router.navigate(['/pages/inventory/v2', this.reportType?.toLowerCase(), this.moduleType?.toLowerCase(), 'edit', element?.stock?.uniqueName]);
     }
     /**
      * This will use for redirect to edit variant by reports
@@ -707,9 +708,7 @@ export class ReportsComponent implements OnInit {
      * @memberof ReportsComponent
      */
     public editVariant(element: any): void {
-        console.log(this.reportType, this.moduleType);
-
-        this.router.navigate(['/pages', 'inventory/v2', 'stock', this.moduleType?.toLowerCase(), 'edit', element?.stock?.uniqueName]);
+        this.router.navigate(['/pages/inventory/v2', 'stock', this.moduleType?.toLowerCase(), 'edit', element?.stock?.uniqueName]);
     }
 
     /**

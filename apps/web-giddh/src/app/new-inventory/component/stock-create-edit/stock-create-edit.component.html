@@ -371,15 +371,13 @@
                                             <div class="row">
                                                 <div class="col-12 col-lg-11">
                                                     <div class="row">
-                                                        <div class="col-xl-6 col-12 pl-4">
-                                                            <div
-                                                                classs="purchase-informqegaegegtion"
-                                                                *ngIf="
-                                                                    stockForm.type === 'FIXED_ASSETS'
-                                                                        ? 'FIXEDASSETS'
-                                                                        : ''
-                                                                "
-                                                            >
+                                                        <div
+                                                            class="col-xl-6 col-12 pl-4 fixed-assets"
+                                                            *ngIf="
+                                                                stockForm.type === 'FIXED_ASSETS' ? 'FIXEDASSETS' : ''
+                                                            "
+                                                        >
+                                                            <div class="purchase-information account-tab-1">
                                                                 <div class="select-puchase-info mr-b15">
                                                                     <mat-checkbox
                                                                         color="primary"
@@ -398,11 +396,11 @@
                                                                     <div class="col-sm-6 col-lg-7 pl-0 mr-b15">
                                                                         <select-field
                                                                             [cssClass]="'form-control'"
-                                                                            [name]="'purchaseAccount'"
+                                                                            [name]="'fixedAssetsAccounts'"
                                                                             [placeholder]="localeData?.linked_accounts"
                                                                             [options]="fixedAssetsAccounts"
                                                                             (selectedOption)="
-                                                                                stockForm.fixedAssetsAccountDetails.accountUniqueName =
+                                                                                stockForm.fixedAssetAccountDetails.accountUniqueName =
                                                                                     $event?.value;
                                                                                 stockForm.variants[0].fixedAssetsInformation.accountUniqueName =
                                                                                     $event?.value
@@ -570,7 +568,7 @@
                                                             "
                                                         >
                                                             <div class="col-xl-6 col-12">
-                                                                <div class="purchase-information">
+                                                                <div class="purchase-information account-tab-3">
                                                                     <div class="select-puchase-info mr-b15">
                                                                         <mat-checkbox
                                                                             color="primary"
@@ -1184,6 +1182,12 @@
                                                             >
                                                                 Sales Unit Rates
                                                             </th>
+                                                            <th
+                                                                class="sales-purchase-info table-heading-color"
+                                                                *ngIf="isFixedAssetsInformationEnabled"
+                                                            >
+                                                                Fixed Assets Unit Rates
+                                                            </th>
                                                             <th class="text-center unit-name table-heading-color">
                                                                 Is Rate Tax Inclusive?
                                                             </th>
@@ -1384,22 +1388,128 @@
                                                                     </div>
                                                                 </ng-container>
                                                             </td>
+                                                            <td
+                                                                class="sales-purchase-info fixed-assets-unit-rates"
+                                                                *ngIf="isFixedAssetsInformationEnabled"
+                                                            >
+                                                                <ng-container
+                                                                    *ngFor="
+                                                                        let variantFixedAssetsUnitRate of variant?.fixedAssetsInformation;
+                                                                        let j = index
+                                                                    "
+                                                                >
+                                                                    <div class="sales-purchase-wrapper d-flex">
+                                                                        <select-field
+                                                                            [cssClass]="'form-control unit-rates'"
+                                                                            [name]="'variantFixedAssetsUnit' + j"
+                                                                            [placeholder]="'Unit'"
+                                                                            [options]="stockUnits"
+                                                                            (selectedOption)="
+                                                                                selectVariantFixedAssetsUnit(
+                                                                                    variantFixedAssetsUnitRate,
+                                                                                    $event
+                                                                                )
+                                                                            "
+                                                                            [defaultValue]="
+                                                                                variantFixedAssetsUnitRate?.stockUnitName
+                                                                            "
+                                                                        ></select-field>
+                                                                        <text-field
+                                                                            [cssClass]="
+                                                                                'form-control text-right unit-amount'
+                                                                            "
+                                                                            [placeholder]="'0.00'"
+                                                                            [name]="'variantFixedAssetsUnitRate' + j"
+                                                                            [(ngModel)]="
+                                                                                variantFixedAssetsUnitRate.rate
+                                                                            "
+                                                                            [type]="'number'"
+                                                                        ></text-field>
+
+                                                                        <button
+                                                                            mat-icon-button
+                                                                            role="button"
+                                                                            class="icon-button-remove-sales"
+                                                                            type="button"
+                                                                            (click)="
+                                                                                deleteVariantFixedAssetsUnitPrice(
+                                                                                    variant,
+                                                                                    j
+                                                                                )
+                                                                            "
+                                                                            *ngIf="
+                                                                                variant.fixedAssetsInformation?.length >
+                                                                                1
+                                                                            "
+                                                                        >
+                                                                            <i class="icon-trash"></i>
+                                                                        </button>
+
+                                                                        <button
+                                                                            mat-icon-button
+                                                                            class="icon-button-add-sales"
+                                                                            role="button"
+                                                                            type="button"
+                                                                            disableRipple
+                                                                            (click)="
+                                                                                addNewVariantFixedAssetsUnitPrice(
+                                                                                    variant
+                                                                                )
+                                                                            "
+                                                                            *ngIf="
+                                                                                j ===
+                                                                                variant.fixedAssetsInformation?.length -
+                                                                                    1
+                                                                            "
+                                                                        >
+                                                                            <span class="add-new-text-container">
+                                                                                <i class="icon-plus"></i>
+                                                                            </span>
+                                                                        </button>
+                                                                    </div>
+                                                                </ng-container>
+                                                            </td>
                                                             <td class="text-center unit-name">
-                                                                <mat-checkbox
-                                                                    color="primary"
-                                                                    name="variantSalesTaxInclusive{{ i }}"
-                                                                    [(ngModel)]="variant.salesTaxInclusive"
-                                                                    [matTooltip]="'Is Sales Rate Tax Inclusive?'"
-                                                                    matTooltipPosition="above"
-                                                                ></mat-checkbox>
-                                                                <mat-checkbox
-                                                                    class="mr-l2"
-                                                                    color="primary"
-                                                                    name="variantPurchaseTaxInclusive{{ i }}"
-                                                                    [(ngModel)]="variant.purchaseTaxInclusive"
-                                                                    [matTooltip]="'Is Purchase Rate Tax Inclusive?'"
-                                                                    matTooltipPosition="above"
-                                                                ></mat-checkbox>
+                                                                <ng-container
+                                                                    *ngIf="
+                                                                        stockForm.type === 'PRODUCT' ||
+                                                                        stockForm.type === 'SERVICE'
+                                                                    "
+                                                                >
+                                                                    <mat-checkbox
+                                                                        color="primary"
+                                                                        name="variantSalesTaxInclusive{{ i }}"
+                                                                        [(ngModel)]="variant.salesTaxInclusive"
+                                                                        [matTooltip]="'Is Sales Rate Tax Inclusive?'"
+                                                                        matTooltipPosition="above"
+                                                                    ></mat-checkbox>
+                                                                    <mat-checkbox
+                                                                        class="mr-l2"
+                                                                        color="primary"
+                                                                        name="variantPurchaseTaxInclusive{{ i }}"
+                                                                        [(ngModel)]="variant.purchaseTaxInclusive"
+                                                                        [matTooltip]="'Is Purchase Rate Tax Inclusive?'"
+                                                                        matTooltipPosition="above"
+                                                                    ></mat-checkbox>
+                                                                </ng-container>
+                                                                <ng-container
+                                                                    *ngIf="
+                                                                        stockForm.type === 'FIXED_ASSETS'
+                                                                            ? 'FIXEDASSETS'
+                                                                            : ''
+                                                                    "
+                                                                >
+                                                                    <mat-checkbox
+                                                                        color="primary"
+                                                                        name="variantFixedAssetsTaxInclusive{{ i }}"
+                                                                        [(ngModel)]="variant.fixedAssetsTaxInclusive"
+                                                                        [checked]="variant.fixedAssetsTaxInclusive"
+                                                                        [matTooltip]="
+                                                                            'Is Fixed Assets Rate Tax Inclusive?'
+                                                                        "
+                                                                        matTooltipPosition="above"
+                                                                    ></mat-checkbox>
+                                                                </ng-container>
                                                             </td>
                                                             <td class="text-center archive">
                                                                 <mat-checkbox
@@ -2278,7 +2388,7 @@
                                     <div class="col-xl-8">
                                         <div class="row">
                                             <div class="col-xl-6 col-12">
-                                                <div class="purchase-information">
+                                                <div class="purchase-information account-tab-4">
                                                     <div class="select-puchase-info mr-b15">
                                                         <mat-checkbox
                                                             color="primary"
@@ -2687,7 +2797,7 @@
                                                 <div class="col-xl-8">
                                                     <div class="row">
                                                         <div class="col-xl-6 col-12">
-                                                            <div class="purchase-information">
+                                                            <div class="purchase-information account-tab">
                                                                 <div class="select-puchase-info mr-b15">
                                                                     <mat-checkbox
                                                                         color="primary"
