@@ -214,12 +214,6 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
 
         this.getTaxes();
         this.getStockUnits();
-        if (this.stockForm.type === 'PRODUCT' || 'SERVICE') {
-            this.getPurchaseAccounts();
-            this.getSalesAccounts();
-        } else {
-            this.getFixedAssetsAccounts();
-        }
         this.getWarehouses();
         this.getCustomFields();
 
@@ -239,6 +233,15 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 }
             }
         });
+
+        if (this.stockForm.type === 'PRODUCT' || 'SERVICE') {
+            this.getPurchaseAccounts();
+            this.getSalesAccounts();
+        }
+
+        if (this.stockForm.type === 'FIXED_ASSETS') {
+            this.getFixedAssetsAccounts();
+        }
     }
 
 
@@ -973,40 +976,34 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 this.isVariantAvailable = (this.stockForm?.variants?.length > 0) ? true : false;
                 this.stockGroupUniqueName = response.body.stockGroup?.uniqueName;
                 this.defaultStockGroupUniqueName = response.body.stockGroup?.uniqueName;
-                if (response.body.purchaseAccountDetails) {
-                    this.stockForm.purchaseAccountDetails = response.body.purchaseAccountDetails;
-                }
-                if (!this.stockForm.purchaseAccountDetails?.unitRates?.length) {
-                    this.stockForm.purchaseAccountDetails.unitRates.push({
-                        rate: null,
-                        stockUnitCode: null,
-                        stockUnitUniqueName: null
-                    });
-                }
-                if (response.body.salesAccountDetails) {
-                    this.stockForm.salesAccountDetails = response.body.salesAccountDetails;
-                }
-                if (!this.stockForm.salesAccountDetails?.unitRates?.length) {
-                    this.stockForm.salesAccountDetails.unitRates.push({
-                        rate: null,
-                        stockUnitCode: null,
-                        stockUnitUniqueName: null
-                    });
-                }
-                if (response.body.fixedAssetAccountDetails) {
-                    this.stockForm.fixedAssetAccountDetails = response.body.fixedAssetAccountDetails;
-                }
-                if (!this.stockForm.fixedAssetAccountDetails?.unitRates?.length) {
-                    this.stockForm.fixedAssetAccountDetails.unitRates.push({
-                        rate: null,
-                        stockUnitCode: null,
-                        stockUnitUniqueName: null
-                    });
-                }
-                this.isPurchaseInformationEnabled = response?.body?.purchaseAccountUniqueNames;
-                this.isSalesInformationEnabled = response?.body?.salesAccountUniqueNames;
-                this.isFixedAssetsInformationEnabled = response?.body?.fixedAssetsAccountUniqueNames
+                this.isPurchaseInformationEnabled = response?.body?.purchaseAccountUniqueNames ? true : false;
+                this.isSalesInformationEnabled = response?.body?.salesAccountUniqueNames ? true : false;
+                this.isFixedAssetsInformationEnabled = response?.body?.fixedAssetsAccountUniqueNames ? true : false;
                 this.stockForm.variants = this.stockForm.variants?.map(variant => {
+                    this.stockForm.purchaseAccountDetails = variant?.purchaseAccountDetails;
+                    this.stockForm.salesAccountDetails = variant?.salesAccountDetails;
+                    this.stockForm.fixedAssetAccountDetails = variant?.fixedAssetAccountDetails;
+                    if (!variant?.salesAccountDetails?.unitRates?.length) {
+                        this.stockForm.salesAccountDetails?.unitRates.push({
+                            rate: null,
+                            stockUnitCode: null,
+                            stockUnitUniqueName: null
+                        });
+                    }
+                    if (!variant?.purchaseAccountDetails?.unitRates?.length) {
+                        this.stockForm.purchaseAccountDetails?.unitRates.push({
+                            rate: null,
+                            stockUnitCode: null,
+                            stockUnitUniqueName: null
+                        });
+                    }
+                    if (!variant?.fixedAssetAccountDetails?.unitRates?.length) {
+                        this.stockForm.fixedAssetAccountDetails?.unitRates.push({
+                            rate: null,
+                            stockUnitCode: null,
+                            stockUnitUniqueName: null
+                        });
+                    }
                     variant['purchaseInformation'] = variant?.purchaseAccountDetails?.unitRates;
                     variant['salesInformation'] = variant?.salesAccountDetails?.unitRates;
                     variant['fixedAssetsInformation'] = variant?.fixedAssetAccountDetails?.unitRates;
