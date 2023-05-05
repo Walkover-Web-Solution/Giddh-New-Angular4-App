@@ -137,8 +137,8 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
             if (response?.length > 0) {
                 this.taxes = response || [];
             }
+            this.changeDetection.detectChanges();
         });
-        this.changeDetection.detectChanges();
     }
 
     /**
@@ -224,6 +224,7 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
             }
         }
         this.selectedTaxes = this.taxTempArray.map(tax => tax?.uniqueName);
+        this.changeDetection.detectChanges();
     }
 
     /**
@@ -233,9 +234,9 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
     */
     public saveGroup(): void {
         this.groupForm.controls['parentStockGroupUniqueName'].setValue(this.stockGroupUniqueName);
-        this.toggleLoader(true);
+        this.groupForm.controls['type'].setValue(this.stockType);
         if (this.groupUniqueName) {
-            this.groupForm.controls['type'].setValue(this.stockType);
+            this.toggleLoader(true);
             this.inventoryService.UpdateStockGroup(this.groupForm?.value, this.groupUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response?.status === "success") {
                     this.toggleLoader(false);
@@ -245,13 +246,15 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
                     this.toaster.successToast(this.localeData?.stock_group_update);
                     this.backClicked();
                 } else {
-                    this.toaster.clearAllToaster();
                     this.toggleLoader(false);
+                    this.toaster.clearAllToaster();
                     this.toaster.errorToast(response?.message);
                 }
+                this.changeDetection.detectChanges();
             });
+
         } else {
-            this.groupForm.controls['type'].setValue(this.stockType);
+            this.toggleLoader(true);
             this.inventoryService.CreateStockGroup(this.groupForm?.value).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response?.status === "success") {
                     this.toggleLoader(false);
@@ -430,6 +433,7 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
             } else {
                 this.toggleLoader(false);
                 this.toaster.showSnackBar("error", response?.message);
+                this.changeDetection.detectChanges();
             }
             this.changeDetection.detectChanges();
         });
