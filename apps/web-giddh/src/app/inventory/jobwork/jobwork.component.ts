@@ -627,7 +627,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
     *To show the datepicker
     *
     * @param {*} element
-    * @memberof AuditLogsFormComponent
+    * @memberof JobworkComponent
     */
     public showGiddhDatepicker(element: any): void {
         if (element) {
@@ -642,7 +642,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
     /**
      * This will hide the datepicker
      *
-     * @memberof AuditLogsFormComponent
+     * @memberof JobworkComponent
      */
     public hideGiddhDatepicker(): void {
         this.modalRef.hide();
@@ -652,7 +652,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
      * Call back function for date/range selection in datepicker
      *
      * @param {*} value
-     * @memberof AuditLogsFormComponent
+     * @memberof JobworkComponent
      */
     public dateSelectedCallback(value?: any): void {
         if (value && value.event === "cancel") {
