@@ -8,6 +8,8 @@
     <div class="wrapper">
         <!-- reverse charge transction start (make it functional by developer end) -->
         <ng-container *ngTemplateOutlet="rcmEntryCheckbox"></ng-container>
+        <!-- Variant dropdown for stock selection -->
+        <ng-container *ngTemplateOutlet="variantDropdown"></ng-container>
         <!-- reverse charge transction end  -->
         <!--  tourist scheme template start      -->
         <ng-container *ngTemplateOutlet="touristSchemeTemplate"></ng-container>
@@ -1170,6 +1172,20 @@
                 (submitClicked)="getAdjustedPaymentData($event)"
             >
             </advance-receipt-adjustment-component>
+        </div>
+    </div>
+</ng-template>
+<ng-template #variantDropdown>
+    <div class="col-md-3 mb-2 p-0">
+        <div *ngIf="currentTxn?.selectedAccount?.stock">
+            <label>{{ localeData?.select_variant }}</label>
+            <sh-select
+                [disabled]="isReadOnly"
+                [class.disabled-ledger]="isReadOnly"
+                [(ngModel)]="selectedWarehouse"
+                [placeholder]="localeData?.select_variant"
+                [options]="warehouses"
+            ></sh-select>
         </div>
     </div>
 </ng-template>
