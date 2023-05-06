@@ -9,14 +9,16 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 import { debounceTime, distinctUntilChanged, publishReplay, refCount, take, takeUntil } from 'rxjs/operators';
 import { ToasterService } from '../../services/toaster.service';
 import { InventoryService } from '../../services/inventory.service';
-import { ModalDirective } from 'ngx-bootstrap/modal';
+import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable, ReplaySubject } from 'rxjs';
 import { InvViewService } from '../inv.view.service';
 import { ShSelectComponent } from '../../theme/ng-virtual-select/sh-select.component';
 import { IStocksItem } from "../../models/interfaces/stocks-item.interface";
 import { DaterangePickerComponent } from '../../theme/ng2-daterangepicker/daterangepicker.component';
-import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
+import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
+import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
+import { GeneralService } from '../../services/general.service';
 
 @Component({
     selector: 'jobwork',
@@ -38,9 +40,9 @@ import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 export class JobworkComponent implements OnInit, OnDestroy {
     public asideTransferPaneState: string = 'out';
     @ViewChild('advanceSearchModel', { static: true }) public advanceSearchModel: ModalDirective;
-    @ViewChild('senderName', { static: true }) public senderName: ElementRef;
-    @ViewChild('receiverName', { static: true }) public receiverName: ElementRef;
-    @ViewChild('productName', { static: true }) public productName: ElementRef;
+    @ViewChild('senderName', { static: false }) public senderName: ElementRef;
+    @ViewChild('receiverName', { static: false }) public receiverName: ElementRef;
+    @ViewChild('productName', { static: false }) public productName: ElementRef;
     @ViewChild('comparisionFilter', { static: true }) public comparisionFilter: ShSelectComponent;
     @ViewChild(DaterangePickerComponent, { static: true }) public datePicker: DaterangePickerComponent;
 
@@ -79,41 +81,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
             "checked": true
         }
     ];
-    public datePickerOptions: any = {
-        locale: {
-            applyClass: 'btn-green',
-            applyLabel: 'Go',
-            fromLabel: 'From',
-            format: 'D-MMM-YY',
-            toLabel: 'To',
-            cancelLabel: 'Cancel',
-            customRangeLabel: 'Custom range'
-        },
-        ranges: {
-            'Last 1 Day': [
-                dayjs().subtract(1, 'day'),
-                dayjs()
-            ],
-            'Last 7 Days': [
-                dayjs().subtract(6, 'day'),
-                dayjs()
-            ],
-            'Last 30 Days': [
-                dayjs().subtract(29, 'day'),
-                dayjs()
-            ],
-            'Last 6 Months': [
-                dayjs().subtract(6, 'month'),
-                dayjs()
-            ],
-            'Last 1 Year': [
-                dayjs().subtract(12, 'month'),
-                dayjs()
-            ]
-        },
-        startDate: dayjs().subtract(30, 'day'),
-        endDate: dayjs()
-    };
+    
     public inventoryReport: InventoryReport;
     public stocksList$: Observable<IStocksItem[]>;
     public inventoryUsers$: Observable<InventoryUser[]>;
@@ -128,6 +96,20 @@ export class JobworkComponent implements OnInit, OnDestroy {
     public universalDate$: Observable<any>;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     private inventoryReport$: Observable<InventoryReport>;
+    /** Directive to get reference of element */
+    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+    /* This will store selected date range to use in api */
+    public selectedDateRange: any;
+    /* This will store selected date range to show on UI */
+    public selectedDateRangeUi: any;
+    /* This will store available date ranges */
+    public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
+    /* Selected range label */
+    public selectedRangeLabel: any = "";
+    /* This will store the x/y position of the field to show datepicker under it */
+    public dateFieldPosition: any = { x: 0, y: 0 };
+    /** Modal reference */
+    public modalRef: BsModalRef;
 
     constructor(
         private inventoryReportActions: InventoryReportActions,
@@ -136,7 +118,9 @@ export class JobworkComponent implements OnInit, OnDestroy {
         private fb: FormBuilder,
         private invViewService: InvViewService,
         private _store: Store<AppState>,
-        private cdr: ChangeDetectorRef) {
+        private cdr: ChangeDetectorRef,
+        private generalService: GeneralService,
+        private modalService: BsModalService) {
 
         this.stocksList$ = this._store.pipe(select(s => s.inventory.stocksList && s.inventory.stocksList.results), takeUntil(this.destroyed$));
         this.inventoryUsers$ = this._store.pipe(select(s => s.inventoryInOutState.inventoryUsers && s.inventoryInOutState.inventoryUsers), takeUntil(this.destroyed$));
@@ -280,7 +264,8 @@ export class JobworkComponent implements OnInit, OnDestroy {
 
         this.universalDate$.subscribe(a => {
             if (a) {
-                this.datePickerOptions = { ...this.datePickerOptions, startDate: a[0], endDate: a[1], chosenLabel: a[2] };
+                this.selectedDateRange = { startDate: dayjs(a[0]), endDate: dayjs(a[1]) };
+                this.selectedDateRangeUi = dayjs(a[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(a[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                 this.startDate = dayjs(a[0]).format(GIDDH_DATE_FORMAT);
                 this.endDate = dayjs(a[1]).format(GIDDH_DATE_FORMAT);
                 this.applyFilters(1, true);
@@ -307,14 +292,6 @@ export class JobworkComponent implements OnInit, OnDestroy {
             element.checked = true;
             this.filter.jobWorkTransactionType.push(element.value);
         });
-    }
-
-    public dateSelected(val) {
-        const { startDate, endDate } = val.picker;
-        this.startDate = startDate.format(GIDDH_DATE_FORMAT);
-        this.endDate = endDate.format(GIDDH_DATE_FORMAT);
-        this.isFilterCorrect = true;
-        this.applyFilters(1, true);
     }
 
     /**
@@ -476,7 +453,8 @@ export class JobworkComponent implements OnInit, OnDestroy {
         //Reset Date
         this.universalDate$.pipe(take(1)).subscribe(a => {
             if (a) {
-                this.datePickerOptions = { ...this.datePickerOptions, startDate: a[0], endDate: a[1], chosenLabel: a[2] };
+                this.selectedDateRange = { startDate: dayjs(a[0]), endDate: dayjs(a[1]) };
+                this.selectedDateRangeUi = dayjs(a[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(a[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                 this.startDate = dayjs(a[0]).format(GIDDH_DATE_FORMAT);
                 this.endDate = dayjs(a[1]).format(GIDDH_DATE_FORMAT);
             }
@@ -643,6 +621,58 @@ export class JobworkComponent implements OnInit, OnDestroy {
                     this._toasty.errorToast(d?.message);
                 }
             });
+    }
+
+    /**
+    *To show the datepicker
+    *
+    * @param {*} element
+    * @memberof AuditLogsFormComponent
+    */
+    public showGiddhDatepicker(element: any): void {
+        if (element) {
+            this.dateFieldPosition = this.generalService.getPosition(element.target);
+        }
+        this.modalRef = this.modalService.show(
+            this.datepickerTemplate,
+            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
+        );
+    }
+
+    /**
+     * This will hide the datepicker
+     *
+     * @memberof AuditLogsFormComponent
+     */
+    public hideGiddhDatepicker(): void {
+        this.modalRef.hide();
+    }
+
+    /**
+     * Call back function for date/range selection in datepicker
+     *
+     * @param {*} value
+     * @memberof AuditLogsFormComponent
+     */
+    public dateSelectedCallback(value?: any): void {
+        if (value && value.event === "cancel") {
+            this.hideGiddhDatepicker();
+            return;
+        }
+        this.selectedRangeLabel = "";
+
+        if (value && value.name) {
+            this.selectedRangeLabel = value.name;
+        }
+        this.hideGiddhDatepicker();
+        if (value && value.startDate && value.endDate) {
+            this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
+            this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.startDate = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
+            this.endDate = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
+            this.isFilterCorrect = true;
+            this.applyFilters(1, true);
+        }
     }
 
 }
