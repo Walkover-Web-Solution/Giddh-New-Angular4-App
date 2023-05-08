@@ -466,7 +466,10 @@
                                                                                         'form-control unit-rates'
                                                                                     "
                                                                                     [name]="
-                                                                                        'variantFixedAssetsUnitRate' + j
+                                                                                        'variantFixedAssetsUnitRate' +
+                                                                                        j +
+                                                                                        '_' +
+                                                                                        i
                                                                                     "
                                                                                     [placeholder]="'Unit'"
                                                                                     [options]="stockUnits"
@@ -588,7 +591,15 @@
                                                                                 localeData?.linked_accounts
                                                                             }}</label>
                                                                         </div>
-                                                                        <div class="col-sm-6 col-lg-7 pl-0 mr-b15">
+
+                                                                        <div
+                                                                            class="
+                                                                                col-sm-6 col-lg-7
+                                                                                pl-0
+                                                                                mr-b15
+                                                                                which-tab
+                                                                            "
+                                                                        >
                                                                             <select-field
                                                                                 [cssClass]="'form-control'"
                                                                                 [name]="'purchaseAccount'"
@@ -597,9 +608,9 @@
                                                                                 "
                                                                                 [options]="purchaseAccounts"
                                                                                 (selectedOption)="
-                                                                                    stockForm.purchaseAccountDetails.accountUniqueName =
+                                                                                    stockForm?.purchaseAccountDetails.accountUniqueName =
                                                                                         $event?.value;
-                                                                                    stockForm.variants[0].purchaseInformation.accountUniqueName =
+                                                                                    stockForm?.variants[0]?.purchaseInformation.accountUniqueName =
                                                                                         $event?.value
                                                                                 "
                                                                                 [readonly]="
@@ -621,6 +632,7 @@
                                                                                 col-xl-6 col-lg-5 col-sm-5 col-11
                                                                                 pl-0
                                                                                 mr-b15
+                                                                                which-tab-1
                                                                             "
                                                                             *ngIf="!isVariantAvailable"
                                                                         >
@@ -645,6 +657,7 @@
                                                                                 col-xl-6 col-lg-5 col-sm-5 col-11
                                                                                 pl-0
                                                                                 mr-b15
+                                                                                which-tab-3
                                                                             "
                                                                             *ngIf="!isVariantAvailable"
                                                                         >
@@ -663,7 +676,10 @@
                                                                                             'form-control unit-rates'
                                                                                         "
                                                                                         [name]="
-                                                                                            'variantPurchaseUnit' + j
+                                                                                            'variantPurchaseUnit' +
+                                                                                            j +
+                                                                                            '_' +
+                                                                                            i
                                                                                         "
                                                                                         [placeholder]="'Unit'"
                                                                                         [options]="stockUnits"
@@ -689,7 +705,9 @@
                                                                                         [placeholder]="'0.00'"
                                                                                         [name]="
                                                                                             'variantPurchaseUnitRate' +
-                                                                                            j
+                                                                                            j +
+                                                                                            '_' +
+                                                                                            i
                                                                                         "
                                                                                         [type]="'number'"
                                                                                         [placeholder]="'Rate'"
@@ -715,7 +733,7 @@
                                                                                     "
                                                                                     *ngIf="
                                                                                         stockForm.variants[0]
-                                                                                            .purchaseInformation
+                                                                                            ?.purchaseInformation
                                                                                             ?.length > 1
                                                                                     "
                                                                                     [disabled]="
@@ -738,7 +756,7 @@
                                                                                     *ngIf="
                                                                                         j ===
                                                                                         stockForm.variants[0]
-                                                                                            .purchaseInformation
+                                                                                            ?.purchaseInformation
                                                                                             ?.length -
                                                                                             1
                                                                                     "
@@ -761,7 +779,7 @@
                                                                 </div>
                                                             </div>
                                                             <div class="col-xl-6 col-12 pl-4">
-                                                                <div class="sales-information">
+                                                                <div class="sales-information which-tab-4">
                                                                     <div class="select-puchase-info mr-b15">
                                                                         <mat-checkbox
                                                                             color="primary"
@@ -789,9 +807,9 @@
                                                                                 "
                                                                                 [options]="salesAccounts"
                                                                                 (selectedOption)="
-                                                                                    stockForm.salesAccountDetails.accountUniqueName =
+                                                                                    stockForm?.salesAccountDetails.accountUniqueName =
                                                                                         $event?.value;
-                                                                                    stockForm.variants[0].salesInformation.accountUniqueName =
+                                                                                    stockForm?.variants[0]?.salesInformation.accountUniqueName =
                                                                                         $event?.value
                                                                                 "
                                                                                 [readonly]="!isSalesInformationEnabled"
@@ -847,7 +865,12 @@
                                                                                 <div class="col-sm-6 col-6">
                                                                                     <select-field
                                                                                         [cssClass]="'form-control'"
-                                                                                        [name]="'variantSalesUnit' + j"
+                                                                                        [name]="
+                                                                                            'variantSalesUnit' +
+                                                                                            j +
+                                                                                            '_' +
+                                                                                            i
+                                                                                        "
                                                                                         [placeholder]="'Unit'"
                                                                                         [options]="stockUnits"
                                                                                         (selectedOption)="
@@ -869,7 +892,10 @@
                                                                                         [cssClass]="'form-control'"
                                                                                         [type]="'text'"
                                                                                         [name]="
-                                                                                            'variantSalesUnitRate' + j
+                                                                                            'variantSalesUnitRate' +
+                                                                                            j +
+                                                                                            '_' +
+                                                                                            i
                                                                                         "
                                                                                         [type]="'number'"
                                                                                         [placeholder]="'Rate'"
@@ -889,12 +915,12 @@
                                                                                     type="button"
                                                                                     (click)="
                                                                                         deleteVariantSalesUnitPrice(
-                                                                                            stockForm.variants[0],
+                                                                                            stockForm?.variants[0],
                                                                                             j
                                                                                         )
                                                                                     "
                                                                                     *ngIf="
-                                                                                        stockForm.variants[0]
+                                                                                        stockForm?.variants[0]
                                                                                             .salesInformation?.length >
                                                                                         1
                                                                                     "
@@ -912,13 +938,13 @@
                                                                                     disableRipple
                                                                                     (click)="
                                                                                         addNewVariantSalesUnitPrice(
-                                                                                            stockForm.variants[0]
+                                                                                            stockForm?.variants[0]
                                                                                         )
                                                                                     "
                                                                                     *ngIf="
                                                                                         j ===
-                                                                                        stockForm.variants[0]
-                                                                                            .salesInformation?.length -
+                                                                                        stockForm?.variants[0]
+                                                                                            ?.salesInformation?.length -
                                                                                             1
                                                                                     "
                                                                                     [disabled]="
@@ -947,7 +973,7 @@
                                     </div>
                                 </mat-tab>
                                 <mat-tab label="Inventory">
-                                    <div class="tab-container-new">
+                                    <div class="tab-container-new inventory-tab">
                                         <!-- <p class="mr-b15 font-14">
                                             <span>
                                                 <mat-checkbox
@@ -1246,7 +1272,11 @@
                                                                 ></text-field>
                                                             </td>
                                                             <td
-                                                                class="sales-purchase-info"
+                                                                class="
+                                                                    sales-purchase-info
+                                                                    inventory-tab
+                                                                    purchase-information-enable
+                                                                "
                                                                 *ngIf="isPurchaseInformationEnabled"
                                                             >
                                                                 <ng-container
@@ -1322,7 +1352,11 @@
                                                                 </ng-container>
                                                             </td>
                                                             <td
-                                                                class="sales-purchase-info"
+                                                                class="
+                                                                    sales-purchase-info
+                                                                    inventory-tab
+                                                                    sales-information-enable
+                                                                "
                                                                 *ngIf="isSalesInformationEnabled"
                                                             >
                                                                 <ng-container
@@ -1393,7 +1427,11 @@
                                                                 </ng-container>
                                                             </td>
                                                             <td
-                                                                class="sales-purchase-info fixed-assets-unit-rates"
+                                                                class="
+                                                                    sales-purchase-info
+                                                                    fixed-assets-unit-rates
+                                                                    inventory-tab
+                                                                "
                                                                 *ngIf="isFixedAssetsInformationEnabled"
                                                             >
                                                                 <ng-container
@@ -1405,7 +1443,9 @@
                                                                     <div class="sales-purchase-wrapper d-flex">
                                                                         <select-field
                                                                             [cssClass]="'form-control unit-rates'"
-                                                                            [name]="'variantFixedAssetsUnit' + j"
+                                                                            [name]="
+                                                                                'variantFixedAssetsUnit' + j + '_' + i
+                                                                            "
                                                                             [placeholder]="'Unit'"
                                                                             [options]="stockUnits"
                                                                             (selectedOption)="

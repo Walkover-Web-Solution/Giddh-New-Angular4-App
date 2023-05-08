@@ -874,9 +874,10 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         if (this.warehouses?.length > 0) {
             defaultWarehouse = this.warehouses?.filter(warehouse => warehouse?.isDefault);
         }
-        if (!this.queryParams.stockUniqueName) {
-            stockForm.variants = stockForm.variants?.map(variant => {
-                if (!this.isVariantAvailable) {
+
+        stockForm.variants = stockForm.variants?.map(variant => {
+            console.log(this.isVariantAvailable, stockForm.variants);
+
                     const salesUnitRate = variant?.salesInformation?.map(unitRate => {
                         unitRate.accountUniqueName = stockForm.salesAccountDetails?.accountUniqueName;
                         return unitRate;
@@ -910,20 +911,20 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                             openingAmount: 0
                         }
                     ]
-                } else {
-                    if (this.stockForm.type === 'FIXED_ASSETS') {
-                        variant['unitRates'] = variant.fixedAssetsUnitRate;
-                    } else {
-                        variant['unitRates'] = variant.salesInformation?.concat(variant?.purchaseInformation);
-                    }
-                }
+                // } else {
+                //     if (this.stockForm.type === 'FIXED_ASSETS') {
+                //         variant['unitRates'] = variant.fixedAssetsUnitRate;
+                //     } else {
+                //         variant['unitRates'] = variant.salesInformation?.concat(variant?.purchaseInformation);
+                //     }
+                // }
                 delete variant.salesInformation;
                 delete variant.purchaseInformation;
                 delete variant.fixedAssetsInformation;
                 variant['unitRates'] = variant?.unitRates?.filter(rate => rate?.rate);
                 return variant;
             });
-        }
+
         if (this.stockForm.type === 'FIXED_ASSETS') {
             stockForm['fixedAssetsAccountUniqueNames'] = stockForm.fixedAssetAccountDetails?.accountUniqueName ? [stockForm.fixedAssetAccountDetails?.accountUniqueName] : [];
         } else {
@@ -979,34 +980,43 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 this.isPurchaseInformationEnabled = response?.body?.purchaseAccountUniqueNames ? true : false;
                 this.isSalesInformationEnabled = response?.body?.salesAccountUniqueNames ? true : false;
                 this.isFixedAssetsInformationEnabled = response?.body?.fixedAssetsAccountUniqueNames ? true : false;
+                if (response.body.purchaseAccountDetails) {
+                    this.stockForm.purchaseAccountDetails = response.body.purchaseAccountDetails;
+                }
+                if (response.body.salesAccountDetails) {
+                    this.stockForm.salesAccountDetails = response.body.salesAccountDetails;
+                }
+                if (response.body.fixedAssetAccountDetails) {
+                    this.stockForm.fixedAssetAccountDetails = response.body.fixedAssetAccountDetails;
+                }
                 this.stockForm.variants = this.stockForm.variants?.map(variant => {
-                    this.stockForm.purchaseAccountDetails = variant?.purchaseAccountDetails;
-                    this.stockForm.salesAccountDetails = variant?.salesAccountDetails;
-                    this.stockForm.fixedAssetAccountDetails = variant?.fixedAssetAccountDetails;
+                    if (!variant.purchaseAccountDetails?.unitRates?.length) {
+                        variant.purchaseAccountDetails?.unitRates.push({
+                                rate: null,
+                                stockUnitCode: null,
+                                stockUnitUniqueName: null
+                            });
+                        }
+
                     if (!variant?.salesAccountDetails?.unitRates?.length) {
-                        this.stockForm.salesAccountDetails?.unitRates.push({
-                            rate: null,
-                            stockUnitCode: null,
-                            stockUnitUniqueName: null
-                        });
-                    }
-                    if (!variant?.purchaseAccountDetails?.unitRates?.length) {
-                        this.stockForm.purchaseAccountDetails?.unitRates.push({
-                            rate: null,
-                            stockUnitCode: null,
-                            stockUnitUniqueName: null
-                        });
-                    }
+                        variant.salesAccountDetails?.unitRates.push({
+                                rate: null,
+                                stockUnitCode: null,
+                                stockUnitUniqueName: null
+                            });
+                        }
                     if (!variant?.fixedAssetAccountDetails?.unitRates?.length) {
-                        this.stockForm.fixedAssetAccountDetails?.unitRates.push({
-                            rate: null,
-                            stockUnitCode: null,
-                            stockUnitUniqueName: null
-                        });
-                    }
-                    variant['purchaseInformation'] = variant?.purchaseAccountDetails?.unitRates;
+                        variant.fixedAssetAccountDetails?.unitRates.push({
+                                rate: null,
+                                stockUnitCode: null,
+                                stockUnitUniqueName: null
+                            });
+                        }
+
                     variant['salesInformation'] = variant?.salesAccountDetails?.unitRates;
+                    variant['purchaseInformation'] = variant?.purchaseAccountDetails?.unitRates;
                     variant['fixedAssetsInformation'] = variant?.fixedAssetAccountDetails?.unitRates;
+
                     return variant;
                 });
 
@@ -1082,8 +1092,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
 
         this.toggleLoader(true);
         const request = this.formatRequest();
-
-        this.inventoryService.updateStock(request, this.stockGroupUniqueName, this.queryParams?.stockUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.inventoryService.updateStockV2(request, this.stockGroupUniqueName, this.queryParams?.stockUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.toggleLoader(false);
             if (response?.status === "success") {
                 this.selectedGroupTaxes();

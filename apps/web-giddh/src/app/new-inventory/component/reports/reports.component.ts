@@ -690,6 +690,9 @@ export class ReportsComponent implements OnInit {
      * @memberof ReportsComponent
      */
     public editGroup(element: any): void {
+        if (this.moduleType?.toUpperCase() === 'FIXED_ASSETS') {
+            this.moduleType = 'fixedassets';
+        }
         this.router.navigate(['/pages/inventory/v2', 'group', this.moduleType?.toLowerCase(), 'edit', element?.stockGroup?.uniqueName]);
     }
 
@@ -700,6 +703,9 @@ export class ReportsComponent implements OnInit {
      * @memberof ReportsComponent
      */
     public editStock(element: any): void {
+        if (this.moduleType?.toUpperCase() === 'FIXED_ASSETS') {
+            this.moduleType = 'fixedassets';
+        }
         this.router.navigate(['/pages/inventory/v2', 'stock', this.moduleType?.toLowerCase(), 'edit', element?.stock?.uniqueName]);
     }
 
@@ -710,6 +716,9 @@ export class ReportsComponent implements OnInit {
      * @memberof ReportsComponent
      */
     public editVariant(element: any): void {
+        if (this.moduleType?.toUpperCase() === 'FIXED_ASSETS') {
+            this.moduleType = 'fixedassets';
+        }
         this.router.navigate(['/pages/inventory/v2', 'stock', this.moduleType?.toLowerCase(), 'edit', element?.stock?.uniqueName]);
     }
 
