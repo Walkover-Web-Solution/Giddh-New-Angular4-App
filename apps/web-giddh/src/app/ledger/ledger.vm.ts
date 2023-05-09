@@ -467,6 +467,8 @@ export class TransactionVM {
     public showDropdown?: boolean = false;
     public referenceVoucher?: ReferenceVoucher;
     public showOtherTax: boolean = false;
+    public stockUniqueName?: string;
+    public oppositeAccountUniqueName?: string;
 }
 
 export interface IInventory {

@@ -26,7 +26,7 @@ import {
 import { AccountResponse, AccountResponseV2 } from 'apps/web-giddh/src/app/models/api-models/Account';
 import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { BehaviorSubject, Observable, of as observableOf, ReplaySubject } from 'rxjs';
-import { take, takeUntil } from 'rxjs/operators';
+import { map, take, takeUntil } from 'rxjs/operators';
 import * as dayjs from 'dayjs';
 import {
     ConfirmationModalConfiguration,
@@ -36,7 +36,7 @@ import { cloneDeep, forEach, sumBy } from '../../../lodash-optimized';
 import { AdjustAdvancePaymentModal, VoucherAdjustments } from '../../../models/api-models/AdvanceReceiptsAdjust';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
 import { ICurrencyResponse, TaxResponse } from '../../../models/api-models/Company';
-import { ReconcileRequest, ReconcileResponse } from '../../../models/api-models/Ledger';
+import { IVariant, ReconcileRequest, ReconcileResponse } from '../../../models/api-models/Ledger';
 import {
     IForceClear,
     SalesOtherTaxesCalculationMethodEnum,
@@ -88,7 +88,7 @@ const NEW_LEDGER_ENTRIES = [
                 transform: 'translate3d(0, 0, 0)'
             })),
             state('out', style({
-                transform: 'translate3d(100%, 0, 0)'
+                transform: 'translate3d(100%,   0, 0)'
             })),
             transition('in => out', animate('400ms ease-in-out')),
             transition('out => in', animate('400ms ease-in-out'))
@@ -133,6 +133,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     @Input() public isReadOnly: boolean = false;
     /** Holds side of entry (dr/cr) */
     @Input() public entrySide: string;
+    /** Stores the selected account details */
+    @Input() public selectedAccountDetails: IOption;
     public isAmountFirst: boolean = false;
     public isTotalFirts: boolean = false;
     public selectedInvoices: string[] = [];
@@ -147,6 +149,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     @Output() public moreDetailOpen: EventEmitter<any> = new EventEmitter();
     /** Emits when other taxes are saved */
     @Output() public saveOtherTax: EventEmitter<any> = new EventEmitter();
+    /** Emits the variant uniquename when stock variant is selected */
+    @Output() public stockVariantSelected: EventEmitter<string> = new EventEmitter();
     @ViewChild('entryContent', { static: true }) public entryContent: ElementRef;
     @ViewChild('sh', { static: true }) public sh: ShSelectComponent;
     @ViewChild('discount', { static: false }) public discountControl: LedgerDiscountComponent;
@@ -265,6 +269,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public invoiceSettings: any = {};
     /** True if unit dropdown  is open */
     public isUnitOpen: boolean = false;
+    /** Stores the stock variants */
+    public stockVariants$: Observable<Array<IOption>> = observableOf([]);
 
     constructor(private store: Store<AppState>,
         private cdRef: ChangeDetectorRef,
@@ -419,14 +425,17 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public ngOnChanges(changes: SimpleChanges): void {
         if (changes?.currentTxn?.currentValue?.selectedAccount) {
             this.currentTxn.advanceReceiptAmount = giddhRoundOff(this.currentTxn.amount, this.giddhBalanceDecimalPlaces);
-            if (!this.currentTxn.selectedAccount.stock) {
+            if (!this.currentTxn.isStock) {
                 this.selectedWarehouse = String(this.defaultWarehouse);
             }
             this.calculatePreAppliedTax();
             this.preparePreAppliedDiscounts();
-            if (this.blankLedger?.otherTaxModal?.appliedOtherTax && this.blankLedger?.otherTaxModal?.appliedOtherTax?.uniqueName) {
+            if (this.blankLedger?.otherTaxModal?.appliedOtherTax?.uniqueName) {
                 this.blankLedger.isOtherTaxesApplicable = true;
             }
+        }
+        if (changes?.selectedAccountDetails?.currentValue !== changes?.selectedAccountDetails?.previousValue && this.currentTxn.isStock) {
+            this.loadStockVariants(this.currentTxn.stockUniqueName);
         }
         if (this.voucherApiVersion === 2 && changes?.invoiceList?.currentValue) {
             this.invoiceList$ = observableOf(this.invoiceList);
@@ -1039,14 +1048,15 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
         let classList = event?.path?.map(m => {
             return m?.classList;
-        });
+        }) ?? [];
 
+        classList = classList.concat(event?.target.classList);
         if (classList && classList instanceof Array) {
             const shouldNotClose = classList.some((className: DOMTokenList) => {
                 if (!className) {
                     return;
                 }
-                return className.contains('currency-toggler') || className.contains("cdk-overlay-container") || className.contains('mat-calendar');
+                return className.contains('currency-toggler') || className.contains("cdk-overlay-container") || className.contains('mat-calendar') || className.contains('mat-option') || className.contains('mat-option-text');
             });
 
             if (shouldNotClose) {
@@ -1863,5 +1873,14 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         };
 
         return this.ledgerUtilityService.checkIfExportIsValid(data);
+    }
+
+    public variantChanged(event: any): void {
+        this.stockVariantSelected.emit(event.value);
+    }
+
+    private loadStockVariants(stockUniqueName: string): void {
+        this.stockVariants$ = this.ledgerService.loadStockVariants(stockUniqueName).pipe(
+            map((variants: IVariant[]) => variants.map((variant: IVariant) => ({label: variant.name, value: variant.uniqueName}))));
     }
 }

@@ -1177,15 +1177,17 @@
 </ng-template>
 <ng-template #variantDropdown>
     <div class="col-md-3 mb-2 p-0">
-        <div *ngIf="currentTxn?.selectedAccount?.stock">
+        <div *ngIf="currentTxn?.isStock">
             <label>{{ localeData?.select_variant }}</label>
-            <sh-select
+            <select-field
                 [disabled]="isReadOnly"
-                [class.disabled-ledger]="isReadOnly"
-                [(ngModel)]="selectedWarehouse"
-                [placeholder]="localeData?.select_variant"
-                [options]="warehouses"
-            ></sh-select>
+                [cssClass]="'form-control'"
+                [placeholder]="'Select Variant'"
+                (selectedOption)="variantChanged($event)"
+                [options]="stockVariants$ | async"
+                [required]="true"
+            >
+            </select-field>
         </div>
     </div>
 </ng-template>
