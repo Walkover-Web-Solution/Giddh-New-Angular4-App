@@ -179,6 +179,9 @@
         font-weight: 400;
         @include marg(B, 0px);
     }
+    .amount-label {
+        margin-right: -15px;
+    }
 
     &.size-175 {
         input:not([type="checkbox"]),
@@ -405,7 +408,7 @@ ng-select.splSales {
     background: var(--color-common-primary-background-for-all-components);
     border: 1px solid var(--color-common-secondary-border);
     padding: 5px;
-    padding-bottom: 10px;
+    padding-bottom: 15px;
 
     &.disabled {
         background: var(--color-dark-fog);
@@ -790,9 +793,14 @@ a.copy-invoice img {
     margin-right: 6px;
 }
 
-.invoice-date-due-date .form-group,
-.invoice-date-due-date label {
-    display: inline-block !important;
+.invoice-date-due-date {
+    .form-group,
+    label {
+        display: inline-block !important;
+    }
+    .form-inline {
+        column-gap: 8px;
+    }
 }
 
 .p-0 {
@@ -1018,7 +1026,7 @@ section.static-invoice-table {
     position: absolute;
     width: 100%;
     left: 0;
-    top: 0;
+    top: 2px;
     margin-left: 48%;
     min-width: 485px;
     max-width: 485px;
@@ -1051,7 +1059,7 @@ section.static-invoice-table {
 }
 
 .customer-invoice-table.bg-white {
-    margin-top: 10px;
+    margin-top: 0px;
     border-bottom: 1px solid var(--color-common-secondary-border);
     margin-bottom: 20px;
     background-color: var(--color-common-primary-background-for-all-components) !important;
@@ -1090,7 +1098,7 @@ section.new-table {
 }
 
 .customer-invoice-table label {
-    line-height: 2.3;
+    line-height: 2.5;
 }
 
 .customer-invoice-table label.sales-country-label {
@@ -1445,12 +1453,13 @@ table.table.table-custom-invoice.basic,
 
 .amount-field,
 .balance-due-text {
-    min-width: 129px !important;
-    margin-left: 20px;
+    min-width: 150px !important;
+    margin-left: 15px;
 }
 
 #deposit-dropdown p {
     text-align: left;
+    font-weight: 600;
 }
 
 .sku-and-custom-fields {
@@ -1592,8 +1601,8 @@ label.sales-country-label {
     position: absolute;
     right: -30px;
     transform: translateY(-40px);
-    width: 20px;
-    height: 20px;
+    width: 22px;
+    height: 22px;
     border: 1px solid var(--color-primary-button-border);
     border-radius: 50%;
     text-align: center;
@@ -1671,7 +1680,7 @@ span.eligible-ITC {
 .payment-mode {
     select-field {
         float: right;
-        width: 50%;
+        width: 53%;
         margin-left: 20px;
         text-align: left;
     }
@@ -1840,8 +1849,13 @@ span.eligible-ITC {
     }
 
     .invoice-date-due-date {
-        display: none;
+        // display: none;
+        // margin-left: 0;
+        // margin-top: 45px;
     }
+    // #actionPane{
+    //     margin-top: 30px;
+    // }
 
     .wrapper-customer-table .col-sm-2 {
         padding-right: 0;
