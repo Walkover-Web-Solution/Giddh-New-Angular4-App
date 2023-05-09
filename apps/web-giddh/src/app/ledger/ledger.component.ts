@@ -494,7 +494,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     this.newLedgerComponent.calculateTax();
                     this.newLedgerComponent.calculateTotal();
                 }
-                this.selectedTxnAccUniqueName = txn.selectedAccount?.uniqueName;
+                this.selectedTxnAccUniqueName = txn?.selectedAccount?.uniqueName;
                 this.cdRf.detectChanges();
             }
         });
@@ -1167,7 +1167,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public toggleTransactionType(event: any) {
         this.lc.showNewLedgerPanel = false;
         let allTrx: TransactionVM[] = filter(this.lc.blankLedger?.transactions, bl => bl?.type === event?.type);
-        let unAccountedTrx = find(allTrx, a => !a.selectedAccount);
+        let unAccountedTrx = find(allTrx, a => !a?.selectedAccount);
 
         if (unAccountedTrx) {
             this.selectBlankTxn(unAccountedTrx);

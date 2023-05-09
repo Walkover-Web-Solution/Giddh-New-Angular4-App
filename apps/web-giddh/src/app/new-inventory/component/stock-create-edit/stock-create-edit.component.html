@@ -1,4 +1,10 @@
-<ng-container appTranslate (commonLocaleData)="commonLocaleData = $event">
+<ng-container
+    appTranslate
+    [file]="'inventory/stock'"
+    (commonLocaleData)="commonLocaleData = $event"
+    (localeData)="localeData = $event"
+    (translationComplete)="translationComplete($event)"
+>
     <giddh-page-loader *ngIf="showLoader"></giddh-page-loader>
     <ng-container *ngIf="!showLoader">
         <div class="relative create-new-inventory-page static-tabs-on-page">
@@ -21,20 +27,30 @@
                             </div>
                         </div>
                     </div> -->
-
                     <!--product content start-->
                     <div
                         class="product-detail-content px-3 mt-2"
-                        *ngIf="stockForm.type === 'PRODUCT' || stockForm.type === 'SERVICE'"
+                        *ngIf="
+                            stockForm.type === 'PRODUCT' ||
+                            stockForm.type === 'SERVICE' ||
+                            stockForm.type === 'FIXED_ASSETS'
+                                ? 'FIXEDASSETS'
+                                : ''
+                        "
                     >
                         <div class="row flex-column-reverse flex-md-row upper-common-form-container">
                             <div class="col-xl-8 col-lg-12">
                                 <div class="row flex-column-reverse flex-md-row">
                                     <div class="col-md-8 col-lg-8 col-xl-6 col-12 upper-common-form-label-field">
                                         <div class="row mr-b1">
-                                            <div class="col-sm-6 col-lg-3">
+                                            <div class="col-sm-6 col-lg-4">
                                                 <label class="product-name-label"
-                                                    >{{ stockForm.type | titlecase }} Name
+                                                    >{{
+                                                        stockForm.type === "FIXEDASSETS"
+                                                            ? localeData?.fixed_assets
+                                                            : (stockForm.type | titlecase)
+                                                    }}
+                                                    {{ localeData?.name }}
                                                     <span class="red-text product-name-star">*</span></label
                                                 >
                                             </div>
@@ -42,7 +58,7 @@
                                                 <text-field
                                                     [cssClass]="'form-control'"
                                                     [name]="'productName'"
-                                                    [placeholder]="'Enter Product'"
+                                                    [placeholder]="localeData?.enter_product"
                                                     [type]="'text'"
                                                     [(ngModel)]="stockForm.name"
                                                     [required]="true"
@@ -51,9 +67,14 @@
                                             </div>
                                         </div>
                                         <div class="row mr-b1">
-                                            <div class="col-sm-6 col-lg-3">
+                                            <div class="col-sm-6 col-lg-4">
                                                 <label
-                                                    >{{ stockForm.type | titlecase }} Unit
+                                                    >{{
+                                                        stockForm.type === "FIXEDASSETS"
+                                                            ? localeData?.fixed_assets
+                                                            : (stockForm.type | titlecase)
+                                                    }}
+                                                    {{ commonLocaleData?.app_unit }}
                                                     <span class="red-text">*</span></label
                                                 >
                                             </div>
@@ -61,7 +82,7 @@
                                                 <select-field
                                                     [cssClass]="'form-control'"
                                                     [name]="'stockUnitCode'"
-                                                    [placeholder]="'Select Unit'"
+                                                    [placeholder]="commonLocaleData?.app_unit"
                                                     [options]="stockUnits"
                                                     (selectedOption)="
                                                         stockForm.stockUnitUniqueName = $event?.value;
@@ -72,14 +93,14 @@
                                             </div>
                                         </div>
                                         <div class="row mr-b1">
-                                            <div class="col-sm-6 col-lg-3">
-                                                <label>Under Group</label>
+                                            <div class="col-sm-6 col-lg-4">
+                                                <label> {{ localeData?.under_group }}</label>
                                             </div>
                                             <div class="col-sm-6 col-lg-6 ml-lg-2 under-group-field-button-wrapper">
                                                 <select-field
                                                     [cssClass]="'form-control'"
                                                     [name]="'stockGroup'"
-                                                    [placeholder]="'Select Group'"
+                                                    [placeholder]="commonLocaleData?.app_select_group"
                                                     [options]="stockGroups"
                                                     (selectedOption)="
                                                         stockGroupUniqueName = $event?.value;
@@ -94,36 +115,34 @@
                                                     (click)="moveStock()"
                                                     [disabled]="defaultStockGroupUniqueName === stockGroupUniqueName"
                                                 >
-                                                    Move
+                                                    {{ localeData?.move }}
                                                 </button>
                                             </div>
                                         </div>
                                         <div class="row mr-b1">
-                                            <div class="col-sm-6 col-lg-3">
-                                                <label
-                                                    >Unique Name
-                                                    <!-- <i class="icon-info text-gray"></i> -->
-                                                </label>
+                                            <div class="col-sm-6 col-lg-4">
+                                                <label>{{ commonLocaleData?.app_unique_name }} </label>
+                                                <!-- <i class="icon-info text-gray"></i> -->
                                             </div>
                                             <div class="col-sm-6 col-lg-6 ml-lg-2">
                                                 <text-field
                                                     [cssClass]="'form-control'"
                                                     [name]="'uniqueName'"
-                                                    [placeholder]="'Unique Name'"
+                                                    [placeholder]="commonLocaleData?.app_unique_name"
                                                     [type]="'text'"
                                                     [(ngModel)]="stockForm.uniqueName"
                                                 ></text-field>
                                             </div>
                                         </div>
                                         <div class="row mr-b1">
-                                            <div class="col-sm-6 col-lg-3">
-                                                <label>Applicable Tax</label>
+                                            <div class="col-sm-6 col-lg-4">
+                                                <label>{{ localeData?.applicable_tax }} </label>
                                             </div>
                                             <div class="col-sm-6 col-lg-6 ml-lg-2">
                                                 <mat-select
                                                     name="taxes"
                                                     class="form-control"
-                                                    placeholder="Select Tax"
+                                                    [placeholder]="commonLocaleData?.app_select_tax"
                                                     multiple
                                                     [(value)]="stockForm.taxes"
                                                 >
@@ -351,18 +370,18 @@
                                                                         name="isPurchaseInformationEnabled"
                                                                         [(ngModel)]="isPurchaseInformationEnabled"
                                                                         (ngModelChange)="togglePurchaseInformation()"
-                                                                        >Purchase Information
+                                                                        >{{ localeData?.purchase_information }}
                                                                     </mat-checkbox>
                                                                 </div>
                                                                 <div class="row">
                                                                     <div class="col-sm-6 col-lg-5">
-                                                                        <label>Linked Account/s</label>
+                                                                        <label>{{ localeData?.linked_accounts }}</label>
                                                                     </div>
                                                                     <div class="col-sm-6 col-lg-7 pl-0 mr-b15">
                                                                         <select-field
                                                                             [cssClass]="'form-control'"
                                                                             [name]="'purchaseAccount'"
-                                                                            [placeholder]="'Linked Accounts'"
+                                                                            [placeholder]="localeData?.linked_accounts"
                                                                             [options]="purchaseAccounts"
                                                                             (selectedOption)="
                                                                                 stockForm.purchaseAccountDetails.accountUniqueName =
@@ -373,7 +392,7 @@
                                                                         ></select-field>
                                                                     </div>
                                                                     <div class="col-sm-6 col-lg-5">
-                                                                        <label>Unit & Price </label>
+                                                                        <label>{{ localeData?.unit_price }} </label>
                                                                     </div>
                                                                     <div
                                                                         class="
@@ -394,7 +413,9 @@
                                                                                 <select-field
                                                                                     [cssClass]="'form-control'"
                                                                                     [name]="'purchaseStockUnitCode' + i"
-                                                                                    [placeholder]="'Unit'"
+                                                                                    [placeholder]="
+                                                                                        commonLocaleData?.app_unit
+                                                                                    "
                                                                                     [options]="stockUnits"
                                                                                     (selectedOption)="
                                                                                         stockForm.purchaseAccountDetails.unitRates[
@@ -415,7 +436,9 @@
                                                                                     [cssClass]="'form-control'"
                                                                                     [type]="'text'"
                                                                                     [name]="'purchaseStockRate' + i"
-                                                                                    [placeholder]="'Rate'"
+                                                                                    [placeholder]="
+                                                                                        commonLocaleData?.app_rate
+                                                                                    "
                                                                                     [(ngModel)]="
                                                                                         stockForm.purchaseAccountDetails
                                                                                             .unitRates[i].rate
@@ -463,7 +486,7 @@
                                                                                     *ngIf="isPurchaseInformationEnabled"
                                                                                     class="add-new-text-container"
                                                                                 >
-                                                                                    + Add New
+                                                                                    {{ localeData?.add_new }}
                                                                                 </span>
                                                                             </button>
                                                                         </div>
@@ -481,19 +504,19 @@
                                                                         name="isSalesInformationEnabled"
                                                                         [(ngModel)]="isSalesInformationEnabled"
                                                                         (ngModelChange)="toggleSalesInformation()"
-                                                                        >Sales Information
+                                                                        >{{ localeData?.sales_information }}
                                                                     </mat-checkbox>
                                                                 </div>
                                                                 <!-- input field will disabled if sales info unchecked -->
                                                                 <div class="row">
                                                                     <div class="col-sm-6 col-lg-5">
-                                                                        <label>Linked Account/s </label>
+                                                                        <label>{{ localeData?.linked_accounts }}</label>
                                                                     </div>
                                                                     <div class="col-sm-6 col-lg-7 pl-0 mr-b15">
                                                                         <select-field
                                                                             [cssClass]="'form-control'"
                                                                             [name]="'salesAccount'"
-                                                                            [placeholder]="'Linked Accounts'"
+                                                                            [placeholder]="localeData?.linked_accounts"
                                                                             [options]="salesAccounts"
                                                                             (selectedOption)="
                                                                                 stockForm.salesAccountDetails.accountUniqueName =
@@ -504,7 +527,7 @@
                                                                         ></select-field>
                                                                     </div>
                                                                     <div class="col-sm-6 col-lg-5">
-                                                                        <label>Unit & Price </label>
+                                                                        <label>{{ localeData?.unit_price }} </label>
                                                                     </div>
                                                                     <div
                                                                         class="
@@ -525,7 +548,9 @@
                                                                                 <select-field
                                                                                     [cssClass]="'form-control'"
                                                                                     [name]="'salesStockUnitCode' + i"
-                                                                                    [placeholder]="'Unit'"
+                                                                                    [placeholder]="
+                                                                                        commonLocaleData?.app_unit
+                                                                                    "
                                                                                     [options]="stockUnits"
                                                                                     (selectedOption)="
                                                                                         stockForm.salesAccountDetails.unitRates[
@@ -546,7 +571,9 @@
                                                                                     [cssClass]="'form-control'"
                                                                                     [type]="'text'"
                                                                                     [name]="'salesStockRate' + i"
-                                                                                    [placeholder]="'Rate'"
+                                                                                    [placeholder]="
+                                                                                        commonLocaleData?.app_rate
+                                                                                    "
                                                                                     [(ngModel)]="
                                                                                         stockForm.salesAccountDetails
                                                                                             .unitRates[i].rate
@@ -590,7 +617,7 @@
                                                                                     *ngIf="isSalesInformationEnabled"
                                                                                     class="add-new-text-container"
                                                                                 >
-                                                                                    + Add New
+                                                                                    {{ localeData?.add_new }}
                                                                                 </span>
                                                                             </button>
                                                                         </div>
@@ -724,8 +751,8 @@
                                                     [(ngModel)]="isVariantAvailable"
                                                     (ngModelChange)="addVariantOption()"
                                                 >
-                                                    Variant? This {{ stockForm.type | lowercase }} has multiple options
-                                                    like size or colours etc..
+                                                    {{ localeData?.variant_this }} {{ stockForm.type | lowercase }}
+                                                    {{ localeData?.has_multiples }}
                                                 </mat-checkbox>
                                             </span>
                                         </p>
@@ -739,17 +766,19 @@
                                                             *ngFor="let option of stockForm.options; let i = index"
                                                         >
                                                             <div class="col-sm-6 col-lg-4">
-                                                                <label>Option {{ i + 1 }}</label>
+                                                                <label> {{ localeData?.option }} {{ i + 1 }}</label>
                                                                 <text-field
                                                                     [cssClass]="'form-control'"
-                                                                    [placeholder]="'Ex: Size , Color'"
+                                                                    [placeholder]="localeData?.ex_size_color"
                                                                     [name]="'option-' + i"
                                                                     [(ngModel)]="option.name"
                                                                     [type]="'text'"
                                                                 ></text-field>
                                                             </div>
                                                             <div class="col-sm-6 col-lg-8">
-                                                                <label class="category-label">Category</label>
+                                                                <label class="category-label">{{
+                                                                    localeData?.category
+                                                                }}</label>
                                                                 <div class="multi-select-input">
                                                                     <mat-chip-list #chipList>
                                                                         <mat-chip
@@ -779,7 +808,7 @@
                                                                                 addOption($event, i)
                                                                             "
                                                                             class="inventory-category-field-input"
-                                                                            placeholder="Separate options with a comma"
+                                                                            [placeholder]="localeData?.separate_options"
                                                                         />
                                                                     </mat-chip-list>
                                                                 </div>
@@ -805,7 +834,7 @@
                                                     *ngIf="stockForm.options?.length < 3"
                                                     (click)="addVariantOption()"
                                                 >
-                                                    + Another option
+                                                    {{ localeData?.another_option }}
                                                 </button>
                                                 <!-- <div class="mt-3 mb-3">
                                                     <button mat-stroked-button class="bdr-radius-50">
@@ -815,12 +844,19 @@
                                                 <div class="table-responsive" *ngIf="stockForm.variants?.length > 0">
                                                     <table class="stock-table font-14" style="margin-left: 2px">
                                                         <tr>
-                                                            <th>Variant Name<span class="red-text">*</span></th>
-                                                            <th>Unit</th>
-                                                            <th class="text-right">Opening Quantity</th>
-                                                            <th class="text-right">Opening Amount</th>
-                                                            <th class="text-right">SKU Code</th>
-                                                            <th class="text-center">Archive</th>
+                                                            <th>
+                                                                {{ localeData?.variant_name
+                                                                }}<span class="red-text">*</span>
+                                                            </th>
+                                                            <th>{{ commonLocaleData?.app_unit }}</th>
+                                                            <th class="text-right">
+                                                                {{ localeData?.opening_quantity }}
+                                                            </th>
+                                                            <th class="text-right">{{ localeData?.opening_amount }}</th>
+                                                            <th class="text-right">
+                                                                {{ commonLocaleData?.app_sku_code }}
+                                                            </th>
+                                                            <th class="text-center">{{ localeData?.archive }}</th>
                                                         </tr>
                                                         <tr *ngFor="let variant of stockForm.variants; let i = index">
                                                             <td>{{ variant.name }}</td>
@@ -828,7 +864,7 @@
                                                                 <select-field
                                                                     [cssClass]="'form-control'"
                                                                     [name]="'variantUnit' + i"
-                                                                    [placeholder]="'Unit'"
+                                                                    [placeholder]="commonLocaleData?.app_unit"
                                                                     [options]="stockUnits"
                                                                     (selectedOption)="
                                                                         selectVariantUnit(variant, $event)
@@ -892,14 +928,14 @@
                                             >
                                                 <div class="row mr-b1">
                                                     <div class="col-sm-6 col-lg-4">
-                                                        <label>HSN Code</label>
+                                                        <label>{{ commonLocaleData?.app_hsn_code }}</label>
                                                     </div>
                                                     <div class="col-sm-6 col-lg-6">
                                                         <text-field
                                                             [cssClass]="'form-control'"
                                                             [name]="'hsnNumber'"
                                                             [type]="'text'"
-                                                            [placeholder]="'Enter Code'"
+                                                            [placeholder]="localeData?.enter_code"
                                                             [(ngModel)]="stockForm.hsnNumber"
                                                         ></text-field>
                                                     </div>
@@ -911,14 +947,14 @@
                                             >
                                                 <div class="row mr-b1">
                                                     <div class="col-sm-6 col-lg-6">
-                                                        <label>SAC Code</label>
+                                                        <label>{{ commonLocaleData?.app_sac_code }}</label>
                                                     </div>
                                                     <div class="col-sm-6 col-lg-6">
                                                         <text-field
                                                             [cssClass]="'form-control'"
                                                             [name]="'sacNumber'"
                                                             [type]="'text'"
-                                                            [placeholder]="'Enter Code'"
+                                                            [placeholder]="localeData?.enter_code"
                                                             [(ngModel)]="stockForm.sacNumber"
                                                         ></text-field>
                                                     </div>
@@ -928,14 +964,14 @@
                                                 <div class="col-xl-6 col-md-12 col-lg-8 col-sm-12">
                                                     <div class="row mr-b1">
                                                         <div class="col-sm-6 col-lg-4">
-                                                            <label>SKU Code</label>
+                                                            <label>{{ commonLocaleData?.app_sku_code }}</label>
                                                         </div>
                                                         <div class="col-sm-6 col-lg-6">
                                                             <text-field
                                                                 [cssClass]="'form-control'"
                                                                 [name]="'skuCode'"
                                                                 [type]="'text'"
-                                                                [placeholder]="'Enter Code'"
+                                                                [placeholder]="localeData?.enter_code"
                                                                 [(ngModel)]="stockForm.skuCode"
                                                             ></text-field>
                                                         </div>
@@ -944,7 +980,7 @@
                                                 <div class="col-xl-6 col-md-12 col-lg-8 col-sm-12">
                                                     <div class="row mr-b1">
                                                         <div class="col-sm-6 col-lg-4">
-                                                            <label>Opening Quantity</label>
+                                                            <label>{{ localeData?.opening_quantity }}</label>
                                                         </div>
                                                         <div class="col-sm-6 col-lg-6">
                                                             <text-field
@@ -960,7 +996,7 @@
                                                 <div class="col-xl-6 col-md-12 col-lg-8 col-sm-12">
                                                     <div class="row mr-b1">
                                                         <div class="col-sm-6 col-lg-4">
-                                                            <label>Opening Amount</label>
+                                                            <label>{{ localeData?.opening_amount }}</label>
                                                         </div>
                                                         <div class="col-sm-6 col-lg-6">
                                                             <text-field
@@ -992,7 +1028,7 @@
                                                             *ngIf="inlineEditCustomField === 1"
                                                             [cssClass]="'form-control'"
                                                             [name]="'customField1Heading'"
-                                                            [placeholder]="'Custom Field'"
+                                                            [placeholder]="localeData?.custom_field"
                                                             [type]="'text'"
                                                             [(ngModel)]="stockForm.customField1Heading"
                                                             [autoFocus]="true"
@@ -1012,7 +1048,7 @@
                                                         <text-field
                                                             [cssClass]="'form-control'"
                                                             [name]="'customField1Value'"
-                                                            [placeholder]="'Custom Field'"
+                                                            [placeholder]="localeData?.custom_field"
                                                             [type]="'text'"
                                                             [(ngModel)]="stockForm.customField1Value"
                                                         ></text-field>
@@ -1037,7 +1073,7 @@
                                                             *ngIf="inlineEditCustomField === 2"
                                                             [cssClass]="'form-control'"
                                                             [name]="'customField2Heading'"
-                                                            [placeholder]="'Custom Field'"
+                                                            [placeholder]="localeData?.custom_field"
                                                             [type]="'text'"
                                                             [(ngModel)]="stockForm.customField2Heading"
                                                             [autoFocus]="true"
@@ -1057,7 +1093,7 @@
                                                         <text-field
                                                             [cssClass]="'form-control'"
                                                             [name]="'customField2Value'"
-                                                            [placeholder]="'Custom Field'"
+                                                            [placeholder]="localeData?.custom_field"
                                                             [type]="'text'"
                                                             [(ngModel)]="stockForm.customField2Value"
                                                         ></text-field>
@@ -1147,7 +1183,7 @@
                                                                 [cssClass]="'form-control'"
                                                                 type="text"
                                                                 id="variant-name"
-                                                                placeholder="Variant Name"
+                                                                [placeholder]="localeData?.variant_name"
                                                                 readonly
                                                             >
                                                             </text-field>
@@ -1158,7 +1194,7 @@
                                                                 [cssClass]="'form-control'"
                                                                 type="text"
                                                                 id="variant-sku"
-                                                                placeholder="SKU"
+                                                                [placeholder]="commonLocaleData?.app_sku"
                                                             ></text-field>
                                                         </div>
                                                         <div class="col-xl-2 col-md-6">
@@ -1167,26 +1203,26 @@
                                                                 [cssClass]="'form-control'"
                                                                 type="text"
                                                                 id="variant-opening-balance"
-                                                                placeholder="Enter amount"
+                                                                [placeholder]="localeData?.enter_amount"
                                                             >
                                                             </text-field>
                                                         </div>
                                                         <div class="col-xl-2 col-md-6">
-                                                            <label> Opening Qty </label>
+                                                            <label> {{ localeData?.opening_quantity }} </label>
                                                             <text-field
                                                                 [cssClass]="'form-control'"
                                                                 type="text"
                                                                 id="variant-qty"
-                                                                placeholder="Enter Qty"
+                                                                [placeholder]="localeData?.enter_qty"
                                                             ></text-field>
                                                         </div>
                                                         <div class="col-xl-2 col-md-6">
-                                                            <label> Rate </label>
+                                                            <label> {{ commonLocaleData?.app_rate }} </label>
                                                             <text-field
                                                                 [cssClass]="'form-control'"
                                                                 type="text"
                                                                 id="variant-rate"
-                                                                placeholder="Enter Rate"
+                                                                [placeholder]="localeData?.enter_rate"
                                                             ></text-field>
                                                         </div>
                                                     </div>
@@ -1196,7 +1232,7 @@
                                                             class="font-14 mr-t1 d-flex"
                                                             id="add-more-variant"
                                                         >
-                                                            + Add More</a
+                                                            {{ localeData?.add_more }}</a
                                                         >
                                                     </div>
                                                 </div>
@@ -1216,7 +1252,7 @@
                                                                 [cssClass]="'form-control'"
                                                                 type="text"
                                                                 id="addon-item"
-                                                                placeholder="Add item"
+                                                                [placeholder]="localeData?.add_item"
                                                             ></text-field>
                                                         </div>
                                                         <div class="col-xl-2 col-md-6">
@@ -1225,7 +1261,7 @@
                                                                 [cssClass]="'form-control'"
                                                                 type="text"
                                                                 id="addon-qty"
-                                                                placeholder="Enter Quantity"
+                                                                [placeholder]="localeData?.enter_qty"
                                                             ></text-field>
                                                         </div>
                                                         <div class="col-xl-2 col-md-6">
@@ -1234,7 +1270,7 @@
                                                                 [cssClass]="'form-control'"
                                                                 type="text"
                                                                 id="addon-sku"
-                                                                placeholder="Enter SKU Number"
+                                                                [placeholder]="localeData?.enter_sku_number"
                                                             ></text-field>
                                                         </div>
                                                         <div class="col-xl-2 col-md-6">
@@ -1243,16 +1279,16 @@
                                                                 [cssClass]="'form-control'"
                                                                 type="text"
                                                                 id="addon-unit"
-                                                                placeholder="eg. cm, kg, m, box"
+                                                                [placeholder]="commonLocaleData?.app_unit_cm_mm"
                                                             ></text-field>
                                                         </div>
                                                         <div class="col-xl-2 col-md-6">
-                                                            <label> Rate </label>
+                                                            <label> {{ commonLocaleData?.app_rate }} </label>
                                                             <text-field
                                                                 [cssClass]="'form-control'"
                                                                 type="text"
                                                                 id="addon-rate"
-                                                                placeholder="Enter Rate"
+                                                                [placeholder]="localeData?.enter_rate"
                                                             ></text-field>
                                                         </div>
                                                         <div class="col-xl-2 col-md-6">
@@ -1267,7 +1303,7 @@
                                                             class="font-14 mr-t1 d-flex"
                                                             id="add-more-addon"
                                                         >
-                                                            + Add More</a
+                                                            {{ localeData?.add_more }}</a
                                                         >
                                                     </div>
                                                 </div>
@@ -1290,7 +1326,7 @@
                                                                         [cssClass]="'form-control'"
                                                                         type="text"
                                                                         id="variant-sku-number"
-                                                                        placeholder="Enter SKU Number"
+                                                                        [placeholder]="localeData?.enter_sku_number"
                                                                     >
                                                                     </text-field>
                                                                 </div>
@@ -1329,7 +1365,7 @@
                                                                         [cssClass]="'form-control'"
                                                                         type="text"
                                                                         id="final-product-1"
-                                                                        placeholder="Product 1"
+                                                                        [placeholder]="localeData?.product_1"
                                                                     >
                                                                     </text-field>
                                                                 </div>
@@ -1340,7 +1376,7 @@
                                                                         [cssClass]="'form-control'"
                                                                         type="text"
                                                                         id="final-product-2"
-                                                                        placeholder="Product 2"
+                                                                        [placeholder]="localeData?.product_2"
                                                                     >
                                                                     </text-field>
                                                                 </div>
@@ -1350,7 +1386,7 @@
                                                                         [cssClass]="'form-control'"
                                                                         type="text"
                                                                         id="recipe-output-qty"
-                                                                        placeholder="Enter Qty"
+                                                                        [placeholder]="localeData?.enter_qty"
                                                                     >
                                                                     </text-field>
                                                                 </div>
@@ -1360,7 +1396,7 @@
                                                                         [cssClass]="'form-control'"
                                                                         type="text"
                                                                         id="recipe-output-unit"
-                                                                        placeholder="eg. cm, kg, m, box"
+                                                                        [placeholder]="commonLocaleData?.app_unit_cm_mm"
                                                                     >
                                                                     </text-field>
                                                                 </div>
@@ -1398,7 +1434,7 @@
                                                                         [cssClass]="'form-control'"
                                                                         type="text"
                                                                         id="recipe-input-attribute"
-                                                                        placeholder="Add item"
+                                                                        [placeholder]="localeData?.add_item"
                                                                     >
                                                                     </text-field>
                                                                 </div>
@@ -1408,7 +1444,7 @@
                                                                         [cssClass]="'form-control'"
                                                                         type="text"
                                                                         id="recipe-input-qty"
-                                                                        placeholder="Enter Qty"
+                                                                        [placeholder]="localeData?.enter_qty"
                                                                     >
                                                                     </text-field>
                                                                 </div>
@@ -1418,7 +1454,7 @@
                                                                         [cssClass]="'form-control'"
                                                                         type="text"
                                                                         id="recipe-input-unit"
-                                                                        placeholder="eg. cm, kg, m, box"
+                                                                        [placeholder]="commonLocaleData?.app_unit_cm_mm"
                                                                     >
                                                                     </text-field>
                                                                 </div>
@@ -1484,7 +1520,7 @@
                                                                 [cssClass]="'form-control'"
                                                                 type="text"
                                                                 id="expense-assets"
-                                                                placeholder="Liability/Asset A/c"
+                                                                [placeholder]="localeData?.liability_assets"
                                                             >
                                                             </text-field>
                                                         </div>
@@ -1494,7 +1530,7 @@
                                                                 [cssClass]="'form-control'"
                                                                 type="text"
                                                                 id="expense-account"
-                                                                placeholder="Expense A/c"
+                                                                [placeholder]="localeData?.expense_acc"
                                                             ></text-field>
                                                         </div>
                                                         <div class="width-30-percent">
@@ -1502,7 +1538,7 @@
                                                                 [cssClass]="'form-control'"
                                                                 id="expense-amount"
                                                                 type="text"
-                                                                placeholder="Amount"
+                                                                [placeholder]="commonLocaleData?.app_amount"
                                                             ></text-field>
                                                         </div>
                                                         <div
@@ -1527,7 +1563,8 @@
                                                 class="text-primary font-14"
                                                 id="add-more-recipe-btn"
                                                 href="javascript:void(0);"
-                                                >+ Add more recipe</a
+                                            >
+                                                {{ localeData?.add_more_recipe }}</a
                                             >
                                         </div>
                                     </div>
@@ -1552,7 +1589,7 @@
                                                     [cssClass]="'form-control'"
                                                     id="combo-name"
                                                     type="text"
-                                                    placeholder="Emter Name"
+                                                    [placeholder]="localeData?.enter_name"
                                                 ></text-field>
                                             </div>
                                         </div>
@@ -1561,7 +1598,10 @@
                                                 <label>Unit<span class="red-text">*</span></label>
                                             </div>
                                             <div class="col-sm-12 col-md-6 col-lg-6">
-                                                <sh-select id="select-combo-unit" placeholder="Select Unit"></sh-select>
+                                                <sh-select
+                                                    id="select-combo-unit"
+                                                    [placeholder]="localeData?.select_unit"
+                                                ></sh-select>
                                             </div>
                                         </div>
                                         <div *ngIf="false" class="row mr-b15">
@@ -1571,7 +1611,7 @@
                                             <div class="col-sm-12 col-md-6 col-lg-6">
                                                 <sh-select
                                                     id="select-under-group"
-                                                    placeholder="Select Group"
+                                                    [placeholder]="commonLocaleData?.app_select_group"
                                                 ></sh-select>
                                             </div>
                                         </div>
@@ -1584,7 +1624,7 @@
                                                     [cssClass]="'form-control'"
                                                     id="combo-unique-name"
                                                     type="text"
-                                                    placeholder="Enter Unique Name"
+                                                    [placeholder]="commonLocaleData?.app_unique_name_placeholder"
                                                 ></text-field>
                                             </div>
                                         </div>
@@ -1597,7 +1637,7 @@
                                                     [cssClass]="'form-control'"
                                                     id="combo-unique-name"
                                                     type="text"
-                                                    placeholder="Enter HSN Code"
+                                                    [placeholder]="localeData?.enter_hsn_code"
                                                 ></text-field>
                                             </div>
                                         </div>
@@ -1610,7 +1650,7 @@
                                                     [cssClass]="'form-control'"
                                                     id="combo-unique-name"
                                                     type="text"
-                                                    placeholder="Enter SKU Code"
+                                                    [placeholder]="localeData?.enter_sku_code"
                                                 ></text-field>
                                             </div>
                                         </div>
@@ -1646,7 +1686,7 @@
                                                     [cssClass]="'form-control'"
                                                     id="select-product"
                                                     type="text"
-                                                    placeholder="Product Name/Service"
+                                                    [placeholder]="localeData?.product_service"
                                                 ></text-field>
                                             </td>
                                             <td width="20%">
@@ -1654,7 +1694,7 @@
                                                     [cssClass]="'form-control'"
                                                     id="unit-field"
                                                     type="text"
-                                                    placeholder="Unit"
+                                                    [placeholder]="commonLocaleData?.app_unit"
                                                 ></text-field>
                                             </td>
                                             <td width="16%">
@@ -1690,7 +1730,7 @@
                                                     [cssClass]="'form-control'"
                                                     id="select-product"
                                                     type="text"
-                                                    placeholder="Product Name/Service"
+                                                    [placeholder]="localeData?.product_service"
                                                 ></text-field>
                                             </td>
                                             <td width="20%">
@@ -1698,7 +1738,7 @@
                                                     [cssClass]="'form-control'"
                                                     id="unit-field"
                                                     type="text"
-                                                    placeholder="Unit"
+                                                    [placeholder]="commonLocaleData?.app_unit"
                                                 ></text-field>
                                             </td>
                                             <td width="16%">
@@ -1761,7 +1801,7 @@
                                                                 type="text"
                                                                 id="linked-account"
                                                                 class="form-control"
-                                                                placeholder="All Accounts Selected"
+                                                                [placeholder]="localeData?.all_accounts"
                                                             ></textarea>
                                                         </div>
                                                         <!-- <div class="col-sm-6 col-lg-6">
@@ -1780,7 +1820,7 @@
                                                                 </p>
                                                             </div> -->
                                                         <div class="col-sm-6 col-lg-5">
-                                                            <label>Unit & Price </label>
+                                                            <label>{{ localeData?.unit_price }} </label>
                                                         </div>
                                                         <div class="col-xl-6 col-lg-5 col-sm-5 col-11 pl-0 mr-b15">
                                                             <div class="row add-new-field mr-b15">
@@ -1789,7 +1829,7 @@
                                                                         [cssClass]="'form-control'"
                                                                         type="text"
                                                                         id="select-unit"
-                                                                        placeholder="Select Unit"
+                                                                        [placeholder]="localeData?.select_unit"
                                                                     ></text-field>
                                                                 </div>
                                                                 <div class="col-sm-6 col-6">
@@ -1797,7 +1837,7 @@
                                                                         [cssClass]="'form-control'"
                                                                         type="text"
                                                                         id="rate"
-                                                                        placeholder="Rate"
+                                                                        [placeholder]="commonLocaleData?.app_rate"
                                                                     ></text-field>
                                                                 </div>
                                                                 <button
@@ -1815,7 +1855,7 @@
                                                                         [cssClass]="'form-control'"
                                                                         type="text"
                                                                         id="select-unit"
-                                                                        placeholder="Select Unit"
+                                                                        [placeholder]="localeData?.select_unit"
                                                                     ></text-field>
                                                                 </div>
                                                                 <div class="col-sm-6 col-6">
@@ -1823,7 +1863,7 @@
                                                                         [cssClass]="'form-control'"
                                                                         type="text"
                                                                         id="rate"
-                                                                        placeholder="Rate"
+                                                                        [placeholder]="commonLocaleData?.app_rate"
                                                                     ></text-field>
                                                                 </div>
                                                                 <button
@@ -1860,7 +1900,7 @@
                                                                 type="text"
                                                                 id="sales-linked-account"
                                                                 class="form-control"
-                                                                placeholder="All Accounts Selected"
+                                                                [placeholder]="localeData?.all_accounts"
                                                                 disabled
                                                             ></textarea>
                                                         </div>
@@ -1884,7 +1924,7 @@
                                                                 </p>
                                                             </div> -->
                                                         <div class="col-sm-6 col-lg-5">
-                                                            <label>Unit & Price </label>
+                                                            <label>{{ localeData?.unit_price }} </label>
                                                         </div>
                                                         <div class="col-xl-6 col-lg-5 col-sm-5 col-11 pl-0 mr-b15">
                                                             <div class="row add-new-field mr-b15">
@@ -1893,7 +1933,7 @@
                                                                         [cssClass]="'form-control'"
                                                                         type="text"
                                                                         id="sales-select-unit"
-                                                                        placeholder="Select Unit"
+                                                                        [placeholder]="localeData?.select_unit"
                                                                         disabled
                                                                     ></text-field>
                                                                 </div>
@@ -1902,7 +1942,7 @@
                                                                         [cssClass]="'form-control'"
                                                                         type="text"
                                                                         id="sales-rate"
-                                                                        placeholder="Rate"
+                                                                        [placeholder]="commonLocaleData?.app_rate"
                                                                         disabled
                                                                     >
                                                                     </text-field>
@@ -1922,7 +1962,7 @@
                                                                         [cssClass]="'form-control'"
                                                                         type="text"
                                                                         id="sales-select-unit"
-                                                                        placeholder="Select Unit"
+                                                                        [placeholder]="localeData?.select_unit"
                                                                         disabled
                                                                     ></text-field>
                                                                 </div>
@@ -1931,7 +1971,7 @@
                                                                         [cssClass]="'form-control'"
                                                                         type="text"
                                                                         id="sales-rate"
-                                                                        placeholder="Rate"
+                                                                        [placeholder]="commonLocaleData?.app_rate"
                                                                         disabled
                                                                     >
                                                                     </text-field>
@@ -1987,7 +2027,8 @@
                                                                 <div class="row mr-b15">
                                                                     <div class="col-sm-6 col-lg-6">
                                                                         <label
-                                                                            >Opening Qty <span class="red-text"></span
+                                                                            >{{ localeData?.opening_quantity }}
+                                                                            <span class="red-text"></span
                                                                         ></label>
                                                                     </div>
                                                                     <div class="col-sm-6 col-lg-6">
@@ -2005,7 +2046,8 @@
                                                                 <div class="row mr-b15">
                                                                     <div class="col-sm-6 col-lg-6">
                                                                         <label
-                                                                            >Rate <span class="red-text"></span
+                                                                            >{{ commonLocaleData?.app_rate }}
+                                                                            <span class="red-text"></span
                                                                         ></label>
                                                                     </div>
                                                                     <div class="col-sm-6 col-lg-6">
@@ -2086,7 +2128,7 @@
                                                                             [cssClass]="'form-control'"
                                                                             id="stock-output-qty"
                                                                             type="text"
-                                                                            placeholder="Enter Qty"
+                                                                            [placeholder]="localeData?.enter_qty"
                                                                         ></text-field>
                                                                     </div>
                                                                 </div>
@@ -2099,7 +2141,7 @@
                                                                     <div class="col-sm-6 col-lg-6">
                                                                         <sh-select
                                                                             id="stock-output-unit"
-                                                                            placeholder="Enter Qty"
+                                                                            [placeholder]="localeData?.enter_qty"
                                                                         >
                                                                         </sh-select>
                                                                     </div>
@@ -2116,7 +2158,7 @@
                                                                 <text-field
                                                                     [cssClass]="'form-control'"
                                                                     type="text"
-                                                                    placeholder="Stock Name"
+                                                                    [placeholder]="commonLocaleData?.app_stock_name"
                                                                 ></text-field>
                                                             </div>
                                                             <div class="col-lg-6 col-sm-6 col-xl-4 show-on-mobile">
@@ -2127,12 +2169,12 @@
                                                                     [cssClass]="'form-control'"
                                                                     type="text"
                                                                     id="enter-qty"
-                                                                    placeholder="Enter Qty"
+                                                                    [placeholder]="localeData?.enter_qty"
                                                                 ></text-field>
                                                                 <sh-select
                                                                     id="select-stock-unit"
                                                                     class="ml-3"
-                                                                    placeholder="Select Unit"
+                                                                    [placeholder]="localeData?.select_unit"
                                                                 >
                                                                 </sh-select>
                                                                 <button mat-icon-button role="button" type="button">
@@ -2168,7 +2210,7 @@
                                                                             type="text"
                                                                             id="linked-account"
                                                                             class="form-control"
-                                                                            placeholder="All Accounts Selected"
+                                                                            [placeholder]="localeData?.all_accounts"
                                                                         ></textarea>
                                                                     </div>
                                                                     <div class="col-sm-6 col-lg-6">
@@ -2177,7 +2219,9 @@
                                                                     <div class="col-sm-6 col-lg-6 pl-0 mr-b15">
                                                                         <sh-select
                                                                             id="applicable-tax"
-                                                                            placeholder="Select Tax"
+                                                                            [placeholder]="
+                                                                                commonLocaleData?.app_select_tax
+                                                                            "
                                                                         >
                                                                         </sh-select>
                                                                         <p class="mt-1 font-14">
@@ -2190,7 +2234,7 @@
                                                                         </p>
                                                                     </div>
                                                                     <div class="col-sm-6 col-lg-6">
-                                                                        <label>Unit & Price </label>
+                                                                        <label>{{ localeData?.unit_price }} </label>
                                                                     </div>
                                                                     <div
                                                                         class="
@@ -2205,7 +2249,9 @@
                                                                                     [cssClass]="'form-control'"
                                                                                     type="text"
                                                                                     id="select-unit"
-                                                                                    placeholder="Select Unit"
+                                                                                    [placeholder]="
+                                                                                        localeData?.select_unit
+                                                                                    "
                                                                                 ></text-field>
                                                                             </div>
                                                                             <div class="col-sm-6 col-6">
@@ -2213,7 +2259,9 @@
                                                                                     [cssClass]="'form-control'"
                                                                                     type="text"
                                                                                     id="rate"
-                                                                                    placeholder="Rate"
+                                                                                    [placeholder]="
+                                                                                        commonLocaleData?.app_rate
+                                                                                    "
                                                                                 >
                                                                                 </text-field>
                                                                             </div>
@@ -2234,7 +2282,9 @@
                                                                                     [cssClass]="'form-control'"
                                                                                     type="text"
                                                                                     id="select-unit"
-                                                                                    placeholder="Select Unit"
+                                                                                    [placeholder]="
+                                                                                        localeData?.select_unit
+                                                                                    "
                                                                                 ></text-field>
                                                                             </div>
                                                                             <div class="col-sm-6 col-6">
@@ -2242,7 +2292,9 @@
                                                                                     [cssClass]="'form-control'"
                                                                                     type="text"
                                                                                     id="rate"
-                                                                                    placeholder="Rate"
+                                                                                    [placeholder]="
+                                                                                        commonLocaleData?.app_rate
+                                                                                    "
                                                                                 >
                                                                                 </text-field>
                                                                             </div>
@@ -2282,7 +2334,7 @@
                                                                             type="text"
                                                                             id="sales-linked-account"
                                                                             class="form-control"
-                                                                            placeholder="All Accounts Selected"
+                                                                            [placeholder]="localeData?.all_accounts"
                                                                             disabled
                                                                         ></textarea>
                                                                     </div>
@@ -2292,7 +2344,9 @@
                                                                     <div class="col-sm-6 col-lg-6 pl-0 mr-b15">
                                                                         <sh-select
                                                                             id="sales-applicable-tax"
-                                                                            placeholder="Select Tax"
+                                                                            [placeholder]="
+                                                                                commonLocaleData?.app_select_tax
+                                                                            "
                                                                             disabled
                                                                         >
                                                                         </sh-select>
@@ -2306,7 +2360,7 @@
                                                                         </p>
                                                                     </div>
                                                                     <div class="col-sm-6 col-lg-6">
-                                                                        <label>Unit & Price </label>
+                                                                        <label>{{ localeData?.unit_price }} </label>
                                                                     </div>
                                                                     <div
                                                                         class="
@@ -2321,7 +2375,9 @@
                                                                                     [cssClass]="'form-control'"
                                                                                     type="text"
                                                                                     id="sales-select-unit"
-                                                                                    placeholder="Select Unit"
+                                                                                    [placeholder]="
+                                                                                        localeData?.select_unit
+                                                                                    "
                                                                                     disabled
                                                                                 >
                                                                                 </text-field>
@@ -2331,7 +2387,9 @@
                                                                                     [cssClass]="'form-control'"
                                                                                     type="text"
                                                                                     id="sales-rate"
-                                                                                    placeholder="Rate"
+                                                                                    [placeholder]="
+                                                                                        commonLocaleData?.app_rate
+                                                                                    "
                                                                                     disabled
                                                                                 ></text-field>
                                                                             </div>
@@ -2342,7 +2400,9 @@
                                                                                     [cssClass]="'form-control'"
                                                                                     type="text"
                                                                                     id="sales-select-unit"
-                                                                                    placeholder="Select Unit"
+                                                                                    [placeholder]="
+                                                                                        localeData?.select_unit
+                                                                                    "
                                                                                     disabled
                                                                                 >
                                                                                 </text-field>
@@ -2352,7 +2412,9 @@
                                                                                     [cssClass]="'form-control'"
                                                                                     type="text"
                                                                                     id="sales-rate"
-                                                                                    placeholder="Rate"
+                                                                                    [placeholder]="
+                                                                                        commonLocaleData?.app_rate
+                                                                                    "
                                                                                     disabled
                                                                                 ></text-field>
                                                                             </div>
@@ -2451,7 +2513,7 @@
                                                                 [cssClass]="'form-control'"
                                                                 type="text"
                                                                 id="select-stock-unit"
-                                                                placeholder="Select Unit"
+                                                                [placeholder]="localeData?.select_unit"
                                                             ></text-field>
                                                         </div>
                                                     </div>
@@ -2689,7 +2751,7 @@
                                                             </text-field>
                                                         </div>
                                                         <div class="col-xl-2 col-md-6">
-                                                            <label> Opening Qty </label>
+                                                            <label>{{ localeData?.opening_quantity }} </label>
                                                             <text-field
                                                                 [cssClass]="'form-control'"
                                                                 type="text"
@@ -2698,12 +2760,12 @@
                                                             ></text-field>
                                                         </div>
                                                         <div class="col-xl-2 col-md-6">
-                                                            <label> Rate </label>
+                                                            <label> {{ commonLocaleData?.app_rate }} </label>
                                                             <text-field
                                                                 [cssClass]="'form-control'"
                                                                 type="text"
                                                                 id="combo-variant-rate"
-                                                                placeholder="Enter Rate"
+                                                                [placeholder]="localeData?.enter_rate"
                                                             ></text-field>
                                                         </div>
                                                     </div>
@@ -2713,7 +2775,7 @@
                                                             class="font-14 mr-t1 d-flex"
                                                             id="combo-add-more-variant"
                                                         >
-                                                            + Add More</a
+                                                            {{ localeData?.add_more }}</a
                                                         >
                                                     </div>
                                                 </div>
@@ -2764,13 +2826,13 @@
                                                             ></text-field>
                                                         </div>
                                                         <div class="col-xl-2 col-md-6">
-                                                            <label> Rate </label>
+                                                            <label> {{ commonLocaleData?.app_rate }} </label>
                                                             <text-field
                                                                 [cssClass]="'form-control'"
                                                                 type="text"
                                                                 id="combo-addon-rate"
                                                                 class="form-control"
-                                                                placeholder="Enter Rate"
+                                                                [placeholder]="localeData?.enter_rate"
                                                             >
                                                             </text-field>
                                                         </div>
@@ -2789,7 +2851,7 @@
                                                             class="font-14 mr-t1 d-flex"
                                                             id="add-more-addon"
                                                         >
-                                                            + Add More
+                                                            {{ localeData?.add_more }}
                                                         </a>
                                                     </div>
                                                 </div>
@@ -3039,7 +3101,8 @@
                                                 class="text-primary font-14"
                                                 id="combo-add-more-recipe-btn"
                                                 href="javascript:void(0);"
-                                                >+ Add more recipe</a
+                                            >
+                                                {{ localeData?.add_more_recipe }}</a
                                             >
                                         </div>
                                     </div>
@@ -3986,9 +4049,9 @@
                                             >
                                         </button>
                                         <button mat-menu-item>
-                                            <mat-checkbox color="primary" id="check-opening-qty"
-                                                >Opening Qty</mat-checkbox
-                                            >
+                                            <mat-checkbox color="primary" id="check-opening-qty">{{
+                                                localeData?.opening_quantity
+                                            }}</mat-checkbox>
                                         </button>
                                         <button mat-menu-item>
                                             <mat-checkbox color="primary" id="check-opening-amount"
@@ -4198,7 +4261,7 @@
                             class="clear-btn"
                             (click)="resetForm(stockCreateEditForm)"
                         >
-                            Clear
+                            {{ commonLocaleData?.app_clear }}
                         </button>
                         <button
                             *ngIf="!queryParams?.stockUniqueName"
@@ -4207,7 +4270,7 @@
                             (click)="createStock(stockCreateEditForm)"
                             [disabled]="stockCreateEditForm.invalid || !stockForm.stockUnitUniqueName"
                         >
-                            Create Inventory
+                            {{ localeData?.create_inventory }}
                         </button>
                         <button
                             *ngIf="queryParams?.stockUniqueName"
@@ -4215,7 +4278,7 @@
                             class="btn-primary min-width-100"
                             (click)="cancelEdit()"
                         >
-                            Cancel
+                            {{ commonLocaleData?.app_cancel }}
                         </button>
                         <button
                             *ngIf="queryParams?.stockUniqueName"
@@ -4223,7 +4286,7 @@
                             class="btn-danger min-width-100"
                             (click)="deleteStock()"
                         >
-                            Delete
+                            {{ commonLocaleData?.app_delete }}
                         </button>
                         <button
                             *ngIf="queryParams?.stockUniqueName"
@@ -4232,7 +4295,7 @@
                             (click)="updateStock(stockCreateEditForm)"
                             [disabled]="stockCreateEditForm.invalid || !stockForm.stockUnitUniqueName"
                         >
-                            Update
+                            {{ commonLocaleData?.app_update }}
                         </button>
                     </div>
                 </div>

@@ -751,6 +751,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public giddhBalanceDecimalPlaces: number = 2;
     /** Giddh round off method to use in html */
     public giddhRoundOff: any = giddhRoundOff;
+    /** True if einvoice is generated for the voucher */
+    public isEinvoiceGenerated: boolean = false;
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -1275,6 +1277,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                         obj.voucherDetails.voucherDate = cloneDeep(voucherDate);
                         obj.voucherDetails.dueDate = cloneDeep(dueDate);
                     } else {
+                        this.isEinvoiceGenerated = results[0].einvoiceGenerated;
                         this.previousDeposit = results[0]?.deposit;
                         if (this.isMultiCurrencyModule()) {
                             // parse normal response to multi currency response
@@ -1484,8 +1487,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                         this.invFormData.voucherDetails.voucherUniqueName = (results[0] as any)?.uniqueName;
                     }
                 }
-                if (this.invFormData.accountDetails.billingDetails?.gstNumber && this.purchaseBillCompany.billingDetails
-                    .gstNumber) {
+                if (this.isEinvoiceGenerated || (this.invFormData.accountDetails.billingDetails?.gstNumber && this.purchaseBillCompany.billingDetails
+                    .gstNumber)) {
                     this.statesBilling.readonly = true;
                 } else {
                     this.statesBilling.readonly = false;
@@ -1523,8 +1526,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                         } else {
                             this.invFormData.accountDetails = new AccountDetailsClass(tempSelectedAcc);
                         }
-                        if (this.invFormData.accountDetails.billingDetails?.gstNumber && this.purchaseBillCompany.billingDetails
-                            .gstNumbe) {
+                        if (this.isEinvoiceGenerated || (this.invFormData.accountDetails.billingDetails?.gstNumber && this.purchaseBillCompany.billingDetails.gstNumber)) {
                             this.statesBilling.readonly = true;
                         } else {
                             this.statesBilling.readonly = false;
@@ -2242,10 +2244,10 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     this.invFormData.accountDetails[type].state.code = null;
                     this.invFormData.accountDetails[type].state.name = null;
                 }
-                statesEle.readonly = false;
+                statesEle.readonly = this.isEinvoiceGenerated ? true : false;
             }
         } else {
-            statesEle.readonly = false;
+            statesEle.readonly = this.isEinvoiceGenerated ? true : false;
 
         }
         this.checkGstNumValidation(gstVal);
@@ -2684,7 +2686,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             let purchaseOrders = [];
             if (this.selectedPoItems && this.selectedPoItems.length > 0) {
                 this.selectedPoItems.forEach(order => {
-                    purchaseOrders.push({ name: this.linkedPoNumbers[order].voucherNumber, uniqueName: order });
+                    purchaseOrders.push({ name: this.linkedPoNumbers[order]?.voucherNumber, uniqueName: order });
                 });
             }
             requestObject = {
@@ -3738,6 +3740,11 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         if (this.isPurchaseInvoice) {
             this.fieldFilteredOptions = [];
             this.linkedPo = [];
+            this.removePoItem();
+
+            this.invFormData.entries?.forEach(entry => {
+                entry.purchaseOrderItemMapping = null;
+            });
         }
     }
 
@@ -3749,7 +3756,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     }
 
     public getAccountDetails(accountUniqueName: string) {
-        if (this.voucherApiVersion !== 2 && this.isPurchaseInvoice) {
+        if (this.isPurchaseInvoice) {
             this.getVendorPurchaseOrders(accountUniqueName);
         }
         this.store.dispatch(this.salesAction.getAccountDetailsForSales(accountUniqueName));
@@ -4409,7 +4416,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
 
                 if (this.selectedPoItems && this.selectedPoItems.length > 0) {
                     this.selectedPoItems.forEach(order => {
-                        purchaseOrders.push({ name: this.linkedPoNumbers[order].voucherNumber, uniqueName: order });
+                        purchaseOrders.push({ name: this.linkedPoNumbers[order]?.voucherNumber, uniqueName: order });
                     });
                 }
 
@@ -5451,13 +5458,13 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     this.selectedPoItems.push(order?.uniqueName);
 
                     if (!this.linkedPoNumbers[order?.uniqueName]) {
-                        this.purchaseOrders.push({ label: order.number, value: order?.uniqueName, additional: { amount: order.grandTotal?.amountForAccount } });
+                        this.purchaseOrders.push({ label: order?.number, value: order?.uniqueName, additional: { amount: order?.grandTotal?.amountForAccount, totalPending: order?.entries?.length } });
                         this.filterPurchaseOrder('');
                     }
 
                     this.linkedPoNumbers[order?.uniqueName] = [];
-                    this.linkedPoNumbers[order?.uniqueName]['voucherNumber'] = order.number;
-                    this.linkedPoNumbers[order?.uniqueName]['items'] = order.entries;
+                    this.linkedPoNumbers[order?.uniqueName]['voucherNumber'] = order?.number;
+                    this.linkedPoNumbers[order?.uniqueName]['items'] = order?.entries;
                 });
             }
 
@@ -6851,7 +6858,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      */
     public getVendorPurchaseOrders(vendorName: any): void {
         let purchaseOrderGetRequest = { companyUniqueName: this.selectedCompany?.uniqueName, accountUniqueName: vendorName, page: 1, count: 100, sort: '', sortBy: '' };
-        let purchaseOrderPostRequest = { statuses: [PURCHASE_ORDER_STATUS.open, PURCHASE_ORDER_STATUS.partiallyReceived, PURCHASE_ORDER_STATUS.expired, PURCHASE_ORDER_STATUS.cancelled] };
+        let purchaseOrderPostRequest = { statuses: [PURCHASE_ORDER_STATUS.open, PURCHASE_ORDER_STATUS.partiallyConverted] };
 
         if (purchaseOrderGetRequest.companyUniqueName && vendorName) {
             this.purchaseOrders = [];
@@ -6878,7 +6885,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                                 this.purchaseOrders.push({ label: item.number, value: item?.uniqueName, additional: { grandTotal: item.pendingDetails.grandTotal, pending: pending.join(", "), totalPending: totalPending } });
                                 this.filterPurchaseOrder('');
                                 this.linkedPoNumbers[item?.uniqueName] = [];
-                                this.linkedPoNumbers[item?.uniqueName]['voucherNumber'] = item.voucherNumber;
+                                this.linkedPoNumbers[item?.uniqueName]['voucherNumber'] = item.number;
                                 this.linkedPoNumbers[item?.uniqueName]['items'] = [];
                             });
                         }
@@ -7057,7 +7064,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 let selectedPoItems = [];
                 this.selectedPoItems.forEach(order => {
                     if (!this.linkedPo.includes(order)) {
-                        let entries = this.linkedPoNumbers[order]['items'];
+                        let entries = (this.linkedPoNumbers[order]) ? this.linkedPoNumbers[order]['items'] : [];
 
                         if (entries && entries.length > 0 && this.invFormData.entries && this.invFormData.entries.length > 0) {
                             entries.forEach(entry => {
@@ -7689,7 +7696,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @memberof VoucherComponent
      */
     public openProductDropdown(): void {
-        if (this.invFormData?.voucherDetails?.customerUniquename || this.invFormData?.voucherDetails?.customerName) {
+        if ((this.invFormData?.voucherDetails?.customerUniquename || this.invFormData?.voucherDetails?.customerName) && !this.isEinvoiceGenerated) {
             setTimeout(() => {
                 const salesSelect: any = !this.isMobileScreen ? this.selectAccount?.first : this.selectAccount?.last;
                 if (salesSelect) {
@@ -8103,13 +8110,13 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 this.getStateCode('billingDetails', this.statesBilling);
                 this.autoFillShippingDetails();
             } else {
-                this.statesBilling.readonly = false;
+                this.statesBilling.readonly = (this.isEinvoiceGenerated) ? true : false;
                 this._cdr.detectChanges();
             }
             if (this.invFormData.accountDetails.shippingDetails?.gstNumber) {
                 this.getStateCode('shippingDetails', this.statesShipping);
             } else {
-                this.statesShipping.readonly = false;
+                this.statesShipping.readonly = (this.isEinvoiceGenerated) ? true : false;
                 this._cdr.detectChanges();
             }
 
@@ -8459,12 +8466,14 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @memberof VoucherComponent
      */
     public openFirstEntry(): void {
-        this.setActiveIndx(0);
+        if (!this.isEinvoiceGenerated) {
+            this.setActiveIndx(0);
 
-        setTimeout(() => {
-            const firstEntry: any = this.selectAccount?.first;
-            firstEntry?.openDropdownPanel();
-        });
+            setTimeout(() => {
+                const firstEntry: any = this.selectAccount?.first;
+                firstEntry?.openDropdownPanel();
+            });
+        }
     }
 
     // CMD + G functionality

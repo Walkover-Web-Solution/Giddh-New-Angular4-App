@@ -110,6 +110,8 @@ export class InventoryTransactionListComponent implements OnInit {
     public advanceSearchModalResponse: any = null;
     /** Observable to cancel api on reports api call */
     private cancelApi$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Holds inventory type module  */
+    public moduleType: string = '';
 
     constructor(
         private generalService: GeneralService,
@@ -184,6 +186,11 @@ export class InventoryTransactionListComponent implements OnInit {
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.reportUniqueName = response?.uniqueName;
+                if (response?.type?.toUpperCase() === 'FIXEDASSETS') {
+                    this.moduleType = 'FIXED_ASSETS';
+                } else {
+                    this.moduleType = response?.type?.toUpperCase();
+                }
                 if (this.isReportLoaded) {
                     this.getStockTransactionalReport(true);
                 }
@@ -214,6 +221,7 @@ export class InventoryTransactionListComponent implements OnInit {
             stockReportRequest.stockGroups = undefined;
             stockReportRequest.stocks = undefined;
             stockReportRequest.variants = undefined;
+            stockReportRequest.inventoryType = this.moduleType;
             this.inventoryService.getStockTransactionReport(stockReportRequest).pipe(takeUntil(this.cancelApi$)).subscribe(response => {
                 this.isLoading = false;
                 if (response && response.body && response.status === 'success') {
@@ -255,6 +263,7 @@ export class InventoryTransactionListComponent implements OnInit {
                 };
                 balanceReportRequest.from = undefined;
                 balanceReportRequest.to = undefined;
+                balanceReportRequest.inventoryType = this.moduleType;
                 this.inventoryService.getStockTransactionReportBalance(queryParams, balanceReportRequest).pipe(takeUntil(this.cancelApi$)).subscribe(response => {
                     if (response && response.body && response.status === 'success') {
                         this.stockTransactionReportBalance = response.body;
