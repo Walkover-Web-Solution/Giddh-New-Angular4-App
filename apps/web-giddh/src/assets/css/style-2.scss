@@ -333,6 +333,7 @@ $custom-typography: mat-typography-config(
     .select-field-input {
         border-bottom: 1px solid var(--color-secondary-input-bar-border);
         margin-bottom: 1px !important;
+        background-color: transparent !important;
     }
 }
 .multicurrency-edit {
@@ -696,6 +697,15 @@ $custom-typography: mat-typography-config(
 
 .mat-calendar-body-cell-content {
     color: var(--color-datepicker-ternary-date);
+}
+
+.mat-calendar-body-cell {
+    &.mat-calendar-body-active {
+        .mat-calendar-body-selected {
+            color: var(--color-white) !important;
+            background-color: #3f51b5;
+        }
+    }
 }
 
 .product-option {
@@ -8442,6 +8452,11 @@ highcharts-chart {
             font-size: 14px;
         }
     }
+
+    .input-bill {
+        border-radius: 0px !important;
+        background-color: transparent !important;
+    }
 }
 
 .aside-menu-othertax-open {
@@ -12703,6 +12718,26 @@ body.prevent-body-scroll {
     .hidden-md {
         display: none !important;
     }
+    ngx-daterangepicker-material,
+    giddh-datepicker {
+        .recurring-form .mat-form-field {
+            min-width: 95px !important;
+        }
+    }
+    .invoice-date-label giddh-datepicker .mat-form-field {
+        min-width: 95px !important;
+    }
+    .mat-form-field-wrapper
+        .mat-form-field-infix
+        .mat-input-element.mat-form-field-autofill-control.mat-datepicker-input {
+        padding-left: 32px !important;
+    }
+    .invoice-date-due-date {
+        .mat-datepicker-toggle .mat-button-wrapper .mat-datepicker-toggle-default-icon {
+            width: 15px;
+            right: 18px !important;
+        }
+    }
 }
 
 /*media query for height resolution*/
@@ -12779,6 +12814,7 @@ body.prevent-body-scroll {
 
 .mat-calendar-arrow {
     border-top-color: var(--color-white) !important;
+    fill: var(--color-white);
 }
 
 .mat-datepicker-toggle,
