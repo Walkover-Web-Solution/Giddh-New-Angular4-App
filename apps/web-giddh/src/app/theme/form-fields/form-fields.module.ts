@@ -20,13 +20,15 @@ import { CdkScrollComponent } from "./cdk-scroll/cdk-scroll.component";
 import { CdkScrollModule } from "./cdk-scroll/cdk-scroll.module";
 import { ScrollingModule } from "@angular/cdk/scrolling";
 import { SelectMultipleFieldsComponent } from "./select-multiple-fields/select-multiple-fields.component";
+import { SelectMultipleCheckboxComponent } from "./select-multiple-checkbox/select-multiple-checkbox.component";
 
 @NgModule({
     declarations: [
         TextFieldComponent,
         SelectFieldComponent,
         SelectMultipleFieldsComponent,
-        CdkScrollComponent
+        CdkScrollComponent,
+        SelectMultipleCheckboxComponent
     ],
     imports: [
         CommonModule,

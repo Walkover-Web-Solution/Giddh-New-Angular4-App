@@ -157,6 +157,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
             this.autoSelectSearchOption = true;
             this.searchRequest.q = this.reportUniqueName;
         }
+        console.log(this.customiseColumns);
 
         this.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe(dateObj => {
             if (dateObj) {
@@ -301,6 +302,8 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
             if (response && response.body && response.status === 'success') {
                 if (response.body?.columns) {
                     this.customiseColumns?.forEach(column => {
+                        console.log(response,column);
+
                         if (!response.body.columns?.includes(column?.value)) {
                             column.checked = false;
                         }
@@ -352,6 +355,8 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ReportFiltersComponent
      */
     public filteredDisplayColumns(): void {
+        console.log(this.customiseColumns, this.displayedColumns);
+
         this.displayedColumns = this.customiseColumns?.filter(value => value?.checked).map(column => column?.value);
         this.selectedColumns.emit(this.displayedColumns);
         this.changeDetection.detectChanges();

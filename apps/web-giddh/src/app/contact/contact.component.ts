@@ -1495,6 +1495,8 @@ export class ContactComponent implements OnInit, OnDestroy {
         if (this.activeTab === "vendor" && computedColumns?.length) {
             computedColumns?.push("action");
         }
+        console.log(computedColumns);
+
         if (computedColumns?.findIndex(s => s === "openingBalance") > -1) {
             computedColumns = computedColumns?.filter(s => s !== "openingBalance");
             computedColumns.splice(1, 0, "openingBalance");
