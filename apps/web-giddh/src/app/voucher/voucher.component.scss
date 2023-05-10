@@ -1796,6 +1796,13 @@ span.eligible-ITC {
         min-width: 430px;
         max-width: 430px;
     }
+    .inner-container {
+        max-width: 970px;
+    }
+    table.table.table-custom-invoice.basic,
+    .other-details-section {
+        max-width: 940px;
+    }
 }
 
 @media (min-width: 768px) {
