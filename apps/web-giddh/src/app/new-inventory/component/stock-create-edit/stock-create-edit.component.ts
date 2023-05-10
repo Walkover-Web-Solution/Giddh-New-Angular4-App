@@ -479,63 +479,56 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         const existingVariants = cloneDeep(this.stockForm.variants);
         let stockVariants = [];
         variants?.forEach(variant => {
-            const lastIndexOfSlash = variant?.lastIndexOf(" / ");
-            const previousVariant = lastIndexOfSlash === -1 ? variant : variant?.slice(0, lastIndexOfSlash);
-            let variantExists = existingVariants?.find(existingVariant => existingVariant?.name === variant || existingVariant?.name === previousVariant);
-            let variantObj;
-            if (variantExists) {
-                variantExists.name = variant;
-                variantObj = variantExists
-            } else {
-                variantObj = {
-                    name: variant,
-                    archive: false,
-                    uniqueName: undefined,
-                    skuCode: undefined,
+            let variantExists = existingVariants?.filter(existingVariant => existingVariant?.name === variant);
 
-                    salesInformation: [
-                        {
-                            rate: undefined,
-                            stockUnitCode: undefined,
-                            stockUnitName: undefined,
-                            stockUnitUniqueName: undefined,
-                            accountUniqueName: this.stockForm.salesAccountDetails?.accountUniqueName
-                        }
-                    ],
-                    purchaseInformation: [
-                        {
-                            rate: undefined,
-                            stockUnitCode: undefined,
-                            stockUnitName: undefined,
-                            stockUnitUniqueName: undefined,
-                            accountUniqueName: this.stockForm.purchaseAccountDetails?.accountUniqueName
-                        }
-                    ],
-                    fixedAssetsInformation: [
-                        {
-                            rate: undefined,
-                            stockUnitCode: undefined,
-                            stockUnitName: undefined,
-                            stockUnitUniqueName: undefined,
-                            accountUniqueName: this.stockForm.fixedAssetAccountDetails?.accountUniqueName
-                        }
-                    ],
-                    warehouseBalance: [
-                        {
-                            warehouse: {
-                                name: (defaultWarehouse) ? defaultWarehouse[0]?.name : undefined,
-                                uniqueName: (defaultWarehouse) ? defaultWarehouse[0]?.uniqueName : undefined
-                            },
-                            stockUnit: {
-                                name: this.stockUnitName,
-                                code: this.stockForm.stockUnitUniqueName
-                            },
-                            openingQuantity: 0,
-                            openingAmount: 0
-                        }
-                    ]
-                };
-            }
+            let variantObj = (variantExists?.length > 0) ? variantExists[0] : {
+                name: variant,
+                archive: false,
+                uniqueName: undefined,
+                skuCode: undefined,
+
+                salesInformation: [
+                    {
+                        rate: undefined,
+                        stockUnitCode: undefined,
+                        stockUnitName: undefined,
+                        stockUnitUniqueName: undefined,
+                        accountUniqueName: this.stockForm.salesAccountDetails?.accountUniqueName
+                    }
+                ],
+                purchaseInformation: [
+                    {
+                        rate: undefined,
+                        stockUnitCode: undefined,
+                        stockUnitName: undefined,
+                        stockUnitUniqueName: undefined,
+                        accountUniqueName: this.stockForm.purchaseAccountDetails?.accountUniqueName
+                    }
+                ],
+                fixedAssetsInformation: [
+                    {
+                        rate: undefined,
+                        stockUnitCode: undefined,
+                        stockUnitName: undefined,
+                        stockUnitUniqueName: undefined,
+                        accountUniqueName: this.stockForm.fixedAssetAccountDetails?.accountUniqueName
+                    }
+                ],
+                warehouseBalance: [
+                    {
+                        warehouse: {
+                            name: (defaultWarehouse) ? defaultWarehouse[0]?.name : undefined,
+                            uniqueName: (defaultWarehouse) ? defaultWarehouse[0]?.uniqueName : undefined
+                        },
+                        stockUnit: {
+                            name: this.stockUnitName,
+                            code: this.stockForm.stockUnitUniqueName
+                        },
+                        openingQuantity: 0,
+                        openingAmount: 0
+                    }
+                ]
+            };
             stockVariants.push(variantObj);
         });
 
@@ -588,7 +581,6 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 ]
             });
         }
-
         this.stockForm.variants = stockVariants;
     }
 
