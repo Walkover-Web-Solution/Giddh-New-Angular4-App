@@ -75,10 +75,10 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
     @Input() public maskInput: string;
     @Input() public prefixInput: string;
     @Input() public suffixInput: string;
-    /** True, if current transaction is advance receipt
-     * Required for inclusive tax rate calculation
+    /** True, if current transaction tax needed to be calculated inclusively
+     * Required for inclusive tax rate calculation for advance receipt, variant (purchase-sales-<fixed-asset>) inclusive
     */
-    @Input() public isAdvanceReceipt: boolean;
+    @Input() public calculateTaxInclusively: boolean;
 
     @Output() public isApplicableTaxesEvent: EventEmitter<boolean> = new EventEmitter();
     @Output() public taxAmountSumEvent: EventEmitter<number> = new EventEmitter();
@@ -133,7 +133,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
         if (changes['totalForTax'] && changes['totalForTax'].currentValue !== changes['totalForTax'].previousValue) {
             this.calculateInclusiveOrExclusiveTaxes();
         }
-        if (changes['isAdvanceReceipt'] && changes['isAdvanceReceipt'].currentValue !== changes['isAdvanceReceipt'].previousValue) {
+        if (changes['calculateTaxInclusively'] && changes['calculateTaxInclusively'].currentValue !== changes['calculateTaxInclusively'].previousValue) {
             this.change();
         }
 
@@ -268,7 +268,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
                     }));
                 }
             });
-            if (this.isAdvanceReceipt) {
+            if (this.calculateTaxInclusively) {
                 // In case of advance receipt only a single tax is allowed in addition to CESS
                 // Check if atleast a single non-cess tax is selected, if yes, then disable all other taxes
                 // except CESS taxes
@@ -366,7 +366,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
      * @memberof TaxControlComponent
      */
     private calculateInclusiveOrExclusiveTaxes(): void {
-        if (this.isAdvanceReceipt) {
+        if (this.calculateTaxInclusively) {
             // Inclusive tax rate
             this.taxTotalAmount = giddhRoundOff((this.totalForTax * this.taxSum) / (100 + this.taxSum), this.giddhBalanceDecimalPlaces);
         } else {

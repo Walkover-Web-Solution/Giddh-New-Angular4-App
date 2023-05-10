@@ -271,6 +271,12 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public isUnitOpen: boolean = false;
     /** Stores the stock variants */
     public stockVariants$: Observable<Array<IOption>> = observableOf([]);
+    /** True, if stock category is 'expenses' and inclusive tax is applied */
+    public purchaseTaxInclusive: boolean;
+    /** True, if stock category is 'income' and inclusive tax is applied */
+    public salesTaxInclusive: boolean;
+    /** True, if stock category is 'assets' and inclusive tax is applied */
+    public fixedAssetTaxInclusive: boolean;
 
     constructor(private store: Store<AppState>,
         private cdRef: ChangeDetectorRef,
@@ -500,6 +506,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public ngAfterViewInit(): void {
         this.needToReCalculate.pipe(takeUntil(this.destroyed$)).subscribe(a => {
             if (a) {
+                console.log('currentTxn: ', this.currentTxn);
+                this.setTaxCalculationMethodForStock();
                 this.amountChanged();
                 this.calculateTotal();
                 this.calculateTax();
@@ -1882,5 +1890,36 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     private loadStockVariants(stockUniqueName: string): void {
         this.stockVariants$ = this.ledgerService.loadStockVariants(stockUniqueName).pipe(
             map((variants: IVariant[]) => variants.map((variant: IVariant) => ({label: variant.name, value: variant.uniqueName}))));
+    }
+
+    private setTaxCalculationMethodForStock(): void {
+        if (this.currentTxn.isStock && this.currentTxn.selectedAccount) {
+            const category = this.currentTxn.selectedAccount.category;
+            switch (category) {
+                case 'income':
+                    this.salesTaxInclusive = true;
+                    this.purchaseTaxInclusive = false;
+                    this.fixedAssetTaxInclusive = false;
+                    break;
+                case 'expenses':
+                    this.salesTaxInclusive = false;
+                    this.purchaseTaxInclusive = true;
+                    this.fixedAssetTaxInclusive = false;
+                    break;
+                case 'assets':
+                    this.salesTaxInclusive = false;
+                    this.purchaseTaxInclusive = false;
+                    this.fixedAssetTaxInclusive = true;
+                    break;
+                default:
+                    this.salesTaxInclusive = false;
+                    this.purchaseTaxInclusive = false;
+                    this.fixedAssetTaxInclusive = false;
+            }
+        } else {
+            this.salesTaxInclusive = false;
+            this.purchaseTaxInclusive = false;
+            this.fixedAssetTaxInclusive = false;
+        }
     }
 }
