@@ -873,7 +873,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         if (this.warehouses?.length > 0) {
             defaultWarehouse = this.warehouses?.filter(warehouse => warehouse?.isDefault);
         }
-        const variantfixedAsseAccountUniqueName = stockForm?.fixedAssetAccountDetails?.accountUniqueName ?? stockForm.variants[0]?.fixedAssetAccountDetails?.accountUniqueName;
+        const variantfixedAssetAccountUniqueName = stockForm?.fixedAssetAccountDetails?.accountUniqueName ?? stockForm.variants[0]?.fixedAssetAccountDetails?.accountUniqueName;
         const variantPurchaseAccountUniqueName = stockForm?.purchaseAccountDetails?.accountUniqueName ?? stockForm.variants[0]?.purchaseAccountDetails?.accountUniqueName;
         const variantSalesAccountUniqueName = stockForm?.salesAccountDetails?.accountUniqueName ?? stockForm.variants[0]?.salesAccountDetails?.accountUniqueName;
         stockForm.variants = stockForm.variants?.map(variant => {
@@ -887,7 +887,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
             });
 
             const fixedAssetsUnitRate = variant?.fixedAssetsInformation?.map(unitRate => {
-                unitRate.accountUniqueName = variantfixedAsseAccountUniqueName;
+                unitRate.accountUniqueName = variantfixedAssetAccountUniqueName;
                 return unitRate;
             });
             if (!variant.name) {
@@ -924,7 +924,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         });
 
         if (this.stockForm.type === 'FIXED_ASSETS') {
-            stockForm['fixedAssetsAccountUniqueNames'] = variantfixedAsseAccountUniqueName ? [variantfixedAsseAccountUniqueName] : [];
+            stockForm['fixedAssetsAccountUniqueNames'] = variantfixedAssetAccountUniqueName ? [variantfixedAssetAccountUniqueName] : [];
 
         } else {
             stockForm['purchaseAccountUniqueNames'] = variantPurchaseAccountUniqueName ? [variantPurchaseAccountUniqueName] : [];
