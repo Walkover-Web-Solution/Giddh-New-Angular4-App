@@ -1,7 +1,7 @@
 export const PURCHASE_ORDER_STATUS = {
     'open': 'open',
-    'received': 'received',
-    'partiallyReceived': 'partially-received',
+    'converted': 'converted',
+    'partiallyConverted': 'partially-converted',
     'expired': 'expired',
     'cancelled': 'cancelled'
 }
@@ -22,8 +22,8 @@ export interface PurchaseOrderStatus {
 
 export const purchaseOrderStatus: PurchaseOrderStatus[] = [
     { label: 'Open', value: PURCHASE_ORDER_STATUS.open },
-    { label: 'Received', value: PURCHASE_ORDER_STATUS.received },
-    { label: 'Partially Received', value: PURCHASE_ORDER_STATUS.partiallyReceived },
+    { label: 'Converted', value: PURCHASE_ORDER_STATUS.converted },
+    { label: 'Partially Converted', value: PURCHASE_ORDER_STATUS.partiallyConverted },
     { label: 'Expired', value: PURCHASE_ORDER_STATUS.expired },
     { label: 'Cancelled', value: PURCHASE_ORDER_STATUS.cancelled }
 ];
