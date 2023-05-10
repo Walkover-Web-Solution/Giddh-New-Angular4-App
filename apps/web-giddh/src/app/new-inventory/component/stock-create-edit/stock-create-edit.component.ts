@@ -234,7 +234,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
             }
         });
 
-        if (this.stockForm.type === 'PRODUCT' || 'SERVICE') {
+        if (this.stockForm.type === 'PRODUCT' || this.stockForm.type === 'SERVICE') {
             this.getPurchaseAccounts();
             this.getSalesAccounts();
         }
@@ -581,7 +581,6 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 ]
             });
         }
-
         this.stockForm.variants = stockVariants;
     }
 
@@ -874,65 +873,66 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         if (this.warehouses?.length > 0) {
             defaultWarehouse = this.warehouses?.filter(warehouse => warehouse?.isDefault);
         }
-        if (!this.queryParams.stockUniqueName) {
-            stockForm.variants = stockForm.variants?.map(variant => {
-                if (!this.isVariantAvailable) {
-                    const salesUnitRate = variant?.salesInformation?.map(unitRate => {
-                        unitRate.accountUniqueName = stockForm.salesAccountDetails?.accountUniqueName;
-                        return unitRate;
-                    });
-                    const purchaseUnitRate = variant?.purchaseInformation?.map(unitRate => {
-                        unitRate.accountUniqueName = stockForm.purchaseAccountDetails?.accountUniqueName;
-                        return unitRate;
-                    });
-
-                    const fixedAssetsUnitRate = variant?.fixedAssetsInformation?.map(unitRate => {
-                        unitRate.accountUniqueName = stockForm.fixedAssetAccountDetails?.accountUniqueName;
-                        return unitRate;
-                    });
-                    variant.name = stockForm.name;
-                    if (this.stockForm.type === 'FIXED_ASSETS') {
-                        variant['unitRates'] = fixedAssetsUnitRate;
-                    } else {
-                        variant['unitRates'] = salesUnitRate?.concat(purchaseUnitRate);
-                    }
-                    variant.warehouseBalance = [
-                        {
-                            warehouse: {
-                                name: (defaultWarehouse) ? defaultWarehouse[0]?.name : undefined,
-                                uniqueName: (defaultWarehouse) ? defaultWarehouse[0]?.uniqueName : undefined
-                            },
-                            stockUnit: {
-                                name: this.stockUnitName,
-                                code: this.stockForm.stockUnitUniqueName
-                            },
-                            openingQuantity: 0,
-                            openingAmount: 0
-                        }
-                    ]
-                } else {
-                    if (this.stockForm.type === 'FIXED_ASSETS') {
-                        variant['unitRates'] = variant.fixedAssetsUnitRate;
-                    } else {
-                        variant['unitRates'] = variant.salesInformation?.concat(variant?.purchaseInformation);
-                    }
-                }
-                delete variant.salesInformation;
-                delete variant.purchaseInformation;
-                delete variant.fixedAssetsInformation;
-                variant['unitRates'] = variant?.unitRates?.filter(rate => rate?.rate);
-                return variant;
+        const variantfixedAssetAccountUniqueName = stockForm?.fixedAssetAccountDetails?.accountUniqueName ?? stockForm.variants[0]?.fixedAssetAccountDetails?.accountUniqueName;
+        const variantPurchaseAccountUniqueName = stockForm?.purchaseAccountDetails?.accountUniqueName ?? stockForm.variants[0]?.purchaseAccountDetails?.accountUniqueName;
+        const variantSalesAccountUniqueName = stockForm?.salesAccountDetails?.accountUniqueName ?? stockForm.variants[0]?.salesAccountDetails?.accountUniqueName;
+        stockForm.variants = stockForm.variants?.map(variant => {
+            const salesUnitRate = variant?.salesInformation?.map(unitRate => {
+                unitRate.accountUniqueName = variantSalesAccountUniqueName;
+                return unitRate;
             });
-        }
+            const purchaseUnitRate = variant?.purchaseInformation?.map(unitRate => {
+                unitRate.accountUniqueName = variantPurchaseAccountUniqueName;
+                return unitRate;
+            });
+
+            const fixedAssetsUnitRate = variant?.fixedAssetsInformation?.map(unitRate => {
+                unitRate.accountUniqueName = variantfixedAssetAccountUniqueName;
+                return unitRate;
+            });
+            if (!variant.name) {
+                variant.name = stockForm.name;
+            }
+            if (this.stockForm.type === 'FIXED_ASSETS') {
+                variant['unitRates'] = fixedAssetsUnitRate;
+            } else {
+                variant['unitRates'] = salesUnitRate?.concat(purchaseUnitRate);
+            }
+            variant.warehouseBalance = [
+                {
+                    warehouse: {
+                        name: (defaultWarehouse) ? defaultWarehouse[0]?.name : undefined,
+                        uniqueName: (defaultWarehouse) ? defaultWarehouse[0]?.uniqueName : undefined
+                    },
+                    stockUnit: {
+                        name: this.stockUnitName,
+                        code: this.stockForm.stockUnitUniqueName
+                    },
+                    openingQuantity: 0,
+                    openingAmount: 0
+                }
+            ]
+
+            delete variant.salesInformation;
+            delete variant.purchaseInformation;
+            delete variant.fixedAssetsInformation;
+            delete variant.fixedAssetAccountDetails;
+            delete variant.purchaseAccountDetails;
+            delete variant.salesAccountDetails;
+            variant['unitRates'] = variant?.unitRates?.filter(rate => rate?.rate);
+            return variant;
+        });
+
         if (this.stockForm.type === 'FIXED_ASSETS') {
-            stockForm['fixedAssetsAccountUniqueNames'] = stockForm.fixedAssetAccountDetails?.accountUniqueName ? [stockForm.fixedAssetAccountDetails?.accountUniqueName] : [];
+            stockForm['fixedAssetsAccountUniqueNames'] = variantfixedAssetAccountUniqueName ? [variantfixedAssetAccountUniqueName] : [];
+
         } else {
-            stockForm['purchaseAccountUniqueNames'] = stockForm.purchaseAccountDetails?.accountUniqueName ? [stockForm.purchaseAccountDetails?.accountUniqueName] : [];
-            stockForm['salesAccountUniqueNames'] = stockForm.salesAccountDetails?.accountUniqueName ? [stockForm.salesAccountDetails?.accountUniqueName] : [];
+            stockForm['purchaseAccountUniqueNames'] = variantPurchaseAccountUniqueName ? [variantPurchaseAccountUniqueName] : [];
+            stockForm['salesAccountUniqueNames'] = variantSalesAccountUniqueName ? [variantSalesAccountUniqueName] : [];
         }
+        delete stockForm.fixedAssetAccountDetails;
         delete stockForm.purchaseAccountDetails;
         delete stockForm.salesAccountDetails;
-        delete stockForm.fixedAssetAccountDetails;
         if (this.stockForm.type === 'FIXED_ASSETS') {
             delete stockForm.purchaseAccountUniqueNames;
             delete stockForm.salesAccountUniqueNames;
@@ -979,34 +979,43 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 this.isPurchaseInformationEnabled = response?.body?.purchaseAccountUniqueNames ? true : false;
                 this.isSalesInformationEnabled = response?.body?.salesAccountUniqueNames ? true : false;
                 this.isFixedAssetsInformationEnabled = response?.body?.fixedAssetsAccountUniqueNames ? true : false;
+                if (response.body.purchaseAccountDetails) {
+                    this.stockForm.purchaseAccountDetails = response.body.purchaseAccountDetails;
+                }
+                if (response.body.salesAccountDetails) {
+                    this.stockForm.salesAccountDetails = response.body.salesAccountDetails;
+                }
+                if (response.body.fixedAssetAccountDetails) {
+                    this.stockForm.fixedAssetAccountDetails = response.body.fixedAssetAccountDetails;
+                }
                 this.stockForm.variants = this.stockForm.variants?.map(variant => {
-                    this.stockForm.purchaseAccountDetails = variant?.purchaseAccountDetails;
-                    this.stockForm.salesAccountDetails = variant?.salesAccountDetails;
-                    this.stockForm.fixedAssetAccountDetails = variant?.fixedAssetAccountDetails;
-                    if (!variant?.salesAccountDetails?.unitRates?.length) {
-                        this.stockForm.salesAccountDetails?.unitRates.push({
+                    if (!variant.purchaseAccountDetails?.unitRates?.length) {
+                        variant.purchaseAccountDetails?.unitRates.push({
                             rate: null,
                             stockUnitCode: null,
                             stockUnitUniqueName: null
                         });
                     }
-                    if (!variant?.purchaseAccountDetails?.unitRates?.length) {
-                        this.stockForm.purchaseAccountDetails?.unitRates.push({
+
+                    if (!variant?.salesAccountDetails?.unitRates?.length) {
+                        variant.salesAccountDetails?.unitRates.push({
                             rate: null,
                             stockUnitCode: null,
                             stockUnitUniqueName: null
                         });
                     }
                     if (!variant?.fixedAssetAccountDetails?.unitRates?.length) {
-                        this.stockForm.fixedAssetAccountDetails?.unitRates.push({
+                        variant.fixedAssetAccountDetails?.unitRates.push({
                             rate: null,
                             stockUnitCode: null,
                             stockUnitUniqueName: null
                         });
                     }
-                    variant['purchaseInformation'] = variant?.purchaseAccountDetails?.unitRates;
+
                     variant['salesInformation'] = variant?.salesAccountDetails?.unitRates;
+                    variant['purchaseInformation'] = variant?.purchaseAccountDetails?.unitRates;
                     variant['fixedAssetsInformation'] = variant?.fixedAssetAccountDetails?.unitRates;
+
                     return variant;
                 });
 
@@ -1082,8 +1091,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
 
         this.toggleLoader(true);
         const request = this.formatRequest();
-
-        this.inventoryService.updateStock(request, this.stockGroupUniqueName, this.queryParams?.stockUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.inventoryService.updateStockV2(request, this.stockGroupUniqueName, this.queryParams?.stockUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.toggleLoader(false);
             if (response?.status === "success") {
                 this.selectedGroupTaxes();

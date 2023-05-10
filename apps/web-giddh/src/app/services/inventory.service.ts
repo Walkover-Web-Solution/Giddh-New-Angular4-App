@@ -1059,6 +1059,29 @@ export class InventoryService {
         }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e, stockUniqueName)));
     }
 
+    /**
+     * . This will use for update stock
+     *
+     * @param {*} model
+     * @param {*} stockGroupUniqueName
+     * @param {string} stockUniqueName
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof InventoryService
+     */
+    public updateStockV2(model: any, stockGroupUniqueName: any, stockUniqueName: string): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        let url = this.config.apiUrl + INVENTORY_API.UPDATE_STOCK_V2;
+        url = url?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
+        url = url?.replace(':stockGroupUniqueName', encodeURIComponent(stockGroupUniqueName));
+        url = url?.replace(':stockUniqueName', encodeURIComponent(stockUniqueName));
+
+        return this.http.put(url, model).pipe(map((res) => {
+            let data: BaseResponse<any, any> = res;
+            data.request = model;
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
+    }
+
     public getStock(stockUniqueName: string): Observable<BaseResponse<any, any>> {
         const companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + INVENTORY_API.NEW.GET;

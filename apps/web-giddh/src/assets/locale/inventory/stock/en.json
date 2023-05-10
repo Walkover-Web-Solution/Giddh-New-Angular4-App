@@ -9,6 +9,10 @@
     "enter_code": "Enter Code",
     "applicable_tax": "Applicable Tax",
     "account": "Account",
+    "fixed_assets_information": "Fixed Assets Information",
+    "is_fixed_assets_inclusive":"Is Fixed Assets Rate Tax Inclusive?",
+    "is_purchase_inclusive":"Is Purchase Rate Tax Inclusive?",
+    "is_sales_inclusive":"Is Sales Rate Tax Inclusive?",
     "purchase_information": "Purchase Information",
     "linked_accounts": "Linked Accounts",
     "unit_price": "Unit & Price ",
@@ -24,6 +28,10 @@
     "variant_name": "Variant Name",
     "opening_quantity": "Opening Quantity",
     "opening_amount": "Opening Amount",
+    "purchase_unit": "Purchase Unit Rates",
+    "sales_unit": "Sales Unit Rates",
+    "is_rate_inclusive":"Is Rate Tax Inclusive?",
+    "fixed_assets_unit": "Fixed Assets Unit Rates",
     "archive": "Archive",
     "custom_field": "Custom Field",
     "opening_balance": " Opening Balance",
@@ -38,6 +46,7 @@
     "enter_sku_number": "Enter SKU number",
     "unit_cm_mm":"eg. cm, kg, m, box",
     "avail_on_variant":"Available on variant",
+    "variant_name":"Variant Name",
     "variant_name_linked":"Variant Name (linked)",
     "final_product_1":"Final Product 1 ",
     "final_product_2":"Final Product 2 ",
@@ -52,6 +61,7 @@
     "add_new_row":"+ Add New Row",
     "liability_assets":"Liability/Asset A/c",
     "expense_acc":"Expense A/c",
+    "to":"to",
     "amount":"Amount",
     "add_more_recipe":"+ Add more recipe",
     "combo_name":"Combo Name",
@@ -61,6 +71,7 @@
     "product_service":"Product Name/Service",
     "all_accounts":"All Accounts Selected",
     "stock_name":"Stock Name",
-    "create_inventory":"Create Inventory"
+    "create_inventory":"Create Inventory",
+    "variant_1":"variant 1"
 }
 

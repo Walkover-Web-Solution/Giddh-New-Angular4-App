@@ -55,9 +55,9 @@
                                     <div class="col-md-8 col-lg-8 col-xl-6 col-12 upper-common-form-label-field">
                                         <div class="row mr-b1">
                                             <div class="col-sm-6 col-lg-4">
-                                                <label class="product-name-label"
-                                                    >{{
-                                                        stockForm.type === "FIXEDASSETS"
+                                                <label class="product-name-label">
+                                                    {{
+                                                        stockForm.type === "FIXED_ASSETS"
                                                             ? localeData?.fixed_assets
                                                             : (stockForm.type | titlecase)
                                                     }}
@@ -81,7 +81,7 @@
                                             <div class="col-sm-6 col-lg-4">
                                                 <label
                                                     >{{
-                                                        stockForm.type === "FIXEDASSETS"
+                                                        stockForm.type === "FIXED_ASSETS"
                                                             ? localeData?.fixed_assets
                                                             : (stockForm.type | titlecase)
                                                     }}
@@ -89,11 +89,12 @@
                                                     <span class="red-text">*</span></label
                                                 >
                                             </div>
+
                                             <div class="col-sm-6 col-lg-6 ml-lg-2">
                                                 <select-field
                                                     [cssClass]="'form-control'"
                                                     [name]="'stockUnitCode'"
-                                                    [placeholder]="commonLocaleData?.app_unit"
+                                                    [placeholder]="localeData?.select_unit"
                                                     [options]="stockUnits"
                                                     (selectedOption)="
                                                         stockForm.stockUnitUniqueName = $event?.value;
@@ -373,11 +374,9 @@
                                                     <div class="row">
                                                         <div
                                                             class="col-xl-6 col-12 pl-4 fixed-assets"
-                                                            *ngIf="
-                                                                stockForm.type === 'FIXED_ASSETS' ? 'FIXEDASSETS' : ''
-                                                            "
+                                                            *ngIf="stockForm.type === 'FIXED_ASSETS'"
                                                         >
-                                                            <div class="purchase-information account-tab-1">
+                                                            <div class="purchase-information fixed-assets-information">
                                                                 <div class="select-puchase-info mr-b15">
                                                                     <mat-checkbox
                                                                         color="primary"
@@ -386,7 +385,7 @@
                                                                         name="isFixedAssetsInformationEnabled"
                                                                         [(ngModel)]="isFixedAssetsInformationEnabled"
                                                                         (ngModelChange)="toggleFixedAssetsInformation()"
-                                                                        >Fixed Assets Information
+                                                                        >{{ localeData?.fixed_assets_information }}
                                                                     </mat-checkbox>
                                                                 </div>
                                                                 <div class="row">
@@ -416,7 +415,7 @@
                                                                         *ngIf="!isVariantAvailable"
                                                                     >
                                                                         <label
-                                                                            >Is Fixed Assets Rate Tax Inclusive?
+                                                                            >{{ localeData?.is_fixed_assets_inclusive }}
                                                                         </label>
                                                                     </div>
                                                                     <div
@@ -428,11 +427,11 @@
                                                                         *ngIf="!isVariantAvailable"
                                                                     >
                                                                         <mat-checkbox
-                                                                            name="fixedAssetsTaxInclusive"
+                                                                            name="fixedAssetTaxInclusive"
                                                                             color="primary"
                                                                             [(ngModel)]="
                                                                                 stockForm.variants[0][
-                                                                                    'fixedAssetsTaxInclusive'
+                                                                                    'fixedAssetTaxInclusive'
                                                                                 ]
                                                                             "
                                                                         ></mat-checkbox>
@@ -466,9 +465,14 @@
                                                                                         'form-control unit-rates'
                                                                                     "
                                                                                     [name]="
-                                                                                        'variantFixedAssetsUnitRate' + j
+                                                                                        'variantFixedAssetsUnitRate' +
+                                                                                        j +
+                                                                                        '_' +
+                                                                                        i
                                                                                     "
-                                                                                    [placeholder]="'Unit'"
+                                                                                    [placeholder]="
+                                                                                        commonLocaleData?.app_unit
+                                                                                    "
                                                                                     [options]="stockUnits"
                                                                                     (selectedOption)="
                                                                                         selectVariantFixedAssetsUnit(
@@ -494,7 +498,9 @@
                                                                                         'variantFixedAssetsUnitRate' + j
                                                                                     "
                                                                                     [type]="'number'"
-                                                                                    [placeholder]="'Rate'"
+                                                                                    [placeholder]="
+                                                                                        commonLocaleData?.app_rate
+                                                                                    "
                                                                                     [(ngModel)]="
                                                                                         variantFixedAssetsUnitRate.rate
                                                                                     "
@@ -562,11 +568,7 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <ng-container
-                                                            *ngIf="
-                                                                stockForm.type !== 'FIXED_ASSETS' ? 'FIXEDASSETS' : ''
-                                                            "
-                                                        >
+                                                        <ng-container *ngIf="stockForm.type !== 'FIXED_ASSETS'">
                                                             <div class="col-xl-6 col-12">
                                                                 <div class="purchase-information account-tab-3">
                                                                     <div class="select-puchase-info mr-b15">
@@ -588,7 +590,15 @@
                                                                                 localeData?.linked_accounts
                                                                             }}</label>
                                                                         </div>
-                                                                        <div class="col-sm-6 col-lg-7 pl-0 mr-b15">
+
+                                                                        <div
+                                                                            class="
+                                                                                col-sm-6 col-lg-7
+                                                                                pl-0
+                                                                                mr-b15
+                                                                                which-tab
+                                                                            "
+                                                                        >
                                                                             <select-field
                                                                                 [cssClass]="'form-control'"
                                                                                 [name]="'purchaseAccount'"
@@ -597,9 +607,9 @@
                                                                                 "
                                                                                 [options]="purchaseAccounts"
                                                                                 (selectedOption)="
-                                                                                    stockForm.purchaseAccountDetails.accountUniqueName =
+                                                                                    stockForm?.purchaseAccountDetails.accountUniqueName =
                                                                                         $event?.value;
-                                                                                    stockForm.variants[0].purchaseInformation.accountUniqueName =
+                                                                                    stockForm?.variants[0]?.purchaseInformation.accountUniqueName =
                                                                                         $event?.value
                                                                                 "
                                                                                 [readonly]="
@@ -613,7 +623,7 @@
                                                                             *ngIf="!isVariantAvailable"
                                                                         >
                                                                             <label
-                                                                                >Is Purchase Rate Tax Inclusive?
+                                                                                >{{ localeData?.is_purchase_inclusive }}
                                                                             </label>
                                                                         </div>
                                                                         <div
@@ -621,6 +631,7 @@
                                                                                 col-xl-6 col-lg-5 col-sm-5 col-11
                                                                                 pl-0
                                                                                 mr-b15
+                                                                                which-tab-1
                                                                             "
                                                                             *ngIf="!isVariantAvailable"
                                                                         >
@@ -645,6 +656,7 @@
                                                                                 col-xl-6 col-lg-5 col-sm-5 col-11
                                                                                 pl-0
                                                                                 mr-b15
+                                                                                which-tab-3
                                                                             "
                                                                             *ngIf="!isVariantAvailable"
                                                                         >
@@ -663,9 +675,14 @@
                                                                                             'form-control unit-rates'
                                                                                         "
                                                                                         [name]="
-                                                                                            'variantPurchaseUnit' + j
+                                                                                            'variantPurchaseUnit' +
+                                                                                            j +
+                                                                                            '_' +
+                                                                                            i
                                                                                         "
-                                                                                        [placeholder]="'Unit'"
+                                                                                        [placeholder]="
+                                                                                            commonLocaleData?.app_unit
+                                                                                        "
                                                                                         [options]="stockUnits"
                                                                                         (selectedOption)="
                                                                                             selectVariantSalesPurchaseUnit(
@@ -689,10 +706,14 @@
                                                                                         [placeholder]="'0.00'"
                                                                                         [name]="
                                                                                             'variantPurchaseUnitRate' +
-                                                                                            j
+                                                                                            j +
+                                                                                            '_' +
+                                                                                            i
                                                                                         "
                                                                                         [type]="'number'"
-                                                                                        [placeholder]="'Rate'"
+                                                                                        [placeholder]="
+                                                                                            commonLocaleData?.app_rate
+                                                                                        "
                                                                                         [(ngModel)]="
                                                                                             variantPurchaseUnitRate.rate
                                                                                         "
@@ -715,7 +736,7 @@
                                                                                     "
                                                                                     *ngIf="
                                                                                         stockForm.variants[0]
-                                                                                            .purchaseInformation
+                                                                                            ?.purchaseInformation
                                                                                             ?.length > 1
                                                                                     "
                                                                                     [disabled]="
@@ -738,7 +759,7 @@
                                                                                     *ngIf="
                                                                                         j ===
                                                                                         stockForm.variants[0]
-                                                                                            .purchaseInformation
+                                                                                            ?.purchaseInformation
                                                                                             ?.length -
                                                                                             1
                                                                                     "
@@ -761,7 +782,7 @@
                                                                 </div>
                                                             </div>
                                                             <div class="col-xl-6 col-12 pl-4">
-                                                                <div class="sales-information">
+                                                                <div class="sales-information which-tab-4">
                                                                     <div class="select-puchase-info mr-b15">
                                                                         <mat-checkbox
                                                                             color="primary"
@@ -789,9 +810,9 @@
                                                                                 "
                                                                                 [options]="salesAccounts"
                                                                                 (selectedOption)="
-                                                                                    stockForm.salesAccountDetails.accountUniqueName =
+                                                                                    stockForm?.salesAccountDetails.accountUniqueName =
                                                                                         $event?.value;
-                                                                                    stockForm.variants[0].salesInformation.accountUniqueName =
+                                                                                    stockForm?.variants[0]?.salesInformation.accountUniqueName =
                                                                                         $event?.value
                                                                                 "
                                                                                 [readonly]="!isSalesInformationEnabled"
@@ -802,7 +823,9 @@
                                                                             class="col-sm-6 col-lg-5"
                                                                             *ngIf="!isVariantAvailable"
                                                                         >
-                                                                            <label>Is Sales Rate Tax Inclusive?</label>
+                                                                            <label>{{
+                                                                                localeData?.is_sales_inclusive
+                                                                            }}</label>
                                                                         </div>
                                                                         <div
                                                                             class="
@@ -847,8 +870,15 @@
                                                                                 <div class="col-sm-6 col-6">
                                                                                     <select-field
                                                                                         [cssClass]="'form-control'"
-                                                                                        [name]="'variantSalesUnit' + j"
-                                                                                        [placeholder]="'Unit'"
+                                                                                        [name]="
+                                                                                            'variantSalesUnit' +
+                                                                                            j +
+                                                                                            '_' +
+                                                                                            i
+                                                                                        "
+                                                                                        [placeholder]="
+                                                                                            commonLocaleData?.app_unit
+                                                                                        "
                                                                                         [options]="stockUnits"
                                                                                         (selectedOption)="
                                                                                             selectVariantSalesPurchaseUnit(
@@ -869,10 +899,15 @@
                                                                                         [cssClass]="'form-control'"
                                                                                         [type]="'text'"
                                                                                         [name]="
-                                                                                            'variantSalesUnitRate' + j
+                                                                                            'variantSalesUnitRate' +
+                                                                                            j +
+                                                                                            '_' +
+                                                                                            i
                                                                                         "
                                                                                         [type]="'number'"
-                                                                                        [placeholder]="'Rate'"
+                                                                                        [placeholder]="
+                                                                                            commonLocaleData?.app_rate
+                                                                                        "
                                                                                         [(ngModel)]="
                                                                                             variantSalesUnitRate.rate
                                                                                         "
@@ -889,12 +924,12 @@
                                                                                     type="button"
                                                                                     (click)="
                                                                                         deleteVariantSalesUnitPrice(
-                                                                                            stockForm.variants[0],
+                                                                                            stockForm?.variants[0],
                                                                                             j
                                                                                         )
                                                                                     "
                                                                                     *ngIf="
-                                                                                        stockForm.variants[0]
+                                                                                        stockForm?.variants[0]
                                                                                             .salesInformation?.length >
                                                                                         1
                                                                                     "
@@ -912,13 +947,13 @@
                                                                                     disableRipple
                                                                                     (click)="
                                                                                         addNewVariantSalesUnitPrice(
-                                                                                            stockForm.variants[0]
+                                                                                            stockForm?.variants[0]
                                                                                         )
                                                                                     "
                                                                                     *ngIf="
                                                                                         j ===
-                                                                                        stockForm.variants[0]
-                                                                                            .salesInformation?.length -
+                                                                                        stockForm?.variants[0]
+                                                                                            ?.salesInformation?.length -
                                                                                             1
                                                                                     "
                                                                                     [disabled]="
@@ -947,7 +982,7 @@
                                     </div>
                                 </mat-tab>
                                 <mat-tab label="Inventory">
-                                    <div class="tab-container-new">
+                                    <div class="tab-container-new inventory-tab">
                                         <!-- <p class="mr-b15 font-14">
                                             <span>
                                                 <mat-checkbox
@@ -1056,17 +1091,24 @@
                                                 </mat-checkbox>
                                             </span>
                                         </p> -->
+
                                         <p class="mr-b15 font-14">
                                             <span>
                                                 <mat-checkbox
                                                     color="primary"
                                                     [checked]="true"
+                                                    [disabled]="queryParams?.stockUniqueName"
                                                     id="variant"
                                                     name="isVariantAvailable"
                                                     [(ngModel)]="isVariantAvailable"
                                                     (ngModelChange)="addVariantOption()"
                                                 >
-                                                    {{ localeData?.variant_this }} {{ stockForm.type | lowercase }}
+                                                    {{ localeData?.variant_this }}
+                                                    {{
+                                                        stockForm.type === "FIXED_ASSETS"
+                                                            ? localeData?.fixed_assets
+                                                            : (stockForm.type | lowercase)
+                                                    }}
                                                     {{ localeData?.has_multiples }}
                                                 </mat-checkbox>
                                             </span>
@@ -1160,39 +1202,40 @@
                                                     <table class="stock-table font-14" style="margin-left: 2px">
                                                         <tr>
                                                             <th class="variant-name-column table-heading-color">
-                                                                Variant Name<span class="red-text">*</span>
+                                                                {{ localeData?.variant_name
+                                                                }}<span class="red-text">*</span>
                                                             </th>
                                                             <th class="unit-name table-heading-color">Unit</th>
                                                             <th class="text-right opening-qty table-heading-color">
-                                                                Opening Quantity
+                                                                {{ localeData?.opening_quantity }}
                                                             </th>
                                                             <th class="text-right opening-amount table-heading-color">
-                                                                Opening Amount
+                                                                {{ localeData?.opening_amount }}
                                                             </th>
                                                             <th class="sku-code table-heading-color">SKU Code</th>
                                                             <th
                                                                 class="sales-purchase-info table-heading-color"
                                                                 *ngIf="isPurchaseInformationEnabled"
                                                             >
-                                                                Purchase Unit Rates
+                                                                {{ localeData?.purchase_unit }}
                                                             </th>
                                                             <th
                                                                 class="sales-purchase-info table-heading-color"
                                                                 *ngIf="isSalesInformationEnabled"
                                                             >
-                                                                Sales Unit Rates
+                                                                {{ localeData?.sales_unit }}
                                                             </th>
                                                             <th
                                                                 class="sales-purchase-info table-heading-color"
                                                                 *ngIf="isFixedAssetsInformationEnabled"
                                                             >
-                                                                Fixed Assets Unit Rates
+                                                                {{ localeData?.fixed_assets_unit }}
                                                             </th>
                                                             <th class="text-center unit-name table-heading-color">
-                                                                Is Rate Tax Inclusive?
+                                                                {{ localeData?.is_rate_inclusive }}
                                                             </th>
                                                             <th class="text-center archive table-heading-color">
-                                                                Archive
+                                                                {{ localeData?.archive }}
                                                             </th>
                                                         </tr>
                                                         <tr
@@ -1246,7 +1289,11 @@
                                                                 ></text-field>
                                                             </td>
                                                             <td
-                                                                class="sales-purchase-info"
+                                                                class="
+                                                                    sales-purchase-info
+                                                                    inventory-tab
+                                                                    purchase-information-enable
+                                                                "
                                                                 *ngIf="isPurchaseInformationEnabled"
                                                             >
                                                                 <ng-container
@@ -1259,7 +1306,7 @@
                                                                         <select-field
                                                                             [cssClass]="'form-control unit-rates'"
                                                                             [name]="'variantPurchaseUnit' + i + '_' + j"
-                                                                            [placeholder]="'Unit'"
+                                                                            [placeholder]="commonLocaleData?.app_unit"
                                                                             [options]="stockUnits"
                                                                             (selectedOption)="
                                                                                 selectVariantSalesPurchaseUnit(
@@ -1322,7 +1369,11 @@
                                                                 </ng-container>
                                                             </td>
                                                             <td
-                                                                class="sales-purchase-info"
+                                                                class="
+                                                                    sales-purchase-info
+                                                                    inventory-tab
+                                                                    sales-information-enable
+                                                                "
                                                                 *ngIf="isSalesInformationEnabled"
                                                             >
                                                                 <ng-container
@@ -1335,7 +1386,7 @@
                                                                         <select-field
                                                                             [cssClass]="'form-control unit-rates'"
                                                                             [name]="'variantSalesUnit' + i + '_' + j"
-                                                                            [placeholder]="'Unit'"
+                                                                            [placeholder]="commonLocaleData?.app_unit"
                                                                             [options]="stockUnits"
                                                                             (selectedOption)="
                                                                                 selectVariantSalesPurchaseUnit(
@@ -1393,7 +1444,11 @@
                                                                 </ng-container>
                                                             </td>
                                                             <td
-                                                                class="sales-purchase-info fixed-assets-unit-rates"
+                                                                class="
+                                                                    sales-purchase-info
+                                                                    fixed-assets-unit-rates
+                                                                    inventory-tab
+                                                                "
                                                                 *ngIf="isFixedAssetsInformationEnabled"
                                                             >
                                                                 <ng-container
@@ -1405,8 +1460,10 @@
                                                                     <div class="sales-purchase-wrapper d-flex">
                                                                         <select-field
                                                                             [cssClass]="'form-control unit-rates'"
-                                                                            [name]="'variantFixedAssetsUnit' + j"
-                                                                            [placeholder]="'Unit'"
+                                                                            [name]="
+                                                                                'variantFixedAssetsUnit' + j + '_' + i
+                                                                            "
+                                                                            [placeholder]="commonLocaleData?.app_unit"
                                                                             [options]="stockUnits"
                                                                             (selectedOption)="
                                                                                 selectVariantFixedAssetsUnit(
@@ -1423,7 +1480,12 @@
                                                                                 'form-control text-right unit-amount'
                                                                             "
                                                                             [placeholder]="'0.00'"
-                                                                            [name]="'variantFixedAssetsUnitRate' + j"
+                                                                            [name]="
+                                                                                'variantFixedAssetsUnitRate' +
+                                                                                j +
+                                                                                '_' +
+                                                                                i
+                                                                            "
                                                                             [(ngModel)]="
                                                                                 variantFixedAssetsUnitRate.rate
                                                                             "
@@ -1484,7 +1546,7 @@
                                                                         color="primary"
                                                                         name="variantSalesTaxInclusive{{ i }}"
                                                                         [(ngModel)]="variant.salesTaxInclusive"
-                                                                        [matTooltip]="'Is Sales Rate Tax Inclusive?'"
+                                                                        [matTooltip]="localeData?.is_sales_inclusive"
                                                                         matTooltipPosition="above"
                                                                     ></mat-checkbox>
                                                                     <mat-checkbox
@@ -1492,24 +1554,18 @@
                                                                         color="primary"
                                                                         name="variantPurchaseTaxInclusive{{ i }}"
                                                                         [(ngModel)]="variant.purchaseTaxInclusive"
-                                                                        [matTooltip]="'Is Purchase Rate Tax Inclusive?'"
+                                                                        [matTooltip]="localeData?.is_purchase_inclusive"
                                                                         matTooltipPosition="above"
                                                                     ></mat-checkbox>
                                                                 </ng-container>
-                                                                <ng-container
-                                                                    *ngIf="
-                                                                        stockForm.type === 'FIXED_ASSETS'
-                                                                            ? 'FIXEDASSETS'
-                                                                            : ''
-                                                                    "
-                                                                >
+                                                                <ng-container *ngIf="stockForm.type === 'FIXED_ASSETS'">
                                                                     <mat-checkbox
                                                                         color="primary"
                                                                         name="variantFixedAssetsTaxInclusive{{ i }}"
-                                                                        [(ngModel)]="variant.fixedAssetsTaxInclusive"
-                                                                        [checked]="variant.fixedAssetsTaxInclusive"
+                                                                        [(ngModel)]="variant.fixedAssetTaxInclusive"
+                                                                        [checked]="variant.fixedAssetTaxInclusive"
                                                                         [matTooltip]="
-                                                                            'Is Fixed Assets Rate Tax Inclusive?'
+                                                                            localeData?.is_fixed_assets_inclusive
                                                                         "
                                                                         matTooltipPosition="above"
                                                                     ></mat-checkbox>
@@ -1624,7 +1680,10 @@
                                                 <div class="row mr-b1">
                                                     <div class="col-sm-6 col-lg-4">
                                                         <label *ngIf="inlineEditCustomField !== 1"
-                                                            >{{ stockForm.customField1Heading || "Custom Field" }}
+                                                            >{{
+                                                                stockForm.customField1Heading ||
+                                                                    localeData?.custom_field
+                                                            }}
 
                                                             <span class="pull-right right-fix-pencil-icon">
                                                                 <i
@@ -1669,7 +1728,10 @@
                                                 <div class="row mr-b1">
                                                     <div class="col-sm-6 col-lg-4">
                                                         <label *ngIf="inlineEditCustomField !== 2"
-                                                            >{{ stockForm.customField2Heading || "Custom Field" }}
+                                                            >{{
+                                                                stockForm.customField2Heading ||
+                                                                    localeData?.custom_field
+                                                            }}
 
                                                             <span class="pull-right right-fix-pencil-icon">
                                                                 <i
@@ -1767,9 +1829,11 @@
                                                                     availableFieldTypes.Boolean
                                                                 "
                                                             >
-                                                                <mat-radio-button value="true"> TRUE </mat-radio-button>
+                                                                <mat-radio-button value="true">
+                                                                    {{ commonLocaleData?.app_true }}
+                                                                </mat-radio-button>
                                                                 <mat-radio-button value="false">
-                                                                    FALSE
+                                                                    {{ commonLocaleData?.app_false }}
                                                                 </mat-radio-button>
                                                             </mat-radio-group>
                                                         </div>
@@ -1787,7 +1851,7 @@
                                                 <div class="col-xl-12">
                                                     <div class="row">
                                                         <div class="col-xl-2 col-md-6">
-                                                            <label> variant 1 </label>
+                                                            <label> {{ localeData?.variant_1 }} </label>
                                                             <!-- vaiant will be auto fill and readonly view -->
                                                             <text-field
                                                                 [cssClass]="'form-control'"
@@ -1799,7 +1863,7 @@
                                                             </text-field>
                                                         </div>
                                                         <div class="col-xl-2 col-md-6">
-                                                            <label> SKU </label>
+                                                            <label> {{ commonLocaleData?.app_sku }} </label>
                                                             <text-field
                                                                 [cssClass]="'form-control'"
                                                                 type="text"
@@ -1808,7 +1872,7 @@
                                                             ></text-field>
                                                         </div>
                                                         <div class="col-xl-2 col-md-6">
-                                                            <label> Opening Balance </label>
+                                                            <label> {{ localeData?.opening_balance }} </label>
                                                             <text-field
                                                                 [cssClass]="'form-control'"
                                                                 type="text"
@@ -1857,7 +1921,7 @@
                                                 <div class="col-xl-12">
                                                     <div class="row">
                                                         <div class="col-xl-2 col-md-6">
-                                                            <label> Item </label>
+                                                            <label> {{ localeData?.add_item }} </label>
                                                             <text-field
                                                                 [cssClass]="'form-control'"
                                                                 type="text"
@@ -1866,7 +1930,7 @@
                                                             ></text-field>
                                                         </div>
                                                         <div class="col-xl-2 col-md-6">
-                                                            <label> Quantity </label>
+                                                            <label> {{ localeData?.quantity }} </label>
                                                             <text-field
                                                                 [cssClass]="'form-control'"
                                                                 type="text"
@@ -1875,7 +1939,7 @@
                                                             ></text-field>
                                                         </div>
                                                         <div class="col-xl-2 col-md-6">
-                                                            <label> SKU </label>
+                                                            <label> {{ commonLocaleData?.app_sku }} </label>
                                                             <text-field
                                                                 [cssClass]="'form-control'"
                                                                 type="text"
@@ -1884,7 +1948,7 @@
                                                             ></text-field>
                                                         </div>
                                                         <div class="col-xl-2 col-md-6">
-                                                            <label> Unit </label>
+                                                            <label> {{ commonLocaleData?.app_unit }} </label>
                                                             <text-field
                                                                 [cssClass]="'form-control'"
                                                                 type="text"
@@ -1902,7 +1966,7 @@
                                                             ></text-field>
                                                         </div>
                                                         <div class="col-xl-2 col-md-6">
-                                                            <label> Available on variant </label>
+                                                            <label> {{ localeData?.avail_on_variant }} </label>
                                                             <!-- All available variant list show with checkbox -->
                                                             <sh-select placeholder="" id="addon-available"></sh-select>
                                                         </div>
@@ -1930,7 +1994,7 @@
                                                         <div class="row variant-field">
                                                             <div class="col-xl-6 d-flex flex-column flex-sm-row">
                                                                 <div class="variant-name-field">
-                                                                    <label> SKU </label>
+                                                                    <label> {{ commonLocaleData?.app_sku }} </label>
                                                                     <!-- All variant list will show in dropdown -->
                                                                     <text-field
                                                                         [cssClass]="'form-control'"
@@ -1942,7 +2006,7 @@
                                                                 </div>
                                                                 <!-- If we feel sku number variant name will auto fill if availble on list -->
                                                                 <div class="variant-name-field mr-b15">
-                                                                    <label> Variant Name </label>
+                                                                    <label> {{ localeData?.variant_name }}</label>
                                                                     <!-- All variant list will show in dropdown -->
                                                                     <sh-select
                                                                         placeholder=""
@@ -1953,9 +2017,9 @@
                                                                     <label class="d-block hide-label-on-mobile">
                                                                         &nbsp;
                                                                     </label>
-                                                                    <span class="text-primary font-14"
-                                                                        >Variant Name (linked)</span
-                                                                    >
+                                                                    <span class="text-primary font-14">{{
+                                                                        localeData?.variant_name_linked
+                                                                    }}</span>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -1970,7 +2034,7 @@
                                                                 "
                                                             >
                                                                 <div class="width-30-percent">
-                                                                    <label> Final Product 1 </label>
+                                                                    <label> {{ localeData?.final_product_1 }} </label>
                                                                     <text-field
                                                                         [cssClass]="'form-control'"
                                                                         type="text"
@@ -1981,7 +2045,7 @@
                                                                 </div>
                                                                 <!-- final product 2 will be show if multiple product will generated by single recipe -->
                                                                 <div class="width-30-percent" hidden>
-                                                                    <label> Final Product 2 </label>
+                                                                    <label> {{ localeData?.final_product_2 }} </label>
                                                                     <text-field
                                                                         [cssClass]="'form-control'"
                                                                         type="text"
@@ -1991,7 +2055,7 @@
                                                                     </text-field>
                                                                 </div>
                                                                 <div class="width-30-percent">
-                                                                    <label> Output Qty </label>
+                                                                    <label> {{ localeData?.output_qty }} </label>
                                                                     <text-field
                                                                         [cssClass]="'form-control'"
                                                                         type="text"
@@ -2001,7 +2065,7 @@
                                                                     </text-field>
                                                                 </div>
                                                                 <div class="width-30-percent">
-                                                                    <label> Output Unit </label>
+                                                                    <label> {{ localeData?.output_unit }} </label>
                                                                     <text-field
                                                                         [cssClass]="'form-control'"
                                                                         type="text"
@@ -2039,7 +2103,7 @@
                                                                 "
                                                             >
                                                                 <div class="width-30-percent">
-                                                                    <label> Attribute </label>
+                                                                    <label> {{ localeData?.attribute }} </label>
                                                                     <text-field
                                                                         [cssClass]="'form-control'"
                                                                         type="text"
@@ -2049,7 +2113,7 @@
                                                                     </text-field>
                                                                 </div>
                                                                 <div class="width-30-percent">
-                                                                    <label> Input Qty </label>
+                                                                    <label> {{ localeData?.input_qty }} </label>
                                                                     <text-field
                                                                         [cssClass]="'form-control'"
                                                                         type="text"
@@ -2059,7 +2123,7 @@
                                                                     </text-field>
                                                                 </div>
                                                                 <div class="width-30-percent">
-                                                                    <label> Input Unit </label>
+                                                                    <label>{{ localeData?.input_unit }} </label>
                                                                     <text-field
                                                                         [cssClass]="'form-control'"
                                                                         type="text"
@@ -2101,7 +2165,7 @@
                                                             class="text-primary font-14"
                                                             id="add-expense-btn"
                                                         >
-                                                            + Add Expense
+                                                            {{ localeData?.add_expense }}
                                                         </a>
                                                         <a
                                                             href="javascript:void(0);"
@@ -2112,7 +2176,8 @@
                                                                 add-new-final-product
                                                             "
                                                             id="add-new-product-btn"
-                                                            >+ Add New Row</a
+                                                        >
+                                                            {{ localeData?.add_row }}</a
                                                         >
                                                     </div>
                                                     <div
@@ -2134,7 +2199,7 @@
                                                             >
                                                             </text-field>
                                                         </div>
-                                                        <span class="to-span"> to </span>
+                                                        <span class="to-span"> {{ localeData?.to }} </span>
                                                         <div class="width-30-percent">
                                                             <text-field
                                                                 [cssClass]="'form-control'"
@@ -2192,7 +2257,9 @@
                                     <div class="col-md-8 col-lg-8 col-xl-6 col-12">
                                         <div class="row mr-b15">
                                             <div class="col-sm-12 col-md-4 col-lg-6">
-                                                <label>Combo Name<span class="red-text">*</span></label>
+                                                <label
+                                                    >{{ localeData?.combo_name }}<span class="red-text">*</span></label
+                                                >
                                             </div>
                                             <div class="col-sm-12 col-md-6 col-lg-6">
                                                 <text-field
@@ -2205,7 +2272,10 @@
                                         </div>
                                         <div class="row mr-b15">
                                             <div class="col-sm-12 col-md-4 col-lg-6">
-                                                <label>Unit<span class="red-text">*</span></label>
+                                                <label
+                                                    >{{ commonLocaleData?.app_unit
+                                                    }}<span class="red-text">*</span></label
+                                                >
                                             </div>
                                             <div class="col-sm-12 col-md-6 col-lg-6">
                                                 <sh-select
@@ -2216,7 +2286,10 @@
                                         </div>
                                         <div *ngIf="false" class="row mr-b15">
                                             <div class="col-sm-12 col-md-4 col-lg-6">
-                                                <label>Under Group <span class="red-text">*</span></label>
+                                                <label
+                                                    >{{ localeData?.under_group }}
+                                                    <span class="red-text">*</span></label
+                                                >
                                             </div>
                                             <div class="col-sm-12 col-md-6 col-lg-6">
                                                 <sh-select
@@ -2227,7 +2300,10 @@
                                         </div>
                                         <div class="row mr-b15">
                                             <div class="col-sm-12 col-md-4 col-lg-6">
-                                                <label>Unique Name<span class="red-text">*</span></label>
+                                                <label
+                                                    >{{ commonLocaleData?.app_unique_name
+                                                    }}<span class="red-text">*</span></label
+                                                >
                                             </div>
                                             <div class="col-sm-12 col-md-6 col-lg-6">
                                                 <text-field
@@ -2240,7 +2316,7 @@
                                         </div>
                                         <div class="row mr-b15">
                                             <div class="col-sm-12 col-md-4 col-lg-6">
-                                                <label>HSN </label>
+                                                <label>{{ commonLocaleData?.app_hsn }} </label>
                                             </div>
                                             <div class="col-sm-12 col-md-6 col-lg-6">
                                                 <text-field
@@ -2253,7 +2329,7 @@
                                         </div>
                                         <div class="row mr-b15">
                                             <div class="col-sm-12 col-md-4 col-lg-6">
-                                                <label>SKU </label>
+                                                <label>{{ commonLocaleData?.app_sku }} </label>
                                             </div>
                                             <div class="col-sm-12 col-md-6 col-lg-6">
                                                 <text-field
