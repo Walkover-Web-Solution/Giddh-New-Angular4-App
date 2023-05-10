@@ -677,17 +677,10 @@ textarea:focus {
     height: 34px !important;
 }
 
-textarea.form-control {
-    height: auto !important;
-}
-
 form label {
     font-size: 14px;
 }
 
-// .billing-address input, .billing-address textarea{
-//     background-color: transparent !important;
-// }
 .billing-address .selected-val {
     border: none !important;
     padding-right: 2px !important;
@@ -1036,11 +1029,6 @@ section.static-invoice-table {
     margin-left: 10px;
 }
 
-// redesign in DIV formate css
-// .customer-invoice-table:nth-child(2) {
-//   padding-top: 10px;
-//   padding-bottom: 10px;
-// }
 .mt-1 {
     margin-top: 10px;
 }
@@ -1451,15 +1439,20 @@ table.table.table-custom-invoice.basic,
     list-style: none;
 }
 
-.amount-field,
-.balance-due-text {
+.amount-field {
     min-width: 150px !important;
     margin-left: 15px;
 }
 
-#deposit-dropdown p {
+.balance-due-text {
+    min-width: 150px !important;
+    margin-left: 23px;
+}
+
+#deposit-dropdown > strong {
     text-align: left;
     font-weight: 600;
+    display: block;
 }
 
 .sku-and-custom-fields {
@@ -1854,15 +1847,6 @@ span.eligible-ITC {
     .customer-invoice-table label {
         font-size: 13px;
     }
-
-    .invoice-date-due-date {
-        // display: none;
-        // margin-left: 0;
-        // margin-top: 45px;
-    }
-    // #actionPane{
-    //     margin-top: 30px;
-    // }
 
     .wrapper-customer-table .col-sm-2 {
         padding-right: 0;
