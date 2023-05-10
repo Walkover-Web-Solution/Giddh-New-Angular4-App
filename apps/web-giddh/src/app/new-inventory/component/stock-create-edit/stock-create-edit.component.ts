@@ -479,56 +479,63 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         const existingVariants = cloneDeep(this.stockForm.variants);
         let stockVariants = [];
         variants?.forEach(variant => {
-            let variantExists = existingVariants?.filter(existingVariant => existingVariant?.name === variant);
+            const lastIndexOfSlash = variant?.lastIndexOf(" / ");
+            const previousVariant = lastIndexOfSlash === -1 ? variant : variant?.slice(0, lastIndexOfSlash);
+            let variantExists = existingVariants?.find(existingVariant => existingVariant?.name === variant || existingVariant?.name === previousVariant);
+            let variantObj;
+            if (variantExists) {
+                variantExists.name = variant;
+                variantObj = variantExists
+            } else {
+                variantObj = {
+                    name: variant,
+                    archive: false,
+                    uniqueName: undefined,
+                    skuCode: undefined,
 
-            let variantObj = (variantExists?.length > 0) ? variantExists[0] : {
-                name: variant,
-                archive: false,
-                uniqueName: undefined,
-                skuCode: undefined,
-
-                salesInformation: [
-                    {
-                        rate: undefined,
-                        stockUnitCode: undefined,
-                        stockUnitName: undefined,
-                        stockUnitUniqueName: undefined,
-                        accountUniqueName: this.stockForm.salesAccountDetails?.accountUniqueName
-                    }
-                ],
-                purchaseInformation: [
-                    {
-                        rate: undefined,
-                        stockUnitCode: undefined,
-                        stockUnitName: undefined,
-                        stockUnitUniqueName: undefined,
-                        accountUniqueName: this.stockForm.purchaseAccountDetails?.accountUniqueName
-                    }
-                ],
-                fixedAssetsInformation: [
-                    {
-                        rate: undefined,
-                        stockUnitCode: undefined,
-                        stockUnitName: undefined,
-                        stockUnitUniqueName: undefined,
-                        accountUniqueName: this.stockForm.fixedAssetAccountDetails?.accountUniqueName
-                    }
-                ],
-                warehouseBalance: [
-                    {
-                        warehouse: {
-                            name: (defaultWarehouse) ? defaultWarehouse[0]?.name : undefined,
-                            uniqueName: (defaultWarehouse) ? defaultWarehouse[0]?.uniqueName : undefined
-                        },
-                        stockUnit: {
-                            name: this.stockUnitName,
-                            code: this.stockForm.stockUnitUniqueName
-                        },
-                        openingQuantity: 0,
-                        openingAmount: 0
-                    }
-                ]
-            };
+                    salesInformation: [
+                        {
+                            rate: undefined,
+                            stockUnitCode: undefined,
+                            stockUnitName: undefined,
+                            stockUnitUniqueName: undefined,
+                            accountUniqueName: this.stockForm.salesAccountDetails?.accountUniqueName
+                        }
+                    ],
+                    purchaseInformation: [
+                        {
+                            rate: undefined,
+                            stockUnitCode: undefined,
+                            stockUnitName: undefined,
+                            stockUnitUniqueName: undefined,
+                            accountUniqueName: this.stockForm.purchaseAccountDetails?.accountUniqueName
+                        }
+                    ],
+                    fixedAssetsInformation: [
+                        {
+                            rate: undefined,
+                            stockUnitCode: undefined,
+                            stockUnitName: undefined,
+                            stockUnitUniqueName: undefined,
+                            accountUniqueName: this.stockForm.fixedAssetAccountDetails?.accountUniqueName
+                        }
+                    ],
+                    warehouseBalance: [
+                        {
+                            warehouse: {
+                                name: (defaultWarehouse) ? defaultWarehouse[0]?.name : undefined,
+                                uniqueName: (defaultWarehouse) ? defaultWarehouse[0]?.uniqueName : undefined
+                            },
+                            stockUnit: {
+                                name: this.stockUnitName,
+                                code: this.stockForm.stockUnitUniqueName
+                            },
+                            openingQuantity: 0,
+                            openingAmount: 0
+                        }
+                    ]
+                };
+            }
             stockVariants.push(variantObj);
         });
 
@@ -874,66 +881,66 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         if (this.warehouses?.length > 0) {
             defaultWarehouse = this.warehouses?.filter(warehouse => warehouse?.isDefault);
         }
-
+        const variantfixedAsseAccountUniqueName = stockForm?.fixedAssetAccountDetails?.accountUniqueName ?? stockForm.variants[0]?.fixedAssetAccountDetails?.accountUniqueName;
+        const variantPurchaseAccountUniqueName = stockForm?.purchaseAccountDetails?.accountUniqueName ?? stockForm.variants[0]?.purchaseAccountDetails?.accountUniqueName;
+        const variantSalesAccountUniqueName = stockForm?.salesAccountDetails?.accountUniqueName ?? stockForm.variants[0]?.salesAccountDetails?.accountUniqueName;
         stockForm.variants = stockForm.variants?.map(variant => {
-            console.log(this.isVariantAvailable, stockForm.variants);
-
-                    const salesUnitRate = variant?.salesInformation?.map(unitRate => {
-                        unitRate.accountUniqueName = stockForm.salesAccountDetails?.accountUniqueName;
-                        return unitRate;
-                    });
-                    const purchaseUnitRate = variant?.purchaseInformation?.map(unitRate => {
-                        unitRate.accountUniqueName = stockForm.purchaseAccountDetails?.accountUniqueName;
-                        return unitRate;
-                    });
-
-                    const fixedAssetsUnitRate = variant?.fixedAssetsInformation?.map(unitRate => {
-                        unitRate.accountUniqueName = stockForm.fixedAssetAccountDetails?.accountUniqueName;
-                        return unitRate;
-                    });
-                    variant.name = stockForm.name;
-                    if (this.stockForm.type === 'FIXED_ASSETS') {
-                        variant['unitRates'] = fixedAssetsUnitRate;
-                    } else {
-                        variant['unitRates'] = salesUnitRate?.concat(purchaseUnitRate);
-                    }
-                    variant.warehouseBalance = [
-                        {
-                            warehouse: {
-                                name: (defaultWarehouse) ? defaultWarehouse[0]?.name : undefined,
-                                uniqueName: (defaultWarehouse) ? defaultWarehouse[0]?.uniqueName : undefined
-                            },
-                            stockUnit: {
-                                name: this.stockUnitName,
-                                code: this.stockForm.stockUnitUniqueName
-                            },
-                            openingQuantity: 0,
-                            openingAmount: 0
-                        }
-                    ]
-                // } else {
-                //     if (this.stockForm.type === 'FIXED_ASSETS') {
-                //         variant['unitRates'] = variant.fixedAssetsUnitRate;
-                //     } else {
-                //         variant['unitRates'] = variant.salesInformation?.concat(variant?.purchaseInformation);
-                //     }
-                // }
-                delete variant.salesInformation;
-                delete variant.purchaseInformation;
-                delete variant.fixedAssetsInformation;
-                variant['unitRates'] = variant?.unitRates?.filter(rate => rate?.rate);
-                return variant;
+            const salesUnitRate = variant?.salesInformation?.map(unitRate => {
+                unitRate.accountUniqueName = variantSalesAccountUniqueName;
+                return unitRate;
+            });
+            const purchaseUnitRate = variant?.purchaseInformation?.map(unitRate => {
+                unitRate.accountUniqueName = variantPurchaseAccountUniqueName;
+                return unitRate;
             });
 
+            const fixedAssetsUnitRate = variant?.fixedAssetsInformation?.map(unitRate => {
+                unitRate.accountUniqueName = variantfixedAsseAccountUniqueName;
+                return unitRate;
+            });
+            if (!variant.name) {
+                variant.name = stockForm.name;
+            }
+            if (this.stockForm.type === 'FIXED_ASSETS') {
+                variant['unitRates'] = fixedAssetsUnitRate;
+            } else {
+                variant['unitRates'] = salesUnitRate?.concat(purchaseUnitRate);
+            }
+            variant.warehouseBalance = [
+                {
+                    warehouse: {
+                        name: (defaultWarehouse) ? defaultWarehouse[0]?.name : undefined,
+                        uniqueName: (defaultWarehouse) ? defaultWarehouse[0]?.uniqueName : undefined
+                    },
+                    stockUnit: {
+                        name: this.stockUnitName,
+                        code: this.stockForm.stockUnitUniqueName
+                    },
+                    openingQuantity: 0,
+                    openingAmount: 0
+                }
+            ]
+
+            delete variant.salesInformation;
+            delete variant.purchaseInformation;
+            delete variant.fixedAssetsInformation;
+            delete variant.fixedAssetAccountDetails;
+            delete variant.purchaseAccountDetails;
+            delete variant.salesAccountDetails;
+            variant['unitRates'] = variant?.unitRates?.filter(rate => rate?.rate);
+            return variant;
+        });
+
         if (this.stockForm.type === 'FIXED_ASSETS') {
-            stockForm['fixedAssetsAccountUniqueNames'] = stockForm.fixedAssetAccountDetails?.accountUniqueName ? [stockForm.fixedAssetAccountDetails?.accountUniqueName] : [];
+            stockForm['fixedAssetsAccountUniqueNames'] = variantfixedAsseAccountUniqueName ? [variantfixedAsseAccountUniqueName] : [];
+
         } else {
-            stockForm['purchaseAccountUniqueNames'] = stockForm.purchaseAccountDetails?.accountUniqueName ? [stockForm.purchaseAccountDetails?.accountUniqueName] : [];
-            stockForm['salesAccountUniqueNames'] = stockForm.salesAccountDetails?.accountUniqueName ? [stockForm.salesAccountDetails?.accountUniqueName] : [];
+            stockForm['purchaseAccountUniqueNames'] = variantPurchaseAccountUniqueName ? [variantPurchaseAccountUniqueName] : [];
+            stockForm['salesAccountUniqueNames'] = variantSalesAccountUniqueName ? [variantSalesAccountUniqueName] : [];
         }
+        delete stockForm.fixedAssetAccountDetails;
         delete stockForm.purchaseAccountDetails;
         delete stockForm.salesAccountDetails;
-        delete stockForm.fixedAssetAccountDetails;
         if (this.stockForm.type === 'FIXED_ASSETS') {
             delete stockForm.purchaseAccountUniqueNames;
             delete stockForm.salesAccountUniqueNames;
@@ -992,26 +999,26 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 this.stockForm.variants = this.stockForm.variants?.map(variant => {
                     if (!variant.purchaseAccountDetails?.unitRates?.length) {
                         variant.purchaseAccountDetails?.unitRates.push({
-                                rate: null,
-                                stockUnitCode: null,
-                                stockUnitUniqueName: null
-                            });
-                        }
+                            rate: null,
+                            stockUnitCode: null,
+                            stockUnitUniqueName: null
+                        });
+                    }
 
                     if (!variant?.salesAccountDetails?.unitRates?.length) {
                         variant.salesAccountDetails?.unitRates.push({
-                                rate: null,
-                                stockUnitCode: null,
-                                stockUnitUniqueName: null
-                            });
-                        }
+                            rate: null,
+                            stockUnitCode: null,
+                            stockUnitUniqueName: null
+                        });
+                    }
                     if (!variant?.fixedAssetAccountDetails?.unitRates?.length) {
                         variant.fixedAssetAccountDetails?.unitRates.push({
-                                rate: null,
-                                stockUnitCode: null,
-                                stockUnitUniqueName: null
-                            });
-                        }
+                            rate: null,
+                            stockUnitCode: null,
+                            stockUnitUniqueName: null
+                        });
+                    }
 
                     variant['salesInformation'] = variant?.salesAccountDetails?.unitRates;
                     variant['purchaseInformation'] = variant?.purchaseAccountDetails?.unitRates;
