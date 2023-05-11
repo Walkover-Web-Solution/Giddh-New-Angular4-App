@@ -373,7 +373,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
             }
             let gstDetails = this.prepareGstDetail(this.companyProfileObj);
             if (gstDetails.taxNumber || gstDetails.address || gstDetails.stateCode || gstDetails.pincode) {
-                this.createNewCompanyPreparedObj.addresses.push(gstDetails);
+                this.createNewCompanyPreparedObj.addresses = [gstDetails];
             } else {
                 this.createNewCompanyPreparedObj.addresses = [];
             }

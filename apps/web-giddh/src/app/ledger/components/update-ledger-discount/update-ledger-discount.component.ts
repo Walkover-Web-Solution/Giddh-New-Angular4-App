@@ -18,6 +18,8 @@ export class UpdateLedgerDiscountData {
 })
 
 export class UpdateLedgerDiscountComponent implements OnInit, OnChanges, OnDestroy {
+    /** True if field is readonly */
+    @Input() public readonly: boolean = false;
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
     @Input() public discountAccountsDetails: LedgerDiscountClass[];

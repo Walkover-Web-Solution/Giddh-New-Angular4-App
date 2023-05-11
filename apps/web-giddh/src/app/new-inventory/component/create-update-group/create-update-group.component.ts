@@ -137,8 +137,8 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
             if (response?.length > 0) {
                 this.taxes = response || [];
             }
+            this.changeDetection.detectChanges();
         });
-        this.changeDetection.detectChanges();
     }
 
     /**
@@ -224,6 +224,7 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
             }
         }
         this.selectedTaxes = this.taxTempArray.map(tax => tax?.uniqueName);
+        this.changeDetection.detectChanges();
     }
 
     /**
@@ -233,36 +234,41 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
     */
     public saveGroup(): void {
         this.groupForm.controls['parentStockGroupUniqueName'].setValue(this.stockGroupUniqueName);
-        this.toggleLoader(true);
+        this.groupForm.controls['type'].setValue(this.stockType);
         if (this.groupUniqueName) {
-            this.groupForm.controls['type'].setValue(this.stockType);
+            this.toggleLoader(true);
             this.inventoryService.UpdateStockGroup(this.groupForm?.value, this.groupUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response?.status === "success") {
                     this.toggleLoader(false);
                     this.getStockGroups();
+                    this.selectedGroupTaxes();
                     this.toaster.clearAllToaster();
                     this.toaster.successToast(this.localeData?.stock_group_update);
                     this.backClicked();
                 } else {
-                    this.toaster.clearAllToaster();
                     this.toggleLoader(false);
+                    this.toaster.clearAllToaster();
                     this.toaster.errorToast(response?.message);
                 }
+                this.changeDetection.detectChanges();
             });
+
         } else {
-            this.groupForm.controls['type'].setValue(this.stockType);
+            this.toggleLoader(true);
             this.inventoryService.CreateStockGroup(this.groupForm?.value).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response?.status === "success") {
                     this.toggleLoader(false);
                     this.getStockGroups();
+                    this.resetTaxes();
                     this.resetGroupForm();
                     this.toaster.clearAllToaster();
                     this.toaster.successToast(this.localeData?.stock_group_create);
                 } else {
-                    this.toaster.clearAllToaster();
                     this.toggleLoader(false);
+                    this.toaster.clearAllToaster();
                     this.toaster.errorToast(response?.message);
                 }
+                this.changeDetection.detectChanges();
             });
         }
     }
@@ -341,6 +347,35 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * This will reset the taxes list
+     *
+     * @memberof CreateUpdateGroupComponent
+     */
+    public resetTaxes(): void {
+        this.taxes?.forEach(tax => {
+            tax.isChecked = false;
+            tax.isDisabled = false;
+            return tax;
+        });
+        this.changeDetection.detectChanges();
+    }
+
+    /**
+     * This will use for select group tax on update
+     *
+     * @memberof CreateUpdateGroupComponent
+     */
+    public selectedGroupTaxes(): void {
+        this.taxes?.forEach(tax => {
+            if (tax?.isChecked) {
+                this.selectTax(tax);
+            }
+            return tax;
+        });
+        this.changeDetection.detectChanges();
+    }
+
+    /**
     * This will use for set hsn/sac value default
     *
     * @param {*} transaction
@@ -398,6 +433,7 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
             } else {
                 this.toggleLoader(false);
                 this.toaster.showSnackBar("error", response?.message);
+                this.changeDetection.detectChanges();
             }
             this.changeDetection.detectChanges();
         });
