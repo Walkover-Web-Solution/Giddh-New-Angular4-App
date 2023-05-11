@@ -485,7 +485,7 @@
     background: var(--color-primary-cancel-button-background-hover);
     border-color: var(--color-primary-cancel-button-background-hover);
     color: var(--color-secondary-button-text);
-    font-family: "opensans-semibold" !important;
+    font-family: var(--font-semibold) !important;
     margin-bottom: 15px !important;
     padding-left: 12px !important;
     padding-right: 18px !important;

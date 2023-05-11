@@ -45,7 +45,7 @@ label .required {
 
 .welcome-header h1 {
     font-size: 30px;
-    font-family: "opensans-regular";
+    font-family: var(--font-regular);
     color: var(--color-common-senary-text);
     background-color: var(--color-common-primary-background-for-all-components);
 }

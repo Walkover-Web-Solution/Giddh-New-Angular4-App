@@ -665,6 +665,7 @@
                         color: var(--color-datepicker-rightside-list-text);
                         background-color: var(--color-dropdown-primary-background);
                         border-left: 3px solid transparent !important;
+                        font-family: var(--font-regular) !important;
                         .available.prev {
                             transform: rotate(180deg);
                         }
@@ -695,7 +696,7 @@
                         &.active {
                             background-color: var(--color-datepicker-right-side-list-secondary-text-hover) !important;
                             border-left: 3px solid var(--color-primary-datepicker-input-bottom-border) !important;
-                            font-family: "opensans-semibold";
+                            font-family: var(--font-semibold);
                             color: var(--color-primary-datepicker-input-bottom-border);
                         }
                         &[disabled] {
@@ -1535,6 +1536,7 @@ td span {
                 cursor: pointer;
                 font-size: 12px;
                 color: var(--color-datepicker-rightside-list-text);
+                font-family: var(--font-regular);
                 .drop-down {
                     position: absolute;
                     z-index: 1017;

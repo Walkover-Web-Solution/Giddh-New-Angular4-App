@@ -51,7 +51,7 @@ form {
                     display: block;
                     font-size: 26px;
                     line-height: 1.2;
-                    font-family: "opensans-semibold";
+                    // font-family: var(--font-semibold);
                 }
             }
             .select-customer-name {
@@ -922,7 +922,7 @@ span.eligible-ITC {
     font-size: 14px !important;
     font-weight: 500;
     display: block;
-    font-family: "opensans-semibold";
+    font-family: var(--font-semibold);
     padding-bottom: 5px;
 }
 
