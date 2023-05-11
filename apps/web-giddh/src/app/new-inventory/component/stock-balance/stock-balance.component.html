@@ -46,7 +46,14 @@
             <!-- <button mat-flat-button class="export-btn">
                 <img src="{{ imgPath }}download-blue.svg" alt="" /> Export
             </button> -->
-            <button mat-flat-button [matMenuTriggerFor]="menu" class="filter-btn">
+            <select-multiple-checkbox
+                [moduleType]="moduleType"
+                [customiseColumns]="customiseColumns"
+                (isLoading)="isLoading = $event"
+                (selectedColumns)="getCustomiseHeaderColumns($event)"
+            >
+            </select-multiple-checkbox>
+            <!-- <button mat-flat-button [matMenuTriggerFor]="menu" class="filter-btn">
                 <img src="{{ imgPath }}filter.svg" alt="filter-button" />
                 <mat-menu #menu="matMenu" class="stock-menu">
                     <button
@@ -68,7 +75,7 @@
                         >
                     </button>
                 </mat-menu>
-            </button>
+            </button> -->
         </div>
     </div>
     <div class="searching-stocks">

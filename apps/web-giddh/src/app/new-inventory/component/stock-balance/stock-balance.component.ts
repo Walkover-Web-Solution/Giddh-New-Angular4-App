@@ -62,14 +62,23 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
     public allSelectedWarehouse: any[] = [];
     /** True if api call in progress */
     public isLoading: boolean = false;
-    /** This will hold common JSON data */
-    public commonLocaleData: any = {};
     /** True if click on particular unit dropdown */
     public isOpen: boolean = false;
     /** This will use for instance of lwarehouses Dropdown */
     public warehousesDropdown: FormControl = new FormControl();
     /** Hold all warehouses */
     public allWarehouses: any[] = [];
+    public moduleType = 'INVENTORY_WAREHOUSE_OPENING_BALANCE';
+    /** This will use for stock report voucher types column check values */
+    public customiseColumns = [];
+    /** This will use for stock report displayed columns */
+    public displayedColumns: any[] = [];
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
+    /** True if translations loaded */
+    public translationLoaded: boolean = false;
 
     constructor(
 
@@ -140,6 +149,26 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
             this.GroupStockReportRequest.stockName = s;
             this.getStocks();
         });
+        this.customiseColumns = cloneDeep([{
+            "value": "unique_name",
+            "label": "Unique Name",
+            "checked": true
+        },
+        {
+            "value": "stock_group",
+            "label": "Stock Group",
+            "checked": true
+        },]);
+    }
+
+    /**
+ * This will use for show hide main table headers from customise columns
+ *
+ * @param {*} event
+ * @memberof ReportsComponent
+ */
+    public getCustomiseHeaderColumns(event: any): void {
+        this.displayedColumns = event;
     }
 
     /**
@@ -400,6 +429,27 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
             }
             this.cdr.detectChanges();
         }, 20);
+    }
+
+    /**
+ * This will use for translation complete
+ *
+ * @param {*} event
+ * @memberof ReportsComponent
+ */
+    public translationComplete(event: any): void {
+        console.log(this.localeData);
+
+        if (event) {
+            this.translationLoaded = true;
+            this.customiseColumns = this.customiseColumns?.map(column => {
+                if (column?.value) {
+                    column.label = this.localeData?.reports[column.value];
+                }
+                return column;
+            });
+            this.cdr.detectChanges();
+        }
     }
 
     /**

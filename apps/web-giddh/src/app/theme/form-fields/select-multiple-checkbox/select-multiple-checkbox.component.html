@@ -1,9 +1,13 @@
 <div class="mat-menu-container">
-    <button mat-button [matMenuTriggerFor]="customise" aria-label="Customise" class="customise-filter-button">
-        <i class="icon-options mr-2"> </i>
-        Customise
+    <button
+        mat-icon-button
+        [matMenuTriggerFor]="menu"
+        [matTooltipPosition]="matTooltipPosition"
+        [matTooltip]="matTooltip"
+    >
+        <i class="icon-options"></i>
     </button>
-    <mat-menu #customise="matMenu" class="columns-wrapper">
+    <mat-menu #menu="matMenu" class="columns-wrapper">
         <button
             class="menu-buttons"
             mat-menu-item
@@ -22,7 +26,7 @@
                 (change)="selectAllColumns($event?.checked)"
                 [checked]="displayedColumns?.length === customiseColumns?.length"
             >
-                {{ localeData?.header?.select_all }}
+                Select All
             </mat-checkbox>
         </button>
         <ng-container *ngFor="let item of customiseColumns">

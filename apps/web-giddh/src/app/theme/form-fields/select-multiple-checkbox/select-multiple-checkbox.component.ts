@@ -1,5 +1,6 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, OnChanges, OnDestroy, OnInit, Optional, Self, SimpleChanges, ViewChild } from "@angular/core";
-import { ControlValueAccessor } from "@angular/forms";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Optional, Output, Self, SimpleChanges, ViewChild } from "@angular/core";
+import { ReplaySubject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 import { InventoryService } from "../../../services/inventory.service";
 
 const noop = () => {
@@ -12,11 +13,31 @@ const noop = () => {
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SelectMultipleCheckboxComponent implements OnInit, OnChanges, OnDestroy {
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
+    /** Holds module name for customised columns */
+    @Input() public moduleName: string = "";
+    /** Holds default columns list for customised columns */
+    @Input() public customiseColumns: any[] = [];
+    /** Holds inventory type module  */
+    @Input() public moduleType: string = "";
+    /** Holds mat tooltip position  */
+    @Input() public matTooltipPosition: string = "";
+    /** Holds mat tooltip name  */
+    @Input() public matTooltip: string = "";
+    /** Emits the loading value */
     @Output() public isLoading: EventEmitter<boolean> = new EventEmitter();
-
+    /** Emits the selected filters */
+    @Output() public selectedColumns: EventEmitter<any> = new EventEmitter();
+    /** Observable to unsubscribe all the store listeners to avoid memory leaks */
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** This will use for stock report displayed columns */
+    public displayedColumns: string[] = [];
 
     constructor(
-        private changeDetectionRef: ChangeDetectorRef,
+        private changeDetection: ChangeDetectorRef,
         private inventoryService: InventoryService,
     ) {
     }
@@ -27,7 +48,7 @@ export class SelectMultipleCheckboxComponent implements OnInit, OnChanges, OnDes
      * @memberof TextFieldComponent
      */
     public ngOnInit(): void {
-
+        this.getReportColumns();
     }
 
     /**
@@ -65,6 +86,23 @@ export class SelectMultipleCheckboxComponent implements OnInit, OnChanges, OnDes
     }
 
     /**
+ * This will use to select all customised columns
+ *
+ * @param {*} event
+ * @memberof ReportFiltersComponent
+ */
+    public selectAllColumns(event: any): void {
+        this.customiseColumns?.forEach(column => {
+            if (column) {
+                column.checked = event;
+            }
+        });
+        this.filteredDisplayColumns();
+        this.saveColumns();
+        this.changeDetection.detectChanges();
+    }
+
+    /**
  * This will be used for filtering the display columns
  *
  * @memberof ReportFiltersComponent
@@ -75,6 +113,28 @@ export class SelectMultipleCheckboxComponent implements OnInit, OnChanges, OnDes
         this.displayedColumns = this.customiseColumns?.filter(value => value?.checked).map(column => column?.value);
         this.selectedColumns.emit(this.displayedColumns);
         this.changeDetection.detectChanges();
+    }
+
+    /**
+* This will get customised columns
+*
+* @memberof ReportFiltersComponent
+*/
+    public getReportColumns(): void {
+        this.inventoryService.getStockTransactionReportColumns(this.moduleType).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response && response.body && response.status === 'success') {
+                if (response.body?.columns) {
+                    this.customiseColumns?.forEach(column => {
+                        console.log(response, column);
+
+                        if (!response.body.columns?.includes(column?.value)) {
+                            column.checked = false;
+                        }
+                    });
+                }
+            }
+            this.filteredDisplayColumns();
+        });
     }
 
 
