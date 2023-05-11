@@ -68,15 +68,15 @@ export class SelectMultipleCheckboxComponent implements OnInit, OnChanges, OnDes
     }
 
     /**
- * This will use to save customised columns
- *
- * @memberof ReportFiltersComponent
- */
+     *This will use to save customised columns
+     *
+     * @memberof SelectMultipleCheckboxComponent
+     */
     public saveColumns(): void {
         setTimeout(() => {
             this.filteredDisplayColumns();
             let saveColumnReq = {
-                module: this.moduleName,
+                module: this.moduleType,
                 columns: this.displayedColumns
             }
             this.inventoryService.saveStockTransactionReportColumns(saveColumnReq).pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -86,11 +86,11 @@ export class SelectMultipleCheckboxComponent implements OnInit, OnChanges, OnDes
     }
 
     /**
- * This will use to select all customised columns
- *
- * @param {*} event
- * @memberof ReportFiltersComponent
- */
+    * This will use to select all customised columns
+    *
+    * @param {*} event
+    * @memberof SelectMultipleCheckboxComponent
+    */
     public selectAllColumns(event: any): void {
         this.customiseColumns?.forEach(column => {
             if (column) {
@@ -103,30 +103,26 @@ export class SelectMultipleCheckboxComponent implements OnInit, OnChanges, OnDes
     }
 
     /**
- * This will be used for filtering the display columns
- *
- * @memberof ReportFiltersComponent
- */
+     * This will be used for filtering the display columns
+     *
+     * @memberof SelectMultipleCheckboxComponent
+     */
     public filteredDisplayColumns(): void {
-        console.log(this.customiseColumns, this.displayedColumns);
-
         this.displayedColumns = this.customiseColumns?.filter(value => value?.checked).map(column => column?.value);
         this.selectedColumns.emit(this.displayedColumns);
         this.changeDetection.detectChanges();
     }
 
     /**
-* This will get customised columns
-*
-* @memberof ReportFiltersComponent
-*/
+    * This will get customised columns
+    *
+    * @memberof SelectMultipleCheckboxComponent
+    */
     public getReportColumns(): void {
         this.inventoryService.getStockTransactionReportColumns(this.moduleType).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.body && response.status === 'success') {
                 if (response.body?.columns) {
                     this.customiseColumns?.forEach(column => {
-                        console.log(response, column);
-
                         if (!response.body.columns?.includes(column?.value)) {
                             column.checked = false;
                         }

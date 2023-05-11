@@ -45,9 +45,9 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
     /** Holds stock group name */
     public stockGroupName: string = "";
     /** Hide/Show for unique name list */
-    public showUniqueName: boolean = true;
+    public showUniqueName: boolean = false;
     /** Hide/Show for group name list */
-    public showGroupName: boolean = true;
+    public showGroupName: boolean = false;
     /** Hold group stock report request */
     public GroupStockReportRequest: GroupStockReportRequest;
     /** Hold stocks report */
@@ -162,13 +162,26 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
     }
 
     /**
- * This will use for show hide main table headers from customise columns
- *
- * @param {*} event
- * @memberof ReportsComponent
- */
+     * This will use for show hide main table headers from customise columns
+     *
+     * @param {*} event
+     * @memberof StockBalanceComponent
+     */
     public getCustomiseHeaderColumns(event: any): void {
         this.displayedColumns = event;
+        if (event) {
+            if (this.displayedColumns?.includes('unique_name')) {
+                this.showUniqueName = true;
+            } else {
+                this.showUniqueName = false;
+            }
+            if (this.displayedColumns?.includes("stock_group")) {
+                this.showGroupName = true;
+            } else {
+                this.showGroupName = false;
+            }
+        }
+        this.cdr.detectChanges();
     }
 
     /**
@@ -435,16 +448,14 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
  * This will use for translation complete
  *
  * @param {*} event
- * @memberof ReportsComponent
+ * @memberof StockBalanceComponent
  */
     public translationComplete(event: any): void {
-        console.log(this.localeData);
-
         if (event) {
             this.translationLoaded = true;
             this.customiseColumns = this.customiseColumns?.map(column => {
                 if (column?.value) {
-                    column.label = this.localeData?.reports[column.value];
+                    column.label = this.localeData?.warehouse_opening_balance[column.value];
                 }
                 return column;
             });
