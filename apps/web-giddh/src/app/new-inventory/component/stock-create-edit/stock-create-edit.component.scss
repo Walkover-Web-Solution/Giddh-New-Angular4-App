@@ -54,7 +54,7 @@
         .select-puchase-info {
             background-color: var(--color-dark-fog);
             padding: 6px 10px;
-            font-family: "opensans-semibold";
+            font-family: var(--font-semibold);
         }
 
         .add-new-field {
@@ -74,9 +74,9 @@
                 display: flex;
                 align-items: center;
                 overflow: hidden;
-                font-family: "opensans-regular" !important;
+                font-family: var(--font-regular) !important;
                 .add-new-text-container {
-                    font-family: "opensans-regular";
+                    font-family: var(--font-regular);
                     position: relative;
                     cursor: pointer;
                     font-size: 12px;
@@ -111,7 +111,7 @@
     .stock-made-with {
         margin-bottom: 15px;
         position: relative;
-        font-family: "opensans-semibold";
+        font-family: var(--font-semibold);
 
         &:after {
             position: absolute;

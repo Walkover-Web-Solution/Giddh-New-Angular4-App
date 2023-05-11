@@ -140,7 +140,7 @@ a[vr-item]:focus {
 .left-fixed-header > li {
     text-transform: capitalize;
     position: relative;
-    font-family: "opensans-semibold";
+    font-family: var(--font-semibold);
 }
 
 .button-back-head {
@@ -197,7 +197,7 @@ a[vr-item]:focus {
     color: var(--color-nero);
     letter-spacing: 0.6px;
     font-weight: normal;
-    font-family: "opensans-semibold";
+    font-family: var(--font-semibold);
     padding: 0;
 }
 
@@ -252,7 +252,7 @@ a[vr-item]:focus {
     font-size: 16px;
     padding-left: 15px;
     padding-right: 15px;
-    font-family: "opensans-semibold";
+    font-family: var(--font-semibold);
     img {
         width: 18px;
     }
@@ -519,7 +519,7 @@ span.icon-support.dropdown-toggle {
 .show-more-opt {
     font-size: 14px;
     padding: 0 15px;
-    font-family: "opensans-semibold";
+    font-family: var(--font-semibold);
     color: var(--color-blue);
 }
 
@@ -616,7 +616,7 @@ ul.sub-list {
 
 .company-name .text-ellipsis {
     font-size: 13px;
-    font-family: "opensans-regular";
+    font-family: var(--font-regular);
 }
 
 .overlay-cal {
@@ -670,7 +670,7 @@ ul.sub-list {
 .show-more-module a {
     font-size: 14px;
     color: var(--color-blue) !important;
-    font-family: "opensans-semibold";
+    font-family: var(--font-semibold);
 }
 /*notification css*/
 .white-row {
@@ -682,7 +682,7 @@ ul.sub-list {
     margin-top: 10px;
     color: var(--color-primary-header-notification-text);
     p {
-        font-family: "opensans-semibold";
+        font-family: var(--font-semibold);
         font-size: 14px;
     }
     .click-here {

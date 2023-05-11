@@ -890,7 +890,7 @@ p {
 
 .title-template {
     font-size: 20px;
-    font-family: "opensans-semibold";
+    font-family: var(--font-semibold);
 }
 
 #default table.item td {
