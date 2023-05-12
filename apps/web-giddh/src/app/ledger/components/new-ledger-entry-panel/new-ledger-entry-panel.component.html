@@ -9,7 +9,7 @@
         <!-- reverse charge transction start (make it functional by developer end) -->
         <ng-container *ngTemplateOutlet="rcmEntryCheckbox"></ng-container>
         <!-- Variant dropdown for stock selection -->
-        <ng-container *ngTemplateOutlet="variantDropdown"></ng-container>
+        <ng-container *ngTemplateOutlet="variantAndWarehouseDropdown"></ng-container>
         <!-- reverse charge transction end  -->
         <!--  tourist scheme template start      -->
         <ng-container *ngTemplateOutlet="touristSchemeTemplate"></ng-container>
@@ -115,7 +115,12 @@
                                 matInput
                                 [disabled]="isReadOnly"
                                 id="new-ledger-enter-amount"
-                                *ngIf="!isAdvanceReceipt"
+                                *ngIf="
+                                    !isAdvanceReceipt &&
+                                    !salesTaxInclusive &&
+                                    !purchaseTaxInclusive &&
+                                    !fixedAssetTaxInclusive
+                                "
                                 type="text"
                                 name="amount"
                                 class="form-control text-right mat-field-border"
@@ -131,7 +136,12 @@
                                 matInput
                                 [disabled]="isReadOnly"
                                 id="new-ledger-enter-amount-advance-receipt"
-                                *ngIf="isAdvanceReceipt"
+                                *ngIf="
+                                    isAdvanceReceipt ||
+                                    salesTaxInclusive ||
+                                    purchaseTaxInclusive ||
+                                    fixedAssetTaxInclusive
+                                "
                                 type="text"
                                 name="advanceAmount"
                                 class="form-control text-right mat-field-border"
@@ -139,7 +149,7 @@
                                 [suffix]="selectedSuffixForCurrency"
                                 disabled
                                 [mask]="inputMaskFormat"
-                                [(ngModel)]="currentTxn.advanceReceiptAmount"
+                                [(ngModel)]="currentTxn.taxInclusiveAmount"
                                 (focus)="hideDiscountTax()"
                                 (keyup)="amountChanged(); calculateTotal()"
                             />
@@ -184,7 +194,11 @@
                                 [maskInput]="inputMaskFormat"
                                 [prefixInput]="selectedPrefixForCurrency"
                                 [suffixInput]="selectedSuffixForCurrency"
-                                [ledgerAmount]="currentTxn.amount"
+                                [ledgerAmount]="
+                                    salesTaxInclusive || purchaseTaxInclusive || fixedAssetTaxInclusive
+                                        ? currentTxn.taxInclusiveAmount
+                                        : currentTxn.amount
+                                "
                                 [discountsList]="discountsList"
                                 [commonLocaleData]="commonLocaleData"
                                 [giddhBalanceDecimalPlaces]="giddhBalanceDecimalPlaces"
@@ -281,6 +295,7 @@
                                     salesTaxInclusive ||
                                     fixedAssetTaxInclusive
                                 "
+                                [isAdvanceReceipt]="isAdvanceReceipt"
                                 [allowedSelectionOfAType]="allowedSelectionOfAType"
                                 [commonLocaleData]="commonLocaleData"
                             >
@@ -346,20 +361,7 @@
             </table>
         </div>
         <div class="row warehouse-field">
-            <div class="col-md-4">
-                <div class="source-warehouse" *ngIf="currentTxn?.selectedAccount?.stock && warehouses?.length > 1">
-                    <label>{{ localeData?.select_warehouse }}</label>
-                    <sh-select
-                        [disabled]="isReadOnly"
-                        [class.disabled-ledger]="isReadOnly"
-                        id="ledger-select-warehouse"
-                        [(ngModel)]="selectedWarehouse"
-                        [placeholder]="localeData?.select_warehouse"
-                        [options]="warehouses"
-                    ></sh-select>
-                </div>
-            </div>
-            <div class="col-md-8" [ngClass]="{ 'offset-md-4': !currentTxn?.selectedAccount?.stock }">
+            <div class="col-md-12" [ngClass]="{ 'offset-md-4': !currentTxn?.selectedAccount?.stock }">
                 <div class="text-right mr-b1" *ngIf="currentTxn?.selectedAccount && showOtherTax">
                     <ng-container *ngIf="isTcsTdsApplicable">
                         <mat-checkbox
@@ -1180,19 +1182,34 @@
         </div>
     </div>
 </ng-template>
-<ng-template #variantDropdown>
-    <div class="col-md-3 mb-2 p-0">
-        <div *ngIf="currentTxn?.isStock">
-            <label>{{ localeData?.select_variant }}</label>
-            <select-field
-                [disabled]="isReadOnly"
-                [cssClass]="'form-control'"
-                [placeholder]="'Select Variant'"
-                (selectedOption)="variantChanged($event)"
-                [options]="stockVariants$ | async"
-                [required]="true"
-            >
-            </select-field>
+<ng-template #variantAndWarehouseDropdown>
+    <div class="d-flex justify-content-between">
+        <div *ngIf="currentTxn?.isStock && stockVariants$ | async as stockVariants" class="col-md-3 mb-2 p-0">
+            <div *ngIf="stockVariants?.length > 1">
+                <label>{{ localeData?.select_variant }}</label>
+                <select-field
+                    [disabled]="isReadOnly"
+                    [cssClass]="'form-control mat-field-border'"
+                    [placeholder]="localeData?.select_variant"
+                    (selectedOption)="variantChanged($event)"
+                    [options]="stockVariants"
+                    [required]="true"
+                >
+                </select-field>
+            </div>
+        </div>
+        <div class="col-md-4 pr-0">
+            <div class="source-warehouse" *ngIf="currentTxn?.selectedAccount?.stock && warehouses?.length > 1">
+                <label>{{ localeData?.select_warehouse }}</label>
+                <sh-select
+                    [disabled]="isReadOnly"
+                    [class.disabled-ledger]="isReadOnly"
+                    id="ledger-select-warehouse"
+                    [(ngModel)]="selectedWarehouse"
+                    [placeholder]="localeData?.select_warehouse"
+                    [options]="warehouses"
+                ></sh-select>
+            </div>
         </div>
     </div>
 </ng-template>

@@ -1,4 +1,4 @@
-import { IELedgerResponse, IELedgerTransaction, TransactionsResponse } from '../models/api-models/Ledger';
+import { IELedgerResponse, IELedgerTransaction, IVariant, TransactionsResponse } from '../models/api-models/Ledger';
 import { Observable } from 'rxjs';
 import { AccountResponse, AccountResponseV2 } from '../models/api-models/Account';
 import { ITransactionItem } from '../models/interfaces/ledger.interface';
@@ -461,7 +461,7 @@ export class TransactionVM {
     public itcAvailable?: string = '';
     public reverseChargeTaxableAmount?: number;
     public shouldShowRcmEntry?: boolean;
-    public advanceReceiptAmount?: number = 0;
+    public taxInclusiveAmount?: number = 0;
     public invoiceLinkingRequest?: IInvoiceLinkingRequest;
     public voucherAdjustments?: VoucherAdjustments;
     public showDropdown?: boolean = false;
@@ -476,6 +476,7 @@ export interface IInventory {
     quantity: number;
     stock: INameUniqueName;
     warehouse: WarehouseDetails;
+    variant: IVariant;
 }
 
 export interface IInventoryUnit {

@@ -79,6 +79,8 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
      * Required for inclusive tax rate calculation for advance receipt, variant (purchase-sales-<fixed-asset>) inclusive
     */
     @Input() public calculateTaxInclusively: boolean;
+    /** True if advance receipt entry is created */
+    @Input() public isAdvanceReceipt: boolean;
 
     @Output() public isApplicableTaxesEvent: EventEmitter<boolean> = new EventEmitter();
     @Output() public taxAmountSumEvent: EventEmitter<number> = new EventEmitter();
@@ -268,7 +270,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
                     }));
                 }
             });
-            if (this.calculateTaxInclusively) {
+            if (this.isAdvanceReceipt) {
                 // In case of advance receipt only a single tax is allowed in addition to CESS
                 // Check if atleast a single non-cess tax is selected, if yes, then disable all other taxes
                 // except CESS taxes

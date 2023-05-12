@@ -2650,8 +2650,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     txn.inventory = {
                         stock: {
                             name: stockName,
-                            uniqueName: stockUniqueName
+                            uniqueName: stockUniqueName,
                         },
+                        variant: txn.selectedAccount.stock.variant,
                         quantity: 1,
                         unit: {
                             stockUnitCode: unitCode,

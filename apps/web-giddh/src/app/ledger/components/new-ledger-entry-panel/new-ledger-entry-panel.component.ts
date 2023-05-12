@@ -338,7 +338,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
         this.uploadInput = new EventEmitter<UploadInput>();
         this.fileUploadOptions = { concurrency: 0 };
-        this.currentTxn.advanceReceiptAmount = this.currentTxn.amount;
+        this.currentTxn.taxInclusiveAmount = this.currentTxn.amount;
         this.activeAccount$.subscribe(acc => {
             if (acc) {
                 this.assignUpdateActiveAccount(acc);
@@ -430,7 +430,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
     public ngOnChanges(changes: SimpleChanges): void {
         if (changes?.currentTxn?.currentValue?.selectedAccount) {
-            this.currentTxn.advanceReceiptAmount = giddhRoundOff(this.currentTxn.amount, this.giddhBalanceDecimalPlaces);
+            this.currentTxn.taxInclusiveAmount = giddhRoundOff(this.currentTxn.amount, this.giddhBalanceDecimalPlaces);
             if (!this.currentTxn.isStock) {
                 this.selectedWarehouse = String(this.defaultWarehouse);
             }
@@ -506,10 +506,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public ngAfterViewInit(): void {
         this.needToReCalculate.pipe(takeUntil(this.destroyed$)).subscribe(a => {
             if (a) {
-                console.log('currentTxn: ', this.currentTxn);
                 this.setTaxCalculationMethodForStock();
                 this.amountChanged();
-                this.calculateTotal();
+                // this.calculateTotal();
                 this.calculateTax();
             }
         });
@@ -564,10 +563,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         totalPercentage = this.currentTxn?.taxesVm?.reduce((pv, cv) => {
             return cv.isChecked ? pv + cv.amount : pv;
         }, 0);
-        if (this.generalService.isReceiptPaymentEntry(this.activeAccount, this.currentTxn.selectedAccount, this.blankLedger.voucherType) && !this.isAdvanceReceiptWithTds) {
-            this.currentTxn.tax = giddhRoundOff(this.generalService.calculateInclusiveOrExclusiveTaxes(false, this.currentTxn.advanceReceiptAmount, totalPercentage, this.currentTxn.discount), this.giddhBalanceDecimalPlaces);
+        if (this.generalService.isReceiptPaymentEntry(this.activeAccount, this.currentTxn.selectedAccount, this.blankLedger.voucherType) && !this.isAdvanceReceiptWithTds && !this.salesTaxInclusive && !this.purchaseTaxInclusive && !this.fixedAssetTaxInclusive) {
+            this.currentTxn.tax = giddhRoundOff(this.generalService.calculateInclusiveOrExclusiveTaxes(false, this.currentTxn.taxInclusiveAmount, totalPercentage, this.currentTxn.discount), this.giddhBalanceDecimalPlaces);
         } else {
-            this.currentTxn.tax = giddhRoundOff(this.generalService.calculateInclusiveOrExclusiveTaxes(this.isAdvanceReceipt, this.currentTxn.amount, totalPercentage, this.currentTxn.discount), this.giddhBalanceDecimalPlaces);
+            this.currentTxn.tax = giddhRoundOff(this.generalService.calculateInclusiveOrExclusiveTaxes(this.isAdvanceReceipt || this.salesTaxInclusive || this.purchaseTaxInclusive || this.fixedAssetTaxInclusive, this.currentTxn.amount, totalPercentage, this.currentTxn.discount), this.giddhBalanceDecimalPlaces);
         }
         this.currentTxn.convertedTax = this.calculateConversionRate(this.currentTxn.tax);
         this.calculateTotal();
@@ -594,8 +593,15 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 const isExportValid = this.checkIfExportIsValid();
 
                 if (this.isAdvanceReceipt) {
-                    this.currentTxn.advanceReceiptAmount = giddhRoundOff((this.currentTxn.amount - this.currentTxn.tax), this.giddhBalanceDecimalPlaces);
-                    this.currentTxn.total = giddhRoundOff((this.currentTxn.advanceReceiptAmount + (!isExportValid ? this.currentTxn.tax : 0)), this.giddhBalanceDecimalPlaces);
+                    this.currentTxn.taxInclusiveAmount = giddhRoundOff((this.currentTxn.amount - this.currentTxn.tax), this.giddhBalanceDecimalPlaces);
+                    this.currentTxn.total = giddhRoundOff((this.currentTxn.taxInclusiveAmount + (!isExportValid ? this.currentTxn.tax : 0)), this.giddhBalanceDecimalPlaces);
+                    this.totalForTax = this.currentTxn.total;
+                    this.currentTxn.convertedTotal = giddhRoundOff((this.currentTxn.convertedAmount - (!isExportValid ? this.currentTxn.convertedTax : 0)), this.giddhBalanceDecimalPlaces);
+                } else if (this.salesTaxInclusive || this.purchaseTaxInclusive || this.fixedAssetTaxInclusive) {
+                    this.currentTxn.total = giddhRoundOff((this.currentTxn.inventory.quantity * this.currentTxn.inventory.unit.rate), this.giddhBalanceDecimalPlaces);
+                    this.currentTxn.taxInclusiveAmount = this.calculateInclusiveAmount(this.currentTxn.total);
+                    // this.currentTxn.total = giddhRoundOff((this.currentTxn.amount + (!isExportValid ? this.currentTxn.tax : 0)), this.giddhBalanceDecimalPlaces);
+                    // this.calculateAmount();
                     this.totalForTax = this.currentTxn.total;
                     this.currentTxn.convertedTotal = giddhRoundOff((this.currentTxn.convertedAmount - (!isExportValid ? this.currentTxn.convertedTax : 0)), this.giddhBalanceDecimalPlaces);
                 } else {
@@ -610,7 +616,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             } else {
                 // Amount is zero, set other parameters to zero
                 if (this.isAdvanceReceipt) {
-                    this.currentTxn.advanceReceiptAmount = 0;
+                    this.currentTxn.taxInclusiveAmount = 0;
                 }
                 this.totalForTax = 0;
                 this.currentTxn.total = 0;
@@ -699,31 +705,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
     public calculateAmount() {
         this.isInclusiveEntry = true;
-        let fixDiscount = 0;
-        let percentageDiscount = 0;
-        if (this.discountControl) {
-            percentageDiscount = this.discountControl.discountAccountsDetails?.filter(f => f.isActive)
-                ?.filter(s => s.discountType === 'PERCENTAGE')
-                .reduce((pv, cv) => {
-                    return Number(cv.discountValue) ? Number(pv) + Number(cv.discountValue) : Number(pv);
-                }, 0) || 0;
-
-            fixDiscount = this.discountControl.discountAccountsDetails?.filter(f => f.isActive)
-                ?.filter(s => s.discountType === 'FIX_AMOUNT')
-                .reduce((pv, cv) => {
-                    return Number(cv.discountValue) ? Number(pv) + Number(cv.discountValue) : Number(pv);
-                }, 0) || 0;
-        }
-        let taxTotal = 0;
-        if (this.taxControll) {
-            taxTotal = this.taxControll.taxRenderData?.filter(f => f.isChecked)
-                .reduce((pv, cv) => {
-                    return Number(pv) + Number(cv.amount);
-                }, 0) || 0;
-        }
-
-        this.currentTxn.amount = giddhRoundOff(((Number(this.currentTxn.total) + fixDiscount + 0.01 * fixDiscount * Number(taxTotal)) /
-            (1 - 0.01 * percentageDiscount + 0.01 * Number(taxTotal) - 0.0001 * percentageDiscount * Number(taxTotal))), this.giddhBalanceDecimalPlaces);
+        this.currentTxn.amount = this.calculateInclusiveAmount(this.currentTxn.total);
         if (this.currentTxn.inventory) {
             this.currentTxn.convertedAmount = this.currentTxn.inventory.quantity * this.currentTxn.convertedRate;
         } else {
@@ -998,23 +980,23 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
 
     public hideDiscountTax(): void {
-        if (this.discountControl) {
+        if (this.discountControl && this.discountControl.discountMenu) {
             this.discountControl.discountMenu = false;
         }
-        if (this.taxControll) {
+        if (this.taxControll && this.taxControll.showTaxPopup) {
             this.taxControll.showTaxPopup = false;
         }
     }
 
     public hideDiscount(): void {
-        if (this.discountControl) {
+        if (this.discountControl && this.discountControl.discountMenu) {
             this.discountControl.change();
             this.discountControl.discountMenu = false;
         }
     }
 
     public hideTax(): void {
-        if (this.taxControll) {
+        if (this.taxControll && this.taxControll.showTaxPopup) {
             this.taxControll.change();
             this.taxControll.showTaxPopup = false;
         }
@@ -1233,7 +1215,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         }
 
         if (modal?.appliedOtherTax && modal?.appliedOtherTax?.uniqueName) {
-            const amount = (this.isAdvanceReceipt) ? transaction?.advanceReceiptAmount : transaction?.amount;
+            const amount = (this.isAdvanceReceipt) ? transaction?.taxInclusiveAmount : transaction?.amount;
             let tax = companyTaxes.find(ct => ct?.uniqueName === modal?.appliedOtherTax?.uniqueName);
             if (tax) {
                 this.blankLedger.otherTaxType = ['tcsrc', 'tcspay'].includes(tax.taxType) ? 'tcs' : 'tds';
@@ -1255,7 +1237,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 }
 
                 taxableValue = this.generalService.getReceiptPaymentOtherTaxAmount(modal.tcsCalculationMethod, totalAmount, mainTaxPercentage, tdsTaxPercentage, tcsTaxPercentage);
-                this.currentTxn.advanceReceiptAmount = taxableValue;
+                this.currentTxn.taxInclusiveAmount = taxableValue;
                 this.totalForTax = taxableValue;
                 if (modal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTotalAmount) {
                     taxableValue = (taxableValue + transaction?.tax);
@@ -1884,6 +1866,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
 
     public variantChanged(event: any): void {
+        // this.currentTxn.inventory.variant = {name: event.label, uniqueName: event.value};
         this.stockVariantSelected.emit(event.value);
     }
 
@@ -1921,5 +1904,33 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.purchaseTaxInclusive = false;
             this.fixedAssetTaxInclusive = false;
         }
+    }
+
+    private calculateInclusiveAmount(total: number): number {
+        let fixDiscount = 0;
+        let percentageDiscount = 0;
+        if (this.discountControl) {
+            percentageDiscount = this.discountControl.discountAccountsDetails?.filter(f => f.isActive)
+                ?.filter(s => s.discountType === 'PERCENTAGE')
+                .reduce((pv, cv) => {
+                    return Number(cv.discountValue) ? Number(pv) + Number(cv.discountValue) : Number(pv);
+                }, 0) || 0;
+
+            fixDiscount = this.discountControl.discountAccountsDetails?.filter(f => f.isActive)
+                ?.filter(s => s.discountType === 'FIX_AMOUNT')
+                .reduce((pv, cv) => {
+                    return Number(cv.discountValue) ? Number(pv) + Number(cv.discountValue) : Number(pv);
+                }, 0) || 0;
+        }
+        let taxTotal = 0;
+        if (this.taxControll) {
+            taxTotal = this.taxControll.taxRenderData?.filter(f => f.isChecked)
+                .reduce((pv, cv) => {
+                    return Number(pv) + Number(cv.amount);
+                }, 0) || 0;
+        }
+
+        return giddhRoundOff(((Number(total) + fixDiscount + 0.01 * fixDiscount * Number(taxTotal)) /
+        (1 - 0.01 * percentageDiscount + 0.01 * Number(taxTotal) - 0.0001 * percentageDiscount * Number(taxTotal))), this.giddhBalanceDecimalPlaces);
     }
 }

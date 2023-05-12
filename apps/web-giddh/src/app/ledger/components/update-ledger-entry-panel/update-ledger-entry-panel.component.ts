@@ -22,7 +22,7 @@ import { BsDatepickerDirective } from "ngx-bootstrap/datepicker";
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { combineLatest as observableCombineLatest, Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
-import { debounceTime, take, takeUntil } from 'rxjs/operators';
+import { debounceTime, map, take, takeUntil } from 'rxjs/operators';
 import { LedgerActions } from '../../../actions/ledger/ledger.actions';
 import { ConfirmationModalConfiguration } from '../../../theme/confirmation-modal/confirmation-modal.interface';
 import { LoaderService } from '../../../loader/loader.service';
@@ -30,7 +30,7 @@ import { cloneDeep, filter, last, orderBy, uniqBy } from '../../../lodash-optimi
 import { AccountResponse } from '../../../models/api-models/Account';
 import { AdjustAdvancePaymentModal, VoucherAdjustments } from '../../../models/api-models/AdvanceReceiptsAdjust';
 import { ICurrencyResponse, TaxResponse } from '../../../models/api-models/Company';
-import { DownloadLedgerRequest, LedgerResponse } from '../../../models/api-models/Ledger';
+import { DownloadLedgerRequest, IVariant, LedgerResponse } from '../../../models/api-models/Ledger';
 import { IForceClear, SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal, VoucherTypeEnum } from '../../../models/api-models/Sales';
 import { TagRequest } from '../../../models/api-models/settingsTags';
 import { ILedgerTransactionItem } from '../../../models/interfaces/ledger.interface';
@@ -280,6 +280,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public restrictedVouchersForDownload: any[] = RESTRICTED_VOUCHERS_FOR_DOWNLOAD;
     /** True if einvoice is generated for the voucher */
     public isEinvoiceGenerated: boolean = false;
+    /** Stores the stock variants */
+    public stockVariants$: Observable<Array<IOption>> = observableOf([]);
 
     constructor(
         private accountService: AccountService,
@@ -448,6 +450,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         }
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         document.querySelector('body')?.classList?.add('update-ledger-entry-panel-popup');
+        // this.loadStockVariants
     }
 
     public toggleShow(): void {
@@ -2517,5 +2520,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 this.restrictedVouchersForDownload = this.restrictedVouchersForDownload?.filter(voucherType => voucherType !== AdjustedVoucherType.PurchaseInvoice);
             }
         });
+    }
+
+    private loadStockVariants(stockUniqueName: string): void {
+        this.stockVariants$ = this.ledgerService.loadStockVariants(stockUniqueName).pipe(
+            map((variants: IVariant[]) => variants.map((variant: IVariant) => ({label: variant.name, value: variant.uniqueName}))));
     }
 }
