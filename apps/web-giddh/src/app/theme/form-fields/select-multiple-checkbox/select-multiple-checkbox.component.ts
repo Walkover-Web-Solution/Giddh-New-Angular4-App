@@ -92,6 +92,8 @@ export class SelectMultipleCheckboxComponent implements OnInit, OnChanges, OnDes
     * @memberof SelectMultipleCheckboxComponent
     */
     public selectAllColumns(event: any): void {
+        console.log(event);
+
         this.customiseColumns?.forEach(column => {
             if (column) {
                 column.checked = event;

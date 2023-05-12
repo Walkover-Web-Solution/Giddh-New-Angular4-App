@@ -42,6 +42,7 @@
                     name="{{ item?.value }}"
                     (ngModelChange)="saveColumns()"
                     [(ngModel)]="item.checked"
+                    [disabled]="item?.checked && displayedColumns.length === 2"
                     (click)="$event?.stopPropagation()"
                 >
                     {{ item?.label }}</mat-checkbox

@@ -158,30 +158,8 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
             "value": "stock_group",
             "label": "Stock Group",
             "checked": true
-        },]);
-    }
-
-    /**
-     * This will use for show hide main table headers from customise columns
-     *
-     * @param {*} event
-     * @memberof StockBalanceComponent
-     */
-    public getCustomiseHeaderColumns(event: any): void {
-        this.displayedColumns = event;
-        if (event) {
-            if (this.displayedColumns?.includes('unique_name')) {
-                this.showUniqueName = true;
-            } else {
-                this.showUniqueName = false;
-            }
-            if (this.displayedColumns?.includes("stock_group")) {
-                this.showGroupName = true;
-            } else {
-                this.showGroupName = false;
-            }
         }
-        this.cdr.detectChanges();
+        ]);
     }
 
     /**
@@ -445,11 +423,34 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
     }
 
     /**
- * This will use for translation complete
- *
- * @param {*} event
- * @memberof StockBalanceComponent
- */
+     * This will use for show hide main table headers from customise columns
+     *
+     * @param {*} event
+     * @memberof StockBalanceComponent
+     */
+    public getCustomiseHeaderColumns(event: any): void {
+        this.displayedColumns = event;
+        if (event) {
+            if (this.displayedColumns?.includes('unique_name')) {
+                this.showUniqueName = true;
+            } else {
+                this.showUniqueName = false;
+            }
+            if (this.displayedColumns?.includes("stock_group")) {
+                this.showGroupName = true;
+            } else {
+                this.showGroupName = false;
+            }
+        }
+        this.cdr.detectChanges();
+    }
+
+    /**
+    * This will use for translation complete
+    *
+    * @param {*} event
+    * @memberof StockBalanceComponent
+    */
     public translationComplete(event: any): void {
         if (event) {
             this.translationLoaded = true;
