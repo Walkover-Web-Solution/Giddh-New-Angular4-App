@@ -148,52 +148,18 @@
                 <i class="icon-advance-filter mr-2"></i>
                 {{ localeData?.header?.advance_filter }}
             </button>
-            <button mat-button [matMenuTriggerFor]="customise" aria-label="Customise" class="customise-filter-button">
-                <i class="icon-options mr-2"> </i>
-                {{ localeData?.header?.customise }}
-            </button>
-            <mat-menu #customise="matMenu" class="columns-wrapper">
-                <button
-                    class="menu-buttons"
-                    mat-menu-item
-                    (click)="$event?.stopPropagation()"
-                    (keydown.enter)="
-                        $event?.stopPropagation();
-                        selectAllCheckbox.checked = !selectAllCheckbox?.checked;
-                        selectAllColumns(selectAllCheckbox?.checked)
-                    "
-                >
-                    <mat-checkbox
-                        class="inventory-checkbox"
-                        #selectAllCheckbox
-                        color="primary"
-                        name="selectAll"
-                        (change)="selectAllColumns($event?.checked)"
-                        [checked]="displayedColumns?.length === customiseColumns?.length"
-                    >
-                        {{ localeData?.header?.select_all }}
-                    </mat-checkbox>
-                </button>
-                <ng-container *ngFor="let item of customiseColumns">
-                    <button
-                        class="menu-buttons"
-                        mat-menu-item
-                        (click)="$event?.stopPropagation()"
-                        (keydown.enter)="$event?.stopPropagation(); item.checked = !item?.checked; saveColumns()"
-                    >
-                        <mat-checkbox
-                            class="inventory-checkbox"
-                            color="primary"
-                            name="{{ item?.value }}"
-                            (ngModelChange)="saveColumns()"
-                            [(ngModel)]="item.checked"
-                            (click)="$event?.stopPropagation()"
-                        >
-                            {{ item?.label }}</mat-checkbox
-                        >
-                    </button>
-                </ng-container>
-            </mat-menu>
+            <select-multiple-checkbox
+                [moduleType]="moduleName"
+                [customiseColumns]="customiseColumns"
+                (isLoading)="isLoading = $event"
+                (selectedColumns)="setDisplayColumns($event)"
+                [localeData]="localeData"
+                [commonLocaleData]="commonLocaleData"
+                [iconClass]="'icon-options mr-2'"
+                [cssClass]="'customise-filter-button'"
+                [buttonText]="localeData?.header?.customise"
+            >
+            </select-multiple-checkbox>
         </div>
     </div>
     <!-- <div class="d-flex transactional-filter-section">

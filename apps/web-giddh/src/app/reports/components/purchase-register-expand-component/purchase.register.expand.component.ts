@@ -51,15 +51,15 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
     public showFieldFilter = {
         date: false,
         account: false,
-        voucherType: false,
-        voucherNo: false,
+        voucher_type: false,
+        voucher_no: false,
         purchase: false,
         return: false,
-        qtyRate: false,
+        qty_rate: false,
         value: false,
         discount: false,
         tax: false,
-        netPurchase: false
+        net_purchase: false
     };
     /* This will hold local JSON data */
     public localeData: any = {};
@@ -71,6 +71,7 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
     public showClearFilter: boolean = false;
     /** Stores the voucher API version of current company */
     public voucherApiVersion: 1 | 2;
+    /* This will hold module type */
     public moduleType = 'PURCHASE_REGISTER';
     /** This will use for stock report voucher types column check values */
     public customiseColumns = [];
@@ -78,8 +79,6 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
     public displayedColumns: any[] = [];
     /** True if translations loaded */
     public translationLoaded: boolean = false;
-    /** True if api call in progress */
-    public isLoading: boolean = false;
 
     constructor(private store: Store<AppState>, private invoiceReceiptActions: InvoiceReceiptActions, private activeRoute: ActivatedRoute, private router: Router, private _cd: ChangeDetectorRef, private breakPointObservar: BreakpointObserver, private generalService: GeneralService, private ledgerService: LedgerService, private toaster: ToasterService) {
         this.purchaseRegisteDetailedResponse$ = this.store.pipe(select(appState => appState.receipt.PurchaseRegisteDetailedResponse), takeUntil(this.destroyed$));
@@ -143,7 +142,7 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
                 this.showSearchInvoiceNo = false;
             }
         });
-        this.customiseColumns = cloneDeep([
+        this.customiseColumns = [
             {
                 "value": "date",
                 "label": "Date",
@@ -194,7 +193,7 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
                 "label": "Net Purchase",
                 "checked": true
             }
-        ]);
+        ];
     }
 
     public getDetailedPurchaseReport(PurchaseDetailedfilter) {
@@ -349,12 +348,6 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
     public translationComplete(event: boolean): void {
         if (event) {
             this.monthNames = [this.commonLocaleData?.app_months_full.january, this.commonLocaleData?.app_months_full.february, this.commonLocaleData?.app_months_full.march, this.commonLocaleData?.app_months_full.april, this.commonLocaleData?.app_months_full.may, this.commonLocaleData?.app_months_full.june, this.commonLocaleData?.app_months_full.july, this.commonLocaleData?.app_months_full.august, this.commonLocaleData?.app_months_full.september, this.commonLocaleData?.app_months_full.october, this.commonLocaleData?.app_months_full.november, this.commonLocaleData?.app_months_full.december];
-            this.customiseColumns = this.customiseColumns?.map(column => {
-                if (column?.value) {
-                    column.label = this.localeData[column.value];
-                }
-                return column;
-            });
             this.getCurrentMonthYear();
         }
     }
@@ -417,65 +410,12 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
      * This will use for show hide main table headers from customise columns
      *
      * @param {*} event
-     * @memberof StockBalanceComponent
+     * @memberof PurchaseRegisterExpandComponent
      */
     public getCustomiseHeaderColumns(event: any): void {
         this.displayedColumns = event;
-        if (this.displayedColumns?.includes('date')) {
-            this.showFieldFilter.date = true;
-        } else {
-            this.showFieldFilter.date = false;
-        }
-        if (this.displayedColumns?.includes('account')) {
-            this.showFieldFilter.account = true;
-        } else {
-            this.showFieldFilter.account = false;
-        }
-        if (this.displayedColumns?.includes('voucher_type')) {
-            this.showFieldFilter.voucherType = true;
-        } else {
-            this.showFieldFilter.voucherType = false;
-        }
-        if (this.displayedColumns?.includes('voucher_type')) {
-            this.showFieldFilter.voucherType = true;
-        } else {
-            this.showFieldFilter.voucherType = false;
-        }
-        if (this.displayedColumns?.includes('voucher_no')) {
-            this.showFieldFilter.voucherNo = true;
-        } else {
-            this.showFieldFilter.voucherNo = false;
-        }
-        if (this.displayedColumns?.includes('purchase')) {
-            this.showFieldFilter.purchase = true;
-        } else {
-            this.showFieldFilter.purchase = false;
-        }
-        if (this.displayedColumns?.includes('return')) {
-            this.showFieldFilter.return = true;
-        } else {
-            this.showFieldFilter.return = false;
-        }
-        if (this.displayedColumns?.includes('qty_rate')) {
-            this.showFieldFilter.qtyRate = true;
-        } else {
-            this.showFieldFilter.qtyRate = false;
-        }
-        if (this.displayedColumns?.includes('discount')) {
-            this.showFieldFilter.discount = true;
-        } else {
-            this.showFieldFilter.discount = false;
-        }
-        if (this.displayedColumns?.includes('tax')) {
-            this.showFieldFilter.tax = true;
-        } else {
-            this.showFieldFilter.tax = false;
-        }
-        if (this.displayedColumns?.includes('net_purchase')) {
-            this.showFieldFilter.netPurchase = true;
-        } else {
-            this.showFieldFilter.netPurchase = false;
-        }
+        const displayColumnsSet = new Set(this.displayedColumns);
+        Object.keys(this.showFieldFilter).forEach(key => this.showFieldFilter[key] = displayColumnsSet.has(key));
     }
 
 }

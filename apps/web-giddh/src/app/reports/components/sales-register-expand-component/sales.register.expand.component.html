@@ -85,77 +85,16 @@
                 <button mat-flat-button color="primary" class="back-btn mr-l1" (click)="export()">
                     {{ commonLocaleData?.app_export }}
                 </button>
-                <div
-                    class="advance-icon cursor-pointer align-items-center btn-group mr-0"
-                    #filterDropDownList="bs-dropdown"
-                    dropdown
-                    [autoClose]="false"
-                    (clickOutside)="hideListItems()"
-                    [placement]="'right'"
+                <select-multiple-checkbox
+                    [moduleType]="moduleType"
+                    [customiseColumns]="customiseColumns"
+                    (selectedColumns)="getCustomiseHeaderColumns($event)"
+                    [localeData]="localeData"
+                    [commonLocaleData]="commonLocaleData"
+                    [iconClass]="'icon-options select-multiple-icon-options'"
+                    [cssClass]="'purchase-customise-column-button'"
                 >
-                    <i dropdownToggle class="icon-options"></i>
-                    <ul *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu" [style.width.px]="'200'">
-                        <li role="menuitem">
-                            <a class="dropdown-item">
-                                <input
-                                    type="checkbox"
-                                    name="voucherType"
-                                    (ngModelChange)="columnFilter($event, 'voucherType')"
-                                    [(ngModel)]="showFieldFilter.voucherType"
-                                />
-                                {{ commonLocaleData?.app_voucher_type }}</a
-                            >
-                        </li>
-                        <li role="menuitem">
-                            <a class="dropdown-item">
-                                <input
-                                    type="checkbox"
-                                    name="voucherNo"
-                                    (ngModelChange)="columnFilter($event, 'voucherNo')"
-                                    [(ngModel)]="showFieldFilter.voucherNo"
-                                />
-                                {{
-                                    voucherApiVersion === 2
-                                        ? commonLocaleData?.app_voucher_no
-                                        : commonLocaleData?.app_entry_no
-                                }}</a
-                            >
-                        </li>
-                        <li role="menuitem">
-                            <a class="dropdown-item">
-                                <input
-                                    type="checkbox"
-                                    name="qtyRate"
-                                    (ngModelChange)="columnFilter($event, 'qtyRate')"
-                                    [(ngModel)]="showFieldFilter.qtyRate"
-                                />
-                                {{ localeData?.quantity_rate }}</a
-                            >
-                        </li>
-                        <li role="menuitem">
-                            <a class="dropdown-item">
-                                <input
-                                    type="checkbox"
-                                    name="discount"
-                                    (ngModelChange)="columnFilter($event, 'discount')"
-                                    [(ngModel)]="showFieldFilter.discount"
-                                />
-                                {{ commonLocaleData?.app_discount }}
-                            </a>
-                        </li>
-                        <li role="menuitem">
-                            <a class="dropdown-item">
-                                <input
-                                    type="checkbox"
-                                    name="tax"
-                                    (ngModelChange)="columnFilter($event, 'tax')"
-                                    [(ngModel)]="showFieldFilter.tax"
-                                />
-                                {{ commonLocaleData?.app_tax }}
-                            </a>
-                        </li>
-                    </ul>
-                </div>
+                </select-multiple-checkbox>
             </div>
         </div>
     </div>

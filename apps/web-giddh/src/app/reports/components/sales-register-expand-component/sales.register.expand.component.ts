@@ -15,6 +15,7 @@ import { GeneralService } from '../../../services/general.service';
 import { ExportBodyRequest } from '../../../models/api-models/DaybookRequest';
 import { LedgerService } from '../../../services/ledger.service';
 import { ToasterService } from '../../../services/toaster.service';
+import { cloneDeep } from '../../../lodash-optimized';
 
 @Component({
     selector: 'sales-register-expand',
@@ -50,13 +51,17 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
     public imgPath: string;
     public expand: boolean = false;
     public showFieldFilter = {
-        voucherType: true,
-        voucherNo: true,
-        productService: false,
+        date: false,
+        account: false,
+        voucherType: false,
+        voucherNo: false,
+        sales: false,
+        return: false,
         qtyRate: false,
         value: false,
         discount: false,
-        tax: false
+        tax: false,
+        netSales: false
     };
     /* This will hold local JSON data */
     public localeData: any = {};
@@ -68,6 +73,14 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
     public showClearFilter: boolean = false;
     /** Stores the voucher API version of current company */
     public voucherApiVersion: 1 | 2;
+    /* This will hold module type */
+    public moduleType = 'SALES_REGISTER';
+    /** This will use for stock report voucher types column check values */
+    public customiseColumns = [];
+    /** This will use for stock report displayed columns */
+    public displayedColumns: any[] = [];
+    /** True if translations loaded */
+    public translationLoaded: boolean = false;
 
     constructor(private store: Store<AppState>, private invoiceReceiptActions: InvoiceReceiptActions, private activeRoute: ActivatedRoute, private router: Router, private _cd: ChangeDetectorRef, private breakPointObservar: BreakpointObserver, private generalService: GeneralService, private ledgerService: LedgerService, private toaster: ToasterService) {
         this.salesRegisteDetailedResponse$ = this.store.pipe(select(appState => appState.receipt.SalesRegisteDetailedResponse), takeUntil(this.destroyed$));
@@ -135,7 +148,58 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
                 this.showSearchInvoiceNo = false;
             }
         });
-
+        this.customiseColumns = cloneDeep([
+            {
+                "value": "date",
+                "label": "Date",
+                "checked": true
+            },
+            {
+                "value": "account",
+                "label": "Account",
+                "checked": true
+            },
+            {
+                "value": "voucher_type",
+                "label": "Voucher Type",
+                "checked": true
+            },
+            {
+                "value": "voucher_no",
+                "label": "Voucher No.",
+                "checked": true
+            },
+            {
+                "value": "purchase",
+                "label": "Purchase",
+                "checked": true
+            },
+            {
+                "value": "return",
+                "label": "Return",
+                "checked": true
+            },
+            {
+                "value": "qty_rate",
+                "label": "Qty-Rate",
+                "checked": true
+            },
+            {
+                "value": "discount",
+                "label": "Discount",
+                "checked": true
+            },
+            {
+                "value": "tax",
+                "label": "Tax",
+                "checked": true
+            },
+            {
+                "value": "net_purchase",
+                "label": "Net Purchase",
+                "checked": true
+            }
+        ]);
     }
 
     public getDetailedSalesReport(SalesDetailedfilter) {
@@ -333,19 +397,19 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
         exportBodyRequest.branchUniqueName = this.getDetailedsalesRequestFilter?.branchUniqueName;
         exportBodyRequest.columnsToExport = [];
 
-        if(this.showFieldFilter.voucherType) {
+        if (this.showFieldFilter.voucherType) {
             exportBodyRequest.columnsToExport.push("Voucher Type");
         }
-        if(this.showFieldFilter.voucherNo) {
+        if (this.showFieldFilter.voucherNo) {
             exportBodyRequest.columnsToExport.push("Voucher No");
         }
-        if(this.showFieldFilter.qtyRate) {
+        if (this.showFieldFilter.qtyRate) {
             exportBodyRequest.columnsToExport.push("Qty/Unit");
         }
-        if(this.showFieldFilter.discount) {
+        if (this.showFieldFilter.discount) {
             exportBodyRequest.columnsToExport.push("Discount");
         }
-        if(this.showFieldFilter.tax) {
+        if (this.showFieldFilter.tax) {
             exportBodyRequest.columnsToExport.push("Tax");
         }
 
@@ -358,4 +422,19 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
             }
         });
     }
+
+    /**
+    * This will use for show hide main table headers from customise columns
+    *
+    * @param {*} event
+    * @memberof SalesRegisterExpandComponent
+    */
+    public getCustomiseHeaderColumns(event: any): void {
+        console.log(event);
+
+        this.displayedColumns = event;
+        const displayColumnsSet = new Set(this.displayedColumns);
+        Object.keys(this.showFieldFilter).forEach(key => this.showFieldFilter[key] = displayColumnsSet.has(key));
+    }
+
 }

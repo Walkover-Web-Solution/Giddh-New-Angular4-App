@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Optional, Output, Self, SimpleChanges, ViewChild } from "@angular/core";
-import { ReplaySubject } from "rxjs";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Optional, Output, Self, SimpleChanges, ViewChild, ViewEncapsulation } from "@angular/core";
+import { ReplaySubject, Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { InventoryService } from "../../../services/inventory.service";
 
@@ -11,14 +11,13 @@ const noop = () => {
     styleUrls: ["./select-multiple-checkbox.component.scss"],
     templateUrl: "./select-multiple-checkbox.component.html",
     changeDetection: ChangeDetectionStrategy.OnPush,
+    encapsulation: ViewEncapsulation.None
 })
 export class SelectMultipleCheckboxComponent implements OnInit, OnChanges, OnDestroy {
     /* This will hold local JSON data */
     @Input() public localeData: any = {};
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
-    /** Holds module name for customised columns */
-    @Input() public moduleName: string = "";
     /** Holds default columns list for customised columns */
     @Input() public customiseColumns: any[] = [];
     /** Holds inventory type module  */
@@ -27,14 +26,24 @@ export class SelectMultipleCheckboxComponent implements OnInit, OnChanges, OnDes
     @Input() public matTooltipPosition: string = "";
     /** Holds mat tooltip name  */
     @Input() public matTooltip: string = "";
-    /** Emits the loading value */
-    @Output() public isLoading: EventEmitter<boolean> = new EventEmitter();
+    /** CSS class name to add on the field */
+    @Input() public cssClass: string = "";
+    /** CSS class name to add on the field */
+    @Input() public iconClass: string = "";
+    /** Inner html add on the field */
+    @Input() public buttonText: string = "";
+    /** Inner html add on the field */
+    @Input() public refreshColumns: boolean = false;
     /** Emits the selected filters */
     @Output() public selectedColumns: EventEmitter<any> = new EventEmitter();
+    /** Emits the selected filters */
+    @Output() public refreshColumnsChange: EventEmitter<boolean> = new EventEmitter();
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** This will use for stock report displayed columns */
     public displayedColumns: string[] = [];
+    /** Observable to subscribe refresh columns */
+    @Input() public refreshColumnsSubject: Subject<void>;
 
     constructor(
         private changeDetection: ChangeDetectorRef,
@@ -48,6 +57,9 @@ export class SelectMultipleCheckboxComponent implements OnInit, OnChanges, OnDes
      * @memberof TextFieldComponent
      */
     public ngOnInit(): void {
+        this.refreshColumnsSubject?.pipe(takeUntil(this.destroyed$)).subscribe(res => {
+            this.filteredDisplayColumns();
+        })
         this.getReportColumns();
     }
 
@@ -57,6 +69,10 @@ export class SelectMultipleCheckboxComponent implements OnInit, OnChanges, OnDes
      * @memberof TextFieldComponent
      */
     public ngOnChanges(changes: SimpleChanges): void {
+        if (changes?.refreshColumns?.currentValue) {
+            this.filteredDisplayColumns();
+            this.refreshColumnsChange.emit(false);
+        }
     }
 
     /**
@@ -79,30 +95,10 @@ export class SelectMultipleCheckboxComponent implements OnInit, OnChanges, OnDes
                 module: this.moduleType,
                 columns: this.displayedColumns
             }
-            this.inventoryService.saveStockTransactionReportColumns(saveColumnReq).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                this.isLoading.emit(false);
-            });
+            this.inventoryService.saveStockTransactionReportColumns(saveColumnReq);
         });
     }
 
-    /**
-    * This will use to select all customised columns
-    *
-    * @param {*} event
-    * @memberof SelectMultipleCheckboxComponent
-    */
-    public selectAllColumns(event: any): void {
-        console.log(event);
-
-        this.customiseColumns?.forEach(column => {
-            if (column) {
-                column.checked = event;
-            }
-        });
-        this.filteredDisplayColumns();
-        this.saveColumns();
-        this.changeDetection.detectChanges();
-    }
 
     /**
      * This will be used for filtering the display columns
@@ -124,11 +120,8 @@ export class SelectMultipleCheckboxComponent implements OnInit, OnChanges, OnDes
         this.inventoryService.getStockTransactionReportColumns(this.moduleType).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.body && response.status === 'success') {
                 if (response.body?.columns) {
-                    this.customiseColumns?.forEach(column => {
-                        if (!response.body.columns?.includes(column?.value)) {
-                            column.checked = false;
-                        }
-                    });
+                    const displayColumnsSet = new Set(response.body?.columns);
+                    this.customiseColumns.forEach(column => column.checked = displayColumnsSet.has(column.value));
                 }
             }
             this.filteredDisplayColumns();

@@ -88,10 +88,11 @@
                 <select-multiple-checkbox
                     [moduleType]="moduleType"
                     [customiseColumns]="customiseColumns"
-                    (isLoading)="isLoading = $event"
                     (selectedColumns)="getCustomiseHeaderColumns($event)"
                     [localeData]="localeData"
                     [commonLocaleData]="commonLocaleData"
+                    [iconClass]="'icon-options select-multiple-icon-options'"
+                    [cssClass]="'purchase-customise-column-button'"
                 >
                 </select-multiple-checkbox>
             </div>
@@ -207,7 +208,7 @@
                         </div>
                     </h5>
                 </div>
-                <div class="total-details-box border-none closing-box" *ngIf="showFieldFilter.netPurchase">
+                <div class="total-details-box border-none closing-box" *ngIf="showFieldFilter.net_purchase">
                     <h5>
                         {{ commonLocaleData?.app_net_purchase }}
                         <div>
@@ -252,7 +253,7 @@
                                     <span> {{ commonLocaleData?.app_account }}</span>
                                 </div>
                             </th>
-                            <th *ngIf="showFieldFilter.voucherType">
+                            <th *ngIf="showFieldFilter.voucher_type">
                                 <div class="d-flex">
                                     <div>{{ commonLocaleData?.app_voucher_type }}</div>
                                     <div class="icon-pointer">
@@ -270,7 +271,7 @@
                             </th>
 
                             <th
-                                *ngIf="showFieldFilter.voucherNo"
+                                *ngIf="showFieldFilter.voucher_no"
                                 class="td-search-box nowrap voucher-width"
                                 #searchInvoiceContainer
                                 (clickOutside)="clickedOutsideEvent()"
@@ -372,7 +373,7 @@
                                     </div>
                                 </div>
                             </th>
-                            <th class="text-right" *ngIf="showFieldFilter.netPurchase">
+                            <th class="text-right" *ngIf="showFieldFilter.net_purchase">
                                 <div class="d-flex justify-content-end">
                                     <div>{{ commonLocaleData?.app_net_purchase }}</div>
                                     <div class="icon-pointer">
@@ -416,7 +417,7 @@
                             </td>
                             <td
                                 [attr.data-title]="commonLocaleData?.app_voucher_type"
-                                *ngIf="showFieldFilter.voucherType"
+                                *ngIf="showFieldFilter.voucher_type"
                                 class="verticle-align-top voucher-type-td"
                             >
                                 {{ item.voucherType }}
@@ -427,7 +428,7 @@
                                         ? commonLocaleData?.app_voucher_no
                                         : commonLocaleData?.app_entry_no
                                 "
-                                *ngIf="showFieldFilter.voucherNo"
+                                *ngIf="showFieldFilter.voucher_no"
                                 class="verticle-align-top"
                             >
                                 {{ item.voucherNumber ? item.voucherNumber : "-" }}
@@ -530,7 +531,7 @@
                             <td
                                 [attr.data-title]="commonLocaleData?.app_net_purchase"
                                 class="text-right"
-                                *ngIf="showFieldFilter.netPurchase"
+                                *ngIf="showFieldFilter.net_purchase"
                             >
                                 <span class="d-inline-flex">
                                     <amount-field

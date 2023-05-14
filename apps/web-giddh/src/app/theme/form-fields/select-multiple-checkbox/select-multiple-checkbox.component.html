@@ -1,53 +1,31 @@
-<div class="mat-menu-container">
-    <button
-        mat-icon-button
-        [matMenuTriggerFor]="menu"
-        [matTooltipPosition]="matTooltipPosition"
-        [matTooltip]="matTooltip"
-    >
-        <i class="icon-options"></i>
-    </button>
-    <mat-menu #menu="matMenu" class="columns-wrapper">
+<button
+    mat-icon-button
+    [matMenuTriggerFor]="menu"
+    [matTooltipPosition]="matTooltipPosition"
+    [matTooltip]="matTooltip"
+    [ngClass]="cssClass"
+>
+    <i [ngClass]="iconClass"> </i> {{ buttonText }}
+</button>
+<mat-menu #menu="matMenu" class="columns-wrapper">
+    <ng-container *ngFor="let item of customiseColumns">
         <button
             class="menu-buttons"
             mat-menu-item
             (click)="$event?.stopPropagation()"
-            (keydown.enter)="
-                $event?.stopPropagation();
-                selectAllCheckbox.checked = !selectAllCheckbox?.checked;
-                selectAllColumns(selectAllCheckbox?.checked)
-            "
+            (keydown.enter)="$event?.stopPropagation(); item.checked = !item?.checked; saveColumns()"
         >
             <mat-checkbox
                 class="inventory-checkbox"
-                #selectAllCheckbox
                 color="primary"
-                name="selectAll"
-                (change)="selectAllColumns($event?.checked)"
-                [checked]="displayedColumns?.length === customiseColumns?.length"
-            >
-                Select All
-            </mat-checkbox>
-        </button>
-        <ng-container *ngFor="let item of customiseColumns">
-            <button
-                class="menu-buttons"
-                mat-menu-item
+                name="{{ item?.value }}"
+                (ngModelChange)="saveColumns()"
+                [(ngModel)]="item.checked"
+                [disabled]="item?.checked && displayedColumns.length === 2"
                 (click)="$event?.stopPropagation()"
-                (keydown.enter)="$event?.stopPropagation(); item.checked = !item?.checked; saveColumns()"
             >
-                <mat-checkbox
-                    class="inventory-checkbox"
-                    color="primary"
-                    name="{{ item?.value }}"
-                    (ngModelChange)="saveColumns()"
-                    [(ngModel)]="item.checked"
-                    [disabled]="item?.checked && displayedColumns.length === 2"
-                    (click)="$event?.stopPropagation()"
-                >
-                    {{ item?.label }}</mat-checkbox
-                >
-            </button>
-        </ng-container>
-    </mat-menu>
-</div>
+                {{ item?.label }}</mat-checkbox
+            >
+        </button>
+    </ng-container>
+</mat-menu>
