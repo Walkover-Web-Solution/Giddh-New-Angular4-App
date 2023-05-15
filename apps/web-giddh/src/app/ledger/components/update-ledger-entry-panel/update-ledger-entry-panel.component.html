@@ -1244,30 +1244,48 @@
 
                 <div class="row ledger-bottom">
                     <div class="col-md-6 pd-t1 accordion-expansion">
-                        <!-- make it functional (Developer end) -->
-                        <div *ngIf="shouldShowWarehouse && warehouses?.length > 1" class="row mr-b1">
-                            <div class="col-sm-6 pd-r1">
-                                <div class="select-warehouse">
-                                    <label class="font-12">{{ localeData?.select_warehouse }}</label>
+                        <div class="row mr-b1">
+                            <ng-container *ngIf="isStockPresent && stockVariants$ | async as stockVariants">
+                                <div class="col-sm-5 pd-r1" *ngIf="stockVariants.length > 1">
+                                    <label class="font-12">{{ localeData?.select_variant }}</label>
                                     <sh-select
-                                        id="update-ledger-select-warehouse"
-                                        [(ngModel)]="selectedWarehouse"
-                                        [placeholder]="localeData?.select_warehouse"
-                                        [options]="warehouses"
-                                        [disabled]="
-                                            !isPettyCash &&
-                                            currentOrganizationType === 'COMPANY' &&
-                                            branches?.length > 1
-                                        "
+                                        id="update-ledger-select-variant"
+                                        [disabled]="currentOrganizationType === 'COMPANY' && branches?.length > 1"
                                         [class.disabled-ledger]="
-                                            !isPettyCash &&
-                                            currentOrganizationType === 'COMPANY' &&
-                                            branches?.length > 1
+                                            currentOrganizationType === 'COMPANY' && branches?.length > 1
                                         "
-                                    >
-                                    </sh-select>
+                                        (selected)="variantChanged($event)"
+                                        [placeholder]="localeData?.select_variant"
+                                        [(ngModel)]="selectedStockVariantUniqueName"
+                                        [options]="stockVariants"
+                                        [isRequired]="true"
+                                    ></sh-select>
                                 </div>
-                            </div>
+                            </ng-container>
+                            <ng-container *ngIf="isStockPresent && warehouses?.length > 1">
+                                <div class="col-sm-5 pd-r1">
+                                    <div class="select-warehouse">
+                                        <label class="font-12">{{ localeData?.select_warehouse }}</label>
+                                        <sh-select
+                                            id="update-ledger-select-warehouse"
+                                            [(ngModel)]="selectedWarehouse"
+                                            [placeholder]="localeData?.select_warehouse"
+                                            [options]="warehouses"
+                                            [disabled]="
+                                                !isPettyCash &&
+                                                currentOrganizationType === 'COMPANY' &&
+                                                branches?.length > 1
+                                            "
+                                            [class.disabled-ledger]="
+                                                !isPettyCash &&
+                                                currentOrganizationType === 'COMPANY' &&
+                                                branches?.length > 1
+                                            "
+                                        >
+                                        </sh-select>
+                                    </div>
+                                </div>
+                            </ng-container>
                         </div>
 
                         <ng-container *ngIf="shouldShowRcmTaxableAmount">
