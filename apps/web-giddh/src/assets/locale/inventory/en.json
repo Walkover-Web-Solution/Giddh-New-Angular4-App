@@ -11,7 +11,8 @@
         "fixed_assets":"Fixed Assets",
         "branch_transfer":"Branch Transfer",
         "manufacturing":"Manufacturing",
-        "warehouse_balance":"Warehouse Opening Balance"
+        "warehouse_balance":"Warehouse Opening Balance",
+        "custom_units":"Custom Units"
     },
     "reports":{
         "transaction_count":"Transaction Count",
@@ -91,5 +92,9 @@
         "opening_bal":"Opening Bal",
         "variant":"Variant",
         "variants":"Variants"
+    },
+    "button":{
+        "export_btn": "Export",
+        "back_btn": "Back"
     }
 }

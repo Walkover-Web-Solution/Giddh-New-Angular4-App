@@ -226,6 +226,11 @@ export class InventorySidebarComponent implements OnDestroy {
                     link: '/pages/inventory/v2/stock-balance',
                     icons: 'warehouse-opening-balance.svg'
                 },
+                {
+                    name: this.localeData?.sidebar?.custom_units,
+                    link: '/pages/inventory/v2/custom-units',
+                    icons: 'warehouse-opening-balance.svg'
+                }
             ];
             this.dataSource.data = this.dataList;
             this.changeDetection.detectChanges();

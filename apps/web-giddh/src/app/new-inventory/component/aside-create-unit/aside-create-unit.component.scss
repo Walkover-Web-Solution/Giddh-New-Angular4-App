@@ -1,5 +1,5 @@
 :host {
-    // position: fixed;
+    position: fixed;
     left: auto;
     top: 0;
     right: 0;
@@ -80,54 +80,12 @@
     }
 }
 
-/*--- custom ---*/
-.unit-quantity {
-    display: flex;
-    justify-content: space-between;
-    .row {
-        width: 92%;
-        .unit-equal {
-            .equal-sign {
-                position: absolute;
-                right: -4px;
-                top: 55%;
-            }
-        }
-    }
-    .plus-minus {
-        width: 8%;
-        position: relative;
-        .unit-add {
-            display: flex;
-            bottom: 0;
-            right: -5px;
-            button {
-                min-width: 20px;
-                padding: 0 10px;
-            }
-        }
-    }
-}
-
 @media (max-width: 768px) {
     :host {
         max-width: 600px;
     }
     :host .aside-pane {
         max-width: 600px;
-    }
-    .unit-quantity {
-        .row {
-            width: 94%;
-        }
-        .plus-minus {
-            width: 6%;
-            .unit-add {
-                button {
-                    padding: 0 7px !important;
-                }
-            }
-        }
     }
 }
 @media (max-width: 575px) {
