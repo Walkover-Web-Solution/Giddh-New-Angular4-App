@@ -600,8 +600,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 } else if (this.salesTaxInclusive || this.purchaseTaxInclusive || this.fixedAssetTaxInclusive) {
                     this.currentTxn.total = giddhRoundOff((this.currentTxn.inventory.quantity * this.currentTxn.inventory.unit.rate), this.giddhBalanceDecimalPlaces);
                     this.currentTxn.taxInclusiveAmount = this.calculateInclusiveAmount(this.currentTxn.total);
-                    // this.currentTxn.total = giddhRoundOff((this.currentTxn.amount + (!isExportValid ? this.currentTxn.tax : 0)), this.giddhBalanceDecimalPlaces);
-                    // this.calculateAmount();
                     this.totalForTax = this.currentTxn.total;
                     this.currentTxn.convertedTotal = giddhRoundOff((this.currentTxn.convertedAmount - (!isExportValid ? this.currentTxn.convertedTax : 0)), this.giddhBalanceDecimalPlaces);
                 } else {
@@ -1865,16 +1863,34 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         return this.ledgerUtilityService.checkIfExportIsValid(data);
     }
 
-    public variantChanged(event: any): void {
-        // this.currentTxn.inventory.variant = {name: event.label, uniqueName: event.value};
+    /**
+     * Variant change handler
+     *
+     * @param {IOption} event Change event
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public variantChanged(event: IOption): void {
         this.stockVariantSelected.emit(event.value);
     }
 
+    /**
+     * Loads the stock variants
+     *
+     * @private
+     * @param {string} stockUniqueName Uniquename of the stock
+     * @memberof NewLedgerEntryPanelComponent
+     */
     private loadStockVariants(stockUniqueName: string): void {
         this.stockVariants$ = this.ledgerService.loadStockVariants(stockUniqueName).pipe(
             map((variants: IVariant[]) => variants.map((variant: IVariant) => ({label: variant.name, value: variant.uniqueName}))));
     }
 
+    /**
+     * Sets the calculation method for stock depending on the category
+     *
+     * @private
+     * @memberof NewLedgerEntryPanelComponent
+     */
     private setTaxCalculationMethodForStock(): void {
         if (this.currentTxn.isStock && this.currentTxn.selectedAccount) {
             const category = this.currentTxn.selectedAccount.category;
@@ -1906,6 +1922,14 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         }
     }
 
+    /**
+     * Calculates the tax inclusive amount
+     *
+     * @private
+     * @param {number} total Total value of the entry against which the inclusive amount needs to be calculated
+     * @return {number} Inclusive amount value
+     * @memberof NewLedgerEntryPanelComponent
+     */
     private calculateInclusiveAmount(total: number): number {
         let fixDiscount = 0;
         let percentageDiscount = 0;

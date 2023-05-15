@@ -454,7 +454,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         }
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         document.querySelector('body')?.classList?.add('update-ledger-entry-panel-popup');
-        // this.loadStockVariants
     }
 
     public toggleShow(): void {
@@ -2539,6 +2538,13 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.selectedStockVariant = {name: event.label, uniqueName: event.value};
     }
 
+    /**
+     * Loads the stock's variants
+     *
+     * @private
+     * @param {string} stockUniqueName Stock uniquename
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
     private loadStockVariants(stockUniqueName: string): void {
         this.stockVariants$ = this.ledgerService.loadStockVariants(stockUniqueName).pipe(
             map((variants: IVariant[]) => variants.map((variant: IVariant) => ({label: variant.name, value: variant.uniqueName}))));

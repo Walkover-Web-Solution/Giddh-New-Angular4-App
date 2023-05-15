@@ -722,6 +722,13 @@ export class LedgerService {
             catchError((e) => this.errorHandler.HandleCatch<string, string>(e, '')));
     }
 
+    /**
+     * Loads stock variants
+     *
+     * @param {string} stockUniqueName Stock uniquename
+     * @return {Observable<Array<IVariant>>} Observable to caary out further operations
+     * @memberof LedgerService
+     */
     public loadStockVariants(stockUniqueName: string): Observable<Array<IVariant>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         const url = this.config.apiUrl + LEDGER_API.GET_STOCK_VARIANTS?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))

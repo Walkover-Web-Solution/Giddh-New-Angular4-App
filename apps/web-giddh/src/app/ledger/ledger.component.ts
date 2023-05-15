@@ -2566,6 +2566,15 @@ export class LedgerComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Load details of the selected account
+     *
+     * @private
+     * @param {IOption} event Selection event
+     * @param {TransactionVM} txn Transaction detauks
+     * @param {string} [variantUniqueName] Uniquename of the variant
+     * @memberof LedgerComponent
+     */
     private loadDetails(event: IOption, txn: TransactionVM, variantUniqueName?: string): void {
         let requestObject;
         if (event.additional.stock) {
