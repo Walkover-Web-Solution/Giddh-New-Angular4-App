@@ -22,7 +22,7 @@ import { BsDatepickerDirective } from "ngx-bootstrap/datepicker";
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { combineLatest as observableCombineLatest, Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
-import { debounceTime, take, takeUntil } from 'rxjs/operators';
+import { debounceTime, map, take, takeUntil, filter as observableFilter } from 'rxjs/operators';
 import { LedgerActions } from '../../../actions/ledger/ledger.actions';
 import { ConfirmationModalConfiguration } from '../../../theme/confirmation-modal/confirmation-modal.interface';
 import { LoaderService } from '../../../loader/loader.service';
@@ -30,7 +30,7 @@ import { cloneDeep, filter, last, orderBy, uniqBy } from '../../../lodash-optimi
 import { AccountResponse } from '../../../models/api-models/Account';
 import { AdjustAdvancePaymentModal, VoucherAdjustments } from '../../../models/api-models/AdvanceReceiptsAdjust';
 import { ICurrencyResponse, TaxResponse } from '../../../models/api-models/Company';
-import { DownloadLedgerRequest, LedgerResponse } from '../../../models/api-models/Ledger';
+import { DownloadLedgerRequest, IVariant, LedgerResponse } from '../../../models/api-models/Ledger';
 import { IForceClear, SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal, VoucherTypeEnum } from '../../../models/api-models/Sales';
 import { TagRequest } from '../../../models/api-models/settingsTags';
 import { ILedgerTransactionItem } from '../../../models/interfaces/ledger.interface';
@@ -122,8 +122,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public selectedWarehouse: string;
     /** Default warehouse of a company */
     private defaultWarehouse: string;
-    /** True, if warehouse drop down should be displayed */
-    public shouldShowWarehouse: boolean;
+    /** True, if stock item is present in any transaction */
+    public isStockPresent: boolean;
     /** True, if subvoucher is RCM */
     public isRcmEntry: boolean = false;
     /** RCM modal configuration */
@@ -280,6 +280,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public restrictedVouchersForDownload: any[] = RESTRICTED_VOUCHERS_FOR_DOWNLOAD;
     /** True if einvoice is generated for the voucher */
     public isEinvoiceGenerated: boolean = false;
+    /** Stores the stock variants */
+    public stockVariants$: Observable<Array<IOption>> = observableOf([]);
+    /** Stores the selected stock variant */
+    public selectedStockVariant: IVariant;
+    /** Stores the selected stock variant */
+    public selectedStockVariantUniqueName: string;
 
     constructor(
         private accountService: AccountService,
@@ -679,7 +685,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                                     rate: txn.selectedAccount.stock.rate,
                                     name: txn.selectedAccount.stock.name
                                 };
-                                txn.unitRate = txn.selectedAccount.stock.unitRates.map(unitRate => ({ ...unitRate, code: unitRate.stockUnitCode }));
+                                // For V1 company, the unitRates is obtained in 'stock' and for v2 company, unitRates is obtained in 'stock.variant'
+                                const unitRates = this.generalService.voucherApiVersion === 1 ? txn.selectedAccount.stock?.unitRates : txn.selectedAccount.stock?.variant?.unitRates
+                                txn.unitRate = unitRates.map(unitRate => ({ ...unitRate, code: unitRate.stockUnitCode }));
                                 stockName = defaultUnit.name;
                                 rate = defaultUnit.rate;
                                 stockUniqueName = txn.selectedAccount.stock?.uniqueName;
@@ -703,10 +711,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                                     amount: 0,
                                     rate
                                 };
-                                // Stock item, show the warehouse drop down
-                                if (!this.shouldShowWarehouse) {
-                                    this.shouldShowWarehouse = true;
+                                // Stock item, show the warehouse & variant drop down
+                                if (!this.isStockPresent) {
+                                    this.isStockPresent = true;
                                 }
+                                this.loadStockVariants(stockUniqueName);
+                                this.assignStockVariantDetails();
                             }
                             if (rate > 0) {
                                 txn.amount = rate;
@@ -753,11 +763,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                         };
                         delete txn.inventory;
                         // Non stock item got selected, search if there is any stock item along with non-stock item
-                        const isStockItemPresent = this.isStockItemPresent();
-                        if (!isStockItemPresent) {
-                            // None of the item were stock item, hide the warehouse section which is applicable only for stocks
-                            this.shouldShowWarehouse = false;
-                        }
+                        // If none of the item were stock item, hide the warehouse & variant dropdown which is applicable only for stocks
+                        this.isStockPresent = this.isStockItemPresent();
+
                         // check if need to showEntryPanel
                         // first check with opened lager
                         if (this.vm.checkDiscountTaxesAllowedOnOpenedLedger(this.activeAccount)) {
@@ -901,7 +909,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             requestObj.transactions = requestObj.transactions?.filter(tx => tx.particular?.uniqueName !== "roundoff");
         }
         requestObj.transactions.map((transaction: any) => {
-            if (transaction?.inventory && this.shouldShowWarehouse) {
+            if (transaction?.inventory && this.isStockPresent) {
+                transaction.inventory.variant = this.selectedStockVariant;
+
                 // Update the warehouse details in update ledger flow
                 if (transaction?.inventory.warehouse) {
                     transaction.inventory.warehouse.uniqueName = this.selectedWarehouse;
@@ -2317,6 +2327,11 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 }
             }
             if (t.inventory) {
+                // Load stock's variants
+                this.loadStockVariants(t.inventory.stock?.uniqueName);
+                this.selectedStockVariantUniqueName = t.inventory.variant?.uniqueName;
+                this.assignStockVariantDetails();
+
                 const unitRates = cloneDeep(this.vm.selectedLedger.unitRates);
                 if (unitRates && unitRates.length) {
                     unitRates.forEach(rate => rate.code = rate?.stockUnitCode);
@@ -2350,7 +2365,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     // If warehouse details are not received show default warehouse
                     this.selectedWarehouse = String(this.defaultWarehouse);
                 }
-                this.shouldShowWarehouse = true;
+                this.isStockPresent = true;
             } else {
                 initialAccounts.push({
                     label: t.particular?.name,
@@ -2518,6 +2533,41 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             } else {
                 this.restrictedVouchersForDownload = this.restrictedVouchersForDownload?.filter(voucherType => voucherType !== AdjustedVoucherType.PurchaseInvoice);
             }
+        });
+    }
+
+    /**
+     * Variant change handler
+     *
+     * @param {IOption} event Variant change event
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+    public variantChanged(event: IOption): void {
+        this.selectedStockVariant = {name: event.label, uniqueName: event.value};
+    }
+
+    /**
+     * Loads the stock's variants
+     *
+     * @private
+     * @param {string} stockUniqueName Stock uniquename
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+    private loadStockVariants(stockUniqueName: string): void {
+        this.stockVariants$ = this.ledgerService.loadStockVariants(stockUniqueName).pipe(
+            map((variants: IVariant[]) => variants.map((variant: IVariant) => ({label: variant.name, value: variant.uniqueName}))));
+    }
+
+    /**
+     * Assign stock variant details based on length
+     *
+     * @private
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+    private assignStockVariantDetails(): void {
+        this.stockVariants$.pipe(observableFilter(val => val?.length === 1), take(1)).subscribe(res => {
+            this.selectedStockVariant = {name: res[0].label, uniqueName: res[0].value};
+            this.selectedStockVariantUniqueName = this.selectedStockVariant.uniqueName;
         });
     }
 }
