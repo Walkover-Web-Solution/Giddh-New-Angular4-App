@@ -136,8 +136,6 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
     public ngOnChanges(changes: SimpleChanges): void {
         if (changes?.options) {
             this.fieldFilteredOptions = cloneDeep(changes.options.currentValue);
-            // Options changed reset the value
-            this.searchFormControl.setValue('');
         }
         if (changes?.defaultValue) {
             this.searchFormControl.setValue({ label: changes?.defaultValue.currentValue });
