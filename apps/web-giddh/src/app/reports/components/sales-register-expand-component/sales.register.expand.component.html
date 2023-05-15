@@ -93,6 +93,7 @@
                     [commonLocaleData]="commonLocaleData"
                     [iconClass]="'icon-options select-multiple-icon-options'"
                     [cssClass]="'purchase-customise-column-button'"
+                    (isLoading)="isLoading = $event"
                 >
                 </select-multiple-checkbox>
             </div>
@@ -148,10 +149,7 @@
                         </div>
                     </h5>
                 </div>
-                <div
-                    class="total-details-box mr-r05 border-none payment-receipt"
-                    *ngIf="showFieldFilter.discount && (salesRegisteDetailedResponse$ | async)?.discountTotal"
-                >
+                <div class="total-details-box mr-r05 border-none payment-receipt" *ngIf="showFieldFilter.discount">
                     <h5>
                         {{ localeData?.net_discount }}
                         <div>
@@ -202,10 +200,7 @@
                         </div>
                     </h5>
                 </div>
-                <div
-                    class="total-details-box mr-r05 border-none due-box"
-                    *ngIf="showFieldFilter.tax && (salesRegisteDetailedResponse$ | async).taxTotal"
-                >
+                <div class="total-details-box mr-r05 border-none due-box" *ngIf="showFieldFilter.tax">
                     <h5>
                         {{ localeData?.net_tax }}
                         <div>
@@ -220,7 +215,7 @@
                         </div>
                     </h5>
                 </div>
-                <div class="total-details-box border-none closing-box">
+                <div class="total-details-box border-none closing-box" *ngIf="showFieldFilter.net_sales">
                     <h5>
                         {{ commonLocaleData?.app_net_sales }}
                         <div>
@@ -247,7 +242,7 @@
                         [hidden]="!(salesRegisteDetailedResponse$ | async)?.items?.length && !voucherNumberInput?.value"
                     >
                         <tr>
-                            <th>
+                            <th *ngIf="showFieldFilter.date">
                                 <div class="d-flex">
                                     <div>{{ commonLocaleData?.app_date }}</div>
                                     <div class="icon-pointer">
@@ -258,12 +253,12 @@
                                     </div>
                                 </div>
                             </th>
-                            <th class="td-search-box">
+                            <th class="td-search-box" *ngIf="showFieldFilter.account">
                                 <div>
                                     <span> {{ commonLocaleData?.app_account }}</span>
                                 </div>
                             </th>
-                            <th *ngIf="showFieldFilter.voucherType">
+                            <th *ngIf="showFieldFilter.voucher_type">
                                 <div class="d-flex">
                                     <div>{{ commonLocaleData?.app_voucher_type }}</div>
                                     <div class="icon-pointer">
@@ -280,7 +275,7 @@
                                 </div>
                             </th>
                             <th
-                                *ngIf="showFieldFilter.voucherNo"
+                                *ngIf="showFieldFilter.voucher_no"
                                 class="td-search-box nowrap"
                                 width="20%"
                                 #searchInvoiceContainer
@@ -309,7 +304,7 @@
                                     />
                                 </div>
                             </th>
-                            <th *ngIf="(salesRegisteDetailedResponse$ | async)?.creditTotal" class="text-right">
+                            <th *ngIf="showFieldFilter.sales" class="text-right">
                                 <div class="d-flex justify-content-end">
                                     <div class="text-right">{{ commonLocaleData?.app_sales }}</div>
                                     <div class="icon-pointer">
@@ -326,7 +321,7 @@
                                 </div>
                             </th>
 
-                            <th *ngIf="(salesRegisteDetailedResponse$ | async)?.debitTotal" class="text-right">
+                            <th *ngIf="showFieldFilter.return" class="text-right">
                                 <div class="d-flex justify-content-end">
                                     <div class="text-right">{{ commonLocaleData?.app_return }}</div>
                                     <div class="icon-pointer">
@@ -337,20 +332,12 @@
                                     </div>
                                 </div>
                             </th>
-                            <th
-                                *ngIf="
-                                    showFieldFilter.qtyRate && (salesRegisteDetailedResponse$ | async)?.quantityTotal
-                                "
-                                class="text-right"
-                            >
+                            <th *ngIf="showFieldFilter.qty_rate" class="text-right">
                                 <div class="d-flex justify-content-end">
                                     <div class="text-right">{{ commonLocaleData?.app_quantity_unit }}</div>
                                 </div>
                             </th>
-                            <th
-                                *ngIf="showFieldFilter.qtyRate && (salesRegisteDetailedResponse$ | async)?.rateTotal"
-                                class="text-right"
-                            >
+                            <th *ngIf="showFieldFilter.qty_rate" class="text-right">
                                 <div class="d-flex justify-content-end">
                                     <div class="text-right">{{ commonLocaleData?.app_rate }}</div>
                                     <div class="icon-pointer">
@@ -362,12 +349,7 @@
                                 </div>
                             </th>
 
-                            <th
-                                *ngIf="
-                                    showFieldFilter.discount && (salesRegisteDetailedResponse$ | async)?.discountTotal
-                                "
-                                class="text-right"
-                            >
+                            <th *ngIf="showFieldFilter.discount" class="text-right">
                                 <div class="d-flex justify-content-end">
                                     <div class="text-right">{{ commonLocaleData?.app_discount }}</div>
                                     <div class="icon-pointer">
@@ -384,10 +366,7 @@
                                 </div>
                             </th>
 
-                            <th
-                                *ngIf="showFieldFilter.tax && (salesRegisteDetailedResponse$ | async)?.taxTotal"
-                                class="text-right"
-                            >
+                            <th *ngIf="showFieldFilter.tax" class="text-right">
                                 <div class="d-flex justify-content-end">
                                     <div class="text-right">{{ commonLocaleData?.app_tax }}</div>
                                     <div class="icon-pointer">
@@ -398,7 +377,7 @@
                                     </div>
                                 </div>
                             </th>
-                            <th class="text-right">
+                            <th class="text-right" *ngIf="showFieldFilter.net_sales">
                                 <div class="d-flex justify-content-end">
                                     <div>{{ commonLocaleData?.app_net_sales }}</div>
                                     <div class="icon-pointer">
@@ -413,9 +392,12 @@
                     </thead>
                     <tbody *ngIf="(salesRegisteDetailedResponse$ | async)?.items?.length">
                         <tr *ngFor="let item of (salesRegisteDetailedResponse$ | async)?.items">
-                            <td [attr.data-title]="commonLocaleData?.app_date">{{ item.date }}</td>
+                            <td [attr.data-title]="commonLocaleData?.app_date" *ngIf="showFieldFilter.date">
+                                {{ item.date }}
+                            </td>
 
                             <td
+                                *ngIf="showFieldFilter.account"
                                 [attr.data-title]="commonLocaleData?.app_account"
                                 (dblclick)="modalUniqueName = item?.uniqueName"
                                 class="cp no-dbl-click-select"
@@ -439,7 +421,7 @@
                             </td>
                             <td
                                 [attr.data-title]="commonLocaleData?.app_voucher_type"
-                                *ngIf="showFieldFilter.voucherType"
+                                *ngIf="showFieldFilter.voucher_type"
                                 class="verticle-align-top"
                             >
                                 {{ item.voucherType }}
@@ -451,14 +433,14 @@
                                         ? commonLocaleData?.app_voucher_no
                                         : commonLocaleData?.app_entry_no
                                 "
-                                *ngIf="showFieldFilter.voucherNo"
+                                *ngIf="showFieldFilter.voucher_no"
                                 class="verticle-align-top voucher-number-td"
                             >
-                                {{ item.voucherNumber }}
+                                {{ item.voucherNumber ? item.voucherNumber : "-" }}
                             </td>
                             <td
+                                *ngIf="showFieldFilter.sales"
                                 [attr.data-title]="commonLocaleData?.app_sales"
-                                *ngIf="(salesRegisteDetailedResponse$ | async)?.creditTotal"
                                 class="text-right"
                             >
                                 <span class="d-inline-flex">
@@ -477,7 +459,7 @@
                             </td>
                             <td
                                 [attr.data-title]="commonLocaleData?.app_return"
-                                *ngIf="(salesRegisteDetailedResponse$ | async)?.debitTotal"
+                                *ngIf="showFieldFilter.return"
                                 class="text-right"
                             >
                                 <span class="d-inline-flex">
@@ -492,9 +474,7 @@
                             <td
                                 [attr.data-title]="commonLocaleData?.app_quantity_unit"
                                 class="text-right"
-                                *ngIf="
-                                    showFieldFilter.qtyRate && (salesRegisteDetailedResponse$ | async)?.quantityTotal
-                                "
+                                *ngIf="showFieldFilter.qty_rate"
                             >
                                 <ng-container *ngFor="let stock of item.stocks">
                                     <p>
@@ -502,11 +482,12 @@
                                         {{ stock.unit.code }}
                                     </p>
                                 </ng-container>
+                                <p *ngIf="!item.stocks?.length">-</p>
                             </td>
                             <td
                                 [attr.data-title]="commonLocaleData?.app_rate"
                                 class="text-right"
-                                *ngIf="showFieldFilter.qtyRate && (salesRegisteDetailedResponse$ | async)?.rateTotal"
+                                *ngIf="showFieldFilter.qty_rate"
                             >
                                 <ng-container *ngFor="let stock of item.stocks">
                                     <p>
@@ -520,12 +501,11 @@
                                         </span>
                                     </p>
                                 </ng-container>
+                                <p *ngIf="!item.stocks?.length">-</p>
                             </td>
                             <td
                                 [attr.data-title]="commonLocaleData?.app_discount"
-                                *ngIf="
-                                    showFieldFilter.discount && (salesRegisteDetailedResponse$ | async)?.discountTotal
-                                "
+                                *ngIf="showFieldFilter.discount"
                                 class="text-right"
                             >
                                 <span class="d-inline-flex">
@@ -539,7 +519,7 @@
                             </td>
                             <td
                                 [attr.data-title]="commonLocaleData?.app_tax"
-                                *ngIf="showFieldFilter.tax && (salesRegisteDetailedResponse$ | async)?.taxTotal"
+                                *ngIf="showFieldFilter.tax"
                                 class="text-right"
                             >
                                 <span class="d-inline-flex">
@@ -551,7 +531,11 @@
                                     </amount-field>
                                 </span>
                             </td>
-                            <td [attr.data-title]="commonLocaleData?.app_net_sales" class="text-right">
+                            <td
+                                [attr.data-title]="commonLocaleData?.app_net_sales"
+                                class="text-right"
+                                *ngIf="showFieldFilter.net_sales"
+                            >
                                 <span class="d-inline-flex">
                                     <amount-field
                                         [amount]="item.netTotal"

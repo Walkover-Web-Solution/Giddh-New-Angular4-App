@@ -93,6 +93,7 @@
                     [commonLocaleData]="commonLocaleData"
                     [iconClass]="'icon-options select-multiple-icon-options'"
                     [cssClass]="'purchase-customise-column-button'"
+                    (isLoading)="isLoading = $event"
                 >
                 </select-multiple-checkbox>
             </div>
@@ -328,12 +329,12 @@
                                     </div>
                                 </div>
                             </th>
-                            <th *ngIf="showFieldFilter.qtyRate" class="text-right">
+                            <th *ngIf="showFieldFilter.qty_rate" class="text-right">
                                 <div class="d-flex justify-content-end">
                                     <div class="text-right">{{ commonLocaleData?.app_quantity_unit }}</div>
                                 </div>
                             </th>
-                            <th *ngIf="showFieldFilter.qtyRate" class="text-right">
+                            <th *ngIf="showFieldFilter.qty_rate" class="text-right">
                                 <div class="d-flex justify-content-end">
                                     <div class="text-right">{{ commonLocaleData?.app_rate }}</div>
                                     <div class="icon-pointer">
@@ -478,7 +479,7 @@
                             <td
                                 class="text-right"
                                 [attr.data-title]="commonLocaleData?.app_quantity_unit"
-                                *ngIf="showFieldFilter.qtyRate"
+                                *ngIf="showFieldFilter.qty_rate"
                             >
                                 <ng-container *ngFor="let stock of item.stocks">
                                     <p>
@@ -491,7 +492,7 @@
                             <td
                                 class="text-right"
                                 [attr.data-title]="commonLocaleData?.app_rate"
-                                *ngIf="showFieldFilter.qtyRate"
+                                *ngIf="showFieldFilter.qty_rate"
                             >
                                 <ng-container *ngFor="let stock of item.stocks">
                                     <p *ngIf="stock.rate">{{ stock.rate | giddhCurrency }}</p>

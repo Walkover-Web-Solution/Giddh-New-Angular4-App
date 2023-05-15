@@ -15,7 +15,6 @@ import { GeneralService } from '../../../services/general.service';
 import { ExportBodyRequest } from '../../../models/api-models/DaybookRequest';
 import { LedgerService } from '../../../services/ledger.service';
 import { ToasterService } from '../../../services/toaster.service';
-import { cloneDeep } from '../../../lodash-optimized';
 
 @Component({
     selector: 'purchase-register-expand',
@@ -79,6 +78,8 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
     public displayedColumns: any[] = [];
     /** True if translations loaded */
     public translationLoaded: boolean = false;
+    /** True if api call in progress */
+    public isLoading: boolean = false;
 
     constructor(private store: Store<AppState>, private invoiceReceiptActions: InvoiceReceiptActions, private activeRoute: ActivatedRoute, private router: Router, private _cd: ChangeDetectorRef, private breakPointObservar: BreakpointObserver, private generalService: GeneralService, private ledgerService: LedgerService, private toaster: ToasterService) {
         this.purchaseRegisteDetailedResponse$ = this.store.pipe(select(appState => appState.receipt.PurchaseRegisteDetailedResponse), takeUntil(this.destroyed$));
@@ -394,8 +395,22 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
         exportBodyRequest.q = this.voucherNumberInput?.value;
         exportBodyRequest.branchUniqueName = this.getDetailedPurchaseRequestFilter?.branchUniqueName;
         exportBodyRequest.columnsToExport = [];
-        exportBodyRequest.columnsToExport = this.displayedColumns;
-
+        // exportBodyRequest.columnsToExport = this.displayedColumns;
+        if (this.showFieldFilter.voucher_type) {
+            exportBodyRequest.columnsToExport.push("Voucher Type");
+        }
+        if (this.showFieldFilter.voucher_no) {
+            exportBodyRequest.columnsToExport.push("Voucher No");
+        }
+        if (this.showFieldFilter.qty_rate) {
+            exportBodyRequest.columnsToExport.push("Qty/Unit");
+        }
+        if (this.showFieldFilter.discount) {
+            exportBodyRequest.columnsToExport.push("Discount");
+        }
+        if (this.showFieldFilter.tax) {
+            exportBodyRequest.columnsToExport.push("Tax");
+        }
         this.ledgerService.exportData(exportBodyRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === 'success') {
                 this.toaster.showSnackBar("success", response?.body);

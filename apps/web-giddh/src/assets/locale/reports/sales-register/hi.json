@@ -8,5 +8,15 @@
     "net_tax": "शुद्ध कर",
     "net_discount": "शुद्ध छूट",
     "net_tds": "नेट टीडीएस",
-    "net_tcs": "नेट टीसीएस"
+    "net_tcs": "नेट टीसीएस",
+    "voucher_type": "Voucher Type",
+    "voucher_no": "Voucher No.",
+    "qty_rate": "Qty-Rate",
+    "discount": "Discount",
+    "tax": "Tax",
+    "date": "Date",
+    "account": "Account",
+    "sales": "Sales",
+    "return": "Return",
+    "net_sales": "Net Sales"
 }

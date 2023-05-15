@@ -10,8 +10,7 @@ const noop = () => {
     selector: "select-multiple-checkbox",
     styleUrls: ["./select-multiple-checkbox.component.scss"],
     templateUrl: "./select-multiple-checkbox.component.html",
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    encapsulation: ViewEncapsulation.None
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SelectMultipleCheckboxComponent implements OnInit, OnChanges, OnDestroy {
     /* This will hold local JSON data */
@@ -34,16 +33,18 @@ export class SelectMultipleCheckboxComponent implements OnInit, OnChanges, OnDes
     @Input() public buttonText: string = "";
     /** Inner html add on the field */
     @Input() public refreshColumns: boolean = false;
+    /** Observable to subscribe refresh columns */
+    @Input() public refreshColumnsSubject: Subject<void>;
     /** Emits the selected filters */
     @Output() public selectedColumns: EventEmitter<any> = new EventEmitter();
     /** Emits the selected filters */
     @Output() public refreshColumnsChange: EventEmitter<boolean> = new EventEmitter();
+    /** Emits true if api call in progress */
+    @Output() public isLoading: EventEmitter<boolean> = new EventEmitter();
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** This will use for stock report displayed columns */
     public displayedColumns: string[] = [];
-    /** Observable to subscribe refresh columns */
-    @Input() public refreshColumnsSubject: Subject<void>;
 
     constructor(
         private changeDetection: ChangeDetectorRef,
@@ -95,7 +96,9 @@ export class SelectMultipleCheckboxComponent implements OnInit, OnChanges, OnDes
                 module: this.moduleType,
                 columns: this.displayedColumns
             }
-            this.inventoryService.saveStockTransactionReportColumns(saveColumnReq);
+            this.inventoryService.saveStockTransactionReportColumns(saveColumnReq).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                this.isLoading.emit(false);
+            });
         });
     }
 

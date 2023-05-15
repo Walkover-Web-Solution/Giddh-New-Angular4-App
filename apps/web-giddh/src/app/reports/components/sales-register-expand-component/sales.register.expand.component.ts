@@ -15,7 +15,6 @@ import { GeneralService } from '../../../services/general.service';
 import { ExportBodyRequest } from '../../../models/api-models/DaybookRequest';
 import { LedgerService } from '../../../services/ledger.service';
 import { ToasterService } from '../../../services/toaster.service';
-import { cloneDeep } from '../../../lodash-optimized';
 
 @Component({
     selector: 'sales-register-expand',
@@ -50,19 +49,6 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
     public modalUniqueName: string;
     public imgPath: string;
     public expand: boolean = false;
-    public showFieldFilter = {
-        date: false,
-        account: false,
-        voucherType: false,
-        voucherNo: false,
-        sales: false,
-        return: false,
-        qtyRate: false,
-        value: false,
-        discount: false,
-        tax: false,
-        netSales: false
-    };
     /* This will hold local JSON data */
     public localeData: any = {};
     /* This will hold common JSON data */
@@ -81,7 +67,22 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
     public displayedColumns: any[] = [];
     /** True if translations loaded */
     public translationLoaded: boolean = false;
-
+    /** True according to show field filters  */
+    public showFieldFilter = {
+        date: false,
+        account: false,
+        voucher_type: false,
+        voucher_no: false,
+        sales: false,
+        return: false,
+        qty_rate: false,
+        value: false,
+        discount: false,
+        tax: false,
+        net_sales: false
+    };
+    /** True if api call in progress */
+    public isLoading: boolean = false;
     constructor(private store: Store<AppState>, private invoiceReceiptActions: InvoiceReceiptActions, private activeRoute: ActivatedRoute, private router: Router, private _cd: ChangeDetectorRef, private breakPointObservar: BreakpointObserver, private generalService: GeneralService, private ledgerService: LedgerService, private toaster: ToasterService) {
         this.salesRegisteDetailedResponse$ = this.store.pipe(select(appState => appState.receipt.SalesRegisteDetailedResponse), takeUntil(this.destroyed$));
         this.isGetSalesDetailsInProcess$ = this.store.pipe(select(p => p.receipt.isGetSalesDetailsInProcess), takeUntil(this.destroyed$));
@@ -148,7 +149,7 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
                 this.showSearchInvoiceNo = false;
             }
         });
-        this.customiseColumns = cloneDeep([
+        this.customiseColumns = [
             {
                 "value": "date",
                 "label": "Date",
@@ -170,8 +171,8 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
                 "checked": true
             },
             {
-                "value": "purchase",
-                "label": "Purchase",
+                "value": "sales",
+                "label": "Sales",
                 "checked": true
             },
             {
@@ -195,11 +196,11 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
                 "checked": true
             },
             {
-                "value": "net_purchase",
-                "label": "Net Purchase",
+                "value": "net_sales",
+                "label": "Net Sales",
                 "checked": true
             }
-        ]);
+        ];
     }
 
     public getDetailedSalesReport(SalesDetailedfilter) {
@@ -397,13 +398,13 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
         exportBodyRequest.branchUniqueName = this.getDetailedsalesRequestFilter?.branchUniqueName;
         exportBodyRequest.columnsToExport = [];
 
-        if (this.showFieldFilter.voucherType) {
+        if (this.showFieldFilter.voucher_type) {
             exportBodyRequest.columnsToExport.push("Voucher Type");
         }
-        if (this.showFieldFilter.voucherNo) {
+        if (this.showFieldFilter.voucher_no) {
             exportBodyRequest.columnsToExport.push("Voucher No");
         }
-        if (this.showFieldFilter.qtyRate) {
+        if (this.showFieldFilter.qty_rate) {
             exportBodyRequest.columnsToExport.push("Qty/Unit");
         }
         if (this.showFieldFilter.discount) {
@@ -430,8 +431,6 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
     * @memberof SalesRegisterExpandComponent
     */
     public getCustomiseHeaderColumns(event: any): void {
-        console.log(event);
-
         this.displayedColumns = event;
         const displayColumnsSet = new Set(this.displayedColumns);
         Object.keys(this.showFieldFilter).forEach(key => this.showFieldFilter[key] = displayColumnsSet.has(key));
