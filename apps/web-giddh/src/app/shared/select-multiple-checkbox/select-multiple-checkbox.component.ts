@@ -1,10 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Optional, Output, Self, SimpleChanges, ViewChild, ViewEncapsulation } from "@angular/core";
 import { ReplaySubject, Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
-import { InventoryService } from "../../../services/inventory.service";
-
-const noop = () => {
-};
+import { InventoryService } from "../../services/inventory.service";
 
 @Component({
     selector: "select-multiple-checkbox",
@@ -31,8 +28,6 @@ export class SelectMultipleCheckboxComponent implements OnInit, OnChanges, OnDes
     @Input() public iconClass: string = "";
     /** Inner html add on the field */
     @Input() public buttonText: string = "";
-    /** Inner html add on the field */
-    @Input() public refreshColumns: boolean = false;
     /** Observable to subscribe refresh columns */
     @Input() public refreshColumnsSubject: Subject<void>;
     /** Emits the selected filters */
@@ -45,6 +40,7 @@ export class SelectMultipleCheckboxComponent implements OnInit, OnChanges, OnDes
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** This will use for stock report displayed columns */
     public displayedColumns: string[] = [];
+
 
     constructor(
         private changeDetection: ChangeDetectorRef,
@@ -60,8 +56,7 @@ export class SelectMultipleCheckboxComponent implements OnInit, OnChanges, OnDes
     public ngOnInit(): void {
         this.refreshColumnsSubject?.pipe(takeUntil(this.destroyed$)).subscribe(res => {
             this.filteredDisplayColumns();
-        })
-        this.getReportColumns();
+        });
     }
 
     /**
@@ -70,9 +65,8 @@ export class SelectMultipleCheckboxComponent implements OnInit, OnChanges, OnDes
      * @memberof TextFieldComponent
      */
     public ngOnChanges(changes: SimpleChanges): void {
-        if (changes?.refreshColumns?.currentValue) {
-            this.filteredDisplayColumns();
-            this.refreshColumnsChange.emit(false);
+        if (changes?.moduleType?.currentValue !== changes?.moduleType?.previousValue) {
+            this.getReportColumns();
         }
     }
 

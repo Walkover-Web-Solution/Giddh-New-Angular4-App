@@ -72,9 +72,9 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
     public voucherApiVersion: 1 | 2;
     /* This will hold module type */
     public moduleType = 'PURCHASE_REGISTER';
-    /** This will use for stock report voucher types column check values */
+    /** This will use for purchase register column check values */
     public customiseColumns = [];
-    /** This will use for stock report displayed columns */
+    /** This will use for purchase register displayed columns */
     public displayedColumns: any[] = [];
     /** True if translations loaded */
     public translationLoaded: boolean = false;

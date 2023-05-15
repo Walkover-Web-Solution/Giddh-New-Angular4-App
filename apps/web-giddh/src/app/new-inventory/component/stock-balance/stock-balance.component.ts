@@ -68,10 +68,11 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
     public warehousesDropdown: FormControl = new FormControl();
     /** Hold all warehouses */
     public allWarehouses: any[] = [];
+    /** Hold module type */
     public moduleType = 'INVENTORY_WAREHOUSE_OPENING_BALANCE';
-    /** This will use for stock report voucher types column check values */
+    /** This will use for stock balance column check values */
     public customiseColumns = [];
-    /** This will use for stock report displayed columns */
+    /** This will use for stock balance displayed columns */
     public displayedColumns: any[] = [];
     /* This will hold local JSON data */
     public localeData: any = {};
@@ -149,17 +150,18 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
             this.GroupStockReportRequest.stockName = s;
             this.getStocks();
         });
-        this.customiseColumns = cloneDeep([{
-            "value": "unique_name",
-            "label": "Unique Name",
-            "checked": true
-        },
-        {
-            "value": "stock_group",
-            "label": "Stock Group",
-            "checked": true
-        }
-        ]);
+        this.customiseColumns = [
+            {
+                "value": "unique_name",
+                "label": "Unique Name",
+                "checked": true
+            },
+            {
+                "value": "stock_group",
+                "label": "Stock Group",
+                "checked": true
+            }
+        ];
     }
 
     /**
@@ -429,8 +431,8 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
      * @memberof StockBalanceComponent
      */
     public getCustomiseHeaderColumns(event: any): void {
-        this.displayedColumns = event;
         if (event) {
+            this.displayedColumns = event;
             if (this.displayedColumns?.includes('unique_name')) {
                 this.showUniqueName = true;
             } else {
@@ -454,12 +456,6 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
     public translationComplete(event: any): void {
         if (event) {
             this.translationLoaded = true;
-            this.customiseColumns = this.customiseColumns?.map(column => {
-                if (column?.value) {
-                    column.label = this.localeData?.warehouse_opening_balance[column.value];
-                }
-                return column;
-            });
             this.cdr.detectChanges();
         }
     }

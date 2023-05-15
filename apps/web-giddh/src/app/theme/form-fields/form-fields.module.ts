@@ -20,7 +20,6 @@ import { CdkScrollComponent } from "./cdk-scroll/cdk-scroll.component";
 import { CdkScrollModule } from "./cdk-scroll/cdk-scroll.module";
 import { ScrollingModule } from "@angular/cdk/scrolling";
 import { SelectMultipleFieldsComponent } from "./select-multiple-fields/select-multiple-fields.component";
-import { SelectMultipleCheckboxComponent } from "./select-multiple-checkbox/select-multiple-checkbox.component";
 import { MatIconModule } from "@angular/material/icon";
 import { MatMenuModule } from "@angular/material/menu";
 import { MatButtonModule } from "@angular/material/button";
@@ -30,8 +29,7 @@ import { MatButtonModule } from "@angular/material/button";
         TextFieldComponent,
         SelectFieldComponent,
         SelectMultipleFieldsComponent,
-        CdkScrollComponent,
-        SelectMultipleCheckboxComponent
+        CdkScrollComponent
     ],
     imports: [
         CommonModule,
@@ -60,7 +58,6 @@ import { MatButtonModule } from "@angular/material/button";
         TextFieldComponent,
         SelectFieldComponent,
         SelectMultipleFieldsComponent,
-        SelectMultipleCheckboxComponent,
         MatFormFieldModule,
         CdkScrollComponent,
         CdkScrollModule,

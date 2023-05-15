@@ -55,6 +55,12 @@ import { CheckPermissionModule } from '../permissions/check-permission.module';
 import { GenericAsideMenuAccountModule } from './generic-aside-menu-account/generic.aside.menu.account.module';
 import { AccountUpdateNewDetailsModule } from './header/components/account-update-new-details/account-update-new-details.module';
 import { MatRadioModule } from '@angular/material/radio';
+import { SelectMultipleCheckboxComponent } from './select-multiple-checkbox/select-multiple-checkbox.component';
+import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatButtonModule } from '@angular/material/button';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true
@@ -82,7 +88,8 @@ export function provideConfig() {
         ShareGroupModalComponent,
         ShareAccountModalComponent,
         ExportGroupLedgerComponent,
-        MasterComponent
+        MasterComponent,
+        SelectMultipleCheckboxComponent
     ],
     imports: [
         KeyboardShortutModule,
@@ -134,7 +141,12 @@ export function provideConfig() {
         MatSlideToggleModule,
         CheckPermissionModule,
         AccountUpdateNewDetailsModule,
-        MatRadioModule
+        MatRadioModule,
+        MatIconModule,
+        MatMenuModule,
+        MatButtonModule,
+        MatTooltipModule,
+        MatCheckboxModule
     ],
     exports: [
         CommonModule,
@@ -175,7 +187,8 @@ export function provideConfig() {
         GiddhPageLoaderModule,
         GiddhDatepickerModule,
         GenericAsideMenuAccountModule,
-        MasterComponent
+        MasterComponent,
+        SelectMultipleCheckboxComponent
     ],
     providers: [
         {
