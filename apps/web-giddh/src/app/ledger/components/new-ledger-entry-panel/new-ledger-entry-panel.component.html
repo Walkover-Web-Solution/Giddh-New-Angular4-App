@@ -1183,30 +1183,32 @@
     </div>
 </ng-template>
 <ng-template #variantAndWarehouseDropdown>
-    <div class="d-flex justify-content-between">
-        <div *ngIf="currentTxn?.isStock && stockVariants$ | async as stockVariants" class="col-md-3 mb-2 p-0">
-            <div *ngIf="stockVariants?.length > 1">
-                <label>{{ localeData?.select_variant }}</label>
-                <!-- <select-field
-                    [disabled]="isReadOnly"
-                    [cssClass]="'form-control mat-field-border'"
-                    [placeholder]="localeData?.select_variant"
-                    (selectedOption)="variantChanged($event)"
-                    [options]="stockVariants"
-                    [required]="true"
-                >
-                </select-field> -->
-                <sh-select
-                    [disabled]="isReadOnly"
-                    [class.disabled-ledger]="isReadOnly"
-                    [placeholder]="localeData?.select_variant"
-                    [options]="stockVariants"
-                    (selected)="variantChanged($event)"
-                    [isRequired]="true"
-                ></sh-select>
+    <div class="d-flex justify-content-between mb-2">
+        <ng-container *ngIf="currentTxn?.isStock && stockVariants$ | async as stockVariants">
+            <div *ngIf="stockVariants?.length > 1" class="col-md-3 mb-2 p-0 pr-2">
+                <div>
+                    <label>{{ localeData?.select_variant }}</label>
+                    <!-- <select-field
+                        [disabled]="isReadOnly"
+                        [cssClass]="'form-control mat-field-border'"
+                        [placeholder]="localeData?.select_variant"
+                        (selectedOption)="variantChanged($event)"
+                        [options]="stockVariants"
+                        [required]="true"
+                    >
+                    </select-field> -->
+                    <sh-select
+                        [disabled]="isReadOnly"
+                        [class.disabled-ledger]="isReadOnly"
+                        [placeholder]="localeData?.select_variant"
+                        [options]="stockVariants"
+                        (selected)="variantChanged($event)"
+                        [isRequired]="true"
+                    ></sh-select>
+                </div>
             </div>
-        </div>
-        <div class="col-md-4 pr-0">
+        </ng-container>
+        <div class="col-md-4 px-0">
             <div class="source-warehouse" *ngIf="currentTxn?.selectedAccount?.stock && warehouses?.length > 1">
                 <label>{{ localeData?.select_warehouse }}</label>
                 <sh-select

@@ -22,7 +22,7 @@ import { BsDatepickerDirective } from "ngx-bootstrap/datepicker";
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { combineLatest as observableCombineLatest, Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
-import { debounceTime, map, take, takeUntil } from 'rxjs/operators';
+import { debounceTime, map, take, takeUntil, filter as observableFilter } from 'rxjs/operators';
 import { LedgerActions } from '../../../actions/ledger/ledger.actions';
 import { ConfirmationModalConfiguration } from '../../../theme/confirmation-modal/confirmation-modal.interface';
 import { LoaderService } from '../../../loader/loader.service';
@@ -685,7 +685,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                                     rate: txn.selectedAccount.stock.rate,
                                     name: txn.selectedAccount.stock.name
                                 };
-                                txn.unitRate = txn.selectedAccount.stock.unitRates.map(unitRate => ({ ...unitRate, code: unitRate.stockUnitCode }));
+                                txn.unitRate = txn.selectedAccount.stock.variant?.unitRates.map(unitRate => ({ ...unitRate, code: unitRate.stockUnitCode }));
                                 stockName = defaultUnit.name;
                                 rate = defaultUnit.rate;
                                 stockUniqueName = txn.selectedAccount.stock?.uniqueName;
@@ -713,6 +713,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                                 if (!this.isStockPresent) {
                                     this.isStockPresent = true;
                                 }
+                                this.loadStockVariants(stockUniqueName);
+                                this.assignStockVariantDetails();
                             }
                             if (rate > 0) {
                                 txn.amount = rate;
@@ -906,9 +908,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         }
         requestObj.transactions.map((transaction: any) => {
             if (transaction?.inventory && this.isStockPresent) {
-                if (transaction?.inventory.variant) {
-                    transaction.inventory.variant = this.selectedStockVariant;
-                }
+                transaction.inventory.variant = this.selectedStockVariant;
+
                 // Update the warehouse details in update ledger flow
                 if (transaction?.inventory.warehouse) {
                     transaction.inventory.warehouse.uniqueName = this.selectedWarehouse;
@@ -2323,8 +2324,11 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 }
             }
             if (t.inventory) {
+                // Load stock's variants
                 this.loadStockVariants(t.inventory.stock?.uniqueName);
                 this.selectedStockVariantUniqueName = t.inventory.variant.uniqueName;
+                this.assignStockVariantDetails();
+
                 const unitRates = cloneDeep(this.vm.selectedLedger.unitRates);
                 if (unitRates && unitRates.length) {
                     unitRates.forEach(rate => rate.code = rate?.stockUnitCode);
@@ -2548,5 +2552,18 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     private loadStockVariants(stockUniqueName: string): void {
         this.stockVariants$ = this.ledgerService.loadStockVariants(stockUniqueName).pipe(
             map((variants: IVariant[]) => variants.map((variant: IVariant) => ({label: variant.name, value: variant.uniqueName}))));
+    }
+
+    /**
+     * Assign stock variant details based on length
+     *
+     * @private
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+    private assignStockVariantDetails(): void {
+        this.stockVariants$.pipe(observableFilter(val => val?.length === 1), take(1)).subscribe(res => {
+            this.selectedStockVariant = {name: res[0].label, uniqueName: res[0].value};
+            this.selectedStockVariantUniqueName = this.selectedStockVariant.uniqueName;
+        });
     }
 }

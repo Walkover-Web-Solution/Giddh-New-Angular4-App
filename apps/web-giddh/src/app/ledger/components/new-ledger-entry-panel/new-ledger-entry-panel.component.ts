@@ -26,7 +26,7 @@ import {
 import { AccountResponse, AccountResponseV2 } from 'apps/web-giddh/src/app/models/api-models/Account';
 import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { BehaviorSubject, Observable, of as observableOf, ReplaySubject } from 'rxjs';
-import { map, take, takeUntil } from 'rxjs/operators';
+import { filter, map, take, takeUntil } from 'rxjs/operators';
 import * as dayjs from 'dayjs';
 import {
     ConfirmationModalConfiguration,
@@ -442,6 +442,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         }
         if (changes?.selectedAccountDetails?.currentValue !== changes?.selectedAccountDetails?.previousValue && this.currentTxn.isStock) {
             this.loadStockVariants(this.currentTxn.stockUniqueName);
+            this.stockVariants$.pipe(filter(val => val?.length === 1), take(1)).subscribe(res => this.stockVariantSelected.emit(res[0].value))
         }
         if (this.voucherApiVersion === 2 && changes?.invoiceList?.currentValue) {
             this.invoiceList$ = observableOf(this.invoiceList);
