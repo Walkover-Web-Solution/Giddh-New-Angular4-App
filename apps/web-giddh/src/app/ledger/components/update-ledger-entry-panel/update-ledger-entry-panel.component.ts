@@ -2328,7 +2328,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             if (t.inventory) {
                 // Load stock's variants
                 this.loadStockVariants(t.inventory.stock?.uniqueName);
-                this.selectedStockVariantUniqueName = t.inventory.variant.uniqueName;
+                this.selectedStockVariantUniqueName = t.inventory.variant?.uniqueName;
                 this.assignStockVariantDetails();
 
                 const unitRates = cloneDeep(this.vm.selectedLedger.unitRates);
