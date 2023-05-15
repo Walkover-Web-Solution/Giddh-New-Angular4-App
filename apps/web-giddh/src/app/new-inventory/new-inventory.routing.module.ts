@@ -20,6 +20,7 @@ import { ItemWiseComponent } from "./component/stock-group/item-wise/item-wise.c
 import { VariantWiseComponent } from "./component/variant-wise/variant-wise.component";
 import { ReportsComponent } from "./component/reports/reports.component";
 import { GroupCreateEditModule } from "./component/create-update-group/create-update-group.module";
+import { CustomUnitsComponent } from "./component/custom-units/custom-units.component";
 
 const routes: Routes = [
     {
@@ -59,6 +60,10 @@ const routes: Routes = [
                 path: "reports/:type/:reportType/:uniqueName",
                 component: ReportsComponent,
             },
+            {
+                path: "custom-units",
+                component: CustomUnitsComponent,
+            }
         ],
     },
 

@@ -67,6 +67,13 @@ import { ReportFiltersComponent } from "./component/report-filters/report-filter
 import { ReportsComponent } from "./component/reports/reports.component";
 import { GroupCreateEditModule } from "./component/create-update-group/create-update-group.module";
 import { InventoryCreateUpdateGroupComponent } from "./component/stock-group/create-update-group/create-update-group.component";
+import { CustomUnitsComponent } from "./component/custom-units/custom-units.component";
+import { MatGridListModule } from "@angular/material/grid-list";
+import { MatListModule } from "@angular/material/list";
+import { MatDivider } from "@angular/material/divider";
+import { AsideCreateNewUnitComponent } from "./component/aside-create-unit/aside-create-unit.component";
+import { CreateGroupComponent } from "./component/create-group/create-group.component";
+import { AsideCreatGroupComponent } from "./component/aside-create-group/aside-create-group.component";
 
 @NgModule({
     declarations: [
@@ -107,7 +114,11 @@ import { InventoryCreateUpdateGroupComponent } from "./component/stock-group/cre
         ItemWiseComponent,
         VariantWiseComponent,
         ReportFiltersComponent,
-        ReportsComponent
+        ReportsComponent,
+        AsideCreateNewUnitComponent,
+        CreateGroupComponent,
+        AsideCreatGroupComponent,
+        CustomUnitsComponent
     ],
     imports: [
         NewInventoryRoutingModule,
@@ -139,7 +150,9 @@ import { InventoryCreateUpdateGroupComponent } from "./component/stock-group/cre
         PaginationModule,
         MatDialogModule,
         MatAutocompleteModule,
-        MatTooltipModule
+        MatTooltipModule,
+        MatGridListModule,
+        MatListModule,
     ],
     exports: [
         NewInventoryComponent,
@@ -173,7 +186,8 @@ import { InventoryCreateUpdateGroupComponent } from "./component/stock-group/cre
         DashboardPurchaseReport,
         DashboardSalesReport,
         DashboardSellingReport,
-        ReportFiltersComponent
+        ReportFiltersComponent,
+        MatDivider
     ]
 })
 export class NewInventoryModule { }

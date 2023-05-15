@@ -2219,6 +2219,27 @@ form#groupDetailForm {
 .right-col-new {
     width: 50% !important;
 }
+
+/*--- custom-unit ---*/
+.mat-grid-wrapper {
+    .mat-list-wrap {
+        width: 100%;
+    }
+    .mat-grid-tile-content {
+        align-items: flex-start;
+        .mat-list-base .mat-list-item {
+            &.map-item {
+                .mat-list-item-content {
+                    justify-content: flex-end;
+                }
+            }
+            .mat-list-item-content {
+                padding: 0;
+            }
+        }
+    }
+}
+
 /* responsive */
 @media (min-width: 768px) {
     .form-inline.financial-select-year .form-group {

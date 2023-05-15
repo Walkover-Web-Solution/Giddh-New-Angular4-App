@@ -98,12 +98,13 @@
                         }
                         &.sub-option[aria-level="1"] {
                             position: relative;
-                            left: 20px;
+                            // left: 20px;
+                            padding-left: 20px !important;
                             height: 27px;
-                            width: 210px;
+                            width: 100%;
                             line-height: 15px;
                             &:last-child {
-                                align-items: flex-start;
+                                align-items: center;
                                 position: relative;
                                 top: 8px;
                             }
