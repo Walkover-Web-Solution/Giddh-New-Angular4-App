@@ -1438,8 +1438,22 @@ table.table.table-custom-invoice.basic,
 }
 
 .balance-due-text {
-    min-width: 150px !important;
-    margin-left: 23px;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin: 0 15px;
+    column-gap: 30px;
+    align-items: center;
+    .blnc-label {
+        width: 50%;
+    }
+    .adjust-amount {
+        display: flex;
+        align-items: center;
+        column-gap: 30px;
+        justify-content: flex-end;
+        width: 50%;
+    }
 }
 
 #deposit-dropdown > strong {
@@ -1664,11 +1678,22 @@ span.eligible-ITC {
 }
 
 .payment-mode {
+    display: flex;
+    justify-content: space-between;
+    .payment-label {
+        text-align: right;
+        width: 40%;
+        margin-right: 10px;
+    }
     select-field {
-        float: right;
-        width: 53%;
-        margin-left: 20px;
+        width: 60%;
         text-align: left;
+    }
+    text-field {
+        width: 72%;
+        input {
+            width: 100%;
+        }
     }
 }
 
@@ -1876,12 +1901,17 @@ span.eligible-ITC {
             top: 28px;
         }
 
-        .voucher-preview-edit .custom-date-entries giddh-datepicker .mat-datepicker-toggle {
-            position: absolute;
-            right: 35%;
-            top: -3px;
-            opacity: 0;
-            z-index: 99;
+        .voucher-preview-edit {
+            .custom-date-entries giddh-datepicker .mat-datepicker-toggle {
+                position: absolute;
+                right: 35%;
+                top: -3px;
+                opacity: 0;
+                z-index: 99;
+            }
+            .multicurrency-grandtotal {
+                width: 100% !important;
+            }
         }
     }
 
