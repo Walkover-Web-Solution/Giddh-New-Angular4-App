@@ -25,7 +25,7 @@
     <!-- section-repeat -->
     <div class="unit-quantity mt-3">
         <div class="row">
-            <div class="col-sm-4 unit-equal">
+            <div class="col-lg-6 col-md-6 col-sm-6 unit-equal">
                 <label>Unit Name <span class="red-text">*</span></label>
                 <select-field
                     [cssClass]="'form-control mat-field-border'"
@@ -35,7 +35,7 @@
                 </select-field>
                 <span class="equal-sign">=</span>
             </div>
-            <div class="col-sm-4">
+            <div class="col-lg-2 col-md-3 col-sm-2 pr-0">
                 <label>Qty. per Unit <span class="red-text">*</span></label>
                 <text-field
                     [cssClass]="'form-control text-right'"
@@ -46,16 +46,18 @@
                 >
                 </text-field>
             </div>
-            <div class="col-sm-4">
+            <div class="col-lg-3 col-md-3 col-sm-3 pl-2">
                 <label>Mapped Unit <span class="red-text">*</span></label>
                 <select-field [cssClass]="'form-control mat-field-border'" [placeholder]="'Choose unit'">
                 </select-field>
             </div>
-        </div>
-        <div class="plus-minus">
-            <div class="pull-right unit-add">
-                <button mat-raised-button class="btn-link btn mr-0"><i class="icon-plus add-row"></i></button>
-                <button mat-raised-button class="btn-link btn mr-0"><i class="icon-cross delete"></i></button>
+            <div class="col-lg-1 col-md-2 col-sm-1 pl-0">
+                <div class="inc-dec">
+                    <div class="plus-minus">
+                        <button mat-raised-button class="btn mr-0"><i class="icon-plus add-row"></i></button>
+                        <button mat-raised-button class="btn mr-0"><i class="icon-cross delete"></i></button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

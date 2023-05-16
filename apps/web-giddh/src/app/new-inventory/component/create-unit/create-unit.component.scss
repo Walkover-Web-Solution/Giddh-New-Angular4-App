@@ -1,13 +1,3 @@
-:host {
-    // position: fixed;
-    left: auto;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    width: 100%;
-    max-width: 760px;
-    z-index: 99999;
-}
 #close {
     position: absolute;
     left: auto;
@@ -20,19 +10,6 @@
     margin-right: 0;
     border: 0;
     border-radius: 0;
-}
-:host .container-fluid {
-    padding-left: 0;
-    padding-right: 0;
-}
-
-:host .aside-pane {
-    width: 100%;
-    max-width: 760px;
-}
-
-.aside-pane {
-    width: 100%;
 }
 
 .flexy-child {
@@ -82,10 +59,7 @@
 
 /*--- custom ---*/
 .unit-quantity {
-    display: flex;
-    justify-content: space-between;
     .row {
-        width: 92%;
         .unit-equal {
             .equal-sign {
                 position: absolute;
@@ -94,63 +68,29 @@
             }
         }
     }
-    .plus-minus {
-        width: 8%;
+    .inc-dec {
         position: relative;
-        .unit-add {
+        width: 100%;
+        height: 100%;
+        .plus-minus {
             display: flex;
-            bottom: 0;
+            position: absolute;
+            bottom: 2px;
             right: -5px;
             button {
-                min-width: 20px;
-                padding: 0 10px;
+                min-width: 14px;
+                padding: 0 5px;
             }
         }
     }
 }
 
-@media (max-width: 768px) {
-    :host {
-        max-width: 600px;
-    }
-    :host .aside-pane {
-        max-width: 600px;
-    }
+@media screen and (max-width: 991px) {
     .unit-quantity {
-        .row {
-            width: 94%;
-        }
-        .plus-minus {
-            width: 6%;
-            .unit-add {
-                button {
-                    padding: 0 7px !important;
-                }
+        .inc-dec {
+            .plus-minus {
+                bottom: -10px;
             }
         }
-    }
-}
-@media (max-width: 575px) {
-    :host {
-        max-width: 370px;
-    }
-    :host .aside-pane {
-        max-width: 370px;
-    }
-}
-@media (max-width: 375px) {
-    :host {
-        max-width: 310px;
-    }
-    :host .aside-pane {
-        max-width: 310px;
-    }
-}
-@media (max-width: 320px) {
-    :host {
-        max-width: 280px;
-    }
-    :host .aside-pane {
-        max-width: 280px;
     }
 }
