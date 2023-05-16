@@ -3541,7 +3541,10 @@
                                                         >
                                                             <li role="menuitem" class="mr-t1">
                                                                 <div class="clearfix payment-mode deposit-payment-mode">
-                                                                    <div class="pull-right balance-due-text">
+                                                                    <div class="balance-due-text">
+                                                                        <label class="blnc-label">{{
+                                                                            localeData?.adjust_amount
+                                                                        }}</label>
                                                                         <div
                                                                             class="clearfix mr-b1 text-left"
                                                                             *ngIf="voucherApiVersion !== 2"
@@ -3571,7 +3574,7 @@
                                                                                 </mat-radio-button>
                                                                             </mat-radio-group>
                                                                         </div>
-                                                                        <div class="clearfix mr-t05">
+                                                                        <div class="clearfix mr-t05 adjust-amount">
                                                                             <span class="pull-left">
                                                                                 <p class="text-light">
                                                                                     <amount-field
@@ -3605,9 +3608,6 @@
                                                                             ></a>
                                                                         </div>
                                                                     </div>
-                                                                    <label class="pull-right">{{
-                                                                        localeData?.adjust_amount
-                                                                    }}</label>
                                                                 </div>
                                                             </li>
                                                         </ng-container>
@@ -3619,7 +3619,12 @@
                                                             "
                                                         >
                                                             <li role="menuitem" class="mr-t1">
-                                                                <div class="clearfix payment-mode">
+                                                                <div class="payment-mode">
+                                                                    <label class="payment-label">{{
+                                                                        !isCashInvoice
+                                                                            ? commonLocaleData?.app_payment_mode
+                                                                            : localeData?.account
+                                                                    }}</label>
                                                                     <select-field
                                                                         #depositDropdown
                                                                         [cssClass]="
@@ -3639,11 +3644,6 @@
                                                                         "
                                                                     >
                                                                     </select-field>
-                                                                    <label class="pull-right">{{
-                                                                        !isCashInvoice
-                                                                            ? commonLocaleData?.app_payment_mode
-                                                                            : localeData?.account
-                                                                    }}</label>
                                                                 </div>
                                                             </li>
                                                             <li
@@ -3660,14 +3660,18 @@
                                                                     !isCashInvoice
                                                                 "
                                                             >
-                                                                <text-field
-                                                                    (change)="
-                                                                        calculateBalanceDue();
-                                                                        updateDepositAmount($event?.target?.value)
-                                                                    "
-                                                                    [placeholder]="commonLocaleData?.app_amount"
-                                                                    [cssClass]="
-                                                                        'form-control
+                                                                <div class="payment-mode">
+                                                                    <label class="payment-label">{{
+                                                                        commonLocaleData?.app_amount
+                                                                    }}</label>
+                                                                    <text-field
+                                                                        (change)="
+                                                                            calculateBalanceDue();
+                                                                            updateDepositAmount($event?.target?.value)
+                                                                        "
+                                                                        [placeholder]="commonLocaleData?.app_amount"
+                                                                        [cssClass]="
+                                                                            'form-control
                                                                         amount-field
                                                                         due-amount-field
                                                                         text-right
@@ -3675,20 +3679,20 @@
                                                                         max-width-100
                                                                         mat-field-border
                                                                         multicurrency-grandtotal'
-                                                                    "
-                                                                    [name]="'dueAmount'"
-                                                                    [prefix]="depositCurrSymbol"
-                                                                    [suffix]="selectedSuffixForCurrency"
-                                                                    [mask]="inputMaskFormat"
-                                                                    [useMask]="true"
-                                                                    [(ngModel)]="depositAmount"
-                                                                    [required]="depositAccountUniqueName ? true : false"
-                                                                    [type]="'text'"
-                                                                    [readonly]="isEinvoiceGenerated"
-                                                                ></text-field>
-                                                                <label class="pull-right amount-label">{{
-                                                                    commonLocaleData?.app_amount
-                                                                }}</label>
+                                                                        "
+                                                                        [name]="'dueAmount'"
+                                                                        [prefix]="depositCurrSymbol"
+                                                                        [suffix]="selectedSuffixForCurrency"
+                                                                        [mask]="inputMaskFormat"
+                                                                        [useMask]="true"
+                                                                        [(ngModel)]="depositAmount"
+                                                                        [required]="
+                                                                            depositAccountUniqueName ? true : false
+                                                                        "
+                                                                        [type]="'text'"
+                                                                        [readonly]="isEinvoiceGenerated"
+                                                                    ></text-field>
+                                                                </div>
                                                             </li>
 
                                                             <li
