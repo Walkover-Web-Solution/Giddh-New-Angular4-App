@@ -94,7 +94,6 @@
 
     .flex-row-child {
         align-self: center;
-        // flex-grow: 1;
         flex-grow: 0;
     }
 }
@@ -227,7 +226,6 @@
 
 .form-inline {
     .form-group {
-        // @include marg(R, 20px);
         vertical-align: top;
     }
 
@@ -238,8 +236,6 @@
 
 #actionPane {
     width: 100%;
-    // height: 80px;
-    // left: -5px;
     position: relative;
     float: left;
     @include padBth(20px, 0);
@@ -349,7 +345,6 @@ a[type="button"] {
         vertical-align: top;
 
         .table-cell {
-            // line-height: 40px;
             vertical-align: middle;
             text-align: right;
             padding-bottom: 7px;
@@ -461,7 +456,6 @@ textarea:focus {
                 text-align: right;
 
                 &:first-child {
-                    // border-left: none !important;
                     text-align: left;
                 }
 
@@ -478,7 +472,6 @@ textarea:focus {
                 }
 
                 &:last-child {
-                    //border-right: none !important;
                     vertical-align: middle !important;
                     display: none;
                 }
@@ -764,7 +757,6 @@ input.form-control.selected-val.cp.bottom-border-only.ng-star-inserted {
     cursor: default;
     background-color: var(--color-dark-fog) !important;
     border: 1px solid var(--color-secondary-input-bar-border);
-    // max-width: 150px;
 }
 
 .sales-invoice-table table.basic td {
@@ -1053,9 +1045,6 @@ section.static-invoice-table {
     background-color: var(--color-common-primary-background-for-all-components) !important;
 }
 
-// .customer-invoice-table section.form-inline {
-//   padding-top: 60px;
-// }
 .customer-invoice-table section.billing-address-wrap {
     padding-top: 65px;
 }
@@ -2032,6 +2021,14 @@ span.eligible-ITC {
     }
 }
 
+.blnc-due {
+    display: flex;
+    justify-content: space-between;
+    .blnc-due-num {
+        width: 50%;
+        text-align: left;
+    }
+}
 @media (max-width: 767px) {
     .mobile-view-padding {
         padding: 0 15px;
@@ -2178,10 +2175,6 @@ span.eligible-ITC {
     .total-amount-description .table-sec .table-row .figure-cell {
         min-width: 150px;
         padding-right: 0 !important;
-        text-align: right;
-    }
-
-    .balance-due-text {
         text-align: right;
     }
 
