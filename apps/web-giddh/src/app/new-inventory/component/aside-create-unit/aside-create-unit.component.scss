@@ -1,13 +1,3 @@
-:host {
-    position: fixed;
-    left: auto;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    width: 100%;
-    max-width: 760px;
-    z-index: 99999;
-}
 #close {
     position: absolute;
     left: auto;
@@ -21,20 +11,6 @@
     border: 0;
     border-radius: 0;
 }
-:host .container-fluid {
-    padding-left: 0;
-    padding-right: 0;
-}
-
-:host .aside-pane {
-    width: 100%;
-    max-width: 760px;
-}
-
-.aside-pane {
-    width: 100%;
-}
-
 .flexy-child {
     flex-grow: 1;
     display: flex;
@@ -77,38 +53,5 @@
 .header-create-unit {
     .form-header {
         display: flex;
-    }
-}
-
-@media (max-width: 768px) {
-    :host {
-        max-width: 600px;
-    }
-    :host .aside-pane {
-        max-width: 600px;
-    }
-}
-@media (max-width: 575px) {
-    :host {
-        max-width: 370px;
-    }
-    :host .aside-pane {
-        max-width: 370px;
-    }
-}
-@media (max-width: 375px) {
-    :host {
-        max-width: 310px;
-    }
-    :host .aside-pane {
-        max-width: 310px;
-    }
-}
-@media (max-width: 320px) {
-    :host {
-        max-width: 280px;
-    }
-    :host .aside-pane {
-        max-width: 280px;
     }
 }

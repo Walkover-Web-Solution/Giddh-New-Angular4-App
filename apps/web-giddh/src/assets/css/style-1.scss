@@ -2213,26 +2213,6 @@ form#groupDetailForm {
     width: 50% !important;
 }
 
-/*--- custom-unit ---*/
-.mat-grid-wrapper {
-    .mat-list-wrap {
-        width: 100%;
-    }
-    .mat-grid-tile-content {
-        align-items: flex-start;
-        .mat-list-base .mat-list-item {
-            &.map-item {
-                .mat-list-item-content {
-                    justify-content: flex-end;
-                }
-            }
-            .mat-list-item-content {
-                padding: 0;
-            }
-        }
-    }
-}
-
 /* responsive */
 @media (min-width: 768px) {
     .form-inline.financial-select-year .form-group {
@@ -2449,17 +2429,6 @@ form#groupDetailForm {
     background: var(--color-primary-tooltip-background) !important;
 }
 /** aside pane styles */
-.aside-pane {
-    position: relative;
-    z-index: 5;
-    height: 100vh;
-    color: var(--color-right-sidebar-settings);
-    background-color: var(--color-primary-right-side-popup-body-background) !important;
-}
-.aside-pane {
-    max-width: 760px;
-    width: 100%;
-}
 .aside-overlay {
     position: fixed;
     top: 0;

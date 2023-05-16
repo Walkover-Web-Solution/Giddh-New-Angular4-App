@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from "@angular/core";
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from "@angular/core";
 
 export interface Tile {
   color: string;
@@ -13,7 +13,7 @@ export interface Tile {
   styleUrls: ["./custom-units.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CustomUnitsComponent {
+export class CustomUnitsComponent implements OnInit, OnDestroy {
   public asideCreateUnitMenuState: string = 'out';
   public asideCreateGroupMenuState: string = 'out';
 
@@ -34,5 +34,11 @@ export class CustomUnitsComponent {
     } else {
       document.querySelector('body').classList.remove('fixed');
     }
+  }
+  public ngOnInit(): void {
+    document.querySelector('body').classList.add('custom-units');
+  }
+  public ngOnDestroy(): void{
+    document.querySelector('body').classList.remove('custom-units');
   }
 }
