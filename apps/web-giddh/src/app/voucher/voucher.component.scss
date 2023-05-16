@@ -2038,6 +2038,14 @@ span.eligible-ITC {
     }
 }
 
+.blnc-due {
+    display: flex;
+    justify-content: space-between;
+    .blnc-due-num {
+        width: 50%;
+        text-align: left;
+    }
+}
 @media (max-width: 767px) {
     .mobile-view-padding {
         padding: 0 15px;
@@ -2188,7 +2196,6 @@ span.eligible-ITC {
     }
 
     .balance-due-text {
-        text-align: right;
     }
 
     #actionPane .update-mode {
