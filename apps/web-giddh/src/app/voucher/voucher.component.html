@@ -3696,7 +3696,7 @@
                                                             </li>
 
                                                             <li
-                                                                class="clearfix mr-t1 bigger-dollar"
+                                                                class="clearfix mr-t1 bigger-dollar blnc-due"
                                                                 *ngIf="
                                                                     isSalesInvoice ||
                                                                     (voucherApiVersion === 2 &&
@@ -3706,7 +3706,8 @@
                                                                             isPendingVoucherType))
                                                                 "
                                                             >
-                                                                <strong class="pull-right balance-due-text">
+                                                                <strong>{{ localeData?.balance_due }}</strong>
+                                                                <strong class="blnc-due-num ml-3">
                                                                     <span *ngIf="isMulticurrencyAccount">{{
                                                                         invFormData.accountDetails.currencySymbol
                                                                     }}</span>
@@ -3726,9 +3727,6 @@
                                                                         }}
                                                                     </ng-container>
                                                                 </strong>
-                                                                <strong class="pull-right">{{
-                                                                    localeData?.balance_due
-                                                                }}</strong>
                                                             </li>
                                                         </ng-container>
                                                     </ul>
