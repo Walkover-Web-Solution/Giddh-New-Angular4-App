@@ -10,12 +10,16 @@
         <div class="stock-balance-top-bar">
             <div class="stock-balance-top-bar-left-side">
                 <button class="new-stock-btn" mat-button [matMenuTriggerFor]="newStock">
-                    + New Stock
+                    {{ localeData?.warehouse_opening_balance?.new_stock }}
                     <span class="caret"></span>
                 </button>
                 <mat-menu #newStock="matMenu">
-                    <button mat-menu-item [routerLink]="'/pages/new-inventory/stock/product/create'">Product</button>
-                    <button mat-menu-item [routerLink]="'/pages/new-inventory/stock/service/create'">Service</button>
+                    <button mat-menu-item [routerLink]="'/pages/new-inventory/stock/product/create'">
+                        {{ commonLocaleData?.app_product }}
+                    </button>
+                    <button mat-menu-item [routerLink]="'/pages/new-inventory/stock/service/create'">
+                        {{ commonLocaleData?.app_service }}
+                    </button>
                 </mat-menu>
                 <div class="col-xl-6 col-lg-10 col-md-10 pl-0">
                     <mat-select
@@ -23,13 +27,13 @@
                         [multiple]="true"
                         [(ngModel)]="selectedWarehouse"
                         class="stock-mat-salect"
-                        [placeholder]="'Select Warehouse'"
+                        [placeholder]="localeData?.warehouse_opening_balance?.select_warehouse"
                     >
                         <mat-option class="balance-options">
                             <ngx-mat-select-search
                                 [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
                                 [formControl]="warehousesDropdown"
-                                [placeholderLabel]="'Select Warehouse'"
+                                [placeholderLabel]="localeData?.warehouse_opening_balance?.select_warehouse"
                             >
                                 <i class="icon-cross" ngxMatSelectSearchClear></i>
                             </ngx-mat-select-search>
@@ -72,7 +76,7 @@
                     <mat-form-field appearance="outline">
                         <input
                             matInput
-                            placeholder="Stocks"
+                            [placeholder]="commonLocaleData?.app_stock"
                             autocomplete="off"
                             #productName
                             [formControl]="productNameSearching"
@@ -80,14 +84,14 @@
                     </mat-form-field>
                 </div>
                 <div class="unique-name-wrapper" *ngIf="showUniqueName">
-                    <h2 class="unique-name font-13">Unique Name</h2>
+                    <h2 class="unique-name font-13">{{ commonLocaleData?.app_unit }}</h2>
                 </div>
                 <div class="group-list-head group-searchbar" *ngIf="showGroupName">
                     <img src="{{ imgPath }}search-new.svg" class="search-icon" />
                     <select-field
                         [cssClass]="'form-control'"
                         [name]="'stockGroup'"
-                        [placeholder]="'Group'"
+                        [placeholder]="commonLocaleData?.app_group"
                         [options]="stockGroups"
                         (selectedOption)="selectGroupName($event)"
                         [defaultValue]="stockGroupName"
@@ -104,7 +108,9 @@
                                 <p class="warehouse-list-head-num">{{ warehouse?.name ?? "-" }}</p>
                                 <div class="warehouse-list-head-options">
                                     <div class="d-flex">
-                                        <div class="flex-fill">Opening Bal</div>
+                                        <div class="flex-fill">
+                                            {{ localeData?.warehouse_opening_balance?.opening_bal }}
+                                        </div>
                                     </div>
                                     <div class="d-flex">
                                         <div class="flex-fill">{{ commonLocaleData?.app_quantity }}</div>
@@ -149,7 +155,11 @@
                                 <img class="dot second-dot" src="{{ imgPath }}dot.png" alt="dot" />
                                 <span>
                                     {{ stock?.stock?.variants?.length }}
-                                    {{ stock?.stock?.variants?.length < 2 ? "Variant" : "Variants" }}
+                                    {{
+                                        stock?.stock?.variants?.length < 2
+                                            ? localeData?.warehouse_opening_balance?.variant
+                                            : localeData?.warehouse_opening_balance?.variants
+                                    }}
                                 </span>
                             </span>
                         </p>
@@ -261,7 +271,7 @@
                                                     #warehouseInput1
                                                     matInput
                                                     class="opening-bal-input"
-                                                    placeholder="Opening Bal"
+                                                    [placeholder]="localeData?.warehouse_opening_balance?.opening_bal"
                                                     type="text"
                                                     (change)="stockUpdate(stock, warehouseVariant)"
                                                     [(ngModel)]="warehouseVariant.openingAmount"
@@ -270,7 +280,7 @@
                                                     #warehouseInput2
                                                     matInput
                                                     class="quantity-input"
-                                                    placeholder="Qty"
+                                                    [placeholder]="localeData?.warehouse_opening_balance?.qty"
                                                     type="text"
                                                     (change)="stockUpdate(stock, warehouseVariant)"
                                                     [(ngModel)]="warehouseVariant.openingQuantity"
@@ -281,7 +291,7 @@
                                                     [cssClass]="'form-control'"
                                                     class="unit-dropdown"
                                                     [name]="'stockUnitCode'"
-                                                    [placeholder]="Unit"
+                                                    [placeholder]="commonLocaleData?.app_unit"
                                                     [options]="stockUnits"
                                                     (selectedOption)="
                                                         warehouseVariant.stockUnit.uniqueName = $event?.value;
@@ -306,7 +316,7 @@
                 </div>
                 <div class="no-data-found" *ngIf="stocksList?.length <= 0">
                     <img src="{{ imgPath }}search-data-not-found.svg" /><br />
-                    No Data Found
+                    {{ commonLocaleData?.app_no_result_found }}
                 </div>
             </div>
         </div>

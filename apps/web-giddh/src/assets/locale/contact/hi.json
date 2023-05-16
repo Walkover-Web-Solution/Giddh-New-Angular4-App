@@ -69,5 +69,15 @@
     "connect_icici_bank": "आईसीआईसीआई बैंक कनेक्ट करें",
     "pending_approval": "लंबित अनुमोदन",
     "due": "देय",
-    "bulk_payment_unsupported_error": "थोक भुगतान समर्थित नहीं है।"
+    "bulk_payment_unsupported_error": "थोक भुगतान समर्थित नहीं है।",
+    "customer_name":"ग्राहक का नाम",
+    "sales": "बिक्री",
+    "receipt": "प्राप्तियां",
+    "vendor_name":"विक्रेता का नाम",
+    "purchase": "खरीदना",
+    "payment":"भुगतान",
+    "action":"कार्य",
+    "parent_group":"जनक समूह",
+    "state":"राज्य",
+    "gstin":"कर नंबर"
 }

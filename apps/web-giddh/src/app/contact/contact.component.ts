@@ -1503,7 +1503,10 @@ export class ContactComponent implements OnInit, OnDestroy {
                     value: "%s_AN",
                 },
             ];
-
+            this.customiseColumns = this.customiseColumns?.map(column => {
+                column.label = this.localeData[column.value];
+                return column;
+            });
         }
     }
 

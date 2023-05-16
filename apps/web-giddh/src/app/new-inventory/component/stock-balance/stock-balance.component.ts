@@ -456,6 +456,10 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
     public translationComplete(event: any): void {
         if (event) {
             this.translationLoaded = true;
+            this.customiseColumns = this.customiseColumns?.map(column => {
+                column.label = this.localeData?.warehouse_opening_balance[column.value];
+                return column;
+            });
             this.cdr.detectChanges();
         }
     }

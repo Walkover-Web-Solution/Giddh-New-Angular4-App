@@ -19,7 +19,7 @@ export const CONTACTS_COMMON_COLUMNS = [
         "checked": true
     },
     {
-        "value": "contact",
+        "value": "contacts",
         "label": "Contacts",
         "checked": true
     },

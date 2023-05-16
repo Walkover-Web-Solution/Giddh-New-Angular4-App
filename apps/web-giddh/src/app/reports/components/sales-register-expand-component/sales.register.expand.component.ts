@@ -351,6 +351,10 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
      */
     public translationComplete(event: boolean): void {
         if (event) {
+            this.customiseColumns = this.customiseColumns?.map(column => {
+                column.label = this.localeData[column.value];
+                return column;
+            });
             this.monthNames = [this.commonLocaleData?.app_months_full.january, this.commonLocaleData?.app_months_full.february, this.commonLocaleData?.app_months_full.march, this.commonLocaleData?.app_months_full.april, this.commonLocaleData?.app_months_full.may, this.commonLocaleData?.app_months_full.june, this.commonLocaleData?.app_months_full.july, this.commonLocaleData?.app_months_full.august, this.commonLocaleData?.app_months_full.september, this.commonLocaleData?.app_months_full.october, this.commonLocaleData?.app_months_full.november, this.commonLocaleData?.app_months_full.december];
             this.getCurrentMonthYear();
         }
