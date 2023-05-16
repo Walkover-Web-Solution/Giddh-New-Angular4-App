@@ -2662,7 +2662,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                             name: stockName,
                             uniqueName: stockUniqueName,
                         },
-                        variant: txn.selectedAccount.stock.variant,
+                        variant: {uniqueName: txn.selectedAccount.stock.variant?.uniqueName},
                         quantity: 1,
                         unit: {
                             stockUnitCode: unitCode,

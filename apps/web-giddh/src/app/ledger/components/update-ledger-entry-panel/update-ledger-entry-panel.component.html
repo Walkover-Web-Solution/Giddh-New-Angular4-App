@@ -824,6 +824,8 @@
                                     [(ngModel)]="selectedStockVariantUniqueName"
                                     [options]="stockVariants"
                                     [isRequired]="true"
+                                    [doNotResetSelectedValues]="true"
+                                    [forceClearReactive]="variantForceClear$ | async"
                                 ></sh-select>
                             </div>
                         </ng-container>
@@ -846,6 +848,7 @@
                                             currentOrganizationType === 'COMPANY' &&
                                             branches?.length > 1
                                         "
+                                        [doNotResetSelectedValues]="true"
                                     >
                                     </sh-select>
                                 </div>

@@ -277,6 +277,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public salesTaxInclusive: boolean;
     /** True, if stock category is 'assets' and inclusive tax is applied */
     public fixedAssetTaxInclusive: boolean;
+    /** To force clear the variant dropdown */
+    public variantForceClear$: Observable<IForceClear> = observableOf({status: false});
 
     constructor(private store: Store<AppState>,
         private cdRef: ChangeDetectorRef,
@@ -1884,8 +1886,12 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      * @memberof NewLedgerEntryPanelComponent
      */
     private loadStockVariants(stockUniqueName: string): void {
-        this.stockVariants$ = this.ledgerService.loadStockVariants(stockUniqueName).pipe(
-            map((variants: IVariant[]) => variants.map((variant: IVariant) => ({label: variant.name, value: variant.uniqueName}))));
+        this.ledgerService.loadStockVariants(stockUniqueName).pipe(
+            map((variants: IVariant[]) => variants.map((variant: IVariant) => ({label: variant.name, value: variant.uniqueName})))).subscribe(res => {
+                this.stockVariants$ = observableOf(res);
+                this.variantForceClear$ = observableOf({status: true});
+                this.cdRef.detectChanges();
+            });
     }
 
     /**
@@ -1899,19 +1905,19 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             const category = this.currentTxn.selectedAccount.category;
             switch (category) {
                 case 'income':
-                    this.salesTaxInclusive = true;
-                    this.purchaseTaxInclusive = false;
-                    this.fixedAssetTaxInclusive = false;
+                    this.salesTaxInclusive = this.currentTxn.selectedAccount.stock?.variant?.salesTaxInclusive;
+                    this.purchaseTaxInclusive = this.currentTxn.selectedAccount.stock?.variant?.purchaseTaxInclusive;
+                    this.fixedAssetTaxInclusive = this.currentTxn.selectedAccount.stock?.variant?.fixedAssetTaxInclusive;
                     break;
                 case 'expenses':
-                    this.salesTaxInclusive = false;
-                    this.purchaseTaxInclusive = true;
-                    this.fixedAssetTaxInclusive = false;
+                    this.salesTaxInclusive = this.currentTxn.selectedAccount.stock?.variant?.salesTaxInclusive;
+                    this.purchaseTaxInclusive = this.currentTxn.selectedAccount.stock?.variant?.purchaseTaxInclusive;
+                    this.fixedAssetTaxInclusive = this.currentTxn.selectedAccount.stock?.variant?.fixedAssetTaxInclusive;
                     break;
                 case 'assets':
-                    this.salesTaxInclusive = false;
-                    this.purchaseTaxInclusive = false;
-                    this.fixedAssetTaxInclusive = true;
+                    this.salesTaxInclusive = this.currentTxn.selectedAccount.stock?.variant?.salesTaxInclusive;
+                    this.purchaseTaxInclusive = this.currentTxn.selectedAccount.stock?.variant?.purchaseTaxInclusive;
+                    this.fixedAssetTaxInclusive = this.currentTxn.selectedAccount.stock?.variant?.fixedAssetTaxInclusive;
                     break;
                 default:
                     this.salesTaxInclusive = false;

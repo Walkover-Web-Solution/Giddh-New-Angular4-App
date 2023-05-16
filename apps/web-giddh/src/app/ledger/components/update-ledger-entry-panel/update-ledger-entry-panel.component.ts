@@ -286,6 +286,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public selectedStockVariant: IVariant;
     /** Stores the selected stock variant */
     public selectedStockVariantUniqueName: string;
+    /** To force clear the variant dropdown */
+    public variantForceClear$: Observable<IForceClear> = observableOf({status: false});
 
     constructor(
         private accountService: AccountService,
@@ -910,7 +912,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         }
         requestObj.transactions.map((transaction: any) => {
             if (transaction?.inventory && this.isStockPresent) {
-                transaction.inventory.variant = this.selectedStockVariant;
+                transaction.inventory.variant = this.selectedStockVariant ?? transaction.inventory.variant;
 
                 // Update the warehouse details in update ledger flow
                 if (transaction?.inventory.warehouse) {
@@ -2552,8 +2554,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     private loadStockVariants(stockUniqueName: string): void {
-        this.stockVariants$ = this.ledgerService.loadStockVariants(stockUniqueName).pipe(
-            map((variants: IVariant[]) => variants.map((variant: IVariant) => ({label: variant.name, value: variant.uniqueName}))));
+        this.ledgerService.loadStockVariants(stockUniqueName).pipe(
+            map((variants: IVariant[]) => variants.map((variant: IVariant) => ({label: variant.name, value: variant.uniqueName})))).subscribe(res => {
+                this.variantForceClear$ = observableOf({status: true});
+                this.stockVariants$ = observableOf(res);
+                this.changeDetectorRef.detectChanges();
+            });
     }
 
     /**
