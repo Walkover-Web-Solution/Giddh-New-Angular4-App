@@ -68,7 +68,7 @@ import { ReportFiltersComponent } from "./component/report-filters/report-filter
 import { ReportsComponent } from "./component/reports/reports.component";
 import { GroupCreateEditModule } from "./component/create-update-group/create-update-group.module";
 import { InventoryCreateUpdateGroupComponent } from "./component/stock-group/create-update-group/create-update-group.component";
-import { SelectTableColumnComponentModule } from "../shared/select-table-column/select-table-column.module";
+import { SelectTableColumnModule } from "../shared/select-table-column/select-table-column.module";
 
 @NgModule({
     declarations: [
@@ -143,7 +143,7 @@ import { SelectTableColumnComponentModule } from "../shared/select-table-column/
         MatDialogModule,
         MatAutocompleteModule,
         MatTooltipModule,
-        SelectTableColumnComponentModule
+        SelectTableColumnModule
     ],
     exports: [
         NewInventoryComponent,

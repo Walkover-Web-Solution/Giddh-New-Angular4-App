@@ -43,7 +43,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { SendEmailModule } from '../shared/send-email/send-email.module';
 import { ConfirmModalModule } from '../theme/confirm-modal/confirm-modal.module';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { SelectTableColumnComponentModule } from '../shared/select-table-column/select-table-column.module';
+import { SelectTableColumnModule } from '../shared/select-table-column/select-table-column.module';
 
 @NgModule({
     declarations: [
@@ -102,7 +102,7 @@ import { SelectTableColumnComponentModule } from '../shared/select-table-column/
         SendEmailModule,
         ConfirmModalModule,
         MatSlideToggleModule,
-        SelectTableColumnComponentModule
+        SelectTableColumnModule
     ]
 })
 

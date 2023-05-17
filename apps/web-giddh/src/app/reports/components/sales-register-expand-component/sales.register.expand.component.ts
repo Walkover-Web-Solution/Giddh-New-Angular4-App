@@ -401,7 +401,6 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
         exportBodyRequest.q = this.voucherNumberInput?.value;
         exportBodyRequest.branchUniqueName = this.getDetailedsalesRequestFilter?.branchUniqueName;
         exportBodyRequest.columnsToExport = [];
-
         if (this.showFieldFilter.voucher_type) {
             exportBodyRequest.columnsToExport.push("Voucher Type");
         }

@@ -399,7 +399,6 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
         exportBodyRequest.q = this.voucherNumberInput?.value;
         exportBodyRequest.branchUniqueName = this.getDetailedPurchaseRequestFilter?.branchUniqueName;
         exportBodyRequest.columnsToExport = [];
-        // exportBodyRequest.columnsToExport = this.displayedColumns;
         if (this.showFieldFilter.voucher_type) {
             exportBodyRequest.columnsToExport.push("Voucher Type");
         }

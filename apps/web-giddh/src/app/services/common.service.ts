@@ -112,7 +112,7 @@ export class CommonService {
     }
 
     /**
-     * This will use for patch mapped gst unit 
+     * This will use for patch mapped gst unit
      *
      * @param {*} params
      * @return {*}  {Observable<BaseResponse<any, any>>}
@@ -127,5 +127,40 @@ export class CommonService {
                 data.request = params;
                 return data;
             }), catchError((error) => this.errorHandler.HandleCatch<any, any>(error, params)));
+    }
+
+    /**
+     * This will use for save stock transaction report columns
+     *
+     * @param {*} model
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof CommonService
+     */
+    public saveSelectedTableColumns(model: any): Observable<BaseResponse<any, any>> {
+        const companyUniqueName = this.generalService.companyUniqueName;
+        let url = this.config.apiUrl + COMMON_API.MODULE_WISE_COLUMNS;
+        url = url?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName))?.replace(':module', model.module);
+        return this.http.post(url, model).pipe(map((res) => {
+            let data: BaseResponse<any, any> = res;
+            data.request = model;
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
+    }
+
+    /**
+    * This will use for get selected  columns data
+    *
+    * @param {string} module
+    * @return {*}  {Observable<BaseResponse<any, string>>}
+    * @memberof CommonService
+    */
+    public getSelectedTableColumns(module: string): Observable<BaseResponse<any, string>> {
+        const companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.get(this.config.apiUrl + COMMON_API.MODULE_WISE_COLUMNS?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName))?.replace(':module', module)).pipe(map((res) => {
+            let data: BaseResponse<any, string> = res;
+            data.request = '';
+            data.queryString = {};
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '', {})));
     }
 }
