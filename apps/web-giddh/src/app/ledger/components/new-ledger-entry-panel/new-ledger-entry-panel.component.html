@@ -1199,6 +1199,7 @@
                     </select-field> -->
                     <sh-select
                         [disabled]="isReadOnly"
+                        [forceClearReactive]="variantForceClear$ | async"
                         [class.disabled-ledger]="isReadOnly"
                         [placeholder]="localeData?.select_variant"
                         [options]="stockVariants"
