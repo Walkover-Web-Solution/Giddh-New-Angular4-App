@@ -69,5 +69,15 @@
     "connect_icici_bank": "आईसीआईसीआई बँक कनेक्ट करा",
     "pending_approval": "मंजूरीसाठी प्रलंबित",
     "due": "देय",
-    "bulk_payment_unsupported_error": "मोठ्या प्रमाणात पेमेंट समर्थित नाही."
+    "bulk_payment_unsupported_error": "मोठ्या प्रमाणात पेमेंट समर्थित नाही.",
+    "customer_name":"ग्राहकाचे नाव",
+    "sales": "विक्री",
+    "receipt": "पावत्या",
+    "vendor_name":"विक्रेता नाव",
+    "purchase": "खरेदी",
+    "payment":"पेमेंट",
+    "action":"कृती",
+    "parent_group":"पालक गट",
+    "state":"राज्य",
+    "gstin":"कर क्रमांक"
 }

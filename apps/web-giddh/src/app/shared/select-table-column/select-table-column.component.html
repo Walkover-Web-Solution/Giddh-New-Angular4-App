@@ -1,0 +1,31 @@
+<button
+    mat-icon-button
+    [matMenuTriggerFor]="menu"
+    [matTooltipPosition]="matTooltipPosition"
+    [matTooltip]="matTooltip"
+    [ngClass]="cssClass"
+>
+    <i [ngClass]="iconClass"> </i> {{ buttonText }}
+</button>
+<mat-menu #menu="matMenu" class="columns-wrapper">
+    <ng-container *ngFor="let item of customiseColumns">
+        <button
+            class="menu-buttons"
+            mat-menu-item
+            (click)="$event?.stopPropagation()"
+            (keydown.enter)="$event?.stopPropagation(); item.checked = !item.checked; saveSelectedColumns()"
+        >
+            <mat-checkbox
+                class="inventory-checkbox"
+                color="primary"
+                [name]="item.value"
+                (ngModelChange)="saveSelectedColumns()"
+                [(ngModel)]="item.checked"
+                [disabled]="item.checked && displayedColumns.length === 2"
+                (click)="$event?.stopPropagation()"
+            >
+                {{ item.label }}</mat-checkbox
+            >
+        </button>
+    </ng-container>
+</mat-menu>
