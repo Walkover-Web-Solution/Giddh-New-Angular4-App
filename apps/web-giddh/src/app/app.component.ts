@@ -82,7 +82,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         if (!(this._generalService.user && this._generalService.sessionId)) {
             if (!window.location.href.includes('login') && !window.location.href.includes('token-verify') && !window.location.href.includes('download')) {
                 if (PRODUCTION_ENV && !isElectron) {
-                    window.location.href = 'https://stage.giddh.com/login/';
+                    window.location.href = 'https://test.giddh.com/login/';
                 } else {
                     this.router.navigate(['/login']);
                 }
@@ -183,6 +183,16 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             this._generalService.addLinkTag("./assets/css/ngx-bootstrap/bs-datepicker.css");
             this._generalService.addLinkTag("./assets/css/ladda-themeless.min.css");
             this._generalService.addLinkTag("./assets/css/lightbox.scss");
+
+            /* RAZORPAY */
+            if (window['Razorpay'] === undefined) {
+                let scriptTag = document.createElement('script');
+                scriptTag.src = 'https://checkout.razorpay.com/v1/checkout.js';
+                scriptTag.type = 'text/javascript';
+                scriptTag.defer = true;
+                document.body.appendChild(scriptTag);
+            }
+            /* RAZORPAY */
         }, 1000);
     }
 

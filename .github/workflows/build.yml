@@ -8,13 +8,13 @@ on:
     branches: [ giddh-2.0, beta-stage, beta-branch, production ]
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
-concurrency: stage-build
+concurrency: test-build
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -46,7 +46,6 @@ jobs:
           CYPRESS_INSTALL_BINARY: 0
         with:
           useLockFile: false
-          useRollingCache: true
           working-directory: .
           install-command: npm i --force
       - name: Creating Test bundle

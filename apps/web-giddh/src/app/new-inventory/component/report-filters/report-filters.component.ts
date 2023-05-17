@@ -18,7 +18,8 @@ import { cloneDeep } from "../../../lodash-optimized";
 import { AppState } from "../../../store";
 import { select, Store } from "@ngrx/store";
 import { Location } from '@angular/common';
-import { InventoryModuleName, InventoryReportType } from "../../inventory.enum";
+import { Router } from "@angular/router";
+import { InventoryModuleName } from "../../inventory.enum";
 
 @Component({
     selector: "report-filters",
@@ -135,6 +136,8 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     public autoSelectSearchOption: boolean = false;
     /** Observable to subscribe for refresh columns on select chiplist */
     public refreshColumns = new Subject<void>();
+    /** This will hold if any chiplist selected on search bar */
+    public holdSearchChiplistValue: any;
 
     constructor(
         public dialog: MatDialog,
@@ -144,7 +147,8 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
         private inventoryService: InventoryService,
         private generalService: GeneralService,
         private toaster: ToasterService,
-        private store: Store<AppState>
+        private store: Store<AppState>,
+        public router: Router
     ) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
     }
@@ -561,6 +565,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ReportFiltersComponent
      */
     public selectChiplistValue(option: any): void {
+        this.holdSearchChiplistValue = option;
         this.stockReportRequest.page = 1;
         const selectOptionValue = option?.option?.value;
         if (option?.option?.value?.type === 'STOCK GROUP') {
@@ -747,4 +752,21 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     public resetWarehouse(): void {
         this.stockReportRequest.warehouseUniqueNames = [];
     }
+
+    /**
+     * Edit transactions of stock , group , and variant
+     *
+     * @memberof ReportFiltersComponent
+     */
+    public editInventory(): void {
+        let type = this.holdSearchChiplistValue?.option?.value?.type;
+        let uniqueName = this.holdSearchChiplistValue?.option?.value?.uniqueName;
+        if (type === 'STOCK GROUP') {
+            this.router.navigate(['/pages', 'inventory/v2', 'group', this.moduleType?.toLowerCase(), 'edit', uniqueName]);
+        }
+        if (type === 'STOCK') {
+            this.router.navigate(['/pages', 'inventory/v2', 'stock', this.moduleType?.toLowerCase(), 'edit', uniqueName]);
+        }
+    }
 }
+

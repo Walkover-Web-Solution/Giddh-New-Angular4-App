@@ -64,6 +64,19 @@
             </mat-option>
         </mat-select>
     </div>
+    <div
+        class="clear-filter"
+        *ngIf="
+            (stockReportRequest.stockGroupUniqueNames?.length ||
+                stockReportRequest.stockUniqueNames?.length ||
+                stockReportRequest.variantUniqueNames?.length) &&
+            searchPage === 'TRANSACTION'
+        "
+    >
+        <button mat-raised-button class="edit-btn-inventory ml-3 mr-0" color="primary" (click)="editInventory()">
+            Edit
+        </button>
+    </div>
     <div class="clear-filter d-flex" *ngIf="showClearFilter">
         <button mat-raised-button class="create-btn-inventory ml-3 mr-0" color="primary" (click)="resetFilter()">
             <span class="icon-cross"></span> {{ commonLocaleData?.app_clear_filter }}

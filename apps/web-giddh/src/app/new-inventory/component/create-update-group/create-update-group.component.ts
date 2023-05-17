@@ -14,7 +14,7 @@ import { uniqueNameInvalidStringReplace } from "../../../shared/helpers/helperFu
 import { AppState } from "../../../store";
 import { ConfirmModalComponent } from "../../../theme/new-confirm-modal/confirm-modal.component";
 import { IOption } from "../../../theme/ng-virtual-select/sh-options.interface";
-
+import { Location } from '@angular/common';
 
 @Component({
     selector: 'create-update-group',
@@ -65,7 +65,8 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
         private route: ActivatedRoute,
         private changeDetection: ChangeDetectorRef,
         private router: Router,
-        private dialog: MatDialog
+        private dialog: MatDialog,
+        private location: Location,
     ) {
         this.companyUniqueName$ = this.store.pipe(select(state => state.session.companyUniqueName), takeUntil(this.destroyed$));
         this.initGroupForm();
@@ -140,6 +141,14 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+    * This will take the user back to last page
+    *
+    * @memberof CreateUpdateGroupComponent
+    */
+    public backClicked(): void {
+        this.location.back();
+    }
 
     /**
     * Select tax
@@ -235,6 +244,7 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
                     this.selectedGroupTaxes();
                     this.toaster.clearAllToaster();
                     this.toaster.successToast(this.localeData?.stock_group_update);
+                    this.backClicked();
                 } else {
                     this.toggleLoader(false);
                     this.toaster.clearAllToaster();
@@ -425,6 +435,7 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
                 this.toaster.showSnackBar("error", response?.message);
                 this.changeDetection.detectChanges();
             }
+            this.changeDetection.detectChanges();
         });
     }
 

@@ -75,9 +75,11 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
     @Input() public maskInput: string;
     @Input() public prefixInput: string;
     @Input() public suffixInput: string;
-    /** True, if current transaction is advance receipt
-     * Required for inclusive tax rate calculation
+    /** True, if current transaction tax needed to be calculated inclusively
+     * Required for inclusive tax rate calculation for advance receipt, variant (purchase-sales-<fixed-asset>) inclusive
     */
+    @Input() public calculateTaxInclusively: boolean;
+    /** True if advance receipt entry is created */
     @Input() public isAdvanceReceipt: boolean;
 
     @Output() public isApplicableTaxesEvent: EventEmitter<boolean> = new EventEmitter();
@@ -133,7 +135,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
         if (changes['totalForTax'] && changes['totalForTax'].currentValue !== changes['totalForTax'].previousValue) {
             this.calculateInclusiveOrExclusiveTaxes();
         }
-        if (changes['isAdvanceReceipt'] && changes['isAdvanceReceipt'].currentValue !== changes['isAdvanceReceipt'].previousValue) {
+        if (changes['calculateTaxInclusively'] && changes['calculateTaxInclusively'].currentValue !== changes['calculateTaxInclusively'].previousValue) {
             this.change();
         }
 
@@ -366,7 +368,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
      * @memberof TaxControlComponent
      */
     private calculateInclusiveOrExclusiveTaxes(): void {
-        if (this.isAdvanceReceipt) {
+        if (this.calculateTaxInclusively) {
             // Inclusive tax rate
             this.taxTotalAmount = giddhRoundOff((this.totalForTax * this.taxSum) / (100 + this.taxSum), this.giddhBalanceDecimalPlaces);
         } else {
