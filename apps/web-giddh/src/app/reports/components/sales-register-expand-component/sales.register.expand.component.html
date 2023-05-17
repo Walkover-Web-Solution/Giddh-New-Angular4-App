@@ -85,7 +85,7 @@
                 <button mat-flat-button color="primary" class="back-btn mr-l1" (click)="export()">
                     {{ commonLocaleData?.app_export }}
                 </button>
-                <select-multiple-checkbox
+                <select-table-column
                     [moduleType]="moduleType"
                     [customiseColumns]="customiseColumns"
                     (selectedColumns)="getCustomiseHeaderColumns($event)"
@@ -95,7 +95,7 @@
                     [cssClass]="'purchase-customise-column-button'"
                     (isLoading)="isLoading = $event"
                 >
-                </select-multiple-checkbox>
+                </select-table-column>
             </div>
         </div>
     </div>

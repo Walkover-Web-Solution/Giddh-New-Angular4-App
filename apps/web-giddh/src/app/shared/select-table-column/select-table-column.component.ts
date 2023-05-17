@@ -1,15 +1,15 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Optional, Output, Self, SimpleChanges, ViewChild, ViewEncapsulation } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
 import { ReplaySubject, Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { InventoryService } from "../../services/inventory.service";
 
 @Component({
-    selector: "select-multiple-checkbox",
-    styleUrls: ["./select-multiple-checkbox.component.scss"],
-    templateUrl: "./select-multiple-checkbox.component.html",
+    selector: "select-table-column",
+    styleUrls: ["./select-table-column.component.scss"],
+    templateUrl: "./select-table-column.component.html",
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SelectMultipleCheckboxComponent implements OnInit, OnChanges, OnDestroy {
+export class SelectTableColumnComponent implements OnInit, OnChanges {
     /* This will hold local JSON data */
     @Input() public localeData: any = {};
     /* This will hold common JSON data */
@@ -41,7 +41,6 @@ export class SelectMultipleCheckboxComponent implements OnInit, OnChanges, OnDes
     /** This will use for stock report displayed columns */
     public displayedColumns: string[] = [];
 
-
     constructor(
         private changeDetection: ChangeDetectorRef,
         private inventoryService: InventoryService,
@@ -51,7 +50,7 @@ export class SelectMultipleCheckboxComponent implements OnInit, OnChanges, OnDes
     /**
      * On Component Init
      *
-     * @memberof SelectMultipleCheckboxComponent
+     * @memberof SelectTableColumnComponent
      */
     public ngOnInit(): void {
         this.refreshColumnsSubject?.pipe(takeUntil(this.destroyed$)).subscribe(res => {
@@ -62,7 +61,7 @@ export class SelectMultipleCheckboxComponent implements OnInit, OnChanges, OnDes
     /**
      * On Change of input properties
      *
-     * @memberof SelectMultipleCheckboxComponent
+     * @memberof SelectTableColumnComponent
      */
     public ngOnChanges(changes: SimpleChanges): void {
         if (changes?.moduleType?.currentValue !== changes?.moduleType?.previousValue) {
@@ -71,17 +70,9 @@ export class SelectMultipleCheckboxComponent implements OnInit, OnChanges, OnDes
     }
 
     /**
-     * Releases the memory on component destroy
-     *
-     * @memberof SelectMultipleCheckboxComponent
-     */
-    public ngOnDestroy() {
-    }
-
-    /**
      *This will use to save customised columns
      *
-     * @memberof SelectMultipleCheckboxComponent
+     * @memberof SelectTableColumnComponent
      */
     public saveColumns(): void {
         setTimeout(() => {
@@ -100,7 +91,7 @@ export class SelectMultipleCheckboxComponent implements OnInit, OnChanges, OnDes
     /**
      * This will be used for filtering the display columns
      *
-     * @memberof SelectMultipleCheckboxComponent
+     * @memberof SelectTableColumnComponent
      */
     public filteredDisplayColumns(): void {
         this.displayedColumns = this.customiseColumns?.filter(value => value?.checked).map(column => column?.value);
@@ -111,7 +102,7 @@ export class SelectMultipleCheckboxComponent implements OnInit, OnChanges, OnDes
     /**
     * This will get customised columns
     *
-    * @memberof SelectMultipleCheckboxComponent
+    * @memberof SelectTableColumnComponent
     */
     public getReportColumns(): void {
         this.inventoryService.getStockTransactionReportColumns(this.moduleType).pipe(takeUntil(this.destroyed$)).subscribe(response => {
