@@ -1887,7 +1887,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      */
     private loadStockVariants(stockUniqueName: string): void {
         this.ledgerService.loadStockVariants(stockUniqueName).pipe(
-            map((variants: IVariant[]) => variants.map((variant: IVariant) => ({label: variant.name, value: variant.uniqueName})))).subscribe(res => {
+            map((variants: IVariant[]) => (variants ?? []).map((variant: IVariant) => ({label: variant.name, value: variant.uniqueName}))), takeUntil(this.destroyed$)).subscribe(res => {
                 this.stockVariants$ = observableOf(res);
                 this.variantForceClear$ = observableOf({status: true});
                 this.cdRef.detectChanges();
