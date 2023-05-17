@@ -51,7 +51,7 @@ export class SelectMultipleCheckboxComponent implements OnInit, OnChanges, OnDes
     /**
      * On Component Init
      *
-     * @memberof TextFieldComponent
+     * @memberof SelectMultipleCheckboxComponent
      */
     public ngOnInit(): void {
         this.refreshColumnsSubject?.pipe(takeUntil(this.destroyed$)).subscribe(res => {
@@ -62,7 +62,7 @@ export class SelectMultipleCheckboxComponent implements OnInit, OnChanges, OnDes
     /**
      * On Change of input properties
      *
-     * @memberof TextFieldComponent
+     * @memberof SelectMultipleCheckboxComponent
      */
     public ngOnChanges(changes: SimpleChanges): void {
         if (changes?.moduleType?.currentValue !== changes?.moduleType?.previousValue) {
@@ -73,7 +73,7 @@ export class SelectMultipleCheckboxComponent implements OnInit, OnChanges, OnDes
     /**
      * Releases the memory on component destroy
      *
-     * @memberof TextFieldComponent
+     * @memberof SelectMultipleCheckboxComponent
      */
     public ngOnDestroy() {
     }
