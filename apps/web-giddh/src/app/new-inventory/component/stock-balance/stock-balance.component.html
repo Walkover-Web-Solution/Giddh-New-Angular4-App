@@ -57,7 +57,7 @@
                 <!-- <button mat-flat-button class="export-btn">
                 <img src="{{ imgPath }}download-blue.svg" alt="" /> Export
             </button> -->
-                <select-multiple-checkbox
+                <select-table-column
                     [moduleType]="moduleType"
                     [customiseColumns]="customiseColumns"
                     (isLoading)="isLoading = $event"
@@ -66,7 +66,7 @@
                     [commonLocaleData]="commonLocaleData"
                     [iconClass]="'icon-options select-multiple-icon-options'"
                 >
-                </select-multiple-checkbox>
+                </select-table-column>
             </div>
         </div>
         <div class="searching-stocks">

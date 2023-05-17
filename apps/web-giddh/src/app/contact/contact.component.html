@@ -188,7 +188,7 @@
                                             </button>
                                         </div>
                                         <div class="mr-0" *ngIf="activeTab !== 'aging'">
-                                            <select-multiple-checkbox
+                                            <select-table-column
                                                 [moduleType]="moduleType"
                                                 [customiseColumns]="customiseColumns"
                                                 (selectedColumns)="getCustomiseHeaderColumns($event)"
@@ -197,7 +197,7 @@
                                                 [iconClass]="'icon-options select-multiple-icon-options'"
                                                 (isLoading)="isLoading = $event"
                                             >
-                                            </select-multiple-checkbox>
+                                            </select-table-column>
                                         </div>
                                     </div>
                                     <div class="btn-group pull-right on-mobile-view mr-t1">

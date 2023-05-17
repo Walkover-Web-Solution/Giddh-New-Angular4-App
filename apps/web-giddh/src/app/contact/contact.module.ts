@@ -41,6 +41,7 @@ import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatDialogModule } from "@angular/material/dialog";
 import { AccountUpdateNewDetailsModule } from '../shared/header/components/account-update-new-details/account-update-new-details.module';
 import { AsideMenuAccountModule } from '../shared/aside-menu-account/aside.menu.account.module';
+import { SelectTableColumnComponentModule } from '../shared/select-table-column/select-table-column.module';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: false,
@@ -99,7 +100,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         MatTooltipModule,
         MatDialogModule,
         AccountUpdateNewDetailsModule,
-        AsideMenuAccountModule
+        AsideMenuAccountModule,
+        SelectTableColumnComponentModule
     ],
     providers: [
         {
