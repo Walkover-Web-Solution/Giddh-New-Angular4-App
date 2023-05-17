@@ -89,6 +89,7 @@ export class SelectTableColumnComponent implements OnInit, OnChanges {
                     this.isLoading.emit(false);
                 } else {
                     this.toaster.errorToast(response?.message);
+                    this.isLoading.emit(false);
                 }
             });
         });
