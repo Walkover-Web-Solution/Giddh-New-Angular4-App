@@ -22,4 +22,4 @@ import { SelectTableColumnComponent } from './select-table-column.component';
     ],
     exports: [SelectTableColumnComponent]
 })
-export class SelectTableColumnComponentModule { }
+export class SelectTableColumnModule { }

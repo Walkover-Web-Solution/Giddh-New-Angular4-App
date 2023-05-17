@@ -13,18 +13,18 @@
             class="menu-buttons"
             mat-menu-item
             (click)="$event?.stopPropagation()"
-            (keydown.enter)="$event?.stopPropagation(); item.checked = !item?.checked; saveColumns()"
+            (keydown.enter)="$event?.stopPropagation(); item.checked = !item.checked; saveSelectedColumns()"
         >
             <mat-checkbox
                 class="inventory-checkbox"
                 color="primary"
-                name="{{ item?.value }}"
-                (ngModelChange)="saveColumns()"
+                [name]="item?.value"
+                (ngModelChange)="saveSelectedColumns()"
                 [(ngModel)]="item.checked"
-                [disabled]="item?.checked && displayedColumns.length === 2"
+                [disabled]="item.checked && displayedColumns.length === 2"
                 (click)="$event?.stopPropagation()"
             >
-                {{ item?.label }}</mat-checkbox
+                {{ item.label }}</mat-checkbox
             >
         </button>
     </ng-container>

@@ -231,7 +231,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     public showClearFilter: boolean = false;
     /** True if it's default load */
     public defaultLoad: boolean = true;
-    /** This will use for purchase register displayed columns */
+    /** This will use for displayed table columns */
     public displayedColumns: any[] = [];
     /** This will use for customise column check values */
     public customiseColumns = [];
@@ -1422,7 +1422,7 @@ export class ContactComponent implements OnInit, OnDestroy {
      * @param {*} event
      * @memberof PurchaseRegisterExpandComponent
      */
-    public getCustomiseHeaderColumns(columns: string[]): void {
+    public showSelectedHeaderColumns(columns: string[]): void {
         if (columns) {
             this.displayedColumns = columns;
         }

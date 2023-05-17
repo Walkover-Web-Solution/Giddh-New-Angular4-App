@@ -1,7 +1,9 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
 import { ReplaySubject, Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
+import { CommonService } from "../../services/common.service";
 import { InventoryService } from "../../services/inventory.service";
+import { ToasterService } from "../../services/toaster.service";
 
 @Component({
     selector: "select-table-column",
@@ -32,7 +34,7 @@ export class SelectTableColumnComponent implements OnInit, OnChanges {
     @Input() public refreshColumnsSubject: Subject<void>;
     /** Emits the selected filters */
     @Output() public selectedColumns: EventEmitter<any> = new EventEmitter();
-    /** Emits the selected filters */
+    /** Emits the refresh column change filters */
     @Output() public refreshColumnsChange: EventEmitter<boolean> = new EventEmitter();
     /** Emits true if api call in progress */
     @Output() public isLoading: EventEmitter<boolean> = new EventEmitter();
@@ -43,7 +45,8 @@ export class SelectTableColumnComponent implements OnInit, OnChanges {
 
     constructor(
         private changeDetection: ChangeDetectorRef,
-        private inventoryService: InventoryService,
+        private commonService: CommonService,
+        private toaster: ToasterService
     ) {
     }
 
@@ -65,7 +68,7 @@ export class SelectTableColumnComponent implements OnInit, OnChanges {
      */
     public ngOnChanges(changes: SimpleChanges): void {
         if (changes?.moduleType?.currentValue !== changes?.moduleType?.previousValue) {
-            this.getReportColumns();
+            this.getSelectedColumns();
         }
     }
 
@@ -74,15 +77,19 @@ export class SelectTableColumnComponent implements OnInit, OnChanges {
      *
      * @memberof SelectTableColumnComponent
      */
-    public saveColumns(): void {
+    public saveSelectedColumns(): void {
         setTimeout(() => {
             this.filteredDisplayColumns();
             let saveColumnReq = {
                 module: this.moduleType,
                 columns: this.displayedColumns
             }
-            this.inventoryService.saveStockTransactionReportColumns(saveColumnReq).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                this.isLoading.emit(false);
+            this.commonService.saveSelectedTableColumns(saveColumnReq).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                if (response && response.body && response.status === 'success') {
+                    this.isLoading.emit(false);
+                } else {
+                    this.toaster.errorToast(response?.message);
+                }
             });
         });
     }
@@ -104,11 +111,11 @@ export class SelectTableColumnComponent implements OnInit, OnChanges {
     *
     * @memberof SelectTableColumnComponent
     */
-    public getReportColumns(): void {
-        this.inventoryService.getStockTransactionReportColumns(this.moduleType).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+    public getSelectedColumns(): void {
+        this.commonService.getSelectedTableColumns(this.moduleType).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.body && response.status === 'success') {
-                if (response.body?.columns) {
-                    const displayColumnsSet = new Set(response.body?.columns);
+                if (response.body.columns) {
+                    const displayColumnsSet = new Set(response.body.columns);
                     this.customiseColumns.forEach(column => column.checked = displayColumnsSet.has(column.value));
                 }
             }

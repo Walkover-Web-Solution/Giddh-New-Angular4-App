@@ -430,7 +430,7 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
      * @param {*} event
      * @memberof StockBalanceComponent
      */
-    public getCustomiseHeaderColumns(event: any): void {
+    public showSelectedTableColumns(event: any): void {
         if (event) {
             this.displayedColumns = event;
             if (this.displayedColumns?.includes('unique_name')) {
